@@ -10,9 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const APPLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_APPLE_ENABLED === "true";
-const GOOGLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED !== "false";
-
 /** Only allow same-origin relative paths as post-login destinations. */
 function safeNext(value: string | null): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return "/dashboard";
@@ -47,8 +44,15 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
     router.refresh();
   };
 
-  const redirectTo = () =>
-    `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+  /**
+   * Keep redirectTo on a clean allowlisted path (no ?next=). Supabase rejects
+   * `.../auth/callback?next=/dashboard` when only `.../auth/callback` is listed,
+   * falls back to Site URL (production), and PKCE exchange fails.
+   */
+  const redirectTo = () => {
+    document.cookie = `auth_next=${encodeURIComponent(next)}; Path=/; Max-Age=600; SameSite=Lax`;
+    return `${window.location.origin}/auth/callback`;
+  };
 
   const sendMagicLink = async (e: FormEvent) => {
     e.preventDefault();
@@ -61,9 +65,9 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
     setStatus(error ? "error" : "sent");
   };
 
-  const oauth = async (provider: "google" | "apple") => {
+  const oauthGoogle = async () => {
     if (!supabase) return;
-    await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: redirectTo() } });
+    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: redirectTo() } });
   };
 
   return (
@@ -143,29 +147,15 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
             ) : null}
           </form>
 
-          {GOOGLE_ENABLED || APPLE_ENABLED ? (
-            <>
-              <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground uppercase">
-                <span className="h-px flex-1 bg-border" />
-                {t("or")}
-                <span className="h-px flex-1 bg-border" />
-              </div>
-              <div className="flex flex-col gap-3">
-                {GOOGLE_ENABLED ? (
-                  <Button variant="outline" className="h-11 rounded-full" onClick={() => oauth("google")}>
-                    <GoogleIcon />
-                    {t("continueWithGoogle")}
-                  </Button>
-                ) : null}
-                {APPLE_ENABLED ? (
-                  <Button variant="outline" className="h-11 rounded-full" onClick={() => oauth("apple")}>
-                    <AppleIcon />
-                    {t("continueWithApple")}
-                  </Button>
-                ) : null}
-              </div>
-            </>
-          ) : null}
+          <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground uppercase">
+            <span className="h-px flex-1 bg-border" />
+            {t("or")}
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <Button variant="outline" className="h-11 w-full rounded-full" onClick={oauthGoogle}>
+            <GoogleIcon />
+            {t("continueWithGoogle")}
+          </Button>
         </>
       )}
 
@@ -201,10 +191,3 @@ function GoogleIcon() {
   );
 }
 
-function AppleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true" fill="currentColor">
-      <path d="M16.4 12.7c0-2.5 2-3.7 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.3ZM14 5.4c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4Z" />
-    </svg>
-  );
-}

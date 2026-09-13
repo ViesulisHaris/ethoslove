@@ -21,7 +21,9 @@ use **Import .env** on that page; tick Production and Preview. Otherwise copy th
 | `STRIPE_WEBHOOK_SECRET` | after step 3 |
 | `RESEND_API_KEY` | Resend → API keys (emails are skipped and logged until this exists) |
 | `CRON_SECRET` | any long random string; protects `/api/cron/unlock` |
-| `NEXT_PUBLIC_AUTH_GOOGLE_ENABLED` | `true` once Google is enabled in Supabase, else `false` |
+
+Google sign-in is always shown in the UI when Supabase is configured (magic link stays
+available too). Apple is not offered for now.
 
 Redeploy after adding them (Deployments → ⋯ → Redeploy).
 
@@ -30,8 +32,13 @@ Redeploy after adding them (Deployments → ⋯ → Redeploy).
 Authentication → URL configuration:
 
 - Site URL: `https://<your-domain>`
-- Redirect URLs: `https://<your-domain>/auth/callback`, `https://<your-domain>/auth/confirm`
-  (keep the `http://localhost:3000/...` ones for development)
+- Redirect URLs (include wildcards so `?next=` fallbacks and local/prod both work):
+  - `https://<your-domain>/auth/callback`
+  - `https://<your-domain>/auth/confirm`
+  - `https://<your-domain>/**`
+  - `http://localhost:3000/auth/callback`
+  - `http://localhost:3000/**`
+  (keep the localhost ones for development)
 
 ## 3. Stripe webhook
 

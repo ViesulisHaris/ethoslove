@@ -39,7 +39,7 @@ third-party account.
    (or paste `supabase/migrations/0001_init.sql` into the SQL editor). This project: `aws-1-eu-west-1`.
 3. Auth → URL configuration: set Site URL to your domain and add `/auth/callback` and `/auth/confirm`
    as redirect URLs.
-4. Auth → Providers: enable Google (and Apple, then set `NEXT_PUBLIC_AUTH_APPLE_ENABLED=true`).
+4. Auth → Providers: enable Google.
 5. Regenerate types when the schema changes: `npm run db:types`.
 
 Local Supabase (needs Docker): `supabase start`, then use the printed local URL/keys.
