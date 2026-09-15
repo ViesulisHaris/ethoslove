@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { useEditor } from "@/lib/editor/store";
+import { reasonOf } from "@/lib/editor/failed-uploads";
 import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "../field";
@@ -36,7 +37,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   const max = manifest.features.photos.max;
   const processing = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "processing");
   const failed = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "error" && !a.storagePath);
-  const retryable = failed.some((a) => a.error !== "missing_blob");
+  const retryable = failed.some((a) => reasonOf(a.error) === "network");
   const full = photos.length >= max;
 
   const pick = (files: FileList | null) => {
@@ -99,7 +100,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
               {t("retry")}
             </button>
           ) : null}
-          <button type="button" onClick={() => void dropFailedUploads()} className="rounded-full border border-border px-3.5 py-1.5 text-xs font-medium">
+          <button type="button" onClick={() => void dropFailedUploads("photos")} className="rounded-full border border-border px-3.5 py-1.5 text-xs font-medium">
             {t("removeFailed")}
           </button>
         </div>

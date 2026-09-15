@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sunday 18:30", "messages": [
+      { "from": "me", "text": "i want to go to a pumpkin patch" },
+      { "from": "them", "text": "why" },
+      { "from": "me", "text": "for the pictures" },
+      { "from": "them", "text": "we have pictures" },
+      { "from": "me", "text": "not AUTUMN pictures" },
+      { "from": "them", "text": "whats the difference" },
+      { "from": "me", "text": "the vibes" }
+    ] },
+    { "type": "chat", "timestamp": "Saturday 21:12", "messages": [
+      { "from": "them", "text": "remember the pumpkin patch" },
+      { "from": "them", "text": "happy 3 months" },
+      { "from": "them", "link": { "title": "our first autumn", "domain": "tryethos.io", "image": "og", "name": "Grace" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "u said whats the difference" },
+      { "from": "them", "text": "i get it now" },
+      { "from": "them", "text": "its the vibes", "tapback": "heart" }
+    ] }
+  ]
+}

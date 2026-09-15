@@ -1,0 +1,25 @@
+{
+  "style": "instagram",
+  "contact": { "name": "amelia", "sub": "Active now", "avatar": 2 },
+  "slides": [
+    { "type": "chat", "timestamp": "Today 20:41", "messages": [
+      { "from": "them", "text": "couples costume?" },
+      { "from": "me", "text": "no" },
+      { "from": "them", "text": "please" },
+      { "from": "me", "text": "im not being the ketchup to ur mustard" },
+      { "from": "them", "text": "i didnt even say ketchup" },
+      { "from": "me", "text": "u were going to" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "fine" },
+      { "from": "them", "text": "i made u something instead" },
+      { "from": "them", "link": { "title": "trick or treat, ben", "domain": "tryethos.io", "image": "og", "name": "Ben" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok im the ketchup" },
+      { "from": "them", "text": "ur the mustard" },
+      { "from": "me", "text": "fine" },
+      { "from": "them", "text": "happy halloween ketchup", "reaction": "❤️" }
+    ] }
+  ]
+}

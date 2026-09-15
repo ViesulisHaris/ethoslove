@@ -15,5 +15,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/trick-or-treat/poster.jpg", webm: "/templates/trick-or-treat/preview.webm" },
   defaultAccent: "#F28C28",
   heavy: false,
-  sortOrder: 12,
+  sortOrder: 18,
 };

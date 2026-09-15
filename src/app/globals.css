@@ -155,6 +155,9 @@
   --font-display: var(--font-display), "Iowan Old Style", Georgia, serif;
   --font-gift-display: var(--font-gift-display), "Iowan Old Style", Georgia, serif;
   --font-hand: var(--font-hand), "Bradley Hand", "Segoe Print", cursive;
+  --font-type: var(--font-type), "Courier New", ui-monospace, monospace;
+  --font-poster: var(--font-poster), Georgia, serif;
+  --font-script: var(--font-script), var(--font-hand), cursive;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-heading: var(--font-display);
 

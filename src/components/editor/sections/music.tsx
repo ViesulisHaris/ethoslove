@@ -2,11 +2,14 @@
 /* eslint-disable @next/next/no-img-element -- album artwork comes from Apple's CDN */
 
 import { useEffect, useRef, useState } from "react";
-import { Music2, Pause, Play, Search, Sparkles, Upload, X } from "lucide-react";
+import { AlertCircle, Loader2, Music2, Pause, Play, Search, Sparkles, Upload, X } from "lucide-react";
 import { useLocale } from "next-intl";
+import { toast } from "sonner";
 import type { CatalogSong } from "@/app/api/music/search/route";
 import { useTranslations } from "next-intl";
 import { useEditor } from "@/lib/editor/store";
+import { uploadTypeFor } from "@/lib/editor/media-types";
+import { reasonOf } from "@/lib/editor/failed-uploads";
 import { LIBRARY_TRACKS, TRACK_MOODS, type TrackMood } from "@/lib/editor/music-library";
 import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -19,7 +22,26 @@ type Mode = "none" | "library" | "song" | "upload";
 export function MusicSection() {
   const t = useTranslations("editor.music");
   const tS = useTranslations("editor.sections.music");
+  const tP = useTranslations("editor.publishSheet");
   const music = useEditor((s) => s.data.music);
+  // The sender's own file: whether it made it up, and if not, why.
+  const upload = useEditor((s) => (s.data.music?.source === "upload" && s.data.music.trackId ? s.assets[s.data.music.trackId] : undefined));
+  const uploadNote = !upload
+    ? null
+    : upload.status === "uploading"
+      ? t("uploadingPct", { pct: Math.round(upload.progress * 100) })
+      : upload.status === "uploaded"
+        ? t("uploadedOk")
+        : upload.status === "error"
+          ? (() => {
+              const reason = reasonOf(upload.error);
+              return reason === "type"
+                ? tP("failed.typeAudio")
+                : reason === "too_big"
+                  ? tP("failed.tooBig", { mb: Math.round(LIMITS.uploadMaxBytes / 1024 / 1024) })
+                  : tP(`failed.${reason}`);
+            })()
+          : null;
   const setLibraryTrack = useEditor((s) => s.setLibraryTrack);
   const setCatalogTrack = useEditor((s) => s.setCatalogTrack);
   const locale = useLocale();
@@ -312,6 +334,17 @@ export function MusicSection() {
                   <X className="size-4" />
                 </button>
               </div>
+              {uploadNote ? (
+                <p
+                  className={cn("mt-2 flex items-start gap-1.5 text-xs", upload?.status === "error" ? "text-destructive" : "text-muted-foreground")}
+                  role={upload?.status === "error" ? "alert" : undefined}
+                  data-testid="song-upload-status"
+                >
+                  {upload?.status === "uploading" ? <Loader2 className="mt-px size-3 shrink-0 animate-spin" /> : null}
+                  {upload?.status === "error" ? <AlertCircle className="mt-px size-3.5 shrink-0" /> : null}
+                  <span className="min-w-0">{uploadNote}</span>
+                </p>
+              ) : null}
               <Field label={`${t("startAt")} · ${formatTime(music.startAt ?? 0)}`} className="mt-3">
                 <Waveform
                   url={music.url}
@@ -337,12 +370,16 @@ export function MusicSection() {
           <input
             ref={inputRef}
             type="file"
-            accept="audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/wav,.mp3,.m4a"
+            accept="audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/wav,.mp3,.m4a,.m4r,.aac,.wav"
             hidden
             onChange={(e) => {
               const f = e.target.files?.[0];
-              if (f && f.size <= LIMITS.audioMaxBytes) void setUploadedMusic(f);
               e.target.value = "";
+              if (!f) return;
+              // Say no at the door, rather than letting a file sit on "uploading" and block the gift.
+              if (!uploadTypeFor("audio", f.type, f.name)) toast.error(t("badType"));
+              else if (f.size > LIMITS.audioMaxBytes) toast.error(t("tooBig", { mb: Math.round(LIMITS.audioMaxBytes / 1024 / 1024) }));
+              else void setUploadedMusic(f);
             }}
           />
         </div>

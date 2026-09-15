@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { nanoid } from "nanoid";
 import type { GiftData, GiftLocale, GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
+import { LIMITS } from "@/config/site";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import {
   GIFTS_BUCKET,
@@ -19,8 +20,10 @@ import type { LibraryTrack } from "./music-library";
 import type { AssetRecord, EditorDraft, SaveState, ScheduleSettings } from "./types";
 import { deleteBlob, getBlob, putBlob } from "./blob-store";
 import { UploadError, timeoutFor, uploadBlob } from "./upload";
+import { uploadTypeFor } from "./media-types";
+import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, type FailedGroup } from "./failed-uploads";
 import { processImageFile, transformImage } from "./image";
-import { localAssetIds, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
+import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
@@ -85,8 +88,8 @@ export type EditorState = {
   uploadPending: () => Promise<void>;
   /** Give failed uploads another go (a photo the browser has lost cannot be retried). */
   retryUploads: () => Promise<void>;
-  /** Take failed photos out of the gift so it can be published without them. */
-  dropFailedUploads: () => Promise<void>;
+  /** Take whatever didn't upload out of the gift (or one part of it) so it can be published without it. */
+  dropFailedUploads: (only?: FailedGroup) => Promise<void>;
   syncNow: () => Promise<boolean>;
   serializedForServer: () => GiftData;
   markPublished: (shortId: string, status: "live" | "scheduled") => void;
@@ -156,11 +159,15 @@ async function captureVideoPoster(file: File): Promise<Blob | null> {
 }
 
 export const useEditor = create<EditorState>((set, get) => {
+  // The local-draft key this editing session opened: the template's own page, or a gift from the dashboard.
+  let sessionKey: string | null = null;
+
   const persistLocal = () => {
     window.clearTimeout(localTimer);
     localTimer = window.setTimeout(() => {
       const s = get();
       if (!s.hydrated) return;
+      const refs = localRefs(s.assets);
       const draft: EditorDraft = {
         version: 1,
         slug: s.slug,
@@ -172,11 +179,15 @@ export const useEditor = create<EditorState>((set, get) => {
         password: s.password,
         removeWatermark: s.removeWatermark,
         updatedAt: Date.now(),
+        uploaded: refs.uploaded,
       };
-      writeLocalDraft(
-        draftScope(s.slug, s.giftId),
-        serializeForLocal(draft, assetRefs(s), refsByUrl(s)),
-      );
+      const serialized = serializeForLocal(draft, refs.byId, refs.byUrl);
+      // Saved where the session opened, so coming back to the same page finds the same gift. It used
+      // to be left at the moment before the draft row existed, and every visit made a new row and
+      // uploaded every photo again. The gift's own key keeps the dashboard's copy current too.
+      const own = draftScope(s.slug, s.giftId);
+      writeLocalDraft(sessionKey ?? own, serialized);
+      if (s.giftId && sessionKey !== own) writeLocalDraft(own, serialized);
       if (!s.authed || !s.giftId)
         set({ save: s.authed ? "saving" : "offline", savedAt: Date.now() });
     }, LOCAL_DEBOUNCE);
@@ -198,40 +209,63 @@ export const useEditor = create<EditorState>((set, get) => {
   const setAsset = (id: string, patch: Partial<AssetRecord>) =>
     set((st) => (st.assets[id] ? { assets: { ...st.assets, [id]: { ...st.assets[id], ...patch } } } : {}));
 
+  // The publish sheet, the autosave and a retry can all ask for a draft row at once; one row answers all of them.
+  let ensuring: Promise<string | null> | null = null;
+
+  /** Leave a draft row that no longer takes this draft, keeping every file this device can send again. */
+  const detachFromGift = (oldGiftId: string) => {
+    const folder = `gifts/${oldGiftId}/`;
+    const assets = { ...get().assets };
+    for (const a of Object.values(assets)) {
+      if (a.local && a.storagePath?.startsWith(folder)) assets[a.id] = { ...a, storagePath: undefined, status: "local", progress: 0, error: undefined };
+    }
+    const { slug } = get();
+    set({ giftId: null, shortId: null, assets });
+    if (sessionKey === draftScope(slug, oldGiftId)) sessionKey = slug;
+    persistLocal();
+  };
+
   /**
    * Three attempts, each with its own timeout and stall detection, so a phone that loses
-   * signal mid-upload ends up on "failed, retry" instead of "uploading" forever.
+   * signal mid-upload ends up on "failed, retry" instead of "uploading" forever. A refusal no
+   * retry can change (a type Storage won't take, a file over the limit, a file the browser can
+   * no longer read) stops at the first answer, so the sender hears why straight away.
    */
   const uploadAsset = async (id: string) => {
     const s = get();
     const asset = s.assets[id];
     const supabase = getSupabaseBrowserClient();
     if (!asset || !s.giftId || !s.authed || !supabase || asset.storagePath || asset.status === "uploading") return;
+    // Claimed before the first await, so two queues running at once can't both send it.
+    setAsset(id, { status: "uploading", progress: 0, error: undefined });
+    const fail = (error: string) => setAsset(id, { status: "error", error, progress: 0 });
+
     const blob = await getBlob(id);
-    if (!blob) {
-      // The browser dropped the draft's copy: private mode, cleared site data, or a different browser.
-      setAsset(id, { status: "error", error: "missing_blob", progress: 0 });
-      return;
-    }
+    // The browser dropped the draft's copy (private mode, cleared site data, a different browser),
+    // or kept a copy it can no longer read, which would otherwise go up as an empty file.
+    if (!blob || !(await readable(blob))) return fail("missing_blob");
+    // Storage checks the label, and phones mislabel ordinary files: an iPhone ringtone is "audio/x-m4r".
+    const type = uploadTypeFor(asset.kind, blob.type || asset.mime, "name" in blob ? (blob as File).name : undefined);
+    if (!type) return fail("unsupported_type");
+    if (blob.size > LIMITS.uploadMaxBytes) return fail("too_big");
+
     const {
       data: { session },
     } = await supabase.auth.getSession();
     const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const apikey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!session?.access_token || !baseUrl || !apikey) {
-      setAsset(id, { status: "error", error: "unauthorized", progress: 0 });
-      return;
-    }
-    const path = buildStoragePath(s.giftId, id, extensionForMime(blob.type));
+    const giftId = get().giftId;
+    if (!session?.access_token || !baseUrl || !apikey || !giftId) return fail("unauthorized");
+    const path = buildStoragePath(giftId, id, extensionForMime(type));
     const url = `${baseUrl}/storage/v1/object/${GIFTS_BUCKET}/${storageObjectKey(path)}`;
     const headers = {
       authorization: `Bearer ${session.access_token}`,
       apikey,
-      "content-type": blob.type || "application/octet-stream",
+      "content-type": type,
       "cache-control": "max-age=31536000",
       "x-upsert": "true",
     };
-    setAsset(id, { status: "uploading", progress: 0, error: undefined });
+    setAsset(id, { mime: type });
     let failure = "network";
     for (let attempt = 0; attempt < 3; attempt++) {
       if (attempt) await new Promise((r) => setTimeout(r, attempt === 1 ? 1500 : 4000));
@@ -243,10 +277,10 @@ export const useEditor = create<EditorState>((set, get) => {
         return;
       } catch (e) {
         failure = e instanceof UploadError ? e.kind : "network";
-        if (failure === "unauthorized") break;
+        if (failure === "unauthorized" || LASTING_FAILURES.has(failure)) break;
       }
     }
-    setAsset(id, { status: "error", error: failure, progress: 0 });
+    fail(failure);
   };
 
   return {
@@ -268,6 +302,7 @@ export const useEditor = create<EditorState>((set, get) => {
     dirty: false,
 
     async init({ slug, manifest, initial, authed, userId, remote }) {
+      sessionKey = draftScope(slug, remote?.id ?? null);
       const timezone = defaultTimezone();
       let data = initial;
       let assets: Record<string, AssetRecord> = {};
@@ -652,7 +687,7 @@ export const useEditor = create<EditorState>((set, get) => {
     async setUploadedMusic(file) {
       get().clearMusic();
       const id = nanoid(10);
-      const mime = file.type || "audio/mpeg";
+      const mime = uploadTypeFor("audio", file.type, file.name) ?? (file.type || "audio/mpeg");
       await putBlob(id, file);
       const objectUrl = URL.createObjectURL(file);
       set((s) => ({
@@ -697,7 +732,7 @@ export const useEditor = create<EditorState>((set, get) => {
       get().clearVideo();
       const id = nanoid(10);
       const posterId = `${id}p`;
-      const mime = file.type || "video/mp4";
+      const mime = uploadTypeFor("video", file.type, file.name) ?? (file.type || "video/mp4");
       await putBlob(id, file);
       const objectUrl = URL.createObjectURL(file);
       const poster = await captureVideoPoster(file);
@@ -780,18 +815,23 @@ export const useEditor = create<EditorState>((set, get) => {
       const s = get();
       if (!s.authed) return null;
       if (s.giftId) return s.giftId;
-      const result = await ensureDraft({
-        templateSlug: s.slug,
-        locale: s.data.locale as GiftLocale,
+      ensuring ??= (async () => {
+        const result = await ensureDraft({
+          templateSlug: s.slug,
+          locale: s.data.locale as GiftLocale,
+        });
+        if (!result.ok) {
+          set({ save: "error" });
+          return null;
+        }
+        set({ giftId: result.data.giftId, shortId: result.data.shortId });
+        persistLocal();
+        await get().uploadPending();
+        return result.data.giftId;
+      })().finally(() => {
+        ensuring = null;
       });
-      if (!result.ok) {
-        set({ save: "error" });
-        return null;
-      }
-      set({ giftId: result.data.giftId, shortId: result.data.shortId });
-      persistLocal();
-      await get().uploadPending();
-      return result.data.giftId;
+      return ensuring;
     },
 
     async uploadPending() {
@@ -799,7 +839,7 @@ export const useEditor = create<EditorState>((set, get) => {
       if (!s.authed || !s.giftId) return;
       // Earlier failures get another go here too; a lost blob is the one thing a retry can't fix.
       const queue = Object.values(s.assets).filter(
-        (a) => a.local && !a.storagePath && a.status !== "uploading" && a.error !== "missing_blob",
+        (a) => a.local && !a.storagePath && a.status !== "uploading" && !(a.status === "error" && LASTING_FAILURES.has(a.error ?? "")),
       );
       // Three at a time: a phone on mobile data chokes when a dozen photos go up at once.
       const worker = async () => {
@@ -812,16 +852,36 @@ export const useEditor = create<EditorState>((set, get) => {
       set((st) => {
         const assets = { ...st.assets };
         for (const a of Object.values(assets))
-          if (a.status === "error" && !a.storagePath && a.error !== "missing_blob") assets[a.id] = { ...a, status: "local", error: undefined, progress: 0 };
+          if (a.status === "error" && !a.storagePath && reasonOf(a.error) === "network") assets[a.id] = { ...a, status: "local", error: undefined, progress: 0 };
         return { assets };
       });
       if (!get().giftId) await get().ensureRemote();
       else await get().uploadPending();
     },
 
-    async dropFailedUploads() {
-      const failed = Object.values(get().assets).filter((a) => a.kind === "photo" && a.status === "error" && !a.storagePath);
-      for (const a of failed) await get().removePhoto(a.id);
+    async dropFailedUploads(only) {
+      const failed = Object.values(get().assets).filter((a) => a.status === "error" && !a.storagePath);
+      for (const a of failed) {
+        const { data } = get();
+        const group = groupOf(data, a);
+        if (only && group !== only) continue;
+        if (group === "photos") await get().removePhoto(a.id);
+        else if (group === "song") get().clearMusic();
+        else if (group === "voice") get().clearVoiceNote();
+        else if (group === "video" && isVideoItself(data, a)) get().clearVideo();
+        else {
+          // A still frame that didn't go up (the clip plays without one), or a leftover nothing uses.
+          if (a.objectUrl) URL.revokeObjectURL(a.objectUrl);
+          set((st) => {
+            const assets = { ...st.assets };
+            delete assets[a.id];
+            const video = group === "video" && st.data.video ? { ...st.data.video, poster: undefined } : st.data.video;
+            return { assets, data: { ...st.data, video } };
+          });
+          await deleteBlob(a.id);
+          touch();
+        }
+      }
     },
 
     async syncNow() {
@@ -830,7 +890,14 @@ export const useEditor = create<EditorState>((set, get) => {
       const giftId = s.giftId ?? (await get().ensureRemote());
       if (!giftId) return false;
       set({ save: "saving" });
-      const result = await saveDraft({ giftId, data: get().serializedForServer() });
+      let result = await saveDraft({ giftId, data: get().serializedForServer(), expectDraft: get().status === "draft" });
+      if (!result.ok && (result.error === "not_found" || result.error === "not_draft") && get().status === "draft" && get().giftId === giftId) {
+        // The row this device remembered is gone (tidied away after a week, deleted, another account
+        // signed in) or was published from somewhere else: carry on in a fresh draft, never over it.
+        detachFromGift(giftId);
+        const fresh = await get().ensureRemote();
+        if (fresh) result = await saveDraft({ giftId: fresh, data: get().serializedForServer(), expectDraft: true });
+      }
       set({
         save: result.ok ? "saved" : "error",
         savedAt: Date.now(),
@@ -869,11 +936,28 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     markPublished(shortId, status) {
+      const { slug, giftId } = get();
+      if (giftId) {
+        // The template's page starts the next gift fresh; this one stays editable from the dashboard.
+        if (sessionKey === slug || readLocalDraft(slug)?.giftId === giftId) clearLocalDraft(slug);
+        sessionKey = draftScope(slug, giftId);
+      }
       set({ shortId, status, dirty: false, save: "saved", savedAt: Date.now() });
       persistLocal();
     },
   };
 });
+
+/** A few bytes are enough to tell whether the browser can still read a stored file. */
+async function readable(blob: Blob): Promise<boolean> {
+  if (blob.size === 0) return false;
+  try {
+    await blob.slice(0, Math.min(blob.size, 64 * 1024)).arrayBuffer();
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export function draftScope(slug: string, giftId: string | null): string {
   return giftId ? `${slug}:${giftId}` : slug;
@@ -890,6 +974,23 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
       if (b) blobs.set(id, b);
     }),
   );
+  // Where files already went: the remote row's own paths, and this device's record of its uploads.
+  const uploaded: Record<string, string> = { ...(local.uploaded ?? {}) };
+  for (const a of Object.values(existing)) if (a.storagePath) uploaded[a.id] = a.storagePath;
+  /** This device's copy while it has one (a working preview, nothing sent twice), else the stored file. */
+  const place = (id: string, kind: AssetRecord["kind"]): string | undefined => {
+    const blob = blobs.get(id);
+    const stored = uploaded[id];
+    if (!blob) {
+      if (!stored) return undefined;
+      assets[id] = { id, kind, local: false, storagePath: stored, status: "uploaded", progress: 1 };
+      return stored;
+    }
+    const objectUrl = URL.createObjectURL(blob);
+    assets[id] = { id, kind, local: true, objectUrl, mime: blob.type, bytes: blob.size, storagePath: stored, status: stored ? "uploaded" : "local", progress: stored ? 1 : 0 };
+    return objectUrl;
+  };
+
   const photos = local.data.photos
     .map((p) => {
       if (isStoragePath(p.url)) {
@@ -903,20 +1004,8 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
         };
         return p;
       }
-      const blob = blobs.get(p.id);
-      if (!blob) return null;
-      const objectUrl = URL.createObjectURL(blob);
-      assets[p.id] = {
-        ...(assets[p.id] ?? { id: p.id, kind: "photo", progress: 0 }),
-        id: p.id,
-        kind: "photo",
-        local: true,
-        objectUrl,
-        mime: blob.type,
-        bytes: blob.size,
-        status: assets[p.id]?.storagePath ? "uploaded" : "local",
-      };
-      return { ...p, url: objectUrl };
+      const url = isLocalRef(p.url) ? place(p.id, "photo") : undefined;
+      return url ? { ...p, url } : null;
     })
     .filter((p): p is GiftPhoto => p !== null);
 
@@ -932,45 +1021,15 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
         progress: 1,
       };
     } else {
-      const blob = blobs.get(music.trackId);
-      if (blob) {
-        const objectUrl = URL.createObjectURL(blob);
-        assets[music.trackId] = {
-          id: music.trackId,
-          kind: "audio",
-          local: true,
-          objectUrl,
-          mime: blob.type,
-          bytes: blob.size,
-          status: "local",
-          progress: 0,
-        };
-        music = { ...music, url: objectUrl };
-      } else music = undefined;
+      const url = place(music.trackId, "audio");
+      music = url ? { ...music, url } : undefined;
     }
   }
-  const resolve = (
-    ref: string | undefined,
-    kind: "video" | "photo" | "audio",
-  ): string | undefined => {
+  const resolve = (ref: string | undefined, kind: AssetRecord["kind"]): string | undefined => {
     if (!ref) return undefined;
     if (isStoragePath(ref)) return ref;
     if (!ref.startsWith("idb:")) return ref;
-    const id = ref.slice(4);
-    const blob = blobs.get(id);
-    if (!blob) return undefined;
-    const objectUrl = URL.createObjectURL(blob);
-    assets[id] = {
-      id,
-      kind,
-      local: true,
-      objectUrl,
-      mime: blob.type,
-      bytes: blob.size,
-      status: "local",
-      progress: 0,
-    };
-    return objectUrl;
+    return place(ref.slice(4), kind);
   };
   let voiceNote = local.data.voiceNote;
   if (voiceNote) {
@@ -990,28 +1049,8 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
   }
   let video = local.data.video;
   if (video) {
-    const resolveVideo = (ref: string | undefined, kind: "video" | "photo"): string | undefined => {
-      if (!ref) return undefined;
-      if (isStoragePath(ref)) return ref;
-      if (!ref.startsWith("idb:")) return ref;
-      const id = ref.slice(4);
-      const blob = blobs.get(id);
-      if (!blob) return undefined;
-      const objectUrl = URL.createObjectURL(blob);
-      assets[id] = {
-        id,
-        kind,
-        local: true,
-        objectUrl,
-        mime: blob.type,
-        bytes: blob.size,
-        status: "local",
-        progress: 0,
-      };
-      return objectUrl;
-    };
-    const url = resolveVideo(video.url, "video");
-    video = url ? { url, poster: resolveVideo(video.poster, "photo") } : undefined;
+    const url = resolve(video.url, "video");
+    video = url ? { url, poster: resolve(video.poster, "photo") } : undefined;
     if (video && isStoragePath(video.url)) {
       const id = video.url.split("/").pop()!.split(".")[0];
       assets[id] = {

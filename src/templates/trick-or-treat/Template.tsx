@@ -265,7 +265,7 @@ function Inside({ p, s, t, data, mode, blocks, reduce, onEvent, onReact, onMakeO
     return () => io.disconnect();
   }, [onEvent, mode]);
 
-  const parchment: CSSProperties = { background: p.paper, backgroundImage: GRAIN, color: p.ink };
+  const parchment: CSSProperties = { backgroundColor: p.paper, backgroundImage: GRAIN, color: p.ink };
 
   return (
     <motion.div className="absolute inset-0 z-10" style={{ background: p.room }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>

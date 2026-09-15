@@ -148,7 +148,7 @@ function Dusk({ p, s, tag, drink, lit, reduce, onLight }: { p: Palette; s: (type
         animate={{ opacity: 1, y: 0, rotate: -3 }}
         transition={{ delay: 0.7, type: "spring", stiffness: 160, damping: 14 }}
       >
-        <div className="relative rounded-[3px] px-[calc(4*var(--k))] py-[calc(1.6*var(--k))] shadow-[0_6px_14px_rgba(0,0,0,0.35)]" style={{ background: "#E9D2AE", color: "#5A3A1E", backgroundImage: GRAIN }}>
+        <div className="relative rounded-[3px] px-[calc(4*var(--k))] py-[calc(1.6*var(--k))] shadow-[0_6px_14px_rgba(0,0,0,0.35)]" style={{ backgroundColor: "#E9D2AE", color: "#5A3A1E", backgroundImage: GRAIN }}>
           <span aria-hidden="true" className="absolute -top-[calc(3*var(--k))] left-1/2 h-[calc(3.2*var(--k))] w-px -translate-x-1/2" style={{ background: p.stripe }} />
           <span aria-hidden="true" className="absolute top-[calc(1*var(--k))] left-[calc(1.2*var(--k))] size-[calc(1.4*var(--k))] rounded-full" style={{ background: "#B58A54" }} />
           <p className="max-w-[calc(60*var(--k))] truncate pl-[calc(1.6*var(--k))] text-[calc(5.2*var(--k))] leading-none" style={{ fontFamily: "var(--gift-font-hand)" }}>
@@ -174,7 +174,7 @@ function Dusk({ p, s, tag, drink, lit, reduce, onLight }: { p: Palette; s: (type
         <motion.div
           aria-hidden="true"
           className="absolute rounded-[3px] shadow-[0_-6px_18px_rgba(0,0,0,0.25)]"
-          style={{ left: "calc(50% - 34 * var(--k))", width: "calc(60 * var(--k))", top: "calc(1 * var(--k))", height: "calc(18 * var(--k))", background: p.paper, backgroundImage: GRAIN, rotate: -6 }}
+          style={{ left: "calc(50% - 34 * var(--k))", width: "calc(60 * var(--k))", top: "calc(1 * var(--k))", height: "calc(18 * var(--k))", backgroundColor: p.paper, backgroundImage: GRAIN, rotate: -6 }}
           initial={{ y: 30 }}
           animate={lit ? { y: -40, rotate: -2 } : { y: 8 }}
           transition={lit ? { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.5 } : { delay: 0.6, duration: 0.8 }}
@@ -222,7 +222,7 @@ function Reading({ p, s, t, data, mode, blocks, reduce, onEvent, onReact, onMake
     return () => io.disconnect();
   }, [onEvent, mode]);
 
-  const paper: CSSProperties = { background: p.paper, backgroundImage: GRAIN, color: p.ink };
+  const paper: CSSProperties = { backgroundColor: p.paper, backgroundImage: GRAIN, color: p.ink };
 
   return (
     <motion.div className="absolute inset-0 z-10 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>

@@ -1,10 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { Clapperboard, Loader2, X } from "lucide-react";
+import { AlertCircle, Clapperboard, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
+import { uploadTypeFor } from "@/lib/editor/media-types";
+import { reasonOf } from "@/lib/editor/failed-uploads";
 import { LIMITS } from "@/config/site";
 import { SectionHeader } from "../field";
 
@@ -13,6 +15,7 @@ const ACCEPT = "video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm";
 export function VideoSection() {
   const t = useTranslations("editor.video");
   const tS = useTranslations("editor.sections.video");
+  const tP = useTranslations("editor.publishSheet");
   const video = useEditor((s) => s.data.video);
   const assets = useEditor((s) => s.assets);
   const setUploadedVideo = useEditor((s) => s.setUploadedVideo);
@@ -20,6 +23,8 @@ export function VideoSection() {
   const inputRef = useRef<HTMLInputElement>(null);
   const asset = Object.values(assets).find((a) => a.kind === "video");
   const status = asset?.status;
+  const mb = Math.round(LIMITS.videoMaxBytes / 1024 / 1024);
+  const reason = status === "error" ? reasonOf(asset?.error) : null;
 
   return (
     <section>
@@ -38,12 +43,20 @@ export function VideoSection() {
               {t("remove")}
             </button>
           </div>
+          {reason ? (
+            <p className="flex items-start gap-1.5 px-3 pb-3 text-xs text-destructive" role="alert">
+              <AlertCircle className="mt-px size-3.5 shrink-0" />
+              <span className="min-w-0">
+                {reason === "type" ? tP("failed.typeVideo") : reason === "too_big" ? tP("failed.tooBig", { mb: Math.round(LIMITS.uploadMaxBytes / 1024 / 1024) }) : tP(`failed.${reason}`)}
+              </span>
+            </p>
+          ) : null}
         </div>
       ) : (
         <button type="button" onClick={() => inputRef.current?.click()} className="flex w-full flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-8 text-center hover:border-ink/40">
           <Clapperboard className="size-5 text-coral" />
           <span className="mt-3 text-sm font-medium">{t("add")}</span>
-          <span className="mt-1 text-xs text-muted-foreground">{t("hint", { mb: Math.round(LIMITS.videoMaxBytes / 1024 / 1024) })}</span>
+          <span className="mt-1 text-xs text-muted-foreground">{t("hint", { mb })}</span>
         </button>
       )}
       <input
@@ -53,11 +66,11 @@ export function VideoSection() {
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) {
-            if (f.size > LIMITS.videoMaxBytes) toast.error(t("tooBig", { mb: Math.round(LIMITS.videoMaxBytes / 1024 / 1024) }));
-            else void setUploadedVideo(f);
-          }
           e.target.value = "";
+          if (!f) return;
+          if (!uploadTypeFor("video", f.type, f.name)) toast.error(t("badType"));
+          else if (f.size > LIMITS.videoMaxBytes) toast.error(t("tooBig", { mb }));
+          else void setUploadedVideo(f);
         }}
       />
     </section>

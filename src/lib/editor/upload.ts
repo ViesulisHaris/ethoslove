@@ -5,7 +5,18 @@
  * progress nor a way to notice a stalled connection. A phone that drops off Wi-Fi mid-upload
  * used to sit on "uploading" forever; now the attempt fails fast and can be retried.
  */
-export type UploadFailure = "timeout" | "stalled" | "network" | "unauthorized" | "server";
+export type UploadFailure =
+  | "timeout"
+  | "stalled"
+  | "network"
+  | "unauthorized"
+  | "server"
+  /** Storage refused the file's type. Another try sends the same type. */
+  | "unsupported_type"
+  /** Over the project's upload limit. */
+  | "too_big"
+  /** The request arrived empty: the browser couldn't read the stored file. */
+  | "unreadable";
 
 export class UploadError extends Error {
   constructor(
@@ -14,6 +25,18 @@ export class UploadError extends Error {
   ) {
     super(message ?? kind);
   }
+}
+
+/**
+ * Storage says why in the JSON body and often answers 400 whatever the reason, so the status
+ * alone can't tell a file it will never take from a hiccup worth retrying.
+ */
+export function failureFromResponse(status: number, body: string): UploadFailure {
+  if (status === 401 || status === 403 || /row-level security|"error":"Unauthorized"/i.test(body)) return "unauthorized";
+  if (status === 413 || /maximum allowed size|payload too large/i.test(body)) return "too_big";
+  if (status === 415 || /mime type|invalid_mime_type/i.test(body)) return "unsupported_type";
+  if (/no content provided/i.test(body)) return "unreadable";
+  return "server";
 }
 
 const STALL_MS = 30_000;
@@ -47,8 +70,7 @@ export function uploadBlob(opts: {
     xhr.onload = () => {
       done();
       if (xhr.status >= 200 && xhr.status < 300) return resolve();
-      if (xhr.status === 401 || xhr.status === 403) return reject(new UploadError("unauthorized", xhr.responseText.slice(0, 200)));
-      reject(new UploadError("server", `${xhr.status} ${xhr.responseText.slice(0, 200)}`));
+      reject(new UploadError(failureFromResponse(xhr.status, xhr.responseText), `${xhr.status} ${xhr.responseText.slice(0, 200)}`));
     };
     xhr.onerror = () => {
       done();

@@ -1,0 +1,21 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sunday 21:04", "messages": [
+      { "from": "me", "text": "its my birthday week" },
+      { "from": "them", "text": "birthday WEEK?" },
+      { "from": "me", "text": "yes. 7 days of me" },
+      { "from": "them", "text": "thats not a thing" },
+      { "from": "me", "text": "it is now" },
+      { "from": "them", "text": "ok." }
+    ] },
+    { "type": "chat", "timestamp": "Monday 00:00", "messages": [
+      { "from": "them", "text": "day 1 of 7" },
+      { "from": "them", "link": { "title": "birthday week, day 1", "domain": "tryethos.io", "image": "og", "name": "Chloe" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "day 1 of SEVEN??" },
+      { "from": "them", "text": "its not a thing" },
+      { "from": "them", "text": "it is now", "tapback": "heart" }
+    ] }
+  ]
+}

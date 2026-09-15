@@ -1,0 +1,24 @@
+{
+  "style": "instagram",
+  "contact": { "name": "marcus", "sub": "Active now", "avatar": 0 },
+  "slides": [
+    { "type": "chat", "timestamp": "Today 17:52", "messages": [
+      { "from": "me", "text": "the restaurant cancelled our reservation" },
+      { "from": "them", "text": "noooo" },
+      { "from": "me", "text": "on our anniversary" },
+      { "from": "them", "text": "stay in then" },
+      { "from": "me", "text": "thats not romantic" },
+      { "from": "them", "text": "blanket. candle. me." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "and this" },
+      { "from": "them", "link": { "title": "one year by the fire", "domain": "tryethos.io", "image": "og", "name": "Sophie" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok this is better than the restaurant" },
+      { "from": "them", "text": "i know" },
+      { "from": "them", "text": "i cancelled it" },
+      { "from": "me", "text": "WHAT", "status": "Seen" }
+    ] }
+  ]
+}

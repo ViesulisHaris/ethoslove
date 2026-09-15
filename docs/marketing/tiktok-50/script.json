@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 09:12", "messages": [
+      { "from": "them", "text": "what day is it" },
+      { "from": "me", "text": "its october 3rd" },
+      { "from": "them", "text": "and what happens on october 3rd" },
+      { "from": "me", "text": "aaron samuels asks cady what day it is" },
+      { "from": "them", "text": "and" },
+      { "from": "me", "text": "and u asked me the same thing a year ago" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i did" },
+      { "from": "them", "text": "happy 1 year" },
+      { "from": "them", "link": { "title": "it's october 3rd", "domain": "tryethos.io", "image": "og", "name": "Maddie" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "u waited a whole year to do this" },
+      { "from": "them", "text": "365 days" },
+      { "from": "me", "text": "ur so annoying" },
+      { "from": "them", "text": "what day is it", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -158,6 +158,29 @@ Constellations 21, everything else 17. 30's gift was Birthday Cinema.
   midnight to 04:00 UK time (US evening). Post UK-leaning stories around 19:00 UK time and
   US-leaning ones around 23:00 UK time.
 
+## Autumn and birthdays: 49 to 56
+
+Eight stories built for the comment section. Each one sits on an argument people already have every
+autumn, and every gift is a template that sells.
+
+| # | The argument in the comments | When to post |
+|---|---|---|
+| 49 | birthday week or birthday day | any week |
+| 50 | "if you know you know" (3 October) | the morning of 3 October |
+| 51 | ketchup or mustard: couples costumes | 15 to 31 October |
+| 52 | have you ever forgotten your own birthday | any week |
+| 53 | is the pumpkin-patch date mandatory | late September to October |
+| 54 | cosy night in or fancy dinner | any autumn weekend |
+| 55 | a Halloween birthday: cursed or iconic | 20 to 31 October |
+| 56 | is cuffing season real or an excuse | October to November |
+
+- **Every caption is a vote.** Two sides and nothing in between, so everyone who comments has picked
+  one, and the other side replies.
+- **Say the searchable words.** October 3rd, Halloween, cuffing season and pumpkin patch are what
+  people type into TikTok search in autumn. Put them in the first slide or the caption.
+- **Seven gifts are one purchase.** An unlock covers every gift on that template, so 49's seven
+  Birthday Cinemas cost one. When people ask how much, that reply sells.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -334,5 +357,13 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 46 | 11:11 | 1 year of long distance, the train | Constellations (free) | Starry |
 | 47 | hoodie | 2 months, Instagram DMs (his side) | Kawaii | Gingham |
 | 48 | top 5 | 3 months | Bouquet | Garden |
+| 49 | birthday week | her birthday, 7 days of gifts | Birthday Cinema | Polka |
+| 50 | it's october 3rd | 1 year, met on 3 October | Scrapbook (Favorite person) | Classic |
+| 51 | ketchup and mustard | Halloween couples costume (his side, Instagram DMs) | Trick or Treat | Spooky |
+| 52 | check the date | her birthday, which she forgot | Birthday Cinema | Polka |
+| 53 | the vibes | first autumn, 3 months | Scrapbook (Sunshine) | Classic |
+| 54 | i cancelled it | 1 year, a night in (Instagram DMs) | Fireside | Harvest |
+| 55 | not halloween. birthday. | her birthday on 31 October | Trick or Treat | Spooky |
+| 56 | cuffing season | asking her out (his side) | Scrapbook (Memories) | Classic |
 
-06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first.
+06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

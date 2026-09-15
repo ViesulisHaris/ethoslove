@@ -71,7 +71,8 @@ export async function ensureDraft(input: { templateSlug: string; locale: GiftLoc
   return { ok: false, error: "short_id_collision" };
 }
 
-const saveInput = z.object({ giftId: z.uuid(), data: z.unknown() });
+/** `expectDraft`: the editor believes this is still a draft, so a gift published since is refused rather than overwritten. */
+const saveInput = z.object({ giftId: z.uuid(), data: z.unknown(), expectDraft: z.boolean().optional() });
 
 /** Validates against the template's schema and stores the draft. */
 export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: string }>> {
@@ -91,6 +92,8 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
     .eq("user_id", ctx.user.id)
     .single();
   if (!row) return { ok: false, error: "not_found" };
+  // An old copy of a draft left on a phone must never land on a gift that went live since.
+  if (input.data.expectDraft && row.status !== "draft") return { ok: false, error: "not_draft" };
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   const data = { ...loose.data, templateSlug: row.template_slug };
   const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };

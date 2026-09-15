@@ -1,0 +1,22 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 07:02", "messages": [
+      { "from": "them", "text": "happy birthday baby" },
+      { "from": "me", "text": "its tomorrow" },
+      { "from": "them", "text": "its today" },
+      { "from": "me", "text": "i think i know my own birthday" },
+      { "from": "them", "text": "check the date" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "oh my god" },
+      { "from": "me", "text": "i forgot my own birthday" },
+      { "from": "them", "text": "i didnt" },
+      { "from": "them", "link": { "title": "happy 20th hannah", "domain": "tryethos.io", "image": "og", "name": "Hannah" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 07:15", "messages": [
+      { "from": "me", "text": "how did u remember and i didnt" },
+      { "from": "them", "text": "u had 3 exams this week" },
+      { "from": "them", "text": "someone had to remember", "tapback": "heart" }
+    ] }
+  ]
+}

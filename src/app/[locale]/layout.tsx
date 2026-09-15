@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, Caveat_Brush, Fraunces, JetBrains_Mono, Newsreader, Schibsted_Grotesk } from "next/font/google";
+import { Caveat, Caveat_Brush, DM_Serif_Display, Fraunces, Homemade_Apple, JetBrains_Mono, Newsreader, Schibsted_Grotesk, Special_Elite } from "next/font/google";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -54,6 +54,33 @@ const caveat = Caveat({
   display: "swap",
 });
 
+// Lettering for scrapbook-style gifts: typewriter notes, poster headlines and a loopy script.
+// Not preloaded, so marketing pages never download them; a gift fetches them when it uses them.
+const typewriter = Special_Elite({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-type",
+  display: "swap",
+  preload: false,
+});
+
+const poster = DM_Serif_Display({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-poster",
+  display: "swap",
+  preload: false,
+});
+
+const script = Homemade_Apple({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-script",
+  display: "swap",
+  preload: false,
+});
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -98,7 +125,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${sans.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} h-full`}
+      className={`${sans.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} ${typewriter.variable} ${poster.variable} ${script.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <RefCapture />
