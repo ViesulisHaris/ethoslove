@@ -223,7 +223,7 @@
     "deleted": "Deleted",
     "cancel": "Cancel",
     "deleteTitle": "Delete this gift?",
-    "deleteBlurb": "The link stops working immediately and the photos are removed. This can't be undone.",
+    "deleteBlurb": "The link stops working immediately and the uploads, images, voice notes and reactions are removed. This can't be undone.",
     "opensOverTime": "Opens, last 30 days",
     "share": "Share",
     "draftShare": "Publish the gift to get a link.",
@@ -256,10 +256,10 @@
       "paid": "paid",
       "refunded": "refunded"
     },
-    "dangerBlurb": "Export everything we hold about you, or delete the account and all of its gifts.",
+    "dangerBlurb": "Export everything we hold about you, or delete the account and all of its gifts, uploads and reactions.",
     "export": "Export my data",
     "deleteAccount": "Delete account",
-    "deleteConfirm": "This removes your account, every gift, upload and reaction, within 30 days. Type {email} to confirm.",
+    "deleteConfirm": "This removes your account, every gift, upload, image, video, voice note and reaction. Active storage is wiped first; backups expire within 30 days. Type {email} to confirm.",
     "deleteForever": "Delete forever",
     "cancel": "Cancel"
   },
@@ -366,7 +366,12 @@
       "crop": "Crop",
       "done": "Done",
       "tooMany": "This template holds up to {max} photos.",
-      "free10": "Free gifts hold 10 photos. Unlock the template for 20."
+      "free10": "Free gifts hold 10 photos. Unlock the template for 20.",
+      "failedBanner": "{n, plural, one {One photo didn’t upload.} other {# photos didn’t upload.}}",
+      "failedMissing": "{n, plural, one {One photo is no longer on this device. Add it again.} other {# photos are no longer on this device. Add them again.}}",
+      "retry": "Retry",
+      "removeFailed": "Remove them",
+      "missing": "Not on this device"
     },
     "music": {
       "none": "No music",
@@ -427,7 +432,8 @@
         "message": "Write a message",
         "photosMin": "Add at least {min} photo(s)",
         "photosMax": "Too many photos for this template",
-        "uploadsPending": "Photos are still uploading"
+        "uploadsPending": "Photos are still uploading",
+        "uploadsFailed": "Some photos didn’t upload"
       },
       "signInTitle": "Sign in to publish",
       "signInBlurb": "Your draft is saved on this device. Sign in and we'll pick up right here.",
@@ -459,7 +465,10 @@
       "signInInstead": "Already have an account? Sign in instead",
       "uploadsAfterPay": "Photos upload right after payment.",
       "ownedElsewhere": "Your purchase covers {templates}. This is a different template.",
-      "openOwned": "Open {template} instead"
+      "openOwned": "Open {template} instead",
+      "uploadingCount": "Uploading photos, {done} of {total}",
+      "retryUploads": "Retry uploads",
+      "removeFailedUploads": "Remove the failed photos"
     },
     "share": {
       "title": "It's live.",

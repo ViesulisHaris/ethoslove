@@ -5,6 +5,21 @@ import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 
 const handleI18n = createIntlMiddleware(routing);
 
+function unprefixedPathname(pathname: string): string {
+  const parts = pathname.split("/");
+  const maybeLocale = parts[1];
+  if (routing.locales.includes(maybeLocale as (typeof routing.locales)[number])) {
+    const rest = `/${parts.slice(2).join("/")}`;
+    return rest === "/" ? "/" : rest.replace(/\/$/, "") || "/";
+  }
+  return pathname;
+}
+
+function needsServerSession(pathname: string): boolean {
+  const path = unprefixedPathname(pathname);
+  return path.startsWith("/account") || path.startsWith("/dashboard") || path.startsWith("/create") || path.startsWith("/checkout");
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
@@ -22,12 +37,11 @@ export async function proxy(request: NextRequest) {
   if (pathname === "/g" || pathname.startsWith("/g/")) {
     const url = request.nextUrl.clone();
     url.pathname = `/${routing.defaultLocale}${pathname}`;
-    const response = NextResponse.rewrite(url);
-    return refreshSupabaseSession(request, response);
+    return NextResponse.rewrite(url);
   }
 
   const response = handleI18n(request);
-  return refreshSupabaseSession(request, response);
+  return needsServerSession(pathname) ? refreshSupabaseSession(request, response) : response;
 }
 
 export const config = {

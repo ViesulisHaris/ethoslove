@@ -6,6 +6,7 @@ import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } 
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
 import { GIFTS_BUCKET, storageObjectKey } from "@/lib/gift/assets";
+import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getManifest, loadTemplate } from "@/templates/registry";
@@ -82,7 +83,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
 
   const { error } = await ctx.supabase
     .from("gifts")
-    .update({ data: loose.data as unknown as Json, locale: loose.data.locale ?? "en" })
+    .update({ data: loose.data as unknown as Json, locale: loose.data.locale ?? "en", storage_pruned_at: null })
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .in("status", ["draft", "scheduled", "live"]);
@@ -143,6 +144,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
       timezone: input.data.schedule?.timezone ?? null,
       locale: data.locale,
       published_at: new Date().toISOString(),
+      storage_pruned_at: null,
     })
     .eq("id", gift.id)
     .eq("user_id", ctx.user.id);
@@ -237,8 +239,15 @@ export async function duplicateGift(giftId: string): Promise<ActionResult<{ gift
 export async function deleteGift(giftId: string): Promise<ActionResult<null>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
-  const { data: files } = await ctx.supabase.storage.from(GIFTS_BUCKET).list(giftId, { limit: 200 });
-  if (files?.length) await ctx.supabase.storage.from(GIFTS_BUCKET).remove(files.map((f) => `${giftId}/${f.name}`));
+  const { data: gift } = await ctx.supabase
+    .from("gifts")
+    .select("id")
+    .eq("id", giftId)
+    .eq("user_id", ctx.user.id)
+    .single();
+  if (!gift) return { ok: false, error: "not_found" };
+  const cleanup = await deleteGiftStorage(gift.id);
+  if (cleanup.errors.length) return { ok: false, error: "storage_cleanup_failed" };
   const { error } = await ctx.supabase.from("gifts").delete().eq("id", giftId).eq("user_id", ctx.user.id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/dashboard");

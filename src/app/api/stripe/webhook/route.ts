@@ -4,6 +4,9 @@ import { env } from "@/lib/env";
 import { getStripe } from "@/lib/stripe/server";
 import { fulfilCheckoutSession, revokePurchaseByPaymentIntent } from "@/lib/stripe/fulfil";
 
+export const runtime = "nodejs";
+export const maxDuration = 10;
+
 /** The only place money turns into unlocks. Verifies the Stripe signature on the raw body. */
 export async function POST(request: NextRequest) {
   const stripe = getStripe();

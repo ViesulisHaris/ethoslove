@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/get-user";
 
+export const runtime = "nodejs";
+export const maxDuration = 10;
+
 /** GDPR data export: everything we hold about the signed-in user, as JSON. */
 export async function GET() {
   const supabase = await getSupabaseServerClient();

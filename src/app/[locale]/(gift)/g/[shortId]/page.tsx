@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
-import { fetchPublicGift, passwordCookieName } from "@/lib/gift/public";
+import { fetchPublicGift, fetchPublicGiftMeta, passwordCookieName } from "@/lib/gift/public";
 import { promoteScheduledGift } from "@/lib/gift/promote";
 import { unseal } from "@/lib/crypto";
 import { isShortId } from "@/lib/gift/short-id";
@@ -14,12 +14,12 @@ import { ScheduledScreen } from "@/components/gift/scheduled-screen";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/g/[shortId]">, "searchParams">): Promise<Metadata> {
   const { shortId } = await params;
-  const gift = isShortId(shortId) ? await fetchPublicGift(shortId) : null;
+  const gift = isShortId(shortId) ? await fetchPublicGiftMeta(shortId) : null;
   if (!gift) return { title: "Gift", robots: { index: false, follow: false } };
   const es = gift.locale === "es";
   // The editor promises the Title shows in the link preview; without one, the invitation stands in.
   const title =
-    gift.data?.title?.trim() ||
+    gift.title?.trim() ||
     (es ? `${gift.recipientName}, alguien te ha hecho algo 💌` : `${gift.recipientName}, someone made you something 💌`);
   const description = es ? "Ábrelo con el sonido activado." : "Open it with your sound on.";
   return {

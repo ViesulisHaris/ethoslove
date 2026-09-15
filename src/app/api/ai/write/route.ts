@@ -6,6 +6,9 @@ import { OCCASIONS } from "@/config/occasions";
 import { rateLimit } from "@/lib/rate-limit";
 import { getCurrentUser } from "@/lib/auth/get-user";
 
+export const runtime = "nodejs";
+export const maxDuration = 20;
+
 const input = z.object({
   occasion: z.enum(OCCASIONS),
   relationship: z.string().max(120).default(""),

@@ -8,6 +8,7 @@ import { env, isConfigured } from "@/lib/env";
  */
 export async function refreshSupabaseSession(request: NextRequest, response: NextResponse) {
   if (!isConfigured.supabase) return response;
+  if (!hasSupabaseAuthCookie(request)) return response;
 
   const supabase = createServerClient(env.supabaseUrl!, env.supabaseAnonKey!, {
     cookies: {
@@ -24,4 +25,10 @@ export async function refreshSupabaseSession(request: NextRequest, response: Nex
   // Do not remove: this call is what triggers a token refresh when the access token expired.
   await supabase.auth.getUser();
   return response;
+}
+
+function hasSupabaseAuthCookie(request: NextRequest): boolean {
+  return request.cookies
+    .getAll()
+    .some((cookie) => cookie.name.startsWith("sb-") && cookie.name.includes("auth-token"));
 }

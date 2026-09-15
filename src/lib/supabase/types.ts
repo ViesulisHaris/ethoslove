@@ -55,6 +55,7 @@ export interface Database {
           created_at: string;
           updated_at: string;
           published_at: string | null;
+          storage_pruned_at: string | null;
         };
         Insert: {
           id?: string;
@@ -72,6 +73,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
           published_at?: string | null;
+          storage_pruned_at?: string | null;
         };
         Update: {
           template_slug?: string;
@@ -85,6 +87,7 @@ export interface Database {
           locale?: "en" | "es";
           updated_at?: string;
           published_at?: string | null;
+          storage_pruned_at?: string | null;
         };
         Relationships: [];
       };
@@ -239,11 +242,14 @@ export interface Database {
     };
     Functions: {
       has_template_unlock: { Args: { p_user: string; p_slug: string }; Returns: boolean };
+      gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };
+      storage_orphans: { Args: { p_limit?: number }; Returns: { name: string; bytes: number }[] };
+      purge_stale_drafts: { Args: { p_days?: number }; Returns: number };
       get_public_gift: { Args: { p_short_id: string; p_password?: string | null }; Returns: Json };
       set_gift_password: { Args: { p_gift_id: string; p_password: string | null }; Returns: undefined };
       record_gift_view: {
         Args: { p_short_id: string; p_viewer_hash: string; p_device?: string | null };
-        Returns: string | null;
+        Returns: Json;
       };
       update_gift_view_progress: { Args: { p_view_id: string; p_pct: number }; Returns: undefined };
       add_reaction: {

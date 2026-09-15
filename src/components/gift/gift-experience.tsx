@@ -9,6 +9,34 @@ import { SoundGate } from "./sound-gate";
 import { ReactionSheet } from "./reaction-sheet";
 import { HomeScreenTip } from "./home-screen-tip";
 
+const VIEW_TTL_MS = 24 * 60 * 60 * 1000;
+const PROGRESS_STEP = 25;
+
+type StoredView = { viewId: string; openedAt: number };
+
+function viewStorageKey(shortId: string): string {
+  return `ethos:view:${shortId}`;
+}
+
+function readStoredView(shortId: string): string | null {
+  try {
+    const raw = window.localStorage.getItem(viewStorageKey(shortId));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<StoredView>;
+    if (typeof parsed.viewId !== "string" || typeof parsed.openedAt !== "number") return null;
+    if (Date.now() - parsed.openedAt > VIEW_TTL_MS) return null;
+    return parsed.viewId;
+  } catch {
+    return null;
+  }
+}
+
+function rememberView(shortId: string, viewId: string) {
+  try {
+    window.localStorage.setItem(viewStorageKey(shortId), JSON.stringify({ viewId, openedAt: Date.now() }));
+  } catch {}
+}
+
 /**
  * The recipient's whole visit: gate → template → reaction, with anonymous view tracking.
  * A gift with a decorated cover skips the plain gate: tapping the cover is the gesture that
@@ -24,15 +52,24 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
   const viewId = useRef<string | null>(null);
   const viewed = useRef(false);
   const lastPct = useRef(0);
+  const lastReportAt = useRef(0);
 
-  // Once per visit; a replay shows the cover again but is not a new view.
+  // Once per browser per day; a replay shows the cover again but is not a new view.
   const recordView = useCallback(() => {
     if (viewed.current) return;
     viewed.current = true;
-    fetch(`/api/gift/${shortId}/view`, { method: "POST" })
+    const stored = readStoredView(shortId);
+    if (stored) {
+      viewId.current = stored;
+      return;
+    }
+    fetch(`/api/gift/${shortId}/view`, { method: "POST", cache: "no-store", keepalive: true })
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
-        if (j?.viewId) viewId.current = j.viewId;
+        if (typeof j?.viewId === "string") {
+          viewId.current = j.viewId;
+          rememberView(shortId, j.viewId);
+        }
       })
       .catch(() => {});
   }, [shortId]);
@@ -46,7 +83,12 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
     (e: TemplateEvent) => {
       const report = (pct: number) => {
         if (!viewId.current || pct <= lastPct.current) return;
+        const now = Date.now();
+        const enoughProgress = pct >= lastPct.current + PROGRESS_STEP;
+        const staleProgress = pct >= lastPct.current + 10 && now - lastReportAt.current > 15000;
+        if (pct < 100 && !enoughProgress && !staleProgress) return;
         lastPct.current = pct;
+        lastReportAt.current = now;
         void fetch(`/api/gift/${shortId}/view`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ viewId: viewId.current, pct }), keepalive: true });
       };
       if (e.type === "progress") report(e.pct);

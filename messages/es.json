@@ -223,7 +223,7 @@
     "deleted": "Borrado",
     "cancel": "Cancelar",
     "deleteTitle": "¿Borrar este regalo?",
-    "deleteBlurb": "El enlace deja de funcionar al instante y las fotos se eliminan. No se puede deshacer.",
+    "deleteBlurb": "El enlace deja de funcionar al instante y se eliminan los archivos, imágenes, notas de voz y reacciones. No se puede deshacer.",
     "opensOverTime": "Aperturas, últimos 30 días",
     "share": "Compartir",
     "draftShare": "Publica el regalo para obtener un enlace.",
@@ -256,10 +256,10 @@
       "paid": "pagado",
       "refunded": "reembolsado"
     },
-    "dangerBlurb": "Exporta todo lo que guardamos sobre ti, o elimina la cuenta y todos sus regalos.",
+    "dangerBlurb": "Exporta todo lo que guardamos sobre ti, o elimina la cuenta y todos sus regalos, archivos y reacciones.",
     "export": "Exportar mis datos",
     "deleteAccount": "Eliminar cuenta",
-    "deleteConfirm": "Esto elimina tu cuenta y todos los regalos, archivos y reacciones en un plazo de 30 días. Escribe {email} para confirmar.",
+    "deleteConfirm": "Esto elimina tu cuenta y todos los regalos, archivos, imágenes, vídeos, notas de voz y reacciones. El almacenamiento activo se borra primero; las copias de seguridad caducan en 30 días. Escribe {email} para confirmar.",
     "deleteForever": "Eliminar para siempre",
     "cancel": "Cancelar"
   },
@@ -366,7 +366,12 @@
       "crop": "Recortar",
       "done": "Listo",
       "tooMany": "Esta plantilla admite hasta {max} fotos.",
-      "free10": "Los regalos gratis admiten 10 fotos. Desbloquea la plantilla para 20."
+      "free10": "Los regalos gratis admiten 10 fotos. Desbloquea la plantilla para 20.",
+      "failedBanner": "{n, plural, one {Una foto no se subió.} other {# fotos no se subieron.}}",
+      "failedMissing": "{n, plural, one {Una foto ya no está en este dispositivo. Añádela de nuevo.} other {# fotos ya no están en este dispositivo. Añádelas de nuevo.}}",
+      "retry": "Reintentar",
+      "removeFailed": "Quitarlas",
+      "missing": "No está en este dispositivo"
     },
     "music": {
       "none": "Sin música",
@@ -427,7 +432,8 @@
         "message": "Escribe un mensaje",
         "photosMin": "Añade al menos {min} foto(s)",
         "photosMax": "Demasiadas fotos para esta plantilla",
-        "uploadsPending": "Las fotos aún se están subiendo"
+        "uploadsPending": "Las fotos aún se están subiendo",
+        "uploadsFailed": "Algunas fotos no se subieron"
       },
       "signInTitle": "Inicia sesión para publicar",
       "signInBlurb": "Tu borrador está guardado en este dispositivo. Inicia sesión y seguimos justo aquí.",
@@ -459,7 +465,10 @@
       "signInInstead": "¿Ya tienes cuenta? Inicia sesión",
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
       "ownedElsewhere": "Tu compra incluye {templates}. Esta es otra plantilla.",
-      "openOwned": "Abrir {template}"
+      "openOwned": "Abrir {template}",
+      "uploadingCount": "Subiendo fotos, {done} de {total}",
+      "retryUploads": "Reintentar subidas",
+      "removeFailedUploads": "Quitar las fotos fallidas"
     },
     "share": {
       "title": "Ya está publicado.",
