@@ -19,6 +19,8 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience } from "../_shared/Ambience";
+import { Confetti } from "../_shared/Confetti";
 import type { ConstellationFields } from "./schema";
 import { Starfield, type Link } from "./Starfield";
 import { layoutSky } from "./shapes";
@@ -411,6 +413,12 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         ) : null}
       </AnimatePresence>
 
+      {/* Sparkle weather over the sky, and a burst of stardust when the shape completes. */}
+      <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+        <Ambience layers={[{ kind: "sparkles", colors: ["#FFFFFF", "#FFE9B8", data.accentColor], count: 22 }, { kind: "dust", colors: ["#FFFFFF"], count: 16 }]} opacity={stage === "message" ? 0.35 : 0.8} />
+      </div>
+      <Confetti burst={stage === "final" || stage === "message" ? 1 : 0} colors={["#FFFFFF", "#FFE9B8", data.accentColor, "#BFD7FF"]} count={120} origin={{ x: 0.5, y: 0.45 }} className="pointer-events-none absolute inset-0 z-[15]" />
+
       {/* Constellation complete */}
       <AnimatePresence>
         {stage === "final" ? (
@@ -423,7 +431,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
             <p
-              className="max-w-sm text-[clamp(1.35rem,6cqw,1.75rem)] leading-snug italic"
+              className="max-w-sm text-[clamp(1.7rem,8cqw,2.3rem)] leading-snug italic drop-shadow-[0_2px_18px_rgba(0,0,0,0.6)]"
               style={{ fontFamily: "var(--gift-font-display)" }}
             >
               {finalLine}
