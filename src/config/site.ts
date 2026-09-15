@@ -28,8 +28,8 @@ export const LIMITS = {
   free: { maxPhotos: 10, maxGifts: Infinity },
   premium: { maxPhotos: 20, maxGifts: Infinity },
   /** Client-side compression target before upload. */
-  photoMaxBytes: 1.5 * 1024 * 1024,
-  photoMaxEdgePx: 2048,
+  photoMaxBytes: 0.6 * 1024 * 1024,
+  photoMaxEdgePx: 1600,
   audioMaxBytes: 12 * 1024 * 1024,
   videoMaxBytes: 60 * 1024 * 1024,
   messageMaxChars: 4000,
