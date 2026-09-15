@@ -385,6 +385,10 @@
       "library": "De la biblioteca",
       "upload": "Subir la tuya",
       "uploadHint": "MP3 o M4A, hasta {mb} MB",
+      "uploadingPct": "Subiendo… {pct}%",
+      "uploadedOk": "Subida",
+      "badType": "No podemos usar este tipo de archivo. Prueba con un MP3 o M4A.",
+      "tooBig": "Ese archivo pasa de {mb} MB. Prueba con uno más corto.",
       "startAt": "Empezar en",
       "previewPlay": "Escuchar",
       "previewStop": "Parar",
@@ -439,8 +443,8 @@
         "message": "Escribe un mensaje",
         "photosMin": "Añade al menos {min} foto(s)",
         "photosMax": "Demasiadas fotos para esta plantilla",
-        "uploadsPending": "Las fotos aún se están subiendo",
-        "uploadsFailed": "Algunas fotos no se subieron"
+        "uploadsPending": "Tus archivos aún se están subiendo",
+        "uploadsFailed": "Algo no se subió"
       },
       "signInTitle": "Inicia sesión para publicar",
       "signInBlurb": "Tu borrador está guardado en este dispositivo. Inicia sesión y seguimos justo aquí.",
@@ -473,9 +477,22 @@
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
       "ownedElsewhere": "Tu compra incluye {templates}. Esta es otra plantilla.",
       "openOwned": "Abrir {template}",
-      "uploadingCount": "Subiendo fotos, {done} de {total}",
-      "retryUploads": "Reintentar subidas",
-      "removeFailedUploads": "Quitar las fotos fallidas"
+      "uploadingCount": "Subiendo tus archivos, {done} de {total}",
+      "retryUploads": "Reintentar",
+      "failed": {
+        "song": "Tu canción «{title}»",
+        "songUntitled": "Tu canción",
+        "video": "Tu vídeo",
+        "voice": "Tu mensaje de voz",
+        "photos": "{n, plural, one {Una foto} other {# fotos}}",
+        "typeAudio": "No podemos usar este tipo de archivo. Prueba con un MP3 o M4A, o elige una canción de la biblioteca.",
+        "typeVideo": "No podemos usar este tipo de archivo. Prueba con un MP4 o MOV.",
+        "typePhoto": "No podemos usar este tipo de archivo. Prueba con un JPG o PNG.",
+        "tooBig": "Pesa más de {mb} MB. Quítalo y añade uno más corto.",
+        "missing": "Este dispositivo ya no puede leerlo. Quítalo y vuelve a añadirlo.",
+        "network": "Se cortó la conexión. Vuelve a intentarlo o quítalo para enviar el regalo sin él.",
+        "remove": "Quitar"
+      }
     },
     "share": {
       "title": "Ya está publicado.",
@@ -535,6 +552,7 @@
       "add": "Añadir un vídeo",
       "hint": "MP4 o MOV, hasta {mb} MB. Mejor si dura menos de un minuto.",
       "tooBig": "Ese vídeo pasa de {mb} MB. Recórtalo o expórtalo más pequeño.",
+      "badType": "No podemos usar este tipo de archivo. Prueba con un MP4 o MOV.",
       "uploaded": "Subido",
       "uploading": "Subiendo…",
       "local": "En este dispositivo",

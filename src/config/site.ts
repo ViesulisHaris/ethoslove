@@ -31,7 +31,9 @@ export const LIMITS = {
   photoMaxBytes: 0.6 * 1024 * 1024,
   photoMaxEdgePx: 1600,
   audioMaxBytes: 12 * 1024 * 1024,
-  videoMaxBytes: 60 * 1024 * 1024,
+  /** Supabase Storage's project-wide ceiling (fileSizeLimit). The gifts bucket says 60 MB, but the lower limit wins. */
+  uploadMaxBytes: 50 * 1024 * 1024,
+  videoMaxBytes: 50 * 1024 * 1024,
   messageMaxChars: 4000,
   captionMaxChars: 140,
   voiceNoteMaxSeconds: 20,

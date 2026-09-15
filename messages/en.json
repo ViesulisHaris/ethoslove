@@ -385,6 +385,10 @@
       "library": "From the library",
       "upload": "Upload your own",
       "uploadHint": "MP3 or M4A, up to {mb} MB",
+      "uploadingPct": "Uploading… {pct}%",
+      "uploadedOk": "Uploaded",
+      "badType": "We can’t use this file type. Try an MP3 or M4A.",
+      "tooBig": "That file is over {mb} MB. Try a shorter one.",
       "startAt": "Start from",
       "previewPlay": "Preview",
       "previewStop": "Stop",
@@ -439,8 +443,8 @@
         "message": "Write a message",
         "photosMin": "Add at least {min} photo(s)",
         "photosMax": "Too many photos for this template",
-        "uploadsPending": "Photos are still uploading",
-        "uploadsFailed": "Some photos didn’t upload"
+        "uploadsPending": "Your files are still uploading",
+        "uploadsFailed": "Something didn’t upload"
       },
       "signInTitle": "Sign in to publish",
       "signInBlurb": "Your draft is saved on this device. Sign in and we'll pick up right here.",
@@ -473,9 +477,22 @@
       "uploadsAfterPay": "Photos upload right after payment.",
       "ownedElsewhere": "Your purchase covers {templates}. This is a different template.",
       "openOwned": "Open {template} instead",
-      "uploadingCount": "Uploading photos, {done} of {total}",
-      "retryUploads": "Retry uploads",
-      "removeFailedUploads": "Remove the failed photos"
+      "uploadingCount": "Uploading your files, {done} of {total}",
+      "retryUploads": "Try again",
+      "failed": {
+        "song": "Your song “{title}”",
+        "songUntitled": "Your song",
+        "video": "Your video clip",
+        "voice": "Your voice message",
+        "photos": "{n, plural, one {One photo} other {# photos}}",
+        "typeAudio": "We can’t use this file type. Try an MP3 or M4A, or pick a song from the library.",
+        "typeVideo": "We can’t use this file type. Try an MP4 or MOV.",
+        "typePhoto": "We can’t use this file type. Try a JPG or PNG.",
+        "tooBig": "It’s over {mb} MB. Remove it and add a shorter one.",
+        "missing": "This device can no longer read it. Remove it, then add it again.",
+        "network": "The connection dropped. Try again, or remove it to send the gift without it.",
+        "remove": "Remove"
+      }
     },
     "share": {
       "title": "It's live.",
@@ -535,6 +552,7 @@
       "add": "Add a video clip",
       "hint": "MP4 or MOV, up to {mb} MB. Keep it under a minute.",
       "tooBig": "That clip is over {mb} MB. Trim it or export smaller.",
+      "badType": "We can’t use this file type. Try an MP4 or MOV.",
       "uploaded": "Uploaded",
       "uploading": "Uploading…",
       "local": "On this device",

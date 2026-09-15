@@ -11,6 +11,8 @@ import { PRODUCTS, currencyFor, formatAmount, type ProductId } from "@/lib/prici
 import { getManifest } from "@/templates/registry";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
+import { summarizeFailedUploads, type FailedUpload } from "@/lib/editor/failed-uploads";
+import { LIMITS } from "@/config/site";
 import { getEntitlement, publishGift } from "@/app/actions/gift";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,7 +66,8 @@ export function PublishSheet({
   // Opening the sheet kicks uploads + a fresh entitlement check.
   useEffect(() => {
     if (!open || !state.authed) return;
-    void state.ensureRemote();
+    // Anything still waiting on this device goes up now, including files an earlier visit never sent.
+    void state.ensureRemote().then(() => useEditor.getState().uploadPending());
     getEntitlement(slug).then(setFetchedEntitlement);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
@@ -77,11 +80,25 @@ export function PublishSheet({
     const local = Object.values(state.assets).filter((a) => a.local || a.status === "processing");
     return { total: local.length, done: local.filter((a) => a.status === "uploaded").length };
   }, [state.assets]);
-  const failedUploads = useMemo(
-    () => Object.values(state.assets).filter((a) => a.status === "error" && !a.storagePath),
-    [state.assets],
+  // What didn't upload, named the way the sender thinks of it, each with its own way out.
+  const failedItems = useMemo(
+    () => (state.hydrated ? summarizeFailedUploads(state.data, state.assets) : []),
+    [state.hydrated, state.data, state.assets],
   );
-  const failedRetryable = failedUploads.some((a) => a.error !== "missing_blob");
+  const failedLabel = (item: FailedUpload) =>
+    item.group === "song"
+      ? item.title
+        ? t("failed.song", { title: item.title })
+        : t("failed.songUntitled")
+      : item.group === "photos"
+        ? t("failed.photos", { n: item.count })
+        : t(`failed.${item.group}`);
+  const failedReason = (item: FailedUpload) =>
+    item.reason === "type"
+      ? t(item.group === "video" ? "failed.typeVideo" : item.group === "photos" ? "failed.typePhoto" : "failed.typeAudio")
+      : item.reason === "too_big"
+        ? t("failed.tooBig", { mb: Math.round(LIMITS.uploadMaxBytes / 1024 / 1024) })
+        : t(`failed.${item.reason}`);
   // A phone that comes back online mid-checklist picks its uploads straight back up.
   useEffect(() => {
     if (!open) return;
@@ -253,7 +270,7 @@ export function PublishSheet({
                   .filter((key) => state.authed || key !== "uploadsPending")
                   .map((key) => {
                     const bad = problems.includes(key);
-                    const stuck = key === "uploadsPending" && bad && !uploadsInFlight && failedUploads.length > 0;
+                    const stuck = key === "uploadsPending" && bad && !uploadsInFlight && failedItems.length > 0;
                     const label = stuck
                       ? t("problems.uploadsFailed")
                       : key === "uploadsPending" && bad && uploadTotals.total > 1
@@ -283,16 +300,33 @@ export function PublishSheet({
                     );
                   })}
               </ul>
-              {state.authed && failedUploads.length > 0 && !uploadsInFlight ? (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {failedRetryable ? (
-                    <Button type="button" variant="outline" className="h-10 rounded-full" onClick={() => void state.retryUploads()}>
+              {state.authed && failedItems.length > 0 && !uploadsInFlight ? (
+                <div className="mt-3 rounded-2xl border border-coral/40 bg-coral/5 p-3" role="alert" data-testid="failed-uploads">
+                  <ul className="flex flex-col gap-3">
+                    {failedItems.map((item) => (
+                      <li key={item.group} className="flex items-start gap-3">
+                        <AlertCircle className="mt-0.5 size-4 shrink-0 text-coral" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium [overflow-wrap:anywhere]">{failedLabel(item)}</p>
+                          <p className="mt-0.5 text-xs text-ink-soft">{failedReason(item)}</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-9 shrink-0 rounded-full px-3.5"
+                          onClick={() => void state.dropFailedUploads(item.group)}
+                          data-testid={`remove-failed-${item.group}`}
+                        >
+                          {t("failed.remove")}
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                  {failedItems.some((item) => item.retryable) ? (
+                    <Button type="button" variant="outline" className="mt-3 h-10 w-full rounded-full" onClick={() => void state.retryUploads()}>
                       {t("retryUploads")}
                     </Button>
                   ) : null}
-                  <Button type="button" variant="ghost" className="h-10 rounded-full" onClick={() => void state.dropFailedUploads()}>
-                    {t("removeFailedUploads")}
-                  </Button>
                 </div>
               ) : null}
             </section>

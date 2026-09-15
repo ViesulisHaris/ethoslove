@@ -78,7 +78,7 @@ function contentSecurityPolicy(): string {
     "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com",
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
     "frame-src https://js.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",
