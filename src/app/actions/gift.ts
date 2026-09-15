@@ -32,10 +32,11 @@ async function requireContext(): Promise<Ctx> {
 
 /**
  * Owners can only write drafts themselves (RLS, migration 0007). What recipients see, a publish or
- * an edit to a live gift, is written with the service role once the publish rules have passed.
+ * an edit to a live gift, is written with the service role once the publish rules have passed, so
+ * without SUPABASE_SERVICE_ROLE_KEY those writes are refused up front rather than by the database.
  */
-function recipientFacingWriter(ctx: SignedIn): SignedIn["supabase"] {
-  return getSupabaseAdminClient() ?? ctx.supabase;
+function recipientFacingWriter(): SignedIn["supabase"] | null {
+  return getSupabaseAdminClient();
 }
 
 /** Every stored file a gift points at, in any field, must sit in the folder of a gift this user owns. */
@@ -115,7 +116,9 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   }
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
-  const { error } = await recipientFacingWriter(ctx)
+  const writer = recipientFacingWriter();
+  if (!writer) return { ok: false, error: "not_configured" };
+  const { error } = await writer
     .from("gifts")
     .update({ ...patch, storage_pruned_at: null })
     .eq("id", input.data.giftId)
@@ -168,8 +171,15 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
   const status = scheduled ? "scheduled" : "live";
+  const writer = recipientFacingWriter();
+  if (!writer) return { ok: false, error: "not_configured" };
 
-  const { error: updateError } = await recipientFacingWriter(ctx)
+  // The password goes on before the gift goes live: it only needs ownership, so it works on a draft,
+  // and if the unlock disappeared in the meantime the password is refused before anything is public.
+  const { error: pwError } = await ctx.supabase.rpc("set_gift_password", { p_gift_id: gift.id, p_password: input.data.password ?? null });
+  if (pwError) return { ok: false, error: pwError.message };
+
+  const { error: updateError } = await writer
     .from("gifts")
     .update({
       data: { ...data, watermark: decision.watermark } as unknown as Json,
@@ -185,9 +195,6 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     .eq("id", gift.id)
     .eq("user_id", ctx.user.id);
   if (updateError) return { ok: false, error: updateError.message };
-
-  const { error: pwError } = await ctx.supabase.rpc("set_gift_password", { p_gift_id: gift.id, p_password: input.data.password ?? null });
-  if (pwError) return { ok: false, error: pwError.message };
 
   const { data: row } = await ctx.supabase.from("gifts").select("short_id").eq("id", gift.id).single();
   revalidatePath("/dashboard");
