@@ -16,12 +16,13 @@ import { manifest as arcade } from "./arcade/manifest";
 import { manifest as passport } from "./passport/manifest";
 import { manifest as bloom } from "./bloom/manifest";
 import { manifest as bouquet } from "./bouquet/manifest";
+import { manifest as kawaii } from "./kawaii/manifest";
 
 /**
  * Manifests are eager (tiny, safe to import on the server).
  * Template code is lazy: each entry is its own chunk, loaded only when rendered.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = {
@@ -41,6 +42,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   passport: () => import("./passport"),
   bloom: () => import("./bloom"),
   bouquet: () => import("./bouquet"),
+  kawaii: () => import("./kawaii"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

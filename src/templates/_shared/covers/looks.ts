@@ -141,6 +141,8 @@ export function defaultCoverFor(slug: string): CoverId {
   switch (slug) {
     case "the-letter":
       return "classic"; // it opens with its own envelope
+    case "kawaii":
+      return "gingham";
     case "constellations":
     case "midnight-countdown":
     case "passport":

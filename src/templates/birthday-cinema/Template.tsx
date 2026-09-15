@@ -19,6 +19,7 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
 import { GiftVideo } from "../_shared/GiftVideo";
+import { Ambience } from "../_shared/Ambience";
 import type { CinemaFields } from "./schema";
 import { Flames, type FlameState } from "./Flames";
 
@@ -175,7 +176,12 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         ) : null}
       </AnimatePresence>
 
-      <Confetti burst={burst} colors={[data.accentColor, "#F2C879", "#FFF8F4", "#F4C7C3"]} origin={{ x: 0.5, y: 0.7 }} />
+      {open ? (
+        <div className="pointer-events-none absolute inset-0 z-[25]" aria-hidden="true">
+          <Ambience layers={[{ kind: "bokeh", colors: ["#FFD98A", "#FFF1D6", data.accentColor], count: 10 }, { kind: "sparkles", colors: ["#FFE9B8", "#FFFFFF"], count: 18 }]} opacity={stage === "film" || stage === "message" ? 0.45 : 0.9} />
+        </div>
+      ) : null}
+      <Confetti burst={burst} colors={[data.accentColor, "#F2C879", "#FFF8F4", "#F4C7C3"]} count={220} origin={{ x: 0.5, y: 0.7 }} />
 
       {/* Film strip + message */}
       {stage === "film" || stage === "message" ? (

@@ -163,6 +163,20 @@ const SCRIPTS = {
     await page.waitForTimeout(4000);
     return poster;
   },
+  kawaii: async (page) => {
+    // Its demo opens with the gingham cover; tap through it first.
+    const cover = page.getByRole("button", { name: /tap to open/i });
+    await cover.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1200);
+    await cover.click({ force: true });
+    await page.getByRole("button", { name: /tap the box/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    const poster = await page.screenshot();
+    // The box pulses forever, which Playwright reads as "not stable"; force the tap.
+    await page.getByRole("button", { name: /tap the box/i }).click({ force: true });
+    await page.waitForTimeout(5500);
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);

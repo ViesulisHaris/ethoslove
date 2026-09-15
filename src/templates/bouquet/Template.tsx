@@ -13,7 +13,9 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience } from "../_shared/Ambience";
 import { BouquetArt, timingFor } from "./Bouquet";
+import { FlowerHead } from "./art";
 import { arrange } from "./arrange";
 import type { BouquetFields } from "./schema";
 
@@ -36,8 +38,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const look = BACKDROP[data.fields.backdrop] ?? BACKDROP.linen;
   const animate = mode !== "preview" && !reduce;
   const arr = useMemo(() => arrange(data.fields.stems, data.fields.seed), [data.fields.stems, data.fields.seed]);
-  const cardAt = animate ? timingFor(arr).card + 1.1 : 0;
+  // One flower blooms big across the screen first, then the bouquet assembles under it.
+  const BLOOM_S = 2.6;
+  const cardAt = animate ? BLOOM_S + timingFor(arr).card + 1.1 : 0;
   const [ready, setReady] = useState(!animate);
+  const [bloomed, setBloomed] = useState(!animate);
   const [open, setOpen] = useState(false);
   const [run, setRun] = useState(0);
   const cardText = data.fields.cardNote?.trim() || s.forName.replace("{name}", data.recipientName);
@@ -78,17 +83,35 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       </div>
 
       <div className="absolute inset-x-0 top-[12%] bottom-[max(14%,8.5rem)] flex items-center justify-center">
-        <BouquetArt
-          key={run}
-          fields={data.fields}
-          cardText={cardText}
-          animate={animate}
-          onCard={ready ? openCard : undefined}
-          className="h-full w-auto max-w-[calc(96*var(--u))] drop-shadow-[0_24px_30px_rgba(40,25,20,0.18)]"
-        />
+        {bloomed ? (
+          <BouquetArt
+            key={run}
+            fields={data.fields}
+            cardText={cardText}
+            animate={animate}
+            onCard={ready ? openCard : undefined}
+            className="h-full w-auto max-w-[calc(96*var(--u))] drop-shadow-[0_24px_30px_rgba(40,25,20,0.18)]"
+          />
+        ) : null}
       </div>
 
-      {animate && ready && petalTone ? <Petals color={petalTone.mid} light={petalTone.light} /> : null}
+      <AnimatePresence>
+        {animate && !bloomed && arr.heads[0] ? (
+          <BloomOpener key={`bloom-${run}`} head={arr.heads[0]} seconds={BLOOM_S} onDone={() => setBloomed(true)} />
+        ) : null}
+      </AnimatePresence>
+
+      {animate && petalTone ? (
+        <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
+          <Ambience
+            layers={[
+              { kind: "petals", colors: [petalTone.mid, petalTone.light, "#F7D9DD"], count: ready ? 16 : 8 },
+              { kind: "sparkles", colors: ["#FFFFFF", "#FFE9B8"], count: 14 },
+            ]}
+            opacity={0.9}
+          />
+        </div>
+      ) : null}
 
       <AnimatePresence>
         {ready && !open ? (
@@ -138,6 +161,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
                   : () => {
                       setOpen(false);
                       setReady(!animate);
+                      setBloomed(!animate);
                       setRun((r) => r + 1);
                     }
               }
@@ -151,24 +175,37 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
-/** A few petals drifting down once the bouquet is finished. */
-function Petals({ color, light }: { color: string; light: string }) {
+/**
+ * The opening: the first flower of the bouquet blooms from a bud to fill the screen in a wash
+ * of light, then fades as the bouquet begins assembling underneath. It is what the video
+ * opens on, so it runs big and slow.
+ */
+function BloomOpener({ head, seconds, onDone }: { head: ReturnType<typeof arrange>["heads"][number]; seconds: number; onDone: () => void }) {
   return (
-    <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-      {[12, 30, 52, 68, 84].map((left, i) => (
-        <motion.svg
-          key={left}
-          viewBox="-6 -10 12 20"
-          className="absolute top-0 h-5 w-3"
-          style={{ left: `${left}%` }}
-          initial={{ y: "-5vh", rotate: 0, opacity: 0 }}
-          animate={{ y: "105vh", rotate: 360, x: [0, 14, -10, 8, 0], opacity: [0, 0.9, 0.9, 0] }}
-          transition={{ duration: 11 + i * 1.7, delay: i * 2.1, repeat: Infinity, ease: "linear" }}
-        >
-          <path d="M0-9C5-5 5 5 0 9C-5 5-5-5 0-9Z" fill={i % 2 ? light : color} />
-        </motion.svg>
-      ))}
-    </div>
+    <motion.div
+      className="pointer-events-none absolute inset-0 z-20 grid place-items-center"
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+      aria-hidden="true"
+    >
+      <motion.div
+        className="absolute rounded-full"
+        style={{ width: "calc(120 * var(--u))", height: "calc(120 * var(--u))", background: `radial-gradient(circle, ${head.tone.light}99 0%, ${head.tone.light}33 38%, transparent 62%)` }}
+        initial={{ scale: 0.2, opacity: 0 }}
+        animate={{ scale: [0.2, 1.35, 1.1], opacity: [0, 1, 0.55] }}
+        transition={{ duration: seconds, ease: "easeOut" }}
+      />
+      <motion.svg
+        viewBox="-60 -60 120 120"
+        style={{ width: "calc(84 * var(--u))", height: "calc(84 * var(--u))", overflow: "visible" }}
+        initial={{ scale: 0.1, rotate: -80, opacity: 0, filter: "blur(6px)" }}
+        animate={{ scale: [0.1, 1.12, 1], rotate: [-80, 6, 0], opacity: 1, filter: ["blur(6px)", "blur(0px)", "blur(0px)"] }}
+        transition={{ duration: seconds * 0.85, ease: [0.16, 1, 0.3, 1] }}
+        onAnimationComplete={() => window.setTimeout(onDone, seconds * 150)}
+      >
+        <FlowerHead id={head.id} tone={head.tone} uid={`bloom${head.key}`} seed={head.seed} />
+      </motion.svg>
+    </motion.div>
   );
 }
 

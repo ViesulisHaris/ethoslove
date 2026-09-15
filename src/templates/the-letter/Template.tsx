@@ -19,6 +19,8 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { GiftVideo } from "../_shared/GiftVideo";
+import { Ambience } from "../_shared/Ambience";
+import { Confetti } from "../_shared/Confetti";
 import type { LetterFields } from "./schema";
 import styles from "./letter.module.css";
 
@@ -47,6 +49,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [stage, setStage] = useState<Stage>(mode === "preview" ? "reading" : "sealed");
   const [lightbox, setLightbox] = useState<GiftPhoto | null>(null);
   const [run, setRun] = useState(0);
+  const [burst, setBurst] = useState(0);
   const timers = useRef<number[]>([]);
 
   const fields = data.fields;
@@ -65,6 +68,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       setStage("reading");
       return;
     }
+    setBurst((b) => b + 1);
     setStage("opening");
     timers.current.push(window.setTimeout(() => setStage("unfolding"), 2450));
     timers.current.push(window.setTimeout(() => setStage("reading"), 2450 + 1500));
@@ -85,6 +89,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   return (
     <div ref={rootRef} className={styles.root} style={vars}>
       <Desk variant={fields.desk} reduce={!!reduce} />
+      {/* Candlelight all over the screen: motes rising while it waits, petals drifting once it's read. */}
+      <div className={styles.ambienceBack} aria-hidden="true">
+        <Ambience layers={[{ kind: "bokeh", colors: ["#FFD9A8", "#FFF1D6", "#F6C7B8"] }, { kind: "dust", colors: ["#FFE7B8", "#FFF7E6"] }]} intensity={stage === "reading" ? 0.7 : 1} />
+      </div>
 
       <AnimatePresence>
         {stage === "sealed" || stage === "opening" ? (
@@ -121,6 +129,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <AnimatePresence>
         {lightbox ? <Lightbox key="lightbox" photo={lightbox} onClose={() => setLightbox(null)} /> : null}
       </AnimatePresence>
+
+      {stage === "reading" && !reduce ? (
+        <div className={styles.ambienceFront} aria-hidden="true">
+          <Ambience layers={[{ kind: "petals", colors: ["#F4B8C1", "#F7D2C4", "#E9A3AE", "#FBE3D6"], count: 14 }, { kind: "sparkles", colors: ["#FFE9B8", "#FFFFFF"], count: 16 }]} opacity={0.85} />
+        </div>
+      ) : null}
+      <Confetti burst={burst} colors={["#F2C879", "#FFE9B8", "#E8604C", "#FBF6EE"]} count={70} origin={{ x: 0.5, y: 0.46 }} className={styles.burst} />
 
       <SoundToggle audio={audio} locale={data.locale} />
     </div>
