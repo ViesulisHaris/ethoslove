@@ -179,6 +179,7 @@
     "or": "or",
     "continueWithGoogle": "Continue with Google",
     "continueWithApple": "Continue with Apple",
+    "continueWithApple": "Continue with Apple",
     "noAccount": "New here?",
     "haveAccount": "Already have an account?",
     "notConfiguredTitle": "Auth isn't connected yet",
