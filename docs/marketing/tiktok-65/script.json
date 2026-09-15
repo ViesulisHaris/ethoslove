@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 22:36", "messages": [
+      { "from": "me", "text": "why is there a note in ur phone with my name on it" },
+      { "from": "them", "text": "u went in my notes" },
+      { "from": "me", "text": "u handed me ur phone" },
+      { "from": "them", "text": "dont open it" },
+      { "from": "me", "text": "its 300 lines" },
+      { "from": "them", "text": "i said dont" }
+    ] },
+    { "type": "chat", "timestamp": "Today 22:51", "messages": [
+      { "from": "them", "text": "fine. read it properly then" },
+      { "from": "them", "link": { "title": "the note", "domain": "tryethos.io", "image": "og", "name": "Eve" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:14", "messages": [
+      { "from": "me", "text": "the first line is from 2 years ago" },
+      { "from": "me", "text": "we met 2 years ago" },
+      { "from": "them", "text": "yes" },
+      { "from": "me", "text": "u started it the day we met" },
+      { "from": "them", "text": "the day after. i waited a day", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -206,6 +206,28 @@ from their own phone.
   four months, a birthday. 57 is the exception that proves it, an anniversary of something that ended.
 - **Four are hers and four are his**, so both sides of the app see themselves sending one.
 
+## The obsession ones: 65 to 70
+
+The stories women stay up reading: somebody has been in love with you for longer than you knew, and
+there is evidence. Six of them, and the rules that keep the genre charming instead of alarming.
+
+- **The reveal is evidence of feeling, never surveillance.** A note in the Notes app, 620 photos, a list
+  written eight months early, a number of days. Nobody is tracked, checked up on, tested, or told what
+  to do. The second a story is about knowing where someone is or who they are with, the comments turn
+  and the post is finished, so we do not write those.
+- **The crazy is mutual, and she is usually worse.** Her album is 900 to his 620, she liked him first
+  anyway, they are both unwell. Two obsessed people is a romance; one obsessed person is a warning.
+- **A number does the confessing.** 300 lines, 227 days, 620 photos, 9 messages in 40 minutes, 3 hours.
+  Numbers make an unbelievable feeling believable, and they are what the comments repeat back.
+- **The obsessed one is embarrassed.** "dont open it", "u counted them", "i waited a day so it wouldnt
+  be weird". Pride reads as creepy; shame reads as love.
+- **The grand gesture asks for nothing.** In 70 he drives three hours and stays in the car park until
+  she tells him to come up. Restraint is what makes a gesture land instead of landing on someone.
+- **One is hers, and it is the one girls send each other.** 69 is a girl who wrote her dream boyfriend
+  in a notes app in January and met him in September. The obsession points at the future, not at him.
+- **Keep it at the age.** The evidence is free: photos, a note, a list, a drive. Nothing bought, nothing
+  flown, nothing that needs money.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -398,5 +420,11 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 62 | it cost me 3 hours | his birthday, no money | Birthday Cinema | Polka |
 | 63 | i said ur my friend | 4 months, the label | Kawaii | Gingham |
 | 64 | the part i unsent | 1 year, the night before | Scrapbook (Memories) | Classic |
+| 65 | the note | 2 years, 300 lines since day one | Jar of Reasons | Picnic |
+| 66 | 227 | 200 days together, the 27 before | Scrapbook (Memories) | Classic |
+| 67 | her | 6 months, 620 photos | Museum | Lovecore |
+| 68 | 40 minutes | her birthday (his side) | Birthday Cinema | Polka |
+| 69 | worked tho | 1 year since they met, her list | Bouquet | Garden |
+| 70 | im fine. | 6 months, the 3am drive (his side) | Fireside | Harvest |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

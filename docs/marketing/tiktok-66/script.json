@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 00:41", "messages": [
+      { "from": "me", "text": "random q" },
+      { "from": "me", "text": "how long have u liked me" },
+      { "from": "them", "text": "227 days" },
+      { "from": "me", "text": "weve been together 200" },
+      { "from": "them", "text": "yes" },
+      { "from": "me", "text": "so what were the other 27" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00:58", "messages": [
+      { "from": "them", "text": "i kept them" },
+      { "from": "them", "link": { "title": "the 27 days", "domain": "tryethos.io", "image": "og", "name": "Lea" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 01:12", "messages": [
+      { "from": "me", "text": "u took photos of me before we were together" },
+      { "from": "them", "text": "badly. from very far away" },
+      { "from": "me", "text": "thats insane" },
+      { "from": "me", "text": "227 days ago i liked u too" },
+      { "from": "them", "text": "i know. u were obvious", "tapback": "heart" }
+    ] }
+  ]
+}
