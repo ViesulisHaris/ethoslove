@@ -1,0 +1,34 @@
+{
+  "style": "instagram",
+  "contact": { "name": "leo", "sub": "Active now", "avatar": 0 },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 23:48",
+      "messages": [
+        { "from": "me", "text": "i lowk miss u" },
+        { "from": "them", "text": "i highk miss u" },
+        { "from": "me", "text": "who says highk" },
+        { "from": "them", "text": "someone who highk misses u" },
+        { "from": "me", "text": "ur so embarrassing" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "i highk made u something" },
+        { "from": "them", "text": "happy 6 months" },
+        { "from": "them", "link": { "title": "highk in love w u", "domain": "tryethos.io", "image": "og", "name": "Zara" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "why does the bunny look like u" },
+        { "from": "them", "text": "because its me" },
+        { "from": "me", "text": "i hate u" },
+        { "from": "them", "text": "i highk hate u too", "reaction": "❤️" }
+      ]
+    }
+  ]
+}

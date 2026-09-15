@@ -1,0 +1,35 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 18:42",
+      "messages": [
+        { "from": "me", "text": "im so mad at u" },
+        { "from": "them", "text": "why what did i do sweet baby" },
+        { "from": "me", "text": "dont sweet baby me" },
+        { "from": "them", "text": "ok what did i do angel" },
+        { "from": "me", "text": "its 6pm on my birthday" },
+        { "from": "me", "text": "and u havent said a word", "status": "Read 18:43" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 19:31",
+      "messages": [
+        { "from": "them", "text": "sorry princess" },
+        { "from": "them", "text": "i was busy" },
+        { "from": "me", "text": "busy doing WHAT" },
+        { "from": "them", "link": { "title": "happy 22nd maya", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "u were making this all day??" },
+        { "from": "them", "text": "since 7am mama" },
+        { "from": "me", "text": "ok im not mad anymore" },
+        { "from": "them", "text": "i know sweet baby", "tapback": "heart" }
+      ]
+    }
+  ]
+}

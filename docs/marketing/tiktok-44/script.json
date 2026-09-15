@@ -1,0 +1,34 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Thursday 23:57",
+      "messages": [
+        { "from": "me", "text": "call me" },
+        { "from": "them", "text": "cant rn baby" },
+        { "from": "me", "text": "why" },
+        { "from": "them", "text": "busy" },
+        { "from": "me", "text": "busy doing what its nearly 12" },
+        { "from": "them", "text": "u will see my angel" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Friday 00:00",
+      "messages": [
+        { "from": "them", "text": "happy birthday my angel" },
+        { "from": "them", "text": "wanted to be first" },
+        { "from": "them", "link": { "title": "happy 23rd josh", "domain": "tryethos.io", "image": "og", "name": "Josh" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "u were busy making THIS" },
+        { "from": "them", "text": "for 2 weeks" },
+        { "from": "me", "text": "call me" },
+        { "from": "them", "text": "already ringing", "tapback": "heart" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Mon 15 Sept 2025|at 23:48",
+      "messages": [
+        { "from": "them", "text": "hey is this jake" },
+        { "from": "me", "text": "no sorry wrong number" },
+        { "from": "them", "text": "oh my bad" },
+        { "from": "them", "text": "goodnight wrong number" },
+        { "from": "me", "text": "goodnight" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 23:48",
+      "messages": [
+        { "from": "them", "text": "hey is this jake" },
+        { "from": "me", "text": "no its ur girlfriend" },
+        { "from": "them", "text": "happy 1 year wrong number" },
+        { "from": "them", "link": { "title": "hey is this jake", "domain": "tryethos.io", "image": "og", "name": "Ella" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "u sent it at the exact same minute" },
+        { "from": "them", "text": "set an alarm" },
+        { "from": "me", "text": "who even is jake" },
+        { "from": "them", "text": "no idea" },
+        { "from": "them", "text": "but i owe him everything", "tapback": "heart" }
+      ]
+    }
+  ]
+}

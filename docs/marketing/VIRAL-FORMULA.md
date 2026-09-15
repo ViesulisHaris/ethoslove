@@ -110,6 +110,54 @@ made of, in the order the viewer meets it:
 39 and 40 are the first variations: same bones, a new thing to argue about in the caption, and a
 new occasion. Keep making these until one stops working.
 
+## The big text posts, and what 41 to 48 take from them
+
+Eight posts from other accounts, 163K to 550K likes each, all plain screenshots with no product in
+them. They include a girl who is furious and gets a new pet name for every message, a question
+about texting whose answer is sadder than the question (392K likes, 50K saves), a "wrong number"
+that ends on "You blocked this contact", and an Instagram DM thread that ends with the same insult
+sent both ways (549.7K). What they share:
+
+- **One screen per slide, readable in three seconds.** Five to seven bubbles, most under five
+  words. Short enough to read twice, and the second read is a signal.
+- **Pet names carry the tone.** Sweet baby, angel, princess, mama. They're funny when someone is in
+  trouble and sweet when they aren't, and the viewer can't tell which until the end.
+- **The last line changes the whole thread.** A mirror (the same words sent back), a twist, or a
+  line the phone writes. The first message reads differently afterwards, which is why people
+  scroll back up.
+- **The phone's own UI is part of the story.** Read receipts, "You blocked this contact", "You
+  unsent a message." Nobody questions a line the phone wrote.
+- **The caption is a reaction or a poll, never a summary.** One to five words, or a question
+  people answer about themselves.
+- **Not all of them are iMessage.** The biggest was Instagram DMs. A purple thread stands out in a
+  feed full of blue ones.
+
+41 to 48 use all of that and keep our rules on top: a real occasion in the first two slides, the
+link card at the bottom of slide 2, a last slide that mirrors the first line, three chat slides.
+Two are drawn as Instagram DMs (`"style": "instagram"` in script.json), and 45 uses the unsent line
+(`{ "system": "…" }`).
+
+Some of those posts went big on a dark ending (a toxic pet name, a block). We still post light
+first: the dark cut of our own 01 got three comments. 41 to 48 borrow the mechanics and keep the
+endings warm.
+
+## What sells, from the sales data
+
+Four days of purchases after 30 went viral (12 to 15 Sept), by template: The Letter 62 (paid
+extras on a free template: a real song, a voice note, more photos), Birthday Cinema 51, Bouquet 36,
+Constellations 21, everything else 17. 30's gift was Birthday Cinema.
+
+- **Show a premium template in the gift frames.** People make the template they saw in the video.
+  About 6 in 10 people who start a Birthday Cinema or a Bouquet pay for it. About 1 in 20 who
+  start a free Letter pays, and when they do it's for an extra.
+- **When the gift is The Letter, show the extra.** Let the song play in the recording, or end on
+  the voice note, and mention it in the reply ("he put our song on it").
+- **Don't reply "it's free" by default.** That sends the most motivated viewers to the template
+  that earns the least. Name the template and let the site do the rest.
+- **Post ahead of the buying hours.** Purchases peak from 21:00 to 23:00 UK time, and again from
+  midnight to 04:00 UK time (US evening). Post UK-leaning stories around 19:00 UK time and
+  US-leaning ones around 23:00 UK time.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -119,6 +167,11 @@ iMessage does, as a grey card with the preview image on top and the title and do
 The title is exactly what the product sends: the Title field from the editor ("my
 paragraph"), or "Bella, someone made you something 💌" when it's left empty. So every link in
 a carousel is one the viewer could actually send.
+
+Instagram DMs (`"style": "instagram"`) are drawn in dark mode the same way: the header with
+"Active now", grey incoming bubbles with the sender's picture beside the last one of each run,
+the purple sent gradient pinned to the screen as in the app, reactions under the bubble, and the
+message bar.
 
 ## The psychology, in the order it happens
 
@@ -273,5 +326,13 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 38 | the drive home | 1 year (his side) | Vinyl | Starry |
 | 39 | 62 days | two months, "is that even an anniversary" | Constellations (free) | Starry |
 | 40 | one year of tuesdays | 1 year, he let her think he forgot | Our Timeline | Lovecore |
+| 41 | sweet baby | her birthday, pet names | Birthday Cinema | Polka |
+| 42 | wrong number | 1 year since the wrong-number text | The Letter + voice note | Classic |
+| 43 | highk | 6 months, Instagram DMs | Kawaii | Gingham |
+| 44 | call me | his birthday at midnight (his side) | Birthday Cinema | Starry |
+| 45 | i think im | 3 months, the first "i love u", unsent | The Letter + song | Lovecore |
+| 46 | 11:11 | 1 year of long distance, the train | Constellations (free) | Starry |
+| 47 | hoodie | 2 months, Instagram DMs (his side) | Kawaii | Gingham |
+| 48 | top 5 | 3 months | Bouquet | Garden |
 
-06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his, and are the ones to post first.
+06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first.

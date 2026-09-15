@@ -5,7 +5,12 @@
  *   node scripts/tiktok-slides.mjs docs/marketing/tiktok-01/script.json docs/marketing/tiktok-01
  *
  * Message shapes: { from: "me"|"them", text } · { image: true } · { typing: true } · { ts } ·
+ * { system } (a grey note such as "You unsent a message.") ·
  * { link: { title, domain, image?: "og", name?, lang? } } · plus optional { status } and { tapback }.
+ * A "|" in a timestamp marks where its semibold part ends: "Mon 15 Sept 2025|at 23:48".
+ *
+ * `"style": "instagram"` draws Instagram DMs instead, dark mode, with `"contact": { name, sub, avatar }`
+ * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
  */
 import { chromium } from "@playwright/test";
 import { mkdirSync, readFileSync } from "node:fs";
@@ -37,9 +42,21 @@ const tapback = (m) => {
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 // "Today 19:42" → the day in semibold, the time in regular, as iOS sets it.
 const stamp = (s) => {
-  const [head, ...rest] = String(s).split(" ");
+  const text = String(s);
+  const [head, ...rest] = text.includes("|") ? text.split("|") : text.split(" ");
   return rest.length ? `<b>${esc(head)}</b> ${esc(rest.join(" "))}` : `<b>${esc(head)}</b>`;
 };
+
+const OG_CSS = `
+    .og{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(70% 90% at 16% 6%,#F6DAD3 0%,rgba(246,218,211,0) 62%),radial-gradient(62% 85% at 88% 94%,#DDE7D9 0%,rgba(221,231,217,0) 60%),#F7F1E7;color:#17130F;text-align:center;padding:0 24px 30px;box-sizing:border-box}
+    .og-frame{position:absolute;inset:14px;border:1px solid rgba(23,19,15,.14);border-radius:10px}
+    .og-seal{width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 36% 30%,#F4C7C3,#E8604C 48%,#B23A2E 100%);box-shadow:0 10px 24px rgba(232,96,76,.32)}
+    .og-seal svg{width:22px;height:22px}
+    .og-eyebrow{margin-top:18px;font-family:Newsreader,Georgia,serif;font-size:17px;letter-spacing:5.9px;color:rgba(23,19,15,.5)}
+    .og-name{margin-top:6px;font-family:Newsreader,Georgia,serif;font-size:82px;line-height:1;letter-spacing:-2px;white-space:nowrap}
+    .og-line{margin-top:8px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:31px;color:rgba(23,19,15,.62);white-space:nowrap}
+    .og-domain{position:absolute;bottom:30px;font-family:Newsreader,Georgia,serif;font-size:15px;letter-spacing:4px;color:rgba(23,19,15,.4)}
+`;
 
 /** The preview image iMessage pulls from a gift link: tryethos.io's og:image, drawn to match. */
 const ogImage = (name, lang) => {
@@ -59,6 +76,7 @@ function html(slide) {
   const rows = slide.messages
     .map((m, i, all) => {
       if (m.ts) return `<div class="ts mid">${stamp(m.ts)}</div>`;
+      if (m.system) return `<div class="sys">${esc(m.system)}</div>`;
       const next = all[i + 1];
       const last = !next || next.from !== m.from || Boolean(next.ts) || Boolean(next.typing);
       const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
@@ -98,6 +116,7 @@ function html(slide) {
     .row:has(.tap), .row.l + .row.r:has(.tap), .row.r + .row.l:has(.tap){margin-top:72px}
     .status{flex-basis:100%;text-align:right;color:#8e8e93;font-size:33px;margin-top:8px;padding-right:12px;letter-spacing:-.1px}
     .status b{font-weight:600}
+    .sys{text-align:center;color:#8e8e93;font-size:35px;line-height:44px;margin:34px 70px;letter-spacing:-.2px}
 
     .bubble{position:relative;max-width:73%;padding:20px 38px 21px;border-radius:54px;font-size:51px;line-height:66px;letter-spacing:-.9px;word-wrap:break-word;box-sizing:border-box}
     .in{background:#262629}
@@ -154,15 +173,111 @@ function html(slide) {
     .lk-thumb .og-seal{width:64px;height:64px;margin:0}
     .lk-thumb .og-seal svg{width:28px;height:28px}
 
-    .og{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(70% 90% at 16% 6%,#F6DAD3 0%,rgba(246,218,211,0) 62%),radial-gradient(62% 85% at 88% 94%,#DDE7D9 0%,rgba(221,231,217,0) 60%),#F7F1E7;color:#17130F;text-align:center;padding:0 24px 30px;box-sizing:border-box}
-    .og-frame{position:absolute;inset:14px;border:1px solid rgba(23,19,15,.14);border-radius:10px}
-    .og-seal{width:49px;height:49px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 36% 30%,#F4C7C3,#E8604C 48%,#B23A2E 100%);box-shadow:0 10px 24px rgba(232,96,76,.32)}
-    .og-seal svg{width:22px;height:22px}
-    .og-eyebrow{margin-top:18px;font-family:Newsreader,Georgia,serif;font-size:17px;letter-spacing:5.9px;color:rgba(23,19,15,.5)}
-    .og-name{margin-top:6px;font-family:Newsreader,Georgia,serif;font-size:82px;line-height:1;letter-spacing:-2px;white-space:nowrap}
-    .og-line{margin-top:8px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:31px;color:rgba(23,19,15,.62);white-space:nowrap}
-    .og-domain{position:absolute;bottom:30px;font-family:Newsreader,Georgia,serif;font-size:15px;letter-spacing:4px;color:rgba(23,19,15,.4)}
+    ${OG_CSS}
   </style></head><body><div class="stage">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
+}
+
+/* Instagram DMs, dark mode, at the same @3x scale. */
+// The sent gradient is pinned to the screen as in the app, so higher bubbles are more purple.
+const IG_GRADIENT = "linear-gradient(180deg,#B432F5 0%,#8B3BF4 36%,#6B47F5 68%,#4F57F6 100%)";
+const IG_ICONS = {
+  back: `<svg viewBox="0 0 24 24"><path d="M15.5 4 7.5 12l8 8" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  call: `<svg viewBox="0 0 24 24"><path d="M6.7 3.6h2.5l1.5 4-2 1.5a11.3 11.3 0 0 0 6.2 6.2l1.5-2 4 1.5v2.5a2.1 2.1 0 0 1-2.3 2.1A17.3 17.3 0 0 1 4.6 5.9a2.1 2.1 0 0 1 2.1-2.3Z" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
+  video: `<svg viewBox="0 0 24 24"><rect x="2.4" y="6" width="13.2" height="12" rx="3" fill="none" stroke="#fff" stroke-width="1.7"/><path d="m15.6 10.3 5.4-3.1v9.6l-5.4-3.1Z" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
+  camera: `<svg viewBox="0 0 24 24"><path d="M8.6 5.2 9.9 3.6h4.2l1.3 1.6H19a2.2 2.2 0 0 1 2.2 2.2v10.4a2.2 2.2 0 0 1-2.2 2.2H5a2.2 2.2 0 0 1-2.2-2.2V7.4A2.2 2.2 0 0 1 5 5.2Z" fill="#fff"/><circle cx="12" cy="12.4" r="3.7" fill="#7443F5"/></svg>`,
+  mic: `<svg viewBox="0 0 24 24"><rect x="9" y="2.8" width="6" height="11.4" rx="3" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M5.6 11a6.4 6.4 0 0 0 12.8 0M12 17.4v3.8" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+  photo: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4.5" fill="none" stroke="#fff" stroke-width="1.7"/><circle cx="8.8" cy="8.8" r="1.7" fill="#fff"/><path d="m3.6 16.8 4.8-4.8 3.9 3.9 2.8-2.8 5.3 5.3" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
+  sticker: `<svg viewBox="0 0 24 24"><path d="M13.6 21H7.5A4.5 4.5 0 0 1 3 16.5v-9A4.5 4.5 0 0 1 7.5 3h9A4.5 4.5 0 0 1 21 7.5v6.1Z" fill="none" stroke="#fff" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.6 21v-3a4.4 4.4 0 0 1 4.4-4.4h3" fill="none" stroke="#fff" stroke-width="1.7"/><circle cx="9" cy="9.8" r="1.1" fill="#fff"/><circle cx="15" cy="9.8" r="1.1" fill="#fff"/></svg>`,
+};
+// A sunset at thumbnail size: the kind of photo people use instead of their face.
+const AVATAR_SKIES = [
+  ["#1c2340", "#b0605a", "#f5c48f"],
+  ["#14303c", "#4f89a2", "#f0dab6"],
+  ["#2a1c2f", "#93597f", "#f3c7d0"],
+];
+let avatarCount = 0;
+const avatar = (sky = 0) => {
+  const id = `av${avatarCount++}`;
+  const [deep, mid, glow] = AVATAR_SKIES[sky % AVATAR_SKIES.length];
+  return `<svg viewBox="0 0 100 100"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${deep}"/><stop offset=".55" stop-color="${mid}"/><stop offset=".8" stop-color="${glow}"/></linearGradient><filter id="${id}f" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6"/></filter></defs><rect width="100" height="100" fill="url(#${id})"/><g filter="url(#${id}f)"><circle cx="62" cy="71" r="11" fill="#fff1d6" opacity=".9"/><circle cx="22" cy="26" r="3" fill="#fff" opacity=".45"/><circle cx="80" cy="18" r="2.4" fill="#fff" opacity=".4"/></g><path d="M0 78c14-6 26-5 38-1s26 5 38 0 18-4 24-2V100H0Z" fill="${deep}" opacity=".92"/><path d="M0 88c20-4 40-2 60 1s30 2 40 0V100H0Z" fill="#0b0d16" opacity=".85"/></svg>`;
+};
+
+function igHtml(slide) {
+  const contact = script.contact ?? {};
+  const sky = contact.avatar ?? 0;
+  const items = slide.timestamp ? [{ ts: slide.timestamp }, ...slide.messages] : slide.messages;
+  const same = (a, b) => Boolean(a && b && !a.ts && !a.system && !b.ts && !b.system && a.from === b.from);
+  const rows = items
+    .map((m, i) => {
+      if (m.ts || m.system) return `<div class="ig-ts">${esc(m.ts ?? m.system)}</div>`;
+      const first = !same(items[i - 1], m);
+      const last = !same(m, items[i + 1]);
+      const side = m.from === "me" ? "out" : "in";
+      const pos = first && last ? "solo" : first ? "first" : last ? "last" : "mid";
+      const react = m.reaction ? `<span class="ig-react">${esc(m.reaction)}</span>` : "";
+      const body = m.link
+        ? `<div class="ig-link">${react}<div class="ig-link-img"><div class="ig-og">${ogImage(m.link.name, m.link.lang)}</div></div><div class="ig-link-foot"><div class="ig-link-title">${esc(m.link.title)}</div><div class="ig-link-domain">${esc(m.link.domain)}</div></div></div>`
+        : `<div class="ig-bubble ${side} ${pos}">${esc(m.text)}${react}</div>`;
+      // Instagram shows their picture once, beside the last message of each run.
+      const face = side === "in" ? `<div class="ig-face">${last ? avatar(sky) : ""}</div>` : "";
+      const seen = m.status ? `<div class="ig-seen">${esc(m.status)}</div>` : "";
+      return `<div class="ig-row ${side}${first ? " starts" : ""}${m.reaction ? " reacted" : ""}">${face}${body}</div>${seen}`;
+    })
+    .join("");
+
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+    @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
+    @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF_ITALIC}) format("truetype");font-style:italic}
+    html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden}
+    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    .ig-head{position:absolute;left:0;right:0;top:0;height:300px;padding:150px 60px 0 30px;box-sizing:border-box;display:flex;align-items:center;background:#000;z-index:3}
+    .ig-head>svg{width:78px;height:78px;flex:none}
+    .ig-avatar{width:112px;height:112px;border-radius:50%;overflow:hidden;flex:none;margin-left:12px}
+    .ig-avatar svg,.ig-face svg{display:block;width:100%;height:100%}
+    .ig-who{margin-left:30px;flex:1;min-width:0}
+    .ig-name{font-size:50px;line-height:60px;font-weight:600;letter-spacing:-.5px}
+    .ig-sub{font-size:38px;line-height:48px;color:#a8a8a8;letter-spacing:-.2px}
+    .ig-icons{display:flex;gap:64px;align-items:center}
+    .ig-icons svg{width:80px;height:80px}
+    .ig-thread{position:absolute;left:0;right:0;top:300px;bottom:330px;padding:0 40px 0 36px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end}
+    .ig-ts{text-align:center;color:#a8a8a8;font-size:37px;font-weight:500;margin:40px 60px 34px;letter-spacing:-.2px}
+    .ig-row{display:flex;align-items:flex-end;margin-top:6px;position:relative}
+    .ig-row.out{justify-content:flex-end}
+    .ig-row.starts{margin-top:34px}
+    .ig-ts+.ig-row{margin-top:0}
+    .ig-row.reacted{margin-bottom:46px}
+    .ig-face{width:86px;height:86px;border-radius:50%;overflow:hidden;flex:none;margin-right:22px}
+    .ig-bubble{position:relative;max-width:780px;padding:26px 44px 28px;border-radius:64px;font-size:51px;line-height:63px;letter-spacing:-.6px;box-sizing:border-box;overflow-wrap:break-word}
+    .ig-bubble.in{background:#262626}
+    .ig-bubble.out{background-image:${IG_GRADIENT};background-attachment:fixed;background-size:1080px 1920px}
+    .ig-bubble.in.first{border-bottom-left-radius:16px}
+    .ig-bubble.in.mid{border-top-left-radius:16px;border-bottom-left-radius:16px}
+    .ig-bubble.in.last{border-top-left-radius:16px}
+    .ig-bubble.out.first{border-bottom-right-radius:16px}
+    .ig-bubble.out.mid{border-top-right-radius:16px;border-bottom-right-radius:16px}
+    .ig-bubble.out.last{border-top-right-radius:16px}
+    .ig-react{position:absolute;bottom:-52px;font-size:40px;line-height:48px;padding:6px 14px;border-radius:40px;background:#262626;border:6px solid #000;z-index:2}
+    .in .ig-react{left:26px}
+    .out .ig-react{right:26px}
+    .ig-seen{align-self:flex-end;color:#a8a8a8;font-size:36px;margin:12px 12px 0 0}
+    .ig-link{position:relative;width:690px;border-radius:46px;background:#262626}
+    .ig-link-img{height:361px;border-radius:46px 46px 0 0;overflow:hidden}
+    .ig-og{width:788px;height:412px;transform:scale(.8756);transform-origin:0 0}
+    .ig-link-foot{padding:26px 38px 32px}
+    .ig-link-title{font-size:45px;line-height:56px;font-weight:600;letter-spacing:-.5px}
+    .ig-link-domain{font-size:37px;line-height:46px;color:#a8a8a8;margin-top:2px}
+    .ig-compose{position:absolute;left:36px;right:36px;bottom:170px;height:140px;border-radius:70px;background:#262626;display:flex;align-items:center;padding:0 44px 0 16px;box-sizing:border-box}
+    .ig-cam{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,#9C3AF5,#5A52F6);display:grid;place-items:center;flex:none}
+    .ig-cam svg{width:60px;height:60px}
+    .ig-placeholder{flex:1;margin-left:30px;font-size:49px;color:#a8a8a8;letter-spacing:-.3px}
+    .ig-tools{display:flex;gap:50px;align-items:center}
+    .ig-tools svg{width:72px;height:72px}
+    ${OG_CSS}
+  </style></head><body>
+    <div class="ig-thread">${rows}</div>
+    <div class="ig-head">${IG_ICONS.back}<div class="ig-avatar">${avatar(sky)}</div><div class="ig-who"><div class="ig-name">${esc(contact.name ?? "")}</div>${contact.sub ? `<div class="ig-sub">${esc(contact.sub)}</div>` : ""}</div><div class="ig-icons">${IG_ICONS.call}${IG_ICONS.video}</div></div>
+    <div class="ig-compose"><div class="ig-cam">${IG_ICONS.camera}</div><div class="ig-placeholder">Message...</div><div class="ig-tools">${IG_ICONS.mic}${IG_ICONS.photo}${IG_ICONS.sticker}</div></div>
+  </body></html>`;
 }
 
 const browser = await chromium.launch();
@@ -171,7 +286,7 @@ let n = 0;
 for (const slide of script.slides) {
   n += 1;
   if (slide.type !== "chat") continue;
-  await page.setContent(html(slide));
+  await page.setContent(script.style === "instagram" ? igHtml(slide) : html(slide));
   await page.waitForTimeout(150);
   const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
   await page.screenshot({ path: file });

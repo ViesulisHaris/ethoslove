@@ -1,0 +1,35 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 21:20",
+      "messages": [
+        { "from": "me", "text": "am i ur favourite person" },
+        { "from": "them", "text": "top 5" },
+        { "from": "me", "text": "TOP 5??" },
+        { "from": "me", "text": "who are the other 4" },
+        { "from": "them", "text": "my mum my nan my dog and gary" },
+        { "from": "me", "text": "WHO IS GARY" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "my barber" },
+        { "from": "me", "text": "im blocking u" },
+        { "from": "them", "text": "wait" },
+        { "from": "them", "text": "happy 3 months" },
+        { "from": "them", "link": { "title": "for my number 1", "domain": "tryethos.io", "image": "og", "name": "Ava" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "number 1??" },
+        { "from": "them", "text": "always has been" },
+        { "from": "me", "text": "what about gary" },
+        { "from": "them", "text": "gary knows his place", "tapback": "haha" }
+      ]
+    }
+  ]
+}

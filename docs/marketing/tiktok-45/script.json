@@ -1,0 +1,34 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 01:12",
+      "messages": [
+        { "from": "me", "text": "can i tell u something" },
+        { "from": "them", "text": "anything" },
+        { "system": "You unsent a message. Kai may still see the message on devices where the software hasn't been updated." },
+        { "from": "me", "text": "nvm" },
+        { "from": "them", "text": "i saw that" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "no u didnt" },
+        { "from": "them", "text": "i love u too" },
+        { "from": "them", "text": "was going to say it tomorrow" },
+        { "from": "them", "link": { "title": "read this tomorrow", "domain": "tryethos.io", "image": "og", "name": "Nina" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "i read it" },
+        { "from": "them", "text": "its not tomorrow nina" },
+        { "from": "me", "text": "so technically i said it first" },
+        { "from": "them", "text": "u unsent it" },
+        { "from": "them", "text": "doesnt count" }
+      ]
+    }
+  ]
+}

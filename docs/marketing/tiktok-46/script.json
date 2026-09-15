@@ -1,0 +1,36 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 23:11",
+      "messages": [
+        { "from": "them", "text": "goodnight" },
+        { "from": "me", "text": "why do u always say it at 11:11" },
+        { "from": "them", "text": "so i get a wish" },
+        { "from": "me", "text": "what do u wish for" },
+        { "from": "them", "text": "that one night i dont have to text it" },
+        { "from": "me", "text": "what does that mean", "status": "Read 23:12" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 23:26",
+      "messages": [
+        { "from": "me", "text": "noah ur scaring me" },
+        { "from": "them", "text": "open this first" },
+        { "from": "them", "link": { "title": "365 goodnights", "domain": "tryethos.io", "image": "og", "name": "Isla" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 23:40",
+      "messages": [
+        { "from": "them", "text": "now look outside" },
+        { "from": "me", "text": "NO" },
+        { "from": "me", "text": "U GOT THE TRAIN??" },
+        { "from": "them", "text": "goodnight" },
+        { "from": "them", "text": "out loud this time", "tapback": "heart" }
+      ]
+    }
+  ]
+}

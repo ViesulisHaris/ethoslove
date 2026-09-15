@@ -1,0 +1,35 @@
+{
+  "style": "instagram",
+  "contact": { "name": "amber", "sub": "Active now", "avatar": 2 },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today 22:02",
+      "messages": [
+        { "from": "them", "text": "do u want ur hoodie back" },
+        { "from": "me", "text": "no" },
+        { "from": "them", "text": "why" },
+        { "from": "me", "text": "looks better on u" },
+        { "from": "them", "text": "its been 2 months" },
+        { "from": "me", "text": "and?" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "and im never giving it back" },
+        { "from": "them", "text": "happy 2 months" },
+        { "from": "them", "link": { "title": "2 months in ur hoodie", "domain": "tryethos.io", "image": "og", "name": "Jay" } }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "is every photo of u in my hoodie" },
+        { "from": "them", "text": "all 31" },
+        { "from": "me", "text": "keep it" },
+        { "from": "them", "text": "i wasnt asking", "reaction": "❤️" }
+      ]
+    }
+  ]
+}
