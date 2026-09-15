@@ -1,0 +1,25 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 12:46", "messages": [
+      { "from": "me", "text": "quick q" },
+      { "from": "me", "text": "whos ur emergency contact" },
+      { "from": "them", "text": "my mum. why" },
+      { "from": "me", "text": "no reason" },
+      { "from": "them", "text": "whos urs" },
+      { "from": "me", "text": "u" }
+    ] },
+    { "type": "chat", "timestamp": "Today 13:02", "messages": [
+      { "from": "them", "text": "since when" },
+      { "from": "me", "text": "since march" },
+      { "from": "me", "link": { "title": "in case of emergency", "domain": "tryethos.io", "image": "og", "name": "Ben" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 13:20", "messages": [
+      { "from": "them", "text": "u recorded urself" },
+      { "from": "me", "text": "for the bad days. dont play it now" },
+      { "from": "them", "text": "played it now" },
+      { "from": "them", "text": "i changed mine" },
+      { "from": "me", "text": "to who" },
+      { "from": "them", "text": "to u", "tapback": "heart" }
+    ] }
+  ]
+}

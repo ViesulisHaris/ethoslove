@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 20:04", "messages": [
+      { "from": "them", "text": "i need to tell u something" },
+      { "from": "me", "text": "ok" },
+      { "from": "them", "text": "not on text" },
+      { "from": "me", "text": "ur scaring me" },
+      { "from": "them", "text": "its not bad. its the opposite" },
+      { "from": "me", "text": "thats worse" }
+    ] },
+    { "type": "chat", "timestamp": "Today 20:26", "messages": [
+      { "from": "them", "text": "open this. dont say it back yet" },
+      { "from": "them", "link": { "title": "dont say it back yet", "domain": "tryethos.io", "image": "og", "name": "Nadia" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 20:39", "messages": [
+      { "from": "me", "text": "its in the flower" },
+      { "from": "me", "text": "u put it in the flower" },
+      { "from": "them", "text": "u werent meant to open it till friday" },
+      { "from": "me", "text": "too late" },
+      { "from": "me", "text": "i love u", "tapback": "heart" }
+    ] }
+  ]
+}

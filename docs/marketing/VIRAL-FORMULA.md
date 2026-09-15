@@ -181,6 +181,31 @@ autumn, and every gift is a template that sells.
 - **Seven gifts are one purchase.** An unlock covers every gift on that template, so 49's seven
   Birthday Cinemas cost one. When people ask how much, that reply sells.
 
+## Conversations nobody should be having: 57 to 64
+
+Eight iMessage threads built on the two hooks that travel furthest here: a conversation the viewer
+knows should not be happening (an ex texting at 23:41, a label said to someone's mum, an argument the
+night before an anniversary), and a countdown somebody in the comments is already living (61 days
+apart). All eight are iMessage, no Instagram, because the blue thread is what this audience screenshots
+from their own phone.
+
+- **The drama is small and completely private.** A contact name nobody changed, a form at work, a full
+  stop, a word he used to his mum. Nothing needs explaining, so nobody has to catch up, and nothing is
+  bad enough to make a viewer worried instead of curious.
+- **Neither of them performs.** He never begs, she never explains. The feeling sits in what they do not
+  say, which is why the last line can be two words: "i know", "to u", "im coming over", "yes is
+  enough". Short endings get screenshotted, paragraphs get scrolled past.
+- **The gift already existed.** In 57 he made it before they broke up, in 64 he wrote it before the
+  argument, in 58 the flight was booked on Tuesday. A gift that was made before the conversation reads
+  as proof rather than as a reply, and proof is what makes people send it to someone.
+- **The phone says the line neither of them will.** 64 leans on "You unsent a message.", which nobody
+  questions and everybody wants explained.
+- **One number does the work of a paragraph.** 47 reasons, 18 days, 3 hours, day 61 of 79. Specific
+  counts are what the comments repeat back.
+- **The occasion is still in the first two slides:** two years, one year, three months, six months,
+  four months, a birthday. 57 is the exception that proves it, an anniversary of something that ended.
+- **Four are hers and four are his**, so both sides of the app see themselves sending one.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -365,5 +390,13 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 54 | i cancelled it | 1 year, a night in (Instagram DMs) | Fireside | Harvest |
 | 55 | not halloween. birthday. | her birthday on 31 October | Trick or Treat | Spooky |
 | 56 | cuffing season | asking her out (his side) | Scrapbook (Memories) | Classic |
+| 57 | i know what day it is | the ex, on what would have been 2 years | Our Timeline | Garden |
+| 58 | day 61 | long distance, the flight he booked | Passport | Starry |
+| 59 | say more than yes | 1 year, the dry texter | Jar of Reasons | Gingham |
+| 60 | dont say it back yet | 3 months, the first "i love u" | Bloom | Lovecore |
+| 61 | whos ur emergency contact | 6 months | The Letter + voice note | Classic |
+| 62 | it cost me 3 hours | his birthday, no money | Birthday Cinema | Polka |
+| 63 | i said ur my friend | 4 months, the label | Kawaii | Gingham |
+| 64 | the part i unsent | 1 year, the night before | Scrapbook (Memories) | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

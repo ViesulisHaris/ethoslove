@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 19:05", "messages": [
+      { "from": "them", "text": "i told my mum about u today" },
+      { "from": "me", "text": "what did u say" },
+      { "from": "them", "text": "i said ur my friend" },
+      { "from": "me", "text": "cool" },
+      { "from": "them", "text": "u said cool." },
+      { "from": "them", "text": "with a full stop" }
+    ] },
+    { "type": "chat", "timestamp": "Today 19:31", "messages": [
+      { "from": "me", "text": "open this then" },
+      { "from": "me", "link": { "title": "my friend", "domain": "tryethos.io", "image": "og", "name": "Alina" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 19:44", "messages": [
+      { "from": "them", "text": "ur not my friend" },
+      { "from": "me", "text": "i know" },
+      { "from": "them", "text": "i panicked. shes my mum" },
+      { "from": "me", "text": "call her back then" },
+      { "from": "them", "text": "im on the phone to her now", "tapback": "heart" }
+    ] }
+  ]
+}

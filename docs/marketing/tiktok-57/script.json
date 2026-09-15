@@ -1,0 +1,25 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 23:41", "messages": [
+      { "from": "them", "text": "why am i still saved as that in ur phone" },
+      { "from": "me", "text": "because i never changed it" },
+      { "from": "them", "text": "we ended in march" },
+      { "from": "me", "text": "i know what day it is" },
+      { "from": "them", "text": "dont" },
+      { "from": "them", "text": "please" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:52", "messages": [
+      { "from": "me", "text": "im not asking u for anything" },
+      { "from": "me", "text": "i started this in february. its urs either way" },
+      { "from": "me", "link": { "title": "two years, in order", "domain": "tryethos.io", "image": "og", "name": "Ellie" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 00:06", "messages": [
+      { "from": "them", "text": "why didnt u send it in march" },
+      { "from": "me", "text": "it wasnt finished" },
+      { "from": "them", "text": "and now" },
+      { "from": "me", "text": "now its finished" },
+      { "from": "them", "text": "im outside" },
+      { "from": "me", "text": "i know", "tapback": "heart" }
+    ] }
+  ]
+}
