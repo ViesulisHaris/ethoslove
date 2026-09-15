@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { OCCASIONS, isOccasion } from "@/config/occasions";
+import { SITE } from "@/config/site";
+import type { Locale } from "@/i18n/routing";
+import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
 import { listManifests } from "@/templates/registry";
+import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 
@@ -13,8 +17,13 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/occasions/[occasion]">, "searchParams">): Promise<Metadata> {
   const { locale, occasion } = await params;
   if (!isOccasion(occasion)) return {};
-  const t = await getTranslations({ locale, namespace: "occasions" });
-  return { title: t("for", { occasion: t(occasion) }) };
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return pageMetadata({
+    locale,
+    path: `/occasions/${occasion}`,
+    title: t(`occasion.${occasion}.title`),
+    description: t(`occasion.${occasion}.description`),
+  });
 }
 
 export default async function OccasionPage({ params }: PageProps<"/[locale]/occasions/[occasion]">) {
@@ -22,13 +31,20 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
   if (!isOccasion(occasion)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations();
+  const title = t(`seo.occasion.${occasion}.title`);
   return (
     <>
-      <PageHeader
-        eyebrow={t("occasions.title")}
-        title={t("occasions.for", { occasion: t(`occasions.${occasion}`) })}
-        subtitle={t("templates.subtitle")}
+      <JsonLd
+        nodes={[
+          templateListNode(listManifests({ occasion }), locale as Locale, title),
+          breadcrumbNode([
+            { name: SITE.name, url: localizedUrl(locale) },
+            { name: t("occasions.title"), url: localizedUrl(locale, "/occasions") },
+            { name: title, url: localizedUrl(locale, `/occasions/${occasion}`) },
+          ]),
+        ]}
       />
+      <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
       <TemplateGallery manifests={listManifests()} initialOccasion={occasion} />
     </>
   );

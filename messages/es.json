@@ -744,5 +744,71 @@
   "promo": {
     "line": "20% de descuento en cualquier regalo con el código",
     "code": "LOVE"
+  },
+  "seo": {
+    "templatesTitle": "Plantillas de regalos digitales",
+    "templatesDescription": "{count} plantillas de regalos digitales animados, desde una carta lacrada hasta un ramo que nunca se marchita. Añade tus fotos, una canción y tus palabras. Todas tienen una demo gratis en vivo.",
+    "templateTitle": "{name}: plantilla de regalo digital",
+    "templateCategory": "Plantilla de regalo digital",
+    "occasionsTitle": "Regalos digitales para cada ocasión",
+    "occasionsDescription": "Regalos digitales personales y animados para cumpleaños, aniversarios, San Valentín, amor a distancia, disculpas y más. Fotos, su canción y tus palabras, enviados con un enlace o un código QR.",
+    "pricingTitle": "Precios",
+    "occasion": {
+      "birthday": {
+        "title": "Regalos digitales de cumpleaños",
+        "description": "Crea un regalo de cumpleaños digital que abrirán una y otra vez: tus fotos, su canción favorita y tus palabras, animados y enviados con un enlace o un código QR. Empezar es gratis.",
+        "intro": "Una felicitación que no se queda perdida en un chat. Sopla las velas en Cine de cumpleaños, abre una Galleta de la fortuna o dedícale una Portada, con tus fotos y su canción, y prográmalo para que se abra a medianoche."
+      },
+      "anniversary": {
+        "title": "Regalos digitales de aniversario",
+        "description": "Un regalo de aniversario hecho con vuestra propia historia: tus fotos, vuestra canción y una carta con tus palabras, animado y enviado con un enlace. Prueba todas las plantillas gratis.",
+        "intro": "Un año o veinte: cuenta vuestra historia con las fotos que solo tenéis vosotros, la canción que es vuestra y una nota que dice lo que una tarjeta no puede. Recorred Nuestra línea del tiempo, colgad las fotos en un Museo o séllalo todo en La carta."
+      },
+      "valentines": {
+        "title": "Regalos digitales de San Valentín",
+        "description": "Un regalo de San Valentín que llega en segundos y dura años: una carta de amor lacrada, un ramo que nunca se marchita o un cielo lleno de tus fotos, con vuestra canción.",
+        "intro": "Las flores se marchitan y los bombones no duran ni la noche. Una carta de amor que se abre con un toque, un ramo que eliges flor a flor o un cielo nocturno donde cada foto es una estrella seguirán ahí el próximo febrero."
+      },
+      "wedding": {
+        "title": "Regalos digitales de boda",
+        "description": "Un regalo de boda para la pareja o para el uno al otro: fotos, tus deseos y una canción reunidos en un regalo animado para guardar, compartido con un enlace o una tarjeta QR impresa.",
+        "intro": "Reúne los momentos y las palabras que importan en algo que la pareja pueda abrir la mañana siguiente, o regálale uno a tu pareja antes de la ceremonia. Imprime la tarjeta QR y métela dentro de una de verdad."
+      },
+      "graduation": {
+        "title": "Regalos digitales de graduación",
+        "description": "Celebra una graduación con un regalo digital: fotos de todos los cursos, un mensaje tuyo y una canción a juego, enviado con un enlace para abrir el gran día.",
+        "intro": "Del primer día a la toga y el birrete. Ordena las fotos, cuenta todo lo que te enorgullece y prográmalo para el día en que terminan. Portada le dedica la primera plana; Nuestra línea del tiempo dibuja el camino hasta allí."
+      },
+      "christmas": {
+        "title": "Regalos digitales de Navidad",
+        "description": "Un regalo de Navidad que no se pierde en el correo: un regalo animado con tus fotos, una canción navideña y tu mensaje, programado para abrirse la mañana de Navidad.",
+        "intro": "Para quienes no verás este año, y para quienes sí: un regalo que se abre la mañana de Navidad estén donde estén, sin plazos de envío que se te pasen. Cuenta atrás de medianoche termina en fuegos artificiales justo a tiempo."
+      },
+      "mothers-day": {
+        "title": "Regalos digitales para el Día de la Madre",
+        "description": "Dile a tu madre lo que significa para ti con un regalo digital: fotos antiguas, su canción favorita y una carta con tus palabras, enviado con un enlace que puede guardar.",
+        "intro": "Busca las fotos antiguas, elige la canción que siempre canta y escribe lo que cuesta decir en voz alta. Regálale un Ramo que nunca se marchita, o un Frasco de razones para sacar una cuando quiera."
+      },
+      "fathers-day": {
+        "title": "Regalos digitales para el Día del Padre",
+        "description": "Un regalo del Día del Padre que de verdad va a guardar: fotos de todos estos años, una canción que le encanta y una nota tuya, en un regalo animado enviado con un enlace.",
+        "intro": "Olvídate de otra corbata. Mete los viajes en coche, las lecciones y los chistes malos en un regalo que se abre en su móvil: su propia Portada o un Museo de vosotros dos."
+      },
+      "apology": {
+        "title": "Regalos digitales para pedir perdón",
+        "description": "Pide perdón como es debido: una carta sincera con tus fotos y una canción, enviada como regalo digital que demuestra que te has tomado tu tiempo. Empezar es gratis.",
+        "intro": "Cuando un mensaje no basta. Tómate el tiempo de escribir lo que sientes, añade los momentos que importan y envía algo que pueda abrir cuando quiera. La carta es gratis, y un Hilo de mensajes lo dice burbuja a burbuja."
+      },
+      "long-distance": {
+        "title": "Regalos para relaciones a distancia",
+        "description": "Regalos para relaciones a distancia que llegan en cuanto los envías: un pasaporte que vuela de tu ciudad a la suya, un cielo con tus fotos o una carta de amor con vuestra canción.",
+        "intro": "Lejos, pero cerca. Envía algo que pueda abrir en cuanto esté listo, programado para su zona horaria, con los lugares y las canciones que son de los dos."
+      },
+      "just-because": {
+        "title": "Regalos porque sí",
+        "description": "Sin ninguna ocasión: un pequeño regalo digital con tus fotos, una canción y unas palabras sinceras para decirle a alguien que piensas en esa persona.",
+        "intro": "Los mejores regalos no esperan a una fecha en el calendario. Haz uno en diez minutos y envíalo sin ningún motivo."
+      }
+    }
   }
 }

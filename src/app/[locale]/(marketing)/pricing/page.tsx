@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { SITE } from "@/config/site";
 import { currencyFor, type Currency } from "@/lib/pricing/products";
+import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { stripeReady } from "@/lib/stripe/server";
 import { listManifests } from "@/templates/registry";
+import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { PricingCards } from "@/components/pricing/pricing-cards";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/pricing">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "pricing" });
-  return { title: t("title"), description: t("subtitle") };
+  const t = await getTranslations({ locale });
+  return pageMetadata({ locale, path: "/pricing", title: t("seo.pricingTitle"), description: t("pricing.subtitle") });
 }
 
 export default async function PricingPage({ params, searchParams }: PageProps<"/[locale]/pricing">) {
@@ -23,6 +26,15 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
 
   return (
     <>
+      <JsonLd
+        nodes={[
+          faqNode(faq),
+          breadcrumbNode([
+            { name: SITE.name, url: localizedUrl(locale) },
+            { name: t("eyebrow"), url: localizedUrl(locale, "/pricing") },
+          ]),
+        ]}
+      />
       <PageHeader eyebrow={t("eyebrow")} title={t("title")} subtitle={t("subtitle")} />
       <section className="container-x pb-6">
         <PricingCards

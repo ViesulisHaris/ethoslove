@@ -5,6 +5,7 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
+import { ogImageUrl } from "@/lib/seo";
 import { Providers } from "@/components/shared/providers";
 import { RefCapture } from "@/components/shared/ref-capture";
 import { SiteAnalytics } from "@/components/shared/analytics";
@@ -72,8 +73,9 @@ export async function generateMetadata({
       title: t("defaultTitle"),
       description: t("description"),
       locale: locale === "es" ? "es_ES" : "en_US",
+      images: [{ url: ogImageUrl(locale), width: 1200, height: 630, alt: t("defaultTitle") }],
     },
-    twitter: { card: "summary_large_image", site: SITE.twitterHandle },
+    twitter: { card: "summary_large_image", site: SITE.twitterHandle, images: [ogImageUrl(locale)] },
     robots: { index: true, follow: true },
     icons: { apple: "/icons/apple-touch-icon.png" },
     appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: SITE.name },

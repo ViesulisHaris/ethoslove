@@ -744,5 +744,71 @@
   "promo": {
     "line": "20% off every gift with code",
     "code": "LOVE"
+  },
+  "seo": {
+    "templatesTitle": "Digital gift templates",
+    "templatesDescription": "{count} animated digital gift templates, from a wax-sealed love letter to a bouquet that never wilts. Add your photos, a song and your words. Every one has a free live demo.",
+    "templateTitle": "{name}: digital gift template",
+    "templateCategory": "Digital gift template",
+    "occasionsTitle": "Digital gifts for every occasion",
+    "occasionsDescription": "Personal, animated digital gifts for birthdays, anniversaries, Valentine's Day, long-distance love, apologies and more. Photos, their song and your words, sent as a link or QR code.",
+    "pricingTitle": "Pricing",
+    "occasion": {
+      "birthday": {
+        "title": "Digital birthday gifts",
+        "description": "Make a digital birthday gift they'll open again and again: your photos, their favourite song and your words, animated and sent as a link or QR code. Free to start.",
+        "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
+      },
+      "anniversary": {
+        "title": "Digital anniversary gifts",
+        "description": "An anniversary gift made from your own story: your photos, your song and a letter in your words, animated and sent as a link. Try every template free.",
+        "intro": "One year or twenty: tell the story of the two of you with the photos only you have, the song that's yours and a note that says what a card can't. Walk them down Our Timeline, hang your photos in a Museum or seal it all in The Letter."
+      },
+      "valentines": {
+        "title": "Digital Valentine's Day gifts",
+        "description": "A Valentine's gift that arrives in seconds and lasts for years: a wax-sealed love letter, a bouquet that never wilts or a sky full of your photos, with your song.",
+        "intro": "Flowers wilt and chocolates don't last the evening. A love letter they open with a tap, a bouquet you picked stem by stem, or a night sky where every photo is a star will still be there next February."
+      },
+      "wedding": {
+        "title": "Digital wedding gifts",
+        "description": "A wedding gift for the couple or for each other: photos, your wishes and a song gathered in an animated gift to keep, shared with a link or a printed QR card.",
+        "intro": "Collect the moments and the words that matter into something the couple can open the morning after, or give one to your partner before the ceremony. Print the QR card and tuck it inside a real one."
+      },
+      "graduation": {
+        "title": "Digital graduation gifts",
+        "description": "Celebrate a graduate with a digital gift: photos from every year, a message from you and a song that fits, sent as a link to open on the big day.",
+        "intro": "From the first day to the cap and gown. Line up the photos, say what you're proud of, and time it to open the day they finish. Front Page puts them on the cover; Our Timeline draws the road that got them there."
+      },
+      "christmas": {
+        "title": "Digital Christmas gifts",
+        "description": "A Christmas gift that can't get lost in the post: an animated gift with your photos, a festive song and your message, timed to open on Christmas morning.",
+        "intro": "For the people you won't see this year, and the ones you will: a gift that opens on Christmas morning wherever they are, with no shipping deadline to miss. Midnight Countdown ends in fireworks right on time."
+      },
+      "mothers-day": {
+        "title": "Digital Mother's Day gifts",
+        "description": "Tell your mum what she means to you with a digital Mother's Day gift: old photos, her favourite song and a letter in your words, sent as a link she can keep.",
+        "intro": "Find the old photos, pick the song she always sings along to, and write the things that are hard to say out loud. Give her a Bouquet that never wilts, or a Jar of Reasons to shake one out whenever she likes."
+      },
+      "fathers-day": {
+        "title": "Digital Father's Day gifts",
+        "description": "A Father's Day gift he'll actually keep: photos through the years, a song he loves and a note from you, in an animated gift sent as a link.",
+        "intro": "Skip another tie. Put the road trips, the lessons and the terrible jokes into a gift that opens on his phone: his own Front Page, or a Museum of the two of you."
+      },
+      "apology": {
+        "title": "Digital apology gifts",
+        "description": "Say sorry properly: a heartfelt apology letter with your photos and a song, sent as a digital gift that shows you took the time. Free to start.",
+        "intro": "When a text isn't enough. Take the time to write what you mean, add the moments that matter, and send something they can open when they're ready. The Letter is free, and a Text Thread says it one bubble at a time."
+      },
+      "long-distance": {
+        "title": "Long-distance relationship gifts",
+        "description": "Gifts for long-distance relationships that arrive the moment you send them: a passport that flies from your city to theirs, a sky of your photos, or a love letter with your song.",
+        "intro": "Miles apart, still close. Send something they can open the second it's ready, scheduled for their time zone, with the places and the songs that belong to you both."
+      },
+      "just-because": {
+        "title": "Just because gifts",
+        "description": "No occasion needed: a small digital gift with your photos, a song and a few honest words, to tell someone you're thinking of them.",
+        "intro": "The best gifts don't wait for a date on the calendar. Make one in ten minutes and send it for no reason at all."
+      }
+    }
   }
 }
