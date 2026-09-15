@@ -11,14 +11,16 @@ import { mix, rgba } from "./theme";
 import { RichMessage } from "./RichMessage";
 import { Typewriter } from "./Typewriter";
 
+const TYPEWRITER = 'var(--font-type), "Courier New", ui-monospace, monospace';
+
 type Props = {
   data: Pick<GiftData, "locale" | "recipientName" | "senderName" | "messageStyle" | "accentColor">;
   blocks: RichBlock[];
   mode: TemplateMode;
   /** Dark cards set the words in warm white; light cards in ink. */
   tone?: "light" | "dark";
-  /** The face the words are set in: the gift's display serif, or handwriting. */
-  face?: "serif" | "hand";
+  /** The face the words are set in: the gift's display serif, handwriting, or a typewriter. */
+  face?: "serif" | "hand" | "type";
   /** The line above the words. Defaults to "Dear {name},"; null hides it. */
   greeting?: string | null;
   /** A small rule with a heart between the greeting and the words. */
@@ -60,7 +62,10 @@ export function MessageBody({ data, blocks, mode, tone = "light", face = "serif"
   return (
     <div className={cn("relative", className)} style={vars}>
       {line ? (
-        <h2 className={cn("leading-[1.08] italic", dark ? "text-[#F8F1E6]" : "text-current")} style={{ fontFamily: "var(--gift-font-display)", fontSize: "clamp(1.9rem, 8.4cqw, 2.5rem)" }}>
+        <h2
+          className={cn("leading-[1.08]", face !== "type" && "italic", dark ? "text-[#F8F1E6]" : "text-current")}
+          style={face === "type" ? { fontFamily: TYPEWRITER, fontSize: "clamp(1.35rem, 5.8cqw, 1.7rem)" } : { fontFamily: "var(--gift-font-display)", fontSize: "clamp(1.9rem, 8.4cqw, 2.5rem)" }}
+        >
           {line}
         </h2>
       ) : null}
@@ -81,7 +86,9 @@ export function MessageBody({ data, blocks, mode, tone = "light", face = "serif"
         style={
           face === "hand"
             ? { fontFamily: "var(--gift-font-hand)", fontSize: "clamp(1.5rem, 6.4cqw, 1.85rem)", lineHeight: 1.45 }
-            : { fontFamily: "var(--gift-font-display)", fontSize: "clamp(1.2rem, 5.3cqw, 1.42rem)", lineHeight: 1.55, letterSpacing: "-0.004em" }
+            : face === "type"
+              ? { fontFamily: TYPEWRITER, fontSize: "clamp(1.02rem, 4.5cqw, 1.2rem)", lineHeight: 1.7, letterSpacing: "0.005em" }
+              : { fontFamily: "var(--gift-font-display)", fontSize: "clamp(1.2rem, 5.3cqw, 1.42rem)", lineHeight: 1.55, letterSpacing: "-0.004em" }
         }
       >
         {instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={finish} /> : <Typewriter blocks={blocks} active speed={speed} onDone={finish} onCaretMove={onCaretMove} />}

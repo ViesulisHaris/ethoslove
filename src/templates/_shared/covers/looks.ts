@@ -176,7 +176,8 @@ export const COVER_LOOKS: Record<CoverLook["id"], CoverLook> = {
 export function defaultCoverFor(slug: string): CoverId {
   switch (slug) {
     case "the-letter":
-      return "classic"; // it opens with its own envelope
+    case "scrapbook":
+      return "classic"; // both open with their own envelope or book
     case "kawaii":
       return "gingham";
     case "fireside":

@@ -204,6 +204,17 @@ const SCRIPTS = {
     await page.waitForTimeout(6000);
     return poster;
   },
+  scrapbook: async (page) => {
+    const book = page.getByRole("button", { name: /open the scrapbook/i });
+    await book.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1800);
+    const poster = await page.screenshot();
+    await book.click({ force: true });
+    await page.waitForTimeout(2500);
+    const sc = page.locator('[data-template="scrapbook"] .overflow-y-auto').last();
+    for (let i = 0; i < 4; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.45, behavior: "smooth" })); await page.waitForTimeout(1100); }
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);

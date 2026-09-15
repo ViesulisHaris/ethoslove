@@ -15,5 +15,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/fireside/poster.jpg", webm: "/templates/fireside/preview.webm" },
   defaultAccent: "#D9822B",
   heavy: false,
-  sortOrder: 13,
+  sortOrder: 17,
 };
