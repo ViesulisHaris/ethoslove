@@ -56,7 +56,8 @@ const breathe = (page: Page, level: number) => page.evaluate((v) => ((window as 
 
 async function openDemo(page: Page, path = "/demo/halfway") {
   await page.goto(path);
-  await expect(page.getByRole("button", { name: /^(fly to|volar hasta) clara$/i })).toBeVisible({ timeout: 30_000 });
+  // Generous: against a dev server this may be the first compile of the template's chunk.
+  await expect(page.getByRole("button", { name: /^(fly to|volar hasta) clara$/i })).toBeVisible({ timeout: 60_000 });
 }
 
 test.describe("Halfway: the recipient", () => {
