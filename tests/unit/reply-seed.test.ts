@@ -39,6 +39,19 @@ describe("send one back", () => {
     expect(takeReplySeed("bouquet")).toBeNull();
   });
 
+  it("carries the answered gift's own fields when there are some", () => {
+    const fields = { from: { name: "Lisbon", lat: 38.7, lng: -9.1 }, palette: "blush" };
+    saveReplySeed({ slug: "halfway", recipientName: "Iván", senderName: "Clara", fields });
+    expect(takeReplySeed("halfway")).toEqual({ slug: "halfway", recipientName: "Iván", senderName: "Clara", fields });
+  });
+
+  it("leaves out fields that aren't an object, or are far too big", () => {
+    window.sessionStorage.setItem("ethos:reply", JSON.stringify({ slug: "halfway", recipientName: "A", senderName: "B", fields: ["x"], savedAt: Date.now() }));
+    expect(takeReplySeed("halfway")).toEqual({ slug: "halfway", recipientName: "A", senderName: "B" });
+    saveReplySeed({ slug: "halfway", recipientName: "A", senderName: "B", fields: { note: "x".repeat(30_000) } });
+    expect(takeReplySeed("halfway")).toEqual({ slug: "halfway", recipientName: "A", senderName: "B" });
+  });
+
   it("never throws when storage is blocked", () => {
     vi.stubGlobal("window", {});
     expect(() => saveReplySeed({ slug: "bouquet", recipientName: "Leo", senderName: "Mia" })).not.toThrow();

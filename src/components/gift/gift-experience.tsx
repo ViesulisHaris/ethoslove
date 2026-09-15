@@ -113,8 +113,9 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
           onEvent={onEvent}
           onReact={data.showReactionCta ? () => setReactOpen(true) : undefined}
           onMakeOne={() => {
-            // The easiest gift to make is a reply: the same template, with the names already swapped.
-            saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName });
+            // The easiest gift to make is a reply: the same template, the names already swapped, and
+            // whatever else the template carries across (Halfway flips the two places).
+            saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
             router.push(`${data.locale === "es" ? "/es" : ""}/create/${data.templateSlug}?ref=${shortId}`);
           }}
           replyMode

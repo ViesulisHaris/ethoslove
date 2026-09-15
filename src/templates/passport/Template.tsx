@@ -15,7 +15,7 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
-import { resolvePlace, haversineKm } from "./cities";
+import { resolvePlace, haversineKm } from "../_shared/places";
 import { Globe, type FlightState, type Place, type GlobePalette } from "./Globe";
 import type { PassportFields } from "./schema";
 

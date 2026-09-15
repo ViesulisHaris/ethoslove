@@ -21,6 +21,7 @@ import { VoiceSection } from "./sections/voice";
 import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
 import { PublishSheet } from "./publish-sheet";
+import { TemplateFields } from "./template-fields";
 
 export type EditorShellProps = {
   slug: string;
@@ -82,6 +83,13 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       if (reply) {
         initial.recipientName = reply.recipientName;
         initial.senderName = reply.senderName;
+        // A template can carry more across, like Halfway's places, swapped. Anything that doesn't
+        // validate is left at the template's defaults.
+        const answered = reply.fields && m.replyFields ? m.fieldsSchema.safeParse(reply.fields) : null;
+        if (answered?.success && m.replyFields) {
+          const merged = m.fieldsSchema.safeParse({ ...initial.fields, ...m.replyFields(answered.data) });
+          if (merged.success) initial.fields = merged.data as Record<string, unknown>;
+        }
       }
       void useEditor.getState().init({
         slug,
@@ -127,7 +135,14 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {hydrated && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0">
-                <WhoSection />
+                <WhoSection>
+                  {mod.leadFields ? (
+                    <div className="mt-7 border-t border-dashed border-border pt-6">
+                      <p className="font-display mb-4 text-lg italic">{mod.leadFields.title[locale]}</p>
+                      <TemplateFields mod={mod} locale={locale} only={mod.leadFields.keys} />
+                    </div>
+                  ) : null}
+                </WhoSection>
                 <WordsSection aiEnabled={aiEnabled} />
                 <PhotosSection manifest={manifest} />
                 {manifest.features.music ? <MusicSection /> : null}

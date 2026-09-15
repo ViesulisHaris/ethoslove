@@ -114,27 +114,6 @@ const SCRIPTS = {
   },
   passport: async (page) => {
     await page.getByRole("button", { name: /^open$/i }).waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1500);
-    const poster = await page.screenshot();
-    await page.getByRole("button", { name: /^open$/i }).click();
-    await page.waitForTimeout(11000);
-    return poster;
-  },
-  bloom: async (page) => {
-    await page.locator("[data-hold]").waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1500);
-    const hold = await page.locator("[data-hold]").boundingBox();
-    await page.mouse.move(hold.x + hold.width / 2, hold.y + hold.height / 2);
-    await page.mouse.down();
-    await page.waitForTimeout(2200);
-    const poster = await page.screenshot();
-    await page.waitForTimeout(2800);
-    await page.mouse.up();
-    await page.waitForTimeout(3500);
-    return poster;
-  },
-  passport: async (page) => {
-    await page.getByRole("button", { name: /^open$/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);
     await page.getByRole("button", { name: /^open$/i }).click();
     await page.waitForTimeout(2600);
@@ -202,6 +181,16 @@ const SCRIPTS = {
     const poster = await page.screenshot();
     await page.getByRole("button", { name: /^treat$/i }).click({ force: true });
     await page.waitForTimeout(6000);
+    return poster;
+  },
+  halfway: async (page) => {
+    // Tapping the plane flies it home; the poster is the postcard before take-off.
+    const plane = page.getByRole("button", { name: /fly to/i });
+    await plane.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1800);
+    const poster = await page.screenshot();
+    await plane.click({ force: true });
+    await page.waitForTimeout(8000);
     return poster;
   },
   "the-letter": async (page) => {

@@ -45,7 +45,7 @@ export function LookSection({ manifest, mod, locale }: { manifest: TemplateManif
       </Field>
       <div className="mt-7 border-t border-dashed border-border pt-6">
         <p className="font-display mb-4 text-lg italic">{manifest.name[locale]}</p>
-        <TemplateFields mod={mod} locale={locale} />
+        <TemplateFields mod={mod} locale={locale} except={mod.leadFields?.keys} />
       </div>
       <div className="mt-7 flex items-start justify-between gap-4 border-t border-dashed border-border pt-6">
         <div>

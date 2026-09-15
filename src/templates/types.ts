@@ -67,6 +67,8 @@ export type FieldEditorProps<T = unknown> = {
   value: T;
   onChange: (value: T) => void;
   locale: GiftLocale;
+  /** Every template field, for editors whose view depends on the others. */
+  fields?: Record<string, unknown>;
 };
 
 export interface TemplateModule<TFields = Record<string, unknown>> {
@@ -77,6 +79,13 @@ export interface TemplateModule<TFields = Record<string, unknown>> {
   /** Custom editors, keyed like the schema, for fields the generated form can't express. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fieldEditors?: Record<string, ComponentType<FieldEditorProps<any>>>;
+  /**
+   * Fields worth filling in first. The editor asks for them right under the names, in a group of
+   * their own, instead of at the end with the look. Keys match the schema.
+   */
+  leadFields?: { keys: string[]; title: Record<GiftLocale, string> };
+  /** "Send one back": what a reply keeps from the gift it answers, such as the two places swapped. */
+  replyFields?: (fields: TFields) => Partial<TFields>;
   /** One complete demo per locale; the gallery, editor and detail page use it. */
   demoData: Record<GiftLocale, GiftData<TFields>>;
   Template: ComponentType<TemplateProps<TFields>>;

@@ -17,12 +17,15 @@ function humanize(key: string) {
   return key.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
 }
 
-/** Form for a template's own `fields`, generated from its Zod schema + fieldMeta labels. */
-export function TemplateFields({ mod, locale }: { mod: TemplateModule; locale: GiftLocale }) {
+/**
+ * Form for a template's own `fields`, generated from its Zod schema + fieldMeta labels. `only` and
+ * `except` split the fields between the lead group under the names and the rest under the look.
+ */
+export function TemplateFields({ mod, locale, only, except }: { mod: TemplateModule; locale: GiftLocale; only?: string[]; except?: string[] }) {
   const fields = useEditor((s) => s.data.fields as Record<string, unknown>);
   const patchFields = useEditor((s) => s.patchFields);
   const meta = mod.fieldMeta?.[locale] ?? {};
-  const descriptors = describeObjectSchema(mod.fieldsSchema as unknown as z.ZodObject);
+  const descriptors = describeObjectSchema(mod.fieldsSchema as unknown as z.ZodObject).filter((d) => (!only || only.includes(d.key)) && !except?.includes(d.key));
   if (descriptors.length === 0) return null;
 
   return (
@@ -34,7 +37,7 @@ export function TemplateFields({ mod, locale }: { mod: TemplateModule; locale: G
         const id = `field-${d.key}`;
         const Custom = mod.fieldEditors?.[d.key];
         if (Custom)
-          return <Custom key={d.key} id={id} label={label} help={m?.help} value={value} onChange={(v: unknown) => patchFields({ [d.key]: v })} locale={locale} />;
+          return <Custom key={d.key} id={id} label={label} help={m?.help} value={value} onChange={(v: unknown) => patchFields({ [d.key]: v })} locale={locale} fields={fields} />;
         switch (d.widget) {
           case "select": {
             const options = (d.options ?? []).map((o) => ({ value: o, label: m?.options?.[o] ?? humanize(o) }));

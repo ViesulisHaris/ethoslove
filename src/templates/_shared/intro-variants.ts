@@ -66,6 +66,7 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "scratch-card": "petals",
   arcade: "petals",
   "text-thread": "petals",
+  halfway: "petals",
   fireside: "paper",
   "trick-or-treat": "starlight",
 };

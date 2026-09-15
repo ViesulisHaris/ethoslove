@@ -252,3 +252,15 @@ export function haversineKm(a: { lat: number; lng: number }, b: { lat: number; l
     Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLng / 2) ** 2;
   return 2 * R * Math.asin(Math.sqrt(h));
 }
+
+/** A named point on the map. */
+export type Place = { name: string; lat: number; lng: number };
+
+/** Built-in cities whose name starts with the query, then any that contain it. Instant and offline. */
+export function searchCities(input: string, limit = 5): City[] {
+  const q = ALIASES[fold(input)] ?? fold(input);
+  if (q.length < 2) return [];
+  const starts = CITIES.filter((city) => fold(city.name).startsWith(q));
+  const contains = CITIES.filter((city) => !fold(city.name).startsWith(q) && fold(city.name).includes(q));
+  return [...starts, ...contains].slice(0, limit);
+}

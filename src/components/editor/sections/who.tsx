@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { useEditor } from "@/lib/editor/store";
 import { GIFT_LOCALES, type GiftLocale } from "@/lib/gift/schema";
@@ -7,7 +8,8 @@ import { LOCALE_LABELS } from "@/i18n/routing";
 import { Input } from "@/components/ui/input";
 import { Field, SectionHeader, Segmented } from "../field";
 
-export function WhoSection() {
+/** Names, title and language; `children` is a template's lead group, asked for right after. */
+export function WhoSection({ children }: { children?: ReactNode }) {
   const t = useTranslations("editor");
   const data = useEditor((s) => s.data);
   const patch = useEditor((s) => s.patch);
@@ -34,6 +36,7 @@ export function WhoSection() {
           options={GIFT_LOCALES.map((l) => ({ value: l, label: LOCALE_LABELS[l] }))}
         />
       </Field>
+      {children}
     </section>
   );
 }
