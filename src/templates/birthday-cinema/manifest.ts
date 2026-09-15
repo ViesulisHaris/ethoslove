@@ -15,5 +15,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/birthday-cinema/poster.jpg", webm: "/templates/birthday-cinema/preview.webm" },
   defaultAccent: "#E8604C",
   heavy: false,
-  sortOrder: 30,
+  sortOrder: 11,
 };

@@ -8,6 +8,7 @@ import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
 import { SoundGate } from "./sound-gate";
 import { ReactionSheet } from "./reaction-sheet";
 import { HomeScreenTip } from "./home-screen-tip";
+import { saveReplySeed } from "@/lib/editor/reply-seed";
 
 const VIEW_TTL_MS = 24 * 60 * 60 * 1000;
 const PROGRESS_STEP = 25;
@@ -111,7 +112,12 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
           replayKey={replayKey}
           onEvent={onEvent}
           onReact={data.showReactionCta ? () => setReactOpen(true) : undefined}
-          onMakeOne={() => router.push(`/?ref=${shortId}`)}
+          onMakeOne={() => {
+            // The easiest gift to make is a reply: the same template, with the names already swapped.
+            saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName });
+            router.push(`${data.locale === "es" ? "/es" : ""}/create/${data.templateSlug}?ref=${shortId}`);
+          }}
+          replyMode
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}

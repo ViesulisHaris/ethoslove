@@ -15,5 +15,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/kawaii/poster.jpg", webm: "/templates/kawaii/preview.webm" },
   defaultAccent: "#F06292",
   heavy: false,
-  sortOrder: 12,
+  sortOrder: 16,
 };

@@ -14,6 +14,7 @@ import { Cover } from "./covers/Cover";
 import { COVER_LOOKS } from "./covers/looks";
 import { Watermark } from "./Watermark";
 import { TemplateErrorBoundary } from "./ErrorBoundary";
+import { ReplyModeContext } from "./reply-mode";
 
 const MIN_LOADING_MS = 1600;
 
@@ -26,6 +27,8 @@ export type GiftRendererProps = {
   onEvent?: (event: TemplateEvent) => void;
   onReact?: () => void;
   onMakeOne?: () => void;
+  /** On a real gift page: the make-one button offers to send one back to the sender. */
+  replyMode?: boolean;
   /** Change to remount the template (replay). */
   replayKey?: number;
   /** Show this cover regardless of the gift's own choice (demo pages, `?cover=`). */
@@ -48,6 +51,7 @@ export function GiftRenderer({
   onEvent,
   onReact,
   onMakeOne,
+  replyMode = false,
   replayKey = 0,
   coverOverride,
   onCoverOpened,
@@ -100,14 +104,16 @@ export function GiftRenderer({
       >
         {ready && coverOpen && Template && resolved ? (
           <TemplateErrorBoundary locale={resolved.locale}>
-            <Template
-              key={replayKey}
-              data={resolved}
-              mode={mode}
-              onEvent={onEvent}
-              onReact={onReact}
-              onMakeOne={onMakeOne}
-            />
+            <ReplyModeContext.Provider value={replyMode}>
+              <Template
+                key={replayKey}
+                data={resolved}
+                mode={mode}
+                onEvent={onEvent}
+                onReact={onReact}
+                onMakeOne={onMakeOne}
+              />
+            </ReplyModeContext.Provider>
           </TemplateErrorBoundary>
         ) : null}
         <AnimatePresence>

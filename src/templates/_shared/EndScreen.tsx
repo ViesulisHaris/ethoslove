@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Heart, Mic, Music2, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import type { GiftData } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import { giftString } from "./i18n";
+import { ReplyModeContext } from "./reply-mode";
 
 export function EndScreen({
   data,
@@ -25,6 +26,7 @@ export function EndScreen({
   const reduce = useReducedMotion();
   const dark = tone === "dark";
   const { locale } = data;
+  const reply = useContext(ReplyModeContext);
 
   return (
     <div className={cn("flex flex-col items-center px-6 text-center", className)}>
@@ -72,11 +74,11 @@ export function EndScreen({
             type="button"
             onClick={onReact}
             whileTap={{ scale: 0.97 }}
-            className="flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold shadow-lg"
+            className="flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-semibold shadow-lg"
             style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
           >
-            <Heart className="size-4" />
-            {giftString(locale, "sendReaction", { sender: data.senderName })}
+            <Heart className="size-4 shrink-0" />
+            <span className="min-w-0 truncate">{giftString(locale, "sendReaction", { sender: data.senderName })}</span>
           </motion.button>
         ) : null}
         {onMakeOne ? (
@@ -84,14 +86,16 @@ export function EndScreen({
             type="button"
             onClick={onMakeOne}
             className={cn(
-              "flex h-12 items-center justify-center gap-2 rounded-full border text-[15px] font-medium",
+              "flex h-12 items-center justify-center gap-2 rounded-full border px-5 text-[15px] font-medium",
               dark
                 ? "border-white/20 text-white hover:bg-white/10"
                 : "border-black/15 text-current hover:bg-black/5",
             )}
           >
-            <Sparkles className="size-4" />
-            {giftString(locale, "makeOne")}
+            <Sparkles className="size-4 shrink-0" />
+            <span className="min-w-0 truncate">
+              {reply ? giftString(locale, "sendOneBack", { sender: data.senderName }) : giftString(locale, "makeOne")}
+            </span>
           </button>
         ) : null}
         {onReplay ? (

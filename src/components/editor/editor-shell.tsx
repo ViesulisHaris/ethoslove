@@ -8,6 +8,7 @@ import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
+import { takeReplySeed } from "@/lib/editor/reply-seed";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
@@ -75,10 +76,17 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     loadTemplate(slug).then((m) => {
       if (!active || !m) return;
       setMod(m);
+      const initial = blankGift(manifest, locale, m);
+      // Arrived from "Send one back" on a gift: the names come already swapped.
+      const reply = remote ? null : takeReplySeed(slug);
+      if (reply) {
+        initial.recipientName = reply.recipientName;
+        initial.senderName = reply.senderName;
+      }
       void useEditor.getState().init({
         slug,
         manifest,
-        initial: blankGift(manifest, locale, m),
+        initial,
         authed: Boolean(user),
         userId: user?.id ?? null,
         remote,
