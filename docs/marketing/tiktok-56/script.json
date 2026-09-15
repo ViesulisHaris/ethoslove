@@ -1,0 +1,21 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 23:02", "messages": [
+      { "from": "them", "text": "is this cuffing season or do u actually like me" },
+      { "from": "me", "text": "why" },
+      { "from": "them", "text": "it got cold and suddenly u text me every day" },
+      { "from": "me", "text": "correlation isnt causation" },
+      { "from": "them", "text": "ur avoiding the question" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:09", "messages": [
+      { "from": "me", "text": "open this" },
+      { "from": "me", "link": { "title": "not a seasonal thing", "domain": "tryethos.io", "image": "og", "name": "Jess" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:20", "messages": [
+      { "from": "them", "text": "are u asking me to be ur girlfriend with a scrapbook" },
+      { "from": "me", "text": "is that a yes" },
+      { "from": "them", "text": "its a yes" },
+      { "from": "me", "text": "for every season", "tapback": "heart" }
+    ] }
+  ]
+}

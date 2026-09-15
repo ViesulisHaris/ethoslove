@@ -1,0 +1,22 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Thursday 22:40", "messages": [
+      { "from": "me", "text": "every year my birthday turns into a halloween party" },
+      { "from": "them", "text": "because its on halloween" },
+      { "from": "me", "text": "i know" },
+      { "from": "me", "text": "just once i want it to be about me" },
+      { "from": "them", "text": "ok" }
+    ] },
+    { "type": "chat", "timestamp": "Friday 00:00", "messages": [
+      { "from": "them", "text": "happy birthday" },
+      { "from": "them", "text": "not halloween. birthday." },
+      { "from": "them", "link": { "title": "it's your birthday, scarlett", "domain": "tryethos.io", "image": "og", "name": "Scarlett" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "theres a ghost in it" },
+      { "from": "them", "text": "the ghost is there for u" },
+      { "from": "them", "text": "not for halloween" },
+      { "from": "me", "text": "i hate how much i love this", "tapback": "heart" }
+    ] }
+  ]
+}
