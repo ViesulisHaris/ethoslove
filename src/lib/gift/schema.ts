@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isSongThumbnail, parseSongLink } from "./song-link";
 
 export const GIFT_LOCALES = ["en", "es"] as const;
 export type GiftLocale = (typeof GIFT_LOCALES)[number];
@@ -54,6 +55,17 @@ export const giftSurpriseSchema = z.object({
   reveal: z.enum(["tap", "hold", "shake"]).default("tap"),
 });
 
+/** "This song reminds me of you": a link out to the full song, shown on the end screen. Free. */
+export const giftDedicationSchema = z.object({
+  url: z.string().max(500).refine((url) => parseSongLink(url) !== null, "unsupported_link"),
+  title: z.string().max(120).optional(),
+  artist: z.string().max(120).optional(),
+  /** The provider's cover or video thumbnail, saved in the editor so recipients never wait on a lookup. */
+  thumbnail: z.string().max(500).refine(isSongThumbnail, "unsupported_thumbnail").optional(),
+  /** The line above the song. Defaults to "this song reminds me of you". */
+  note: z.string().max(80).optional(),
+});
+
 export const FONT_PAIRINGS = ["editorial", "modern", "handwritten"] as const;
 
 /** The screen a recipient taps to open the gift. "classic" is the plain name-and-hairline intro. */
@@ -81,6 +93,7 @@ export const giftDataBaseSchema = z.object({
   video: giftVideoSchema.optional(),
   countdown: giftCountdownSchema.optional(),
   surprise: giftSurpriseSchema.optional(),
+  dedication: giftDedicationSchema.optional(),
   accentColor: z.string().regex(HEX_COLOR).default("#E8604C"),
   fontPairing: z.enum(FONT_PAIRINGS).default("editorial"),
   cover: z.enum(COVER_IDS).optional(),
@@ -95,6 +108,7 @@ export type GiftMusic = z.infer<typeof giftMusicSchema>;
 export type GiftVideo = z.infer<typeof giftVideoSchema>;
 export type GiftCountdown = z.infer<typeof giftCountdownSchema>;
 export type GiftSurprise = z.infer<typeof giftSurpriseSchema>;
+export type GiftDedication = z.infer<typeof giftDedicationSchema>;
 export type GiftDataBase = z.infer<typeof giftDataBaseSchema>;
 
 export type GiftData<TFields = Record<string, unknown>> = Omit<GiftDataBase, "fields"> & {

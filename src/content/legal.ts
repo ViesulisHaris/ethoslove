@@ -13,7 +13,7 @@ export const LEGAL_ENTITY = {
   registeredAt: "27 March 2026",
 } as const;
 
-export const LEGAL_UPDATED = "2026-09-13";
+export const LEGAL_UPDATED = "2026-09-15";
 
 export type LegalSection = { heading: string; paragraphs: string[] };
 export type LegalDoc = { title: string; intro: string; sections: LegalSection[] };
@@ -237,7 +237,7 @@ const privacyEn: LegalDoc = {
     {
       heading: "4. Who we share data with",
       paragraphs: [
-        "We use service providers who process data on our behalf under data-processing agreements: Supabase (database, authentication and file storage), Vercel (hosting and delivery), Stripe (payments), Resend (transactional email), PostHog (product analytics, only with consent), Sentry (error monitoring) and Anthropic (the optional 'help me write it' feature — only the facts you type into that dialog are sent, and only when you use it). Some providers process data in the United States; transfers rely on the EU–US Data Privacy Framework or the European Commission's Standard Contractual Clauses.",
+        "We use service providers who process data on our behalf under data-processing agreements: Supabase (database, authentication and file storage), Vercel (hosting and delivery), Stripe (payments), Resend (transactional email), PostHog (product analytics, only with consent), Sentry (error monitoring) and Anthropic (the optional 'help me write it' feature — only the facts you type into that dialog are sent, and only when you use it). Some providers process data in the United States; transfers rely on the EU–US Data Privacy Framework or the European Commission's Standard Contractual Clauses. If a gift includes a song link, opening it loads the song's cover image from YouTube, Spotify or Apple, which then receive the viewer's IP address; tapping the link opens that service under its own privacy policy.",
         "We don't sell personal data. We disclose data to authorities only where the law requires it.",
       ],
     },
@@ -307,7 +307,7 @@ const privacyEs: LegalDoc = {
     {
       heading: "4. Con quién compartimos los datos",
       paragraphs: [
-        "Usamos proveedores que tratan datos en nuestro nombre bajo contratos de encargo de tratamiento: Supabase (base de datos, autenticación y almacenamiento de archivos), Vercel (alojamiento y entrega), Stripe (pagos), Resend (correo transaccional), PostHog (analíticas de producto, solo con consentimiento), Sentry (monitorización de errores) y Anthropic (la función opcional «ayúdame a escribirlo»: solo se envían los datos que escribes en ese diálogo y solo cuando la usas). Algunos proveedores tratan datos en Estados Unidos; las transferencias se amparan en el Marco de Privacidad de Datos UE–EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea.",
+        "Usamos proveedores que tratan datos en nuestro nombre bajo contratos de encargo de tratamiento: Supabase (base de datos, autenticación y almacenamiento de archivos), Vercel (alojamiento y entrega), Stripe (pagos), Resend (correo transaccional), PostHog (analíticas de producto, solo con consentimiento), Sentry (monitorización de errores) y Anthropic (la función opcional «ayúdame a escribirlo»: solo se envían los datos que escribes en ese diálogo y solo cuando la usas). Algunos proveedores tratan datos en Estados Unidos; las transferencias se amparan en el Marco de Privacidad de Datos UE–EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea. Si un regalo incluye el enlace a una canción, al abrirlo se carga su portada desde YouTube, Spotify o Apple, que reciben la dirección IP de quien lo ve; al tocar el enlace se abre ese servicio, sujeto a su propia política de privacidad.",
         "No vendemos datos personales. Solo comunicamos datos a las autoridades cuando la ley lo exige.",
       ],
     },

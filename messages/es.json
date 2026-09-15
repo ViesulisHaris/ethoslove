@@ -375,6 +375,13 @@
     },
     "music": {
       "none": "Sin música",
+      "dedicationTitle": "Una canción que te recuerde a esa persona",
+      "dedicationHelp": "Pega un enlace de YouTube, Spotify o Apple Music. Aparece al final como «esta canción me recuerda a ti» y abre la canción completa. Gratis en todas las plantillas.",
+      "dedicationPlaceholder": "Pega el enlace de una canción…",
+      "dedicationInvalid": "Ese enlace no es una canción de YouTube, Spotify o Apple Music.",
+      "dedicationRemove": "Quitar la canción",
+      "dedicationNote": "La frase encima de la canción",
+      "dedicationNotePlaceholder": "esta canción me recuerda a ti",
       "library": "De la biblioteca",
       "upload": "Subir la tuya",
       "uploadHint": "MP3 o M4A, hasta {mb} MB",

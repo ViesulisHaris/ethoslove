@@ -12,6 +12,7 @@ import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Field, SectionHeader, Segmented } from "../field";
 import { Waveform } from "../waveform";
+import { SongLinkField } from "../song-link-field";
 
 type Mode = "none" | "library" | "song" | "upload";
 
@@ -357,6 +358,8 @@ export function MusicSection() {
           />
         </Field>
       ) : null}
+
+      <SongLinkField />
     </section>
   );
 }

@@ -375,6 +375,13 @@
     },
     "music": {
       "none": "No music",
+      "dedicationTitle": "A song that reminds you of them",
+      "dedicationHelp": "Paste a YouTube, Spotify or Apple Music link. It shows at the end as “this song reminds me of you” and opens the full song. Free on every template.",
+      "dedicationPlaceholder": "Paste a song link…",
+      "dedicationInvalid": "That isn't a YouTube, Spotify or Apple Music song link.",
+      "dedicationRemove": "Remove the song",
+      "dedicationNote": "The line above the song",
+      "dedicationNotePlaceholder": "this song reminds me of you",
       "library": "From the library",
       "upload": "Upload your own",
       "uploadHint": "MP3 or M4A, up to {mb} MB",

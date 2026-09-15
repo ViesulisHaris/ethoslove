@@ -7,6 +7,7 @@ import type { GiftData } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import { giftString } from "./i18n";
 import { ReplyModeContext } from "./reply-mode";
+import { SongDedication } from "./SongDedication";
 
 export function EndScreen({
   data,
@@ -67,6 +68,8 @@ export function EndScreen({
           dark={dark}
         />
       ) : null}
+
+      {data.dedication ? <SongDedication dedication={data.dedication} locale={locale} dark={dark} /> : null}
 
       <div className="mt-8 flex w-full max-w-xs flex-col gap-3">
         {data.showReactionCta && onReact ? (
