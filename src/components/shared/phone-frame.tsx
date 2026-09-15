@@ -13,7 +13,8 @@ export function PhoneFrame({
   children: React.ReactNode;
   className?: string;
   screenClassName?: string;
-  width?: number;
+  /** Pixels, or any CSS width — a short screen can hand it a height-derived one. */
+  width?: number | string;
 }) {
   return (
     <div

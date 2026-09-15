@@ -55,7 +55,8 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
 
   return (
     <div className={cn("flex flex-col items-center gap-5", className)}>
-      <PhoneFrame width={330} className="max-w-full">
+      {/* On a short laptop screen the frame shrinks so the play button underneath stays reachable. */}
+      <PhoneFrame width="min(330px, calc((100dvh - 11.25rem) * 390 / 844))" className="max-w-full">
         {renderer}
       </PhoneFrame>
       {playButton}
