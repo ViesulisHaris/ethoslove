@@ -2,7 +2,7 @@
 
 import type { GiftData } from "@/lib/gift/schema";
 import { isLocalRef } from "@/lib/gift/assets";
-import type { EditorDraft } from "./types";
+import type { AssetRecord, EditorDraft } from "./types";
 
 const KEY_PREFIX = "ethos:draft:";
 
@@ -10,7 +10,25 @@ export function draftKey(slug: string): string {
   return `${KEY_PREFIX}${slug}`;
 }
 
-/** Replace object URLs with idb refs so the draft survives reloads. */
+/**
+ * What a draft saved on this device points at: the copy on this device while there is one, so the
+ * preview still works after a reload, otherwise the file in Storage. Where each file already went
+ * rides along, so reopening the draft neither sends a file twice nor loses track of it.
+ */
+export function localRefs(assets: Record<string, AssetRecord>) {
+  const byId: Record<string, string | undefined> = {};
+  const byUrl: Record<string, string | undefined> = {};
+  const uploaded: Record<string, string> = {};
+  for (const a of Object.values(assets)) {
+    const ref = a.local ? `idb:${a.id}` : a.storagePath;
+    byId[a.id] = ref;
+    if (a.objectUrl) byUrl[a.objectUrl] = ref;
+    if (a.storagePath) uploaded[a.id] = a.storagePath;
+  }
+  return { byId, byUrl, uploaded };
+}
+
+/** Replace object URLs with persistent refs so the draft survives reloads. */
 export function serializeForLocal(draft: EditorDraft, assetRefs: Record<string, string | undefined>, byUrl: Record<string, string | undefined> = {}): string {
   const data: GiftData = {
     ...draft.data,
@@ -22,6 +40,8 @@ export function serializeForLocal(draft: EditorDraft, assetRefs: Record<string, 
     video: draft.data.video
       ? { url: byUrl[draft.data.video.url] ?? draft.data.video.url, poster: draft.data.video.poster ? (byUrl[draft.data.video.poster] ?? draft.data.video.poster) : undefined }
       : undefined,
+    // Saved as its object URL, a voice message didn't survive a reload.
+    voiceNote: draft.data.voiceNote ? { ...draft.data.voiceNote, url: byUrl[draft.data.voiceNote.url] ?? draft.data.voiceNote.url } : undefined,
   };
   return JSON.stringify({ ...draft, data });
 }

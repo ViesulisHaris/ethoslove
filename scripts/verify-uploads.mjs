@@ -89,6 +89,43 @@ try {
   check("one draft row for one gift", rows?.length === 1, `${rows?.length} rows`);
   await shot("01-ringtone-uploaded");
 
+  // 1b. Coming back to the page finds the same gift: no new draft row, nothing sent again, previews intact.
+  let storagePosts = 0;
+  page.on("request", (r) => {
+    if (r.method() === "POST" && r.url().includes("/storage/v1/object/gifts/")) storagePosts++;
+  });
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByLabel("Their name").waitFor({ timeout: 30000 });
+  await status.filter({ hasText: /Uploaded|can’t|connection|no longer/ }).waitFor({ timeout: 30000 });
+  await page.waitForTimeout(3000);
+  const { data: afterReload } = await admin.from("gifts").select("id").eq("user_id", userId);
+  check("reopening keeps the same draft row", afterReload?.length === 1 && afterReload[0].id === withSong?.id, `${afterReload?.length} rows`);
+  check("reopening sends nothing again", storagePosts === 0, `${storagePosts} uploads`);
+  check("song still marked uploaded after reopening", (await status.innerText()).includes("Uploaded"));
+  const thumbOk = await page.locator('img[src^="blob:"]').first().evaluate((img) => img.complete && img.naturalWidth > 0).catch(() => false);
+  check("photo preview works after reopening", thumbOk);
+
+  // 1c. A copy of a draft that has since been published elsewhere must not write over the live gift.
+  const liveId = withSong.id;
+  await admin.from("gifts").update({ status: "live", published_at: new Date().toISOString() }).eq("id", liveId);
+  await page.getByLabel("Message").fill("Happy birthday. This one has our song in it. (edited later)");
+  let rowsNow = [];
+  for (let i = 0; i < 40; i++) {
+    const { data } = await admin.from("gifts").select("id, status, data").eq("user_id", userId);
+    rowsNow = data ?? [];
+    const next = rowsNow.find((r) => r.id !== liveId);
+    if (next?.data?.message?.includes("edited later") && (next.data?.music?.url ?? "").startsWith(`gifts/${next.id}/`)) break;
+    await page.waitForTimeout(1000);
+  }
+  const live = rowsNow.find((r) => r.id === liveId);
+  const next = rowsNow.find((r) => r.id !== liveId);
+  check("published gift left untouched", Boolean(live) && !live.data?.message?.includes("edited later"));
+  check(
+    "edits carry on in a fresh draft with its own files",
+    Boolean(next) && next.status === "draft" && next.data?.message?.includes("edited later") && (next.data?.music?.url ?? "").startsWith(`gifts/${next.id}/`) && (next.data?.photos?.[0]?.url ?? "").startsWith(`gifts/${next.id}/`),
+    JSON.stringify({ rows: rowsNow.length, music: next?.data?.music?.url, photo: next?.data?.photos?.[0]?.url }),
+  );
+
   // 2. A type we can't take is refused when it's picked.
   await audioInput.setInputFiles({ name: "memo.amr", mimeType: "audio/amr", buffer: Buffer.from("#!AMR\n0000") });
   const refusedAtDoor = await page.getByText("We can’t use this file type. Try an MP3 or M4A.").first().waitFor({ timeout: 6000 }).then(() => true, () => false);

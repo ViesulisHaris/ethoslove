@@ -23,7 +23,7 @@ import { UploadError, timeoutFor, uploadBlob } from "./upload";
 import { uploadTypeFor } from "./media-types";
 import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, type FailedGroup } from "./failed-uploads";
 import { processImageFile, transformImage } from "./image";
-import { localAssetIds, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
+import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
@@ -159,11 +159,15 @@ async function captureVideoPoster(file: File): Promise<Blob | null> {
 }
 
 export const useEditor = create<EditorState>((set, get) => {
+  // The local-draft key this editing session opened: the template's own page, or a gift from the dashboard.
+  let sessionKey: string | null = null;
+
   const persistLocal = () => {
     window.clearTimeout(localTimer);
     localTimer = window.setTimeout(() => {
       const s = get();
       if (!s.hydrated) return;
+      const refs = localRefs(s.assets);
       const draft: EditorDraft = {
         version: 1,
         slug: s.slug,
@@ -175,11 +179,15 @@ export const useEditor = create<EditorState>((set, get) => {
         password: s.password,
         removeWatermark: s.removeWatermark,
         updatedAt: Date.now(),
+        uploaded: refs.uploaded,
       };
-      writeLocalDraft(
-        draftScope(s.slug, s.giftId),
-        serializeForLocal(draft, assetRefs(s), refsByUrl(s)),
-      );
+      const serialized = serializeForLocal(draft, refs.byId, refs.byUrl);
+      // Saved where the session opened, so coming back to the same page finds the same gift. It used
+      // to be left at the moment before the draft row existed, and every visit made a new row and
+      // uploaded every photo again. The gift's own key keeps the dashboard's copy current too.
+      const own = draftScope(s.slug, s.giftId);
+      writeLocalDraft(sessionKey ?? own, serialized);
+      if (s.giftId && sessionKey !== own) writeLocalDraft(own, serialized);
       if (!s.authed || !s.giftId)
         set({ save: s.authed ? "saving" : "offline", savedAt: Date.now() });
     }, LOCAL_DEBOUNCE);
@@ -203,6 +211,19 @@ export const useEditor = create<EditorState>((set, get) => {
 
   // The publish sheet, the autosave and a retry can all ask for a draft row at once; one row answers all of them.
   let ensuring: Promise<string | null> | null = null;
+
+  /** Leave a draft row that no longer takes this draft, keeping every file this device can send again. */
+  const detachFromGift = (oldGiftId: string) => {
+    const folder = `gifts/${oldGiftId}/`;
+    const assets = { ...get().assets };
+    for (const a of Object.values(assets)) {
+      if (a.local && a.storagePath?.startsWith(folder)) assets[a.id] = { ...a, storagePath: undefined, status: "local", progress: 0, error: undefined };
+    }
+    const { slug } = get();
+    set({ giftId: null, shortId: null, assets });
+    if (sessionKey === draftScope(slug, oldGiftId)) sessionKey = slug;
+    persistLocal();
+  };
 
   /**
    * Three attempts, each with its own timeout and stall detection, so a phone that loses
@@ -281,6 +302,7 @@ export const useEditor = create<EditorState>((set, get) => {
     dirty: false,
 
     async init({ slug, manifest, initial, authed, userId, remote }) {
+      sessionKey = draftScope(slug, remote?.id ?? null);
       const timezone = defaultTimezone();
       let data = initial;
       let assets: Record<string, AssetRecord> = {};
@@ -868,7 +890,14 @@ export const useEditor = create<EditorState>((set, get) => {
       const giftId = s.giftId ?? (await get().ensureRemote());
       if (!giftId) return false;
       set({ save: "saving" });
-      const result = await saveDraft({ giftId, data: get().serializedForServer() });
+      let result = await saveDraft({ giftId, data: get().serializedForServer(), expectDraft: get().status === "draft" });
+      if (!result.ok && (result.error === "not_found" || result.error === "not_draft") && get().status === "draft" && get().giftId === giftId) {
+        // The row this device remembered is gone (tidied away after a week, deleted, another account
+        // signed in) or was published from somewhere else: carry on in a fresh draft, never over it.
+        detachFromGift(giftId);
+        const fresh = await get().ensureRemote();
+        if (fresh) result = await saveDraft({ giftId: fresh, data: get().serializedForServer(), expectDraft: true });
+      }
       set({
         save: result.ok ? "saved" : "error",
         savedAt: Date.now(),
@@ -907,6 +936,12 @@ export const useEditor = create<EditorState>((set, get) => {
     },
 
     markPublished(shortId, status) {
+      const { slug, giftId } = get();
+      if (giftId) {
+        // The template's page starts the next gift fresh; this one stays editable from the dashboard.
+        if (sessionKey === slug || readLocalDraft(slug)?.giftId === giftId) clearLocalDraft(slug);
+        sessionKey = draftScope(slug, giftId);
+      }
       set({ shortId, status, dirty: false, save: "saved", savedAt: Date.now() });
       persistLocal();
     },
@@ -939,6 +974,23 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
       if (b) blobs.set(id, b);
     }),
   );
+  // Where files already went: the remote row's own paths, and this device's record of its uploads.
+  const uploaded: Record<string, string> = { ...(local.uploaded ?? {}) };
+  for (const a of Object.values(existing)) if (a.storagePath) uploaded[a.id] = a.storagePath;
+  /** This device's copy while it has one (a working preview, nothing sent twice), else the stored file. */
+  const place = (id: string, kind: AssetRecord["kind"]): string | undefined => {
+    const blob = blobs.get(id);
+    const stored = uploaded[id];
+    if (!blob) {
+      if (!stored) return undefined;
+      assets[id] = { id, kind, local: false, storagePath: stored, status: "uploaded", progress: 1 };
+      return stored;
+    }
+    const objectUrl = URL.createObjectURL(blob);
+    assets[id] = { id, kind, local: true, objectUrl, mime: blob.type, bytes: blob.size, storagePath: stored, status: stored ? "uploaded" : "local", progress: stored ? 1 : 0 };
+    return objectUrl;
+  };
+
   const photos = local.data.photos
     .map((p) => {
       if (isStoragePath(p.url)) {
@@ -952,20 +1004,8 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
         };
         return p;
       }
-      const blob = blobs.get(p.id);
-      if (!blob) return null;
-      const objectUrl = URL.createObjectURL(blob);
-      assets[p.id] = {
-        ...(assets[p.id] ?? { id: p.id, kind: "photo", progress: 0 }),
-        id: p.id,
-        kind: "photo",
-        local: true,
-        objectUrl,
-        mime: blob.type,
-        bytes: blob.size,
-        status: assets[p.id]?.storagePath ? "uploaded" : "local",
-      };
-      return { ...p, url: objectUrl };
+      const url = isLocalRef(p.url) ? place(p.id, "photo") : undefined;
+      return url ? { ...p, url } : null;
     })
     .filter((p): p is GiftPhoto => p !== null);
 
@@ -981,45 +1021,15 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
         progress: 1,
       };
     } else {
-      const blob = blobs.get(music.trackId);
-      if (blob) {
-        const objectUrl = URL.createObjectURL(blob);
-        assets[music.trackId] = {
-          id: music.trackId,
-          kind: "audio",
-          local: true,
-          objectUrl,
-          mime: blob.type,
-          bytes: blob.size,
-          status: "local",
-          progress: 0,
-        };
-        music = { ...music, url: objectUrl };
-      } else music = undefined;
+      const url = place(music.trackId, "audio");
+      music = url ? { ...music, url } : undefined;
     }
   }
-  const resolve = (
-    ref: string | undefined,
-    kind: "video" | "photo" | "audio",
-  ): string | undefined => {
+  const resolve = (ref: string | undefined, kind: AssetRecord["kind"]): string | undefined => {
     if (!ref) return undefined;
     if (isStoragePath(ref)) return ref;
     if (!ref.startsWith("idb:")) return ref;
-    const id = ref.slice(4);
-    const blob = blobs.get(id);
-    if (!blob) return undefined;
-    const objectUrl = URL.createObjectURL(blob);
-    assets[id] = {
-      id,
-      kind,
-      local: true,
-      objectUrl,
-      mime: blob.type,
-      bytes: blob.size,
-      status: "local",
-      progress: 0,
-    };
-    return objectUrl;
+    return place(ref.slice(4), kind);
   };
   let voiceNote = local.data.voiceNote;
   if (voiceNote) {
@@ -1039,28 +1049,8 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
   }
   let video = local.data.video;
   if (video) {
-    const resolveVideo = (ref: string | undefined, kind: "video" | "photo"): string | undefined => {
-      if (!ref) return undefined;
-      if (isStoragePath(ref)) return ref;
-      if (!ref.startsWith("idb:")) return ref;
-      const id = ref.slice(4);
-      const blob = blobs.get(id);
-      if (!blob) return undefined;
-      const objectUrl = URL.createObjectURL(blob);
-      assets[id] = {
-        id,
-        kind,
-        local: true,
-        objectUrl,
-        mime: blob.type,
-        bytes: blob.size,
-        status: "local",
-        progress: 0,
-      };
-      return objectUrl;
-    };
-    const url = resolveVideo(video.url, "video");
-    video = url ? { url, poster: resolveVideo(video.poster, "photo") } : undefined;
+    const url = resolve(video.url, "video");
+    video = url ? { url, poster: resolve(video.poster, "photo") } : undefined;
     if (video && isStoragePath(video.url)) {
       const id = video.url.split("/").pop()!.split(".")[0];
       assets[id] = {

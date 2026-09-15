@@ -35,6 +35,8 @@ export type EditorDraft = {
   password: string;
   removeWatermark: boolean;
   updatedAt: number;
+  /** Where each file on this device already went in Storage, so reopening the draft sends nothing twice. */
+  uploaded?: Record<string, string>;
 };
 
 export type SaveState = "idle" | "saving" | "saved" | "offline" | "error";
