@@ -50,13 +50,14 @@ const nextConfig: NextConfig = {
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';
  * dev adds eval + the HMR socket. Supabase (storage, auth), Stripe (js + Checkout) and
- * Apple's song previews/artwork are the only third parties.
+ * Apple's song previews/artwork are the only third parties. Vercel Analytics and Speed Insights
+ * load from /_vercel on this origin; only their dev debug scripts come from va.vercel-scripts.com.
  */
 function contentSecurityPolicy(): string {
   const dev = process.env.NODE_ENV !== "production";
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""} https://js.stripe.com`,
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com",
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",

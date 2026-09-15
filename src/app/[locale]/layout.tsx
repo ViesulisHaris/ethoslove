@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { Providers } from "@/components/shared/providers";
 import { RefCapture } from "@/components/shared/ref-capture";
+import { SiteAnalytics } from "@/components/shared/analytics";
 import "../globals.css";
 
 const sans = Schibsted_Grotesk({
@@ -102,6 +103,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
         <NextIntlClientProvider>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
+        <SiteAnalytics />
       </body>
     </html>
   );
