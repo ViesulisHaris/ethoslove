@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { currencyFor, type Currency } from "@/lib/pricing/products";
-import { getCurrentUser } from "@/lib/auth/get-user";
 import { stripeReady } from "@/lib/stripe/server";
 import { listManifests } from "@/templates/registry";
 import { PageHeader } from "@/components/shared/page-header";
@@ -19,7 +18,6 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
   const { template, return: returnTo, currency: qCurrency } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("pricing");
-  const user = await getCurrentUser();
   const currency: Currency = qCurrency === "eur" || qCurrency === "gbp" || qCurrency === "usd" ? qCurrency : currencyFor(locale === "es" ? "ES" : "US");
   const faq = t.raw("faq") as { q: string; a: string }[];
 
@@ -30,7 +28,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
         <PricingCards
           currency={currency}
           manifests={listManifests()}
-          authed={Boolean(user)}
+          authed={false}
           paymentsEnabled={stripeReady()}
           preselect={typeof template === "string" ? template : undefined}
           returnTo={typeof returnTo === "string" ? returnTo : undefined}

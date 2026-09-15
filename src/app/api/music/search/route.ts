@@ -2,6 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 
+export const runtime = "nodejs";
+export const maxDuration = 5;
+
+const SEARCH_CACHE = "public, s-maxage=86400, stale-while-revalidate=604800";
+
 export type CatalogSong = {
   id: string;
   title: string;
@@ -24,7 +29,7 @@ export type CatalogSong = {
 export async function GET(request: NextRequest) {
   const q = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 80);
   const country = (request.nextUrl.searchParams.get("country") ?? "US").slice(0, 2).toUpperCase();
-  if (q.length < 2) return NextResponse.json({ songs: [] });
+  if (q.length < 2) return NextResponse.json({ songs: [] }, { headers: { "cache-control": SEARCH_CACHE } });
   // Every search is a request to Apple from our servers: one visitor must not get us throttled for everyone.
   if (!(await rateLimit(`music:${clientIp(request.headers)}`, { limit: 60, windowSeconds: 60 })))
     return NextResponse.json({ songs: [], error: "rate_limited" }, { status: 429 });
@@ -48,5 +53,5 @@ export async function GET(request: NextRequest) {
       url: String(r.trackViewUrl ?? ""),
       durationMs: typeof r.trackTimeMillis === "number" ? r.trackTimeMillis : undefined,
     }));
-  return NextResponse.json({ songs }, { headers: { "cache-control": "public, s-maxage=86400, stale-while-revalidate=604800" } });
+  return NextResponse.json({ songs }, { headers: { "cache-control": SEARCH_CACHE } });
 }

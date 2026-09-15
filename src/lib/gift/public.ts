@@ -1,8 +1,10 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import { GIFTS_BUCKET, storageObjectKey, storagePathsOf } from "./assets";
+import { GIFTS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
+import { giftStoragePaths } from "./storage-paths";
 
 export type PublicGift = {
   id: string;
@@ -23,6 +25,54 @@ export type PublicGift = {
 };
 
 const SIGNED_TTL = 60 * 60 * 24 * 7;
+const SIGNED_REVALIDATE = 60 * 60 * 24 * 6;
+
+const getSignedAssetUrlMap = unstable_cache(
+  async (paths: string[]): Promise<Record<string, string>> => {
+    const admin = getSupabaseAdminClient();
+    if (!admin) return {};
+    const unique = Array.from(new Set(paths.filter(isStoragePath))).sort();
+    if (unique.length === 0) return {};
+
+    const { data: signed } = await admin.storage
+      .from(GIFTS_BUCKET)
+      .createSignedUrls(unique.map(storageObjectKey), SIGNED_TTL);
+    const map: Record<string, string> = {};
+    signed?.forEach((row, i) => {
+      if (row.signedUrl) map[unique[i]] = row.signedUrl;
+    });
+    return map;
+  },
+  ["gift-signed-assets-v1"],
+  { revalidate: SIGNED_REVALIDATE },
+);
+
+export type PublicGiftMeta = {
+  locale: GiftLocale;
+  recipientName: string;
+  senderName: string;
+  title: string | null;
+};
+
+/** Metadata read path: deliberately avoids signing or returning media URLs. */
+export async function fetchPublicGiftMeta(shortId: string): Promise<PublicGiftMeta | null> {
+  const admin = getSupabaseAdminClient();
+  if (!admin) return null;
+  const { data, error } = await admin
+    .from("gifts")
+    .select("locale, status, password_hash, data")
+    .eq("short_id", shortId)
+    .in("status", ["live", "scheduled"])
+    .maybeSingle();
+  if (error || !data) return null;
+  const giftData = data.data && typeof data.data === "object" && !Array.isArray(data.data) ? (data.data as Record<string, unknown>) : {};
+  return {
+    locale: data.locale === "es" ? "es" : "en",
+    recipientName: String(giftData.recipientName ?? ""),
+    senderName: String(giftData.senderName ?? ""),
+    title: data.password_hash ? null : typeof giftData.title === "string" ? giftData.title : null,
+  };
+}
 
 /** The one server-side read path for recipients. Goes through the SECURITY DEFINER RPC. */
 export async function fetchPublicGift(shortId: string, password?: string | null): Promise<PublicGift | null> {
@@ -54,15 +104,7 @@ export async function fetchPublicGift(shortId: string, password?: string | null)
 }
 
 async function signAssets(data: GiftData, watermark: boolean): Promise<GiftData> {
-  const admin = getSupabaseAdminClient()!;
-  const paths = storagePathsOf(data);
-  const map: Record<string, string> = {};
-  if (paths.length) {
-    const { data: signed } = await admin.storage.from(GIFTS_BUCKET).createSignedUrls(paths.map(storageObjectKey), SIGNED_TTL);
-    signed?.forEach((row, i) => {
-      if (row.signedUrl) map[paths[i]] = row.signedUrl;
-    });
-  }
+  const map = await getSignedAssetUrlMap(giftStoragePaths(data));
   return {
     ...data,
     watermark,

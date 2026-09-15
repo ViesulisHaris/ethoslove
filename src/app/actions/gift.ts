@@ -5,7 +5,9 @@ import { revalidatePath } from "next/cache";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
-import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey, storagePathsOf } from "@/lib/gift/assets";
+import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
+import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
+import { giftStoragePaths } from "@/lib/gift/storage-paths";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
@@ -29,17 +31,17 @@ async function requireContext(): Promise<Ctx> {
 }
 
 /**
- * Owners can only write drafts themselves (RLS, migration 0005). What recipients see, a publish or
+ * Owners can only write drafts themselves (RLS, migration 0007). What recipients see, a publish or
  * an edit to a live gift, is written with the service role once the publish rules have passed.
  */
 function recipientFacingWriter(ctx: SignedIn): SignedIn["supabase"] {
   return getSupabaseAdminClient() ?? ctx.supabase;
 }
 
-/** Every stored file a gift points at must sit in the folder of a gift this user owns. */
-async function ownsAssets(ctx: SignedIn, data: Pick<GiftData, "photos" | "music" | "video" | "voiceNote">): Promise<boolean> {
+/** Every stored file a gift points at, in any field, must sit in the folder of a gift this user owns. */
+async function ownsAssets(ctx: SignedIn, data: unknown): Promise<boolean> {
   const giftIds = new Set<string>();
-  for (const path of storagePathsOf(data)) {
+  for (const path of giftStoragePaths(data)) {
     const giftId = giftIdOfStoragePath(path);
     if (!giftId) return false;
     giftIds.add(giftId);
@@ -111,11 +113,11 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
     const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
     if (!unlocked) return { ok: false, error: "payment_required" };
   }
-  if (!(await ownsAssets(ctx, content))) return { ok: false, error: "invalid_assets" };
+  if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const { error } = await recipientFacingWriter(ctx)
     .from("gifts")
-    .update(patch)
+    .update({ ...patch, storage_pruned_at: null })
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .in("status", ["scheduled", "live"]);
@@ -178,6 +180,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
       timezone: input.data.schedule?.timezone ?? null,
       locale: data.locale,
       published_at: new Date().toISOString(),
+      storage_pruned_at: null,
     })
     .eq("id", gift.id)
     .eq("user_id", ctx.user.id);
@@ -272,8 +275,15 @@ export async function duplicateGift(giftId: string): Promise<ActionResult<{ gift
 export async function deleteGift(giftId: string): Promise<ActionResult<null>> {
   const ctx = await requireContext();
   if (!ctx.ok) return { ok: false, error: ctx.error };
-  const { data: files } = await ctx.supabase.storage.from(GIFTS_BUCKET).list(giftId, { limit: 200 });
-  if (files?.length) await ctx.supabase.storage.from(GIFTS_BUCKET).remove(files.map((f) => `${giftId}/${f.name}`));
+  const { data: gift } = await ctx.supabase
+    .from("gifts")
+    .select("id")
+    .eq("id", giftId)
+    .eq("user_id", ctx.user.id)
+    .single();
+  if (!gift) return { ok: false, error: "not_found" };
+  const cleanup = await deleteGiftStorage(gift.id);
+  if (cleanup.errors.length) return { ok: false, error: "storage_cleanup_failed" };
   const { error } = await ctx.supabase.from("gifts").delete().eq("id", giftId).eq("user_id", ctx.user.id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/dashboard");

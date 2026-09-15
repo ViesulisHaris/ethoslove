@@ -6,6 +6,9 @@ import { isShortId } from "@/lib/gift/short-id";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 
+export const runtime = "nodejs";
+export const maxDuration = 5;
+
 const input = z.object({ password: z.string().min(1).max(64) });
 
 /** Verifies a gift password and stores it (encrypted) in an HttpOnly cookie for this gift. */

@@ -30,6 +30,22 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["sharp"],
   headers: async () => [
     {
+      source: "/audio/library/:path*",
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    },
+    {
+      source: "/demo/:path*",
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    },
+    {
+      source: "/icons/:path*",
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    },
+    {
+      source: "/templates/:path*",
+      headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+    },
+    {
       source: "/(.*)",
       headers: [
         { key: "Content-Security-Policy", value: contentSecurityPolicy() },

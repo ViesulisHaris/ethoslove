@@ -18,6 +18,7 @@ import type { CatalogSong } from "@/app/api/music/search/route";
 import type { LibraryTrack } from "./music-library";
 import type { AssetRecord, EditorDraft, SaveState, ScheduleSettings } from "./types";
 import { deleteBlob, getBlob, putBlob } from "./blob-store";
+import { UploadError, timeoutFor, uploadBlob } from "./upload";
 import { processImageFile, transformImage } from "./image";
 import { localAssetIds, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 
@@ -82,6 +83,10 @@ export type EditorState = {
 
   ensureRemote: () => Promise<string | null>;
   uploadPending: () => Promise<void>;
+  /** Give failed uploads another go (a photo the browser has lost cannot be retried). */
+  retryUploads: () => Promise<void>;
+  /** Take failed photos out of the gift so it can be published without them. */
+  dropFailedUploads: () => Promise<void>;
   syncNow: () => Promise<boolean>;
   serializedForServer: () => GiftData;
   markPublished: (shortId: string, status: "live" | "scheduled") => void;
@@ -190,50 +195,58 @@ export const useEditor = create<EditorState>((set, get) => {
     if (get().authed) persistRemote();
   };
 
+  const setAsset = (id: string, patch: Partial<AssetRecord>) =>
+    set((st) => (st.assets[id] ? { assets: { ...st.assets, [id]: { ...st.assets[id], ...patch } } } : {}));
+
+  /**
+   * Three attempts, each with its own timeout and stall detection, so a phone that loses
+   * signal mid-upload ends up on "failed, retry" instead of "uploading" forever.
+   */
   const uploadAsset = async (id: string) => {
     const s = get();
     const asset = s.assets[id];
     const supabase = getSupabaseBrowserClient();
-    if (
-      !asset ||
-      !s.giftId ||
-      !s.authed ||
-      !supabase ||
-      asset.storagePath ||
-      asset.status === "uploading"
-    )
-      return;
+    if (!asset || !s.giftId || !s.authed || !supabase || asset.storagePath || asset.status === "uploading") return;
     const blob = await getBlob(id);
-    if (!blob) return;
-    set((st) => ({
-      assets: { ...st.assets, [id]: { ...st.assets[id], status: "uploading", progress: 0.2 } },
-    }));
-    const ext = extensionForMime(blob.type);
-    const path = buildStoragePath(s.giftId, id, ext);
-    const { error } = await supabase.storage
-      .from(GIFTS_BUCKET)
-      .upload(storageObjectKey(path), blob, {
-        contentType: blob.type,
-        upsert: true,
-        cacheControl: "31536000",
-      });
-    if (error) {
-      set((st) => ({
-        assets: {
-          ...st.assets,
-          [id]: { ...st.assets[id], status: "error", error: error.message, progress: 0 },
-        },
-      }));
+    if (!blob) {
+      // The browser dropped the draft's copy: private mode, cleared site data, or a different browser.
+      setAsset(id, { status: "error", error: "missing_blob", progress: 0 });
       return;
     }
-    set((st) => ({
-      assets: {
-        ...st.assets,
-        [id]: { ...st.assets[id], status: "uploaded", storagePath: path, progress: 1 },
-      },
-    }));
-    persistLocal();
-    persistRemote();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const apikey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!session?.access_token || !baseUrl || !apikey) {
+      setAsset(id, { status: "error", error: "unauthorized", progress: 0 });
+      return;
+    }
+    const path = buildStoragePath(s.giftId, id, extensionForMime(blob.type));
+    const url = `${baseUrl}/storage/v1/object/${GIFTS_BUCKET}/${storageObjectKey(path)}`;
+    const headers = {
+      authorization: `Bearer ${session.access_token}`,
+      apikey,
+      "content-type": blob.type || "application/octet-stream",
+      "cache-control": "max-age=31536000",
+      "x-upsert": "true",
+    };
+    setAsset(id, { status: "uploading", progress: 0, error: undefined });
+    let failure = "network";
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise((r) => setTimeout(r, attempt === 1 ? 1500 : 4000));
+      try {
+        await uploadBlob({ url, headers, blob, timeoutMs: timeoutFor(blob.size), onProgress: (f) => setAsset(id, { progress: f }) });
+        setAsset(id, { status: "uploaded", storagePath: path, progress: 1, error: undefined });
+        persistLocal();
+        persistRemote();
+        return;
+      } catch (e) {
+        failure = e instanceof UploadError ? e.kind : "network";
+        if (failure === "unauthorized") break;
+      }
+    }
+    setAsset(id, { status: "error", error: failure, progress: 0 });
   };
 
   return {
@@ -784,10 +797,31 @@ export const useEditor = create<EditorState>((set, get) => {
     async uploadPending() {
       const s = get();
       if (!s.authed || !s.giftId) return;
-      const pending = Object.values(s.assets).filter(
-        (a) => a.local && !a.storagePath && a.status !== "uploading",
+      // Earlier failures get another go here too; a lost blob is the one thing a retry can't fix.
+      const queue = Object.values(s.assets).filter(
+        (a) => a.local && !a.storagePath && a.status !== "uploading" && a.error !== "missing_blob",
       );
-      await Promise.all(pending.map((a) => uploadAsset(a.id)));
+      // Three at a time: a phone on mobile data chokes when a dozen photos go up at once.
+      const worker = async () => {
+        while (queue.length) await uploadAsset(queue.shift()!.id);
+      };
+      await Promise.all(Array.from({ length: Math.min(3, queue.length) }, worker));
+    },
+
+    async retryUploads() {
+      set((st) => {
+        const assets = { ...st.assets };
+        for (const a of Object.values(assets))
+          if (a.status === "error" && !a.storagePath && a.error !== "missing_blob") assets[a.id] = { ...a, status: "local", error: undefined, progress: 0 };
+        return { assets };
+      });
+      if (!get().giftId) await get().ensureRemote();
+      else await get().uploadPending();
+    },
+
+    async dropFailedUploads() {
+      const failed = Object.values(get().assets).filter((a) => a.kind === "photo" && a.status === "error" && !a.storagePath);
+      for (const a of failed) await get().removePhoto(a.id);
     },
 
     async syncNow() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight, Play } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -18,6 +18,7 @@ export function Hero() {
   const t = useTranslations("home.hero");
   const tAll = useTranslations();
   const ref = useRef<HTMLDivElement>(null);
+  const [previewVideo, setPreviewVideo] = useState(false);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(my, [-1, 1], [6, -6]), { stiffness: 80, damping: 18 });
@@ -100,20 +101,33 @@ export function Hero() {
             transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.15 }}
             style={{ rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
             className="relative z-10 mx-auto w-[260px] sm:mr-4 sm:ml-auto sm:w-[290px] lg:w-[300px]"
+            onPointerEnter={() => setPreviewVideo(true)}
+            onFocus={() => setPreviewVideo(true)}
           >
             <div aria-hidden="true" className="absolute -inset-10 -z-10 rounded-full bg-blush/25 blur-3xl" />
             <PhoneFrame width={300} className="!w-full">
-              <video
-                className="h-full w-full object-cover"
-                src="/templates/bouquet/preview.webm"
-                poster="/templates/bouquet/poster.jpg"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label={t("videoAlt")}
-              />
+              {previewVideo ? (
+                <video
+                  className="h-full w-full object-cover"
+                  src="/templates/bouquet/preview.webm"
+                  poster="/templates/bouquet/poster.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  aria-label={t("videoAlt")}
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src="/templates/bouquet/poster.jpg"
+                  alt=""
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+              )}
             </PhoneFrame>
             <motion.div
               initial={{ opacity: 0, y: 8 }}

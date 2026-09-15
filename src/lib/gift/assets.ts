@@ -1,5 +1,3 @@
-import type { GiftData } from "./schema";
-
 /**
  * Asset URL conventions.
  *   blob:…            in-editor object URL (never persisted)
@@ -33,20 +31,11 @@ export function buildStoragePath(giftId: string, assetId: string, ext: string): 
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** The gift whose folder a Storage path sits in (`gifts/{giftId}/{file}`), or null when it isn't one. */
+/** The gift whose folder a Storage path sits in (`gifts/{giftId}/…`), or null when it isn't one. */
 export function giftIdOfStoragePath(path: string): string | null {
-  const [bucket, giftId, file, ...rest] = path.split("/");
-  return bucket === GIFTS_BUCKET && giftId && UUID.test(giftId) && file && rest.length === 0 ? giftId : null;
-}
-
-/** Every Storage path a gift points at: photos, an uploaded song, the video and its poster, the voice note. */
-export function storagePathsOf(data: Pick<GiftData, "photos" | "music" | "video" | "voiceNote">): string[] {
-  return [
-    ...data.photos.map((p) => p.url),
-    ...(data.music?.source === "upload" ? [data.music.url] : []),
-    ...(data.video ? [data.video.url, data.video.poster ?? ""] : []),
-    ...(data.voiceNote ? [data.voiceNote.url] : []),
-  ].filter(isStoragePath);
+  const [bucket, giftId, ...rest] = path.split("/");
+  const inside = rest.length > 0 && rest.every((part) => part !== "" && part !== "." && part !== "..");
+  return bucket === GIFTS_BUCKET && giftId && UUID.test(giftId) && inside ? giftId : null;
 }
 
 export function extensionForMime(mime: string): string {

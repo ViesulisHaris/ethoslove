@@ -73,6 +73,22 @@ export function PublishSheet({
   const uploadsInFlight = Object.values(state.assets).some(
     (a) => a.status === "uploading" || a.status === "processing",
   );
+  const uploadTotals = useMemo(() => {
+    const local = Object.values(state.assets).filter((a) => a.local || a.status === "processing");
+    return { total: local.length, done: local.filter((a) => a.status === "uploaded").length };
+  }, [state.assets]);
+  const failedUploads = useMemo(
+    () => Object.values(state.assets).filter((a) => a.status === "error" && !a.storagePath),
+    [state.assets],
+  );
+  const failedRetryable = failedUploads.some((a) => a.error !== "missing_blob");
+  // A phone that comes back online mid-checklist picks its uploads straight back up.
+  useEffect(() => {
+    if (!open) return;
+    const onOnline = () => void useEditor.getState().retryUploads();
+    window.addEventListener("online", onOnline);
+    return () => window.removeEventListener("online", onOnline);
+  }, [open]);
   const problems = useMemo(() => {
     if (!serialized) return ["uploadsPending"];
     const p = readinessProblems(manifest, serialized);
@@ -237,7 +253,12 @@ export function PublishSheet({
                   .filter((key) => state.authed || key !== "uploadsPending")
                   .map((key) => {
                     const bad = problems.includes(key);
-                    const label = t(`problems.${key}`, { min: manifest.features.photos.min });
+                    const stuck = key === "uploadsPending" && bad && !uploadsInFlight && failedUploads.length > 0;
+                    const label = stuck
+                      ? t("problems.uploadsFailed")
+                      : key === "uploadsPending" && bad && uploadTotals.total > 1
+                        ? t("uploadingCount", { done: uploadTotals.done, total: uploadTotals.total })
+                        : t(`problems.${key}`, { min: manifest.features.photos.min });
                     return (
                       <li
                         key={key}
@@ -249,7 +270,7 @@ export function PublishSheet({
                         )}
                       >
                         {bad ? (
-                          key === "uploadsPending" ? (
+                          key === "uploadsPending" && !stuck ? (
                             <Loader2 className="size-4 animate-spin text-coral" />
                           ) : (
                             <AlertCircle className="size-4 text-coral" />
@@ -262,6 +283,18 @@ export function PublishSheet({
                     );
                   })}
               </ul>
+              {state.authed && failedUploads.length > 0 && !uploadsInFlight ? (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {failedRetryable ? (
+                    <Button type="button" variant="outline" className="h-10 rounded-full" onClick={() => void state.retryUploads()}>
+                      {t("retryUploads")}
+                    </Button>
+                  ) : null}
+                  <Button type="button" variant="ghost" className="h-10 rounded-full" onClick={() => void state.dropFailedUploads()}>
+                    {t("removeFailedUploads")}
+                  </Button>
+                </div>
+              ) : null}
             </section>
 
             {!state.authed && supabaseConfigured && guestCanPay && !showSignIn ? (

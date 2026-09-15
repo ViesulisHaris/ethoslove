@@ -9,6 +9,9 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { TEMPLATE_SLUGS } from "@/templates/registry";
 
+export const runtime = "nodejs";
+export const maxDuration = 10;
+
 const input = z.object({
   product: z.string(),
   templateSlugs: z.array(z.string()).default([]),

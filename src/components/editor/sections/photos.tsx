@@ -5,7 +5,7 @@ import { useRef, useState, type DragEvent } from "react";
 import { closestCenter, DndContext, PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { rectSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Crop, ImagePlus, Loader2, RotateCw, X } from "lucide-react";
+import { AlertCircle, Crop, ImagePlus, Loader2, RotateCw, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
@@ -26,6 +26,8 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   const movePhoto = useEditor((s) => s.movePhoto);
   const updatePhoto = useEditor((s) => s.updatePhoto);
   const editPhoto = useEditor((s) => s.editPhoto);
+  const retryUploads = useEditor((s) => s.retryUploads);
+  const dropFailedUploads = useEditor((s) => s.dropFailedUploads);
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
   const [cropping, setCropping] = useState<GiftPhoto | null>(null);
@@ -33,6 +35,8 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
 
   const max = manifest.features.photos.max;
   const processing = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "processing");
+  const failed = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "error" && !a.storagePath);
+  const retryable = failed.some((a) => a.error !== "missing_blob");
   const full = photos.length >= max;
 
   const pick = (files: FileList | null) => {
@@ -85,6 +89,21 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
         <input ref={inputRef} type="file" accept={ACCEPT} multiple hidden onChange={(e) => { pick(e.target.files); e.target.value = ""; }} />
       </div>
       {full ? <p className="mt-2 text-xs text-muted-foreground">{t("tooMany", { max })}</p> : photos.length >= LIMITS.free.maxPhotos ? <p className="mt-2 text-xs text-muted-foreground">{t("free10")}</p> : null}
+
+      {failed.length > 0 ? (
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm" role="alert">
+          <AlertCircle className="size-4 shrink-0 text-destructive" />
+          <span className="min-w-0 flex-1">{retryable ? t("failedBanner", { n: failed.length }) : t("failedMissing", { n: failed.length })}</span>
+          {retryable ? (
+            <button type="button" onClick={() => void retryUploads()} className="rounded-full bg-ink px-3.5 py-1.5 text-xs font-semibold text-paper">
+              {t("retry")}
+            </button>
+          ) : null}
+          <button type="button" onClick={() => void dropFailedUploads()} className="rounded-full border border-border px-3.5 py-1.5 text-xs font-medium">
+            {t("removeFailed")}
+          </button>
+        </div>
+      ) : null}
 
       {photos.length > 0 || processing.length > 0 ? (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -145,7 +164,15 @@ function PhotoTile({
   const t = useTranslations("editor.photos");
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: photo.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
-  const statusLabel: Record<string, string> = { uploading: t("uploading"), uploaded: t("uploaded"), local: t("local"), error: t("failed"), processing: t("processing") };
+  const progress = useEditor((s) => s.assets[photo.id]?.progress ?? 0);
+  const failure = useEditor((s) => s.assets[photo.id]?.error);
+  const statusLabel: Record<string, string> = {
+    uploading: `${t("uploading")} ${Math.round(progress * 100)}%`,
+    uploaded: t("uploaded"),
+    local: t("local"),
+    error: failure === "missing_blob" ? t("missing") : t("failed"),
+    processing: t("processing"),
+  };
 
   return (
     <li ref={setNodeRef} style={style} className={cn("group flex flex-col gap-2", isDragging && "z-10 opacity-80")}>

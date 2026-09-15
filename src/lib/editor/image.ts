@@ -19,7 +19,8 @@ async function dimensions(blob: Blob): Promise<{ width: number; height: number }
 
 /**
  * HEIC → JPEG (only when needed, the decoder is ~1MB so it loads lazily), then resize +
- * compress to WebP under LIMITS.photoMaxBytes. Runs in a worker where available.
+ * compress to WebP under LIMITS.photoMaxBytes. Runs in a worker where available. 1600px at
+ * ~0.5 MB is more than a phone screen shows, and a third of what we used to upload and serve.
  */
 export async function processImageFile(file: File): Promise<ProcessedImage> {
   let source: Blob = file;
@@ -33,7 +34,7 @@ export async function processImageFile(file: File): Promise<ProcessedImage> {
     maxSizeMB: LIMITS.photoMaxBytes / (1024 * 1024),
     maxWidthOrHeight: LIMITS.photoMaxEdgePx,
     fileType: "image/webp",
-    initialQuality: 0.86,
+    initialQuality: 0.82,
     useWebWorker: true,
     preserveExif: false,
   });

@@ -1,5 +1,4 @@
 import { getTranslations } from "next-intl/server";
-import { getCurrentUser } from "@/lib/auth/get-user";
 import { stripeReady } from "@/lib/stripe/server";
 import { currencyFor } from "@/lib/pricing/products";
 import { listManifests } from "@/templates/registry";
@@ -7,7 +6,6 @@ import { PricingCards } from "@/components/pricing/pricing-cards";
 
 export async function PricingTeaser({ locale }: { locale: string }) {
   const t = await getTranslations("pricing");
-  const user = await getCurrentUser();
   return (
     <section className="border-b border-line py-20 lg:py-28">
       <div className="container-x">
@@ -18,7 +16,7 @@ export async function PricingTeaser({ locale }: { locale: string }) {
           </div>
           <p className="max-w-md text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:pb-1">{t("subtitle")}</p>
         </div>
-        <PricingCards currency={currencyFor(locale === "es" ? "ES" : "US")} manifests={listManifests()} authed={Boolean(user)} paymentsEnabled={stripeReady()} />
+        <PricingCards currency={currencyFor(locale === "es" ? "ES" : "US")} manifests={listManifests()} authed={false} paymentsEnabled={stripeReady()} />
       </div>
     </section>
   );

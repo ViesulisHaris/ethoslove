@@ -13,7 +13,7 @@ export const LEGAL_ENTITY = {
   registeredAt: "27 March 2026",
 } as const;
 
-export const LEGAL_UPDATED = "2026-09-11";
+export const LEGAL_UPDATED = "2026-09-13";
 
 export type LegalSection = { heading: string; paragraphs: string[] };
 export type LegalDoc = { title: string; intro: string; sections: LegalSection[] };
@@ -244,7 +244,7 @@ const privacyEn: LegalDoc = {
     {
       heading: "5. How long we keep it",
       paragraphs: [
-        "Gifts and their content stay until you delete them or your account. Deleted accounts and gifts are removed within 30 days, then from backups within a further 30 days. View statistics are kept for as long as the gift exists. Purchase records are kept for the period Latvian accounting law requires (currently five years). Sign-in logs and security data are kept for up to 12 months.",
+        "Gifts and their content stay until you delete them or your account. After a live gift has been opened, we may remove unused upload versions that are no longer referenced by the published gift; scheduled gifts are not pruned before their unlock time. Deleted accounts and gifts have active Supabase Storage files, including images, videos, voice notes and reaction recordings, removed as part of deletion; routine backups expire within 30 days. View statistics are kept for as long as the gift exists. Purchase records are kept for the period Latvian accounting law requires (currently five years). Sign-in logs and security data are kept for up to 12 months.",
       ],
     },
     {
@@ -314,7 +314,7 @@ const privacyEs: LegalDoc = {
     {
       heading: "5. Cuánto tiempo los conservamos",
       paragraphs: [
-        "Los regalos y su contenido se conservan hasta que los borras o eliminas tu cuenta. Las cuentas y regalos eliminados se borran en 30 días y de las copias de seguridad en otros 30 días. Las estadísticas de visualización se conservan mientras exista el regalo. Los registros de compra se conservan durante el periodo que exige la legislación contable letona (actualmente cinco años). Los registros de acceso y datos de seguridad se conservan hasta 12 meses.",
+        "Los regalos y su contenido se conservan hasta que los borras o eliminas tu cuenta. Cuando un regalo publicado ya se ha abierto, podemos eliminar versiones de archivos subidos que ya no estén referenciadas por el regalo publicado; los regalos programados no se depuran antes de su hora de apertura. Al borrar una cuenta o un regalo, eliminamos del almacenamiento activo de Supabase los archivos asociados, incluidas imágenes, vídeos, notas de voz y grabaciones de reacción; las copias de seguridad rutinarias caducan en 30 días. Las estadísticas de visualización se conservan mientras exista el regalo. Los registros de compra se conservan durante el periodo que exige la legislación contable letona (actualmente cinco años). Los registros de acceso y datos de seguridad se conservan hasta 12 meses.",
       ],
     },
     {

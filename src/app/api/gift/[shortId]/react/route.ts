@@ -6,6 +6,9 @@ import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import { notifyReaction } from "@/lib/email/notify";
 
+export const runtime = "nodejs";
+export const maxDuration = 5;
+
 const EMOJI = new Set(["❤️", "😭", "🥹", "😂", "😮"]);
 const MAX_AUDIO_BYTES = 3 * 1024 * 1024;
 const AUDIO_TYPES = new Set(["audio/webm", "audio/mp4", "audio/mpeg", "audio/ogg", "audio/wav", "audio/aac", "audio/x-m4a"]);

@@ -3,7 +3,7 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { GIFTS_BUCKET, REACTIONS_BUCKET } from "@/lib/gift/assets";
+import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 
 /** Deletes the account and everything under it. Rows cascade; storage is wiped explicitly. */
 export async function deleteAccount(): Promise<{ ok: boolean; error?: string }> {
@@ -12,13 +12,25 @@ export async function deleteAccount(): Promise<{ ok: boolean; error?: string }> 
   const user = await getCurrentUser();
   if (!supabase || !admin || !user) return { ok: false, error: "unauthenticated" };
 
-  const { data: gifts } = await admin.from("gifts").select("id").eq("user_id", user.id);
-  for (const g of gifts ?? []) {
-    for (const bucket of [GIFTS_BUCKET, REACTIONS_BUCKET]) {
-      const { data: files } = await admin.storage.from(bucket).list(g.id, { limit: 500 });
-      if (files?.length) await admin.storage.from(bucket).remove(files.map((f) => `${g.id}/${f.name}`));
-    }
+  const giftIds: string[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await admin
+      .from("gifts")
+      .select("id")
+      .eq("user_id", user.id)
+      .range(from, from + 999);
+    if (error) return { ok: false, error: error.message };
+    giftIds.push(...(data ?? []).map((g) => g.id));
+    if ((data?.length ?? 0) < 1000) break;
   }
+
+  const errors: string[] = [];
+  for (const giftId of giftIds) {
+    const cleanup = await deleteGiftStorage(giftId);
+    errors.push(...cleanup.errors);
+  }
+  if (errors.length) return { ok: false, error: "storage_cleanup_failed" };
+
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return { ok: false, error: error.message };
   await supabase.auth.signOut();
