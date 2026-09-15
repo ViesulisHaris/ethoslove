@@ -725,7 +725,12 @@
       "title": "No pudimos confirmarlo.",
       "detail": "Si se te ha cobrado, el desbloqueo aparecerá en unos minutos. Si no, inténtalo de nuevo desde la página de precios."
     },
-    "continue": "Continuar"
+    "signin": {
+      "title": "Pagado. Ahora inicia sesión.",
+      "detail": "Tu compra está en la cuenta del correo con el que pagaste. Inicia sesión con ese correo para publicar."
+    },
+    "continue": "Continuar",
+    "signIn": "Iniciar sesión"
   },
   "promo": {
     "line": "20% de descuento en cualquier regalo con el código",

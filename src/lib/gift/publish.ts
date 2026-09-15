@@ -1,6 +1,6 @@
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
-import { isStoragePath } from "./assets";
+import { isLocalRef, isStoragePath } from "./assets";
 
 export type Entitlement = {
   /** User owns this template (or Everything). */
@@ -38,11 +38,22 @@ export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos";
 /** Content-level extras that need an unlock on any template (the free tier stays a real gift, these are the upsell). */
 export function premiumExtras(data: GiftData): PremiumExtra[] {
   const extras: PremiumExtra[] = [];
-  if (data.music?.source === "catalog") extras.push("song");
+  if (data.music && !isFreeMusic(data.music)) extras.push("song");
   if (data.video) extras.push("video");
   if (data.voiceNote) extras.push("voiceNote");
   if (data.photos.length > 10) extras.push("morePhotos");
   return extras;
+}
+
+/**
+ * Free music is a track from our own library or a file the sender uploaded. Anything else is the
+ * paid real-song feature whatever its `source` says, so a catalog preview relabelled "library" or
+ * "upload" still counts as one.
+ */
+function isFreeMusic(music: NonNullable<GiftData["music"]>): boolean {
+  if (music.source === "library") return music.url.startsWith("/audio/library/");
+  if (music.source === "upload") return isStoragePath(music.url) || isLocalRef(music.url);
+  return false;
 }
 
 /**

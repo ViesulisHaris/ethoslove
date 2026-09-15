@@ -725,7 +725,12 @@
       "title": "We couldn't confirm that.",
       "detail": "If you were charged, your unlock will appear within a few minutes. Otherwise, try again from the pricing page."
     },
-    "continue": "Continue"
+    "signin": {
+      "title": "Paid. Now sign in.",
+      "detail": "Your purchase is on the account for the email you paid with. Sign in with that email to publish."
+    },
+    "continue": "Continue",
+    "signIn": "Sign in"
   },
   "promo": {
     "line": "20% off every gift with code",

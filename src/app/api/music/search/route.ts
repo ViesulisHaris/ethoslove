@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/request-ip";
 
 export type CatalogSong = {
   id: string;
@@ -23,6 +25,9 @@ export async function GET(request: NextRequest) {
   const q = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 80);
   const country = (request.nextUrl.searchParams.get("country") ?? "US").slice(0, 2).toUpperCase();
   if (q.length < 2) return NextResponse.json({ songs: [] });
+  // Every search is a request to Apple from our servers: one visitor must not get us throttled for everyone.
+  if (!(await rateLimit(`music:${clientIp(request.headers)}`, { limit: 60, windowSeconds: 60 })))
+    return NextResponse.json({ songs: [], error: "rate_limited" }, { status: 429 });
   const url = new URL("https://itunes.apple.com/search");
   url.searchParams.set("term", q);
   url.searchParams.set("entity", "song");

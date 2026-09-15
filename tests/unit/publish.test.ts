@@ -57,6 +57,13 @@ describe("publish rules", () => {
     expect(premiumExtras(lib)).toEqual([]);
     expect(readinessProblems(letter, { ...base, voiceNote: { url: "blob:x" } })).toContain("uploadsPending");
   });
+  it("only our own library and the sender's upload count as free music", () => {
+    const preview = "https://audio-ssl.itunes.apple.com/itunes-assets/p.m4a";
+    expect(premiumExtras({ ...base, music: { source: "library" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "gifts/g1/song.mp3", startAt: 0 } })).toEqual([]);
+    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "idb:song", startAt: 0 } })).toEqual([]);
+  });
   it("edits to a live gift are held to the publish rules", () => {
     const plain = { hasSchedule: false, hasPassword: false, watermark: true };
     expect(liveEditNeedsUnlock(letter, base, plain)).toBe(false);

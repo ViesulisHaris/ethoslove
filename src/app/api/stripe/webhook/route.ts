@@ -33,6 +33,13 @@ export async function POST(request: NextRequest) {
       if (pi && charge.refunded) await revokePurchaseByPaymentIntent(pi);
       break;
     }
+    case "charge.dispute.created": {
+      // A chargeback takes the money back, so it takes the unlock back too.
+      const dispute = event.data.object;
+      const pi = typeof dispute.payment_intent === "string" ? dispute.payment_intent : dispute.payment_intent?.id;
+      if (pi) await revokePurchaseByPaymentIntent(pi);
+      break;
+    }
     default:
       break;
   }

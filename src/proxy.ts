@@ -5,12 +5,15 @@ import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 
 const handleI18n = createIntlMiddleware(routing);
 
+/** Supabase auth codes are UUIDs; any other ?code= (a promo code in a link, say) is left alone. */
+const AUTH_CODE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
   // Supabase sends OAuth / magic-link codes to the Site URL when the callback path is not
-  // on its allow list. Catch a stray ?code= anywhere and finish the exchange properly.
-  if (searchParams.has("code") && !pathname.startsWith("/auth/")) {
+  // on its allow list. Catch a stray auth code anywhere and finish the exchange properly.
+  if (AUTH_CODE.test(searchParams.get("code") ?? "") && !pathname.startsWith("/auth/")) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/callback";
     return NextResponse.redirect(url);

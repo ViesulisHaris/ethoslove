@@ -2,7 +2,7 @@ import "server-only";
 
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import { GIFTS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
+import { GIFTS_BUCKET, storageObjectKey, storagePathsOf } from "./assets";
 
 export type PublicGift = {
   id: string;
@@ -47,19 +47,15 @@ export async function fetchPublicGift(shortId: string, password?: string | null)
     senderName: String(row.senderName ?? ""),
     data: null,
   };
-  if (row.data && typeof row.data === "object") gift.data = await signAssets(row.data as GiftData, gift.watermark);
+  // Render the row's template, the one the paywall checked, never a slug written inside the data.
+  if (row.data && typeof row.data === "object")
+    gift.data = await signAssets({ ...(row.data as GiftData), templateSlug: gift.templateSlug }, gift.watermark);
   return gift;
 }
 
 async function signAssets(data: GiftData, watermark: boolean): Promise<GiftData> {
   const admin = getSupabaseAdminClient()!;
-  const paths = [
-    ...data.photos.map((p) => p.url).filter(isStoragePath),
-    ...(data.music?.source === "upload" && isStoragePath(data.music.url) ? [data.music.url] : []),
-    ...(data.video && isStoragePath(data.video.url) ? [data.video.url] : []),
-    ...(data.video?.poster && isStoragePath(data.video.poster) ? [data.video.poster] : []),
-    ...(data.voiceNote && isStoragePath(data.voiceNote.url) ? [data.voiceNote.url] : []),
-  ];
+  const paths = storagePathsOf(data);
   const map: Record<string, string> = {};
   if (paths.length) {
     const { data: signed } = await admin.storage.from(GIFTS_BUCKET).createSignedUrls(paths.map(storageObjectKey), SIGNED_TTL);

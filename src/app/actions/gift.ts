@@ -5,8 +5,9 @@ import { revalidatePath } from "next/cache";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
-import { GIFTS_BUCKET, storageObjectKey } from "@/lib/gift/assets";
+import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey, storagePathsOf } from "@/lib/gift/assets";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getManifest, loadTemplate } from "@/templates/registry";
 import type { Json } from "@/lib/supabase/types";
@@ -17,6 +18,7 @@ export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string
 type Ctx =
   | { ok: false; error: "not_configured" | "unauthenticated" }
   | { ok: true; supabase: NonNullable<Awaited<ReturnType<typeof getSupabaseServerClient>>>; user: NonNullable<Awaited<ReturnType<typeof getCurrentUser>>> };
+type SignedIn = Extract<Ctx, { ok: true }>;
 
 async function requireContext(): Promise<Ctx> {
   const supabase = await getSupabaseServerClient();
@@ -24,6 +26,27 @@ async function requireContext(): Promise<Ctx> {
   if (!supabase) return { ok: false, error: "not_configured" };
   if (!user) return { ok: false, error: "unauthenticated" };
   return { ok: true, supabase, user };
+}
+
+/**
+ * Owners can only write drafts themselves (RLS, migration 0005). What recipients see, a publish or
+ * an edit to a live gift, is written with the service role once the publish rules have passed.
+ */
+function recipientFacingWriter(ctx: SignedIn): SignedIn["supabase"] {
+  return getSupabaseAdminClient() ?? ctx.supabase;
+}
+
+/** Every stored file a gift points at must sit in the folder of a gift this user owns. */
+async function ownsAssets(ctx: SignedIn, data: Pick<GiftData, "photos" | "music" | "video" | "voiceNote">): Promise<boolean> {
+  const giftIds = new Set<string>();
+  for (const path of storagePathsOf(data)) {
+    const giftId = giftIdOfStoragePath(path);
+    if (!giftId) return false;
+    giftIds.add(giftId);
+  }
+  if (giftIds.size === 0) return true;
+  const { data: owned, error } = await ctx.supabase.from("gifts").select("id").eq("user_id", ctx.user.id).in("id", [...giftIds]);
+  return !error && (owned?.length ?? 0) === giftIds.size;
 }
 
 /** Creates the draft row a gift needs before assets can be uploaded to Storage. */
@@ -58,7 +81,6 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   const loose = giftDataBaseSchema.partial({ recipientName: true, senderName: true }).safeParse(input.data.data);
   if (!loose.success) return { ok: false, error: "invalid_data", problems: loose.error.issues.map((i) => i.path.join(".")) };
 
-  // A live or scheduled gift is what recipients see: edits to it are held to the publish rules.
   const { data: row } = await ctx.supabase
     .from("gifts")
     .select("status, template_slug, unlock_at, password_hash, watermark")
@@ -66,26 +88,37 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
     .eq("user_id", ctx.user.id)
     .single();
   if (!row) return { ok: false, error: "not_found" };
-  if (row.status !== "draft") {
-    const manifest = getManifest(row.template_slug);
-    if (!manifest) return { ok: false, error: "unknown_template" };
-    const needs = liveEditNeedsUnlock(manifest, { music: loose.data.music, video: loose.data.video, voiceNote: loose.data.voiceNote, photos: loose.data.photos ?? [] }, {
-      hasSchedule: row.unlock_at !== null,
-      hasPassword: row.password_hash !== null,
-      watermark: row.watermark,
-    });
-    if (needs) {
-      const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
-      if (!unlocked) return { ok: false, error: "payment_required" };
-    }
+  // Recipients render whichever template data.templateSlug names, so it always comes from the row.
+  const data = { ...loose.data, templateSlug: row.template_slug };
+  const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
+
+  if (row.status === "draft") {
+    const { error } = await ctx.supabase.from("gifts").update(patch).eq("id", input.data.giftId).eq("user_id", ctx.user.id).eq("status", "draft");
+    if (error) return { ok: false, error: error.message };
+    return { ok: true, data: { savedAt: new Date().toISOString() } };
   }
 
-  const { error } = await ctx.supabase
+  // A live or scheduled gift is what recipients see: edits to it are held to the publish rules.
+  const manifest = getManifest(row.template_slug);
+  if (!manifest) return { ok: false, error: "unknown_template" };
+  const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [] };
+  const needs = liveEditNeedsUnlock(manifest, content, {
+    hasSchedule: row.unlock_at !== null,
+    hasPassword: row.password_hash !== null,
+    watermark: row.watermark,
+  });
+  if (needs) {
+    const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
+    if (!unlocked) return { ok: false, error: "payment_required" };
+  }
+  if (!(await ownsAssets(ctx, content))) return { ok: false, error: "invalid_assets" };
+
+  const { error } = await recipientFacingWriter(ctx)
     .from("gifts")
-    .update({ data: loose.data as unknown as Json, locale: loose.data.locale ?? "en" })
+    .update(patch)
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
-    .in("status", ["draft", "scheduled", "live"]);
+    .in("status", ["scheduled", "live"]);
   if (error) return { ok: false, error: error.message };
   return { ok: true, data: { savedAt: new Date().toISOString() } };
 }
@@ -118,7 +151,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const parsed = createGiftSchema(mod.fieldsSchema).safeParse(input.data.data);
   if (!parsed.success) return { ok: false, error: "invalid_data", problems: parsed.error.issues.map((i) => i.path.join(".")) };
-  const data = parsed.data as GiftData;
+  // Recipients render whichever template data.templateSlug names, so it always comes from the row.
+  const data = { ...(parsed.data as GiftData), templateSlug: gift.template_slug };
 
   const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: gift.template_slug });
 
@@ -128,11 +162,12 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     password: Boolean(input.data.password),
   });
   if (!decision.ok) return { ok: false, error: decision.reason, problems: decision.problems };
+  if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
   const status = scheduled ? "scheduled" : "live";
 
-  const { error: updateError } = await ctx.supabase
+  const { error: updateError } = await recipientFacingWriter(ctx)
     .from("gifts")
     .update({
       data: { ...data, watermark: decision.watermark } as unknown as Json,
@@ -240,15 +275,6 @@ export async function deleteGift(giftId: string): Promise<ActionResult<null>> {
   const { data: files } = await ctx.supabase.storage.from(GIFTS_BUCKET).list(giftId, { limit: 200 });
   if (files?.length) await ctx.supabase.storage.from(GIFTS_BUCKET).remove(files.map((f) => `${giftId}/${f.name}`));
   const { error } = await ctx.supabase.from("gifts").delete().eq("id", giftId).eq("user_id", ctx.user.id);
-  if (error) return { ok: false, error: error.message };
-  revalidatePath("/dashboard");
-  return { ok: true, data: null };
-}
-
-export async function setGiftStatus(giftId: string, status: "draft" | "live" | "archived"): Promise<ActionResult<null>> {
-  const ctx = await requireContext();
-  if (!ctx.ok) return { ok: false, error: ctx.error };
-  const { error } = await ctx.supabase.from("gifts").update({ status }).eq("id", giftId).eq("user_id", ctx.user.id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/dashboard");
   return { ok: true, data: null };
