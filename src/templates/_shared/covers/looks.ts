@@ -134,6 +134,42 @@ export const COVER_LOOKS: Record<CoverLook["id"], CoverLook> = {
       { id: "bow", x: 81, y: 81, size: 21, rotate: 8 },
     ],
   },
+  harvest: {
+    id: "harvest",
+    tone: "light",
+    background: gingham("rgba(196,120,52,.28)", "#fbf3e3"),
+    script: "#8a3b12",
+    hint: "#9a6a44",
+    piece: { kind: "envelope", colors: { body: "#e7c49c", flap: "#f0d6b6", inner: "#cfa273", seal: "#b8471f", mark: "heart", letter: "#fffaf2" } },
+    stickers: [
+      { id: "leaf", x: 17, y: 16, size: 20, rotate: -22 },
+      { id: "pumpkin", x: 82, y: 17, size: 25, rotate: 8 },
+      { id: "sparkle", x: 50, y: 8, size: 7, rotate: 0 },
+      { id: "acorn", x: 9, y: 50, size: 12, rotate: 14 },
+      { id: "leaf", x: 91, y: 48, size: 13, rotate: 38 },
+      { id: "mug", x: 19, y: 79, size: 22, rotate: -6 },
+      { id: "leaf", x: 80, y: 80, size: 22, rotate: 152 },
+    ],
+    tapes: [{ x: 80, y: 6, width: 26, rotate: 8, color: "rgba(255,255,255,.62)" }],
+  },
+  spooky: {
+    id: "spooky",
+    tone: "dark",
+    background:
+      "radial-gradient(rgba(255,255,255,.75) calc(.3*var(--u)), transparent calc(.42*var(--u))) 0 0/calc(15*var(--u)) calc(15*var(--u)), radial-gradient(rgba(255,214,160,.5) calc(.2*var(--u)), transparent calc(.32*var(--u))) calc(7*var(--u)) calc(8*var(--u))/calc(19*var(--u)) calc(19*var(--u)), radial-gradient(120% 90% at 50% 20%, #4b2a70, #22143d 55%, #0d0918)",
+    script: "#ffd9a0",
+    hint: "rgba(255,217,160,.75)",
+    piece: { kind: "gift", colors: { body: "#f39a3a", lid: "#f7b25c", ribbon: "#5a2f8a" } },
+    stickers: [
+      { id: "moon", x: 82, y: 12, size: 20, rotate: 0 },
+      { id: "bat", x: 20, y: 12, size: 20, rotate: -10 },
+      { id: "bat", x: 42, y: 21, size: 12, rotate: 12 },
+      { id: "ghost", x: 87, y: 46, size: 16, rotate: 8 },
+      { id: "sparkle", x: 9, y: 46, size: 8, rotate: 0 },
+      { id: "pumpkin", x: 18, y: 78, size: 24, rotate: -6 },
+      { id: "candy", x: 80, y: 81, size: 22, rotate: 18 },
+    ],
+  },
 };
 
 /** The cover a new gift starts with, chosen to suit the template's world. */
@@ -143,6 +179,10 @@ export function defaultCoverFor(slug: string): CoverId {
       return "classic"; // it opens with its own envelope
     case "kawaii":
       return "gingham";
+    case "fireside":
+      return "harvest";
+    case "trick-or-treat":
+      return "spooky";
     case "constellations":
     case "midnight-countdown":
     case "passport":

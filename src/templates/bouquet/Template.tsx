@@ -7,11 +7,10 @@ import { parseRichText } from "@/lib/gift/rich-text";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
-import { RichMessage } from "../_shared/RichMessage";
-import { Typewriter } from "../_shared/Typewriter";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
+import { MessageBody } from "../_shared/MessageBody";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { BouquetArt, timingFor } from "./Bouquet";
@@ -258,27 +257,14 @@ function Finale({
         initial={reduce ? false : { rotateY: 90, opacity: 0 }}
         animate={{ rotateY: 0, opacity: 1 }}
         transition={{ delay: 0.35, duration: 0.6, ease: "easeOut" }}
-        className="relative rounded-[4px] bg-[#FFFDF8] px-7 py-8 text-[#2a2420] shadow-[0_30px_60px_-24px_rgba(0,0,0,0.45)]"
+        className="relative rounded-[4px] bg-[#FFFDF8] px-[clamp(24px,7cqw,42px)] pt-[clamp(28px,8cqw,44px)] pb-[clamp(30px,9cqw,48px)] text-[#2a2420] shadow-[0_1px_2px_rgba(0,0,0,0.14),0_30px_60px_-24px_rgba(0,0,0,0.45)]"
       >
-        <p className="text-center text-[26px] leading-none" style={{ fontFamily: "var(--gift-font-hand)", color: "var(--gift-accent-deep)" }}>
+        <p className="text-center text-[clamp(28px,8cqw,36px)] leading-none" style={{ fontFamily: "var(--gift-font-hand)", color: "var(--gift-accent-deep)" }}>
           {cardText}
         </p>
-        <div className="mx-auto mt-4 mb-5 h-px w-16 bg-[#2a2420]/15" />
-        <h2 className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic" style={{ fontFamily: "var(--gift-font-display)" }}>
-          {t("dear", { name: data.recipientName })}
-        </h2>
-        <div className="mt-4 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed [&_em]:text-[var(--gift-accent-deep)] [&_p+p]:mt-4 [&_strong]:font-semibold">
-          {instant ? (
-            <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} />
-          ) : (
-            <Typewriter blocks={blocks} active speed={38} onDone={() => setDone(true)} />
-          )}
+        <div className="mt-6">
+          <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face="serif" onDone={() => setDone(true)} />
         </div>
-        {done ? (
-          <p className="mt-5 text-right text-xl italic" style={{ fontFamily: "var(--gift-font-display)", color: "var(--gift-accent-deep)" }}>
-            {data.senderName}
-          </p>
-        ) : null}
       </motion.div>
 
       {done && data.photos.length ? (

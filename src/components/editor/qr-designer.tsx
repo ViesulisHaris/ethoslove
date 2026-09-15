@@ -30,6 +30,19 @@ export function QrDesigner({ url, photos, accent, giftId }: { url: string; photo
   const [gradient, setGradient] = useState(false);
   const [centre, setCentre] = useState<Centre>("logo");
   const [photoId, setPhotoId] = useState(photos[0]?.id ?? "");
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState(300);
+
+  // The preview is as wide as the card allows, so the code is sized from the frame, not a constant.
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => setBox(Math.round(entry.contentRect.width)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  // Same proportions as the PNG export below: the heart's code sits between the lobes and the point.
+  const qrSize = Math.max(96, Math.round(box * (frame === "heart" ? 0.4 : frame === "circle" ? 0.6 : 0.8)));
 
   const image = centre === "logo" ? `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}` : centre === "photo" ? photos.find((p) => p.id === photoId)?.url : undefined;
 
@@ -38,8 +51,8 @@ export function QrDesigner({ url, photos, accent, giftId }: { url: string; photo
     import("qr-code-styling").then(({ default: QRCodeStyling }) => {
       if (cancelled || !holder.current) return;
       const options = {
-        width: 280,
-        height: 280,
+        width: qrSize,
+        height: qrSize,
         type: "svg" as const,
         data: url,
         margin: 8,
@@ -66,7 +79,7 @@ export function QrDesigner({ url, photos, accent, giftId }: { url: string; photo
     return () => {
       cancelled = true;
     };
-  }, [url, dots, colour, gradient, image]);
+  }, [url, dots, colour, gradient, image, qrSize]);
 
   /** Composites the frame + QR into a PNG so the download matches the preview. */
   const downloadPng = async () => {
@@ -110,12 +123,13 @@ export function QrDesigner({ url, photos, accent, giftId }: { url: string; photo
 
   return (
     <div className="grid gap-5">
-      <div className="flex justify-center rounded-2xl border border-border bg-card p-6">
+      <div className="flex justify-center rounded-2xl border border-border bg-card p-4 sm:p-6">
         <div
-          className={cn("relative grid place-items-center", frame === "none" && "rounded-2xl p-4", frame === "circle" && "size-[360px] rounded-full", frame === "heart" && "size-[380px]")}
-          style={frame === "heart" ? { background, clipPath: `path("${HEART_PATH.replace(/(\d+(\.\d+)?)/g, (m) => String((Number(m) * 380) / 100))}")` } : { background }}
+          ref={frameRef}
+          className={cn("relative aspect-square w-full max-w-[340px]", frame === "none" && "rounded-2xl", frame === "circle" && "rounded-full")}
+          style={frame === "heart" ? { background, clipPath: `path("${HEART_PATH.replace(/(\d+(\.\d+)?)/g, (m) => String((Number(m) * box) / 100))}")` } : { background }}
         >
-          <div ref={holder} className={cn(frame === "heart" && "-translate-y-6 scale-[0.62]", frame === "circle" && "scale-[0.85]")} />
+          <div ref={holder} className={cn("absolute left-1/2 -translate-x-1/2 [&_canvas]:block [&_svg]:block", frame === "heart" ? "top-[24%]" : "top-1/2 -translate-y-1/2")} />
         </div>
       </div>
 

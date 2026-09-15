@@ -553,6 +553,8 @@
         "polka": "Polka",
         "garden": "Garden",
         "lovecore": "Lovecore",
+        "harvest": "Harvest",
+        "spooky": "Spooky",
         "classic": "Classic"
       }
     }
@@ -616,6 +618,7 @@
     "wedding": "Wedding",
     "graduation": "Graduation",
     "christmas": "Christmas",
+    "halloween": "Halloween",
     "mothers-day": "Mother's Day",
     "fathers-day": "Father's Day",
     "apology": "Apology",
@@ -803,6 +806,11 @@
         "title": "Long-distance relationship gifts",
         "description": "Gifts for long-distance relationships that arrive the moment you send them: a passport that flies from your city to theirs, a sky of your photos, or a love letter with your song.",
         "intro": "Miles apart, still close. Send something they can open the second it's ready, scheduled for their time zone, with the places and the songs that belong to you both."
+      },
+      "halloween": {
+        "title": "Digital Halloween gifts",
+        "description": "A Halloween gift they open with a tap: a doorbell, a jack-o'-lantern, a small ghost with your photos and your words, and a song in the dark. Free to start.",
+        "intro": "Better than a bag of sweets. Ring the bell in Trick or Treat, light the pumpkin and let a small ghost hand over your photos, your message and your song. Or make it cozy instead: a candle, a blanket and a letter by the fire in Fireside."
       },
       "just-because": {
         "title": "Just because gifts",

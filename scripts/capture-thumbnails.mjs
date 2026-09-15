@@ -177,6 +177,33 @@ const SCRIPTS = {
     await page.waitForTimeout(5500);
     return poster;
   },
+  fireside: async (page) => {
+    // Its demo opens with the harvest cover; tap through it first.
+    const cover = page.getByRole("button", { name: /tap to open/i });
+    await cover.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1200);
+    await cover.click({ force: true });
+    await page.getByRole("button", { name: /light the candle/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1800);
+    const poster = await page.screenshot();
+    await page.getByRole("button", { name: /light the candle/i }).click({ force: true });
+    await page.waitForTimeout(6000);
+    return poster;
+  },
+  "trick-or-treat": async (page) => {
+    const cover = page.getByRole("button", { name: /tap to open/i });
+    await cover.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1200);
+    await cover.click({ force: true });
+    await page.getByRole("button", { name: /ring the bell/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await page.getByRole("button", { name: /ring the bell/i }).click({ force: true });
+    await page.waitForTimeout(1800);
+    const poster = await page.screenshot();
+    await page.getByRole("button", { name: /^treat$/i }).click({ force: true });
+    await page.waitForTimeout(6000);
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);

@@ -10,13 +10,14 @@ const S = {
 
 export function PrintCard({ svg, url, recipientName, senderName, accent, locale, brand }: { svg: string; url: string; recipientName: string; senderName: string; accent: string; locale: "en" | "es"; brand: string }) {
   const t = S[locale] ?? S.en;
+  const nameSize = recipientName.length > 16 ? "15pt" : recipientName.length > 10 ? "18pt" : "22pt";
   const card = (
     <div className="card" style={{ borderColor: accent }}>
       <div className="head">
         <LogoMark className="mark" />
         <span>{brand}</span>
       </div>
-      <p className="name">{recipientName},</p>
+      <p className="name" style={{ fontSize: nameSize }}>{recipientName},</p>
       <p className="line">{senderName} {t.line}</p>
       <div className="qr" dangerouslySetInnerHTML={{ __html: svg }} />
       <p className="cta">{t.cta}</p>
@@ -34,8 +35,8 @@ export function PrintCard({ svg, url, recipientName, senderName, accent, locale,
         .card{width:105mm;height:148mm;margin:0 auto;border:1.2mm solid;border-radius:6mm;padding:10mm 9mm;display:flex;flex-direction:column;align-items:center;text-align:center;background:#FAF7F2;color:#1A1614;position:relative}
         .head{display:flex;align-items:center;gap:6px;font-family:var(--font-display),Georgia,serif;font-style:italic;font-size:14pt}
         .mark{width:20px;height:20px}
-        .name{margin-top:9mm;font-family:var(--font-display),Georgia,serif;font-size:22pt;line-height:1;font-style:italic}
-        .line{margin-top:2mm;font-size:11pt;color:#3d3531}
+        .name{margin-top:9mm;font-family:var(--font-display),Georgia,serif;font-size:22pt;line-height:1.05;font-style:italic;max-width:100%;overflow-wrap:anywhere}
+        .line{margin-top:2mm;font-size:11pt;color:#3d3531;max-width:100%;overflow-wrap:anywhere}
         .qr{margin-top:7mm;width:46mm;height:46mm}
         .qr svg{width:100%;height:100%}
         .cta{margin-top:5mm;font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:#6f665f}

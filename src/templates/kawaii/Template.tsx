@@ -207,14 +207,15 @@ function Book({ p, data, mode, blocks, s, t, reduce, onEvent, onReact, onMakeOne
   }, [onEvent, mode]);
 
   return (
-    <motion.div className="absolute inset-0 z-10 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
-      {/* the plushie peeks in from the corner */}
-      <motion.div aria-hidden="true" className="pointer-events-none fixed top-[calc(2*var(--u))] left-[calc(1*var(--u))] z-20 w-[calc(22*var(--u))]" initial={{ x: -80, rotate: -20, opacity: 0 }} animate={{ x: 0, rotate: -8, opacity: 1 }} transition={{ delay: 0.5, type: "spring", stiffness: 140, damping: 14 }}>
+    <motion.div className="absolute inset-0 z-10" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}>
+      {/* the plushie peeks in from the corner, pinned while the page scrolls under it */}
+      <motion.div aria-hidden="true" className="pointer-events-none absolute top-[calc(2*var(--u))] left-[calc(1*var(--u))] z-20 w-[calc(22*var(--u))]" initial={{ x: -80, rotate: -20, opacity: 0 }} animate={{ x: 0, rotate: -8, opacity: 1 }} transition={{ delay: 0.5, type: "spring", stiffness: 140, damping: 14 }}>
         <div className="aspect-[128/140] w-full">
           <Plushie kind={data.fields.character} p={p} mood="happy" wave />
         </div>
       </motion.div>
 
+      <div className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none">
       <div className="mx-auto flex w-[min(88cqw,560px)] flex-col gap-[calc(5*var(--u))] pt-[calc(24*var(--u))] pb-[calc(72px+env(safe-area-inset-bottom))]">
         {/* the note */}
         <motion.article className="relative rounded-[calc(6*var(--u))] px-[calc(6*var(--u))] pt-[calc(6*var(--u))] pb-[calc(7*var(--u))] shadow-[0_14px_40px_-16px_rgba(120,40,70,0.35)]" style={{ background: p.paper }} initial={{ opacity: 0, y: 24, rotate: -1 }} animate={{ opacity: 1, y: 0, rotate: -0.6 }} transition={{ delay: 0.2, type: "spring", stiffness: 140, damping: 16 }}>
@@ -270,6 +271,7 @@ function Book({ p, data, mode, blocks, s, t, reduce, onEvent, onReact, onMakeOne
         <div ref={endRef} className="rounded-[calc(5*var(--u))] p-[calc(4*var(--u))]" style={{ background: p.paper }}>
           <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
         </div>
+      </div>
       </div>
     </motion.div>
   );

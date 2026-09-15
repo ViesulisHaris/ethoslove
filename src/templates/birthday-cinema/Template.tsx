@@ -11,11 +11,10 @@ import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
-import { Typewriter } from "../_shared/Typewriter";
-import { RichMessage } from "../_shared/RichMessage";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
+import { MessageBody } from "../_shared/MessageBody";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
 import { GiftVideo } from "../_shared/GiftVideo";
@@ -269,6 +268,10 @@ function Cake({ count, positions }: { count: number; positions: { x: number; y: 
   );
 }
 
+/** Paper grain for the programme card, multiplied over cream. */
+const PROGRAMME_GRAIN =
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.48 0 0 0 0 0.38 0 0 0 0.16 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>\")";
+
 function FilmPanel({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, onReplay, landscape }: { data: TemplateProps<CinemaFields>["data"]; mode: TemplateProps["mode"]; blocks: ReturnType<typeof parseRichText>; reduce: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void; landscape: boolean }) {
   const t = useGiftStrings(data.locale);
   const scroller = useRef<HTMLDivElement>(null);
@@ -320,14 +323,23 @@ function FilmPanel({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, on
         </div>
 
         <div className="mx-auto mt-10 flex w-[min(90cqw,560px)] flex-col gap-5">
-          <div className="rounded-3xl border border-white/10 bg-black/50 p-6 backdrop-blur-xl sm:p-8">
-            <p className="text-[11px] tracking-[0.3em] text-paper/50 uppercase">{data.title || data.recipientName}</p>
-            <h2 className="mt-2 text-[clamp(1.6rem,7cqw,2rem)] leading-tight italic" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
-            <div className="mt-5 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed text-white/90 [&_em]:text-[var(--gift-accent-soft)] [&_p+p]:mt-4 [&_strong]:font-semibold [&_strong]:text-white">
-              {instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={38} onDone={() => setDone(true)} />}
+          {/* The words, printed like the programme you're handed at a premiere. */}
+          <motion.div
+            className="relative rounded-[6px] px-[clamp(24px,7cqw,42px)] pt-[clamp(30px,9cqw,48px)] pb-[clamp(30px,9cqw,50px)] text-[#2A1A14] shadow-[0_1px_2px_rgba(0,0,0,0.35),0_40px_70px_-30px_rgba(0,0,0,0.9)]"
+            style={{ background: "#FBF3E4", backgroundImage: PROGRAMME_GRAIN }}
+            initial={reduce ? false : { opacity: 0, y: 30, rotate: -1.5 }}
+            animate={{ opacity: 1, y: 0, rotate: -0.4 }}
+            transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div aria-hidden="true" className="pointer-events-none absolute inset-[10px] rounded-[3px] border border-[#B8893A]/60" />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-[15px] rounded-[2px] border border-[#B8893A]/25" />
+            <p className="relative text-center text-[11px] font-semibold tracking-[0.34em] uppercase" style={{ color: "var(--gift-accent-deep)" }}>
+              ★ {data.title || data.recipientName} ★
+            </p>
+            <div className="relative mt-5">
+              <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face="serif" onDone={() => setDone(true)} />
             </div>
-            {done ? <p className="mt-6 text-right text-[1.5rem] italic" style={{ fontFamily: "var(--gift-font-display)", color: "var(--gift-accent)" }}>— {data.senderName}</p> : null}
-          </div>
+          </motion.div>
           {done && data.countdown ? <div className="rounded-3xl border border-white/10 bg-black/45 p-6 backdrop-blur-xl"><Countdown countdown={data.countdown} locale={data.locale} tone="dark" /></div> : null}
           {done && data.surprise ? (
             <div className="rounded-3xl border border-white/10 bg-black/45 p-6 backdrop-blur-xl">

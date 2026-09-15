@@ -119,12 +119,12 @@ export function EndScreen({
           target="_blank"
           rel="noreferrer"
           className={cn(
-            "mt-6 flex items-center gap-2 text-xs",
+            "mt-6 flex max-w-full items-center gap-2 text-xs",
             dark ? "text-white/50 hover:text-white/80" : "text-black/45 hover:text-black/70",
           )}
         >
-          <Music2 className="size-3.5" />
-          <span className="truncate">
+          <Music2 className="size-3.5 shrink-0" />
+          <span className="min-w-0 truncate">
             {giftString(locale, "musicCredit")} {data.music.title}
             {data.music.artist ? ` — ${data.music.artist}` : ""}
           </span>

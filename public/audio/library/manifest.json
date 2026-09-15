@@ -54,5 +54,19 @@
     "mood": "calm",
     "note": "Piano · sparse",
     "kb": 1000
+  },
+  {
+    "id": "fireside",
+    "seconds": 66,
+    "mood": "warm",
+    "note": "Felt piano · by the fire",
+    "kb": 1035
+  },
+  {
+    "id": "all-hallows",
+    "seconds": 36,
+    "mood": "dreamy",
+    "note": "Music box · a waltz in the dark",
+    "kb": 563
   }
 ]

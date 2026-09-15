@@ -24,6 +24,8 @@ export const LIBRARY_TRACKS: LibraryTrack[] = [
   { id: "under-the-stars", title: "Under the Stars", mood: "cinematic", url: "/audio/library/under-the-stars.mp3", duration: 51, note: "Pads · wide" },
   { id: "home", title: "Home", mood: "playful", url: "/audio/library/home.mp3", duration: 40, note: "Ukulele · sunny" },
   { id: "quiet-hours", title: "Quiet Hours", mood: "calm", url: "/audio/library/quiet-hours.mp3", duration: 64, note: "Piano · sparse" },
+  { id: "fireside", title: "Fireside", mood: "warm", url: "/audio/library/fireside.mp3", duration: 66, note: "Felt piano · by the fire" },
+  { id: "all-hallows", title: "All Hallows", mood: "dreamy", url: "/audio/library/all-hallows.mp3", duration: 36, note: "Music box · a waltz in the dark" },
 ];
 
 export const TRACK_MOODS: TrackMood[] = ["warm", "romantic", "dreamy", "calm", "hopeful", "playful", "cinematic"];

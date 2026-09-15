@@ -553,6 +553,8 @@
         "polka": "Lunares",
         "garden": "Jardín",
         "lovecore": "Amor",
+        "harvest": "Otoño",
+        "spooky": "Halloween",
         "classic": "Clásica"
       }
     }
@@ -616,6 +618,7 @@
     "wedding": "Boda",
     "graduation": "Graduación",
     "christmas": "Navidad",
+    "halloween": "Halloween",
     "mothers-day": "Día de la Madre",
     "fathers-day": "Día del Padre",
     "apology": "Disculpa",
@@ -803,6 +806,11 @@
         "title": "Regalos para relaciones a distancia",
         "description": "Regalos para relaciones a distancia que llegan en cuanto los envías: un pasaporte que vuela de tu ciudad a la suya, un cielo con tus fotos o una carta de amor con vuestra canción.",
         "intro": "Lejos, pero cerca. Envía algo que pueda abrir en cuanto esté listo, programado para su zona horaria, con los lugares y las canciones que son de los dos."
+      },
+      "halloween": {
+        "title": "Regalos digitales de Halloween",
+        "description": "Un regalo de Halloween que se abre con un toque: un timbre, una calabaza iluminada, un fantasmita con tus fotos y tus palabras, y una canción en la oscuridad. Gratis para empezar.",
+        "intro": "Mejor que una bolsa de caramelos. Llama al timbre en Truco o trato, enciende la calabaza y deja que un fantasmita entregue tus fotos, tu mensaje y su canción. O hazlo acogedor: una vela, una manta y una carta junto al fuego en Junto al fuego."
       },
       "just-because": {
         "title": "Regalos porque sí",

@@ -248,8 +248,8 @@ export function MusicSection() {
                         className="flex min-w-0 flex-1 flex-col items-start text-left"
                         data-testid="song-result"
                       >
-                        <span className="truncate text-sm font-medium">{song.title}</span>
-                        <span className="truncate text-xs text-muted-foreground">
+                        <span className="max-w-full truncate text-sm font-medium">{song.title}</span>
+                        <span className="max-w-full truncate text-xs text-muted-foreground">
                           {song.artist}
                           {song.album ? ` · ${song.album}` : ""}
                         </span>

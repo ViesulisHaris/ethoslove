@@ -21,7 +21,14 @@ export type StickerId =
   | "heart"
   | "cloud"
   | "kiss"
-  | "squiggle";
+  | "squiggle"
+  | "pumpkin"
+  | "leaf"
+  | "acorn"
+  | "mug"
+  | "ghost"
+  | "bat"
+  | "candy";
 
 const Svg = ({ children, vb = "0 0 100 100" }: { children: ReactNode; vb?: string }) => (
   <svg viewBox={vb} className="sticker h-full w-full overflow-visible" aria-hidden="true">
@@ -227,6 +234,105 @@ const STICKERS: Record<StickerId, () => ReactNode> = {
   squiggle: () => (
     <Svg vb="0 0 90 120">
       <path d="M20 10 C60 14 60 34 30 40 C0 46 10 70 50 66 C84 62 70 96 30 104" stroke="currentColor" strokeWidth="7" fill="none" strokeLinecap="round" />
+    </Svg>
+  ),
+  pumpkin: () => (
+    <Svg>
+      <defs>
+        <linearGradient id="pk-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffa74d" /><stop offset="1" stopColor="#e8701c" /></linearGradient>
+      </defs>
+      <path d="M46 26 C44 16 48 10 56 8 C60 14 58 22 54 28Z" fill="#6f8f3c" {...cut} />
+      <g {...cut}>
+        <ellipse cx="50" cy="60" rx="43" ry="33" fill="url(#pk-g)" />
+      </g>
+      <ellipse cx="50" cy="60" rx="43" ry="33" fill="url(#pk-g)" />
+      <ellipse cx="29" cy="60" rx="15" ry="31" fill="none" stroke="#d4631a" strokeWidth="2.5" opacity=".7" />
+      <ellipse cx="71" cy="60" rx="15" ry="31" fill="none" stroke="#d4631a" strokeWidth="2.5" opacity=".7" />
+      <ellipse cx="50" cy="60" rx="15" ry="33" fill="none" stroke="#ffc98a" strokeWidth="2.5" opacity=".7" />
+      <path d="M36 56 q5 -6 10 0" stroke="#4a2a12" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M54 56 q5 -6 10 0" stroke="#4a2a12" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <path d="M44 67 q6 6 12 0" stroke="#4a2a12" strokeWidth="3.2" fill="none" strokeLinecap="round" />
+      <circle cx="31" cy="66" r="4.5" fill="#ff8a8a" opacity=".55" />
+      <circle cx="69" cy="66" r="4.5" fill="#ff8a8a" opacity=".55" />
+    </Svg>
+  ),
+  leaf: () => (
+    <Svg>
+      <defs>
+        <linearGradient id="lf-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f5a341" /><stop offset="1" stopColor="#c8401f" /></linearGradient>
+      </defs>
+      <path d="M50 6 C76 26 88 54 50 94 C12 54 24 26 50 6Z" fill="url(#lf-g)" {...cut} />
+      <path d="M50 14 V88" stroke="#8a2f14" strokeWidth="2.4" strokeLinecap="round" opacity=".65" />
+      <path d="M50 34 L66 44 M50 34 L34 44 M50 52 L68 64 M50 52 L32 64 M50 68 L62 78 M50 68 L38 78" stroke="#8a2f14" strokeWidth="1.8" strokeLinecap="round" opacity=".5" />
+    </Svg>
+  ),
+  acorn: () => (
+    <Svg>
+      <path d="M50 24 C50 18 54 14 60 12" stroke="#fff" strokeWidth="10" strokeLinecap="round" fill="none" />
+      <path d="M50 24 C50 18 54 14 60 12" stroke="#6b4423" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M26 46 C26 78 40 92 50 92 C60 92 74 78 74 46Z" fill="#d49a5a" {...cut} />
+      <path d="M26 46 C26 78 40 92 50 92 C60 92 74 78 74 46Z" fill="#d49a5a" />
+      <path d="M36 52 C36 70 42 80 46 84" stroke="#f0c48f" strokeWidth="3" strokeLinecap="round" fill="none" opacity=".8" />
+      <path d="M20 46 C20 28 80 28 80 46 C80 50 76 52 70 52 H30 C24 52 20 50 20 46Z" fill="#8a5a2b" {...cut} />
+      <path d="M20 46 C20 28 80 28 80 46 C80 50 76 52 70 52 H30 C24 52 20 50 20 46Z" fill="#8a5a2b" />
+      {[[32, 40], [44, 36], [56, 36], [68, 40], [38, 46], [50, 44], [62, 46]].map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r="2.6" fill="#6b4423" />
+      ))}
+    </Svg>
+  ),
+  mug: () => (
+    <Svg>
+      <path d="M40 30 c-5 -7 3 -9 -1 -16 M52 30 c-5 -7 3 -9 -1 -16" stroke="#fff" strokeWidth="9" strokeLinecap="round" fill="none" />
+      <path d="M40 30 c-5 -7 3 -9 -1 -16 M52 30 c-5 -7 3 -9 -1 -16" stroke="#d9c6b0" strokeWidth="3" strokeLinecap="round" fill="none" />
+      <path d="M70 46 a11 11 0 0 1 0 24" stroke="#fff" strokeWidth="14" strokeLinecap="round" fill="none" />
+      <path d="M70 46 a11 11 0 0 1 0 24" stroke="#fff3e0" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <path d="M70 46 a11 11 0 0 1 0 24" stroke="#e8cfae" strokeWidth="1.6" strokeLinecap="round" fill="none" />
+      <path d="M22 38 H70 V76 a12 12 0 0 1 -12 12 H34 a12 12 0 0 1 -12 -12Z" fill="#fff3e0" {...cut} />
+      <path d="M22 38 H70 V76 a12 12 0 0 1 -12 12 H34 a12 12 0 0 1 -12 -12Z" fill="#fff3e0" />
+      <ellipse cx="46" cy="38" rx="24" ry="6.5" fill="#7a4a2a" />
+      <ellipse cx="46" cy="38" rx="24" ry="6.5" fill="none" stroke="#fff" strokeWidth="2.5" />
+      <path d="M28 52 H64" stroke="#f0b0b8" strokeWidth="5" strokeLinecap="round" />
+      <path d="M28 62 H64" stroke="#f0b0b8" strokeWidth="5" strokeLinecap="round" opacity=".7" />
+    </Svg>
+  ),
+  ghost: () => (
+    <Svg>
+      <path d="M50 10 C29 10 20 28 20 46 V88 L30 80 L40 90 L50 80 L60 90 L70 80 L80 88 V46 C80 28 71 10 50 10Z" fill="#fbf8ff" {...cut} />
+      <path d="M50 10 C29 10 20 28 20 46 V88 L30 80 L40 90 L50 80 L60 90 L70 80 L80 88 V46 C80 28 71 10 50 10Z" fill="#fbf8ff" />
+      <path d="M30 46 C30 34 36 24 46 20" stroke="#e5dcf5" strokeWidth="4" strokeLinecap="round" fill="none" />
+      <ellipse cx="40" cy="48" rx="4.5" ry="6.5" fill="#2a2140" />
+      <ellipse cx="60" cy="48" rx="4.5" ry="6.5" fill="#2a2140" />
+      <circle cx="41.5" cy="45.5" r="1.6" fill="#fff" />
+      <circle cx="61.5" cy="45.5" r="1.6" fill="#fff" />
+      <ellipse cx="50" cy="60" rx="3.5" ry="4.5" fill="#2a2140" />
+      <circle cx="31" cy="58" r="4.5" fill="#f7a6b8" opacity=".75" />
+      <circle cx="69" cy="58" r="4.5" fill="#f7a6b8" opacity=".75" />
+    </Svg>
+  ),
+  bat: () => (
+    <Svg vb="0 0 120 80">
+      <path d="M60 30 C52 12 30 8 8 22 C18 24 22 32 20 40 C30 34 40 36 46 46 C50 40 56 38 60 38 C64 38 70 40 74 46 C80 36 90 34 100 40 C98 32 102 24 112 22 C90 8 68 12 60 30Z" fill="#2b2140" {...cut} />
+      <path d="M60 30 C52 12 30 8 8 22 C18 24 22 32 20 40 C30 34 40 36 46 46 C50 40 56 38 60 38 C64 38 70 40 74 46 C80 36 90 34 100 40 C98 32 102 24 112 22 C90 8 68 12 60 30Z" fill="#2b2140" />
+      <path d="M50 24 L54 12 L58 24Z M62 24 L66 12 L70 24Z" fill="#2b2140" {...cut} />
+      <path d="M50 24 L54 12 L58 24Z M62 24 L66 12 L70 24Z" fill="#2b2140" />
+      <ellipse cx="60" cy="38" rx="11" ry="14" fill="#2b2140" />
+      <circle cx="55" cy="34" r="2.4" fill="#fff" />
+      <circle cx="65" cy="34" r="2.4" fill="#fff" />
+      <circle cx="55.6" cy="34.4" r="1.1" fill="#2b2140" />
+      <circle cx="65.6" cy="34.4" r="1.1" fill="#2b2140" />
+      <path d="M57 42 q3 3 6 0" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+    </Svg>
+  ),
+  candy: () => (
+    <Svg vb="0 0 120 80">
+      <path d="M30 26 L6 14 L12 40 L6 66 L30 54Z" fill="#ffb1c8" {...cut} />
+      <path d="M90 26 L114 14 L108 40 L114 66 L90 54Z" fill="#ffb1c8" {...cut} />
+      <path d="M30 26 L6 14 L12 40 L6 66 L30 54Z M90 26 L114 14 L108 40 L114 66 L90 54Z" fill="#ffb1c8" />
+      <path d="M14 22 L26 34 M14 58 L26 46 M106 22 L94 34 M106 58 L94 46" stroke="#f07aa0" strokeWidth="2.2" strokeLinecap="round" opacity=".8" />
+      <ellipse cx="60" cy="40" rx="30" ry="21" fill="#ff8fab" {...cut} />
+      <ellipse cx="60" cy="40" rx="30" ry="21" fill="#ff8fab" />
+      <path d="M46 20 C40 34 40 46 46 60 M60 19 C54 34 54 46 60 61 M74 20 C68 34 68 46 74 60" stroke="#fff" strokeWidth="5" fill="none" strokeLinecap="round" opacity=".9" />
+      <ellipse cx="50" cy="30" rx="8" ry="4" fill="#fff" opacity=".55" />
     </Svg>
   ),
 };

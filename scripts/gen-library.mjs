@@ -1,10 +1,10 @@
 /**
- * Renders the bundled music library: eight short, loopable, consonant pieces built from
+ * Renders the bundled music library: ten short, loopable, consonant pieces built from
  * synthesised piano, plucked strings (Karplus–Strong), music box and pads, through a
  * Schroeder reverb, encoded to MP3.   node scripts/gen-library.mjs [id]
  */
 import { createRequire } from "node:module";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 const require = createRequire(import.meta.url);
 // lamejs 1.2 expects these on the global scope when loaded from Node.
 globalThis.MPEGMode = require("lamejs/src/js/MPEGMode");
@@ -427,11 +427,57 @@ const PIECES = {
     for (const [n, b] of mel) { mix.add(piano(hz(n), b * beat * 0.9, vj(0.36), { felt: true }), tm + jitter(), 0.05); tm += b * beat; }
     return finish(mix, { wet: 0.36, room: 0.84, damp: 0.4 });
   } },
+  fireside: { mood: "warm", note: "Felt piano · by the fire", render() {
+    const bpm = 58, beat = 60 / bpm, bars = 16, len = bars * 4 * beat;
+    const mix = new Mix(len);
+    const prog = [["F2", MAJ7], ["C3", MAJ], ["D3", MIN7], ["Bb2", MAJ7]];
+    for (let bar = 0; bar < bars; bar++) {
+      const [root, q] = prog[Math.floor(bar / 2) % 4];
+      const tones = chord(root, q, 1);
+      const t0 = bar * 4 * beat;
+      // a rocking-chair arpeggio: low, high, middle, high, over and over
+      const pattern = [0, 2, 1, 2, 0, 3 % tones.length, 1, 2].map((k) => tones[k % tones.length]);
+      pattern.forEach((f, i) => mix.add(piano(f, beat * 1.1, vj(0.3 + (i === 0 ? 0.1 : 0)), { felt: true }), t0 + i * beat * 0.5 + jitter(), (i % 2 ? 0.22 : -0.22)));
+      mix.add(bass(hz(root), beat * 3.7, 0.26), t0 + jitter(0.004), 0);
+      mix.add(pad(hz(root) * 2, beat * 4, 0.06), t0, -0.1);
+      mix.add(pad(tones[2], beat * 4, 0.03), t0, 0.3);
+      // a music-box glint on the last beat of every other bar, like a spark leaving the fire
+      if (bar % 2 === 1) mix.add(musicBox(tones[1] * 4, 0.5, vj(0.14)), t0 + 3.5 * beat + jitter(0.01), 0.4);
+    }
+    const mel = [["A4", 2], ["C5", 2], ["F5", 3], ["E5", 1], ["D5", 2], ["C5", 2], ["A4", 4], ["G4", 2], ["A4", 2], ["C5", 3], ["D5", 1], ["C5", 2], ["A4", 2], ["F4", 4], ["A4", 2], ["C5", 2], ["D5", 3], ["C5", 1], ["Bb4", 2], ["A4", 2], ["G4", 4], ["A4", 2], ["G4", 2], ["F4", 6], ["E4", 2], ["F4", 4]];
+    let tm = 4 * 4 * beat;
+    for (const [n, b] of mel) { mix.add(piano(hz(n), b * beat * 0.95, vj(0.4), { felt: true }), tm + jitter(), 0.05); tm += b * beat; }
+    return finish(mix, { wet: 0.34, room: 0.84, damp: 0.42 });
+  } },
+
+  "all-hallows": { mood: "dreamy", note: "Music box · a waltz in the dark", render() {
+    const bpm = 80, beat = 60 / bpm, bars = 16, len = bars * 3 * beat;
+    const mix = new Mix(len);
+    // A minor with the E major that gives an old music box its shiver.
+    const prog = [["A2", MIN], ["F2", MAJ7], ["E2", MAJ], ["A2", MIN]];
+    for (let bar = 0; bar < bars; bar++) {
+      const [root, q] = prog[Math.floor(bar / 2) % 4];
+      const t0 = bar * 3 * beat;
+      const tones = chord(root, q, 1);
+      // oom-pah-pah: the bass on one, two plucked chords after it
+      mix.add(bass(hz(root), beat * 1.4, 0.26), t0 + jitter(0.004), 0);
+      [1, 2].forEach((b) => tones.slice(0, 3).forEach((f, k) => mix.add(pluck(f, beat * 0.7, vj(0.3), { bright: 0.3, damp: 0.996 }), t0 + b * beat + k * 0.012 + jitter(0.005), -0.25 + k * 0.25)));
+      mix.add(pad(hz(root) * 2, beat * 3, 0.045), t0, 0.15);
+    }
+    const scale = ["A4", "B4", "C5", "D5", "E5", "F5", "G#5", "A5", "B5", "C6"];
+    const tune = [[4, 2], [7, 1], [6, 1], [7, 1], [9, 1], [7, 2], [4, 1], [5, 1], [4, 1], [3, 1], [2, 2], [3, 1], [4, 2], [1, 1], [0, 3]];
+    for (const start of [0, 4, 8, 12]) {
+      let tm = start * 3 * beat;
+      for (const [deg, b] of tune) { mix.add(musicBox(hz(scale[deg]), 0.45, vj(0.32)), tm + jitter(0.01), 0.3 - 0.6 * (deg % 2)); tm += b * beat; }
+    }
+    return finish(mix, { wet: 0.44, room: 0.88, damp: 0.3 });
+  } },
 };
 
 mkdirSync("public/audio/library", { recursive: true });
 const only = process.argv[2];
-const meta = [];
+// Rendering one piece keeps the others' entries in the manifest.
+const meta = only && existsSync("public/audio/library/manifest.json") ? JSON.parse(readFileSync("public/audio/library/manifest.json", "utf8")).filter((m) => m.id !== only) : [];
 for (const [id, piece] of Object.entries(PIECES)) {
   if (only && only !== id) continue;
   const t = Date.now();

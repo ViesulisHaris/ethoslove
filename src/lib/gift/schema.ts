@@ -57,7 +57,7 @@ export const giftSurpriseSchema = z.object({
 export const FONT_PAIRINGS = ["editorial", "modern", "handwritten"] as const;
 
 /** The screen a recipient taps to open the gift. "classic" is the plain name-and-hairline intro. */
-export const COVER_IDS = ["gingham", "picnic", "starry", "polka", "garden", "lovecore", "classic"] as const;
+export const COVER_IDS = ["gingham", "picnic", "starry", "polka", "garden", "lovecore", "harvest", "spooky", "classic"] as const;
 export type CoverId = (typeof COVER_IDS)[number];
 export type FontPairing = (typeof FONT_PAIRINGS)[number];
 

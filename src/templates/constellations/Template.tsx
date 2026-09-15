@@ -13,11 +13,10 @@ import { hashString } from "../_shared/random";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useGyroParallax } from "../_shared/hooks/use-gyro-parallax";
-import { Typewriter } from "../_shared/Typewriter";
-import { RichMessage } from "../_shared/RichMessage";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
+import { MessageBody } from "../_shared/MessageBody";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
@@ -534,34 +533,19 @@ function MessagePanel({
       transition={{ type: "spring", stiffness: 90, damping: 18 }}
     >
       <div className="mx-auto flex w-[min(90cqw,560px)] flex-col gap-5 pt-[max(14cqh,72px)] pb-[max(2rem,env(safe-area-inset-bottom))]">
-        <div className="rounded-3xl border border-white/10 bg-black/55 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
-          <h2
-            className="text-[clamp(1.6rem,7cqw,2rem)] leading-tight italic"
-            style={{ fontFamily: "var(--gift-font-display)" }}
-          >
-            {t("dear", { name: data.recipientName })}
-          </h2>
-          <div className="mt-5 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed text-white/90 [&_em]:text-[var(--gift-accent-soft)] [&_p+p]:mt-4 [&_strong]:font-semibold [&_strong]:text-white">
-            {instant ? (
-              <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} />
-            ) : (
-              <Typewriter blocks={blocks} active speed={38} onDone={() => setDone(true)} onCaretMove={followCaret} />
-            )}
+        {/* The words on smoked glass under the stars, with the sky's glow bleeding in at the top. */}
+        <div
+          className="relative overflow-hidden rounded-[28px] px-[clamp(24px,7cqw,42px)] pt-[clamp(28px,8cqw,46px)] pb-[clamp(28px,8cqw,48px)] backdrop-blur-xl"
+          style={{
+            background: "linear-gradient(165deg, rgba(34,40,92,0.74) 0%, rgba(12,14,40,0.8) 55%, rgba(6,8,24,0.86) 100%)",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.22), 0 40px 80px -30px rgba(0,0,0,0.9)",
+          }}
+        >
+          <div aria-hidden="true" className="pointer-events-none absolute -top-28 left-1/2 h-56 w-[130%] -translate-x-1/2 rounded-full opacity-70 blur-3xl" style={{ background: "radial-gradient(closest-side, rgba(var(--gift-accent-rgb), 0.38), transparent)" }} />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-50" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,.7) 1px, transparent 1.6px)", backgroundSize: "46px 46px", maskImage: "linear-gradient(180deg, black, transparent 45%)" }} />
+          <div className="relative">
+            <MessageBody data={data} blocks={blocks} mode={mode} tone="dark" face="serif" onDone={() => setDone(true)} onCaretMove={followCaret} />
           </div>
-          <AnimatePresence>
-            {done ? (
-              <motion.p
-                key="sig"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.7 }}
-                className="mt-6 text-right text-[1.5rem] italic"
-                style={{ fontFamily: "var(--gift-font-display)", color: "var(--gift-accent)" }}
-              >
-                — {data.senderName}
-              </motion.p>
-            ) : null}
-          </AnimatePresence>
         </div>
 
         {done && data.countdown ? (
