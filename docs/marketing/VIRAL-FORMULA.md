@@ -257,6 +257,35 @@ while the wrong person opens it. What they taught us:
 - **"Nothing" is still the best trap there is.** She says nothing, he agrees too fast, and the whole
   comment section is women explaining what nothing means.
 
+## The slow one: 77, and the 2.9M post it is built on
+
+Everything above 76 is ours. 77 is somebody else's shape, taken apart and rebuilt, and it is the one to
+copy next if the numbers hold.
+
+A creator's carousel found under the search **"free website for love letter"** did 2.9M views, 515K
+likes, 56.4K saves and 16.1K shares on a story where nothing happens. "You in bed yet?" / "almost" /
+"You always say almost" / "because i'm still doing my skincare" / "Right right". Two slides of that
+before "Btw · I made you something earlier", and the link does not land until slide 5 of 10.
+
+- **Slow is a strategy, not a mistake.** Ten slides is ten swipes, and swipes are what rank a photo
+  post. The first two slides can have no stakes at all as long as they sound exactly like the viewer's
+  own chat. Familiarity holds attention as well as tension does, and it holds a different, bigger
+  audience: 56.4K saves is people keeping an idea, not a story.
+- **Two to five words a bubble.** "Rude". "Btw". "Fair". "skill issue". Ours were running twelve to
+  fifteen and getting skimmed. Cut every bubble until it cannot lose another word.
+- **The gift arrives as an afterthought.** He throws it away mid-conversation and then plays it down —
+  "It's not that serious", "Maybe a little" cheesy. Nobody cries, nobody drives three hours. Cosy
+  outperforms dramatic on saves by a distance, because a save is "I could do this", not "wow".
+- **Autocaps is a character.** He types with a capital letter and a full stop he does not mean; she is
+  lowercase with caps when she is losing it. That contrast alone tells you who is who without a name.
+- **Four things theirs is missing, which 77 adds:** a phrase to repeat ("be normal about it", said
+  three times, and "i wasnt normal about it" at the end), a number to check ("Since Sunday" against
+  "its thursday"), one thing nobody has read yet ("Don't skip to the end" plants the P.S.), and a loop
+  — her first word is "no" and her last word is "no", so a second swipe costs nothing.
+- **Own the search, not just the feed.** That post was found by typing "free website for love letter"
+  into TikTok, and the answer to that search is The Letter, which is free. Put the phrase in the
+  caption and the hashtags, and give one repost hook the search wording outright.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -311,7 +340,9 @@ comments, and people rewatch to catch it.
 
 ## The structure
 
-Short. Three chat slides and three to five gift frames. Never more than nine total.
+Short, unless you are deliberately running the slow shape (see 77): three chat slides and three
+to five gift frames, never more than nine total. The slow one is ten — five chat slides, four gift
+frames, one to close — and it earns the extra length with familiarity instead of tension.
 
 1. **Hook.** One open loop, stated in the first bubble or two. Timestamp on it.
 2. **The turn.** Time passes (a new timestamp), the link card arrives, one line of tension.
@@ -461,5 +492,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 74 | i planted u something | anniversary, "nothing" | The Garden | Classic |
 | 75 | 11 minutes | 3 months, the first i love you | The Letter | Starry |
 | 76 | number 12 | her 18th, from her little sister | Jar of Reasons | Birthday |
+| 77 | be normal about it | the slow one, 10 slides, free letter search | The Letter | Starry |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

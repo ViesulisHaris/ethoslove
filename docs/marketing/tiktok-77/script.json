@@ -1,0 +1,48 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 23.41", "messages": [
+      { "from": "them", "text": "You up?" },
+      { "from": "me", "text": "no" },
+      { "from": "them", "text": "Right. Sorry to bother you" },
+      { "from": "me", "text": "what do u want" },
+      { "from": "them", "text": "Nothing anymore" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "why r u even awake" },
+      { "from": "them", "text": "Finishing something" },
+      { "from": "me", "text": "finishing WHAT" },
+      { "from": "them", "text": "It's nearly done" },
+      { "from": "me", "text": "that is not an answer" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Fine. It's for you" },
+      { "from": "them", "text": "But you have to be normal about it" },
+      { "from": "me", "text": "when am i not normal" },
+      { "from": "them", "text": "Tuesday" },
+      { "from": "me", "text": "that was ONE time" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "how long did it take" },
+      { "from": "them", "text": "Doesn't matter" },
+      { "from": "me", "text": "how long" },
+      { "from": "them", "text": "Since Sunday" },
+      { "from": "me", "text": "its thursday" },
+      { "from": "them", "text": "Be normal" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Don't skip to the end" },
+      { "from": "them", "link": { "title": "since sunday", "domain": "tryethos.io", "image": "og", "name": "Romy" } },
+      { "from": "me", "text": "opening it" },
+      { "from": "them", "text": "Normal." },
+      { "from": "me", "text": "normal" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.26", "messages": [
+      { "from": "me", "text": "i wasnt normal about it" },
+      { "from": "them", "text": "I could hear you" },
+      { "from": "me", "text": "i live 40 minutes away" },
+      { "from": "me", "text": "the ps ruined me" },
+      { "from": "them", "text": "Go to sleep", "tapback": "heart" },
+      { "from": "me", "text": "no" }
+    ] }
+  ]
+}
