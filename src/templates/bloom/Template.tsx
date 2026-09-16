@@ -18,7 +18,7 @@ import { Ambience, type AmbienceKind } from "../_shared/Ambience";
 import { COVER_VARS, CoverPage, POSTER_FONT, StickerScatter, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import { BLOOM_KEYFRAMES, Pot, StemTag, Windowsill, type PotColors, type SillColors } from "./art";
 import { Flower, type BloomState } from "./Flower";
-import type { BloomFields } from "./schema";
+import { fieldsSchema, type BloomFields } from "./schema";
 
 type Sky = {
   bg: string;
@@ -147,6 +147,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
   const sky = SKY[data.fields.sky] ?? SKY.dawn;
+  // Gifts published before these two toggles existed have no value stored for them, so read
+  // them through the schema: missing keys come back as their defaults and nothing already
+  // sent changes what it looks like.
+  const { stickers: showStickers, pot: showPot } = useMemo(() => {
+    const parsed = fieldsSchema.safeParse(data.fields);
+    return parsed.success ? parsed.data : fieldsSchema.parse({});
+  }, [data.fields]);
   const [webgl] = useState(() => (typeof window === "undefined" ? true : hasWebGL()));
   const [bloomed, setBloomed] = useState(mode === "preview" || !webgl);
   const [holding, setHolding] = useState(false);
@@ -242,14 +249,19 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         </div>
       )}
 
-      {/* Petals in the light, then the stickers, then the ledge the pot is standing on. */}
+      {/* Petals in the light, then the stickers, then the ledge the pot stands on. The sender
+          can turn either of the last two off; the tag on the stem stays either way. */}
       <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
         <Ambience layers={sky.ambience} opacity={0.85} />
       </div>
-      <StickerScatter items={sky.stickers} reduce={!!reduce} className="z-[3]" />
+      {showStickers ? <StickerScatter items={sky.stickers} reduce={!!reduce} className="z-[3]" /> : null}
       <div className="pointer-events-none absolute inset-0 z-[4]" aria-hidden="true">
-        <Windowsill colors={sky.sill} />
-        <Pot colors={sky.pot} />
+        {showPot ? (
+          <>
+            <Windowsill colors={sky.sill} />
+            <Pot colors={sky.pot} />
+          </>
+        ) : null}
         <StemTag
           name={data.recipientName}
           forLabel={s.for}
@@ -260,7 +272,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 z-[5] px-[calc(6*var(--k))] text-center" style={{ top: "max(calc(5*var(--k)), calc(env(safe-area-inset-top) + 2*var(--k)))" }}>
+      <div className="pointer-events-none absolute inset-x-0 z-[5] px-[calc(6*var(--k))] text-center" style={{ top: "max(calc(5*var(--k)), calc(var(--gift-safe-top,env(safe-area-inset-top)) + 2*var(--k)))" }}>
         <motion.p
           className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
           initial={reduce ? false : { opacity: 0, y: 8 }}

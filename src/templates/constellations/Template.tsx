@@ -414,7 +414,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-1/2 z-40 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/35 px-3 text-xs text-white/85 backdrop-blur-md"
+            className="absolute top-[max(0.75rem,var(--gift-safe-top,env(safe-area-inset-top)))] left-1/2 z-40 flex h-9 -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/35 px-3 text-xs text-white/85 backdrop-blur-md"
           >
             <Compass className="size-3.5" />
             {t("enableMotion")}
@@ -479,7 +479,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
                 e.stopPropagation();
                 closeNode();
               }}
-              className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-3 grid size-10 place-items-center rounded-full bg-black/35 text-white/85 backdrop-blur-md"
+              className="absolute top-[max(0.75rem,var(--gift-safe-top,env(safe-area-inset-top)))] right-3 grid size-10 place-items-center rounded-full bg-black/35 text-white/85 backdrop-blur-md"
             >
               <X className="size-4" />
             </button>

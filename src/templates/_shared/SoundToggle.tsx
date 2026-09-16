@@ -30,7 +30,7 @@ export function SoundToggle({ audio, locale, className }: { audio: GiftAudio; lo
       onFocus={() => setDimmed(false)}
       aria-label={giftString(locale, audio.muted ? "unmute" : "mute")}
       className={cn(
-        "absolute top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-40 grid size-10 place-items-center rounded-full bg-black/35 text-white/90 backdrop-blur-md transition-[opacity,background-color] duration-700 hover:bg-black/50",
+        "absolute top-[max(0.75rem,var(--gift-safe-top,env(safe-area-inset-top)))] right-3 z-40 grid size-10 place-items-center rounded-full bg-black/35 text-white/90 backdrop-blur-md transition-[opacity,background-color] duration-700 hover:bg-black/50",
         dimmed && !audio.muted && "opacity-25",
         className,
       )}

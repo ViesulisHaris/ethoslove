@@ -9,6 +9,10 @@ export const fieldsSchema = z.object({
     .optional(),
   sky: z.enum(["dawn", "dusk", "paper"]).default("dawn"),
   pollen: z.boolean().default(true),
+  /** The die-cut stickers scattered around the flower. */
+  stickers: z.boolean().default(true),
+  /** The windowsill and the pot the stem rises out of; off leaves the flower in the light. */
+  pot: z.boolean().default(true),
 });
 
 export type BloomFields = z.infer<typeof fieldsSchema>;

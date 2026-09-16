@@ -39,7 +39,7 @@ export const demoData: Record<"en" | "es", GiftData<BloomFields>> = {
       p3: "Every birthday, the same cake, on purpose",
       p7: "Summer, before we knew about sunscreen",
     }),
-    fields: { flower: "peony", sky: "dawn", pollen: true },
+    fields: { flower: "peony", sky: "dawn", pollen: true, stickers: true, pot: true },
   },
   es: {
     ...shared,
@@ -52,6 +52,6 @@ export const demoData: Record<"en" | "es", GiftData<BloomFields>> = {
       p3: "Cada cumpleaños, la misma tarta, a propósito",
       p7: "Verano, antes de saber lo que era la crema solar",
     }),
-    fields: { flower: "peony", sky: "dawn", pollen: true },
+    fields: { flower: "peony", sky: "dawn", pollen: true, stickers: true, pot: true },
   },
 };

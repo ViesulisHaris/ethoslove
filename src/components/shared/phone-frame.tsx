@@ -19,7 +19,19 @@ export function PhoneFrame({
   return (
     <div
       className={cn("relative shrink-0 select-none", className)}
-      style={{ width, aspectRatio: "390 / 844" }}
+      style={
+        {
+          width,
+          aspectRatio: "390 / 844",
+          // What a real iPhone reports as `env(safe-area-inset-top)`: 59 of 844pt, or 7% of
+          // the screen's height. The screen is 94.8% of the frame at 390:844, so its height is
+          // ~2.05 × the frame width, which puts the inset at ~14.3% of that width. Templates
+          // read it through `--gift-safe-top` and keep their headers clear of the island, the
+          // way they do on a phone — `env()` is 0 in a desktop browser, so without this the
+          // island cropped whatever sat at the top.
+          "--gift-safe-top": `calc(${typeof width === "number" ? `${width}px` : width} * 0.143)`,
+        } as React.CSSProperties
+      }
     >
       {/* Body */}
       <div aria-hidden="true" className="absolute inset-0 rounded-[13%/6%] bg-[#1c1917] shadow-[0_30px_80px_-24px_rgba(26,22,20,0.55),inset_0_0_0_2px_rgba(255,255,255,0.06)]" />

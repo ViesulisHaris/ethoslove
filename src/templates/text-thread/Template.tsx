@@ -184,7 +184,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       style={{ ...COVER_VARS, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
       {/* Chat header */}
-      <header className="flex h-[max(3.6rem,calc(env(safe-area-inset-top)+3rem))] shrink-0 items-end border-b border-black/10 bg-white/80 px-3 pb-2 backdrop-blur">
+      <header className="flex h-[max(3.6rem,calc(var(--gift-safe-top,env(safe-area-inset-top))+3rem))] shrink-0 items-end border-b border-black/10 bg-white/80 px-3 pb-2 backdrop-blur">
         <ChevronLeft className="size-5 opacity-50" />
         <div className="ml-1 flex flex-1 items-center gap-2.5">
           <span
@@ -433,7 +433,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <SoundToggle
         audio={audio}
         locale={data.locale}
-        className={cn("top-[max(4rem,calc(env(safe-area-inset-top)+3.5rem))] bg-black/10 text-ink")}
+        className={cn("top-[max(4rem,calc(var(--gift-safe-top,env(safe-area-inset-top))+3.5rem))] bg-black/10 text-ink")}
       />
     </div>
   );

@@ -91,7 +91,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <div className="grain-overlay opacity-[0.07]" />
       <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_100%,rgba(var(--gift-accent-rgb),0.2),transparent_70%)]" />
 
-      <div className="absolute inset-x-0 top-[max(1.25rem,calc(env(safe-area-inset-top)+0.75rem))] z-20 flex items-center justify-between px-6 text-[11px] tracking-[0.25em] text-paper/55 uppercase">
+      <div className="absolute inset-x-0 top-[max(1.25rem,calc(var(--gift-safe-top,env(safe-area-inset-top))+0.75rem))] z-20 flex items-center justify-between px-6 text-[11px] tracking-[0.25em] text-paper/55 uppercase">
         <span>{data.senderName} → {data.recipientName}</span>
         <span>{s.cardOf.replace("{i}", String(index + 1)).replace("{n}", String(total))}</span>
       </div>

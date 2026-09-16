@@ -146,7 +146,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <StickerScatter items={look.stickers} reduce={!!reduce} className="z-[3]" />
       <div
         className="pointer-events-none absolute inset-x-0 z-20 px-[calc(6*var(--k))] text-center"
-        style={{ top: "max(calc(3*var(--k)), calc(env(safe-area-inset-top) + 2*var(--k)))" }}
+        style={{ top: "max(calc(3*var(--k)), calc(var(--gift-safe-top,env(safe-area-inset-top)) + 2*var(--k)))" }}
       >
         <motion.p
           className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"

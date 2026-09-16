@@ -298,7 +298,7 @@ export function Template({
             onArrive={land}
             className="!absolute inset-0"
           />
-          <div className="pointer-events-none absolute inset-x-0 top-[max(1.5rem,calc(env(safe-area-inset-top)+1rem))] px-6 text-center">
+          <div className="pointer-events-none absolute inset-x-0 top-[max(1.5rem,calc(var(--gift-safe-top,env(safe-area-inset-top))+1rem))] px-6 text-center">
             <p className="text-[11px] tracking-[0.3em] uppercase opacity-60">
               {arrived ? s.arrived : s.flying}
             </p>
