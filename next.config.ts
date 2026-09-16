@@ -73,9 +73,12 @@ const nextConfig: NextConfig = {
 function contentSecurityPolicy(): string {
   const dev = process.env.NODE_ENV !== "production";
   // Only widened when Clarity is actually configured, so a build without it keeps the tighter
-  // policy. The tag comes from www.clarity.ms and reports to a regional *.clarity.ms host.
+  // policy. The wildcard is needed on script-src, not just www: the tag at www.clarity.ms is a
+  // loader that pulls the library from scripts.clarity.ms, and a version number in that path
+  // means pinning the host is the most that can be pinned. It reports to a regional
+  // *.clarity.ms host as well.
   const clarity = Boolean(process.env.NEXT_PUBLIC_CLARITY_ID);
-  const clarityScript = clarity ? " https://www.clarity.ms" : "";
+  const clarityScript = clarity ? " https://*.clarity.ms" : "";
   const clarityConnect = clarity ? " https://*.clarity.ms https://c.bing.com" : "";
   const directives = [
     "default-src 'self'",
