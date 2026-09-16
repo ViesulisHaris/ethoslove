@@ -5,23 +5,24 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { env } from "@/lib/env";
-import { isPrivatePath, setConsent } from "@/lib/analytics/consent";
+import { hidesConsentBanner, setConsent } from "@/lib/analytics/consent";
 import { useConsent, useIsClient } from "@/lib/analytics/use-consent";
 
 /**
  * Asks once, in the least intrusive place that is still honest.
  *
- * It never appears where nothing would be set anyway: with no Clarity id configured, or on a
- * gift page, which is most of the traffic and the worst possible moment to interrupt. A strip
- * at the bottom rather than a modal, two plain buttons, no "manage preferences" maze — the
- * choice is reversible from the footer, so there is nothing to bury.
+ * It never appears with no Clarity id configured, and never where a gift is running — a real one
+ * at `/g/…` or a demo — because that is most of the traffic, the worst possible moment to
+ * interrupt, and the strip would sit directly on top of the gift's own controls. A strip at the
+ * bottom rather than a modal, two plain buttons, no "manage preferences" maze — the choice is
+ * reversible from the footer, so there is nothing to bury.
  */
 export function CookieConsent() {
   const t = useTranslations("cookies");
   const pathname = usePathname();
   const consent = useConsent();
   const isClient = useIsClient();
-  const visible = isClient && consent === null && Boolean(env.clarityId) && !isPrivatePath(pathname);
+  const visible = isClient && consent === null && Boolean(env.clarityId) && !hidesConsentBanner(pathname);
 
   return (
     <AnimatePresence>

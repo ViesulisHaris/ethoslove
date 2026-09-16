@@ -72,15 +72,31 @@ export function serverConsent(): Consent | null {
  * - `/dashboard/…`, `/account`  signed-in pages, with gift ids in the path.
  *
  * What is left is the whole public funnel — the pages, the templates, the editor — which is
- * where the questions actually are. Keeping the banner off these paths too means it never
- * interrupts a recipient opening a gift.
- *
- * Takes the path with or without a locale prefix, since callers get it from either Next's
- * `usePathname` (`/es/g/abc`) or next-intl's (`/g/abc`).
+ * where the questions actually are.
  */
 const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account"];
 
+/** Takes the path with or without a locale prefix, since callers get it from either router. */
+const bare = (pathname: string) => pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
+const under = (path: string, roots: readonly string[]) =>
+  roots.some((p) => path === p || path.startsWith(`${p}/`));
+
 export function isPrivatePath(pathname: string): boolean {
-  const path = pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
-  return OFF_LIMITS.some((p) => path === p || path.startsWith(`${p}/`));
+  return under(bare(pathname), OFF_LIMITS);
+}
+
+/**
+ * Where a gift is running, and the bottom of the screen therefore belongs to the gift.
+ *
+ * A demo is the same gift as `/g/…`, only with the sender's words swapped for ours — the blow,
+ * the pour, the shake and the tap all sit in the bottom strip, which is exactly where a banner
+ * pinned to the bottom lands. So it stays off these too.
+ *
+ * Clarity is deliberately *not* kept off `/demo`: it sets nothing without consent, the demos are
+ * the funnel, and where people stop watching one is worth knowing. Only the banner moves.
+ */
+const NO_BANNER = ["/demo"];
+
+export function hidesConsentBanner(pathname: string): boolean {
+  return isPrivatePath(pathname) || under(bare(pathname), NO_BANNER);
 }
