@@ -151,6 +151,29 @@ Pure logic — geometry, physics, time — belongs in its own module with unit t
 - **Adding a template conflicts with anyone else adding one**, always in the same four files: the
   registry, `defaultCoverFor`, the capture script and the demo test list. Keep both sides.
 
+## Choosing `occasions`
+
+**Order matters: most central first.** Position 0 means the template was built for that occasion;
+later positions mean it genuinely suits it. The occasion page sorts on exactly that, so `halfway`
+and `passport` lead `/occasions/long-distance` and `the-letter` follows them. Get the order wrong
+and the right templates sink.
+
+Tag an occasion only if you would actually recommend the template for it — "this suits it", never
+"this could be stretched to cover it". Most templates land on two to four; a unit test fails above
+five, and another fails if any page is out of fit order.
+
+The failure mode is quiet and it has already happened once: every template claimed six to eight
+occasions, so `/occasions/long-distance` listed eighteen of twenty-six templates including Trick or
+Treat and Snow Globe, and every occasion page became the whole catalogue reshuffled. A tag is not
+free — it is a promise on a page someone lands on from Google.
+
+An occasion page with four honest templates beats one with eighteen padded ones. If a page looks
+thin, that is the catalogue telling you which template to build next — Christmas has two and
+Halloween has one. Don't fix it by widening tags.
+
+The tags also feed the "Good for" line on each template page and in `/llms.txt`, which is what AI
+assistants read, so a loose tag misinforms more than the gallery.
+
 ## Writing the words
 
 The manifest's description is marketing copy: say what the recipient does and what they get, in

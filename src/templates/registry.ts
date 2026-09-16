@@ -64,12 +64,21 @@ export function getManifest(slug: string): TemplateManifest | null {
   return TEMPLATE_MANIFESTS.find((m) => m.slug === slug) ?? null;
 }
 
+/**
+ * A manifest lists its occasions most-central-first, so a template's position in that list is
+ * how well it fits. Filtering by occasion therefore ranks by fit — the templates built for the
+ * occasion lead, the ones that merely suit it follow — and falls back to `sortOrder` within a
+ * rank. Unfiltered, the gallery keeps its curated `sortOrder`.
+ */
 export function listManifests(filter: { occasion?: Occasion; tier?: TemplateTier } = {}) {
+  const { occasion } = filter;
   return TEMPLATE_MANIFESTS.filter(
-    (m) =>
-      (!filter.occasion || m.occasions.includes(filter.occasion)) &&
-      (!filter.tier || m.tier === filter.tier),
-  ).sort((a, b) => a.sortOrder - b.sortOrder);
+    (m) => (!occasion || m.occasions.includes(occasion)) && (!filter.tier || m.tier === filter.tier),
+  ).sort((a, b) =>
+    occasion
+      ? a.occasions.indexOf(occasion) - b.occasions.indexOf(occasion) || a.sortOrder - b.sortOrder
+      : a.sortOrder - b.sortOrder,
+  );
 }
 
 export async function loadTemplate(slug: string): Promise<TemplateModule | null> {

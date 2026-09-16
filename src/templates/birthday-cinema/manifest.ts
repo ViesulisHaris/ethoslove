@@ -8,7 +8,7 @@ export const manifest: TemplateManifest = {
     en: "Red curtains part on a marquee with their name in lights. A cake with real flickering candles waits, they blow into the phone (or swipe) to put them out, confetti fires, and a film strip of your photos rolls.",
     es: "Un telón rojo se abre sobre una marquesina con su nombre en luces. Espera una tarta con velas de llama real: soplan al teléfono (o deslizan) para apagarlas, salta el confeti y rueda una tira de película con tus fotos.",
   },
-  occasions: ["birthday", "graduation", "just-because"],
+  occasions: ["birthday"],
   styles: ["cinematic", "playful"],
   tier: "premium",
   features: { music: true, video: true, countdown: true, surprise: true, captions: true, photos: { min: 1, max: 20 }, needs: ["microphone"] },

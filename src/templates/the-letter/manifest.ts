@@ -11,7 +11,7 @@ export const manifest: TemplateManifest = {
     en: "Tap to break the seal. The letter slides out and unfolds on a candle-lit desk, your words appear in handwriting, and your photos drop in as polaroids.",
     es: "Toca para romper el sello. La carta sale del sobre y se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids.",
   },
-  occasions: ["anniversary", "valentines", "apology", "just-because", "mothers-day", "fathers-day", "long-distance"],
+  occasions: ["anniversary", "valentines", "apology", "just-because", "long-distance"],
   styles: ["romantic", "minimal"],
   tier: "free",
   features: {

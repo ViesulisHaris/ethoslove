@@ -32,11 +32,12 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
   setRequestLocale(locale);
   const t = await getTranslations();
   const title = t(`seo.occasion.${occasion}.title`);
+  const templates = listManifests({ occasion });
   return (
     <>
       <JsonLd
         nodes={[
-          templateListNode(listManifests({ occasion }), locale as Locale, title),
+          templateListNode(templates, locale as Locale, title),
           breadcrumbNode([
             { name: SITE.name, url: localizedUrl(locale) },
             { name: t("occasions.title"), url: localizedUrl(locale, "/occasions") },
@@ -45,7 +46,7 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
         ]}
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
-      <TemplateGallery manifests={listManifests()} initialOccasion={occasion} />
+      <TemplateGallery manifests={templates} occasion={occasion} />
     </>
   );
 }

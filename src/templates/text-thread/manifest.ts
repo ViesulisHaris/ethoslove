@@ -8,7 +8,7 @@ export const manifest: TemplateManifest = {
     en: "You write the messages; they watch them arrive, typing dots, little pops, photos dropped in as attachments, the occasional voice-note-shaped pause. It reads like the chat you actually have, ending on the one message you'd never send by text. Friendly, fast, made for phones.",
     es: "Tú escribes los mensajes; ellos los ven llegar: puntitos de «escribiendo», pequeños pops, fotos adjuntas, alguna pausa con forma de nota de voz. Se lee como el chat que tenéis de verdad, y termina con el mensaje que nunca mandarías por texto. Cercano, rápido, hecho para el móvil.",
   },
-  occasions: ["just-because", "birthday", "long-distance", "apology", "valentines", "anniversary", "graduation"],
+  occasions: ["just-because", "apology", "long-distance", "birthday"],
   styles: ["playful", "minimal"],
   tier: "premium",
   features: { music: true, video: false, countdown: true, surprise: true, captions: true, photos: { min: 0, max: 12 } },

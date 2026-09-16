@@ -8,7 +8,7 @@ export const manifest: TemplateManifest = {
     en: "Scroll-driven storytelling. A winding road draws itself down the page; every milestone pins a photo with a date and parallax layers. It ends on “and it's only the beginning” with a countdown to whatever comes next.",
     es: "Una historia que avanza al deslizar. Un camino sinuoso se dibuja página abajo; cada hito fija una foto con su fecha y capas en paralaje. Termina en «y esto solo es el principio», con una cuenta atrás hacia lo que venga.",
   },
-  occasions: ["anniversary", "wedding", "graduation", "long-distance", "just-because", "valentines"],
+  occasions: ["anniversary", "wedding", "graduation", "long-distance"],
   styles: ["cinematic", "minimal"],
   tier: "premium",
   features: { music: true, video: true, countdown: true, surprise: true, captions: true, photos: { min: 2, max: 20 } },

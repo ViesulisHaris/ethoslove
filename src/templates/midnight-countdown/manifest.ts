@@ -8,7 +8,7 @@ export const manifest: TemplateManifest = {
     en: "A live countdown to the moment you choose. The sky darkens from dusk to night as it gets close; at zero, fireworks fill the screen and the gift unlocks, your photos, your words. Made for the stroke of midnight on their birthday.",
     es: "Una cuenta atrás en vivo hasta el momento que elijas. El cielo pasa del atardecer a la noche mientras se acerca; a cero, los fuegos artificiales llenan la pantalla y el regalo se abre: tus fotos, tus palabras. Hecha para las doce en punto de su cumpleaños.",
   },
-  occasions: ["birthday", "anniversary", "christmas", "graduation", "long-distance", "wedding"],
+  occasions: ["birthday", "anniversary", "long-distance"],
   styles: ["cinematic"],
   tier: "premium",
   features: { music: true, video: false, countdown: true, surprise: true, captions: true, photos: { min: 1, max: 20 } },

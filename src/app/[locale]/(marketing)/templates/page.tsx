@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
+import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
 import { listManifests } from "@/templates/registry";
@@ -23,10 +24,12 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/tem
 export default async function TemplatesPage({ params, searchParams }: PageProps<"/[locale]/templates">) {
   const { locale } = await params;
   const { occasion } = await searchParams;
+  // An occasion has its own page; send the old query-param form there rather than serving the
+  // same list under two URLs, which would have them compete with each other in search.
+  if (typeof occasion === "string" && isOccasion(occasion)) redirect({ href: `/occasions/${occasion}`, locale });
   setRequestLocale(locale);
   const t = await getTranslations();
   const manifests = listManifests();
-  const initial = typeof occasion === "string" && isOccasion(occasion) ? occasion : undefined;
   return (
     <>
       <JsonLd
@@ -39,7 +42,7 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
         ]}
       />
       <PageHeader eyebrow={t("templates.title")} title={t("seo.templatesTitle")} subtitle={t("templates.subtitle")} />
-      <TemplateGallery manifests={manifests} initialOccasion={initial} />
+      <TemplateGallery manifests={manifests} />
     </>
   );
 }

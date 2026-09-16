@@ -11,7 +11,7 @@ export const manifest: TemplateManifest = {
     en: "A passport with their name on the cover. Open it and a globe turns, a route draws itself from your city to theirs (stopovers welcome), and the pages fill with stamps, one per photo, before the visa page reveals your message.",
     es: "Un pasaporte con su nombre en la portada. Al abrirlo gira un globo, una ruta se dibuja desde tu ciudad hasta la suya (con escalas si quieres) y las páginas se llenan de sellos, uno por foto, antes de que la página del visado revele tu mensaje.",
   },
-  occasions: ["long-distance", "anniversary", "birthday", "graduation", "wedding", "just-because"],
+  occasions: ["long-distance", "anniversary"],
   styles: ["3d", "cinematic"],
   tier: "premium",
   features: {

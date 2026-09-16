@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createGiftSchema, GIFT_LOCALES } from "@/lib/gift/schema";
 import { parseRichText, richTextLength } from "@/lib/gift/rich-text";
+import { OCCASIONS } from "@/config/occasions";
 import { TEMPLATE_MANIFESTS, TEMPLATE_SLUGS, getManifest, listManifests, loadTemplate } from "@/templates/registry";
 
 describe("template registry", () => {
@@ -15,6 +16,30 @@ describe("template registry", () => {
 
   it("filters by occasion", () => {
     expect(listManifests({ occasion: "anniversary" }).length).toBeGreaterThan(0);
+  });
+
+  // An occasion tag says "this template suits it", not "this could be stretched to cover it".
+  // Tag loosely and every occasion page becomes the whole catalogue reshuffled, which is what
+  // these guard against.
+  it("no template claims more than five occasions", () => {
+    const greedy = TEMPLATE_MANIFESTS.filter((m) => m.occasions.length > 5).map(
+      (m) => `${m.slug} (${m.occasions.length}: ${m.occasions.join(", ")})`,
+    );
+    expect(greedy, `tag only where you would actively recommend it:\n  ${greedy.join("\n  ")}`).toEqual([]);
+  });
+
+  it("an occasion page leads with the templates built for it", () => {
+    // Position in a manifest's own list is the fit signal, so a page must never open on a
+    // template that ranks the occasion lower than one further down the page.
+    for (const occasion of OCCASIONS) {
+      const ranks = listManifests({ occasion }).map((m) => m.occasions.indexOf(occasion));
+      expect([...ranks].sort((a, b) => a - b), `${occasion} is out of fit order`).toEqual(ranks);
+    }
+  });
+
+  it("every occasion has at least one template, so no occasion page is empty", () => {
+    const empty = OCCASIONS.filter((o) => listManifests({ occasion: o }).length === 0);
+    expect(empty, `these occasion pages would render nothing: ${empty.join(", ")}`).toEqual([]);
   });
 
   for (const slug of TEMPLATE_SLUGS) {

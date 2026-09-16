@@ -12,6 +12,7 @@ export interface TemplateManifest {
   name: Record<GiftLocale, string>;
   tagline: Record<GiftLocale, string>;
   description: Record<GiftLocale, string>;
+  /** Most central first: position here is what ranks the template on that occasion's page. */
   occasions: Occasion[];
   styles: TemplateStyle[];
   tier: TemplateTier;

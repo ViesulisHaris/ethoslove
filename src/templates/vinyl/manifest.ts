@@ -8,7 +8,7 @@ export const manifest: TemplateManifest = {
     en: "A turntable. They drop the needle and the record spins in real time with the music. Your photos sit in a crate as album covers to flip through; your message is printed on the liner notes.",
     es: "Un tocadiscos. Ponen la aguja y el disco gira en tiempo real con la música. Tus fotos esperan en una caja como portadas de discos para ir pasando; tu mensaje va impreso en las notas del libreto.",
   },
-  occasions: ["anniversary", "valentines", "birthday", "just-because", "long-distance"],
+  occasions: ["anniversary", "valentines", "just-because", "long-distance"],
   styles: ["retro", "romantic"],
   tier: "premium",
   features: { music: true, video: false, countdown: true, surprise: true, captions: true, photos: { min: 1, max: 12 } },
