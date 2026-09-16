@@ -26,6 +26,17 @@ export const env = {
   posthogKey: read("NEXT_PUBLIC_POSTHOG_KEY"),
   posthogHost: read("NEXT_PUBLIC_POSTHOG_HOST") ?? "https://us.i.posthog.com",
 
+  /**
+   * Microsoft Clarity project id: heatmaps, scroll maps and session replay.
+   *
+   * Written out in full rather than through `read()` on purpose. Next only substitutes
+   * `process.env.NEXT_PUBLIC_*` where it appears literally; a dynamic `process.env[key]`
+   * survives into the browser bundle, where `process` does not exist, so it reads as unset.
+   * This value is checked in the browser — it decides whether the banner and the tag load —
+   * so it has to be one Next can inline.
+   */
+  clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || undefined,
+
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
   anthropicApiKey: read("ANTHROPIC_API_KEY"),
@@ -47,6 +58,7 @@ export const isConfigured = {
   stripe: Boolean(env.stripeSecretKey),
   resend: Boolean(env.resendApiKey),
   posthog: Boolean(env.posthogKey),
+  clarity: Boolean(env.clarityId),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
   upstash: Boolean(env.upstashRedisUrl && env.upstashRedisToken),

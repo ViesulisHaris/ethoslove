@@ -131,8 +131,9 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
         <RefCapture />
         <NextIntlClientProvider>
           <Providers>{children}</Providers>
+          {/* Inside the provider: the consent banner is translated and reads the locale-less path. */}
+          <SiteAnalytics />
         </NextIntlClientProvider>
-        <SiteAnalytics />
       </body>
     </html>
   );

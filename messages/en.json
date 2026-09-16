@@ -745,6 +745,15 @@
     "privacy": "Privacy Policy",
     "lastUpdated": "Last updated {date}"
   },
+  "cookies": {
+    "title": "Cookies",
+    "blurb": "Cookies, so we can see what's working. Never on a gift someone's been sent.",
+    "readMore": "Read the policy",
+    "accept": "Allow",
+    "decline": "No thanks",
+    "turnOn": "Allow cookies",
+    "turnOff": "Stop cookies"
+  },
   "notFound": {
     "title": "This page wandered off",
     "detail": "The link may be broken, or the page may have moved.",

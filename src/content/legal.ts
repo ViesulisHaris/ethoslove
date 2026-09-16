@@ -237,7 +237,7 @@ const privacyEn: LegalDoc = {
     {
       heading: "4. Who we share data with",
       paragraphs: [
-        "We use service providers who process data on our behalf under data-processing agreements: Supabase (database, authentication and file storage), Vercel (hosting and delivery), Stripe (payments), Resend (transactional email), PostHog (product analytics, only with consent), Sentry (error monitoring) and Anthropic (the optional 'help me write it' feature — only the facts you type into that dialog are sent, and only when you use it). Some providers process data in the United States; transfers rely on the EU–US Data Privacy Framework or the European Commission's Standard Contractual Clauses. When you search for a place in a template's place picker, our servers send what you type to Photon, komoot's public place search built on OpenStreetMap data, to find matching towns; only the search text is sent, never your name or your gift. If a gift includes a song link, opening it loads the song's cover image from YouTube, Spotify or Apple, which then receive the viewer's IP address; tapping the link opens that service under its own privacy policy.",
+        "We use service providers who process data on our behalf under data-processing agreements: Supabase (database, authentication and file storage), Vercel (hosting and delivery), Stripe (payments), Resend (transactional email), PostHog (product analytics, only with consent), Microsoft Clarity (heatmaps and session replay, only with consent, and never on a gift page), Sentry (error monitoring) and Anthropic (the optional 'help me write it' feature — only the facts you type into that dialog are sent, and only when you use it). Some providers process data in the United States; transfers rely on the EU–US Data Privacy Framework or the European Commission's Standard Contractual Clauses. When you search for a place in a template's place picker, our servers send what you type to Photon, komoot's public place search built on OpenStreetMap data, to find matching towns; only the search text is sent, never your name or your gift. If a gift includes a song link, opening it loads the song's cover image from YouTube, Spotify or Apple, which then receive the viewer's IP address; tapping the link opens that service under its own privacy policy.",
         "We don't sell personal data. We disclose data to authorities only where the law requires it.",
       ],
     },
@@ -257,7 +257,7 @@ const privacyEn: LegalDoc = {
     {
       heading: "7. Cookies and similar technologies",
       paragraphs: [
-        "Strictly necessary cookies keep you signed in, remember your language and protect against abuse; they don't need consent. Analytics cookies (PostHog) are set only after you accept them in the cookie banner, and you can change your mind from the footer at any time. We don't use advertising cookies.",
+        "Strictly necessary cookies keep you signed in, remember your language and protect against abuse; they don't need consent. Analytics cookies (PostHog, Microsoft Clarity) are set only after you accept them in the cookie banner, and you can change your mind from the footer at any time. We don't use advertising cookies.",
       ],
     },
     {
@@ -307,7 +307,7 @@ const privacyEs: LegalDoc = {
     {
       heading: "4. Con quién compartimos los datos",
       paragraphs: [
-        "Usamos proveedores que tratan datos en nuestro nombre bajo contratos de encargo de tratamiento: Supabase (base de datos, autenticación y almacenamiento de archivos), Vercel (alojamiento y entrega), Stripe (pagos), Resend (correo transaccional), PostHog (analíticas de producto, solo con consentimiento), Sentry (monitorización de errores) y Anthropic (la función opcional «ayúdame a escribirlo»: solo se envían los datos que escribes en ese diálogo y solo cuando la usas). Algunos proveedores tratan datos en Estados Unidos; las transferencias se amparan en el Marco de Privacidad de Datos UE–EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea. Cuando buscas un sitio en el selector de lugares de una plantilla, nuestros servidores envían lo que escribes a Photon, el buscador público de lugares de komoot basado en datos de OpenStreetMap, para encontrar pueblos y ciudades; solo se envía el texto de la búsqueda, nunca tu nombre ni tu regalo. Si un regalo incluye el enlace a una canción, al abrirlo se carga su portada desde YouTube, Spotify o Apple, que reciben la dirección IP de quien lo ve; al tocar el enlace se abre ese servicio, sujeto a su propia política de privacidad.",
+        "Usamos proveedores que tratan datos en nuestro nombre bajo contratos de encargo de tratamiento: Supabase (base de datos, autenticación y almacenamiento de archivos), Vercel (alojamiento y entrega), Stripe (pagos), Resend (correo transaccional), PostHog (analíticas de producto, solo con consentimiento), Microsoft Clarity (mapas de calor y grabación de sesiones, solo con consentimiento y nunca en la página de un regalo), Sentry (monitorización de errores) y Anthropic (la función opcional «ayúdame a escribirlo»: solo se envían los datos que escribes en ese diálogo y solo cuando la usas). Algunos proveedores tratan datos en Estados Unidos; las transferencias se amparan en el Marco de Privacidad de Datos UE–EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea. Cuando buscas un sitio en el selector de lugares de una plantilla, nuestros servidores envían lo que escribes a Photon, el buscador público de lugares de komoot basado en datos de OpenStreetMap, para encontrar pueblos y ciudades; solo se envía el texto de la búsqueda, nunca tu nombre ni tu regalo. Si un regalo incluye el enlace a una canción, al abrirlo se carga su portada desde YouTube, Spotify o Apple, que reciben la dirección IP de quien lo ve; al tocar el enlace se abre ese servicio, sujeto a su propia política de privacidad.",
         "No vendemos datos personales. Solo comunicamos datos a las autoridades cuando la ley lo exige.",
       ],
     },
@@ -327,7 +327,7 @@ const privacyEs: LegalDoc = {
     {
       heading: "7. Cookies y tecnologías similares",
       paragraphs: [
-        "Las cookies estrictamente necesarias mantienen tu sesión iniciada, recuerdan tu idioma y protegen contra abusos; no requieren consentimiento. Las cookies analíticas (PostHog) solo se instalan tras aceptarlas en el aviso de cookies, y puedes cambiar de opinión desde el pie de página en cualquier momento. No usamos cookies publicitarias.",
+        "Las cookies estrictamente necesarias mantienen tu sesión iniciada, recuerdan tu idioma y protegen contra abusos; no requieren consentimiento. Las cookies analíticas (PostHog, Microsoft Clarity) solo se instalan tras aceptarlas en el aviso de cookies, y puedes cambiar de opinión desde el pie de página en cualquier momento. No usamos cookies publicitarias.",
       ],
     },
     {

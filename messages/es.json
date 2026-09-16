@@ -745,6 +745,15 @@
     "privacy": "Política de privacidad",
     "lastUpdated": "Última actualización: {date}"
   },
+  "cookies": {
+    "title": "Cookies",
+    "blurb": "Cookies, para ver qué funciona. Nunca en un regalo que alguien ha recibido.",
+    "readMore": "Leer la política",
+    "accept": "Aceptar",
+    "decline": "No, gracias",
+    "turnOn": "Aceptar cookies",
+    "turnOff": "Quitar cookies"
+  },
   "notFound": {
     "title": "Esta página se perdió",
     "detail": "Puede que el enlace esté roto o que la página se haya movido.",

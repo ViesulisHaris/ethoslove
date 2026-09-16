@@ -66,19 +66,25 @@ const nextConfig: NextConfig = {
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';
  * dev adds eval + the HMR socket. Supabase (storage, auth), Stripe (js + Checkout) and
- * Apple's song previews/artwork are the only third parties. Vercel Analytics and Speed Insights
- * load from /_vercel on this origin; only their dev debug scripts come from va.vercel-scripts.com.
+ * Apple's song previews/artwork are the third parties, plus Microsoft Clarity once it has a
+ * project id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
+ * dev debug scripts come from va.vercel-scripts.com.
  */
 function contentSecurityPolicy(): string {
   const dev = process.env.NODE_ENV !== "production";
+  // Only widened when Clarity is actually configured, so a build without it keeps the tighter
+  // policy. The tag comes from www.clarity.ms and reports to a regional *.clarity.ms host.
+  const clarity = Boolean(process.env.NEXT_PUBLIC_CLARITY_ID);
+  const clarityScript = clarity ? " https://www.clarity.ms" : "";
+  const clarityConnect = clarity ? " https://*.clarity.ms https://c.bing.com" : "";
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com`,
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com",
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com${clarityConnect}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
     "frame-src https://js.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",

@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { OCCASIONS } from "@/config/occasions";
 import { Logo } from "@/components/shared/logo";
+import { CookieChoiceButton } from "@/components/shared/cookie-consent";
 import { LocaleSwitcher } from "./locale-switcher";
 
 export async function MarketingFooter() {
@@ -43,6 +44,8 @@ export async function MarketingFooter() {
         <p>{t("footer.rights", { year })}</p>
         <div className="flex items-center gap-5">
           <p className="hidden sm:block">{t("footer.madeWith")}</p>
+          {/* The privacy policy promises the choice can be changed from here. */}
+          <CookieChoiceButton className="text-cream/50 transition-colors hover:text-cream" />
           <LocaleSwitcher className="h-8 text-xs text-cream/70 hover:bg-white/10 hover:text-cream" />
         </div>
       </div>

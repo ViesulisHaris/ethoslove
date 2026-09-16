@@ -2,6 +2,8 @@
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Clarity } from "./clarity";
+import { CookieConsent } from "./cookie-consent";
 
 const KEPT_PARAMS = /^(ref|utm_[a-z]+)$/;
 
@@ -20,12 +22,18 @@ function redact<T extends { url: string }>(event: T): T {
   }
 }
 
-/** Vercel Web Analytics and Speed Insights: cookieless, on every page. */
+/**
+ * Vercel Web Analytics and Speed Insights are cookieless, so they run on every page with no
+ * consent needed. Clarity sets cookies and records sessions, so it waits behind the banner and
+ * never runs on a gift page at all.
+ */
 export function SiteAnalytics() {
   return (
     <>
       <Analytics beforeSend={redact} />
       <SpeedInsights beforeSend={redact} />
+      <Clarity />
+      <CookieConsent />
     </>
   );
 }
