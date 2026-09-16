@@ -100,11 +100,19 @@ export function MessageBody({ data, blocks, mode, tone = "light", face = "serif"
   );
 }
 
-/** The sender's name in handwriting, with a flourish that draws itself underneath. */
+/**
+ * The sender's name in handwriting, with a flourish that draws itself underneath.
+ *
+ * Handwriting overhangs: a script face's last letter trails past the width it is charged for, and
+ * the name is set flush right against whatever card it sits on, tilted a few degrees on top. So
+ * nothing here may clip — it keeps a little air on the right for the tail of the last letter and
+ * the lean, sets its own line height rather than squeezing the ascenders flat, and lets a name
+ * too long for one line wrap onto a second instead of being sliced off with an ellipsis.
+ */
 function Signature({ name, reduce }: { name: string; reduce: boolean }) {
   return (
-    <motion.div className="mt-6 flex flex-col items-end" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.6 }}>
-      <span className="inline-block max-w-full -rotate-3 truncate leading-none" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "clamp(2rem, 8.6cqw, 2.6rem)", color: "var(--mb-accent)" }}>
+    <motion.div className="mt-6 flex flex-col items-end pr-[0.14em]" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.6 }}>
+      <span className="inline-block max-w-full -rotate-3 text-right leading-[1.18] break-words hyphens-none" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "clamp(1.7rem, 8.6cqw, 2.6rem)", color: "var(--mb-accent)" }}>
         {name}
       </span>
       <svg viewBox="0 0 240 26" className="mt-1 h-[clamp(14px,3.4cqw,20px)] w-[clamp(120px,36cqw,220px)] overflow-visible" aria-hidden="true" style={{ color: "var(--mb-accent)" }}>
