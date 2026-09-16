@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { FastForward } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
@@ -15,20 +15,44 @@ import { Typewriter } from "../_shared/Typewriter";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Confetti } from "../_shared/Confetti";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { MidnightFields } from "./schema";
 import { Fireworks } from "./Fireworks";
+import { Banner, BulbString, MarqueeSign, MIDNIGHT_KEYFRAMES, Rooftop } from "./art";
 
 const S = {
-  en: { until: "Until midnight", happy: "Happy birthday, {name}.", tap: "Tap to start", skip: "Skip to midnight", days: "d", hours: "h", minutes: "m", seconds: "s", open: "Open your gift" },
-  es: { until: "Hasta medianoche", happy: "Feliz cumpleaños, {name}.", tap: "Toca para empezar", skip: "Saltar a medianoche", days: "d", hours: "h", minutes: "m", seconds: "s", open: "Abrir tu regalo" },
+  en: { until: "Until midnight", happy: "Happy birthday, {name}.", tap: "tap to start", skip: "Skip to midnight", days: "d", hours: "h", minutes: "m", seconds: "s", open: "Open your gift" },
+  es: { until: "Hasta medianoche", happy: "Feliz cumpleaños, {name}.", tap: "toca para empezar", skip: "Saltar a medianoche", days: "d", hours: "h", minutes: "m", seconds: "s", open: "Abrir tu regalo" },
 };
 
-/** Sky phase 0 (dusk) → 1 (deep night) from how close we are; last 60 s go full night. */
+/** The sky is the page here, so the tone only dresses the pill: solid and light on a night scene. */
+const TONE: CoverTone = { page: "#0B0F2A", glow: ["rgba(255,214,150,.35)", "rgba(120,110,220,.3)"], accent: "#2B2140" };
+
+/** Pressed around the very edges, so they frame the rooftop instead of floating in the sky. */
+const STICKERS: StickerPlacement[] = [
+  { id: "star", x: 6, y: 20, size: 9, rotate: -12 },
+  { id: "sparkle", x: 94, y: 17, size: 7 },
+  { id: "heart", x: 5, y: 44, size: 8, rotate: 10 },
+  { id: "star", x: 95, y: 47, size: 7, rotate: 14 },
+  { id: "sparkle", x: 8, y: 70, size: 6 },
+  { id: "sparkle", x: 92, y: 72, size: 6 },
+];
+
+const AMBIENCE: { kind: AmbienceKind; colors: string[]; count?: number }[] = [
+  { kind: "embers", colors: ["#FFD9A0", "#F2C879"], count: 10 },
+];
+
+/**
+ * Sky phase 0 (dusk) → 1 (deep night) from how close we are; last 60 s go full night. The floor
+ * sits high because the cover is a rooftop at night: dusk only ever tints the horizon.
+ */
 function skyPhase(totalMs: number): number {
   if (totalMs <= 0) return 1;
   const hours = totalMs / 3600000;
-  if (hours > 6) return 0.15;
-  return Math.min(1, 0.15 + (1 - hours / 6) * 0.85);
+  if (hours > 6) return 0.55;
+  return Math.min(1, 0.55 + (1 - hours / 6) * 0.45);
 }
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<MidnightFields>) {
@@ -45,6 +69,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [started, setStarted] = useState(mode === "preview");
   const [forced, setForced] = useState(mode === "preview");
   const [gift, setGift] = useState(mode === "preview");
+  const [burst, setBurst] = useState(0);
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const zero = forced || parts.done || !targetAt;
   const phase = zero ? 1 : skyPhase(parts.totalMs);
@@ -66,8 +91,14 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       engine.intensity = 1;
       engine.start();
       onEvent?.({ type: "progress", pct: 40 });
+      // The confetti waits for the moment: one burst as the clock lands on midnight, fired from a
+      // timer so the state lands after this effect instead of cascading inside it.
+      const pop = window.setTimeout(() => setBurst((b) => b + 1), 0);
       const id = window.setTimeout(() => setGift(true), reduce ? 800 : 5200);
-      return () => window.clearTimeout(id);
+      return () => {
+        window.clearTimeout(pop);
+        window.clearTimeout(id);
+      };
     }
     engine.stop();
   }, [zero, started, onEvent, reduce]);
@@ -86,8 +117,50 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const headline = data.fields.headline || data.countdown?.label || s.until;
   const zeroLine = data.fields.zeroLine || s.happy.replace("{name}", data.recipientName);
 
+  /** What the sign shows: the line, then either the running clock or midnight itself. */
+  const signBody = (
+    <>
+      <p className="text-[calc(3.4*var(--k))] leading-snug text-balance text-[#FFE9C4]/85 italic" style={{ fontFamily: "var(--gift-font-display)" }}>
+        {zero ? zeroLine : headline}
+      </p>
+      {!zero ? (
+        <div className="mt-[calc(2.6*var(--k))] flex items-end justify-center gap-[calc(2.4*var(--k))] tabular-nums" style={{ fontFamily: "var(--gift-font-display)" }}>
+          {(
+            [
+              [parts.days, s.days],
+              [parts.hours, s.hours],
+              [parts.minutes, s.minutes],
+              [parts.seconds, s.seconds],
+            ] as [number, string][]
+          ).map(([v, u], i) => (
+            <div key={u} className="flex items-baseline">
+              <span
+                className={cn("text-[calc(9.5*var(--k))] leading-none", i === 0 && parts.days === 0 ? "hidden" : "")}
+                style={{ color: "#FFE9C4", textShadow: "0 0 calc(2.6*var(--k)) rgba(255,190,110,.55)" }}
+              >
+                {String(v).padStart(2, "0")}
+              </span>
+              <span className={cn("ml-[calc(.7*var(--k))] text-[calc(2.6*var(--k))] text-[#FFE9C4]/55", i === 0 && parts.days === 0 ? "hidden" : "")}>{u}</span>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {zero && started ? (
+        <motion.p
+          initial={{ opacity: 0, scale: 0.7 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 120, damping: 12 }}
+          className="mt-[calc(2.6*var(--k))] text-[calc(14*var(--k))] leading-none"
+          style={{ fontFamily: "var(--gift-font-display)", color: "var(--gift-accent)", textShadow: "0 0 calc(4*var(--k)) rgba(255,190,110,.5)" }}
+        >
+          00:00
+        </motion.p>
+      ) : null}
+    </>
+  );
+
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden text-paper select-none" style={{ fontFamily: "var(--gift-font-body)" }}>
+    <div ref={rootRef} className="absolute inset-0 overflow-hidden text-paper select-none" style={{ ...COVER_VARS, fontFamily: "var(--gift-font-body)" } as CSSProperties}>
       {/* Sky */}
       <div className="absolute inset-0 transition-[opacity] duration-[3000ms]" style={{ background: "linear-gradient(180deg,#0b0f2a 0%,#3b2f5f 45%,#c9683f 78%,#f2b26b 100%)" }} />
       <div className="absolute inset-0 transition-opacity duration-[4000ms] ease-linear" style={{ background: "linear-gradient(180deg,#02030c 0%,#0a0f2c 55%,#1a1f45 100%)", opacity: phase }} />
@@ -96,43 +169,55 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <div className="size-[calc(14*var(--u))] max-w-[90px] rounded-full bg-[#f6efd8] shadow-[0_0_60px_20px_rgba(246,239,216,0.22)]" style={{ transform: `translateY(${(1 - phase) * 60}px)` }} />
       </div>
       <Skyline kind={skyline} />
+      <style>{MIDNIGHT_KEYFRAMES}</style>
+      {/* the rooftop itself: bulbs overhead, the rail and the glasses someone left standing */}
+      <motion.div className="absolute inset-0 z-[5]" animate={{ opacity: gift ? 0 : 1 }} transition={{ duration: 0.6 }} aria-hidden="true">
+        <BulbString />
+        <Rooftop />
+      </motion.div>
+      <StickerScatter items={STICKERS} reduce={!!reduce} className="z-[4]" />
+      <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
+        <Ambience layers={AMBIENCE} opacity={0.8} />
+      </div>
       <canvas ref={canvasRef} className="absolute inset-0" aria-hidden="true" />
+      <Confetti burst={burst} colors={[data.accentColor, "#FFF3D6", "#F2C879", "#E8604C"]} origin={{ x: 0.5, y: 0.35 }} count={110} />
 
       {/* Countdown */}
       <AnimatePresence>
         {!gift ? (
-          <motion.div key="clock" exit={{ opacity: 0, y: -20, transition: { duration: 0.6 } }} className="absolute inset-x-0 top-[12%] z-20 flex flex-col items-center px-6 text-center">
-            <p className="text-[11px] tracking-[0.3em] text-paper/60 uppercase">{data.senderName} → {data.recipientName}</p>
-            <p className="mt-3 text-[clamp(1.3rem,6cqw,1.7rem)] italic" style={{ fontFamily: "var(--gift-font-display)" }}>{zero ? zeroLine : headline}</p>
-            {!zero ? (
-              <div className="mt-6 flex items-end gap-3 tabular-nums" style={{ fontFamily: "var(--gift-font-display)" }}>
-                {[
-                  [parts.days, s.days],
-                  [parts.hours, s.hours],
-                  [parts.minutes, s.minutes],
-                  [parts.seconds, s.seconds],
-                ].map(([v, u], i) => (
-                  <div key={u} className="flex items-baseline">
-                    <span className={cn("leading-none", i === 0 && parts.days === 0 ? "hidden" : "", "text-[clamp(2.6rem,13cqw,4.2rem)]")}>{String(v).padStart(2, "0")}</span>
-                    <span className={cn("ml-1 text-sm text-paper/60", i === 0 && parts.days === 0 ? "hidden" : "")}>{u}</span>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-            {zero && started ? (
-              <motion.p initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", stiffness: 120, damping: 12 }} className="mt-6 text-[clamp(3rem,16cqw,5rem)] leading-none" style={{ fontFamily: "var(--gift-font-display)", color: "var(--gift-accent)" }}>
-                00:00
-              </motion.p>
-            ) : null}
+          <motion.div key="clock" exit={{ opacity: 0, y: -20, transition: { duration: 0.6 } }} className="absolute inset-x-0 top-[13%] z-20 flex flex-col items-center px-[calc(5*var(--k))] text-center">
+            <Banner name={data.recipientName} />
+            <p className="mt-[calc(3.4*var(--k))] text-[calc(2.4*var(--k))] tracking-[0.34em] text-paper/55 uppercase">
+              {data.senderName} → {data.recipientName}
+            </p>
+            <div className="mt-[calc(3.4*var(--k))] w-[calc(84*var(--k))] max-w-full">
+              {!started ? (
+                <button
+                  type="button"
+                  onClick={start}
+                  aria-label={s.tap}
+                  className="block w-full rounded-[calc(4*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/50"
+                >
+                  <MarqueeSign>{signBody}</MarqueeSign>
+                </button>
+              ) : (
+                <MarqueeSign>{signBody}</MarqueeSign>
+              )}
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
 
       {/* Controls */}
       {!started ? (
-        <button type="button" onClick={start} className="absolute inset-x-0 bottom-[max(3rem,calc(env(safe-area-inset-bottom)+2.5rem))] z-30 mx-auto flex h-12 w-fit items-center rounded-full px-7 text-[15px] font-semibold shadow-lg" style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}>
-          {s.tap}
-        </button>
+        <div
+          className="absolute inset-x-0 z-30 flex justify-center"
+          style={{ bottom: "max(calc(7*var(--k)), calc(env(safe-area-inset-bottom) + 3*var(--k)))" }}
+        >
+          <TapPill tone={TONE} reduce={!!reduce}>
+            {s.tap}
+          </TapPill>
+        </div>
       ) : null}
       {started && !zero && mode === "demo" ? (
         <button type="button" onClick={() => setForced(true)} className="absolute inset-x-0 bottom-[max(3rem,calc(env(safe-area-inset-bottom)+2.5rem))] z-30 mx-auto flex h-10 w-fit items-center gap-2 rounded-full bg-black/35 px-4 text-xs text-paper/80 backdrop-blur">

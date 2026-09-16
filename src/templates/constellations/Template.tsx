@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { AnimatePresence, animate, motion, useReducedMotion } from "motion/react";
 import { Compass, X } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
@@ -20,6 +20,8 @@ import { MessageBody } from "../_shared/MessageBody";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { CHART_KEYFRAMES, StarChart } from "./art";
 import type { ConstellationFields } from "./schema";
 import { Starfield, type Link } from "./Starfield";
 import { layoutSky } from "./shapes";
@@ -28,6 +30,32 @@ const SKY: Record<ConstellationFields["sky"], string> = {
   midnight: "radial-gradient(120% 85% at 50% 112%, #1f1d45 0%, #0c0c22 46%, #04040c 100%)",
   aurora: "radial-gradient(120% 90% at 50% 112%, #123f3f 0%, #0a1a30 46%, #03050f 100%)",
   dawn: "radial-gradient(120% 90% at 50% 116%, #5a2f52 0%, #1c1233 46%, #06050f 100%)",
+};
+
+/** The page is the sky itself, so the tone paints nothing: only the light behind the card and the corner haze. */
+const NIGHT: CoverTone = {
+  page: "transparent",
+  glow: ["rgba(96,108,206,.26)", "rgba(148,104,206,.24)"],
+  accent: "#F2C879",
+  dark: true,
+};
+
+/** The milky band: two soft diagonals, one cool and one warm, laid across the whole sky. */
+const MILKY =
+  "linear-gradient(104deg, transparent 33%, rgba(150,170,255,.10) 43%, rgba(226,224,255,.17) 50%, rgba(150,170,255,.09) 58%, transparent 69%), linear-gradient(96deg, transparent 41%, rgba(255,214,186,.07) 50%, transparent 60%)";
+
+const STICKERS: StickerPlacement[] = [
+  { id: "moon", x: 13, y: 14, size: 12, rotate: -8 },
+  { id: "sparkle", x: 87, y: 12, size: 7.5 },
+  { id: "planet", x: 89, y: 62, size: 14.5, rotate: 10 },
+  { id: "star", x: 11, y: 46, size: 9.5, rotate: -12 },
+  { id: "sparkle", x: 15, y: 85, size: 6.5 },
+  { id: "star", x: 86, y: 87, size: 8, rotate: 14 },
+];
+
+const S = {
+  en: { tapStar: "tap a star", chart: "{name}'s sky", stars: "{n} stars", oneStar: "1 star", headline: "our sky" },
+  es: { tapStar: "toca una estrella", chart: "el cielo de {name}", stars: "{n} estrellas", oneStar: "1 estrella", headline: "nuestro cielo" },
 };
 
 type Stage = "intro" | "exploring" | "complete" | "final" | "message";
@@ -39,6 +67,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const size = useContainerSize(rootRef);
   const reduce = useReducedMotion();
   const t = useGiftStrings(data.locale);
+  const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
   const gyro = useGyroParallax(rootRef, { maxTiltDeg: 22 });
 
@@ -237,8 +266,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     <div
       ref={rootRef}
       className="absolute inset-0 overflow-hidden text-paper select-none"
-      style={{ background: SKY[data.fields.sky] ?? SKY.midnight, fontFamily: "var(--gift-font-body)" }}
+      style={{ ...COVER_VARS, background: SKY[data.fields.sky] ?? SKY.midnight, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
+      <style>{CHART_KEYFRAMES}</style>
+      {/* The sky is this template's page, so the cover's wash lays over it instead of replacing it. */}
+      <CoverPage tone={NIGHT} pattern={MILKY} />
       {/* Nebula tint, parallaxed slightly against the stars */}
       <motion.div
         aria-hidden="true"
@@ -277,31 +309,74 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           ))
         : null}
 
-      {/* Intro */}
+      {/* Cover: the star chart, until they start. It sits under the star buttons, so a star tapped
+          through the card still opens its photo. */}
       <AnimatePresence>
         {stage === "intro" ? (
           <motion.div
             key="intro"
-            className="pointer-events-none absolute inset-x-0 top-[9cqh] flex flex-col items-center px-8 text-center"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12, transition: { duration: 0.5 } }}
-            transition={{ type: "spring", stiffness: 90, damping: 16, delay: 0.2 }}
+            className="pointer-events-none absolute inset-0 z-[6] flex flex-col items-center justify-center px-[calc(7*var(--k))] text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.5 } }}
           >
-            <p className="text-[11px] tracking-[0.3em] text-white/55 uppercase">{data.senderName} → {data.recipientName}</p>
-            <h1
-              className="mt-3 text-[clamp(2rem,10cqw,3.2rem)] leading-[1.02] italic"
-              style={{ fontFamily: "var(--gift-font-display)", fontVariationSettings: '"opsz" 72, "SOFT" 40, "WONK" 1' }}
+            <StickerScatter items={STICKERS} reduce={!!reduce} />
+            <motion.p
+              className="text-[calc(2.5*var(--k))] tracking-[0.34em] text-white/55 uppercase"
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.7 }}
+            >
+              {data.senderName} → {data.recipientName}
+            </motion.p>
+            <motion.h1
+              className="mt-[calc(1.6*var(--k))] max-w-[calc(74*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+              style={{ fontFamily: POSTER_FONT }}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, duration: 0.8 }}
             >
               {title}
-            </h1>
+            </motion.h1>
+
+            <motion.div
+              className="relative mt-[calc(4*var(--k))] w-[calc(55*var(--k))]"
+              initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+              animate={{ opacity: 1, y: 0, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+            >
+              <Float reduce={!!reduce}>
+                <button
+                  type="button"
+                  onClick={begin}
+                  aria-label={s.tapStar}
+                  className="pointer-events-auto block w-full rounded-[calc(2.6*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+                >
+                  <StarChart
+                    shape={shape}
+                    count={n}
+                    seed={hashString(data.recipientName)}
+                    name={s.chart.replace("{name}", data.recipientName)}
+                    starsLabel={n === 1 ? s.oneStar : s.stars.replace("{n}", String(n))}
+                  />
+                </button>
+              </Float>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-[calc(1.8*var(--k))] left-1/2 h-[calc(4*var(--k))] w-[70%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-[calc(2.4*var(--k))]"
+              />
+            </motion.div>
+
+            <TapPill tone={NIGHT} reduce={!!reduce} className="mt-[calc(5.5*var(--k))]">
+              {s.tapStar}
+            </TapPill>
           </motion.div>
         ) : null}
       </AnimatePresence>
 
       {/* Hint + progress */}
       <AnimatePresence>
-        {(stage === "intro" || stage === "exploring") && active === null ? (
+        {stage === "exploring" && active === null ? (
           <motion.div
             key="hint"
             className="pointer-events-none absolute inset-x-0 bottom-[max(3.5rem,calc(env(safe-area-inset-bottom)+3rem))] flex flex-col items-center gap-3"

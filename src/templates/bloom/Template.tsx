@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { parseRichText } from "@/lib/gift/rich-text";
 import type { TemplateProps } from "../types";
@@ -14,39 +14,121 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, POSTER_FONT, StickerScatter, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { BLOOM_KEYFRAMES, Pot, StemTag, Windowsill, type PotColors, type SillColors } from "./art";
 import { Flower, type BloomState } from "./Flower";
 import type { BloomFields } from "./schema";
 
-const SKY: Record<BloomFields["sky"], { bg: string; ink: string; tone: "light" | "dark" }> = {
+type Sky = {
+  bg: string;
+  ink: string;
+  tone: "light" | "dark";
+  /** The light in the room, which the sender picks by choosing the sky. */
+  cover: CoverTone;
+  sill: SillColors;
+  pot: PotColors;
+  ribbon: string;
+  ribbonDeep: string;
+  tagPaper: string;
+  tagInk: string;
+  stickers: StickerPlacement[];
+  ambience: { kind: AmbienceKind; colors: string[]; count?: number }[];
+};
+
+const SKY: Record<BloomFields["sky"], Sky> = {
   dawn: {
     bg: "linear-gradient(180deg,#f7e3d4 0%,#f1c9c0 45%,#d9a6a8 100%)",
     ink: "#3a2a2a",
     tone: "light",
+    cover: { page: "#f1c9c0", glow: ["rgba(255,238,202,.85)", "rgba(255,188,166,.5)"], accent: "#B4485C" },
+    sill: { top: "#F4DCC4", face: "#D2A886", edge: "rgba(255,255,255,.55)" },
+    pot: { body: "#C6764F", rim: "#D68A63", shade: "rgba(120,60,40,.34)", soil: "#4A3327" },
+    ribbon: "#CC5A70",
+    ribbonDeep: "#9E3A50",
+    tagPaper: "#FFF7EC",
+    tagInk: "#4A2B33",
+    stickers: [
+      { id: "sparkle", x: 11, y: 17, size: 8 },
+      { id: "butterfly", x: 87, y: 19, size: 14, rotate: 12 },
+      { id: "daisy", x: 8, y: 53, size: 12 },
+      { id: "sparkle", x: 93, y: 49, size: 7 },
+      { id: "heart", x: 12, y: 84, size: 12, rotate: -10 },
+      { id: "bow", x: 90, y: 82, size: 13, rotate: 10 },
+    ],
+    ambience: [
+      { kind: "petals", colors: ["#FBD3DC", "#FFFFFF"], count: 8 },
+      { kind: "dust", colors: ["#FFE7B8", "#FFFFFF"], count: 14 },
+    ],
   },
   dusk: {
     bg: "linear-gradient(180deg,#2b1f3a 0%,#4a2b4f 55%,#7a3f55 100%)",
     ink: "#f8eef0",
     tone: "dark",
+    cover: { page: "#3a2545", glow: ["rgba(255,205,160,.3)", "rgba(120,70,110,.55)"], accent: "#F8EEF0", dark: true },
+    sill: { top: "#5A3E5C", face: "#38253D", edge: "rgba(255,216,190,.35)" },
+    pot: { body: "#4E3A63", rim: "#5F4878", shade: "rgba(12,6,20,.5)", soil: "#241A2E" },
+    ribbon: "#E8A0B4",
+    ribbonDeep: "#B06A83",
+    tagPaper: "#4A3358",
+    tagInk: "#F8EEF0",
+    stickers: [
+      { id: "star", x: 11, y: 16, size: 11, rotate: -10 },
+      { id: "moon", x: 88, y: 18, size: 15 },
+      { id: "sparkle", x: 8, y: 53, size: 9 },
+      { id: "star", x: 93, y: 49, size: 8, rotate: 14 },
+      { id: "heart", x: 12, y: 84, size: 12, rotate: -10 },
+      { id: "sparkle", x: 90, y: 82, size: 10 },
+    ],
+    ambience: [
+      { kind: "petals", colors: ["#E8A0B4", "#F6D3DC"], count: 7 },
+      { kind: "sparkles", colors: ["#FFFFFF", "#FFD9A8"], count: 14 },
+    ],
   },
-  paper: { bg: "linear-gradient(180deg,#faf7f2 0%,#f1ebe1 100%)", ink: "#1A1614", tone: "light" },
+  paper: {
+    bg: "linear-gradient(180deg,#faf7f2 0%,#f1ebe1 100%)",
+    ink: "#1A1614",
+    tone: "light",
+    cover: { page: "#f1ebe1", glow: ["rgba(255,252,240,.95)", "rgba(214,200,178,.45)"], accent: "#7A6344" },
+    sill: { top: "#F7F2E8", face: "#DBD1C0", edge: "rgba(255,255,255,.7)" },
+    pot: { body: "#E8E0D2", rim: "#F3EDE3", shade: "rgba(110,95,75,.3)", soil: "#5A4A3A" },
+    ribbon: "#C98B76",
+    ribbonDeep: "#9C6552",
+    tagPaper: "#FFFDF6",
+    tagInk: "#3B2A22",
+    stickers: [
+      { id: "sparkle", x: 11, y: 17, size: 8 },
+      { id: "butterfly", x: 87, y: 19, size: 14, rotate: 12 },
+      { id: "daisy", x: 8, y: 53, size: 12 },
+      { id: "sparkle", x: 93, y: 49, size: 7 },
+      { id: "tulip", x: 12, y: 83, size: 13, rotate: -10 },
+      { id: "leaf", x: 90, y: 82, size: 12, rotate: 16 },
+    ],
+    ambience: [
+      { kind: "petals", colors: ["#FFFFFF", "#F0E2CC"], count: 7 },
+      { kind: "dust", colors: ["#FFF3D8", "#FFFFFF"], count: 12 },
+    ],
+  },
 };
 
 const S = {
   en: {
-    hold: "Hold to bloom",
-    holding: "Keep holding…",
+    hold: "hold to bloom",
+    holding: "keep holding…",
     open: "It's open.",
     read: "Read the note",
-    tap: "Tap to bloom",
+    tap: "tap to bloom",
     photos: "Tap a photo",
+    for: "for",
   },
   es: {
-    hold: "Mantén pulsado para que florezca",
-    holding: "Sigue así…",
+    hold: "mantén pulsado",
+    holding: "sigue así…",
     open: "Ya está abierta.",
     read: "Leer la nota",
-    tap: "Toca para que florezca",
+    tap: "toca para florecer",
     photos: "Toca una foto",
+    for: "para",
   },
 };
 
@@ -133,9 +215,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   return (
     <div
       className="absolute inset-0 overflow-hidden select-none"
-      style={{ background: sky.bg, color: sky.ink, fontFamily: "var(--gift-font-body)" }}
+      style={{ ...COVER_VARS, backgroundColor: sky.cover.page, color: sky.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(60%_45%_at_50%_30%,rgba(255,255,255,0.35),transparent)]" />
+      <style>{BLOOM_KEYFRAMES}</style>
+      <CoverPage tone={sky.cover} pattern={sky.bg} />
       {webgl ? (
         <div
           className="absolute inset-0 touch-none"
@@ -159,16 +242,42 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         </div>
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 top-[max(1.5rem,calc(env(safe-area-inset-top)+1rem))] px-6 text-center">
-        <p className="text-[11px] tracking-[0.3em] uppercase opacity-60">
+      {/* Petals in the light, then the stickers, then the ledge the pot is standing on. */}
+      <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+        <Ambience layers={sky.ambience} opacity={0.85} />
+      </div>
+      <StickerScatter items={sky.stickers} reduce={!!reduce} className="z-[3]" />
+      <div className="pointer-events-none absolute inset-0 z-[4]" aria-hidden="true">
+        <Windowsill colors={sky.sill} />
+        <Pot colors={sky.pot} />
+        <StemTag
+          name={data.recipientName}
+          forLabel={s.for}
+          ribbon={sky.ribbon}
+          ribbonDeep={sky.ribbonDeep}
+          paper={sky.tagPaper}
+          ink={sky.tagInk}
+        />
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 z-[5] px-[calc(6*var(--k))] text-center" style={{ top: "max(calc(5*var(--k)), calc(env(safe-area-inset-top) + 2*var(--k)))" }}>
+        <motion.p
+          className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 0.55, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+        >
           {data.senderName} → {data.recipientName}
-        </p>
-        <p
-          className="mt-2 text-[clamp(1.4rem,6.5cqw,1.9rem)] italic"
-          style={{ fontFamily: "var(--gift-font-display)" }}
+        </motion.p>
+        <motion.h1
+          className="mx-auto mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+          style={{ fontFamily: POSTER_FONT }}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.8 }}
         >
           {data.title || data.recipientName}
-        </p>
+        </motion.h1>
       </div>
 
       <AnimatePresence>
@@ -205,26 +314,29 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           : null}
       </AnimatePresence>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] z-30 flex flex-col items-center gap-3 px-8 text-center">
+      <div
+        className="pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-[calc(2.4*var(--k))] px-[calc(6*var(--k))] text-center"
+        style={{ bottom: `max(calc(10*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))` }}
+      >
         {!bloomed ? (
-          <>
-            <motion.div
-              animate={holding ? { scale: 1.06 } : { scale: [1, 1.03, 1] }}
-              transition={holding ? { duration: 0.2 } : { duration: 1.8, repeat: Infinity }}
-              className="pointer-events-auto flex h-14 touch-none items-center gap-3 rounded-full px-7 text-[15px] font-semibold shadow-lg"
-              style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
-              onPointerDown={down}
-              onPointerUp={up}
-              data-hold
-            >
-              <span className="relative grid size-6 place-items-center">
-                <span className="absolute inset-0 rounded-full border-2 border-current opacity-40" />
-                <span className="size-2.5 rounded-full bg-current" />
-              </span>
-              {holding ? s.holding : reduce ? s.tap : s.hold}
-            </motion.div>
-            <ProgressBar stateRef={state} active={started} />
-          </>
+          <motion.div
+            role="button"
+            aria-label={reduce ? s.tap : s.hold}
+            animate={holding ? { scale: 1.06 } : { scale: reduce ? 1 : [1, 1.05, 1] }}
+            transition={holding ? { duration: 0.2 } : { duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+            className="pointer-events-auto flex touch-none items-center gap-[calc(2.2*var(--k))] rounded-full py-[calc(1.7*var(--k))] pr-[calc(4.5*var(--k))] pl-[calc(2*var(--k))] text-[calc(3.1*var(--k))] leading-none font-semibold tracking-[0.22em] whitespace-nowrap uppercase backdrop-blur-sm"
+            style={{
+              background: sky.cover.dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.8)",
+              color: sky.cover.dark ? "#FFF8EE" : sky.cover.accent,
+              boxShadow: sky.cover.dark ? "inset 0 0 0 1px rgba(255,255,255,.2)" : "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,35,25,.14)",
+            }}
+            onPointerDown={down}
+            onPointerUp={up}
+            data-hold
+          >
+            <HoldRing stateRef={state} active={started} />
+            {holding ? s.holding : reduce ? s.tap : s.hold}
+          </motion.div>
         ) : !note ? (
           <>
             <p
@@ -324,8 +436,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
+const RING = 2 * Math.PI * 15.5;
+
 /** Polls the mutable bloom progress on a timer so React never re-renders per frame. */
-function ProgressBar({ stateRef, active }: { stateRef: RefObject<BloomState>; active: boolean }) {
+function HoldRing({ stateRef, active }: { stateRef: RefObject<BloomState>; active: boolean }) {
   const [pct, setPct] = useState(0);
   useEffect(() => {
     if (!active) return;
@@ -333,18 +447,30 @@ function ProgressBar({ stateRef, active }: { stateRef: RefObject<BloomState>; ac
     return () => clearInterval(id);
   }, [stateRef, active]);
   return (
-    <div
-      className="h-1 w-40 overflow-hidden rounded-full bg-black/10"
+    <span
+      className="relative grid size-[calc(6.4*var(--k))] shrink-0 place-items-center"
       role="progressbar"
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
     >
-      <div
-        className="h-full rounded-full transition-[width] duration-150"
-        style={{ width: `${pct}%`, background: "var(--gift-accent-deep)" }}
-      />
-    </div>
+      <svg viewBox="0 0 36 36" className="absolute inset-0 -rotate-90" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" strokeWidth="3" opacity=".25" />
+        <circle
+          cx="18"
+          cy="18"
+          r="15.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={RING}
+          strokeDashoffset={RING * (1 - pct / 100)}
+          style={{ transition: "stroke-dashoffset 150ms linear" }}
+        />
+      </svg>
+      <span className="size-[calc(1.9*var(--k))] rounded-full" style={{ background: "currentColor" }} />
+    </span>
   );
 }
 

@@ -1,9 +1,8 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
-import { ChevronDown } from "lucide-react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
@@ -18,11 +17,14 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { GiftVideo } from "../_shared/GiftVideo";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { Garland, TIMELINE_KEYFRAMES, TitleCard } from "./art";
 import type { TimelineFields } from "./schema";
 
 const S = {
-  en: { begin: "Scroll to begin", ending: "…and it's only the beginning.", chapter: "Chapter" },
-  es: { begin: "Desliza para empezar", ending: "…y esto solo es el principio.", chapter: "Capítulo" },
+  en: { begin: "scroll to begin", for: "for", ending: "…and it's only the beginning.", chapter: "Chapter" },
+  es: { begin: "desliza para empezar", for: "para", ending: "…y esto solo es el principio.", chapter: "Capítulo" },
 };
 
 const ROAD: Record<TimelineFields["road"], { stroke: string; width: number; dash?: string; bg: string; ink: string; paper: string }> = {
@@ -30,6 +32,116 @@ const ROAD: Record<TimelineFields["road"], { stroke: string; width: number; dash
   chalk: { stroke: "rgba(255,255,255,0.85)", width: 5, dash: "14 12", bg: "#1f2a2f", ink: "#f4efe7", paper: "#28353b" },
   ink: { stroke: "var(--gift-accent)", width: 4, dash: undefined, bg: "#f6f1e8", ink: "#1A1614", paper: "#ffffff" },
 };
+
+type Look = {
+  tone: CoverTone;
+  pattern: string;
+  /** The title card, the polaroid frames and the tag pinned to the card. */
+  card: string;
+  cardInk: string;
+  rule: string;
+  polaroid: string;
+  tagPaper: string;
+  tagInk: string;
+  /** The garland: its string, the clothespins and their springs. */
+  line: string;
+  peg: string;
+  metal: string;
+  pin: string;
+  stickers: StickerPlacement[];
+  ambience: { kind: AmbienceKind; colors: string[]; count?: number }[];
+};
+
+/**
+ * One page per road style, each keeping that style's own paper colour so the cover and the
+ * road below it are the same sheet, only lit.
+ */
+const LOOKS: Record<TimelineFields["road"], Look> = {
+  ink: {
+    tone: { page: "#f6f1e8", glow: ["rgba(255,248,228,.95)", "rgba(205,180,146,.45)"], accent: "#2E4A62" },
+    pattern: "repeating-linear-gradient(0deg, rgba(120,100,70,.07) 0 calc(.25*var(--k)), transparent calc(.25*var(--k)) calc(7*var(--k)))",
+    card: "#FFFCF4",
+    cardInk: "#22201C",
+    rule: "rgba(60,50,35,.28)",
+    polaroid: "#FFFDF8",
+    tagPaper: "#FFF7EC",
+    tagInk: "#3B2A22",
+    line: "#9C7248",
+    peg: "#D9B88A",
+    metal: "#C9CBC6",
+    pin: "#B4432F",
+    stickers: [
+      { id: "sparkle", x: 12, y: 13, size: 8 },
+      { id: "butterfly", x: 86, y: 12, size: 15, rotate: 12 },
+      { id: "daisy", x: 7, y: 58, size: 12 },
+      { id: "sparkle", x: 93, y: 55, size: 7 },
+      { id: "heart", x: 14, y: 87, size: 12, rotate: -10 },
+      { id: "leaf", x: 86, y: 88, size: 13, rotate: 18 },
+    ],
+    ambience: [
+      { kind: "dust", colors: ["#FFE7B8", "#FFFFFF"], count: 14 },
+      { kind: "sparkles", colors: ["#FFFFFF", "#F0D6A4"], count: 10 },
+    ],
+  },
+  asphalt: {
+    tone: { page: "#e9e4dc", glow: ["rgba(255,252,244,.9)", "rgba(150,142,128,.4)"], accent: "#33333A" },
+    pattern: "radial-gradient(rgba(120,115,105,.16) calc(.55*var(--k)), transparent calc(.7*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))",
+    card: "#FBF8F2",
+    cardInk: "#1A1614",
+    rule: "rgba(40,40,45,.3)",
+    polaroid: "#FFFFFF",
+    tagPaper: "#F1EADC",
+    tagInk: "#2B2926",
+    line: "#6E6A62",
+    peg: "#C9C3B6",
+    metal: "#AFB2AE",
+    pin: "#B0392E",
+    stickers: [
+      { id: "sparkle", x: 12, y: 13, size: 8 },
+      { id: "cloud", x: 86, y: 12, size: 18 },
+      { id: "squiggle", x: 7, y: 57, size: 10 },
+      { id: "sparkle", x: 93, y: 55, size: 7 },
+      { id: "heart", x: 14, y: 87, size: 12, rotate: -10 },
+      { id: "star", x: 86, y: 88, size: 12, rotate: 14 },
+    ],
+    ambience: [{ kind: "dust", colors: ["#FFF4DC", "#FFFFFF"], count: 14 }],
+  },
+  chalk: {
+    tone: { page: "#1f2a2f", glow: ["rgba(126,170,180,.34)", "rgba(40,70,82,.6)"], accent: "#F4EFE7", dark: true },
+    pattern: "repeating-linear-gradient(115deg, rgba(255,255,255,.035) 0 calc(1.2*var(--k)), transparent calc(1.2*var(--k)) calc(5*var(--k)))",
+    card: "#28353B",
+    cardInk: "#F4EFE7",
+    rule: "rgba(244,239,231,.45)",
+    polaroid: "#F7F3EA",
+    tagPaper: "#38474E",
+    tagInk: "#F4EFE7",
+    line: "#C9D6D8",
+    peg: "#8FA3A8",
+    metal: "#6E7F85",
+    pin: "#E0A15C",
+    stickers: [
+      { id: "star", x: 12, y: 13, size: 11, rotate: -10 },
+      { id: "moon", x: 87, y: 12, size: 16 },
+      { id: "sparkle", x: 7, y: 57, size: 8 },
+      { id: "star", x: 93, y: 54, size: 8, rotate: 14 },
+      { id: "cloud", x: 15, y: 88, size: 20 },
+      { id: "sparkle", x: 87, y: 88, size: 9 },
+    ],
+    ambience: [
+      { kind: "sparkles", colors: ["#FFFFFF", "#CFE3E6"], count: 14 },
+      { kind: "dust", colors: ["#DCEAEC"], count: 10 },
+    ],
+  },
+};
+
+/** The years the sender already typed into the milestone dates, as "2022 → 2025". */
+function yearRange(dates: string[]): string | null {
+  const years = dates.flatMap((d) => d.match(/\b(?:19|20)\d{2}\b/g) ?? []).map(Number);
+  if (!years.length) return null;
+  const lo = Math.min(...years);
+  const hi = Math.max(...years);
+  return lo === hi ? String(lo) : `${lo} → ${hi}`;
+}
 
 /** Winding road through N milestones, in real pixels so the stroke stays uniform. */
 function roadPath(n: number, w: number, h: number): string {
@@ -56,6 +168,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const photos = data.photos;
   const n = photos.length;
   const road = ROAD[data.fields.road] ?? ROAD.ink;
+  const look = LOOKS[data.fields.road] ?? LOOKS.ink;
+  const dates = useMemo(() => data.fields.dates ?? [], [data.fields.dates]);
+  const years = useMemo(() => yearRange(dates), [dates]);
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const path = useMemo(() => roadPath(n, size.width || 390, size.height || 844), [n, size.width, size.height]);
 
@@ -79,21 +194,74 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ background: road.bg, color: road.ink, fontFamily: "var(--gift-font-body)" }}>
+    <div
+      ref={rootRef}
+      className="absolute inset-0 overflow-hidden select-none"
+      style={{ ...COVER_VARS, background: road.bg, color: road.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
+    >
+      <style>{TIMELINE_KEYFRAMES}</style>
       <div className="grain-overlay" />
       <div ref={scroller} className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none">
-        {/* Cover */}
-        <section className="relative flex h-full flex-col items-center justify-center px-8 text-center">
-          <p className="text-[11px] tracking-[0.3em] uppercase opacity-55">{data.senderName} → {data.recipientName}</p>
-          <h1 className="mt-4 text-[clamp(2.4rem,11cqw,3.6rem)] leading-[0.98] italic" style={{ fontFamily: "var(--gift-font-display)" }}>
-            {data.title || data.recipientName}
-          </h1>
-          <button type="button" onClick={begin} className="mt-12 flex flex-col items-center gap-2 text-[12px] tracking-[0.22em] uppercase opacity-70">
-            {s.begin}
-            <motion.span animate={reduce ? undefined : { y: [0, 6, 0] }} transition={{ duration: 1.4, repeat: Infinity }}>
-              <ChevronDown className="size-5" />
-            </motion.span>
-          </button>
+        {/* Cover: a garland of pegged polaroids over the title card, on the road's own paper. */}
+        <section className="relative flex h-full flex-col items-center justify-center overflow-hidden text-center">
+          <CoverPage tone={look.tone} pattern={look.pattern} />
+          <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+            <Ambience layers={look.ambience} opacity={0.85} />
+          </div>
+          <StickerScatter items={look.stickers} reduce={!!reduce} className="z-[3]" />
+
+          <div className="relative z-10 flex w-[calc(112*var(--k))] max-w-full flex-col items-center">
+            <motion.div
+              className="w-full"
+              initial={reduce ? false : { opacity: 0, y: -18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.1 }}
+            >
+              <Garland photos={photos} polaroid={look.polaroid} line={look.line} peg={look.peg} metal={look.metal} />
+            </motion.div>
+
+            <motion.p
+              className="mt-[calc(5*var(--k))] text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 0.55, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
+              {data.senderName} → {data.recipientName}
+            </motion.p>
+
+            <motion.div
+              className="relative mt-[calc(2.4*var(--k))] w-[calc(72*var(--k))] max-w-full"
+              initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+              animate={{ opacity: 1, y: 0, rotate: -1.2 }}
+              transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.24 }}
+            >
+              <Float reduce={!!reduce} amount={0.8} duration={6}>
+                <div className="relative">
+                  <TitleCard
+                    title={data.title || data.recipientName}
+                    years={years}
+                    name={data.recipientName}
+                    forLabel={s.for}
+                    paper={look.card}
+                    ink={look.cardInk}
+                    rule={look.rule}
+                    tagPaper={look.tagPaper}
+                    tagInk={look.tagInk}
+                    pin={look.pin}
+                  />
+                  <button type="button" onClick={begin} aria-label={s.begin} className="absolute inset-0 z-[2] outline-none focus-visible:ring-4 focus-visible:ring-white/70" />
+                </div>
+              </Float>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-[calc(2.4*var(--k))] left-1/2 h-[calc(4*var(--k))] w-[72%] -translate-x-1/2 rounded-[50%] bg-black/20 blur-[calc(2.2*var(--k))]"
+              />
+            </motion.div>
+
+            <TapPill tone={look.tone} reduce={!!reduce} className="mt-[calc(19*var(--k))]">
+              {s.begin}
+            </TapPill>
+          </div>
         </section>
 
         {/* Road + milestones */}

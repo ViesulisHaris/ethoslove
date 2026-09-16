@@ -146,8 +146,9 @@ export function GiftBox({ p, opening }: { p: Palette; opening: boolean }) {
       >
         <rect x={-54} y={-26} width={108} height={22} rx={6} fill={p.boxLid} />
         <rect x={-10} y={-26} width={20} height={22} fill={p.ribbon} opacity={0.9} />
+        {/* The bow the lid is tied with: big enough to read as the thing you want to pull. */}
         <g transform="translate(0 -30)">
-          <Bow color={p.ribbon} deep={p.bow} size={44} />
+          <Bow color={p.ribbon} deep={p.bowDeep} size={52} />
         </g>
       </motion.g>
       <rect x={-46} y={-6} width={92} height={54} rx={7} fill={p.box} />

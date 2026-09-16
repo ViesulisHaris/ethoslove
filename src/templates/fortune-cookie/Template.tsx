@@ -15,6 +15,9 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { Blossom, Coin, Lantern, TRAY_KEYFRAMES, TakeoutBox, Tray, type TrayColors } from "./art";
 import type { FortuneFields } from "./schema";
 
 const TABLE: Record<
@@ -41,9 +44,62 @@ const TABLE: Record<
   },
 };
 
+/** The room the tray is served in: one per table, so the whole page follows the sender's choice. */
+type Look = {
+  tone: CoverTone;
+  pattern: string;
+  tray: TrayColors;
+  lantern: { paper: string; deep: string; gold: string };
+  blossom: { petal: string; centre: string; branch: string };
+  /** The brushed name on the takeout box. */
+  boxInk: string;
+};
+
+const LOOKS: Record<FortuneFields["table"], Look> = {
+  red: {
+    tone: { page: "#7E1A1A", glow: ["rgba(255,196,120,.34)", "rgba(198,48,48,.5)"], accent: "#8C2F2F", dark: true },
+    pattern: "radial-gradient(rgba(240,208,130,.16) calc(.35*var(--k)), transparent calc(.5*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))",
+    tray: { lacquer: "#3E0D0D", deep: "#280707", gold: "#D9A441" },
+    lantern: { paper: "#E8493C", deep: "#8E1F1F", gold: "#E9BE63" },
+    blossom: { petal: "#F7C6CE", centre: "#E9BE63", branch: "#5E2420" },
+    boxInk: "#7E1A1A",
+  },
+  jade: {
+    tone: { page: "#215043", glow: ["rgba(255,236,180,.28)", "rgba(28,92,74,.55)"], accent: "#1E4A3E", dark: true },
+    pattern: "radial-gradient(rgba(240,208,130,.14) calc(.35*var(--k)), transparent calc(.5*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))",
+    tray: { lacquer: "#123329", deep: "#0B231C", gold: "#D9A441" },
+    lantern: { paper: "#E8493C", deep: "#8E1F1F", gold: "#E9BE63" },
+    blossom: { petal: "#F3D9E2", centre: "#E9BE63", branch: "#20352C" },
+    boxInk: "#1D4A3E",
+  },
+  linen: {
+    tone: { page: "#E9DCC6", glow: ["rgba(255,250,232,.95)", "rgba(206,176,128,.5)"], accent: "#8A4A2A" },
+    pattern: "radial-gradient(rgba(140,100,60,.1) calc(.35*var(--k)), transparent calc(.5*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))",
+    tray: { lacquer: "#3A2420", deep: "#241512", gold: "#C79A3E" },
+    lantern: { paper: "#E8493C", deep: "#9C2A22", gold: "#C79A3E" },
+    blossom: { petal: "#F2BFC8", centre: "#C79A3E", branch: "#6B4A32" },
+    boxInk: "#8A3A24",
+  },
+};
+
+const STICKERS: StickerPlacement[] = [
+  { id: "sparkle", x: 31, y: 8, size: 6.5 },
+  { id: "sparkle", x: 69, y: 10, size: 5.5 },
+  { id: "heart", x: 7, y: 42, size: 10, rotate: -12 },
+  { id: "cherries", x: 93, y: 38, size: 11, rotate: 12 },
+  { id: "daisy", x: 92, y: 72, size: 9 },
+];
+
+const AMBIENCE: { kind: AmbienceKind; colors: string[]; count?: number }[] = [
+  { kind: "dust", colors: ["#FFD9A0", "#FFFFFF"], count: 14 },
+  { kind: "sparkles", colors: ["#FFE9B8", "#FFFFFF"], count: 12 },
+];
+
 const S = {
   en: {
-    tap: "Tap a cookie",
+    pick: "pick a cookie",
+    for: "for",
+    headline: "your fortune",
     crack: "Crack it open",
     lucky: "Lucky numbers",
     left: "{n} left",
@@ -53,7 +109,9 @@ const S = {
     learn: "Learn Chinese: 爱 · love",
   },
   es: {
-    tap: "Toca una galleta",
+    pick: "elige una galleta",
+    for: "para",
+    headline: "tu fortuna",
     crack: "Ábrela",
     lucky: "Números de la suerte",
     left: "Quedan {n}",
@@ -76,6 +134,7 @@ export function Template({
   const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
   const table = TABLE[data.fields.table] ?? TABLE.red;
+  const look = LOOKS[data.fields.table] ?? LOOKS.red;
   const fortunes = useMemo(
     () => (data.fields.fortunes.length ? data.fields.fortunes : ["…"]),
     [data.fields.fortunes],
@@ -125,93 +184,121 @@ export function Template({
   return (
     <div
       className="absolute inset-0 overflow-hidden select-none"
-      style={{ background: table.bg, color: table.ink, fontFamily: "var(--gift-font-body)" }}
+      style={{ ...COVER_VARS, background: table.bg, color: table.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
-      <div className="grain-overlay opacity-[0.08]" />
-      {/* Header */}
-      <div className="absolute inset-x-0 top-[max(1.25rem,calc(env(safe-area-inset-top)+0.75rem))] z-20 px-6 text-center">
-        <p className="text-[11px] tracking-[0.3em] uppercase opacity-60">
-          {data.senderName} → {data.recipientName}
-        </p>
-        <p
-          className="mt-2 text-[clamp(1.4rem,6.5cqw,1.9rem)] italic"
-          style={{ fontFamily: "var(--gift-font-display)" }}
+      <style>{TRAY_KEYFRAMES}</style>
+      <CoverPage tone={look.tone} pattern={look.pattern} />
+      <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+        <Ambience layers={AMBIENCE} opacity={0.85} />
+      </div>
+      <StickerScatter items={STICKERS} reduce={!!reduce} className="z-[3]" />
+      <Blossom {...look.blossom} className="top-[-2%] left-[-7%] z-[3] w-[calc(34*var(--k))] rotate-[8deg]" />
+      <Blossom {...look.blossom} className="right-[-8%] bottom-[-2%] z-[3] w-[calc(36*var(--k))] -scale-x-100 rotate-[6deg]" />
+      {/* Hung from the very top of the frame, so the cord reads as coming from a ceiling we can't see. */}
+      <Lantern {...look.lantern} className="top-0 left-[9%] z-[3] w-[calc(15*var(--k))]" />
+      <Lantern {...look.lantern} className="fc-sway-b top-0 right-[16%] z-[3] w-[calc(12.5*var(--k))]" />
+
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-[calc(7*var(--k))] text-center">
+        <motion.p
+          className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-60"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 0.6, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
         >
-          {data.title || data.recipientName}
-        </p>
-      </div>
+          {data.senderName} → {data.recipientName}
+        </motion.p>
+        <motion.h1
+          className="mt-[calc(1.6*var(--k))] max-w-[calc(72*var(--k))] text-[calc(7.6*var(--k))] leading-[1.06] text-balance italic [overflow-wrap:anywhere]"
+          style={{ fontFamily: POSTER_FONT }}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.8 }}
+        >
+          {data.title?.trim() || s.headline}
+        </motion.h1>
 
-      {/* Plate */}
-      <div
-        className="absolute top-[19%] left-1/2 w-[min(90cqw,440px)] -translate-x-1/2"
-        style={{ aspectRatio: "1 / 1.05" }}
-      >
-        <div
-          className="absolute inset-[3%] rounded-[50%] shadow-[0_30px_50px_-20px_rgba(0,0,0,0.6),inset_0_0_0_10px_rgba(0,0,0,0.05)]"
-          style={{ background: table.plate }}
-        />
-        <div
-          className="absolute inset-[9%] rounded-[50%] border-2 border-dashed opacity-25"
-          style={{ borderColor: "var(--gift-accent)" }}
-        />
-        {layout.map((pos, i) => (
-          <Cookie
-            key={i}
-            index={i}
-            pos={pos}
-            opened={opened[i]}
-            real={i === total - 1}
-            onCrack={() => crack(i)}
-            reduce={!!reduce}
-            label={s.crack}
+        {/* The tray, with every cookie exactly where the layout put it. */}
+        <motion.div
+          className="relative mt-[calc(3.8*var(--k))] w-[calc(68*var(--k))]"
+          initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+        >
+          <Float reduce={!!reduce} amount={0.7}>
+            <Tray colors={look.tray}>
+              {layout.map((pos, i) => (
+                <Cookie
+                  key={i}
+                  index={i}
+                  pos={pos}
+                  opened={opened[i]}
+                  real={i === total - 1}
+                  onCrack={() => crack(i)}
+                  reduce={!!reduce}
+                  label={s.crack}
+                />
+              ))}
+            </Tray>
+          </Float>
+          <TakeoutBox name={data.recipientName} forLabel={s.for} ink={look.boxInk} className="top-[78%] left-[-11%] z-[4] w-[31%]" />
+          <Coin gold={look.tray.gold} className="right-[-9%] bottom-[7%] z-[4] w-[calc(8*var(--k))]" />
+          <Coin gold={look.tray.gold} className="right-[-14%] bottom-[15%] z-[4] w-[calc(6*var(--k))] -rotate-12" />
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-[calc(2*var(--k))] left-1/2 h-[calc(4.5*var(--k))] w-[80%] -translate-x-1/2 rounded-[50%] bg-black/45 blur-[calc(2.6*var(--k))]"
           />
-        ))}
-      </div>
+        </motion.div>
 
-      {/* Footer hint */}
-      <AnimatePresence>
-        {active === null ? (
-          <motion.div
-            key="hint"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-x-0 bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] z-20 flex flex-col items-center gap-2 px-8 text-center"
-          >
-            {remaining > 1 ? (
-              <>
-                <motion.p
-                  animate={reduce ? undefined : { y: [0, -4, 0] }}
-                  transition={{ duration: 1.6, repeat: Infinity }}
-                  className="text-[13px] tracking-[0.22em] uppercase opacity-80"
+        <div className="mt-[calc(4.6*var(--k))] flex min-h-[calc(12*var(--k))] flex-col items-center gap-[calc(1.8*var(--k))]">
+          <AnimatePresence mode="wait">
+            {active === null ? (
+              remaining > 1 ? (
+                <motion.div
+                  key="hint"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-center gap-[calc(1.6*var(--k))]"
                 >
-                  {s.tap}
+                  <TapPill tone={look.tone} reduce={!!reduce}>
+                    {s.pick}
+                  </TapPill>
+                  <p className="text-[calc(2.6*var(--k))] tracking-[0.2em] uppercase opacity-55">
+                    {s.left.replace("{n}", String(remaining))}
+                  </p>
+                </motion.div>
+              ) : remaining === 1 ? (
+                <motion.p
+                  key="last"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="max-w-[calc(66*var(--k))] text-[calc(4.4*var(--k))] text-balance italic"
+                  style={{ fontFamily: POSTER_FONT }}
+                >
+                  {s.last}
                 </motion.p>
-                <p className="text-xs opacity-60">{s.left.replace("{n}", String(remaining))}</p>
-              </>
-            ) : remaining === 1 ? (
-              <p
-                className="text-[clamp(1.1rem,5cqw,1.3rem)] italic"
-                style={{ fontFamily: "var(--gift-font-display)" }}
-              >
-                {s.last}
-              </p>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setFinale(true);
-                  onEvent?.({ type: "progress", pct: 85 });
-                }}
-                className="h-12 rounded-full px-7 text-[15px] font-semibold shadow-lg"
-                style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
-              >
-                {s.open}
-              </button>
-            )}
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+              ) : (
+                <motion.button
+                  key="open"
+                  type="button"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => {
+                    setFinale(true);
+                    onEvent?.({ type: "progress", pct: 85 });
+                  }}
+                  className="h-[calc(11*var(--k))] rounded-full px-[calc(7*var(--k))] text-[calc(3.6*var(--k))] font-semibold shadow-lg"
+                  style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
+                >
+                  {s.open}
+                </motion.button>
+              )
+            ) : null}
+          </AnimatePresence>
+        </div>
+      </div>
 
       {/* Slip */}
       <AnimatePresence>

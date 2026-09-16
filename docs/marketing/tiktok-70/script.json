@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 01:12", "messages": [
+      { "from": "them", "text": "im fine." },
+      { "from": "me", "text": "with a full stop" },
+      { "from": "them", "text": "its punctuation" },
+      { "from": "me", "text": "its a warning" },
+      { "from": "them", "text": "its 1am. go to sleep" },
+      { "from": "me", "text": "its our 6 months in 8 hours" }
+    ] },
+    { "type": "chat", "timestamp": "Today 04:26", "messages": [
+      { "from": "me", "text": "im outside. dont come down, just open this" },
+      { "from": "me", "link": { "title": "i wrote this in the car park", "domain": "tryethos.io", "image": "og", "name": "Maja" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 04:39", "messages": [
+      { "from": "them", "text": "u drove 3 hours" },
+      { "from": "them", "text": "for a full stop" },
+      { "from": "me", "text": "for u" },
+      { "from": "them", "text": "its 4am. come up" },
+      { "from": "me", "text": "i brought the blanket", "tapback": "heart" }
+    ] }
+  ]
+}

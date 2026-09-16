@@ -19,6 +19,7 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
+import { COVER_VARS, CoverPage, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import { Banner, Bow, GiftBox, PALETTES, Plushie, type Palette } from "./art";
 import type { KawaiiFields } from "./schema";
 
@@ -26,6 +27,18 @@ const S = {
   en: { greeting: "i have something for you", tap: "tap the box", forName: "for {name}", note: "a note from {name}", photos: "look at us" },
   es: { greeting: "tengo algo para ti", tap: "toca la caja", forName: "para {name}", note: "una nota de {name}", photos: "míranos" },
 };
+
+/** The theme's own colours, lit: the page keeps its gingham and gains a soft light and grain. */
+const toneOf = (p: Palette): CoverTone => ({ page: p.bg, glow: ["rgba(255,255,255,.8)", `${p.bow}4d`], accent: p.bowDeep });
+
+const STICKERS: StickerPlacement[] = [
+  { id: "star", x: 9, y: 14, size: 10, rotate: -12 },
+  { id: "heart", x: 91, y: 17, size: 11, rotate: 12 },
+  { id: "sparkle", x: 7, y: 44, size: 8 },
+  { id: "candy", x: 93, y: 47, size: 14, rotate: 10 },
+  { id: "balloons", x: 10, y: 74, size: 15, rotate: -8 },
+  { id: "bow", x: 90, y: 72, size: 13, rotate: 10 },
+];
 
 type Stage = "waiting" | "opening" | "book";
 
@@ -63,13 +76,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     setRun((r) => r + 1);
   };
 
-  const gingham: CSSProperties = {
-    backgroundColor: p.bg,
-    backgroundImage: `repeating-linear-gradient(0deg, ${p.check}8c 0 calc(6 * var(--u)), transparent calc(6 * var(--u)) calc(12 * var(--u))), repeating-linear-gradient(90deg, ${p.check}8c 0 calc(6 * var(--u)), transparent calc(6 * var(--u)) calc(12 * var(--u)))`,
-  };
+  const tone = toneOf(p);
+  const gingham = `repeating-linear-gradient(0deg, ${p.check}8c 0 calc(6 * var(--k)), transparent calc(6 * var(--k)) calc(12 * var(--k))), repeating-linear-gradient(90deg, ${p.check}8c 0 calc(6 * var(--k)), transparent calc(6 * var(--k)) calc(12 * var(--k)))`;
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...gingham, color: p.ink, fontFamily: "var(--gift-font-body)", ["--k" as string]: "min(var(--u), 0.5cqh)" } as CSSProperties}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, backgroundColor: p.bg, color: p.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}>
+      <CoverPage tone={tone} pattern={gingham} />
+      <StickerScatter items={STICKERS} reduce={!!reduce} className="z-[3]" />
       {/* Hearts and sparkles all over, the whole time. */}
       <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
         <Ambience layers={[{ kind: "hearts", colors: [p.bow, p.inner, "#FFFFFF"], count: stage === "book" ? 8 : 14 }, { kind: "sparkles", colors: ["#FFFFFF", p.bow], count: 18 }]} opacity={0.9} />
@@ -91,7 +104,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       <AnimatePresence mode="wait">
         {stage !== "book" ? (
-          <Waiting key={`wait-${run}`} p={p} data={data} s={s} greeting={greeting} banner={banner} opening={stage === "opening"} onOpen={openBox} reduce={!!reduce} />
+          <Waiting key={`wait-${run}`} p={p} tone={tone} data={data} s={s} greeting={greeting} banner={banner} opening={stage === "opening"} onOpen={openBox} reduce={!!reduce} />
         ) : (
           <Book key={`book-${run}`} p={p} data={data} mode={mode} blocks={blocks} s={s} t={t} reduce={!!reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={mode === "preview" ? undefined : replay} />
         )}
@@ -103,7 +116,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
-function Waiting({ p, data, s, greeting, banner, opening, onOpen, reduce }: { p: Palette; data: TemplateProps<KawaiiFields>["data"]; s: (typeof S)["en"]; greeting: string; banner: string; opening: boolean; onOpen: () => void; reduce: boolean }) {
+function Waiting({ p, tone, data, s, greeting, banner, opening, onOpen, reduce }: { p: Palette; tone: CoverTone; data: TemplateProps<KawaiiFields>["data"]; s: (typeof S)["en"]; greeting: string; banner: string; opening: boolean; onOpen: () => void; reduce: boolean }) {
   return (
     <motion.div className="absolute inset-0 z-10 flex flex-col items-center" exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.45 } }}>
       {/* their name, big, in the handwriting */}
@@ -141,12 +154,29 @@ function Waiting({ p, data, s, greeting, banner, opening, onOpen, reduce }: { p:
         </div>
       </motion.div>
 
+      {/* their name on a banner, strung over the box */}
+      <motion.div
+        aria-hidden="true"
+        className="relative mt-[calc(6*var(--k))] w-[calc(58*var(--k))]"
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.35, type: "spring", stiffness: 150, damping: 14 }}
+      >
+        {/* The string sits in the gap under the plushie, never across it. */}
+        <svg viewBox="0 0 240 40" preserveAspectRatio="none" className="absolute -top-[calc(4*var(--k))] left-1/2 h-[calc(5.5*var(--k))] w-[106%] -translate-x-1/2" aria-hidden="true">
+          <path d="M0 4 Q120 40 240 4" fill="none" stroke={p.bowDeep} strokeWidth="2.5" strokeLinecap="round" opacity="0.45" />
+        </svg>
+        <div className="aspect-[220/44] w-full" style={{ filter: "drop-shadow(0 calc(.8*var(--k)) calc(1.4*var(--k)) rgba(120,40,70,0.25))" }}>
+          <Banner text={banner} p={p} />
+        </div>
+      </motion.div>
+
       {/* the box */}
       <motion.button
         type="button"
         onClick={onOpen}
         aria-label={s.tap}
-        className="relative mt-[calc(1*var(--k))] w-[calc(38*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/70"
+        className="relative mt-[calc(1.5*var(--k))] w-[calc(38*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/70"
         style={{ filter: "drop-shadow(0 10px 14px rgba(120,40,70,0.22))" }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0, scale: opening || reduce ? 1 : [1, 1.04, 1] }}
@@ -158,23 +188,9 @@ function Waiting({ p, data, s, greeting, banner, opening, onOpen, reduce }: { p:
         </div>
       </motion.button>
 
-      {!opening ? (
-        <motion.p
-          className="mt-[calc(2*var(--k))] rounded-full px-[calc(4*var(--k))] py-[calc(1.4*var(--k))] text-[calc(3.2*var(--k))] font-semibold tracking-[0.22em] uppercase"
-          style={{ background: "rgba(255,255,255,0.75)", color: p.bowDeep }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0.6, 1, 0.6] }}
-          transition={{ delay: 1.8, duration: 2, repeat: Infinity }}
-        >
-          {s.tap}
-        </motion.p>
-      ) : null}
-
-      <motion.div className="mt-auto mb-[max(calc(6*var(--k)),calc(env(safe-area-inset-bottom)+1.5rem))] w-[calc(70*var(--k))]" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}>
-        <div className="aspect-[220/44] w-full">
-          <Banner text={banner} p={p} />
-        </div>
-      </motion.div>
+      <TapPill tone={tone} hidden={opening} reduce={reduce} delay={1.8} className="mt-[calc(3*var(--k))]">
+        {s.tap}
+      </TapPill>
     </motion.div>
   );
 }

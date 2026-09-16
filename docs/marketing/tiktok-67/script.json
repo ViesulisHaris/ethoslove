@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 19:52", "messages": [
+      { "from": "me", "text": "whats the album on ur phone called her" },
+      { "from": "them", "text": "dont" },
+      { "from": "me", "text": "620 photos" },
+      { "from": "them", "text": "u counted them" },
+      { "from": "me", "text": "the phone counted them" },
+      { "from": "them", "text": "ok thats fair" }
+    ] },
+    { "type": "chat", "timestamp": "Today 20:05", "messages": [
+      { "from": "them", "text": "the good ones are somewhere better" },
+      { "from": "them", "link": { "title": "her", "domain": "tryethos.io", "image": "og", "name": "Priya" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 20:20", "messages": [
+      { "from": "me", "text": "u framed them" },
+      { "from": "me", "text": "theres a plaque" },
+      { "from": "them", "text": "6 months today" },
+      { "from": "me", "text": "mine is called him and its 900" },
+      { "from": "them", "text": "we are both unwell", "tapback": "heart" }
+    ] }
+  ]
+}

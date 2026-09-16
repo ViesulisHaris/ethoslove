@@ -19,7 +19,9 @@ import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
 import { GiftVideo } from "../_shared/GiftVideo";
 import { Ambience } from "../_shared/Ambience";
+import { COVER_VARS, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { CinemaFields } from "./schema";
+import { CINEMA_KEYFRAMES, Marquee, Ticket } from "./art";
 import { Flames, type FlameState } from "./Flames";
 
 const CURTAIN: Record<CinemaFields["curtain"], { base: string; dark: string; light: string }> = {
@@ -29,9 +31,21 @@ const CURTAIN: Record<CinemaFields["curtain"], { base: string; dark: string; lig
 };
 
 const S = {
-  en: { now: "Now showing", turns: "turns", blowMic: "Blow into your phone", blowSwipe: "Swipe up to blow", allowMic: "Use microphone", orSwipe: "or swipe up", wish: "Make a wish", happy: "Happy birthday,", roll: "Roll the film", tapStart: "Tap to start the show" },
-  es: { now: "Hoy", turns: "cumple", blowMic: "Sopla al teléfono", blowSwipe: "Desliza hacia arriba para soplar", allowMic: "Usar el micrófono", orSwipe: "o desliza hacia arriba", wish: "Pide un deseo", happy: "¡Feliz cumpleaños,", roll: "Que ruede la película", tapStart: "Toca para empezar la función" },
+  en: { now: "Now showing", turns: "turns", blowMic: "Blow into your phone", blowSwipe: "Swipe up to blow", allowMic: "Use microphone", orSwipe: "or swipe up", wish: "Make a wish", happy: "Happy birthday,", roll: "Roll the film", tapStart: "tap to start the show", admit: "Admit one", for: "for", seat: "Row A · Seat 1", stub: "Show" },
+  es: { now: "Hoy", turns: "cumple", blowMic: "Sopla al teléfono", blowSwipe: "Desliza hacia arriba para soplar", allowMic: "Usar el micrófono", orSwipe: "o desliza hacia arriba", wish: "Pide un deseo", happy: "¡Feliz cumpleaños,", roll: "Que ruede la película", tapStart: "toca para empezar la función", admit: "Entrada", for: "para", seat: "Fila A · Butaca 1", stub: "Función" },
 };
+
+/** The pill sits on velvet, so the cover is always a dark page. */
+const TONE: CoverTone = { page: "#140A0A", glow: ["rgba(255,203,116,.5)", "rgba(120,20,25,.45)"], accent: "#8F1D24", dark: true };
+
+/** Clear of the sign at the top, the ticket in the middle and the pill at the foot. */
+const COVER_STICKERS: StickerPlacement[] = [
+  { id: "balloons", x: 13, y: 44, size: 18, rotate: -9 },
+  { id: "star", x: 88, y: 41, size: 13, rotate: 11 },
+  { id: "sparkle", x: 92, y: 65, size: 7 },
+  { id: "sparkle", x: 9, y: 67, size: 8 },
+  { id: "star", x: 82, y: 86, size: 9, rotate: -14 },
+];
 
 type Stage = "curtains" | "cake" | "out" | "film" | "message";
 
@@ -117,14 +131,15 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const open = stage !== "curtains";
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none" style={{ ...vars, fontFamily: "var(--gift-font-body)" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div ref={rootRef} className="absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none" style={{ ...COVER_VARS, ...vars, fontFamily: "var(--gift-font-body)" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+      <style>{CINEMA_KEYFRAMES}</style>
       {/* Stage floor + spotlight */}
       <div className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_62%,rgba(255,200,120,0.14),transparent_70%)]" />
       <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[linear-gradient(180deg,transparent,rgba(60,30,20,0.65))]" />
 
-      {/* Marquee */}
+      {/* Marquee over the cake, once the curtains are open */}
       <div className={cn("absolute inset-x-0 top-[13%] z-30 flex justify-center px-6 transition-opacity duration-700", (stage === "film" || stage === "message") && "opacity-0")}>
-        <Marquee text={marquee} reduced={!!reduce} />
+        <Marquee text={marquee} compact />
       </div>
 
       {/* Cake scene */}
@@ -192,13 +207,69 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <Curtain side="right" open={open} reduced={!!reduce} />
       <div className="absolute inset-x-0 top-0 z-40 h-[9%] bg-[linear-gradient(180deg,var(--curtain-dark),var(--curtain))] shadow-[0_10px_30px_rgba(0,0,0,0.6)]" style={{ borderBottom: "6px solid var(--gift-accent)" }} />
 
-      {stage === "curtains" ? (
-        <button type="button" onClick={start} className="absolute inset-0 z-50 flex items-end justify-center pb-[max(4rem,calc(env(safe-area-inset-bottom)+3.5rem))]" aria-label={s.tapStart}>
-          <motion.span animate={reduce ? undefined : { opacity: [0.6, 1, 0.6] }} transition={{ duration: 2, repeat: Infinity }} className="rounded-full bg-black/40 px-5 py-2.5 text-[13px] tracking-[0.2em] uppercase backdrop-blur">
-            {s.tapStart}
-          </motion.span>
-        </button>
-      ) : null}
+      {/* The cover: the house lights up before anyone has tapped anything. */}
+      <AnimatePresence>
+        {stage === "curtains" ? (
+          <motion.div key="cover" className="absolute inset-0 z-50" exit={{ opacity: 0, transition: { duration: 0.45 } }}>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div
+                className="bc-beam absolute -top-[4%] left-0 h-[118%] w-[76%] mix-blend-screen"
+                style={{ clipPath: "polygon(16% 0, 31% 0, 100% 100%, 42% 100%)", background: "linear-gradient(180deg, rgba(255,232,183,.5), rgba(255,196,110,0) 82%)" }}
+              />
+              <div
+                className="bc-beam absolute -top-[4%] right-0 h-[118%] w-[76%] mix-blend-screen"
+                style={{ clipPath: "polygon(69% 0, 84% 0, 58% 100%, 0 100%)", background: "linear-gradient(180deg, rgba(255,232,183,.42), rgba(255,196,110,0) 82%)" }}
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              <Ambience layers={[{ kind: "dust", colors: ["#FFE0A8", "#FFF3DA"], count: 16 }, { kind: "sparkles", colors: ["#FFEFC9", "#FFFFFF"], count: 12 }]} opacity={0.8} />
+            </div>
+            <StickerScatter items={COVER_STICKERS} reduce={!!reduce} className="z-[2]" />
+            <button
+              type="button"
+              onClick={start}
+              aria-label={s.tapStart}
+              className="absolute inset-0 z-[3] flex flex-col items-center px-[calc(6*var(--k))] pt-[calc(26*var(--k))] pb-[calc(7*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-inset"
+            >
+              <motion.div initial={reduce ? false : { opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7 }}>
+                <Marquee text={marquee} hang />
+              </motion.div>
+              <motion.p
+                className="mt-[calc(4*var(--k))] text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase"
+                style={{ color: "#FBEAD0", textShadow: "0 calc(.3*var(--k)) calc(.8*var(--k)) rgba(30,4,6,.85)" }}
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 0.7, y: 0 }}
+                transition={{ delay: 0.24, duration: 0.7 }}
+              >
+                {data.senderName} → {data.recipientName}
+              </motion.p>
+
+              <div className="flex flex-1 flex-col items-center justify-center">
+                <motion.div
+                  className="relative w-[calc(78*var(--k))]"
+                  initial={reduce ? false : { opacity: 0, y: 34, rotate: -9 }}
+                  animate={{ opacity: 1, y: 0, rotate: -4.5 }}
+                  transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -inset-[calc(9*var(--k))] rounded-[50%]"
+                    style={{ background: "radial-gradient(closest-side, rgba(255,214,140,.32), rgba(255,190,100,0) 72%)" }}
+                  />
+                  <Float reduce={!!reduce}>
+                    <Ticket admit={s.admit} forLabel={s.for} name={data.recipientName} seat={s.seat} stub={age ? String(age) : s.stub} />
+                  </Float>
+                  <span aria-hidden="true" className="absolute -bottom-[calc(2.4*var(--k))] left-1/2 h-[calc(3.6*var(--k))] w-[74%] -translate-x-1/2 rounded-[50%] bg-black/50 blur-[calc(2.2*var(--k))]" />
+                </motion.div>
+              </div>
+
+              <TapPill tone={TONE} reduce={!!reduce}>
+                {s.tapStart}
+              </TapPill>
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <SoundToggle audio={audio} locale={data.locale} className="top-auto bottom-[max(0.75rem,env(safe-area-inset-bottom))]" />
       <span className="hidden">{t("theEnd")}{run}</span>
@@ -219,30 +290,6 @@ function Curtain({ side, open, reduced }: { side: "left" | "right"; open: boolea
         boxShadow: side === "left" ? "12px 0 30px rgba(0,0,0,0.6)" : "-12px 0 30px rgba(0,0,0,0.6)",
       }}
     />
-  );
-}
-
-function Marquee({ text, reduced }: { text: string; reduced: boolean }) {
-  const bulbs = 18;
-  return (
-    <div className="relative rounded-2xl border-4 border-[#3b2a1a] bg-[#f6e7c6] px-6 py-3 text-center shadow-[0_10px_40px_rgba(0,0,0,0.5),inset_0_0_0_2px_#d9c39a]">
-      <p className="max-w-[calc(70*var(--u))] truncate font-display text-[clamp(0.95rem,4.2cqw,1.25rem)] font-semibold tracking-[0.08em] text-[#3b2a1a] uppercase" style={{ fontFamily: "var(--gift-font-display)" }}>
-        {text}
-      </p>
-      {Array.from({ length: bulbs }, (_, i) => {
-        const perSide = bulbs / 2;
-        const top = i < perSide;
-        const frac = ((i % perSide) + 0.5) / perSide;
-        return (
-          <span
-            key={i}
-            className={cn("absolute size-2 rounded-full bg-[#ffd98a] shadow-[0_0_8px_2px_rgba(255,200,100,0.8)]", !reduced && "animate-[marquee-chase_1s_steps(2)_infinite]")}
-            style={{ left: `calc(${frac * 100}% - 4px)`, [top ? "top" : "bottom"]: -7, animationDelay: `${(i % 2) * 0.5}s` }}
-          />
-        );
-      })}
-      <style>{`@keyframes marquee-chase{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}`}</style>
-    </div>
   );
 }
 

@@ -11,7 +11,7 @@ import { PRODUCTS, currencyFor, formatAmount, type ProductId } from "@/lib/prici
 import { getManifest } from "@/templates/registry";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
-import { summarizeFailedUploads, type FailedUpload } from "@/lib/editor/failed-uploads";
+import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
 import { LIMITS } from "@/config/site";
 import { getEntitlement, publishGift } from "@/app/actions/gift";
 import { Button } from "@/components/ui/button";
@@ -80,12 +80,22 @@ export function PublishSheet({
     const local = Object.values(state.assets).filter((a) => a.local || a.status === "processing");
     return { total: local.length, done: local.filter((a) => a.status === "uploaded").length };
   }, [state.assets]);
-  // What didn't upload, named the way the sender thinks of it, each with its own way out.
-  const failedItems = useMemo(
-    () => (state.hydrated ? summarizeFailedUploads(state.data, state.assets) : []),
+  // Everything the gift still points at on this device, named the way the sender thinks of it.
+  const stuckItems = useMemo(
+    () => (state.hydrated ? stuckUploads(state.data, state.assets) : []),
     [state.hydrated, state.data, state.assets],
   );
-  const failedLabel = (item: FailedUpload) =>
+  // A file that failed says so at once; one that is still going gets twenty seconds before we
+  // offer to drop it, so nobody is ever left watching a spinner with no way forward.
+  const [graceOver, setGraceOver] = useState(false);
+  useEffect(() => {
+    if (!open) return;
+    const id = window.setTimeout(() => setGraceOver(true), 20000);
+    return () => window.clearTimeout(id);
+  }, [open]);
+  const lastingProblem = stuckItems.some((item) => item.reason !== "waiting");
+  const showStuck = stuckItems.length > 0 && (lastingProblem || graceOver);
+  const failedLabel = (item: StuckUpload) =>
     item.group === "song"
       ? item.title
         ? t("failed.song", { title: item.title })
@@ -93,7 +103,7 @@ export function PublishSheet({
       : item.group === "photos"
         ? t("failed.photos", { n: item.count })
         : t(`failed.${item.group}`);
-  const failedReason = (item: FailedUpload) =>
+  const failedReason = (item: StuckUpload) =>
     item.reason === "type"
       ? t(item.group === "video" ? "failed.typeVideo" : item.group === "photos" ? "failed.typePhoto" : "failed.typeAudio")
       : item.reason === "too_big"
@@ -270,7 +280,7 @@ export function PublishSheet({
                   .filter((key) => state.authed || key !== "uploadsPending")
                   .map((key) => {
                     const bad = problems.includes(key);
-                    const stuck = key === "uploadsPending" && bad && !uploadsInFlight && failedItems.length > 0;
+                    const stuck = key === "uploadsPending" && bad && lastingProblem;
                     const label = stuck
                       ? t("problems.uploadsFailed")
                       : key === "uploadsPending" && bad && uploadTotals.total > 1
@@ -300,10 +310,10 @@ export function PublishSheet({
                     );
                   })}
               </ul>
-              {state.authed && failedItems.length > 0 && !uploadsInFlight ? (
+              {state.authed && showStuck ? (
                 <div className="mt-3 rounded-2xl border border-coral/40 bg-coral/5 p-3" role="alert" data-testid="failed-uploads">
                   <ul className="flex flex-col gap-3">
-                    {failedItems.map((item) => (
+                    {stuckItems.map((item) => (
                       <li key={item.group} className="flex items-start gap-3">
                         <AlertCircle className="mt-0.5 size-4 shrink-0 text-coral" />
                         <div className="min-w-0 flex-1">
@@ -314,7 +324,7 @@ export function PublishSheet({
                           type="button"
                           variant="outline"
                           className="h-9 shrink-0 rounded-full px-3.5"
-                          onClick={() => void state.dropFailedUploads(item.group)}
+                          onClick={() => void state.dropStuckUploads(item.group)}
                           data-testid={`remove-failed-${item.group}`}
                         >
                           {t("failed.remove")}
@@ -322,7 +332,7 @@ export function PublishSheet({
                       </li>
                     ))}
                   </ul>
-                  {failedItems.some((item) => item.retryable) ? (
+                  {stuckItems.some((item) => item.retryable) ? (
                     <Button type="button" variant="outline" className="mt-3 h-10 w-full rounded-full" onClick={() => void state.retryUploads()}>
                       {t("retryUploads")}
                     </Button>

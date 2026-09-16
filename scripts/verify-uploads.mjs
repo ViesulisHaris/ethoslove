@@ -44,6 +44,7 @@ const errors = [];
 page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
 page.on("console", (m) => m.type() === "error" && errors.push(`console: ${m.text().slice(0, 300)}`));
 const shot = (n) => page.screenshot({ path: join(out, `uploads-${n}.png`) });
+const PHOTO_INPUT = 'input[type="file"]';
 const checks = [];
 const check = (name, ok, detail = "") => {
   checks.push({ name, ok });
@@ -52,10 +53,16 @@ const check = (name, ok, detail = "") => {
 
 // Storage's answer to a type it won't take, served for songs while `refuseSongs` is on.
 let refuseSongs = false;
-await page.route("**/storage/v1/object/gifts/**", (route) => {
+// Held open rather than refused: a file that simply never finishes, which is what traps a gift.
+let stallPhotos = false;
+await page.route("**/storage/v1/object/gifts/**", async (route) => {
   const req = route.request();
   if (refuseSongs && req.method() === "POST" && /\.(m4a|mp3|bin)$/.test(new URL(req.url()).pathname)) {
     return route.fulfill({ status: 400, contentType: "application/json", body: JSON.stringify({ statusCode: "415", error: "invalid_mime_type", message: "mime type audio/x-m4r is not supported" }) });
+  }
+  if (stallPhotos && req.method() === "POST" && /\.(webp|png|jpg|jpeg)$/.test(new URL(req.url()).pathname)) {
+    await new Promise((r) => setTimeout(r, 40000));
+    return route.abort();
   }
   return route.continue();
 });
@@ -164,6 +171,26 @@ try {
   check("song waveform loads (no CSP refusals)", songErrors.length === 0, `${songErrors.length} refusals`);
   await shot("04-song-removed");
   refuseSongs = false;
+
+  // 4. A file that never finishes must not trap the gift behind a spinner with nothing to do.
+  stallPhotos = true;
+  await page.locator(PHOTO_INPUT).first().setInputFiles(["public/demo/photos/p2.webp"]);
+  await page.waitForTimeout(2500);
+  const stuckList = page.getByTestId("failed-uploads");
+  check("a file still going raises no alarm at first", (await stuckList.isVisible().catch(() => false)) === false);
+  await page.waitForTimeout(21000);
+  const offered = await stuckList.waitFor({ timeout: 10000 }).then(() => true, () => false);
+  const stuckText = offered ? (await stuckList.innerText()).replace(/\s+/g, " ") : "";
+  check("after a moment the sheet names it and offers a way out", offered && /photo/i.test(stuckText) && /finished uploading/i.test(stuckText), stuckText);
+  await shot("05-stuck-photo");
+  await page.getByTestId("remove-failed-photos").click();
+  await page.waitForTimeout(2000);
+  check("removing the stuck photo clears the block", (await stuckList.isVisible().catch(() => false)) === false);
+  const uploadLine = page.locator("li", { hasText: "Your files are still uploading" }).first();
+  const settled = await uploadLine.evaluate((el) => getComputedStyle(el).textDecorationLine).catch(() => "missing");
+  check("uploads stop blocking once it is out", settled.includes("line-through"), settled);
+  await shot("06-unblocked");
+  stallPhotos = false;
 } catch (e) {
   console.log("VERIFY FAILED:", e.message);
   checks.push({ name: "script", ok: false });

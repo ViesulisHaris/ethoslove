@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,9 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { BoardingPass, DESK_KEYFRAMES, LuggageTag, PaperPlane, Passport, Stamp, cityCode } from "./art";
 import { resolvePlace, haversineKm } from "../_shared/places";
 import { Globe, type FlightState, type Place, type GlobePalette } from "./Globe";
 import type { PassportFields } from "./schema";
@@ -26,10 +29,37 @@ const COVER: Record<PassportFields["cover"], string> = {
   black: "#15130f",
 };
 
+/** The desk the booklet lies on: a printed sky, with the sun coming in from one corner. */
+const SKY_TONE: CoverTone = {
+  page: "#CFE2F2",
+  glow: ["rgba(255,252,236,.9)", "rgba(142,190,230,.55)"],
+  accent: "#2C5578",
+};
+
+const CLOUDS =
+  "radial-gradient(40% 24% at 15% 13%, rgba(255,255,255,.92), transparent 70%), radial-gradient(28% 16% at 29% 18%, rgba(255,255,255,.8), transparent 72%), radial-gradient(36% 20% at 87% 25%, rgba(255,255,255,.85), transparent 70%), radial-gradient(44% 22% at 74% 90%, rgba(255,255,255,.7), transparent 72%), radial-gradient(32% 18% at 7% 64%, rgba(255,255,255,.6), transparent 74%)";
+
+const STICKERS: StickerPlacement[] = [
+  { id: "star", x: 9, y: 29, size: 9, rotate: -14 },
+  { id: "sparkle", x: 89, y: 9, size: 7.5 },
+  { id: "cloud", x: 12, y: 68, size: 17, rotate: -6 },
+  { id: "heart", x: 91, y: 82, size: 11, rotate: 12 },
+  { id: "butterfly", x: 13, y: 88, size: 13, rotate: 8 },
+];
+
+const AMBIENCE: { kind: AmbienceKind; colors: string[]; count?: number }[] = [
+  { kind: "bokeh", colors: ["#FFFFFF", "#E8F3FF"], count: 8 },
+  { kind: "dust", colors: ["#FFFFFF", "#FFF3D6"], count: 12 },
+];
+
 const S = {
   en: {
     passport: "PASSPORT",
-    open: "Open",
+    open: "open",
+    coverLine: "somewhere, together",
+    to: "to",
+    boardingPass: "boarding pass",
+    entry: "entry",
     flying: "Now boarding",
     km: "{n} km",
     hours: "About {n} hours by plane. Or one tap.",
@@ -50,7 +80,11 @@ const S = {
   },
   es: {
     passport: "PASAPORTE",
-    open: "Abrir",
+    open: "abrir",
+    coverLine: "a algún sitio, juntos",
+    to: "a",
+    boardingPass: "embarque",
+    entry: "entrada",
     flying: "Embarcando",
     km: "{n} km",
     hours: "Unas {n} horas en avión. O un toque.",
@@ -152,60 +186,104 @@ export function Template({
   return (
     <div
       className="absolute inset-0 overflow-hidden bg-[#0b0d16] text-[#f3eee4] select-none"
-      style={{ fontFamily: "var(--gift-font-body)" }}
+      style={{ ...COVER_VARS, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
+      <style>{DESK_KEYFRAMES}</style>
       <AnimatePresence>
         {stage === "cover" ? (
           <motion.div
             key="cover"
-            className="absolute inset-0 z-30 flex items-center justify-center"
-            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+            className="absolute inset-0 z-30 overflow-hidden"
+            exit={{ opacity: 0, scale: 1.03, transition: { duration: 0.45 } }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_40%,rgba(var(--gift-accent-rgb),0.14),transparent)]" />
-            <motion.div
-              initial={reduce ? false : { y: 40, rotate: -4, opacity: 0 }}
-              animate={{ y: 0, rotate: -2, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 120, damping: 16 }}
-              className="relative flex aspect-[88/125] w-[min(66cqw,300px)] flex-col items-center justify-between rounded-[10px] px-6 py-8 text-center"
-              style={{
-                background: `linear-gradient(160deg, ${cover} 0%, ${cover} 60%, rgba(0,0,0,0.35) 100%)`,
-                boxShadow:
-                  "inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 0 0 8px rgba(0,0,0,0.12), 0 40px 60px -30px rgba(0,0,0,0.9)",
-                color: "var(--gift-accent)",
-              }}
+            <CoverPage tone={SKY_TONE} pattern={CLOUDS} />
+            <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+              <Ambience layers={AMBIENCE} opacity={0.8} />
+            </div>
+            <StickerScatter items={STICKERS} reduce={!!reduce} className="z-[3]" />
+            <PaperPlane className="top-[13%] right-[8%] z-[3] w-[calc(16*var(--k))]" />
+            {/* the desk's own stamps: where this route starts and where it lands */}
+            <Stamp
+              ink="#B23A2E"
+              title={route.places[0].name}
+              sub={s.entry}
+              round
+              className="top-[15%] left-[11%] z-[3] size-[calc(18*var(--k))] -rotate-[13deg]"
+            />
+            <Stamp
+              ink="#1F3D8A"
+              title={route.places[route.places.length - 1].name}
+              sub={s.arrived}
+              className="right-[9%] bottom-[11%] z-[3] h-[calc(12*var(--k))] w-[calc(22*var(--k))] rotate-[9deg]"
+            />
+
+            <div
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center px-[calc(8*var(--k))] text-center"
+              style={{ color: "#20344B" }}
             >
-              <p className="text-[10px] tracking-[0.42em]">
-                {(data.fields.nationality || s.holder).toUpperCase()}
-              </p>
-              <div className="flex flex-col items-center gap-4">
-                <span
-                  className="grid size-16 place-items-center rounded-full border-2"
-                  style={{ borderColor: "var(--gift-accent)" }}
-                >
-                  <span className="text-2xl">✈︎</span>
-                </span>
-                <p
-                  className="text-[clamp(1.1rem,5.2cqw,1.4rem)] tracking-[0.35em]"
-                  style={{ fontFamily: "var(--gift-font-display)" }}
-                >
-                  {s.passport}
-                </p>
-              </div>
-              <p
-                className="text-[clamp(1rem,4.6cqw,1.2rem)] tracking-[0.2em] uppercase"
-                style={{ fontFamily: "var(--gift-font-display)" }}
+              <motion.p
+                className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 0.55, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.7 }}
               >
-                {data.recipientName}
-              </p>
-            </motion.div>
-            <button
-              type="button"
-              onClick={open}
-              className="absolute inset-x-0 bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] mx-auto flex h-12 w-fit items-center rounded-full px-8 text-[15px] font-semibold shadow-lg"
-              style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
-            >
-              {s.open}
-            </button>
+                {data.senderName} → {data.recipientName}
+              </motion.p>
+              <motion.h1
+                className="mt-[calc(1.6*var(--k))] max-w-[calc(70*var(--k))] text-[calc(7.4*var(--k))] leading-[1.06] text-balance italic [overflow-wrap:anywhere]"
+                style={{ fontFamily: POSTER_FONT }}
+                initial={reduce ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.8 }}
+              >
+                {data.title?.trim() || s.coverLine}
+              </motion.h1>
+
+              <motion.div
+                className="relative mt-[calc(4.4*var(--k))] w-[calc(52*var(--k))]"
+                initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+              >
+                <Float reduce={!!reduce}>
+                  <button
+                    type="button"
+                    onClick={open}
+                    aria-label={s.open}
+                    className="relative block w-full rounded-[calc(2.4*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/70"
+                  >
+                    <BoardingPass
+                      from={cityCode(route.places[0].name)}
+                      to={cityCode(route.places[route.places.length - 1].name)}
+                      label={s.boardingPass}
+                      passenger={data.recipientName}
+                      className="absolute top-[25%] right-[-43%] z-0 w-[68%] rotate-[7deg]"
+                    />
+                    <div className="relative z-[1] -rotate-[1.5deg]">
+                      <Passport
+                        leather={cover}
+                        nationality={data.fields.nationality || s.holder}
+                        passportLabel={s.passport}
+                        name={data.recipientName}
+                      />
+                    </div>
+                    <LuggageTag
+                      name={route.places[route.places.length - 1].name}
+                      eyebrow={s.to}
+                      className="absolute top-[56%] left-[-29%] z-[2] w-[40%]"
+                    />
+                  </button>
+                </Float>
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-[calc(2*var(--k))] left-1/2 h-[calc(4.5*var(--k))] w-[78%] -translate-x-1/2 rounded-[50%] bg-[#2C5578]/25 blur-[calc(2.4*var(--k))]"
+                />
+              </motion.div>
+
+              <TapPill tone={SKY_TONE} reduce={!!reduce} className="mt-[calc(5.5*var(--k))]">
+                {s.open}
+              </TapPill>
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>

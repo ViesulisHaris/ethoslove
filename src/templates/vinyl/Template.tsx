@@ -13,7 +13,10 @@ import { RichMessage } from "../_shared/RichMessage";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, Float, TapPill, type CoverTone } from "../_shared/cover-kit";
 import type { VinylFields } from "./schema";
+import { Cassette, Plant, Sleeve } from "./art";
 
 const SLEEVE: Record<VinylFields["sleeve"], { bg: string; ink: string; paper: string; muted: string }> = {
   black: { bg: "#151312", ink: "#f4efe7", paper: "#1f1c1a", muted: "rgba(244,239,231,0.55)" },
@@ -21,9 +24,31 @@ const SLEEVE: Record<VinylFields["sleeve"], { bg: string; ink: string; paper: st
   burgundy: { bg: "#4a1f26", ink: "#f4efe7", paper: "#5a2a32", muted: "rgba(244,239,231,0.6)" },
 };
 
+/** The room the shelf stands in: one per sleeve the sender picked. */
+const LOOKS: Record<VinylFields["sleeve"], { tone: CoverTone; pattern: string; shelf: readonly [string, string]; ambience: { kind: AmbienceKind; colors: string[]; count?: number }[] }> = {
+  cream: {
+    tone: { page: "#E8D7BD", glow: ["rgba(255,245,218,.95)", "rgba(203,150,95,.5)"], accent: "#8A4F22" },
+    pattern: "repeating-linear-gradient(90deg, rgba(255,255,255,.16) 0 calc(1.4*var(--k)), transparent calc(1.4*var(--k)) calc(9*var(--k)))",
+    shelf: ["#C48F59", "#8A5B33"],
+    ambience: [{ kind: "dust", colors: ["#FFE9BE", "#FFFFFF"], count: 16 }],
+  },
+  black: {
+    tone: { page: "#241E1B", glow: ["rgba(255,206,140,.4)", "rgba(120,70,40,.45)"], accent: "#E0A468", dark: true },
+    pattern: "repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 calc(1.4*var(--k)), transparent calc(1.4*var(--k)) calc(9*var(--k)))",
+    shelf: ["#9C6B3E", "#5F3C20"],
+    ambience: [{ kind: "dust", colors: ["#FFD9A0", "#FFF1D8"], count: 18 }],
+  },
+  burgundy: {
+    tone: { page: "#E9D7C5", glow: ["rgba(255,242,219,.95)", "rgba(176,105,105,.45)"], accent: "#8C2F3A" },
+    pattern: "repeating-linear-gradient(90deg, rgba(255,255,255,.14) 0 calc(1.4*var(--k)), transparent calc(1.4*var(--k)) calc(9*var(--k)))",
+    shelf: ["#BE8654", "#84542F"],
+    ambience: [{ kind: "dust", colors: ["#FFE6C4", "#FFFFFF"], count: 16 }],
+  },
+};
+
 const S = {
-  en: { drop: "Drop the needle", playing: "Now playing", crate: "From the crate", liner: "Liner notes", tap: "Tap a cover" },
-  es: { drop: "Pon la aguja", playing: "Sonando", crate: "De la caja", liner: "Notas del libreto", tap: "Toca una portada" },
+  en: { drop: "drop the needle", playing: "Now playing", crate: "From the crate", liner: "Liner notes", tap: "Tap a cover", for: "for" },
+  es: { drop: "pon la aguja", playing: "Sonando", crate: "De la caja", liner: "Notas del libreto", tap: "Toca una portada", for: "para" },
 };
 
 const RPM = 33.333;
@@ -33,6 +58,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const t = useGiftStrings(data.locale);
   const s = S[data.locale] ?? S.en;
   const sleeve = SLEEVE[data.fields.sleeve] ?? SLEEVE.cream;
+  const look = LOOKS[data.fields.sleeve] ?? LOOKS.cream;
+  const [stage, setStage] = useState<"cover" | "player">(mode === "preview" ? "player" : "cover");
   const [playing, setPlaying] = useState(false);
   const [cover, setCover] = useState(0);
   const [everStarted, setEverStarted] = useState(mode === "preview");
@@ -96,6 +123,12 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     onEvent?.({ type: "progress", pct: 30 });
   };
 
+  /** Taking the sleeve off the shelf is the same gesture as dropping the needle. */
+  const dropNeedle = () => {
+    setStage("player");
+    void toggle();
+  };
+
   useEffect(() => {
     const onVis = () => document.hidden && audioRef.current && (audioRef.current.pause(), setPlaying(false));
     document.addEventListener("visibilitychange", onVis);
@@ -106,9 +139,62 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const current = photos[cover];
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: sleeve.bg, color: sleeve.ink, fontFamily: "var(--gift-font-body)" }}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: sleeve.bg, color: sleeve.ink, fontFamily: "var(--gift-font-body)" }}>
       <div className="grain-overlay" />
-      <div className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none">
+
+      {/* The cover: the sleeve still on the shelf, the record half out of it. */}
+      <AnimatePresence>
+        {stage === "cover" ? (
+          <motion.div key="shelf" className="absolute inset-0 z-20" exit={{ opacity: 0, transition: { duration: 0.45 } }}>
+            <CoverPage tone={look.tone} pattern={look.pattern} />
+            <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+              <Ambience layers={look.ambience} opacity={0.75} />
+            </div>
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-[calc(6*var(--k))]">
+              <motion.p
+                className="relative text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase"
+                style={{ color: look.tone.dark ? "#F6E6CE" : "#4A3325" }}
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 0.6, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.7 }}
+              >
+                {data.senderName} → {data.recipientName}
+              </motion.p>
+
+              <motion.div
+                className="relative mt-[calc(6*var(--k))] w-[calc(88*var(--k))] max-w-full"
+                style={{ aspectRatio: "88 / 60" }}
+                initial={reduce ? false : { opacity: 0, y: 34, rotate: -3 }}
+                animate={{ opacity: 1, y: 0, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.18 }}
+              >
+                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[8.4%] rounded-[calc(.5*var(--k))]" style={{ background: `linear-gradient(180deg, ${look.shelf[0]}, ${look.shelf[1]})` }} />
+                <div aria-hidden="true" className="absolute inset-x-[2%] top-full h-[7%]" style={{ background: "linear-gradient(180deg, rgba(48,25,10,.45), rgba(48,25,10,0))" }} />
+                <div aria-hidden="true" className="absolute bottom-[8.4%] left-[-1%] w-[20%]">
+                  <Plant />
+                </div>
+                <div className="absolute bottom-[8.4%] left-[14%] w-[61%]">
+                  <Float reduce={!!reduce} amount={0.4} duration={6}>
+                    <button type="button" onClick={dropNeedle} aria-label={s.drop} className="block w-full outline-none focus-visible:ring-4 focus-visible:ring-white/70">
+                      <Sleeve photo={photos[0]} album={album} artist={artist} name={data.recipientName} forLabel={s.for} paper={sleeve.paper} />
+                    </button>
+                  </Float>
+                  <span aria-hidden="true" className="absolute -bottom-[2%] left-[6%] h-[4%] w-[88%] rounded-[50%] bg-black/40 blur-[calc(1.4*var(--k))]" />
+                </div>
+                <div aria-hidden="true" className="absolute right-0 bottom-[7.6%] w-[29%] rotate-[-4deg]">
+                  <Cassette label={artist} />
+                </div>
+              </motion.div>
+
+              <TapPill tone={look.tone} reduce={!!reduce} className="mt-[calc(10*var(--k))]">
+                {s.drop}
+              </TapPill>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <div className={cn("absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none", stage === "cover" && "invisible")}>
         {/* Turntable */}
         <section className="relative flex flex-col items-center px-6 pt-[max(6cqh,36px)]">
           <p className="text-[11px] tracking-[0.3em] uppercase" style={{ color: sleeve.muted }}>{everStarted && playing ? s.playing : `${artist}`}</p>

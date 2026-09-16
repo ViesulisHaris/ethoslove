@@ -490,6 +490,8 @@
         "typePhoto": "No podemos usar este tipo de archivo. Prueba con un JPG o PNG.",
         "tooBig": "Pesa más de {mb} MB. Quítalo y añade uno más corto.",
         "missing": "Este dispositivo ya no puede leerlo. Quítalo y vuelve a añadirlo.",
+        "waiting": "No ha terminado de subirse. Inténtalo de nuevo o quítalo para enviar el regalo sin él.",
+        "processing": "Este dispositivo no pudo prepararlo. Quítalo o añade una copia más pequeña.",
         "network": "Se cortó la conexión. Vuelve a intentarlo o quítalo para enviar el regalo sin él.",
         "remove": "Quitar"
       }

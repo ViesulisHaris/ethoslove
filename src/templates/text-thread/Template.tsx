@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, Phone, Video } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
@@ -14,6 +14,9 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { COVER_VARS, TapPill, type CoverTone } from "../_shared/cover-kit";
+import { LockGlyph, NotificationCard, StatusIcons } from "./art";
 import type { ThreadFields } from "./schema";
 
 const BUBBLE: Record<ThreadFields["bubble"], string> = {
@@ -23,28 +26,43 @@ const BUBBLE: Record<ThreadFields["bubble"], string> = {
   coral: "#E8604C",
 };
 
+/** Solid and light: the dark treatment disappears against a near-black wallpaper. */
+const PILL_TONE: CoverTone = { page: "#0B0E14", glow: ["rgba(255,255,255,.1)", "rgba(255,255,255,.06)"], accent: "#16202E" };
+const LOCK_AMBIENCE: { kind: AmbienceKind; colors: string[]; count?: number }[] = [
+  { kind: "bokeh", colors: ["#FFFFFF", "#FFD9A8"], count: 6 },
+];
+
 const S = {
   en: {
     online: "online",
     today: "Today",
     delivered: "Delivered",
     read: "Read",
-    tap: "Tap to open the chat",
+    tap: "tap to open the chat",
     typing: "typing…",
     placeholder: "Reply…",
     finale: "Read the whole thing",
     sent: "Sent from a train",
+    now: "now",
+    /** The three that land on the lock screen before the thread opens. */
+    n1: "hey",
+    n2: "you up?",
+    n3: "i made you something",
   },
   es: {
     online: "en línea",
     today: "Hoy",
     delivered: "Entregado",
     read: "Leído",
-    tap: "Toca para abrir el chat",
+    tap: "toca para abrir el chat",
     typing: "escribiendo…",
     placeholder: "Responder…",
     finale: "Leerlo entero",
     sent: "Enviado desde un tren",
+    now: "ahora",
+    n1: "ey",
+    n2: "¿estás ahí?",
+    n3: "te he hecho una cosa",
   },
 };
 
@@ -106,6 +124,18 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       ),
     [data.locale],
   );
+  const wallpaper = data.photos[0];
+  /** The lock screen clock: hours and minutes only, the way a phone shows them, plus the long date. */
+  const clock = useMemo(() => {
+    const at = new Date();
+    const parts = new Intl.DateTimeFormat(data.locale, { hour: "numeric", minute: "2-digit", hour12: data.locale === "en" }).formatToParts(at);
+    const hhmm = parts
+      .filter((p) => p.type === "hour" || p.type === "minute" || (p.type === "literal" && p.value.includes(":")))
+      .map((p) => p.value)
+      .join("");
+    const long = new Intl.DateTimeFormat(data.locale, { weekday: "long", day: "numeric", month: "long" }).format(at);
+    return { hhmm, date: long.charAt(0).toUpperCase() + long.slice(1) };
+  }, [data.locale]);
 
   // Deliver the next item after a human-ish delay.
   useEffect(() => {
@@ -151,7 +181,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   return (
     <div
       className="absolute inset-0 flex flex-col overflow-hidden bg-[#f4f1ec] text-ink select-none"
-      style={{ fontFamily: "var(--gift-font-body)" }}
+      style={{ ...COVER_VARS, fontFamily: "var(--gift-font-body)" } as CSSProperties}
     >
       {/* Chat header */}
       <header className="flex h-[max(3.6rem,calc(env(safe-area-inset-top)+3rem))] shrink-0 items-end border-b border-black/10 bg-white/80 px-3 pb-2 backdrop-blur">
@@ -309,20 +339,76 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         </span>
       </div>
 
-      {!started ? (
-        <button
-          type="button"
-          onClick={start}
-          className="absolute inset-0 z-30 flex items-end justify-center bg-gradient-to-t from-[#f4f1ec] via-[#f4f1ec]/70 to-transparent pb-[max(5rem,calc(env(safe-area-inset-bottom)+4.5rem))]"
-        >
-          <span
-            className="h-12 rounded-full px-7 text-[15px] leading-[3rem] font-semibold text-white shadow-lg"
-            style={{ background: "var(--gift-accent)" }}
+      {/* The cover: their phone, face up, with the first three messages waiting on it. */}
+      <AnimatePresence>
+        {!started ? (
+          <motion.div
+            key="lock"
+            className="absolute inset-0 z-30 overflow-hidden"
+            exit={{ y: "-100%", transition: { duration: 0.55, ease: [0.65, 0, 0.35, 1] } }}
           >
-            {s.tap}
-          </span>
-        </button>
-      ) : null}
+            {/* wallpaper: their first photo thrown out of focus, under a night gradient */}
+            <div aria-hidden="true" className="absolute inset-0 overflow-hidden" style={{ backgroundColor: "#12151F" }}>
+              {wallpaper ? (
+                <img
+                  src={wallpaper.url}
+                  alt=""
+                  draggable={false}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ filter: "blur(calc(3.4*var(--k))) saturate(1.15)", transform: "scale(1.2)" }}
+                />
+              ) : null}
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(180deg, rgba(8,10,16,.82) 0%, rgba(8,10,16,.38) 28%, rgba(8,10,16,.5) 60%, rgba(8,10,16,.9) 100%)" }}
+              />
+              <div className="absolute inset-0" style={{ background: `radial-gradient(72% 42% at 50% 16%, ${bubble}3d, transparent 72%)` }} />
+              <Ambience layers={LOCK_AMBIENCE} opacity={0.45} />
+            </div>
+
+            {/* the whole lock screen is the tap target; the content above it lets taps through */}
+            <button type="button" onClick={start} aria-label={s.tap} className="absolute inset-0 z-10 w-full outline-none" />
+
+            <div className="pointer-events-none absolute inset-0 z-20 flex flex-col px-[calc(6*var(--k))] pt-[calc(4.5*var(--k))] pb-[calc(4*var(--k))] text-white">
+              <div className="flex items-center justify-between gap-[calc(3*var(--k))]">
+                <p className="truncate text-[calc(2.3*var(--k))] tracking-[0.3em] uppercase opacity-60">
+                  {data.senderName} → {data.recipientName}
+                </p>
+                <StatusIcons />
+              </div>
+
+              <div className="mt-[calc(7*var(--k))] flex flex-col items-center">
+                <LockGlyph />
+                <p className="mt-[calc(2.6*var(--k))] text-[calc(3.4*var(--k))] font-medium opacity-80">{clock.date}</p>
+                <p
+                  className="mt-[calc(.4*var(--k))] text-[calc(21*var(--k))] leading-[.95] font-semibold tracking-[-0.02em] tabular-nums"
+                  style={{ textShadow: "0 calc(.6*var(--k)) calc(2.2*var(--k)) rgba(0,0,0,.4)" }}
+                >
+                  {clock.hhmm}
+                </p>
+              </div>
+
+              <div className="mt-auto flex w-full flex-col gap-[calc(2.2*var(--k))]">
+                {[s.n1, s.n2, s.n3].map((line, i) => (
+                  <motion.div
+                    key={i}
+                    initial={reduce ? false : { opacity: 0, y: 18, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ delay: 0.45 + i * 0.6, type: "spring", stiffness: 240, damping: 24 }}
+                  >
+                    <NotificationCard name={name} badge={name.slice(0, 1).toUpperCase()} text={line} color={bubble} now={s.now} />
+                  </motion.div>
+                ))}
+              </div>
+
+              <TapPill tone={PILL_TONE} reduce={!!reduce} delay={1.8} className="mt-[calc(4.5*var(--k))] self-center">
+                {s.tap}
+              </TapPill>
+              <span aria-hidden="true" className="mx-auto mt-[calc(3*var(--k))] h-[calc(1*var(--k))] w-[calc(30*var(--k))] shrink-0 rounded-full bg-white/55" />
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
 
       <AnimatePresence>
         {lightbox !== null && data.photos[lightbox] ? (

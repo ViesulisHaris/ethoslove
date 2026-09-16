@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 21:30", "messages": [
+      { "from": "me", "text": "i found my notes app from before we met" },
+      { "from": "them", "text": "and" },
+      { "from": "me", "text": "i described u" },
+      { "from": "them", "text": "describe me" },
+      { "from": "me", "text": "tall. bad at texting. good hands. owns one plant" },
+      { "from": "them", "text": "thats me" }
+    ] },
+    { "type": "chat", "timestamp": "Today 21:47", "messages": [
+      { "from": "me", "text": "one year since we met today. heres the list" },
+      { "from": "me", "link": { "title": "the list, one year on", "domain": "tryethos.io", "image": "og", "name": "Owen" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 22:05", "messages": [
+      { "from": "them", "text": "u wrote this in january" },
+      { "from": "them", "text": "we met in september" },
+      { "from": "me", "text": "i know" },
+      { "from": "them", "text": "ur delulu" },
+      { "from": "me", "text": "worked tho", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 21:18", "messages": [
+      { "from": "them", "text": "do u even like me" },
+      { "from": "me", "text": "yes" },
+      { "from": "them", "text": "say more than yes" },
+      { "from": "me", "text": "yes, a lot" },
+      { "from": "them", "text": "ur impossible" },
+      { "from": "them", "text": "one year of this" }
+    ] },
+    { "type": "chat", "timestamp": "Today 21:40", "messages": [
+      { "from": "me", "text": "i said them all at once instead" },
+      { "from": "me", "link": { "title": "47 things i dont say out loud", "domain": "tryethos.io", "image": "og", "name": "Kayla" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 22:02", "messages": [
+      { "from": "them", "text": "47" },
+      { "from": "them", "text": "u wrote 47" },
+      { "from": "me", "text": "there were more" },
+      { "from": "me", "text": "it stopped letting me add them", "tapback": "heart" },
+      { "from": "them", "text": "i take it back" },
+      { "from": "them", "text": "yes is enough" }
+    ] }
+  ]
+}

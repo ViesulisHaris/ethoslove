@@ -14,13 +14,21 @@ import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
+import { Ambience } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, Float, TapPill, type CoverTone } from "../_shared/cover-kit";
 import type { FrontPageFields } from "./schema";
+import { CoffeeCup, FP_KEYFRAMES, FoldedPaper, Glasses, Pen } from "./art";
 
 const INK: Record<FrontPageFields["ink"], string> = { black: "#151311", navy: "#1c2a4a", sepia: "#4a3626" };
 
+/** The table the paper landed on: warm oak, planks running across it, morning light. */
+const TONE: CoverTone = { page: "#A5754C", glow: ["rgba(255,241,206,.8)", "rgba(126,78,38,.45)"], accent: "#7A3B2A" };
+const WOOD =
+  "repeating-linear-gradient(1deg, rgba(60,30,10,.17) 0 calc(.6*var(--k)), transparent calc(.6*var(--k)) calc(26*var(--k))), repeating-linear-gradient(0.4deg, rgba(60,30,10,.06) 0 1px, transparent 1px calc(2.2*var(--k))), repeating-linear-gradient(2deg, rgba(255,240,210,.06) 0 1px, transparent 1px calc(7*var(--k)))";
+
 const S = {
-  en: { daily: "The Daily", extra: "Extra! Extra!", tap: "Tap to read", weather: "Weather", classifieds: "Classifieds", horoscope: "Horoscope", continued: "Continued on the back page", edition: "Late edition", vol: "Vol. XXX · No. 1", staff: "Staff report", readOn: "Read on", weatherDefault: "Sunny, with a 100% chance of cake.", backPage: "Back page" },
-  es: { daily: "El Diario de", extra: "¡Extra, extra!", tap: "Toca para leer", weather: "El tiempo", classifieds: "Clasificados", horoscope: "Horóscopo", continued: "Continúa en la contraportada", edition: "Edición de tarde", vol: "Vol. XXX · N.º 1", staff: "Redacción", readOn: "Seguir leyendo", weatherDefault: "Soleado, con un 100 % de probabilidad de tarta.", backPage: "Contraportada" },
+  en: { daily: "The Daily", extra: "Extra! Extra!", tap: "tap to read", for: "for", weather: "Weather", classifieds: "Classifieds", horoscope: "Horoscope", continued: "Continued on the back page", edition: "Late edition", vol: "Vol. XXX · No. 1", staff: "Staff report", readOn: "Read on", weatherDefault: "Sunny, with a 100% chance of cake.", backPage: "Back page" },
+  es: { daily: "El Diario de", extra: "¡Extra, extra!", tap: "toca para leer", for: "para", weather: "El tiempo", classifieds: "Clasificados", horoscope: "Horóscopo", continued: "Continúa en la contraportada", edition: "Edición de tarde", vol: "Vol. XXX · N.º 1", staff: "Redacción", readOn: "Seguir leyendo", weatherDefault: "Soleado, con un 100 % de probabilidad de tarta.", backPage: "Contraportada" },
 };
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<FrontPageFields>) {
@@ -28,7 +36,6 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const t = useGiftStrings(data.locale);
   const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
-  const [landed, setLanded] = useState(mode === "preview");
   const [started, setStarted] = useState(mode === "preview");
   const ink = INK[data.fields.ink] ?? INK.black;
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
@@ -36,6 +43,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const headline = data.fields.headline || data.title || data.recipientName;
   const [lead, ...rest] = data.photos;
   const date = useMemo(() => new Intl.DateTimeFormat(data.locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date()), [data.locale]);
+  const strap = [s.vol, s.edition, data.fields.price || "€0.00"].join(" · ");
 
   const start = () => {
     setStarted(true);
@@ -43,23 +51,15 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     onEvent?.({ type: "started" });
   };
 
-  useEffect(() => {
-    if (!landed) {
-      const id = setTimeout(() => setLanded(true), reduce ? 100 : 1300);
-      return () => clearTimeout(id);
-    }
-  }, [landed, reduce]);
-
   return (
-    <div className="absolute inset-0 overflow-hidden bg-[#8d7f6b] select-none" style={{ color: ink, fontFamily: "var(--gift-font-body)" }}>
-      {/* doormat */}
-      <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(0,0,0,0.08)_0_3px,transparent_3px_9px),repeating-linear-gradient(0deg,rgba(0,0,0,0.06)_0_2px,transparent_2px_7px)]" />
-      <div className="grain-overlay opacity-[0.12]" />
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, color: ink, fontFamily: "var(--gift-font-body)" }}>
+      <style>{FP_KEYFRAMES}</style>
+      <CoverPage tone={TONE} pattern={WOOD} />
 
       <motion.div
-        initial={mode === "preview" ? false : { y: "-120%", rotate: -14, scale: 0.9 }}
-        animate={{ y: 0, rotate: started ? 0 : -1.5, scale: 1 }}
-        transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 110, damping: 14, mass: 1.1 }}
+        initial={mode === "preview" ? false : { opacity: 0, y: "5%" }}
+        animate={{ opacity: started ? 1 : 0, y: started ? 0 : "5%" }}
+        transition={reduce ? { duration: 0 } : { duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none"
         style={{ pointerEvents: started ? "auto" : "none" }}
       >
@@ -144,15 +144,75 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           <p className="mt-6 border-t pt-2 text-center text-[10px] tracking-[0.2em] uppercase" style={{ borderColor: ink }}>{s.continued} ↓</p>
 
           {/* Back page */}
-          <BackPage data={data} mode={mode} ink={ink} label={s.backPage} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={mode === "preview" ? undefined : () => { setLanded(false); setStarted(false); }} />
+          <BackPage data={data} mode={mode} ink={ink} label={s.backPage} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={mode === "preview" ? undefined : () => setStarted(false)} />
         </article>
       </motion.div>
 
+      {/* The cover: the paper still folded on the table, their name written in the margin. */}
       <AnimatePresence>
         {!started ? (
-          <motion.button key="tap" type="button" onClick={start} initial={{ opacity: 0 }} animate={{ opacity: landed ? 1 : 0 }} exit={{ opacity: 0 }} className="absolute inset-x-0 bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] z-30 mx-auto flex h-12 w-fit items-center rounded-full px-7 text-[15px] font-semibold text-paper shadow-lg" style={{ background: "var(--gift-accent)" }}>
-            {s.tap}
-          </motion.button>
+          <motion.div key="table" className="absolute inset-0 z-30" exit={{ opacity: 0, scale: 1.03, transition: { duration: 0.45 } }}>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(72% 48% at 22% 4%, rgba(255,242,210,.5), rgba(255,236,190,0) 72%)" }} />
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              <Ambience layers={[{ kind: "dust", colors: ["#FFE7BE", "#FFFFFF"], count: 14 }]} opacity={0.6} />
+            </div>
+
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-[calc(6*var(--k))]">
+              <motion.p
+                className="relative text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase"
+                style={{ color: "#FFF3E2", textShadow: "0 calc(.3*var(--k)) calc(.8*var(--k)) rgba(48,22,6,.55)" }}
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 0.75, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.7 }}
+              >
+                {data.senderName} → {data.recipientName}
+              </motion.p>
+
+              <motion.div
+                className="relative mt-[calc(5*var(--k))] w-[calc(74*var(--k))] max-w-full pb-[calc(21*var(--k))]"
+                initial={reduce ? false : { opacity: 0, y: 34, rotate: -5 }}
+                animate={{ opacity: 1, y: 0, rotate: -2.2 }}
+                transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.18 }}
+              >
+                <Float reduce={!!reduce} amount={0.45} duration={6.2}>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={start}
+                      aria-label={s.tap}
+                      className="block w-full text-left outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+                    >
+                      <FoldedPaper
+                        paperName={paperName}
+                        headline={headline}
+                        subhead={data.fields.subhead}
+                        date={date}
+                        strap={strap}
+                        extra={s.extra}
+                        name={data.recipientName}
+                        forLabel={s.for}
+                        ink={ink}
+                        accent="var(--gift-accent)"
+                      />
+                    </button>
+                    <div aria-hidden="true" className="absolute -bottom-[11%] -left-[11%] w-[36%] rotate-[9deg]">
+                      <Glasses />
+                    </div>
+                    <div aria-hidden="true" className="absolute right-[8%] -bottom-[5%] w-[44%] rotate-[-14deg]">
+                      <Pen />
+                    </div>
+                    <div aria-hidden="true" className="absolute -right-[9%] -bottom-[15%] w-[33%]">
+                      <CoffeeCup />
+                    </div>
+                  </div>
+                </Float>
+              </motion.div>
+
+              <TapPill tone={TONE} reduce={!!reduce} className="mt-[calc(5*var(--k))]">
+                {s.tap}
+              </TapPill>
+            </div>
+          </motion.div>
         ) : null}
       </AnimatePresence>
       <SoundToggle audio={audio} locale={data.locale} className="bg-black/20" />

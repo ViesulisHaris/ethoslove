@@ -108,18 +108,11 @@
 }
 
 /* ---------- envelope ---------- */
-.stage {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-}
 .envelope {
   position: relative;
-  perspective: 900px;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  perspective: calc(210 * var(--k));
   transform-style: preserve-3d;
 }
 .envBack,
@@ -183,63 +176,77 @@
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: 50% 0%;
 }
+/* The name, the stamp and the twine are stuck to the front, so they sit over the paper inside. */
+.envName {
+  position: absolute;
+  left: 8%;
+  bottom: 9%;
+  width: 42%;
+  z-index: 5;
+  margin: 0;
+  font-family: var(--gift-font-hand);
+  line-height: 1.04;
+  color: color-mix(in srgb, var(--tl-ink) 88%, transparent);
+  overflow-wrap: anywhere;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.envStamp {
+  position: absolute;
+  right: 4%;
+  top: 24%;
+  width: 15%;
+  z-index: 5;
+}
+.envDress {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+}
 .sealWrap {
   position: absolute;
   left: 50%;
   top: 56%;
   width: 0;
   height: 0;
-  z-index: 6;
+  z-index: 7;
 }
 .seal {
   position: absolute;
-  left: -32px;
-  top: -34px;
-  width: 64px;
-  height: 64px;
+  left: calc(-7.5 * var(--k));
+  top: calc(-8 * var(--k));
+  width: calc(15 * var(--k));
+  height: calc(15 * var(--k));
   border-radius: 50%;
   display: grid;
   place-items: center;
   border: 0;
   padding: 0;
-  cursor: pointer;
   color: var(--gift-on-accent);
   font-family: var(--font-display), Georgia, serif;
-  font-size: 26px;
+  font-size: calc(6.2 * var(--k));
   font-style: italic;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 1px rgba(0, 0, 0, 0.35);
   background: radial-gradient(circle at 36% 30%, var(--gift-accent-soft), var(--gift-accent) 48%, var(--gift-accent-deep) 100%);
   box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.4),
-    inset 0 -4px 8px rgba(0, 0, 0, 0.28),
-    inset 0 2px 4px rgba(255, 255, 255, 0.28);
+    0 calc(1.4 * var(--k)) calc(3.3 * var(--k)) rgba(0, 0, 0, 0.4),
+    inset 0 calc(-0.9 * var(--k)) calc(1.9 * var(--k)) rgba(0, 0, 0, 0.28),
+    inset 0 calc(0.5 * var(--k)) calc(0.9 * var(--k)) rgba(255, 255, 255, 0.28);
 }
 .seal::before {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: calc(1.6 * var(--k));
   border-radius: 50%;
   box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
-.seal:focus-visible {
-  outline: 3px solid white;
-  outline-offset: 3px;
-}
 .crumb {
   position: absolute;
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
+  left: calc(-0.7 * var(--k));
+  top: calc(-0.7 * var(--k));
+  width: calc(1.4 * var(--k));
+  height: calc(1.4 * var(--k));
   border-radius: 40%;
   background: var(--gift-accent-deep);
-}
-.hint {
-  font-size: 13px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* ---------- folded letter ---------- */

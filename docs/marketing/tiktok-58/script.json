@@ -1,0 +1,24 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 07:12", "messages": [
+      { "from": "me", "text": "day 61" },
+      { "from": "them", "text": "61 of how many" },
+      { "from": "me", "text": "thats the question isnt it" },
+      { "from": "them", "text": "ask me again tonight" },
+      { "from": "me", "text": "why tonight" },
+      { "from": "them", "text": "just ask" }
+    ] },
+    { "type": "chat", "timestamp": "Today 22:58", "messages": [
+      { "from": "me", "text": "ok. 61 of how many" },
+      { "from": "them", "text": "open it" },
+      { "from": "them", "link": { "title": "18 days", "domain": "tryethos.io", "image": "og", "name": "Mia" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:04", "messages": [
+      { "from": "me", "text": "18" },
+      { "from": "me", "text": "u booked it" },
+      { "from": "them", "text": "i booked it" },
+      { "from": "me", "text": "day 61 of 79" },
+      { "from": "them", "text": "79 and then never again", "tapback": "heart" }
+    ] }
+  ]
+}

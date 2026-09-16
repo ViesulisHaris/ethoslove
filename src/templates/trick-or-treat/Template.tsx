@@ -17,13 +17,44 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
-import { Cat, Cobweb, Ghost, House, Moon, PALETTES, Pumpkin, ScrollRoll, type Palette } from "./art";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { Cat, Cobweb, Ghost, House, Moon, PALETTES, Pumpkin, ScrollRoll, Sweets, type Palette } from "./art";
 import type { TrickOrTreatFields } from "./schema";
 
 const S = {
-  en: { ring: "ring the bell", door: "trick or treat?", trick: "trick", treat: "treat", boo: "BOO!", fine: "…fine. treat.", sign: "happy halloween", scroll: "a note from {name}", gallery: "the haunted gallery" },
-  es: { ring: "llama al timbre", door: "¿truco o trato?", trick: "truco", treat: "trato", boo: "¡BUU!", fine: "…vale. trato.", sign: "feliz halloween", scroll: "una nota de {name}", gallery: "la galería encantada" },
+  en: { ring: "ring the bell", door: "trick or treat?", trick: "trick", treat: "treat", boo: "BOO!", fine: "…fine. treat.", sign: "for {name}", scroll: "a note from {name}", gallery: "the haunted gallery", headline: "one night only" },
+  es: { ring: "llama al timbre", door: "¿truco o trato?", trick: "truco", treat: "trato", boo: "¡BUU!", fine: "…vale. trato.", sign: "para {name}", scroll: "una nota de {name}", gallery: "la galería encantada", headline: "solo por esta noche" },
 };
+
+/** The night is the page: a wash that deepens it, with the moon's haze in the corner it stands in. */
+const LOOKS: Record<TrickOrTreatFields["palette"], { tone: CoverTone; pattern: string }> = {
+  midnight: {
+    tone: { page: "rgba(10,6,24,.3)", glow: ["rgba(169,139,240,.18)", "rgba(255,179,71,.3)"], accent: "#FFD9A0", dark: true },
+    pattern: "radial-gradient(rgba(255,255,255,.05) calc(.45*var(--k)), transparent calc(.6*var(--k))) 0 0/calc(23*var(--k)) calc(17*var(--k))",
+  },
+  pumpkin: {
+    tone: { page: "rgba(18,6,3,.3)", glow: ["rgba(224,144,74,.18)", "rgba(255,193,92,.3)"], accent: "#FFD9A0", dark: true },
+    pattern: "radial-gradient(rgba(255,255,255,.05) calc(.45*var(--k)), transparent calc(.6*var(--k))) 0 0/calc(23*var(--k)) calc(17*var(--k))",
+  },
+  witch: {
+    tone: { page: "rgba(4,14,11,.3)", glow: ["rgba(139,224,166,.16)", "rgba(200,255,122,.26)"], accent: "#CFF7A8", dark: true },
+    pattern: "radial-gradient(rgba(255,255,255,.05) calc(.45*var(--k)), transparent calc(.6*var(--k))) 0 0/calc(23*var(--k)) calc(17*var(--k))",
+  },
+  candy: {
+    tone: { page: "rgba(20,6,30,.3)", glow: ["rgba(255,179,230,.18)", "rgba(255,192,224,.3)"], accent: "#FFD6EE", dark: true },
+    pattern: "radial-gradient(rgba(255,255,255,.05) calc(.45*var(--k)), transparent calc(.6*var(--k))) 0 0/calc(23*var(--k)) calc(17*var(--k))",
+  },
+};
+
+/** The house nearly spans a phone, so these keep to the sky above it and the path below it. */
+const STICKERS: StickerPlacement[] = [
+  { id: "bat", x: 13, y: 12, size: 17, rotate: -8 },
+  { id: "sparkle", x: 31, y: 7, size: 7 },
+  { id: "candy", x: 10, y: 80, size: 16, rotate: -12 },
+  { id: "ghost", x: 89, y: 78, size: 14, rotate: 8 },
+  { id: "star", x: 93, y: 89, size: 10, rotate: 10 },
+  { id: "candy", x: 27, y: 91, size: 14, rotate: 16 },
+];
 
 const KEYFRAMES = `
 .tt-flicker{animation:tt-flick 1.3s ease-in-out infinite alternate}
@@ -53,6 +84,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const sign = data.fields.sign?.trim() || s.sign.replace("{name}", data.recipientName);
   const doorLine = data.fields.doorLine?.trim() || s.door;
+  const look = LOOKS[data.fields.palette] ?? LOOKS.midnight;
+  const headline = data.title?.trim() || s.headline;
   const eventRef = useRef(onEvent);
   useEffect(() => {
     eventRef.current = onEvent;
@@ -91,18 +124,20 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: `linear-gradient(180deg, ${p.sky[0]} 0%, ${p.sky[1]} 70%, ${p.ground} 100%)`, color: p.paper, fontFamily: "var(--gift-font-body)", ["--k" as string]: "min(var(--u), 0.5cqh)" } as CSSProperties}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: `linear-gradient(180deg, ${p.sky[0]} 0%, ${p.sky[1]} 70%, ${p.ground} 100%)`, color: p.paper, fontFamily: "var(--gift-font-body)", ["--top" as string]: "max(calc(6 * var(--k)), calc((100cqh - 140 * var(--k)) / 2))" } as CSSProperties}>
       <style>{KEYFRAMES}</style>
-      {/* stars */}
-      <div aria-hidden="true" className="absolute inset-0 opacity-80" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,.85) calc(.32*var(--u)), transparent calc(.45*var(--u))), radial-gradient(rgba(255,255,255,.45) calc(.22*var(--u)), transparent calc(.34*var(--u)))", backgroundSize: "calc(14*var(--u)) calc(14*var(--u)), calc(19*var(--u)) calc(19*var(--u))", backgroundPosition: "0 0, calc(7*var(--u)) calc(9*var(--u))" }} />
+      {/* stars: faint, so they read as a sky rather than a dotted paper */}
+      <div aria-hidden="true" className="absolute inset-0 opacity-50" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,.85) calc(.32*var(--u)), transparent calc(.45*var(--u))), radial-gradient(rgba(255,255,255,.45) calc(.22*var(--u)), transparent calc(.34*var(--u)))", backgroundSize: "calc(14*var(--u)) calc(14*var(--u)), calc(19*var(--u)) calc(19*var(--u))", backgroundPosition: "0 0, calc(7*var(--u)) calc(9*var(--u))" }} />
+      {/* the night deepens towards the edges, and the moon's corner carries the light */}
+      {stage !== "inside" ? <CoverPage tone={look.tone} pattern={look.pattern} className="z-[1]" /> : null}
       {/* bats and a few sparkles, the whole night */}
       <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
-        <Ambience layers={[{ kind: "bats", colors: ["#120A22", "#1C1030"], count: stage === "trick" ? 14 : stage === "inside" ? 3 : 5 }, { kind: "sparkles", colors: ["#FFFFFF", p.glow], count: 10 }]} opacity={0.95} />
+        <Ambience layers={[{ kind: "bats", colors: ["#120A22", "#1C1030"], count: stage === "trick" ? 14 : stage === "inside" ? 3 : 8 }, { kind: "sparkles", colors: ["#FFFFFF", p.glow], count: 10 }]} opacity={0.95} />
       </div>
 
       <AnimatePresence mode="wait">
         {stage !== "inside" ? (
-          <Porch key={`porch-${run}`} p={p} s={s} data={data} stage={stage} sign={sign} doorLine={doorLine} reduce={!!reduce} onRing={ring} onChoose={choose} />
+          <Porch key={`porch-${run}`} p={p} look={look} s={s} data={data} stage={stage} headline={headline} sign={sign} doorLine={doorLine} reduce={!!reduce} onRing={ring} onChoose={choose} />
         ) : (
           <Inside key={`inside-${run}`} p={p} s={s} t={t} data={data} mode={mode} blocks={blocks} reduce={!!reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={mode === "preview" ? undefined : replay} />
         )}
@@ -121,7 +156,7 @@ function Host({ kind, p, mood }: { kind: TrickOrTreatFields["host"]; p: Palette;
   return <Ghost mood={mood} />;
 }
 
-function Porch({ p, s, data, stage, sign, doorLine, reduce, onRing, onChoose }: { p: Palette; s: (typeof S)["en"]; data: TemplateProps<TrickOrTreatFields>["data"]; stage: Stage; sign: string; doorLine: string; reduce: boolean; onRing: () => void; onChoose: (c: "trick" | "treat") => void }) {
+function Porch({ p, look, s, data, stage, headline, sign, doorLine, reduce, onRing, onChoose }: { p: Palette; look: (typeof LOOKS)["midnight"]; s: (typeof S)["en"]; data: TemplateProps<TrickOrTreatFields>["data"]; stage: Stage; headline: string; sign: string; doorLine: string; reduce: boolean; onRing: () => void; onChoose: (c: "trick" | "treat") => void }) {
   const doorOpen = stage !== "porch";
   const mood: "shy" | "happy" | "boo" = stage === "trick" ? "boo" : stage === "treat" ? "happy" : "shy";
   const bubble = stage === "trick" ? s.boo : stage === "treat" ? "♥" : doorLine;
@@ -139,30 +174,63 @@ function Porch({ p, s, data, stage, sign, doorLine, reduce, onRing, onChoose }: 
       animate={stage === "trick" && !afterBoo && !reduce ? { x: [0, -10, 10, -8, 8, -4, 4, 0] } : { x: 0 }}
       transition={{ duration: 0.6 }}
     >
-      {/* the moon */}
-      <motion.div aria-hidden="true" className="absolute" style={{ right: "max(calc(6 * var(--k)), calc(50% - 46 * var(--k)))", top: "calc(5 * var(--k))", width: "calc(30 * var(--k))", height: "calc(30 * var(--k))" }} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }}>
+      <StickerScatter items={STICKERS} reduce={reduce} className="z-[1]" />
+
+      {/* the moon, with the haze it throws into the corner of the sky */}
+      <div aria-hidden="true" className="absolute" style={{ right: "calc(-11 * var(--k))", top: "calc(-12 * var(--k))", width: "calc(60 * var(--k))", height: "calc(60 * var(--k))", background: `radial-gradient(circle, ${p.glow}38 0%, ${p.glow}16 38%, transparent 68%)` }} />
+      <motion.div aria-hidden="true" className="absolute" style={{ right: "calc(4 * var(--k))", top: "calc(3 * var(--k))", width: "calc(30 * var(--k))", height: "calc(30 * var(--k))" }} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }}>
         <Moon p={p} />
       </motion.div>
 
-      {/* their name, big, in the handwriting */}
       <motion.p
-        className="absolute max-w-[calc(56*var(--k))] text-[calc(11*var(--k))] leading-none"
-        style={{ left: "max(calc(6 * var(--k)), calc(50% - 46 * var(--k)))", top: "calc(10 * var(--k))", fontFamily: "var(--gift-font-hand)", color: p.glow, textShadow: `0 0 calc(4*var(--k)) ${p.glow}66` }}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.7 }}
+        className="absolute inset-x-[calc(8*var(--k))] z-[6] text-center text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55 [overflow-wrap:anywhere]"
+        style={{ top: "calc(var(--top) + 2 * var(--k))" }}
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 0.55, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
       >
-        {data.title || data.recipientName}
+        {data.senderName} → {data.recipientName}
       </motion.p>
+      <motion.h1
+        className="absolute inset-x-[calc(9*var(--k))] z-[6] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+        style={{ top: "calc(var(--top) + 6 * var(--k))", fontFamily: POSTER_FONT, fontSize: headline.length > 24 ? "calc(6*var(--k))" : "calc(8*var(--k))", color: p.glow, textShadow: `0 0 calc(4*var(--k)) ${p.glow}55` }}
+        initial={reduce ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+      >
+        {headline}
+      </motion.h1>
 
-      {/* the house */}
-      <motion.div className="absolute left-1/2 -translate-x-1/2" style={{ top: "calc(30 * var(--k))", width: "calc(78 * var(--k))", height: "calc(92 * var(--k))", filter: "drop-shadow(0 18px 24px rgba(0,0,0,0.5))" }} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
-        <House p={p} doorOpen={doorOpen} lit={doorOpen} sign={sign} />
+      {/* the house: the whole porch is the thing you press */}
+      <motion.div
+        className="absolute left-1/2 z-[2] -translate-x-1/2"
+        style={{ top: "calc(var(--top) + 26 * var(--k))", width: "calc(78 * var(--k))" }}
+        initial={reduce ? false : { opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <span aria-hidden="true" className="absolute bottom-[calc(-1*var(--k))] left-1/2 h-[calc(4*var(--k))] w-[86%] -translate-x-1/2 rounded-[50%]" style={{ background: "rgba(0,0,0,.55)", filter: "blur(calc(2*var(--k)))" }} />
+        <Float reduce={reduce} amount={0.3} duration={7.2}>
+          <motion.button
+            type="button"
+            className="block w-full cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+            style={{ height: "calc(92 * var(--k))", filter: "drop-shadow(0 calc(3*var(--k)) calc(4*var(--k)) rgba(0,0,0,0.5))" }}
+            whileTap={stage === "porch" ? { scale: 0.985 } : undefined}
+            {...(stage === "porch" ? { onClick: onRing, "aria-label": s.ring } : { disabled: true, "aria-hidden": true, tabIndex: -1 })}
+          >
+            <House p={p} doorOpen={doorOpen} lit={doorOpen} sign={sign} />
+          </motion.button>
+        </Float>
       </motion.div>
 
-      {/* the pumpkin on the step */}
-      <motion.div className="absolute z-[3]" style={{ left: "calc(50% - 38 * var(--k))", top: "calc(104 * var(--k))", width: "calc(24 * var(--k))", height: "calc(22 * var(--k))" }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.6 }}>
-        <Pumpkin p={p} lit={stage === "treat" || stage === "trick"} />
+      {/* sweets dropped on the step */}
+      <motion.div className="absolute z-[3]" style={{ left: "calc(50% - 23 * var(--k))", top: "calc(var(--top) + 107 * var(--k))", width: "calc(46 * var(--k))", height: "calc(7.4 * var(--k))" }} initial={reduce ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.75, duration: 0.5 }}>
+        <Sweets p={p} />
+      </motion.div>
+
+      {/* the jack-o'-lantern on the step, carved with her name */}
+      <motion.div className="absolute z-[3]" style={{ left: "calc(50% - 40 * var(--k))", top: "calc(var(--top) + 94 * var(--k))", width: "calc(32 * var(--k))", height: "calc(28 * var(--k))" }} initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.6 }}>
+        <Pumpkin p={p} lit={stage === "treat" || stage === "trick"} name={data.recipientName} />
       </motion.div>
 
       {/* the host, out of the door */}
@@ -171,7 +239,7 @@ function Porch({ p, s, data, stage, sign, doorLine, reduce, onRing, onChoose }: 
           <motion.div
             key="host"
             className={cn("absolute left-1/2 z-[4] -translate-x-1/2", !reduce && data.fields.host === "ghost" && "tt-float")}
-            style={{ top: "calc(88 * var(--k))", width: "calc(26 * var(--k))", height: "calc(28 * var(--k))" }}
+            style={{ top: "calc(var(--top) + 84 * var(--k))", width: "calc(26 * var(--k))", height: "calc(28 * var(--k))" }}
             initial={{ opacity: 0, y: 30, scale: 0.6 }}
             animate={stage === "trick" && !afterBoo ? { opacity: 1, y: -18, scale: 1.35 } : { opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0 }}
@@ -188,7 +256,7 @@ function Porch({ p, s, data, stage, sign, doorLine, reduce, onRing, onChoose }: 
           <motion.div
             key={`bubble-${stage}-${afterBoo}`}
             className="absolute left-1/2 z-[6] max-w-[calc(70*var(--k))] -translate-x-1/2 rounded-[calc(4*var(--k))] px-[calc(4.5*var(--k))] py-[calc(2.4*var(--k))] text-center leading-snug shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
-            style={{ top: "calc(66 * var(--k))", background: "#FFFDF7", color: "#2A2140", fontSize: stage === "trick" && !afterBoo ? "calc(8*var(--k))" : "calc(4.8*var(--k))", fontWeight: stage === "trick" && !afterBoo ? 800 : 500 }}
+            style={{ top: "calc(var(--top) + 62 * var(--k))", background: "#FFFDF7", color: "#2A2140", fontSize: stage === "trick" && !afterBoo ? "calc(8*var(--k))" : "calc(4.8*var(--k))", fontWeight: stage === "trick" && !afterBoo ? 800 : 500 }}
             initial={{ opacity: 0, scale: 0.6, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
@@ -201,24 +269,11 @@ function Porch({ p, s, data, stage, sign, doorLine, reduce, onRing, onChoose }: 
       </AnimatePresence>
 
       {/* the bell, then the choice */}
-      <div className="absolute inset-x-0 z-[8] flex flex-col items-center gap-[calc(3*var(--k))]" style={{ top: "calc(128 * var(--k))" }}>
+      <div className="absolute inset-x-0 z-[8] flex flex-col items-center gap-[calc(3*var(--k))]" style={{ top: "calc(var(--top) + 127 * var(--k))" }}>
         {stage === "porch" ? (
-          <motion.button
-            type="button"
-            onClick={onRing}
-            aria-label={s.ring}
-            className="flex items-center gap-[calc(2.5*var(--k))] rounded-full px-[calc(6*var(--k))] py-[calc(2.6*var(--k))] text-[calc(3.6*var(--k))] font-semibold tracking-[0.18em] uppercase shadow-[0_12px_30px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-4 focus-visible:ring-white/60"
-            style={{ background: p.accent, color: "#1A0F2A" }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0, scale: reduce ? 1 : [1, 1.04, 1] }}
-            transition={{ opacity: { delay: 1, duration: 0.5 }, y: { delay: 1, type: "spring", stiffness: 200, damping: 14 }, scale: { duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 1.8 } }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span aria-hidden="true" className="grid size-[calc(5*var(--k))] place-items-center rounded-full" style={{ background: "#1A0F2A" }}>
-              <span className="size-[calc(2*var(--k))] rounded-full" style={{ background: p.glow, boxShadow: `0 0 calc(2*var(--k)) ${p.glow}` }} />
-            </span>
+          <TapPill tone={look.tone} reduce={reduce} delay={1}>
             {s.ring}
-          </motion.button>
+          </TapPill>
         ) : stage === "door" ? (
           <motion.div className="flex gap-[calc(3*var(--k))]" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
             {(["trick", "treat"] as const).map((c) => (

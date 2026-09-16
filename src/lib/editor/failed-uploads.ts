@@ -1,16 +1,21 @@
 /**
- * What didn't upload, in the sender's terms. The editor tracks files by id; the sender thinks in
- * "my song", "the clip", "three photos". A song that won't go up used to be reported as "Some photos
- * didn't upload", and removing "the failed photos" left the song where it was, so the gift could
- * never be published. Everything here is pure, so the checklist and the remove buttons agree.
+ * What is holding a gift back, in the sender's terms. The editor tracks files by id; the sender
+ * thinks in "my song", "the clip", "three photos". A song that won't go up used to be reported as
+ * "Some photos didn't upload", and removing "the failed photos" left the song where it was, so the
+ * gift could never be published. Everything here is pure, so the checklist and the remove buttons
+ * agree.
  */
+import { isLocalRef } from "@/lib/gift/assets";
 import type { GiftData } from "@/lib/gift/schema";
 import type { AssetRecord } from "./types";
 
 export type FailedGroup = "song" | "video" | "voice" | "photos";
 
 /** Why, in a form the sender can act on: another file, a smaller file, the same file again, or another try. */
-export type FailedReason = "type" | "too_big" | "missing" | "network";
+export type FailedReason = "type" | "too_big" | "missing" | "network" | "processing";
+
+/** A file that is not up yet may simply still be going, which is nobody's fault and needs no alarm. */
+export type StuckReason = FailedReason | "waiting";
 
 export type FailedUpload = {
   group: FailedGroup;
@@ -22,10 +27,12 @@ export type FailedUpload = {
   retryable: boolean;
 };
 
+export type StuckUpload = Omit<FailedUpload, "reason"> & { reason: StuckReason };
+
 const ORDER: FailedGroup[] = ["song", "video", "voice", "photos"];
 
 /** Failures a retry can't change: only a different file, or the same file added again, fixes these. */
-export const LASTING_FAILURES: ReadonlySet<string> = new Set(["unsupported_type", "too_big", "unreadable", "missing_blob"]);
+export const LASTING_FAILURES: ReadonlySet<string> = new Set(["unsupported_type", "too_big", "unreadable", "missing_blob", "processing_failed"]);
 
 export function reasonOf(error: string | undefined): FailedReason {
   switch (error) {
@@ -36,6 +43,8 @@ export function reasonOf(error: string | undefined): FailedReason {
     case "unreadable":
     case "missing_blob":
       return "missing";
+    case "processing_failed":
+      return "processing";
     default:
       return "network";
   }
@@ -79,5 +88,40 @@ export function summarizeFailedUploads(data: GiftData, assets: Record<string, As
       if (seen.reason === "network" && reason !== "network") seen.reason = reason;
     }
   }
+  return ORDER.flatMap((group) => groups.get(group) ?? []);
+}
+
+/** The asset behind a url the gift still points at on this device. */
+function assetIdFor(url: string, assets: Record<string, AssetRecord>): string | undefined {
+  if (url.startsWith("idb:")) return url.slice(4);
+  return Object.values(assets).find((a) => a.objectUrl === url)?.id;
+}
+
+/**
+ * Everything the gift still points at on this device rather than in Storage: the song, the clip, the
+ * voice message, the photos. Read from the gift itself rather than from the upload records, because a
+ * record that went missing used to leave the checklist waiting on a file nobody could see or remove.
+ */
+export function stuckUploads(data: GiftData, assets: Record<string, AssetRecord>): StuckUpload[] {
+  const groups = new Map<FailedGroup, StuckUpload>();
+  const add = (group: FailedGroup, id: string | undefined, title?: string) => {
+    const asset = id ? assets[id] : undefined;
+    const reason: StuckReason = asset?.status === "error" ? reasonOf(asset.error) : asset ? "waiting" : "missing";
+    const retryable = reason === "waiting" || reason === "network";
+    const seen = groups.get(group);
+    if (!seen) {
+      groups.set(group, { group, count: 1, title, reason, retryable });
+      return;
+    }
+    seen.count += 1;
+    seen.retryable ||= retryable;
+    // A file that failed outranks one that is merely slow: that is the one the sender has to act on.
+    if (seen.reason === "waiting" && reason !== "waiting") seen.reason = reason;
+  };
+
+  if (data.music?.source === "upload" && isLocalRef(data.music.url)) add("song", data.music.trackId ?? assetIdFor(data.music.url, assets), data.music.title);
+  if (data.video && isLocalRef(data.video.url)) add("video", assetIdFor(data.video.url, assets));
+  if (data.voiceNote && isLocalRef(data.voiceNote.url)) add("voice", assetIdFor(data.voiceNote.url, assets));
+  for (const photo of data.photos) if (isLocalRef(photo.url)) add("photos", photo.id);
   return ORDER.flatMap((group) => groups.get(group) ?? []);
 }

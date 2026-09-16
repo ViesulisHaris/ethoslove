@@ -32,7 +32,8 @@ export const demoData: Record<"en" | "es", GiftData<TrickOrTreatFields>> = {
   en: {
     ...shared,
     locale: "en",
-    title: "for ivy",
+    // Her name is carved into the pumpkin and hung on the door; the title says something else.
+    title: "you're the treat",
     message:
       "you said halloween is your favourite and nobody ever does anything for it. so.\n\nthis is the haunted house version of me knocking on your door with a bag of sweets, except the sweets are photos and the ghost is nervous.\n\n**you're the treat.** the trick is that i'm keeping you.\n\n*boo. love you.*",
     photos: demoPhotos(["p3", "p5", "p6", "p2"], {
@@ -46,7 +47,7 @@ export const demoData: Record<"en" | "es", GiftData<TrickOrTreatFields>> = {
   es: {
     ...shared,
     locale: "es",
-    title: "para ivy",
+    title: "tú eres el trato",
     message:
       "dijiste que halloween es tu favorito y que nadie hace nunca nada por él. pues.\n\nesta es la versión casa encantada de mí llamando a tu puerta con una bolsa de caramelos, solo que los caramelos son fotos y el fantasma está nervioso.\n\n**tú eres el trato.** el truco es que me quedo contigo.\n\n*buu. te quiero.*",
     photos: demoPhotos(["p3", "p5", "p6", "p2"], {

@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 18:31", "messages": [
+      { "from": "them", "text": "i told u not to spend money on me" },
+      { "from": "me", "text": "i didnt" },
+      { "from": "them", "text": "swear" },
+      { "from": "me", "text": "it cost me 3 hours" },
+      { "from": "them", "text": "3 hours of what" },
+      { "from": "me", "text": "ull see at 7" }
+    ] },
+    { "type": "chat", "timestamp": "Today 19:00", "messages": [
+      { "from": "me", "text": "happy birthday. dont open it at work" },
+      { "from": "me", "link": { "title": "no money was spent", "domain": "tryethos.io", "image": "og", "name": "Kofi" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 19:22", "messages": [
+      { "from": "them", "text": "im at work" },
+      { "from": "them", "text": "im crying at work" },
+      { "from": "me", "text": "i said dont" },
+      { "from": "them", "text": "3 hours??" },
+      { "from": "me", "text": "and the shift i swapped", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 18:03", "messages": [
+      { "from": "them", "text": "u sent 9 messages" },
+      { "from": "me", "text": "u didnt reply for 40 minutes" },
+      { "from": "them", "text": "i was in the shower" },
+      { "from": "me", "text": "for 40 minutes?" },
+      { "from": "them", "text": "u are unwell" },
+      { "from": "me", "text": "its ur birthday tomorrow. i needed u alive" }
+    ] },
+    { "type": "chat", "timestamp": "Today 18:20", "messages": [
+      { "from": "me", "text": "anyway. open this at midnight" },
+      { "from": "me", "link": { "title": "happy birthday, answer ur phone", "domain": "tryethos.io", "image": "og", "name": "Sara" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 00:04", "messages": [
+      { "from": "them", "text": "i opened it" },
+      { "from": "them", "text": "u made a whole cinema" },
+      { "from": "me", "text": "took 3 days" },
+      { "from": "them", "text": "i wouldve replied faster if i knew" },
+      { "from": "me", "text": "reply faster anyway", "tapback": "heart" }
+    ] }
+  ]
+}

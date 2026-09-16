@@ -38,6 +38,24 @@ export function ScratchSurface({ foil, label, onCleared, threshold = 0.55, reset
     stops.forEach((c, i) => g.addColorStop(i / (stops.length - 1), c));
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
+    // A holographic sheen over the foil: translucent sweeps, so it scratches off with everything else.
+    for (const [tilt, alpha] of [
+      [0.6, 0.16],
+      [-0.35, 0.1],
+    ] as const) {
+      const sheen = ctx.createLinearGradient(0, h * (0.5 - tilt), w, h * (0.5 + tilt));
+      for (const [stop, hue] of [
+        [0, 190],
+        [0.25, 280],
+        [0.5, 330],
+        [0.75, 45],
+        [1, 160],
+      ] as const) {
+        sheen.addColorStop(stop, `hsla(${hue}, 90%, 72%, ${alpha})`);
+      }
+      ctx.fillStyle = sheen;
+      ctx.fillRect(0, 0, w, h);
+    }
     for (let i = 0; i < w * h * 0.06; i++) {
       ctx.fillStyle = Math.random() < 0.5 ? "rgba(255,255,255,0.18)" : "rgba(0,0,0,0.12)";
       ctx.fillRect(Math.random() * w, Math.random() * h, 1.2, 1.2);
