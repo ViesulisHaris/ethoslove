@@ -125,8 +125,10 @@ test.describe("Halfway: the recipient", () => {
     // The button breathes forever, so Playwright never sees it as stable; force is intended here.
     await page.getByRole("button", { name: "blow the plane to Clara" }).click({ force: true });
     await expect(page.getByText("blow into your phone", { exact: true })).toBeVisible({ timeout: 5_000 });
+    // The counter is live, so wait for it to settle at the whole distance rather than reading it
+    // mid-frame: on a fast build the first read can land before the stage has drawn its first one.
+    await expect.poll(() => kmLeft(page), { timeout: 5_000 }).toBe(6863);
     const start = await kmLeft(page);
-    expect(start).toBe(6863);
 
     // Quiet: nothing moves.
     await page.waitForTimeout(1_500);
