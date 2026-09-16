@@ -28,7 +28,9 @@ export type StickerId =
   | "mug"
   | "ghost"
   | "bat"
-  | "candy";
+  | "candy"
+  | "cake"
+  | "snowflake";
 
 const Svg = ({ children, vb = "0 0 100 100" }: { children: ReactNode; vb?: string }) => (
   <svg viewBox={vb} className="sticker h-full w-full overflow-visible" aria-hidden="true">
@@ -323,6 +325,41 @@ const STICKERS: Record<StickerId, () => ReactNode> = {
       <path d="M57 42 q3 3 6 0" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round" />
     </Svg>
   ),
+  cake: () => (
+    <Svg vb="0 0 110 110">
+      <ellipse cx="55" cy="97" rx="45" ry="8" fill="#fffaf2" {...cut} />
+      <path d="M15 57H95V85C95 91 90 95 84 95H26C20 95 15 91 15 85Z" fill="#E7B88B" {...cut} />
+      <path d="M15 52C15 46 20 42 26 42H84C90 42 95 46 95 52V61C89 67 81 59 73 64C65 69 57 61 49 65C41 69 33 61 25 65C20 67 17 65 15 61Z" fill="#FCE7EE" {...cut} />
+      <g fill="#F2879F">
+        <circle cx="34" cy="74" r="3.2" />
+        <circle cx="54" cy="82" r="3.2" />
+        <circle cx="74" cy="72" r="3.2" />
+        <circle cx="44" cy="88" r="2.8" />
+        <circle cx="66" cy="88" r="2.8" />
+      </g>
+      <rect x="31.5" y="22" width="7" height="22" rx="3.5" fill="#FFF6E6" {...cut} />
+      <rect x="51.5" y="15" width="7" height="29" rx="3.5" fill="#FFD9E2" {...cut} />
+      <rect x="71.5" y="22" width="7" height="22" rx="3.5" fill="#FFF6E6" {...cut} />
+      <path d="M35 8C38.5 13 40.5 16 40.5 19.5C40.5 23 38 25.5 35 25.5C32 25.5 29.5 23 29.5 19.5C29.5 16 31.5 13 35 8Z" fill="#FFC24D" {...cut} />
+      <path d="M55 1C58.5 6 60.5 9 60.5 12.5C60.5 16 58 18.5 55 18.5C52 18.5 49.5 16 49.5 12.5C49.5 9 51.5 6 55 1Z" fill="#FFC24D" {...cut} />
+      <path d="M75 8C78.5 13 80.5 16 80.5 19.5C80.5 23 78 25.5 75 25.5C72 25.5 69.5 23 69.5 19.5C69.5 16 71.5 13 75 8Z" fill="#FFC24D" {...cut} />
+    </Svg>
+  ),
+  snowflake: () => {
+    const arm = "M50 50V11M50 21L42.5 13.5M50 21L57.5 13.5M50 33L43.5 26.5M50 33L56.5 26.5";
+    const arms = [0, 60, 120, 180, 240, 300];
+    return (
+      <Svg>
+        {arms.map((a) => (
+          <path key={`w${a}`} d={arm} transform={`rotate(${a} 50 50)`} stroke="#fff" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        ))}
+        {arms.map((a) => (
+          <path key={`c${a}`} d={arm} transform={`rotate(${a} 50 50)`} stroke="#BFE0F7" strokeWidth="4.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        ))}
+        <circle cx="50" cy="50" r="7.5" fill="#EAF6FF" {...cut} />
+      </Svg>
+    );
+  },
   candy: () => (
     <Svg vb="0 0 120 80">
       <path d="M30 26 L6 14 L12 40 L6 66 L30 54Z" fill="#ffb1c8" {...cut} />
