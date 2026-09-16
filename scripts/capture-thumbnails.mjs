@@ -152,6 +152,21 @@ const SCRIPTS = {
     await page.waitForTimeout(4000);
     return poster;
   },
+  garden: async (page) => {
+    // The gate is its own cover: shoot it closed, then push it and walk the page down.
+    const gate = page.getByRole("button", { name: /push the gate/i }).first();
+    await gate.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    const poster = await page.screenshot();
+    await gate.click({ force: true });
+    await page.waitForTimeout(2600);
+    const sc = page.locator('[data-template="garden"] .overflow-y-auto').first();
+    for (let i = 0; i < 9; i++) {
+      await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.5, behavior: "smooth" }));
+      await page.waitForTimeout(820);
+    }
+    return poster;
+  },
   kawaii: async (page) => {
     // Its demo opens with the gingham cover; tap through it first.
     const cover = page.getByRole("button", { name: /tap to open/i });

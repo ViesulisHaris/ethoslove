@@ -21,12 +21,13 @@ import { manifest as fireside } from "./fireside/manifest";
 import { manifest as trickOrTreat } from "./trick-or-treat/manifest";
 import { manifest as scrapbook } from "./scrapbook/manifest";
 import { manifest as halfway } from "./halfway/manifest";
+import { manifest as garden } from "./garden/manifest";
 
 /**
  * Manifests are eager (tiny, safe to import on the server).
  * Template code is lazy: each entry is its own chunk, loaded only when rendered.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = {
@@ -51,6 +52,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "trick-or-treat": () => import("./trick-or-treat"),
   scrapbook: () => import("./scrapbook"),
   halfway: () => import("./halfway"),
+  garden: () => import("./garden"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
