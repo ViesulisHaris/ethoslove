@@ -490,6 +490,8 @@
         "typePhoto": "We can’t use this file type. Try a JPG or PNG.",
         "tooBig": "It’s over {mb} MB. Remove it and add a shorter one.",
         "missing": "This device can no longer read it. Remove it, then add it again.",
+        "waiting": "It hasn't finished uploading. Try again, or remove it to send the gift without it.",
+        "processing": "This device couldn't prepare it. Remove it, or add a smaller copy.",
         "network": "The connection dropped. Try again, or remove it to send the gift without it.",
         "remove": "Remove"
       }

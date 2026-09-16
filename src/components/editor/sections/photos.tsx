@@ -11,6 +11,7 @@ import type { GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { useEditor } from "@/lib/editor/store";
 import { reasonOf } from "@/lib/editor/failed-uploads";
+import { isLocalRef } from "@/lib/gift/assets";
 import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "../field";
@@ -115,7 +116,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
                   key={photo.id}
                   photo={photo}
                   index={i}
-                  status={assets[photo.id]?.status ?? "uploaded"}
+                  status={assets[photo.id]?.status ?? (isLocalRef(photo.url) ? "local" : "uploaded")}
                   onCaption={(caption) => updatePhoto(photo.id, { caption })}
                   onRemove={() => void removePhoto(photo.id)}
                   onRotate={() => void editPhoto(photo.id, { rotate: 90 })}

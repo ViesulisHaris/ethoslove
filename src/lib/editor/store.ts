@@ -21,7 +21,7 @@ import type { AssetRecord, EditorDraft, SaveState, ScheduleSettings } from "./ty
 import { deleteBlob, getBlob, putBlob } from "./blob-store";
 import { UploadError, timeoutFor, uploadBlob } from "./upload";
 import { uploadTypeFor } from "./media-types";
-import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, type FailedGroup } from "./failed-uploads";
+import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, stuckUploads, type FailedGroup } from "./failed-uploads";
 import { processImageFile, transformImage } from "./image";
 import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 
@@ -90,6 +90,8 @@ export type EditorState = {
   retryUploads: () => Promise<void>;
   /** Take whatever didn't upload out of the gift (or one part of it) so it can be published without it. */
   dropFailedUploads: (only?: FailedGroup) => Promise<void>;
+  /** The same, for anything the gift still points at on this device, however it got stuck. */
+  dropStuckUploads: (only?: FailedGroup) => Promise<void>;
   syncNow: () => Promise<boolean>;
   serializedForServer: () => GiftData;
   markPublished: (shortId: string, status: "live" | "scheduled") => void;
@@ -881,6 +883,17 @@ export const useEditor = create<EditorState>((set, get) => {
           await deleteBlob(a.id);
           touch();
         }
+      }
+    },
+
+    async dropStuckUploads(only) {
+      for (const item of stuckUploads(get().data, get().assets)) {
+        if (only && item.group !== only) continue;
+        if (item.group === "song") get().clearMusic();
+        else if (item.group === "voice") get().clearVoiceNote();
+        else if (item.group === "video") get().clearVideo();
+        // Photos go one by one: the ones already in Storage stay in the gift.
+        else for (const photo of get().data.photos.filter((p) => isLocalRef(p.url))) await get().removePhoto(photo.id);
       }
     },
 

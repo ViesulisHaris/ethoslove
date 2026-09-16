@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { GiftData } from "@/lib/gift/schema";
 import type { AssetRecord } from "@/lib/editor/types";
-import { groupOf, isVideoItself, summarizeFailedUploads } from "@/lib/editor/failed-uploads";
+import { groupOf, isVideoItself, stuckUploads, summarizeFailedUploads } from "@/lib/editor/failed-uploads";
 
 const base = {
   version: 1,
@@ -64,7 +64,7 @@ describe("what didn't upload", () => {
     expect(summarizeFailedUploads(data, { gone: asset("gone", "photo", "network") })).toEqual([]);
   });
 
-  it("lists the song, the clip, the voice message and the photos in that order", () => {
+  it("lists the song, the clip, the voice message and the photos in that order, when they failed", () => {
     const data = gift({
       photos: [{ id: "p", url: "blob:p" }],
       music: { source: "upload", url: "blob:s", trackId: "s", startAt: 0 },
@@ -73,5 +73,36 @@ describe("what didn't upload", () => {
     });
     const assets = { p: asset("p", "photo", "stalled"), vn: asset("vn", "audio", "server", "blob:vn"), v: asset("v", "video", "network", "blob:v"), s: asset("s", "audio", "unreadable") };
     expect(summarizeFailedUploads(data, assets).map((f) => f.group)).toEqual(["song", "video", "voice", "photos"]);
+  });
+});
+
+describe("what is still holding the gift back", () => {
+  it("counts a file the gift still points at here, even with no upload record left", () => {
+    const data = gift({ photos: [{ id: "a", url: "idb:a" }, { id: "b", url: "gifts/g/b.webp" }] });
+    expect(stuckUploads(data, {})).toEqual([{ group: "photos", count: 1, title: undefined, reason: "missing", retryable: false }]);
+  });
+
+  it("calls a file that is still going 'waiting', and offers to try again", () => {
+    const data = gift({ photos: [], music: { source: "upload", url: "blob:song", trackId: "song", title: "our song", startAt: 0 } });
+    const uploading = { song: { id: "song", kind: "audio" as const, local: true, status: "uploading" as const, progress: 0.4, objectUrl: "blob:song" } };
+    expect(stuckUploads(data, uploading)).toEqual([{ group: "song", count: 1, title: "our song", reason: "waiting", retryable: true }]);
+  });
+
+  it("lets a real failure outrank a file that is merely slow", () => {
+    const data = gift({ photos: [{ id: "a", url: "blob:a" }, { id: "b", url: "blob:b" }] });
+    const assets = {
+      a: { id: "a", kind: "photo" as const, local: true, status: "uploading" as const, progress: 0.2 },
+      b: { id: "b", kind: "photo" as const, local: true, status: "error" as const, progress: 0, error: "processing_failed" },
+    };
+    expect(stuckUploads(data, assets)).toEqual([{ group: "photos", count: 2, title: undefined, reason: "processing", retryable: true }]);
+  });
+
+  it("says nothing when every file is in Storage", () => {
+    const data = gift({
+      photos: [{ id: "a", url: "gifts/g/a.webp" }],
+      music: { source: "upload", url: "gifts/g/song.m4a", trackId: "song", startAt: 0 },
+      voiceNote: { url: "gifts/g/vn.webm" },
+    });
+    expect(stuckUploads(data, {})).toEqual([]);
   });
 });

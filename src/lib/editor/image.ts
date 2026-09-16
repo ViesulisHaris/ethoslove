@@ -22,22 +22,44 @@ async function dimensions(blob: Blob): Promise<{ width: number; height: number }
  * compress to WebP under LIMITS.photoMaxBytes. Runs in a worker where available. 1600px at
  * ~0.5 MB is more than a phone screen shows, and a third of what we used to upload and serve.
  */
+/**
+ * A decoder that never comes back leaves the photo on "Preparing…" for ever, and the publish
+ * checklist waits behind it with nothing to show the sender. Give every step a finish line.
+ */
+const PREPARE_MS = 45_000;
+
+function withDeadline<T>(work: Promise<T>, ms = PREPARE_MS): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error("processing_failed")), ms);
+    work.then(
+      (value) => {
+        clearTimeout(id);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(id);
+        reject(error);
+      },
+    );
+  });
+}
+
 export async function processImageFile(file: File): Promise<ProcessedImage> {
   let source: Blob = file;
   if (isHeic(file)) {
     const { default: heic2any } = await import("heic2any");
-    const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.92 });
+    const converted = await withDeadline(heic2any({ blob: file, toType: "image/jpeg", quality: 0.92 }));
     source = Array.isArray(converted) ? converted[0] : converted;
   }
   const { default: compress } = await import("browser-image-compression");
-  const blob = await compress(source as File, {
+  const blob = await withDeadline(compress(source as File, {
     maxSizeMB: LIMITS.photoMaxBytes / (1024 * 1024),
     maxWidthOrHeight: LIMITS.photoMaxEdgePx,
     fileType: "image/webp",
     initialQuality: 0.82,
     useWebWorker: true,
     preserveExif: false,
-  });
+  }));
   const dims = await dimensions(blob);
   return { blob, ...dims };
 }
