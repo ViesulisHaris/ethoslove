@@ -576,11 +576,15 @@
       "names": {
         "gingham": "Vichy",
         "picnic": "Pícnic",
-        "starry": "Estrellas",
         "polka": "Lunares",
-        "garden": "Jardín",
+        "birthday": "Cumpleaños",
         "lovecore": "Amor",
+        "pearl": "Perla",
+        "garden": "Jardín",
+        "mocha": "Moca",
         "harvest": "Otoño",
+        "starry": "Estrellas",
+        "snow": "Nieve",
         "spooky": "Halloween",
         "classic": "Clásica"
       }

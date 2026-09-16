@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { motion } from "motion/react";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { giftString } from "../i18n";
@@ -49,7 +49,10 @@ export function Cover({
   return (
     <motion.div
       className="absolute inset-0 z-[60] overflow-hidden"
-      style={{ background: look.background }}
+      // A cover is also drawn outside a gift (the editor's picker, the gallery on the homepage),
+      // where --u has never been declared. Declaring it here resolves against whichever box is
+      // the container: the gift on a real page, the thumbnail everywhere else.
+      style={{ "--u": "min(1cqw, calc(1cqh * 0.6))", background: look.background } as CSSProperties}
       initial={false}
       exit={{ opacity: 0, scale: 1.05, transition: { duration: 0.6, ease: EASE } }}
       data-cover={look.id}

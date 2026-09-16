@@ -576,11 +576,15 @@
       "names": {
         "gingham": "Gingham",
         "picnic": "Picnic",
-        "starry": "Starry",
         "polka": "Polka",
-        "garden": "Garden",
+        "birthday": "Birthday",
         "lovecore": "Lovecore",
+        "pearl": "Pearl",
+        "garden": "Garden",
+        "mocha": "Mocha",
         "harvest": "Harvest",
+        "starry": "Starry",
+        "snow": "Snow",
         "spooky": "Spooky",
         "classic": "Classic"
       }
