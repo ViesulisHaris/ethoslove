@@ -1,5 +1,5 @@
 ---
-name: gift-template
+name: build-gift-template
 description: How to build, change or review a gift template in this repo (src/templates/<slug>). Use this whenever the work touches a template — adding a new one, editing an existing template's look, interaction, fields or demo data, wiring a template into the editor and gallery, capturing its poster and preview, or reviewing a template someone else wrote. Reach for it even when the request never says "template": "make a gift where you shake the phone", "add a colour option to Kawaii", "the map one looks wrong on phones", "why doesn't my new field show in the editor" are all this.
 ---
 
