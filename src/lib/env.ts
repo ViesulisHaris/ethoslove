@@ -45,6 +45,15 @@ export const env = {
   upstashRedisUrl: read("UPSTASH_REDIS_REST_URL"),
   upstashRedisToken: read("UPSTASH_REDIS_REST_TOKEN"),
 
+  /**
+   * Search Console and Bing Webmaster ownership, as the meta tag each one offers. Server-side:
+   * `generateMetadata` runs on the server, so these never need to reach the browser bundle.
+   * Left unset the tags are simply absent, which is also the right answer when ownership was
+   * proved by DNS instead.
+   */
+  googleSiteVerification: read("GOOGLE_SITE_VERIFICATION"),
+  bingSiteVerification: read("BING_SITE_VERIFICATION"),
+
   /** Apple Sign-In is hidden until the provider is configured in Supabase. */
   authAppleEnabled: read("NEXT_PUBLIC_AUTH_APPLE_ENABLED") === "true",
   authGoogleEnabled: read("NEXT_PUBLIC_AUTH_GOOGLE_ENABLED") !== "false",

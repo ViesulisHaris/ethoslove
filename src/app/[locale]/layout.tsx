@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { ogImageUrl } from "@/lib/seo";
+import { env } from "@/lib/env";
 import { Providers } from "@/components/shared/providers";
 import { RefCapture } from "@/components/shared/ref-capture";
 import { SiteAnalytics } from "@/components/shared/analytics";
@@ -104,6 +105,11 @@ export async function generateMetadata({
     },
     twitter: { card: "summary_large_image", site: SITE.twitterHandle, images: [ogImageUrl(locale)] },
     robots: { index: true, follow: true },
+    // Absent until a token is set, which is correct: ownership proved by DNS needs no tag.
+    verification: {
+      ...(env.googleSiteVerification ? { google: env.googleSiteVerification } : {}),
+      ...(env.bingSiteVerification ? { other: { "msvalidate.01": env.bingSiteVerification } } : {}),
+    },
     icons: { apple: "/icons/apple-touch-icon.png" },
     appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: SITE.name },
   };
