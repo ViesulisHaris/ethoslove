@@ -1,0 +1,48 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 21.14", "messages": [
+      { "from": "me", "text": "happy anniversary" },
+      { "from": "them", "text": "It's tomorrow" },
+      { "from": "me", "text": "its today" },
+      { "from": "them", "text": "Tomorrow" },
+      { "from": "me", "text": "u cannot be serious" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "our first date was the 14th" },
+      { "from": "them", "text": "We made it official on the 15th" },
+      { "from": "me", "text": "so basically now" },
+      { "from": "them", "text": "It is not basically now" },
+      { "from": "me", "text": "ur insufferable" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Anyway" },
+      { "from": "them", "text": "I made you something" },
+      { "from": "me", "text": "for today or tomorrow" },
+      { "from": "them", "text": "For whichever one you're doing" },
+      { "from": "me", "text": "both. obviously" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "how long did this take" },
+      { "from": "them", "text": "Don't worry about it" },
+      { "from": "me", "text": "thats not a number" },
+      { "from": "them", "text": "Start at the top when you open it" },
+      { "from": "me", "text": "where else would i start" },
+      { "from": "them", "text": "You always start at the end" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "link": { "title": "365", "domain": "tryethos.io", "image": "og", "name": "Noa" } },
+      { "from": "me", "text": "ok im opening it" },
+      { "from": "them", "text": "Top first" },
+      { "from": "me", "text": "yes" },
+      { "from": "me", "text": "no" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.02", "messages": [
+      { "from": "me", "text": "the last card says 391" },
+      { "from": "them", "text": "Days since i met you" },
+      { "from": "me", "text": "we hadnt even spoken then" },
+      { "from": "them", "text": "I know" },
+      { "from": "me", "text": "its past midnight btw" },
+      { "from": "them", "text": "Then happy anniversary", "tapback": "heart" }
+    ] }
+  ]
+}
