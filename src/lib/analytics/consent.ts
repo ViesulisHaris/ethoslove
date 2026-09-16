@@ -63,14 +63,24 @@ export function serverConsent(): Consent | null {
 }
 
 /**
- * A gift page is someone's private letter, opened at a private link. We run no analytics there
- * and so have nothing to ask about — which also keeps the banner away from the one moment the
- * product is trying to be good at.
+ * Where session replay must not go. Clarity records the URL as it finds it, so anything with a
+ * secret or an id in the path or query has to be kept off it entirely — the same rule the
+ * Vercel analytics `redact()` already applies by stripping query strings.
+ *
+ * - `/g/…`   someone's private letter, opened at a private link, with their photos in it.
+ * - `/checkout/…`  carries `?session_id=cs_…`, a Stripe checkout session.
+ * - `/dashboard/…`, `/account`  signed-in pages, with gift ids in the path.
+ *
+ * What is left is the whole public funnel — the pages, the templates, the editor — which is
+ * where the questions actually are. Keeping the banner off these paths too means it never
+ * interrupts a recipient opening a gift.
  *
  * Takes the path with or without a locale prefix, since callers get it from either Next's
  * `usePathname` (`/es/g/abc`) or next-intl's (`/g/abc`).
  */
+const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account"];
+
 export function isPrivatePath(pathname: string): boolean {
   const path = pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
-  return path === "/g" || path.startsWith("/g/");
+  return OFF_LIMITS.some((p) => path === p || path.startsWith(`${p}/`));
 }

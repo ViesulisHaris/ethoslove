@@ -18,8 +18,20 @@ describe("isPrivatePath", () => {
     }
   });
 
+  it("covers the paths that carry a secret or an id", () => {
+    // /checkout/success?session_id=cs_… is a Stripe session; /dashboard/gift/<uuid> is a gift id.
+    const paths = ["/checkout", "/checkout/success", "/dashboard", "/dashboard/gift/79fe7c36", "/account"];
+    for (const p of paths) {
+      expect(isPrivatePath(p), p).toBe(true);
+      for (const locale of routing.locales) {
+        expect(isPrivatePath(`/${locale}${p}`), `/${locale}${p}`).toBe(true);
+      }
+    }
+  });
+
   it("leaves the rest of the site alone", () => {
-    for (const p of ["/", "/templates", "/occasions/birthday", "/pricing", "/create/bloom", "/dashboard"]) {
+    // The public funnel, which is the whole point of measuring anything.
+    for (const p of ["/", "/templates", "/occasions/birthday", "/pricing", "/create/bloom"]) {
       expect(isPrivatePath(p), p).toBe(false);
       for (const locale of routing.locales) {
         expect(isPrivatePath(`/${locale}${p}`), `/${locale}${p}`).toBe(false);
