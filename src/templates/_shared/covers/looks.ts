@@ -196,7 +196,7 @@ export const COVER_LOOKS: Record<CoverLook["id"], CoverLook> = {
   pearl: {
     id: "pearl",
     tone: "light",
-    background: `radial-gradient(70% 50% at 50% 14%, rgba(255,255,255,.9), transparent 70%), ${dots("rgba(198,172,130,.3)", "#fdf8ef", 9, 1.1)}`,
+    background: `radial-gradient(70% 46% at 50% 12%, rgba(255,255,255,.55), transparent 72%), ${dots("rgba(190,160,112,.42)", "#fbf4e6", 9, 1.2)}`,
     script: "#6f5426",
     hint: "#8a7350",
     piece: { kind: "envelope", colors: { body: "#fffdf8", flap: "#fbf3e6", inner: "#eadfc9", seal: "#c9a227", mark: "heart", letter: "#ffffff" } },
