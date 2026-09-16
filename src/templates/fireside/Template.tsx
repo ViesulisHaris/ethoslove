@@ -17,13 +17,53 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Sticker } from "../_shared/covers/stickers";
-import { Blanket, Candle, Mug, PALETTES, Peg, StringLine, WindowFrame, WindowScene, type Palette } from "./art";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { Blanket, Candle, Garland, Mug, PALETTES, Peg, StringLine, WindowFrame, WindowScene, type Palette } from "./art";
 import type { FiresideFields } from "./schema";
 
 const S = {
-  en: { light: "light the candle", tag: "for {name}", letter: "a letter from {name}", photos: "on the line" },
-  es: { light: "enciende la vela", tag: "para {name}", letter: "una carta de {name}", photos: "colgadas del hilo" },
+  en: { light: "light the candle", tag: "for {name}", letter: "a letter from {name}", photos: "on the line", headline: "the long evenings" },
+  es: { light: "enciende la vela", tag: "para {name}", letter: "una carta de {name}", photos: "colgadas del hilo", headline: "las tardes largas" },
 };
+
+/** The room is the scene; the cover's page is a warm wash over it with its own light behind the candle. */
+const LOOKS: Record<FiresideFields["mood"], { tone: CoverTone; pattern: string }> = {
+  amber: {
+    tone: { page: "rgba(14,20,32,.34)", glow: ["rgba(255,179,92,.34)", "rgba(196,106,75,.3)"], accent: "#8A4A22", dark: true },
+    pattern: "repeating-linear-gradient(90deg, rgba(255,226,180,.035) 0 calc(2*var(--k)), transparent calc(2*var(--k)) calc(11*var(--k)))",
+  },
+  maple: {
+    tone: { page: "rgba(20,14,26,.34)", glow: ["rgba(255,158,92,.34)", "rgba(217,112,74,.3)"], accent: "#8A3320", dark: true },
+    pattern: "repeating-linear-gradient(90deg, rgba(255,214,194,.035) 0 calc(2*var(--k)), transparent calc(2*var(--k)) calc(11*var(--k)))",
+  },
+  moss: {
+    tone: { page: "rgba(12,20,17,.34)", glow: ["rgba(233,210,122,.3)", "rgba(176,138,74,.28)"], accent: "#5E5A22", dark: true },
+    pattern: "repeating-linear-gradient(90deg, rgba(232,226,196,.035) 0 calc(2*var(--k)), transparent calc(2*var(--k)) calc(11*var(--k)))",
+  },
+};
+
+/** Down both edges: the window owns the middle band and the blanket owns the bottom. */
+const STICKERS: Record<FiresideFields["outside"], StickerPlacement[]> = {
+  leaves: [
+    { id: "leaf", x: 9, y: 30, size: 13, rotate: -22 },
+    { id: "acorn", x: 92, y: 26, size: 11, rotate: 12 },
+    { id: "sparkle", x: 88, y: 45, size: 7 },
+    { id: "leaf", x: 8, y: 52, size: 11, rotate: 150 },
+    { id: "pumpkin", x: 12, y: 70, size: 15, rotate: -8 },
+    { id: "leaf", x: 90, y: 66, size: 13, rotate: 28 },
+  ],
+  snow: [
+    { id: "cloud", x: 10, y: 29, size: 17, rotate: -6 },
+    { id: "star", x: 92, y: 25, size: 10, rotate: 12 },
+    { id: "sparkle", x: 88, y: 45, size: 7 },
+    { id: "moon", x: 8, y: 52, size: 11 },
+    { id: "heart", x: 12, y: 70, size: 12, rotate: -8 },
+    { id: "sparkle", x: 90, y: 66, size: 9 },
+  ],
+};
+
+/** Motes only: bokeh discs read as smudges on a room this dark. */
+const ROOM_AMBIENCE = (p: Palette) => [{ kind: "dust" as const, colors: [p.glow, "#FFF3D6"], count: 16 }];
 
 /** The paper's grain: multiplied over the letter and the notes. */
 const GRAIN =
@@ -53,6 +93,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [run, setRun] = useState(0);
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const tag = data.fields.tag?.trim() || s.tag.replace("{name}", data.recipientName);
+  const look = LOOKS[data.fields.mood] ?? LOOKS.amber;
+  const headline = data.title?.trim() || s.headline;
   const lit = stage !== "dusk";
   const eventRef = useRef(onEvent);
   useEffect(() => {
@@ -78,10 +120,17 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const weather = data.fields.outside === "snow" ? { kind: "snow" as const, colors: ["#FFFFFF", "#EAF2FF"], count: 44 } : { kind: "leaves" as const, colors: p.weather, count: 14 };
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: p.cold, color: p.paper, fontFamily: "var(--gift-font-body)", ["--k" as string]: "min(var(--u), 0.5cqh)", ["--top" as string]: "max(0px, calc((100cqh - 156 * var(--k)) / 2))" } as CSSProperties}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: p.cold, color: p.paper, fontFamily: "var(--gift-font-body)", ["--top" as string]: "max(calc(42 * var(--k)), calc((100cqh - 156 * var(--k)) / 2))" } as CSSProperties}>
       <style>{KEYFRAMES}</style>
       {/* Lamplight takes over the room once the candle is lit. */}
       <motion.div aria-hidden="true" className="absolute inset-0" style={{ background: p.warm }} initial={false} animate={{ opacity: lit ? 1 : 0 }} transition={{ duration: reduce ? 0.3 : 1.8, ease: "easeInOut" }} />
+
+      {/* The cover's page, behind the window: it pulls back as the candle takes over the lighting. */}
+      {stage !== "reading" ? (
+        <motion.div aria-hidden="true" className="absolute inset-0 z-[1]" initial={false} animate={{ opacity: lit ? 0.3 : 1 }} transition={{ duration: reduce ? 0.3 : 1.6 }}>
+          <CoverPage tone={look.tone} pattern={look.pattern} />
+        </motion.div>
+      ) : null}
 
       {/* The window, with the weather falling behind the glazing bars. */}
       <div className="absolute left-1/2 z-[2] -translate-x-1/2 overflow-hidden" style={{ top: "calc(var(--top) + 8 * var(--k))", width: "calc(72 * var(--k))", height: "calc(84 * var(--k))", borderRadius: "calc(36 * var(--k)) calc(36 * var(--k)) 6px 6px", boxShadow: "inset 0 0 calc(6 * var(--k)) rgba(0,0,0,0.5)" }}>
@@ -99,7 +148,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       <AnimatePresence mode="wait">
         {stage !== "reading" ? (
-          <Dusk key={`dusk-${run}`} p={p} s={s} tag={tag} drink={data.fields.drink} lit={lit} reduce={!!reduce} onLight={light} />
+          <Dusk key={`dusk-${run}`} p={p} look={look} s={s} data={data} headline={headline} tag={tag} drink={data.fields.drink} outside={data.fields.outside} lit={lit} reduce={!!reduce} onLight={light} />
         ) : (
           <Reading key={`reading-${run}`} p={p} s={s} t={t} data={data} mode={mode} blocks={blocks} reduce={!!reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={mode === "preview" ? undefined : replay} />
         )}
@@ -117,59 +166,108 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
-function Dusk({ p, s, tag, drink, lit, reduce, onLight }: { p: Palette; s: (typeof S)["en"]; tag: string; drink: FiresideFields["drink"]; lit: boolean; reduce: boolean; onLight: () => void }) {
+function Dusk({
+  p,
+  look,
+  s,
+  data,
+  headline,
+  tag,
+  drink,
+  outside,
+  lit,
+  reduce,
+  onLight,
+}: {
+  p: Palette;
+  look: (typeof LOOKS)["amber"];
+  s: (typeof S)["en"];
+  data: TemplateProps<FiresideFields>["data"];
+  headline: string;
+  tag: string;
+  drink: FiresideFields["drink"];
+  outside: FiresideFields["outside"];
+  lit: boolean;
+  reduce: boolean;
+  onLight: () => void;
+}) {
   return (
     <motion.div className="absolute inset-0 z-10" exit={{ opacity: 0, transition: { duration: 0.5 } }}>
-      {/* the mug, on the sill */}
+      {/* the air in the room, and a few things pressed onto the page around the scene */}
+      <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden="true">
+        <Ambience layers={ROOM_AMBIENCE(p)} opacity={0.85} />
+      </div>
+      <StickerScatter items={STICKERS[outside] ?? STICKERS.leaves} reduce={reduce} className="z-[2]" />
+
+      {/* the bunting: their name, letter by letter, across the top */}
+      <motion.div
+        className="absolute inset-x-0 top-[calc(2.5*var(--k))] z-[8]"
+        initial={reduce ? false : { opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.7 }}
+      >
+        <Garland name={data.recipientName} p={p} reduce={reduce} />
+      </motion.div>
+
+      <motion.p
+        className="absolute inset-x-[calc(8*var(--k))] z-[8] text-center text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55 [overflow-wrap:anywhere]"
+        style={{ top: "calc(23 * var(--k))" }}
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 0.55, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+      >
+        {data.senderName} → {data.recipientName}
+      </motion.p>
+      <motion.h1
+        className="absolute inset-x-[calc(7*var(--k))] z-[8] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+        style={{ top: "calc(27 * var(--k))", fontFamily: POSTER_FONT, fontSize: headline.length > 24 ? "calc(6*var(--k))" : "calc(8*var(--k))", color: p.stripe }}
+        initial={reduce ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.38, duration: 0.8 }}
+      >
+        {headline}
+      </motion.h1>
+
+      {/* the mug, on the sill, steaming since before you got here */}
       <motion.div className="absolute z-[4]" style={{ left: "calc(50% - 40 * var(--k))", top: "calc(var(--top) + 70 * var(--k))", width: "calc(24 * var(--k))", height: "calc(26 * var(--k))" }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }}>
         <Mug p={p} drink={drink} lit={lit} />
       </motion.div>
 
       {/* the candle: the one thing to tap */}
-      <motion.button
-        type="button"
-        onClick={onLight}
-        aria-label={s.light}
-        className="absolute left-1/2 z-[5] -translate-x-1/2 outline-none focus-visible:ring-4 focus-visible:ring-white/60"
-        style={{ top: "calc(var(--top) + 54 * var(--k))", width: "calc(20 * var(--k))", height: "calc(44 * var(--k))" }}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25, duration: 0.6 }}
-        whileTap={{ scale: 0.96 }}
-      >
-        <Candle p={p} lit={lit} />
-      </motion.button>
-
-      {/* the tag tied to it, with their name */}
       <motion.div
-        className="absolute left-1/2 z-[6] -translate-x-1/2"
-        style={{ top: "calc(var(--top) + 99 * var(--k))" }}
-        initial={{ opacity: 0, y: -6, rotate: -6 }}
-        animate={{ opacity: 1, y: 0, rotate: -3 }}
-        transition={{ delay: 0.7, type: "spring", stiffness: 160, damping: 14 }}
+        className="absolute left-1/2 z-[5] -translate-x-1/2"
+        style={{ top: "calc(var(--top) + 54 * var(--k))", width: "calc(20 * var(--k))" }}
+        initial={reduce ? false : { opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25, type: "spring", stiffness: 80, damping: 15 }}
       >
-        <div className="relative rounded-[3px] px-[calc(4*var(--k))] py-[calc(1.6*var(--k))] shadow-[0_6px_14px_rgba(0,0,0,0.35)]" style={{ backgroundColor: "#E9D2AE", color: "#5A3A1E", backgroundImage: GRAIN }}>
-          <span aria-hidden="true" className="absolute -top-[calc(3*var(--k))] left-1/2 h-[calc(3.2*var(--k))] w-px -translate-x-1/2" style={{ background: p.stripe }} />
-          <span aria-hidden="true" className="absolute top-[calc(1*var(--k))] left-[calc(1.2*var(--k))] size-[calc(1.4*var(--k))] rounded-full" style={{ background: "#B58A54" }} />
-          <p className="max-w-[calc(60*var(--k))] truncate pl-[calc(1.6*var(--k))] text-[calc(5.2*var(--k))] leading-none" style={{ fontFamily: "var(--gift-font-hand)" }}>
-            {tag}
-          </p>
-        </div>
+        {/* it stands on the sill: the shadow stays put while the flame breathes */}
+        <span
+          aria-hidden="true"
+          className="absolute bottom-[calc(1.2*var(--k))] left-1/2 h-[calc(2.6*var(--k))] w-[112%] -translate-x-1/2 rounded-[50%]"
+          style={{ background: "rgba(0,0,0,.5)", filter: "blur(calc(1.1*var(--k)))" }}
+        />
+        <Float reduce={reduce} amount={0.35} duration={6.8}>
+          <motion.button
+            type="button"
+            onClick={onLight}
+            aria-label={s.light}
+            className="block w-full cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+            style={{ height: "calc(44 * var(--k))" }}
+            whileTap={{ scale: 0.96 }}
+          >
+            <Candle p={p} lit={lit} />
+          </motion.button>
+        </Float>
       </motion.div>
 
-      {!lit ? (
-        <motion.p
-          className="absolute left-1/2 z-[6] -translate-x-1/2 rounded-full px-[calc(4*var(--k))] py-[calc(1.5*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] whitespace-nowrap uppercase"
-          style={{ top: "calc(var(--top) + 112 * var(--k))", background: "rgba(255,244,224,0.14)", color: p.stripe, backdropFilter: "blur(6px)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: reduce ? 1 : [0.55, 1, 0.55] }}
-          transition={{ delay: 1.4, duration: 2, repeat: reduce ? 0 : Infinity }}
-        >
+      <div className="absolute inset-x-0 z-[8] flex justify-center" style={{ top: "calc(var(--top) + 103 * var(--k))" }}>
+        <TapPill tone={look.tone} hidden={lit} reduce={reduce} delay={1.2}>
           {s.light}
-        </motion.p>
-      ) : null}
+        </TapPill>
+      </div>
 
-      {/* the blanket, with the letter tucked into it */}
+      {/* the blanket, with the letter tucked into it and their label sewn on */}
       <div className="absolute inset-x-0 bottom-0 z-[7]" style={{ height: "calc(34 * var(--k))" }}>
         <motion.div
           aria-hidden="true"
@@ -186,6 +284,23 @@ function Dusk({ p, s, tag, drink, lit, reduce, onLight }: { p: Palette; s: (type
         <div className="absolute inset-x-0 bottom-0 h-full drop-shadow-[0_-8px_18px_rgba(0,0,0,0.35)]">
           <Blanket p={p} />
         </div>
+        <motion.div
+          className="absolute z-[2]"
+          style={{ right: "calc(8 * var(--k))", bottom: "calc(5 * var(--k))" }}
+          initial={reduce ? false : { opacity: 0, y: 10, rotate: 9 }}
+          animate={{ opacity: 1, y: 0, rotate: 4 }}
+          transition={{ delay: 0.9, type: "spring", stiffness: 160, damping: 14 }}
+        >
+          <div
+            className="relative rounded-[calc(1*var(--k))] px-[calc(3.4*var(--k))] py-[calc(1.6*var(--k))]"
+            style={{ backgroundColor: "#F4E6CC", color: "#5A3A1E", backgroundImage: GRAIN, boxShadow: "0 calc(.8*var(--k)) calc(2*var(--k)) rgba(0,0,0,.4)" }}
+          >
+            <span aria-hidden="true" className="absolute inset-[calc(.9*var(--k))] rounded-[calc(.6*var(--k))] border border-dashed" style={{ borderColor: "rgba(90,58,30,.45)" }} />
+            <p className="max-w-[calc(44*var(--k))] truncate text-[calc(4.4*var(--k))] leading-none" style={{ fontFamily: "var(--gift-font-hand)" }}>
+              {tag}
+            </p>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );

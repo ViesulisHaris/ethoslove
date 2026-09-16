@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { parseRichText } from "@/lib/gift/rich-text";
 import type { TemplateProps } from "../types";
@@ -13,21 +13,89 @@ import { EndScreen } from "../_shared/EndScreen";
 import { MessageBody } from "../_shared/MessageBody";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
+import { COVER_VARS, CoverPage, POSTER_FONT, StickerScatter, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import { BouquetArt, timingFor } from "./Bouquet";
 import { FlowerHead } from "./art";
 import { arrange } from "./arrange";
 import type { BouquetFields } from "./schema";
 
-const BACKDROP: Record<BouquetFields["backdrop"], { bg: string; ink: string; tone: "light" | "dark" }> = {
-  linen: { bg: "radial-gradient(120% 80% at 50% 30%,#F8F2E9 0%,#E9DDCA 100%)", ink: "#2A2420", tone: "light" },
-  sage: { bg: "radial-gradient(120% 80% at 50% 30%,#EEF2E8 0%,#C9D5C1 100%)", ink: "#22291F", tone: "light" },
-  blush: { bg: "radial-gradient(120% 80% at 50% 30%,#FDF0EF 0%,#EDCFD0 100%)", ink: "#2E1F22", tone: "light" },
-  night: { bg: "radial-gradient(120% 80% at 50% 30%,#2B2E3B 0%,#0F1016 100%)", ink: "#F4EFE8", tone: "dark" },
+type Backdrop = {
+  bg: string;
+  ink: string;
+  tone: "light" | "dark";
+  /** The page the bouquet is photographed against, and the light behind it. */
+  cover: CoverTone;
+  /** The wax that closes the paper. */
+  seal: string;
+  stickers: StickerPlacement[];
+};
+
+const BACKDROP: Record<BouquetFields["backdrop"], Backdrop> = {
+  linen: {
+    bg: "radial-gradient(120% 80% at 50% 30%,#F8F2E9 0%,#E9DDCA 100%)",
+    ink: "#2A2420",
+    tone: "light",
+    cover: { page: "#E9DDCA", glow: ["rgba(255,250,232,.95)", "rgba(211,186,150,.45)"], accent: "#9C5A44" },
+    seal: "#B03A3C",
+    stickers: [
+      { id: "sparkle", x: 8, y: 11, size: 8 },
+      { id: "butterfly", x: 89, y: 12, size: 13, rotate: 12 },
+      { id: "leaf", x: 7, y: 68, size: 11, rotate: -22 },
+      { id: "sparkle", x: 94, y: 62, size: 7 },
+      { id: "daisy", x: 7, y: 86, size: 11 },
+      { id: "heart", x: 93, y: 84, size: 11, rotate: 12 },
+    ],
+  },
+  sage: {
+    bg: "radial-gradient(120% 80% at 50% 30%,#EEF2E8 0%,#C9D5C1 100%)",
+    ink: "#22291F",
+    tone: "light",
+    cover: { page: "#C9D5C1", glow: ["rgba(250,255,240,.95)", "rgba(168,192,160,.45)"], accent: "#41653F" },
+    seal: "#A8433C",
+    stickers: [
+      { id: "sparkle", x: 8, y: 11, size: 8 },
+      { id: "butterfly", x: 89, y: 12, size: 13, rotate: 12 },
+      { id: "leaf", x: 7, y: 68, size: 11, rotate: -22 },
+      { id: "sparkle", x: 94, y: 62, size: 7 },
+      { id: "daisy", x: 7, y: 86, size: 11 },
+      { id: "tulip", x: 93, y: 83, size: 12, rotate: 12 },
+    ],
+  },
+  blush: {
+    bg: "radial-gradient(120% 80% at 50% 30%,#FDF0EF 0%,#EDCFD0 100%)",
+    ink: "#2E1F22",
+    tone: "light",
+    cover: { page: "#EDCFD0", glow: ["rgba(255,246,232,.95)", "rgba(240,180,190,.5)"], accent: "#B4485C" },
+    seal: "#C2455E",
+    stickers: [
+      { id: "sparkle", x: 8, y: 11, size: 8 },
+      { id: "butterfly", x: 89, y: 12, size: 13, rotate: 12 },
+      { id: "cherries", x: 7, y: 68, size: 12, rotate: -12 },
+      { id: "sparkle", x: 94, y: 62, size: 7 },
+      { id: "daisy", x: 7, y: 86, size: 11 },
+      { id: "heart", x: 93, y: 84, size: 11, rotate: 12 },
+    ],
+  },
+  night: {
+    bg: "radial-gradient(120% 80% at 50% 30%,#2B2E3B 0%,#0F1016 100%)",
+    ink: "#F4EFE8",
+    tone: "dark",
+    cover: { page: "#16171F", glow: ["rgba(255,214,160,.26)", "rgba(70,74,102,.6)"], accent: "#F4EFE8", dark: true },
+    seal: "#C9A227",
+    stickers: [
+      { id: "star", x: 8, y: 11, size: 10, rotate: -10 },
+      { id: "moon", x: 90, y: 12, size: 14 },
+      { id: "sparkle", x: 7, y: 68, size: 9 },
+      { id: "star", x: 94, y: 62, size: 8, rotate: 14 },
+      { id: "sparkle", x: 7, y: 86, size: 10 },
+      { id: "heart", x: 93, y: 84, size: 11, rotate: 12 },
+    ],
+  },
 };
 
 const S = {
-  en: { forName: "For {name}", open: "Open the card", hint: "There's a card tucked in" },
-  es: { forName: "Para {name}", open: "Abre la tarjeta", hint: "Hay una tarjeta escondida" },
+  en: { forName: "For {name}", open: "open the card" },
+  es: { forName: "Para {name}", open: "abre la tarjeta" },
 };
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<BouquetFields>) {
@@ -70,15 +138,33 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: look.bg, color: look.ink, fontFamily: "var(--gift-font-body)" }}>
-      <div className="grain-overlay opacity-[0.07]" />
-      <div className="absolute inset-x-0 top-[max(1.25rem,calc(env(safe-area-inset-top)+0.75rem))] z-20 px-6 text-center">
-        <p className="text-[11px] tracking-[0.3em] uppercase opacity-60">
+    <div
+      className="absolute inset-0 overflow-hidden select-none"
+      style={{ ...COVER_VARS, backgroundColor: look.cover.page, color: look.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}
+    >
+      <CoverPage tone={look.cover} pattern={look.bg} />
+      <StickerScatter items={look.stickers} reduce={!!reduce} className="z-[3]" />
+      <div
+        className="pointer-events-none absolute inset-x-0 z-20 px-[calc(6*var(--k))] text-center"
+        style={{ top: "max(calc(3*var(--k)), calc(env(safe-area-inset-top) + 2*var(--k)))" }}
+      >
+        <motion.p
+          className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 0.55, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+        >
           {data.senderName} → {data.recipientName}
-        </p>
-        <p className="mt-2 text-[clamp(1.4rem,6.5cqw,1.9rem)] italic" style={{ fontFamily: "var(--gift-font-display)" }}>
+        </motion.p>
+        <motion.h1
+          className="mx-auto mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+          style={{ fontFamily: POSTER_FONT }}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.8 }}
+        >
           {data.title || data.recipientName}
-        </p>
+        </motion.h1>
       </div>
 
       <div className="absolute inset-x-0 top-[12%] bottom-[max(14%,8.5rem)] flex items-center justify-center">
@@ -87,6 +173,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             key={run}
             fields={data.fields}
             cardText={cardText}
+            seal={look.seal}
+            openLabel={s.open}
             animate={animate}
             onCard={ready ? openCard : undefined}
             className="h-full w-auto max-w-[calc(96*var(--u))] drop-shadow-[0_24px_30px_rgba(40,25,20,0.18)]"
@@ -100,7 +188,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         ) : null}
       </AnimatePresence>
 
-      {animate && petalTone ? (
+      {petalTone ? (
         <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
           <Ambience
             layers={[
@@ -119,17 +207,24 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-x-0 bottom-[max(2.5rem,calc(env(safe-area-inset-bottom)+2rem))] z-20 flex flex-col items-center gap-2 px-8 text-center"
+            className="absolute inset-x-0 z-20 flex flex-col items-center px-[calc(6*var(--k))] text-center"
+            style={{ bottom: "max(calc(7*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))" }}
           >
-            <p className="text-xs opacity-60">{s.hint}</p>
-            <button
+            <motion.button
               type="button"
               onClick={openCard}
-              className="h-12 rounded-full px-7 text-[15px] font-semibold shadow-lg"
-              style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
+              aria-label={s.open}
+              className="rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] leading-none font-semibold tracking-[0.22em] whitespace-nowrap uppercase backdrop-blur-sm"
+              style={{
+                background: look.cover.dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.8)",
+                color: look.cover.dark ? "#FFF8EE" : look.cover.accent,
+                boxShadow: look.cover.dark ? "inset 0 0 0 1px rgba(255,255,255,.2)" : "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,35,25,.14)",
+              }}
+              animate={reduce ? undefined : { scale: [1, 1.05, 1] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
             >
               {s.open}
-            </button>
+            </motion.button>
           </motion.div>
         ) : null}
       </AnimatePresence>

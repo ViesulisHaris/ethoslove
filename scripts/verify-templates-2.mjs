@@ -46,7 +46,7 @@ if (!only || only === "cinema") {
 if (!only || only === "jar") {
   await go("jar-of-reasons");
   await shot("jar-01-jar");
-  await page.getByRole("button", { name: /pull another/i }).click();
+  await page.getByRole("button", { name: /tap the jar/i }).click({ force: true });
   await page.waitForTimeout(1200);
   await shot("jar-02-note");
   await page.mouse.click(195, 632);

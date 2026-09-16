@@ -16,13 +16,35 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { hashString } from "../_shared/random";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { ScratchFields } from "./schema";
 import { ScratchSurface } from "./ScratchSurface";
+import { Coin, Ticket } from "./art";
 
 const S = {
-  en: { scratch: "Scratch here", next: "Next card", last: "The last one", cardOf: "Card {i} of {n}", tapStart: "Tap to begin", done: "Keep scratching" },
-  es: { scratch: "Rasca aquí", next: "Siguiente tarjeta", last: "La última", cardOf: "Tarjeta {i} de {n}", tapStart: "Toca para empezar", done: "Sigue rascando" },
+  en: { scratch: "Scratch here", next: "Next card", last: "The last one", cardOf: "Card {i} of {n}", tapStart: "Tap to begin", done: "Keep scratching", pill: "scratch here", for: "for", ticket: "scratch card", prize: "one real story, in five" },
+  es: { scratch: "Rasca aquí", next: "Siguiente tarjeta", last: "La última", cardOf: "Tarjeta {i} de {n}", tapStart: "Toca para empezar", done: "Sigue rascando", pill: "rasca aquí", for: "para", ticket: "tarjeta rasca", prize: "una historia de verdad, en cinco" },
 };
+
+/** The counter the ticket was left on: warm paper, gold light, a shimmer off the foil. */
+const TONE: CoverTone = { page: "#EBD5B4", glow: ["rgba(255,248,230,.95)", "rgba(216,152,102,.55)"], accent: "#9A5C2A" };
+const PATTERN = "radial-gradient(rgba(255,255,255,.5) calc(.8*var(--k)), transparent calc(.9*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))";
+
+const STICKERS: StickerPlacement[] = [
+  { id: "star", x: 12, y: 13, size: 13, rotate: -12 },
+  { id: "sparkle", x: 88, y: 16, size: 8 },
+  { id: "heart", x: 9, y: 52, size: 12, rotate: -8 },
+  { id: "sparkle", x: 92, y: 55, size: 7 },
+  { id: "cherries", x: 15, y: 85, size: 14, rotate: -10 },
+  { id: "star", x: 87, y: 86, size: 11, rotate: 14 },
+];
+
+const AMBIENCE: { kind: AmbienceKind; colors: string[]; count?: number }[] = [
+  { kind: "sparkles", colors: ["#FFFFFF", "#FFE2A8"], count: 16 },
+  { kind: "bokeh", colors: ["#FFD9A8", "#FFF1D6"], count: 6 },
+];
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<ScratchFields>) {
   const reduce = useReducedMotion();
@@ -60,6 +82,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
 
   const finalTitle = data.fields.finalTitle;
+
+  // Before the first scratch, the whole screen is the ticket someone left on the counter.
+  if (!started) return <ScratchCover data={data} s={s} foilLabel={label} reduce={!!reduce} audio={audio} onStart={start} />;
 
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#141110] text-paper select-none" style={{ fontFamily: "var(--gift-font-body)" }}>
@@ -121,11 +146,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       {/* Footer controls */}
       <div className="absolute inset-x-0 bottom-[max(1.5rem,calc(env(safe-area-inset-bottom)+1rem))] z-20 flex flex-col items-center gap-3 px-6">
-        {!started ? (
-          <button type="button" onClick={start} className="h-12 rounded-full px-7 text-[15px] font-semibold shadow-lg" style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}>
-            {s.tapStart}
-          </button>
-        ) : revealed[index] && !isFinal ? (
+        {revealed[index] && !isFinal ? (
           <motion.button initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} type="button" onClick={next} className="flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold shadow-lg" style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}>
             {index + 1 === total - 1 ? s.last : s.next}
             <ChevronRight className="size-4" />
@@ -149,6 +170,84 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       <SoundToggle audio={audio} locale={data.locale} />
       <span className="hidden">{t("theEnd")}</span>
+    </div>
+  );
+}
+
+/** The cover: one printed ticket on the counter, a coin beside it, their name on the print. */
+function ScratchCover({
+  data,
+  s,
+  foilLabel,
+  reduce,
+  audio,
+  onStart,
+}: {
+  data: TemplateProps<ScratchFields>["data"];
+  s: (typeof S)["en"];
+  foilLabel: string;
+  reduce: boolean;
+  audio: ReturnType<typeof useGiftAudio>;
+  onStart: () => void;
+}) {
+  const title = data.title?.trim();
+  const prize = data.fields.finalTitle?.trim() || s.prize;
+  const serial = `№ ${100000 + (hashString(`${data.senderName}${data.recipientName}`) % 899999)}`;
+
+  return (
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, color: "#4A3726", fontFamily: "var(--gift-font-body)" }}>
+      <CoverPage tone={TONE} pattern={PATTERN} />
+      <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+        <Ambience layers={AMBIENCE} opacity={0.85} />
+      </div>
+      <StickerScatter items={STICKERS} reduce={reduce} className="z-[3]" />
+
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-[calc(7*var(--k))] pb-[calc(2*var(--k))]">
+        <motion.p
+          className="text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 0.55, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+        >
+          {data.senderName} → {data.recipientName}
+        </motion.p>
+        {title ? (
+          <motion.h1
+            className="mt-[calc(1.6*var(--k))] max-w-[calc(78*var(--k))] text-center text-[calc(7.2*var(--k))] leading-[1.05] text-balance italic"
+            style={{ fontFamily: POSTER_FONT }}
+            initial={reduce ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.8 }}
+          >
+            {title}
+          </motion.h1>
+        ) : null}
+
+        <motion.div
+          className="relative mt-[calc(4.5*var(--k))] w-[calc(56*var(--k))]"
+          initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+        >
+          <Float reduce={reduce}>
+            <button type="button" onClick={onStart} aria-label={s.pill} className="block w-full rounded-[calc(3*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/70">
+              <Ticket name={data.recipientName} forLabel={s.for} kind={s.ticket} prize={prize} foilLabel={foilLabel} serial={serial} cards={data.photos.slice(0, 12).length + 1} />
+            </button>
+          </Float>
+          <div aria-hidden="true" className="absolute -right-[calc(6*var(--k))] bottom-[calc(5*var(--k))] w-[calc(15*var(--k))] rotate-[-12deg]">
+            <Coin />
+          </div>
+          <span aria-hidden="true" className="absolute -bottom-[calc(1.5*var(--k))] left-1/2 h-[calc(4*var(--k))] w-[72%] -translate-x-1/2 rounded-[50%] bg-black/25 blur-[calc(2.2*var(--k))]" />
+        </motion.div>
+
+        <div className="mt-[calc(5.5*var(--k))]">
+          <TapPill tone={TONE} reduce={reduce}>
+            {s.pill}
+          </TapPill>
+        </div>
+      </div>
+
+      <SoundToggle audio={audio} locale={data.locale} className="bg-black/10 text-current" />
     </div>
   );
 }

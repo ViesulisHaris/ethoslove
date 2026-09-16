@@ -109,8 +109,12 @@ export function Moon({ p }: { p: Palette }) {
   );
 }
 
-/** A jack-o'-lantern. Unlit it's just a pumpkin with a face cut; lit, the face glows and flickers. */
-export function Pumpkin({ p, lit, face = true }: { p: Palette; lit: boolean; face?: boolean }) {
+/**
+ * A jack-o'-lantern. Unlit it's just a pumpkin with a face cut; lit, the cuts glow and flicker.
+ * Give it a `name` and the grin is carved into their name instead.
+ */
+export function Pumpkin({ p, lit, face = true, name }: { p: Palette; lit: boolean; face?: boolean; name?: string }) {
+  const carved = name ? (name.trim().split(/\s+/)[0] || name.trim()).toUpperCase().slice(0, 9) : "";
   return (
     <svg viewBox="0 0 100 90" className="h-full w-full overflow-visible" aria-hidden="true">
       <defs>
@@ -133,7 +137,22 @@ export function Pumpkin({ p, lit, face = true }: { p: Palette; lit: boolean; fac
         <g fill={lit ? "#FFE28A" : "#3A1508"} className={lit ? "tt-flicker" : undefined}>
           <path d="M30 44 L42 52 L28 54Z" />
           <path d="M70 44 L58 52 L72 54Z" />
-          <path d="M28 64 C36 74 64 74 72 64 L66 62 L62 68 L56 62 L50 68 L44 62 L38 68 L34 62Z" />
+          {carved ? (
+            <text
+              x="50"
+              y="72"
+              textAnchor="middle"
+              fontSize={carved.length > 6 ? 13 : 16}
+              fontFamily="var(--font-poster), Georgia, serif"
+              fontWeight="700"
+              letterSpacing="1.5"
+              {...(carved.length > 3 ? { textLength: 58, lengthAdjust: "spacingAndGlyphs" as const } : {})}
+            >
+              {carved}
+            </text>
+          ) : (
+            <path d="M28 64 C36 74 64 74 72 64 L66 62 L62 68 L56 62 L50 68 L44 62 L38 68 L34 62Z" />
+          )}
         </g>
       ) : null}
     </svg>
@@ -201,9 +220,44 @@ export function House({ p, doorOpen, lit, sign }: { p: Palette; doorOpen: boolea
       >
         {sign}
       </text>
+      {/* the doorbell, screwed to the wall beside the door: what the pill asks you to press */}
+      <g>
+        <rect x="104" y="141" width="8" height="13" rx="4" fill="rgba(0,0,0,0.42)" stroke={p.trim} strokeWidth="1" strokeOpacity="0.7" />
+        <circle cx="108" cy="147.5" r="4.2" fill={p.glow} opacity="0.22" className={doorOpen ? undefined : "tt-glow"} />
+        <circle cx="108" cy="147.5" r="2" fill={doorOpen ? "#FFF3C4" : p.glow} />
+        <circle cx="107.4" cy="146.9" r="0.7" fill="#FFFDF7" opacity="0.8" />
+      </g>
       {/* the step */}
       <path d="M46 178 H114 V186 H46Z" fill="rgba(0,0,0,0.35)" />
       <path d="M40 186 H120 V190 H40Z" fill="rgba(0,0,0,0.45)" />
+    </svg>
+  );
+}
+
+/** A few sweets dropped on the step: two wrapped, a lollipop, and a couple of little round ones. */
+export function Sweets({ p }: { p: Palette }) {
+  const c = p.candy;
+  return (
+    <svg viewBox="0 0 100 16" className="h-full w-full overflow-visible" aria-hidden="true">
+      <g transform="rotate(-12 13 10)">
+        <path d="M5 10 L1 6.5 L1.6 13.4Z M21 10 L25 6.5 L24.4 13.4Z" fill={c[0]} opacity="0.9" />
+        <ellipse cx="13" cy="10" rx="8" ry="5" fill={c[0]} />
+        <ellipse cx="11" cy="8.4" rx="3" ry="1.5" fill="#FFFFFF" opacity="0.45" />
+      </g>
+      <circle cx="33" cy="12" r="4" fill={c[1]} />
+      <circle cx="31.7" cy="10.7" r="1.4" fill="#FFFFFF" opacity="0.5" />
+      <g transform="rotate(8 50 8)">
+        <path d="M50 10 V16" stroke="#F6E7C8" strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="50" cy="7" r="5.4" fill={c[2]} />
+        <path d="M50 7 q2.6 -1.4 3.4 1.2 q.8 2.8 -2.4 3.4" fill="none" stroke="#FFFFFF" strokeOpacity="0.45" strokeWidth="1.2" />
+      </g>
+      <g transform="rotate(15 71 11)">
+        <path d="M63 11 L59 7.5 L59.6 14.4Z M79 11 L83 7.5 L82.4 14.4Z" fill={c[3]} opacity="0.9" />
+        <ellipse cx="71" cy="11" rx="8" ry="5" fill={c[3]} />
+        <ellipse cx="69" cy="9.4" rx="3" ry="1.5" fill="#FFFFFF" opacity="0.4" />
+      </g>
+      <circle cx="91" cy="12.4" r="3.4" fill={c[4]} />
+      <circle cx="90" cy="11.4" r="1.2" fill="#FFFFFF" opacity="0.5" />
     </svg>
   );
 }

@@ -17,7 +17,10 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { GiftVideo } from "../_shared/GiftVideo";
+import { Ambience } from "../_shared/Ambience";
+import { COVER_VARS, Float, POSTER_FONT, TapPill, type CoverTone } from "../_shared/cover-kit";
 import type { MuseumFields } from "./schema";
+import { Plaque, VelvetRope } from "./art";
 
 const WALL: Record<MuseumFields["wall"], { wall: string; floor: string; ink: string; muted: string; plaque: string; tone: "light" | "dark" }> = {
   plaster: { wall: "#ece6dc", floor: "#b9a893", ink: "#1A1614", muted: "rgba(26,22,20,0.55)", plaque: "#f7f3ec", tone: "light" },
@@ -32,8 +35,8 @@ const FRAME: Record<MuseumFields["frame"], string> = {
 };
 
 const S = {
-  en: { enter: "Enter", room: "Room", wallText: "Wall text", swipe: "Swipe to walk", untitled: "Untitled" },
-  es: { enter: "Entrar", room: "Sala", wallText: "Texto de pared", swipe: "Desliza para caminar", untitled: "Sin título" },
+  en: { enter: "enter", room: "Room", wallText: "Wall text", swipe: "Swipe to walk", untitled: "Untitled", collection: "The {name} Collection", works: "works" },
+  es: { enter: "entrar", room: "Sala", wallText: "Texto de pared", swipe: "Desliza para caminar", untitled: "Sin título", collection: "Colección {name}", works: "obras" },
 };
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<MuseumFields>) {
@@ -63,9 +66,18 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
   const next = () => scroller.current?.scrollBy({ left: scroller.current.clientWidth, behavior: "smooth" });
   const exhibition = data.fields.exhibition || data.title || data.recipientName;
+  const frame = FRAME[data.fields.frame] ?? FRAME.oak;
+  const hero = data.photos[0];
+  const tone: CoverTone = {
+    page: palette.wall,
+    glow: ["rgba(255,247,226,.9)", "rgba(0,0,0,0)"],
+    accent: palette.tone === "dark" ? "#F4EFE7" : "#4A3A2C",
+    dark: palette.tone === "dark",
+  };
+  const plaqueMeta = [data.fields.years, `${data.photos.length} ${s.works}`].filter(Boolean).join(" · ");
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: palette.wall, color: palette.ink, fontFamily: "var(--gift-font-display)" }}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: palette.wall, color: palette.ink, fontFamily: "var(--gift-font-display)" }}>
       <div className="grain-overlay opacity-[0.05]" />
       {/* floor with perspective lines */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%]" style={{ background: `linear-gradient(180deg, ${palette.floor}cc, ${palette.floor})` }}>
@@ -75,18 +87,89 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[8%] bg-[linear-gradient(180deg,rgba(0,0,0,0.12),transparent)]" />
 
       <div ref={scroller} className="absolute inset-0 flex snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-contain scrollbar-none">
-        {/* Entrance placard */}
-        <section className="relative flex h-full w-full shrink-0 snap-start flex-col items-center justify-center px-8 text-center">
-          <div className="rounded-sm px-8 py-9 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)]" style={{ background: palette.plaque }}>
-            <p className="text-[10px] tracking-[0.35em] uppercase" style={{ color: palette.muted }}>{data.senderName} · {data.recipientName}</p>
-            <h1 className="mt-4 text-[clamp(2rem,10cqw,3rem)] leading-[1] italic">{exhibition}</h1>
-            {data.fields.years ? <p className="mt-3 text-sm" style={{ color: palette.muted }}>{data.fields.years}</p> : null}
-            <p className="mt-6 text-[11px] tracking-[0.25em] uppercase" style={{ color: palette.muted }}>{data.photos.length} {data.locale === "es" ? "obras" : "works"}</p>
+        {/* The entrance: the first work already hung, lit, and roped off. */}
+        <section className="relative flex h-full w-full shrink-0 snap-start flex-col items-center justify-center overflow-hidden px-[calc(6*var(--k))] pb-[calc(46*var(--k))] text-center">
+          {/* the picture light: a cone off the ceiling, and the pool it throws on the floor */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[80%]" style={{ background: "radial-gradient(52% 54% at 50% -6%, rgba(255,248,230,.8), rgba(255,244,214,0) 70%)" }} />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 left-1/2 h-[66%] w-[94%] -translate-x-1/2"
+            style={{ clipPath: "polygon(39% 0, 61% 0, 97% 100%, 3% 100%)", background: "linear-gradient(180deg, rgba(255,251,238,.6), rgba(255,246,222,0) 88%)", filter: "blur(calc(2*var(--k)))" }}
+          />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[24%]" style={{ background: "radial-gradient(40% 120% at 50% 100%, rgba(255,243,214,.5), rgba(255,243,214,0) 70%)" }} />
+          {/* parquet boards, and the skirting where the wall meets them */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%]"
+            style={{ backgroundImage: "repeating-linear-gradient(0deg, rgba(0,0,0,.055) 0 1px, transparent 1px calc(10*var(--k))), repeating-linear-gradient(90deg, rgba(255,255,255,.09) 0 1px, transparent 1px calc(15*var(--k)))" }}
+          />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(118% 88% at 50% 44%, transparent 54%, rgba(58,38,22,.17))" }} />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[22%] h-[calc(2.2*var(--k))]" style={{ background: `linear-gradient(180deg, ${palette.plaque}, rgba(0,0,0,.2))` }} />
+          <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+            <Ambience layers={[{ kind: "dust", colors: ["#FFF4DC", "#FFFFFF"], count: 11 }]} opacity={0.45} />
           </div>
-          <button type="button" onClick={enter} className="mt-10 flex h-12 items-center gap-2 rounded-full px-7 text-[15px] font-semibold shadow-lg" style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)", fontFamily: "var(--gift-font-body)" }}>
+
+          <motion.p
+            className="relative text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase"
+            style={{ color: palette.muted, fontFamily: "var(--gift-font-body)" }}
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.7 }}
+          >
+            {data.senderName} → {data.recipientName}
+          </motion.p>
+          <motion.h1
+            className="relative mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+            style={{ fontFamily: POSTER_FONT }}
+            initial={reduce ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.18, duration: 0.8 }}
+          >
+            {exhibition}
+          </motion.h1>
+
+          <motion.div
+            className="relative mt-[calc(5*var(--k))]"
+            initial={reduce ? false : { opacity: 0, y: 34, rotate: -1.5 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+          >
+            <Float reduce={!!reduce} amount={0.5} duration={6.4}>
+              <button
+                type="button"
+                onClick={enter}
+                aria-label={s.enter}
+                className="block outline-none focus-visible:ring-4 focus-visible:ring-white/70"
+              >
+                <div className="relative p-[calc(2.2*var(--k))]" style={{ background: frame, boxShadow: "0 calc(5*var(--k)) calc(9*var(--k)) calc(-3*var(--k)) rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.4)" }}>
+                  <div className="p-[7%]" style={{ background: "#F7F3EB" }}>
+                    {hero ? (
+                      <img
+                        src={hero.url}
+                        alt=""
+                        draggable={false}
+                        className={cn("block object-cover", hero.height > hero.width ? "h-[calc(60*var(--k))] w-auto" : "h-auto w-[calc(58*var(--k))]")}
+                      />
+                    ) : (
+                      <div className="h-[calc(46*var(--k))] w-[calc(58*var(--k))]" style={{ background: palette.plaque }} />
+                    )}
+                  </div>
+                  {/* glass */}
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(118deg, rgba(255,255,255,.26) 0 16%, rgba(255,255,255,.05) 28%, transparent 46%)" }} />
+                </div>
+                <div className="mt-[calc(3.4*var(--k))] flex justify-center">
+                  <Plaque title={s.collection.replace("{name}", data.recipientName)} meta={plaqueMeta} />
+                </div>
+              </button>
+            </Float>
+          </motion.div>
+
+          <div aria-hidden="true" className="pointer-events-none absolute left-1/2 w-[calc(94*var(--k))] max-w-[96%] -translate-x-1/2" style={{ bottom: "calc(22% - 2.5 * var(--k))" }}>
+            <VelvetRope />
+          </div>
+          <TapPill tone={tone} reduce={!!reduce} className="absolute bottom-[calc(5*var(--k))] left-1/2 -translate-x-1/2">
             {s.enter}
-            <ChevronRight className="size-4" />
-          </button>
+          </TapPill>
         </section>
 
         {data.photos.map((photo, i) => (

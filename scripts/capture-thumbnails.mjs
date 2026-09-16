@@ -16,7 +16,7 @@ const SCRIPTS = {
     await page.getByRole("button", { name: /scroll to begin/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1000);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /scroll to begin/i }).click();
+    await page.getByRole("button", { name: /scroll to begin/i }).click({ force: true });
     const sc = page.locator(".overflow-y-auto").first();
     for (let i = 0; i < 6; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.6, behavior: "smooth" })); await page.waitForTimeout(900); }
     return poster;
@@ -25,7 +25,7 @@ const SCRIPTS = {
     await page.getByRole("button", { name: /drop the needle/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1000);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /drop the needle/i }).click();
+    await page.getByRole("button", { name: /drop the needle/i }).click({ force: true });
     await page.waitForTimeout(3500);
     const sc = page.locator(".overflow-y-auto").first();
     await sc.evaluate((el) => el.scrollBy({ top: 520, behavior: "smooth" }));
@@ -33,12 +33,13 @@ const SCRIPTS = {
     return poster;
   },
   museum: async (page) => {
-    await page.getByRole("button", { name: /^enter$/i }).waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1000);
-    await page.getByRole("button", { name: /^enter$/i }).click();
-    await page.waitForTimeout(1600);
+    const enter = page.getByRole("button", { name: /^enter$/i }).first();
+    await enter.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1800);
     const poster = await page.screenshot();
-    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /next room/i }).first().click().catch(() => {}); await page.waitForTimeout(1400); }
+    await enter.click({ force: true });
+    await page.waitForTimeout(1600);
+    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /next room/i }).first().click({ force: true }).catch(() => {}); await page.waitForTimeout(1400); }
     return poster;
   },
   "birthday-cinema": async (page) => {
@@ -52,17 +53,24 @@ const SCRIPTS = {
     return poster;
   },
   "jar-of-reasons": async (page) => {
-    await page.getByRole("button", { name: /pull another/i }).waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1200);
+    const jar = page.getByRole("button", { name: /tap the jar/i });
+    await jar.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1600);
     const poster = await page.screenshot();
-    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /pull another/i }).click(); await page.waitForTimeout(1600); await page.mouse.click(195, 560); await page.waitForTimeout(700); }
+    await jar.click({ force: true });
+    await page.waitForTimeout(1600);
+    await page.mouse.click(195, 560);
+    await page.waitForTimeout(700);
+    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /pull another/i }).click({ force: true }); await page.waitForTimeout(1500); await page.mouse.click(195, 560); await page.waitForTimeout(650); }
     return poster;
   },
   "scratch-card": async (page) => {
-    await page.getByRole("button", { name: /tap to begin/i }).waitFor({ timeout: 15000 });
-    await page.getByRole("button", { name: /tap to begin/i }).click();
+    await page.getByRole("button", { name: /scratch here/i }).waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1600);
+    const ticket = await page.screenshot();
+    await page.getByRole("button", { name: /scratch here/i }).first().click({ force: true });
     await page.waitForTimeout(1000);
-    const poster = await page.screenshot();
+    const poster = ticket;
     const box = await page.locator("canvas[role=img]").first().boundingBox();
     if (box) for (let row = 0; row < 6; row++) { const y = box.y + 20 + (row / 5) * (box.height - 40); await page.mouse.move(box.x + 10, y); await page.mouse.down(); await page.mouse.move(box.x + box.width - 10, y, { steps: 12 }); await page.mouse.up(); await page.waitForTimeout(150); }
     await page.waitForTimeout(2500);
@@ -72,9 +80,9 @@ const SCRIPTS = {
     await page.getByRole("button", { name: /tap to start/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1200);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /tap to start/i }).click();
+    await page.getByRole("button", { name: /tap to start/i }).click({ force: true });
     await page.waitForTimeout(500);
-    await page.getByRole("button", { name: /skip to midnight/i }).click();
+    await page.getByRole("button", { name: /skip to midnight/i }).click({ force: true });
     await page.waitForTimeout(6000);
     return poster;
   },
@@ -82,7 +90,7 @@ const SCRIPTS = {
     await page.getByRole("button", { name: /tap to read/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1800);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /tap to read/i }).click();
+    await page.getByRole("button", { name: /tap to read/i }).click({ force: true });
     await page.waitForTimeout(1200);
     const sc = page.locator(".overflow-y-auto").first();
     for (let i = 0; i < 4; i++) { await sc.evaluate((el) => el.scrollBy({ top: 380, behavior: "smooth" })); await page.waitForTimeout(900); }
@@ -96,49 +104,51 @@ const SCRIPTS = {
     return poster;
   },
   "text-thread": async (page) => {
-    await page.getByRole("button", { name: /tap to open the chat/i }).waitFor({ timeout: 15000 });
-    await page.getByRole("button", { name: /tap to open the chat/i }).click();
-    await page.waitForTimeout(5200);
+    const open = page.getByRole("button", { name: /tap to open the chat/i }).first();
+    await open.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1800);
     const poster = await page.screenshot();
-    await page.waitForTimeout(3500);
+    await open.click({ force: true });
+    await page.waitForTimeout(6500);
     return poster;
   },
   arcade: async (page) => {
-    await page.getByRole("button", { name: /tap to start/i }).waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1400);
+    await page.getByRole("button", { name: /press start/i }).waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1600);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /tap to start/i }).click();
+    await page.getByRole("button", { name: /press start/i }).click({ force: true });
     const box = await page.locator("canvas").first().boundingBox();
     for (let i = 0; i < 26; i++) { const x = box.x + 10 + ((i * 41) % (box.width - 20)); await page.mouse.move(x, box.y + box.height - 20); await page.mouse.down(); await page.mouse.up(); await page.waitForTimeout(260); }
     return poster;
   },
   passport: async (page) => {
-    await page.getByRole("button", { name: /^open$/i }).waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1400);
-    await page.getByRole("button", { name: /^open$/i }).click();
-    await page.waitForTimeout(2600);
+    const open = page.getByRole("button", { name: /^open$/i }).first();
+    await open.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1800);
     const poster = await page.screenshot();
-    await page.waitForTimeout(6000);
+    await open.click({ force: true });
+    await page.waitForTimeout(8000);
     return poster;
   },
   bloom: async (page) => {
     await page.locator("[data-hold]").waitFor({ timeout: 15000 });
-    await page.waitForTimeout(1400);
+    await page.waitForTimeout(1800);
+    const poster = await page.screenshot();
     const box = await page.locator("[data-hold]").boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
-    await page.waitForTimeout(2000);
-    const poster = await page.screenshot();
-    await page.waitForTimeout(2600);
+    await page.waitForTimeout(4600);
     await page.mouse.up();
     await page.waitForTimeout(3000);
     return poster;
   },
   bouquet: async (page) => {
-    await page.getByRole("button", { name: /open the card/i }).waitFor({ timeout: 20000 });
-    await page.waitForTimeout(800);
+    // The cover object and the pill carry the same words, so take the first match.
+    const card = page.getByRole("button", { name: /open the card/i }).first();
+    await card.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2600);
     const poster = await page.screenshot();
-    await page.getByRole("button", { name: /open the card/i }).click();
+    await card.click({ force: true });
     await page.waitForTimeout(4000);
     return poster;
   },
@@ -174,11 +184,12 @@ const SCRIPTS = {
     await cover.waitFor({ timeout: 20000 });
     await page.waitForTimeout(1200);
     await cover.click({ force: true });
-    await page.getByRole("button", { name: /ring the bell/i }).waitFor({ timeout: 20000 });
-    await page.waitForTimeout(1600);
-    await page.getByRole("button", { name: /ring the bell/i }).click({ force: true });
-    await page.waitForTimeout(1800);
+    const bell = page.getByRole("button", { name: /ring the bell/i }).first();
+    await bell.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2000);
     const poster = await page.screenshot();
+    await bell.click({ force: true });
+    await page.waitForTimeout(1800);
     await page.getByRole("button", { name: /^treat$/i }).click({ force: true });
     await page.waitForTimeout(6000);
     return poster;
@@ -217,9 +228,9 @@ const SCRIPTS = {
     await page.waitForTimeout(1500);
     const poster = await page.screenshot();
     for (let i = 0; i < 3; i++) {
-      await page.locator(`[data-star="${i}"]`).click();
+      await page.locator(`[data-star="${i}"]`).click({ force: true });
       await page.waitForTimeout(1500);
-      await page.getByTestId("close-photo").click();
+      await page.getByTestId("close-photo").click({ force: true });
       await page.waitForTimeout(1000);
     }
     return poster;
@@ -246,7 +257,14 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
   await page.addStyleTag({
     content: '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }',
   });
-  const poster = await run(page);
+  let poster;
+  try {
+    poster = await run(page);
+  } catch (e) {
+    console.log("FAILED", slug, e.message.split("\n")[0]);
+    await context.close();
+    continue;
+  }
   await sharp(poster).jpeg({ quality: 82, mozjpeg: true }).toFile(join(dir, "poster.jpg"));
   await context.close();
   const [video] = readdirSync(videoDir).filter((f) => f.endsWith(".webm"));

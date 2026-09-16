@@ -1,7 +1,11 @@
 /**
- * The room: a window at dusk, a candle, a mug, a blanket, wooden pegs on a string. All original,
- * drawn as SVG so it scales from a phone to a laptop without a single image.
+ * The room: a window at dusk, a candle, a mug, a blanket, wooden pegs on a string, and the bunting
+ * strung across the top with their name on it. All original, drawn as SVG so it scales from a phone
+ * to a laptop without a single image.
  */
+import { cn } from "@/lib/utils";
+
+const POSTER = "var(--font-poster), Georgia, serif";
 
 export type Palette = {
   /** The room before the candle is lit: cold dusk. */
@@ -146,18 +150,16 @@ export function Candle({ p, lit }: { p: Palette; lit: boolean }) {
   );
 }
 
-/** The mug, with what they drink in it, and steam once the room is warm. */
+/** The mug, with what they drink in it. It steams from the first frame: it was poured before you arrived. */
 export function Mug({ p, drink, lit }: { p: Palette; drink: "cocoa" | "tea" | "coffee"; lit: boolean }) {
   const fill = drink === "cocoa" ? "#5A3A2A" : drink === "tea" ? "#B8752A" : "#3B241A";
   return (
     <svg viewBox="0 0 56 60" className="h-full w-full overflow-visible" aria-hidden="true">
-      {lit ? (
-        <g stroke="rgba(255,250,240,0.7)" strokeWidth="2.2" strokeLinecap="round" fill="none">
-          <path className="fs-steam" style={{ animationDelay: "0s" }} d="M18 22 c-4 -6 3 -8 -1 -14" />
-          <path className="fs-steam" style={{ animationDelay: "1.1s" }} d="M28 20 c-4 -6 3 -8 -1 -14" />
-          <path className="fs-steam" style={{ animationDelay: "2.2s" }} d="M38 22 c-4 -6 3 -8 -1 -14" />
-        </g>
-      ) : null}
+      <g stroke={lit ? "rgba(255,250,240,0.7)" : "rgba(228,238,252,0.62)"} strokeWidth="2.2" strokeLinecap="round" fill="none">
+        <path className="fs-steam" style={{ animationDelay: "0s" }} d="M18 22 c-4 -6 3 -8 -1 -14" />
+        <path className="fs-steam" style={{ animationDelay: "1.1s" }} d="M28 20 c-4 -6 3 -8 -1 -14" />
+        <path className="fs-steam" style={{ animationDelay: "2.2s" }} d="M38 22 c-4 -6 3 -8 -1 -14" />
+      </g>
       <path d="M44 31 a9 9 0 0 1 0 20" stroke={p.stripe} strokeWidth="6" strokeLinecap="round" fill="none" />
       <path d="M44 31 a9 9 0 0 1 0 20" stroke="rgba(0,0,0,0.12)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
       <path d="M10 26 H46 V50 a8 8 0 0 1 -8 8 H18 a8 8 0 0 1 -8 -8Z" fill={p.stripe} />
@@ -183,16 +185,82 @@ export function Mug({ p, drink, lit }: { p: Palette; drink: "cocoa" | "tea" | "c
   );
 }
 
-/** The blanket along the bottom of the screen, folded, with its stripes following the fold. */
+const BLANKET_EDGE = "M0 14 C14 6 26 18 40 10 C56 1 70 16 86 8 C92 5 97 6 100 8 V40 H0Z";
+/** The knit sits on a CSS layer, not in the SVG: the silhouette stretches to the screen, stitches must not. */
+const BLANKET_MASK = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'><path d='${BLANKET_EDGE}' fill='white'/></svg>")`;
+
+/** The blanket along the bottom of the screen: folded, striped, and knitted in the foreground. */
 export function Blanket({ p }: { p: Palette }) {
+  const stitch = `repeating-linear-gradient(45deg, ${p.stripe}2E 0 calc(.5*var(--k)), transparent calc(.5*var(--k)) calc(2.4*var(--k))), repeating-linear-gradient(-45deg, ${p.stripe}2E 0 calc(.5*var(--k)), transparent calc(.5*var(--k)) calc(2.4*var(--k))), repeating-linear-gradient(0deg, rgba(0,0,0,.09) 0 calc(.4*var(--k)), transparent calc(.4*var(--k)) calc(2.4*var(--k)))`;
   return (
-    <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="h-full w-full" aria-hidden="true">
-      <path d="M0 14 C14 6 26 18 40 10 C56 1 70 16 86 8 C92 5 97 6 100 8 V40 H0Z" fill={p.blanket} />
-      <path d="M0 20 C14 12 26 24 40 16 C56 7 70 22 86 14 C92 11 97 12 100 14" stroke={p.stripe} strokeWidth="1.6" fill="none" opacity="0.85" />
-      <path d="M0 25 C14 17 26 29 40 21 C56 12 70 27 86 19 C92 16 97 17 100 19" stroke={p.stripe} strokeWidth="0.8" fill="none" opacity="0.6" />
-      <path d="M0 31 C14 23 26 35 40 27 C56 18 70 33 86 25 C92 22 97 23 100 25" stroke={p.stripe} strokeWidth="1.6" fill="none" opacity="0.85" />
-      <path d="M0 14 C14 6 26 18 40 10 C56 1 70 16 86 8 C92 5 97 6 100 8 V12 C97 10 92 9 86 12 C70 20 56 5 40 14 C26 22 14 10 0 18Z" fill="rgba(0,0,0,0.18)" />
-    </svg>
+    <div className="relative h-full w-full" aria-hidden="true">
+      <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+        <path d={BLANKET_EDGE} fill={p.blanket} />
+        <path d="M0 20 C14 12 26 24 40 16 C56 7 70 22 86 14 C92 11 97 12 100 14" stroke={p.stripe} strokeWidth="1.6" fill="none" opacity="0.85" />
+        <path d="M0 25 C14 17 26 29 40 21 C56 12 70 27 86 19 C92 16 97 17 100 19" stroke={p.stripe} strokeWidth="0.8" fill="none" opacity="0.6" />
+        <path d="M0 31 C14 23 26 35 40 27 C56 18 70 33 86 25 C92 22 97 23 100 25" stroke={p.stripe} strokeWidth="1.6" fill="none" opacity="0.85" />
+        <path d="M0 14 C14 6 26 18 40 10 C56 1 70 16 86 8 C92 5 97 6 100 8 V12 C97 10 92 9 86 12 C70 20 56 5 40 14 C26 22 14 10 0 18Z" fill="rgba(0,0,0,0.18)" />
+        {/* the cast-off edge, stitch by stitch along the fold */}
+        <path d="M0 14 C14 6 26 18 40 10 C56 1 70 16 86 8 C92 5 97 6 100 8" stroke={p.stripe} strokeWidth="2.6" strokeDasharray="7 6" strokeLinecap="round" fill="none" opacity="0.5" vectorEffect="non-scaling-stroke" />
+      </svg>
+      <div
+        className="absolute inset-0"
+        style={{ backgroundImage: stitch, maskImage: BLANKET_MASK, WebkitMaskImage: BLANKET_MASK, maskSize: "100% 100%", WebkitMaskSize: "100% 100%", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat", opacity: 0.85 }}
+      />
+    </div>
+  );
+}
+
+/** Bunting strung across the top of the page, one pennant per letter of their name. */
+export function Garland({ name, p, reduce }: { name: string; p: Palette; reduce: boolean }) {
+  const letters = [...(name.trim().split(/\s+/)[0] || name.trim()).toUpperCase()].slice(0, 10);
+  const n = Math.max(1, letters.length);
+  // The cord is one quadratic; every pennant reads its drop off the same curve, so they hang on it.
+  const dropAt = (u: number) => (1 - u) ** 2 * 1.5 + 2 * u * (1 - u) * 13 + u ** 2 * 1.5;
+  const flags: [string, string][] = [
+    [p.blanket, p.stripe],
+    [p.stripe, p.woodDeep],
+    [p.accent, "#3A2414"],
+  ];
+
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute top-0 left-1/2 -translate-x-1/2"
+      style={{ width: `min(92%, calc(${n * 13} * var(--k)))`, height: "calc(20 * var(--k))" }}
+    >
+      <svg viewBox="0 0 100 20" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible">
+        <path d="M-90 -5 Q-45 -1 0 1.5 Q50 13 100 1.5 Q145 -1 190 -5" fill="none" stroke={p.woodDeep} strokeWidth="2.2" vectorEffect="non-scaling-stroke" />
+        <path d="M-90 -6 Q-45 -2 0 0.6 Q50 12.1 100 0.6 Q145 -2 190 -6" fill="none" stroke={p.stripe} strokeWidth="1" strokeOpacity="0.45" vectorEffect="non-scaling-stroke" />
+      </svg>
+      <div className="absolute inset-0 flex items-start justify-between">
+        {letters.map((ch, i) => {
+          const u = n === 1 ? 0.5 : i / (n - 1);
+          const [bg, ink] = flags[i % flags.length];
+          return (
+            <span
+              key={i}
+              className={cn("block shrink-0", !reduce && "fs-swing")}
+              style={{ ["--sway" as string]: `${(4.2 + (i % 3) * 0.7).toFixed(1)}s`, transform: `translateY(calc(${dropAt(u).toFixed(2)} * var(--k))) rotate(${((u - 0.5) * 14).toFixed(1)}deg)` }}
+            >
+              <span
+                className="grid justify-center"
+                style={{
+                  width: "calc(7.4 * var(--k))",
+                  height: "calc(9.6 * var(--k))",
+                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
+                  background: bg,
+                  paddingTop: "calc(.8 * var(--k))",
+                  filter: "drop-shadow(0 calc(.4*var(--k)) calc(.8*var(--k)) rgba(0,0,0,.4))",
+                }}
+              >
+                <span style={{ fontFamily: POSTER, fontSize: "calc(4.6 * var(--k))", lineHeight: 1, color: ink }}>{ch}</span>
+              </span>
+            </span>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

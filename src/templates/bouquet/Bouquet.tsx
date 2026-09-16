@@ -37,15 +37,36 @@ export function timingFor(arr: Arrangement): BouquetTiming {
  * The bouquet as one SVG. With `animate` it assembles itself: paper, greens, every head in
  * turn, then the paper folds round, the ribbon ties and the card drops in.
  */
+/** The wax that closes the paper: a poured blob, pressed with a heart while it was soft. */
+function WaxSeal({ x, y, color }: { x: number; y: number; color: string }) {
+  const deep = mix(color, "#000000", 0.38);
+  const light = mix(color, "#FFFFFF", 0.32);
+  const blob = "M0 -18C9 -19 17 -12 18 -4C19 5 13 15 4 17C-6 19 -16 13 -18 4C-20 -6 -9 -17 0 -18Z";
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <path d={blob} transform="translate(1.5 2.5)" fill="#000" opacity={0.22} />
+      <path d={blob} fill={color} />
+      <path d={blob} fill="none" stroke={deep} strokeWidth={1.6} />
+      <path d="M-11 -8C-8 -13 -3 -15 1 -14" fill="none" stroke={light} strokeWidth={2.6} strokeLinecap="round" opacity={0.75} />
+      <path d="M0 8C-7 2 -10 -2 -8 -6C-6 -9 -2 -8 0 -5C2 -8 6 -9 8 -6C10 -2 7 2 0 8Z" fill={deep} opacity={0.55} />
+      <path d="M0 6.5C-6.4 1 -9 -2.6 -7.2 -6.2C-5.4 -8.8 -1.8 -7.9 0 -5.2C1.8 -7.9 5.4 -8.8 7.2 -6.2C9 -2.6 6.4 1 0 6.5Z" fill={light} opacity={0.4} />
+    </g>
+  );
+}
+
 export function BouquetArt({
   fields,
   cardText,
+  seal,
+  openLabel,
   animate,
   onCard,
   className,
 }: {
   fields: BouquetFields;
   cardText: string;
+  seal?: string;
+  openLabel?: string;
   animate: boolean;
   onCard?: () => void;
   className?: string;
@@ -174,6 +195,16 @@ export function BouquetArt({
         <path d="M200 474L201 596" stroke={paper.line} strokeOpacity={0.25} strokeWidth={1.1} />
       </motion.g>
 
+      {/* The wax seal that holds the paper closed, pressed on once the sheets have folded round. */}
+      <motion.g
+        style={{ transformBox: "view-box", transformOrigin: "200px 398px" }}
+        {...(animate
+          ? { initial: { scale: 0, opacity: 0 }, animate: { scale: 1, opacity: 1 }, transition: { delay: time.wrap + 0.35, type: "spring" as const, stiffness: 240, damping: 12 } }
+          : {})}
+      >
+        <WaxSeal x={200} y={398} color={seal ?? "#B03A3C"} />
+      </motion.g>
+
       {/* The ribbon. */}
       <motion.g
         style={{ transformBox: "view-box", transformOrigin: `${NECK.x}px ${NECK.y}px` }}
@@ -195,7 +226,7 @@ export function BouquetArt({
       <motion.g
         data-card=""
         role={onCard ? "button" : undefined}
-        aria-label={onCard ? cardText : undefined}
+        aria-label={onCard ? (openLabel ?? cardText) : undefined}
         tabIndex={onCard ? 0 : undefined}
         onClick={onCard}
         onKeyDown={onCard ? (e) => (e.key === "Enter" || e.key === " ") && onCard() : undefined}

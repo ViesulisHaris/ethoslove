@@ -19,8 +19,10 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { GiftVideo } from "../_shared/GiftVideo";
-import { Ambience } from "../_shared/Ambience";
+import { Ambience, type AmbienceKind } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
+import { COVER_VARS, CoverPage, Float, POSTER_FONT, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
+import { SealDressing, Stamp } from "./art";
 import type { LetterFields } from "./schema";
 import styles from "./letter.module.css";
 
@@ -34,6 +36,66 @@ const DESK_CLASS: Record<LetterFields["desk"], string> = {
   walnut: styles.deskWalnut,
   linen: styles.deskLinen,
   slate: styles.deskSlate,
+};
+
+type Look = {
+  tone: CoverTone;
+  /** The eyebrow, headline and pill sit on the page, not on the paper, so they have their own ink. */
+  ink: string;
+  pattern: string;
+  twine: string;
+  ambience: { kind: AmbienceKind; colors: string[]; count?: number }[];
+};
+
+/** Corners only: the envelope is wide, and on a phone it reaches almost edge to edge. */
+const STICKERS: StickerPlacement[] = [
+  { id: "bouquet", x: 13, y: 15, size: 17, rotate: -12 },
+  { id: "sparkle", x: 84, y: 11, size: 8 },
+  // Clear of the candle, which stands in the top right corner of the desk.
+  { id: "heart", x: 93, y: 72, size: 11, rotate: 14 },
+  { id: "daisy", x: 9, y: 81, size: 12 },
+  { id: "kiss", x: 21, y: 88, size: 15, rotate: -8 },
+  { id: "butterfly", x: 85, y: 84, size: 16, rotate: 10 },
+];
+
+/** The desk the sender picked lights the whole cover: candle on walnut, daylight on linen. */
+const LOOKS: Record<LetterFields["desk"], Look> = {
+  walnut: {
+    tone: { page: "rgba(46,27,15,.44)", glow: ["rgba(255,197,122,.5)", "rgba(255,166,80,.46)"], accent: "#FFE7C2", dark: true },
+    ink: "#FFEBD2",
+    pattern: "repeating-linear-gradient(96deg, rgba(255,232,196,.032) 0 calc(1.4*var(--k)), transparent calc(1.4*var(--k)) calc(9*var(--k)))",
+    twine: "#C3996A",
+    ambience: [
+      { kind: "dust", colors: ["#FFE7B8", "#FFF7E6"], count: 20 },
+      { kind: "bokeh", colors: ["#FFD9A8", "#FFF1D6"], count: 8 },
+    ],
+  },
+  linen: {
+    tone: { page: "rgba(240,230,209,.55)", glow: ["rgba(255,248,226,.9)", "rgba(222,176,116,.5)"], accent: "#96502C" },
+    ink: "#4A3524",
+    pattern:
+      "repeating-linear-gradient(0deg, rgba(255,255,255,.2) 0 calc(.3*var(--k)), transparent calc(.3*var(--k)) calc(2.2*var(--k))), repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0 calc(.3*var(--k)), transparent calc(.3*var(--k)) calc(2.2*var(--k)))",
+    twine: "#A9855A",
+    ambience: [
+      { kind: "dust", colors: ["#FFF2D4", "#FFFFFF"], count: 18 },
+      { kind: "sparkles", colors: ["#FFFFFF", "#FFE9BE"], count: 12 },
+    ],
+  },
+  slate: {
+    tone: { page: "rgba(26,30,36,.52)", glow: ["rgba(255,205,140,.44)", "rgba(120,142,176,.34)"], accent: "#FFE3BE", dark: true },
+    ink: "#F2E6D6",
+    pattern: "radial-gradient(rgba(255,255,255,.07) calc(.5*var(--k)), transparent calc(.62*var(--k))) 0 0/calc(9*var(--k)) calc(9*var(--k))",
+    twine: "#BE9A6E",
+    ambience: [
+      { kind: "dust", colors: ["#FFE7B8", "#FFFFFF"], count: 20 },
+      { kind: "bokeh", colors: ["#FFD9A8", "#DCE6F2"], count: 8 },
+    ],
+  },
+};
+
+const S = {
+  en: { tap: "tap the seal", for: "for", headline: "a letter for you" },
+  es: { tap: "toca el sello", for: "para", headline: "una carta para ti" },
 };
 
 type Stage = "sealed" | "opening" | "unfolding" | "reading";
@@ -57,6 +119,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const sealInitial = (fields.sealInitial || data.senderName.charAt(0) || "♥").toUpperCase();
   const greeting = fields.greeting || t("dear", { name: data.recipientName });
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
+  const s = S[data.locale] ?? S.en;
+  const look = LOOKS[fields.desk] ?? LOOKS.walnut;
+  const headline = data.title?.trim() || s.headline;
+  const onCover = stage === "sealed" || stage === "opening";
 
   useEffect(() => () => timers.current.forEach((id) => window.clearTimeout(id)), []);
 
@@ -81,6 +147,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   }, []);
 
   const vars = {
+    ...COVER_VARS,
     "--tl-ink": fields.inkColor,
     "--tl-paper": palette.paper,
     "--tl-env": palette.env,
@@ -89,20 +156,26 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   return (
     <div ref={rootRef} className={styles.root} style={vars}>
       <Desk variant={fields.desk} reduce={!!reduce} />
-      {/* Candlelight all over the screen: motes rising while it waits, petals drifting once it's read. */}
-      <div className={styles.ambienceBack} aria-hidden="true">
-        <Ambience layers={[{ kind: "bokeh", colors: ["#FFD9A8", "#FFF1D6", "#F6C7B8"] }, { kind: "dust", colors: ["#FFE7B8", "#FFF7E6"] }]} intensity={stage === "reading" ? 0.7 : 1} />
-      </div>
+      {/* Candlelight all over the screen: motes rising while it waits, petals drifting once it's read.
+          The cover brings its own layer, in front of its page rather than behind it. */}
+      {onCover ? null : (
+        <div className={styles.ambienceBack} aria-hidden="true">
+          <Ambience layers={[{ kind: "bokeh", colors: ["#FFD9A8", "#FFF1D6", "#F6C7B8"] }, { kind: "dust", colors: ["#FFE7B8", "#FFF7E6"] }]} intensity={stage === "reading" ? 0.7 : 1} />
+        </div>
+      )}
 
       <AnimatePresence>
-        {stage === "sealed" || stage === "opening" ? (
-          <Envelope
-            key={`envelope-${run}`}
-            opening={stage === "opening"}
+        {onCover ? (
+          <Cover
+            key={`cover-${run}`}
+            look={look}
+            s={s}
+            data={data}
+            headline={headline}
             sealInitial={sealInitial}
+            opening={stage === "opening"}
+            reduce={!!reduce}
             onOpen={open}
-            hint={t("tapSeal")}
-            size={size}
           />
         ) : null}
         {stage === "unfolding" ? <FoldedLetter key="folded" /> : null}
@@ -173,83 +246,139 @@ function Desk({ variant, reduce }: { variant: LetterFields["desk"]; reduce: bool
 }
 
 /* ------------------------------------------------------------------ */
-/* Envelope                                                            */
+/* Cover: the sealed envelope, addressed, on a candle-lit page         */
 /* ------------------------------------------------------------------ */
-function Envelope({
-  opening,
+function Cover({
+  look,
+  s,
+  data,
+  headline,
   sealInitial,
+  opening,
+  reduce,
   onOpen,
-  hint,
-  size,
 }: {
-  opening: boolean;
+  look: Look;
+  s: (typeof S)["en"];
+  data: TemplateProps<LetterFields>["data"];
+  headline: string;
   sealInitial: string;
+  opening: boolean;
+  reduce: boolean;
   onOpen: () => void;
-  hint: string;
-  size: ContainerSize;
 }) {
-  const w = size.ready ? Math.max(220, Math.min(size.width * 0.8, size.height * 0.5 * 1.5, 400)) : 320;
-  const h = w / 1.5;
+  const name = data.recipientName;
+  // A short name is written large across the envelope; a long one has to come down a size to fit.
+  const nameSize = name.length > 14 ? "calc(3.6*var(--k))" : name.length > 9 ? "calc(4.4*var(--k))" : "calc(5.2*var(--k))";
 
   return (
     <motion.div
-      className={styles.stage}
-      exit={{ opacity: 0, y: 90, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
+      className="absolute inset-0 z-10"
+      style={{ color: look.ink }}
+      exit={{ opacity: 0, y: 80, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } }}
     >
-      <motion.div
-        className={styles.envelope}
-        style={{ width: w, height: h }}
-        initial={{ y: 40, opacity: 0, rotate: -4 }}
-        animate={{ y: 0, opacity: 1, rotate: opening ? 0 : -2 }}
-        transition={{ type: "spring", stiffness: 90, damping: 15, mass: 1 }}
-      >
-        <div className={styles.envBack} />
-        <div className={styles.envInner} />
-        <motion.div
-          className={styles.envLetter}
-          animate={opening ? { y: -h * 0.66 } : { y: 0 }}
-          transition={{ delay: 1.15, type: "spring", stiffness: 70, damping: 14 }}
+      <CoverPage tone={look.tone} pattern={look.pattern} />
+      <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+        <Ambience layers={look.ambience} opacity={0.9} />
+      </div>
+      <StickerScatter items={STICKERS} reduce={reduce} className="z-[3]" />
+
+      <div className="absolute inset-0 z-[4] flex flex-col items-center justify-center px-[calc(6*var(--k))]">
+        <motion.p
+          className="max-w-[calc(74*var(--k))] text-center text-[calc(2.5*var(--k))] tracking-[0.34em] uppercase opacity-55 [overflow-wrap:anywhere]"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 0.55, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
         >
-          <div className={styles.letterLines} />
-        </motion.div>
-        <div className={styles.envFront} />
+          {data.senderName} → {data.recipientName}
+        </motion.p>
+        <motion.h1
+          className="mt-[calc(1.8*var(--k))] max-w-[calc(76*var(--k))] text-center text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
+          style={{ fontFamily: POSTER_FONT }}
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18, duration: 0.8 }}
+        >
+          {headline}
+        </motion.h1>
+
         <motion.div
-          className={styles.envFlap}
-          style={{ zIndex: opening ? 1 : 5 }}
-          animate={opening ? { rotateX: -176 } : { rotateX: 0 }}
-          transition={{ delay: 0.45, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        />
-        <div className={styles.sealWrap}>
-          <AnimatePresence>
-            {!opening ? (
-              <motion.button
-                key="seal"
-                type="button"
-                className={styles.seal}
-                onClick={onOpen}
-                aria-label={hint}
-                whileTap={{ scale: 0.92 }}
-                initial={{ scale: 0.6, opacity: 0 }}
-                animate={{ scale: [1, 1.045, 1], opacity: 1 }}
-                exit={{ scale: 1.18, opacity: 0, transition: { duration: 0.22 } }}
-                transition={{ scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }, opacity: { duration: 0.4 } }}
-              >
-                {sealInitial}
-              </motion.button>
-            ) : (
-              <SealBreak key="break" sealInitial={sealInitial} />
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-      <motion.p
-        className={styles.hint}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: opening ? 0 : [0.55, 1, 0.55] }}
-        transition={opening ? { duration: 0.2 } : { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-      >
-        {hint}
-      </motion.p>
+          className="relative mt-[calc(6*var(--k))] w-[calc(84*var(--k))]"
+          initial={reduce ? false : { opacity: 0, y: 34, rotate: -4 }}
+          animate={{ opacity: 1, y: 0, rotate: opening ? 0 : -2 }}
+          transition={{ type: "spring", stiffness: 80, damping: 15 }}
+        >
+          <Float reduce={reduce} amount={0.8} duration={5.6}>
+            <motion.button
+              type="button"
+              onClick={onOpen}
+              aria-label={s.tap}
+              whileTap={opening ? undefined : { scale: 0.985 }}
+              className="block w-full cursor-pointer rounded-[calc(2*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+            >
+              <div className={styles.envelope}>
+                <div className={styles.envBack} />
+                <div className={styles.envInner} />
+                <motion.div
+                  className={styles.envLetter}
+                  animate={opening ? { y: "-72%" } : { y: 0 }}
+                  transition={{ delay: 1.15, type: "spring", stiffness: 70, damping: 14 }}
+                >
+                  <div className={styles.letterLines} />
+                </motion.div>
+                <div className={styles.envFront} />
+                <motion.div
+                  className={styles.envFlap}
+                  style={{ zIndex: opening ? 1 : 5 }}
+                  animate={opening ? { rotateX: -176 } : { rotateX: 0 }}
+                  transition={{ delay: 0.45, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                />
+                <p className={styles.envName} style={{ fontSize: nameSize }}>
+                  {s.for} {name}
+                </p>
+                <div className={styles.envStamp}>
+                  <Stamp />
+                </div>
+                {/* The twine holds the flap: it goes as the seal breaks. */}
+                <motion.div
+                  className={styles.envDress}
+                  animate={opening ? { opacity: 0, y: 10 } : { opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45 }}
+                >
+                  <SealDressing twine={look.twine} />
+                </motion.div>
+                <div className={styles.sealWrap}>
+                  <AnimatePresence>
+                    {!opening ? (
+                      <motion.span
+                        key="seal"
+                        aria-hidden="true"
+                        className={styles.seal}
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={{ scale: reduce ? 1 : [1, 1.045, 1], opacity: 1 }}
+                        exit={{ scale: 1.18, opacity: 0, transition: { duration: 0.22 } }}
+                        transition={{ scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }, opacity: { duration: 0.4 } }}
+                      >
+                        {sealInitial}
+                      </motion.span>
+                    ) : (
+                      <SealBreak key="break" sealInitial={sealInitial} />
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.button>
+          </Float>
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-[calc(2.6*var(--k))] left-1/2 h-[calc(4.2*var(--k))] w-[70%] -translate-x-1/2 rounded-[50%] bg-black/35 blur-[calc(2.4*var(--k))]"
+          />
+        </motion.div>
+
+        <TapPill tone={look.tone} hidden={opening} reduce={reduce} className="mt-[calc(6.5*var(--k))]">
+          {s.tap}
+        </TapPill>
+      </div>
     </motion.div>
   );
 }
