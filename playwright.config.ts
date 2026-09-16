@@ -9,7 +9,18 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? "github" : "list",
-  use: { baseURL, trace: "on-first-retry" },
+  use: {
+    baseURL,
+    trace: "on-first-retry",
+    // The consent banner is fixed to the bottom of every page, which is where a gift keeps its
+    // controls, so it swallows taps meant for them. Every test starts with the choice already
+    // made -- declined, the privacy-preserving one -- so the suite exercises the gift and not
+    // the banner. A test about the banner itself clears this key first.
+    storageState: {
+      cookies: [],
+      origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "ethos-analytics-consent", value: "denied" }] }],
+    },
+  },
   projects: [
     { name: "mobile-chrome", use: { ...devices["Pixel 7"] } },
     { name: "desktop-chrome", use: { ...devices["Desktop Chrome"] } },
