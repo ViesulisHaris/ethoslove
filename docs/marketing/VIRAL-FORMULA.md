@@ -282,6 +282,10 @@ before "Btw · I made you something earlier", and the link does not land until s
   three times, and "i wasnt normal about it" at the end), a number to check ("Since Sunday" against
   "its thursday"), one thing nobody has read yet ("Don't skip to the end" plants the P.S.), and a loop
   — her first word is "no" and her last word is "no", so a second swipe costs nothing.
+- **The best low-stakes opener is an argument nobody can win.** 78 runs the same shape on a one-year
+  anniversary and opens on which date counts — the first date, the day you made it official, the day
+  you met. It is cosy enough for the slow shape and it turns the comments into people stating their
+  own rule rather than complimenting the story. The pin asks the question outright.
 - **Own the search, not just the feed.** That post was found by typing "free website for love letter"
   into TikTok, and the answer to that search is The Letter, which is free. Put the phrase in the
   caption and the hashtags, and give one repost hook the search wording outright.
@@ -493,5 +497,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 75 | 11 minutes | 3 months, the first i love you | The Letter | Starry |
 | 76 | number 12 | her 18th, from her little sister | Jar of Reasons | Birthday |
 | 77 | be normal about it | the slow one, 10 slides, free letter search | The Letter | Starry |
+| 78 | it's tomorrow | 1 year, 365 against 391, the slow shape | Our Timeline | Gingham |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
