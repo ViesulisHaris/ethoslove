@@ -22,12 +22,17 @@ import { manifest as trickOrTreat } from "./trick-or-treat/manifest";
 import { manifest as scrapbook } from "./scrapbook/manifest";
 import { manifest as halfway } from "./halfway/manifest";
 import { manifest as garden } from "./garden/manifest";
+import { manifest as snowGlobe } from "./snow-globe/manifest";
+import { manifest as recipeBox } from "./recipe-box/manifest";
+import { manifest as capToss } from "./cap-toss/manifest";
+import { manifest as paperCrane } from "./paper-crane/manifest";
+import { manifest as theToast } from "./the-toast/manifest";
 
 /**
  * Manifests are eager (tiny, safe to import on the server).
  * Template code is lazy: each entry is its own chunk, loaded only when rendered.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast];
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = {
@@ -53,6 +58,11 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   scrapbook: () => import("./scrapbook"),
   halfway: () => import("./halfway"),
   garden: () => import("./garden"),
+  "snow-globe": () => import("./snow-globe"),
+  "recipe-box": () => import("./recipe-box"),
+  "cap-toss": () => import("./cap-toss"),
+  "paper-crane": () => import("./paper-crane"),
+  "the-toast": () => import("./the-toast"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

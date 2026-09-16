@@ -11,6 +11,17 @@ const base = process.argv[2] ?? "http://localhost:3000";
 const W = 390;
 const H = 600;
 
+/** Every gift now opens on a cover; the capture taps it and waits for the gift underneath. */
+async function open(page) {
+  const cover = page.getByRole("button", { name: /tap to open/i });
+  if (await cover.count()) {
+    await cover.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await cover.first().click({ force: true });
+    await page.waitForTimeout(2200);
+  }
+}
+
 const SCRIPTS = {
   "our-timeline": async (page) => {
     await page.getByRole("button", { name: /scroll to begin/i }).waitFor({ timeout: 15000 });
@@ -228,6 +239,82 @@ const SCRIPTS = {
     await page.waitForTimeout(2500);
     const sc = page.locator('[data-template="scrapbook"] .overflow-y-auto').last();
     for (let i = 0; i < 4; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.45, behavior: "smooth" })); await page.waitForTimeout(1100); }
+    return poster;
+  },
+  "snow-globe": async (page) => {
+    await open(page);
+    const globe = page.getByRole("button", { name: /shake the globe/i });
+    await globe.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    // The globe lit on its shelf under the garland, before anyone has touched it.
+    const poster = await page.screenshot();
+    for (let i = 0; i < 3; i++) {
+      await page.getByRole("button", { name: /^shake it$/i }).click({ force: true });
+      await page.waitForTimeout(3800);
+    }
+    await page.getByRole("button", { name: /turn it over/i }).click({ force: true });
+    await page.waitForTimeout(5000);
+    return poster;
+  },
+  "recipe-box": async (page) => {
+    await open(page);
+    const pour = page.locator('[data-rb-action="pour"]').last();
+    await pour.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1500);
+    const poster = await page.screenshot();
+    for (let i = 0; i < 4; i++) { await pour.click({ force: true }); await page.waitForTimeout(900); }
+    await page.waitForTimeout(1200);
+    const stir = page.locator('[data-rb-action="stir"]').last();
+    for (let i = 0; i < 5 && (await stir.count()); i++) { await stir.click({ force: true }); await page.waitForTimeout(800); }
+    await page.waitForTimeout(3500);
+    return poster;
+  },
+  "cap-toss": async (page) => {
+    await open(page);
+    const toss = page.getByRole("button", { name: /^throw it$/i });
+    await toss.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    // The cap on the gown, under the bunting, with the year printed behind it.
+    const poster = await page.screenshot();
+    await toss.click({ force: true });
+    await page.waitForTimeout(4200);
+    const ribbon = page.getByRole("button", { name: /pull the ribbon/i }).first();
+    for (let i = 0; i < 5 && (await ribbon.count()); i++) { await ribbon.click({ force: true }); await page.waitForTimeout(700); }
+    await page.waitForTimeout(3500);
+    return poster;
+  },
+  "paper-crane": async (page) => {
+    await open(page);
+    const fold = page.getByRole("button", { name: /tap to fold/i });
+    await fold.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1200);
+    // Two creases in, so the card shows a shape being made rather than a blank square.
+    for (let i = 0; i < 2; i++) { await fold.click({ force: true }); await page.waitForTimeout(1400); }
+    const poster = await page.screenshot();
+    for (let i = 0; i < 5 && (await fold.count()); i++) { await fold.click({ force: true }); await page.waitForTimeout(1300); }
+    await page.waitForTimeout(1200);
+    const go = page.getByRole("button", { name: /let it go/i }).first();
+    if (await go.count()) await go.click({ force: true });
+    await page.waitForTimeout(5000);
+    return poster;
+  },
+  "the-toast": async (page) => {
+    await open(page);
+    const pour = page.getByRole("button", { name: /hold to pour/i });
+    await pour.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    // Two empty glasses either side of the card, the candle lit, the bottle waiting above.
+    const poster = await page.screenshot();
+    // Pouring is a press and hold, so the capture holds it the way a thumb would.
+    const box = await pour.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.waitForTimeout(2400);
+    await page.mouse.up();
+    await page.waitForTimeout(1800);
+    const clink = page.getByRole("button", { name: /^clink$/i }).first();
+    if (await clink.count()) await clink.click({ force: true });
+    await page.waitForTimeout(4500);
     return poster;
   },
   "the-letter": async (page) => {

@@ -237,7 +237,16 @@ export function defaultCoverFor(slug: string): CoverId {
     case "trick-or-treat":
       return "spooky";
     case "halfway":
+    case "paper-crane":
       return "gingham";
+    case "snow-globe":
+      return "starry";
+    case "recipe-box":
+      return "garden";
+    case "cap-toss":
+      return "polka";
+    case "the-toast":
+      return "lovecore";
     case "constellations":
     case "midnight-countdown":
     case "passport":
