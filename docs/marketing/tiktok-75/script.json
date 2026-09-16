@@ -1,0 +1,24 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 23:41", "messages": [
+      { "from": "me", "text": "u still up" },
+      { "from": "them", "text": "ya" },
+      { "from": "me", "text": "u ok" },
+      { "typing": true },
+      { "from": "me", "text": "why do u keep typing and stopping" },
+      { "typing": true },
+      { "from": "me", "text": "its been 11 minutes" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23:53", "messages": [
+      { "from": "them", "text": "i couldnt say it out loud so i wrote it" },
+      { "from": "them", "link": { "title": "the thing i couldnt say", "domain": "tryethos.io", "image": "og", "name": "Eda" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 00:14", "messages": [
+      { "from": "me", "text": "u said it" },
+      { "from": "me", "text": "in writing" },
+      { "from": "me", "text": "twice" },
+      { "from": "them", "text": "once. the second one was the ps" },
+      { "from": "me", "text": "i love u too", "tapback": "heart" }
+    ] }
+  ]
+}

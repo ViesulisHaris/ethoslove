@@ -228,6 +228,35 @@ there is evidence. Six of them, and the rules that keep the genre charming inste
 - **Keep it at the age.** The evidence is free: photos, a note, a list, a drive. Nothing bought, nothing
   flown, nothing that needs money.
 
+## The gap between sending it and them reading it: 71 to 76
+
+Six that happen in the minutes nobody writes about — while the dots are going, while it sits unread,
+while the wrong person opens it. What they taught us:
+
+- **A dread opener has to break inside the same slide.** "we need to talk" and eleven minutes of typing
+  dots buy enormous attention and spend it fast. If the slide ends still frightening, the comments are
+  about anxiety and nobody shares it. 71 breaks with "sorry phone died", 75 with him admitting he
+  cannot say it out loud.
+- **Typing dots are the cheapest tension in the app.** Two per carousel, never more; three reads as a
+  gimmick. They do what a paragraph of narration would do and cost one line of script.
+- **A number the product actually knows beats an invented one.** 72 is built on the open counter — she
+  opened it 23 times and he can see it — so the comment is "WAIT it tells you??", which is the feature
+  selling itself. Numbers we made up get argued with; this one gets asked about.
+- **Not every one is a boyfriend.** Sisters share hardest: the comment on 76 is a tag, not an opinion,
+  because everyone has one person who has known them the whole time. Mums are second. A carousel that
+  ends in a tag outperforms one that ends in a debate.
+- **Everybody who is not the couple gets their own voice.** Mum types in capital letters, full
+  sentences, "Love Mum x" on every message including the angry ones. A sixteen year old is dry and
+  would rather die than be caught being sincere twice: "dont tell mum i was nice".
+- **The third party is never the joke at her expense.** In 73 his mum opens the gift by accident, reads
+  it twice, cries about the market photo and sends it to his dad. She is proof the thing is good, which
+  is worth more than any line we could write ourselves.
+- **Let the recipient describe the gift.** In 74 she scrolls the garden out loud — "it keeps growing",
+  "there r photos on the trellis", "theres a greenhouse" — and that is the entire ad, said by the one
+  person the viewer believes.
+- **"Nothing" is still the best trap there is.** She says nothing, he agrees too fast, and the whole
+  comment section is women explaining what nothing means.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -426,5 +455,11 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 68 | 40 minutes | her birthday (his side) | Birthday Cinema | Polka |
 | 69 | worked tho | 1 year since they met, her list | Bouquet | Garden |
 | 70 | im fine. | 6 months, the 3am drive (his side) | Fireside | Harvest |
+| 71 | we need to talk | 1 year, the dry texter | Text Thread | Lovecore |
+| 72 | 23 times | 6 months, the open counter (his side) | Scrapbook | Mocha |
+| 73 | wrong chat | 2 years, his mum opened it (his side) | Our Timeline | Pearl |
+| 74 | i planted u something | anniversary, "nothing" | The Garden | Classic |
+| 75 | 11 minutes | 3 months, the first i love you | The Letter | Starry |
+| 76 | number 12 | her 18th, from her little sister | Jar of Reasons | Birthday |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

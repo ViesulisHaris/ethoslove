@@ -1,0 +1,25 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 12:04", "messages": [
+      { "from": "me", "link": { "title": "two years of you", "domain": "tryethos.io", "image": "og", "name": "Ines" } },
+      { "from": "them", "text": "Is this for me?" },
+      { "from": "me", "text": "WRONG CHAT" },
+      { "from": "me", "text": "mum do not open it" },
+      { "from": "them", "text": "I have opened it." }
+    ] },
+    { "type": "chat", "timestamp": "Today 12:09", "messages": [
+      { "from": "them", "text": "I have read all of it. Twice." },
+      { "from": "them", "text": "The one at the market is my favourite photo of you both." },
+      { "from": "me", "text": "mum please" },
+      { "from": "them", "text": "Does she know you can write like this?" },
+      { "from": "me", "text": "no" }
+    ] },
+    { "type": "chat", "timestamp": "Today 12:26", "messages": [
+      { "from": "them", "text": "I have sent it to your father." },
+      { "from": "me", "text": "MUM" },
+      { "from": "them", "text": "He cried at the market part. Love Mum x" },
+      { "from": "me", "text": "i havent even sent it to her yet" },
+      { "from": "them", "text": "Send it. Love Mum x", "tapback": "heart" }
+    ] }
+  ]
+}

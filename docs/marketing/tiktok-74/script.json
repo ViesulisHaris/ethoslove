@@ -1,0 +1,25 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sun 11:02", "messages": [
+      { "from": "them", "text": "what do u want for our anniversary" },
+      { "from": "me", "text": "nothing" },
+      { "from": "me", "text": "genuinely nothing" },
+      { "from": "them", "text": "ok" },
+      { "from": "me", "text": "u agreed too fast" },
+      { "from": "them", "text": "u said nothing" }
+    ] },
+    { "type": "chat", "timestamp": "Sun 11:40", "messages": [
+      { "from": "them", "text": "i didnt buy u anything" },
+      { "from": "them", "text": "i planted u something instead" },
+      { "from": "them", "link": { "title": "everything i planted", "domain": "tryethos.io", "image": "og", "name": "Noor" } },
+      { "from": "me", "text": "planted" }
+    ] },
+    { "type": "chat", "timestamp": "Sun 12:15", "messages": [
+      { "from": "me", "text": "u made me a GARDEN" },
+      { "from": "me", "text": "i keep scrolling and it keeps growing" },
+      { "from": "me", "text": "there r photos on the trellis" },
+      { "from": "them", "text": "keep going. theres a greenhouse" },
+      { "from": "me", "text": "im not okay", "tapback": "heart" }
+    ] }
+  ]
+}

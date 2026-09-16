@@ -1,0 +1,81 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sat 21:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "made u something. dont open it at work"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "six months of the bus stop",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Alma"
+          },
+          "status": "Read 21:41"
+        },
+        {
+          "from": "them",
+          "text": "im at work"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 22:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it says uve opened it 23 times"
+        },
+        {
+          "from": "them",
+          "text": "it does not say that"
+        },
+        {
+          "from": "me",
+          "text": "it tells me every time"
+        },
+        {
+          "from": "them",
+          "text": "delete ur account"
+        },
+        {
+          "from": "me",
+          "text": "23"
+        },
+        {
+          "from": "them",
+          "text": "ok some of them were accidents"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today 22:31",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its the page with the bus stop photo"
+        },
+        {
+          "from": "them",
+          "text": "i keep going back to that one"
+        },
+        {
+          "from": "me",
+          "text": "u can just say u like me"
+        },
+        {
+          "from": "them",
+          "text": "i have. 23 times.",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

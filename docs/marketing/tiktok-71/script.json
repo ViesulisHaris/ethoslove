@@ -1,0 +1,24 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 18:02", "messages": [
+      { "from": "them", "text": "we need to talk" },
+      { "from": "me", "text": "about" },
+      { "from": "me", "text": "hello" },
+      { "typing": true },
+      { "from": "me", "text": "why are u typing and stopping" },
+      { "from": "them", "text": "sorry phone died" },
+      { "from": "me", "text": "i have aged 40 years" }
+    ] },
+    { "type": "chat", "timestamp": "Today 18:20", "messages": [
+      { "from": "them", "text": "open this first. then we can talk" },
+      { "from": "them", "link": { "title": "one year of the worst texter alive", "domain": "tryethos.io", "image": "og", "name": "Leni" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 18:31", "messages": [
+      { "from": "me", "text": "i thought u were breaking up with me" },
+      { "from": "me", "text": "i was deciding who gets the dog" },
+      { "from": "them", "text": "the dog is mine" },
+      { "from": "me", "text": "read the room" },
+      { "from": "them", "text": "happy one year", "tapback": "heart" }
+    ] }
+  ]
+}

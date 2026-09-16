@@ -1,0 +1,24 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 09:12", "messages": [
+      { "from": "them", "text": "happy birthday loser" },
+      { "from": "me", "text": "thats it" },
+      { "from": "me", "text": "18 years and u sent 3 words" },
+      { "from": "them", "text": "check ur messages properly" },
+      { "from": "them", "text": "the other one" },
+      { "from": "me", "text": "what other one" }
+    ] },
+    { "type": "chat", "timestamp": "Today 09:15", "messages": [
+      { "from": "them", "link": { "title": "18 things about my sister", "domain": "tryethos.io", "image": "og", "name": "Mila" } },
+      { "from": "them", "text": "dont read it at breakfast" },
+      { "from": "me", "text": "im AT breakfast" }
+    ] },
+    { "type": "chat", "timestamp": "Today 09:41", "messages": [
+      { "from": "me", "text": "number 12" },
+      { "from": "me", "text": "u kept the bracelet" },
+      { "from": "them", "text": "obviously" },
+      { "from": "me", "text": "im crying at the table" },
+      { "from": "them", "text": "happy birthday. dont tell mum i was nice", "tapback": "heart" }
+    ] }
+  ]
+}
