@@ -11,7 +11,7 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { homedir } from "node:os";
-import { isAbsolute, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import sharp from "sharp";
 
 const args = process.argv.slice(2);
@@ -23,7 +23,9 @@ if (!who || files.length === 0) {
 }
 
 const expand = (p) => (p.startsWith("~") ? join(homedir(), p.slice(1)) : p);
-const dir = /^\d+$/.test(who) ? `docs/marketing/tiktok-${who}` : who;
+// Run it from anywhere: the folders are found from the script's own location, not the shell's.
+const repo = resolve(import.meta.dirname, "..");
+const dir = resolve(repo, /^\d+$/.test(who) ? `docs/marketing/tiktok-${who}` : expand(who));
 mkdirSync(dir, { recursive: true });
 const position = top ? sharp.gravity.north : sharp.strategy.attention;
 
@@ -47,5 +49,7 @@ for (const [src, name, w, h] of jobs) {
 
 const script = join(dir, "script.json");
 if (existsSync(script)) {
-  execFileSync("node", [isAbsolute(script) ? "scripts/tiktok-slides.mjs" : "scripts/tiktok-slides.mjs", script, dir], { stdio: "inherit" });
+  execFileSync("node", [join(import.meta.dirname, "tiktok-slides.mjs"), script, dir], { stdio: "inherit" });
+} else {
+  console.log("no script.json in", dir, "— faces written, nothing to render");
 }

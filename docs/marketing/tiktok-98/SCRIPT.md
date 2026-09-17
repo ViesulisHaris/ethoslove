@@ -9,8 +9,10 @@ Save the girl's photo, the boy's photo and the cover photo anywhere — Download
 command with the three paths in that order:
 
 ```bash
-node scripts/tiktok-faces.mjs 98 ~/Downloads/her.jpg ~/Downloads/him.jpg ~/Downloads/cover.jpg
+node ~/Documents/mail/ethoslove/scripts/tiktok-faces.mjs 98 ~/Downloads/her.jpg ~/Downloads/him.jpg ~/Downloads/cover.jpg
 ```
+
+It runs from any folder — the full path to the script is what matters, not where the terminal is.
 
 It squares the two faces for the circles, crops the cover to 1080×1920, drops all three into this
 folder and re-renders every slide. The circles are round, so a portrait has to be squared or it keeps
@@ -18,7 +20,7 @@ whatever is in the middle of the frame — a chest, a bouquet — instead of the
 busiest part of the picture, which is usually the face; add `--top` if it grabs the wrong thing:
 
 ```bash
-node scripts/tiktok-faces.mjs 98 ~/Downloads/her.jpg ~/Downloads/him.jpg --top
+node ~/Documents/mail/ethoslove/scripts/tiktok-faces.mjs 98 ~/Downloads/her.jpg ~/Downloads/him.jpg --top
 ```
 
 The cover is optional — leave it off and the first slide stays a placeholder until you add one. Until
