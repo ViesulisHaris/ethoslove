@@ -1,0 +1,42 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he said dont open it\nuntil hes here", "timestamp": "Today 18.22", "messages": [
+      { "from": "them", "link": { "title": "open it with me", "domain": "tryethos.io", "image": "og", "name": "Mia" } },
+      { "from": "them", "text": "dont open that yet" },
+      { "from": "me", "text": "u cant send something called that and say dont open it" },
+      { "from": "them", "text": "i know" },
+      { "from": "me", "text": "im opening it" },
+      { "from": "them", "text": "MIA" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok im not opening it" },
+      { "from": "me", "text": "what is it" },
+      { "from": "them", "text": "im 40 mins away" },
+      { "from": "me", "text": "WHAT IS IT" },
+      { "from": "them", "text": "40 mins" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "im holding my phone like a bomb" },
+      { "from": "them", "text": "good" },
+      { "from": "me", "text": "is it bad news" },
+      { "from": "them", "text": "no" },
+      { "from": "them", "text": "its the opposite" },
+      { "from": "me", "text": "ur making it so much worse" }
+    ] },
+    { "type": "chat", "timestamp": "Today 18.51", "messages": [
+      { "from": "them", "text": "20 mins" },
+      { "from": "me", "text": "i havent opened it" },
+      { "from": "them", "text": "i know. i can see" },
+      { "from": "me", "text": "u can SEE" },
+      { "from": "them", "text": "it tells me when u open it" },
+      { "from": "me", "text": "im being so normal about this" }
+    ] },
+    { "type": "chat", "timestamp": "Today 19.04", "messages": [
+      { "from": "them", "text": "10 mins" },
+      { "from": "me", "text": "i opened it" },
+      { "from": "them", "text": "MIA" },
+      { "from": "me", "text": "im sat on the floor" },
+      { "from": "them", "text": "dont move. im coming" }
+    ] }
+  ]
+}

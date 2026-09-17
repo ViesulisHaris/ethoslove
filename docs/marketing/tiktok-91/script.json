@@ -1,0 +1,38 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he scheduled it 8 months\nago and forgot", "timestamp": "Today 09.02", "messages": [
+      { "from": "me", "text": "did u send me something" },
+      { "from": "me", "link": { "title": "for when ur 20", "domain": "tryethos.io", "image": "og", "name": "Ivy" } },
+      { "from": "them", "text": "no" },
+      { "from": "them", "text": "wait" },
+      { "from": "them", "text": "where did u get that" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "it just arrived" },
+      { "from": "me", "text": "from u" },
+      { "from": "them", "text": "i made that in january" },
+      { "from": "them", "text": "i set it to send on ur birthday and forgot about it" },
+      { "from": "me", "text": "u forgot" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i made it the week we got together" },
+      { "from": "them", "text": "i didnt know if wed still be together in september" },
+      { "from": "me", "text": "so u set it and left it" },
+      { "from": "them", "text": "yeah" },
+      { "from": "me", "text": "and if we werent" },
+      { "from": "them", "text": "then u wouldve got it anyway" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "in january u didnt know my middle name" },
+      { "from": "them", "text": "i knew enough" },
+      { "from": "me", "text": "u wrote if ur reading this we made it" },
+      { "from": "them", "text": "we made it" }
+    ] },
+    { "type": "chat", "timestamp": "Today 09.48", "messages": [
+      { "from": "me", "text": "what if we hadnt" },
+      { "from": "them", "text": "then u wouldve got a nice thing from someone who meant it at the time" },
+      { "from": "me", "text": "im crying at work" },
+      { "from": "them", "text": "happy birthday", "tapback": "heart" }
+    ] }
+  ]
+}

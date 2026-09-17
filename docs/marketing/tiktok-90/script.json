@@ -1,0 +1,26 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "you asked what was in it", "timestamp": "Today 08.11", "messages": [
+      { "from": "them", "text": "did u sleep" },
+      { "from": "me", "text": "no" },
+      { "from": "them", "text": "did u get to the last page" },
+      { "from": "me", "text": "ive read the last page 6 times" },
+      { "from": "them", "text": "ok" },
+      { "from": "me", "text": "\"ok\"" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "u wrote it in november" },
+      { "from": "them", "text": "i started it in november" },
+      { "from": "me", "text": "we got together in january" },
+      { "from": "them", "text": "i know when we got together" }
+    ] },
+    { "type": "chat", "timestamp": "Today 08.40", "messages": [
+      { "from": "me", "text": "the bit about the bus stop" },
+      { "from": "them", "text": "i wasnt going to put that in" },
+      { "from": "me", "text": "why" },
+      { "from": "them", "text": "because i dont come out of it well" },
+      { "from": "me", "text": "u waited 6 months to say u fancied me" },
+      { "from": "them", "text": "i waited 7", "tapback": "heart" }
+    ] }
+  ]
+}
