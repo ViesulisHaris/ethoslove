@@ -318,6 +318,10 @@ for the posts whose job is reach.
   start a Birthday Cinema or a Bouquet pay; about one in twenty who start a free Letter does. 77 used
   The Letter deliberately to win the "free website for love letter" search — that wins clicks and
   loses revenue, so it stays a search play, not the default.
+- **Put the buyer in the maker's seat.** When the narrator is the one who made the gift — 79 and 83 —
+  the feeling the post leaves is "I could do that and they would lose it". When the narrator receives
+  it — 80, 81, 82 — it is "I wish someone would". The first opens a link; the second is a wish. Write
+  the maker as the blue bubbles whenever the story allows it.
 - **Sell the extras, because that is where the money is on a free template.** The song, the voice note
   and the photo count are worth naming out loud: "is that YOUR VOICE" converts better than any
   sentence about pages.
@@ -543,5 +547,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 80 | they dont die | for no reason, the price answer | Bouquet | Picnic |
 | 81 | u dont have to water it | long distance, the scroll | The Garden | Classic |
 | 82 | dont put it on speaker | her 22nd, the voice note | Scrapbook | Polka |
+| 83 | the ones u tried to delete | a best friend's birthday, the pages | Scrapbook | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

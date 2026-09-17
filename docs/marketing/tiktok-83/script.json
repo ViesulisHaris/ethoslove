@@ -1,0 +1,32 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 00.01", "messages": [
+      { "from": "me", "text": "happy birthday" },
+      { "from": "them", "text": "ITS 12AM" },
+      { "from": "me", "text": "i waited up" },
+      { "from": "them", "text": "ur unwell" },
+      { "from": "me", "text": "check ur messages" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "link": { "title": "the ones u tried to delete", "domain": "tryethos.io", "image": "og", "name": "Mimi" } },
+      { "from": "them", "text": "What have you done" },
+      { "from": "me", "text": "dont scroll too fast" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "IS THAT YEAR 9" },
+      { "from": "me", "text": "and year 7" },
+      { "from": "them", "text": "i asked u to delete those" },
+      { "from": "me", "text": "i kept everything" },
+      { "from": "them", "text": "theres tape on them" },
+      { "from": "me", "text": "theyre pages. keep going" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.26", "messages": [
+      { "from": "them", "text": "how long did this take u" },
+      { "from": "me", "text": "half an hour" },
+      { "from": "them", "text": "the photos though" },
+      { "from": "me", "text": "the photos took longer than the making" },
+      { "from": "them", "text": "im deleting all of these btw" },
+      { "from": "me", "text": "u cant. theyre pages now", "tapback": "heart" }
+    ] }
+  ]
+}
