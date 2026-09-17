@@ -1,0 +1,32 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 19.02", "messages": [
+      { "from": "me", "text": "happy birthday" },
+      { "from": "me", "text": "dont open it at ur mums" },
+      { "from": "them", "text": "Im at my mums" },
+      { "from": "me", "text": "go to ur room then" },
+      { "from": "them", "text": "Ok. In my room" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "link": { "title": "theo turns 20", "domain": "tryethos.io", "image": "og", "name": "Theo" } },
+      { "from": "them", "text": "Whats this" },
+      { "from": "me", "text": "press play" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Is that our song" },
+      { "from": "them", "text": "Its our song" },
+      { "from": "me", "text": "yes" },
+      { "from": "them", "text": "Its telling me to blow the candles out" },
+      { "from": "me", "text": "so blow them out" },
+      { "from": "them", "text": "Im 20 years old" },
+      { "from": "me", "text": "BLOW" }
+    ] },
+    { "type": "chat", "timestamp": "Today 19.44", "messages": [
+      { "from": "them", "text": "They went out" },
+      { "from": "them", "text": "How long did this take you" },
+      { "from": "me", "text": "20 minutes on the bus" },
+      { "from": "them", "text": "You're lying" },
+      { "from": "them", "text": "Ive watched it 4 times", "tapback": "heart" }
+    ] }
+  ]
+}

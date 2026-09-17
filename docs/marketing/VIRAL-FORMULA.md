@@ -290,6 +290,47 @@ before "Btw · I made you something earlier", and the link does not land until s
   into TikTok, and the answer to that search is The Letter, which is free. Put the phrase in the
   caption and the hashtags, and give one repost hook the search wording outright.
 
+## Views are not sales: 79 to 82
+
+78 did 20k in its first day, which is the slow shape working. It also showed up the thing this
+document had been quietly teaching: almost every rule above optimises for **comments**, and the
+comments it produces are people arguing about whether he is a bad boyfriend. That is entertainment
+traffic. It watches, it argues, it scrolls on. The comments that turn into money are "what website",
+"what template is that", "sending this to mine" and "im making this for his birthday" — and you get
+those by making the gift the subject instead of the plot device.
+
+79 to 82 are built the other way round. Treat this as the sales shape, and keep the argument shapes
+for the posts whose job is reach.
+
+- **Four chat slides, six gift frames.** The reverse of everything above. The buyer has to want the
+  object, so the object gets six of the ten slides and the story gets four.
+- **Every line of dialogue names something the product does.** "Is that our song", "it wants me to
+  blow the candles out", "you pick every stem", "is that YOUR VOICE". By slide three a viewer who has
+  never heard of us knows what the thing is, described by somebody who is not selling it.
+- **Shrink the effort, never brag about it.** 77 was right to say "since Sunday" — that post was
+  selling a feeling. A sales post says "20 minutes on the bus", because the real objection is "I
+  haven't got time and I'm not creative" and twenty minutes kills both.
+- **Let the recipient answer the price.** "how much was this" / "Less than the garage ones" / "and
+  they dont die". The product promise lands hardest when the person receiving it says it.
+- **Nobody is a bad partner.** No forgetting, no testing, no fight to take sides in. A post nobody can
+  argue about sends its comments straight to "where is this from".
+- **Premium in the gift frames, always.** People make the template they saw. About six in ten who
+  start a Birthday Cinema or a Bouquet pay; about one in twenty who start a free Letter does. 77 used
+  The Letter deliberately to win the "free website for love letter" search — that wins clicks and
+  loses revenue, so it stays a search play, not the default.
+- **Sell the extras, because that is where the money is on a free template.** The song, the voice note
+  and the photo count are worth naming out loud: "is that YOUR VOICE" converts better than any
+  sentence about pages.
+- **The pin is the how, not a debate.** Name the template, say what it does, say how long it took. The
+  pinned comment is the product page for everyone who will never leave the app.
+- **Name the occasion in the caption** — "for his 20th", "for no reason", "long distance" — so the
+  viewer with that date coming maps it onto themselves, and post inside the buying hours: 21:00 to
+  23:00 UK, or 23:00 UK for the US evening.
+
+One caution: this is a hypothesis with one data point behind it. Run 79 to 82 against the same tracker
+columns and compare **link clicks and purchases**, not views. If the argument posts still out-earn
+these on absolute sales because they out-reach them ten to one, that is worth knowing too.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -498,5 +539,9 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 76 | number 12 | her 18th, from her little sister | Jar of Reasons | Birthday |
 | 77 | be normal about it | the slow one, 10 slides, free letter search | The Letter | Starry |
 | 78 | it's tomorrow | 1 year, 365 against 391, the slow shape | Our Timeline | Gingham |
+| 79 | press play | his 20th, the candles and the song | Birthday Cinema | Birthday |
+| 80 | they dont die | for no reason, the price answer | Bouquet | Picnic |
+| 81 | u dont have to water it | long distance, the scroll | The Garden | Classic |
+| 82 | dont put it on speaker | her 22nd, the voice note | Scrapbook | Polka |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

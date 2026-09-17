@@ -1,0 +1,31 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 22.40", "messages": [
+      { "from": "me", "text": "i miss u" },
+      { "from": "them", "text": "I know" },
+      { "from": "them", "text": "I cant send you flowers from here" },
+      { "from": "me", "text": "i know" },
+      { "from": "them", "text": "So i made you a garden" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "link": { "title": "u dont have to water it", "domain": "tryethos.io", "image": "og", "name": "Liv" } },
+      { "from": "me", "text": "what does that mean" },
+      { "from": "them", "text": "Scroll it" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "its still going" },
+      { "from": "me", "text": "theres a whole meadow" },
+      { "from": "them", "text": "Keep going" },
+      { "from": "me", "text": "our photos are on the TREES" },
+      { "from": "them", "text": "Trellis" },
+      { "from": "me", "text": "the TRELLIS" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23.18", "messages": [
+      { "from": "me", "text": "how far does it go" },
+      { "from": "them", "text": "Theres a greenhouse at the end" },
+      { "from": "me", "text": "and a letter" },
+      { "from": "them", "text": "And a letter" },
+      { "from": "me", "text": "im 3000 miles away and im in a garden", "tapback": "heart" }
+    ] }
+  ]
+}

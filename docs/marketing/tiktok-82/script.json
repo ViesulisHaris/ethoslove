@@ -1,0 +1,29 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 08.31", "messages": [
+      { "from": "them", "text": "Happy birthday" },
+      { "from": "them", "text": "Dont put it on speaker" },
+      { "from": "me", "text": "why" },
+      { "from": "them", "text": "Just dont" },
+      { "from": "me", "text": "u r scaring me" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "link": { "title": "twenty two", "domain": "tryethos.io", "image": "og", "name": "Elif" } },
+      { "from": "me", "text": "opening it at the table" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "there are actual pages" },
+      { "from": "me", "text": "with tape on them" },
+      { "from": "them", "text": "Keep going" },
+      { "from": "me", "text": "wait" },
+      { "from": "me", "text": "is that YOUR VOICE" }
+    ] },
+    { "type": "chat", "timestamp": "Today 08.49", "messages": [
+      { "from": "me", "text": "u recorded a voice note" },
+      { "from": "them", "text": "At the end. Yeah" },
+      { "from": "me", "text": "i had it on speaker" },
+      { "from": "them", "text": "I said not to" },
+      { "from": "me", "text": "my entire family heard it", "tapback": "heart" }
+    ] }
+  ]
+}

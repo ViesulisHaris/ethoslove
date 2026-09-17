@@ -1,0 +1,28 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 16.20", "messages": [
+      { "from": "them", "text": "i sent u flowers" },
+      { "from": "me", "text": "no u didnt" },
+      { "from": "me", "text": "theres nothing here" },
+      { "from": "them", "text": "Check ur messages" },
+      { "from": "me", "text": "oh" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "link": { "title": "for no reason", "domain": "tryethos.io", "image": "og", "name": "Juno" } },
+      { "from": "me", "text": "opening it" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "u picked every single one" },
+      { "from": "them", "text": "Theres a list. You pick them" },
+      { "from": "me", "text": "the peonies r my favourite" },
+      { "from": "them", "text": "I know" },
+      { "from": "me", "text": "theres a card inside the paper" }
+    ] },
+    { "type": "chat", "timestamp": "Today 16.51", "messages": [
+      { "from": "me", "text": "how much was this" },
+      { "from": "them", "text": "Less than the garage ones" },
+      { "from": "me", "text": "and they dont die" },
+      { "from": "them", "text": "They dont die", "tapback": "heart" }
+    ] }
+  ]
+}
