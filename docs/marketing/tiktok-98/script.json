@@ -1,0 +1,41 @@
+{
+  "style": "messenger",
+  "avatars": { "me": "pfp-her.jpg", "them": "pfp-him.jpg" },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: his flight is in 6 hours\nand he just sent you this" },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "u awake" },
+      { "from": "me", "text": "ya" },
+      { "from": "them", "text": "i cant sleep" },
+      { "from": "me", "text": "me neither" },
+      { "from": "them", "text": "im sorry" },
+      { "from": "me", "text": "for what" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "for going" },
+      { "from": "me", "text": "u got in. u have to go" },
+      { "from": "them", "text": "i know" },
+      { "from": "them", "text": "doesnt make it better" },
+      { "from": "me", "text": "i know" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i made u something" },
+      { "from": "them", "text": "so u dont forget the boring stuff" },
+      { "from": "them", "link": { "title": "the boring stuff", "domain": "tryethos.io", "image": "og", "name": "Ella" } },
+      { "from": "me", "text": "what boring stuff" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "the bus stop" },
+      { "from": "me", "text": "u kept the receipt from the chinese" },
+      { "from": "them", "text": "i kept everything" },
+      { "from": "me", "text": "im not ok" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "6 hours" },
+      { "from": "me", "text": "dont say the number" },
+      { "from": "them", "text": "sorry" },
+      { "from": "me", "text": "come here" },
+      { "from": "them", "text": "im outside" }
+    ] }
+  ]
+}

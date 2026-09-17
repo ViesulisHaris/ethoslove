@@ -507,6 +507,31 @@ The four slides stay: hook bubble, link, one frame of the gift, the mess at the 
 link card, that single frame, the caption and the pin — there is no room for a product tour, and it
 turns out not to need one.
 
+## The story format: 98
+
+Everything up to 97 is a gift carousel — something happens, the gift lands, four slides. 98 is the
+other thing on this app: a serialised love story told in a DM thread, the format the storytime
+accounts run, and it wants different rules.
+
+- **It is light mode, not iMessage.** White page, grey pills one side, blue the other, and a round
+  profile picture beside every single message on both sides. `"style": "messenger"` in the script, and
+  `"avatars": { "me": "pfp-her.jpg", "them": "pfp-him.jpg" }` puts real faces in the circles. Photos
+  live in the carousel's own folder; a missing one falls back to a drawn circle so a script renders
+  before the pictures exist.
+- **It opens on a photo, not a chat.** `{ "type": "photo", "src": "cover.jpg", "caption": "POV: ..." }`
+  — two people, dark, from behind or cropped, with the line over it. That slide is the whole hook, and
+  it is why this format can run longer than four slides: the picture does what a written hook cannot.
+- **Eight slides is fine here.** The four-slide rule is for gift carousels, where the story is an
+  excuse for the product. A story people are following is watched to the end for its own sake, which
+  is the same reason the 2.9M post could run ten.
+- **It ends unresolved, on purpose.** 98 ends on "im outside" — he has been downstairs the whole
+  conversation. Part 2 is the door.
+- **The gift has to be the small stuff.** A bus stop, a receipt from the Chinese, a kitchen at half
+  eleven. Nobody makes a keepsake out of the holidays, and "so u dont forget the boring stuff" is the
+  line that sends somebody to build one.
+- **Nobody is the villain, including the distance.** He got in somewhere and she tells him he has to
+  go. A story where the only enemy is a plane gets "who is cutting onions" instead of an argument.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -734,5 +759,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 95 | on ur phone all week | the row that was him making it | any, one frame | — |
 | 96 | so ur not gonna say anything | she thought he forgot; it was 00:00 | any, one frame | — |
 | 97 | do u even like me | 2am, and he'd had it since June | any, one frame | — |
+| 98 | the boring stuff | long distance, part 1, messenger style | Scrapbook (Memories) | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

@@ -13,12 +13,20 @@
  * style, near the top. Use it on slide 1: it is the only thing legible at thumbnail size, and a
  * carousel whose first slide says nothing dies in the test pool. "\n" breaks the line.
  *
+ * `"style": "messenger"` draws a light-mode DM thread — white page, grey and blue pills, and a
+ * round profile picture beside every message on both sides. `"avatars": { "me": "him.jpg",
+ * "them": "her.jpg" }` in the script (paths relative to the script) puts real faces in the
+ * circles; a missing file falls back to a drawn one, so a script renders before the photos exist.
+ *
+ * A slide can also be `{ "type": "photo", "src": "cover.jpg", "caption": "POV: ..." }` — the
+ * picture that opens a story, full bleed, with the line over it. "\n" breaks the line.
+ *
  * `"style": "instagram"` draws Instagram DMs instead, dark mode, with `"contact": { name, sub, avatar }`
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
  */
 import { chromium } from "@playwright/test";
-import { mkdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { dirname, isAbsolute, join } from "node:path";
 
 // The link card is drawn with the same serif the product embeds in its real og:image.
 const face = (file) => readFileSync(join(import.meta.dirname, "../src/fonts", file)).toString("base64");
@@ -218,6 +226,17 @@ const avatar = (sky = 0) => {
   return `<svg viewBox="0 0 100 100"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${deep}"/><stop offset=".55" stop-color="${mid}"/><stop offset=".8" stop-color="${glow}"/></linearGradient><filter id="${id}f" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6"/></filter></defs><rect width="100" height="100" fill="url(#${id})"/><g filter="url(#${id}f)"><circle cx="62" cy="71" r="11" fill="#fff1d6" opacity=".9"/><circle cx="22" cy="26" r="3" fill="#fff" opacity=".45"/><circle cx="80" cy="18" r="2.4" fill="#fff" opacity=".4"/></g><path d="M0 78c14-6 26-5 38-1s26 5 38 0 18-4 24-2V100H0Z" fill="${deep}" opacity=".92"/><path d="M0 88c20-4 40-2 60 1s30 2 40 0V100H0Z" fill="#0b0d16" opacity=".85"/></svg>`;
 };
 
+
+// Pictures live next to the script, so a carousel folder holds its own faces and cover.
+const MIME = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif" };
+function localImage(src) {
+  if (!src) return null;
+  const file = isAbsolute(src) ? src : join(dirname(scriptPath), src);
+  if (!existsSync(file)) return null;
+  const ext = file.toLowerCase().split(".").pop();
+  return `data:${MIME[ext] ?? "image/jpeg"};base64,${readFileSync(file).toString("base64")}`;
+}
+
 function igHtml(slide) {
   const contact = script.contact ?? {};
   const sky = contact.avatar ?? 0;
@@ -299,13 +318,86 @@ function igHtml(slide) {
   </body></html>`;
 }
 
+
+/** A face in a circle: their photo if the script points at one, otherwise the drawn sunset. */
+function faceFor(from) {
+  const src = localImage(script.avatars?.[from]);
+  return src ? `<img src="${src}" alt="">` : avatar(from === "me" ? 1 : 0);
+}
+
+/**
+ * The light-mode DM thread the storytime accounts use: white page, grey pills one side, blue the
+ * other, and a round profile picture beside every single message on both sides. Type is large
+ * because these are read at arm's length on a feed, and there is no header or message bar — the
+ * slides are crops of a conversation, not screenshots of an app.
+ */
+function msgHtml(slide) {
+  const items = slide.timestamp ? [{ ts: slide.timestamp }, ...slide.messages] : slide.messages;
+  const rows = items
+    .map((m) => {
+      if (m.ts || m.system) return `<div class="ms-ts">${esc(m.ts ?? m.system)}</div>`;
+      const side = m.from === "me" ? "out" : "in";
+      const face = `<div class="ms-face">${faceFor(m.from)}</div>`;
+      if (m.typing) return `<div class="ms-row ${side}">${side === "in" ? face : ""}<div class="ms-bubble ${side} typing"><span></span><span></span><span></span></div>${side === "out" ? face : ""}</div>`;
+      const body = m.link
+        ? `<div class="ms-link"><div class="ms-link-img">${ogImage(m.link.name, m.link.lang)}</div><div class="ms-link-foot"><div class="ms-link-title">${esc(m.link.title)}</div><div class="ms-link-domain">${esc(m.link.domain)}</div></div></div>`
+        : `<div class="ms-bubble ${side}">${esc(m.text)}</div>`;
+      return `<div class="ms-row ${side}">${side === "in" ? face : ""}${body}${side === "out" ? face : ""}</div>`;
+    })
+    .join("");
+
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+    @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
+    @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF_ITALIC}) format("truetype");font-style:italic}
+    html,body{margin:0;background:#fff;width:1080px;height:1920px;overflow:hidden}
+    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;color:#000;-webkit-font-smoothing:antialiased}
+    .ms-thread{position:absolute;inset:0;padding:180px 34px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:34px}
+    .ms-ts{text-align:center;color:#8e8e93;font-size:36px;font-weight:500;margin:6px 0}
+    .ms-row{display:flex;align-items:flex-end;gap:22px}
+    .ms-row.out{justify-content:flex-end}
+    .ms-face{width:94px;height:94px;border-radius:50%;overflow:hidden;flex:none;background:#e9e9eb}
+    .ms-face img,.ms-face svg{display:block;width:100%;height:100%;object-fit:cover}
+    .ms-bubble{max-width:740px;padding:30px 46px 34px;border-radius:70px;font-size:54px;line-height:66px;letter-spacing:-.8px;box-sizing:border-box;overflow-wrap:break-word}
+    .ms-bubble.in{background:#eceded;color:#000}
+    .ms-bubble.out{background:#0a84ff;color:#fff}
+    .ms-bubble.typing{display:flex;gap:16px;align-items:center;padding:44px 46px}
+    .ms-bubble.typing span{width:20px;height:20px;border-radius:50%;background:#8e8e93;display:block}
+    .ms-bubble.out.typing span{background:rgba(255,255,255,.85)}
+    .ms-link{width:700px;border-radius:44px;overflow:hidden;background:#eceded}
+    .ms-link-img{height:366px;overflow:hidden;position:relative}
+    .ms-link-img .og{position:absolute;inset:0}
+    .ms-link-foot{padding:26px 40px 34px}
+    .ms-link-title{font-size:46px;line-height:56px;font-weight:600;letter-spacing:-.6px}
+    .ms-link-domain{font-size:38px;line-height:48px;color:#8e8e93;margin-top:4px}
+    ${OG_CSS}
+    ${HOOK_CSS}
+  </style></head><body>${hookHtml(slide)}<div class="ms-thread">${rows}</div></body></html>`;
+}
+
+/** The picture a story opens on: full bleed, darkened a little, one line over it. */
+function photoHtml(slide) {
+  const src = localImage(slide.src);
+  const bg = src
+    ? `background-image:url(${src});background-size:cover;background-position:center`
+    : "background:radial-gradient(120% 90% at 50% 20%,#2b3a55,#141a26 60%,#080b12)";
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+    html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif}
+    .ph{position:absolute;inset:0;${bg}}
+    .ph:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.12) 40%,rgba(0,0,0,.45))}
+    .cap{position:absolute;left:80px;right:80px;top:50%;transform:translateY(-50%);text-align:center;color:#fff;font-size:58px;line-height:1.22;font-weight:600;letter-spacing:-.6px;text-shadow:0 4px 26px rgba(0,0,0,.75);z-index:2}
+    .miss{position:absolute;left:0;right:0;bottom:120px;text-align:center;color:rgba(255,255,255,.5);font-size:30px;z-index:2}
+  </style></head><body><div class="ph"></div>${slide.caption ? `<div class="cap">${esc(slide.caption).replace(/\n/g, "<br>")}</div>` : ""}${src ? "" : `<div class="miss">drop ${esc(slide.src ?? "cover.jpg")} in this folder and run it again</div>`}</body></html>`;
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 let n = 0;
 for (const slide of script.slides) {
   n += 1;
-  if (slide.type !== "chat") continue;
-  await page.setContent(script.style === "instagram" ? igHtml(slide) : html(slide));
+  const draw = slide.type === "photo" ? photoHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
+  if (slide.type !== "chat" && slide.type !== "photo") continue;
+  await page.setContent(draw(slide));
   await page.waitForTimeout(150);
   const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
   await page.screenshot({ path: file });

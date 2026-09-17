@@ -1,0 +1,89 @@
+# TikTok carousel 98 · "the boring stuff" — long distance, part 1
+
+A different format from everything before it: the light-mode DM thread the storytime accounts use,
+with a photo as the opening slide and real profile pictures in the circles. Post 21:00 UK.
+
+## Put your three pictures in first
+
+The script points at three files that live in this folder. Drop them in, then run one command.
+
+| File | What it is |
+|---|---|
+| `cover.jpg` | The photo that opens the post. Two people, dark, from behind or cropped — never a face on camera. |
+| `pfp-him.jpg` | His profile picture, the one that goes in the grey side's circle. |
+| `pfp-her.jpg` | Hers, in the blue side's circle. |
+
+```bash
+node scripts/tiktok-slides.mjs docs/marketing/tiktok-98/script.json docs/marketing/tiktok-98
+```
+
+Until they exist it renders a placeholder cover and drawn circles, so you can read the layout before
+you have the photos. Any of them can be `.jpg`, `.png` or `.webp`.
+
+## The beats
+
+The cover: **"POV: his flight is in 6 hours / and he just sent you this"**. Then "u awake" / "ya" / "i
+cant sleep" / "me neither" / "im sorry" / "for what". Then "for going" / "u got in. u have to go" / "i
+know" / "doesnt make it better" / "i know". Then "i made u something" / "so u dont forget the boring
+stuff", the link, "what boring stuff". Then "the bus stop" / "u kept the receipt from the chinese" /
+"i kept everything" / "im not ok". Then "6 hours" / "dont say the number" / "sorry" / "come here" /
+"im outside".
+
+## Why it is written this way
+
+- **Nobody is leaving because they stopped loving each other.** He got in somewhere. She tells him he
+  has to go. That is what makes it bearable to watch, and it is why the comments are "who is cutting
+  onions" rather than an argument about whether he should stay.
+- **"im sorry" / "for what" / "for going"** is three bubbles and the whole situation. No explaining.
+- **The gift is not a grand gesture, it is the opposite.** "so u dont forget the boring stuff" — the
+  bus stop, a receipt from the Chinese. Nobody makes a keepsake out of the holidays; they make it out
+  of the Tuesdays, and that is the line that makes somebody go and build one.
+- **"i kept everything"** is the confession, and it is two words.
+- **"dont say the number"** is what somebody actually types when a countdown is being said out loud.
+- **It ends on "im outside", unresolved.** He has been downstairs the whole time. That is the part 2,
+  and the comments will ask for it.
+
+## The order
+
+| # | File | On screen |
+|---|---|---|
+| 1 | `slide-01.png` | **the cover photo** with "POV: his flight is in 6 hours / and he just sent you this" |
+| 2 | `slide-02.png` | "u awake" · "ya" · "i cant sleep" · "me neither" · "im sorry" · "for what" |
+| 3 | `slide-03.png` | "for going" · "u got in. u have to go" · "i know" · "doesnt make it better" · "i know" |
+| 4 | `slide-04.png` | "i made u something" · "so u dont forget the boring stuff" · **the link: "the boring stuff"** · "what boring stuff" |
+| 5 | yours | One page of the scrapbook: the bus stop photo, taped |
+| 6 | yours | The page with the receipt on it |
+| 7 | `slide-05.png` | "the bus stop" · "u kept the receipt from the chinese" · "i kept everything" · "im not ok" |
+| 8 | `slide-06.png` | "6 hours" · "dont say the number" · "sorry" · "come here" · "im outside" |
+
+Eight slides. Two of them are yours, and they have to match what she names in slide 7 — a bus stop and
+a receipt. Shoot those two pages specifically.
+
+## The gift
+
+Scrapbook at tryethos.io (premium), theme **Memories**, cover **Classic**, title `the boring stuff`.
+
+**Editor fields:** Their name `Ella` · Your name `Jack` · The pages `Memories` · The cut-out title
+`THE BORING STUFF` · The torn note `none of this was a big day` · The pinned note `the 42 bus · the
+chinese · ur kitchen` · Music: library "Quiet Hours"
+
+**Photos:** `the bus stop, 42 to town` · `the receipt from the chinese` · `ur kitchen, the good mug` ·
+`the walk back` · `my hoodie on ur chair` · `the car park at yours`
+
+**Message:** `ella. none of this is a big day. its the bus stop and the chinese and your kitchen at
+half eleven, because that is the stuff that goes first and i am not letting it. i am not going to
+write anything clever here. i kept everything. thats it.`
+
+## Post (tt-couple)
+
+Caption: `his flight was in 6 hours and he sent me this 😭 he kept the receipt from our first chinese`
+
+Hashtags: `#longdistance #ldr #storytime #couple #part1 #fyp`
+
+Part 2 is the door. Shoot it if this one moves: she goes downstairs, he is in the car, and neither of
+them says anything useful. Pin `part 2 tomorrow` on this one and reply to every "part 2" comment.
+
+- **Pin (the how):** `the thing he sent is on tryethos.io — photos, tape, his handwriting. the receipt is page 3`
+- **"the boring stuff broke me"** → `thats the whole point of it. nobody forgets the holidays`
+- **"is he actually gone"** → `part 2`
+- **"what did he keep"** → `a receipt, two bus tickets and a photo of my kitchen. thats the gift`
