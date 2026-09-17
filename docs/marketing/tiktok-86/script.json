@@ -1,0 +1,42 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he screenshotted my first\never message to his mates", "timestamp": "Today 21.03", "messages": [
+      { "from": "me", "text": "what r u doing" },
+      { "from": "them", "text": "looking for something" },
+      { "from": "me", "text": "for what" },
+      { "from": "them", "text": "hang on" },
+      { "from": "them", "text": "ok dont be weird about this" },
+      { "from": "me", "text": "u cant say that and then go quiet" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "u remember the first time u messaged me" },
+      { "from": "me", "text": "yeah?? u took 2 days to reply" },
+      { "from": "them", "text": "i didnt take 2 days" },
+      { "from": "them", "text": "i screenshotted it and sent it to the lads" },
+      { "from": "me", "text": "u WHAT" },
+      { "from": "them", "text": "and then i took 2 days" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "its in here. page 3" },
+      { "from": "them", "link": { "title": "the 2 days", "domain": "tryethos.io", "image": "og", "name": "Ellie" } },
+      { "from": "me", "text": "opening it" },
+      { "from": "them", "text": "dont read the caption under it" },
+      { "from": "me", "text": "im reading the caption under it" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "u sent it at 1am" },
+      { "from": "me", "text": "and u said im in trouble" },
+      { "from": "them", "text": "i was" },
+      { "from": "me", "text": "u took TWO DAYS to reply" },
+      { "from": "them", "text": "i rewrote it like 9 times" },
+      { "from": "me", "text": "nine" }
+    ] },
+    { "type": "chat", "timestamp": "Today 21.46", "messages": [
+      { "from": "me", "text": "why r u telling me this now" },
+      { "from": "them", "text": "its a year today since u messaged me" },
+      { "from": "me", "text": "thats not our anniversary" },
+      { "from": "them", "text": "its mine", "tapback": "heart" },
+      { "from": "me", "text": "no bc im actually crying" }
+    ] }
+  ]
+}

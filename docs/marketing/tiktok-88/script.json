@@ -1,0 +1,40 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "i almost didnt send it", "timestamp": "Today 22.41", "messages": [
+      { "from": "me", "text": "are u home" },
+      { "from": "them", "text": "ya why" },
+      { "from": "me", "text": "nothing" },
+      { "from": "them", "text": "what" },
+      { "from": "me", "text": "nothing!!" },
+      { "from": "them", "text": "ellie" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok dont laugh at me" },
+      { "from": "me", "text": "ive been making u something for 2 weeks" },
+      { "from": "them", "text": "why would i laugh" },
+      { "from": "me", "text": "because its a lot" },
+      { "from": "them", "text": "send it" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "link": { "title": "everything ive not said", "domain": "tryethos.io", "image": "og", "name": "Sam" } },
+      { "from": "me", "text": "dont reply straight away" },
+      { "from": "them", "text": "too late" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "the third page" },
+      { "from": "them", "text": "u kept the receipt from the first night" },
+      { "from": "me", "text": "i keep everything" },
+      { "from": "them", "text": "im sat in the car outside my own house" },
+      { "from": "me", "text": "why" },
+      { "from": "them", "text": "because i cant go in yet" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23.20", "messages": [
+      { "from": "them", "text": "why were u scared to send it" },
+      { "from": "me", "text": "bc its a lot" },
+      { "from": "them", "text": "its not a lot" },
+      { "from": "them", "text": "im coming over", "tapback": "heart" },
+      { "from": "me", "text": "its 11pm" },
+      { "from": "them", "text": "im coming over" }
+    ] }
+  ]
+}

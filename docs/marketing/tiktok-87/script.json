@@ -1,0 +1,34 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he sent me a voice note\nhe recorded 11 months ago", "timestamp": "Today 00.12", "messages": [
+      { "from": "them", "text": "are u awake" },
+      { "from": "me", "text": "ya whats wrong" },
+      { "from": "them", "text": "nothing. i need to send u something" },
+      { "from": "them", "text": "ive had it since november" },
+      { "from": "me", "text": "had what since november" },
+      { "from": "them", "text": "give me a sec im nervous" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i recorded it the night u stayed at mine the first time" },
+      { "from": "them", "text": "u fell asleep and i couldnt" },
+      { "from": "them", "text": "i was gonna delete it like 4 times" },
+      { "from": "me", "text": "dont u dare" },
+      { "from": "them", "link": { "title": "november", "domain": "tryethos.io", "image": "og", "name": "Sofia" } }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ive listened to it 4 times" },
+      { "from": "me", "text": "u whisper the whole thing" },
+      { "from": "them", "text": "u were asleep next to me" },
+      { "from": "me", "text": "u say something at 0:48" },
+      { "from": "them", "text": "i know what i say at 0:48" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.58", "messages": [
+      { "from": "me", "text": "why did u wait 11 months" },
+      { "from": "them", "text": "u werent in love with me in november" },
+      { "from": "me", "text": "i was" },
+      { "from": "them", "text": "u didnt say it til march" },
+      { "from": "me", "text": "i was scared" },
+      { "from": "them", "text": "so was i. thats why i recorded it", "tapback": "heart" }
+    ] }
+  ]
+}

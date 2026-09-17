@@ -389,6 +389,35 @@ One trade to be aware of: this register needs the reader in the receiving seat, 
 be the maker. 85 gives up the maker's-seat rule deliberately and lets the pinned comment carry the
 sale. Judge it against 83 and 84 on link clicks per thousand views, not on views.
 
+## Realistic beats novelistic: 86 to 88
+
+85 has the right psychology and the wrong mouth. "Good. Sit down." and "The end, Mara." are how the
+genre is written, not how anybody texts, and this audience spots a fake screenshot in half a second —
+which is the one thing this whole format cannot survive. 86 to 88 keep the obsession and give it back
+to people who type like people.
+
+- **A real boy is shy about it, not commanding.** "ok dont be weird about this", "give me a sec im
+  nervous", "dont laugh at me" carry the same charge as an order and cost nothing in realism.
+  Embarrassment is what intensity looks like at twenty-one.
+- **Put the intensity in the facts, not the punctuation.** A screenshot sent to a group chat at 1am. A
+  voice note recorded in a bathroom eleven months ago. A receipt from the first night, kept. The
+  feeling is in the object; the bubbles can stay flat.
+- **Flat delivery is what gets screenshotted.** "its mine". "i was". "im coming over". Two or three
+  words, no full stop, enormous. The novelistic version of each of those is worse.
+- **A name on its own line is the realistic version of the genre's name-drop.** "ellie" as a single
+  bubble is what a real person sends when they are being serious. Nobody has ever typed "The end,
+  Mara."
+- **Say where you are instead of how you feel.** "im sat in the car outside my own house" / "because i
+  cant go in yet" tells the viewer everything without a single feeling word, and it is the kind of
+  thing people actually text.
+- **Repeat a line rather than escalating it.** "im coming over" / "its 11pm" / "im coming over". Real
+  people repeat themselves when they have decided something.
+- **Give the comments a locked door.** "u say something at 0:48" and he will not tell her what. A
+  specific timestamp inside something nobody can hear cannot be settled in the comments, so it keeps
+  going.
+- **Witnesses beat declarations.** His group chat, his mum, a receipt with a date on it. Somebody or
+  something that is not in love with her says it, and it lands harder than anything he could claim.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -604,5 +633,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 83 | the ones u tried to delete | a best friend's birthday, the pages | Scrapbook | Classic |
 | 84 | I have 400 | his 20th, his mum's 38 photos | Scrapbook | Classic |
 | 85 | Good. Sit down. | 4 months, the night he decided | Scrapbook (Favorite person) | Lovecore |
+| 86 | its mine | a year since she messaged him | Scrapbook (Memories) | Polka |
+| 87 | 0:48 | the voice note from 11 months ago | The Letter + voice note | Starry |
+| 88 | im coming over | she made it and nearly didn't send it | Scrapbook (Blossom) | Gingham |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
