@@ -14,6 +14,10 @@ node ~/Documents/mail/ethoslove/scripts/tiktok-faces.mjs 98 ~/Downloads/her.jpg 
 
 It runs from any folder — the full path to the script is what matters, not where the terminal is.
 
+**The faces in this one were installed with `--top`**, because the interesting part of both photos is
+at the top of the frame: his bouquet and her hair. The default crop keeps the busiest region, which on
+those two pictures was his back and her wine glass.
+
 It squares the two faces for the circles, crops the cover to 1080×1920, drops all three into this
 folder and re-renders every slide. The circles are round, so a portrait has to be squared or it keeps
 whatever is in the middle of the frame — a chest, a bouquet — instead of the face. It picks the
