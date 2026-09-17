@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { ArrowRight, Play } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,6 @@ export function Hero() {
   const t = useTranslations("home.hero");
   const tAll = useTranslations();
   const ref = useRef<HTMLDivElement>(null);
-  const [previewVideo, setPreviewVideo] = useState(false);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(my, [-1, 1], [6, -6]), { stiffness: 80, damping: 18 });
@@ -111,49 +110,27 @@ export function Hero() {
             transition={{ type: "spring", stiffness: 70, damping: 16, delay: 0.15 }}
             style={{ rotateX: rx, rotateY: ry, transformPerspective: 1200 }}
             className="relative z-10 mx-auto w-[260px] sm:mr-4 sm:ml-auto sm:w-[290px] lg:w-[300px]"
-            onPointerEnter={() => setPreviewVideo(true)}
-            onFocus={() => setPreviewVideo(true)}
           >
             <div
               aria-hidden="true"
               className="absolute -inset-10 -z-10 rounded-full bg-blush/25 blur-3xl"
             />
             {/*
-             * The phone is the thing people tap: it took 30% of every tap on this page while it
-             * was only a picture, because a gift playing on a screen reads as something you can
-             * open. There is no hover on a phone, so a tap got neither the video nor anywhere —
-             * it now opens the demo, which is what the tap was asking for.
+             * The poster, and only the poster. It is a 97KB still captured at device resolution;
+             * the preview it used to swap to on hover is a 1.2MB Playwright screencast recorded
+             * at 390x600 and 1x, so on any retina screen it was being upscaled — the hero's
+             * centrepiece traded a crisp image for a soft one, and paid 1.2MB to do it.
              */}
-            <Link
-              href="/demo/bouquet"
-              aria-label={t("demo")}
-              className="group/phone block rounded-[13%/6%] outline-none focus-visible:ring-2 focus-visible:ring-cream/70 focus-visible:ring-offset-4 focus-visible:ring-offset-forest"
-            >
-              <PhoneFrame width={300} className="!w-full">
-                {previewVideo ? (
-                  <video
-                    className="h-full w-full object-cover"
-                    src="/templates/bouquet/preview.webm"
-                    poster="/templates/bouquet/poster.jpg"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="none"
-                    aria-label={t("videoAlt")}
-                  />
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src="/templates/bouquet/poster.jpg"
-                    alt=""
-                    className="h-full w-full object-cover"
-                    loading="eager"
-                    decoding="async"
-                  />
-                )}
-              </PhoneFrame>
-            </Link>
+            <PhoneFrame width={300} className="!w-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/templates/bouquet/poster.jpg"
+                alt=""
+                className="h-full w-full object-cover"
+                loading="eager"
+                decoding="async"
+              />
+            </PhoneFrame>
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
