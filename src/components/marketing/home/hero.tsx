@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { OCCASIONS } from "@/config/occasions";
 import { PhoneFrame } from "@/components/shared/phone-frame";
 import { BotanicalBackdrop } from "@/components/marketing/botanical-backdrop";
+import { HeroBouquet } from "./hero-bouquet";
 
 /**
  * The night garden: a deep green ground framed by our own flowers, the words on the left,
@@ -116,20 +117,12 @@ export function Hero() {
               className="absolute -inset-10 -z-10 rounded-full bg-blush/25 blur-3xl"
             />
             {/*
-             * The poster, and only the poster. It is a 97KB still captured at device resolution;
-             * the preview it used to swap to on hover is a 1.2MB Playwright screencast recorded
-             * at 390x600 and 1x, so on any retina screen it was being upscaled — the hero's
-             * centrepiece traded a crisp image for a soft one, and paid 1.2MB to do it.
+             * The bouquet assembling itself, live — the template's own SVG, looping. It used to
+             * be a poster that swapped, on hover, to a 1.2MB screencast recorded at 390×600 and
+             * 1×, which on any retina screen was an upscaled, soft version of the still.
              */}
             <PhoneFrame width={300} className="!w-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/templates/bouquet/poster.jpg"
-                alt=""
-                className="h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
+              <HeroBouquet cardText={t("card.to")} />
             </PhoneFrame>
             <motion.div
               initial={{ opacity: 0, y: 8 }}
