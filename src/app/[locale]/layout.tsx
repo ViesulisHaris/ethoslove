@@ -35,18 +35,24 @@ const mono = JetBrains_Mono({
 });
 
 // The gift templates keep Fraunces (their type was tuned to it); the site itself uses Newsreader.
+// Not preloaded: `--font-gift-display` is only ever read under `.gift-root`, so a marketing page
+// was paying for a font it never draws — and LCP measured 4.4s on an audience that is 92% phones.
 const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
   variable: "--font-gift-display",
   display: "swap",
   axes: ["opsz", "SOFT", "WONK"],
+  preload: false,
 });
 
+// Covers only, and `display: block` means it hides text while it loads — the last thing that
+// should be competing with the homepage's first paint. It loads when a cover actually renders.
 const coverScript = Caveat_Brush({
   weight: "400",
   subsets: ["latin", "latin-ext"],
   variable: "--font-cover",
   display: "block",
+  preload: false,
 });
 
 const caveat = Caveat({

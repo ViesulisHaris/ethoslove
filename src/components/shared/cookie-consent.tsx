@@ -38,7 +38,9 @@ export function CookieConsent() {
         >
           {/* The footer's own treatment: forest, cream, and the grain over the top. */}
           {/* The hairline matters on the dark pages: forest on forest has no edge without it. */}
-          <div className="relative flex w-full max-w-xl flex-col gap-3 overflow-hidden rounded-2xl bg-forest px-5 py-4 text-cream ring-1 ring-cream/15 shadow-lift sm:flex-row sm:items-center sm:gap-5">
+          {/* Kept short on phones: it docks over the hero, so every extra line is a line of the
+              page someone came for that they cannot see. */}
+          <div className="relative flex w-full max-w-xl flex-col gap-2.5 overflow-hidden rounded-2xl bg-forest px-4 py-3.5 text-cream ring-1 ring-cream/15 shadow-lift sm:flex-row sm:items-center sm:gap-5 sm:px-5 sm:py-4">
             <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
             <p className="relative text-sm leading-relaxed text-cream/75">
               {t("blurb")}{" "}
