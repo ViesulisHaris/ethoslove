@@ -43,36 +43,23 @@ export function Hero() {
       <BotanicalBackdrop />
       <div className="relative container-x grid items-center gap-14 pt-12 pb-16 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-24">
         <div className="lg:col-span-7">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="text-[12px] font-medium tracking-[0.22em] text-cream/60 uppercase"
-          >
+          {/*
+           * No entrance animation on the words, deliberately. `initial` is serialised into the
+           * server HTML as `style="opacity:0"`, so these four shipped invisible and only appeared
+           * once React had hydrated — a phone saw an empty green rectangle until then. That is
+           * what made LCP 4.4s and what the eleven-to-nineteen-second sessions were looking at.
+           * The scene below still animates; the sentence someone came to read does not.
+           */}
+          <p className="text-[12px] font-medium tracking-[0.22em] text-cream/60 uppercase">
             {t("eyebrow")}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 90, damping: 18, delay: 0.05 }}
-            className="mt-6 max-w-[11ch] display-hero text-balance text-cream"
-          >
+          </p>
+          <h1 className="mt-6 max-w-[11ch] display-hero text-balance text-cream">
             {t("h1a")} <em className="text-blush">{t("h1b")}</em> {t("h1c")}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-7 max-w-xl text-lg leading-relaxed text-cream/75 sm:text-xl"
-          >
+          </h1>
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-cream/75 sm:text-xl">
             {t("sub")}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
-          >
+          </p>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link
               href="/templates"
               className="inline-flex h-13 items-center gap-2 rounded-full bg-cream px-7 text-base font-semibold text-forest shadow-[0_14px_40px_-16px_rgba(0,0,0,0.6)] transition-transform hover:-translate-y-0.5"
@@ -89,7 +76,7 @@ export function Hero() {
               </span>
               {t("demo")}
             </Link>
-          </motion.div>
+          </div>
           <p className="mt-4 text-sm text-cream/55">{t("ctaNote")}</p>
 
           <dl className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
