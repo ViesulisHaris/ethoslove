@@ -418,6 +418,34 @@ to people who type like people.
 - **Witnesses beat declarations.** His group chat, his mum, a receipt with a date on it. Somebody or
   something that is not in love with her says it, and it lands harder than anything he could claim.
 
+## Built for reach, not for the sale: 89 to 91
+
+79 to 88 are built to convert. These three are built to travel, because a post that nobody sees
+converts nothing, and the two jobs want different shapes.
+
+**The two-parter (89 and 90), which this document recommended from the start and we had never built.**
+Part 1 shows a link that nobody opens and ends with her on the floor saying nothing about what was in
+it. No gift frames at all. The caption asks one thing — "should i post whats in it" — which is a
+request a viewer grants in two taps rather than an argument they have to win, and "PART 2" is the
+cheapest comment on the app. Part 2 goes up 24 hours later, opens with "you asked what was in it", and
+carries all six gift frames to an audience that has been waiting a day to see them. Pin part 2 on part
+1 when it is up; the two posts feed each other for about 48 hours. Part 1 sells nothing on purpose.
+It also costs nothing to make: five chat slides, no screen recording, no finished gift needed.
+
+**Withholding is the whole mechanism.** "i know. i can see" / "it tells me when u open it" is tension
+and a product feature in one, and the last slide of part 1 tells you she is sat on the floor without
+telling you why.
+
+**The premise beats the writing (91).** Eight months earlier he built a gift, scheduled it for her
+birthday and forgot about it, so it arrives on a morning he has no idea about — and when she asks what
+would have happened if they had broken up first, he says "then u wouldve got it anyway". Nobody in
+this niche is using scheduling, so the novelty is the post; a better-written version of the same
+send-and-react story cannot buy that. It sells a premium extra by demonstrating it, and nothing sad
+happens: the what-if stays a what-if, which keeps it a love story rather than a grief story.
+
+Judge these on views and shares. Judge 79 to 88 on link clicks. Running both is the point — the reach
+posts fill the account, the sales posts empty the checkout.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -636,5 +664,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 86 | its mine | a year since she messaged him | Scrapbook (Memories) | Polka |
 | 87 | 0:48 | the voice note from 11 months ago | The Letter + voice note | Starry |
 | 88 | im coming over | she made it and nearly didn't send it | Scrapbook (Blossom) | Gingham |
+| 89 | dont open it yet | part 1 of 2, the unopened link | none, on purpose | — |
+| 90 | i waited 7 | part 2 of 2, what was in it | yours | — |
+| 91 | then u wouldve got it anyway | scheduled 8 months early | any, scheduled | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
