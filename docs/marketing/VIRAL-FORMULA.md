@@ -335,6 +335,29 @@ One caution: this is a hypothesis with one data point behind it. Run 79 to 82 ag
 columns and compare **link clicks and purchases**, not views. If the argument posts still out-earn
 these on absolute sales because they out-reach them ten to one, that is worth knowing too.
 
+## When a post does 100 views
+
+84 was written after one did 20k and the next did 100 from the same account. A script cannot move a
+post 200x either way, so when a post dies in the test pool, stop rewriting it and check these in
+order:
+
+1. **How many posts went out that day.** A young account gets one cold-start pool at a time; two or
+   three posts split it and all of them die. One post a day per account.
+2. **Whether the picture is the same as last time.** Black background, white bubbles, same layout,
+   over and over is exactly what an unoriginal-content filter looks for. Alternate iMessage and
+   Instagram DMs (`"style": "instagram"`), and start some carousels on a gift frame so the thumbnail
+   is not another black rectangle.
+3. **Whether slide 1 says anything.** It is the thumbnail and the two-second test at once, and small
+   talk on black gives a stranger no reason to stay. Every carousel gets a hook drawn into slide 1
+   now — `"hook": "..."` on the slide, in TikTok's own text style, inside the safe area.
+4. **Whether the caption carries a domain.** Keep tryethos.io out of the caption and the on-screen
+   text; it belongs in the pinned comment, where it costs no reach.
+5. **The first hour.** Reply to every comment for sixty minutes. On a photo post that is most of the
+   ranking signal still available after posting.
+
+If it does 100 again on a clean day with a hook on slide 1, the account is the problem and not the
+post. Start a second account and put the same carousel on it.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -548,5 +571,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 81 | u dont have to water it | long distance, the scroll | The Garden | Classic |
 | 82 | dont put it on speaker | her 22nd, the voice note | Scrapbook | Polka |
 | 83 | the ones u tried to delete | a best friend's birthday, the pages | Scrapbook | Classic |
+| 84 | I have 400 | his 20th, his mum's 38 photos | Scrapbook | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

@@ -1,0 +1,34 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "i asked his mum for\nbaby photos", "timestamp": "Today 18.40", "messages": [
+      { "from": "me", "text": "hi liz, can i ask u something" },
+      { "from": "them", "text": "Of course darling" },
+      { "from": "me", "text": "have u got any photos of theo as a kid" },
+      { "from": "them", "text": "How many do you want" },
+      { "from": "me", "text": "however many uve got" },
+      { "from": "them", "text": "I have 400" }
+    ] },
+    { "type": "chat", "timestamp": "Today 19.02", "messages": [
+      { "from": "them", "text": "Sent 38" },
+      { "from": "them", "text": "Do not tell him I sent the bath one" },
+      { "from": "me", "text": "its going on the first page" },
+      { "from": "me", "link": { "title": "theo is 20", "domain": "tryethos.io", "image": "og", "name": "Theo" } },
+      { "from": "them", "text": "Is that my kitchen" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "I have not seen that photo in twenty years" },
+      { "from": "them", "text": "Where did you find the one at the seaside" },
+      { "from": "me", "text": "u sent it to me" },
+      { "from": "them", "text": "Did I" },
+      { "from": "them", "text": "I am in bits. Love Liz x" }
+    ] },
+    { "type": "chat", "timestamp": "Today 20.15", "messages": [
+      { "from": "them", "text": "He has rung me twice" },
+      { "from": "me", "text": "did he see the bath one" },
+      { "from": "them", "text": "He saw the bath one" },
+      { "from": "them", "text": "How long did this take you?" },
+      { "from": "me", "text": "half an hour. u did the hard part" },
+      { "from": "them", "text": "Love Liz x", "tapback": "heart" }
+    ] }
+  ]
+}

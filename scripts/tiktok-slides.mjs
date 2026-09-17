@@ -9,6 +9,10 @@
  * { link: { title, domain, image?: "og", name?, lang? } } · plus optional { status } and { tapback }.
  * A "|" in a timestamp marks where its semibold part ends: "Mon 15 Sept 2025|at 23:48".
  *
+ * `"hook": "..."` on a slide draws the line of text a creator types over the image, in TikTok's own
+ * style, near the top. Use it on slide 1: it is the only thing legible at thumbnail size, and a
+ * carousel whose first slide says nothing dies in the test pool. "\n" breaks the line.
+ *
  * `"style": "instagram"` draws Instagram DMs instead, dark mode, with `"contact": { name, sub, avatar }`
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
  */
@@ -71,6 +75,17 @@ const ogImage = (name, lang) => {
     <div class="og-domain">TRYETHOS.IO</div>
   </div>`;
 };
+
+/**
+ * The hook a creator types over the first slide. Kept inside TikTok's safe area — clear of the
+ * search bar at the top and the caption and buttons at the bottom — and heavy enough to read when
+ * the post is a thumbnail in a feed.
+ */
+const HOOK_CSS = `
+    .hook{position:absolute;top:232px;left:70px;right:70px;text-align:center;font-size:54px;line-height:1.16;font-weight:700;letter-spacing:-.6px;color:#fff;text-shadow:0 3px 20px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95);z-index:5}
+    .stage.has-hook{padding-top:300px}
+`;
+const hookHtml = (slide) => (slide.hook ? `<div class="hook">${esc(slide.hook).replace(/\n/g, "<br>")}</div>` : "");
 
 function html(slide) {
   const rows = slide.messages
@@ -174,7 +189,8 @@ function html(slide) {
     .lk-thumb .og-seal svg{width:28px;height:28px}
 
     ${OG_CSS}
-  </style></head><body><div class="stage">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
+    ${HOOK_CSS}
+  </style></head><body>${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
 }
 
 /* Instagram DMs, dark mode, at the same @3x scale. */
@@ -239,6 +255,7 @@ function igHtml(slide) {
     .ig-sub{font-size:38px;line-height:48px;color:#a8a8a8;letter-spacing:-.2px}
     .ig-icons{display:flex;gap:64px;align-items:center}
     .ig-icons svg{width:80px;height:80px}
+    .ig-thread.has-hook{padding-top:300px}
     .ig-thread{position:absolute;left:0;right:0;top:300px;bottom:330px;padding:0 40px 0 36px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end}
     .ig-ts{text-align:center;color:#a8a8a8;font-size:37px;font-weight:500;margin:40px 60px 34px;letter-spacing:-.2px}
     .ig-row{display:flex;align-items:flex-end;margin-top:6px;position:relative}
@@ -273,8 +290,10 @@ function igHtml(slide) {
     .ig-tools{display:flex;gap:50px;align-items:center}
     .ig-tools svg{width:72px;height:72px}
     ${OG_CSS}
+    ${HOOK_CSS}
   </style></head><body>
-    <div class="ig-thread">${rows}</div>
+    ${hookHtml(slide)}
+    <div class="ig-thread${slide.hook ? " has-hook" : ""}">${rows}</div>
     <div class="ig-head">${IG_ICONS.back}<div class="ig-avatar">${avatar(sky)}</div><div class="ig-who"><div class="ig-name">${esc(contact.name ?? "")}</div>${contact.sub ? `<div class="ig-sub">${esc(contact.sub)}</div>` : ""}</div><div class="ig-icons">${IG_ICONS.call}${IG_ICONS.video}</div></div>
     <div class="ig-compose"><div class="ig-cam">${IG_ICONS.camera}</div><div class="ig-placeholder">Message...</div><div class="ig-tools">${IG_ICONS.mic}${IG_ICONS.photo}${IG_ICONS.sticker}</div></div>
   </body></html>`;
