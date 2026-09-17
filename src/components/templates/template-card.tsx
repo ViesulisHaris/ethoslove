@@ -1,11 +1,11 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
 
 import { useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
@@ -56,7 +56,10 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
       className="group flex flex-col"
     >
       <div
-        className="relative aspect-[390/600] overflow-hidden rounded-[26px] bg-night shadow-[0_24px_50px_-30px_rgba(23,19,15,0.6)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-500 ease-[var(--ease-out-quint)] group-hover:-translate-y-1.5 group-hover:shadow-[0_34px_70px_-30px_rgba(23,19,15,0.7)]"
+        // A soft neutral behind the poster, not `bg-night`: until the browser has rasterised a
+        // card — which on a busy first paint can be seconds — the box is what shows, and a
+        // near-black rectangle on a cream page reads as broken. A warm grey reads as loading.
+        className="relative aspect-[390/600] overflow-hidden rounded-[26px] bg-ink/10 shadow-[0_24px_50px_-30px_rgba(23,19,15,0.6)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-500 ease-[var(--ease-out-quint)] group-hover:-translate-y-1.5 group-hover:shadow-[0_34px_70px_-30px_rgba(23,19,15,0.7)]"
         onMouseEnter={play}
         onMouseLeave={pause}
       >
@@ -66,13 +69,27 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
           </div>
         ) : (
           <>
-            <img
+            {/*
+             * Through next/image so the browser gets a poster the size of the card, not the
+             * 1170×1800 capture. Measured on production in Chrome: the originals had finished
+             * downloading by ~420ms, yet the first row sat black for seconds, because a 2MP
+             * JPEG decodes async and only paints once a main thread busy hydrating for ~11s
+             * frees a frame. A ~400px AVIF decodes in a blink. The first row is `priority`
+             * (eager, fetchpriority=high); the rest stay lazy.
+             *
+             * And the first row decodes synchronously. Forcing `img.decode()` on three cards
+             * that had sat black for nine seconds took 8ms in total: the cost was never the
+             * decode, it was Chrome deferring it. `sync` makes it part of the paint instead.
+             */}
+            <Image
               src={manifest.thumbnail.poster}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover"
-              loading={above ? "eager" : "lazy"}
-              fetchPriority={index === 0 ? "high" : undefined}
-              decoding="async"
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              quality={75}
+              priority={above}
+              decoding={above ? "sync" : "async"}
+              className="object-cover"
             />
             {manifest.thumbnail.webm ? (
               <video
