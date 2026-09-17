@@ -1,0 +1,27 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 02.14", "messages": [
+      { "from": "me", "text": "do u even like me" },
+      { "from": "them", "text": "what" },
+      { "from": "me", "text": "sorry ignore that" },
+      { "from": "me", "text": "im tired" },
+      { "from": "them", "text": "wait" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "no bc where has this come from" },
+      { "from": "me", "text": "idk. forget it" },
+      { "from": "them", "text": "give me 5 mins" },
+      { "from": "me", "text": "its 2am" },
+      { "from": "them", "link": { "title": "since june", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+    ] },
+    { "type": "chat", "timestamp": "Today 02.51", "messages": [
+      { "from": "me", "text": "how long have u had this" },
+      { "from": "them", "text": "since like june" },
+      { "from": "me", "text": "its september" },
+      { "from": "them", "text": "ya i know" },
+      { "from": "me", "text": "why didnt u show me" },
+      { "from": "them", "text": "idk it felt weird" },
+      { "from": "me", "text": "WEIRD" }
+    ] }
+  ]
+}

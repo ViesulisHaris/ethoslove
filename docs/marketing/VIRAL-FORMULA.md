@@ -476,6 +476,37 @@ dread hook has one slide to break.
 Two-parters (89, 90) still work at this length — part 1 is three slides and the unopened link, part 2
 is four. Everything else runs at four.
 
+## Texts nobody wrote: 95 to 97
+
+92 to 94 ended on lines like "now its finished" and "i love u" placed exactly where a script wants
+them. Nobody types that. The psychology was right and the mouth was wrong again, and at four slides
+there is nowhere for a fake line to hide.
+
+- **Do not close the loop.** "its not finished" answered forty minutes later by "now its finished" is a
+  writer's callback. Real conversations do not resolve symmetrically, and a viewer feels the seam even
+  if they could not name it.
+- **The emotional peak is incoherent, not eloquent.** "ur so annoying" / "im crying". "WEIRD". "i hate
+  u". Nobody lands a sentence at the moment they feel the most; they fall apart or they deflect.
+  Writing a good line there is the single clearest sign a human did not send it.
+- **Nobody says "i love you" on cue.** The closest a real couple gets at that age is the opposite word
+  — "i hate u", "ur so annoying", "stop" — and both of them know what it means. Write the opposite.
+- **The hook is the first bubble, not text over the picture.** A line written on the image reads as an
+  advert. A first message that is a real complaint reads as somebody's life: "why have u been on ur
+  phone all week", "so ur not gonna say anything", "do u even like me". Each one is a hook and a text
+  at the same time, and they are all messages the viewer has personally sent.
+- **Let her be slightly in the wrong.** She is annoyed about the phone, she assumes he forgot, she
+  spirals at 2am — and she is wrong each time, and says so. Self-deprecating travels: there is nobody
+  to tell off, so the comments are "i feel so bad" and "i would have started a whole argument" rather
+  than an argument.
+- **He deflects instead of declaiming.** "ok". "ya". "give me a sec". "idk it felt weird". A boy who
+  cannot talk about it goes and gets the thing instead, which is also what makes the gift the answer.
+- **Let questions go unanswered or answered late.** "about", "??", "what". Real chats cross, repeat and
+  miss each other. Every message advancing the plot is how a script reads.
+
+The four slides stay: hook bubble, link, one frame of the gift, the mess at the end. The selling is the
+link card, that single frame, the caption and the pin — there is no room for a product tour, and it
+turns out not to need one.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -700,5 +731,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 92 | its not finished | the unsent link in his phone | any, one frame | — |
 | 93 | in case | "only open it if we ever break up" | any, one frame | — |
 | 94 | day 3 | made 3 days after they met, sent 14 months later | any, one frame | — |
+| 95 | on ur phone all week | the row that was him making it | any, one frame | — |
+| 96 | so ur not gonna say anything | she thought he forgot; it was 00:00 | any, one frame | — |
+| 97 | do u even like me | 2am, and he'd had it since June | any, one frame | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

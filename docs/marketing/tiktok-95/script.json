@@ -1,0 +1,29 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 23.02", "messages": [
+      { "from": "me", "text": "why have u been on ur phone all week" },
+      { "from": "them", "text": "what" },
+      { "from": "me", "text": "every night ur just on it" },
+      { "from": "them", "text": "im not" },
+      { "from": "me", "text": "u literally are" },
+      { "from": "them", "text": "ok" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok??" },
+      { "from": "me", "text": "thats all ur gonna say" },
+      { "from": "them", "text": "give me a sec" },
+      { "from": "me", "text": "no bc this is what i mean" },
+      { "from": "them", "link": { "title": "the thing ive been doing", "domain": "tryethos.io", "image": "og", "name": "Freya" } },
+      { "from": "me", "text": "whats that" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23.31", "messages": [
+      { "from": "me", "text": "wait" },
+      { "from": "me", "text": "is this what uve been doing" },
+      { "from": "them", "text": "ya" },
+      { "from": "me", "text": "since when" },
+      { "from": "them", "text": "the 2nd" },
+      { "from": "me", "text": "ur so annoying" },
+      { "from": "me", "text": "im crying" }
+    ] }
+  ]
+}

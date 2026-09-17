@@ -1,0 +1,25 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Today 21.40", "messages": [
+      { "from": "me", "text": "so ur not gonna say anything" },
+      { "from": "them", "text": "about" },
+      { "from": "me", "text": "seriously" },
+      { "from": "them", "text": "??" },
+      { "from": "me", "text": "its fine" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.00", "messages": [
+      { "from": "them", "link": { "title": "happy birthday", "domain": "tryethos.io", "image": "og", "name": "Alice" } },
+      { "from": "them", "text": "happy birthday" },
+      { "from": "me", "text": "u waited till midnight" },
+      { "from": "them", "text": "obviously" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.22", "messages": [
+      { "from": "me", "text": "i was so annoyed at u" },
+      { "from": "them", "text": "i know" },
+      { "from": "me", "text": "u let me be annoyed for like 3 hours" },
+      { "from": "them", "text": "i know" },
+      { "from": "me", "text": "i hate u" },
+      { "from": "them", "text": "ya", "tapback": "heart" }
+    ] }
+  ]
+}
