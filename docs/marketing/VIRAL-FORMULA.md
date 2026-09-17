@@ -532,6 +532,56 @@ accounts run, and it wants different rules.
 - **Nobody is the villain, including the distance.** He got in somewhere and she tells him he has to
   go. A story where the only enemy is a plane gets "who is cutting onions" instead of an argument.
 
+## The account that does this for a living: @tingarchive14
+
+`words.left.unsaid` — **14.7K followers, 1M likes**. Thirteen posts, one couple, the same three
+photographs on every single one, and the numbers are all made on the For You page rather than on a
+following. Every post is a DM thread with one line written over a photo as the first slide. Their
+table, best to worst:
+
+| Views | The line |
+|---|---|
+| 3.6M | POV: they both moved on. neither let go. |
+| 2.7M | POV: he loved you enough to let you go. |
+| 1.2M | Pov: they lost 5 years. Over something that never happened. |
+| 1.1M | Pov: you start noticing he's acting different. |
+| 886.9K | Pov: her fiancé knew her ex. she was the only one who didn't know. |
+| 669.1K | Pov: your childhood best friend kept a promise from 7 years ago |
+| 603.3K | Pov: she thought they lost each other. someone made sure they did. |
+| 430K | Pov: you text the person you never really got over |
+| 405K | Pov: you finally learn the truth… five years too late. |
+| 358.7K | Pov: the misunderstanding that ended your relationship was never an accident. |
+| 339.1K | Pov: five years later, one conversation changes everything you remember. |
+| 322.6K | Pov: you realize the worst night of your life might have been planned. |
+| 121.5K | Pov: you still write to him, even though he'll never read it. |
+
+**The hook is a paradox, not a plot point.** The two at the top are one sentence in two halves that
+fight each other — moved on / neither let go, loved you / let you go. No names, no explanation, and
+anybody watching can put their own life inside it. The middle of the table is plot: a fiancé, a
+misunderstanding, five years, a planned night. All interesting, all requiring you to care about *those*
+people first, and that costs a million views. The bottom is plain sadness with nothing pulling against
+it and does a thirtieth of the top. Write the line before the story, and keep it to six to nine words.
+
+**The rest of the 3.6M post, which is all copyable:**
+
+- **Caption: a question and a part number.** `should she call him? | part 1`. Not a summary, not a
+  joke — something the comments answer and a promise that there is more.
+- **Hashtags are genre, not reach:** `#lovestory #romance #part1`. No #fyp anywhere on the account.
+- **Saves beat comments 33 to one.** 277K likes, 920 comments, **30.5K saves**, 12.2K shares. People
+  keep these to read again, which is a signal we have never optimised for.
+- **The top comment, at 31K likes, is a moral argument** about what the couple are doing — the story
+  has them texting an ex a week before a wedding. The engine is not sadness, it is somebody being
+  slightly in the wrong.
+- **One of the most-liked replies is "we all know it's scripted but we choose to act like it was
+  real"** (4.4K). The audience does not need it to be true. It needs to be consistent — same couple,
+  same photos, same voice, every post.
+- **A sad song whose title reads like the story** ("What If I Call"). The sound is part of the hook.
+- **One picture carries the whole series.** Thirteen posts, three photographs. The line does the work.
+
+99 and 100 are ours built on this: the long-distance story in iMessage, "POV: he packed everything
+except you" and "POV: he's been gone 3 weeks. the link still works." The second one is a paradox only
+we can write, because the thing he made is the only part of him that did not get on the plane.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -760,5 +810,7 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 96 | so ur not gonna say anything | she thought he forgot; it was 00:00 | any, one frame | — |
 | 97 | do u even like me | 2am, and he'd had it since June | any, one frame | — |
 | 98 | the boring stuff | long distance, part 1, messenger style | Scrapbook (Memories) | Classic |
+| 99 | he packed everything except you | long distance part 1, iMessage | Scrapbook (Memories) | Classic |
+| 100 | the link still works | long distance part 2, the open counter | none, on purpose | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
