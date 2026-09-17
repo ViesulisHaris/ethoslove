@@ -16,7 +16,7 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience, type AmbienceKind } from "../_shared/Ambience";
 import { COVER_VARS, CoverPage, POSTER_FONT, StickerScatter, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
-import { BLOOM_KEYFRAMES, Pot, StemTag, Windowsill, type PotColors, type SillColors } from "./art";
+import { BLOOM_KEYFRAMES, Pot, PotTag, StemTag, Windowsill, type PotColors, type SillColors } from "./art";
 import { Flower, type BloomState } from "./Flower";
 import { fieldsSchema, type BloomFields } from "./schema";
 
@@ -238,6 +238,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             color={color}
             stateRef={state}
             pollen={data.fields.pollen}
+            potted={showPot}
             reduce={!!reduce}
             onBloomed={onBloomed}
             className="!absolute inset-0"
@@ -250,7 +251,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       )}
 
       {/* Petals in the light, then the stickers, then the ledge the pot stands on. The sender
-          can turn either of the last two off; the tag on the stem stays either way. */}
+          can turn either of the last two off. The name tag stays either way: tied round the
+          pot's collar, or, with no pot, low on the bare stem. */}
       <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
         <Ambience layers={sky.ambience} opacity={0.85} />
       </div>
@@ -260,16 +262,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           <>
             <Windowsill colors={sky.sill} />
             <Pot colors={sky.pot} />
+            <PotTag name={data.recipientName} forLabel={s.for} ribbon={sky.ribbon} ribbonDeep={sky.ribbonDeep} paper={sky.tagPaper} ink={sky.tagInk} />
           </>
-        ) : null}
-        <StemTag
-          name={data.recipientName}
-          forLabel={s.for}
-          ribbon={sky.ribbon}
-          ribbonDeep={sky.ribbonDeep}
-          paper={sky.tagPaper}
-          ink={sky.tagInk}
-        />
+        ) : (
+          <StemTag name={data.recipientName} forLabel={s.for} ribbon={sky.ribbon} ribbonDeep={sky.ribbonDeep} paper={sky.tagPaper} ink={sky.tagInk} />
+        )}
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 z-[5] px-[calc(6*var(--k))] text-center" style={{ top: "max(calc(5*var(--k)), calc(var(--gift-safe-top,env(safe-area-inset-top)) + 2*var(--k)))" }}>
@@ -290,6 +287,25 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         >
           {data.title || data.recipientName}
         </motion.h1>
+        {/* The line that says it happened lives up here with their name. It used to sit in the
+            bottom stack, which put it across the foot of the pot and, now, under the tag. */}
+        <AnimatePresence>
+          {bloomed && !note ? (
+            <motion.div
+              key="open"
+              className="mt-[calc(2.2*var(--k))] flex flex-col items-center gap-[calc(.9*var(--k))]"
+              initial={reduce || mode === "preview" ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              <p className="text-[calc(5*var(--k))] leading-none italic" style={{ fontFamily: "var(--gift-font-display)" }}>
+                {s.open}
+              </p>
+              {data.photos.length ? <p className="text-[calc(2.9*var(--k))] leading-none opacity-60">{s.photos}</p> : null}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
 
       <AnimatePresence>
@@ -328,7 +344,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       <div
         className="pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-[calc(2.4*var(--k))] px-[calc(6*var(--k))] text-center"
-        style={{ bottom: `max(calc(10*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))` }}
+        // On the face of the ledge, under its lip (24k): at 10k a 48px button on a short screen rode up over the
+        // lip and the foot of the pot.
+        style={{ bottom: `max(calc(6*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))` }}
       >
         {!bloomed ? (
           <motion.div
@@ -350,26 +368,17 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             {holding ? s.holding : reduce ? s.tap : s.hold}
           </motion.div>
         ) : !note ? (
-          <>
-            <p
-              className="text-[clamp(1.1rem,5cqw,1.3rem)] italic"
-              style={{ fontFamily: "var(--gift-font-display)" }}
-            >
-              {s.open}
-            </p>
-            {data.photos.length ? <p className="text-xs opacity-60">{s.photos}</p> : null}
-            <button
-              type="button"
-              onClick={() => {
-                setNote(true);
-                onEvent?.({ type: "progress", pct: 70 });
-              }}
-              className="pointer-events-auto h-12 rounded-full px-7 text-[15px] font-semibold shadow-lg"
-              style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
-            >
-              {s.read}
-            </button>
-          </>
+          <button
+            type="button"
+            onClick={() => {
+              setNote(true);
+              onEvent?.({ type: "progress", pct: 70 });
+            }}
+            className="pointer-events-auto h-12 rounded-full px-7 text-[15px] font-semibold shadow-lg"
+            style={{ background: "var(--gift-accent)", color: "var(--gift-on-accent)" }}
+          >
+            {s.read}
+          </button>
         ) : null}
       </div>
 

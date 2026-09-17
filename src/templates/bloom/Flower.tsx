@@ -197,7 +197,30 @@ function Petals({
   );
 }
 
-function Stem({ kind }: { kind: FlowerKind }) {
+/**
+ * Where the two leaves leave the stem, and which way they point (Euler XYZ, leaf along +Y).
+ *
+ * `free` is the plant on its own: long, lazy leaves reaching out sideways low on the stem.
+ *
+ * `potted` is the same plant standing in the pot, which is a flat drawing laid over the canvas,
+ * about 0.3 of these units either side of the stem, with its rim near y = -0.62. A leaf that
+ * leaves the stem below that line and reaches 0.4 sideways cannot be hidden by a pot 0.3 wide:
+ * every time the flower turned it side-on, it showed from behind the pot, in mid-air. So in the
+ * pot the leaves start just under the rim and climb at about 60° — everything below the rim line
+ * stays inside the pot's width at every angle, and what shows is a leaf coming up over the rim.
+ */
+const LEAVES: Record<"free" | "potted", { y: number; rotation: [number, number, number] }[]> = {
+  free: [
+    { y: -1.2, rotation: [-Math.PI / 2 + 0.9, 0.3, 0.9] },
+    { y: -0.8, rotation: [-Math.PI / 2 + 1.0, -0.6, -1.1] },
+  ],
+  potted: [
+    { y: -0.8, rotation: [-Math.PI / 2 + 1.25, 0.3, 0.5] },
+    { y: -0.72, rotation: [-Math.PI / 2 + 1.3, -0.6, -0.55] },
+  ],
+};
+
+function Stem({ kind, potted }: { kind: FlowerKind; potted: boolean }) {
   const curve = useMemo(
     () =>
       new THREE.CatmullRomCurve3([
@@ -223,12 +246,11 @@ function Stem({ kind }: { kind: FlowerKind }) {
       <mesh geometry={geo}>
         <meshStandardMaterial color={green} roughness={0.8} />
       </mesh>
-      <mesh geometry={leaf} position={[0.03, -1.2, 0]} rotation={[-Math.PI / 2 + 0.9, 0.3, 0.9]}>
-        <meshStandardMaterial color={green} side={THREE.DoubleSide} roughness={0.8} />
-      </mesh>
-      <mesh geometry={leaf} position={[-0.03, -0.8, 0]} rotation={[-Math.PI / 2 + 1.0, -0.6, -1.1]}>
-        <meshStandardMaterial color={green} side={THREE.DoubleSide} roughness={0.8} />
-      </mesh>
+      {LEAVES[potted ? "potted" : "free"].map((l, i) => (
+        <mesh key={i} geometry={leaf} position={[i === 0 ? 0.03 : -0.03, l.y, 0]} rotation={l.rotation}>
+          <meshStandardMaterial color={green} side={THREE.DoubleSide} roughness={0.8} />
+        </mesh>
+      ))}
       {/* sepals */}
       {[0, 1, 2, 3, 4].map((i) => (
         <group key={i} rotation={[0, (i / 5) * Math.PI * 2, 0]}>
@@ -304,6 +326,7 @@ function Scene({
   color,
   stateRef,
   pollen,
+  potted,
   reduce,
   onBloomed,
 }: {
@@ -311,6 +334,7 @@ function Scene({
   color: string;
   stateRef: RefObject<BloomState>;
   pollen: boolean;
+  potted: boolean;
   reduce: boolean;
   onBloomed: () => void;
 }) {
@@ -342,7 +366,7 @@ function Scene({
       <directionalLight position={[-3, 1, -2]} intensity={0.7} color="#ffd7c2" />
       <ambientLight intensity={0.35} />
       <group ref={root} position={[0, 0.15, 0]}>
-        <Stem kind={kind} />
+        <Stem kind={kind} potted={potted} />
         <Petals kind={kind} color={color} stateRef={stateRef} />
         <mesh
           position={[0, 0.06, 0]}
@@ -364,6 +388,7 @@ export function Flower({
   color,
   stateRef,
   pollen,
+  potted = false,
   reduce,
   onBloomed,
   className,
@@ -372,6 +397,8 @@ export function Flower({
   color: string;
   stateRef: RefObject<BloomState>;
   pollen: boolean;
+  /** Standing in the pot the template draws over the canvas: the leaves have to fit inside it. */
+  potted?: boolean;
   reduce: boolean;
   onBloomed: () => void;
   className?: string;
@@ -392,6 +419,7 @@ export function Flower({
         color={color}
         stateRef={stateRef}
         pollen={pollen}
+        potted={potted}
         reduce={reduce}
         onBloomed={onBloomed}
       />

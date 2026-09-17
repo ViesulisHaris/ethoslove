@@ -526,7 +526,7 @@ export const useEditor = create<EditorState>((set, get) => {
             set((s) => ({
               assets: {
                 ...s.assets,
-                [id]: { ...s.assets[id], status: "error", error: (e as Error).message },
+                [id]: { ...s.assets[id], status: "error", error: e instanceof Error ? e.message : "processing_failed" },
               },
             }));
           }
@@ -763,7 +763,8 @@ export const useEditor = create<EditorState>((set, get) => {
                   kind: "photo" as const,
                   local: true,
                   objectUrl: posterUrl,
-                  mime: "image/webp",
+                  // Whatever the canvas actually wrote: Safari has handed back PNG for "image/webp".
+                  mime: poster.type || "image/webp",
                   bytes: poster.size,
                   status: "local" as const,
                   progress: 0,

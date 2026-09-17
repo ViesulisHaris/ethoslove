@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { defaultCoverFor } from "@/templates/_shared/covers/looks";
 import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -136,11 +136,28 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     };
   }, [view]);
 
+  // Preview hides the form, the page collapses to one screen and the browser drops the scroll
+  // to the top — so coming back to Edit meant scrolling all the way down to the field you were
+  // on. Remember where the form was when Preview was tapped and put it back before it paints.
+  const editScroll = useRef(0);
+  const switched = useRef(false);
+  const switchView = (next: "edit" | "preview") => {
+    if (next === view) return;
+    if (next === "preview") editScroll.current = window.scrollY;
+    switched.current = true;
+    setView(next);
+  };
+  useLayoutEffect(() => {
+    if (!switched.current) return;
+    switched.current = false;
+    window.scrollTo({ top: view === "edit" ? editScroll.current : 0, behavior: "instant" });
+  }, [view]);
+
   const templateName = useMemo(() => manifest.name[locale], [manifest, locale]);
 
   return (
     <div className="flex min-h-dvh flex-col bg-paper">
-      <TopBar templateName={templateName} save={save} view={view} onView={setView} onPublish={() => setPublishOpen(true)} />
+      <TopBar templateName={templateName} save={save} view={view} onView={switchView} onPublish={() => setPublishOpen(true)} />
       {/*
        * A plain block on a phone, never a flex row. As a flex item the form column could not be
        * narrower than its longest unbreakable thing, capped only by its own 520px max-width — and

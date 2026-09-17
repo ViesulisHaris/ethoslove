@@ -11,8 +11,10 @@ import { NameTag, PAPER_GRAIN } from "../_shared/cover-kit";
 /** The ledge, the pot on it and the tag above it, measured up from the bottom edge in --k. */
 export const SILL_H = 30;
 const POT_BASE = 27;
-/** Wide enough that the lowest leaves pass behind it: that is what makes the plant look potted. */
+/** The stem and the feet of both leaves stand behind it: that is what makes the plant look potted. */
 const POT_W = 48;
+/** Without a pot, the bottom of the bow-and-tag's box: the bow lands about 27k above this. */
+const STEM_TAG_BASE = 31;
 
 export const BLOOM_KEYFRAMES = `
 .bl-tag{transform-origin:50% 0;animation:bl-tag 6.2s ease-in-out infinite alternate}
@@ -81,7 +83,92 @@ export function Pot({ colors }: { colors: PotColors }) {
   );
 }
 
-/** A bow round the stem with a small tag on it, sitting clear above the rim. */
+/**
+ * How big the name can be written on a tag `widthK` wide before it has to wrap. The tag hangs in
+ * a fixed place with something underneath it, so a long name gets smaller, not taller.
+ */
+function nameSizeFor(name: string, widthK: number) {
+  const chars = Math.max(1, [...name.trim()].length);
+  // 6.4k of padding; handwriting runs at about 0.46em a letter.
+  const fit = (widthK - 6.4) / (chars * 0.46);
+  return `calc(${Math.max(3, Math.min(5.4, fit)).toFixed(2)} * var(--k))`;
+}
+
+/**
+ * The ribbon tied round the pot's collar, its bow, and the name tag hanging from it.
+ *
+ * It lives on the pot because the pot is the one thing here that holds still. It used to be tied
+ * "round the stem" — but the stem is inside a WebGL flower that turns, and the bow was a flat
+ * drawing pinned over it: on the peony it sat on the petals and stayed put while they span past.
+ * This is drawn in the pot's own box and the pot's own viewBox, so the two cannot drift apart.
+ */
+export function PotTag({
+  name,
+  forLabel,
+  ribbon,
+  ribbonDeep,
+  paper,
+  ink,
+}: {
+  name: string;
+  forLabel: string;
+  ribbon: string;
+  ribbonDeep: string;
+  paper: string;
+  ink: string;
+}) {
+  const id = useId().replace(/:/g, "");
+  // A longer name gets a wider tag first, then smaller writing.
+  const chars = [...name.trim()].length;
+  const widthPct = Math.min(60, Math.max(42, 28 + chars * 2.6));
+  const widthK = (POT_W * widthPct) / 100;
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute left-1/2 -translate-x-1/2"
+      style={{ bottom: `calc(${POT_BASE} * var(--k))`, width: `calc(${POT_W} * var(--k))`, aspectRatio: "140 / 104" }}
+    >
+      <svg viewBox="0 0 140 104" className="absolute inset-0 h-full w-full overflow-visible">
+        <defs>
+          <linearGradient id={`${id}-sheen`} x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stopColor="#000" stopOpacity=".2" />
+            <stop offset=".16" stopColor="#fff" stopOpacity=".3" />
+            <stop offset=".52" stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#000" stopOpacity=".26" />
+          </linearGradient>
+        </defs>
+        {/* The band, following the collar's taper, lit the way the glaze under it is. */}
+        <path d="M4.2 16.5 H135.8 L133 25 H7 Z" fill={ribbon} />
+        <path d="M4.2 16.5 H135.8 L133 25 H7 Z" fill={`url(#${id}-sheen)`} />
+        <path d="M6.9 24.6 H133.1" stroke={ribbonDeep} strokeWidth="1.2" strokeOpacity=".75" />
+        <path d="M4.6 17.4 H135.4" stroke="#fff" strokeWidth="1" strokeOpacity=".35" />
+        {/* the strand from the knot to the tag's hole */}
+        <path d="M52 23 C62 25 74 27 84 34.5" fill="none" stroke={ribbon} strokeWidth="2.4" strokeLinecap="round" />
+        <g transform="translate(48 20.5) scale(1.46)">
+          <ellipse cx="-7" cy="-1" rx="7.4" ry="4.4" transform="rotate(-20)" fill={ribbon} />
+          <ellipse cx="7" cy="-1" rx="7.4" ry="4.4" transform="rotate(20)" fill={ribbon} />
+          <ellipse cx="-7" cy="-1" rx="7.4" ry="4.4" transform="rotate(-20)" fill="none" stroke={ribbonDeep} strokeWidth="1" />
+          <ellipse cx="7" cy="-1" rx="7.4" ry="4.4" transform="rotate(20)" fill="none" stroke={ribbonDeep} strokeWidth="1" />
+          <path d="M-1.5 3 C-4 9 -6 13 -9 17 M1.5 3 C4 9 5 13 8 18" fill="none" stroke={ribbon} strokeWidth="2.6" strokeLinecap="round" />
+          <circle r="3.2" fill={ribbonDeep} />
+        </g>
+      </svg>
+      {/* Hangs from its hole, which sits where the strand ends: 84 across, 27 down, in the viewBox. */}
+      <div className="absolute" style={{ left: "60%", top: "26%", width: `${widthPct}%` }}>
+        <div className="bl-tag -translate-x-1/2">
+          <NameTag name={name} eyebrow={forLabel} paper={paper} ink={ink} nameSize={nameSizeFor(name, widthK)} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * With the pot turned off there is nothing still to tie it to but the stem, so the bow goes on
+ * the bare stem well under the flower head — low enough that no petal of the widest flower, the
+ * peony, hangs over it. A stem turning on its own axis looks the same from every side, so a bow
+ * that holds still on it reads as tied; a bow over turning petals did not.
+ */
 export function StemTag({
   name,
   forLabel,
@@ -101,7 +188,7 @@ export function StemTag({
     <div
       aria-hidden="true"
       className="absolute left-1/2 -translate-x-1/2"
-      style={{ bottom: `calc(63 * var(--k))`, width: `calc(48 * var(--k))`, aspectRatio: "48 / 34" }}
+      style={{ bottom: `calc(${STEM_TAG_BASE} * var(--k))`, width: `calc(48 * var(--k))`, aspectRatio: "48 / 34" }}
     >
       <svg viewBox="0 0 96 68" className="absolute inset-0 h-full w-full overflow-visible">
         {/* the strand running from the knot out to the tag's hole */}
@@ -117,7 +204,7 @@ export function StemTag({
       </svg>
       <div className="absolute" style={{ left: "72%", top: "47%", width: "44%" }}>
         <div className="bl-tag -translate-x-1/2">
-          <NameTag name={name} eyebrow={forLabel} paper={paper} ink={ink} />
+          <NameTag name={name} eyebrow={forLabel} paper={paper} ink={ink} nameSize={nameSizeFor(name, 48 * 0.44)} />
         </div>
       </div>
     </div>

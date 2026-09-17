@@ -116,6 +116,7 @@ export function NameTag({
   eyebrow,
   paper = "#FFF7EC",
   ink = "#3B2A22",
+  nameSize = "calc(5.4*var(--k))",
   className,
   style,
 }: {
@@ -123,6 +124,8 @@ export function NameTag({
   eyebrow?: string;
   paper?: string;
   ink?: string;
+  /** The handwriting's size. A tag with a fixed place to hang shrinks a long name rather than grow. */
+  nameSize?: string;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -148,7 +151,7 @@ export function NameTag({
           {eyebrow}
         </p>
       ) : null}
-      <p className="mt-[calc(.8*var(--k))] text-[calc(5.4*var(--k))] leading-[1.1] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)" }}>
+      <p className="mt-[calc(.8*var(--k))] leading-[1.1] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: nameSize }}>
         {name}
       </p>
     </div>
