@@ -14,14 +14,14 @@ export function EmojiPicker({ onPick, label }: { onPick: (emoji: string) => void
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button type="button" aria-label={label} className="grid size-8 place-items-center rounded-lg text-ink-soft hover:bg-ink/5">
+        <button type="button" aria-label={label} className="grid size-10 place-items-center rounded-lg text-ink-soft hover:bg-ink/5 md:size-8">
           <Smile className="size-4" />
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[18rem] p-2">
+      <PopoverContent align="start" className="w-[20rem] max-w-[calc(100vw-1.5rem)] p-2 md:w-[18rem]">
         <div className="grid grid-cols-8 gap-0.5">
           {EMOJI.map((e) => (
-            <button key={e} type="button" onClick={() => onPick(e)} className="grid size-8 place-items-center rounded-md text-lg hover:bg-ink/5">
+            <button key={e} type="button" onClick={() => onPick(e)} className="grid aspect-square w-full place-items-center rounded-md text-xl hover:bg-ink/5 md:text-lg">
               {e}
             </button>
           ))}

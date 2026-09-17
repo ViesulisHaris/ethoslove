@@ -63,7 +63,7 @@ export function SongLinkField() {
               type="button"
               onClick={() => patch({ dedication: undefined })}
               aria-label={t("dedicationRemove")}
-              className="grid size-8 shrink-0 place-items-center rounded-full hover:bg-ink/5"
+              className="relative grid size-8 after:absolute after:-inset-1.5 shrink-0 place-items-center rounded-full hover:bg-ink/5"
             >
               <X className="size-4" />
             </button>
@@ -89,7 +89,7 @@ export function SongLinkField() {
             placeholder={t("dedicationPlaceholder")}
             inputMode="url"
             autoComplete="off"
-            className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+            className="min-w-0 flex-1 bg-transparent text-base outline-none md:text-sm"
             aria-label={t("dedicationTitle")}
             data-testid="song-link"
           />

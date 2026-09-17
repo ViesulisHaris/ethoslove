@@ -94,6 +94,9 @@ export function isPrivatePath(pathname: string): boolean {
  *
  * Clarity is deliberately *not* kept off `/demo`: it sets nothing without consent, the demos are
  * the funnel, and where people stop watching one is worth knowing. Only the banner moves.
+ *
+ * The editor keeps the banner, except while its phone preview is up — that is a gift running
+ * too, and it says so itself with `data-gift-running` on <html> (see `CookieConsent`).
  */
 const NO_BANNER = ["/demo"];
 

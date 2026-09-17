@@ -32,7 +32,9 @@ export function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 90, opacity: 0 }}
           transition={{ type: "spring", stiffness: 340, damping: 34, mass: 0.9 }}
-          className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+          // Steps aside while the editor's phone preview is up: that is a gift running full-screen
+          // with "Play from the start" docked exactly here. It comes back with the form.
+          className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] [[data-gift-running]_&]:hidden"
           role="region"
           aria-label={t("title")}
         >

@@ -41,7 +41,7 @@ export function VoiceSection() {
           <button
             type="button"
             onClick={clearVoiceNote}
-            className="grid size-9 shrink-0 place-items-center rounded-full hover:bg-ink/5"
+            className="relative grid size-9 after:absolute after:-inset-1 shrink-0 place-items-center rounded-full hover:bg-ink/5"
             aria-label={t("remove")}
           >
             <Trash2 className="size-4" />

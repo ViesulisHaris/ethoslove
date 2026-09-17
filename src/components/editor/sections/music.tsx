@@ -133,7 +133,7 @@ export function MusicSection() {
                 type="button"
                 onClick={() => setMood(m)}
                 className={cn(
-                  "h-8 shrink-0 rounded-full border px-3 text-xs",
+                  "relative h-8 shrink-0 rounded-full border px-3 text-xs after:absolute after:inset-x-0 after:-inset-y-1.5",
                   mood === m ? "border-ink bg-ink text-paper" : "border-border bg-card",
                 )}
               >
@@ -153,7 +153,7 @@ export function MusicSection() {
                     type="button"
                     onClick={() => togglePreview(tr.id, tr.url)}
                     aria-label={playingId === tr.id ? t("previewStop") : t("previewPlay")}
-                    className="grid size-9 shrink-0 place-items-center rounded-full bg-ink text-paper"
+                    className="relative grid size-9 after:absolute after:-inset-1 shrink-0 place-items-center rounded-full bg-ink text-paper"
                   >
                     {playingId === tr.id ? (
                       <Pause className="size-4" />
@@ -211,7 +211,7 @@ export function MusicSection() {
               <button
                 type="button"
                 onClick={() => togglePreview("catalog", music.url)}
-                className="grid size-8 place-items-center rounded-full bg-ink text-paper"
+                className="relative grid size-8 after:absolute after:-inset-1.5 place-items-center rounded-full bg-ink text-paper"
                 aria-label={t("previewPlay")}
               >
                 {playingId === "catalog" ? (
@@ -223,7 +223,7 @@ export function MusicSection() {
               <button
                 type="button"
                 onClick={() => setCatalogTrack(null)}
-                className="grid size-8 place-items-center rounded-full hover:bg-ink/5"
+                className="relative grid size-8 after:absolute after:-inset-1.5 place-items-center rounded-full hover:bg-ink/5"
                 aria-label={t("none")}
               >
                 <X className="size-4" />
@@ -236,7 +236,7 @@ export function MusicSection() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("songSearch")}
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+              className="min-w-0 flex-1 bg-transparent text-base outline-none md:text-sm"
               aria-label={t("songSearch")}
               data-testid="song-search"
             />
@@ -281,7 +281,7 @@ export function MusicSection() {
                         type="button"
                         onClick={() => togglePreview(song.id, song.previewUrl)}
                         aria-label={playingId === song.id ? t("previewStop") : t("previewPlay")}
-                        className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-paper"
+                        className="relative grid size-8 after:absolute after:-inset-1.5 shrink-0 place-items-center rounded-full bg-ink text-paper"
                       >
                         {playingId === song.id ? (
                           <Pause className="size-3.5" />
@@ -316,7 +316,7 @@ export function MusicSection() {
                 <button
                   type="button"
                   onClick={() => togglePreview("upload", music.url, music.startAt)}
-                  className="grid size-8 place-items-center rounded-full bg-ink text-paper"
+                  className="relative grid size-8 after:absolute after:-inset-1.5 place-items-center rounded-full bg-ink text-paper"
                   aria-label={t("previewPlay")}
                 >
                   {playingId === "upload" ? (
@@ -328,7 +328,7 @@ export function MusicSection() {
                 <button
                   type="button"
                   onClick={clearMusic}
-                  className="grid size-8 place-items-center rounded-full hover:bg-ink/5"
+                  className="relative grid size-8 after:absolute after:-inset-1.5 place-items-center rounded-full hover:bg-ink/5"
                   aria-label={t("none")}
                 >
                   <X className="size-4" />

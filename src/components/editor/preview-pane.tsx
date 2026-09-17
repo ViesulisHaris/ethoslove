@@ -35,7 +35,7 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
         setPlaying((p) => !p);
       }}
       className={cn(
-        "flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium shadow-soft transition-colors",
+        "flex h-11 items-center gap-2 rounded-full px-5 text-sm font-medium shadow-soft transition-colors md:h-10 md:px-4",
         playing ? "bg-ink text-paper" : "border border-border bg-card text-ink hover:border-ink/40",
       )}
     >
@@ -45,10 +45,16 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
   );
 
   if (fullscreen) {
+    // The phone preview. The play button gets a dock of its own under the gift rather than
+    // floating over it: almost every template keeps its main control in the bottom strip ("Read
+    // the note", "tap the box", the blow meter), and a floating button sat right on top of it.
+    // The gift sizes itself to its container, so it simply plays in the space that is left.
     return (
-      <div className={cn("relative h-full w-full", className)}>
-        {renderer}
-        <div className="absolute inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center">{playButton}</div>
+      <div className={cn("flex h-full w-full flex-col", className)}>
+        <div className="relative min-h-0 flex-1">{renderer}</div>
+        <div className="flex shrink-0 justify-center border-t border-border bg-paper px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
+          {playButton}
+        </div>
       </div>
     );
   }

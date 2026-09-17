@@ -36,8 +36,11 @@ export function CoverPicker({
             className="group flex flex-col items-center gap-1.5 text-center"
           >
             <span
+              // isolate: a cover stacks itself at z-60 for the gift page. Without a stacking context
+              // of its own here, every thumbnail scrolled over the sticky top bar and the editor's
+              // Edit / Preview / Publish controls could not be tapped through them.
               className={cn(
-                "relative block aspect-[9/16] w-full overflow-hidden rounded-xl border transition-all [container-type:size]",
+                "relative isolate block aspect-[9/16] w-full overflow-hidden rounded-xl border transition-all [container-type:size]",
                 active ? "border-ink ring-2 ring-ink ring-offset-2 ring-offset-paper" : "border-border group-hover:border-ink/40",
               )}
             >

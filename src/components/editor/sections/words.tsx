@@ -51,24 +51,24 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
       <SectionHeader n={t("sections.words.n")} title={t("sections.words.title")} blurb={t("sections.words.blurb")} />
       <Field id="message" label={t("fields.message")} counter={t("fields.charsLeft", { n: left })}>
         <div className="rounded-xl border border-border bg-card focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30">
-          <div className="flex items-center gap-1 border-b border-border px-2 py-1.5">
-            <button type="button" onClick={() => wrap("**")} aria-label={t("fields.bold")} className="grid size-8 place-items-center rounded-lg text-ink-soft hover:bg-ink/5">
+          <div className="flex items-center gap-0.5 border-b border-border px-1.5 py-1 md:gap-1 md:px-2 md:py-1.5">
+            <button type="button" onClick={() => wrap("**")} aria-label={t("fields.bold")} className="grid size-10 place-items-center rounded-lg text-ink-soft hover:bg-ink/5 md:size-8">
               <Bold className="size-4" />
             </button>
-            <button type="button" onClick={() => wrap("*")} aria-label={t("fields.italic")} className="grid size-8 place-items-center rounded-lg text-ink-soft hover:bg-ink/5">
+            <button type="button" onClick={() => wrap("*")} aria-label={t("fields.italic")} className="grid size-10 place-items-center rounded-lg text-ink-soft hover:bg-ink/5 md:size-8">
               <Italic className="size-4" />
             </button>
             <EmojiPicker onPick={insert} label={t("fields.emoji")} />
             <div className="ml-auto">
               {aiEnabled ? (
-                <button type="button" onClick={() => setHelperOpen(true)} className="flex h-8 items-center gap-1.5 rounded-full bg-accent px-3 text-xs font-medium text-ink hover:bg-rose">
+                <button type="button" onClick={() => setHelperOpen(true)} className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 text-[13px] font-medium text-ink hover:bg-rose md:h-8 md:px-3 md:text-xs">
                   <Sparkles className="size-3.5 text-coral" />
                   {t("fields.helpWrite")}
                 </button>
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button type="button" onClick={() => toast(t("fields.helpWriteSoon"))} className="flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-muted-foreground">
+                    <button type="button" onClick={() => toast(t("fields.helpWriteSoon"))} className="flex h-10 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-medium text-muted-foreground md:h-8 md:px-3 md:text-xs">
                       <Sparkles className="size-3.5" />
                       {t("fields.helpWrite")}
                     </button>
@@ -86,7 +86,7 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
             onChange={(e) => patch({ message: e.target.value })}
             placeholder={t("fields.messagePlaceholder")}
             rows={9}
-            className="min-h-[13rem] resize-y rounded-none border-0 bg-transparent px-3.5 py-3 text-[15px] leading-relaxed shadow-none focus-visible:ring-0"
+            className="min-h-[13rem] resize-y rounded-none border-0 bg-transparent px-3.5 py-3 text-base leading-relaxed md:text-[15px] shadow-none focus-visible:ring-0"
           />
         </div>
       </Field>

@@ -75,7 +75,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
         className={cn(
-          "flex flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-8 text-center transition-colors",
+          "relative flex flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-8 text-center transition-colors",
           dragOver ? "border-coral bg-accent" : "border-border bg-card",
           full && "opacity-60",
         )}
@@ -83,7 +83,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
         <ImagePlus className="size-6 text-coral" />
         <p className="mt-3 text-sm text-ink-soft">
           {t("drop")}{" "}
-          <button type="button" onClick={() => inputRef.current?.click()} disabled={full} className="font-medium text-coral underline underline-offset-4">
+          <button type="button" onClick={() => inputRef.current?.click()} disabled={full} className="font-medium text-coral underline underline-offset-4 after:absolute after:inset-0 after:rounded-2xl">
             {t("browse")}
           </button>
         </p>
@@ -203,7 +203,7 @@ function PhotoTile({
         onChange={(e) => onCaption(e.target.value)}
         placeholder={t("captionPlaceholder")}
         aria-label={t("caption")}
-        className="h-9 w-full rounded-lg border border-border bg-card px-2.5 text-sm placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/30 focus:outline-none"
+        className="h-11 w-full rounded-lg border border-border bg-card px-2.5 text-base md:h-9 md:text-sm placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/30 focus:outline-none"
       />
     </li>
   );

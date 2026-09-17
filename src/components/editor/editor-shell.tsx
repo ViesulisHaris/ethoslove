@@ -125,13 +125,34 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, []);
 
+  // The phone preview is a gift running full-screen; anything docked at the bottom of the page
+  // (the consent banner) reads this and steps aside. On a laptop the preview is a side pane and
+  // `view` never leaves "edit", so this only ever fires on a phone.
+  useEffect(() => {
+    if (view !== "preview") return;
+    document.documentElement.dataset.giftRunning = "true";
+    return () => {
+      delete document.documentElement.dataset.giftRunning;
+    };
+  }, [view]);
+
   const templateName = useMemo(() => manifest.name[locale], [manifest, locale]);
 
   return (
     <div className="flex min-h-dvh flex-col bg-paper">
       <TopBar templateName={templateName} save={save} view={view} onView={setView} onPublish={() => setPublishOpen(true)} />
-      <div className="flex flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]">
-        <div className={view === "edit" ? "block" : "hidden md:block"}>
+      {/*
+       * A plain block on a phone, never a flex row. As a flex item the form column could not be
+       * narrower than its longest unbreakable thing, capped only by its own 520px max-width — and
+       * the message box is `field-sizing: content`, so its longest word counts. Paste one link
+       * into the message, or a song link, and on an iPhone the column laid out 474–520px wide on
+       * a 393px screen. Safari then lets the whole page zoom out to fit, which is what made the
+       * top bar tiny and hard to hit. (Reproduced in WebKit against production, 17 Sept 2026.)
+       * A block is as wide as the screen, whatever is inside it; `min-w-0` does the same job in
+       * the desktop grid, and `overflow-x-clip` means one wide control can never widen the page.
+       */}
+      <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]">
+        <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {hydrated && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0">
@@ -156,12 +177,17 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
             )}
           </div>
         </div>
-        <div className={view === "preview" ? "block flex-1" : "hidden md:block"}>
+        <div className={view === "preview" ? "block" : "hidden md:block"}>
           <div className="md:sticky md:top-14 md:h-[calc(100dvh-3.5rem)]">
             <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-8 md:flex">
               <PreviewPane slug={slug} />
             </div>
-            <div className="h-[calc(100dvh-3.5rem)] md:hidden">
+            {/*
+             * Everything under the bar: 3.5rem, its hairline and, in a home-screen app, the notch.
+             * Inline, because Tailwind does not emit an arbitrary `calc()` with `env()` inside it —
+             * the class compiled to nothing and the gift collapsed to zero height.
+             */}
+            <div className="md:hidden" style={{ height: "calc(100dvh - 3.5rem - 1px - env(safe-area-inset-top, 0px))" }}>
               <PreviewPane slug={slug} fullscreen />
             </div>
           </div>

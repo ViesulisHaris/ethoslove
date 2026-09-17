@@ -70,7 +70,7 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
                     </motion.button>
                   ))}
                 </div>
-                <textarea value={text} onChange={(e) => setText(e.target.value.slice(0, 1000))} placeholder={t.placeholder} rows={3} className="mt-4 w-full resize-none rounded-2xl border border-white/10 bg-white/5 p-3.5 text-[15px] text-paper placeholder:text-white/35 focus:border-coral focus:outline-none" />
+                <textarea value={text} onChange={(e) => setText(e.target.value.slice(0, 1000))} placeholder={t.placeholder} rows={3} className="mt-4 w-full resize-none rounded-2xl border border-white/10 bg-white/5 p-3.5 text-base text-paper placeholder:text-white/35 focus:border-coral focus:outline-none" />
                 <div className="mt-3">
                   <VoiceRecorder locale={locale} value={audio} onChange={setAudio} />
                 </div>

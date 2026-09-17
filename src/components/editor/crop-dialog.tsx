@@ -36,7 +36,7 @@ export function CropDialog({ photo, onClose, onApply }: { photo: GiftPhoto | nul
             </div>
             <div className="flex items-center gap-2">
               {ASPECTS.map((a) => (
-                <button key={a.label} type="button" onClick={() => setAspect(a.value ?? 1)} className={aspect === a.value ? "h-8 rounded-full bg-ink px-3 text-xs text-paper" : "h-8 rounded-full border border-border px-3 text-xs"}>
+                <button key={a.label} type="button" onClick={() => setAspect(a.value ?? 1)} className={aspect === a.value ? "relative h-8 rounded-full bg-ink px-3 text-xs text-paper after:absolute after:inset-x-0 after:-inset-y-1.5" : "relative h-8 rounded-full border border-border px-3 text-xs after:absolute after:inset-x-0 after:-inset-y-1.5"}>
                   {a.label}
                 </button>
               ))}

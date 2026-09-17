@@ -34,38 +34,57 @@ export function TopBar({
   const s = saveLabel[save];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-paper/85 backdrop-blur-xl">
-      <div className="flex h-14 items-center gap-3 px-3 sm:px-5">
-        <Link href="/templates" className="flex items-center gap-2 rounded-full py-1.5 pr-3 pl-1.5 text-sm text-ink-soft hover:bg-ink/5" aria-label={t("back")}>
-          <LogoMark className="size-6" />
+    <header className="sticky top-0 z-40 border-b border-border bg-paper/85 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
+      {/*
+       * On a phone the bar is three things, each a full 44pt target: back, the Edit / Preview
+       * switch, Publish. The switch sits in the middle and takes whatever room is left, the way a
+       * segmented control does in an iOS navigation bar. It used to be two 32px-tall, 45px-wide
+       * buttons squeezed beside a title that, in Spanish at 375px, had 14px left to live in.
+       * The template's name comes back at `md`, where the switch is gone and there is room.
+       */}
+      <div className="flex h-14 items-center gap-2 px-2 sm:gap-3 sm:px-5">
+        <Link
+          href="/templates"
+          className="flex h-11 shrink-0 items-center gap-2 rounded-full pr-3 pl-2 text-sm text-ink-soft hover:bg-ink/5"
+          aria-label={t("back")}
+        >
+          <LogoMark className="size-6 max-[359px]:hidden" />
           <ArrowLeft className="size-4" />
           <span className="hidden sm:inline">{t("back")}</span>
         </Link>
-        <div className="min-w-0 flex-1 text-center">
-          <p className="font-display truncate text-[15px] italic sm:text-base">{templateName}</p>
-          <p className={cn("hidden items-center justify-center gap-1 text-[11px] sm:flex", s.tone)}>
+        <div className="hidden min-w-0 flex-1 text-center md:block">
+          <p className="font-display truncate text-base italic">{templateName}</p>
+          <p className={cn("flex items-center justify-center gap-1 text-[11px]", s.tone)}>
             {s.icon}
             {s.text}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex rounded-full border border-border bg-card p-0.5 md:hidden" role="tablist">
+        <div className="flex min-w-0 flex-1 justify-center md:hidden">
+          <div className="grid h-10 w-full max-w-[17rem] grid-cols-2 rounded-full border border-border bg-card p-[3px]" role="tablist">
             {(["edit", "preview"] as const).map((v) => (
               <button
                 key={v}
                 role="tab"
                 aria-selected={view === v}
                 onClick={() => onView(v)}
-                className={cn("h-8 rounded-full px-3 text-xs font-medium", view === v ? "bg-ink text-paper" : "text-ink-soft")}
+                // The pill is 32px tall so the bar stays light; `after` carries the touch to 44.
+                className={cn(
+                  "relative min-w-0 truncate rounded-full px-1 text-[13px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2",
+                  view === v ? "bg-ink text-paper" : "text-ink-soft",
+                )}
               >
                 {v === "edit" ? t("edit") : t("preview")}
               </button>
             ))}
           </div>
-          <Button onClick={onPublish} disabled={publishing} className="h-9 rounded-full px-4 shadow-glow">
-            {t("publish")}
-          </Button>
         </div>
+        <Button
+          onClick={onPublish}
+          disabled={publishing}
+          className="relative h-10 shrink-0 rounded-full px-5 text-sm shadow-glow after:absolute after:inset-x-0 after:-inset-y-0.5"
+        >
+          {t("publish")}
+        </Button>
       </div>
     </header>
   );

@@ -113,7 +113,7 @@ export function ListField({
               onClick={() => remove(i)}
               disabled={items.length <= 1 && item === ""}
               aria-label={t("listRemove")}
-              className="grid size-9 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-black/5 hover:text-ink disabled:opacity-30"
+              className="relative grid size-9 after:absolute after:-inset-1 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-black/5 hover:text-ink disabled:opacity-30"
             >
               <X className="size-4" />
             </button>
