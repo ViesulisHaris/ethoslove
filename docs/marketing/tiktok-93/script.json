@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he said only open it if\nwe ever break up", "timestamp": "Today 21.06", "messages": [
+      { "from": "them", "text": "dont open this now" },
+      { "from": "them", "text": "only if we ever break up" },
+      { "from": "me", "text": "why would u say that" },
+      { "from": "them", "text": "just in case" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "link": { "title": "in case", "domain": "tryethos.io", "image": "og", "name": "Mia" } },
+      { "from": "me", "text": "im opening it" },
+      { "from": "them", "text": "mia" },
+      { "from": "me", "text": "im opening it" }
+    ] },
+    { "type": "chat", "timestamp": "Today 21.44", "messages": [
+      { "from": "me", "text": "it says if ur reading this i already lost" },
+      { "from": "them", "text": "yeah" },
+      { "from": "me", "text": "we havent broken up" },
+      { "from": "them", "text": "i know" },
+      { "from": "them", "text": "i wanted u to know what id say if we did", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -446,6 +446,36 @@ happens: the what-if stays a what-if, which keeps it a love story rather than a 
 Judge these on views and shares. Judge 79 to 88 on link clicks. Running both is the point — the reach
 posts fill the account, the sales posts empty the checkout.
 
+## Four slides, not ten: 92 to 94
+
+The slide count in this document has been wrong, and 89 to 91 argued for the wrong thing outright —
+"ten slides is ten swipes, and swipes are what rank a photo post". Swipes are not the signal.
+**Finishing is.** A ten-slide carousel that loses most people by slide three reads to the algorithm as
+a post nobody wanted; a four-slide one that almost everybody finishes reads as a post that worked. The
+2.9M post got away with ten because its first two slides are the most familiar conversation on earth.
+Ours are not that, and ten slides of ours is three slides of attention and seven of drop-off.
+
+**Four slides total.** Not four chat slides and six gift frames — four slides:
+
+1. **The hook**, drawn into the image, with three or four bubbles under it. The hook is now a quarter
+   of the post rather than a tenth, so it has to be the most shocking true sentence in the story.
+2. **The link**, with two or three bubbles around it.
+3. **One frame of the gift.** The best page, the date, the one line — whichever single image sells it.
+   Not a tour.
+4. **The payoff**, four to six bubbles, ending on the line people screenshot.
+
+Everything else goes: the setup, the banter, the second joke, the rest of the gift. If a bubble is not
+doing one of those four jobs, cut it.
+
+**What the hook has to be now.** A fact or an accusation, never a mood. "i found a link in his phone
+with my name on it" reads as a cheating story for two seconds. "he said only open it if we ever break
+up" reads as a breakup. "he made it 3 days after we met" is a date you cannot argue with. Each one
+resolves into devotion by slide 2, which is the rule from 77 held to even harder: at four slides, a
+dread hook has one slide to break.
+
+Two-parters (89, 90) still work at this length — part 1 is three slides and the unopened link, part 2
+is four. Everything else runs at four.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -667,5 +697,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 89 | dont open it yet | part 1 of 2, the unopened link | none, on purpose | — |
 | 90 | i waited 7 | part 2 of 2, what was in it | yours | — |
 | 91 | then u wouldve got it anyway | scheduled 8 months early | any, scheduled | — |
+| 92 | its not finished | the unsent link in his phone | any, one frame | — |
+| 93 | in case | "only open it if we ever break up" | any, one frame | — |
+| 94 | day 3 | made 3 days after they met, sent 14 months later | any, one frame | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he made it 3 days\nafter we met", "timestamp": "Today 20.22", "messages": [
+      { "from": "them", "link": { "title": "day 3", "domain": "tryethos.io", "image": "og", "name": "Nell" } },
+      { "from": "them", "text": "dont look at the date" },
+      { "from": "me", "text": "july 4" },
+      { "from": "me", "text": "we met on july 1" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i said dont look at the date" },
+      { "from": "me", "text": "u made this 3 days after we met" },
+      { "from": "them", "text": "yeah" },
+      { "from": "me", "text": "u didnt even know me" },
+      { "from": "them", "text": "thats the thing" }
+    ] },
+    { "type": "chat", "timestamp": "Today 20.51", "messages": [
+      { "from": "me", "text": "uve had this for a year" },
+      { "from": "them", "text": "14 months" },
+      { "from": "me", "text": "why send it now" },
+      { "from": "them", "text": "u said u thought i took ages to fall for u", "tapback": "heart" }
+    ] }
+  ]
+}

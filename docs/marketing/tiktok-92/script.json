@@ -1,0 +1,23 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "i found a link in his phone\nwith my name on it", "timestamp": "Today 23.14", "messages": [
+      { "from": "me", "text": "why is there a link in ur phone with my name on it" },
+      { "from": "them", "text": "u went in my phone" },
+      { "from": "me", "text": "WHY IS THERE A LINK" },
+      { "from": "them", "text": "its not finished" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "link": { "title": "when ur ready", "domain": "tryethos.io", "image": "og", "name": "Cleo" } },
+      { "from": "me", "text": "its dated july" },
+      { "from": "them", "text": "i know" }
+    ] },
+    { "type": "chat", "timestamp": "Today 23.31", "messages": [
+      { "from": "me", "text": "why didnt u send it" },
+      { "from": "them", "text": "i was waiting for u to say it first" },
+      { "from": "me", "text": "say what" },
+      { "from": "them", "text": "u know what" },
+      { "from": "me", "text": "i love u" },
+      { "from": "them", "text": "now its finished", "tapback": "heart" }
+    ] }
+  ]
+}

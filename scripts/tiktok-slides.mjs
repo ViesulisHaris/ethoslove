@@ -83,7 +83,7 @@ const ogImage = (name, lang) => {
  */
 const HOOK_CSS = `
     .hook{position:absolute;top:232px;left:70px;right:70px;text-align:center;font-size:54px;line-height:1.16;font-weight:700;letter-spacing:-.6px;color:#fff;text-shadow:0 3px 20px rgba(0,0,0,.9),0 1px 3px rgba(0,0,0,.95);z-index:5}
-    .stage.has-hook{padding-top:300px}
+    .stage.has-hook{justify-content:flex-start;padding-top:440px}
 `;
 const hookHtml = (slide) => (slide.hook ? `<div class="hook">${esc(slide.hook).replace(/\n/g, "<br>")}</div>` : "");
 
@@ -255,7 +255,7 @@ function igHtml(slide) {
     .ig-sub{font-size:38px;line-height:48px;color:#a8a8a8;letter-spacing:-.2px}
     .ig-icons{display:flex;gap:64px;align-items:center}
     .ig-icons svg{width:80px;height:80px}
-    .ig-thread.has-hook{padding-top:300px}
+    .ig-thread.has-hook{padding-top:440px}
     .ig-thread{position:absolute;left:0;right:0;top:300px;bottom:330px;padding:0 40px 0 36px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end}
     .ig-ts{text-align:center;color:#a8a8a8;font-size:37px;font-weight:500;margin:40px 60px 34px;letter-spacing:-.2px}
     .ig-row{display:flex;align-items:flex-end;margin-top:6px;position:relative}
