@@ -358,6 +358,37 @@ order:
 If it does 100 again on a clean day with a hook on slide 1, the account is the problem and not the
 post. Start a second account and put the same carousel on it.
 
+## The book-boyfriend register: 85
+
+Everything to 84 is written like a real couple texting, which is why it reads as true and why it sells.
+It is not, however, what the audience reads for pleasure. They read 365 Days, Fifty Shades, the
+vampire ones and Wattpad, and that genre runs on four things, none of which are drama:
+
+- **Intensity aimed at exactly one person.** He is short, controlled and unreadable with everybody, and
+  undone by her alone. The fantasy is being the one exception to somebody's rule, not being chased.
+- **Restraint is the heat.** What he does not do. He waited four months. He says "Sit down" and then
+  hands over a thing he made rather than a demand. Pursuit is cheap; patience is the genre.
+- **A secret that has been running the whole time,** revealed with a number as evidence. "I had already
+  decided. That night. In the kitchen. Before you spoke to me." — then nine photographs she never knew
+  were taken. This is the same machine as the obsession ones at 65 to 70, turned up.
+- **One line written to be screenshotted.** "Youre not running now." Build the carousel around the line
+  somebody will put on their story and it travels without needing an argument to carry it.
+
+How the voice works: his bubbles are four to six words, capital letters, full stops, never flustered;
+hers are lowercase and spiralling. He says her name inside a bubble exactly once — "The end, Mara." —
+which is the device the whole genre rests on and it stops working the second time.
+
+**The line it must not cross, and this is the whole safety of the format.** Possessive about his own
+feelings, never about her movements. "I had already decided" is devotion; "who were you with" is
+control, and a carousel that reads as control turns its comments into "leave him" and dies there.
+Nobody is told what to do, nobody is checked up on, nothing is tracked. And the dread has to break
+inside two slides — "I lied to you" held any longer reads as a confession of cheating, and that
+comment section does not buy anything.
+
+One trade to be aware of: this register needs the reader in the receiving seat, so the narrator cannot
+be the maker. 85 gives up the maker's-seat rule deliberately and lets the pinned comment carry the
+sale. Judge it against 83 and 84 on link clicks per thousand views, not on views.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -572,5 +603,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 82 | dont put it on speaker | her 22nd, the voice note | Scrapbook | Polka |
 | 83 | the ones u tried to delete | a best friend's birthday, the pages | Scrapbook | Classic |
 | 84 | I have 400 | his 20th, his mum's 38 photos | Scrapbook | Classic |
+| 85 | Good. Sit down. | 4 months, the night he decided | Scrapbook (Favorite person) | Lovecore |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

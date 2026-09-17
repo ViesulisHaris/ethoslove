@@ -1,0 +1,41 @@
+{
+  "slides": [
+    { "type": "chat", "hook": "he lied to me for\n4 months", "timestamp": "Today 23.58", "messages": [
+      { "from": "them", "text": "I lied to you" },
+      { "from": "me", "text": "what" },
+      { "from": "me", "text": "about what" },
+      { "from": "them", "text": "Four months ago. The night we met." },
+      { "from": "me", "text": "ur actually scaring me" },
+      { "from": "them", "text": "Good. Sit down." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "I told you i wasnt looking for anything" },
+      { "from": "me", "text": "u did" },
+      { "from": "them", "text": "I had already decided." },
+      { "from": "them", "text": "That night. In the kitchen. Before you spoke to me." },
+      { "from": "me", "text": "decided what" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Open it. Dont say anything until the end." },
+      { "from": "them", "link": { "title": "the night i decided", "domain": "tryethos.io", "image": "og", "name": "Mara" } },
+      { "from": "me", "text": "im opening it" },
+      { "from": "them", "text": "The end, Mara." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "uve been keeping these since JULY" },
+      { "from": "them", "text": "Since the kitchen." },
+      { "from": "me", "text": "theres a photo of me from that night" },
+      { "from": "me", "text": "i didnt know u took it" },
+      { "from": "them", "text": "There are nine." },
+      { "from": "me", "text": "nine" }
+    ] },
+    { "type": "chat", "timestamp": "Today 00.41", "messages": [
+      { "from": "me", "text": "why did u lie" },
+      { "from": "them", "text": "You would have run." },
+      { "from": "me", "text": "i wouldnt have" },
+      { "from": "them", "text": "You would." },
+      { "from": "them", "text": "Youre not running now.", "tapback": "heart" },
+      { "from": "me", "text": "no" }
+    ] }
+  ]
+}
