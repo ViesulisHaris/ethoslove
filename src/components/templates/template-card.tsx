@@ -5,10 +5,20 @@ import { useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "motion/react";
+import dynamic from "next/dynamic";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
-import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
+
+/**
+ * Loaded on demand, not with the page. Importing it statically reaches the template registry and
+ * every template behind it, which puts ~900KB of three.js into the gallery bundle for the two
+ * templates that use WebGL — on a page that mounts a template only after someone taps "try it".
+ */
+const GiftRenderer = dynamic(
+  () => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer),
+  { ssr: false },
+);
 import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +33,8 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
   const videoRef = useRef<HTMLVideoElement>(null);
   const currency = currencyFor(locale === "es" ? "ES" : "US");
   const price = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
+  /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
+  const above = index < 4;
 
   const play = () => {
     const v = videoRef.current;
@@ -34,8 +46,11 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      // The first row ships visible. `initial` is serialised into the server HTML, so every card
+      // arrived as `opacity:0` and waited for hydration and an intersection observer before it
+      // appeared — on /templates, the most visited page, that is a blank grid on arrival.
+      initial={above ? false : { opacity: 0, y: 16 }}
+      whileInView={above ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ type: "spring", stiffness: 120, damping: 20, delay: (index % 3) * 0.06 }}
       className="group flex flex-col"
@@ -51,7 +66,14 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
           </div>
         ) : (
           <>
-            <img src={manifest.thumbnail.poster} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" />
+            <img
+              src={manifest.thumbnail.poster}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              loading={above ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : undefined}
+              decoding="async"
+            />
             {manifest.thumbnail.webm ? (
               <video
                 ref={videoRef}
