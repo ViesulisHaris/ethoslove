@@ -6,8 +6,12 @@ import { z } from "zod";
  * what broke was to reproduce it. Trimmed hard, so a report can never carry a page of text.
  */
 export const clientErrorSchema = z.object({
-  /** Which boundary caught it: a page, the root layout, or a gift inside its own frame. */
-  where: z.enum(["page", "root", "gift"]),
+  /**
+   * Which boundary caught it: a page, the root layout, or a gift inside its own frame — or none:
+   * `window` for an uncaught error and `promise` for an unhandled rejection, which break something
+   * without ever reaching an error screen (see src/components/shared/error-reporter.tsx).
+   */
+  where: z.enum(["page", "root", "gift", "window", "promise"]),
   code: z.string().max(12),
   name: z.string().max(80),
   message: z.string().max(500),
@@ -40,12 +44,22 @@ export function errorCode(error: ErrorLike | null | undefined): string {
   return (hash >>> 0).toString(36).toUpperCase().padStart(6, "0").slice(-6);
 }
 
+/**
+ * A stack can quote the page's own address — a frame in an inline script, or on a gift — so it
+ * gets the same treatment as `path`: no query strings, and no gift's link.
+ */
+export function scrubStack(stack: string): string {
+  return stack
+    .replace(/(\bhttps?:\/\/[^\s?#)]+)[?#][^\s:)]*/g, "$1")
+    .replace(/(\/(?:(?:en|es)\/)?g\/)[A-Za-z0-9_-]+/g, "$1[shortId]");
+}
+
 export function buildClientErrorReport(
   error: ErrorLike | null | undefined,
   where: ClientErrorReport["where"],
   context: { path: string; template?: string; build?: string },
 ): ClientErrorReport {
-  const stack = error?.stack?.split("\n").slice(0, STACK_LINES).join("\n").slice(0, 2000);
+  const stack = error?.stack ? scrubStack(error.stack).split("\n").slice(0, STACK_LINES).join("\n").slice(0, 2000) : undefined;
   return {
     where,
     code: errorCode(error),
@@ -59,13 +73,34 @@ export function buildClientErrorReport(
   };
 }
 
+/**
+ * Whether an error that reached `window` is one of ours to report. Most of what lands there isn't:
+ * "Script error." is a script on another origin that the browser won't describe; extensions and
+ * in-app browsers inject their own code ("Java object is gone" is Android's WebView bridge); and
+ * the ResizeObserver loop notice is harmless by definition. Ours come from a file on this origin,
+ * or show one in their stack.
+ */
+export function isOwnError(input: { message?: string; filename?: string; stack?: string }, origin: string): boolean {
+  const message = input.message ?? "";
+  if (!message || message === "Script error." || message === "Script error") return false;
+  if (/ResizeObserver loop|Java object is gone|invoking postMessage/i.test(message)) return false;
+  const own = (s: string | undefined) => Boolean(s) && s!.includes(origin);
+  return own(input.filename) || own(input.stack);
+}
+
+/** A gift's link is its key; the log only needs to know it was a gift. */
+export function redactGiftPath(path: string): string {
+  return path.replace(/^((?:\/(?:en|es))?\/g\/)[^/]+/, "$1[shortId]");
+}
+
 /** One report per error per page load: React can render a boundary more than once for the same crash. */
 const sent = new Set<string>();
 
 export function reportClientError(error: ErrorLike | null | undefined, where: ClientErrorReport["where"], template?: string): void {
   if (typeof window === "undefined") return;
+  const uncaught = where === "window" || where === "promise";
   const report = buildClientErrorReport(error, where, {
-    path: window.location.pathname,
+    path: uncaught ? redactGiftPath(window.location.pathname) : window.location.pathname,
     template,
     build: process.env.NEXT_DEPLOYMENT_ID || undefined,
   });
