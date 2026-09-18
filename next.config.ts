@@ -33,16 +33,20 @@ const nextConfig: NextConfig = {
       source: "/audio/library/:path*",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
     },
+    // The demo's files, not the demo: `/demo/:path*` also matched the page `/demo/bloom`, so a
+    // browser kept an English demo page for a year, immutable, and never saw a fix to it again.
     {
-      source: "/demo/:path*",
+      source: "/demo/:dir(audio|photos)/:path*",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
     },
     {
       source: "/icons/:path*",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
     },
+    // A template's poster and preview video, one level below its page: `/templates/:path*` also
+    // matched `/templates/bouquet` itself, which browsers then kept for a week after a deploy.
     {
-      source: "/templates/:path*",
+      source: "/templates/:slug/:file+",
       headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
     },
     {
