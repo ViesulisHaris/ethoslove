@@ -7,7 +7,7 @@ import { getStripe, resolvePriceId } from "@/lib/stripe/server";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { TEMPLATE_SLUGS } from "@/templates/registry";
+import { TEMPLATE_SLUGS } from "@/templates/manifests";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;

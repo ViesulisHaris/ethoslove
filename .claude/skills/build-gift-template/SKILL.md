@@ -72,8 +72,11 @@ when a second template wants it.
 
 Miss one of these and the template half-exists. After adding the folder:
 
-1. `src/templates/registry.ts` — import the manifest, add it to `TEMPLATE_MANIFESTS`, add a lazy
-   loader entry. The loader key is the slug.
+1. `src/templates/manifests.ts` — import the manifest and add it to `TEMPLATE_MANIFESTS`.
+   `src/templates/registry.ts` — add a lazy loader entry, and `src/templates/schemas.ts` a schema
+   loader; both keyed by the slug. A unit test fails if the three lists disagree.
+   Keep them apart: pages that only list templates import `manifests.ts`, and anything they import
+   that holds an `import("./<slug>")` ships every template's code to that page — three.js included.
 2. `src/templates/_shared/intro-variants.ts` — the loading screen's world for this slug.
 3. `src/templates/_shared/covers/looks.ts` — `defaultCoverFor` returns the cover a new gift starts on.
 4. `scripts/capture-thumbnails.mjs` — a short routine that drives the demo, so the poster and preview
@@ -83,7 +86,7 @@ Miss one of these and the template half-exists. After adding the folder:
    the template page and the sitemap all point at them, so a missing poster is a broken image.
 
 Everything else follows automatically: the editor, unlocking after payment, occasion pages,
-`llms.txt`, the sitemap and the dashboard all read the registry.
+`llms.txt`, the sitemap and the dashboard all read the manifests.
 
 **Only two templates are free** (The Letter, Constellations) and a unit test enforces it. A new
 template is `tier: "premium"` unless the user says otherwise.
@@ -148,8 +151,9 @@ Pure logic — geometry, physics, time — belongs in its own module with unit t
 - **The editor preview plays from the gift's cover**, so a test or script that presses "Play from the
   start" has to tap the cover before the template's own controls exist.
 - **Demo photos must fit `features.photos`** min and max, or the template unit test fails.
-- **Adding a template conflicts with anyone else adding one**, always in the same four files: the
-  registry, `defaultCoverFor`, the capture script and the demo test list. Keep both sides.
+- **Adding a template conflicts with anyone else adding one**, always in the same files: the
+  manifests, the registry and schema loaders, `defaultCoverFor`, the capture script and the demo
+  test list. Keep both sides.
 
 ## Choosing `occasions`
 

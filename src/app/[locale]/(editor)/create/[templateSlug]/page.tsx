@@ -5,7 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { loadGiftForEdit } from "@/app/actions/gift";
 import { EditorShell } from "@/components/editor/editor-shell";
 import type { RemoteGift } from "@/lib/editor/store";

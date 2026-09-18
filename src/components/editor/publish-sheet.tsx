@@ -8,7 +8,7 @@ import type { TemplateManifest } from "@/templates/types";
 import { currentRef } from "@/lib/attribution/ref";
 import { decidePublish, readinessProblems, premiumExtras } from "@/lib/gift/publish";
 import { PRODUCTS, currencyFor, formatAmount, type ProductId } from "@/lib/pricing/products";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";

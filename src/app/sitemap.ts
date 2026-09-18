@@ -3,7 +3,7 @@ import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { localizedUrl } from "@/lib/seo";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 
 type Page = { path: string; priority: number; changeFrequency: "weekly" | "monthly" | "yearly"; images?: string[] };
 

@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { breadcrumbNode, localizedUrl, ogImageUrl, pageMetadata, templateProductNode } from "@/lib/seo";
-import { TEMPLATE_SLUGS, getManifest } from "@/templates/registry";
+import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";

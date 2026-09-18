@@ -16,7 +16,7 @@ import { getStripe } from "@/lib/stripe/server";
 import { premiumExtras } from "@/lib/gift/publish";
 import type { GiftData } from "@/lib/gift/schema";
 import { notifyReceipt, notifyWelcome } from "@/lib/email/notify";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 
 export type Fulfilment = {
   ok: boolean;

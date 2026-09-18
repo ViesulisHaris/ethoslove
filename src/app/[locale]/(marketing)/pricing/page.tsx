@@ -4,7 +4,7 @@ import { SITE } from "@/config/site";
 import { currencyFor, type Currency } from "@/lib/pricing/products";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { stripeReady } from "@/lib/stripe/server";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { PricingCards } from "@/components/pricing/pricing-cards";

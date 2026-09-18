@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getGiftDetail } from "@/lib/gift/dashboard";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { SITE } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { OpensChart } from "@/components/dashboard/opens-chart";

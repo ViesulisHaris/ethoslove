@@ -98,3 +98,35 @@ describe("gift schema", () => {
     expect(schema.safeParse({ ...ok, recipientName: "" }).success).toBe(false);
   });
 });
+
+describe("what a page that lists templates is allowed to reach", () => {
+  it("has a loader, a schema loader and a manifest for exactly the same templates", async () => {
+    const { LOADER_SLUGS } = await import("@/templates/registry");
+    const { SCHEMA_SLUGS } = await import("@/templates/schemas");
+    const manifests = [...TEMPLATE_SLUGS].sort();
+    expect([...LOADER_SLUGS].sort()).toEqual(manifests);
+    expect([...SCHEMA_SLUGS].sort()).toEqual(manifests);
+  });
+
+  it("validates a gift with the very schema its template renders with", async () => {
+    const { loadFieldsSchema } = await import("@/templates/schemas");
+    for (const slug of TEMPLATE_SLUGS) {
+      const mod = await loadTemplate(slug);
+      expect(await loadFieldsSchema(slug), slug).toBe(mod!.fieldsSchema);
+    }
+    expect(await loadFieldsSchema("nope")).toBeNull();
+    expect(await loadFieldsSchema("constructor")).toBeNull();
+  });
+
+  it("keeps the manifest module free of template code", async () => {
+    // A server component that imports a module with `import("./bloom")` in it ships every
+    // template to that route's browsers, three.js included. The manifests must stay pure data.
+    const { readFileSync } = await import("node:fs");
+    const code = (f: string) => readFileSync(new URL(`../../src/templates/${f}`, import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+    const source = code("manifests.ts");
+    expect(source).not.toMatch(/\bimport\s*\(/);
+    for (const [, spec] of source.matchAll(/from "([^"]+)"/g)) expect(spec, spec).toMatch(/\/manifest$|^\.\/types$|^@\/config\/occasions$/);
+    const schemas = code("schemas.ts");
+    for (const [, spec] of schemas.matchAll(/import\("([^"]+)"\)/g)) expect(spec, spec).toMatch(/\/schema$/);
+  });
+});

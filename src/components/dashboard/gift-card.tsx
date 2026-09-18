@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { DashboardGift } from "@/lib/gift/dashboard";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { deleteGift, duplicateGift } from "@/app/actions/gift";
 import { SITE } from "@/config/site";
 import { cn } from "@/lib/utils";

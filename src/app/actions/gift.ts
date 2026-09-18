@@ -11,7 +11,10 @@ import { giftStoragePaths } from "@/lib/gift/storage-paths";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { getManifest, loadTemplate } from "@/templates/registry";
+// The manifest and the field schema only: loading the whole template here put every template's
+// components, and three.js, into the editor's first download (see src/templates/schemas.ts).
+import { getManifest } from "@/templates/manifests";
+import { loadFieldsSchema } from "@/templates/schemas";
 import type { Json } from "@/lib/supabase/types";
 import { notifyPublished } from "@/lib/email/notify";
 
@@ -154,10 +157,10 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   if (giftError || !gift) return { ok: false, error: "not_found" };
 
   const manifest = getManifest(gift.template_slug);
-  const mod = await loadTemplate(gift.template_slug);
-  if (!manifest || !mod) return { ok: false, error: "unknown_template" };
+  const fieldsSchema = await loadFieldsSchema(gift.template_slug);
+  if (!manifest || !fieldsSchema) return { ok: false, error: "unknown_template" };
 
-  const parsed = createGiftSchema(mod.fieldsSchema).safeParse(input.data.data);
+  const parsed = createGiftSchema(fieldsSchema).safeParse(input.data.data);
   if (!parsed.success) return { ok: false, error: "invalid_data", problems: parsed.error.issues.map((i) => i.path.join(".")) };
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
   const data = { ...(parsed.data as GiftData), templateSlug: gift.template_slug };

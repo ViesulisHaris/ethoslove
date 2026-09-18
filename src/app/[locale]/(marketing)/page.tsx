@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { appNode, organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { Hero } from "@/components/marketing/home/hero";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";

@@ -5,7 +5,7 @@ import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";

@@ -53,7 +53,9 @@ See `supabase/migrations/0001_init.sql`. Key decisions:
 
 ```
 src/templates/
-  registry.ts          slug → { manifest (eager), load(): Promise<TemplateModule> (lazy chunk) }
+  manifests.ts         every manifest, eager and pure data: what pages that list templates import
+  registry.ts          slug → load(): Promise<TemplateModule> (lazy chunk), for code that renders one
+  schemas.ts           slug → the template's field schema alone, for validating on the server
   _shared/             GiftRenderer, LoadingScreen, EndScreen, Typewriter, hooks
   <slug>/
     manifest.ts        name, occasions, tier, features, thumbnail, defaultAccent, heavy
@@ -139,7 +141,9 @@ interface TemplateProps<TFields> {
 ### Adding a template
 
 1. `mkdir src/templates/<slug>` and create the five files above.
-2. Register it in `registry.ts` with a dynamic import so it code-splits.
+2. Add its manifest to `manifests.ts`, and a dynamic import to `registry.ts` and `schemas.ts` so it
+   code-splits (a unit test checks all three agree). A page that only lists templates must import
+   `manifests.ts`: reaching the loaders from a server component ships every template to that page.
 3. Put static assets in `public/templates/<slug>/` (textures, lottie, poster, webm).
 4. Respect the quality bar: 60fps on a mid-range Android, < 2MB before user media, loading screen
    with the sender's name, spring easings, `prefers-reduced-motion` variant, portrait + landscape.

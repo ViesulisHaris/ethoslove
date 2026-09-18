@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { BRAND } from "@/config/brand";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 
 const COPY = {
   en: { eyebrow: "DIGITAL GIFTS", templateEyebrow: "A DIGITAL GIFT", line: "Photos, their song and your words, sent as a link." },

@@ -3,7 +3,7 @@ import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { PRODUCTS, PRODUCT_ORDER, formatAmount } from "@/lib/pricing/products";
 import { localizedUrl } from "@/lib/seo";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 import en from "../../../messages/en.json";
 
 export const dynamic = "force-static";

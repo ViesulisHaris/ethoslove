@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { stripeReady } from "@/lib/stripe/server";
 import { currencyFor } from "@/lib/pricing/products";
-import { listManifests } from "@/templates/registry";
+import { listManifests } from "@/templates/manifests";
 import { PricingCards } from "@/components/pricing/pricing-cards";
 
 export async function PricingTeaser({ locale }: { locale: string }) {

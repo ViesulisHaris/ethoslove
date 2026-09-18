@@ -5,7 +5,7 @@ import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { listMyPurchases } from "@/lib/gift/dashboard";
 import { formatAmount, type Currency } from "@/lib/pricing/products";
-import { getManifest } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { NotConnected } from "@/components/app/not-connected";
 import { DangerZone } from "@/components/dashboard/danger-zone";

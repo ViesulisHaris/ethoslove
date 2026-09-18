@@ -1,38 +1,14 @@
-import type { Occasion } from "@/config/occasions";
-import type { TemplateManifest, TemplateModule, TemplateTier } from "./types";
-import { manifest as theLetter } from "./the-letter/manifest";
-import { manifest as constellations } from "./constellations/manifest";
-import { manifest as birthdayCinema } from "./birthday-cinema/manifest";
-import { manifest as jarOfReasons } from "./jar-of-reasons/manifest";
-import { manifest as scratchCard } from "./scratch-card/manifest";
-import { manifest as midnightCountdown } from "./midnight-countdown/manifest";
-import { manifest as ourTimeline } from "./our-timeline/manifest";
-import { manifest as vinyl } from "./vinyl/manifest";
-import { manifest as museum } from "./museum/manifest";
-import { manifest as frontPage } from "./front-page/manifest";
-import { manifest as fortuneCookie } from "./fortune-cookie/manifest";
-import { manifest as textThread } from "./text-thread/manifest";
-import { manifest as arcade } from "./arcade/manifest";
-import { manifest as passport } from "./passport/manifest";
-import { manifest as bloom } from "./bloom/manifest";
-import { manifest as bouquet } from "./bouquet/manifest";
-import { manifest as kawaii } from "./kawaii/manifest";
-import { manifest as fireside } from "./fireside/manifest";
-import { manifest as trickOrTreat } from "./trick-or-treat/manifest";
-import { manifest as scrapbook } from "./scrapbook/manifest";
-import { manifest as halfway } from "./halfway/manifest";
-import { manifest as garden } from "./garden/manifest";
-import { manifest as snowGlobe } from "./snow-globe/manifest";
-import { manifest as recipeBox } from "./recipe-box/manifest";
-import { manifest as capToss } from "./cap-toss/manifest";
-import { manifest as paperCrane } from "./paper-crane/manifest";
-import { manifest as theToast } from "./the-toast/manifest";
+import type { TemplateModule } from "./types";
 
 /**
- * Manifests are eager (tiny, safe to import on the server).
- * Template code is lazy: each entry is its own chunk, loaded only when rendered.
+ * Template code, lazily: each entry is its own chunk, loaded only when a template is rendered.
+ *
+ * Only for code that renders a template (the gift renderer, the editor). Anything that only
+ * needs to know about templates — every page that lists them, the sitemap, checkout — imports
+ * ./manifests instead: see the note there on what importing this file from a server component
+ * costs. The manifest helpers are re-exported here so older imports keep working.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast];
+export { TEMPLATE_MANIFESTS, TEMPLATE_SLUGS, getManifest, isTemplateSlug, listManifests } from "./manifests";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> = {
@@ -66,32 +42,8 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
-
-export function isTemplateSlug(slug: string): boolean {
-  return slug in loaders;
-}
-
-export function getManifest(slug: string): TemplateManifest | null {
-  return TEMPLATE_MANIFESTS.find((m) => m.slug === slug) ?? null;
-}
-
-/**
- * A manifest lists its occasions most-central-first, so a template's position in that list is
- * how well it fits. Filtering by occasion therefore ranks by fit — the templates built for the
- * occasion lead, the ones that merely suit it follow — and falls back to `sortOrder` within a
- * rank. Unfiltered, the gallery keeps its curated `sortOrder`.
- */
-export function listManifests(filter: { occasion?: Occasion; tier?: TemplateTier } = {}) {
-  const { occasion } = filter;
-  return TEMPLATE_MANIFESTS.filter(
-    (m) => (!occasion || m.occasions.includes(occasion)) && (!filter.tier || m.tier === filter.tier),
-  ).sort((a, b) =>
-    occasion
-      ? a.occasions.indexOf(occasion) - b.occasions.indexOf(occasion) || a.sortOrder - b.sortOrder
-      : a.sortOrder - b.sortOrder,
-  );
-}
+/** Every slug with a loader; tests/unit/templates.test.ts checks it against ./manifests. */
+export const LOADER_SLUGS = Object.keys(loaders);
 
 export async function loadTemplate(slug: string): Promise<TemplateModule | null> {
   const loader = loaders[slug];

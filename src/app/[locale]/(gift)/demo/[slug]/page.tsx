@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { TEMPLATE_SLUGS, getManifest } from "@/templates/registry";
+import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { DemoStage } from "@/components/gift/demo-stage";
 
 export function generateStaticParams() {
