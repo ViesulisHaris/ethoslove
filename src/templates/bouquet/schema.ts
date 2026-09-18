@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FLOWER_IDS, MAX_STEMS } from "./catalogue";
+import { DEFAULT_STEMS, FLOWER_IDS, MAX_STEMS } from "./catalogue";
 
 export const stemSchema = z.object({
   flower: z.enum(FLOWER_IDS),
@@ -8,16 +8,6 @@ export const stemSchema = z.object({
 });
 
 export type Stem = z.infer<typeof stemSchema>;
-
-/** What a new bouquet starts with: soft, and full enough to look finished in the first preview. */
-export const DEFAULT_STEMS: Stem[] = [
-  { flower: "peony", color: "blush", count: 2 },
-  { flower: "rose", color: "blush", count: 2 },
-  { flower: "ranunculus", color: "peach", count: 3 },
-  { flower: "rose", color: "white", count: 2 },
-  { flower: "gypsophila", color: "white", count: 2 },
-  { flower: "eucalyptus", color: "sage", count: 2 },
-];
 
 export const fieldsSchema = z.object({
   stems: z

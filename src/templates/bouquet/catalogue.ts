@@ -25,6 +25,19 @@ type Flower = { role: Role; size: number; name: { en: string; es: string }; colo
 
 export const MAX_STEMS = 24;
 
+/**
+ * What a new bouquet starts with: soft, and full enough to look finished in the first preview.
+ * Kept here, not in ./schema, so the homepage's hero can draw it without downloading zod.
+ */
+export const DEFAULT_STEMS: { flower: FlowerId; color: string; count: number }[] = [
+  { flower: "peony", color: "blush", count: 2 },
+  { flower: "rose", color: "blush", count: 2 },
+  { flower: "ranunculus", color: "peach", count: 3 },
+  { flower: "rose", color: "white", count: 2 },
+  { flower: "gypsophila", color: "white", count: 2 },
+  { flower: "eucalyptus", color: "sage", count: 2 },
+];
+
 export const FLOWERS: Record<FlowerId, Flower> = {
   rose: {
     role: "focal",

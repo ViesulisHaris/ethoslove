@@ -1,6 +1,7 @@
 import type { GiftData } from "@/lib/gift/schema";
 import { demoPhotos } from "../_shared/demo-photos";
-import { DEFAULT_STEMS, type BouquetFields } from "./schema";
+import { DEFAULT_STEMS } from "./catalogue";
+import type { BouquetFields } from "./schema";
 
 const shared = {
   version: 1 as const,

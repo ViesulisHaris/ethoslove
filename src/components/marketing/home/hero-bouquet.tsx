@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { BouquetArt, timingFor } from "@/templates/bouquet/Bouquet";
 import { arrange } from "@/templates/bouquet/arrange";
-import { DEFAULT_STEMS, type BouquetFields } from "@/templates/bouquet/schema";
+import { DEFAULT_STEMS } from "@/templates/bouquet/catalogue";
+import type { BouquetFields } from "@/templates/bouquet/schema";
 
 /** The same bouquet as the demo and the poster: the template's own defaults. */
 const FIELDS: BouquetFields = { stems: DEFAULT_STEMS, wrap: "kraft", ribbon: "cream", backdrop: "linen", seed: 1 };

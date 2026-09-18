@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { arrange, expandStems } from "@/templates/bouquet/arrange";
 import { FLOWERS, MAX_STEMS, toneOf } from "@/templates/bouquet/catalogue";
-import { DEFAULT_STEMS, fieldsSchema } from "@/templates/bouquet/schema";
+import { DEFAULT_STEMS } from "@/templates/bouquet/catalogue";
+import { fieldsSchema } from "@/templates/bouquet/schema";
 
 describe("bouquet", () => {
   it("arranges the same stems the same way every time, and differently per seed", () => {
