@@ -1,0 +1,26 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Tue, Sep 15|at 11:48 PM", "messages": [
+      { "from": "them", "link": { "title": "maya turns 20", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+      { "from": "them", "text": "WAIT" },
+      { "from": "them", "text": "wrong chat dont open that" }
+    ] },
+    { "type": "chat", "timestamp": "Tue, Sep 15|at 11:48 PM", "messages": [
+      { "from": "them", "link": { "title": "maya turns 20", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+      { "from": "them", "text": "WAIT" },
+      { "from": "them", "text": "wrong chat dont open that" },
+      { "from": "me", "text": "Too late" },
+      { "from": "me", "text": "Why is there a cake with 20 candles on it" },
+      { "from": "them", "text": "it was for jake to check" },
+      { "from": "them", "text": "if its cringe" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "it was for jake to check" },
+      { "from": "them", "text": "if its cringe" },
+      { "from": "me", "text": "My birthday is in March" },
+      { "from": "them", "text": "i know" },
+      { "from": "me", "text": "It’s September" },
+      { "from": "them", "text": "i know.", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -698,6 +698,17 @@ too scared to send ("12 reasons I love you"). The morning after, he blames the d
 with the date: "U weren’t drunk in June". The gift is the confession, which is what the buyer is
 really buying.
 
+## More in the 5 AM shape: 112 to 114
+
+111's shape with three new engines, each something everybody has done or seen on their own phone:
+the wrong chat (112 — a link with her name on it, then "dont open that"), somebody else holding his
+phone (113 — his mum, in full sentences), and the dad who signs every text (114). The rules stay:
+slide 1 is a whole open loop in three bubbles, the slides are one thread scrolling, her phone
+autocorrects and theirs doesn't, a heart lands on the heaviest line, and the link is the reason the
+conversation exists. The captions do different jobs — 112 asks a question people answer about the
+post ("is it cringe?"), 113 is a reaction, and 114 asks to be sent to somebody's dad, because the
+share lands on the person with the photos and the card.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -949,5 +960,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 109 | 12 years of tuesday coffees | best friend moving abroad | Scrapbook (demo) | its own |
 | 110 | now she's the exhibit | mum, "is this a virus" | Museum (demo) | its own |
 | 111 | he's drunk | the 5 AM drunk text, one thread scrolling | Jar of Reasons (demo) | — |
+| 112 | wrong chat | the accidental send, six months early | Birthday Cinema | — |
+| 113 | this is his mum | somebody else on his phone | Scrapbook | — |
+| 114 | Love Dad | the dad sign-off, uni week | Our Timeline | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

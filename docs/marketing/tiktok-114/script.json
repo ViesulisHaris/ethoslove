@@ -1,0 +1,26 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sun 13 Sept|at 07:02", "messages": [
+      { "from": "them", "text": "Good morning. Are you awake. Love Dad" },
+      { "from": "me", "text": "Dad it’s 7am" },
+      { "from": "me", "text": "U don’t have to sign every text" }
+    ] },
+    { "type": "chat", "timestamp": "Sun 13 Sept|at 07:02", "messages": [
+      { "from": "them", "text": "Good morning. Are you awake. Love Dad" },
+      { "from": "me", "text": "Dad it’s 7am" },
+      { "from": "me", "text": "U don’t have to sign every text" },
+      { "from": "them", "text": "Your mother says I should send this before your first lecture. Love Dad" },
+      { "from": "them", "link": { "title": "for my girl", "domain": "tryethos.io", "image": "og", "name": "Sophie" } },
+      { "from": "them", "text": "I made it myself. Love Dad" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "I made it myself. Love Dad" },
+      { "ts": "Sun 13 Sept|at 07:31" },
+      { "from": "me", "text": "Dad" },
+      { "from": "me", "text": "Why is there a photo of me in a bin" },
+      { "from": "them", "text": "You climbed in yourself. You were 4. Love Dad" },
+      { "from": "me", "text": "I’m crying in my halls" },
+      { "from": "them", "text": "Me too. Love Dad", "tapback": "heart" }
+    ] }
+  ]
+}
