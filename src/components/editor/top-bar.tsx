@@ -45,7 +45,7 @@ export function TopBar({
       <div className="flex h-14 items-center gap-2 px-2 sm:gap-3 sm:px-5">
         <Link
           href="/templates"
-          className="flex h-11 shrink-0 items-center gap-2 rounded-full pr-3 pl-2 text-sm text-ink-soft hover:bg-ink/5"
+          className="flex h-11 shrink-0 items-center gap-2 rounded-full pr-3 pl-2 text-sm text-ink-soft hover:bg-ink/5 max-[359px]:pr-2"
           aria-label={t("back")}
         >
           <LogoMark className="size-6 max-[359px]:hidden" />
@@ -69,7 +69,7 @@ export function TopBar({
                 onClick={() => onView(v)}
                 // The pill is 32px tall so the bar stays light; `after` carries the touch to 44.
                 className={cn(
-                  "relative min-w-0 truncate rounded-full px-1 text-[13px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2",
+                  "relative min-w-0 truncate rounded-full px-1 text-[13px] font-medium transition-colors after:absolute after:inset-x-0 after:-inset-y-2 max-[374px]:px-0.5 max-[374px]:text-[12px]",
                   view === v ? "bg-ink text-paper" : "text-ink-soft",
                 )}
               >
@@ -81,7 +81,7 @@ export function TopBar({
         <Button
           onClick={onPublish}
           disabled={publishing}
-          className="relative h-10 shrink-0 rounded-full px-5 text-sm shadow-glow after:absolute after:inset-x-0 after:-inset-y-0.5"
+          className="relative h-10 shrink-0 rounded-full px-5 text-sm shadow-glow after:absolute after:inset-x-0 after:-inset-y-0.5 max-[374px]:px-3.5"
         >
           {t("publish")}
         </Button>
