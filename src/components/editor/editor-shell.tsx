@@ -22,6 +22,7 @@ import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
 import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
+import { FormSkeleton } from "./form-skeleton";
 
 export type EditorShellProps = {
   slug: string;
@@ -196,7 +197,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                 <ExtrasSection manifest={manifest} />
               </div>
             ) : (
-              <SkeletonForm />
+              <FormSkeleton />
             )}
           </div>
         </div>
@@ -228,21 +229,6 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         paymentsEnabled={paymentsEnabled}
         resume={resumePublish}
       />
-    </div>
-  );
-}
-
-function SkeletonForm() {
-  return (
-    <div className="flex flex-col gap-8" aria-hidden="true">
-      {[0, 1, 2].map((i) => (
-        <div key={i} className="flex flex-col gap-3">
-          <div className="h-3 w-10 rounded bg-ink/10" />
-          <div className="h-6 w-2/3 rounded bg-ink/10" />
-          <div className="h-11 rounded-xl bg-ink/5" />
-          <div className="h-11 rounded-xl bg-ink/5" />
-        </div>
-      ))}
     </div>
   );
 }
