@@ -3,6 +3,7 @@
  * JSON, drawn to iOS 18 Messages at @3x: 17pt text, 18pt corners, colour Tapbacks and rich link
  * previews. Uses the Mac's system font through Chromium, so the type is the real thing.
  *   node scripts/tiktok-slides.mjs docs/marketing/tiktok-01/script.json docs/marketing/tiktok-01
+ * Add --sheet for sheet.png: the whole post at a quarter size, hand-made slides as labelled gaps.
  *
  * Message shapes: { from: "me"|"them", text } · { image: true } · { typing: true } · { ts } ·
  * { system } (a grey note such as "You unsent a message.") ·
@@ -36,7 +37,18 @@ const face = (file) => readFileSync(join(import.meta.dirname, "../src/fonts", fi
 const SERIF = face("newsreader-regular.ttf");
 const SERIF_ITALIC = face("newsreader-italic.ttf");
 
-const [scriptPath, outDir] = [process.argv[2], process.argv[3] ?? "."];
+// The type is SF Pro, which a Mac has as its system font, so there these are the real thing. Anywhere
+// else Chromium used to fall through the stack to Arial — wider, rounder, and the half-second tell.
+// Inter (OFL, scripts/fonts) is embedded as a stand-in only a non-Mac ever reaches: at 97% it sets
+// every bubble of carousel 91 within 2px of the Mac's widths, line breaks included, because at these
+// sizes it picks its Display cut just as SF does. Final posts are still best rendered on the Mac.
+const STAND_IN = readFileSync(join(import.meta.dirname, "fonts/Inter-Variable.ttf")).toString("base64");
+const STAND_IN_FACE = `@font-face{font-family:"iMessage Stand-in";src:url(data:font/ttf;base64,${STAND_IN}) format("truetype");font-weight:100 900;size-adjust:97%}`;
+const SYSTEM = `-apple-system,BlinkMacSystemFont,"SF Pro Text","iMessage Stand-in","Helvetica Neue",Helvetica,Arial,sans-serif`;
+
+const args = process.argv.slice(2).filter((a) => !a.startsWith("--"));
+const SHEET = process.argv.includes("--sheet");
+const [scriptPath, outDir] = [args[0], args[1] ?? "."];
 const script = JSON.parse(readFileSync(scriptPath, "utf8"));
 mkdirSync(outDir, { recursive: true });
 
@@ -140,11 +152,11 @@ function html(slide) {
     })
     .join("");
 
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF_ITALIC}) format("truetype");font-style:italic}
     html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden}
-    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    body{font-family:${SYSTEM};color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     .stage{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 48px 0 42px}
     .ts{text-align:center;color:#8e8e93;font-size:35px;margin:0 0 30px;letter-spacing:-.2px}
     .ts b{font-weight:600}
@@ -280,11 +292,11 @@ function igHtml(slide) {
     })
     .join("");
 
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF_ITALIC}) format("truetype");font-style:italic}
     html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden}
-    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    body{font-family:${SYSTEM};color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     .ig-head{position:absolute;left:0;right:0;top:0;height:300px;padding:150px 60px 0 30px;box-sizing:border-box;display:flex;align-items:center;background:#000;z-index:3}
     .ig-head>svg{width:78px;height:78px;flex:none}
     .ig-avatar{width:112px;height:112px;border-radius:50%;overflow:hidden;flex:none;margin-left:12px}
@@ -366,11 +378,11 @@ function msgHtml(slide) {
     })
     .join("");
 
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF_ITALIC}) format("truetype");font-style:italic}
     html,body{margin:0;background:#fff;width:1080px;height:1920px;overflow:hidden}
-    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;color:#000;-webkit-font-smoothing:antialiased}
+    body{font-family:${SYSTEM};color:#000;-webkit-font-smoothing:antialiased}
     .ms-thread{position:absolute;inset:0;padding:180px 34px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:34px}
     .ms-ts{text-align:center;color:#8e8e93;font-size:36px;font-weight:500;margin:6px 0}
     .ms-row{display:flex;align-items:flex-end;gap:22px}
@@ -400,9 +412,9 @@ function photoHtml(slide) {
   const bg = src
     ? `background-image:url(${src});background-size:cover;background-position:center`
     : "background:radial-gradient(120% 90% at 50% 20%,#2b3a55,#141a26 60%,#080b12)";
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
-    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif}
+    body{font-family:${SYSTEM}}
     .ph{position:absolute;inset:0;${bg}}
     .ph:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.12) 40%,rgba(0,0,0,.45))}
     .cap{position:absolute;left:80px;right:80px;top:50%;transform:translateY(-50%);text-align:center;color:#fff;font-size:58px;line-height:1.22;font-weight:600;letter-spacing:-.6px;text-shadow:0 4px 26px rgba(0,0,0,.75);z-index:2}
@@ -410,17 +422,55 @@ function photoHtml(slide) {
   </style></head><body><div class="ph"></div>${slide.caption ? `<div class="cap">${esc(slide.caption).replace(/\n/g, "<br>")}</div>` : ""}${src ? "" : `<div class="miss">drop ${esc(slide.src ?? "cover.jpg")} in this folder and run it again</div>`}</body></html>`;
 }
 
+/** On the contact sheet only: a slide somebody still has to screenshot, and what goes in it. */
+function gapHtml(slide, n) {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
+    html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#15151a}
+    body{font-family:${SYSTEM};color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 110px;box-sizing:border-box;border:10px dashed #3a3a44}
+    .n{font-size:40px;color:#8e8e93;letter-spacing:6px;text-transform:uppercase}
+    .note{margin:48px 0 0;font-size:48px;line-height:1.35;color:#d8d8e0}
+  </style></head><body><div class="n">${String(n).padStart(2, "0")} · ${esc(slide.type)} · yours</div>${slide.note ? `<p class="note">${esc(slide.note)}</p>` : ""}</body></html>`;
+}
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+// The stand-in is a data URL, so it loads after first use; a slide shot before it lands is set in the
+// very Arial it is there to prevent.
+const settle = () =>
+  page.evaluate(async () => {
+    for (const w of [400, 600, 700]) await document.fonts.load(`${w} 51px "iMessage Stand-in"`);
+    await document.fonts.ready;
+  });
+const sheet = [];
 let n = 0;
 for (const slide of script.slides) {
   n += 1;
   const draw = slide.type === "photo" ? photoHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
-  if (slide.type !== "chat" && slide.type !== "photo") continue;
+  if (slide.type !== "chat" && slide.type !== "photo") {
+    if (SHEET) {
+      await page.setContent(gapHtml(slide, n));
+      await settle();
+      sheet.push(await page.screenshot());
+    }
+    continue;
+  }
   await page.setContent(draw(slide));
+  await settle();
   await page.waitForTimeout(150);
   const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
-  await page.screenshot({ path: file });
+  sheet.push(await page.screenshot({ path: file }));
+  console.log("wrote", file);
+}
+
+// `--sheet`: every slide in order at a quarter size, so a post can be read the way someone swipes it.
+if (SHEET && sheet.length) {
+  const cols = Math.min(sheet.length, 6);
+  const rows = Math.ceil(sheet.length / cols);
+  const cells = sheet.map((b) => `<img src="data:image/png;base64,${b.toString("base64")}">`).join("");
+  await page.setViewportSize({ width: cols * 290 + 20, height: rows * 510 + 20 });
+  await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
+  const file = join(outDir, "sheet.png");
+  await page.screenshot({ path: file, fullPage: true });
   console.log("wrote", file);
 }
 await browser.close();

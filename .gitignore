@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Vercel import file with real values
 .env.vercel
+# Review-only contact sheets from `tiktok-slides.mjs --sheet`: not a slide, never to be posted.
+/docs/marketing/*/sheet.png
+/.tmp-calib/
