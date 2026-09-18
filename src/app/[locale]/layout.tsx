@@ -12,15 +12,18 @@ import { RefCapture } from "@/components/shared/ref-capture";
 import { SiteAnalytics } from "@/components/shared/analytics";
 import "../globals.css";
 
+// `subsets` is only what gets preloaded. Every subset is still declared, so a name like Mārtiņš
+// or Łucja fetches latin-ext the moment it appears; English and Spanish never need it, and
+// preloading it cost every first visit five font files (~250 KB) that no page drew.
 const sans = Schibsted_Grotesk({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
   style: ["normal", "italic"],
 });
 
 const display = Newsreader({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
   style: ["normal", "italic"],
@@ -56,7 +59,7 @@ const coverScript = Caveat_Brush({
 });
 
 const caveat = Caveat({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-hand",
   display: "swap",
 });
