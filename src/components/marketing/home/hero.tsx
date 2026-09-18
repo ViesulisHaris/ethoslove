@@ -79,9 +79,15 @@ export function Hero() {
           </div>
           <p className="mt-4 text-sm text-cream/55">{t("ctaNote")}</p>
 
-          <dl className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+          {/*
+           * Figures, not buttons. They were frosted-glass tiles — the treatment "Watch the demo"
+           * uses just above them — so they looked like four more things to press, and they were
+           * where most of the homepage's dead taps landed (Clarity, 18 Sep). A hairline and the
+           * numbers are enough to read as facts.
+           */}
+          <dl className="mt-12 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-6 border-t border-cream/15 pt-7 sm:grid-cols-4">
             {(["free", "noAccount", "once", "langs"] as const).map((k) => (
-              <div key={k} className="rounded-2xl px-4 py-4 glass-cream">
+              <div key={k}>
                 <dt className="font-display text-[1.9rem] leading-none tracking-tight text-cream">
                   {t(`facts.${k}.a`)}
                 </dt>
