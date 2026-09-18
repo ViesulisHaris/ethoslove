@@ -1,6 +1,6 @@
 # TikTok carousel 104 · "it was just a summer thing" (part 1 of 2 — she leaves, he says nothing)
 
-Post **21:00 UK**, dark iMessage, the story format (98): a photo, then five chat slides. Part 2 is 105.
+Post **21:00 UK**, dark iMessage. Five chat slides, the hook drawn over the first. Part 2 is 105.
 
 ## Why this one
 
@@ -8,13 +8,15 @@ Everything in 98 to 103 is **him** leaving, by plane, from a couple who were alr
 the other half of September that every 18-year-old is living this week: **she** leaves, for uni, by
 train, from something neither of them ever called a relationship. The fight is not about the distance
 — it is about the label. "we said summer" is the most common lie in the age group, and the viewer
-knows it is a lie from the first slide, because the photo already told them.
+knows it is a lie from the first slide, because the hook already told them.
 
 - **The hook is a paradox, six words each side** (@tingarchive14's top two are both this shape):
   *it was just a summer thing* / *he bought a railcard*. Nobody buys a railcard for a summer thing.
+- **No cover photo: the post opens on the hook and the first texts.** The paradox does the job a
+  picture would, and the thread starts moving on the first swipe.
 - **The viewer knows more than she does.** She spends five slides thinking it was nothing to him; the
-  cover said otherwise before she typed a word. That is the engine — the comments shout at her, not
-  at him: "GIRL HE BOUGHT A RAILCARD".
+  hook said otherwise before she typed a word. That is the engine — the comments shout at her, not at
+  him: "GIRL HE BOUGHT A RAILCARD".
 - **She is slightly in the wrong, at 2am** ("its like it was nothing to u"), and he is not the
   villain: "if i say it u wont go." is a sacrifice, not a dodge. Nobody is the villain, including
   the distance.
@@ -31,23 +33,14 @@ Her: Lottie, 18, off to Edinburgh. Him: Rory, staying in London.
 
 | # | File | On screen |
 |---|---|---|
-| 1 | `slide-01.png` | **POV: it was just a summer thing. / he bought a railcard.** over the cover photo |
-| 2 | `slide-02.png` | Thu 13 Aug at 08:04 "I GOT IN" · "EDINBURGH" · "no way" · "IM GOING TO EDINBURGH" · "thats so far" · "its 4 hours on a train its not the moon" |
-| 3 | `slide-03.png` | Wednesday 23:12 "so what happens sunday" · "u get on a train" · "and us" · "we said summer" · "i know what we said" |
-| 4 | `slide-04.png` | Yesterday 01:48 "u havent said one thing all week" · "not one" · "its like it was nothing to u" · "go to sleep" · "say one thing" · **"if i say it u wont go."** |
-| 5 | `slide-05.png` | Today 08:51 "ur not even coming to the platform" · "barriers as far as i go" · "rory" · "ur gonna miss it" |
-| 6 | `slide-06.png` | Today 09:01 **the link: "for the train"** · "when its moving" |
+| 1 | `slide-01.png` | **hook: POV: it was just a summer thing. / he bought a railcard.** · Thu 13 Aug at 08:04 "I GOT IN" · "EDINBURGH" · "no way" · "IM GOING TO EDINBURGH" · "thats so far" · "its 4 hours on a train its not the moon" |
+| 2 | `slide-02.png` | Wednesday 23:12 "so what happens sunday" · "u get on a train" · "and us" · "we said summer" · "i know what we said" |
+| 3 | `slide-03.png` | Yesterday 01:48 "u havent said one thing all week" · "not one" · "its like it was nothing to u" · "go to sleep" · "say one thing" · **"if i say it u wont go."** |
+| 4 | `slide-04.png` | Today 08:51 "ur not even coming to the platform" · "barriers as far as i go" · "rory" · "ur gonna miss it" |
+| 5 | `slide-05.png` | Today 09:01 **the link: "for the train"** · "when its moving" |
 
 Results day was Thursday 13 August 2026, so the first timestamp is the real one. The rest are this
 week as her phone would show them on Sunday morning — "Yesterday" for the 2am one.
-
-## The cover
-
-`cover.jpg` in this folder, then run the renderer again. **Two people from behind on a wall at dusk,
-end of summer, no faces.** Your own photo on your own phone, a little soft. Never Pinterest (it is
-somebody's), never AI (the comments find it, and TikTok wants it labelled). Use the same couple and the
-same light for 105 — one picture per series is what @tingarchive14 does, and it is why the account
-reads as one story.
 
 ## Post (tt-couple)
 
@@ -57,7 +50,7 @@ Hashtags: `#lovestory #romance #part1` — genre, not reach. No #fyp.
 
 Sound: slow, sincere, a title that reads like the story. Turned down.
 
-Hooks for slide 1 — swap for each repost:
+Hooks for slide 1 — swap for each repost (`"hook"` in script.json, then run the renderer):
 
 1. POV: it was just a summer thing. he bought a railcard.
 2. POV: they said it would end with summer. he checked the trains in july.
