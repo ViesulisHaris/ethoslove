@@ -2,9 +2,10 @@
 
 import { Component, type ReactNode } from "react";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { reportClientError } from "@/lib/client-error";
 import { giftString } from "./i18n";
 
-type Props = { children: ReactNode; locale: GiftLocale };
+type Props = { children: ReactNode; locale: GiftLocale; slug?: string };
 type State = { error: Error | null };
 
 /** Keeps a template crash from taking down the page chrome around it. */
@@ -17,6 +18,8 @@ export class TemplateErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error) {
     console.error("[gift] template crashed", error);
+    // The one crash a recipient sees. On /g/<id> the path doesn't name the template, so send it.
+    reportClientError(error, "gift", this.props.slug);
   }
 
   render() {

@@ -68,8 +68,14 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const [resumeDismissed, setResumeDismissed] = useState(false);
   const resumePublish = search.get("resume") === "publish";
   const hydrated = useEditor((s) => s.hydrated);
+  const storeSlug = useEditor((s) => s.slug);
+  const storeGiftId = useEditor((s) => s.giftId);
   const save = useEditor((s) => s.save);
   const authed = useEditor((s) => s.authed);
+  // The store outlives the page. Arriving from another editor, it is still hydrated with that
+  // gift until init() below replaces it, so this template's form would be drawn over another
+  // template's data (and anything touched in that moment saved under this template's key).
+  const ready = hydrated && storeSlug === slug && (!remote || storeGiftId === remote.id);
 
   // Load the template module (schema + field meta), then hydrate the store.
   useEffect(() => {
@@ -171,7 +177,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]">
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
-            {hydrated && mod ? (
+            {ready && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0">
                 <WhoSection>
                   {mod.leadFields ? (
@@ -211,7 +217,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         </div>
       </div>
       <PublishSheet
-        open={publishOpen || (resumePublish && hydrated && authed && !resumeDismissed)}
+        open={publishOpen || (resumePublish && ready && authed && !resumeDismissed)}
         onOpenChange={(v) => {
           setPublishOpen(v);
           if (!v) setResumeDismissed(true);

@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 export function PreviewPane({ slug, className, fullscreen = false }: { slug: string; className?: string; fullscreen?: boolean }) {
   const t = useTranslations("editor");
   const data = useEditor((s) => s.data);
-  const hydrated = useEditor((s) => s.hydrated);
+  // Only once the store holds this template's gift; see EditorShell's `ready`.
+  const hydrated = useEditor((s) => s.hydrated && s.slug === slug);
   const [playing, setPlaying] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
   if (!hydrated) return null;

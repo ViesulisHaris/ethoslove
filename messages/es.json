@@ -762,7 +762,8 @@
   "error": {
     "title": "Algo falló de nuestro lado",
     "detail": "Ya lo sabemos. Inténtalo de nuevo en un momento.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "code": "Código de error {code}"
   },
   "checkout": {
     "paid": {

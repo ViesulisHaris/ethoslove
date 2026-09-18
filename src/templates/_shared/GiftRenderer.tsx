@@ -103,7 +103,7 @@ export function GiftRenderer({
         data-template={slug}
       >
         {ready && coverOpen && Template && resolved ? (
-          <TemplateErrorBoundary locale={resolved.locale}>
+          <TemplateErrorBoundary locale={resolved.locale} slug={slug}>
             <ReplyModeContext.Provider value={replyMode}>
               <Template
                 key={replayKey}

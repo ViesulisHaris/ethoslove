@@ -762,7 +762,8 @@
   "error": {
     "title": "Something broke on our side",
     "detail": "We've been notified. Try again in a moment.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "code": "Error code {code}"
   },
   "checkout": {
     "paid": {

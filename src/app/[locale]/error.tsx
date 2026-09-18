@@ -1,41 +1,50 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { isStaleBuild } from "@/lib/stale-build";
+import { errorCode, reportClientError } from "@/lib/client-error";
+import { shouldAutoReload } from "@/lib/stale-build";
 
 /**
- * A page open while we deploy is holding the old build's HTML, and every template is a lazy chunk
- * whose filename changed underneath it. The next import 404s, React throws, and this boundary
- * catches it — which is how "I tried to open Jar of Reasons" ends on an error screen for something
- * that is not broken. One reload fixes that, so do the reload instead of showing the screen. Once
- * per tab, so an error that is genuinely ours can never put the page in a loop.
+ * A tab that outlived its build asks for a chunk the current one doesn't have, and lands here for
+ * something that is not broken. A reload fixes that, so reload instead of showing the screen —
+ * unless this tab reloaded itself moments ago, which would make it a loop (see shouldAutoReload).
+ * Anything else is a real crash: it goes to the logs, and the screen shows a code to match it by.
  */
-const RELOADED = "ethos:stale-chunk-reload";
+const RELOADED_AT = "ethos:stale-chunk-reload";
 
-function shouldReload(error: Error): boolean {
-  if (typeof window === "undefined" || !isStaleBuild(error)) return false;
+/** When this tab last reloaded itself; null if never, undefined if there is no storage to ask. */
+function lastAutoReload(): number | null | undefined {
   try {
-    return !sessionStorage.getItem(RELOADED);
+    const value = sessionStorage.getItem(RELOADED_AT);
+    return value === null ? null : Number(value);
   } catch {
-    return true; // private window, no storage: one reload still beats the error screen
+    return undefined;
   }
 }
 
 export default function LocaleError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useTranslations("error");
-  const reloading = shouldReload(error);
+  // Decided once, when the screen mounts (each new error mounts it afresh), so a re-render while
+  // the reload is under way can't flash the screen. With no storage to remember a reload by, one
+  // that didn't help would repeat forever: don't.
+  const [reloading] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const last = lastAutoReload();
+    return last !== undefined && shouldAutoReload(error, last, Date.now());
+  });
 
   useEffect(() => {
     if (!reloading) {
       console.error(error);
+      reportClientError(error, "page");
       return;
     }
     try {
-      sessionStorage.setItem(RELOADED, "1");
+      sessionStorage.setItem(RELOADED_AT, String(Date.now()));
     } catch {
-      // nothing to remember it with; the reload below still happens
+      // unreachable: reloading is only chosen when storage answered
     }
     window.location.reload();
   }, [reloading, error]);
@@ -50,6 +59,7 @@ export default function LocaleError({ error, reset }: { error: Error & { digest?
       <Button onClick={reset} className="mt-8 rounded-full">
         {t("retry")}
       </Button>
+      <p className="mt-6 text-xs text-muted-foreground/70">{t("code", { code: errorCode(error) })}</p>
     </div>
   );
 }
