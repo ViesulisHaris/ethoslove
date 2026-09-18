@@ -63,7 +63,7 @@ export default async function TemplateDetailPage({ params }: PageProps<"/[locale
         ]}
       />
       <div className="container-x grid gap-12 pt-10 pb-24 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16 lg:pt-16">
-        <div className="lg:sticky lg:top-24">
+        <div className="min-w-0 lg:sticky lg:top-24">
           <TemplatePhonePreview slug={manifest.slug} locale={l} />
           <p className="mt-4 text-center text-xs text-muted-foreground">{t("templates.previewHint")}</p>
         </div>

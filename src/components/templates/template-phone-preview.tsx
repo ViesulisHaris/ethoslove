@@ -12,7 +12,11 @@ export function TemplatePhonePreview({ slug, locale, autoStart = false }: { slug
   const t = useTranslations("templates");
   const [live, setLive] = useState(autoStart);
   return (
-    <PhoneFrame width={340} className="mx-auto max-w-full">
+    // 340px, or the page's width inside its 20px gutters on a phone narrower than that: a fixed
+    // 340 made the whole page scroll sideways on a 320px screen, and the frame's side button
+    // poked out at 360. The frame derives the gift's notch clearance from this width, so it has
+    // to be the width it is actually drawn at, not the 340 it was squeezed from.
+    <PhoneFrame width="min(340px, 100vw - 2.5rem)" className="mx-auto max-w-full">
       {live ? (
         <GiftRenderer slug={slug} mode="demo" demoLocale={locale} />
       ) : (
