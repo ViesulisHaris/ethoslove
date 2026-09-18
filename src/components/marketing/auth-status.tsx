@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 /**
@@ -18,18 +17,26 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
   const ghost = cn(block && "h-11", dark && "text-cream/85 hover:bg-white/10 hover:text-cream");
 
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) return;
+    // Most visitors have never signed in, and without a session cookie there is no one to ask
+    // about — so they never download the Supabase client (60 KB) at all. Same test as the proxy's
+    // (src/lib/supabase/proxy.ts).
+    if (!/(?:^|;\s*)sb-[^=]*auth-token/.test(document.cookie)) return;
     let active = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (active) setAuthed(Boolean(data.user));
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setAuthed(Boolean(session?.user));
+    let unsubscribe = () => {};
+    void import("@/lib/supabase/client").then(({ getSupabaseBrowserClient }) => {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase || !active) return;
+      supabase.auth.getUser().then(({ data }) => {
+        if (active) setAuthed(Boolean(data.user));
+      });
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+        setAuthed(Boolean(session?.user));
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
     });
     return () => {
       active = false;
-      sub.subscription.unsubscribe();
+      unsubscribe();
     };
   }, []);
 
