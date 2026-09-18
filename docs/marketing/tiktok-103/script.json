@@ -1,0 +1,38 @@
+{
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: she was going to end it.\nhe was finishing this." },
+    { "type": "chat", "timestamp": "Today 21.30", "messages": [
+      { "from": "me", "text": "can we talk tonight" },
+      { "from": "them", "text": "cant tonight sorry" },
+      { "from": "me", "text": "u said that yesterday" },
+      { "from": "them", "text": "i know." },
+      { "from": "me", "text": "u always say that now" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "i think we should stop" },
+      { "from": "them", "text": "what" },
+      { "from": "me", "text": "ur never here anymore" },
+      { "from": "me", "text": "u dont even notice" },
+      { "from": "them", "text": "wait" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "give me 10 mins" },
+      { "from": "me", "text": "for what" },
+      { "from": "them", "text": "it wasnt ready but" },
+      { "from": "them", "link": { "title": "every night since august", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+      { "from": "me", "text": "whats this" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "this is where u were" },
+      { "from": "them", "text": "every night." },
+      { "from": "me", "text": "i thought u were bored of me" },
+      { "from": "them", "text": "maya." },
+      { "from": "them", "text": "look at the dates." }
+    ] },
+    { "type": "chat", "timestamp": "Today 22.49", "messages": [
+      { "from": "me", "text": "i was going to end it tonight" },
+      { "from": "me", "text": "i didnt" },
+      { "from": "me", "text": "im coming over", "status": "Delivered" }
+    ] }
+  ]
+}

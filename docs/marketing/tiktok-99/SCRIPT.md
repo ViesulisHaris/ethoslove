@@ -1,6 +1,6 @@
 # TikTok carousel 99 · "he packed everything except you" — part 1
 
-The long-distance story from 98, told in iMessage instead of the light DM thread, and rebuilt on what
+The long-distance story from 98, told in dark iMessage, and rebuilt on what
 @tingarchive14 is doing. Six slides: a photo, four chats, one chat. Post 21:00 UK.
 
 ## What that account taught this one
@@ -43,7 +43,7 @@ Three more things from their 3.6M post:
 ## Built on their 2.7M post, slide for slide
 
 `He promised he'd still be there.` (2.7M) is a long-distance story too, so it is the template for this
-one. Cover, then five chat slides, light-mode iMessage, and every slide does one job:
+one. Cover, then five chat slides, dark iMessage, and every slide does one job:
 
 | # | Their 2.7M | This one |
 |---|---|---|

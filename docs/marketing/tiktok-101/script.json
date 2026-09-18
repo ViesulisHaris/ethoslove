@@ -1,0 +1,40 @@
+{
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: they broke up in june.\nhe finished it anyway." },
+    { "type": "chat", "timestamp": "Today 23.08", "messages": [
+      { "from": "them", "text": "hey" },
+      { "from": "me", "text": "hi??" },
+      { "from": "them", "text": "sorry. i know its been ages" },
+      { "from": "me", "text": "4 months" },
+      { "from": "them", "text": "i know." },
+      { "from": "them", "text": "i have something of urs" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "we broke up in june" },
+      { "from": "them", "text": "i know." },
+      { "from": "me", "text": "u said u didnt feel the same" },
+      { "from": "them", "text": "i know what i said." },
+      { "from": "me", "text": "so what is it" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i started it in may." },
+      { "from": "them", "text": "for ur birthday." },
+      { "from": "them", "link": { "title": "for ur 21st", "domain": "tryethos.io", "image": "og", "name": "Lily" } },
+      { "from": "me", "text": "why would u finish it" },
+      { "from": "them", "text": "because it was urs." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "the last page" },
+      { "from": "me", "text": "u wrote it in august" },
+      { "from": "them", "text": "yeah." },
+      { "from": "me", "text": "u said u didnt feel the same" },
+      { "from": "them", "text": "i wasnt ok in june, lily." },
+      { "from": "them", "text": "i didnt want u to watch that." }
+    ] },
+    { "type": "chat", "timestamp": "Today 23.51", "messages": [
+      { "from": "me", "text": "are u home" },
+      { "from": "me", "text": "open the door" },
+      { "from": "me", "text": "i read the last page", "status": "Delivered" }
+    ] }
+  ]
+}

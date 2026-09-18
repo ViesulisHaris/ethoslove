@@ -601,7 +601,7 @@ little longer to keep. 🤍`). Two of the three I opened use "The Scientist". Th
 distance is something ill never understand" / "if he really loved her he would drop everything and go
 with her". The comments are a verdict on a choice, every time.
 
-`"theme": "light"` on a script draws iMessage in light mode now, to match. 99 and 100 are rebuilt on
+`"theme": "light"` on a script draws iMessage in light mode, to match — though dark is what we post; the shape is what matters, not the colour. 99 and 100 are rebuilt on
 the five-slide shape: joy with the seed, the distance, the gift as the real reason (the link), the peak
 with a name, and an ending — part 2's is "i can see u", Delivered, because he is looking at her and not
 at his phone.
@@ -838,7 +838,10 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 96 | so ur not gonna say anything | she thought he forgot; it was 00:00 | any, one frame | — |
 | 97 | do u even like me | 2am, and he'd had it since June | any, one frame | — |
 | 98 | the boring stuff | long distance, part 1, messenger style | Scrapbook (Memories) | Classic |
-| 99 | he packed everything except you | long distance part 1, light iMessage, 5 chat slides | Scrapbook (Memories) | Classic |
+| 99 | he packed everything except you | long distance part 1, 5 chat slides | Scrapbook (Memories) | Classic |
 | 100 | the link still works | part 2, the link again, ends Delivered | Scrapbook (Memories) | Classic |
+| 101 | he finished it anyway | broke up in June, finished the gift anyway | Scrapbook (Memories) | Classic |
+| 102 | everyone knew but her | friends to lovers, 3 years | Scrapbook (Blossom) | Classic |
+| 103 | she was going to end it | the misunderstanding, resolved in a night | Scrapbook (Memories) | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

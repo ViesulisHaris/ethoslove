@@ -1,41 +1,142 @@
 {
-  "theme": "light",
   "slides": [
-    { "type": "photo", "src": "cover.jpg", "caption": "POV: he's been gone 3 weeks.\nthe link still works." },
-    { "type": "chat", "timestamp": "Today|01.06", "messages": [
-      { "from": "them", "text": "ur up late" },
-      { "from": "me", "text": "how do u know" },
-      { "from": "them", "text": "it tells me when u open it." },
-      { "from": "me", "text": "oh my god" },
-      { "from": "them", "text": "4 times tonight." }
-    ] },
-    { "type": "chat", "messages": [
-      { "from": "me", "text": "its 8pm there" },
-      { "from": "them", "text": "ya." },
-      { "from": "me", "text": "so u just sit there waiting for it to say i opened it" },
-      { "from": "them", "text": "no." },
-      { "from": "them", "text": "yes." }
-    ] },
-    { "type": "chat", "messages": [
-      { "from": "me", "text": "i keep going back to this one" },
-      { "from": "me", "link": { "title": "the boring stuff", "domain": "tryethos.io", "image": "og", "name": "Ella" } },
-      { "from": "them", "text": "the bus stop." },
-      { "from": "me", "text": "how did u know" },
-      { "from": "them", "text": "its always the bus stop." }
-    ] },
-    { "type": "chat", "messages": [
-      { "from": "me", "text": "r we still doing this" },
-      { "from": "them", "text": "doing what" },
-      { "from": "me", "text": "this, finn." },
-      { "from": "them", "text": "u opened it 4 times tonight." },
-      { "from": "me", "text": "thats not an answer" },
-      { "from": "them", "text": "its 87 days." }
-    ] },
-    { "type": "chat", "timestamp": "Sat 14 Dec|at 17.42", "messages": [
-      { "from": "me", "text": "im at the barrier" },
-      { "from": "me", "text": "which exit r u" },
-      { "from": "me", "text": "finn" },
-      { "from": "me", "text": "i can see u", "status": "Delivered" }
-    ] }
+    {
+      "type": "photo",
+      "src": "cover.jpg",
+      "caption": "POV: he's been gone 3 weeks.\nthe link still works."
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|01.06",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur up late"
+        },
+        {
+          "from": "me",
+          "text": "how do u know"
+        },
+        {
+          "from": "them",
+          "text": "it tells me when u open it."
+        },
+        {
+          "from": "me",
+          "text": "oh my god"
+        },
+        {
+          "from": "them",
+          "text": "4 times tonight."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its 8pm there"
+        },
+        {
+          "from": "them",
+          "text": "ya."
+        },
+        {
+          "from": "me",
+          "text": "so u just sit there waiting for it to say i opened it"
+        },
+        {
+          "from": "them",
+          "text": "no."
+        },
+        {
+          "from": "them",
+          "text": "yes."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i keep going back to this one"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "the boring stuff",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ella"
+          }
+        },
+        {
+          "from": "them",
+          "text": "the bus stop."
+        },
+        {
+          "from": "me",
+          "text": "how did u know"
+        },
+        {
+          "from": "them",
+          "text": "its always the bus stop."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "r we still doing this"
+        },
+        {
+          "from": "them",
+          "text": "doing what"
+        },
+        {
+          "from": "me",
+          "text": "this, finn."
+        },
+        {
+          "from": "them",
+          "text": "u opened it 4 times tonight."
+        },
+        {
+          "from": "me",
+          "text": "thats not an answer"
+        },
+        {
+          "from": "them",
+          "text": "its 87 days."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Sat 14 Dec|at 17.42",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im at the barrier"
+        },
+        {
+          "from": "me",
+          "text": "which exit r u"
+        },
+        {
+          "from": "me",
+          "text": "finn"
+        },
+        {
+          "from": "me",
+          "text": "i can see u",
+          "status": "Delivered"
+        }
+      ]
+    }
   ]
 }

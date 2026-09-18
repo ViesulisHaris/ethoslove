@@ -1,0 +1,38 @@
+{
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: everyone knew\nbut her." },
+    { "type": "chat", "timestamp": "Tue 16.20", "messages": [
+      { "from": "me", "text": "I PASSED" },
+      { "from": "them", "text": "NO WAY" },
+      { "from": "them", "text": "told u" },
+      { "from": "me", "text": "ur the first person i told" },
+      { "from": "them", "text": "i know." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "also i have a date friday" },
+      { "from": "them", "text": "oh" },
+      { "from": "them", "text": "with who" },
+      { "from": "me", "text": "jake from my course" },
+      { "from": "them", "text": "cool." }
+    ] },
+    { "type": "chat", "timestamp": "Thu 00.14", "messages": [
+      { "from": "them", "text": "can i send u something before friday" },
+      { "from": "me", "text": "?" },
+      { "from": "them", "text": "u can ignore it" },
+      { "from": "them", "link": { "title": "3 years", "domain": "tryethos.io", "image": "og", "name": "Sofia" } },
+      { "from": "me", "text": "whats this" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "this starts in year 12" },
+      { "from": "them", "text": "yeah." },
+      { "from": "me", "text": "zac" },
+      { "from": "me", "text": "ur telling me everyone knew" },
+      { "from": "them", "text": "everyone knew, sofia." }
+    ] },
+    { "type": "chat", "timestamp": "Fri 19.58", "messages": [
+      { "from": "me", "text": "i cancelled" },
+      { "from": "me", "text": "where r u" },
+      { "from": "me", "text": "zac", "status": "Delivered" }
+    ] }
+  ]
+}
