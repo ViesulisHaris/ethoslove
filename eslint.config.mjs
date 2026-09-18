@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated from node_modules by scripts/heic-worker.mjs: a library's minified build, not ours.
+    "public/workers/**",
   ]),
 ]);
 
