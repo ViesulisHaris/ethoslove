@@ -360,7 +360,7 @@
       "local": "On this device",
       "failed": "Failed",
       "caption": "Caption",
-      "captionPlaceholder": "Where, when, or what you remember",
+      "captionPlaceholder": "Add a caption",
       "remove": "Remove",
       "rotate": "Rotate",
       "crop": "Crop",
@@ -368,9 +368,10 @@
       "tooMany": "This template holds up to {max} photos.",
       "free10": "Free gifts hold 10 photos. Unlock the template for 20.",
       "failedBanner": "{n, plural, one {One photo didn’t upload.} other {# photos didn’t upload.}}",
+      "failedUnreadable": "{n, plural, one {One photo couldn’t be opened. Try a JPEG or PNG of it.} other {# photos couldn’t be opened. Try JPEG or PNG copies.}}",
       "failedMissing": "{n, plural, one {One photo is no longer on this device. Add it again.} other {# photos are no longer on this device. Add them again.}}",
       "retry": "Retry",
-      "removeFailed": "Remove them",
+      "removeFailed": "{n, plural, one {Remove it} other {Remove them}}",
       "missing": "Not on this device"
     },
     "music": {

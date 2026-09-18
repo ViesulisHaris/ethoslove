@@ -60,6 +60,18 @@ const nextConfig: NextConfig = {
         },
       ],
     },
+    {
+      // Decoder workers (scripts/heic-worker.mjs). After the rule above on purpose: for the same
+      // header, the later rule wins, so these files get this policy instead of the page's. libheif
+      // calls `new Function` while it starts, and a worker loaded from a URL runs under the policy
+      // served with it. It can't touch the page or its DOM, and with default-src 'none' it can't
+      // fetch anything either. Filenames carry the library version, so they never change in place.
+      source: "/workers/:path*",
+      headers: [
+        { key: "Content-Security-Policy", value: "default-src 'none'; script-src 'self' 'unsafe-eval'" },
+        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+      ],
+    },
   ],
 };
 

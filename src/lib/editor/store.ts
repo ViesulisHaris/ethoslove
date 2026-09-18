@@ -522,11 +522,15 @@ export const useEditor = create<EditorState>((set, get) => {
             }));
             touch();
             void uploadAsset(id);
-          } catch (e) {
+          } catch {
             set((s) => ({
               assets: {
                 ...s.assets,
-                [id]: { ...s.assets[id], status: "error", error: e instanceof Error ? e.message : "processing_failed" },
+                // Anything that fails here failed to turn the file into a photo: a format this browser
+                // can't read, a corrupt file, a decoder that ran out of time. It used to keep the
+                // library's own message, which the photos banner read as "try again" or as "no longer
+                // on this device" — neither of which was true, and neither helped.
+                [id]: { ...s.assets[id], status: "error", error: "processing_failed" },
               },
             }));
           }

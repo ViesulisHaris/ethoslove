@@ -1,14 +1,9 @@
 "use client";
 
 import { LIMITS } from "@/config/site";
+import { heicToJpeg, isHeif } from "./heic";
 
 export type ProcessedImage = { blob: Blob; width: number; height: number };
-
-const HEIC_TYPES = new Set(["image/heic", "image/heif", "image/heic-sequence", "image/heif-sequence"]);
-
-function isHeic(file: File): boolean {
-  return HEIC_TYPES.has(file.type) || /\.(heic|heif)$/i.test(file.name);
-}
 
 async function dimensions(blob: Blob): Promise<{ width: number; height: number }> {
   const bitmap = await createImageBitmap(blob);
@@ -18,9 +13,9 @@ async function dimensions(blob: Blob): Promise<{ width: number; height: number }
 }
 
 /**
- * HEIC → JPEG (only when needed, the decoder is ~1MB so it loads lazily), then resize +
- * compress to WebP under LIMITS.photoMaxBytes. Runs in a worker where available. 1600px at
- * ~0.5 MB is more than a phone screen shows, and a third of what we used to upload and serve.
+ * HEIC → JPEG (only when the file really is one; the decoder is ~1MB so it loads only then), then
+ * resize + compress to WebP under LIMITS.photoMaxBytes. 1600px at ~0.5 MB is more than a phone
+ * screen shows, and a third of what we used to upload and serve.
  */
 /**
  * A decoder that never comes back leaves the photo on "Preparing…" for ever, and the publish
@@ -46,10 +41,10 @@ function withDeadline<T>(work: Promise<T>, ms = PREPARE_MS): Promise<T> {
 
 export async function processImageFile(file: File): Promise<ProcessedImage> {
   let source: Blob = file;
-  if (isHeic(file)) {
-    const { default: heic2any } = await import("heic2any");
-    const converted = await withDeadline(heic2any({ blob: file, toType: "image/jpeg", quality: 0.92 }));
-    source = Array.isArray(converted) ? converted[0] : converted;
+  // By its bytes, not its name: a HEIC can arrive as "photo.jpg", and a JPEG as "IMG_1.HEIC".
+  if (await isHeif(file)) {
+    // Twice the final size, so the resize below still has detail to work from.
+    source = await withDeadline(heicToJpeg(file, LIMITS.photoMaxEdgePx * 2));
   }
   const { default: compress } = await import("browser-image-compression");
   const blob = await withDeadline(compress(source as File, {
@@ -57,7 +52,9 @@ export async function processImageFile(file: File): Promise<ProcessedImage> {
     maxWidthOrHeight: LIMITS.photoMaxEdgePx,
     fileType: "image/webp",
     initialQuality: 0.82,
-    useWebWorker: true,
+    // Its worker fetches the library from cdn.jsdelivr.net, which our policy refuses, so every
+    // photo paid for a blocked request and fell back to this thread anyway. Same work, no detour.
+    useWebWorker: false,
     preserveExif: false,
   }));
   const dims = await dimensions(blob);

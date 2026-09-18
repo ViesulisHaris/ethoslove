@@ -39,6 +39,9 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   const processing = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "processing");
   const failed = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "error" && !a.storagePath);
   const retryable = failed.some((a) => reasonOf(a.error) === "network");
+  // A file this browser couldn't turn into a photo is still on the device; saying it isn't sent
+  // people looking for a photo they had just picked.
+  const unreadable = failed.some((a) => ["processing", "type"].includes(reasonOf(a.error)));
   const full = photos.length >= max;
 
   const pick = (files: FileList | null) => {
@@ -93,17 +96,27 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
       {full ? <p className="mt-2 text-xs text-muted-foreground">{t("tooMany", { max })}</p> : photos.length >= LIMITS.free.maxPhotos ? <p className="mt-2 text-xs text-muted-foreground">{t("free10")}</p> : null}
 
       {failed.length > 0 ? (
-        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm" role="alert">
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2.5 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm" role="alert">
           <AlertCircle className="size-4 shrink-0 text-destructive" />
-          <span className="min-w-0 flex-1">{retryable ? t("failedBanner", { n: failed.length }) : t("failedMissing", { n: failed.length })}</span>
-          {retryable ? (
-            <button type="button" onClick={() => void retryUploads()} className="rounded-full bg-ink px-3.5 py-1.5 text-xs font-semibold text-paper">
-              {t("retry")}
+          {/* On a phone the words take the whole line and the buttons go underneath; beside them,
+              the sentence was squeezed into a column five lines tall on an iPhone SE. */}
+          <span className="min-w-0 flex-1 basis-[calc(100%-1.75rem)] sm:basis-0">
+            {retryable
+              ? t("failedBanner", { n: failed.length })
+              : unreadable
+                ? t("failedUnreadable", { n: failed.length })
+                : t("failedMissing", { n: failed.length })}
+          </span>
+          <div className="flex shrink-0 items-center gap-2 pl-7 sm:pl-0">
+            {retryable ? (
+              <button type="button" onClick={() => void retryUploads()} className="h-10 rounded-full bg-ink px-4 text-xs font-semibold text-paper sm:h-8 sm:px-3.5">
+                {t("retry")}
+              </button>
+            ) : null}
+            <button type="button" onClick={() => void dropFailedUploads("photos")} className="h-10 rounded-full border border-border px-4 text-xs font-medium sm:h-8 sm:px-3.5">
+              {t("removeFailed", { n: failed.length })}
             </button>
-          ) : null}
-          <button type="button" onClick={() => void dropFailedUploads("photos")} className="rounded-full border border-border px-3.5 py-1.5 text-xs font-medium">
-            {t("removeFailed")}
-          </button>
+          </div>
         </div>
       ) : null}
 
@@ -178,10 +191,13 @@ function PhotoTile({
 
   return (
     <li ref={setNodeRef} style={style} className={cn("group flex flex-col gap-2", isDragging && "z-10 opacity-80")}>
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-paper-deep shadow-soft">
+      <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-paper-deep shadow-soft @container">
         <img src={photo.url} alt={photo.alt ?? ""} className="h-full w-full object-cover" draggable={false} {...attributes} {...listeners} />
-        <span className="absolute top-2 left-2 grid size-6 place-items-center rounded-full bg-black/55 text-[11px] font-semibold text-white tabular-nums">{index + 1}</span>
-        <span className={cn("absolute bottom-2 left-2 rounded-full px-2 py-0.5 text-[10px] font-medium backdrop-blur", status === "uploaded" ? "bg-moss/80 text-white" : status === "error" ? "bg-destructive text-white" : "bg-black/55 text-white")}>
+        {/* The order number only where the tile has room for it beside the three buttons (136px); in
+            a narrower tile — three across on an iPad, two on a 320px phone — the rotate button sat on
+            top of it. The grid itself still shows the order. */}
+        <span className="absolute top-2 left-2 hidden size-6 place-items-center rounded-full bg-black/55 text-[11px] font-semibold text-white tabular-nums @min-[8.5rem]:grid">{index + 1}</span>
+        <span className={cn("absolute bottom-2 left-2 max-w-[calc(100%-1rem)] truncate rounded-full px-2 py-0.5 text-[10px] font-medium whitespace-nowrap backdrop-blur", status === "uploaded" ? "bg-moss/80 text-white" : status === "error" ? "bg-destructive text-white" : "bg-black/55 text-white")}>
           {status === "uploading" ? <Loader2 className="mr-1 inline size-3 animate-spin" /> : null}
           {statusLabel[status] ?? status}
         </span>
