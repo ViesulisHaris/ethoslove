@@ -1,0 +1,21 @@
+{
+  "slides": [
+    {
+      "type": "photo",
+      "src": "cover.jpg",
+      "caption": "POV: he couldn't say it.\nso he made her this.",
+      "note": "From inside a train: the window, the platform starting to slide past, morning light. Same couple, same week, your own photo."
+    },
+    { "type": "gift", "note": "Halfway, the postcard: London on his island, Edinburgh on hers, the kilometres in big numbers, the paper plane waiting at his door." },
+    { "type": "gift", "note": "Halfway, mid-flight after she blows: the bubble at the middle reads \"got a 16-25 railcard. its 4 hours 20. dont be weird about it\"" },
+    { "type": "chat", "timestamp": "Today 09:11", "messages": [
+      { "from": "me", "text": "U GOT A RAILCARD" },
+      { "from": "them", "text": "it was like 30 quid" },
+      { "from": "me", "text": "ur so annoying" },
+      { "from": "me", "text": "im crying on a train" },
+      { "from": "them", "text": "dont be weird about it" },
+      { "from": "me", "text": "a man just gave me a tissue" },
+      { "from": "them", "text": "tell him thanks" }
+    ] }
+  ]
+}

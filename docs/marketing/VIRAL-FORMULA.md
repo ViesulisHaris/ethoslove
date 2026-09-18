@@ -532,6 +532,24 @@ accounts run, and it wants different rules.
 - **Nobody is the villain, including the distance.** He got in somewhere and she tells him he has to
   go. A story where the only enemy is a plane gets "who is cutting onions" instead of an argument.
 
+## Her side of September: 104 and 105
+
+98 to 103 are all him leaving, by plane, from a couple who were already a couple. 104 and 105 are the
+other half of this month, the one every 18-year-old in the audience is living in the same week: **she**
+leaves, for uni, by train, from something neither of them ever called a relationship. The argument is
+the label, not the distance — "we said summer" is the most common lie at that age, and the cover has
+already told the viewer it is a lie before she types a word.
+
+- **The viewer knows more than she does.** "he bought a railcard" is on the photo; she spends five
+  slides thinking it was nothing to him. The comments shout at her, which is kinder than shouting at
+  him and just as loud.
+- **The sacrifice is his silence.** "if i say it u wont go." is the whole of his side of part 1, the
+  same shape as the 2.7M post's "because if i told you yesterday / you would've stayed".
+- **The reveal is a £30 railcard**, the 16-25 one, in Halfway's halfway note — small money as a
+  sacrifice, and a gift no carousel has shown yet, which people cannot work out from a still: you blow
+  a paper plane across the map from his town to hers.
+- **Part 2 is four slides**, because it carries the gift; part 1 is the story format's photo and five.
+
 ## The account that does this for a living: @tingarchive14
 
 `words.left.unsaid` — **14.7K followers, 1M likes**. Thirteen posts, one couple, the same three
@@ -624,6 +642,16 @@ Instagram DMs (`"style": "instagram"`) are drawn in dark mode the same way: the 
 "Active now", grey incoming bubbles with the sender's picture beside the last one of each run,
 the purple sent gradient pinned to the screen as in the app, reactions under the bubble, and the
 message bar.
+
+**Off a Mac, the type used to give it away.** Every style here asks for SF Pro through the system
+font, which only a Mac has. On Windows Chromium fell straight through the stack to Arial — wider,
+rounder, and exactly the half-second tell this section is about, without anyone rendering on Windows
+being able to see why. `scripts/fonts/Inter-Variable.ttf` (OFL) is now embedded behind SF Pro as a
+stand-in that a Mac never reaches: at 97% it sets every bubble of 91 within 2px of the Mac's widths,
+line breaks included, and re-renders of 91, 98 and 99 differ from the Mac's by about 1% of pixels,
+all of it glyph edges. Good enough to draft and review anywhere; the Mac is still the one to post from.
+`--sheet` writes `sheet.png`, the whole post at a quarter size with the hand-made slides as labelled
+gaps, for reading a carousel the way somebody swipes it.
 
 ## The psychology, in the order it happens
 
@@ -843,5 +871,7 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 101 | he finished it anyway | broke up in June, finished the gift anyway | Scrapbook (Memories) | Classic |
 | 102 | everyone knew but her | friends to lovers, 3 years | Scrapbook (Blossom) | Classic |
 | 103 | she was going to end it | the misunderstanding, resolved in a night | Scrapbook (Memories) | Classic |
+| 104 | just a summer thing · part 1 | leaving for uni, the label not the distance | none, on purpose | — |
+| 105 | he couldnt say it · part 2 | what was in the link | Halfway (Night flight) | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

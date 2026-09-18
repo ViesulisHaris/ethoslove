@@ -1,0 +1,43 @@
+{
+  "slides": [
+    {
+      "type": "photo",
+      "src": "cover.jpg",
+      "caption": "POV: it was just a summer thing.\nhe bought a railcard.",
+      "note": "Two people from behind on a wall at dusk, end of summer, no faces. Your own photo."
+    },
+    { "type": "chat", "timestamp": "Thu 13 Aug|at 08:04", "messages": [
+      { "from": "me", "text": "I GOT IN" },
+      { "from": "me", "text": "EDINBURGH" },
+      { "from": "them", "text": "no way" },
+      { "from": "me", "text": "IM GOING TO EDINBURGH" },
+      { "from": "them", "text": "thats so far" },
+      { "from": "me", "text": "its 4 hours on a train its not the moon" }
+    ] },
+    { "type": "chat", "timestamp": "Wednesday 23:12", "messages": [
+      { "from": "me", "text": "so what happens sunday" },
+      { "from": "them", "text": "u get on a train" },
+      { "from": "me", "text": "and us" },
+      { "from": "them", "text": "we said summer" },
+      { "from": "me", "text": "i know what we said" }
+    ] },
+    { "type": "chat", "timestamp": "Yesterday 01:48", "messages": [
+      { "from": "me", "text": "u havent said one thing all week" },
+      { "from": "me", "text": "not one" },
+      { "from": "me", "text": "its like it was nothing to u" },
+      { "from": "them", "text": "go to sleep" },
+      { "from": "me", "text": "say one thing" },
+      { "from": "them", "text": "if i say it u wont go." }
+    ] },
+    { "type": "chat", "timestamp": "Today 08:51", "messages": [
+      { "from": "me", "text": "ur not even coming to the platform" },
+      { "from": "them", "text": "barriers as far as i go" },
+      { "from": "me", "text": "rory" },
+      { "from": "them", "text": "ur gonna miss it" }
+    ] },
+    { "type": "chat", "timestamp": "Today 09:01", "messages": [
+      { "from": "them", "link": { "title": "for the train", "domain": "tryethos.io", "image": "og", "name": "Lottie" } },
+      { "from": "them", "text": "when its moving" }
+    ] }
+  ]
+}
