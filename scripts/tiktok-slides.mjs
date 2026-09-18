@@ -13,6 +13,9 @@
  * style, near the top. Use it on slide 1: it is the only thing legible at thumbnail size, and a
  * carousel whose first slide says nothing dies in the test pool. "\n" breaks the line.
  *
+ * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
+ * the storytime accounts that do millions actually post.
+ *
  * `"style": "messenger"` draws a light-mode DM thread — white page, grey and blue pills, and a
  * round profile picture beside every message on both sides. `"avatars": { "me": "him.jpg",
  * "them": "her.jpg" }` in the script (paths relative to the script) puts real faces in the
@@ -94,6 +97,22 @@ const HOOK_CSS = `
     .stage.has-hook{justify-content:flex-start;padding-top:440px}
 `;
 const hookHtml = (slide) => (slide.hook ? `<div class="hook">${esc(slide.hook).replace(/\n/g, "<br>")}</div>` : "");
+
+
+/** iMessage in light mode: every colour the dark drawing hard-codes, turned the other way. */
+const LIGHT_CSS = `
+    html,body{background:#fff}
+    .in{background:#E9E9EB;color:#000}
+    .in.last::after,.out.last::after,.link.last::after{background:#fff}
+    .in.last::before{background:#E9E9EB}
+    .link{background:#E9E9EB}
+    .link.tail-l::before,.link.tail-r::before{background:#E9E9EB}
+    .lk-title{color:#000}
+    .typing .t1,.typing .t2{background:#E9E9EB}
+    .tap{box-shadow:0 0 0 6px #fff}
+    .tap i{box-shadow:0 0 0 4px #fff}
+    .tap.theirs{background:#E9E9EB}
+`;
 
 function html(slide) {
   const rows = slide.messages
@@ -198,6 +217,7 @@ function html(slide) {
 
     ${OG_CSS}
     ${HOOK_CSS}
+    ${script.theme === "light" ? LIGHT_CSS : ""}
   </style></head><body>${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
 }
 

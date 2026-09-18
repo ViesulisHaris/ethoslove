@@ -5,48 +5,50 @@ chats. No gift frames — part 1 showed the gift; this one is about what it is s
 
 ## The beats
 
-The cover: **"POV: he's been gone 3 weeks. the link still works."** 01.06: "ur up late" / "how do u
-know" / "it tells me when u open it" / "oh my god" / "u opened it 4 times tonight". Then "its 8pm
-there" / "ya" / "so u just sit there waiting for it to say i opened it" / "no" / "yes". Then "i keep
-going to the bus stop one" / "i know. its the one u always open" / "stop" / "im not judging u" / "i
-wrote it for that". 01.44: "r we still doing this" / "doing what" / "this" / "u opened it 4 times
-tonight" / "thats not an answer" / "its 87 days".
+Cover: **"POV: he's been gone 3 weeks. the link still works."** 01.06: "ur up late" / "how do u know" /
+"it tells me when u open it." / "oh my god" / "4 times tonight." Then "its 8pm there" / "ya." / "so u
+just sit there waiting for it to say i opened it" / "no." / "yes." Then "i keep going back to this
+one", **the link**, "the bus stop." / "how did u know" / "its always the bus stop." Then "r we still
+doing this" / "doing what" / "this, finn." / "u opened it 4 times tonight." / "thats not an answer" /
+"its 87 days." Then **Sat 14 Dec at 17.42**: "im at the barrier" / "which exit r u" / "finn" / "i can
+see u" — **Delivered**.
 
-## Why this is the part 2 to write
+## Why it ends on "Delivered"
 
-- **The cover is a paradox again, and it is ours.** "he's been gone 3 weeks. the link still works."
-  The thing he made is the only part of him that did not get on the plane, and that is a sentence
-  nobody else on this app can write because nobody else has the product.
-- **"no" / "yes"** is the best pair of bubbles in either part. He denies it and corrects himself in
-  two letters.
-- **The open counter carries the whole conversation.** He can see every time she opens it, she knows
-  he can see, and neither of them stops. It is the least creepy possible version of watching somebody,
-  because she is the one doing the opening.
-- **"r we still doing this" is the question the comments answer,** and he refuses to answer it
-  directly: "its 87 days" — the countdown to seeing her, which is the answer without the word.
-- **It sells without a single gift frame.** Anybody watching now knows the thing tells you when it is
-  opened, that it lives somewhere permanent, and that it is still working three weeks later.
+Their 2.7M ends on a message five years later that is Delivered and never Read — the ache is that he
+has not looked. This ends on the same word for the opposite reason: 87 days later she is at the
+station barrier, and "i can see u" stays Delivered because he is not looking at his phone. He is
+looking at her. Same device, flipped from grief to the best moment in the series, and it resolves
+"its 87 days." without anybody explaining it.
+
+- **The link comes back in slide 4, sent by her.** She forwards him his own gift — "i keep going back
+  to this one" — and he knows which page without being told: "its always the bus stop." Three weeks
+  after the plane, the thing he made is still the thing they talk through.
+- **"no." / "yes."** — he denies it and corrects himself in two letters. That is the screenshot.
+- **"this, finn."** — her one use of his name, at the peak, as the blueprint does.
 
 ## The order
 
 | # | File | On screen |
 |---|---|---|
 | 1 | `slide-01.png` | **the cover photo** · "POV: he's been gone 3 weeks. the link still works." |
-| 2 | `slide-02.png` | Today 01.06 "ur up late" · "how do u know" · "it tells me when u open it" · "oh my god" · "u opened it 4 times tonight" |
-| 3 | `slide-03.png` | "its 8pm there" · "ya" · "so u just sit there waiting for it to say i opened it" · "no" · "yes" |
-| 4 | `slide-04.png` | "i keep going to the bus stop one" · "i know. its the one u always open" · "stop" · "im not judging u" · "i wrote it for that" |
-| 5 | `slide-05.png` | Today 01.44 "r we still doing this" · "doing what" · "this" · "u opened it 4 times tonight" · "thats not an answer" · "its 87 days" |
+| 2 | `slide-02.png` | Today 01.06 "ur up late" → "4 times tonight." |
+| 3 | `slide-03.png` | "its 8pm there" · "ya." · "so u just sit there waiting…" · "no." · "yes." |
+| 4 | `slide-04.png` | "i keep going back to this one" · **the link** · "the bus stop." · "how did u know" · "its always the bus stop." |
+| 5 | `slide-05.png` | "r we still doing this" · "doing what" · "this, finn." · "u opened it 4 times tonight." · "thats not an answer" · "its 87 days." |
+| 6 | `slide-06.png` | Sat 14 Dec at 17.42 "im at the barrier" · "which exit r u" · "finn" · "i can see u" — **Delivered** |
 
-Use the same cover photo as 99 — one image carries the series, which is what the account we took this
-from does with all thirteen of its posts.
+Same cover photo as 99.
 
 ## Post (tt-couple)
 
-Caption: `87 days. is that a yes? | part 2`
+Title line: `She kept opening it.`
+
+Caption: `87 days. he never said yes. he didnt have to. 🤍 | part 2`
 
 Hashtags: `#lovestory #longdistance #romance #part2`
 
 - **Pin (the how):** `the thing he made is on tryethos.io. it tells him every time i open it, which i did not know until part 2`
 - **"WAIT it tells him when you open it"** → `every single time. i have opened it 60 times`
-- **"its 87 days made me sob"** → `hes counting to when i fly out. he still hasnt answered the question`
+- **"i can see u. delivered. im gone"** → `he was not looking at his phone. that was the point`
 - **"part 3?"** → reply to every one of these

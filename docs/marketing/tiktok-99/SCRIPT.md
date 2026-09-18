@@ -40,55 +40,54 @@ Three more things from their 3.6M post:
   of the most-liked replies under it is "we all know it's scripted but we choose to act like it was
   real". The audience does not need it to be true. It needs to be consistent.
 
-## The beats
+## Built on their 2.7M post, slide for slide
 
-The cover: **"POV: he packed everything except you."** 02.40: "u awake" / "ya" / "i cant sleep" / "me
-neither" / "im sorry" / "for what". Then "for going" / "u got in. u have to go" / "i know" / "doesnt
-make it better" / "i know". Then "i made u something" / "so u dont forget the boring stuff", the link,
-"what boring stuff". Then "the bus stop" / "u kept the receipt from the chinese" / "i kept everything"
-/ "im not ok". 03.12: "6 hours" / "dont say the number" / "sorry" / "come here" / "im outside".
+`He promised he'd still be there.` (2.7M) is a long-distance story too, so it is the template for this
+one. Cover, then five chat slides, light-mode iMessage, and every slide does one job:
 
-Nobody is leaving because they stopped loving each other — he got in somewhere and she is the one
-telling him to go, so the comments have nothing to fight about except whether she went downstairs.
-The gift is deliberately small: a bus stop, a receipt from the Chinese. Nobody makes a keepsake out of
-the holidays.
+| # | Their 2.7M | This one |
+|---|---|---|
+| 1 | Joy with the seed in it: "I GOT IT" / "NO WAY" / "I'M SO PROUD OF YOU" | "i got in" / "NO WAY" / "IM SO PROUD OF YOU" / "its in edinburgh." |
+| 2 | The break: "do you still love me?" / "then don't do this." | "edinburgh." / "thats 7 hours away" / "when do u go" / "saturday." |
+| 3 | The real reason: he lied so she would go | The real reason: he made her something — **the link** |
+| 4 | The peak, with a name: "just once, Emma... choose you." | The peak, with a name: "i kept everything, ella." / "dont go" / "i have to." |
+| 5 | Time jump, **Delivered** and unread | "6 hours." / "dont say the number" / "come here" / "im outside." |
+
+Their voice, which this copies: lowercase, a full stop on the heavy lines ("yeah." "saturday." "i have
+to."), capitals only for joy, and one name used once at the peak. Theirs is a sacrifice made with a
+lie; ours is a sacrifice made with a gift. Same shape, different story, and ours has a product in it.
 
 ## The order
+
+Six slides. No gift frames — the link card on slide 4 is the product shot, which is how you keep the
+blueprint's length and still sell.
 
 | # | File | On screen |
 |---|---|---|
 | 1 | `slide-01.png` | **the cover photo** · "POV: he packed everything except you." |
-| 2 | `slide-02.png` | Today 02.40 "u awake" → "for what" |
-| 3 | `slide-03.png` | "for going" → "i know" |
-| 4 | `slide-04.png` | "i made u something" · "so u dont forget the boring stuff" · **the link** · "what boring stuff" |
-| 5 | yours | One page of the scrapbook — the bus stop, taped |
-| 6 | yours | The page with the receipt |
-| 7 | `slide-05.png` | "the bus stop" · "u kept the receipt from the chinese" · "i kept everything" · "im not ok" |
-| 8 | `slide-06.png` | Today 03.12 "6 hours" · "dont say the number" · "sorry" · "come here" · "im outside" |
+| 2 | `slide-02.png` | "BABE" · "what" · "i got in" · "NO WAY" · "IM SO PROUD OF YOU" · "its in edinburgh." |
+| 3 | `slide-03.png` | "edinburgh." · "yeah." · "thats 7 hours away" · "i know." · "when do u go" · "saturday." |
+| 4 | `slide-04.png` | Sat 02.40 "u awake" · "ya" · "i made u something." · "so u dont forget the boring stuff." · **the link** · "what boring stuff" |
+| 5 | `slide-05.png` | "the bus stop." · "u kept the receipt from the chinese" · "i kept everything, ella." · "dont go" · "i have to." · "i know." |
+| 6 | `slide-06.png` | Sat 03.12 "6 hours." · "dont say the number" · "sorry." · "come here" · "im outside." |
 
-Add the cover photo with:
-
-```bash
-node ~/Documents/mail/ethoslove/scripts/tiktok-faces.mjs 99 --clip cover
-```
-
-(copy the picture first), or pass a path. Dark, two people, from behind — the same shot can carry
-every part of the series, which is exactly what that account does.
+Add the cover with `node ~/Documents/mail/ethoslove/scripts/tiktok-faces.mjs 99 --clip cover` (copy the
+picture first). Dark, two people, from behind — one photo for the whole series, as they do.
 
 ## The gift
 
-Scrapbook at tryethos.io, theme **Memories**, cover **Classic**, title `the boring stuff`. Fields and
-message are the same as 98's — one gift, two carousels.
+Scrapbook at tryethos.io, theme **Memories**, title `the boring stuff`. Same gift as 98.
 
 ## Post (tt-couple)
 
-Caption: `did she go downstairs? | part 1`
+Title line (their posts carry one): `He packed everything except her.`
+
+Caption: `maybe some things dont fit in a suitcase. 🤍 | part 1`
 
 Hashtags: `#lovestory #longdistance #romance #part1`
 
-Sound: something slow with a title that reads like the story. Theirs is "What If I Call".
+Sound: slow and recognisable — theirs is "The Scientist" on two of the three I opened.
 
 - **Pin:** `part 2 tomorrow`
-- **"the boring stuff broke me"** → `nobody forgets the holidays. thats the point of it`
-- **"did she go down"** → `part 2`
+- **"breaking up because of distance…"** → `they didnt break up. part 2`
 - **"what did he make"** → `its on tryethos.io — photos, tape, his handwriting. the receipt is page 3`

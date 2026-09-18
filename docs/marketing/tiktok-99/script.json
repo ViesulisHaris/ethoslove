@@ -1,39 +1,45 @@
 {
+  "theme": "light",
   "slides": [
     { "type": "photo", "src": "cover.jpg", "caption": "POV: he packed everything\nexcept you." },
-    { "type": "chat", "timestamp": "Today 02.40", "messages": [
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "BABE" },
+      { "from": "me", "text": "what" },
+      { "from": "them", "text": "i got in" },
+      { "from": "me", "text": "NO WAY" },
+      { "from": "me", "text": "IM SO PROUD OF YOU" },
+      { "from": "them", "text": "its in edinburgh." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "edinburgh." },
+      { "from": "them", "text": "yeah." },
+      { "from": "me", "text": "thats 7 hours away" },
+      { "from": "them", "text": "i know." },
+      { "from": "me", "text": "when do u go" },
+      { "from": "them", "text": "saturday." }
+    ] },
+    { "type": "chat", "timestamp": "Sat|02.40", "messages": [
       { "from": "them", "text": "u awake" },
       { "from": "me", "text": "ya" },
-      { "from": "them", "text": "i cant sleep" },
-      { "from": "me", "text": "me neither" },
-      { "from": "them", "text": "im sorry" },
-      { "from": "me", "text": "for what" }
-    ] },
-    { "type": "chat", "messages": [
-      { "from": "them", "text": "for going" },
-      { "from": "me", "text": "u got in. u have to go" },
-      { "from": "them", "text": "i know" },
-      { "from": "them", "text": "doesnt make it better" },
-      { "from": "me", "text": "i know" }
-    ] },
-    { "type": "chat", "messages": [
-      { "from": "them", "text": "i made u something" },
-      { "from": "them", "text": "so u dont forget the boring stuff" },
+      { "from": "them", "text": "i made u something." },
+      { "from": "them", "text": "so u dont forget the boring stuff." },
       { "from": "them", "link": { "title": "the boring stuff", "domain": "tryethos.io", "image": "og", "name": "Ella" } },
       { "from": "me", "text": "what boring stuff" }
     ] },
     { "type": "chat", "messages": [
-      { "from": "me", "text": "the bus stop" },
+      { "from": "me", "text": "the bus stop." },
       { "from": "me", "text": "u kept the receipt from the chinese" },
-      { "from": "them", "text": "i kept everything" },
-      { "from": "me", "text": "im not ok" }
+      { "from": "them", "text": "i kept everything, ella." },
+      { "from": "me", "text": "dont go" },
+      { "from": "them", "text": "i have to." },
+      { "from": "me", "text": "i know." }
     ] },
-    { "type": "chat", "timestamp": "Today 03.12", "messages": [
-      { "from": "them", "text": "6 hours" },
+    { "type": "chat", "timestamp": "Sat|03.12", "messages": [
+      { "from": "them", "text": "6 hours." },
       { "from": "me", "text": "dont say the number" },
-      { "from": "them", "text": "sorry" },
+      { "from": "them", "text": "sorry." },
       { "from": "me", "text": "come here" },
-      { "from": "them", "text": "im outside" }
+      { "from": "them", "text": "im outside." }
     ] }
   ]
 }

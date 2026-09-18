@@ -578,6 +578,34 @@ it and does a thirtieth of the top. Write the line before the story, and keep it
 - **A sad song whose title reads like the story** ("What If I Call"). The sound is part of the hook.
 - **One picture carries the whole series.** Thirteen posts, three photographs. The line does the work.
 
+**Inside the posts, not just the grid.** Opened slide by slide, their 2.7M (`He promised he'd still be
+there.`) is **a cover and five chat slides** — not nine — in **light-mode iMessage**, white page and
+grey bubbles, and 1.1M (`He Wouldn't Tell Her Why`) is the same light iMessage, zoomed in so the
+bubbles run off the edges. Each of the five slides has one job:
+
+1. **Joy, with the seed of the problem inside it.** "I GOT IT" / "NO WAY" / "I'M SO PROUD OF YOU" —
+   and in there, the London job that ends them. Capitals only here, because this is the only happy
+   moment.
+2. **The break.** "do you still love me?" / "more than you know." / "then don't do this."
+3. **The real reason, which is a sacrifice.** He lied so she would take the job: "because if i told
+   you yesterday / you would've stayed."
+4. **The peak, with a name used once.** "just once, Emma... / choose you."
+5. **A time jump that ends on Delivered.** "it's been 5 years" / "can we please talk?" — Delivered,
+   never Read.
+
+Four to seven messages a slide. Lowercase, and **a full stop on the heavy lines** ("i know." "yes."
+"exactly.") — that is their weight, the way capitals are ours. Every post carries a title line
+(`He promised he'd still be there.`) and a one-line caption under it (`maybe some promises just take a
+little longer to keep. 🤍`). Two of the three I opened use "The Scientist". The top comment on the
+2.7M, with 70 replies, is an argument about whether his sacrifice was right: "breaking up because of
+distance is something ill never understand" / "if he really loved her he would drop everything and go
+with her". The comments are a verdict on a choice, every time.
+
+`"theme": "light"` on a script draws iMessage in light mode now, to match. 99 and 100 are rebuilt on
+the five-slide shape: joy with the seed, the distance, the gift as the real reason (the link), the peak
+with a name, and an ending — part 2's is "i can see u", Delivered, because he is looking at her and not
+at his phone.
+
 99 and 100 are ours built on this: the long-distance story in iMessage, "POV: he packed everything
 except you" and "POV: he's been gone 3 weeks. the link still works." The second one is a paradox only
 we can write, because the thing he made is the only part of him that did not get on the plane.
@@ -810,7 +838,7 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 96 | so ur not gonna say anything | she thought he forgot; it was 00:00 | any, one frame | — |
 | 97 | do u even like me | 2am, and he'd had it since June | any, one frame | — |
 | 98 | the boring stuff | long distance, part 1, messenger style | Scrapbook (Memories) | Classic |
-| 99 | he packed everything except you | long distance part 1, iMessage | Scrapbook (Memories) | Classic |
-| 100 | the link still works | long distance part 2, the open counter | none, on purpose | — |
+| 99 | he packed everything except you | long distance part 1, light iMessage, 5 chat slides | Scrapbook (Memories) | Classic |
+| 100 | the link still works | part 2, the link again, ends Delivered | Scrapbook (Memories) | Classic |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
