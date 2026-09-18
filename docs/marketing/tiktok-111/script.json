@@ -1,0 +1,30 @@
+{
+  "demo": { "template": "jar-of-reasons", "steps": ["shot gift-1.png", "tap \"tap the jar\"", "wait 3500", "shot gift-2.png"] },
+  "slides": [
+    { "type": "chat", "timestamp": "Thu, Aug 20|at 5:10 AM", "messages": [
+      { "from": "me", "text": "What do u want" },
+      { "from": "them", "text": "ignore it" },
+      { "from": "them", "text": "he’s drunk" }
+    ] },
+    { "type": "chat", "timestamp": "Thu, Aug 20|at 5:10 AM", "messages": [
+      { "from": "me", "text": "What do u want" },
+      { "from": "them", "text": "ignore it" },
+      { "from": "them", "text": "he’s drunk" },
+      { "ts": "Thu, Aug 20|at 6:13 AM" },
+      { "from": "them", "link": { "title": "12 reasons I love you", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "them", "text": "i made thsi in june" },
+      { "from": "them", "text": "was to scared to send it", "tapback": "heart" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "i made thsi in june" },
+      { "from": "them", "text": "was to scared to send it", "tapback": "heart" },
+      { "ts": "Thu, Aug 20|at 11:52 AM" },
+      { "from": "them", "text": "oh my god" },
+      { "from": "them", "text": "please ignore everything i sent last night" },
+      { "from": "me", "text": "No" },
+      { "from": "me", "text": "U wrote 12 reasons" },
+      { "from": "them", "text": "i was drunk" },
+      { "from": "me", "text": "U weren’t drunk in June", "status": "Read|11:54 AM" }
+    ] }
+  ]
+}
