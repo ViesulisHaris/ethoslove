@@ -23,7 +23,9 @@
  * circles; a missing file falls back to a drawn one, so a script renders before the photos exist.
  *
  * A slide can also be `{ "type": "photo", "src": "cover.jpg", "caption": "POV: ..." }` — the
- * picture that opens a story, full bleed, with the line over it. "\n" breaks the line.
+ * picture that opens a story, full bleed, with the line over it. "\n" breaks the line. Without a
+ * caption the picture is left as it is, which is how a gift frame goes in: `{ "type": "photo",
+ * "src": "gift-1.png" }`, a 1080×1920 capture of the gift from scripts/tiktok-demo-frames.mjs.
  *
  * `"style": "instagram"` draws Instagram DMs instead, dark mode, with `"contact": { name, sub, avatar }`
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
@@ -416,7 +418,7 @@ function photoHtml(slide) {
     html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
     body{font-family:${SYSTEM}}
     .ph{position:absolute;inset:0;${bg}}
-    .ph:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.12) 40%,rgba(0,0,0,.45))}
+    ${slide.caption ? `.ph:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.12) 40%,rgba(0,0,0,.45))}` : ""}
     .cap{position:absolute;left:80px;right:80px;top:50%;transform:translateY(-50%);text-align:center;color:#fff;font-size:58px;line-height:1.22;font-weight:600;letter-spacing:-.6px;text-shadow:0 4px 26px rgba(0,0,0,.75);z-index:2}
     .miss{position:absolute;left:0;right:0;bottom:120px;text-align:center;color:rgba(255,255,255,.5);font-size:30px;z-index:2}
   </style></head><body><div class="ph"></div>${slide.caption ? `<div class="cap">${esc(slide.caption).replace(/\n/g, "<br>")}</div>` : ""}${src ? "" : `<div class="miss">drop ${esc(slide.src ?? "cover.jpg")} in this folder and run it again</div>`}</body></html>`;

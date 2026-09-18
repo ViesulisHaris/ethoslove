@@ -1,0 +1,30 @@
+{
+  "demo": { "template": "birthday-cinema", "steps": ["shot gift-1.png", "tap", "wait 3500", "swipe up", "wait 700", "swipe up", "wait 700", "swipe up", "wait 1500", "shot gift-2.png"] },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: everyone forgot her 30th.\non purpose." },
+    { "type": "chat", "timestamp": "Sat|20:47", "messages": [
+      { "from": "them", "text": "not one message in the group chat" },
+      { "from": "them", "text": "its 9pm" },
+      { "from": "them", "text": "i turned 30 today and everyone forgot" },
+      { "from": "me", "text": "HAPPY BIRTHDAY 🎂" },
+      { "from": "them", "text": "at least u remembered 🙃" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "the group chats quiet bc" },
+      { "from": "me", "text": "weve been busy" },
+      { "from": "me", "link": { "title": "now showing: ana turns 30", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "me", "text": "sound on" },
+      { "from": "them", "text": "elena what is this" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "photo", "src": "gift-2.png" },
+    { "type": "chat", "timestamp": "Sat|21:32", "messages": [
+      { "from": "them", "text": "IT MADE ME BLOW THE CANDLES OUT" },
+      { "from": "them", "text": "why is my DOG in this" },
+      { "from": "them", "text": "how did u even do this" },
+      { "from": "me", "text": "everyone sent me pics" },
+      { "from": "me", "text": "took like 20 mins lol" },
+      { "from": "them", "text": "im 30 and crying on the kitchen floor", "tapback": "heart" }
+    ] }
+  ]
+}

@@ -643,6 +643,44 @@ at his phone.
 except you" and "POV: he's been gone 3 weeks. the link still works." The second one is a paradox only
 we can write, because the thing he made is the only part of him that did not get on the plane.
 
+## Happy sells: 106 to 110
+
+99 to 103 did what the blueprint promises — comments — and not what we need, which is purchases.
+The comments on a heartbreak story are a verdict on the couple ("she should have trusted him").
+Nobody leaves a verdict and then goes and buys the thing; the viewer who buys is the one who spent
+the post picturing *their* person opening it. So 106 to 110 keep the shape that earns the watch —
+a photo cover with a paradox line, chat slides, the link in the chat — and change what it is for:
+
+- **Happy arcs, and more than couples.** A best friend who can't fly to the wedding (106), a
+  girlfriend allergic to flowers (107), the group chat that "forgot" her 30th (108), a best friend
+  moving abroad (109), a mum who thinks every link is a virus (110). Each has one small low, the
+  link, and then joy. Friends and mums are also a bigger market than boyfriends: everyone has one.
+- **The gift is on screen.** One or two slides are stills of the actual gift, taken from its live
+  demo at 1080×1920 by `scripts/tiktok-demo-frames.mjs` (the steps live in the carousel's
+  script.json). People make the template they saw, and a viewer who goes looking finds exactly what
+  was in the post. Stills, not Live Photos, because `tiktok-gift-live.mjs` only knows Halfway so far;
+  when a template gets its choreography, swap its stills for the moving version. The price of using
+  the demo is the names, so the stories are written around them: Ana and Marco, Elena (Ana's best
+  friend, who gives the toast), Sam and Elena, Dani and Mamá — a recurring cast, which is what
+  @tingarchive14 does with one couple.
+- **The maker is the blue bubbles.** The viewer reads the post from the seat of the person who made
+  it, so the feeling it leaves is "they would lose it if I did that", not "I wish someone would".
+- **The recipient says what it does.** "it told him off" (the pour), "U PICKED EVERY STEM??", "IT MADE
+  ME BLOW THE CANDLES OUT", "why does it have a little sign". Somebody who isn't selling it names the
+  features.
+- **"how did u make this" gets asked, and answered small.** "on my lunch break lol", "took like 20
+  mins lol", "like 20 mins i had the pics". The objection is time and talent; twenty minutes answers
+  both, and "i had the pics" reminds every viewer they already have theirs.
+- **Somebody else wants one before the end.** The desk girl makes one for her boyfriend (107), the
+  tía wants one for her birthday (110). The next sale happens on screen.
+- **The pin carries the how and a reason to do it now:** the template's name, what it does, twenty
+  minutes, and `code LOVE = 20% off`. The caption asks for a tag — the maid of honour, the friend
+  who'd organise it — because the person who gets tagged is the likely buyer.
+
+Measure them against 99 to 103 on link clicks, profile visits and purchases, not views. If they
+reach less but sell more, that is the trade we want. If they neither reach nor sell, the happy arc
+is too flat and the next batch goes back to one real low before the link.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -888,5 +926,10 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 103 | she was going to end it | the misunderstanding, resolved in a night | Scrapbook (Memories) | Classic |
 | 104 | just a summer thing · part 1 | leaving for uni, the label not the distance, no cover | none, on purpose | — |
 | 105 | he couldnt say it · part 2 | what was in the link, the gift as Live Photos | Halfway (Night flight) | — |
+| 106 | she couldn't make the wedding | best friend, happy, two gift stills | The Toast (demo) | its own |
+| 107 | she's allergic to flowers | comedy, the recipient sells it | Bouquet (demo) | none |
+| 108 | everyone forgot her 30th | the group chat, the candles | Birthday Cinema (demo) | its own |
+| 109 | 12 years of tuesday coffees | best friend moving abroad | Scrapbook (demo) | its own |
+| 110 | now she's the exhibit | mum, "is this a virus" | Museum (demo) | its own |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

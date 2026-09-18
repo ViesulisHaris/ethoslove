@@ -1,0 +1,30 @@
+{
+  "demo": { "template": "scrapbook", "steps": ["shot gift-1.png", "tap", "wait 3500", "shot gift-2.png"] },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: 12 years of tuesday coffees.\nshe moves tomorrow." },
+    { "type": "chat", "timestamp": "Mon|23:12", "messages": [
+      { "from": "them", "text": "i cant close my suitcase" },
+      { "from": "them", "text": "i packed 11 jumpers" },
+      { "from": "me", "text": "its toronto not the arctic" },
+      { "from": "them", "text": "sam it IS the arctic" },
+      { "from": "them", "text": "who am i gonna do tuesdays with" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok i was gonna send this when ur on the plane" },
+      { "from": "me", "link": { "title": "for elena", "domain": "tryethos.io", "image": "og", "name": "Elena" } },
+      { "from": "them", "text": "SAM" },
+      { "from": "me", "text": "dont open it at the airport ull cry at security" },
+      { "from": "them", "text": "im opening it now" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "photo", "src": "gift-2.png" },
+    { "type": "chat", "timestamp": "Mon|23:41", "messages": [
+      { "from": "them", "text": "thats our table" },
+      { "from": "them", "text": "u kept all of these??" },
+      { "from": "them", "text": "how long did this take" },
+      { "from": "me", "text": "like 20 mins i had the pics" },
+      { "from": "them", "text": "im not getting on the plane" },
+      { "from": "me", "text": "ur getting on the plane", "status": "Read|23:44" }
+    ] }
+  ]
+}

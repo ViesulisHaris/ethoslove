@@ -1,0 +1,36 @@
+{
+  "demo": { "template": "bouquet", "steps": ["wait 7000", "shot gift-1.png"] },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: she's allergic to flowers.\nhe sent her some anyway." },
+    { "type": "chat", "timestamp": "Today|13:12", "messages": [
+      { "from": "them", "text": "the girl next to me at work got flowers" },
+      { "from": "them", "text": "theyre SO pretty" },
+      { "from": "them", "text": "ive sneezed 14 times" },
+      { "from": "me", "text": "lol" },
+      { "from": "them", "text": "why am i allergic to the one thing i want" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "check ur phone" },
+      { "from": "me", "link": { "title": "just because", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "them", "text": "marco" },
+      { "from": "them", "text": "did u just send me flowers" },
+      { "from": "me", "text": "the no sneeze kind" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "U PICKED EVERY STEM??" },
+      { "from": "them", "text": "theres a little card" },
+      { "from": "them", "text": "how much was this" },
+      { "from": "me", "text": "less than hers" },
+      { "from": "them", "text": "and they dont die" }
+    ] },
+    { "type": "chat", "timestamp": "Today|13:31", "messages": [
+      { "from": "them", "text": "shes asking where u got them" },
+      { "from": "me", "text": "tell her its a secret" },
+      { "from": "them", "text": "i sent her the link already" },
+      { "from": "them", "text": "shes making one for her bf" },
+      { "from": "me", "text": "ana" },
+      { "from": "me", "text": "it was a secret", "status": "Read|13:31" }
+    ] }
+  ]
+}

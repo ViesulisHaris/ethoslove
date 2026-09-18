@@ -1,0 +1,35 @@
+{
+  "demo": { "template": "museum", "steps": ["shot gift-1.png", "tap", "wait 3500", "tap \"Next room\"", "wait 2600", "shot gift-2.png"] },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: she reads every plaque in every museum.\nnow she's the exhibit." },
+    { "type": "chat", "timestamp": "Sun|10:02", "messages": [
+      { "from": "them", "text": "Good morning Dani 🌸" },
+      { "from": "them", "text": "Did you eat breakfast." },
+      { "from": "me", "text": "mama its 10am" },
+      { "from": "them", "text": "That is not an answer." },
+      { "from": "them", "text": "You never send me photos anymore." }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok i sent u something" },
+      { "from": "me", "link": { "title": "A Retrospective", "domain": "tryethos.io", "image": "og", "name": "Mamá" } },
+      { "from": "them", "text": "Is this a virus" },
+      { "from": "me", "text": "its not a virus" },
+      { "from": "me", "text": "press enter" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "photo", "src": "gift-2.png" },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "Dani." },
+      { "from": "them", "text": "That is the cake I make every year" },
+      { "from": "them", "text": "Why does it have a little sign" },
+      { "from": "me", "text": "bc ur in a museum" },
+      { "from": "them", "text": "I am calling you." }
+    ] },
+    { "type": "chat", "timestamp": "Sun|11:15", "messages": [
+      { "from": "them", "text": "I showed your tía." },
+      { "from": "them", "text": "She is jealous." },
+      { "from": "them", "text": "Make one for her birthday." },
+      { "from": "me", "text": "lol ok", "status": "Read|11:16" }
+    ] }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "demo": { "template": "the-toast", "steps": ["shot gift-1.png", "tap", "wait 3500", "press \"hold to pour\"", "wait 2500", "shot gift-2.png", "release"] },
+  "slides": [
+    { "type": "photo", "src": "cover.jpg", "caption": "POV: she couldn't make the wedding.\nshe still gave the toast." },
+    { "type": "chat", "timestamp": "Sat 14 Jun|12:40", "messages": [
+      { "from": "them", "text": "ELENA" },
+      { "from": "them", "text": "4 HOURS" },
+      { "from": "me", "text": "IM CRYING ALREADY" },
+      { "from": "them", "text": "its so weird ur not here" },
+      { "from": "me", "text": "i know. im sorry" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "ok dont cry ur makeup is done" },
+      { "from": "me", "text": "i wasnt gonna miss the toast tho" },
+      { "from": "me", "link": { "title": "For Ana & Marco", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "them", "text": "elena what did u do" },
+      { "from": "me", "text": "open it at dinner. both of u" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "photo", "src": "gift-2.png" },
+    { "type": "chat", "timestamp": "Sat 14 Jun|22:08", "messages": [
+      { "from": "them", "text": "we opened it at dinner" },
+      { "from": "them", "text": "marco overpoured and it told him off 😭" },
+      { "from": "them", "text": "the whole table was crying" },
+      { "from": "them", "text": "how did u even make this" },
+      { "from": "me", "text": "on my lunch break lol" },
+      { "from": "them", "text": "u were literally there", "tapback": "heart" }
+    ] }
+  ]
+}
