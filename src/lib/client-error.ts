@@ -1,30 +1,32 @@
-import { z } from "zod";
+/**
+ * Which boundary caught it: a page, the root layout, or a gift inside its own frame — or none:
+ * `window` for an uncaught error and `promise` for an unhandled rejection, which break something
+ * without ever reaching an error screen (see src/components/shared/error-reporter.tsx).
+ */
+export const CLIENT_ERROR_WHERE = ["page", "root", "gift", "window", "promise"] as const;
 
 /**
  * What an error screen sends home. Until this existed the screen said "we've been notified" and
  * nothing was: a crash in someone's browser left no trace on our side, so the only way to learn
  * what broke was to reproduce it. Trimmed hard, so a report can never carry a page of text.
+ *
+ * The server checks it against ./client-error-schema. That lives apart because every page's error
+ * screen imports this file, and zod would put 370 KB of script on every page to build an object.
  */
-export const clientErrorSchema = z.object({
-  /**
-   * Which boundary caught it: a page, the root layout, or a gift inside its own frame — or none:
-   * `window` for an uncaught error and `promise` for an unhandled rejection, which break something
-   * without ever reaching an error screen (see src/components/shared/error-reporter.tsx).
-   */
-  where: z.enum(["page", "root", "gift", "window", "promise"]),
-  code: z.string().max(12),
-  name: z.string().max(80),
-  message: z.string().max(500),
-  digest: z.string().max(80).optional(),
-  stack: z.string().max(2000).optional(),
+export type ClientErrorReport = {
+  where: (typeof CLIENT_ERROR_WHERE)[number];
+  code: string;
+  name: string;
+  message: string;
+  digest?: string;
+  stack?: string;
   /** Path only: a query string can hold a token, and a hash is never ours. */
-  path: z.string().max(300),
-  template: z.string().max(40).optional(),
+  path: string;
+  template?: string;
   /** The deployment the tab was loaded from, which is how an old tab shows itself. */
-  build: z.string().max(64).optional(),
-});
+  build?: string;
+};
 
-export type ClientErrorReport = z.infer<typeof clientErrorSchema>;
 export type ErrorLike = { name?: string; message?: string; stack?: string; digest?: string };
 
 const STACK_LINES = 12;

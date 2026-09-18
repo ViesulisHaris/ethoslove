@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { clientErrorSchema } from "@/lib/client-error";
+import { clientErrorSchema } from "@/lib/client-error-schema";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 

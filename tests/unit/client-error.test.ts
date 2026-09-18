@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildClientErrorReport, clientErrorSchema, errorCode, isOwnError, redactGiftPath, scrubStack } from "@/lib/client-error";
+import { buildClientErrorReport, errorCode, isOwnError, redactGiftPath, scrubStack } from "@/lib/client-error";
+import { clientErrorSchema } from "@/lib/client-error-schema";
 
 describe("what an error screen sends home", () => {
   const crash = { name: "TypeError", message: "Cannot read properties of undefined (reading 'map')", stack: Array.from({ length: 40 }, (_, i) => `    at frame${i} (https://tryethos.io/_next/static/chunks/x.js:1:${i})`).join("\n") };
@@ -36,6 +37,12 @@ describe("what an error screen sends home", () => {
     expect(clientErrorSchema.safeParse({ where: "page", code: "X", name: "E", message: "m", path: "/", stack: "s".repeat(5000) }).success).toBe(false);
     expect(clientErrorSchema.safeParse({ where: "elsewhere", code: "X", name: "E", message: "m", path: "/" }).success).toBe(false);
     expect(clientErrorSchema.safeParse(null).success).toBe(false);
+  });
+
+  it("builds a report without zod, which every page's error screen would otherwise download", async () => {
+    const { readFileSync } = await import("node:fs");
+    const source = readFileSync(new URL("../../src/lib/client-error.ts", import.meta.url), "utf8");
+    expect(source).not.toMatch(/^import (?!type\b).*from "zod/m);
   });
 });
 
