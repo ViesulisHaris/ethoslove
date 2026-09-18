@@ -29,7 +29,7 @@
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
  */
 import { chromium } from "@playwright/test";
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 
 // The link card is drawn with the same serif the product embeds in its real og:image.
@@ -446,6 +446,16 @@ let n = 0;
 for (const slide of script.slides) {
   n += 1;
   const draw = slide.type === "photo" ? photoHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
+  // A gift slide with a `still` (from tiktok-gift-live.mjs) is the gift's own frame: it becomes the
+  // slide, and the Live Photo made from its clip goes in its place when posting.
+  const still = slide.type === "gift" && slide.still ? join(dirname(scriptPath), slide.still) : null;
+  if (still && existsSync(still)) {
+    const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
+    copyFileSync(still, file);
+    sheet.push(readFileSync(still));
+    console.log("wrote", file, "(the gift, from", slide.still + ")");
+    continue;
+  }
   if (slide.type !== "chat" && slide.type !== "photo") {
     if (SHEET) {
       await page.setContent(gapHtml(slide, n));
