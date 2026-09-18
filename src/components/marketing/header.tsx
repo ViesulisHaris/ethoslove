@@ -43,7 +43,8 @@ export function MarketingHeader() {
       <div className="px-3 pt-3 sm:px-5">
         <div
           className={cn(
-            "glass-forest mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full pr-2 pl-5 text-cream transition-shadow duration-300",
+            // Under 360px a little less air, so "Crear un regalo" stays one line on a 320px phone.
+            "glass-forest mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full pr-2 pl-5 text-cream transition-shadow duration-300 max-[359px]:gap-2 max-[359px]:pl-4",
             scrolled && "shadow-[0_18px_50px_-22px_rgba(0,0,0,0.65)]",
           )}
         >
@@ -69,7 +70,7 @@ export function MarketingHeader() {
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
-            <Link href="/templates" className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold text-forest">
+            <Link href="/templates" className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold whitespace-nowrap text-forest max-[359px]:px-3">
               {t("common.createGift")}
             </Link>
             <Sheet open={open} onOpenChange={setOpen}>
