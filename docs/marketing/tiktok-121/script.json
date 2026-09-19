@@ -1,0 +1,31 @@
+{
+  "demo": { "template": "sketchbook", "steps": ["tap \"open the sketchbook\"", "wait 7400", "shot gift-1.png", "tap \"next page\"", "wait 3400", "shot gift-2.png"] },
+  "slides": [
+    { "type": "chat", "timestamp": "Sat, Sep 19|at 8:12 AM", "messages": [
+      { "from": "me", "link": { "title": "a sketchbook for ana", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "them", "text": "u drew me a cake??" },
+      { "from": "them", "text": "u cant draw" },
+      { "from": "me", "text": "i know" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "u cant draw" },
+      { "from": "me", "text": "i know" },
+      { "from": "them", "text": "its drawing itself" },
+      { "from": "me", "text": "turn the page" },
+      { "from": "them", "text": "THERES MORE" },
+      { "from": "them", "text": "u put the coffee one in" },
+      { "from": "them", "text": "how many pages is this" },
+      { "from": "me", "text": "12" },
+      { "from": "me", "text": "dont rush it" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "dont rush it" },
+      { "from": "them", "text": "im on the last page" },
+      { "from": "them", "text": "u wrote a whole letter" },
+      { "from": "them", "text": "in handwriting" },
+      { "from": "them", "text": "i hate u" },
+      { "from": "me", "text": "happy birthday", "tapback": "heart" }
+    ] }
+  ]
+}

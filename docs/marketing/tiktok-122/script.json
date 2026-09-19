@@ -1,0 +1,27 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sat 19 Sept|at 07:30", "messages": [
+      { "from": "me", "link": { "title": "happy 50th dad", "domain": "tryethos.io", "image": "og", "name": "Dad" } },
+      { "from": "them", "text": "Why does my phone keep popping" },
+      { "from": "me", "text": "its ur birthday dad" },
+      { "from": "them", "text": "It sounds like fireworks" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "It sounds like fireworks" },
+      { "from": "me", "text": "pop the balloons" },
+      { "from": "them", "text": "There are photos in them" },
+      { "from": "them", "text": "That is your mother in 1998" },
+      { "from": "me", "text": "pop the big one" },
+      { "from": "them", "text": "It says open the letter" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "It says open the letter" },
+      { "ts": "Sat 19 Sept|at 07:52" },
+      { "from": "them", "text": "I have opened it" },
+      { "from": "them", "text": "I am in the car. Give me a minute." },
+      { "from": "me", "text": "dad" },
+      { "from": "them", "text": "Thank you. I am fine. It is the pollen." },
+      { "from": "me", "text": "its september", "tapback": "heart" }
+    ] }
+  ]
+}

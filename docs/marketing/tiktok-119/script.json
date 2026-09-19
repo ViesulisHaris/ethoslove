@@ -1,0 +1,33 @@
+{
+  "demo": { "template": "balloons", "steps": ["tap \"tap to open\"", "wait 4000", "tap \"pop a balloon\"", "wait 700", "tap \"pop a balloon\"", "wait 700", "tap \"pop a balloon\"", "wait 700", "tap \"pop a balloon\"", "wait 700", "tap \"pop a balloon\"", "wait 1800", "shot gift-1.png"] },
+  "slides": [
+    { "type": "chat", "timestamp": "Fri, Sep 18|at 11:58 PM", "messages": [
+      { "from": "them", "text": "im going to sleep" },
+      { "from": "me", "text": "not yet" },
+      { "from": "me", "text": "theres 30 balloons in ur phone" },
+      { "from": "them", "text": "what" }
+    ] },
+    { "type": "chat", "timestamp": "Fri, Sep 18|at 11:58 PM", "messages": [
+      { "from": "them", "text": "im going to sleep" },
+      { "from": "me", "text": "not yet" },
+      { "from": "me", "text": "theres 30 balloons in ur phone" },
+      { "from": "them", "text": "what" },
+      { "ts": "Sat, Sep 19|at 12:00 AM" },
+      { "from": "me", "link": { "title": "30 balloons for ana", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "me", "text": "pop them" },
+      { "from": "them", "text": "WAIT THEY HAVE PHOTOS IN THEM" },
+      { "from": "them", "text": "the big one wont pop" },
+      { "from": "me", "text": "pop the others first" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "the big one wont pop" },
+      { "from": "me", "text": "pop the others first" },
+      { "from": "them", "text": "ok i popped it" },
+      { "from": "them", "text": "marco." },
+      { "from": "them", "text": "u wrote all that at work??" },
+      { "from": "me", "text": "on the bus" },
+      { "from": "them", "text": "im not sleeping now", "tapback": "heart" }
+    ] }
+  ]
+}

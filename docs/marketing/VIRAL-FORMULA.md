@@ -700,6 +700,19 @@ group chat (116), a long-distance voice message sung off key (117), and our own 
 things the gift does, in the recipient's words: the cake and the song, the plaques, the voice, the
 candles you blow out on your phone.
 
+## The new templates on screen: 119 to 124
+
+Three templates were built on 2026-09-19 — Balloons (pop them, every one drops a photo, the big
+one is the letter), the Pop-up Card (it opens and a paper cake stands up; tap the candles, blow
+them out) and the Sketchbook (the doodles draw themselves, the photos go in taped) — and each
+has a thing nobody has seen on a phone before. 119 to 124 put those things in the recipient's
+mouth, in the 111 shape: "theres 30 balloons in ur phone", "THE CARD OPENED AND IT STOOD UP",
+"its drawing itself". One carousel per template shows a still of the demo as slide 3 (Ana, 30 —
+so those stories are hers); the other three are for a dad, a mum and a best friend, with no
+still, because the demo says Ana and the buyers for those are daughters and friends.
+`scripts/tiktok-demo-frames.mjs` takes the stills straight from tryethos.io, so they are exactly
+what a viewer who goes looking will find.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -956,5 +969,11 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 116 | the group chat | her and his mum, his 21st | Museum | — |
 | 117 | is that your voice | long distance, the voice message | Vinyl + voice | — |
 | 118 | was i first | 30 turned round, Delivered twice | Birthday Cinema | — |
+| 119 | 30 balloons in ur phone | the balloons, with a still | Balloons (demo) | birthday |
+| 120 | the cake stood up | broke, long distance, with a still | Pop-up Card (demo) | — |
+| 121 | u cant draw | the doodles draw themselves, with a still | Sketchbook (demo) | — |
+| 122 | why does my phone keep popping | a dad's 50th, in full sentences | Balloons | — |
+| 123 | your father thinks i have lost my mind | a mum follows the instructions | Pop-up Card | — |
+| 124 | the book of us | best friends, the things they said they'd forget | Sketchbook | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

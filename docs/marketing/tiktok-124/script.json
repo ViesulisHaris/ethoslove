@@ -1,0 +1,27 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sat, Sep 19|at 12:03 AM", "messages": [
+      { "from": "me", "text": "ok dont be mad" },
+      { "from": "me", "link": { "title": "the book of us", "domain": "tryethos.io", "image": "og", "name": "Zoe" } },
+      { "from": "them", "text": "why would i be mad" },
+      { "from": "them", "text": "OH MY GOD" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "OH MY GOD" },
+      { "from": "them", "text": "u put the bathroom floor photo in" },
+      { "from": "them", "text": "the cake is drawing itself" },
+      { "from": "them", "text": "did u draw this" },
+      { "from": "me", "text": "i cant draw. it draws itself" },
+      { "from": "them", "text": "its got the parking ticket" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "its got the parking ticket" },
+      { "from": "me", "text": "every page is something u said id forget" },
+      { "from": "them", "text": "the last page is a letter" },
+      { "from": "them", "text": "im reading it in the uber" },
+      { "from": "them", "text": "the driver asked if im ok" },
+      { "from": "me", "text": "are u" },
+      { "from": "them", "text": "no", "tapback": "heart" }
+    ] }
+  ]
+}

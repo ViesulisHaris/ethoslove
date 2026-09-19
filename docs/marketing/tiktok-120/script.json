@@ -1,0 +1,35 @@
+{
+  "demo": { "template": "popup-card", "steps": ["tap \"open the card\"", "wait 3200", "tap \"light candle 1\"", "wait 300", "tap \"light candle 2\"", "wait 300", "tap \"light candle 3\"", "wait 300", "tap \"light candle 4\"", "wait 300", "tap \"light candle 5\"", "wait 1400", "shot gift-1.png"] },
+  "slides": [
+    { "type": "chat", "timestamp": "Sun 20 Sept|at 23:41", "messages": [
+      { "from": "me", "text": "i couldnt afford to send anything" },
+      { "from": "me", "text": "so i made u something instead" },
+      { "from": "me", "text": "open it at 12" },
+      { "from": "them", "text": "ur being weird" }
+    ] },
+    { "type": "chat", "timestamp": "Sun 20 Sept|at 23:41", "messages": [
+      { "from": "me", "text": "i couldnt afford to send anything" },
+      { "from": "me", "text": "so i made u something instead" },
+      { "from": "me", "text": "open it at 12" },
+      { "from": "them", "text": "ur being weird" },
+      { "ts": "Mon 21 Sept|at 00:00" },
+      { "from": "me", "link": { "title": "happy birthday ana", "domain": "tryethos.io", "image": "og", "name": "Ana" } },
+      { "from": "them", "text": "why is a cake standing up in my phone" },
+      { "from": "them", "text": "THE CARD OPENED AND IT STOOD UP" },
+      { "from": "me", "text": "light the candles" },
+      { "from": "them", "text": "how" },
+      { "from": "me", "text": "tap them" }
+    ] },
+    { "type": "photo", "src": "gift-1.png" },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "how" },
+      { "from": "me", "text": "tap them" },
+      { "from": "them", "text": "ok theyre lit" },
+      { "from": "me", "text": "now blow" },
+      { "from": "them", "text": "i blew on my phone in bed like a psycho" },
+      { "from": "them", "text": "they went out" },
+      { "from": "them", "text": "this is better than a gift" },
+      { "from": "me", "text": "it is a gift", "tapback": "heart" }
+    ] }
+  ]
+}
