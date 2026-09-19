@@ -11,9 +11,14 @@ export const BRAND = {
   },
   domain: "tryethos.io",
   supportEmail: "support@secuora.xyz",
+  /**
+   * Profiles that exist and are ours: they become the Organization's `sameAs`, which is how search
+   * engines and AI assistants tie "Ethos" the gift site to its accounts. Only add one once it is
+   * live — instagram.com/tryethos didn't exist (checked 19 Sep 2026), and a dead link here tells
+   * them the wrong thing about who we are.
+   */
   socials: {
     tiktok: "https://www.tiktok.com/@tryethos",
-    instagram: "https://www.instagram.com/tryethos",
     youtube: "https://www.youtube.com/@tryethos",
   },
   /** Shown on free-tier gifts. Keep it short; it is the viral hook. */
