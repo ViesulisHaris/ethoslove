@@ -179,7 +179,7 @@ export function PaperCake({ theme, candles, topper, lit, out, onCandle, lightLab
   const spread = Math.min(44, candles * 11);
   const cx = (i: number) => 60 + (candles === 1 ? 0 : (i / (candles - 1) - 0.5) * spread);
   return (
-    <svg viewBox="0 0 120 130" className="h-full w-full" style={{ overflow: "visible" }} aria-hidden="true">
+    <svg viewBox="0 -34 120 164" className="h-full w-full" style={{ overflow: "visible" }} aria-hidden="true">
       {/* the plate */}
       <Cut d="M4 118 h112 a4 4 0 0 1 0 8 h-112 a4 4 0 0 1 0 -8 Z" fill={theme.inside} ink={ink} />
       {tiers.map((t, i) => (
@@ -197,17 +197,8 @@ export function PaperCake({ theme, candles, topper, lit, out, onCandle, lightLab
       ))}
       <Grain x={4} y={40} width={112} height={90} seed={seed} opacity={0.14} />
 
-      {/* the topper: their age cut out and glued to a stick, behind the candles */}
-      {topper.length ? (
-        <g transform="translate(60 -24)">
-          <path d="M0 8 v50" stroke={ink} strokeOpacity=".7" strokeWidth="1.2" />
-          {topper.map((d, i) => (
-            <text key={i} x={(i - (topper.length - 1) / 2) * 15} y="20" textAnchor="middle" fontSize="24" fontWeight="900" fill={theme.accent} stroke="#FFFFFF" strokeWidth="2.4" paintOrder="stroke" style={{ fontFamily: "var(--font-gift-display), Georgia, serif", fontVariationSettings: '"wght" 900, "SOFT" 100, "opsz" 144' }}>
-              {d}
-            </text>
-          ))}
-        </g>
-      ) : null}
+      {/* the topper's stick, behind the candles; the age itself is HTML over the cake (see Topper) */}
+      {topper.length ? <path d="M60 -16 v50" stroke={ink} strokeOpacity=".7" strokeWidth="1.2" /> : null}
 
       {/* the candles */}
       {Array.from({ length: candles }, (_, i) => {
@@ -227,6 +218,34 @@ export function PaperCake({ theme, candles, topper, lit, out, onCandle, lightLab
       })}
 
     </svg>
+  );
+}
+
+/**
+ * Their age, cut out and glued to the stick on top of the cake. HTML rather than SVG text on
+ * purpose: a stroked SVG text inside a 3D-transformed layer is one of the things a compositor
+ * drops in a screen capture, and the number on the cake has to be in every screenshot.
+ */
+export function Topper({ digits, theme }: { digits: string[]; theme: Theme }) {
+  if (!digits.length) return null;
+  const edge = "#FFFFFF";
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute left-1/2 -translate-x-1/2 leading-none whitespace-nowrap"
+      style={{
+        top: "1%",
+        fontFamily: "var(--font-gift-display), Georgia, serif",
+        fontWeight: 900,
+        fontVariationSettings: '"SOFT" 100, "opsz" 144',
+        fontSize: "calc(12 * var(--c))",
+        letterSpacing: "-0.02em",
+        color: theme.accent,
+        textShadow: [`0 0 0 ${edge}`, `1.5px 0 ${edge}`, `-1.5px 0 ${edge}`, `0 1.5px ${edge}`, `0 -1.5px ${edge}`, `1.2px 1.2px ${edge}`, `-1.2px -1.2px ${edge}`, `1.2px -1.2px ${edge}`, `-1.2px 1.2px ${edge}`, `0 2px 3px rgba(60,30,30,.25)`].join(", "),
+      }}
+    >
+      {digits.join("")}
+    </div>
   );
 }
 

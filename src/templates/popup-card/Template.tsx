@@ -20,7 +20,7 @@ import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
 import { PAPER_GRAIN, TapPill, type CoverTone } from "../_shared/cover-kit";
 import { Peg } from "../balloons/art";
-import { CARD_KEYFRAMES, ConfettiDots, CoverArt, GiftBox, PaperBalloon, PaperCake, PennantArch, Ruled, THEMES, type Theme, type ThemeId } from "./art";
+import { CARD_KEYFRAMES, ConfettiDots, CoverArt, GiftBox, PaperBalloon, PaperCake, PennantArch, Ruled, THEMES, Topper, type Theme, type ThemeId } from "./art";
 import { baseTilt, candleCount, lidAngle, pieceAngle, pieceShadow, settle, topperDigits } from "./fold";
 import type { PopupCardFields } from "./schema";
 
@@ -38,7 +38,7 @@ const PIECES = {
   left: { x: 14, depth: 16, w: 20, h: 40, delay: 0.1 },
   right: { x: 87, depth: 14, w: 18, h: 36, delay: 0.16 },
   mid: { x: 28, depth: 30, w: 14, h: 28, delay: 0.24 },
-  cake: { x: 50, depth: 64, w: 60, h: 65, delay: 0.34 },
+  cake: { x: 50, depth: 64, w: 60, h: 82, delay: 0.34 },
   gift: { x: 85, depth: 84, w: 19, h: 19, delay: 0.5 },
 };
 
@@ -167,7 +167,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
               </div>
             </Piece>
             <Piece open={open} spec={PIECES.cake}>
-              <PaperCake theme={theme} candles={candles} topper={topper} lit={lit} out={out} onCandle={stage === "open" || stage === "lit" ? light : undefined} lightLabel={s.lightOne} seed={seed} />
+              <div className="relative h-full w-full">
+                <PaperCake theme={theme} candles={candles} topper={topper} lit={lit} out={out} onCandle={stage === "open" || stage === "lit" ? light : undefined} lightLabel={s.lightOne} seed={seed} />
+                <Topper digits={topper} theme={theme} />
+              </div>
             </Piece>
             <Piece open={open} spec={PIECES.gift}>
               <GiftBox theme={theme} className="h-full w-full" />
