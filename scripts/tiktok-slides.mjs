@@ -29,6 +29,15 @@
  *
  * `"style": "instagram"` draws Instagram DMs instead, dark mode, with `"contact": { name, sub, avatar }`
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
+ *
+ * A group chat: `{ from: "them", name: "Priya", text }` sets the small grey sender name iOS shows
+ * over a grey bubble when a thread has more than two people. It is drawn when the name changes
+ * from the message above, exactly as Messages does, so a run from one person carries it once.
+ *
+ * `{ "type": "note", "title": "for everyone asking", "date": "19 September 2026 at 00:14",
+ * "lines": ["tryethos, the balloons one", ...] }` draws an Apple Notes screenshot, light mode: the
+ * slide people save. A line that starts with "- " is a bulleted list item, "[] " a checklist box,
+ * "[x] " a ticked one, "# " a heading, and "" a blank line.
  */
 import { chromium } from "@playwright/test";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
@@ -150,7 +159,11 @@ function html(slide) {
         const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
         return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
       }
-      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+      // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
+      const prev = all[i - 1];
+      const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
+      const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
     })
     .join("");
 
@@ -160,6 +173,8 @@ function html(slide) {
     html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden}
     body{font-family:${SYSTEM};color:#fff;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     .stage{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 48px 0 42px}
+    .who{flex-basis:100%;color:#8e8e93;font-size:33px;line-height:40px;letter-spacing:-.2px;padding-left:38px;margin-bottom:6px}
+    .row.named{margin-top:22px}
     .ts{text-align:center;color:#8e8e93;font-size:35px;margin:0 0 30px;letter-spacing:-.2px}
     .ts b{font-weight:600}
     .ts.mid{margin:36px 0 26px}
@@ -424,6 +439,65 @@ function photoHtml(slide) {
   </style></head><body><div class="ph"></div>${slide.caption ? `<div class="cap">${esc(slide.caption).replace(/\n/g, "<br>")}</div>` : ""}${src ? "" : `<div class="miss">drop ${esc(slide.src ?? "cover.jpg")} in this folder and run it again</div>`}</body></html>`;
 }
 
+/**
+ * An Apple Notes screenshot, light mode, drawn at @3x like the rest: the "for everyone asking" slide
+ * that closes a carousel. It is what gets saved, and a save is the signal the photo algorithm
+ * weighs heaviest after the swipe-through, so the one slide that names the product is also the one
+ * that earns the post its reach. Written like a person's own note, never a brand's.
+ */
+function noteHtml(slide) {
+  const lines = (slide.lines ?? [])
+    .map((raw) => {
+      const line = String(raw);
+      if (line === "") return `<div class="gap"></div>`;
+      if (line.startsWith("# ")) return `<div class="h">${esc(line.slice(2))}</div>`;
+      if (line.startsWith("[x] ")) return `<div class="ck done"><i></i><span>${esc(line.slice(4))}</span></div>`;
+      if (line.startsWith("[] ")) return `<div class="ck"><i></i><span>${esc(line.slice(3))}</span></div>`;
+      if (line.startsWith("- ")) return `<div class="li"><b>•</b><span>${esc(line.slice(2))}</span></div>`;
+      return `<div class="p">${esc(line)}</div>`;
+    })
+    .join("");
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
+    html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#fff}
+    body{font-family:${SYSTEM};color:#000;-webkit-font-smoothing:antialiased}
+    .bar{position:absolute;top:0;left:0;right:0;height:210px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 48px 22px;box-sizing:border-box;color:#E5A800;font-size:51px;letter-spacing:-.6px}
+    .bar .back{display:flex;align-items:center;gap:14px}
+    .bar .back svg{width:34px;height:52px}
+    .bar .icons{display:flex;gap:64px}
+    .bar .icons svg{width:52px;height:52px}
+    .bar .done{font-weight:600}
+    .sheet{position:absolute;top:240px;left:60px;right:60px}
+    .date{text-align:center;color:#8e8e93;font-size:33px;letter-spacing:-.2px;margin-bottom:34px}
+    .title{font-size:66px;line-height:78px;font-weight:700;letter-spacing:-1.2px;margin-bottom:36px}
+    .p,.li,.ck,.h{font-size:51px;line-height:70px;letter-spacing:-.8px}
+    .h{font-weight:700;font-size:56px;margin:28px 0 8px}
+    .p{margin:0}
+    .li{display:flex;gap:26px;padding-left:12px}
+    .li b{font-weight:400}
+    .ck{display:flex;gap:28px;align-items:flex-start}
+    .ck i{flex:none;width:56px;height:56px;margin-top:8px;border-radius:50%;border:3px solid #C7C7CC;box-sizing:border-box}
+    .ck.done i{border-color:#E5A800;background:#E5A800;position:relative}
+    .ck.done i::after{content:"";position:absolute;left:18px;top:8px;width:12px;height:26px;border:solid #fff;border-width:0 5px 5px 0;transform:rotate(45deg)}
+    .ck.done span{color:#8e8e93}
+    .gap{height:44px}
+    .tools{position:absolute;left:0;right:0;bottom:0;height:190px;border-top:1px solid #E5E5EA;display:flex;align-items:flex-start;justify-content:space-around;padding:36px 60px 0;box-sizing:border-box}
+    .tools svg{width:54px;height:54px}
+  </style></head><body>
+    <div class="bar">
+      <div class="back"><svg viewBox="0 0 34 52"><path d="M28 4 8 26l20 22" fill="none" stroke="#E5A800" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Notes</span></div>
+      <div class="icons"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="#E5A800" stroke-width="4"/><path d="M26 16v20M16 26h20" stroke="#E5A800" stroke-width="4" stroke-linecap="round"/></svg><svg viewBox="0 0 52 52"><path d="M26 6v30M14 18l12-12 12 12M10 30v14h32V30" fill="none" stroke="#E5A800" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="done">Done</span></div>
+    </div>
+    <div class="sheet">${slide.date ? `<div class="date">${esc(slide.date)}</div>` : ""}${slide.title ? `<div class="title">${esc(slide.title)}</div>` : ""}${lines}</div>
+    <div class="tools">
+      <svg viewBox="0 0 54 54"><path d="M10 40l4-12 20-20 8 8-20 20z" fill="none" stroke="#E5A800" stroke-width="3.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 54 54"><rect x="8" y="10" width="38" height="34" rx="6" fill="none" stroke="#E5A800" stroke-width="3.5"/><path d="M14 24h26M14 32h18" stroke="#E5A800" stroke-width="3.5" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 54 54"><rect x="9" y="9" width="36" height="36" rx="6" fill="none" stroke="#E5A800" stroke-width="3.5"/><path d="M18 30l8-8 8 8" fill="none" stroke="#E5A800" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 54 54"><path d="M12 10h30v34l-6-4-6 4-6-4-6 4-6-4z" fill="none" stroke="#E5A800" stroke-width="3.5" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 54 54"><path d="M27 8l5 12 13 1-10 9 3 13-11-7-11 7 3-13-10-9 13-1z" fill="none" stroke="#E5A800" stroke-width="3.5" stroke-linejoin="round"/></svg>
+    </div>
+  </body></html>`;
+}
+
 /** On the contact sheet only: a slide somebody still has to screenshot, and what goes in it. */
 function gapHtml(slide, n) {
   return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
@@ -447,7 +521,7 @@ const sheet = [];
 let n = 0;
 for (const slide of script.slides) {
   n += 1;
-  const draw = slide.type === "photo" ? photoHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
+  const draw = slide.type === "photo" ? photoHtml : slide.type === "note" ? noteHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
   // A gift slide with a `still` is a Live Photo from tiktok-gift-live.mjs: it is posted as it is, so
   // there is no slide file to write — its still only goes on the contact sheet.
   const still = slide.type === "gift" && slide.still ? join(dirname(scriptPath), slide.still) : null;
@@ -455,7 +529,7 @@ for (const slide of script.slides) {
     if (SHEET) sheet.push(readFileSync(still));
     continue;
   }
-  if (slide.type !== "chat" && slide.type !== "photo") {
+  if (slide.type !== "chat" && slide.type !== "photo" && slide.type !== "note") {
     if (SHEET) {
       await page.setContent(gapHtml(slide, n));
       await settle();

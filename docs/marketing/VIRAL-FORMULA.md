@@ -713,6 +713,44 @@ still, because the demo says Ana and the buyers for those are daughters and frie
 `scripts/tiktok-demo-frames.mjs` takes the stills straight from tryethos.io, so they are exactly
 what a viewer who goes looking will find.
 
+## The September 2026 meta: 125 to 130
+
+What the photo-mode algorithm weighs this month, from the creators who publish their numbers
+(ReelBase, PostWaffle, Buffer's and tokchart's sound charts for the week of 19 September) and
+from what the storytime accounts are actually posting:
+
+- **Swipe-through is the metric.** A carousel is tested on 200 to 500 people, and the share of
+  them that swipes from slide 1 to slide 2 decides whether it leaves the pool. 60 to 70% is the
+  bar. So slide 1 is a hook typed over the image, 8 to 15 words, first person, and the thread
+  under it stops mid-question.
+- **Five to seven slides, one beat each, 3 to 5 seconds a slide.** Every swipe is a signal and
+  seven slides is four more signals than three. Completion counts, and so do reverse swipes,
+  so one slide should make people go back and check something ("ana is in this chat").
+- **Saves outweigh likes.** A 5% save rate is what the ranking calls high value. The last slide
+  is therefore the one people save: an Apple Notes screenshot, "for everyone asking", with the
+  template, the how, the minutes and the code. It is the only slide that names the product, and
+  it earns the post its reach instead of costing it.
+- **Confession and numbers.** The hooks doing the numbers in 2026 open on a mistake or an
+  admission ("i forgot", "i couldn't afford", "he went quiet") with something exact in them
+  (11:41pm, 4,000 miles, 4 minutes, 84). Raw beats polished by about a third.
+- **The sound is sincere and known.** "u + me = <3" under friendship and family carousels,
+  "Velvety Captor" (piano) under romance, "Makes No Difference" when it is reflective, "kinda chic"
+  under a comedy; "nowhere, nobody" (Ariana Grande) is this month's emotional-carousel sound, the
+  slides cut to its sections. Never the comedy sound of the week under a story that isn't one.
+- **Belonging is the share.** High-arousal feeling (awe, tenderness, dread turning to relief)
+  makes people share; a tag that names a person ("tag the friend who'd cry at this", "tag someone
+  who should ring their nan") tells them who to share it with. The maker is the same voice every
+  time, so the account is a person people come back to.
+- **Cadence.** Three to five carousels a week, evenings, and the first hour of replies in
+  character.
+
+125 to 130 are built on that: seven slides each, the hook over slide 1, the link on slide 2, a
+still of the real gift on slides 3 and 5, the recipient naming every feature in their own words,
+the quotable line with the heart on slide 6 and the Notes slide last. Two of them use
+`swap "Ana" "Nan"` in `scripts/tiktok-demo-frames.mjs`, so the still says "Dear Nan," and "84" —
+the drawing is the real template, the names are the story's. 128 is the first group chat: names
+over the grey bubbles, four friends reacting, and the birthday girl in the chat the whole time.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -975,5 +1013,11 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 122 | why does my phone keep popping | a dad's 50th, in full sentences | Balloons | — |
 | 123 | your father thinks i have lost my mind | a mum follows the instructions | Pop-up Card | — |
 | 124 | the book of us | best friends, the things they said they'd forget | Sketchbook | — |
+| 125 | 11:41 | forgot her birthday, 17 minutes, the balloons | Balloons | — |
+| 126 | 4,000 miles | long distance, she blew the candles out | Pop-up Card | — |
+| 127 | 4 minutes | her boyfriend went quiet, a sketchbook | Sketchbook | — |
+| 128 | wrong chat | the group chat reviews it; she is in the chat | Birthday Cinema | — |
+| 129 | nan | 84, blew out candles through her phone | Pop-up Card | — |
+| 130 | mum's 50th | "it's fine love", 11:58pm, 50 balloons | Balloons | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

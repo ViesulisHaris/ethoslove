@@ -1,0 +1,185 @@
+{
+  "demo": {
+    "template": "sketchbook",
+    "steps": [
+      "swap \"Ana\" \"Sam\"",
+      "swap \"Marco\" \"Mia\"",
+      "tap \"open the sketchbook\"",
+      "wait 7400",
+      "tap \"next page\"",
+      "wait 3400",
+      "shot gift-1.png",
+      "tap \"next page\"",
+      "wait 1200",
+      "tap \"next page\"",
+      "wait 1200",
+      "tap \"next page\"",
+      "wait 9000",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "i made my boyfriend a sketchbook\nand he went quiet for 4 minutes",
+      "timestamp": "Sat, Sep 19|at 9:12 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "dont open this at work"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "a sketchbook for sam",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Sam"
+          }
+        },
+        {
+          "from": "them",
+          "text": "im at work"
+        },
+        {
+          "from": "them",
+          "text": "opening it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "im at work"
+        },
+        {
+          "from": "them",
+          "text": "opening it"
+        },
+        {
+          "from": "them",
+          "text": "u drew a cake"
+        },
+        {
+          "from": "them",
+          "text": "wait its drawing itself"
+        },
+        {
+          "from": "them",
+          "text": "how did u do the handwriting"
+        },
+        {
+          "from": "me",
+          "text": "turn the page"
+        },
+        {
+          "ts": "Sat, Sep 19|at 9:17 AM"
+        },
+        {
+          "from": "them",
+          "text": "sorry"
+        },
+        {
+          "from": "them",
+          "text": "i had to put my phone down for a sec"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i had to put my phone down for a sec"
+        },
+        {
+          "from": "them",
+          "text": "u put the coffee one in"
+        },
+        {
+          "from": "them",
+          "text": "and lisbon"
+        },
+        {
+          "from": "them",
+          "text": "the captions r in ur handwriting"
+        },
+        {
+          "from": "me",
+          "text": "every page is a thing u said id forget"
+        },
+        {
+          "from": "them",
+          "text": "i didnt think ud remember the sugar thing"
+        },
+        {
+          "from": "me",
+          "text": "i remember everything. thats the problem"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i remember everything. thats the problem"
+        },
+        {
+          "from": "them",
+          "text": "im in the toilets at work reading a sketchbook"
+        },
+        {
+          "from": "them",
+          "text": "theres a letter at the end"
+        },
+        {
+          "from": "them",
+          "text": "ok im actually crying"
+        },
+        {
+          "from": "them",
+          "text": "a grown man. in a cubicle"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday sam",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "my mate just asked what site this is"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "since 200 of u asked",
+      "date": "19 September 2026 at 10:02",
+      "lines": [
+        "- tryethos, the Sketchbook template",
+        "- u pick the photos + write a caption for each",
+        "- it draws the cake itself. the doodles too. the handwriting is a font, im not talented",
+        "- the last page is ur letter",
+        "- took me 25 min in bed",
+        "- code LOVE = 20% off",
+        "",
+        "(save this for his birthday. he will go quiet too)"
+      ]
+    }
+  ]
+}

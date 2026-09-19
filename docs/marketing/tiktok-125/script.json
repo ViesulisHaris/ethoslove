@@ -1,0 +1,206 @@
+{
+  "demo": {
+    "template": "balloons",
+    "steps": [
+      "tap \"tap to open\"",
+      "wait 4200",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "wait 1600",
+      "shot gift-1.png",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "wait 1400",
+      "tap \"open the letter\"",
+      "wait 3600",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "i forgot my best friend's birthday\nuntil 11:41pm",
+      "timestamp": "Fri, Sep 18|at 11:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u still awake"
+        },
+        {
+          "from": "them",
+          "text": "yeah why"
+        },
+        {
+          "from": "me",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "them",
+          "text": "its 11:41 what do u want"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "them",
+          "text": "its 11:41 what do u want"
+        },
+        {
+          "ts": "Fri, Sep 18|at 11:59 PM"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "dont judge it. it took me 17 minutes"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "30 balloons for ana",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ana"
+          }
+        },
+        {
+          "from": "me",
+          "text": "open it at 12"
+        },
+        {
+          "from": "them",
+          "text": "??"
+        },
+        {
+          "from": "them",
+          "text": "why are there balloons in my phone"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why are there balloons in my phone"
+        },
+        {
+          "from": "me",
+          "text": "pop them"
+        },
+        {
+          "from": "them",
+          "text": "THEY HAVE PHOTOS IN THEM"
+        },
+        {
+          "from": "them",
+          "text": "the coffee one"
+        },
+        {
+          "from": "them",
+          "text": "u kept that photo??"
+        },
+        {
+          "from": "them",
+          "text": "the big one wont pop"
+        },
+        {
+          "from": "me",
+          "text": "pop the others first"
+        },
+        {
+          "from": "them",
+          "text": "u did this in 17 minutes"
+        },
+        {
+          "from": "me",
+          "text": "on the sofa. dont tell anyone"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "on the sofa. dont tell anyone"
+        },
+        {
+          "from": "them",
+          "text": "the big one had a letter in it"
+        },
+        {
+          "from": "them",
+          "text": "marco"
+        },
+        {
+          "from": "them",
+          "text": "u called me ur person"
+        },
+        {
+          "from": "them",
+          "text": "im crying in the dark like an idiot"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday. go to sleep"
+        },
+        {
+          "from": "them",
+          "text": "no im reading it again",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "also my sister wants one. how"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking how",
+      "date": "19 September 2026 at 00:31",
+      "lines": [
+        "- tryethos, the one called Balloons",
+        "- ur photos go inside the balloons. she pops them",
+        "- the big one has the letter in it",
+        "- 17 min on my phone. no app, its a link",
+        "- code LOVE takes 20% off",
+        "",
+        "- send it at 12:00 exactly. trust me",
+        "",
+        "(save this for their birthday)"
+      ]
+    }
+  ]
+}

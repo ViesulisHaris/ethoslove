@@ -1,0 +1,200 @@
+{
+  "demo": {
+    "template": "popup-card",
+    "steps": [
+      "tap \"open the card\"",
+      "wait 3400",
+      "tap \"light candle 1\"",
+      "wait 320",
+      "tap \"light candle 2\"",
+      "wait 320",
+      "tap \"light candle 3\"",
+      "wait 320",
+      "tap \"light candle 4\"",
+      "wait 320",
+      "tap \"light candle 5\"",
+      "wait 320",
+      "wait 1500",
+      "shot gift-1.png",
+      "swipe up",
+      "wait 2600",
+      "tap \"read the letter\"",
+      "wait 3800",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "she's 4,000 miles away and still\nblew out her candles",
+      "timestamp": "Fri, Sep 18|at 11:59 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what time is it there"
+        },
+        {
+          "from": "them",
+          "text": "7. why"
+        },
+        {
+          "from": "me",
+          "text": "its 11:59 here"
+        },
+        {
+          "from": "me",
+          "text": "so ur birthday starts in 1 min for me"
+        },
+        {
+          "from": "them",
+          "text": "ur so annoying"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so ur birthday starts in 1 min for me"
+        },
+        {
+          "from": "them",
+          "text": "ur so annoying"
+        },
+        {
+          "ts": "Sat, Sep 19|at 12:00 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy birthday ana",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ana"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i couldnt post a card in time. so i made one"
+        },
+        {
+          "from": "them",
+          "text": "its a card"
+        },
+        {
+          "from": "them",
+          "text": "WAIT IT OPENED"
+        },
+        {
+          "from": "them",
+          "text": "theres a cake standing up in it"
+        },
+        {
+          "from": "me",
+          "text": "tap the candles"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "tap the candles"
+        },
+        {
+          "from": "them",
+          "text": "ok theyre lit"
+        },
+        {
+          "from": "them",
+          "text": "it says make a wish"
+        },
+        {
+          "from": "me",
+          "text": "so make one"
+        },
+        {
+          "from": "me",
+          "text": "then blow. into ur phone"
+        },
+        {
+          "from": "them",
+          "text": "marco im on the subway"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok i did it. a man looked at me"
+        },
+        {
+          "from": "them",
+          "text": "they went out. the candles actually went out"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "they went out. the candles actually went out"
+        },
+        {
+          "from": "me",
+          "text": "now read the inside"
+        },
+        {
+          "from": "them",
+          "text": "u wrote it in ur handwriting"
+        },
+        {
+          "from": "them",
+          "text": "i can see u writing it"
+        },
+        {
+          "from": "them",
+          "text": "i miss u so much it hurts"
+        },
+        {
+          "from": "me",
+          "text": "31 days"
+        },
+        {
+          "from": "them",
+          "text": "31 days",
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for the long distance ppl asking",
+      "date": "19 September 2026 at 00:22",
+      "lines": [
+        "- tryethos → the Pop-up Card one",
+        "- it opens like a real card and the cake stands up",
+        "- she taps the candles, then blows into her phone (it uses the mic)",
+        "- ur letter is on the inside, in handwriting",
+        "- took me 20 min. no app, its a link",
+        "- code LOVE = 20% off",
+        "",
+        "- send it at midnight. theirs or urs, doesnt matter",
+        "",
+        "(save for when u cant be there)"
+      ]
+    }
+  ]
+}

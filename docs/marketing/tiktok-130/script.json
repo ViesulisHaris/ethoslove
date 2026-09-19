@@ -1,0 +1,207 @@
+{
+  "demo": {
+    "template": "balloons",
+    "steps": [
+      "swap \"Ana\" \"Mum\"",
+      "swap \"30\" \"50\"",
+      "swap \"The coffee that started it\" \"You, before I ruined your sleep\"",
+      "swap \"Lisbon, lost on purpose\" \"Lisbon. You navigated.\"",
+      "swap \"Nube's first birthday party\" \"The day you said no to a dog\"",
+      "swap \"July, on two wheels\" \"You, teaching me to ride\"",
+      "swap \"Last year's cake, before you fixed it\" \"Last year's cake. You fixed it.\"",
+      "swap \"3\" \"5\"",
+      "tap \"tap to open\"",
+      "wait 4200",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "wait 1600",
+      "shot gift-1.png",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "tap \"pop a balloon\"",
+      "wait 650",
+      "wait 2600",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "my mum thinks i forgot her 50th.\nit's 11:58pm",
+      "timestamp": "Sat, Sep 19|at 11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's fine love. I know you're busy."
+        },
+        {
+          "from": "me",
+          "text": "mum"
+        },
+        {
+          "from": "me",
+          "text": "im not busy"
+        },
+        {
+          "from": "me",
+          "text": "look at ur phone at 12"
+        },
+        {
+          "from": "them",
+          "text": "I am looking at my phone."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I am looking at my phone."
+        },
+        {
+          "ts": "Sun, Sep 20|at 12:00 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "50 balloons for mum",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mum"
+          }
+        },
+        {
+          "from": "me",
+          "text": "happy birthday. tap it"
+        },
+        {
+          "from": "them",
+          "text": "There are balloons on my screen"
+        },
+        {
+          "from": "them",
+          "text": "Do I pop them"
+        },
+        {
+          "from": "me",
+          "text": "yes. tap them"
+        },
+        {
+          "from": "them",
+          "text": "There is a picture in this one."
+        },
+        {
+          "from": "them",
+          "text": "Oh"
+        },
+        {
+          "from": "them",
+          "text": "Oh that's the day we got Nube"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Oh that's the day we got Nube"
+        },
+        {
+          "from": "them",
+          "text": "You kept the bike one."
+        },
+        {
+          "from": "them",
+          "text": "Why won't the big one pop"
+        },
+        {
+          "from": "me",
+          "text": "pop the others first"
+        },
+        {
+          "from": "them",
+          "text": "Did you make this yourself"
+        },
+        {
+          "from": "me",
+          "text": "yeah. 20 mins. dont tell dad it was quick"
+        },
+        {
+          "from": "them",
+          "text": "Your father is asleep. Your father is missing this."
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Your father is missing this."
+        },
+        {
+          "from": "them",
+          "text": "The big one had a letter in it"
+        },
+        {
+          "from": "them",
+          "text": "I've read it three times"
+        },
+        {
+          "from": "them",
+          "text": "I didn't think you remembered the bike."
+        },
+        {
+          "from": "me",
+          "text": "i remember all of it"
+        },
+        {
+          "from": "them",
+          "text": "I'm going to wake your father.",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "Can you make one for Auntie Sue"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking (and auntie sue)",
+      "date": "20 September 2026 at 00:26",
+      "lines": [
+        "- tryethos, the Balloons one",
+        "- her photos go inside the balloons. she pops them",
+        "- the big one holds ur letter",
+        "- 20 min on my phone. its just a link",
+        "- works on a mum's phone. she found it, so u can",
+        "- code LOVE = 20% off",
+        "",
+        "(save this. her birthday comes round faster than u think)"
+      ]
+    }
+  ]
+}

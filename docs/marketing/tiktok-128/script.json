@@ -1,0 +1,205 @@
+{
+  "demo": {
+    "template": "birthday-cinema",
+    "steps": [
+      "tap \"tap to start the show\"",
+      "wait 3200",
+      "shot gift-1.png",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "wait 7000",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "i sent my best friend's surprise\nto the group chat she's in",
+      "timestamp": "Sat, Sep 19|at 6:40 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok its done. tell me if its too much before i send it to her"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "a cinema for ana",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ana"
+          }
+        },
+        {
+          "from": "them",
+          "name": "Priya",
+          "text": "theres a CINEMA"
+        },
+        {
+          "from": "them",
+          "name": "Tom",
+          "text": "why is there a ticket with her name on"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "name": "Priya",
+          "text": "theres a CINEMA"
+        },
+        {
+          "from": "them",
+          "name": "Tom",
+          "text": "why is there a ticket with her name on"
+        },
+        {
+          "from": "them",
+          "name": "Priya",
+          "text": "the cake has candles. real ones"
+        },
+        {
+          "from": "me",
+          "text": "tap start. then swipe up to blow them out"
+        },
+        {
+          "from": "them",
+          "name": "Tom",
+          "text": "i just blew on my phone in a lidl"
+        },
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "the film is our photos??"
+        },
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "the venice one is in"
+        },
+        {
+          "from": "me",
+          "text": "its from all of us. i put everyone in"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its from all of us. i put everyone in"
+        },
+        {
+          "from": "them",
+          "name": "Priya",
+          "text": "im not crying its the lidl lighting"
+        },
+        {
+          "from": "them",
+          "name": "Tom",
+          "text": "how long did this take u"
+        },
+        {
+          "from": "me",
+          "text": "20 mins. u just upload the photos"
+        },
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "wait"
+        },
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "guys"
+        },
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "ana is in this chat"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "name": "Jess",
+          "text": "ana is in this chat"
+        },
+        {
+          "from": "them",
+          "name": "Ana",
+          "text": "hi"
+        },
+        {
+          "from": "them",
+          "name": "Ana",
+          "text": "ive been here the whole time"
+        },
+        {
+          "from": "them",
+          "name": "Ana",
+          "text": "ive watched it 4 times"
+        },
+        {
+          "from": "them",
+          "name": "Ana",
+          "text": "the ticket says row A seat 1"
+        },
+        {
+          "from": "me",
+          "text": "surprise i guess"
+        },
+        {
+          "from": "them",
+          "name": "Ana",
+          "text": "best surprise ive ever ruined",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "name": "Tom",
+          "text": "ok but link. i need one for my mum"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for tom and the 300 people in my comments",
+      "date": "19 September 2026 at 19:14",
+      "lines": [
+        "- tryethos → Birthday Cinema",
+        "- it prints a ticket with their name, then a cake with their age in candles",
+        "- they blow into the phone, the candles go out, the film starts",
+        "- the film is ur photos. we put 14 in",
+        "- 20 min. we split it between the 4 of us",
+        "- code LOVE = 20% off",
+        "",
+        "(save this for the group chat)"
+      ]
+    }
+  ]
+}

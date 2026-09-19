@@ -1,0 +1,201 @@
+{
+  "demo": {
+    "template": "popup-card",
+    "steps": [
+      "swap \"Ana\" \"Nan\"",
+      "swap \"Marco\" \"Ellie\"",
+      "swap \"30\" \"84\"",
+      "swap \"Thirty\" \"Eighty-four\"",
+      "swap \"The café where it started\" \"Your kitchen, every Sunday\"",
+      "swap \"Lisbon, lost on purpose\" \"Blackpool, you and grandad\"",
+      "tap \"open the card\"",
+      "wait 3400",
+      "tap \"light candle 1\"",
+      "wait 320",
+      "tap \"light candle 2\"",
+      "wait 320",
+      "tap \"light candle 3\"",
+      "wait 320",
+      "tap \"light candle 4\"",
+      "wait 320",
+      "tap \"light candle 5\"",
+      "wait 320",
+      "wait 1500",
+      "shot gift-1.png",
+      "swipe up",
+      "wait 2600",
+      "tap \"read the letter\"",
+      "wait 3800",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "my nan is 84 and just blew out\ncandles through her phone",
+      "timestamp": "Sat, Sep 19|at 10:04 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "nan happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "i sent u something. its a link, just press it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy birthday nan",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Nan"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Hello love. It says open the card. Do I press it"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Hello love. It says open the card. Do I press it"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "Oh my goodness"
+        },
+        {
+          "from": "them",
+          "text": "It opened like a real card"
+        },
+        {
+          "from": "them",
+          "text": "There is a cake stood up in it"
+        },
+        {
+          "from": "me",
+          "text": "tap the candles nan"
+        },
+        {
+          "from": "them",
+          "text": "I've lit them. They're all lit."
+        },
+        {
+          "from": "them",
+          "text": "It says make a wish"
+        },
+        {
+          "from": "me",
+          "text": "make one. then blow on the phone"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "make one. then blow on the phone"
+        },
+        {
+          "from": "them",
+          "text": "Blow on it?"
+        },
+        {
+          "from": "me",
+          "text": "yeah. like real candles. it listens"
+        },
+        {
+          "from": "them",
+          "text": "Ellie I look ridiculous"
+        },
+        {
+          "from": "them",
+          "text": "They've gone out."
+        },
+        {
+          "from": "them",
+          "text": "Ellie they went out"
+        },
+        {
+          "from": "them",
+          "text": "How does it know"
+        },
+        {
+          "from": "me",
+          "text": "its clever. read the inside now"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its clever. read the inside now"
+        },
+        {
+          "from": "them",
+          "text": "You wrote it in your writing"
+        },
+        {
+          "from": "them",
+          "text": "I've read it twice"
+        },
+        {
+          "from": "them",
+          "text": "Your grandad would have loved this."
+        },
+        {
+          "from": "them",
+          "text": "He'd have blown on the phone all day."
+        },
+        {
+          "from": "me",
+          "text": "he would"
+        },
+        {
+          "from": "them",
+          "text": "Thank you my darling. I'm going to show Margaret.",
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking about nan's card",
+      "date": "19 September 2026 at 10:41",
+      "lines": [
+        "- tryethos → Pop-up Card",
+        "- it opens like a real card and a paper cake stands up",
+        "- she taps the candles, blows into the phone, they go out",
+        "- ur letter is inside, in handwriting",
+        "- 15 min. no app, its a link. nan managed it",
+        "- code LOVE = 20% off",
+        "",
+        "(save this for ur nan. and ring her)"
+      ]
+    }
+  ]
+}

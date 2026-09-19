@@ -8,13 +8,15 @@
  *
  * Steps: `shot <file>` · `wait <ms>` · `tap` (the middle) · `tap <x> <y>` (in the 360×640 viewport)
  * · `tap "text"` (a control in the gift with that text or label) · `press "text"` / `release` (hold
- * it down, for "hold to pour") · `swipe up|down|left|right`.
+ * it down, for "hold to pour") · `swipe up|down|left|right` · `swap "Ana" "Nan"` (from then on,
+ * every shot has that whole word replaced in the gift's text — the name on the letter, the age on
+ * the cake, a caption — so the frame belongs to the story's people; the drawing is untouched).
  *
  * Why the demo and not a real gift: nothing is published and nobody's account is touched, and the
- * demo is exactly what a viewer who goes looking will find. The price is the names — Ana and Marco,
- * Elena, Sam, Dani and Mamá — so the story is written around whoever the demo is for. The demo's
- * own bar ("All templates", "Use this template") is hidden, and cookies are declined, so a frame
- * shows only the gift.
+ * demo is exactly what a viewer who goes looking will find. The price used to be the names — Ana
+ * and Marco, Elena, Sam, Dani and Mamá; `swap` pays it, so a story about a nan or a brother can
+ * show a card addressed to them. The demo's own bar ("All templates", "Use this template") is
+ * hidden, and cookies are declined, so a frame shows only the gift.
  *
  * These are stills. scripts/tiktok-gift-live.mjs films the gift moving, with your own names and
  * photos, for Live Photos — use that for any template it has choreography for (Halfway, so far).
@@ -82,6 +84,24 @@ async function drag(from, to) {
   await page.mouse.up();
 }
 
+/** Whole-word replacements applied to the gift's text right before every shot. */
+const swaps = [];
+const applySwaps = async () => {
+  if (!swaps.length) return;
+  await page.evaluate((pairs) => {
+    const root = document.querySelector(".gift-root") ?? document.body;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    for (const node of nodes) {
+      let text = node.nodeValue ?? "";
+      for (const [from, to] of pairs) text = text.replace(new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"), to);
+      if (text !== node.nodeValue) node.nodeValue = text;
+    }
+  }, swaps);
+  await page.waitForTimeout(120);
+};
+
 const SWIPES = { up: [[W / 2, H * 0.85], [W / 2, H * 0.3]], down: [[W / 2, H * 0.3], [W / 2, H * 0.85]], left: [[W * 0.9, H / 2], [W * 0.1, H / 2]], right: [[W * 0.1, H / 2], [W * 0.9, H / 2]] };
 
 for (const step of script.demo.steps) {
@@ -89,6 +109,7 @@ for (const step of script.demo.steps) {
   const quoted = step.match(/"([^"]+)"/)?.[1];
   if (verb === "shot") {
     const file = join(dir, rest[0]);
+    await applySwaps();
     await page.screenshot({ path: file });
     console.log("wrote", file);
   } else if (verb === "wait") {
@@ -103,6 +124,10 @@ for (const step of script.demo.steps) {
     await page.mouse.up();
   } else if (verb === "swipe" && SWIPES[rest[0]]) {
     await drag(...SWIPES[rest[0]]);
+  } else if (verb === "swap") {
+    const [from, to] = [...step.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
+    if (!from || to === undefined) throw new Error(`step "${step}": swap needs "from" "to"`);
+    swaps.push([from, to]);
   } else {
     throw new Error(`unknown step "${step}"`);
   }
