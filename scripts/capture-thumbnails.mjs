@@ -347,6 +347,16 @@ const SCRIPTS = {
     await page.waitForTimeout(3200);
     return poster;
   },
+  sketchbook: async (page) => {
+    const book = page.getByRole("button", { name: /open the sketchbook/i });
+    await book.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await book.click({ force: true });
+    await page.waitForTimeout(6800);
+    const poster = await page.screenshot();
+    for (let i = 0; i < 3; i++) { await page.locator("[data-turn=next]").click({ force: true }).catch(() => {}); await page.waitForTimeout(2600); }
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);

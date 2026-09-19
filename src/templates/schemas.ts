@@ -39,6 +39,7 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "the-toast": () => import("./the-toast/schema"),
   balloons: () => import("./balloons/schema"),
   "popup-card": () => import("./popup-card/schema"),
+  sketchbook: () => import("./sketchbook/schema"),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);

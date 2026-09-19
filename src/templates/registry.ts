@@ -41,6 +41,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "the-toast": () => import("./the-toast"),
   balloons: () => import("./balloons"),
   "popup-card": () => import("./popup-card"),
+  sketchbook: () => import("./sketchbook"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
