@@ -81,7 +81,8 @@ export function TemplateFields({ mod, locale, only, except }: { mod: TemplateMod
           case "number":
             return (
               <Field key={d.key} id={id} label={label} help={m?.help}>
-                <Input id={id} type="number" value={Number(value ?? 0)} min={d.min} max={d.max} onChange={(e) => patchFields({ [d.key]: Number(e.target.value) })} className="h-11" />
+                {/* An empty optional number stays empty: shown as 0 it read as an age, and saved as 0 it failed the schema's minimum at publish. */}
+                <Input id={id} type="number" inputMode="numeric" value={value === "" || value === undefined || value === null ? "" : String(value)} min={d.min} max={d.max} onChange={(e) => patchFields({ [d.key]: e.target.value === "" ? undefined : Number(e.target.value) })} className="h-11" />
               </Field>
             );
           case "list":

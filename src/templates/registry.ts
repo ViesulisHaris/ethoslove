@@ -39,6 +39,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "cap-toss": () => import("./cap-toss"),
   "paper-crane": () => import("./paper-crane"),
   "the-toast": () => import("./the-toast"),
+  balloons: () => import("./balloons"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

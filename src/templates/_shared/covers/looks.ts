@@ -253,6 +253,7 @@ export function defaultCoverFor(slug: string): CoverId {
       return "starry";
     case "birthday-cinema":
     case "arcade":
+    case "balloons":
       return "birthday";
     case "scratch-card":
     case "fortune-cookie":

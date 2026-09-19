@@ -317,6 +317,20 @@ const SCRIPTS = {
     await page.waitForTimeout(4500);
     return poster;
   },
+  balloons: async (page) => {
+    await open(page);
+    const balloon = page.locator("[data-balloon]:not([data-letter])");
+    await balloon.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2600);
+    const poster = await page.screenshot();
+    const count = await balloon.count();
+    for (let i = 0; i < count; i++) { await page.locator("[data-balloon]:not([data-letter])").first().click({ force: true }); await page.waitForTimeout(650); }
+    await page.locator("[data-letter]").first().click({ force: true });
+    await page.waitForTimeout(3200);
+    const sc = page.locator('[data-template="balloons"] .overflow-y-auto').last();
+    for (let i = 0; i < 3; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.5, behavior: "smooth" })); await page.waitForTimeout(1000); }
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);
