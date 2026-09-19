@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "indexnow": "node scripts/indexnow.mjs",
     "db:types": "supabase gen types typescript --linked --schema public > src/lib/supabase/types.ts",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset"
