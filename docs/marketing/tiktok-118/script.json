@@ -1,0 +1,26 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Fri, Sep 18|at 11:58 PM", "messages": [
+      { "from": "me", "text": "are u awake" },
+      { "from": "me", "text": "stay awake 2 more mins" },
+      { "from": "me", "text": "please", "status": "Delivered" }
+    ] },
+    { "type": "chat", "timestamp": "Fri, Sep 18|at 11:58 PM", "messages": [
+      { "from": "me", "text": "are u awake" },
+      { "from": "me", "text": "stay awake 2 more mins" },
+      { "from": "me", "text": "please" },
+      { "ts": "Sat, Sep 19|at 12:00 AM" },
+      { "from": "me", "link": { "title": "sam turns 20", "domain": "tryethos.io", "image": "og", "name": "Sam" } },
+      { "from": "me", "text": "i wanted to be first", "status": "Delivered" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "me", "text": "i wanted to be first" },
+      { "ts": "Sat, Sep 19|at 7:48 AM" },
+      { "from": "them", "text": "i fell asleep" },
+      { "from": "them", "text": "WAIT" },
+      { "from": "them", "text": "i just blew the candles out in front of my mum" },
+      { "from": "me", "text": "was i first" },
+      { "from": "them", "text": "u were first", "tapback": "heart" }
+    ] }
+  ]
+}

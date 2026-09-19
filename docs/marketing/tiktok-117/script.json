@@ -1,0 +1,27 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sun 20 Sept|at 23:52", "messages": [
+      { "from": "them", "text": "i hate that ur not here" },
+      { "from": "me", "text": "i know" },
+      { "from": "me", "text": "put ur headphones in at 12" }
+    ] },
+    { "type": "chat", "timestamp": "Sun 20 Sept|at 23:52", "messages": [
+      { "from": "them", "text": "i hate that ur not here" },
+      { "from": "me", "text": "i know" },
+      { "from": "me", "text": "put ur headphones in at 12" },
+      { "ts": "Mon 21 Sept|at 00:00" },
+      { "from": "me", "link": { "title": "happy birthday lil", "domain": "tryethos.io", "image": "og", "name": "Lily" } },
+      { "from": "them", "text": "wait" },
+      { "from": "them", "text": "IS THAT YOUR VOICE" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "wait" },
+      { "from": "them", "text": "IS THAT YOUR VOICE" },
+      { "from": "them", "text": "u sang it??" },
+      { "from": "them", "text": "ur so off key" },
+      { "from": "me", "text": "u were meant to cry" },
+      { "from": "them", "text": "i am crying" },
+      { "from": "them", "text": "bc ur off key", "tapback": "heart" }
+    ] }
+  ]
+}

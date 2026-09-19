@@ -691,6 +691,15 @@ conversation exists. The captions do different jobs — 112 asks a question peop
 post ("is it cringe?"), 113 is a reaction, and 114 asks to be sent to somebody's dad, because the
 share lands on the person with the photos and the card.
 
+## Birthdays, both ways: 115 to 118
+
+Four birthday threads in the 111 shape, two made by him and two by her, because both are buyers:
+a gift ban beaten on a technicality (115, "websites can sing"), the girlfriend and his mum with a
+group chat (116), a long-distance voice message sung off key (117), and our own hit 30 turned round
+— she stays up to be first, he is asleep, Delivered twice (118). Each names exactly one or two
+things the gift does, in the recipient's words: the cake and the song, the plaques, the voice, the
+candles you blow out on your phone.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -943,5 +952,9 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 112 | wrong chat | the accidental send, six months early | Birthday Cinema | — |
 | 113 | this is his mum | somebody else on his phone | Scrapbook | — |
 | 114 | Love Dad | the dad sign-off, uni week | Our Timeline | — |
+| 115 | no gifts | a ban beaten on a technicality | Birthday Cinema | — |
+| 116 | the group chat | her and his mum, his 21st | Museum | — |
+| 117 | is that your voice | long distance, the voice message | Vinyl + voice | — |
+| 118 | was i first | 30 turned round, Delivered twice | Birthday Cinema | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

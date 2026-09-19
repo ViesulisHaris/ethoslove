@@ -1,0 +1,26 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Sat, Sep 19|at 12:01 AM", "messages": [
+      { "from": "them", "text": "why is my mum sending me heart emojis at midnight" },
+      { "from": "me", "text": "no idea" },
+      { "from": "me", "text": "happy birthday tho 🙂" }
+    ] },
+    { "type": "chat", "timestamp": "Sat, Sep 19|at 12:01 AM", "messages": [
+      { "from": "them", "text": "why is my mum sending me heart emojis at midnight" },
+      { "from": "me", "text": "no idea" },
+      { "from": "me", "text": "happy birthday tho 🙂" },
+      { "from": "me", "link": { "title": "The Jake Collection", "domain": "tryethos.io", "image": "og", "name": "Jake" } },
+      { "from": "them", "text": "why is my baby photo in a museum" },
+      { "from": "them", "text": "it has a plaque" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "why is my baby photo in a museum" },
+      { "from": "them", "text": "it has a plaque" },
+      { "from": "them", "text": "it says already annoying 2005" },
+      { "from": "me", "text": "ur mum wrote that one" },
+      { "from": "them", "text": "u and my mum have a GROUP CHAT??" },
+      { "from": "me", "text": "since june" },
+      { "from": "them", "text": "ur both insane", "tapback": "heart" }
+    ] }
+  ]
+}
