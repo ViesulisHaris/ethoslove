@@ -532,27 +532,9 @@ accounts run, and it wants different rules.
 - **Nobody is the villain, including the distance.** He got in somewhere and she tells him he has to
   go. A story where the only enemy is a plane gets "who is cutting onions" instead of an argument.
 
-## Her side of September: 104 and 105
-
-98 to 103 are all him leaving, by plane, from a couple who were already a couple. 104 and 105 are the
-other half of this month, the one every 18-year-old in the audience is living in the same week: **she**
-leaves, for uni, by train, from something neither of them ever called a relationship. The argument is
-the label, not the distance — "we said summer" is the most common lie at that age, and the hook has
-already told the viewer it is a lie before she types a word.
-
-- **No cover photo.** Both parts open on the hook drawn over the first texts. The paradox — *it was
-  just a summer thing / he bought a railcard* — does what the picture does for @tingarchive14, and the
-  thread is already moving on the first swipe.
-- **The viewer knows more than she does.** She spends five slides thinking it was nothing to him. The
-  comments shout at her, which is kinder than shouting at him and just as loud.
-- **The sacrifice is his silence.** "if i say it u wont go." is the whole of his side of part 1, the
-  same shape as the 2.7M post's "because if i told you yesterday / you would've stayed".
-- **The reveal is a £30 railcard**, the 16-25 one, in Halfway's halfway note — small money as a
-  sacrifice, in a gift no carousel has shown yet.
-
 ## The gift, moving: Live Photos
 
-A still of a gift is a picture of a website. 105 posts three **Live Photos of the gift actually
+A still of a gift is a picture of a website. A carousel can post **Live Photos of the gift actually
 playing** instead — the plane crossing the map as she blows, the kilometres falling, the note popping
 up half way, the heart, the postcard turning over, the photos under the letter — and TikTok plays them
 in the carousel, on loop. Nobody has to be told the thing is interactive; they watch it be.
@@ -952,8 +934,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 101 | he finished it anyway | broke up in June, finished the gift anyway | Scrapbook (Memories) | Classic |
 | 102 | everyone knew but her | friends to lovers, 3 years | Scrapbook (Blossom) | Classic |
 | 103 | she was going to end it | the misunderstanding, resolved in a night | Scrapbook (Memories) | Classic |
-| 104 | just a summer thing · part 1 | leaving for uni, the label not the distance, no cover | none, on purpose | — |
-| 105 | he couldnt say it · part 2 | what was in the link, the gift as Live Photos | Halfway (Night flight) | — |
 | 106 | she couldn't make the wedding | best friend, happy, two gift stills | The Toast (demo) | its own |
 | 107 | she's allergic to flowers | comedy, the recipient sells it | Bouquet (demo) | none |
 | 108 | everyone forgot her 30th | the group chat, the candles | Birthday Cinema (demo) | its own |
