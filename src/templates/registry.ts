@@ -40,6 +40,9 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "paper-crane": () => import("./paper-crane"),
   "the-toast": () => import("./the-toast"),
   balloons: () => import("./balloons"),
+  "party-animals": () => import("./party-animals"),
+  "the-council": () => import("./the-council"),
+  "sticker-bomb": () => import("./sticker-bomb"),
   "popup-card": () => import("./popup-card"),
   sketchbook: () => import("./sketchbook"),
 };

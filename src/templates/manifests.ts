@@ -28,6 +28,9 @@ import { manifest as capToss } from "./cap-toss/manifest";
 import { manifest as paperCrane } from "./paper-crane/manifest";
 import { manifest as theToast } from "./the-toast/manifest";
 import { manifest as balloons } from "./balloons/manifest";
+import { manifest as partyAnimals } from "./party-animals/manifest";
+import { manifest as theCouncil } from "./the-council/manifest";
+import { manifest as stickerBomb } from "./sticker-bomb/manifest";
 import { manifest as popupCard } from "./popup-card/manifest";
 import { manifest as sketchbook } from "./sketchbook/manifest";
 
@@ -41,7 +44,7 @@ import { manifest as sketchbook } from "./sketchbook/manifest";
  * on the homepage, pricing and the gallery, for gifts nobody had opened. Import from here unless
  * you are about to render a template.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb];
 
 export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
 

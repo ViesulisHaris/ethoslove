@@ -226,6 +226,8 @@ export const COVER_LOOKS: Record<CoverLook["id"], CoverLook> = {
 /** The cover a new gift starts with, chosen to suit the template's world. */
 export function defaultCoverFor(slug: string): CoverId {
   switch (slug) {
+    case "the-council":
+    case "sticker-bomb":
     case "the-letter":
     case "scrapbook":
     case "garden":
@@ -256,6 +258,7 @@ export function defaultCoverFor(slug: string): CoverId {
     case "birthday-cinema":
     case "arcade":
     case "balloons":
+    case "party-animals":
       return "birthday";
     case "scratch-card":
     case "fortune-cookie":

@@ -347,6 +347,44 @@ const SCRIPTS = {
     await page.waitForTimeout(3200);
     return poster;
   },
+  "party-animals": async (page) => {
+    await open(page);
+    const guests = page.locator("[data-guest]");
+    await guests.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(3000);
+    const count = await guests.count();
+    for (let i = 0; i < 3; i++) { await guests.nth(i * 3).click({ force: true }); await page.waitForTimeout(700); }
+    // The poster is the party mid-shout: the collage, the hats, one bubble.
+    const poster = await page.screenshot();
+    for (let i = 0; i < count; i++) { await guests.nth(i).click({ force: true }); await page.waitForTimeout(420); }
+    await page.waitForTimeout(1600);
+    return poster;
+  },
+  "the-council": async (page) => {
+    await page.getByRole("button", { name: /all rise/i }).click({ force: true, timeout: 20000 });
+    await page.waitForTimeout(1900);
+    // The poster is the hearing: five cats behind the bench and the chair reading the first finding.
+    const poster = await page.screenshot();
+    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /next finding/i }).click({ force: true }); await page.waitForTimeout(1300); }
+    await page.getByRole("button", { name: /hear the verdict/i }).click({ force: true });
+    await page.waitForTimeout(4200);
+    return poster;
+  },
+  "sticker-bomb": async (page) => {
+    const surface = page.locator("[data-surface]");
+    await surface.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1200);
+    const box = await surface.boundingBox();
+    const spots = [[0.27, 0.2], [0.72, 0.27], [0.5, 0.47], [0.27, 0.62], [0.74, 0.66], [0.5, 0.17], [0.3, 0.4], [0.7, 0.47], [0.5, 0.74], [0.28, 0.82], [0.73, 0.83], [0.5, 0.33]];
+    let poster = null;
+    for (const [i, [fx, fy]] of spots.entries()) {
+      await page.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+      await page.waitForTimeout(520);
+      if (i === 8) poster = await page.screenshot();
+    }
+    await page.waitForTimeout(2200);
+    return poster;
+  },
   sketchbook: async (page) => {
     const book = page.getByRole("button", { name: /open the sketchbook/i });
     await book.waitFor({ timeout: 20000 });
