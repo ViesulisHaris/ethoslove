@@ -1,0 +1,173 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "my flatmate said no one was doing\nanything for her birthday. it was 11:52pm",
+      "timestamp": "Thu, Sep 17|at 11:52 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "dont worry about tmrw btw"
+        },
+        {
+          "from": "them",
+          "text": "no ones doing anything. its fine"
+        },
+        {
+          "from": "me",
+          "text": "who said that"
+        },
+        {
+          "from": "them",
+          "text": "me. im going to sleep x"
+        },
+        {
+          "from": "me",
+          "text": "give me 8 minutes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "me. im going to sleep x"
+        },
+        {
+          "from": "me",
+          "text": "give me 8 minutes"
+        },
+        {
+          "ts": "Fri, Sep 18|at 12:00 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "now showing: jess",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jess"
+          }
+        },
+        {
+          "from": "me",
+          "text": "tap start. sound on"
+        },
+        {
+          "from": "them",
+          "text": "why is there a ticket with my name on"
+        },
+        {
+          "from": "them",
+          "text": "row A seat 1??"
+        },
+        {
+          "from": "them",
+          "text": "IS THAT A CAKE"
+        },
+        {
+          "from": "me",
+          "text": "blow into ur phone"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Birthday Cinema: the cake lit under 'NOW SHOWING: JESS TURNS 22', the 'Use microphone' pill showing."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "blow into ur phone"
+        },
+        {
+          "from": "them",
+          "text": "i just blew on my phone in bed"
+        },
+        {
+          "from": "them",
+          "text": "they went out"
+        },
+        {
+          "from": "them",
+          "text": "wait theres a film"
+        },
+        {
+          "from": "them",
+          "text": "its the halloween one"
+        },
+        {
+          "from": "them",
+          "text": "and the night we got locked out"
+        },
+        {
+          "from": "me",
+          "text": "i went through 4 years of camera roll"
+        },
+        {
+          "from": "them",
+          "text": "in 8 minutes??"
+        },
+        {
+          "from": "me",
+          "text": "8 and a bit"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The film: three of your photos on the strip with their captions, the halloween one first."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "8 and a bit"
+        },
+        {
+          "from": "them",
+          "text": "no one was doing anything"
+        },
+        {
+          "from": "me",
+          "text": "someone was"
+        },
+        {
+          "from": "them",
+          "text": "im coming to ur room"
+        },
+        {
+          "from": "them",
+          "text": "dont look at me im a mess"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday jess",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "ur doing this for my mum in november"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking what i sent her",
+      "date": "18 September 2026 at 00:19",
+      "lines": [
+        "- tryethos → Birthday Cinema",
+        "- a ticket with her name, a cake she blows out (it uses the mic), then a film of ur photos",
+        "- 8 min if u know which photos. 20 if u dont",
+        "- no app. its a link. she opened it in bed",
+        "- code LOVE = 20% off",
+        "",
+        "(save for the friend who says 'its fine')"
+      ]
+    }
+  ]
+}

@@ -751,6 +751,24 @@ the quotable line with the heart on slide 6 and the Notes slide last. Two of the
 the drawing is the real template, the names are the story's. 128 is the first group chat: names
 over the grey bubbles, four friends reacting, and the birthday girl in the chat the whole time.
 
+## The top sellers, with your own pictures: 131 to 136
+
+What actually sells, from the purchases table on 2026-09-19 (30 days): The Letter 115, Birthday
+Cinema 98, Bouquet 52, Constellations 28, Bloom 7, then Kawaii 4 and Halfway, Vinyl and Front
+Page at 3. The Letter and Constellations are free templates: every one of those sales is a paid
+extra — a song, a video or a voice note, which also takes the watermark off — so a carousel for
+them shows the extra in the story ("u put the car song on it", "theres a video at the end")
+and never says "free". Sales ran 70 a day at the peak of the viral week and 24 on the 19th,
+which is what a fresh batch is for.
+
+131 to 136 are those five templates in the September shape, and not only birthdays: a Tuesday,
+a flatmate's 22nd, one year (twice, differently), an apology, and the first i love you across
+42 days. Slides 3 and 5 are `{ "type": "gift", "note": "..." }` — labelled gaps on the sheet
+— because these are shot from your own gifts with your own photos, and each SCRIPT.md says
+exactly what to make in the editor and when to screenshot it. Three are posted by her (the
+hint mechanic: girls forward them, boyfriends buy), three by the maker (the buyer sees
+themself doing it on the bus).
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1019,5 +1037,11 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 128 | wrong chat | the group chat reviews it; she is in the chat | Birthday Cinema | — |
 | 129 | nan | 84, blew out candles through her phone | Pop-up Card | — |
 | 130 | mum's 50th | "it's fine love", 11:58pm, 50 balloons | Balloons | — |
+| 131 | it's a tuesday | no occasion, the car song | The Letter + song | yours |
+| 132 | no one was doing anything | the flatmate, 8 minutes | Birthday Cinema | yours |
+| 133 | flowers die in 3 days | one year, the list, peonies | Bouquet | yours |
+| 134 | 12 stars | one year, a star a month, the hospital one | Constellations + song | yours |
+| 135 | the dishwasher | 3 days, an apology you have to hold | Bloom | yours |
+| 136 | 9 seconds | 42 days, the first i love you on video | The Letter + video | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

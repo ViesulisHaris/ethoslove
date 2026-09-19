@@ -1,0 +1,169 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "it's not my birthday. it's not our\nanniversary. it's a tuesday.",
+      "timestamp": "Tue, Sep 15|at 6:47 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u home"
+        },
+        {
+          "from": "me",
+          "text": "ya why"
+        },
+        {
+          "from": "them",
+          "text": "check ur phone in 5 min"
+        },
+        {
+          "from": "me",
+          "text": "im on my phone"
+        },
+        {
+          "from": "them",
+          "text": "5 min"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im on my phone"
+        },
+        {
+          "from": "them",
+          "text": "5 min"
+        },
+        {
+          "ts": "Tue, Sep 15|at 6:52 PM"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "no reason",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "what is this"
+        },
+        {
+          "from": "me",
+          "text": "its not my birthday"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "its a tuesday"
+        },
+        {
+          "from": "them",
+          "text": "i know. open it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The Letter, shut: the envelope with Mia on it and the wax seal, the pill 'tap the seal'."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know. open it"
+        },
+        {
+          "from": "me",
+          "text": "u put the car song on it"
+        },
+        {
+          "from": "me",
+          "text": "THE ONE U SAID U HATE"
+        },
+        {
+          "from": "them",
+          "text": "never said that"
+        },
+        {
+          "from": "me",
+          "text": "u said it 4 times"
+        },
+        {
+          "from": "them",
+          "text": "read it"
+        },
+        {
+          "from": "me",
+          "text": "im reading it"
+        },
+        {
+          "from": "me",
+          "text": "the tesco car park is in it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The Letter open, mid-read, in the handwriting face: the paragraph about the tesco car park on screen, the song bar showing."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the tesco car park is in it"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "why today"
+        },
+        {
+          "from": "them",
+          "text": "u had a bad week"
+        },
+        {
+          "from": "them",
+          "text": "and its tuesday"
+        },
+        {
+          "from": "me",
+          "text": "im crying at a tuesday",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "the girls want to know what this is"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for the girls asking",
+      "date": "15 September 2026 at 19:31",
+      "lines": [
+        "- its called The Letter. on tryethos",
+        "- he wrote it, picked our song. it opens like an envelope and the song plays while u read",
+        "- the song is the paid bit (it takes the watermark off too)",
+        "- took him 15 min. he said 40",
+        "- code LOVE = 20% off",
+        "",
+        "(send this to him. subtly.)"
+      ]
+    }
+  ]
+}

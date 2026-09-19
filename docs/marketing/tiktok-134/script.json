@@ -1,0 +1,167 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "our first year is 12 stars\nand i've been crying since the third",
+      "timestamp": "Sat, Sep 19|at 12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "one year of us",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "them",
+          "text": "tap the stars"
+        },
+        {
+          "from": "me",
+          "text": "what stars"
+        },
+        {
+          "from": "me",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "OH"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "OH"
+        },
+        {
+          "from": "me",
+          "text": "the first star is the bowling photo"
+        },
+        {
+          "from": "me",
+          "text": "september"
+        },
+        {
+          "from": "them",
+          "text": "ya. theres 12"
+        },
+        {
+          "from": "me",
+          "text": "one for every month??"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "u. who cant send a text longer than 3 words"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Constellations: the night sky with your 12 stars, one photo open (the first month, with its caption)."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "march is the hospital one"
+        },
+        {
+          "from": "me",
+          "text": "u put the hospital one in"
+        },
+        {
+          "from": "them",
+          "text": "it was a big month"
+        },
+        {
+          "from": "me",
+          "text": "im at the third star and im crying"
+        },
+        {
+          "from": "them",
+          "text": "theres 9 more"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "All 12 stars lit, the lines joined and the stardust burst, your line under the sky."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "the lines joined up on the last one"
+        },
+        {
+          "from": "me",
+          "text": "when did u do this"
+        },
+        {
+          "from": "them",
+          "text": "at work. on my phone"
+        },
+        {
+          "from": "me",
+          "text": "at work"
+        },
+        {
+          "from": "me",
+          "text": "i love u",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "my whole house wants to know what this is"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking (my whole house)",
+      "date": "19 September 2026 at 00:58",
+      "lines": [
+        "- tryethos → Constellations",
+        "- 12 photos = 12 stars. tap one, the photo opens. the last one joins the lines up",
+        "- he wrote one line for each month",
+        "- he did the version with our song on it (thats the paid one)",
+        "- 25 min. on his phone. at work",
+        "- code LOVE = 20% off",
+        "",
+        "(save this for ur 1 year)"
+      ]
+    }
+  ]
+}

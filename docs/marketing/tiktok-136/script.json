@@ -1,0 +1,154 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "the letter ends with a 9 second video.\ni've watched it 31 times",
+      "timestamp": "Sat, Sep 19|at 6:03 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur up early"
+        },
+        {
+          "from": "me",
+          "text": "couldnt sleep. 42 days"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "read this before work"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for the 42 days",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "read this before work"
+        },
+        {
+          "from": "me",
+          "text": "its 6am"
+        },
+        {
+          "from": "them",
+          "text": "i know what time it is"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "it plays our song when it opens"
+        },
+        {
+          "from": "me",
+          "text": "wait"
+        },
+        {
+          "from": "me",
+          "text": "theres a video at the end"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The Letter open on his handwriting (the hand face), the song bar showing."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "theres a video at the end"
+        },
+        {
+          "from": "me",
+          "text": "its u on the balcony"
+        },
+        {
+          "from": "me",
+          "text": "saying it"
+        },
+        {
+          "from": "me",
+          "text": "U SAID IT"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "in a video. before u said it in person"
+        },
+        {
+          "from": "them",
+          "text": "i couldnt wait 42 days"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The 'a clip for you' card at the end of the letter with your 9-second video on it (a frame of him on a balcony)."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i couldnt wait 42 days"
+        },
+        {
+          "from": "me",
+          "text": "ive watched it 31 times"
+        },
+        {
+          "from": "me",
+          "text": "im going to be late for work"
+        },
+        {
+          "from": "them",
+          "text": "watch it again"
+        },
+        {
+          "from": "me",
+          "text": "i love u too",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "41 days"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone in my comments asking",
+      "date": "19 September 2026 at 07:12",
+      "lines": [
+        "- tryethos → The Letter",
+        "- u write it, pick a song, and u can put a video at the end (thats the paid bit)",
+        "- it opens like an envelope. the song plays while she reads",
+        "- his was 9 seconds. from a balcony. that was enough",
+        "- code LOVE = 20% off",
+        "",
+        "(save for the 42 days)"
+      ]
+    }
+  ]
+}

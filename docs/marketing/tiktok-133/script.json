@@ -1,0 +1,170 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "she said flowers die in 3 days.\nso i made ones that don't",
+      "timestamp": "Sat, Sep 12|at 7:10 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "dont buy me flowers for our anniversary btw"
+        },
+        {
+          "from": "them",
+          "text": "they die in 3 days and i feel bad"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "ok??"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok??"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "ts": "Sat, Sep 19|at 12:00 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "flowers that dont die",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "them",
+          "text": "u made me flowers"
+        },
+        {
+          "from": "them",
+          "text": "THEY'RE OPENING"
+        },
+        {
+          "from": "them",
+          "text": "the first one just filled my whole screen"
+        },
+        {
+          "from": "me",
+          "text": "theres a card in it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Bouquet, assembled: your stems with peonies in it, the pill 'open the card'."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "theres a card in it"
+        },
+        {
+          "from": "them",
+          "text": "u picked peonies"
+        },
+        {
+          "from": "them",
+          "text": "i said peonies ONCE. in march"
+        },
+        {
+          "from": "me",
+          "text": "i wrote it down"
+        },
+        {
+          "from": "them",
+          "text": "u wrote it down??"
+        },
+        {
+          "from": "me",
+          "text": "theres a list"
+        },
+        {
+          "from": "them",
+          "text": "show me the list"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The card open: your letter, first line 'you said flowers die in 3 days'."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "the card says theyll still be open next year"
+        },
+        {
+          "from": "them",
+          "text": "and the year after"
+        },
+        {
+          "from": "me",
+          "text": "ya thats the point"
+        },
+        {
+          "from": "them",
+          "text": "i take back the flowers thing"
+        },
+        {
+          "from": "them",
+          "text": "im keeping this link forever",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "my sister asked if u have a brother"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking about the flowers",
+      "date": "19 September 2026 at 00:40",
+      "lines": [
+        "- tryethos → Bouquet",
+        "- u pick the stems (she said peonies once. in march. i wrote it down)",
+        "- they bloom when she opens it, the first one fills the screen",
+        "- ur letter is in the card",
+        "- 15 min. on the bus",
+        "- code LOVE = 20% off",
+        "",
+        "(save for the person who says dont get me anything)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "we didn't speak for 3 days\nover a dishwasher",
+      "timestamp": "Wed, Sep 16|at 9:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im not doing this over text"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "dont ok me"
+        },
+        {
+          "ts": "Sat, Sep 19|at 8:02 PM"
+        },
+        {
+          "from": "them",
+          "text": "i made u something"
+        },
+        {
+          "from": "them",
+          "text": "u have to hold it down. dont let go"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u have to hold it down. dont let go"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "im sorry (hold it)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "its a flower"
+        },
+        {
+          "from": "me",
+          "text": "it wont open"
+        },
+        {
+          "from": "them",
+          "text": "ur letting go"
+        },
+        {
+          "from": "me",
+          "text": "im not"
+        },
+        {
+          "from": "them",
+          "text": "u are. hold it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Bloom: the bud half open with 'keep holding…' on screen."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u are. hold it"
+        },
+        {
+          "from": "me",
+          "text": "ok its opening"
+        },
+        {
+          "from": "me",
+          "text": "it opened"
+        },
+        {
+          "from": "me",
+          "text": "'im sorry i said the dishwasher was ur job'"
+        },
+        {
+          "from": "me",
+          "text": "u put that in writing"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "'and the other thing'"
+        },
+        {
+          "from": "them",
+          "text": "and the other thing"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "The flower fully open with your apology on screen."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "and the other thing"
+        },
+        {
+          "from": "me",
+          "text": "why did it have to be held"
+        },
+        {
+          "from": "them",
+          "text": "so u couldnt skim it"
+        },
+        {
+          "from": "me",
+          "text": "thats annoyingly good"
+        },
+        {
+          "from": "me",
+          "text": "im still a bit mad"
+        },
+        {
+          "from": "them",
+          "text": "hold it again",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "the dishwasher is still urs btw"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking (and rating it)",
+      "date": "19 September 2026 at 20:44",
+      "lines": [
+        "- tryethos → Bloom",
+        "- u write it. they have to hold the flower to open it. let go and it stops",
+        "- so they cant skim an apology. genuinely evil",
+        "- yes it worked. no the dishwasher is not sorted",
+        "- 10 min. he says 10. it was 30",
+        "- code LOVE = 20% off",
+        "",
+        "(save for the next fight)"
+      ]
+    }
+  ]
+}
