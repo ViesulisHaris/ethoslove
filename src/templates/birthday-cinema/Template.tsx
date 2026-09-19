@@ -8,6 +8,7 @@ import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
+import { hashString } from "../_shared/random";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
@@ -22,7 +23,12 @@ import { Ambience } from "../_shared/Ambience";
 import { COVER_VARS, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { CinemaFields } from "./schema";
 import { CINEMA_KEYFRAMES, Marquee, Ticket } from "./art";
+import { CAKE_BOX, CakeArt, candleSpots } from "./cake";
 import { Flames, type FlameState } from "./Flames";
+
+/** The cake's width in --k, and where its drawing starts down the stage. */
+const CAKE_W = 86;
+const CAKE_TOP = 0.38;
 
 const CURTAIN: Record<CinemaFields["curtain"], { base: string; dark: string; light: string }> = {
   crimson: { base: "#8f1d24", dark: "#5a0f14", light: "#c0323a" },
@@ -62,12 +68,25 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const curtain = CURTAIN[data.fields.curtain] ?? CURTAIN.crimson;
   const age = data.fields.age;
-  const candleCount = age ? Math.min(12, age) : 5;
+  // Past twelve the age goes on a topper and the candles come down to six, on the middle tier.
+  const topper = age && age > 12 ? String(age).split("") : [];
+  const candleCount = age ? (age > 12 ? 6 : age) : 5;
   const [lit, setLit] = useState<FlameState[]>(() => Array(candleCount).fill("lit"));
   const outCount = lit.filter((x) => x === "out").length;
   const marquee = data.fields.marquee || (age ? `${s.now}: ${data.recipientName} ${s.turns} ${age}` : `${s.now}: ${data.recipientName}`);
+  const cakeSeed = useMemo(() => hashString(`${data.recipientName}|${data.senderName}|cinema`), [data.recipientName, data.senderName]);
 
-  const positions = useMemo(() => Array.from({ length: candleCount }, (_, i) => ({ x: 0.5 + ((i - (candleCount - 1) / 2) / Math.max(candleCount, 4)) * 0.62, y: 0.47 - (i % 2) * 0.012 })), [candleCount]);
+  // The flames are drawn on a canvas over the whole stage, so every wick's place in the cake's
+  // drawing is turned into a fraction of the stage. --k is min(--u, 0.5cqh) with --u
+  // min(1cqw, 0.6cqh), which comes to min(width / 100, height / 200).
+  const positions = useMemo(() => {
+    const spots = candleSpots(candleCount, topper.length > 0);
+    if (!size.ready || !size.width || !size.height) return spots.map(() => ({ x: 0.5, y: 0.5 }));
+    const k = Math.min(size.width / 100, size.height / 200);
+    const w = CAKE_W * k;
+    const h = (w * CAKE_BOX.h) / CAKE_BOX.w;
+    return spots.map((c) => ({ x: 0.5 + ((c.x - CAKE_BOX.w / 2) / CAKE_BOX.w) * (w / size.width), y: (CAKE_TOP * size.height + (c.y / CAKE_BOX.h) * h) / size.height }));
+  }, [candleCount, topper.length, size.ready, size.width, size.height]);
 
   const blowOne = useCallback(() => {
     setLit((prev) => {
@@ -144,13 +163,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       {/* Cake scene */}
       <div className={cn("absolute inset-0 transition-opacity duration-700", stage === "film" || stage === "message" ? "opacity-0" : "opacity-100")}>
-        <Cake count={candleCount} positions={positions} />
+        <div aria-hidden="true" className="absolute left-1/2 -translate-x-1/2" style={{ top: `${CAKE_TOP * 100}%`, width: `calc(${CAKE_W} * var(--k))`, aspectRatio: `${CAKE_BOX.w} / ${CAKE_BOX.h}`, filter: "drop-shadow(0 calc(2*var(--k)) calc(3*var(--k)) rgba(0,0,0,.45))" }}>
+          <CakeArt count={candleCount} accent={data.accentColor} topper={topper} seed={cakeSeed} />
+        </div>
         <Flames positions={positions} states={lit} wind={blow.level} reduced={!!reduce} />
-        {age && age > 12 ? (
-          <div className="absolute left-1/2 top-[31%] -translate-x-1/2 font-display text-[3.4rem] leading-none text-[#ffd98a] drop-shadow-[0_0_18px_rgba(255,180,80,0.6)]" style={{ fontFamily: "var(--gift-font-display)" }}>
-            {age}
-          </div>
-        ) : null}
       </div>
 
       {/* Instructions while lit */}
@@ -180,7 +196,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           </motion.div>
         ) : null}
         {stage === "out" ? (
-          <motion.div key="happy" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ type: "spring", stiffness: 140, damping: 14 }} className="absolute inset-x-0 top-[34%] z-30 px-6 text-center">
+          <motion.div key="happy" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ type: "spring", stiffness: 140, damping: 14 }} className="absolute inset-x-0 top-[24%] z-30 px-6 text-center">
             <p className="text-[clamp(2.2rem,11cqw,3.4rem)] leading-[0.95] italic" style={{ fontFamily: "var(--gift-font-display)" }}>
               {s.happy}
               <br />
@@ -290,28 +306,6 @@ function Curtain({ side, open, reduced }: { side: "left" | "right"; open: boolea
         boxShadow: side === "left" ? "12px 0 30px rgba(0,0,0,0.6)" : "-12px 0 30px rgba(0,0,0,0.6)",
       }}
     />
-  );
-}
-
-function Cake({ count, positions }: { count: number; positions: { x: number; y: number }[] }) {
-  return (
-    <div className="absolute inset-0" aria-hidden="true">
-      {/* plate */}
-      <div className="absolute left-1/2 top-[66%] h-[4%] w-[74%] -translate-x-1/2 rounded-[50%] bg-[#e9e2d6] shadow-[0_8px_30px_rgba(0,0,0,0.5)]" />
-      {/* tiers */}
-      <div className="absolute left-1/2 top-[56%] h-[12%] w-[62%] -translate-x-1/2 rounded-b-[18px] rounded-t-[10px] bg-[linear-gradient(180deg,#f5d3c4,#e7b3a3)] shadow-[inset_0_-10px_20px_rgba(0,0,0,0.12)]" />
-      <div className="absolute left-1/2 top-[47.5%] h-[10%] w-[46%] -translate-x-1/2 rounded-b-[16px] rounded-t-[10px] bg-[linear-gradient(180deg,#fbe4d8,#eec4b4)] shadow-[inset_0_-10px_20px_rgba(0,0,0,0.12)]" />
-      {/* icing drips */}
-      <div className="absolute left-1/2 top-[47%] h-[3%] w-[48%] -translate-x-1/2 rounded-[10px] bg-[var(--gift-accent)] opacity-90" />
-      <div className="absolute left-1/2 top-[55.6%] h-[3%] w-[64%] -translate-x-1/2 rounded-[10px] bg-[var(--gift-accent)] opacity-90" />
-      {/* candles */}
-      {positions.slice(0, count).map((p, i) => (
-        <div key={i} className="absolute w-[3.4%] -translate-x-1/2" style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%`, height: "6%" }}>
-          <div className="h-full w-full rounded-sm bg-[repeating-linear-gradient(135deg,#fff8f0 0 3px,#f0a8b8 3px 6px)] shadow-[0_2px_4px_rgba(0,0,0,0.4),inset_-2px_0_2px_rgba(0,0,0,0.12)]" />
-          <div className="absolute -top-[6px] left-1/2 h-[6px] w-[2px] -translate-x-1/2 bg-[#333]" />
-        </div>
-      ))}
-    </div>
   );
 }
 
