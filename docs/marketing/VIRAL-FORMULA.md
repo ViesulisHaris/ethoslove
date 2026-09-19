@@ -540,12 +540,12 @@ up half way, the heart, the postcard turning over, the photos under the letter �
 in the carousel, on loop. Nobody has to be told the thing is interactive; they watch it be.
 
 `node scripts/tiktok-gift-live.mjs <carousel>` makes them. It builds the carousel's gift from
-`gift.json` in the editor's own draft (photos from `photos/`, through the editor's own picker), plays
-it from the start, blows into a fake microphone where the gift asks for breath, films it at 1080×1920
-and cuts it into clips of about five seconds, each with its best frame as a still. Nothing is
-published, so it costs nothing to reshoot. On the phone each clip becomes a Live Photo through a
-private TikTok post (Share → Live Photo) or IntoLive. Only Halfway is choreographed so far; any gift
-with a moment worth watching — a jar emptying, a flower opening, a globe shaken — is the next one.
+`gift.json` in the editor's own draft, plays it from the start, blows into a fake microphone where the
+gift asks for breath, films it at 1080×1920, and writes each clip straight out as a Live Photo — a
+`.pvt` package, JPEG and MOV bound by one content identifier, as the iPhone camera writes them.
+Nothing is published and nothing is converted on the phone; the one step left is getting them into
+the iPhone's Photos in one piece, which from Windows goes through a Mac (docs/marketing/LIVE-PHOTOS.md).
+Only Halfway is choreographed so far.
 
 ## The account that does this for a living: @tingarchive14
 

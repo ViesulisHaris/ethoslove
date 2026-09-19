@@ -10,13 +10,16 @@
  * the site's own demo pictures, and it says which. They go in through the editor's photo picker and
  * stay on that browser.
  *
- * Out come `live-*.mp4`: H.264 at 30fps, a few seconds each, which is what a Live Photo is made from.
- * On the phone, post one privately on TikTok and Share → Live Photo (or put it through IntoLive), then
- * put that in the carousel with loop on, and it moves for everyone who swipes to it. Each clip's best
- * moment is saved as `live-*.png` too, for the contact sheet and as a still if a Live Photo won't take.
+ * Out come Live Photos, not videos: one `live-<name>.pvt/` per clip — a JPEG of the clip's best
+ * moment and a MOV of the clip, H.264 at 30fps, carrying the same content identifier, plus the
+ * metadata.plist that makes the folder a Live Photo package (see lib/live-photo.mjs). Nothing is
+ * left to convert on the phone; what remains is getting them into its Photos library in one piece,
+ * which from Windows means going through a Mac (see docs/marketing/LIVE-PHOTOS.md).
  *
  * Only Halfway is choreographed so far: the postcard at rest, the flight, a held moment on the
- * halfway note, then the rest of the way home and the postcard turning over. Blowing is faked the way
+ * halfway note; the rest of the way to the heart; then the postcard turning over to the letter, and
+ * down to the photos if the gift has any. `"photos": []` in gift.json makes it a letter and nothing
+ * else. Blowing is faked the way
  * the Halfway e2e tests fake it — a square wave in place of the microphone, as loud as `__breath`.
  */
 import { chromium } from "@playwright/test";
@@ -25,6 +28,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSyn
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import sharp from "sharp";
+import { writeLivePhoto } from "./lib/live-photo.mjs";
 
 const [dir, base = "http://localhost:3000"] = process.argv.slice(2);
 if (!dir) throw new Error("usage: node scripts/tiktok-gift-live.mjs <carousel folder> [base url]");
@@ -182,54 +186,71 @@ await live.getByText(/blow into your phone/i).first().waitFor({ timeout: 15000 }
 marks.rest = now();
 await page.waitForTimeout(350);
 
-// Blow to the middle, where the note pops up, a breath past it so it glides on and the note stays
-// up while it drifts back.
+// Ease off a little before the middle: the plane glides on after the breath stops, so letting go at
+// the note overshoots to three quarters of the way, and "halfway" reads wrong over "148 km to go".
+// The glide carries it over the middle and the note comes up; a short puff if it falls short.
+const noteUp = (note) => document.querySelector('[data-mode="live"]')?.innerText.includes(note);
+const total = await km();
+const kmBelow = (limit) => Number((document.querySelector('[data-mode="live"] p.tabular-nums')?.innerText ?? "").replace(/[^\d]/g, "")) < limit;
 await breathe(0.5);
-await inGift((note) => document.querySelector('[data-mode="live"]')?.innerText.includes(note), spec.fields.halfwayNote, 8);
-await page.waitForTimeout(260);
+// The clip opens a beat before the plane moves, not on the whole wait for a breath to register.
+await inGift(kmBelow, total, 6);
+marks.rest = Math.max(marks.rest, now() - 0.9);
+// Let go at 58% of the way left: at 64% the glide stopped a few kilometres short of the middle.
+await inGift(kmBelow, total * 0.58, 8);
 await breathe(0);
-await page.waitForTimeout(1900);
+if (!(await page.waitForFunction(noteUp, spec.fields.halfwayNote, { timeout: 2500, polling: 25 }).then(() => true, () => false))) {
+  await breathe(0.5);
+  await inGift(noteUp, spec.fields.halfwayNote, 4);
+  await breathe(0);
+}
+await page.waitForTimeout(1700);
 marks.noteEnd = now();
 
-// The rest of the way: the path becomes a heart, and the postcard turns over.
+// The rest of the way: the path becomes a heart.
 marks.resume = now();
 await breathe(0.5);
 await inGift(() => /together/i.test(document.querySelector('[data-mode="live"]')?.innerText ?? ""), null, 8);
 await breathe(0);
 marks.together = now();
-await inGift(() => /a postcard from/i.test(document.querySelector('[data-mode="live"]')?.innerText ?? ""), null, 12);
-await page.waitForTimeout(1300);
-marks.flipped = now();
+await page.waitForTimeout(1700);
+marks.heart = now();
 
-// The letter, then down to the photos pinned under it, the way a thumb would. They only arrive once
-// the letter has finished, so wait for them rather than scrolling to where they are going to be.
-await page.waitForTimeout(1200);
+// The postcard turns over and the letter comes up, signed.
+await inGift(() => /a postcard from/i.test(document.querySelector('[data-mode="live"]')?.innerText ?? ""), null, 12);
+marks.flipped = now();
+await page.waitForTimeout(3400);
 marks.letter = now();
-await inGift(() => [...(document.querySelector('[data-mode="live"]')?.querySelectorAll("img") ?? [])].some((i) => i.complete && i.getBoundingClientRect().width > 0 && !i.closest("[aria-hidden=true]")), null, 8);
-await page.waitForTimeout(400);
-await page.evaluate(async () => {
-  const gift = document.querySelector('[data-mode="live"]');
-  const sc = [...gift.querySelectorAll("div")].find((d) => /overflow-y-auto/.test(d.className));
-  const heading = [...gift.querySelectorAll("p,h2,h3,span,div")].find((e) => /^\s*along the way\s*$/i.test(e.textContent ?? ""));
-  if (!sc) return;
-  // Where the photos start, in the page's own units: inside the zoomed box a bounding rectangle is
-  // 2.5 times the size of a scroll position, and mixing the two lands on the end card.
-  let y = 0;
-  for (let e = heading; e && e !== sc; e = e.offsetParent) y += e.offsetTop;
-  const target = Math.min(sc.scrollHeight - sc.clientHeight, heading ? y - 24 : Infinity);
-  const from = sc.scrollTop;
-  const start = performance.now();
-  await new Promise((done) => {
-    const step = (t) => {
-      const k = Math.min(1, (t - start) / 2600);
-      sc.scrollTop = from + (target - from) * (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2);
-      if (k < 1) requestAnimationFrame(step);
-      else done();
-    };
-    requestAnimationFrame(step);
+
+// With photos, carry on down to them, the way a thumb would. They only arrive once the letter has
+// finished, so wait for them rather than scrolling to where they are going to be.
+if (pictures.length) {
+  await inGift(() => [...(document.querySelector('[data-mode="live"]')?.querySelectorAll("img") ?? [])].some((i) => i.complete && i.getBoundingClientRect().width > 0 && !i.closest("[aria-hidden=true]")), null, 8);
+  await page.waitForTimeout(400);
+  await page.evaluate(async () => {
+    const gift = document.querySelector('[data-mode="live"]');
+    const sc = [...gift.querySelectorAll("div")].find((d) => /overflow-y-auto/.test(d.className));
+    const heading = [...gift.querySelectorAll("p,h2,h3,span,div")].find((e) => /^\s*along the way\s*$/i.test(e.textContent ?? ""));
+    if (!sc) return;
+    // Where the photos start, in the page's own units: inside the zoomed box a bounding rectangle is
+    // 2.5 times the size of a scroll position, and mixing the two lands on the end card.
+    let y = 0;
+    for (let e = heading; e && e !== sc; e = e.offsetParent) y += e.offsetTop;
+    const target = Math.min(sc.scrollHeight - sc.clientHeight, heading ? y - 24 : Infinity);
+    const from = sc.scrollTop;
+    const start = performance.now();
+    await new Promise((done) => {
+      const step = (t) => {
+        const k = Math.min(1, (t - start) / 2600);
+        sc.scrollTop = from + (target - from) * (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2);
+        if (k < 1) requestAnimationFrame(step);
+        else done();
+      };
+      requestAnimationFrame(step);
+    });
   });
-});
-await page.waitForTimeout(1300);
+  await page.waitForTimeout(1300);
+}
 marks.end = now();
 await cdp.send("Page.stopScreencast");
 
@@ -240,26 +261,35 @@ async function cut(name, from, to, stillAt = from) {
   rmSync(tmp, { recursive: true, force: true });
   mkdirSync(tmp, { recursive: true });
   let j = 0;
-  let k = 0;
   const n = Math.round((to - from) * fps);
+  const used = [];
   for (let i = 0; i < n; i++) {
     const t = from + i / fps;
     while (j + 1 < frames.length && frames[j + 1].t <= t) j++;
-    copyFileSync(frames[j].file, join(tmp, `f${String(k++).padStart(5, "0")}.jpg`));
+    copyFileSync(frames[j].file, join(tmp, `f${String(i).padStart(5, "0")}.jpg`));
+    used.push(frames[j].file);
   }
-  const mp4 = join(dir, `live-${name}.mp4`);
-  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", join(tmp, "f%05d.jpg"), "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", mp4]);
-  // The still is the clip's best moment, not its first: it is what shows before the Live Photo plays.
-  await sharp(frames.filter((f) => f.t <= stillAt).pop().file).png().toFile(join(dir, `live-${name}.png`));
+  // A MOV straight out of ffmpeg, no faststart: the Live Photo writer appends to its mdat, which
+  // only works while moov still comes last. No B-frames either, so the video starts on its first frame
+  // rather than behind a two-frame edit, as an iPhone's does.
+  const raw = join(tmp, "raw.mov");
+  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(fps), "-i", join(tmp, "f%05d.jpg"), "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-bf", "0", "-pix_fmt", "yuv420p", "-map_metadata", "-1", "-f", "mov", raw]);
+  // The still is the clip's best moment, not its first — what shows before the Live Photo plays —
+  // and it is that exact frame of the movie, at the time the movie says the still was taken.
+  const idx = Math.max(0, Math.min(n - 2, Math.floor((stillAt - from) * fps)));
+  const still = await sharp(used[idx]).jpeg({ quality: 92 }).toBuffer();
+  const { pvt } = writeLivePhoto({ dir, name: `live-${name}`, mov: raw, still, stillTime: idx / fps });
   rmSync(tmp, { recursive: true, force: true });
-  console.log(`wrote ${mp4} (${(to - from).toFixed(1)}s)`);
+  console.log(`wrote ${pvt} (${(to - from).toFixed(1)}s, still at ${(idx / fps).toFixed(2)}s)`);
 }
 if (!frames.length) throw new Error("the screencast caught no frames");
 const size = await sharp(frames[0].file).metadata();
 console.log(`${frames.length} frames at ${size.width}×${size.height}`);
 
+// Three clips: the flight to the note, the rest of the way to the heart, and the postcard turning over
+// to the letter (and down to the photos, when there are some).
 await cut("flight", marks.rest, marks.noteEnd, marks.noteEnd - 0.2); // the note up
-await cut("home", marks.resume, marks.flipped, marks.together + 0.9); // the heart
-await cut("letter", marks.letter - 0.4, marks.end, marks.end - 0.1); // the photos
+await cut("home", marks.resume, marks.heart, marks.together + 0.9); // the heart
+await cut("letter", marks.heart, marks.end, marks.end - 0.1); // the letter, signed (or the photos)
 rmSync(reel, { recursive: true, force: true });
 await browser.close();

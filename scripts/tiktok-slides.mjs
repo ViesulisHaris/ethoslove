@@ -31,7 +31,7 @@
  * in the header. Messages there take { reaction: "❤️" } and { status: "Seen" }.
  */
 import { chromium } from "@playwright/test";
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 
 // The link card is drawn with the same serif the product embeds in its real og:image.
@@ -448,14 +448,11 @@ let n = 0;
 for (const slide of script.slides) {
   n += 1;
   const draw = slide.type === "photo" ? photoHtml : script.style === "messenger" ? msgHtml : script.style === "instagram" ? igHtml : html;
-  // A gift slide with a `still` (from tiktok-gift-live.mjs) is the gift's own frame: it becomes the
-  // slide, and the Live Photo made from its clip goes in its place when posting.
+  // A gift slide with a `still` is a Live Photo from tiktok-gift-live.mjs: it is posted as it is, so
+  // there is no slide file to write — its still only goes on the contact sheet.
   const still = slide.type === "gift" && slide.still ? join(dirname(scriptPath), slide.still) : null;
   if (still && existsSync(still)) {
-    const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
-    copyFileSync(still, file);
-    sheet.push(readFileSync(still));
-    console.log("wrote", file, "(the gift, from", slide.still + ")");
+    if (SHEET) sheet.push(readFileSync(still));
     continue;
   }
   if (slide.type !== "chat" && slide.type !== "photo") {
@@ -478,7 +475,8 @@ for (const slide of script.slides) {
 if (SHEET && sheet.length) {
   const cols = Math.min(sheet.length, 6);
   const rows = Math.ceil(sheet.length / cols);
-  const cells = sheet.map((b) => `<img src="data:image/png;base64,${b.toString("base64")}">`).join("");
+  const mime = (b) => (b[0] === 0xff && b[1] === 0xd8 ? "image/jpeg" : "image/png");
+  const cells = sheet.map((b) => `<img src="data:${mime(b)};base64,${b.toString("base64")}">`).join("");
   await page.setViewportSize({ width: cols * 290 + 20, height: rows * 510 + 20 });
   await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
   const file = join(outDir, "sheet.png");
