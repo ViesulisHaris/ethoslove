@@ -25,6 +25,11 @@ export type ClientErrorReport = {
   template?: string;
   /** The deployment the tab was loaded from, which is how an old tab shows itself. */
   build?: string;
+  /**
+   * The browser was translating the page. A translator rewrites the DOM under React, and the
+   * crashes it causes look like ours (error WAAC4V was one); this says which they are.
+   */
+  translated?: boolean;
 };
 
 export type ErrorLike = { name?: string; message?: string; stack?: string; digest?: string };
@@ -59,7 +64,7 @@ export function scrubStack(stack: string): string {
 export function buildClientErrorReport(
   error: ErrorLike | null | undefined,
   where: ClientErrorReport["where"],
-  context: { path: string; template?: string; build?: string },
+  context: { path: string; template?: string; build?: string; translated?: boolean },
 ): ClientErrorReport {
   const stack = error?.stack ? scrubStack(error.stack).split("\n").slice(0, STACK_LINES).join("\n").slice(0, 2000) : undefined;
   return {
@@ -72,7 +77,14 @@ export function buildClientErrorReport(
     path: context.path.split(/[?#]/)[0].slice(0, 300),
     ...(context.template ? { template: context.template.slice(0, 40) } : {}),
     ...(context.build ? { build: context.build.slice(0, 64) } : {}),
+    ...(context.translated ? { translated: true } : {}),
   };
+}
+
+/** Chrome marks a page it has translated on <html>; Edge's translator tags what it rewrote. */
+export function pageIsTranslated(): boolean {
+  if (typeof document === "undefined") return false;
+  return /\btranslated-(ltr|rtl)\b/.test(document.documentElement.className) || document.querySelector("[_msttexthash]") !== null;
 }
 
 /**
@@ -105,6 +117,7 @@ export function reportClientError(error: ErrorLike | null | undefined, where: Cl
     path: uncaught ? redactGiftPath(window.location.pathname) : window.location.pathname,
     template,
     build: process.env.NEXT_DEPLOYMENT_ID || undefined,
+    translated: pageIsTranslated(),
   });
   const key = `${where}|${report.code}|${report.path}`;
   if (sent.has(key)) return;

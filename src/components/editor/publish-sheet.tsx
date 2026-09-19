@@ -23,6 +23,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
+import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { cn } from "@/lib/utils";
 import { ShareScreen } from "./share-screen";
 
@@ -261,7 +262,7 @@ export function PublishSheet({
             <SheetHeader className="p-0 text-left">
               <SheetTitle className="font-display text-3xl">{t("title")}</SheetTitle>
               <SheetDescription>
-                {t("subtitle", { name: state.data.recipientName || "…" })}
+                {t.rich("subtitle", { name: state.data.recipientName || "…", who: keepAsWritten })}
               </SheetDescription>
             </SheetHeader>
 
@@ -305,7 +306,7 @@ export function PublishSheet({
                         ) : (
                           <Check className="size-4 text-moss" />
                         )}
-                        {label}
+                        <span>{label}</span>
                       </li>
                     );
                   })}
@@ -370,7 +371,7 @@ export function PublishSheet({
                   data-testid="pay-single"
                 >
                   {paying === "single" ? <Loader2 className="size-4 animate-spin" /> : null}
-                  {paying === "single" ? t("paying") : t("payButton", { price: priceOne })}
+                  <span>{paying === "single" ? t("paying") : t("payButton", { price: priceOne })}</span>
                 </Button>
                 <button
                   type="button"
@@ -437,7 +438,7 @@ export function PublishSheet({
                       data-testid="pay-single"
                     >
                       {paying === "single" ? <Loader2 className="size-4 animate-spin" /> : null}
-                      {paying === "single" ? t("paying") : t("payButton", { price: priceOne })}
+                      <span>{paying === "single" ? t("paying") : t("payButton", { price: priceOne })}</span>
                     </Button>
                     <button
                       type="button"
@@ -486,11 +487,13 @@ export function PublishSheet({
               onClick={publish}
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-              {busy
-                ? t("publishing")
-                : state.schedule.enabled
-                  ? t("publishScheduled")
-                  : t("publishNow")}
+              <span>
+                {busy
+                  ? t("publishing")
+                  : state.schedule.enabled
+                    ? t("publishScheduled")
+                    : t("publishNow")}
+              </span>
             </Button>
             <p className="mt-3 text-center text-xs text-muted-foreground">
               {tCommon("noSubscription")}

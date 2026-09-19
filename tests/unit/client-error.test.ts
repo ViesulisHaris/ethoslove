@@ -39,6 +39,14 @@ describe("what an error screen sends home", () => {
     expect(clientErrorSchema.safeParse(null).success).toBe(false);
   });
 
+  it("says when the browser was translating the page, and only then", () => {
+    const translated = buildClientErrorReport({ name: "NotFoundError", message: "Failed to execute 'insertBefore' on 'Node'" }, "page", { path: "/pricing", translated: true });
+    expect(translated.translated).toBe(true);
+    expect(clientErrorSchema.safeParse(translated).success).toBe(true);
+    expect(buildClientErrorReport(crash, "page", { path: "/", translated: false })).not.toHaveProperty("translated");
+    expect(clientErrorSchema.safeParse({ ...translated, translated: "yes" }).success).toBe(false);
+  });
+
   it("builds a report without zod, which every page's error screen would otherwise download", async () => {
     const { readFileSync } = await import("node:fs");
     const source = readFileSync(new URL("../../src/lib/client-error.ts", import.meta.url), "utf8");

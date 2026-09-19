@@ -41,7 +41,7 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
       )}
     >
       {playing ? <Square className="size-3.5 fill-current" /> : <Play className="size-3.5 fill-current" />}
-      {playing ? t("stopPlaying") : t("playFromStart")}
+      <span>{playing ? t("stopPlaying") : t("playFromStart")}</span>
     </button>
   );
 

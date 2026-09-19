@@ -27,7 +27,7 @@ export function ScheduledScreen({ senderName, unlockAt, timezone, locale }: { se
   }, [parts.done, router]);
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-night px-8 text-center text-paper" style={{ "--gift-font-display": "var(--font-display)" } as React.CSSProperties}>
+    <div translate="no" className="flex min-h-dvh flex-col items-center justify-center bg-night px-8 text-center text-paper" style={{ "--gift-font-display": "var(--font-display)" } as React.CSSProperties}>
       <div className="grain-overlay" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_100%,rgba(212,168,83,0.18),transparent)]" />
       <LogoMark className="size-12" />

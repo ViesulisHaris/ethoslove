@@ -436,7 +436,7 @@
     },
     "publishSheet": {
       "title": "Ready to send?",
-      "subtitle": "Here's what {name} will get.",
+      "subtitle": "Here's what <who>{name}</who> will get.",
       "checklist": "Checklist",
       "problems": {
         "recipientName": "Add their name",
@@ -500,7 +500,7 @@
     "share": {
       "title": "It's live.",
       "scheduledTitle": "It's scheduled.",
-      "subtitle": "Send {name} the link — or hand them the card.",
+      "subtitle": "Send <who>{name}</who> the link — or hand them the card.",
       "scheduledSubtitle": "It unlocks {when}. Share the link now; they'll see a countdown until then.",
       "copy": "Copy link",
       "copied": "Copied",

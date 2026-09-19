@@ -48,6 +48,8 @@ export function Cover({
 
   return (
     <motion.div
+      // The recipient's name, lettered: never the browser translator's (see GiftRenderer).
+      translate="no"
       className="absolute inset-0 z-[60] overflow-hidden"
       // A cover is also drawn outside a gift (the editor's picker, the gallery on the homepage),
       // where --u has never been declared. Declaring it here resolves against whichever box is

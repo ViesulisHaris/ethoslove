@@ -56,7 +56,7 @@ export function TopBar({
           <p className="font-display truncate text-base italic">{templateName}</p>
           <p className={cn("flex items-center justify-center gap-1 text-[11px]", s.tone)}>
             {s.icon}
-            {s.text}
+            <span>{s.text}</span>
           </p>
         </div>
         <div className="flex min-w-0 flex-1 justify-center md:hidden">

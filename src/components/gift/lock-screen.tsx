@@ -27,7 +27,7 @@ export function LockScreen({ shortId, senderName, locale }: { shortId: string; s
   };
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-night px-8 text-center text-paper">
+    <div translate="no" className="flex min-h-dvh flex-col items-center justify-center bg-night px-8 text-center text-paper">
       <div className="grain-overlay" />
       <LogoMark className="size-12" />
       <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 140, damping: 16, delay: 0.15 }} className="mt-8 grid size-16 place-items-center rounded-full bg-white/8">

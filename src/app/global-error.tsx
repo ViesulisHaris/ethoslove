@@ -19,7 +19,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <button onClick={reset} style={{ marginTop: 16, padding: "10px 20px", borderRadius: 999, border: 0, background: "#E8604C", color: "#fff", fontWeight: 600 }}>
             Try again
           </button>
-          <p style={{ marginTop: 20, fontSize: 12, opacity: 0.5 }}>Error code {errorCode(error)}</p>
+          <p translate="no" style={{ marginTop: 20, fontSize: 12, opacity: 0.5 }}>Error code {errorCode(error)}</p>
         </div>
       </body>
     </html>

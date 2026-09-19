@@ -17,8 +17,8 @@ export function PrintCard({ svg, url, recipientName, senderName, accent, locale,
         <LogoMark className="mark" />
         <span>{brand}</span>
       </div>
-      <p className="name" style={{ fontSize: nameSize }}>{recipientName},</p>
-      <p className="line">{senderName} {t.line}</p>
+      <p className="name" translate="no" style={{ fontSize: nameSize }}>{recipientName},</p>
+      <p className="line"><span translate="no">{senderName}</span> {t.line}</p>
       <div className="qr" dangerouslySetInnerHTML={{ __html: svg }} />
       <p className="cta">{t.cta}</p>
       <p className="url">{url.replace(/^https?:\/\//, "")}</p>

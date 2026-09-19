@@ -37,7 +37,7 @@ export function GiftCard({ gift }: { gift: DashboardGift }) {
         {gift.thumbnail ? <img src={gift.thumbnail} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" /> : manifest ? <img src={manifest.thumbnail.poster} alt="" className="h-full w-full object-cover opacity-80" /> : null}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-paper">
           <p className="text-[11px] tracking-[0.2em] uppercase opacity-70">{manifest?.name[locale] ?? gift.template_slug}</p>
-          <p className="font-display text-2xl italic">{gift.recipientName || t("untitled")}</p>
+          <p translate={gift.recipientName ? "no" : undefined} className="font-display text-2xl italic">{gift.recipientName || t("untitled")}</p>
         </div>
         <span className={cn("absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase", gift.status === "live" ? "bg-moss text-white" : gift.status === "scheduled" ? "bg-gold text-ink" : "bg-white/90 text-ink")}>
           {t(`status.${gift.status}`)}

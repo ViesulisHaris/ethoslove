@@ -72,7 +72,7 @@ export function WritingHelper({ open, onOpenChange, onUse }: { open: boolean; on
           </Field>
           <Button onClick={generate} disabled={loading || facts.trim().length < 10} className="h-11 rounded-full">
             {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-            {t("editor.writer.generate")}
+            <span>{t("editor.writer.generate")}</span>
           </Button>
           {drafts.length > 0 ? (
             <div className="grid gap-3">

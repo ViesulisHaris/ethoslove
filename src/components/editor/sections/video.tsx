@@ -35,8 +35,10 @@ export function VideoSection() {
           <div className="flex items-center justify-between gap-3 px-3 py-2 text-xs">
             <span className="flex items-center gap-1.5 text-muted-foreground">
               {status === "uploading" ? <Loader2 className="size-3 animate-spin" /> : null}
-              {status === "uploaded" ? t("uploaded") : status === "uploading" ? t("uploading") : status === "error" ? t("failed") : t("local")}
-              {asset?.bytes ? ` · ${(asset.bytes / 1024 / 1024).toFixed(1)} MB` : ""}
+              <span>
+                {status === "uploaded" ? t("uploaded") : status === "uploading" ? t("uploading") : status === "error" ? t("failed") : t("local")}
+                {asset?.bytes ? ` · ${(asset.bytes / 1024 / 1024).toFixed(1)} MB` : ""}
+              </span>
             </span>
             <button type="button" onClick={clearVideo} className="flex items-center gap-1 rounded-full px-2 py-1 text-ink-soft hover:bg-ink/5">
               <X className="size-3.5" />

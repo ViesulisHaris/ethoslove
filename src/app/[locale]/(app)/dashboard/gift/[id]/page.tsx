@@ -35,7 +35,7 @@ export default async function GiftDetailPage({ params }: PageProps<"/[locale]/da
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
       <p className="text-eyebrow text-coral">{manifest?.name[locale as GiftLocale] ?? gift.template_slug} · {t(`status.${gift.status}`)}</p>
       <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
-        <h1 className="display-lg">{data.recipientName || t("untitled")}</h1>
+        <h1 translate={data.recipientName ? "no" : undefined} className="display-lg">{data.recipientName || t("untitled")}</h1>
         <div className="flex gap-2">
           <Button asChild variant="outline" className="rounded-full"><Link href={`/create/${gift.template_slug}?gift=${gift.id}`}><Pencil className="size-4" />{t("edit")}</Link></Button>
           <Button asChild variant="outline" className="rounded-full"><Link href={`/dashboard/gift/${gift.id}/print`}><Printer className="size-4" />{t("qrCard")}</Link></Button>

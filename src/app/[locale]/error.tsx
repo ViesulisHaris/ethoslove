@@ -59,7 +59,8 @@ export default function LocaleError({ error, reset }: { error: Error & { digest?
       <Button onClick={reset} className="mt-8 rounded-full">
         {t("retry")}
       </Button>
-      <p className="mt-6 text-xs text-muted-foreground/70">{t("code", { code: errorCode(error) })}</p>
+      {/* Untranslated, so the code in a customer's screenshot is the one in our logs. */}
+      <p translate="no" className="mt-6 text-xs text-muted-foreground/70">{t("code", { code: errorCode(error) })}</p>
     </div>
   );
 }

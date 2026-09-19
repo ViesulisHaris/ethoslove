@@ -77,7 +77,7 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
                 {state === "error" ? <p className="mt-3 text-sm text-coral">{t.error}</p> : null}
                 <button type="button" onClick={send} disabled={state === "sending"} className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-coral text-[15px] font-semibold text-paper shadow-glow disabled:opacity-60">
                   {state === "sending" ? <Loader2 className="size-4 animate-spin" /> : null}
-                  {state === "sending" ? t.sending : `${t.send} ${emoji}`}
+                  <span>{state === "sending" ? t.sending : `${t.send} ${emoji}`}</span>
                 </button>
               </>
             )}

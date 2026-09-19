@@ -7,6 +7,7 @@ import { Link } from "@/i18n/navigation";
 import type { GiftData } from "@/lib/gift/schema";
 import { SITE } from "@/config/site";
 import { Button } from "@/components/ui/button";
+import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { QrDesigner } from "./qr-designer";
 
 export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
@@ -42,13 +43,13 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
     <div className="px-6 pt-8 pb-10 sm:px-8">
       <p className="text-eyebrow text-coral">{status === "scheduled" ? "Scheduled" : "Live"}</p>
       <h2 className="font-display mt-2 text-3xl">{status === "scheduled" ? t("scheduledTitle") : t("title")}</h2>
-      <p className="mt-2 text-sm text-muted-foreground">{status === "scheduled" ? t("scheduledSubtitle", { when }) : t("subtitle", { name: data.recipientName })}</p>
+      <p className="mt-2 text-sm text-muted-foreground">{status === "scheduled" ? t("scheduledSubtitle", { when }) : t.rich("subtitle", { name: data.recipientName, who: keepAsWritten })}</p>
 
       <div className="mt-6 flex items-center gap-2 rounded-2xl border border-border bg-card p-2 pl-4">
         <span className="min-w-0 flex-1 truncate font-mono text-sm">{url.replace(/^https?:\/\//, "")}</span>
         <Button onClick={copy} className="h-10 shrink-0 rounded-full px-4">
           {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-          {copied ? t("copied") : t("copy")}
+          <span>{copied ? t("copied") : t("copy")}</span>
         </Button>
       </div>
 

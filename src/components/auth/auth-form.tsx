@@ -141,7 +141,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
             </div>
             <Button type="submit" className="h-11 rounded-full" disabled={status === "sending"}>
               <Mail className="size-4" />
-              {status === "sending" ? t("sending") : t("sendLink")}
+              <span>{status === "sending" ? t("sending") : t("sendLink")}</span>
             </Button>
             {status === "error" ? (
               <p role="alert" className="text-sm text-destructive">

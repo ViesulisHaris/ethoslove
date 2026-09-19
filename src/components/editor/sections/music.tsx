@@ -166,7 +166,7 @@ export function MusicSection() {
                     onClick={() => setLibraryTrack(selected ? null : tr)}
                     className="flex min-w-0 flex-1 flex-col items-start text-left"
                   >
-                    <span className="text-sm font-medium">{tr.title}</span>
+                    <span translate="no" className="text-sm font-medium">{tr.title}</span>
                     <span className="text-xs text-muted-foreground">
                       {tr.note} · {t(`mood.${tr.mood}`)}
                     </span>
@@ -203,9 +203,9 @@ export function MusicSection() {
                 <Music2 className="size-5 text-coral" />
               )}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{music.title}</p>
+                <p translate="no" className="truncate text-sm font-medium">{music.title}</p>
                 <p className="truncate text-xs text-muted-foreground">
-                  {music.artist} · {t("songSelected")}
+                  <span translate="no">{music.artist}</span> · {t("songSelected")}
                 </p>
               </div>
               <button
@@ -271,8 +271,8 @@ export function MusicSection() {
                         className="flex min-w-0 flex-1 flex-col items-start text-left"
                         data-testid="song-result"
                       >
-                        <span className="max-w-full truncate text-sm font-medium">{song.title}</span>
-                        <span className="max-w-full truncate text-xs text-muted-foreground">
+                        <span translate="no" className="max-w-full truncate text-sm font-medium">{song.title}</span>
+                        <span translate="no" className="max-w-full truncate text-xs text-muted-foreground">
                           {song.artist}
                           {song.album ? ` · ${song.album}` : ""}
                         </span>
@@ -312,7 +312,7 @@ export function MusicSection() {
             <div className="rounded-xl border border-border bg-card p-3">
               <div className="flex items-center gap-3">
                 <Music2 className="size-4 text-coral" />
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">{music.title}</span>
+                <span translate="no" className="min-w-0 flex-1 truncate text-sm font-medium">{music.title}</span>
                 <button
                   type="button"
                   onClick={() => togglePreview("upload", music.url, music.startAt)}

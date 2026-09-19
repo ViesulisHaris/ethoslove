@@ -96,7 +96,14 @@ export function GiftRenderer({
 
   return (
     <MotionConfig reducedMotion="user">
+      {/*
+       * translate="no": a gift is the sender's words, in whatever language they wrote them, and
+       * the browser's translator took them for English and "translated" them — a Romanian message
+       * came back reworded in the editor's preview. It also rewrote the template's text under
+       * React's feet, mid-animation. The gift stays exactly as it was made.
+       */}
       <div
+        translate="no"
         className={cn("gift-root relative isolate h-full w-full overflow-hidden bg-night text-paper [container-type:size]", className)}
         style={theme}
         data-mode={mode}

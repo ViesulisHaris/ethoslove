@@ -102,7 +102,9 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
   );
 
   return (
-    <div className="gift-backdrop">
+    // The whole gift page is the sender's, names and all: the browser's translator doesn't get to
+    // reword it (see GiftRenderer).
+    <div className="gift-backdrop" translate="no">
     <div className="gift-stage bg-night">
       {opened ? (
         <GiftRenderer

@@ -436,7 +436,7 @@
     },
     "publishSheet": {
       "title": "¿Listo para enviarlo?",
-      "subtitle": "Esto es lo que recibirá {name}.",
+      "subtitle": "Esto es lo que recibirá <who>{name}</who>.",
       "checklist": "Lista de comprobación",
       "problems": {
         "recipientName": "Añade su nombre",
@@ -500,7 +500,7 @@
     "share": {
       "title": "Ya está publicado.",
       "scheduledTitle": "Ya está programado.",
-      "subtitle": "Envíale el enlace a {name}, o dale la tarjeta.",
+      "subtitle": "Envíale el enlace a <who>{name}</who>, o dale la tarjeta.",
       "scheduledSubtitle": "Se abre {when}. Comparte el enlace ya; verán una cuenta atrás hasta entonces.",
       "copy": "Copiar enlace",
       "copied": "Copiado",

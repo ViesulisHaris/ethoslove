@@ -16,4 +16,5 @@ export const clientErrorSchema: z.ZodType<ClientErrorReport> = z.object({
   path: z.string().max(300),
   template: z.string().max(40).optional(),
   build: z.string().max(64).optional(),
+  translated: z.boolean().optional(),
 });

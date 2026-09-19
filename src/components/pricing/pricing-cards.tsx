@@ -144,7 +144,7 @@ export function PricingCards({
                 )}
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-                {t(`plans.${id}.cta`)}
+                <span>{t(`plans.${id}.cta`)}</span>
               </button>
               {dominant ? (
                 <p className="mt-3 text-center text-xs text-paper/55">{t("priority")}</p>
@@ -211,7 +211,7 @@ export function PricingCards({
             className="flex h-12 items-center justify-center gap-2 rounded-full bg-coral text-[15px] font-semibold text-paper shadow-glow disabled:opacity-50"
           >
             {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-            {t("pick.continue", { n: chosen.length, total: needed })}
+            <span>{t("pick.continue", { n: chosen.length, total: needed })}</span>
           </button>
         </DialogContent>
       </Dialog>

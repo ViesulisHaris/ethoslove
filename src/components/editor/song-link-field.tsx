@@ -55,7 +55,7 @@ export function SongLinkField() {
             <div className="size-12 shrink-0 overflow-hidden rounded-md bg-muted">
               {dedication.thumbnail ? <img src={dedication.thumbnail} alt="" className="h-full w-full object-cover" /> : <Link2 className="m-3.5 size-5 text-coral" />}
             </div>
-            <div className="min-w-0 flex-1">
+            <div translate="no" className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{dedication.title || (provider ? SONG_PROVIDER_NAMES[provider] : dedication.url)}</p>
               <p className="truncate text-xs text-muted-foreground">{dedication.artist ?? dedication.url.replace(/^https:\/\//, "")}</p>
             </div>
