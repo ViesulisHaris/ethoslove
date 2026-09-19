@@ -331,6 +331,22 @@ const SCRIPTS = {
     for (let i = 0; i < 3; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.5, behavior: "smooth" })); await page.waitForTimeout(1000); }
     return poster;
   },
+  "popup-card": async (page) => {
+    const card = page.getByRole("button", { name: /open the card/i });
+    await card.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await card.click({ force: true });
+    await page.waitForTimeout(2600);
+    const candles = page.locator("[data-candle]");
+    const n = await candles.count();
+    for (let i = 0; i < n; i++) { await candles.nth(i).click({ force: true }); await page.waitForTimeout(380); }
+    await page.waitForTimeout(900);
+    // The poster is the lit cake standing out of the card, not the shut front.
+    const poster = await page.screenshot();
+    await page.mouse.move(195, 520); await page.mouse.down(); await page.mouse.move(195, 300, { steps: 6 }); await page.mouse.up();
+    await page.waitForTimeout(3200);
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);
