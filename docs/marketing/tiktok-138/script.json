@@ -1,0 +1,188 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"Ana\" \"Jake\"",
+      "swap \"stealing every hoodie I own\" \"leaving me on delivered for 4 hours\"",
+      "swap \"his favourite person\" \"her favourite person\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "my boyfriend left me on delivered for\n4 hours so i took him to court",
+      "timestamp": "Sat, Sep 19|at 9:42 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "4 hours"
+        },
+        {
+          "from": "me",
+          "text": "u left me on delivered for 4 hours"
+        },
+        {
+          "from": "them",
+          "text": "i was asleep"
+        },
+        {
+          "from": "me",
+          "text": "at 5pm"
+        },
+        {
+          "from": "them",
+          "text": "its called a nap"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its called a nap"
+        },
+        {
+          "from": "me",
+          "text": "ok. ur being taken to court"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "the council v. jake",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "them",
+          "text": "babe"
+        },
+        {
+          "from": "them",
+          "text": "why are there 5 cats behind a desk"
+        },
+        {
+          "from": "them",
+          "text": "why does one have a shark hat"
+        },
+        {
+          "from": "me",
+          "text": "thats security. press all rise"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "thats security. press all rise"
+        },
+        {
+          "from": "them",
+          "text": "the cat with glasses just read out"
+        },
+        {
+          "from": "them",
+          "text": "'you said five minutes away from your bed'"
+        },
+        {
+          "from": "them",
+          "text": "HOW DOES IT KNOW THAT"
+        },
+        {
+          "from": "me",
+          "text": "i submitted evidence"
+        },
+        {
+          "from": "them",
+          "text": "'you cried at an advert for a bank'"
+        },
+        {
+          "from": "them",
+          "text": "that was ONE time"
+        },
+        {
+          "from": "me",
+          "text": "keep going"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "keep going"
+        },
+        {
+          "from": "them",
+          "text": "it stamped GUILTY on a certificate with my name on"
+        },
+        {
+          "from": "them",
+          "text": "theres a gavel"
+        },
+        {
+          "from": "them",
+          "text": "sentence: one hug, to be served immediately"
+        },
+        {
+          "from": "me",
+          "text": "the council has spoken"
+        },
+        {
+          "from": "them",
+          "text": "im coming over",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "also the boys want to know how to sue their girlfriends"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking how i sued my boyfriend",
+      "date": "19 September 2026 at 22:31",
+      "lines": [
+        "- tryethos → The Council",
+        "- u write the charge + the evidence. 5 cats read it out to him one by one",
+        "- then the gavel, then it stamps GUILTY (or approved / pardoned if ur nice)",
+        "- u can add photos as exhibits. i added the nap",
+        "- the full ruling at the end is ur actual letter. mine was soft. dont tell him",
+        "- 15 min. code LOVE = 20% off",
+        "",
+        "(save this for the next time he says 'i was asleep')"
+      ]
+    }
+  ]
+}

@@ -768,7 +768,9 @@ a flatmate's 22nd, one year (twice, differently), an apology, and the first i lo
 exactly what to make in the editor and when to screenshot it. Three are posted by her (the
 hint mechanic: girls forward them, boyfriends buy), three by the maker (the buyer sees
 themself doing it on the bus). 137 adds the Sketchbook, which has no sales history because it
-shipped on the 19th, for the one thing happening this week: leaving for uni.
+shipped on the 19th, for the one thing happening this week: leaving for uni. 138 is the first carousel for the
+meme templates: a girlfriend takes her boyfriend to The Council over four hours on delivered, and
+he sells every feature by being confused by it.
 
 ## The screenshots have to pass for real
 
@@ -1045,5 +1047,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 135 | the dishwasher | 3 days, an apology you have to hold | Bloom | yours |
 | 136 | 9 seconds | 42 days, the first i love you on video | The Letter + video | yours |
 | 137 | the lamp | leaving for uni in 9 hours, 4 years of photos | Sketchbook | yours |
+| 138 | the council v. jake | left on delivered for 4 hours, so she took him to court | The Council | — |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
