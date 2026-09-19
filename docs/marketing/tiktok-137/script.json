@@ -1,0 +1,174 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "she leaves for uni in 9 hours.\ni put the last 4 years in a sketchbook",
+      "timestamp": "Sat, Sep 19|at 11:02 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ive packed 4 bags and im crying at a lamp"
+        },
+        {
+          "from": "me",
+          "text": "which lamp"
+        },
+        {
+          "from": "them",
+          "text": "the one from ur room. u gave me it in year 9"
+        },
+        {
+          "from": "me",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "them",
+          "text": "im leaving at 8. the car is already full"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "them",
+          "text": "im leaving at 8. the car is already full"
+        },
+        {
+          "ts": "Sun, Sep 20|at 12:14 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for the drive",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ruby"
+          }
+        },
+        {
+          "from": "me",
+          "text": "its a sketchbook. u turn the pages"
+        },
+        {
+          "from": "them",
+          "text": "the first page says see u at christmas"
+        },
+        {
+          "from": "them",
+          "text": "in ur handwriting??"
+        },
+        {
+          "from": "them",
+          "text": "why is there a cake"
+        },
+        {
+          "from": "me",
+          "text": "its a leaving cake. turn the page"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Sketchbook, page 1: the cake drawing itself under your own line 'see u at christmas' (the title field), no age. Black paper and white pen if you want the night one."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its a leaving cake. turn the page"
+        },
+        {
+          "from": "them",
+          "text": "IT DRAWS ITSELF"
+        },
+        {
+          "from": "them",
+          "text": "year 9 is in it"
+        },
+        {
+          "from": "them",
+          "text": "the lamp photo"
+        },
+        {
+          "from": "them",
+          "text": "u put the LAMP in"
+        },
+        {
+          "from": "them",
+          "text": "and the bus stop one"
+        },
+        {
+          "from": "me",
+          "text": "every page is a year"
+        },
+        {
+          "from": "them",
+          "text": "theres 4 years in here"
+        },
+        {
+          "from": "me",
+          "text": "12 photos. dont rush it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "A photos page: two taped photos with your handwritten captions ('the lamp, year 9' and 'the bus stop, every day for 4 years'), the doodles around them."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "12 photos. dont rush it"
+        },
+        {
+          "from": "them",
+          "text": "the last page is a letter"
+        },
+        {
+          "from": "them",
+          "text": "im reading it on the stairs so my mum doesnt see"
+        },
+        {
+          "from": "them",
+          "text": "ur coming up the first weekend"
+        },
+        {
+          "from": "me",
+          "text": "already booked the train"
+        },
+        {
+          "from": "them",
+          "text": "the lamp is coming with me",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "im showing everyone on my floor what this is"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking what i made her",
+      "date": "20 September 2026 at 00:52",
+      "lines": [
+        "- tryethos → Sketchbook",
+        "- u put in ur photos + a caption for each. it draws the doodles itself",
+        "- the first page is a cake (it was a leaving cake. it works)",
+        "- the last page is ur letter",
+        "- one night. 12 photos. 4 years",
+        "- code LOVE = 20% off",
+        "",
+        "(save for the friend who leaves next)"
+      ]
+    }
+  ]
+}
