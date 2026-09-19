@@ -1,0 +1,29 @@
+{
+  "slides": [
+    { "type": "chat", "timestamp": "Wed, Sep 16|at 9:14 AM", "messages": [
+      { "from": "them", "text": "i swear to god if u get me anything for my birthday" },
+      { "from": "them", "text": "i mean it" },
+      { "from": "them", "text": "NO GIFTS" },
+      { "from": "me", "text": "ok" }
+    ] },
+    { "type": "chat", "timestamp": "Wed, Sep 16|at 9:14 AM", "messages": [
+      { "from": "them", "text": "i swear to god if u get me anything for my birthday" },
+      { "from": "them", "text": "i mean it" },
+      { "from": "them", "text": "NO GIFTS" },
+      { "from": "me", "text": "ok" },
+      { "ts": "Sat, Sep 19|at 12:00 AM" },
+      { "from": "me", "link": { "title": "not a gift", "domain": "tryethos.io", "image": "og", "name": "Ella" } },
+      { "from": "them", "text": "it literally says a gift for ella" },
+      { "from": "me", "text": "its a website" }
+    ] },
+    { "type": "chat", "messages": [
+      { "from": "them", "text": "it literally says a gift for ella" },
+      { "from": "me", "text": "its a website" },
+      { "from": "them", "text": "it has a cake" },
+      { "from": "me", "text": "websites can have cakes" },
+      { "from": "them", "text": "IT SANG TO ME" },
+      { "from": "me", "text": "websites can sing" },
+      { "from": "them", "text": "i hate u so much", "tapback": "heart" }
+    ] }
+  ]
+}
