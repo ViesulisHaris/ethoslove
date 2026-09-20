@@ -25,6 +25,15 @@ const CARD_DROP_S = 1.4;
 export function HeroBouquet({ cardText }: { cardText: string }) {
   const reduce = useReducedMotion();
   const [run, setRun] = useState(0);
+  // The server cannot know they asked for less motion, so it sends the bouquet hidden, ready to
+  // assemble. React keeps those hidden styles when it hydrates, and someone with Reduce Motion on
+  // was left looking at an empty phone. A frame after mounting, the art is put in again, whole.
+  const [still, setStill] = useState(false);
+  useEffect(() => {
+    if (!reduce) return;
+    const id = requestAnimationFrame(() => setStill(true));
+    return () => cancelAnimationFrame(id);
+  }, [reduce]);
   const total = useMemo(() => timingFor(arrange(FIELDS.stems, FIELDS.seed)).card + CARD_DROP_S, []);
 
   useEffect(() => {
@@ -46,10 +55,10 @@ export function HeroBouquet({ cardText }: { cardText: string }) {
        * the viewBox is already cut tight to the paper.
        */}
       <BouquetArt
-        key={run}
+        key={still ? "still" : run}
         fields={FIELDS}
         cardText={cardText}
-        animate={!reduce}
+        animate={!still}
         className="h-auto w-full drop-shadow-[0_18px_24px_rgba(40,25,20,0.16)]"
       />
     </div>

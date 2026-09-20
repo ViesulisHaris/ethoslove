@@ -14,6 +14,7 @@ import { OccasionsIndex } from "@/components/marketing/home/occasions-index";
 import { PricingTeaser } from "@/components/marketing/home/pricing-teaser";
 import { Faq } from "@/components/marketing/home/faq";
 import { FinalCta } from "@/components/marketing/home/final-cta";
+import { TornEdge } from "@/components/marketing/home/cutouts";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -35,6 +36,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <>
       <JsonLd nodes={[organizationNode(), websiteNode(), appNode(locale as Locale, t("meta.description"), plans)]} />
       <Hero />
+      <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" />
       <TemplateStrip manifests={listManifests()} />
       <Openings locale={locale as GiftLocale} />
       <Reactions />
@@ -42,6 +44,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <OccasionsIndex />
       <PricingTeaser locale={locale} />
       <Faq />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
       <FinalCta />
     </>
   );

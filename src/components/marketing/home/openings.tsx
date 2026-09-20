@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { COVER_IDS, type GiftLocale } from "@/lib/gift/schema";
 import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
 import { Cover } from "@/templates/_shared/covers/Cover";
+import { FloralFrame } from "./cutouts";
 
 /** Every cover a gift can open with, drawn for real, each one a link to a live demo. */
 export async function Openings({ locale }: { locale: GiftLocale }) {
@@ -11,6 +12,7 @@ export async function Openings({ locale }: { locale: GiftLocale }) {
   const ids = COVER_IDS.filter((c) => c !== "classic");
   return (
     <section className="relative overflow-hidden bg-forest py-20 text-cream lg:py-28">
+      <FloralFrame frame="band" ground="bare" />
       <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
       <div aria-hidden="true" className="absolute top-0 left-1/2 h-72 w-[70rem] -translate-x-1/2 rounded-full bg-blush/10 blur-3xl" />
       <div className="container-x relative grid gap-6 lg:grid-cols-12 lg:items-end">

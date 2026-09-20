@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { OCCASIONS } from "@/config/occasions";
+import { Cutout } from "./cutouts";
 
 /** Magazine-index style list, not a card grid. */
 export async function OccasionsIndex() {
@@ -13,6 +14,7 @@ export async function OccasionsIndex() {
           <p className="text-eyebrow text-ink-soft">{t("home.occasions.eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[12ch]">{t("home.occasions.title")}</h2>
           <p className="mt-5 max-w-md text-lg leading-relaxed text-ink-soft">{t("home.occasions.blurb")}</p>
+          <Cutout id="envelope-ps" className="mt-10 hidden w-[150px] -rotate-6 drop-shadow-[0_16px_22px_rgba(70,40,20,0.28)] lg:block" />
         </div>
         <ol className="grid border-t border-line lg:col-span-7 sm:grid-cols-2 sm:gap-x-10">
           {OCCASIONS.map((o, i) => (

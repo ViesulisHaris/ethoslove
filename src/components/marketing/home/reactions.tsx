@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { Cutout } from "./cutouts";
 
 /**
  * "See the reaction". Sample threads set like notes pinned to a board; each becomes a
@@ -14,9 +15,11 @@ export function Reactions() {
     <section className="border-b border-line bg-paper-deep/40 py-20 lg:py-28">
       <div className="container-x">
         <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
+          <div className="relative lg:col-span-7">
             <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
             <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
+            {/* what comes back, more often than not */}
+            <Cutout id="kiss-red" className="absolute right-2 bottom-1 w-[84px] rotate-[14deg] opacity-95 drop-shadow-[0_8px_12px_rgba(120,20,40,0.22)] sm:right-16 sm:w-[112px]" />
           </div>
           <p className="max-w-md text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:pb-1">{t("blurb")}</p>
         </div>
