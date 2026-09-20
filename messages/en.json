@@ -674,6 +674,8 @@
   "occasions": {
     "title": "Occasions",
     "for": "Digital gifts for {occasion}",
+    "guideEyebrow": "How to make one",
+    "faqTitle": "Questions people ask",
     "birthday": "Birthday",
     "anniversary": "Anniversary",
     "valentines": "Valentine's Day",

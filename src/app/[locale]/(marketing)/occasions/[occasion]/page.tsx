@@ -4,9 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { OCCASIONS, isOccasion } from "@/config/occasions";
 import { SITE } from "@/config/site";
 import type { Locale } from "@/i18n/routing";
-import { breadcrumbNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
+import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
+import { OCCASION_GUIDES } from "@/content/occasions";
 import { JsonLd } from "@/components/shared/json-ld";
+import { OccasionGuide } from "@/components/marketing/occasion-guide";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
 
@@ -33,6 +35,7 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
   const t = await getTranslations();
   const title = t(`seo.occasion.${occasion}.title`);
   const templates = listManifests({ occasion });
+  const guide = OCCASION_GUIDES[occasion][locale as Locale];
   return (
     <>
       <JsonLd
@@ -43,10 +46,12 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
             { name: t("occasions.title"), url: localizedUrl(locale, "/occasions") },
             { name: title, url: localizedUrl(locale, `/occasions/${occasion}`) },
           ]),
+          faqNode(guide.faq),
         ]}
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
       <TemplateGallery manifests={templates} occasion={occasion} />
+      <OccasionGuide occasion={occasion} locale={locale as Locale} />
     </>
   );
 }
