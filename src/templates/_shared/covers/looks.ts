@@ -228,6 +228,9 @@ export function defaultCoverFor(slug: string): CoverId {
   switch (slug) {
     case "the-council":
     case "sticker-bomb":
+    case "coquette":
+    case "xoxo":
+    case "keepsake":
     case "the-letter":
     case "scrapbook":
     case "garden":

@@ -22,7 +22,8 @@ import { MEMES } from "../_shared/memes/catalogue";
 import { Bubble } from "../_shared/memes/Bubble";
 import { MemeSticker } from "../_shared/memes/MemeSticker";
 import { buzz, playBoing, playHonk, playSlap, playSqueak, playTada } from "../_shared/memes/sounds";
-import { BoothStrip, LOOKS, PARTY_KEYFRAMES, Polaroid, RansomRows, Spark, type Look, type LookId } from "./art";
+import { RansomRows } from "../_shared/collage/ransom";
+import { BoothStrip, LOOKS, PARTY_KEYFRAMES, Polaroid, Spark, type Look, type LookId } from "./art";
 import { bannerRows, letterSize, planFrames, planGuests, shoutFor, type FrameSpot, type GuestSpot, type Voice } from "./scene";
 import { fieldsSchema, type PartyAnimalsFields } from "./schema";
 
@@ -336,7 +337,7 @@ function CardSheet({ data, mode, blocks, look, s, t, reduce, onEvent, onReact, o
     <motion.div className="absolute inset-0 z-[40] overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none" initial={reduce ? { y: 0 } : { y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%", transition: { duration: 0.35 } }} transition={{ type: "spring", stiffness: 64, damping: 18 }}>
       <div className="flex min-h-full flex-col">
         <div className="shrink-0" style={{ height: mode === "preview" ? "min(58cqh, 540px)" : "min(26cqh, 280px)" }} />
-        <div className="relative mx-auto w-[min(94cqw,600px)] flex-1 rounded-t-[calc(4*var(--k))] px-[calc(5*var(--k))] pt-[calc(9*var(--k))] pb-[calc(72px+env(safe-area-inset-bottom))] shadow-[0_-24px_60px_-20px_rgba(0,0,0,.45)]" style={{ background: look.paper, color: look.paperInk, backgroundImage: PAPER_GRAIN }}>
+        <div className="relative mx-auto w-[min(94cqw,600px)] flex-1 rounded-t-[calc(4*var(--k))] px-[calc(5*var(--k))] pt-[calc(9*var(--k))] pb-[calc(72px+env(safe-area-inset-bottom))] shadow-[0_-24px_60px_-20px_rgba(0,0,0,.45)]" style={{ backgroundColor: look.paper, color: look.paperInk, backgroundImage: PAPER_GRAIN }}>
           {/* two guests who read over the top of the card */}
           <MemeSticker id="party-kitten" width="calc(17*var(--k))" className="absolute -top-[calc(15*var(--k))] left-[calc(4*var(--k))] -rotate-6" />
           <MemeSticker id="hamster-cake" width="calc(11*var(--k))" className="absolute -top-[calc(12.5*var(--k))] right-[calc(6*var(--k))] rotate-6" />

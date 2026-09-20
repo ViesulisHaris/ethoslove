@@ -41,6 +41,9 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "party-animals": () => import("./party-animals/schema"),
   "the-council": () => import("./the-council/schema"),
   "sticker-bomb": () => import("./sticker-bomb/schema"),
+  coquette: () => import("./coquette/schema"),
+  xoxo: () => import("./xoxo/schema"),
+  keepsake: () => import("./keepsake/schema"),
   "popup-card": () => import("./popup-card/schema"),
   sketchbook: () => import("./sketchbook/schema"),
 };

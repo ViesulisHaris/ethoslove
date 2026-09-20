@@ -1,6 +1,6 @@
 """Cut meme stickers out of sticker sheets as die-cut WebPs: transparent ground, white edge, 2x.
 
-    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder>
+    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder> [memes|scraps]
 
 A sheet is a flat-coloured page of cut-outs (the kind people post on Pinterest). The ground is
 flooded in from the borders, what is left is labelled blob by blob, and CATALOGUE below says which
@@ -8,8 +8,13 @@ blob of which sheet becomes which sticker: (index, box, close). `box` splits two
 touch; `close` is how wide a leak to seal when white fur let the ground colour in. Run it with a
 new sheet and an empty pick list first: it prints every blob's index and box.
 
-Needs Pillow only. The results go in public/memes, and src/templates/_shared/memes/catalogue.ts
-lists their sizes. Leave out film, game and brand characters: the three meme templates ship these
+Two sets: `memes` (public/memes, the animals, with a white die-cut edge) and `scraps` (public/scraps,
+the flowers, kisses, paper and lace the collage templates are made of, mostly without one). A pick
+may also carry `edge` (the white edge in source pixels, 0 for none) and `key` (cut by colour instead
+of by flood, for lace and doilies whose holes must stay holes).
+
+Needs Pillow only. src/templates/_shared/memes/catalogue.ts and _shared/collage/scraps.ts list the
+sizes. Leave out film, game and brand characters: the three meme templates ship these
 files to paying customers.
 """
 import sys, json, os
@@ -18,6 +23,7 @@ from PIL import Image, ImageFilter, ImageChops, ImageDraw
 
 IMG = sys.argv[1]
 OUT = sys.argv[2]
+SET = sys.argv[3] if len(sys.argv) > 3 else "memes"
 os.makedirs(OUT, exist_ok=True)
 
 def segment(path, tol):
@@ -78,11 +84,12 @@ EDGE = 5   # the white die-cut edge, in source pixels
 CLOSE = 5  # how wide a leak the closing seals, in source pixels
 SCALE = 2
 
-def cut(im, label, comp, bg, is_bg, name, box=None, close=None):
-    CLOSE_R = close or CLOSE
+def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=False):
+    CLOSE_R = CLOSE if close is None else close
+    EDGE_R = EDGE if edge is None else edge
     W, H = im.size
     x0, y0, x1, y1 = box or comp["box"]
-    pad = EDGE + 4 + (close or 0)
+    pad = EDGE_R + CLOSE_R + 6
     X0, Y0, X1, Y1 = max(0, x0 - pad), max(0, y0 - pad), min(W, x1 + pad), min(H, y1 + pad)
     w, h = X1 - X0, Y1 - Y0
     mask = bytearray(w * h)
@@ -91,6 +98,11 @@ def cut(im, label, comp, bg, is_bg, name, box=None, close=None):
         for x in range(max(x0, X0), min(x1, X1)):
             if label[row + x] == comp["id"]: mask[(y - Y0) * w + (x - X0)] = 1
     if box: mask = largest(mask, w, h)
+    if key:
+        # Lace and doilies: whatever is the ground colour is a hole, enclosed or not.
+        for y in range(h):
+            for x in range(w):
+                if mask[y * w + x] and is_bg(X0 + x, Y0 + y): mask[y * w + x] = 0
     crop = im.crop((X0, Y0, X1, Y1)).convert("RGBA")
     # Ground colour trapped inside the sticker (between an arm and a body) reads as a grey patch; a real
     # die-cut sticker is white there.
@@ -116,25 +128,27 @@ def cut(im, label, comp, bg, is_bg, name, box=None, close=None):
     m = Image.frombytes("L", (w, h), bytes(v * 255 for v in mask))
     # White fur the ground colour leaked into: seal the thin channels (a closing), then fill whatever
     # is no longer reachable from outside.
-    m = m.filter(ImageFilter.MaxFilter(CLOSE_R * 2 + 1)).filter(ImageFilter.MinFilter(CLOSE_R * 2 + 1))
-    padded = Image.new("L", (w + 2, h + 2), 0); padded.paste(m, (1, 1))
-    ImageDraw.floodfill(padded, (0, 0), 128)
-    m = padded.crop((1, 1, w + 1, h + 1)).point(lambda v: 0 if v == 128 else 255)
+    if not key:
+        if CLOSE_R: m = m.filter(ImageFilter.MaxFilter(CLOSE_R * 2 + 1)).filter(ImageFilter.MinFilter(CLOSE_R * 2 + 1))
+        padded = Image.new("L", (w + 2, h + 2), 0); padded.paste(m, (1, 1))
+        ImageDraw.floodfill(padded, (0, 0), 128)
+        m = padded.crop((1, 1, w + 1, h + 1)).point(lambda v: 0 if v == 128 else 255)
     mpx = m.load()
     if bg != (255, 255, 255):
         for y in range(h):
             for x in range(w):
                 if mpx[x, y] and not mask[y * w + x] and is_bg(X0 + x, Y0 + y): cpx[x, y] = (255, 255, 255, 255)
-    inner = m.filter(ImageFilter.MinFilter(3))                       # drop the JPEG fringe
-    edge = m.filter(ImageFilter.MaxFilter(EDGE * 2 + 1))              # the white edge
+    inner = m if key else m.filter(ImageFilter.MinFilter(3))         # drop the JPEG fringe
+    edge = m.filter(ImageFilter.MaxFilter(EDGE_R * 2 + 1)) if EDGE_R else None   # the white edge
     big = (w * SCALE, h * SCALE)
     crop = crop.resize(big, Image.LANCZOS)
     inner = inner.resize(big, Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.8))
-    edge = edge.resize(big, Image.LANCZOS).filter(ImageFilter.GaussianBlur(1.1))
+    if edge is not None: edge = edge.resize(big, Image.LANCZOS).filter(ImageFilter.GaussianBlur(1.1))
     crop = crop.filter(ImageFilter.UnsharpMask(radius=1.4, percent=60, threshold=2))
     out = Image.new("RGBA", big, (255, 255, 255, 0))
-    white = Image.new("RGBA", big, (255, 255, 255, 255)); white.putalpha(edge)
-    out.alpha_composite(white)
+    if edge is not None:
+        white = Image.new("RGBA", big, (255, 255, 255, 255)); white.putalpha(edge)
+        out.alpha_composite(white)
     crop.putalpha(inner)
     out.alpha_composite(crop)
     bbox = out.getchannel("A").point(lambda a: 255 if a > 8 else 0).getbbox()
@@ -142,7 +156,7 @@ def cut(im, label, comp, bg, is_bg, name, box=None, close=None):
     out.save(f"{OUT}/{name}.webp", "WEBP", quality=88, alpha_quality=92, method=6)
     return out.size
 
-CATALOGUE = {
+MEMES = {
     "2.jpg": (14, {
         "shark-baby": (1, None), "matcha": (4, None), "glasses-tulips": (3, None), "bow-kitten": (6, None),
         "lawyer": (7, None), "whiskers": (8, None, 13), "shades": (10, None, 11), "scream": (12, None),
@@ -158,12 +172,45 @@ CATALOGUE = {
         "hamster-slice": (10, None), "ferrets": (9, [255, 609, 517, 946]), "green-hat-kitten": (9, [538, 609, 664, 946]),
     }),
 }
+
+SCRAPS = {
+    "26.jpg": (12, {
+        "lily-pink": (2, None, None, 2), "hibiscus-pink": (1, None, None, 2), "lily-stargazer": (3, None, None, 2), "blossom-pale": (4, None, 8, 2),
+        "blossom-gold": (5, None, None, 2), "hibiscus-coral": (6, None, None, 2), "sakura": (7, None, 8, 2), "lily-blush": (8, None, None, 2),
+        "hibiscus-ruffle": (9, None, None, 2), "plumeria-pink": (12, [250, 1018, 497, 1292], None, 2), "plumeria-rose": (12, [483, 1018, 730, 1292], None, 2),
+    }),
+    "24.jpg": (10, {
+        "blue-spray": (0, [6, 8, 236, 450], 8, 0), "blue-velvet": (0, [230, 8, 458, 224], None, 0), "blue-rose": (1, None, None, 0), "blue-clematis": (2, None, None, 0),
+        "blue-lily": (4, None, None, 0), "blue-pansy": (5, None, None, 0), "blue-hibiscus": (6, None, None, 0), "blue-gerbera": (8, None, None, 0),
+        "blue-cluster": (9, None, 6, 0), "blue-poppy": (10, None, 8, 0),
+    }),
+    "27.jpg": (10, {
+        "kiss-red": (10, None, None, 0), "cats-cuddle": (11, None, 8, 3), "cats-nose": (9, None, 6, 3),
+        "paper-couple": (5, None, None, 0), "heart-print": (13, None, None, 0), "heart-print-pink": (16, None, None, 0), "star-felt": (23, None, None, 0),
+        "teddy": (6, None, 6, 3), "heart-anatomical": (17, None, None, 0),
+    }),
+    "28.jpg": (10, {
+        "kiss-1": (0, None, None, 0), "kiss-2": (6, None, None, 0), "kiss-3": (12, None, None, 0), "kiss-dark": (13, None, None, 0),
+        "plaster-heart": (2, None, None, 0), "cats-kiss": (14, [493, 520, 668, 814], 8, 3),
+    }),
+    "29.jpg": (10, {
+        "dried-flowers": (0, None, None, 0), "peony-kraft": (6, None, None, 0), "columbine": (7, None, None, 0), "bow-red": (9, None, None, 0),
+        "leaf-skeleton": (10, None, None, 0), "locket": (12, None, 6, 0), "wax-seal": (14, None, None, 0), "roses-kraft": (15, None, None, 0),
+        "envelope-ps": (17, None, None, 0), "plaid-heart": (5, None, None, 0), "kiss-4": (3, None, None, 0),
+    }),
+    "30.jpg": (10, {
+        "doily-red": (1, None, 0, 0, True), "bow-gingham": (0, None, None, 0), "tag-tofrom": (2, None, None, 0), "label-ornate": (3, None, None, 0),
+        "heart-damask": (8, None, 0, 0, True), "doily-pink": (9, None, 0, 0, True), "lace-red": (7, None, 0, 0, True),
+    }),
+}
+
+CATALOGUE = SCRAPS if SET == "scraps" else MEMES
 sizes = {}
 for sheet, (tol, picks) in CATALOGUE.items():
     im, label, comps, bg, is_bg = segment(f"{IMG}/{sheet}", tol)
     for name, pick in picks.items():
         k, box = pick[0], pick[1]
-        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None)
+        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False)
         print(name, sizes[name])
 json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
 

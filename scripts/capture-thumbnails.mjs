@@ -12,6 +12,17 @@ const W = 390;
 const H = 600;
 
 /** Every gift now opens on a cover; the capture taps it and waits for the gift underneath. */
+/** Opens a collage, takes the first screen as the poster, then scrolls it for the recording. */
+async function scrollCollage(page, opener) {
+  await page.getByRole("button", { name: opener }).click({ force: true, timeout: 20000 });
+  const scroller = page.locator("[data-scroller]");
+  await scroller.waitFor({ timeout: 15000 });
+  await page.waitForTimeout(3600);
+  const poster = await page.screenshot();
+  for (let i = 0; i < 5; i++) { await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.62, behavior: "smooth" })); await page.waitForTimeout(1500); }
+  return poster;
+}
+
 async function open(page) {
   const cover = page.getByRole("button", { name: /tap to open/i });
   if (await cover.count()) {
@@ -347,6 +358,10 @@ const SCRIPTS = {
     await page.waitForTimeout(3200);
     return poster;
   },
+  // The three scrolling collages open with their own gesture, then the recording is the scroll itself.
+  coquette: async (page) => scrollCollage(page, /untie the bow/i),
+  xoxo: async (page) => scrollCollage(page, /open it/i),
+  keepsake: async (page) => scrollCollage(page, /break the seal/i),
   "party-animals": async (page) => {
     await open(page);
     const guests = page.locator("[data-guest]");

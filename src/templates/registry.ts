@@ -43,6 +43,9 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "party-animals": () => import("./party-animals"),
   "the-council": () => import("./the-council"),
   "sticker-bomb": () => import("./sticker-bomb"),
+  coquette: () => import("./coquette"),
+  xoxo: () => import("./xoxo"),
+  keepsake: () => import("./keepsake"),
   "popup-card": () => import("./popup-card"),
   sketchbook: () => import("./sketchbook"),
 };

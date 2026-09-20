@@ -340,7 +340,7 @@ function Member({ seat, index, label, saying, still, reduce, delay, disabled, on
 function Ruling({ s, court, name, charge, verdict, stamped, caseNo, reduce, still }: { s: Copy; court: Court; name: string; charge: string; verdict: Verdict; stamped: boolean; caseNo: string; reduce: boolean; still: boolean }) {
   return (
     <motion.div className="absolute top-[7%] left-1/2 z-[12] w-[calc(86*var(--p))]" style={{ translate: "-50% 0" }} initial={still || reduce ? false : { y: "130%", rotate: 7 }} animate={{ y: 0, rotate: -1.2 }} exit={{ opacity: 0 }} transition={{ delay: still || reduce ? 0 : 1.15, type: "spring", stiffness: 120, damping: 17 }}>
-      <div className="relative px-[calc(6*var(--p))] pt-[calc(6*var(--p))] pb-[calc(5*var(--p))] text-center text-[#2B211A] shadow-[0_calc(2*var(--p))_calc(5*var(--p))_rgba(0,0,0,.45)]" style={{ background: "#FBF3DF", backgroundImage: PAPER_GRAIN }}>
+      <div className="relative px-[calc(6*var(--p))] pt-[calc(6*var(--p))] pb-[calc(5*var(--p))] text-center text-[#2B211A] shadow-[0_calc(2*var(--p))_calc(5*var(--p))_rgba(0,0,0,.45)]" style={{ backgroundColor: "#FBF3DF", backgroundImage: PAPER_GRAIN }}>
         <span aria-hidden="true" className="pointer-events-none absolute inset-[calc(1.8*var(--p))] border-[calc(.5*var(--p))] border-double" style={{ borderColor: court.brass.deep, borderWidth: "calc(1.1*var(--p))" }} />
         <p className="relative text-[calc(2.3*var(--p))] font-bold tracking-[0.3em] uppercase opacity-60">
           {s.caseNo} {caseNo}

@@ -80,6 +80,9 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "party-animals": "paper",
   "the-council": "curtain",
   "sticker-bomb": "paper",
+  coquette: "petals",
+  xoxo: "paper",
+  keepsake: "paper",
   "popup-card": "paper",
   sketchbook: "paper",
 };
