@@ -8,7 +8,7 @@ import type { TemplateManifest } from "@/templates/types";
 import { currentRef } from "@/lib/attribution/ref";
 import { decidePublish, readinessProblems, premiumExtras } from "@/lib/gift/publish";
 import { PRODUCTS, currencyFor, formatAmount, type ProductId } from "@/lib/pricing/products";
-import { getManifest } from "@/templates/manifests";
+import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
@@ -53,12 +53,16 @@ export function PublishSheet({
   const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [] };
   const [busy, setBusy] = useState(false);
   const [paying, setPaying] = useState<ProductId | null>(null);
+  // Which unlock to buy. The bundle used to be a line of small print under the pay button, and
+  // nobody took it; as a second row beside the single it is a choice, priced.
+  const [plan, setPlan] = useState<"single" | "everything">("single");
   const [showSignIn, setShowSignIn] = useState(false);
   const autoPublished = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const currency = currencyFor(locale === "es" ? "ES" : "US");
   const priceOne = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
   const priceAll = formatAmount(PRODUCTS.everything.amounts[currency], currency, locale);
+  const price = plan === "everything" ? priceAll : priceOne;
   const [published, setPublished] = useState<{
     shortId: string;
     status: "live" | "scheduled";
@@ -354,33 +358,20 @@ export function PublishSheet({
                       {t("payTitle")}
                     </p>
                     <p className="mt-1 text-sm text-ink-soft">
-                      {t("payGuestBlurb", {
-                        features: premiumFeatures.join(", "),
-                        price: priceOne,
-                      })}
+                      {t("payGuestBlurb", { features: premiumFeatures.join(", ") })}
                     </p>
                   </div>
-                  <p className="shrink-0 font-display text-[2rem] leading-none tracking-tight">
-                    {priceOne}
-                  </p>
                 </div>
+                <PlanChoice plan={plan} onChange={setPlan} priceOne={priceOne} priceAll={priceAll} disabled={paying !== null} />
                 <Button
-                  className="mt-5 h-12 w-full rounded-full text-base"
+                  className="mt-4 h-12 w-full rounded-full text-base"
                   disabled={paying !== null || guestProblems.length > 0}
-                  onClick={() => checkout("single")}
+                  onClick={() => checkout(plan)}
                   data-testid="pay-single"
                 >
-                  {paying === "single" ? <Loader2 className="size-4 animate-spin" /> : null}
-                  <span>{paying === "single" ? t("paying") : t("payButton", { price: priceOne })}</span>
+                  {paying ? <Loader2 className="size-4 animate-spin" /> : null}
+                  <span>{paying ? t("paying") : t("payButton", { price })}</span>
                 </Button>
-                <button
-                  type="button"
-                  disabled={paying !== null || guestProblems.length > 0}
-                  onClick={() => checkout("everything")}
-                  className="mt-3 w-full text-center text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline disabled:opacity-50"
-                >
-                  {t("payAll", { price: priceAll })}
-                </button>
                 <p className="mt-3 text-center text-mono-meta text-muted-foreground">
                   {t("payNote")} {t("uploadsAfterPay")}
                 </p>
@@ -425,29 +416,19 @@ export function PublishSheet({
                       </p>
                     ) : null}
                   </div>
-                  <p className="shrink-0 font-display text-[2rem] leading-none tracking-tight">
-                    {priceOne}
-                  </p>
                 </div>
                 {paymentsEnabled ? (
                   <>
+                    <PlanChoice plan={plan} onChange={setPlan} priceOne={priceOne} priceAll={priceAll} disabled={paying !== null} />
                     <Button
-                      className="mt-5 h-12 w-full rounded-full text-base"
+                      className="mt-4 h-12 w-full rounded-full text-base"
                       disabled={paying !== null}
-                      onClick={() => checkout("single")}
+                      onClick={() => checkout(plan)}
                       data-testid="pay-single"
                     >
-                      {paying === "single" ? <Loader2 className="size-4 animate-spin" /> : null}
-                      <span>{paying === "single" ? t("paying") : t("payButton", { price: priceOne })}</span>
+                      {paying ? <Loader2 className="size-4 animate-spin" /> : null}
+                      <span>{paying ? t("paying") : t("payButton", { price })}</span>
                     </Button>
-                    <button
-                      type="button"
-                      disabled={paying !== null}
-                      onClick={() => checkout("everything")}
-                      className="mt-3 w-full text-center text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline disabled:opacity-50"
-                    >
-                      {t("payAll", { price: priceAll })}
-                    </button>
                     {ownedElsewhere.length === 1 ? (
                       <a
                         href={`/create/${ownedElsewhere[0].slug}`}
@@ -525,6 +506,61 @@ function Notice({
       )}
     >
       {children}
+    </div>
+  );
+}
+
+/**
+ * The two ways to unlock, as rows the sender picks between: the single, or every template. Drawn
+ * like the rows of the pricing page's pick-three dialog, so the two read as one product.
+ */
+function PlanChoice({
+  plan,
+  onChange,
+  priceOne,
+  priceAll,
+  disabled,
+}: {
+  plan: "single" | "everything";
+  onChange: (plan: "single" | "everything") => void;
+  priceOne: string;
+  priceAll: string;
+  disabled: boolean;
+}) {
+  const t = useTranslations("editor.publishSheet");
+  const rows = [
+    { id: "single" as const, name: t("planSingle"), blurb: t("planSingleBlurb"), price: priceOne },
+    { id: "everything" as const, name: t("planEverything"), blurb: t("planEverythingBlurb", { n: TEMPLATE_MANIFESTS.length }), price: priceAll },
+  ];
+  return (
+    <div role="radiogroup" aria-label={t("planLabel")} className="mt-5 grid gap-2">
+      {rows.map((row) => {
+        const on = plan === row.id;
+        return (
+          <button
+            key={row.id}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            disabled={disabled}
+            onClick={() => onChange(row.id)}
+            data-testid={`plan-${row.id}`}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors disabled:opacity-50",
+              on ? "border-ink bg-ink/5" : "border-line hover:border-ink/40",
+            )}
+          >
+            <span className="min-w-0 flex-1">
+              <span className="block font-medium">{row.name}</span>
+              <span className="block text-xs text-muted-foreground">{row.blurb}</span>
+            </span>
+            <span className="shrink-0 font-display text-lg">{row.price}</span>
+            <span className={cn("grid size-5 shrink-0 place-items-center rounded-full border", on ? "border-coral bg-coral text-paper" : "border-border")}>
+              {on ? <Check className="size-3" /> : null}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }
