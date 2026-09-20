@@ -9,6 +9,7 @@ import type { TemplateManifest, TemplateTier } from "@/templates/types";
 import { cn } from "@/lib/utils";
 import { Cutout } from "@/components/marketing/home/cutouts";
 import { TemplateCard } from "./template-card";
+import { GALLERY_ID } from "./gallery-id";
 
 /**
  * The occasion chips are links, not local state. Each occasion is already a real page with
@@ -31,7 +32,9 @@ export function TemplateGallery({ manifests, occasion }: { manifests: TemplateMa
   const offsets = shelves.map((_, i) => shelves.slice(0, i).reduce((n, shelf) => n + shelf.items.length, 0));
 
   return (
-    <div className="container-x pb-24">
+    // The header's "Make a gift" scrolls here on this page; the margin keeps the fixed header
+    // (promo strip and bar, ~104px) off the filter chips it lands on.
+    <div id={GALLERY_ID} className="container-x scroll-mt-32 pb-24">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <nav aria-label={t("templates.allOccasions")} className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
           <Link href="/templates" aria-current={occasion ? undefined : "page"} className={chipClass(!occasion)}>

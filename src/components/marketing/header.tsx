@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Logo } from "@/components/shared/logo";
 import { LocaleSwitcher } from "./locale-switcher";
 import { AuthStatus } from "./auth-status";
+import { MakeGiftLink } from "./make-gift-link";
 
 /** A floating pill of dark glass under the promo bar: it sits over the hero and the cream pages alike. */
 export function MarketingHeader() {
@@ -70,9 +71,9 @@ export function MarketingHeader() {
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
-            <Link href="/templates" className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold whitespace-nowrap text-forest max-[359px]:px-3">
+            <MakeGiftLink className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold whitespace-nowrap text-forest max-[359px]:px-3">
               {t("common.createGift")}
-            </Link>
+            </MakeGiftLink>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
                 <button type="button" aria-label={t("common.openMenu")} className="grid size-10 place-items-center rounded-full text-cream hover:bg-white/10">

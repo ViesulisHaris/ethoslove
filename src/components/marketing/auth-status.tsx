@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { MakeGiftLink } from "./make-gift-link";
 import { cn } from "@/lib/utils";
 
 /**
@@ -60,9 +61,7 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
         size="lg"
         className={cn("rounded-full px-5", dark ? "bg-cream font-semibold text-forest hover:bg-cream/90" : "bg-ink text-paper hover:bg-ink/90", block && "h-11")}
       >
-        <Link href="/templates" onClick={onNavigate}>
-          {t("createGift")}
-        </Link>
+        <MakeGiftLink onClick={onNavigate}>{t("createGift")}</MakeGiftLink>
       </Button>
     </div>
   );
