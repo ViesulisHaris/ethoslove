@@ -787,7 +787,7 @@ best friend's (143, who cries at a gift that isn't hers and sends the link to he
 in March, she says it is technically not two years, and he put the 23 days in the gift on purpose
 ("tried. 23 days. hated it"). The caption asks whether the break counts.
 
-## The slow burn: 145 to 147
+## The slow burn: 145 to 148
 
 A carousel in this shape did 2.9M views for another gift site, and it breaks most of the rules
 above on purpose. Ten slides, five bubbles each, centred on a black page. No hook typed over
@@ -802,7 +802,10 @@ look like in a screenshot.
 comes back as the last: "nearly", "one more game", "told u"), so people swipe back to slide 1; a
 reaction that stays in character instead of turning into a greeting card; and, in 147, best
 friends instead of a couple. Nothing in the texts describes the gift, so slides 6 and 7 are
-screenshots of whichever template is being pushed.
+screenshots of whichever template is being pushed. 148 is the one-year version, Marco to Maya: it
+opens on the first text he ever sent her ("Hey, is this Maya from the party?"), she confesses
+after the gift that she typed her reply in four minutes and stared at it for six hours, and the
+last two bubbles are that first text again and the reply she sent a year ago, "who is this".
 
 ## The screenshots have to pass for real
 
@@ -1089,5 +1092,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 145 | nearly | slow burn; he made it, she is drying her hair | any (yours) | yours |
 | 146 | one more game | slow burn; six months, he pauses the game | any (yours) | yours |
 | 147 | 4 minutes | slow burn; best friends, 214 miles | any (yours) | yours |
+| 148 | who is this | slow burn; one year, Marco to Maya, the first text again | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
