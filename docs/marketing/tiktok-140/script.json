@@ -1,0 +1,198 @@
+{
+  "demo": {
+    "template": "sticker-bomb",
+    "steps": [
+      "swap \"Ana\" \"Mia\"",
+      "swap \"ana before coffee\" \"mia before coffee\"",
+      "swap \"Marco\" \"Jake\"",
+      "wait 1600",
+      "tap 95 125",
+      "wait 420",
+      "tap 262 185",
+      "wait 420",
+      "tap 180 300",
+      "wait 420",
+      "tap 98 395",
+      "wait 420",
+      "tap 268 430",
+      "wait 420",
+      "tap 180 105",
+      "wait 420",
+      "tap 112 250",
+      "wait 420",
+      "tap 255 318",
+      "wait 420",
+      "tap 180 470",
+      "wait 420",
+      "wait 500",
+      "shot gift-1.png",
+      "tap 100 530",
+      "wait 420",
+      "tap 262 540",
+      "wait 420",
+      "tap 180 215",
+      "wait 420",
+      "wait 1300",
+      "tap \"read the card\"",
+      "wait 2800",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "i labelled 12 cat memes with things\nmy girlfriend does. she was at work",
+      "timestamp": "Tue, Sep 15|at 1:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u busy"
+        },
+        {
+          "from": "them",
+          "text": "on my lunch. why"
+        },
+        {
+          "from": "me",
+          "text": "i made u something. its not an apology i havent done anything"
+        },
+        {
+          "from": "them",
+          "text": "thats exactly what someone whos done something would say"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "thats exactly what someone whos done something would say"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for mia. no reason.",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "just tap the screen. anywhere"
+        },
+        {
+          "from": "them",
+          "text": "its an empty page"
+        },
+        {
+          "from": "them",
+          "text": "OH"
+        },
+        {
+          "from": "them",
+          "text": "a cat in a shark hat just got slapped onto my screen"
+        },
+        {
+          "from": "them",
+          "text": "WHY IS IT LABELLED 'MIA BEFORE COFFEE'"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "WHY IS IT LABELLED 'MIA BEFORE COFFEE'"
+        },
+        {
+          "from": "me",
+          "text": "keep tapping"
+        },
+        {
+          "from": "them",
+          "text": "'certified menace'"
+        },
+        {
+          "from": "them",
+          "text": "'was right (once)'"
+        },
+        {
+          "from": "them",
+          "text": "ONCE??"
+        },
+        {
+          "from": "me",
+          "text": "i stand by it"
+        },
+        {
+          "from": "them",
+          "text": "u put the photo of nube in between the cats"
+        },
+        {
+          "from": "them",
+          "text": "im laughing so loud in the staff room"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "im laughing so loud in the staff room"
+        },
+        {
+          "from": "them",
+          "text": "theres a letter under all the stickers"
+        },
+        {
+          "from": "them",
+          "text": "'the one in sunglasses is you after i say you were right'"
+        },
+        {
+          "from": "them",
+          "text": "ok that one is accurate"
+        },
+        {
+          "from": "me",
+          "text": "so ur not mad"
+        },
+        {
+          "from": "them",
+          "text": "im printing the shark one for my desk",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "sarah wants to know what this is. shes doing one for her boyfriend"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking",
+      "date": "15 September 2026 at 13:40",
+      "lines": [
+        "- tryethos → Sticker Bomb",
+        "- she taps the screen and cat memes get slapped on wherever she taps",
+        "- u write the labels. thats the whole joke ('mia before coffee')",
+        "- ur photos land in between as polaroids",
+        "- 12 stickers in, ur letter opens",
+        "- 10 min. code LOVE = 20% off",
+        "",
+        "(save for a tuesday with no reason)"
+      ]
+    }
+  ]
+}

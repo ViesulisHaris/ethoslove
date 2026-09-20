@@ -1,0 +1,197 @@
+{
+  "demo": {
+    "template": "party-animals",
+    "steps": [
+      "swap \"Ana\" \"Jake\"",
+      "swap \"ANA\" \"JAKE\"",
+      "swap \"30\" \"24\"",
+      "swap \"marco\" \"mia\"",
+      "swap \"Marco\" \"Mia\"",
+      "swap \"Thirty\" \"Twenty-four\"",
+      "tap \"tap to open\"",
+      "wait 4200",
+      "tap \"the two puppies\"",
+      "wait 750",
+      "shot gift-1.png",
+      "tap \"the cat yelling\"",
+      "wait 330",
+      "tap \"the kitten in the green hat\"",
+      "wait 330",
+      "tap \"the hamster holding a cake\"",
+      "wait 330",
+      "tap \"the sad hamster\"",
+      "wait 330",
+      "tap \"the cat with the heart balloon\"",
+      "wait 330",
+      "tap \"the hamster with a slice\"",
+      "wait 330",
+      "tap \"the kitten with cake and flowers\"",
+      "wait 330",
+      "tap \"the ferrets\"",
+      "wait 330",
+      "tap \"the puppy in the blue hat\"",
+      "wait 330",
+      "wait 700",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "he said no fuss for his birthday.\nso i invited 10 animals in party hats",
+      "timestamp": "Fri, Sep 18|at 11:31 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "dont do anything for my birthday btw"
+        },
+        {
+          "from": "them",
+          "text": "no fuss"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "no fuss"
+        },
+        {
+          "from": "them",
+          "text": "why did u say it like that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did u say it like that"
+        },
+        {
+          "ts": "Sat, Sep 19|at 12:00 AM"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "jake's party (no fuss)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "happy birthday. no fuss"
+        },
+        {
+          "from": "them",
+          "text": "theres a hamster in a party hat"
+        },
+        {
+          "from": "them",
+          "text": "theres 10 of them"
+        },
+        {
+          "from": "them",
+          "text": "WHY ARE THERE FERRETS"
+        },
+        {
+          "from": "me",
+          "text": "tap them"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "tap them"
+        },
+        {
+          "from": "them",
+          "text": "the puppies just said u cried making this"
+        },
+        {
+          "from": "me",
+          "text": "the puppies are liars"
+        },
+        {
+          "from": "them",
+          "text": "the hamster asked if theres cake"
+        },
+        {
+          "from": "them",
+          "text": "one of them said '24?? in THIS economy'"
+        },
+        {
+          "from": "them",
+          "text": "u put the ferry photo in"
+        },
+        {
+          "from": "me",
+          "text": "u said no fuss. this is 10 animals and 6 photos. thats nothing"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "thats nothing"
+        },
+        {
+          "from": "them",
+          "text": "i tapped all of them and confetti went off in my bed"
+        },
+        {
+          "from": "them",
+          "text": "theres a card"
+        },
+        {
+          "from": "them",
+          "text": "ok im not crying the hamster is"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday u big baby",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "best fuss ive ever had"
+        },
+        {
+          "from": "them",
+          "text": "sending this to the lads. tom needs one for his mrs"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking about the hamsters",
+      "date": "19 September 2026 at 00:41",
+      "lines": [
+        "- tryethos → Party Animals",
+        "- ur photos go in the polaroids. 10 animals in party hats crash it",
+        "- he taps each one and it yells a line U wrote (i made the puppies snitch on me)",
+        "- tap them all → confetti → ur card opens",
+        "- 15 min. code LOVE = 20% off",
+        "",
+        "(save for the person who says 'no fuss')"
+      ]
+    }
+  ]
+}
