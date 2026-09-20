@@ -1,0 +1,157 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "he ignored our anniversary all day.\nthen it turned 11:58pm",
+      "timestamp": "Sat, Sep 19|at 9:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "good morning"
+        },
+        {
+          "from": "me",
+          "text": "anything u want to say to me today"
+        },
+        {
+          "from": "them",
+          "text": "drink water"
+        },
+        {
+          "from": "me",
+          "text": "wow"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "drink water"
+        },
+        {
+          "from": "me",
+          "text": "wow"
+        },
+        {
+          "ts": "Sat, Sep 19|at 11:58 PM"
+        },
+        {
+          "from": "them",
+          "text": "ok now"
+        },
+        {
+          "from": "them",
+          "text": "2 years ago u said yes at 11:58pm"
+        },
+        {
+          "from": "them",
+          "text": "not at 9am. i was being accurate"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "2 years, to the minute",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "U WAITED ALL DAY"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "U WAITED ALL DAY"
+        },
+        {
+          "from": "them",
+          "text": "15 hours. worst day of my life"
+        },
+        {
+          "from": "me",
+          "text": "i was so mad at u"
+        },
+        {
+          "from": "them",
+          "text": "i know. u liked a tiktok about breakups at 4pm"
+        },
+        {
+          "from": "me",
+          "text": "im crying"
+        },
+        {
+          "from": "me",
+          "text": "when did u even make this"
+        },
+        {
+          "from": "them",
+          "text": "tuesday. been sitting on it since"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "tuesday. been sitting on it since"
+        },
+        {
+          "from": "me",
+          "text": "u wrote all that"
+        },
+        {
+          "from": "them",
+          "text": "ya"
+        },
+        {
+          "from": "me",
+          "text": "u. who texts 'drink water'"
+        },
+        {
+          "from": "them",
+          "text": "drink water"
+        },
+        {
+          "from": "me",
+          "text": "i love u so much",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "im sending this to the girls so their boyfriends suffer"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for the girls asking what he sent",
+      "date": "20 September 2026 at 00:31",
+      "lines": [
+        "- its from tryethos",
+        "- he picked a template, put our photos in and wrote the letter himself",
+        "- its a link. no app. i opened it in bed",
+        "- he made it on tuesday and said nothing for 4 days",
+        "- code LOVE = 20% off",
+        "",
+        "(send this to him. he'll get it eventually)"
+      ]
+    }
+  ]
+}

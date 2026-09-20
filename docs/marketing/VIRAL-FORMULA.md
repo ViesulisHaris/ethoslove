@@ -774,6 +774,17 @@ he sells every feature by being confused by it. 139 (Party Animals: "no fuss", s
 party hats) and 140 (Sticker Bomb: twelve cat memes labelled with things she does, sent to her at
 work) finish the set, one carousel per cat template.
 
+## Anniversary threads for any template: 141 to 143
+
+Three anniversary conversations written so that nothing in them says what the gift looks like: no
+balloons, no cats, no locket, only the date, the wait, the letter and what it did to her. Slides 3
+and 5 are gaps for screenshots of whichever template is being pushed that week, and the pinned
+comment has a `[TEMPLATE NAME]` to fill in. Three points of view, because each one is shared by a
+different person: hers (141, he says nothing all day because she said yes at 11:58pm), his (142,
+the last line of the letter is why he asked her out: she told him his shoes were ugly), and her
+best friend's (143, who cries at a gift that isn't hers and sends the link to her own boyfriend
+"no context. as a threat").
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1052,5 +1063,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 138 | the council v. jake | left on delivered for 4 hours, so she took him to court | The Council | — |
 | 139 | no fuss | his birthday; the puppies snitch | Party Animals | — |
 | 140 | mia before coffee | no reason; he labelled the cats with her habits | Sticker Bomb | — |
+| 141 | to the minute | anniversary; silent all day, then 11:58pm | any (yours) | yours |
+| 142 | ugly shoes | 3 years; why he asked her out is the last line | any (yours) | yours |
+| 143 | as a threat | her best friend forwards it to her own boyfriend | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

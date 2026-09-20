@@ -1,0 +1,157 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "my best friend texted me at midnight\non her anniversary. \"EMERGENCY\"",
+      "timestamp": "Sun, Sep 20|at 12:06 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "them",
+          "text": "EMERGENCY"
+        },
+        {
+          "from": "me",
+          "text": "whats wrong"
+        },
+        {
+          "from": "them",
+          "text": "nothing is wrong. thats the emergency"
+        },
+        {
+          "from": "them",
+          "text": "look what jake sent me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "look what jake sent me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year with mia",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "jake. OUR jake"
+        },
+        {
+          "from": "me",
+          "text": "the one who got u a petrol station candle for ur birthday"
+        },
+        {
+          "from": "them",
+          "text": "THE SAME ONE"
+        },
+        {
+          "from": "me",
+          "text": "opening it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "opening it"
+        },
+        {
+          "from": "me",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "oh no"
+        },
+        {
+          "from": "me",
+          "text": "im crying and its not even for me"
+        },
+        {
+          "from": "them",
+          "text": "RIGHT"
+        },
+        {
+          "from": "them",
+          "text": "he wrote all of that himself"
+        },
+        {
+          "from": "me",
+          "text": "who is this man"
+        },
+        {
+          "from": "them",
+          "text": "i dont know but im keeping him"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i dont know but im keeping him"
+        },
+        {
+          "from": "me",
+          "text": "im sending this to tom"
+        },
+        {
+          "from": "me",
+          "text": "no context. just the link"
+        },
+        {
+          "from": "them",
+          "text": "as a threat"
+        },
+        {
+          "from": "me",
+          "text": "as a threat",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "where did he even find this"
+        },
+        {
+          "from": "them",
+          "text": "he wont tell me. he said 'a man has his ways'"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "i found it (for the girls)",
+      "date": "20 September 2026 at 00:52",
+      "lines": [
+        "- 'a man has his ways' = he googled it. its tryethos",
+        "- u pick a template, add photos, write the letter",
+        "- its a link, no app. she opened it at midnight",
+        "- code LOVE = 20% off",
+        "",
+        "- send it to him. no context. as a threat"
+      ]
+    }
+  ]
+}

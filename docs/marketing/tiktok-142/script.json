@@ -1,0 +1,153 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "3 years together and i never told her\nwhy i asked her out",
+      "timestamp": "Sun, Sep 20|at 12:01 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy 3 years"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "3 years (read to the end)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ella"
+          }
+        },
+        {
+          "from": "me",
+          "text": "the last bit is something ive never told u"
+        },
+        {
+          "from": "them",
+          "text": "im scared"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "im scared"
+        },
+        {
+          "from": "them",
+          "text": "ok opening it"
+        },
+        {
+          "from": "them",
+          "text": "wait"
+        },
+        {
+          "from": "them",
+          "text": "WAIT"
+        },
+        {
+          "from": "them",
+          "text": "u made this??"
+        },
+        {
+          "from": "me",
+          "text": "ya"
+        },
+        {
+          "from": "them",
+          "text": "im not at the end yet dont say anything"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "im not at the end yet dont say anything"
+        },
+        {
+          "ts": "Sun, Sep 20|at 12:09 AM"
+        },
+        {
+          "from": "them",
+          "text": "THATS why u asked me out???"
+        },
+        {
+          "from": "them",
+          "text": "because i said ur shoes were ugly"
+        },
+        {
+          "from": "me",
+          "text": "at a party. to my face. in front of my friends"
+        },
+        {
+          "from": "them",
+          "text": "they were ugly"
+        },
+        {
+          "from": "me",
+          "text": "i know. i still have them"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know. i still have them"
+        },
+        {
+          "from": "them",
+          "text": "3 years and u never told me"
+        },
+        {
+          "from": "me",
+          "text": "was saving it"
+        },
+        {
+          "from": "them",
+          "text": "for what"
+        },
+        {
+          "from": "me",
+          "text": "for when i ran out of other ways to say it"
+        },
+        {
+          "from": "me",
+          "text": "u had me at ugly shoes",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "im screenshotting that"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking what i sent her",
+      "date": "20 September 2026 at 00:40",
+      "lines": [
+        "- its from tryethos",
+        "- u pick a template, add ur photos and write the letter",
+        "- put the thing uve never told them at the very end",
+        "- its a link. no app. 20 min on my phone",
+        "- code LOVE = 20% off",
+        "",
+        "(save this for ur anniversary)"
+      ]
+    }
+  ]
+}
