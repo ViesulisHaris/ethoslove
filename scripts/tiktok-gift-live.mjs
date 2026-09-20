@@ -61,7 +61,9 @@ const pictures = (spec.photos ?? []).map((p, i) => {
 });
 
 // ── The browser: a phone, no cookie question, and a microphone we can blow into ───────────────────
-const browser = await chromium.launch();
+// WebGL, please: Chrome stopped falling back to software rendering for it on its own, and a
+// template like Bloom draws its flower in 3D — without this the pot comes out empty.
+const browser = await chromium.launch({ args: ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] });
 // A 1080×1920 window, and the gift in a phone-sized box inside it drawn at 2.5×: it lays out exactly as
 // it does on a 432-wide phone — including every size clamped in rem — and is filmed at full resolution.
 // (A 2× device scale lays out right too, but the screencast then only hands back the CSS pixels.)
@@ -223,6 +225,37 @@ if (await cover.last().waitFor({ timeout: 15000 }).then(() => true, () => false)
   await page.getByText(/tap to open/i).last().waitFor({ timeout: 30000 }).catch(() => {});
   await page.waitForTimeout(800);
   await cover.last().evaluate((b) => b.click());
+}
+
+// The templates that draw in 3D (Bloom, Passport) can't start WebGL inside a zoomed box: three.js
+// measures itself as it mounts, reads the zoomed size, and draws the flower two and a half times too
+// big, outside the phone — which is why the pot came out empty. So for those: take the zoom off, wait
+// for three to start and measure the phone properly, put the zoom back, and hold its canvas to the
+// phone's size, because it resizes itself again the moment anything else changes.
+if (["bloom", "passport"].includes(slug)) {
+  const sized = await page.evaluate(async (phone) => {
+    const gift = document.querySelector('[data-mode="live"]');
+    const box = gift?.parentElement;
+    if (!box) return "no gift";
+    box.style.zoom = "1";
+    const until = Date.now() + 6000;
+    let canvas = null;
+    while (Date.now() < until && !(canvas = gift.querySelector("canvas[data-engine]"))) await new Promise((done) => setTimeout(done, 100));
+    await new Promise((done) => setTimeout(done, 500));
+    box.style.zoom = String(phone.zoom);
+    if (!canvas) return "three never started";
+    const pin = () => {
+      if (canvas.style.width !== "100%" || canvas.style.height !== "100%") {
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+      }
+    };
+    pin();
+    new MutationObserver(pin).observe(canvas, { attributes: true, attributeFilter: ["style"] });
+    return `${canvas.dataset.engine} drawing at ${canvas.width}×${canvas.height}`;
+  }, PHONE);
+  console.log(`3D: ${sized}`);
+  await page.waitForTimeout(800);
 }
 
 // ── Filming: every frame the compositor draws, as the phone shows it at 1080×1920 ───────────────
