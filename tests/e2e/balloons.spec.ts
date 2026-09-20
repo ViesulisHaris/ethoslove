@@ -48,7 +48,10 @@ test.describe("Balloons", () => {
     await photo.click({ force: true });
     const large = page.locator("figure img");
     await expect(large).toBeVisible();
-    await page.mouse.click(10, 10);
+    // A tap on the dark round the photo closes it. The corner of the gift, that is: the corner of
+    // the page is the demo's own bar, which is not part of the gift and closes nothing.
+    const gift = (await page.locator(".gift-root").boundingBox())!;
+    await page.mouse.click(gift.x + 12, gift.y + 12);
     await expect(large).toBeHidden();
   });
 

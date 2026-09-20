@@ -61,3 +61,20 @@ export const guard = (muted: boolean, play: (c: AudioContext, t: number) => void
     // no audio device: the joke still lands without it
   }
 };
+
+/** A tick from the phone's motor, where it has one. */
+export function buzz(ms = 12): void {
+  try {
+    navigator.vibrate?.(ms);
+  } catch {
+    // not every browser has a motor
+  }
+}
+
+/**
+ * Wakes the audio context from inside a tap, so a sound that belongs to what the tap set off can
+ * still play a moment later, when the browser would no longer count it as the user's doing.
+ */
+export function prime(): void {
+  ctx();
+}

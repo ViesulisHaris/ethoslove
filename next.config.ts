@@ -49,6 +49,13 @@ const nextConfig: NextConfig = {
       source: "/templates/:slug/:file+",
       headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
     },
+    // The cut-outs the covers and the collage templates are made of. They are on the first screen of
+    // a gift now, a dozen at a time, and every one was being re-checked with the server on every
+    // open. A day, not a year: a picture can be swapped for another under the same name.
+    {
+      source: "/:dir(scraps|memes)/:file",
+      headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=2592000" }],
+    },
     {
       source: "/(.*)",
       headers: [
