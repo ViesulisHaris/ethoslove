@@ -15,6 +15,7 @@ import { COVER_LOOKS } from "./covers/looks";
 import { Watermark } from "./Watermark";
 import { TemplateErrorBoundary } from "./ErrorBoundary";
 import { ReplyModeContext } from "./reply-mode";
+import { GiftChromeContext } from "./gift-chrome";
 
 const MIN_LOADING_MS = 1600;
 
@@ -61,6 +62,8 @@ export function GiftRenderer({
   const [minElapsed, setMinElapsed] = useState(mode === "preview");
   // The replay the cover was last opened for; a replay shows the cover again.
   const [openedFor, setOpenedFor] = useState<number | null>(null);
+  // The end screen says when it is the thing being looked at, so the badge can get out of its way.
+  const [endScreen, setEndScreen] = useState(false);
   const mod = loaded.slug === slug ? loaded.mod : null;
   const failed = loaded.slug === slug && loaded.mod === null && loaded.slug !== "";
 
@@ -84,6 +87,9 @@ export function GiftRenderer({
   const resolved = useMemo(() => (base && coverOverride ? { ...base, cover: coverOverride } : base), [base, coverOverride]);
   const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview");
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
+
+  const watermarked = ready && !!resolved?.watermark && mode !== "preview";
+  const chrome = useMemo(() => ({ watermarked, onEndScreen: setEndScreen }), [watermarked]);
 
   const theme = useMemo(
     () => (resolved ? giftThemeVars(resolved.accentColor, resolved.fontPairing) : undefined),
@@ -112,14 +118,16 @@ export function GiftRenderer({
         {ready && coverOpen && Template && resolved ? (
           <TemplateErrorBoundary locale={resolved.locale} slug={slug}>
             <ReplyModeContext.Provider value={replyMode}>
-              <Template
-                key={replayKey}
-                data={resolved}
-                mode={mode}
-                onEvent={onEvent}
-                onReact={onReact}
-                onMakeOne={onMakeOne}
-              />
+              <GiftChromeContext.Provider value={chrome}>
+                <Template
+                  key={replayKey}
+                  data={resolved}
+                  mode={mode}
+                  onEvent={onEvent}
+                  onReact={onReact}
+                  onMakeOne={onMakeOne}
+                />
+              </GiftChromeContext.Provider>
             </ReplyModeContext.Provider>
           </TemplateErrorBoundary>
         ) : null}
@@ -151,7 +159,8 @@ export function GiftRenderer({
             <p className="font-display text-xl">Unknown template “{slug}”.</p>
           </div>
         ) : null}
-        {ready && resolved?.watermark && mode !== "preview" ? <Watermark locale={resolved.locale} /> : null}
+        {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
+        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} /> : null}
       </div>
     </MotionConfig>
   );

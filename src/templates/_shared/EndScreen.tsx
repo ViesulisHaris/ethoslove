@@ -5,9 +5,11 @@ import { Heart, Mic, Music2, Pause, Play, RotateCcw, Sparkles } from "lucide-rea
 import { motion, useReducedMotion } from "motion/react";
 import type { GiftData } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
+import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
 import { ReplyModeContext } from "./reply-mode";
 import { SongDedication } from "./SongDedication";
+import { Watermark } from "./Watermark";
 
 export function EndScreen({
   data,
@@ -28,9 +30,26 @@ export function EndScreen({
   const dark = tone === "dark";
   const { locale } = data;
   const reply = useContext(ReplyModeContext);
+  // The free-tier badge floats at the foot of the gift, which is where these buttons are. While this
+  // screen is the one being looked at, the badge steps aside and comes in at the end of it instead.
+  // (Being mounted isn't enough — half the templates keep the end screen at the bottom of a long
+  // scroll, where it sits unseen for most of the gift.)
+  const chrome = useGiftChrome();
+  const onScreen = useRef<HTMLDivElement>(null);
+  const tell = chrome.onEndScreen;
+  useEffect(() => {
+    const el = onScreen.current;
+    if (!el || !tell) return;
+    const io = new IntersectionObserver(([entry]) => tell(entry.isIntersecting), { threshold: 0.2 });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      tell(false);
+    };
+  }, [tell]);
 
   return (
-    <div className={cn("flex flex-col items-center px-6 text-center", className)}>
+    <div ref={onScreen} className={cn("flex flex-col items-center px-6 text-center", className)}>
       <motion.div
         initial={{ scale: 0.6, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
@@ -133,6 +152,8 @@ export function EndScreen({
           </span>
         </a>
       ) : null}
+
+      {chrome.watermarked ? <Watermark locale={locale} inline className="mt-8" /> : null}
     </div>
   );
 }
