@@ -69,7 +69,11 @@ export const giftDedicationSchema = z.object({
 export const FONT_PAIRINGS = ["editorial", "modern", "handwritten"] as const;
 
 /** The screen a recipient taps to open the gift. "classic" is the plain name-and-hairline intro. */
-export const COVER_IDS = ["gingham", "picnic", "polka", "birthday", "lovecore", "pearl", "garden", "mocha", "harvest", "starry", "snow", "spooky", "classic"] as const;
+/**
+ * The order is the order they are offered in. The first six are the collage covers, made of real
+ * cut-outs; the rest are the drawn set. A published gift stores its id, so ids are only ever added.
+ */
+export const COVER_IDS = ["lilies", "kisses", "cats", "party", "bluebell", "pressed", "gingham", "picnic", "polka", "birthday", "lovecore", "pearl", "garden", "mocha", "harvest", "starry", "snow", "spooky", "classic"] as const;
 export type CoverId = (typeof COVER_IDS)[number];
 export type FontPairing = (typeof FONT_PAIRINGS)[number];
 

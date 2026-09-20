@@ -63,4 +63,39 @@ test.describe("gift covers", () => {
     await expect(cover).toBeHidden({ timeout: 5000 });
     await expect(page.locator("[data-star]").first()).toBeVisible({ timeout: 15000 });
   });
+
+  test("a collage cover, made of real cut-outs, opens into the gift too", async ({ page }) => {
+    await page.goto("/demo/constellations?cover=cats");
+    const cover = page.locator("[data-cover=cats]");
+    await expect(cover).toBeVisible({ timeout: 20000 });
+    await expect(cover.getByText(/for sof/i)).toBeVisible();
+    // The cats are pictures: every one of them has to have arrived.
+    await expect(cover.locator("img").first()).toBeVisible();
+    const broken = await cover.locator("img").evaluateAll((imgs) => imgs.filter((i) => (i as HTMLImageElement).complete && (i as HTMLImageElement).naturalWidth === 0).length);
+    expect(broken).toBe(0);
+    await expect(page.getByText(/tap to open/i)).toBeVisible({ timeout: 25000 });
+    await page.getByRole("button", { name: /tap to open/i }).click();
+    await expect(cover).toBeHidden({ timeout: 5000 });
+    await expect(page.locator("[data-star]").first()).toBeVisible({ timeout: 15000 });
+  });
+
+  test("a tap before the gift has loaded is remembered, and it opens by itself", async ({ page }) => {
+    await page.goto("/demo/constellations?cover=lilies");
+    const cover = page.locator("[data-cover=lilies]");
+    await expect(cover).toBeVisible({ timeout: 20000 });
+    // No waiting for the hint: tap straight away, once.
+    await page.getByRole("button", { name: /tap to open/i }).click({ force: true });
+    await expect(cover).toBeHidden({ timeout: 30000 });
+    await expect(page.locator("[data-star]").first()).toBeVisible({ timeout: 15000 });
+  });
+
+  test("with motion turned down a cover still opens", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/demo/constellations?cover=kisses");
+    const cover = page.locator("[data-cover=kisses]");
+    await expect(cover).toBeVisible({ timeout: 20000 });
+    await expect(page.getByText(/tap to open/i)).toBeVisible({ timeout: 25000 });
+    await page.getByRole("button", { name: /tap to open/i }).click();
+    await expect(cover).toBeHidden({ timeout: 5000 });
+  });
 });

@@ -78,10 +78,4 @@ export const playTada = (muted: boolean) =>
     [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(c, "triangle", f, f, t + i * 0.085, i === 3 ? 0.5 : 0.16, 0.2));
   });
 
-export function buzz(ms = 12): void {
-  try {
-    navigator.vibrate?.(ms);
-  } catch {
-    // not every browser has a motor
-  }
-}
+export { buzz } from "../synth";
