@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
+import type { Featured } from "@/config/featured";
 
 /**
  * Loaded on demand, not with the page. Importing it statically reaches the template registry and
@@ -26,7 +27,7 @@ import { cn } from "@/lib/utils";
  * Gallery card. Poster at rest, the captured preview video plays on hover,
  * and "Try the live demo" mounts the real template inside the card.
  */
-export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManifest; index?: number }) {
+export function TemplateCard({ manifest, index = 0, badge }: { manifest: TemplateManifest; index?: number; badge?: Featured }) {
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
   const [live, setLive] = useState(false);
@@ -127,6 +128,16 @@ export function TemplateCard({ manifest, index = 0 }: { manifest: TemplateManife
         >
           {manifest.tier === "free" ? t("common.free") : t("common.premium")}
         </span>
+        {badge ? (
+          <span className={cn("pointer-events-none absolute top-3 right-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-blush text-forest" : "bg-[#B23A5E] text-white")}>
+            {badge === "popular" ? (
+              <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true">
+                <path d="M12 21s-7.6-4.7-9.7-9.3C.9 8.4 2.7 4.6 6.4 4.6c2 0 3.6 1.1 5.6 3.3 2-2.2 3.6-3.3 5.6-3.3 3.7 0 5.5 3.8 4.1 7.1C19.6 16.3 12 21 12 21Z" fill="currentColor" />
+              </svg>
+            ) : null}
+            {t(`templates.badge.${badge}`)}
+          </span>
+        ) : null}
       </div>
       <div className="mt-4 px-0.5">
         <div className="flex items-baseline justify-between gap-3">

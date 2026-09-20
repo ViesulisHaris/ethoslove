@@ -638,7 +638,28 @@
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a real song, a video or a voice message for {price}, paid once.",
-    "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever."
+    "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
+    "sections": {
+      "popular": {
+        "eyebrow": "Most popular",
+        "title": "The ones people send most",
+        "blurb": "Ranked by what actually gets made and sent, week after week."
+      },
+      "new": {
+        "eyebrow": "New",
+        "title": "Just arrived",
+        "blurb": "A council of cats, a party crashed by hamsters, a sticker bomb, and three collages you scroll."
+      },
+      "all": {
+        "eyebrow": "The collection",
+        "title": "Everything else",
+        "blurb": "Letters, skies, records, maps and more. Every one has a live demo."
+      }
+    },
+    "badge": {
+      "popular": "Most loved",
+      "new": "New"
+    }
   },
   "occasions": {
     "title": "Occasions",

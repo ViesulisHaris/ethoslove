@@ -638,7 +638,28 @@
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
     "detailPriceFree": "Gratis, para siempre. Añade una canción real, un vídeo o un mensaje de voz por {price}, pagado una vez.",
-    "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre."
+    "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
+    "sections": {
+      "popular": {
+        "eyebrow": "Las más populares",
+        "title": "Las que más se envían",
+        "blurb": "Ordenadas por lo que de verdad se hace y se envía, semana tras semana."
+      },
+      "new": {
+        "eyebrow": "Novedades",
+        "title": "Recién llegadas",
+        "blurb": "Un consejo de gatos, una fiesta invadida por hámsters, una bomba de stickers y tres collages para deslizar."
+      },
+      "all": {
+        "eyebrow": "La colección",
+        "title": "Todas las demás",
+        "blurb": "Cartas, cielos, vinilos, mapas y más. Todas tienen demo en vivo."
+      }
+    },
+    "badge": {
+      "popular": "Favorita",
+      "new": "Nueva"
+    }
   },
   "occasions": {
     "title": "Ocasiones",
