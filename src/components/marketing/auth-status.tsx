@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { MakeGiftLink } from "./make-gift-link";
+import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { cn } from "@/lib/utils";
 
 /**
@@ -19,9 +20,8 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
 
   useEffect(() => {
     // Most visitors have never signed in, and without a session cookie there is no one to ask
-    // about — so they never download the Supabase client (60 KB) at all. Same test as the proxy's
-    // (src/lib/supabase/proxy.ts).
-    if (!/(?:^|;\s*)sb-[^=]*auth-token/.test(document.cookie)) return;
+    // about — so they never download the Supabase client (60 KB) at all.
+    if (!hasSessionCookie()) return;
     let active = true;
     let unsubscribe = () => {};
     void import("@/lib/supabase/client").then(({ getSupabaseBrowserClient }) => {

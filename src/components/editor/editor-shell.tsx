@@ -9,7 +9,7 @@ import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
 import { WhoSection } from "./sections/who";
@@ -113,15 +113,40 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  // Keep auth state fresh (login in another tab, magic link return).
+  // Keep auth state fresh (login in another tab, magic link return). The client library is
+  // 60 KB the editor doesn't need to start, so it loads once there is a session to watch, or
+  // the publish sheet is open, which is where a guest signs in; subscribing replays the current
+  // session, so a sign-in made elsewhere in the meantime is picked up then.
+  const signedIn = Boolean(user);
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) return;
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      useEditor.getState().setAuth(Boolean(session?.user), session?.user?.id ?? null);
+    if (!signedIn && !publishOpen && !hasSessionCookie()) return;
+    let active = true;
+    let unsubscribe = () => {};
+    void import("@/lib/supabase/client").then(({ getSupabaseBrowserClient }) => {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase || !active) return;
+      const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+        useEditor.getState().setAuth(Boolean(session?.user), session?.user?.id ?? null);
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
     });
-    return () => sub.subscription.unsubscribe();
-  }, []);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [signedIn, publishOpen]);
+
+  // A guest signs in from the publish sheet, and the client library that takes is 60 KB: it is
+  // fetched once the form is live and the browser has gone idle, so the sheet has it in hand
+  // without it costing the editor's start.
+  useEffect(() => {
+    if (signedIn || !ready) return;
+    const load = () => void import("@/lib/supabase/client");
+    // Safari has no requestIdleCallback.
+    const idle = typeof window.requestIdleCallback === "function";
+    const id = idle ? window.requestIdleCallback(load, { timeout: 10000 }) : window.setTimeout(load, 3000);
+    return () => (idle ? window.cancelIdleCallback(id) : window.clearTimeout(id));
+  }, [signedIn, ready]);
 
   // Warn before leaving with unsaved local-only work being uploaded.
   useEffect(() => {

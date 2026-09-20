@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import type { GiftData, GiftLocale, GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { LIMITS } from "@/config/site";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
 import {
   GIFTS_BUCKET,
   buildStoragePath,
@@ -236,11 +236,15 @@ export const useEditor = create<EditorState>((set, get) => {
   const uploadAsset = async (id: string) => {
     const s = get();
     const asset = s.assets[id];
-    const supabase = getSupabaseBrowserClient();
-    if (!asset || !s.giftId || !s.authed || !supabase || asset.storagePath || asset.status === "uploading") return;
+    if (!asset || !s.giftId || !s.authed || !SUPABASE_CONFIGURED || asset.storagePath || asset.status === "uploading") return;
     // Claimed before the first await, so two queues running at once can't both send it.
     setAsset(id, { status: "uploading", progress: 0, error: undefined });
     const fail = (error: string) => setAsset(id, { status: "error", error, progress: 0 });
+    // The client library loads here, not with the editor: only a signed-in sender who is
+    // uploading has a use for it.
+    const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) return fail("unauthorized");
 
     const blob = await getBlob(id);
     // The browser dropped the draft's copy (private mode, cleared site data, a different browser),

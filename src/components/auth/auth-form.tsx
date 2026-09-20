@@ -5,13 +5,16 @@ import { Mail, MailCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/navigation";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 // Inlined at build time. Off until the Apple provider is set up in Supabase (scripts/apple-sign-in.mjs).
 const APPLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_APPLE_ENABLED === "true";
+
+/** The client library, 60 KB, arrives the first time it is needed — on submit — not with the form. */
+const client = () => import("@/lib/supabase/client").then((m) => m.getSupabaseBrowserClient());
 
 /** Only allow same-origin relative paths as post-login destinations. */
 function safeNext(value: string | null): string {
@@ -31,13 +34,14 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
   const [code, setCode] = useState("");
   const [codeState, setCodeState] = useState<"idle" | "checking" | "wrong">("idle");
   const router = useRouter();
-  const supabase = getSupabaseBrowserClient();
 
   /** The same email carries a 6-digit code; typing it here works even if the link opens elsewhere. */
   const verifyCode = async (e: FormEvent) => {
     e.preventDefault();
-    if (!supabase || code.length < 6) return;
+    if (!SUPABASE_CONFIGURED || code.length < 6) return;
     setCodeState("checking");
+    const supabase = await client();
+    if (!supabase) return setCodeState("idle");
     const { error } = await supabase.auth.verifyOtp({ email, token: code.trim(), type: "email" });
     if (error) {
       setCodeState("wrong");
@@ -59,8 +63,10 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
 
   const sendMagicLink = async (e: FormEvent) => {
     e.preventDefault();
-    if (!supabase) return;
+    if (!SUPABASE_CONFIGURED) return;
     setStatus("sending");
+    const supabase = await client();
+    if (!supabase) return setStatus("error");
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: redirectTo(), shouldCreateUser: true, data: { locale } },
@@ -69,6 +75,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
   };
 
   const oauth = async (provider: "apple" | "google") => {
+    const supabase = await client();
     if (!supabase) return;
     await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: redirectTo() } });
   };
@@ -80,7 +87,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
         {mode === "login" ? t("loginSubtitle") : t("signupSubtitle")}
       </p>
 
-      {!supabase ? (
+      {!SUPABASE_CONFIGURED ? (
         <div className="mt-6 rounded-xl border border-dashed border-gold/60 bg-gold/5 p-4 text-sm">
           <p className="font-medium">{t("notConfiguredTitle")}</p>
           <p className="mt-1 text-muted-foreground">{t("notConfiguredDetail")}</p>
