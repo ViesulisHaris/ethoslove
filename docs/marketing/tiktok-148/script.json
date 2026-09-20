@@ -1,0 +1,219 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:31",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Hey, is this Maya from the party?"
+        },
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "ive been ur girlfriend for a year"
+        },
+        {
+          "from": "them",
+          "text": "I know. I'm starting over"
+        },
+        {
+          "from": "me",
+          "text": "ur so weird"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "One year ago today I sent you that"
+        },
+        {
+          "from": "them",
+          "text": "You left me on read for 6 hours"
+        },
+        {
+          "from": "me",
+          "text": "i was playing it cool"
+        },
+        {
+          "from": "them",
+          "text": "You replied 'who is this'"
+        },
+        {
+          "from": "me",
+          "text": "VERY cool"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I nearly didn't text you at all"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "Jamie said you were out of my league"
+        },
+        {
+          "from": "me",
+          "text": "jamie was right"
+        },
+        {
+          "from": "them",
+          "text": "Jamie is still right"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Anyway. I made you something"
+        },
+        {
+          "from": "me",
+          "text": "made?? u??"
+        },
+        {
+          "from": "them",
+          "text": "Don't sound so surprised"
+        },
+        {
+          "from": "me",
+          "text": "u wrapped my christmas present in a tesco bag"
+        },
+        {
+          "from": "them",
+          "text": "It was a nice bag"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year of maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok opening it"
+        },
+        {
+          "from": "them",
+          "text": "Read it somewhere quiet"
+        },
+        {
+          "from": "me",
+          "text": "im in bed its 11pm"
+        },
+        {
+          "from": "them",
+          "text": "Perfect"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "them",
+          "text": "Yeah"
+        },
+        {
+          "from": "me",
+          "text": "u wrote about the 6 hours"
+        },
+        {
+          "from": "them",
+          "text": "Longest 6 hours of my life"
+        },
+        {
+          "from": "me",
+          "text": "ok i have to tell u something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i typed my reply in 4 minutes"
+        },
+        {
+          "from": "me",
+          "text": "then i stared at it for 6 hours"
+        },
+        {
+          "from": "them",
+          "text": "WHAT"
+        },
+        {
+          "from": "them",
+          "text": "You let me think that for a YEAR"
+        },
+        {
+          "from": "me",
+          "text": "i was playing it cool"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You have never once been cool"
+        },
+        {
+          "from": "me",
+          "text": "happy one year"
+        },
+        {
+          "from": "them",
+          "text": "Happy one year. So"
+        },
+        {
+          "from": "them",
+          "text": "Is this Maya from the party?"
+        },
+        {
+          "from": "me",
+          "text": "yes. who is this",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
