@@ -61,9 +61,11 @@ const pictures = (spec.photos ?? []).map((p, i) => {
 });
 
 // ── The browser: a phone, no cookie question, and a microphone we can blow into ───────────────────
-// WebGL, please: Chrome stopped falling back to software rendering for it on its own, and a
-// template like Bloom draws its flower in 3D — without this the pot comes out empty.
-const browser = await chromium.launch({ args: ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] });
+// The templates that draw in 3D (Bloom, Passport) need WebGL, and Chrome stopped falling back to
+// software rendering for it on its own — without these flags the pot comes out empty. Only for them:
+// software GL slows everything else down.
+const THREE_D = ["bloom", "passport"];
+const browser = await chromium.launch({ args: THREE_D.includes(slug) ? ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] : [] });
 // A 1080×1920 window, and the gift in a phone-sized box inside it drawn at 2.5×: it lays out exactly as
 // it does on a 432-wide phone — including every size clamped in rem — and is filmed at full resolution.
 // (A 2× device scale lays out right too, but the screencast then only hands back the CSS pixels.)
@@ -232,7 +234,7 @@ if (await cover.last().waitFor({ timeout: 15000 }).then(() => true, () => false)
 // big, outside the phone — which is why the pot came out empty. So for those: take the zoom off, wait
 // for three to start and measure the phone properly, put the zoom back, and hold its canvas to the
 // phone's size, because it resizes itself again the moment anything else changes.
-if (["bloom", "passport"].includes(slug)) {
+if (THREE_D.includes(slug)) {
   const sized = await page.evaluate(async (phone) => {
     const gift = document.querySelector('[data-mode="live"]');
     const box = gift?.parentElement;
