@@ -1,0 +1,161 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "hook": "we broke up for 23 days last year.\nhe still says today is our 2 years",
+      "timestamp": "Sun, Sep 20|at 8:41 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 2 years"
+        },
+        {
+          "from": "me",
+          "text": "technically its not"
+        },
+        {
+          "from": "them",
+          "text": "?"
+        },
+        {
+          "from": "me",
+          "text": "we broke up for 23 days in march"
+        },
+        {
+          "from": "them",
+          "text": "i know how many days it was"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know how many days it was"
+        },
+        {
+          "from": "me",
+          "text": "so its 1 year 11 months and a week"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "2 years (all of it)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "them",
+          "text": "the 23 days are in there"
+        },
+        {
+          "from": "me",
+          "text": "why would u put that in"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why would u put that in"
+        },
+        {
+          "from": "them",
+          "text": "read it"
+        },
+        {
+          "ts": "Sun, Sep 20|at 8:52 AM"
+        },
+        {
+          "from": "me",
+          "text": "u wrote about march"
+        },
+        {
+          "from": "me",
+          "text": "i was never going to bring march up again"
+        },
+        {
+          "from": "them",
+          "text": "its the most important bit"
+        },
+        {
+          "from": "me",
+          "text": "how"
+        },
+        {
+          "from": "them",
+          "text": "its how i know"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its how i know"
+        },
+        {
+          "from": "me",
+          "text": "know what"
+        },
+        {
+          "from": "them",
+          "text": "that i cant do it without u"
+        },
+        {
+          "from": "them",
+          "text": "tried. 23 days. hated it",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "its 2 years"
+        },
+        {
+          "from": "them",
+          "text": "its 2 years"
+        },
+        {
+          "from": "me",
+          "text": "im still putting the 23 days in the caption"
+        }
+      ]
+    },
+    {
+      "type": "note",
+      "title": "for everyone asking (and arguing)",
+      "date": "20 September 2026 at 09:20",
+      "lines": [
+        "- its from tryethos",
+        "- he picked a template, added our photos and wrote the letter",
+        "- yes he wrote about the break. yes i cried at 9am",
+        "- its a link. no app",
+        "- code LOVE = 20% off",
+        "",
+        "(does the break count? fight in the comments)"
+      ]
+    }
+  ]
+}
