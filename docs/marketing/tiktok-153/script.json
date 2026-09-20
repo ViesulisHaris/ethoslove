@@ -1,0 +1,102 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:26",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i said im sorry"
+        },
+        {
+          "from": "them",
+          "text": "k"
+        },
+        {
+          "from": "me",
+          "text": "its a tv show"
+        },
+        {
+          "from": "them",
+          "text": "it was the FINALE"
+        },
+        {
+          "from": "me",
+          "text": "i didnt know u hadnt seen it"
+        },
+        {
+          "from": "them",
+          "text": "u watched it WITHOUT me and then told me who died"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u watched it WITHOUT me and then told me who died"
+        },
+        {
+          "from": "me",
+          "text": "ok thats fair"
+        },
+        {
+          "from": "me",
+          "text": "i made u a formal apology"
+        },
+        {
+          "from": "them",
+          "text": "i dont want it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "formal apology (re: the finale)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Marco. Your name: Maya."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this is a lot of effort for a tv show"
+        },
+        {
+          "from": "me",
+          "text": "so ur not mad"
+        },
+        {
+          "from": "them",
+          "text": "im still mad"
+        },
+        {
+          "from": "them",
+          "text": "u put the photo of me asleep at the cinema in it"
+        },
+        {
+          "from": "me",
+          "text": "u looked peaceful"
+        },
+        {
+          "from": "them",
+          "text": "come over. bring snacks. im rewatching it and ur acting surprised",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "ill gasp so loud"
+        }
+      ]
+    }
+  ]
+}

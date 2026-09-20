@@ -1,0 +1,105 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:52",
+      "messages": [
+        {
+          "from": "them",
+          "text": "he posted her"
+        },
+        {
+          "from": "them",
+          "text": "im fine"
+        },
+        {
+          "from": "me",
+          "text": "ur not"
+        },
+        {
+          "from": "them",
+          "text": "im drafting a text"
+        },
+        {
+          "from": "me",
+          "text": "DO NOT"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "DO NOT"
+        },
+        {
+          "from": "me",
+          "text": "give me 20 minutes"
+        },
+        {
+          "from": "them",
+          "text": "for what"
+        },
+        {
+          "from": "me",
+          "text": "dont text him. 20 minutes. promise"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "ts": "Today|01:14"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "read this instead",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jess"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Jess. A friend's gift: photos of the two of you."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u made this in 20 minutes"
+        },
+        {
+          "from": "me",
+          "text": "22. i had the pics"
+        },
+        {
+          "from": "them",
+          "text": "u put the one where i fell off the banana boat"
+        },
+        {
+          "from": "me",
+          "text": "its ur best photo"
+        },
+        {
+          "from": "them",
+          "text": "im crying in my kitchen. in a good way"
+        },
+        {
+          "from": "them",
+          "text": "i deleted the draft",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "good. go to sleep. he has a weak chin"
+        }
+      ]
+    }
+  ]
+}

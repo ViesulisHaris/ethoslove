@@ -1,0 +1,98 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:02",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Don't get me anything for my birthday. I mean it."
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "I mean it, love. Save your money."
+        },
+        {
+          "from": "me",
+          "text": "i didnt buy anything"
+        },
+        {
+          "from": "them",
+          "text": "Good."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Good."
+        },
+        {
+          "from": "me",
+          "text": "i made something"
+        },
+        {
+          "from": "them",
+          "text": "Made? With what?"
+        },
+        {
+          "from": "me",
+          "text": "my phone. open it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy birthday mum",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mum"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Mum."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm at the hairdresser's."
+        },
+        {
+          "from": "them",
+          "text": "I'm crying under the dryer. Sandra has stopped cutting."
+        },
+        {
+          "from": "me",
+          "text": "good crying??"
+        },
+        {
+          "from": "them",
+          "text": "Your father has never made me anything in 31 years."
+        },
+        {
+          "from": "me",
+          "text": "dont tell him that"
+        },
+        {
+          "from": "them",
+          "text": "I've sent it to him.",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "And to your Auntie Carol. She wants one."
+        }
+      ]
+    }
+  ]
+}

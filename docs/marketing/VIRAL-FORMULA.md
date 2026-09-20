@@ -807,6 +807,38 @@ opens on the first text he ever sent her ("Hey, is this Maya from the party?"), 
 after the gift that she typed her reply in four minutes and stared at it for six hours, and the
 last two bubbles are that first text again and the reply she sent a year ago, "who is this".
 
+## Four slides, everything we know: 149 to 155
+
+The long shapes earn their length only when the first two slides are the most familiar
+conversation on earth. Most days a post is safer short, because **finishing is the signal**, so
+this batch is four slides each (five with a second gift frame), and every rule that has survived
+is in them at once:
+
+- **The hook is the first bubble, and it is a text the viewer has sent.** "are u mad at me",
+  "he posted her", "what do girls like", "i said im sorry" / "k", "Don't get me anything for my
+  birthday. I mean it." Nothing is typed over the picture.
+- **Tiny stakes, push and pull, and the dry one caves on a callback** (the 3.1M post): a spoiled
+  finale, an "ok" to a paragraph, a rude first sentence in a queue.
+- **The link is one move in the banter**, and it is on slide 2 every time. 150 opens on it,
+  because there the link is the riddle: the gift is locked, and the password is the first thing
+  she ever said to him.
+- **The peak is incoherent and the loop stays open** (95 to 97): "this is so nice i hate u",
+  "im crying at a password", "no. go to sleep". Nobody says i love you on cue.
+- **The maker is blue wherever the story allows** (150, 151, 152, 153, and the adviser in 155),
+  and the effort is shrunk out loud: "22. i had the pics", "20 mins. write what u actually think
+  of her", "it cost less than the card i was going to buy".
+- **Somebody else wants one before the end**: the sister, Auntie Carol, Sandra the hairdresser.
+- **Two keyboards**: Mum punctuates, her daughter does not.
+- **The caption is a question about the viewer's own life or a tag that names the buyer**:
+  "what would ur password be", "rate my apology 1-10", "tag the boy who needs this".
+- **More than couples**: a best friend at 1am, a mum under a hairdresser's dryer, a boy with £11
+  asking a friend what girls like. The couple, where there is one, is Maya and Marco again, so one
+  gift's screenshots serve 148, 149, 150, 154 and 155, and the account has a cast.
+
+Nothing in the texts says what the gift looks like; slide 3 is a gap for a screenshot of any
+template. 154 is built on "open when" letters, which people already search for and make by hand,
+and it makes the case for a bundle without saying so: there is one for every bad night.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1093,5 +1125,12 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 146 | one more game | slow burn; six months, he pauses the game | any (yours) | yours |
 | 147 | 4 minutes | slow burn; best friends, 214 miles | any (yours) | yours |
 | 148 | who is this | slow burn; one year, Marco to Maya, the first text again | any (yours) | yours |
+| 149 | are u mad at me | four slides; no occasion | any (yours) | yours |
+| 150 | whats the password | four slides; one year, or no occasion | any (yours) | yours |
+| 151 | he posted her | four slides; a friend's bad night | any (yours) | yours |
+| 152 | under the dryer | four slides; mum's birthday | any (yours) | yours |
+| 153 | it was the finale | four slides; an apology | any (yours) | yours |
+| 154 | open when u cant sleep | four slides; long distance | any (yours) | yours |
+| 155 | what do girls like | four slides; his girlfriend's birthday, in three days | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

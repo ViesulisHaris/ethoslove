@@ -1,0 +1,94 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u mad at me"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "u replied 'ok' to a whole paragraph"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "doing what"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "text": "took longer than i thought"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (not mad)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i wrote a breakup speech in my notes app"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "it was really good too"
+        },
+        {
+          "from": "them",
+          "text": "send it"
+        },
+        {
+          "from": "me",
+          "text": "no. im deleting it. this is so nice i hate u",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "send me the speech maya"
+        }
+      ]
+    }
+  ]
+}

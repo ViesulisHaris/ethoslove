@@ -1,0 +1,98 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|03:07",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cant sleep"
+        },
+        {
+          "from": "them",
+          "text": "its 3am there"
+        },
+        {
+          "from": "me",
+          "text": "i know what time it is marco"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "i made something for this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made something for this"
+        },
+        {
+          "from": "me",
+          "text": "for what"
+        },
+        {
+          "from": "them",
+          "text": "for when u cant sleep and im 9 hours behind and useless"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open when u cant sleep",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how long have u had this"
+        },
+        {
+          "from": "them",
+          "text": "since u left"
+        },
+        {
+          "from": "me",
+          "text": "thats 6 weeks"
+        },
+        {
+          "from": "them",
+          "text": "theres others"
+        },
+        {
+          "from": "me",
+          "text": "WHAT others"
+        },
+        {
+          "from": "them",
+          "text": "open when u miss me. open when ur mad at me. open when its ur birthday"
+        },
+        {
+          "from": "me",
+          "text": "im mad at u now. send it",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "no. go to sleep"
+        }
+      ]
+    }
+  ]
+}

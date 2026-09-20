@@ -1,0 +1,110 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:14",
+      "messages": [
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya. locked.",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it wants a password"
+        },
+        {
+          "from": "me",
+          "text": "ya"
+        },
+        {
+          "from": "them",
+          "text": "whats the password"
+        },
+        {
+          "from": "me",
+          "text": "the first thing u ever said to me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the first thing u ever said to me"
+        },
+        {
+          "from": "them",
+          "text": "i said a lot of things"
+        },
+        {
+          "from": "me",
+          "text": "u said one thing. to my face. at the bar"
+        },
+        {
+          "from": "them",
+          "text": "'hi'?"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "oh no"
+        },
+        {
+          "from": "them",
+          "text": "'are u in the queue or just standing there'"
+        },
+        {
+          "from": "me",
+          "text": "lowercase. no spaces"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "IT WORKED"
+        },
+        {
+          "from": "them",
+          "text": "u remembered that for a YEAR"
+        },
+        {
+          "from": "me",
+          "text": "it was a very rude thing to say"
+        },
+        {
+          "from": "them",
+          "text": "u were just standing there"
+        },
+        {
+          "from": "me",
+          "text": "i was in the queue"
+        },
+        {
+          "from": "them",
+          "text": "im crying at a password",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "my sister wants to know what hers would be"
+        }
+      ]
+    }
+  ]
+}

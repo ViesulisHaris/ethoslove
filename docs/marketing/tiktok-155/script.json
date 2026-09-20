@@ -1,0 +1,105 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|16:40",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what do girls like"
+        },
+        {
+          "from": "me",
+          "text": "be more specific"
+        },
+        {
+          "from": "them",
+          "text": "its mayas birthday friday"
+        },
+        {
+          "from": "me",
+          "text": "THIS friday"
+        },
+        {
+          "from": "them",
+          "text": "i have £11"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i have £11"
+        },
+        {
+          "from": "me",
+          "text": "ok. do u have photos of her"
+        },
+        {
+          "from": "them",
+          "text": "like 900"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for priya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Priya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "my bf made me this last year. i still open it"
+        },
+        {
+          "from": "me",
+          "text": "make her one. 20 mins. write what u actually think of her"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco. (This is the one he made her.)"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "ts": "Friday|23:58"
+        },
+        {
+          "from": "them",
+          "text": "SHE CRIED",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "good crying?"
+        },
+        {
+          "from": "them",
+          "text": "she said its the best thing anyones ever given her"
+        },
+        {
+          "from": "them",
+          "text": "it cost less than the card i was going to buy"
+        },
+        {
+          "from": "me",
+          "text": "told u"
+        },
+        {
+          "from": "them",
+          "text": "i owe u"
+        },
+        {
+          "from": "me",
+          "text": "u owe me a nandos"
+        }
+      ]
+    }
+  ]
+}
