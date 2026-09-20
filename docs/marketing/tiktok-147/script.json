@@ -1,0 +1,219 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:05",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u alive"
+        },
+        {
+          "from": "me",
+          "text": "barely. i have 3 deadlines"
+        },
+        {
+          "from": "them",
+          "text": "u have had 3 deadlines since 2023"
+        },
+        {
+          "from": "me",
+          "text": "theyre different deadlines"
+        },
+        {
+          "from": "them",
+          "text": "sure"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what do u want"
+        },
+        {
+          "from": "them",
+          "text": "cant i just check on my best friend"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "fair"
+        },
+        {
+          "from": "them",
+          "text": "ok i do want something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "knew it"
+        },
+        {
+          "from": "them",
+          "text": "i need 4 minutes of ur time"
+        },
+        {
+          "from": "me",
+          "text": "i dont have 4 minutes"
+        },
+        {
+          "from": "them",
+          "text": "u just spent 4 minutes telling me that"
+        },
+        {
+          "from": "me",
+          "text": "rude but correct"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made u something"
+        },
+        {
+          "from": "me",
+          "text": "is it a meme"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "is it another voice note of u crying"
+        },
+        {
+          "from": "them",
+          "text": "that was ONE time"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for the girl with 3 deadlines",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Priya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "whats this"
+        },
+        {
+          "from": "them",
+          "text": "open it. then go back to ur deadlines"
+        },
+        {
+          "from": "me",
+          "text": "bossy"
+        },
+        {
+          "from": "them",
+          "text": "u love it"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "i was not ready for that"
+        },
+        {
+          "from": "them",
+          "text": "told u. 4 minutes"
+        },
+        {
+          "from": "me",
+          "text": "u put the freshers photo in"
+        },
+        {
+          "from": "them",
+          "text": "the one with the traffic cone yes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss u so much its actually annoying"
+        },
+        {
+          "from": "them",
+          "text": "214 miles is nothing"
+        },
+        {
+          "from": "me",
+          "text": "its 214 miles"
+        },
+        {
+          "from": "them",
+          "text": "im coming up on the 3rd"
+        },
+        {
+          "from": "me",
+          "text": "WHAT"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "booked it this morning"
+        },
+        {
+          "from": "me",
+          "text": "i have 3 deadlines"
+        },
+        {
+          "from": "them",
+          "text": "u will have 3 deadlines on the 3rd too. im bringing snacks",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "best 4 minutes of my week"
+        },
+        {
+          "from": "them",
+          "text": "told u"
+        }
+      ]
+    }
+  ]
+}

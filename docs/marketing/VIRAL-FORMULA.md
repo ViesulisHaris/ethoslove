@@ -787,6 +787,23 @@ best friend's (143, who cries at a gift that isn't hers and sends the link to he
 in March, she says it is technically not two years, and he put the 23 days in the gift on purpose
 ("tried. 23 days. hated it"). The caption asks whether the break counts.
 
+## The slow burn: 145 to 147
+
+A carousel in this shape did 2.9M views for another gift site, and it breaks most of the rules
+above on purpose. Ten slides, five bubbles each, centred on a black page. No hook typed over
+slide 1: it opens on "You in bed yet?" and four slides of banter, the gift is first mentioned on
+slide 3, and the link only arrives on slide 5. Nothing is repeated from one slide to the next. It
+works because five bubbles read in two seconds, so the swipe-through is nearly free; because the
+banter is the hook (people stay to find out who these two are, then what he made); and because
+one of them types in lowercase while the other's phone capitalises, which is what two real people
+look like in a screenshot.
+
+145 to 147 keep all of that and add what it was missing: a **loop** (the first word of the thread
+comes back as the last: "nearly", "one more game", "told u"), so people swipe back to slide 1; a
+reaction that stays in character instead of turning into a greeting card; and, in 147, best
+friends instead of a couple. Nothing in the texts describes the gift, so slides 6 and 7 are
+screenshots of whichever template is being pushed.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1069,5 +1086,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 142 | ugly shoes | 3 years; why he asked her out is the last line | any (yours) | yours |
 | 143 | as a threat | her best friend forwards it to her own boyfriend | any (yours) | yours |
 | 144 | 23 days | 2 years with a break in the middle; does it count | any (yours) | yours |
+| 145 | nearly | slow burn; he made it, she is drying her hair | any (yours) | yours |
+| 146 | one more game | slow burn; six months, he pauses the game | any (yours) | yours |
+| 147 | 4 minutes | slow burn; best friends, 214 miles | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

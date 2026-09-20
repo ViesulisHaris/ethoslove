@@ -1,0 +1,219 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You asleep?"
+        },
+        {
+          "from": "me",
+          "text": "nearly"
+        },
+        {
+          "from": "them",
+          "text": "You said nearly an hour ago"
+        },
+        {
+          "from": "me",
+          "text": "my hair takes 40 minutes to dry thats not my fault"
+        },
+        {
+          "from": "them",
+          "text": "Sure"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are u still up"
+        },
+        {
+          "from": "them",
+          "text": "Can't sleep"
+        },
+        {
+          "from": "me",
+          "text": "have u tried closing ur eyes"
+        },
+        {
+          "from": "them",
+          "text": "Wow. Never thought of that"
+        },
+        {
+          "from": "me",
+          "text": "im basically a doctor"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Unbelievable"
+        },
+        {
+          "from": "them",
+          "text": "Anyway"
+        },
+        {
+          "from": "me",
+          "text": "anyway what"
+        },
+        {
+          "from": "them",
+          "text": "I did something today"
+        },
+        {
+          "from": "me",
+          "text": "legal or illegal"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Legal. I made you a thing"
+        },
+        {
+          "from": "me",
+          "text": "a thing"
+        },
+        {
+          "from": "them",
+          "text": "Don't make it weird"
+        },
+        {
+          "from": "me",
+          "text": "will it make me cry"
+        },
+        {
+          "from": "them",
+          "text": "Depends how tired you are"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (go easy)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok opening it"
+        },
+        {
+          "from": "them",
+          "text": "Go easy"
+        },
+        {
+          "from": "me",
+          "text": "absolutely not"
+        },
+        {
+          "from": "them",
+          "text": "Thought so"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "oliver"
+        },
+        {
+          "from": "them",
+          "text": "Yeah"
+        },
+        {
+          "from": "me",
+          "text": "u wrote all of that"
+        },
+        {
+          "from": "them",
+          "text": "Took me three lunch breaks"
+        },
+        {
+          "from": "me",
+          "text": "THREE"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I type slow"
+        },
+        {
+          "from": "me",
+          "text": "im on my bedroom floor crying with wet hair"
+        },
+        {
+          "from": "them",
+          "text": "So it's not dry then"
+        },
+        {
+          "from": "me",
+          "text": "shut up"
+        },
+        {
+          "from": "me",
+          "text": "come over"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's midnight"
+        },
+        {
+          "from": "me",
+          "text": "and"
+        },
+        {
+          "from": "them",
+          "text": "On my way",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "how long"
+        },
+        {
+          "from": "them",
+          "text": "Nearly"
+        }
+      ]
+    }
+  ]
+}

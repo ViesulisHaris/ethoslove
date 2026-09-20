@@ -1,0 +1,219 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:37",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u still playing"
+        },
+        {
+          "from": "them",
+          "text": "One more game"
+        },
+        {
+          "from": "me",
+          "text": "u said that at 8"
+        },
+        {
+          "from": "them",
+          "text": "It's a different one more game"
+        },
+        {
+          "from": "me",
+          "text": "right"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u winning"
+        },
+        {
+          "from": "them",
+          "text": "Define winning"
+        },
+        {
+          "from": "me",
+          "text": "so no"
+        },
+        {
+          "from": "them",
+          "text": "The ref hates me personally"
+        },
+        {
+          "from": "me",
+          "text": "its a video game"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "And yet"
+        },
+        {
+          "from": "me",
+          "text": "can u pause it"
+        },
+        {
+          "from": "them",
+          "text": "Why"
+        },
+        {
+          "from": "me",
+          "text": "i made u something"
+        },
+        {
+          "from": "them",
+          "text": "Is it food"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "Then it can wait 4 minutes"
+        },
+        {
+          "from": "me",
+          "text": "its 6 months today"
+        },
+        {
+          "from": "them",
+          "text": "..."
+        },
+        {
+          "from": "them",
+          "text": "Paused"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "link": {
+            "title": "6 months (pause the game)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Theo"
+          }
+        },
+        {
+          "from": "them",
+          "text": "What is this"
+        },
+        {
+          "from": "me",
+          "text": "open it"
+        },
+        {
+          "from": "them",
+          "text": "Is this going to make me feel things"
+        },
+        {
+          "from": "me",
+          "text": "thats the plan"
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Ok"
+        },
+        {
+          "from": "them",
+          "text": "I've turned the console off"
+        },
+        {
+          "from": "me",
+          "text": "OFF off??"
+        },
+        {
+          "from": "them",
+          "text": "Off off"
+        },
+        {
+          "from": "me",
+          "text": "thats the most romantic thing uve ever done"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You wrote about the night bus"
+        },
+        {
+          "from": "me",
+          "text": "obviously"
+        },
+        {
+          "from": "them",
+          "text": "I didn't think you remembered that"
+        },
+        {
+          "from": "me",
+          "text": "i remember everything. its a curse"
+        },
+        {
+          "from": "them",
+          "text": "I'm coming round"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its raining"
+        },
+        {
+          "from": "them",
+          "text": "Don't care"
+        },
+        {
+          "from": "me",
+          "text": "what about ur one more game"
+        },
+        {
+          "from": "them",
+          "text": "You're the one more game",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "that was terrible. say it again"
+        }
+      ]
+    }
+  ]
+}
