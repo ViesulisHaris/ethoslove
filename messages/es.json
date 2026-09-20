@@ -442,7 +442,7 @@
         "recipientName": "Añade su nombre",
         "senderName": "Añade tu nombre",
         "message": "Escribe un mensaje",
-        "photosMin": "Añade al menos {min} foto(s)",
+        "photosMin": "Añade {min, plural, one {una foto} other {al menos # fotos}}",
         "photosMax": "Demasiadas fotos para esta plantilla",
         "uploadsPending": "Tus archivos aún se están subiendo",
         "uploadsFailed": "Algo no se subió"

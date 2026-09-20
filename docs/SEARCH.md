@@ -21,10 +21,11 @@ while the DNS record exists.
 
 ## Bing Webmaster Tools
 
-This covers Bing search, and through it ChatGPT search, Copilot and DuckDuckGo. It needs an
-account: sign in at bing.com/webmasters with the Google account above, then choose **Import from
-Google Search Console**. That carries the verification and the sitemap across. Its AI Performance
-report shows which pages Copilot cites.
+This covers Bing search, and through it ChatGPT search, Copilot and DuckDuckGo. Set up on
+2026-09-20: signed in at bing.com/webmasters with the Google account above and imported the site
+from Search Console, which carried the verification across; `https://tryethos.io/sitemap.xml` was
+then submitted by hand, because the import didn't bring it. Reports fill in within 48 hours. Its AI
+Performance report shows which pages Copilot cites.
 
 `BING_SITE_VERIFICATION` becomes the `msvalidate.01` tag, if the tag method is ever preferred.
 

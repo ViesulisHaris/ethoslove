@@ -442,7 +442,7 @@
         "recipientName": "Add their name",
         "senderName": "Add your name",
         "message": "Write a message",
-        "photosMin": "Add at least {min} photo(s)",
+        "photosMin": "Add {min, plural, one {a photo} other {at least # photos}}",
         "photosMax": "Too many photos for this template",
         "uploadsPending": "Your files are still uploading",
         "uploadsFailed": "Something didn’t upload"

@@ -282,7 +282,8 @@ export function PublishSheet({
                 {(
                   ["recipientName", "senderName", "message", "photosMin", "uploadsPending"] as const
                 )
-                  .filter((key) => state.authed || key !== "uploadsPending")
+                  // A template that needs no photos has nothing to tick off for them.
+                  .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || manifest.features.photos.min > 0))
                   .map((key) => {
                     const bad = problems.includes(key);
                     const stuck = key === "uploadsPending" && bad && lastingProblem;
