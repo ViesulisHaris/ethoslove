@@ -28,7 +28,9 @@ export async function GET(request: NextRequest) {
 
   const center = { lat: round(lat, 2) + 0, lng: round(lng, 2) + 0 };
   const json = await askOverpass(buildRareQuery(center), { deadlineMs: 24_000, hedgeMs: 6000, revalidate: WEEK });
-  if (!json) return NextResponse.json({ error: "unavailable", places: [] }, { status: 503, headers: { "cache-control": "no-store" } });
+  // Not an error as far as the page is concerned: the rare finds are a bonus, and a red line in
+  // somebody's console for a busy third-party server helps nobody. Not cached, so the next visitor asks again.
+  if (!json) return NextResponse.json({ center, radiusM: RARE_RADIUS_M, places: [], unavailable: true }, { headers: { "cache-control": "no-store" } });
   const places = parseOverpass(json, center, RARE_RADIUS_M, (kind) => KINDS[kind].label[locale]);
   return NextResponse.json({ center, radiusM: RARE_RADIUS_M, places }, { headers: { "cache-control": `public, s-maxage=${WEEK}, stale-while-revalidate=${WEEK * 4}` } });
 }

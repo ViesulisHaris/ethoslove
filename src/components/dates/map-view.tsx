@@ -301,7 +301,8 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
 
       {interactive && state === "ready" ? (
         <>
-          <div className="pointer-events-none absolute inset-x-0 top-3 z-10 flex justify-center px-3">
+          {/* On a wide screen the map runs up behind the site's floating header; its own controls start below that. */}
+          <div className="pointer-events-none absolute inset-x-0 top-[max(0.75rem,env(safe-area-inset-top))] z-10 flex justify-center px-3 lg:top-[calc(var(--header-h,0px)+0.5rem)]">
             {searching ? (
               <span className="inline-flex h-10 items-center gap-2 rounded-full bg-white/95 px-4 text-[13px] font-medium text-forest shadow-lift">
                 <Loader2 className="size-4 animate-spin" />
