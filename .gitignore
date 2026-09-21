@@ -51,3 +51,6 @@ next-env.d.ts
 # Review-only contact sheets from `tiktok-slides.mjs --sheet`: not a slide, never to be posted.
 /docs/marketing/*/sheet.png
 /.tmp-calib/
+
+# MapLibre browser files, copied from node_modules by scripts/copy-maplibre.mjs
+/public/vendor/

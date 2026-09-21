@@ -13,7 +13,7 @@ export function StickyCta() {
   const t = useTranslations("common");
   const pathname = usePathname();
   // Only where the page has no strong call to action of its own (cards and detail pages carry theirs).
-  const wanted = pathname === "/" || pathname === "/occasions";
+  const wanted = pathname === "/gifts" || pathname === "/occasions";
   const consent = useConsent();
   const scrolled = useScrolledPast(480);
   // The consent banner docks in exactly this spot and sits above it (z-50 against this z-40),

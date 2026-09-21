@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Generated from node_modules by scripts/heic-worker.mjs: a library's minified build, not ours.
     "public/workers/**",
+    // Copied from node_modules by scripts/copy-maplibre.mjs: MapLibre's own minified build.
+    "public/vendor/**",
   ]),
 ]);
 

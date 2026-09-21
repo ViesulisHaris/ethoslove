@@ -1,51 +1,42 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { Locale } from "@/i18n/routing";
-import type { GiftLocale } from "@/lib/gift/schema";
-import { appNode, organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
+import { organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
-import { Hero } from "@/components/marketing/home/hero";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";
-import { Openings } from "@/components/marketing/home/openings";
-import { Reactions } from "@/components/marketing/home/reactions";
-import { HowItWorks } from "@/components/marketing/home/how-it-works";
-import { OccasionsIndex } from "@/components/marketing/home/occasions-index";
-import { PricingTeaser } from "@/components/marketing/home/pricing-teaser";
-import { Faq } from "@/components/marketing/home/faq";
-import { FinalCta } from "@/components/marketing/home/final-cta";
 import { TornEdge } from "@/components/marketing/home/cutouts";
+import { GamesBand, LongDistanceBand, PlatformClosing } from "@/components/marketing/platform/bands";
+import { Doors } from "@/components/marketing/platform/doors";
+import { IdeasTeaser } from "@/components/marketing/platform/ideas-teaser";
+import { PlatformHero } from "@/components/marketing/platform/platform-hero";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "meta" });
-  return pageMetadata({ locale, path: "/", title: t("defaultTitle"), description: t("description"), absoluteTitle: true });
+  const t = await getTranslations({ locale, namespace: "platform.meta" });
+  return pageMetadata({ locale, path: "/", title: t("title"), description: t("description"), absoluteTitle: true });
 }
 
+/**
+ * The front door: dates on a map, gifts that open like a story, a corner for long distance and
+ * the games to come. The gifts' own front page, which used to live here, is at /gifts unchanged.
+ */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations();
-  const plans = {
-    free: t("common.free"),
-    single: t("pricing.plans.single.name"),
-    pick3: t("pricing.plans.pick3.name"),
-    everything: t("pricing.plans.everything.name"),
-  };
   return (
     <>
-      <JsonLd nodes={[organizationNode(), websiteNode(), appNode(locale as Locale, t("meta.description"), plans)]} />
-      <Hero />
-      <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" />
+      <JsonLd nodes={[organizationNode(), websiteNode()]} />
+      <PlatformHero />
+      <TornEdge from="#F9E8E4" to="var(--brand-paper)" />
+      <Doors />
+      <IdeasTeaser />
       <TemplateStrip manifests={listManifests()} />
-      <Openings locale={locale as GiftLocale} />
-      <Reactions />
-      <HowItWorks />
-      <OccasionsIndex />
-      <PricingTeaser locale={locale} />
-      <Faq />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
-      <FinalCta />
+      <LongDistanceBand />
+      <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#2c4a3a" />
+      <GamesBand />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
+      <PlatformClosing />
     </>
   );
 }

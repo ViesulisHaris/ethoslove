@@ -13,7 +13,7 @@ export const LEGAL_ENTITY = {
   registeredAt: "27 March 2026",
 } as const;
 
-export const LEGAL_UPDATED = "2026-09-15";
+export const LEGAL_UPDATED = "2026-09-21";
 
 export type LegalSection = { heading: string; paragraphs: string[] };
 export type LegalDoc = { title: string; intro: string; sections: LegalSection[] };
@@ -225,7 +225,15 @@ const privacyEn: LegalDoc = {
       ],
     },
     {
-      heading: "3. Why we process it and on what legal basis",
+      heading: "3. Dates, maps and plans",
+      paragraphs: [
+        "The Dates pages work without an account. To show places near you we need a location: a town you type; the rough, city-level location your connection suggests, which our hosting provider supplies and which we use only to open the map on your city and do not store; or, only if you press 'Near me' and your browser agrees, your device's position. Before a position is sent to our servers it is rounded to a grid of roughly a hundred metres, and we neither store it nor link it to you. A search made with 'Near me' is never written into the page's address.",
+        "The map is drawn from OpenFreeMap: your browser downloads map tiles directly from tiles.openfreemap.org, which therefore receives your IP address, as any website you visit does. Places come from OpenStreetMap. To look up a place's details, the weather forecast or a town's name, our servers ask Nominatim (run by the OpenStreetMap Foundation), the public Overpass servers, Open-Meteo and Photon (komoot). Those requests carry coordinates or the text you searched for, never your name, your IP address or anything about your device.",
+        "A plan you build is kept in your browser's local storage and is never sent to us. When you share it, the plan travels inside the link itself, in the part after the '#', which browsers do not send to servers: whoever has the link can read the plan, and we cannot. Treat the link like the invitation it is. Links you follow from a place (directions, photos and reviews, a venue's own website) open other services under their own privacy policies.",
+      ],
+    },
+    {
+      heading: "4. Why we process it and on what legal basis",
       paragraphs: [
         "To provide the Service — creating and hosting gifts, delivering them to recipients, showing reactions and statistics to senders, processing purchases: performance of a contract (Art. 6(1)(b) GDPR).",
         "To keep the Service secure, prevent abuse, and enforce our terms: our legitimate interests (Art. 6(1)(f)).",
@@ -235,41 +243,41 @@ const privacyEn: LegalDoc = {
       ],
     },
     {
-      heading: "4. Who we share data with",
+      heading: "5. Who we share data with",
       paragraphs: [
         "We use service providers who process data on our behalf under data-processing agreements: Supabase (database, authentication and file storage), Vercel (hosting and delivery), Stripe (payments), Resend (transactional email), PostHog (product analytics, only with consent), Microsoft Clarity (heatmaps and session replay, only with consent, and never on a gift page), Sentry (error monitoring) and Anthropic (the optional 'help me write it' feature — only the facts you type into that dialog are sent, and only when you use it). Some providers process data in the United States; transfers rely on the EU–US Data Privacy Framework or the European Commission's Standard Contractual Clauses. When you search for a place in a template's place picker, our servers send what you type to Photon, komoot's public place search built on OpenStreetMap data, to find matching towns; only the search text is sent, never your name or your gift. If a gift includes a song link, opening it loads the song's cover image from YouTube, Spotify or Apple, which then receive the viewer's IP address; tapping the link opens that service under its own privacy policy.",
         "We don't sell personal data. We disclose data to authorities only where the law requires it.",
       ],
     },
     {
-      heading: "5. How long we keep it",
+      heading: "6. How long we keep it",
       paragraphs: [
         "Gifts and their content stay until you delete them or your account. After a live gift has been opened, we may remove unused upload versions that are no longer referenced by the published gift; scheduled gifts are not pruned before their unlock time. Deleted accounts and gifts have active Supabase Storage files, including images, videos, voice notes and reaction recordings, removed as part of deletion; routine backups expire within 30 days. View statistics are kept for as long as the gift exists. Purchase records are kept for the period Latvian accounting law requires (currently five years). Sign-in logs and security data are kept for up to 12 months.",
       ],
     },
     {
-      heading: "6. Your rights",
+      heading: "7. Your rights",
       paragraphs: [
         "You can access, correct, export (in a portable format) or delete your data, restrict or object to certain processing, and withdraw consent, from your account page or by emailing us. We answer within one month. You can also complain to the Latvian Data State Inspectorate (Datu valsts inspekcija, dvi.gov.lv) or the supervisory authority where you live.",
         "Recipients who want a reaction or view record removed can write to us with the gift link; we'll remove it and tell the sender it was withdrawn.",
       ],
     },
     {
-      heading: "7. Cookies and similar technologies",
+      heading: "8. Cookies and similar technologies",
       paragraphs: [
         "Strictly necessary cookies keep you signed in, remember your language and protect against abuse; they don't need consent. Analytics cookies (PostHog, Microsoft Clarity) are set only after you accept them in the cookie banner, and you can change your mind from the footer at any time. We don't use advertising cookies.",
       ],
     },
     {
-      heading: "8. Children",
+      heading: "9. Children",
       paragraphs: ["The Service isn't directed at children under 16, and we don't knowingly collect their data. Photos of children may appear in gifts made by adults; the sender is responsible for having the right to share them."],
     },
     {
-      heading: "9. Security",
+      heading: "10. Security",
       paragraphs: ["Data is encrypted in transit and at rest. Uploaded files live in private storage and are served through short-lived signed links. Access to production systems is limited to people who need it and protected with multi-factor authentication."],
     },
     {
-      heading: "10. Changes and contact",
+      heading: "11. Changes and contact",
       paragraphs: [`We'll post updates here and email account holders about material changes. Contact: ${E.name}, ${E.address}, ${E.email}.`],
     },
   ],
@@ -295,7 +303,15 @@ const privacyEs: LegalDoc = {
       ],
     },
     {
-      heading: "3. Por qué los tratamos y con qué base legal",
+      heading: "3. Citas, mapas y planes",
+      paragraphs: [
+        "Las páginas de Citas funcionan sin cuenta. Para mostrarte sitios cerca necesitamos una ubicación: una ciudad que escribas; la ubicación aproximada, a nivel de ciudad, que sugiere tu conexión, que nos facilita nuestro proveedor de alojamiento y que usamos solo para abrir el mapa en tu ciudad, sin almacenarla; o, únicamente si pulsas «Cerca de mí» y tu navegador lo permite, la posición de tu dispositivo. Antes de enviar una posición a nuestros servidores se redondea a una cuadrícula de unos cien metros, y ni la almacenamos ni la vinculamos a ti. Una búsqueda hecha con «Cerca de mí» nunca se escribe en la dirección de la página.",
+        "El mapa se dibuja con OpenFreeMap: tu navegador descarga las teselas directamente de tiles.openfreemap.org, que por tanto recibe tu dirección IP, como cualquier web que visitas. Los sitios proceden de OpenStreetMap. Para consultar los detalles de un sitio, la previsión del tiempo o el nombre de una ciudad, nuestros servidores preguntan a Nominatim (de la Fundación OpenStreetMap), a los servidores públicos de Overpass, a Open-Meteo y a Photon (komoot). Esas peticiones llevan coordenadas o el texto que has buscado, nunca tu nombre, tu dirección IP ni nada sobre tu dispositivo.",
+        "El plan que montas se guarda en el almacenamiento local de tu navegador y nunca se nos envía. Cuando lo compartes, el plan viaja dentro del propio enlace, en la parte que va después de «#», que los navegadores no envían a los servidores: quien tenga el enlace puede leer el plan, y nosotros no. Trata el enlace como la invitación que es. Los enlaces que sigas desde un sitio (cómo llegar, fotos y reseñas, la web del local) abren otros servicios con sus propias políticas de privacidad.",
+      ],
+    },
+    {
+      heading: "4. Por qué los tratamos y con qué base legal",
       paragraphs: [
         "Para prestar el Servicio (crear y alojar regalos, entregarlos a los destinatarios, mostrar reacciones y estadísticas a los remitentes, procesar compras): ejecución de un contrato (art. 6.1.b RGPD).",
         "Para mantener el Servicio seguro, prevenir abusos y hacer cumplir nuestros términos: nuestro interés legítimo (art. 6.1.f).",
@@ -305,41 +321,41 @@ const privacyEs: LegalDoc = {
       ],
     },
     {
-      heading: "4. Con quién compartimos los datos",
+      heading: "5. Con quién compartimos los datos",
       paragraphs: [
         "Usamos proveedores que tratan datos en nuestro nombre bajo contratos de encargo de tratamiento: Supabase (base de datos, autenticación y almacenamiento de archivos), Vercel (alojamiento y entrega), Stripe (pagos), Resend (correo transaccional), PostHog (analíticas de producto, solo con consentimiento), Microsoft Clarity (mapas de calor y grabación de sesiones, solo con consentimiento y nunca en la página de un regalo), Sentry (monitorización de errores) y Anthropic (la función opcional «ayúdame a escribirlo»: solo se envían los datos que escribes en ese diálogo y solo cuando la usas). Algunos proveedores tratan datos en Estados Unidos; las transferencias se amparan en el Marco de Privacidad de Datos UE–EE. UU. o en las cláusulas contractuales tipo de la Comisión Europea. Cuando buscas un sitio en el selector de lugares de una plantilla, nuestros servidores envían lo que escribes a Photon, el buscador público de lugares de komoot basado en datos de OpenStreetMap, para encontrar pueblos y ciudades; solo se envía el texto de la búsqueda, nunca tu nombre ni tu regalo. Si un regalo incluye el enlace a una canción, al abrirlo se carga su portada desde YouTube, Spotify o Apple, que reciben la dirección IP de quien lo ve; al tocar el enlace se abre ese servicio, sujeto a su propia política de privacidad.",
         "No vendemos datos personales. Solo comunicamos datos a las autoridades cuando la ley lo exige.",
       ],
     },
     {
-      heading: "5. Cuánto tiempo los conservamos",
+      heading: "6. Cuánto tiempo los conservamos",
       paragraphs: [
         "Los regalos y su contenido se conservan hasta que los borras o eliminas tu cuenta. Cuando un regalo publicado ya se ha abierto, podemos eliminar versiones de archivos subidos que ya no estén referenciadas por el regalo publicado; los regalos programados no se depuran antes de su hora de apertura. Al borrar una cuenta o un regalo, eliminamos del almacenamiento activo de Supabase los archivos asociados, incluidas imágenes, vídeos, notas de voz y grabaciones de reacción; las copias de seguridad rutinarias caducan en 30 días. Las estadísticas de visualización se conservan mientras exista el regalo. Los registros de compra se conservan durante el periodo que exige la legislación contable letona (actualmente cinco años). Los registros de acceso y datos de seguridad se conservan hasta 12 meses.",
       ],
     },
     {
-      heading: "6. Tus derechos",
+      heading: "7. Tus derechos",
       paragraphs: [
         "Puedes acceder a tus datos, corregirlos, exportarlos (en un formato portable) o borrarlos, limitar u oponerte a ciertos tratamientos y retirar tu consentimiento, desde la página de tu cuenta o escribiéndonos. Respondemos en el plazo de un mes. También puedes reclamar ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija, dvi.gov.lv) o ante la autoridad de control de tu lugar de residencia.",
         "Los destinatarios que quieran que se elimine una reacción o un registro de visualización pueden escribirnos con el enlace del regalo; lo eliminaremos e informaremos al remitente de que se ha retirado.",
       ],
     },
     {
-      heading: "7. Cookies y tecnologías similares",
+      heading: "8. Cookies y tecnologías similares",
       paragraphs: [
         "Las cookies estrictamente necesarias mantienen tu sesión iniciada, recuerdan tu idioma y protegen contra abusos; no requieren consentimiento. Las cookies analíticas (PostHog, Microsoft Clarity) solo se instalan tras aceptarlas en el aviso de cookies, y puedes cambiar de opinión desde el pie de página en cualquier momento. No usamos cookies publicitarias.",
       ],
     },
     {
-      heading: "8. Menores",
+      heading: "9. Menores",
       paragraphs: ["El Servicio no está dirigido a menores de 16 años y no recogemos sus datos a sabiendas. En los regalos creados por adultos pueden aparecer fotos de menores; el remitente es responsable de tener derecho a compartirlas."],
     },
     {
-      heading: "9. Seguridad",
+      heading: "10. Seguridad",
       paragraphs: ["Los datos se cifran en tránsito y en reposo. Los archivos subidos se guardan en almacenamiento privado y se sirven mediante enlaces firmados de corta duración. El acceso a los sistemas de producción está limitado a las personas que lo necesitan y protegido con autenticación multifactor."],
     },
     {
-      heading: "10. Cambios y contacto",
+      heading: "11. Cambios y contacto",
       paragraphs: [`Publicaremos las actualizaciones aquí y avisaremos por correo a los titulares de cuentas sobre cambios relevantes. Contacto: ${E.name}, ${E.address.replace("Latvia", "Letonia")}, ${E.email}.`],
     },
   ],

@@ -19,8 +19,10 @@ export function MarketingHeader() {
   const [open, setOpen] = useState(false);
 
   const nav = [
-    { href: "/templates", label: t("nav.templates") },
-    { href: "/occasions", label: t("nav.occasions") },
+    { href: "/dates", label: t("nav.dates") },
+    { href: "/gifts", label: t("nav.gifts") },
+    { href: "/long-distance", label: t("nav.longDistance") },
+    { href: "/games", label: t("nav.games") },
     { href: "/pricing", label: t("nav.pricing") },
   ] as const;
 
@@ -53,24 +55,25 @@ export function MarketingHeader() {
             <Logo />
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+          {/* Five rooms and three controls do not fit a tablet, in Spanish least of all: below `lg` it is the menu button. */}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
             {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-full px-3.5 py-2 text-[14.5px] font-medium text-cream/75 transition-colors hover:bg-white/10 hover:text-cream"
+                className="rounded-full px-3.5 py-2 text-[14.5px] font-medium whitespace-nowrap text-cream/75 transition-colors hover:bg-white/10 hover:text-cream"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             <LocaleSwitcher className="text-cream/80 hover:bg-white/10 hover:text-cream" />
             <AuthStatus tone="dark" />
           </div>
 
-          <div className="flex items-center gap-1 md:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
             <MakeGiftLink className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold whitespace-nowrap text-forest max-[359px]:px-3">
               {t("common.createGift")}
             </MakeGiftLink>

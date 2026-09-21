@@ -18,10 +18,13 @@ export async function MarketingFooter() {
           <Logo />
           <p className="font-display mt-4 text-xl leading-snug text-cream/70 italic">{t("footer.blurb")}</p>
         </div>
-        <FooterColumn title={t("footer.product")}>
+        <FooterColumn title={t("footer.explore")}>
+          <FooterLink href="/dates">{t("nav.dates")}</FooterLink>
+          <FooterLink href="/gifts">{t("nav.gifts")}</FooterLink>
           <FooterLink href="/templates">{t("nav.templates")}</FooterLink>
+          <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
+          <FooterLink href="/games">{t("nav.games")}</FooterLink>
           <FooterLink href="/pricing">{t("nav.pricing")}</FooterLink>
-          <FooterLink href="/occasions">{t("nav.occasions")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("nav.occasions")}>
           {OCCASIONS.slice(0, 6).map((o) => (

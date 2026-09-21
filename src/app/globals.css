@@ -400,3 +400,80 @@
 .gift-root {
   --u: min(1cqw, calc(1cqh * 0.6));
 }
+
+/* ------------------------------------------------------------------ */
+/* The Dates map: markers MapLibre positions as plain DOM elements.    */
+/* ------------------------------------------------------------------ */
+.ethos-stop-pin {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: #b23a5e;
+  color: #fff;
+  font: 700 13px/1 var(--font-sans);
+  box-shadow: 0 6px 14px -4px rgba(90, 20, 45, 0.55);
+}
+/* MapLibre positions a marker by writing `transform` on its root, so the root carries none of its own:
+   the teardrop's rotation and the drop-in animation live on the elements inside it. */
+.ethos-selected-pin {
+  position: relative;
+  width: 36px;
+  height: 46px;
+  pointer-events: none;
+}
+.ethos-selected-pin > i {
+  position: absolute;
+  left: 1px;
+  bottom: 7px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px 999px 999px 0;
+  rotate: -45deg;
+  background: var(--pin, #b23a5e);
+  border: 3px solid #fff;
+  box-shadow: 0 10px 20px -6px rgba(70, 20, 40, 0.6);
+  animation: ethos-pin-drop 0.35s var(--ease-spring) both;
+}
+.ethos-selected-pin > i::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  background: #fff;
+}
+.ethos-selected-pin > span {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  translate: -50% 0;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 999px;
+  background: #17130f;
+  padding: 5px 11px;
+  color: #fff;
+  font: 600 12px/1.2 var(--font-sans);
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.6);
+}
+@keyframes ethos-pin-drop {
+  from {
+    opacity: 0;
+    translate: 10px -10px;
+  }
+}
+.ethos-you-pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: #2f7fa8;
+  box-shadow: 0 0 0 7px rgba(47, 127, 168, 0.2), 0 4px 10px -3px rgba(20, 60, 90, 0.6);
+}
+.maplibregl-ctrl-attrib {
+  font-size: 10.5px;
+}

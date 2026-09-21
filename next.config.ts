@@ -66,10 +66,16 @@ const nextConfig: NextConfig = {
         { key: "X-Frame-Options", value: "SAMEORIGIN" },
         {
           key: "Permissions-Policy",
-          // Templates need mic (Birthday Cinema), motion (Jar, Constellations), gyroscope.
-          value: "camera=(), microphone=(self), geolocation=(), accelerometer=(self), gyroscope=(self)",
+          // Templates need mic (Birthday Cinema), motion (Jar, Constellations), gyroscope; the Dates
+          // map asks where they are, only when they press "Near me".
+          value: "camera=(), microphone=(self), geolocation=(self), accelerometer=(self), gyroscope=(self)",
         },
       ],
+    },
+    {
+      // MapLibre's browser files (scripts/copy-maplibre.mjs). The folder is named after the version.
+      source: "/vendor/maplibre-gl/:version/:file",
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
     },
     {
       // Decoder workers (scripts/heic-worker.mjs). After the rule above on purpose: for the same
@@ -91,7 +97,8 @@ const nextConfig: NextConfig = {
  * dev adds eval + the HMR socket. Supabase (storage, auth), Stripe (js + Checkout) and
  * Apple's song previews/artwork are the third parties, plus Microsoft Clarity once it has a
  * project id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
- * dev debug scripts come from va.vercel-scripts.com.
+ * dev debug scripts come from va.vercel-scripts.com. The Dates map draws OpenFreeMap's tiles,
+ * lettering and icons; the map library itself is served from this origin (/vendor).
  */
 function contentSecurityPolicy(): string {
   const dev = process.env.NODE_ENV !== "production";
@@ -107,10 +114,10 @@ function contentSecurityPolicy(): string {
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com",
+    "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org",
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com${clarityConnect}${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
     "frame-src https://js.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",

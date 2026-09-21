@@ -1,14 +1,24 @@
 import { expect, test } from "@playwright/test";
 
-test("homepage renders the hero in English", async ({ page }) => {
+test("the front page asks where they are, in English", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("open again and again");
-  await expect(page.getByRole("link", { name: /make a gift/i }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Find the date.");
+  await expect(page.getByRole("combobox", { name: "Where" })).toBeVisible();
+  // The four rooms, as cards with a way in.
+  for (const cta of ["Find a date", "Make a gift", "Close the distance", "See what's coming"]) await expect(page.getByRole("link", { name: new RegExp(cta) }).first()).toBeAttached();
 });
 
-test("Spanish homepage is served at /es", async ({ page }) => {
+test("the Spanish front page is served at /es", async ({ page }) => {
   await page.goto("/es");
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Encuentra la cita.");
+});
+
+test("the gifts' own front page lives on at /gifts, as it was", async ({ page }) => {
+  await page.goto("/gifts");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("open again and again");
+  await expect(page.getByRole("link", { name: /make a gift/i }).first()).toBeVisible();
+  await page.goto("/es/gifts");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("una y otra vez");
 });
 

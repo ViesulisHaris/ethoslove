@@ -33,14 +33,19 @@
   "meta": {
     "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
-    "description": "Create a personalised, animated digital gift for someone you love. Photos, their song, your words. Share with a link or QR code. Free to start."
+    "description": "Create a personalised, animated digital gift for someone you love. Photos, their song, your words. Share with a link or QR code. Free to start.",
+    "giftsTitle": "Ethos — Digital gifts that open like a story"
   },
   "nav": {
     "templates": "Templates",
     "occasions": "Occasions",
     "pricing": "Pricing",
     "howItWorks": "How it works",
-    "seeReactions": "Reactions"
+    "seeReactions": "Reactions",
+    "dates": "Dates",
+    "gifts": "Gifts",
+    "longDistance": "Long distance",
+    "games": "Games"
   },
   "home": {
     "hero": {
@@ -163,7 +168,8 @@
     "privacy": "Privacy",
     "contact": "Contact",
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
-    "madeWith": "Made in Riga and Madrid."
+    "madeWith": "Made in Riga and Madrid.",
+    "explore": "Explore"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -891,6 +897,387 @@
         "title": "Just because gifts",
         "description": "No occasion needed: a small digital gift with your photos, a song and a few honest words, to tell someone you're thinking of them.",
         "intro": "The best gifts don't wait for a date on the calendar. Make one in ten minutes and send it for no reason at all."
+      }
+    }
+  },
+  "dates": {
+    "meta": {
+      "title": "Date ideas near you, on a map",
+      "description": "Pick a day, see the forecast and the sunset, and get date ideas built from real places near you: coffee, views, dinner, something to play. Save it as a plan and send it to them."
+    },
+    "eyebrow": "Dates",
+    "titleIn": "Date ideas in {place}",
+    "titleNear": "Date ideas near you",
+    "empty": {
+      "title": "Where are you two?",
+      "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
+      "or": "Or start somewhere"
+    },
+    "where": {
+      "label": "Where",
+      "placeholder": "City or neighbourhood",
+      "nearMe": "Near me",
+      "searching": "Looking…",
+      "nothing": "No town by that name. Try the nearest city.",
+      "nearYou": "Near you",
+      "mapArea": "This area",
+      "noGeo": "This browser can't share a location. Type a town instead.",
+      "denied": "We couldn't get your location. Type a town instead."
+    },
+    "when": {
+      "label": "When",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "weekend": "This weekend",
+      "previous": "Previous month",
+      "next": "Next month",
+      "forecastNote": "The forecast reaches sixteen days ahead. After that, plan for either."
+    },
+    "weather": {
+      "wet": "Rain likely ({chance}%). The indoor ideas come first.",
+      "warm": "Dry and warm. Made for being outside.",
+      "cold": "Cold out. Somewhere warm, then a short walk.",
+      "mild": "Dry. A jacket and you're fine anywhere.",
+      "tooFar": "Too far ahead for a forecast. Plan for either.",
+      "loading": "Checking the forecast…",
+      "sunset": "Sunset"
+    },
+    "ideas": {
+      "title": "Ideas for that day",
+      "sub": "Tap one. We'll find the places.",
+      "vibes": "Mood",
+      "previous": "Earlier ideas",
+      "next": "More ideas",
+      "hours": "{hours} h",
+      "budget": {
+        "0": "Free",
+        "1": "Pocket change",
+        "2": "Dinner money",
+        "3": "A treat"
+      },
+      "notNearby": "Not around here",
+      "noneForVibe": "Nothing in that mood suits the forecast. Try another.",
+      "twist": "The twist:",
+      "another": "Another",
+      "nothingFor": "We couldn't find a {kind} near here. Drag the map and search again.",
+      "add": "Add this date to our plan",
+      "added": "In your plan",
+      "close": "Close this idea"
+    },
+    "places": {
+      "title": "Places for a date",
+      "count": "{count, plural, =0 {no places} one {# place} other {# places}}",
+      "filter": "Kind of place",
+      "all": "All",
+      "error": "We couldn't load the places just now.",
+      "retry": "Try again",
+      "none": "The map doesn't know anywhere for a date right here. Drag it towards the nearest town and search that area.",
+      "noneInFilter": "Nothing of that kind close by. Pick another, or drag the map and search a wider area.",
+      "more": "Show {count} more",
+      "credit": "Places and map data © OpenStreetMap contributors. Anyone can add what is missing at openstreetmap.org."
+    },
+    "place": {
+      "open": "Open",
+      "add": "Add to our plan",
+      "remove": "In your plan · remove",
+      "close": "Close",
+      "directions": "Directions",
+      "website": "Website",
+      "reviews": "Photos & reviews",
+      "call": "Call",
+      "walk": "{minutes} min walk",
+      "walkBetween": "{minutes} min walk",
+      "openOn": "Open {day} {hours}",
+      "closedOn": "Closed on {day}",
+      "hoursUnknown": "Hours aren't listed. Check before you go.",
+      "hoursUnclear": "Hours vary by season. Check before you go.",
+      "terrace": "Terrace",
+      "vegetarian": "Vegetarian options",
+      "stepFree": "Step-free",
+      "landmark": "A local landmark",
+      "free": "Free to visit",
+      "source": "From OpenStreetMap, as mapped by locals. Hours change: a quick check before you go saves an evening."
+    },
+    "map": {
+      "label": "Map of places for a date",
+      "show": "Map",
+      "list": "List",
+      "searchHere": "Search this area",
+      "loading": "Loading…",
+      "unavailable": "The map couldn't load here. The list beside it still works.",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    },
+    "plan": {
+      "open": "Our plan",
+      "full": "A plan holds {max} stops. Take one out first."
+    }
+  },
+  "plan": {
+    "meta": {
+      "title": "Our date plan",
+      "description": "A date, planned: the day, the stops in order, a note. Made on Ethos and sent as a link."
+    },
+    "eyebrow": "Our plan",
+    "eyebrowShared": "You're invited",
+    "someday": "A day to be decided",
+    "to": "Who is it for?",
+    "toPlaceholder": "Their name",
+    "from": "From",
+    "fromPlaceholder": "Your name",
+    "forFrom": "For {to}, from {from}",
+    "forOnly": "For {to}",
+    "fromOnly": "From {from}",
+    "rain": "{chance}% chance of rain",
+    "sunset": "Sunset {time}",
+    "past": "This one has already happened. We hope it was a good one.",
+    "walk": "{minutes} min walk",
+    "timeFor": "Time at {name}",
+    "noteFor": "A note for {name}",
+    "stopNotePlaceholder": "Add a note: “get the corner table”",
+    "directions": "Directions",
+    "moveUp": "Move {name} earlier",
+    "moveDown": "Move {name} later",
+    "removeStop": "Take {name} out of the plan",
+    "note": "A line for them",
+    "notePlaceholder": "Wear something you can walk in. That's all you're getting.",
+    "twist": "The twist:",
+    "send": {
+      "title": "Send it to them",
+      "sub": "One link, with the whole evening inside it. They open it on their phone: no app, no account.",
+      "share": "Share",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "private": "The plan is kept in this browser and travels inside the link itself. It is never stored on our servers."
+    },
+    "received": {
+      "title": "Somebody planned this for you",
+      "sub": "Keep it on this phone, or plan one back.",
+      "keep": "Keep this plan",
+      "kept": "Kept on this device",
+      "own": "Plan one of your own"
+    },
+    "gift": {
+      "title": "Wrap it in a gift",
+      "sub": "Hide the plan in something they open: a letter, a bouquet, a scratch card."
+    },
+    "addMore": "Add another stop",
+    "clear": "Clear the plan",
+    "clearConfirm": "Clear the whole plan? This can't be undone.",
+    "copyFallback": "Copy this link:",
+    "shareTitle": "A date, planned",
+    "shareText": "I planned us a date.",
+    "shareTextTo": "{name}, I planned us a date.",
+    "mapLabel": "Map of the plan's stops",
+    "mapLoading": "Loading…",
+    "mapUnavailable": "The map couldn't load here.",
+    "empty": {
+      "title": "Nothing planned yet",
+      "sub": "Pick a day, tap an idea, add a stop or two. It will be waiting here.",
+      "cta": "Find a date"
+    },
+    "broken": {
+      "title": "That link didn't survive the trip",
+      "sub": "Part of it got cut off on the way. Ask them to send it again, or plan one of your own."
+    }
+  },
+  "platform": {
+    "meta": {
+      "title": "Ethos — Dates, gifts and games for the two of you",
+      "description": "Find date ideas on a map of your town, plan the evening and send it as a link. Make a digital gift that opens like a story. Built for couples, near or far."
+    },
+    "hero": {
+      "eyebrow": "For the two of you",
+      "h1a": "Find the date.",
+      "h1b": "Keep the person.",
+      "sub": "Date ideas made from real places near you, on a map, for the day you pick. Plan it, send it as an invitation, and wrap it in a gift they'll keep.",
+      "nearMe": "See ideas near me",
+      "orGift": "or make a gift instead",
+      "facts": {
+        "free": {
+          "a": "Free",
+          "b": "to find and plan a date"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps or accounts needed"
+        },
+        "private": {
+          "a": "Yours",
+          "b": "plans never leave your phone"
+        }
+      },
+      "card": {
+        "meta": "2 h · Pocket change",
+        "invited": "You're invited",
+        "day": "Saturday, golden hour",
+        "names": "For Maya, from Marco",
+        "stop1": "Something sweet",
+        "stop2": "The best view in town"
+      }
+    },
+    "doors": {
+      "eyebrow": "One house, four rooms",
+      "title": "Whatever kind of couple you are this week.",
+      "dates": {
+        "title": "Dates",
+        "blurb": "Ideas built from real places on a map of your town, matched to the weather and the sunset.",
+        "cta": "Find a date"
+      },
+      "gifts": {
+        "title": "Gifts",
+        "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
+        "cta": "Make a gift"
+      },
+      "ldr": {
+        "title": "Long distance",
+        "blurb": "Meet in the middle, date across time zones, and send something that closes the gap.",
+        "cta": "Close the distance"
+      },
+      "games": {
+        "title": "Games",
+        "blurb": "Little games for two: on one screen on the sofa, or on two phones a continent apart.",
+        "cta": "See what's coming"
+      }
+    },
+    "ideas": {
+      "eyebrow": "Date ideas",
+      "title": "An evening with a shape to it.",
+      "blurb": "Every idea is a small recipe: a couple of stops and a twist. Pick one and we fill it with real places near you.",
+      "all": "All {count} ideas, on the map",
+      "hours": "{hours} h"
+    },
+    "ldr": {
+      "eyebrow": "Long distance",
+      "titleA": "Apart is not",
+      "titleB": "the same as far.",
+      "blurb": "Find the city halfway between you, plan the date for when you land, and keep the everyday going with things you can do on two screens.",
+      "cta": "Open the long-distance room",
+      "halfway": "halfway",
+      "cityA": "Riga",
+      "cityB": "Madrid"
+    },
+    "games": {
+      "eyebrow": "Games · coming soon",
+      "title": "Play for who does the dishes.",
+      "blurb": "Quick games made for two people who like each other. No downloads: open a link and you're playing.",
+      "cta": "See the first games",
+      "one": {
+        "title": "One screen",
+        "blurb": "Pass the phone on the sofa."
+      },
+      "two": {
+        "title": "Two phones",
+        "blurb": "Send a link, play from anywhere."
+      }
+    },
+    "closing": {
+      "title": "Saturday isn't going to plan itself.",
+      "blurb": "Two minutes now, and the weekend has a shape.",
+      "dates": "Find a date",
+      "gifts": "Make a gift"
+    }
+  },
+  "ldr": {
+    "meta": {
+      "title": "Long distance: meet halfway, date across time zones",
+      "description": "Find the city halfway between you, see the hours you're both awake, and get date ideas for two screens. Free tools for long-distance couples."
+    },
+    "eyebrow": "Long distance",
+    "h1a": "Apart is not",
+    "h1b": "the same as far.",
+    "sub": "A few small tools for the months between visits: where to meet, when you're both awake, and what to do on a call besides recap your day.",
+    "meet": {
+      "title": "Meet in the middle",
+      "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
+      "you": "Where you are",
+      "them": "Where they are",
+      "hint": "Pick both towns and we'll do the maths.",
+      "apart": "Apart",
+      "miles": "{miles} miles, as the plane flies",
+      "halfway": "Halfway",
+      "halfwayExact": "Almost exactly halfway between you.",
+      "halfwayNear": "The nearest city to your halfway point, {km} km from it.",
+      "datesThere": "Date ideas in {city}",
+      "nowhere": "Open water, more or less",
+      "nowhereSub": "Halfway between you is nowhere to land. One of you is getting on a plane.",
+      "clocks": "Clocks",
+      "sameTime": "Same time, both ends",
+      "ahead": "{name} is {hours} h ahead",
+      "behind": "{name} is {hours} h behind",
+      "bothAwake": "You're both awake {windows}, your time.",
+      "and": "and",
+      "neverAwake": "Your waking hours never overlap. Somebody is setting an alarm."
+    },
+    "virtual": {
+      "eyebrow": "Dates for two screens",
+      "title": "Something to do on the call.",
+      "twist": "The twist:"
+    },
+    "gifts": {
+      "eyebrow": "Gifts for the distance",
+      "title": "Something to open while you wait.",
+      "all": "All long-distance gifts"
+    }
+  },
+  "games": {
+    "meta": {
+      "title": "Games for two",
+      "description": "Little games for couples, played on one phone on the sofa or on two phones far apart. Start with a deck of question cards; more are on the way."
+    },
+    "eyebrow": "Games · the first one is here",
+    "h1a": "Games for",
+    "h1b": "exactly two.",
+    "sub": "Quick things to play with the person you like most. No downloads and no accounts: open a link and you're in.",
+    "modes": {
+      "one": {
+        "title": "One screen",
+        "blurb": "Pass the phone back and forth on the sofa."
+      },
+      "two": {
+        "title": "Two phones",
+        "blurb": "Send a link and play from anywhere."
+      }
+    },
+    "deck": {
+      "playable": "Play this one now",
+      "choose": "Choose a deck",
+      "count": "Card {n} of {total}",
+      "next": "Next card",
+      "done": "That's the whole deck. You two talk a lot.",
+      "doneEyebrow": "The end",
+      "again": "Shuffle and go again",
+      "how": "Whoever is holding the phone reads it out. You both answer."
+    },
+    "coming": {
+      "eyebrow": "Coming next",
+      "title": "What we're building.",
+      "meanwhile": "Meanwhile:",
+      "dates": "Plan a date",
+      "gifts": "Make a gift",
+      "know": {
+        "title": "How well do you know me?",
+        "blurb": "You each answer about yourself and guess the other. The scoreboard settles it."
+      },
+      "draw": {
+        "title": "Draw it, guess it",
+        "blurb": "One of you draws with a finger, the other guesses, live, from anywhere."
+      },
+      "rather": {
+        "title": "Would you rather, in sync",
+        "blurb": "Both pick in secret, then reveal. Match for points, clash for an argument."
+      },
+      "memory": {
+        "title": "Memory, with your photos",
+        "blurb": "The classic pairs game, dealt from your own camera roll."
+      },
+      "dare": {
+        "title": "Truth or dare, soft edition",
+        "blurb": "Nothing you'd regret. Mostly compliments and bad dancing."
+      },
+      "dishes": {
+        "title": "Dishes roulette",
+        "blurb": "Spin for who cooks, who washes up and who picks the film. Binding."
       }
     }
   }

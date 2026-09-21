@@ -33,14 +33,19 @@
   "meta": {
     "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
-    "description": "Crea un regalo digital personalizado y animado para alguien que quieres. Fotos, su canción, tus palabras. Compártelo con un enlace o un código QR. Empezar es gratis."
+    "description": "Crea un regalo digital personalizado y animado para alguien que quieres. Fotos, su canción, tus palabras. Compártelo con un enlace o un código QR. Empezar es gratis.",
+    "giftsTitle": "Ethos — Regalos digitales que se abren como una historia"
   },
   "nav": {
     "templates": "Plantillas",
     "occasions": "Ocasiones",
     "pricing": "Precios",
     "howItWorks": "Cómo funciona",
-    "seeReactions": "Reacciones"
+    "seeReactions": "Reacciones",
+    "dates": "Citas",
+    "gifts": "Regalos",
+    "longDistance": "A distancia",
+    "games": "Juegos"
   },
   "home": {
     "hero": {
@@ -163,7 +168,8 @@
     "privacy": "Privacidad",
     "contact": "Contacto",
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
-    "madeWith": "Hecho en Riga y Madrid."
+    "madeWith": "Hecho en Riga y Madrid.",
+    "explore": "Explorar"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -891,6 +897,387 @@
         "title": "Regalos porque sí",
         "description": "Sin ninguna ocasión: un pequeño regalo digital con tus fotos, una canción y unas palabras sinceras para decirle a alguien que piensas en esa persona.",
         "intro": "Los mejores regalos no esperan a una fecha en el calendario. Haz uno en diez minutos y envíalo sin ningún motivo."
+      }
+    }
+  },
+  "dates": {
+    "meta": {
+      "title": "Ideas para una cita cerca de ti, en un mapa",
+      "description": "Elige un día, mira el tiempo y la puesta de sol, y recibe ideas de citas hechas con sitios reales cerca de ti: café, vistas, cena, algo a lo que jugar. Guárdalo como plan y envíaselo."
+    },
+    "eyebrow": "Citas",
+    "titleIn": "Ideas para una cita en {place}",
+    "titleNear": "Ideas para una cita cerca de ti",
+    "empty": {
+      "title": "¿Dónde estáis?",
+      "sub": "Una ciudad, un barrio o donde estés ahora mismo. Encontramos las citas que esconde.",
+      "or": "O empieza por aquí"
+    },
+    "where": {
+      "label": "Dónde",
+      "placeholder": "Ciudad o barrio",
+      "nearMe": "Cerca de mí",
+      "searching": "Buscando…",
+      "nothing": "No hay ningún sitio con ese nombre. Prueba con la ciudad más cercana.",
+      "nearYou": "Cerca de ti",
+      "mapArea": "Esta zona",
+      "noGeo": "Este navegador no puede compartir la ubicación. Escribe una ciudad.",
+      "denied": "No hemos podido obtener tu ubicación. Escribe una ciudad."
+    },
+    "when": {
+      "label": "Cuándo",
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "weekend": "Este finde",
+      "previous": "Mes anterior",
+      "next": "Mes siguiente",
+      "forecastNote": "La previsión llega a dieciséis días. Más allá, planead para todo."
+    },
+    "weather": {
+      "wet": "Probable lluvia ({chance} %). Las ideas bajo techo van primero.",
+      "warm": "Seco y cálido. Hecho para estar fuera.",
+      "cold": "Hace frío. Un sitio calentito y luego un paseo corto.",
+      "mild": "Seco. Con una chaqueta, a cualquier parte.",
+      "tooFar": "Demasiado lejos para una previsión. Planead para todo.",
+      "loading": "Mirando el tiempo…",
+      "sunset": "Puesta de sol"
+    },
+    "ideas": {
+      "title": "Ideas para ese día",
+      "sub": "Toca una. Nosotros buscamos los sitios.",
+      "vibes": "Ambiente",
+      "previous": "Ideas anteriores",
+      "next": "Más ideas",
+      "hours": "{hours} h",
+      "budget": {
+        "0": "Gratis",
+        "1": "Calderilla",
+        "2": "Lo de una cena",
+        "3": "Un capricho"
+      },
+      "notNearby": "No por aquí",
+      "noneForVibe": "Nada de ese ambiente encaja con el tiempo. Prueba otro.",
+      "twist": "El giro:",
+      "another": "Otro",
+      "nothingFor": "No hemos encontrado ningún sitio así ({kind}) por aquí. Mueve el mapa y busca otra vez.",
+      "add": "Añadir esta cita a nuestro plan",
+      "added": "En vuestro plan",
+      "close": "Cerrar esta idea"
+    },
+    "places": {
+      "title": "Sitios para una cita",
+      "count": "{count, plural, =0 {ningún sitio} one {# sitio} other {# sitios}}",
+      "filter": "Tipo de sitio",
+      "all": "Todos",
+      "error": "Ahora mismo no hemos podido cargar los sitios.",
+      "retry": "Probar otra vez",
+      "none": "El mapa no conoce ningún sitio para una cita justo aquí. Arrástralo hacia la ciudad más cercana y busca en esa zona.",
+      "noneInFilter": "Nada de ese tipo por aquí cerca. Elige otro, o mueve el mapa y busca en una zona más amplia.",
+      "more": "Ver {count} más",
+      "credit": "Sitios y datos del mapa © colaboradores de OpenStreetMap. Cualquiera puede añadir lo que falte en openstreetmap.org."
+    },
+    "place": {
+      "open": "Abrir",
+      "add": "Añadir a nuestro plan",
+      "remove": "En vuestro plan · quitar",
+      "close": "Cerrar",
+      "directions": "Cómo llegar",
+      "website": "Web",
+      "reviews": "Fotos y reseñas",
+      "call": "Llamar",
+      "walk": "{minutes} min a pie",
+      "walkBetween": "{minutes} min a pie",
+      "openOn": "Abre el {day} {hours}",
+      "closedOn": "Cierra los {day}",
+      "hoursUnknown": "No figura el horario. Compruébalo antes de ir.",
+      "hoursUnclear": "El horario cambia según la temporada. Compruébalo antes de ir.",
+      "terrace": "Terraza",
+      "vegetarian": "Opciones vegetarianas",
+      "stepFree": "Sin escalones",
+      "landmark": "Un lugar emblemático",
+      "free": "Entrada libre",
+      "source": "De OpenStreetMap, tal como lo cartografía la gente del lugar. Los horarios cambian: comprobarlo antes de ir salva una noche."
+    },
+    "map": {
+      "label": "Mapa de sitios para una cita",
+      "show": "Mapa",
+      "list": "Lista",
+      "searchHere": "Buscar en esta zona",
+      "loading": "Cargando…",
+      "unavailable": "El mapa no ha podido cargarse aquí. La lista de al lado sigue funcionando.",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar"
+    },
+    "plan": {
+      "open": "Nuestro plan",
+      "full": "Un plan admite {max} paradas. Quita una primero."
+    }
+  },
+  "plan": {
+    "meta": {
+      "title": "Nuestro plan para la cita",
+      "description": "Una cita, planeada: el día, las paradas en orden, una nota. Hecha en Ethos y enviada como enlace."
+    },
+    "eyebrow": "Nuestro plan",
+    "eyebrowShared": "Tienes una invitación",
+    "someday": "Un día por decidir",
+    "to": "¿Para quién es?",
+    "toPlaceholder": "Su nombre",
+    "from": "De",
+    "fromPlaceholder": "Tu nombre",
+    "forFrom": "Para {to}, de {from}",
+    "forOnly": "Para {to}",
+    "fromOnly": "De {from}",
+    "rain": "{chance} % de probabilidad de lluvia",
+    "sunset": "Puesta de sol {time}",
+    "past": "Esta ya ha pasado. Ojalá fuera de las buenas.",
+    "walk": "{minutes} min a pie",
+    "timeFor": "Hora en {name}",
+    "noteFor": "Una nota para {name}",
+    "stopNotePlaceholder": "Añade una nota: «pide la mesa de la esquina»",
+    "directions": "Cómo llegar",
+    "moveUp": "Mover {name} antes",
+    "moveDown": "Mover {name} después",
+    "removeStop": "Quitar {name} del plan",
+    "note": "Unas palabras para esa persona",
+    "notePlaceholder": "Ponte algo con lo que puedas andar. No te digo más.",
+    "twist": "El giro:",
+    "send": {
+      "title": "Envíaselo",
+      "sub": "Un enlace con toda la noche dentro. Lo abre en el móvil: sin app y sin cuenta.",
+      "share": "Compartir",
+      "copy": "Copiar enlace",
+      "copied": "Copiado",
+      "private": "El plan se guarda en este navegador y viaja dentro del propio enlace. Nunca se almacena en nuestros servidores."
+    },
+    "received": {
+      "title": "Alguien ha planeado esto para ti",
+      "sub": "Guárdalo en este móvil o planea una de vuelta.",
+      "keep": "Guardar este plan",
+      "kept": "Guardado en este dispositivo",
+      "own": "Planear una por tu cuenta"
+    },
+    "gift": {
+      "title": "Envuélvelo en un regalo",
+      "sub": "Esconde el plan en algo que se abre: una carta, un ramo, un rasca."
+    },
+    "addMore": "Añadir otra parada",
+    "clear": "Borrar el plan",
+    "clearConfirm": "¿Borrar todo el plan? No se puede deshacer.",
+    "copyFallback": "Copia este enlace:",
+    "shareTitle": "Una cita, planeada",
+    "shareText": "Nos he planeado una cita.",
+    "shareTextTo": "{name}, nos he planeado una cita.",
+    "mapLabel": "Mapa de las paradas del plan",
+    "mapLoading": "Cargando…",
+    "mapUnavailable": "El mapa no ha podido cargarse aquí.",
+    "empty": {
+      "title": "Todavía no hay nada planeado",
+      "sub": "Elige un día, toca una idea, añade una parada o dos. Te estará esperando aquí.",
+      "cta": "Buscar una cita"
+    },
+    "broken": {
+      "title": "Ese enlace no ha sobrevivido al viaje",
+      "sub": "Se ha cortado una parte por el camino. Pídele que lo envíe otra vez, o planea una por tu cuenta."
+    }
+  },
+  "platform": {
+    "meta": {
+      "title": "Ethos — Citas, regalos y juegos para vosotros dos",
+      "description": "Encuentra ideas para una cita en un mapa de tu ciudad, planea la noche y envíala como enlace. Crea un regalo digital que se abre como una historia. Hecho para parejas, cerca o lejos."
+    },
+    "hero": {
+      "eyebrow": "Para vosotros dos",
+      "h1a": "Encuentra la cita.",
+      "h1b": "Quédate con la persona.",
+      "sub": "Ideas para una cita hechas con sitios reales cerca de ti, en un mapa, para el día que elijas. Planéala, envíala como invitación y envuélvela en un regalo que guardará.",
+      "nearMe": "Ver ideas cerca de mí",
+      "orGift": "o mejor crea un regalo",
+      "facts": {
+        "free": {
+          "a": "Gratis",
+          "b": "buscar y planear una cita"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps o cuentas necesarias"
+        },
+        "private": {
+          "a": "Tuyo",
+          "b": "los planes no salen de tu móvil"
+        }
+      },
+      "card": {
+        "meta": "2 h · Calderilla",
+        "invited": "Tienes una invitación",
+        "day": "Sábado, a la hora dorada",
+        "names": "Para Maya, de Marco",
+        "stop1": "Algo dulce",
+        "stop2": "La mejor vista de la ciudad"
+      }
+    },
+    "doors": {
+      "eyebrow": "Una casa, cuatro habitaciones",
+      "title": "Seáis la pareja que seáis esta semana.",
+      "dates": {
+        "title": "Citas",
+        "blurb": "Ideas hechas con sitios reales en un mapa de tu ciudad, según el tiempo y la puesta de sol.",
+        "cta": "Buscar una cita"
+      },
+      "gifts": {
+        "title": "Regalos",
+        "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
+        "cta": "Crear un regalo"
+      },
+      "ldr": {
+        "title": "A distancia",
+        "blurb": "Quedad a medio camino, tened citas entre husos horarios y enviad algo que acorte la distancia.",
+        "cta": "Acortar la distancia"
+      },
+      "games": {
+        "title": "Juegos",
+        "blurb": "Juegos pequeños para dos: en una pantalla en el sofá o en dos móviles a un continente de distancia.",
+        "cta": "Ver lo que viene"
+      }
+    },
+    "ideas": {
+      "eyebrow": "Ideas para citas",
+      "title": "Una noche con forma.",
+      "blurb": "Cada idea es una pequeña receta: un par de paradas y un giro. Elige una y la llenamos de sitios reales cerca de ti.",
+      "all": "Las {count} ideas, en el mapa",
+      "hours": "{hours} h"
+    },
+    "ldr": {
+      "eyebrow": "A distancia",
+      "titleA": "Estar separados no es",
+      "titleB": "estar lejos.",
+      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis y mantened el día a día con cosas para hacer en dos pantallas.",
+      "cta": "Abrir la habitación a distancia",
+      "halfway": "a medio camino",
+      "cityA": "Riga",
+      "cityB": "Madrid"
+    },
+    "games": {
+      "eyebrow": "Juegos · muy pronto",
+      "title": "Jugaos quién friega los platos.",
+      "blurb": "Juegos rápidos para dos personas que se gustan. Sin descargas: abrís un enlace y a jugar.",
+      "cta": "Ver los primeros juegos",
+      "one": {
+        "title": "Una pantalla",
+        "blurb": "Pasaos el móvil en el sofá."
+      },
+      "two": {
+        "title": "Dos móviles",
+        "blurb": "Envía un enlace y jugad desde donde sea."
+      }
+    },
+    "closing": {
+      "title": "El sábado no se va a planear solo.",
+      "blurb": "Dos minutos ahora y el finde ya tiene forma.",
+      "dates": "Buscar una cita",
+      "gifts": "Crear un regalo"
+    }
+  },
+  "ldr": {
+    "meta": {
+      "title": "A distancia: quedad a medio camino, citas entre husos horarios",
+      "description": "Encuentra la ciudad a medio camino entre los dos, mira a qué horas estáis ambos despiertos y descubre ideas de citas para dos pantallas. Herramientas gratis para parejas a distancia."
+    },
+    "eyebrow": "A distancia",
+    "h1a": "Estar separados no es",
+    "h1b": "estar lejos.",
+    "sub": "Unas cuantas herramientas pequeñas para los meses entre visita y visita: dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada además de repasar el día.",
+    "meet": {
+      "title": "Quedad a medio camino",
+      "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
+      "you": "Dónde estás tú",
+      "them": "Dónde está la otra persona",
+      "hint": "Elige las dos ciudades y hacemos las cuentas.",
+      "apart": "Distancia",
+      "miles": "{miles} millas, en línea de vuelo",
+      "halfway": "A medio camino",
+      "halfwayExact": "Casi exactamente a medio camino entre los dos.",
+      "halfwayNear": "La ciudad más cercana a vuestro punto medio, a {km} km de él.",
+      "datesThere": "Ideas para una cita en {city}",
+      "nowhere": "Mar abierto, más o menos",
+      "nowhereSub": "A medio camino entre los dos no hay donde aterrizar. A uno le toca coger un avión.",
+      "clocks": "Relojes",
+      "sameTime": "La misma hora en los dos lados",
+      "ahead": "{name} va {hours} h por delante",
+      "behind": "{name} va {hours} h por detrás",
+      "bothAwake": "Estáis los dos despiertos de {windows}, en tu hora.",
+      "and": "y de",
+      "neverAwake": "Vuestras horas despiertos no coinciden nunca. A alguien le toca poner el despertador."
+    },
+    "virtual": {
+      "eyebrow": "Citas para dos pantallas",
+      "title": "Algo que hacer durante la llamada.",
+      "twist": "El giro:"
+    },
+    "gifts": {
+      "eyebrow": "Regalos para la distancia",
+      "title": "Algo que abrir mientras esperáis.",
+      "all": "Todos los regalos a distancia"
+    }
+  },
+  "games": {
+    "meta": {
+      "title": "Juegos para dos",
+      "description": "Juegos pequeños para parejas, en un móvil en el sofá o en dos móviles a distancia. Empieza con una baraja de preguntas; vienen más en camino."
+    },
+    "eyebrow": "Juegos · ya está el primero",
+    "h1a": "Juegos para",
+    "h1b": "exactamente dos.",
+    "sub": "Cosas rápidas a las que jugar con la persona que más te gusta. Sin descargas y sin cuentas: abrís un enlace y ya estáis dentro.",
+    "modes": {
+      "one": {
+        "title": "Una pantalla",
+        "blurb": "Pasaos el móvil en el sofá."
+      },
+      "two": {
+        "title": "Dos móviles",
+        "blurb": "Envía un enlace y jugad desde donde sea."
+      }
+    },
+    "deck": {
+      "playable": "A este ya se puede jugar",
+      "choose": "Elige una baraja",
+      "count": "Carta {n} de {total}",
+      "next": "Siguiente carta",
+      "done": "Se acabó la baraja. Habláis un montón.",
+      "doneEyebrow": "Fin",
+      "again": "Barajar y otra vez",
+      "how": "Quien tenga el móvil la lee en voz alta. Respondéis los dos."
+    },
+    "coming": {
+      "eyebrow": "Lo siguiente",
+      "title": "Lo que estamos construyendo.",
+      "meanwhile": "Mientras tanto:",
+      "dates": "Planear una cita",
+      "gifts": "Crear un regalo",
+      "know": {
+        "title": "¿Cuánto me conoces?",
+        "blurb": "Cada uno responde sobre sí mismo y adivina al otro. El marcador decide."
+      },
+      "draw": {
+        "title": "Dibuja y adivina",
+        "blurb": "Uno dibuja con el dedo y el otro adivina, en directo, desde donde sea."
+      },
+      "rather": {
+        "title": "¿Qué prefieres?, a la vez",
+        "blurb": "Elegís en secreto y luego se descubre. Coincidir da puntos; no coincidir, conversación."
+      },
+      "memory": {
+        "title": "Memory, con vuestras fotos",
+        "blurb": "El juego de parejas de toda la vida, repartido desde tu propio carrete."
+      },
+      "dare": {
+        "title": "Verdad o reto, versión suave",
+        "blurb": "Nada de lo que arrepentirse. Sobre todo piropos y bailar mal."
+      },
+      "dishes": {
+        "title": "La ruleta de los platos",
+        "blurb": "Gira para ver quién cocina, quién friega y quién elige la peli. Es vinculante."
       }
     }
   }
