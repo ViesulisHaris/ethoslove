@@ -50,7 +50,8 @@ export async function film({ page, live, spec, breathe, inGift, now }) {
   await page.evaluate(async (signOff) => {
     const gift = document.querySelector('[data-mode="live"]');
     const sc = [...gift.querySelectorAll("div")].find((d) => /overflow-y-auto/.test(d.className));
-    const last = [...gift.querySelectorAll("p,span,div")].filter((e) => !e.children.length && e.textContent.toLowerCase().includes(signOff)).pop();
+    // The signature, not the end card's "Made by …", which also carries the name.
+    const last = gift.querySelector('[class*="ignature"]') ?? [...gift.querySelectorAll("p,span")].find((e) => !e.children.length && e.textContent.toLowerCase().includes(signOff));
     if (!sc || !last) return;
     let y = 0;
     for (let e = last; e && e !== sc; e = e.offsetParent) y += e.offsetTop;
@@ -66,7 +67,7 @@ export async function film({ page, live, spec, breathe, inGift, now }) {
       };
       requestAnimationFrame(step);
     });
-  }, "from ollie");
+  }, spec.senderName.toLowerCase());
   await page.waitForTimeout(1500);
   marks.end = now();
 
