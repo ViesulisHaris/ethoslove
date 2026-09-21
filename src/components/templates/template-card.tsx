@@ -84,7 +84,8 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
              */}
             <Image
               src={manifest.thumbnail.poster}
-              alt=""
+              // The tagline says what the poster shows; Bing flags an empty alt on every card.
+              alt={manifest.tagline[locale]}
               fill
               sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               quality={75}
