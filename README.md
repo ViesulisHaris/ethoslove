@@ -6,6 +6,24 @@ The recipient opens it on their phone and gets a cinematic experience.
 
 > Working brand name: **Ethos** (`src/config/brand.ts`). Change it there and it propagates everywhere.
 
+## This repository: the couples platform
+
+`reasj2/ethoswebsite` is where Ethos grows past gifts: **date ideas on a map** (`/dates`), a plan that
+is sent as a link (`/plan`), a **long-distance** room and **games** for two. The gifts are all still
+here and unchanged, under `/gifts`, `/templates`, `/occasions` and `/pricing`.
+
+The gifts site in production is `reasj2/ethoslove`, and every push to it deploys. **This repository
+pulls from it and never pushes to it**: `upstream` is ethoslove with its push URL disabled.
+
+```bash
+git fetch upstream && git rebase upstream/main   # bring over what changed in the gifts product
+git push origin main                             # only ever to ethoswebsite
+```
+
+The Dates pages need no keys and no database; [docs/DATES.md](docs/DATES.md) explains where the map,
+the places, the hours and the forecast come from, what that data cannot do, and what to swap when
+it is outgrown.
+
 ## Stack
 
 Next.js 16 (App Router, RSC, TypeScript strict) · Tailwind v4 + shadcn/ui · Motion (Framer) + GSAP +
