@@ -98,7 +98,8 @@ const nextConfig: NextConfig = {
  * Apple's song previews/artwork are the third parties, plus Microsoft Clarity once it has a
  * project id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
  * dev debug scripts come from va.vercel-scripts.com. The Dates map draws OpenFreeMap's tiles,
- * lettering and icons; the map library itself is served from this origin (/vendor).
+ * lettering and icons; the map library itself is served from this origin (/vendor). Photographs of
+ * places are Wikimedia's, loaded from its two image hosts.
  */
 function contentSecurityPolicy(): string {
   const dev = process.env.NODE_ENV !== "production";
@@ -114,7 +115,7 @@ function contentSecurityPolicy(): string {
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org",
+    "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org",
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
     `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${dev ? " ws: http://localhost:*" : ""}`,

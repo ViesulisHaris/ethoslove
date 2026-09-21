@@ -1,5 +1,6 @@
 import { distanceKm, type LatLng } from "./geo";
 import { KINDS, kindOf, type PlaceGroup, type PlaceKind } from "./kinds";
+import type { PlacePhoto } from "./photos";
 
 /** One place worth going to, as the pages use it. Everything here came off the map; nothing is invented. */
 export type Place = {
@@ -25,6 +26,11 @@ export type Place = {
   /** Has an encyclopedia entry: a landmark rather than a corner café. */
   notable: boolean;
   score: number;
+  /** A real photograph of this very place, with its credit. Never a stand-in. */
+  photo?: PlacePhoto;
+  /** A line about it, and where that line came from. */
+  about?: string;
+  articleUrl?: string;
 };
 
 type Element = { type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };

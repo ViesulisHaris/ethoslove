@@ -17,6 +17,8 @@ export type PlaceDetails = {
   notable: boolean;
   /** A sentence from the map itself, when a mapper wrote one. */
   description?: string;
+  /** Its Wikidata item ("Q42"), which is how its photograph is found. */
+  wikidata?: string;
 };
 
 export const isPlaceId = (id: string): boolean => /^(node|way|relation)\/\d{1,15}$/.test(id);
@@ -57,6 +59,7 @@ export function detailsFromTags(id: string, tags: Record<string, string | undefi
     vegetarian: yes(tags["diet:vegetarian"]) || yes(tags["diet:vegan"]),
     stepFree: tags.wheelchair === "yes",
     notable: Boolean(tags.wikidata || tags.wikipedia),
+    wikidata: /^Q[1-9]\d{0,11}$/.test(tags.wikidata ?? "") ? tags.wikidata : undefined,
     description: description ? (description.length > 220 ? `${description.slice(0, 217).trimEnd()}…` : description) : undefined,
   };
 }

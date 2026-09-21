@@ -1,37 +1,41 @@
+/* eslint-disable @next/next/no-img-element */
 import { ArrowRight, Gamepad2, Gift, MapPinned, Plane } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { HERO_ART } from "@/lib/dates/art";
 
 const DOORS = [
-  { key: "dates", href: "/dates", Icon: MapPinned, ground: "linear-gradient(160deg,#FFE3D3 0%,#F9C6D0 100%)", ink: "#8E2F4C", soon: false },
-  { key: "gifts", href: "/gifts", Icon: Gift, ground: "linear-gradient(160deg,#F8E6CF 0%,#EED2B2 100%)", ink: "#7A4B16", soon: false },
-  { key: "ldr", href: "/long-distance", Icon: Plane, ground: "linear-gradient(160deg,#D9EEF3 0%,#BBDDE8 100%)", ink: "#22607F", soon: false },
-  { key: "games", href: "/games", Icon: Gamepad2, ground: "linear-gradient(160deg,#E6E0F8 0%,#D2C8F0 100%)", ink: "#4B3F9A", soon: true },
+  { key: "dates", href: "/dates", Icon: MapPinned, image: HERO_ART.dates, ink: "#B0245A", soon: false },
+  { key: "gifts", href: "/gifts", Icon: Gift, image: HERO_ART.gifts, ink: "#9A5A12", soon: false },
+  { key: "ldr", href: "/long-distance", Icon: Plane, image: HERO_ART.ldr, ink: "#22607F", soon: false },
+  { key: "games", href: "/games", Icon: Gamepad2, image: HERO_ART.games, ink: "#4B3F9A", soon: true },
 ] as const;
 
-/** The four rooms of the house, as four paper cards. */
+/** The four rooms of the house, each a photograph with a way in. */
 export async function Doors() {
   const t = await getTranslations("platform.doors");
   const soon = (await getTranslations("common"))("comingSoon");
   return (
     <section className="bg-paper py-20 lg:py-28">
       <div className="container-x">
-        <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
+        <p className="text-eyebrow text-[#B0245A]">{t("eyebrow")}</p>
         <h2 className="display-xl mt-4 max-w-[18ch]">{t("title")}</h2>
         <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {DOORS.map(({ key, href, Icon, ground, ink, soon: isSoon }, i) => (
+          {DOORS.map(({ key, href, Icon, image, ink, soon: isSoon }, i) => (
             <li key={key}>
-              <Link href={href} className={cn("group relative flex h-full min-h-[280px] flex-col overflow-hidden rounded-[28px] p-6 shadow-soft transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift", i % 2 === 1 ? "lg:translate-y-6 lg:hover:translate-y-[18px]" : "")} style={{ background: ground }}>
-                <span className="grain-overlay opacity-[0.12] mix-blend-overlay" />
-                <span className="relative grid size-14 place-items-center rounded-2xl bg-white/75 shadow-soft" style={{ color: ink }}>
-                  <Icon aria-hidden="true" className="size-7" strokeWidth={1.7} />
+              <Link href={href} className={cn("group relative flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift", i % 2 === 1 ? "lg:translate-y-6 lg:hover:translate-y-[18px]" : "")}>
+                <span className="relative block overflow-hidden">
+                  <img src={image} alt="" width={1280} height={960} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.06]" />
+                  <span className="absolute top-3.5 left-3.5 grid size-11 place-items-center rounded-2xl bg-white/92 shadow-soft backdrop-blur" style={{ color: ink }}>
+                    <Icon aria-hidden="true" className="size-[22px]" strokeWidth={1.8} />
+                  </span>
+                  {isSoon ? <span className="absolute top-4 right-3.5 rounded-full bg-white/92 px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] uppercase backdrop-blur" style={{ color: ink }}>{soon}</span> : null}
                 </span>
-                {isSoon ? <span className="absolute top-6 right-6 rounded-full bg-white/80 px-2.5 py-1 text-[11px] font-bold tracking-[0.08em] uppercase" style={{ color: ink }}>{soon}</span> : null}
-                <span className="relative mt-auto block pt-10">
-                  <span className="block font-display text-[28px] leading-[1.05] text-forest">{t(`${key}.title`)}</span>
-                  <span className="mt-2 block text-[15px] leading-relaxed text-forest/70">{t(`${key}.blurb`)}</span>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold" style={{ color: ink }}>
+                <span className="flex flex-1 flex-col p-5">
+                  <span className="block font-display text-[26px] leading-[1.05] text-forest">{t(`${key}.title`)}</span>
+                  <span className="mt-2 block text-[14.5px] leading-relaxed text-forest/70">{t(`${key}.blurb`)}</span>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold" style={{ color: ink }}>
                     {t(`${key}.cta`)}
                     <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
                   </span>

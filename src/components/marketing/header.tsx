@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Gamepad2, Gift, MapPinned, Menu, Plane, Tag } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useScrolledPast } from "@/hooks/use-scrolled-past";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -12,19 +12,26 @@ import { LocaleSwitcher } from "./locale-switcher";
 import { AuthStatus } from "./auth-status";
 import { MakeGiftLink } from "./make-gift-link";
 
-/** A floating pill of dark glass under the promo bar: it sits over the hero and the cream pages alike. */
+/** Which room a path belongs to, so the navbar can say where you are. Gifts has several front doors. */
+const ROOMS = [
+  { href: "/dates", key: "dates", Icon: MapPinned, match: ["/dates", "/plan"] },
+  { href: "/gifts", key: "gifts", Icon: Gift, match: ["/gifts", "/templates", "/occasions", "/create", "/demo"] },
+  { href: "/long-distance", key: "longDistance", Icon: Plane, match: ["/long-distance"] },
+  { href: "/games", key: "games", Icon: Gamepad2, match: ["/games"] },
+  { href: "/pricing", key: "pricing", Icon: Tag, match: ["/pricing"] },
+] as const;
+
+/**
+ * A floating pill of frosted white under a thin rose promo strip. Light, so it reads as part of
+ * the paper it floats over, and it still holds on the wine sections; the room you are in is
+ * marked, because with five of them "where am I" is a real question.
+ */
 export function MarketingHeader() {
   const t = useTranslations();
+  const pathname = usePathname();
   const scrolled = useScrolledPast(12);
   const [open, setOpen] = useState(false);
-
-  const nav = [
-    { href: "/dates", label: t("nav.dates") },
-    { href: "/gifts", label: t("nav.gifts") },
-    { href: "/long-distance", label: t("nav.longDistance") },
-    { href: "/games", label: t("nav.games") },
-    { href: "/pricing", label: t("nav.pricing") },
-  ] as const;
+  const isIn = (match: readonly string[]) => match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 
   return (
     <header className="fixed inset-x-0 top-0 z-40">
@@ -37,18 +44,18 @@ export function MarketingHeader() {
 
       <Link
         href="/pricing"
-        className="flex h-9 items-center justify-center gap-2 bg-blush px-4 text-center text-[13px] font-medium text-forest transition-colors hover:bg-blush/85"
+        className="flex h-9 items-center justify-center gap-2 bg-[linear-gradient(90deg,#a61e52_0%,#d6336c_50%,#e8447a_100%)] px-4 text-center text-[13px] font-medium text-white transition-[filter] hover:brightness-110"
       >
         <span className="truncate">{t("promo.line")}</span>
-        <span className="shrink-0 rounded-full bg-forest px-2 py-0.5 text-[11px] font-bold tracking-[0.14em] text-cream">{t("promo.code")}</span>
+        <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold tracking-[0.14em] text-[#B0245A]">{t("promo.code")}</span>
       </Link>
 
       <div className="px-3 pt-3 sm:px-5">
         <div
           className={cn(
             // Under 360px a little less air, so "Crear un regalo" stays one line on a 320px phone.
-            "glass-forest mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full pr-2 pl-5 text-cream transition-shadow duration-300 max-[359px]:gap-2 max-[359px]:pl-4",
-            scrolled && "shadow-[0_18px_50px_-22px_rgba(0,0,0,0.65)]",
+            "glass-petal mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-full pr-2 pl-5 text-forest transition-shadow duration-300 max-[359px]:gap-2 max-[359px]:pl-4",
+            scrolled && "shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_22px_54px_-22px_rgba(120,20,60,0.55)]",
           )}
         >
           <Link href="/" className="rounded-full" aria-label={t("common.brand")}>
@@ -56,47 +63,66 @@ export function MarketingHeader() {
           </Link>
 
           {/* Five rooms and three controls do not fit a tablet, in Spanish least of all: below `lg` it is the menu button. */}
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-full px-3.5 py-2 text-[14.5px] font-medium whitespace-nowrap text-cream/75 transition-colors hover:bg-white/10 hover:text-cream"
-              >
-                {item.label}
-              </Link>
-            ))}
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
+            {ROOMS.map(({ href, key, match }) => {
+              const here = isIn(match);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={here ? "page" : undefined}
+                  className={cn(
+                    "rounded-full px-3.5 py-2 text-[14.5px] font-medium whitespace-nowrap transition-colors",
+                    here ? "bg-[#FFE8EF] text-[#B0245A]" : "text-forest/70 hover:bg-[#FFF0F4] hover:text-forest",
+                  )}
+                >
+                  {t(`nav.${key}`)}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="hidden items-center gap-1 lg:flex">
-            <LocaleSwitcher className="text-cream/80 hover:bg-white/10 hover:text-cream" />
-            <AuthStatus tone="dark" />
+            <LocaleSwitcher className="text-forest/75 hover:bg-[#FFF0F4] hover:text-forest" />
+            <AuthStatus />
           </div>
 
           <div className="flex items-center gap-1 lg:hidden">
-            <MakeGiftLink className="inline-flex h-10 items-center rounded-full bg-cream px-4 text-sm font-semibold whitespace-nowrap text-forest max-[359px]:px-3">
+            <MakeGiftLink className="btn-rose inline-flex h-10 items-center rounded-full px-4 text-sm font-semibold whitespace-nowrap max-[359px]:px-3">
               {t("common.createGift")}
             </MakeGiftLink>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <button type="button" aria-label={t("common.openMenu")} className="grid size-10 place-items-center rounded-full text-cream hover:bg-white/10">
+                <button type="button" aria-label={t("common.openMenu")} className="grid size-10 place-items-center rounded-full text-forest hover:bg-[#FFF0F4]">
                   <Menu className="size-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[86vw] max-w-sm border-l-0 bg-forest text-cream">
+              <SheetContent side="right" className="w-[86vw] max-w-sm border-l-0 bg-[#FFF7F3] text-forest">
                 <SheetTitle className="sr-only">{t("common.openMenu")}</SheetTitle>
                 <div className="flex h-full flex-col gap-6 px-2 pt-10">
                   <Logo />
-                  <nav className="flex flex-col" aria-label="Mobile">
-                    {nav.map((item) => (
-                      <Link key={item.href} href={item.href} onClick={() => setOpen(false)} className="font-display border-b border-white/10 py-4 text-[1.75rem] text-cream">
-                        {item.label}
-                      </Link>
-                    ))}
+                  <nav className="flex flex-col gap-1" aria-label="Mobile">
+                    {ROOMS.map(({ href, key, Icon, match }) => {
+                      const here = isIn(match);
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          aria-current={here ? "page" : undefined}
+                          onClick={() => setOpen(false)}
+                          className={cn("flex items-center gap-3.5 rounded-2xl px-3 py-3.5 font-display text-[1.6rem] leading-none", here ? "bg-[#FFE8EF] text-[#B0245A]" : "text-forest hover:bg-[#FFF0F4]")}
+                        >
+                          <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", here ? "bg-white text-[#D6336C]" : "bg-white text-forest/60 shadow-soft")}>
+                            <Icon aria-hidden="true" className="size-5" strokeWidth={1.8} />
+                          </span>
+                          {t(`nav.${key}`)}
+                        </Link>
+                      );
+                    })}
                   </nav>
                   <div className="mt-auto flex flex-col gap-3 pb-6">
-                    <AuthStatus onNavigate={() => setOpen(false)} block tone="dark" />
-                    <LocaleSwitcher className="text-cream/80 hover:bg-white/10 hover:text-cream" />
+                    <AuthStatus onNavigate={() => setOpen(false)} block />
+                    <LocaleSwitcher className="text-forest/75 hover:bg-[#FFF0F4] hover:text-forest" />
                   </div>
                 </div>
               </SheetContent>

@@ -39,9 +39,21 @@ the day they picked. The forecast hides ideas rain would ruin and leads with the
 Licences: OpenStreetMap data is ODbL and must be credited, which the map's attribution control and
 the line under the place list both do. MapLibre GL is BSD-3.
 
+| A real photograph of a place | [Wikimedia Commons](https://commons.wikimedia.org) and Wikidata | `/api/dates/photo`, asked only for cards somebody scrolls to (three at a time) and when a place is opened: the picture its Wikidata item names, else a geotagged Commons photo within 250 m whose file name carries the place's name. Author and licence travel with it and are shown. `/api/dates/photos` matches a neighbourhood's Wikipedia articles to places by name in one request. Cached a month. |
+
+### Pictures, and which ones are real
+
+Two kinds, never confused. **Illustrations** (`public/dates`, mapped in `art.ts`): one per idea, one
+per kind of place, a hero per room, all made for the site in one style, with nobody's face and
+nothing that reads as a real venue. They illustrate *ideas* and *kinds*. **Photographs** of actual
+places come only from Wikimedia, with credit. A place nobody has photographed gets its kind's tile
+washed in the group colour with a glyph on it, which reads as "a café", never as "this café".
+Wikipedia also remembers buildings demolished in 1829, so its articles are only ever used to
+illustrate places the map says exist today, never added as places themselves.
+
 ### What this data cannot do
 
-OpenStreetMap has **no photos, no ratings and no reviews**, opening hours for about a third of
+OpenStreetMap has **no ratings and no reviews** (and no photos of its own: see above for where those come from, which is generous in big cities and thin in small towns), opening hours for about a third of
 places and a website for about a quarter. The site is designed round that rather than hiding it:
 places are ordered by how near and how unusual they are (never shown as a score), hours are read
 for the chosen day and an unknown is called an unknown (`hours.ts` refuses to guess at the hard
@@ -49,7 +61,7 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 
 ### When it outgrows this
 
-- **Photos, ratings, booking**: Google Places or Foursquare behind the same `Place` type. Both need
+- **Ratings, booking, photos everywhere**: affiliate partner feeds first (they pay us and bring photos and ratings: see MONETIZATION.md), or Google Places or Foursquare behind the same `Place` type. Both need
   a billing account and a key in `.env.local`; `/api/dates/place` is the one route to change.
 - **Overpass reliability**: run a private Overpass instance, or drop the rare kinds into a nightly
   extract. The public servers are fine for a launch, not for a campaign that lands.
@@ -65,7 +77,7 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 - A plan lives in `localStorage` and travels in the link's `#fragment`, which browsers do not send
   to servers. There is no plan table, and nothing new in the database at all.
 - `Permissions-Policy` now allows `geolocation=(self)`; the CSP allows `tiles.openfreemap.org` for
-  `connect-src` and `img-src` and nothing else new.
+  `connect-src` and `img-src`, and Wikimedia's two image hosts for `img-src`, and nothing else new.
 
 ## MapLibre is not bundled
 

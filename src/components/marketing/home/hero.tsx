@@ -39,7 +39,7 @@ export function Hero() {
         mx.set(0);
         my.set(0);
       }}
-      className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-[#FBF1EC] pt-[var(--header-h)] text-forest"
+      className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-[#FFF5F2] pt-[var(--header-h)] text-forest"
     >
       <FloralFrame frame="hero" ground="light" />
       <div className="relative container-x grid items-center gap-14 pt-12 pb-16 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:pt-20 lg:pb-24">
@@ -55,7 +55,7 @@ export function Hero() {
             {t("eyebrow")}
           </p>
           <h1 className="mt-6 max-w-[11ch] display-hero text-balance text-forest">
-            {t("h1a")} <em className="text-[#B23A5E]">{t("h1b")}</em> {t("h1c")}
+            {t("h1a")} <em className="text-[#B0245A]">{t("h1b")}</em> {t("h1c")}
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">
             {t("sub")}
@@ -63,7 +63,7 @@ export function Hero() {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link
               href="/templates"
-              className="inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(15,34,25,0.7)] transition-transform hover:-translate-y-0.5"
+              className="inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5"
             >
               {t("cta")}
               <ArrowRight className="size-4" />
@@ -110,7 +110,7 @@ export function Hero() {
             <span className="absolute -top-2.5 left-1/2 h-5 w-16 -translate-x-1/2 -rotate-3 opacity-90 shadow-sm" style={{ backgroundColor: "#FFFFFF", backgroundImage: "linear-gradient(90deg, rgba(238,120,158,.5) 50%, transparent 50%), linear-gradient(rgba(238,120,158,.5) 50%, transparent 50%)", backgroundSize: "8px 8px" }} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/demo/photos/p2.webp" alt="" width={896} height={1200} loading="lazy" decoding="async" draggable={false} className="aspect-square w-full object-cover" />
-            <svg viewBox="0 0 120 40" className="absolute right-3 bottom-1.5 h-5 w-14 text-[#B23A5E] sm:bottom-2" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 120 40" className="absolute right-3 bottom-1.5 h-5 w-14 text-[#B0245A] sm:bottom-2" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 32 C24 30 40 24 52 17 C62 11 58 2 50 5 C42 8 46 19 60 27 C72 19 86 7 78 3 C70 0 62 11 66 22 C70 32 96 32 116 27" />
             </svg>
           </motion.div>

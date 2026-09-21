@@ -911,7 +911,8 @@
     "empty": {
       "title": "¿Dónde estáis?",
       "sub": "Una ciudad, un barrio o donde estés ahora mismo. Encontramos las citas que esconde.",
-      "or": "O empieza por aquí"
+      "or": "O empieza por aquí",
+      "note": "elige una calle, la que sea"
     },
     "where": {
       "label": "Dónde",
@@ -996,7 +997,11 @@
       "stepFree": "Sin escalones",
       "landmark": "Un lugar emblemático",
       "free": "Entrada libre",
-      "source": "De OpenStreetMap, tal como lo cartografía la gente del lugar. Los horarios cambian: comprobarlo antes de ir salva una noche."
+      "source": "De OpenStreetMap, tal como lo cartografía la gente del lugar. Los horarios cambian: comprobarlo antes de ir salva una noche.",
+      "photo": "Foto real",
+      "photoBy": "Foto: {author}",
+      "photoFrom": "Wikimedia Commons",
+      "readMore": "Leer más en Wikipedia"
     },
     "map": {
       "label": "Mapa de sitios para una cita",
@@ -1218,7 +1223,8 @@
       "eyebrow": "Regalos para la distancia",
       "title": "Algo que abrir mientras esperáis.",
       "all": "Todos los regalos a distancia"
-    }
+    },
+    "polaroid": "por fin."
   },
   "games": {
     "meta": {
@@ -1278,7 +1284,8 @@
       "dishes": {
         "title": "La ruleta de los platos",
         "blurb": "Gira para ver quién cocina, quién friega y quién elige la peli. Es vinculante."
-      }
+      },
+      "blurb": "Un sofá, un móvil y una discusión sobre quién conoce mejor a quién. Los primeros son cortos a propósito: cinco minutos y de vuelta a la peli."
     }
   }
 }

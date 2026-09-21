@@ -45,7 +45,7 @@ export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">
       <OccasionsIndex />
       <PricingTeaser locale={locale} />
       <Faq />
-      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <FinalCta />
     </>
   );

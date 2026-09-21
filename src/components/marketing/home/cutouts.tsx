@@ -80,8 +80,8 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
 export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
-      {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 80% 46%, rgba(243,185,196,.5) 0%, rgba(243,185,196,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(248,214,208,.9) 0%, rgba(248,214,208,0) 72%), linear-gradient(180deg, #FCF5F0 0%, #F9E8E4 100%)" }} /> : null}
-      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #21402f 0%, #0f2219 55%, #09150f 100%)" }} /> : null}
+      {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
+      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => (
         <Cutout
           key={i}
@@ -99,7 +99,7 @@ export function FloralFrame({ frame, ground, className }: { frame: keyof typeof 
         />
       ))}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
-      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(6,14,10,0.55) 100%)" }} /> : null}
+      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}
     </div>
   );
 }

@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Check, Plus, Shuffle, Sparkles, X } from "lucide-react";
 import { motion } from "motion/react";
+import { ideaImage } from "@/lib/dates/art";
 import { formatDistance, walkingMinutes, distanceKm } from "@/lib/dates/geo";
 import type { DateIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
@@ -36,14 +38,19 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       aria-label={idea.title[locale]}
-      className="relative rounded-[26px] bg-white p-5 shadow-lift ring-1 ring-forest/5 sm:p-6"
+      className="relative overflow-hidden rounded-[26px] bg-white shadow-lift ring-1 ring-forest/5"
     >
-      <button type="button" onClick={onClose} aria-label={labels.close} className="absolute top-3.5 right-3.5 grid size-9 place-items-center rounded-full text-forest/50 hover:bg-forest/5 hover:text-forest">
-        <X className="size-4" />
-      </button>
-      <h3 className="pr-10 font-display text-[26px] leading-[1.05] text-forest">{idea.title[locale]}</h3>
-      <p className="mt-2 text-[15px] leading-relaxed text-forest/70">{idea.blurb[locale]}</p>
-      <p className="mt-4 flex gap-2.5 rounded-2xl bg-[#FBE9EE] p-3.5 text-[14px] leading-snug text-[#7A2942]">
+      <div className="relative">
+        <img src={ideaImage(idea.id)} alt="" width={960} height={720} decoding="async" className="aspect-[16/8] w-full object-cover" />
+        <span aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(36,10,24,0)_30%,rgba(36,10,24,0.78)_100%)]" />
+        <h3 className="absolute inset-x-5 bottom-4 font-display text-[28px] leading-[1.04] text-white [text-shadow:0_1px_12px_rgba(30,5,18,0.55)] sm:inset-x-6">{idea.title[locale]}</h3>
+        <button type="button" onClick={onClose} aria-label={labels.close} className="absolute top-3 right-3 grid size-10 place-items-center rounded-full bg-white/90 text-forest shadow-soft backdrop-blur hover:bg-white">
+          <X className="size-4" />
+        </button>
+      </div>
+      <div className="p-5 sm:p-6">
+      <p className="text-[15px] leading-relaxed text-forest/70">{idea.blurb[locale]}</p>
+      <p className="mt-4 flex gap-2.5 rounded-2xl bg-[#FFE8EF] p-3.5 text-[14px] leading-snug text-[#8A1C42]">
         <Sparkles aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
         <span>
           <span className="font-semibold">{labels.twist}</span> {idea.twist[locale]}
@@ -56,8 +63,8 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
           const previous = i > 0 ? stops[i - 1].place : null;
           return (
             <li key={i} className="relative pb-4 pl-[52px] last:pb-0">
-              {i < stops.length - 1 ? <span aria-hidden="true" className="absolute top-10 bottom-0 left-[19px] border-l-2 border-dotted border-[#B23A5E]/40" /> : null}
-              <span className="absolute top-0 left-0 grid size-10 place-items-center rounded-full bg-[#B23A5E] text-[14px] font-bold text-white shadow-[0_6px_14px_-6px_rgba(120,20,50,0.7)]">{i + 1}</span>
+              {i < stops.length - 1 ? <span aria-hidden="true" className="absolute top-10 bottom-0 left-[19px] border-l-2 border-dotted border-[#D6336C]/40" /> : null}
+              <span className="absolute top-0 left-0 grid size-10 place-items-center rounded-full bg-[#D6336C] text-[14px] font-bold text-white shadow-[0_6px_14px_-6px_rgba(176,36,90,0.7)]">{i + 1}</span>
               {previous && stop.place ? <p className="-mt-1 mb-1.5 text-[11.5px] font-medium tracking-wide text-forest/45 uppercase">{labels.walk(walkingMinutes(distanceKm(previous, stop.place)))}</p> : null}
               {stop.place ? (
                 <div className="flex items-start gap-2" onPointerEnter={() => onHover(stop.place!.id)} onPointerLeave={() => onHover(null)}>
@@ -90,11 +97,12 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
         type="button"
         disabled={found === 0 || inPlan}
         onClick={onAdd}
-        className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-forest text-[15px] font-semibold text-cream shadow-[0_16px_36px_-18px_rgba(15,34,25,0.8)] transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:bg-forest/10 disabled:text-forest/50 disabled:shadow-none"
+        className="btn-rose mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:bg-none disabled:bg-forest/10 disabled:text-forest/50 disabled:shadow-none"
       >
         {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
         {inPlan ? labels.added : labels.add}
       </button>
+      </div>
     </motion.section>
   );
 }

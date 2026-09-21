@@ -27,15 +27,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     <>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />
       <PlatformHero />
-      <TornEdge from="#F9E8E4" to="var(--brand-paper)" />
+      <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
       <Doors />
       <IdeasTeaser />
       <TemplateStrip manifests={listManifests()} />
-      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <LongDistanceBand />
-      <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#2c4a3a" />
+      <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#4d2139" />
       <GamesBand />
-      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#2c4a3a" />
+      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <PlatformClosing />
     </>
   );

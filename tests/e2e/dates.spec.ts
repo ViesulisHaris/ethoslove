@@ -47,6 +47,13 @@ async function mockWorld(page: Page, { wet = false }: { wet?: boolean } = {}) {
     const id = new URL(route.request().url()).searchParams.get("id");
     return route.fulfill({ json: { details: { id, address: "Rua das Flores 12, Chiado, Lisbon", hours: "Mo-Su 10:00-22:00", website: "https://example.pt/", phone: "+351 210 000 000", cuisine: ["coffee shop"], outdoorSeating: true, vegetarian: false, stepFree: true, notable: false } } });
   });
+  // One café has been photographed by somebody generous; nobody has photographed the rest.
+  await page.route("**/api/dates/photo*", (route) => {
+    const name = new URL(route.request().url()).searchParams.get("name");
+    return route.fulfill({ json: { photo: name === "Café da Esquina" ? { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/test/640px-cafe.jpg", width: 640, height: 427, credit: "Inês Almeida", licence: "CC BY 4.0", fileUrl: "https://commons.wikimedia.org/wiki/File:Cafe.jpg" } : null } });
+  });
+  await page.route("**/api/dates/photos*", (route) => route.fulfill({ json: { center: LISBON, sights: [] } }));
+  await page.route("https://upload.wikimedia.org/**", (route) => route.fulfill({ contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64") }));
   // The map draws on plain paper: a style with no sources asks for no tiles.
   await page.route("https://tiles.openfreemap.org/**", (route) =>
     route.request().url().endsWith("/styles/positron")
@@ -119,6 +126,8 @@ test.describe("finding a date", () => {
     const weekday = startingDay().toLocaleDateString("en-GB", { weekday: "long" });
     await expect(sheet).toContainText(`Open ${weekday} 10:00–22:00`);
     await expect(sheet).toContainText("Terrace");
+    // A real photograph of this very café, and the name of whoever gave it away.
+    await expect(sheet.getByRole("link", { name: "Photo: Inês Almeida · CC BY 4.0 · Wikimedia Commons" })).toHaveAttribute("href", "https://commons.wikimedia.org/wiki/File:Cafe.jpg");
     await expect(sheet.getByRole("link", { name: "Directions" })).toHaveAttribute("href", /google\.com\/maps\/dir/);
     await sheet.getByRole("button", { name: "Add to our plan" }).click();
     await expect(sheet.getByRole("button", { name: /In your plan/ })).toBeVisible();

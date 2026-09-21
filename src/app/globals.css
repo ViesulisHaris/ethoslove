@@ -8,35 +8,36 @@
 /* Brand tokens — the only place raw colours live.                     */
 /* ------------------------------------------------------------------ */
 :root {
-  /* Paper, ink, one wax-red accent. Everything else is a tint of these. */
-  --brand-paper: #f6f1e8;
-  --brand-paper-deep: #ece5d8;
-  --brand-ink: #17130f;
-  --brand-ink-soft: #4a423b;
-  --brand-coral: #c63d22;
-  --brand-coral-deep: #a3301a;
-  --brand-rose: #efd9cf;
-  --brand-rose-soft: #f7ece5;
-  --brand-gold: #b8903f;
-  --brand-gold-deep: #94722f;
+  /* Warm paper, plum ink, one rose accent. Everything else is a tint of these.
+     (The accent keeps its old name, "coral"; it is a raspberry rose now, 4.6:1 under white type.) */
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-ink: #24121b;
+  --brand-ink-soft: #5d4652;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose: #f9d5de;
+  --brand-rose-soft: #fdeef2;
+  --brand-gold: #c9923a;
+  --brand-gold-deep: #a27428;
   --brand-moss: #2e6b4e;
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
-  --brand-line: #d9cfbf;
+  --brand-line: #ecdcd6;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
-  --card: #fbf8f2;
+  --card: #fffaf7;
   --card-foreground: var(--brand-ink);
-  --popover: #fbf8f2;
+  --popover: #fffaf7;
   --popover-foreground: var(--brand-ink);
   --primary: var(--brand-coral);
   --primary-foreground: #fbf6ee;
   --secondary: var(--brand-paper-deep);
   --secondary-foreground: var(--brand-ink);
-  --muted: #ede6d9;
-  --muted-foreground: #6b625a;
+  --muted: #f6eae5;
+  --muted-foreground: #6e5963;
   --accent: var(--brand-rose-soft);
   --accent-foreground: var(--brand-ink);
   --destructive: #b5341c;
@@ -49,11 +50,11 @@
   --chart-4: var(--brand-moss);
   --chart-5: var(--brand-ink-soft);
   --radius: 0.625rem;
-  --sidebar: #f1ebe0;
+  --sidebar: #f9efea;
   --sidebar-foreground: var(--brand-ink);
   --sidebar-primary: var(--brand-coral);
   --sidebar-primary-foreground: #fbf6ee;
-  --sidebar-accent: #e6dfd2;
+  --sidebar-accent: #f3e3dd;
   --sidebar-accent-foreground: var(--brand-ink);
   --sidebar-border: var(--brand-line);
   --sidebar-ring: var(--brand-ink);
@@ -174,9 +175,9 @@
   --ease-out-expo: var(--ease-out-expo);
   --ease-in-out-quart: var(--ease-in-out-quart);
 
-  --shadow-soft: 0 1px 1px rgba(23, 19, 15, 0.04), 0 6px 18px -10px rgba(23, 19, 15, 0.16);
-  --shadow-lift: 0 1px 2px rgba(23, 19, 15, 0.05), 0 20px 40px -18px rgba(23, 19, 15, 0.3);
-  --shadow-glow: 0 10px 26px -12px rgba(198, 61, 34, 0.5);
+  --shadow-soft: 0 1px 1px rgba(60, 20, 40, 0.04), 0 6px 18px -10px rgba(90, 30, 60, 0.18);
+  --shadow-lift: 0 1px 2px rgba(60, 20, 40, 0.05), 0 22px 44px -20px rgba(110, 30, 70, 0.34);
+  --shadow-glow: 0 10px 26px -12px rgba(214, 51, 108, 0.5);
 }
 
 @layer base {
@@ -340,14 +341,15 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* The night garden: the site's dark botanical sections.               */
+/* The dark sections. They were a forest green when the site only sold gifts; for a site about    */
+/* couples they are a deep wine. The names stay ("forest", "cream") so nothing else has to change. */
 /* ------------------------------------------------------------------ */
 :root {
-  --brand-forest: #0f2219;
-  --brand-forest-raised: #17301f;
-  --brand-cream: #f4ede0;
-  --brand-blush: #f0c8c2;
-  --brand-sage: #a8bea4;
+  --brand-forest: #2a0f1f;
+  --brand-forest-raised: #3a1830;
+  --brand-cream: #fff6f0;
+  --brand-blush: #f9cdd8;
+  --brand-sage: #d9b8c6;
 }
 
 @theme inline {
@@ -360,9 +362,23 @@
 
 @utility glass-forest {
   background: color-mix(in oklab, var(--brand-forest) 88%, transparent);
-  border: 1px solid rgba(244, 237, 224, 0.12);
+  border: 1px solid rgba(255, 246, 240, 0.12);
   backdrop-filter: blur(18px) saturate(1.25);
   -webkit-backdrop-filter: blur(18px) saturate(1.25);
+}
+/* The navbar: frosted white with a breath of rose, light enough to sit on paper and on wine alike. */
+@utility glass-petal {
+  background: color-mix(in oklab, #ffffff 84%, transparent);
+  border: 1px solid rgba(214, 51, 108, 0.16);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 14px 40px -20px rgba(176, 36, 90, 0.4);
+}
+/* The one button that matters on a page. */
+@utility btn-rose {
+  background-image: linear-gradient(135deg, #e8447a 0%, #c42a63 55%, #a61e52 100%);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.28) inset, 0 14px 30px -14px rgba(176, 36, 90, 0.75);
 }
 @utility glass-cream {
   background: rgba(244, 237, 224, 0.1);
@@ -411,7 +427,7 @@
   height: 30px;
   border-radius: 999px;
   border: 3px solid #fff;
-  background: #b23a5e;
+  background: #d6336c;
   color: #fff;
   font: 700 13px/1 var(--font-sans);
   box-shadow: 0 6px 14px -4px rgba(90, 20, 45, 0.55);
@@ -432,7 +448,7 @@
   height: 34px;
   border-radius: 999px 999px 999px 0;
   rotate: -45deg;
-  background: var(--pin, #b23a5e);
+  background: var(--pin, #d6336c);
   border: 3px solid #fff;
   box-shadow: 0 10px 20px -6px rgba(70, 20, 40, 0.6);
   animation: ethos-pin-drop 0.35s var(--ease-spring) both;

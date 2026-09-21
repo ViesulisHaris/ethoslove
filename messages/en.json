@@ -911,7 +911,8 @@
     "empty": {
       "title": "Where are you two?",
       "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
-      "or": "Or start somewhere"
+      "or": "Or start somewhere",
+      "note": "pick a street, any street"
     },
     "where": {
       "label": "Where",
@@ -996,7 +997,11 @@
       "stepFree": "Step-free",
       "landmark": "A local landmark",
       "free": "Free to visit",
-      "source": "From OpenStreetMap, as mapped by locals. Hours change: a quick check before you go saves an evening."
+      "source": "From OpenStreetMap, as mapped by locals. Hours change: a quick check before you go saves an evening.",
+      "photo": "Real photo",
+      "photoBy": "Photo: {author}",
+      "photoFrom": "Wikimedia Commons",
+      "readMore": "Read more on Wikipedia"
     },
     "map": {
       "label": "Map of places for a date",
@@ -1218,7 +1223,8 @@
       "eyebrow": "Gifts for the distance",
       "title": "Something to open while you wait.",
       "all": "All long-distance gifts"
-    }
+    },
+    "polaroid": "finally."
   },
   "games": {
     "meta": {
@@ -1278,7 +1284,8 @@
       "dishes": {
         "title": "Dishes roulette",
         "blurb": "Spin for who cooks, who washes up and who picks the film. Binding."
-      }
+      },
+      "blurb": "A sofa, one phone, and an argument about who knows who better. The first ones are short on purpose: five minutes, then back to the film."
     }
   }
 }

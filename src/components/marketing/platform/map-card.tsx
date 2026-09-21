@@ -46,7 +46,7 @@ export function MapCard({ className }: { className?: string }) {
           <path d="M130 -10 L150 310" transform="translate(-6 0)" />
           <path d="M130 -10 L150 310" transform="translate(6 0)" />
         </g>
-        <path d="M96 210 C120 160 190 170 250 96" fill="none" stroke="#B23A5E" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="0.5 8" />
+        <path d="M96 210 C120 160 190 170 250 96" fill="none" stroke="#D6336C" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="0.5 8" />
         {PINS.map((pin) => (
           <g key={pin.group} transform={`translate(${pin.x} ${pin.y})`} filter="url(#map-card-pin)">
             <circle r="17" fill="#FFFFFF" />
@@ -63,14 +63,14 @@ export function MapCard({ className }: { className?: string }) {
           { n: 2, x: 250, y: 96 },
         ].map((s) => (
           <g key={s.n} transform={`translate(${s.x + 19} ${s.y - 19})`}>
-            <circle r="10.5" fill="#B23A5E" stroke="#FFFFFF" strokeWidth="2.5" />
+            <circle r="10.5" fill="#D6336C" stroke="#FFFFFF" strokeWidth="2.5" />
             <text textAnchor="middle" y="4" fontSize="11" fontWeight="700" fill="#FFFFFF" fontFamily="var(--font-sans)">
               {s.n}
             </text>
           </g>
         ))}
       </g>
-      <rect x="0.5" y="0.5" width="379" height="299" rx="25.5" fill="none" stroke="rgba(15,34,25,0.08)" />
+      <rect x="0.5" y="0.5" width="379" height="299" rx="25.5" fill="none" stroke="rgba(42,15,31,0.08)" />
     </svg>
   );
 }

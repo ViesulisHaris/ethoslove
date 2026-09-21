@@ -18,7 +18,7 @@ export default async function DatesPage({ params }: PageProps<"/[locale]/dates">
   setRequestLocale(locale);
   return (
     // Pulled up under the floating header: on a wide screen the map runs the full height of the window behind it.
-    <div className="-mt-[var(--header-h)] min-h-dvh bg-[#FBF1EC] pt-[var(--header-h)] lg:pt-0">
+    <div className="-mt-[var(--header-h)] min-h-dvh bg-[#FFF5F2] pt-[var(--header-h)] lg:pt-0">
       <DatesExplorer />
     </div>
   );
