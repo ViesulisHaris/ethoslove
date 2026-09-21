@@ -137,9 +137,15 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
                 />
               ))}
               {processing.map((a) => (
-                <li key={a.id} className="flex aspect-square flex-col items-center justify-center rounded-xl border border-border bg-card text-xs text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin" />
-                  <span className="mt-2">{t("processing")}</span>
+                // The same footprint as the tile that replaces it, caption row included: the swap
+                // happens after the 500 ms Chrome allows an input, so any growth here counts as a
+                // layout shift — and this was the editor's biggest one.
+                <li key={a.id} className="flex flex-col gap-2">
+                  <span className="flex aspect-square flex-col items-center justify-center rounded-xl border border-border bg-card text-xs text-muted-foreground">
+                    <Loader2 className="size-4 animate-spin" />
+                    <span className="mt-2">{t("processing")}</span>
+                  </span>
+                  <span aria-hidden="true" className="block h-11 md:h-9" />
                 </li>
               ))}
             </ul>

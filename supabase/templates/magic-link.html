@@ -20,7 +20,7 @@
     <p style="margin:0 0 24px 0;font-size:16px;line-height:1.55;color:#5c544e;">Tap the button to sign in. The link works once and expires in an hour.</p>
     <table role="presentation" cellspacing="0" cellpadding="0" border="0"><tr>
       <td style="border-radius:999px;background:#e8604c;">
-        <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 26px;font-size:16px;font-weight:600;color:#fff8f4;text-decoration:none;border-radius:999px;">Sign in</a>
+        <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email" style="display:inline-block;padding:14px 26px;font-size:16px;font-weight:600;color:#fff8f4;text-decoration:none;border-radius:999px;">Sign in</a>
       </td>
     </tr></table>
     <p style="margin:28px 0 8px 0;font-size:13px;color:#8a817a;">Or type this code on the sign-in page:</p>

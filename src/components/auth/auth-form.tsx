@@ -63,7 +63,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
 
   const sendMagicLink = async (e: FormEvent) => {
     e.preventDefault();
-    if (!SUPABASE_CONFIGURED) return;
+    if (!SUPABASE_CONFIGURED || !email.trim()) return;
     setStatus("sending");
     const supabase = await client();
     if (!supabase) return setStatus("error");
@@ -127,26 +127,64 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
       ) : (
         <>
           {callbackError ? (
-            <p role="alert" className="mt-5 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-              {t("callbackError")}
-            </p>
+            <form onSubmit={verifyCode} className="mt-5 rounded-xl bg-accent p-4">
+              <p role="alert" className="text-sm font-medium">{t("callbackError")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("callbackCodeHint")}</p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Label htmlFor="email-for-code" className="text-xs text-muted-foreground">{t("emailLabel")}</Label>
+                <Input
+                  id="email-for-code"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t("emailPlaceholder")}
+                  className="h-11"
+                />
+                <Label htmlFor="otp" className="mt-1 text-xs text-muted-foreground">{t("codeLabel")}</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="otp"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    pattern="[0-9]*"
+                    maxLength={8}
+                    value={code}
+                    onChange={(e) => {
+                      setCode(e.target.value.replace(/\D/g, ""));
+                      if (codeState === "wrong") setCodeState("idle");
+                    }}
+                    placeholder="123456"
+                    className="h-11 text-center font-mono text-lg tracking-[0.3em]"
+                  />
+                  <Button type="submit" className="h-11 rounded-full px-5" disabled={!email || code.length < 6 || codeState === "checking"}>
+                    {codeState === "checking" ? "…" : t("verify")}
+                  </Button>
+                </div>
+                {codeState === "wrong" ? <p role="alert" className="text-xs text-destructive">{t("codeWrong")}</p> : null}
+              </div>
+            </form>
           ) : null}
           <form onSubmit={sendMagicLink} className="mt-6 flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email">{t("emailLabel")}</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t("emailPlaceholder")}
-                className="h-11"
-              />
-            </div>
-            <Button type="submit" className="h-11 rounded-full" disabled={status === "sending"}>
+            {callbackError ? null : (
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="email">{t("emailLabel")}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t("emailPlaceholder")}
+                  className="h-11"
+                />
+              </div>
+            )}
+            <Button type="submit" className="h-11 rounded-full" disabled={status === "sending" || (callbackError && !email.trim())}>
               <Mail className="size-4" />
               <span>{status === "sending" ? t("sending") : t("sendLink")}</span>
             </Button>

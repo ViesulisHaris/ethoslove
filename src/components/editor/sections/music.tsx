@@ -244,12 +244,18 @@ export function MusicSection() {
               <span className="size-3 animate-pulse rounded-full bg-coral" aria-hidden="true" />
             ) : null}
           </label>
-          {results && query.trim().length >= 2 ? (
-            results.length === 0 && !searching ? (
-              <p className="mt-3 text-sm text-muted-foreground">{t("songNone")}</p>
-            ) : (
-              <ul className="mt-3 divide-y divide-border rounded-xl border border-border bg-card">
-                {results.map((song) => {
+          {query.trim().length >= 2 ? (
+            // A box of fixed height from the first keystroke: six rows showing, the rest scrolling
+            // inside it. The results land after the debounce and the round trip, outside the 500 ms
+            // Chrome allows an input, so if the list grew the page it counted as a layout shift.
+            <div className="mt-3 h-[343px] overflow-y-auto rounded-xl border border-border bg-card" data-testid="song-results">
+              {results && results.length === 0 && !searching ? (
+                <p className="p-3 text-sm text-muted-foreground">{t("songNone")}</p>
+              ) : (
+              // Keyed by the query: a refined search mounts a fresh list instead of reordering the
+              // rows of the old one, and rows that are new to the page are not a layout shift.
+              <ul key={query.trim().toLowerCase()} className="divide-y divide-border">
+                {(results ?? []).map((song) => {
                   const selected = music?.source === "catalog" && music.trackId === song.id;
                   return (
                     <li
@@ -300,7 +306,8 @@ export function MusicSection() {
                   );
                 })}
               </ul>
-            )
+              )}
+            </div>
           ) : null}
           <p className="mt-2 text-xs text-muted-foreground">{t("songPreviewNote")}</p>
         </div>
