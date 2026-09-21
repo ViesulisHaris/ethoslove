@@ -839,6 +839,42 @@ Nothing in the texts says what the gift looks like; slide 3 is a gap for a scree
 template. 154 is built on "open when" letters, which people already search for and make by hand,
 and it makes the case for a bundle without saying so: there is one for every bad night.
 
+## Two crimes and a confession: what 149's comments said, and 156 to 158
+
+149 ("are u mad at me") is the first of the four-slide batch to break out, and its comment
+section says why more exactly than the view count does. It is two camps shouting past each other:
+
+- against him: *"gurl he ignored ur paragraph just to send you 3 sentences thru app"*, *"break up"*
+- against her: *"that reply was the devil herself"*, *"now what possessed you to say that to him"*
+
+So the engine is not "a cute surprise". It is that **both of them commit a crime, and the viewer
+has to pick one**:
+
+- **His is small and universally hated**: an "ok" to a whole paragraph. Everybody has received it,
+  so everybody arrives already angry on her behalf.
+- **Hers is bigger, funnier, and she confesses it**: a breakup speech, in her Notes app, and it was
+  "really good too". The confession is what gets quoted; a crime somebody else discovers would
+  not be.
+- **The gift sits between the two** as the turn, and says nothing for itself.
+- **The loop stays open**, and the last bubble is him still asking: "send me the speech maya".
+
+A thread where one of them is simply right gives the comments nothing to do. 156 to 158 are that
+engine three more times, each a new story with nothing carried over from 149 but the shape:
+
+| | His crime | Her confession | Still open |
+|---|---|---|---|
+| 156 | hearted "do u even still like me" | asked the group chat whether to dump him. 4 to 1. The 1 was her | "who were the 4 maya" |
+| 157 | "we need to talk", then offline for three hours | told her manager her grandad died ("the one who died in 2019"); compassionate leave until Thursday | "so ur free tomorrow" |
+| 158 | online, seen, not answering | changed the Netflix password out of spite and cannot remember it | "maya im on the last episode" |
+
+Two rules that come out of it:
+
+- **The gift frame has to look like work.** "3 sentences thru app" is a viewer seeing a short
+  message on slide 3 and scoring it against the whole paragraph she wrote him. Use a frame with photos, or the
+  template's big moment. It arms the side defending him, and it is the only slide that sells.
+- **Reply to "break up" in character, every time.** It is the cheapest comment to write, so there
+  are hundreds, and each reply is another notification pulling somebody back to the post.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1132,5 +1168,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 153 | it was the finale | four slides; an apology | any (yours) | yours |
 | 154 | open when u cant sleep | four slides; long distance | any (yours) | yours |
 | 155 | what do girls like | four slides; his girlfriend's birthday, in three days | any (yours) | yours |
+| 156 | u cannot heart react that | four slides; no occasion; 149's two crimes and a confession | any (yours) | yours |
+| 157 | we need to talk | four slides; no occasion; 149's engine, his crime turned up | any (yours) | yours |
+| 158 | u were active 4 minutes ago | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

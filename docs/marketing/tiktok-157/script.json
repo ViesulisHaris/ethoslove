@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|14:02",
+      "messages": [
+        { "from": "them", "text": "we need to talk" },
+        { "from": "me", "text": "about what" },
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "MARCO" },
+        { "ts": "Today|17:26" },
+        { "from": "me", "text": "its been 3 hours. who says that and goes offline" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "sorry. took longer than i thought" },
+        { "from": "them", "text": "this is what we need to talk about" },
+        { "from": "them", "link": { "title": "for maya (we need to talk)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "i hate u" },
+        { "from": "me", "text": "i cried in the work toilets" },
+        { "from": "me", "text": "i told my manager my grandad died" },
+        { "from": "them", "text": "which grandad" },
+        { "from": "me", "text": "the one who died in 2019" },
+        { "from": "them", "text": "maya" },
+        { "from": "me", "text": "im on compassionate leave til thursday. this is so beautiful. never text me that again", "tapback": "heart" },
+        { "from": "them", "text": "so ur free tomorrow" }
+      ]
+    }
+  ]
+}

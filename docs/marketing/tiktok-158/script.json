@@ -1,0 +1,40 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:41",
+      "messages": [
+        { "from": "me", "text": "u were active 4 minutes ago" },
+        { "from": "them", "text": "and" },
+        { "from": "me", "text": "and i texted u at 6" },
+        { "from": "them", "text": "i saw" },
+        { "from": "me", "text": "U SAW" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "U SAW" },
+        { "from": "them", "text": "was on my phone the whole time" },
+        { "from": "them", "text": "doing this" },
+        { "from": "them", "link": { "title": "for maya (seen)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "oh no" },
+        { "from": "me", "text": "marco i changed the netflix password" },
+        { "from": "them", "text": "when" },
+        { "from": "me", "text": "an hour ago. out of spite" },
+        { "from": "them", "text": "change it back" },
+        { "from": "me", "text": "i dont remember it. i was typing angry. this is so lovely im sorry", "tapback": "haha" },
+        { "from": "them", "text": "maya im on the last episode" }
+      ]
+    }
+  ]
+}
