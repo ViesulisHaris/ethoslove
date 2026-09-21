@@ -1,0 +1,40 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:36",
+      "messages": [
+        { "from": "me", "text": "love u" },
+        { "from": "them", "text": "thanks" },
+        { "from": "me", "text": "thanks???" },
+        { "from": "them", "text": "one sec" },
+        { "from": "me", "text": "u said THANKS to love u" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "its been 11 minutes of one sec" },
+        { "from": "them", "text": "wanted to say it back properly" },
+        { "from": "them", "text": "took a while" },
+        { "from": "them", "link": { "title": "for maya (love u too)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "i told my mum u said thanks" },
+        { "from": "them", "text": "what did she say" },
+        { "from": "me", "text": "ur uninvited from sunday lunch" },
+        { "from": "them", "text": "she cant do that" },
+        { "from": "me", "text": "the dog is getting ur roast potatoes. this is so lovely i cant breathe", "tapback": "heart" },
+        { "from": "them", "text": "maya tell her i said it back" }
+      ]
+    }
+  ]
+}
