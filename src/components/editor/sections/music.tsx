@@ -252,9 +252,9 @@ export function MusicSection() {
               {results && results.length === 0 && !searching ? (
                 <p className="p-3 text-sm text-muted-foreground">{t("songNone")}</p>
               ) : (
-              // Keyed by the query: a refined search mounts a fresh list instead of reordering the
-              // rows of the old one, and rows that are new to the page are not a layout shift.
-              <ul key={query.trim().toLowerCase()} className="divide-y divide-border">
+              // Keyed by the result set: when a refined search lands, a fresh list mounts instead
+              // of the old rows reordering, and rows new to the page are not a layout shift.
+              <ul key={results ? results.map((song) => song.id).join(",") : "pending"} className="divide-y divide-border">
                 {(results ?? []).map((song) => {
                   const selected = music?.source === "catalog" && music.trackId === song.id;
                   return (
