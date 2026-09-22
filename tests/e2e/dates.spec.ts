@@ -309,3 +309,76 @@ test.describe("the other rooms", () => {
     await expect(page.getByRole("button", { name: /Carta 1 de 12/ })).toBeVisible();
   });
 });
+
+test.describe("games on one phone", () => {
+  test("how well do you know me: two players, one phone, a reveal and a score", async ({ page }) => {
+    await page.goto("/games/know");
+    await page.getByRole("button", { name: /^One phone/ }).click();
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    await expect(page.getByText("Question 1 of 8 · Maya")).toBeVisible();
+    await page.getByRole("group", { name: "Your answer" }).getByRole("button").nth(0).click();
+    await page.getByRole("group", { name: /What will Marco say/ }).getByRole("button").nth(1).click();
+    await page.getByRole("button", { name: "Lock it in" }).click();
+    await expect(page.getByRole("heading", { name: "Hand the phone to Marco" })).toBeVisible();
+    await page.getByRole("button", { name: "I'm Marco, go" }).click();
+    await expect(page.getByText("Question 1 of 8 · Marco")).toBeVisible();
+    await page.getByRole("group", { name: "Your answer" }).getByRole("button").nth(1).click();
+    await page.getByRole("group", { name: /What will Maya say/ }).getByRole("button").nth(0).click();
+    await page.getByRole("button", { name: "Lock it in" }).click();
+    // Maya guessed 1 and Marco said 1; Marco guessed 0 and Maya said 0.
+    await expect(page.getByText("Marco got it")).toBeVisible();
+    await expect(page.getByText("Maya got it")).toBeVisible();
+    await expect(page.getByText("Maya 1 · Marco 1")).toBeVisible();
+    await page.getByRole("button", { name: "Next question" }).click();
+    await expect(page.getByRole("heading", { name: "Hand the phone to Maya" })).toBeVisible();
+  });
+
+  test("would you rather: a match, a clash, and the verdict at the end", async ({ page }) => {
+    await page.goto("/games/rather");
+    await page.getByRole("button", { name: /^One phone/ }).click();
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    for (let round = 1; round <= 10; round++) {
+      await expect(page.getByText(`${round} of 10 · Maya`)).toBeVisible();
+      await page.getByRole("heading", { name: "Would you rather…" }).locator("..").getByRole("button").nth(0).click();
+      await page.getByRole("button", { name: "I'm Marco, go" }).click();
+      await page.getByRole("heading", { name: "Would you rather…" }).locator("..").getByRole("button").nth(round === 1 ? 1 : 0).click();
+      await expect(page.getByRole("heading", { name: round === 1 ? "Not the same." : "Same!" })).toBeVisible();
+      await page.getByRole("button", { name: round < 10 ? "Next one" : "See the results" }).click();
+      if (round < 10) await page.getByRole("button", { name: "I'm Maya, go" }).click();
+    }
+    await expect(page.getByText("You agreed on 9 of 10.")).toBeVisible();
+  });
+
+  test("the roulette spins and the dares deal", async ({ page }) => {
+    await page.goto("/games/roulette");
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    await page.getByRole("button", { name: "Spin" }).click();
+    await expect(page.getByText(/^(Maya|Marco) (cooks tonight|washes up|picks the film|makes the tea|gets up first tomorrow|books the next date|takes the bins out|chooses the music)\.$/)).toBeVisible({ timeout: 10_000 });
+    await page.goto("/games/dare");
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    await expect(page.getByRole("heading", { name: "Maya, truth or dare?" })).toBeVisible();
+    await page.getByRole("button", { name: "Dare", exact: true }).click();
+    await expect(page.getByText("For Maya")).toBeVisible();
+    await page.getByRole("button", { name: /Done\. Marco's turn/ }).click();
+    await expect(page.getByRole("heading", { name: "Marco, truth or dare?" })).toBeVisible();
+  });
+
+  test("two phones: a room opens with a code and a link to send", async ({ page }) => {
+    await page.goto("/games/rather");
+    await page.getByRole("button", { name: /^Two phones/ }).click();
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByRole("button", { name: "Make a room" }).click();
+    const code = page.getByLabel(/^Room code /);
+    await expect(code).toHaveText(/^[A-Z]{4}$/);
+    await expect(page.getByRole("button", { name: "Copy link" })).toBeVisible();
+    await expect(page.getByRole("status")).toContainText(/Connecting|Waiting/);
+  });
+});

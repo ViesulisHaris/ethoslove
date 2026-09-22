@@ -1273,7 +1273,7 @@
       "title": "Games for two",
       "description": "Little games for couples, played on one phone on the sofa or on two phones far apart. Start with a deck of question cards; more are on the way."
     },
-    "eyebrow": "Games · the first one is here",
+    "eyebrow": "Games · five to play now",
     "h1a": "Games for",
     "h1b": "exactly two.",
     "sub": "Quick things to play with the person you like most. No downloads and no accounts: open a link and you're in.",
@@ -1298,36 +1298,139 @@
       "how": "Whoever is holding the phone reads it out. You both answer."
     },
     "coming": {
-      "eyebrow": "Coming next",
-      "title": "What we're building.",
-      "meanwhile": "Meanwhile:",
-      "dates": "Plan a date",
-      "gifts": "Make a gift",
-      "know": {
-        "title": "How well do you know me?",
-        "blurb": "You each answer about yourself and guess the other. The scoreboard settles it."
+      "eyebrow": "Still coming",
+      "title": "Next on the list.",
+      "memory": {
+        "title": "Memory, with your photos",
+        "blurb": "The classic pairs game, dealt from your own camera roll."
       },
       "draw": {
         "title": "Draw it, guess it",
         "blurb": "One of you draws with a finger, the other guesses, live, from anywhere."
       },
-      "rather": {
-        "title": "Would you rather, in sync",
-        "blurb": "Both pick in secret, then reveal. Match for points, clash for an argument."
+      "meanwhile": "Meanwhile:",
+      "dates": "Plan a date",
+      "gifts": "Make a gift"
+    },
+    "lobby": {
+      "one": {
+        "title": "One phone",
+        "blurb": "Pass it back and forth on the sofa.",
+        "who": "Who's playing?"
       },
-      "memory": {
-        "title": "Memory, with your photos",
-        "blurb": "The classic pairs game, dealt from your own camera roll."
+      "two": {
+        "title": "Two phones",
+        "blurb": "Make a room, send the link, play from anywhere.",
+        "yourName": "Your name",
+        "joining": "Joining room {code}",
+        "join": "Join",
+        "create": "Make a room",
+        "room": "Room",
+        "codeLabel": "Room code {code}",
+        "sendIt": "Send them the link, or read out the code. It works from anywhere.",
+        "share": "Share the link",
+        "copy": "Copy link",
+        "copied": "Copied",
+        "connecting": "Connecting…",
+        "waiting": "Waiting for them to open the link…",
+        "here": "{name} is here",
+        "hostStarts": "{name} starts the game from their phone.",
+        "failed": "The room couldn't open. Check the connection and try again."
       },
-      "dare": {
-        "title": "Truth or dare, soft edition",
-        "blurb": "Nothing you'd regret. Mostly compliments and bad dancing."
+      "you": "Your name",
+      "them": "Their name",
+      "someone": "Somebody",
+      "start": "Start",
+      "back": "Back",
+      "shareText": "{name} wants to play a game with you",
+      "copyFallback": "Copy this link:",
+      "privacy": "Nothing is stored. A room lives while you're both in it and is gone when you leave."
+    },
+    "know": {
+      "title": "How well do you know me?",
+      "blurb": "Eight questions. You each answer about yourself and guess the other. The guesses score. Play on one phone, or from two.",
+      "round": "Question {n} of {total}",
+      "yourAnswer": "Your answer",
+      "theirAnswer": "What will {name} say?",
+      "lockIn": "Lock it in",
+      "handTo": "Hand the phone to {name}",
+      "noPeeking": "No peeking at the last answers.",
+      "imHere": "I'm {name}, go",
+      "waitingFor": "Waiting for {name}…",
+      "waitingHost": "Waiting for the host to start…",
+      "reveal": {
+        "said": "{name} said",
+        "right": "{name} got it",
+        "wrong": "{name} guessed “{answer}”"
       },
-      "dishes": {
-        "title": "Dishes roulette",
-        "blurb": "Spin for who cooks, who washes up and who picks the film. Binding."
+      "score": "{a} {sa} · {b} {sb}",
+      "next": "Next question",
+      "results": "See the results",
+      "end": {
+        "eyebrow": "Final score",
+        "great": "You two are basically one person.",
+        "good": "You know each other well. Suspiciously well.",
+        "ok": "There is more to learn. Good.",
+        "of": "of {total}",
+        "sub": "Guesses about the other person, not answers about yourself. The one with more points listens better. Or is lying.",
+        "again": "Play again",
+        "gift": "Make them a gift"
+      }
+    },
+    "rather": {
+      "title": "Would you rather?",
+      "blurb": "Ten of them. You both pick in secret, then see whether you agree. Play on one phone, or from two.",
+      "round": "{n} of {total}",
+      "prompt": "Would you rather…",
+      "handTo": "Hand the phone to {name}",
+      "imHere": "I'm {name}, go",
+      "waitingFor": "Waiting for {name}…",
+      "waitingHost": "Waiting for the host to start…",
+      "reveal": {
+        "match": "Same!",
+        "clash": "Not the same."
       },
-      "blurb": "A sofa, one phone, and an argument about who knows who better. The first ones are short on purpose: five minutes, then back to the film."
+      "sofar": "Agreed on {same} of {total} so far",
+      "next": "Next one",
+      "results": "See the results",
+      "end": {
+        "eyebrow": "The verdict",
+        "twins": "You are the same person.",
+        "balanced": "Different enough to be interesting.",
+        "opposites": "Opposites. It's a whole genre.",
+        "sub": "You agreed on {same} of {total}. The other ones are the conversation.",
+        "again": "Play again",
+        "date": "Plan a date"
+      }
+    },
+    "roulette": {
+      "title": "Dishes roulette",
+      "blurb": "A wheel of the two of you. Every spin settles one chore. The wheel's word is final.",
+      "eyebrow": "Spin to decide who",
+      "question": "Who {chore}?",
+      "spin": "Spin",
+      "spinning": "Spinning…",
+      "binding": "Results are binding. Everyone agreed to that by pressing spin."
+    },
+    "dare": {
+      "title": "Truth or dare, soft edition",
+      "blurb": "Nothing you'd regret in the morning. Mostly compliments and bad dancing. One phone, going round.",
+      "turn": "{name}'s turn",
+      "pick": "{name}, truth or dare?",
+      "truth": "Truth",
+      "dare": "Dare",
+      "for": "For {name}",
+      "done": "Done. {name}'s turn",
+      "soft": "Twelve of each, in a fresh order every time."
+    },
+    "play": {
+      "eyebrow": "Play now",
+      "title": "Five games, ready.",
+      "one": "One phone",
+      "two": "One or two phones",
+      "deckTitle": "Question cards",
+      "deckBlurb": "Three decks. Pass the phone, read it out, both answer.",
+      "cta": "Play"
     }
   },
   "forTwo": {

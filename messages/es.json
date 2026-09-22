@@ -1273,7 +1273,7 @@
       "title": "Juegos para dos",
       "description": "Juegos pequeños para parejas, en un móvil en el sofá o en dos móviles a distancia. Empieza con una baraja de preguntas; vienen más en camino."
     },
-    "eyebrow": "Juegos · ya está el primero",
+    "eyebrow": "Juegos · cinco para jugar ya",
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
     "sub": "Cosas rápidas a las que jugar con la persona que más te gusta. Sin descargas y sin cuentas: abrís un enlace y ya estáis dentro.",
@@ -1298,36 +1298,139 @@
       "how": "Quien tenga el móvil la lee en voz alta. Respondéis los dos."
     },
     "coming": {
-      "eyebrow": "Lo siguiente",
-      "title": "Lo que estamos construyendo.",
-      "meanwhile": "Mientras tanto:",
-      "dates": "Planear una cita",
-      "gifts": "Crear un regalo",
-      "know": {
-        "title": "¿Cuánto me conoces?",
-        "blurb": "Cada uno responde sobre sí mismo y adivina al otro. El marcador decide."
+      "eyebrow": "Todavía por llegar",
+      "title": "Lo siguiente en la lista.",
+      "memory": {
+        "title": "Memory, con vuestras fotos",
+        "blurb": "El juego de parejas de toda la vida, repartido desde tu propio carrete."
       },
       "draw": {
         "title": "Dibuja y adivina",
         "blurb": "Uno dibuja con el dedo y el otro adivina, en directo, desde donde sea."
       },
-      "rather": {
-        "title": "¿Qué prefieres?, a la vez",
-        "blurb": "Elegís en secreto y luego se descubre. Coincidir da puntos; no coincidir, conversación."
+      "meanwhile": "Mientras tanto:",
+      "dates": "Planear una cita",
+      "gifts": "Crear un regalo"
+    },
+    "lobby": {
+      "one": {
+        "title": "Un móvil",
+        "blurb": "Pasáoslo en el sofá.",
+        "who": "¿Quién juega?"
       },
-      "memory": {
-        "title": "Memory, con vuestras fotos",
-        "blurb": "El juego de parejas de toda la vida, repartido desde tu propio carrete."
+      "two": {
+        "title": "Dos móviles",
+        "blurb": "Crea una sala, envía el enlace y jugad desde donde sea.",
+        "yourName": "Tu nombre",
+        "joining": "Entrando en la sala {code}",
+        "join": "Entrar",
+        "create": "Crear una sala",
+        "room": "Sala",
+        "codeLabel": "Código de sala {code}",
+        "sendIt": "Envíale el enlace o léele el código. Funciona desde cualquier sitio.",
+        "share": "Compartir el enlace",
+        "copy": "Copiar enlace",
+        "copied": "Copiado",
+        "connecting": "Conectando…",
+        "waiting": "Esperando a que abra el enlace…",
+        "here": "{name} está aquí",
+        "hostStarts": "{name} empieza la partida desde su móvil.",
+        "failed": "No se ha podido abrir la sala. Comprueba la conexión y prueba otra vez."
       },
-      "dare": {
-        "title": "Verdad o reto, versión suave",
-        "blurb": "Nada de lo que arrepentirse. Sobre todo piropos y bailar mal."
+      "you": "Tu nombre",
+      "them": "Su nombre",
+      "someone": "Alguien",
+      "start": "Empezar",
+      "back": "Atrás",
+      "shareText": "{name} quiere jugar contigo",
+      "copyFallback": "Copia este enlace:",
+      "privacy": "No se guarda nada. La sala existe mientras estáis los dos y desaparece al salir."
+    },
+    "know": {
+      "title": "¿Cuánto me conoces?",
+      "blurb": "Ocho preguntas. Cada uno responde sobre sí mismo y adivina al otro. Puntúan los aciertos. En un móvil o en dos.",
+      "round": "Pregunta {n} de {total}",
+      "yourAnswer": "Tu respuesta",
+      "theirAnswer": "¿Qué dirá {name}?",
+      "lockIn": "Confirmar",
+      "handTo": "Pásale el móvil a {name}",
+      "noPeeking": "Sin mirar las últimas respuestas.",
+      "imHere": "Soy {name}, vamos",
+      "waitingFor": "Esperando a {name}…",
+      "waitingHost": "Esperando a que empiece el anfitrión…",
+      "reveal": {
+        "said": "{name} dijo",
+        "right": "{name} lo acertó",
+        "wrong": "{name} pensaba «{answer}»"
       },
-      "dishes": {
-        "title": "La ruleta de los platos",
-        "blurb": "Gira para ver quién cocina, quién friega y quién elige la peli. Es vinculante."
+      "score": "{a} {sa} · {b} {sb}",
+      "next": "Siguiente pregunta",
+      "results": "Ver los resultados",
+      "end": {
+        "eyebrow": "Puntuación final",
+        "great": "Sois básicamente una sola persona.",
+        "good": "Os conocéis bien. Sospechosamente bien.",
+        "ok": "Queda mucho por aprender. Bien.",
+        "of": "de {total}",
+        "sub": "Puntúan los aciertos sobre el otro, no las respuestas sobre uno mismo. Quien tenga más puntos escucha mejor. O miente.",
+        "again": "Jugar otra vez",
+        "gift": "Hazle un regalo"
+      }
+    },
+    "rather": {
+      "title": "¿Qué prefieres?",
+      "blurb": "Diez dilemas. Elegís en secreto y luego veis si coincidís. En un móvil o en dos.",
+      "round": "{n} de {total}",
+      "prompt": "¿Qué prefieres…",
+      "handTo": "Pásale el móvil a {name}",
+      "imHere": "Soy {name}, vamos",
+      "waitingFor": "Esperando a {name}…",
+      "waitingHost": "Esperando a que empiece el anfitrión…",
+      "reveal": {
+        "match": "¡Igual!",
+        "clash": "No coincidís."
       },
-      "blurb": "Un sofá, un móvil y una discusión sobre quién conoce mejor a quién. Los primeros son cortos a propósito: cinco minutos y de vuelta a la peli."
+      "sofar": "De acuerdo en {same} de {total} por ahora",
+      "next": "Siguiente",
+      "results": "Ver los resultados",
+      "end": {
+        "eyebrow": "El veredicto",
+        "twins": "Sois la misma persona.",
+        "balanced": "Lo bastante distintos para ser interesantes.",
+        "opposites": "Polos opuestos. Es todo un género.",
+        "sub": "Coincidisteis en {same} de {total}. Los demás son la conversación.",
+        "again": "Jugar otra vez",
+        "date": "Planear una cita"
+      }
+    },
+    "roulette": {
+      "title": "La ruleta de los platos",
+      "blurb": "Una ruleta con vosotros dos. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
+      "eyebrow": "Gira para decidir quién",
+      "question": "¿Quién {chore}?",
+      "spin": "Girar",
+      "spinning": "Girando…",
+      "binding": "El resultado es vinculante. Todo el mundo lo aceptó al pulsar girar."
+    },
+    "dare": {
+      "title": "Verdad o reto, versión suave",
+      "blurb": "Nada de lo que arrepentirse por la mañana. Sobre todo piropos y bailar mal. Un móvil, por turnos.",
+      "turn": "Turno de {name}",
+      "pick": "{name}, ¿verdad o reto?",
+      "truth": "Verdad",
+      "dare": "Reto",
+      "for": "Para {name}",
+      "done": "Hecho. Turno de {name}",
+      "soft": "Doce de cada, en un orden nuevo cada vez."
+    },
+    "play": {
+      "eyebrow": "Para jugar ya",
+      "title": "Cinco juegos, listos.",
+      "one": "Un móvil",
+      "two": "Uno o dos móviles",
+      "deckTitle": "Cartas de preguntas",
+      "deckBlurb": "Tres barajas. Pasaos el móvil, leedla en voz alta y respondéis los dos.",
+      "cta": "Jugar"
     }
   },
   "forTwo": {

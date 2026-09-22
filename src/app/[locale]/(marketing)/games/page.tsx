@@ -4,7 +4,6 @@ import { ArrowRight, Smartphone, Users } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
-import { HERO_ART, heroSrcSet } from "@/lib/dates/art";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
 import { QuestionDeck } from "@/components/games/question-deck";
 
@@ -14,14 +13,14 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/gam
   return pageMetadata({ locale, path: "/games", title: t("title"), description: t("description") });
 }
 
-const COMING = [
-  { key: "know", mode: "two", ground: "linear-gradient(160deg,#FFE3D3,#F9C6D0)" },
-  { key: "draw", mode: "two", ground: "linear-gradient(160deg,#E6E0F8,#D2C8F0)" },
-  { key: "rather", mode: "two", ground: "linear-gradient(160deg,#D9EEF3,#BBDDE8)" },
-  { key: "memory", mode: "one", ground: "linear-gradient(160deg,#F8E6CF,#EED2B2)" },
-  { key: "dare", mode: "one", ground: "linear-gradient(160deg,#FCE0EE,#F5BFD9)" },
-  { key: "dishes", mode: "one", ground: "linear-gradient(160deg,#E1EFD9,#CBE3BE)" },
+const GAMES = [
+  { key: "know", href: "/games/know", image: "/dates/hero/games-sm.webp", mode: "two" },
+  { key: "rather", href: "/games/rather", image: "/dates/ideas/arcade-night.webp", mode: "two" },
+  { key: "roulette", href: "/games/roulette", image: "/dates/ideas/pasta-and-a-slow-walk.webp", mode: "one" },
+  { key: "dare", href: "/games/dare", image: "/dates/ideas/karaoke-duet.webp", mode: "one" },
 ] as const;
+
+const COMING = ["memory", "draw"] as const;
 
 export default async function GamesPage({ params }: PageProps<"/[locale]/games">) {
   const { locale } = await params;
@@ -63,24 +62,39 @@ export default async function GamesPage({ params }: PageProps<"/[locale]/games">
 
       <section className="bg-paper py-20 lg:py-28">
         <div className="container-x">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)]">
-            <div>
-              <p className="text-eyebrow text-lilac">{t("coming.eyebrow")}</p>
-              <h2 className="display-xl mt-4 max-w-[16ch]">{t("coming.title")}</h2>
-              <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-soft">{t("coming.blurb")}</p>
-            </div>
-            <img src={HERO_ART.games} srcSet={heroSrcSet(HERO_ART.games)} sizes="(min-width: 1024px) 440px, 100vw" alt="" width={1800} height={1350} loading="lazy" decoding="async" className="aspect-[4/3] w-full rotate-[-1.5deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(60,30,120,0.5)] ring-8 ring-white" />
-          </div>
-          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {COMING.map(({ key, mode, ground }) => (
-              <li key={key} className="relative overflow-hidden rounded-[26px] p-6 shadow-soft" style={{ background: ground }}>
-                <span className="grain-overlay opacity-[0.12] mix-blend-overlay" />
-                <span className="relative inline-flex items-center gap-1.5 rounded-full bg-white/75 px-2.5 py-1 text-[11.5px] font-semibold text-forest/75">
-                  {mode === "one" ? <Users aria-hidden="true" className="size-3.5" /> : <Smartphone aria-hidden="true" className="size-3.5" />}
-                  {t(`modes.${mode}.title`)}
-                </span>
-                <h3 className="relative mt-12 font-display text-[25px] leading-[1.08] text-forest">{t(`coming.${key}.title`)}</h3>
-                <p className="relative mt-2 text-[14.5px] leading-relaxed text-forest/70">{t(`coming.${key}.blurb`)}</p>
+          <p className="text-eyebrow text-lilac">{t("play.eyebrow")}</p>
+          <h2 className="display-xl mt-4 max-w-[16ch]">{t("play.title")}</h2>
+          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {GAMES.map(({ key, href, image, mode }) => (
+              <li key={key}>
+                <Link href={href} className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-soft ring-1 ring-forest/5 transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift">
+                  <span className="relative block overflow-hidden">
+                    <img src={image} alt="" width={960} height={720} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-(--ease-out-quint) group-hover:scale-[1.06]" />
+                    <span className="absolute top-3.5 left-3.5 inline-flex items-center gap-1.5 rounded-full bg-white/92 px-2.5 py-1 text-[11.5px] font-semibold text-forest/75 backdrop-blur">
+                      {mode === "one" ? <Users aria-hidden="true" className="size-3.5" /> : <Smartphone aria-hidden="true" className="size-3.5" />}
+                      {t(mode === "one" ? "play.one" : "play.two")}
+                    </span>
+                  </span>
+                  <span className="flex flex-1 flex-col p-5">
+                    <span className="block font-display text-[24px] leading-[1.05] text-forest">{t(`${key}.title`)}</span>
+                    <span className="mt-2 block text-[14px] leading-relaxed text-forest/70">{t(`${key}.blurb`)}</span>
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[14px] font-semibold text-lilac">
+                      {t("play.cta")}
+                      <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-20 text-eyebrow text-ink-soft">{t("coming.eyebrow")}</p>
+          <h2 className="display-md mt-3">{t("coming.title")}</h2>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+            {COMING.map((key) => (
+              <li key={key} className="rounded-[24px] bg-white/70 p-5 ring-1 ring-forest/5">
+                <p className="font-display text-[21px] leading-tight text-forest/80">{t(`coming.${key}.title`)}</p>
+                <p className="mt-1.5 text-[14px] leading-relaxed text-forest/60">{t(`coming.${key}.blurb`)}</p>
               </li>
             ))}
           </ul>

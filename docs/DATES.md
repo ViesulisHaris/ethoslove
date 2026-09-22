@@ -87,6 +87,18 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 - **Make it a date**: on every place, two others of a different kind within a short walk (dinner
   then a view; coffee then a gallery), the better ranked first.
 
+## Games
+
+Five to play, at `/games`. The deck of question cards (one phone). **How well do you know me?** and
+**Would you rather?** run on one phone passed back and forth or on two phones joined by a room
+code: a room is a Supabase Realtime channel named after its four-letter code (`use-room.ts`), with
+presence for who is here and broadcast for the moves. No table, no row: the room exists while both
+are in it. The host (whoever made the code) holds the game state and sends it after every move; the
+guest sends moves (`use-synced.ts`). The game logic itself is pure (`src/lib/games/play.ts`) and
+runs identically in both modes, so it is unit-tested once. **Dishes roulette** and **Truth or dare,
+soft edition** are one-screen games. Memory and Draw-it are still to come, and say so.
+Tested for real in two tabs of one browser: room, join, answer on both, reveal, guest-driven next.
+
 ## Ethos for Two
 
 `/pricing` now leads with the couples' side: Free (everything above) and "Ethos for Two", €29 a
