@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:48",
+      "messages": [
+        { "from": "them", "text": "i think we should break up" },
+        { "from": "me", "text": "what" },
+        { "from": "me", "text": "is this a joke" },
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "MARCO" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "MARCO" },
+        { "from": "them", "text": "with the flat" },
+        { "from": "them", "text": "read this before u ring ur mum" },
+        { "from": "them", "link": { "title": "for maya (break up with the flat)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template; photos of the two of them suit it. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "i already rang my mum" },
+        { "from": "them", "text": "and" },
+        { "from": "me", "text": "shes on her way with wine and a speech" },
+        { "from": "them", "text": "tell her to bring boxes. we get the keys in march" },
+        { "from": "me", "text": "MARCO IS THAT A GARDEN" },
+        { "from": "them", "text": "thats a garden" },
+        { "from": "me", "text": "i cant breathe. my mum is going to kill u. we're keeping the wine", "tapback": "heart" },
+        { "from": "them", "text": "maya does she still have the speech" }
+      ]
+    }
+  ]
+}

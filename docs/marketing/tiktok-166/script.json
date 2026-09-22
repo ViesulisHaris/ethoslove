@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|17:12",
+      "messages": [
+        { "from": "me", "text": "what time do u land tomorrow" },
+        { "from": "them", "text": "im not coming tomorrow" },
+        { "from": "me", "text": "what" },
+        { "from": "me", "text": "marco we booked this in MARCH" },
+        { "from": "them", "text": "i know. open this first" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "link": { "title": "for maya (about tomorrow)", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+        { "from": "me", "text": "marco this is a countdown" },
+        { "from": "me", "text": "why is it counting down to 6 minutes" },
+        { "from": "them", "text": "look at ur door" }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. A countdown template (Midnight Countdown) is the one the texts describe. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "MARCO" },
+        { "from": "me", "text": "WHY ARE U OUTSIDE MY DOOR" },
+        { "from": "them", "text": "been in an airbnb round the corner since tuesday" },
+        { "from": "me", "text": "SINCE TUESDAY" },
+        { "from": "me", "text": "u facetimed me from 'ur flat' on wednesday" },
+        { "from": "them", "text": "the airbnb has a similar lamp" },
+        { "from": "me", "text": "im crying. im not opening it. i havent shaved my legs marco", "tapback": "heart" },
+        { "from": "them", "text": "maya its raining out here" }
+      ]
+    }
+  ]
+}

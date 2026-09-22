@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:31",
+      "messages": [
+        { "from": "them", "text": "are u home" },
+        { "from": "me", "text": "yes why" },
+        { "from": "them", "text": "dont open the door yet" },
+        { "from": "me", "text": "why is there a box on the mat marco" },
+        { "from": "them", "text": "open this first. read to the end" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "link": { "title": "for maya (read to the end)", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+        { "from": "me", "text": "marco why does this start with our first photo" },
+        { "from": "me", "text": "and the second one" },
+        { "from": "them", "text": "keep going" }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here: a frame with their photos in it, from a template that ends on a message (The Letter, Our Timeline, Scrapbook). Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "MARCO" },
+        { "from": "me", "text": "THERE IS A QUESTION AT THE END" },
+        { "from": "them", "text": "yes" },
+        { "from": "me", "text": "IS THIS REAL" },
+        { "from": "them", "text": "open the door" },
+        { "from": "me", "text": "i have a face mask on" },
+        { "from": "me", "text": "im crying through a face mask", "tapback": "heart" },
+        { "from": "them", "text": "maya open the door" }
+      ]
+    }
+  ]
+}

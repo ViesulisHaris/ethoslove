@@ -905,6 +905,31 @@ Rules for this register, because it cuts both ways:
   It brings people to the account, where the next post sells. Never two in a row, and never let it
   become the account's voice.
 
+## Shockers: the sentence that means something else after the gift (165 to 167)
+
+Three posts built on one move: the first bubble is the worst text a person can receive, and the
+gift is what turns it into the best one. The reader believes the bad version for a whole slide,
+and the comment section is people telling each other they nearly threw their phone.
+
+| | The bad version | What it was | Still open |
+|---|---|---|---|
+| 165 | "i think we should break up" | with the flat: he found them a house, with a garden; her mum is already on her way with wine and a speech | "maya does she still have the speech" |
+| 166 | "im not coming tomorrow" (booked in March) | the gift is a countdown to six minutes from now; he has been in an Airbnb round the corner since Tuesday and FaceTimed her from it ("the airbnb has a similar lamp") | "maya its raining out here" |
+| 167 | "dont open the door yet", a box on the mat | a question at the end of the gift; she reads it twice with a face mask on | "maya open the door" |
+
+Rules for the shocker, because it is a bigger lever and it cuts:
+
+- **The reveal is the gift, never the text.** "with the flat" is two words; the house is on
+  slide 3. If the screenshot is thin, the post is a man being cruel by text and then explaining.
+- **He has to have known the cost.** The lamp, the four days, the box: the twist works because he
+  went to trouble, not because he was careless with a sentence. The comments forgive trouble.
+- **She still commits her crime** (rang her mum, will not open the door, read it twice). It keeps
+  the two-camp engine from 149 running under the shock.
+- **The proposal ends before the answer**, and the pinned comment gives it. The post is the
+  question; the comments are the answer; the pin is the receipt.
+- **Never two shockers in a row.** The lever only works while "i think we should break up" still
+  reads as real for a slide. The fourth one in a month reads as a bit.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1207,5 +1232,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 162 | u liked her photo | four slides; no occasion; 149's engine, the ex | one with their photos | yours |
 | 163 | nice | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
 | 164 | who is she | four slides; no occasion; the other engine: he is the problem, she ends on idk | the most romantic frame | yours |
+| 165 | i think we should break up | four slides; a move; shocker: with the flat | one with their photos | yours |
+| 166 | im not coming tomorrow | four slides; long distance; shocker: he is at the door, since Tuesday | a countdown | yours |
+| 167 | read to the end | four slides; a proposal; shocker: the question is the last line, never shown | photos, not the last frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
