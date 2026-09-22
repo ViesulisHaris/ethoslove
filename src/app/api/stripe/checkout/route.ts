@@ -107,9 +107,22 @@ export async function POST(request: NextRequest) {
       locale,
       product,
       template_slugs: slugs.join(","),
+      withdrawal_notice: "shown_at_payment",
       ...(ref ? { ref } : {}),
     },
     allow_promotion_codes: true,
+    // Digital content supplied at once: under EU consumer law the 14-day right to cancel only ends
+    // if the buyer asks for it to be unlocked straight away and acknowledges losing that right,
+    // before paying. This line sits directly above Stripe's pay button, which is the moment it has
+    // to be seen; the receipt email confirms it afterwards, as the law also requires.
+    custom_text: {
+      submit: {
+        message:
+          locale === "es"
+            ? `Al pagar, pides que tu compra se desbloquee al instante y aceptas que, una vez desbloqueada, pierdes el derecho de desistimiento de 14 días. Términos: ${origin}/es/legal/terms`
+            : `By paying, you ask for your purchase to be unlocked straight away and accept that, once it is, you lose the 14-day right to cancel. Terms: ${origin}/legal/terms`,
+      },
+    },
     // Shared Stripe account: make the charge recognisable on statements.
     payment_intent_data: { statement_descriptor_suffix: "ETHOS" },
     automatic_tax: process.env.STRIPE_AUTOMATIC_TAX === "true" ? { enabled: true } : undefined,

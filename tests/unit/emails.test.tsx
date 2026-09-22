@@ -14,6 +14,10 @@ describe("email templates", () => {
     expect(reaction).toContain("voice note");
     const receipt = await render(ReceiptEmail({ locale: "en", productLabel: "Everything", amountLabel: "$24.99", unlocks: ["All templates"], dashboardUrl: "https://x" }));
     expect(receipt).toContain("$24.99");
+    // It confirms the consent to immediate unlocking given at payment, in writing, in both languages.
+    expect(receipt).toContain("14-day right to cancel no longer applies");
+    const receiptEs = await render(ReceiptEmail({ locale: "es", productLabel: "Todo", amountLabel: "22,99 €", unlocks: ["Todas"], dashboardUrl: "https://x" }));
+    expect(receiptEs).toContain("derecho de desistimiento de 14 días ya no se aplica");
     const welcome = await render(WelcomeEmail({ locale: "es", siteUrl: "https://ethoslove.com" }));
     expect(welcome).toContain("Hacer un regalo");
   });

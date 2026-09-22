@@ -64,6 +64,12 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
       </P>
       <P>{es ? "Desbloqueado:" : "Unlocked:"} {unlocks.join(", ")}</P>
       <Quiet>{es ? "Pago único, sin renovaciones. Stripe te envía la factura por separado." : "One-time payment, no renewals. Stripe sends the invoice separately."}</Quiet>
+      {/* The confirmation, on a durable medium, of the consent given at payment (Consumer Rights Directive art. 8(7)). */}
+      <Quiet>
+        {es
+          ? "Pediste que se desbloqueara al instante, así que el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos."
+          : "You asked for it to be unlocked straight away, so the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right."}
+      </Quiet>
     </EmailLayout>
   );
 }
