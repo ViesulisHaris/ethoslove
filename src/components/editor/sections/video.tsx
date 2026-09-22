@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { AlertCircle, Clapperboard, Loader2, X } from "lucide-react";
+import { AlertCircle, Clapperboard, Loader2, Sparkles, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
@@ -28,7 +28,19 @@ export function VideoSection() {
 
   return (
     <section>
-      <SectionHeader n={tS("n")} title={tS("title")} blurb={tS("blurb")} />
+      {/* A clip makes any gift premium, the free templates included. The song and the voice note say so
+          beside their titles; this one did not, and a customer found out at the pay sheet. */}
+      <SectionHeader
+        n={tS("n")}
+        title={tS("title")}
+        blurb={tS("blurb")}
+        badge={
+          <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-ink">
+            <Sparkles className="size-3" />
+            {t("premium")}
+          </span>
+        }
+      />
       {video ? (
         <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <video src={video.url} poster={video.poster} controls playsInline preload="metadata" className="aspect-video w-full bg-black" />

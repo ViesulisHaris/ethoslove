@@ -5,7 +5,7 @@
  * Holding is a real press: the flower only opens while a pointer is down on it, so the mouse goes to
  * the middle of the phone and stays there. Everything else is waiting for what the gift says.
  */
-export async function film({ page, live, inGift, now, slow }) {
+export async function film({ page, live, spec, inGift, now, slow }) {
   const marks = {};
   const says = (text) => document.querySelector('[data-mode="live"]')?.innerText.includes(text);
 
@@ -36,9 +36,9 @@ export async function film({ page, live, inGift, now, slow }) {
   marks.note = now() - 0.5;
   const read = live.getByRole("button", { name: /read|note/i }).first();
   await read.evaluate((b) => b.click());
-  await inGift(says, "wont let me bring flowers", 8);
+  await inGift(says, spec.message.slice(0, 24), 8);
   marks.reading = now();
-  await page.waitForTimeout(2600);
+  await page.waitForTimeout(3800); // long enough to read all of it
   marks.end = now();
 
   console.log("marks:", JSON.stringify(Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, +(v - marks.bud).toFixed(2)]))), `(${slow}x)`);
