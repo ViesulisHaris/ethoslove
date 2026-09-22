@@ -779,7 +779,9 @@
         "q": "Refunds?",
         "a": "Unlocks are digital and delivered instantly, so we can't refund a change of heart. If something doesn't work as described, write to us and we'll make it right."
       }
-    ]
+    ],
+    "perTemplate": "All {n} premium templates · {price} each",
+    "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe"
   },
   "legal": {
     "terms": "Terms of Service",

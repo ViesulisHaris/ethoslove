@@ -1,6 +1,8 @@
 /**
- * Pricing catalogue. Amounts are minor units. Stripe Price IDs come from env so the same
- * code runs against test and live accounts. Every product is a ONE-TIME payment.
+ * Pricing catalogue. Amounts are minor units and MUST equal the Stripe prices for every currency in
+ * CHARGED_CURRENCIES — the amount on the page is a promise about the amount on the card statement
+ * (scripts/check-prices.mjs compares them). Stripe Price IDs come from env so the same code runs
+ * against test and live accounts. Every product is a ONE-TIME payment.
  */
 export type ProductId = "single" | "pick3" | "everything";
 export type Currency = "usd" | "eur" | "gbp";
@@ -34,13 +36,27 @@ export function formatAmount(minor: number, currency: Currency, locale = "en"): 
   return new Intl.NumberFormat(locale, { style: "currency", currency: currency.toUpperCase(), minimumFractionDigits: 2 }).format(minor / 100);
 }
 
-/** Rough currency guess from a locale/country; Stripe Checkout shows the final price. */
+/**
+ * The currencies the live Stripe prices really carry, in order of preference, from
+ * NEXT_PUBLIC_PRICE_CURRENCIES ("eur,usd,gbp"). The site only ever shows one of these, so the price
+ * on the page is the price charged. Anything else is shown in the first (euros) and Stripe converts
+ * it at checkout, which it says on its own page. Adding "usd" here without a USD price on every
+ * Stripe product would put a number on the page nobody is charged: run scripts/check-prices.mjs.
+ */
+export const CHARGED_CURRENCIES: Currency[] = (() => {
+  const listed = (process.env.NEXT_PUBLIC_PRICE_CURRENCIES ?? "eur")
+    .split(",")
+    .map((c) => c.trim().toLowerCase())
+    .filter((c): c is Currency => c === "eur" || c === "usd" || c === "gbp");
+  return listed.length > 0 ? listed : ["eur"];
+})();
+
+/** The currency to show and charge for a locale/country: its own if Stripe carries it, otherwise the first charged one. */
 export function currencyFor(countryOrLocale: string | null | undefined): Currency {
   const v = (countryOrLocale ?? "").toUpperCase();
   const eu = ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PT", "SI", "SK"];
-  if (v === "GB" || v.endsWith("-GB")) return "gbp";
-  if (eu.some((c) => v === c || v.endsWith(`-${c}`))) return "eur";
-  return "usd";
+  const local: Currency = v === "GB" || v.endsWith("-GB") ? "gbp" : eu.some((c) => v === c || v.endsWith(`-${c}`)) ? "eur" : "usd";
+  return CHARGED_CURRENCIES.includes(local) ? local : CHARGED_CURRENCIES[0];
 }
 
 /**

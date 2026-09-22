@@ -69,6 +69,7 @@ export function PricingCards({
   };
 
   const needed = picking ? PRODUCTS[picking].picks : 0;
+  const premium = manifests.filter((m) => m.tier === "premium").length;
 
   return (
     <>
@@ -119,6 +120,12 @@ export function PricingCards({
               >
                 {t("oneTime")}
               </p>
+              {id === "everything" && premium > 0 ? (
+                // What "everything" means, in the unit people compare it to: one gift.
+                <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")}>
+                  {t("perTemplate", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / premium), currency, locale) })}
+                </p>
+              ) : null}
               <ul className="mt-6 flex flex-col gap-2.5 text-sm">
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
@@ -153,6 +160,7 @@ export function PricingCards({
           );
         })}
       </div>
+      <p className="mt-5 text-center text-[13px] text-muted-foreground">{t("checkoutNote")}</p>
 
       <Dialog open={picking !== null} onOpenChange={(v) => !v && setPicking(null)}>
         <DialogContent className="sm:max-w-lg">

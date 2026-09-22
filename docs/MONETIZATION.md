@@ -62,6 +62,53 @@ than that (Paired is around $70 a year) for less that you can touch.
 
 Free stays generous: finding, planning and sharing are never behind it.
 
+## Gift prices, September 2026: what to charge
+
+**The evidence** (Stripe, the four days after the first viral post): people who start a *premium*
+template pay about **60%** of the time (Birthday Cinema 51 of 78, Bouquet 36 of 60), with the price
+on the card before they start. People who start a *free* template pay about **4%** (the Letter: 62 of
+1,383), all of it for paid extras. Purchases peak 20:00 to 22:00 UTC.
+
+**What it says.** When more than 40% of the people who reach a paywall pay, the price is not what
+stops anybody; it is under what they would pay. And almost all the traffic starts free, so the
+biggest money is not in the price of a premium template but in the 96% of free makers who pay
+nothing.
+
+**The ladder to move to** (same numbers in each currency, set as the default price of each Stripe
+product, with USD and GBP added as currency options):
+
+| | Now (live) | Recommended | Why |
+|---|---|---|---|
+| One template | €7.49 | **€9.99 / $9.99 / £8.99** | 60% paywall conversion says the buyer who has made the gift pays. Under ten stays "under a tenner". |
+| Pick three | €10.99 | **€14.99 / $14.99 / £12.99** | Half the price of three singles, and a small step from one. |
+| Everything, forever | €22.99 | **€24.99 / $24.99 / £21.99** | Only €10 more than three and 2.5× one: the obvious choice, which is the point. |
+
+Expected effect: fewer starts at the higher single price, more revenue per buyer (+33% on singles);
+test it for seven days against the week before with `scripts/revenue-by-ref.mjs`.
+
+**Bigger levers than the price, in order:**
+
+1. **Apple Pay and Google Pay (and PayPal)** at checkout. Google Pay and PayPal are off in the
+   shared Stripe account's payment-method settings. Wallets typically lift mobile checkout by
+   double digits, and nearly all of this traffic is mobile. Free, and a switch in the Stripe
+   dashboard.
+2. **A small upgrade for free templates**: "Make it special", €3.99, unlocking the paid extras (real
+   songs, video, voice, 20 photos, no footer) for one free gift. It is aimed at the 1,383 Letter
+   makers; moving them from 4% to 8% is worth more than any price change above. Needs a Stripe
+   product and a checkout option.
+3. **A plain guarantee** by the pay button: "If it doesn't open on their phone, you get your money
+   back." It costs almost nothing (it hardly happens) and it removes the last doubt. It has to match
+   the terms (docs: legal pages).
+4. **Local prices**: once the live prices carry USD and GBP, set NEXT_PUBLIC_PRICE_CURRENCIES to
+   "eur,usd,gbp" and the site shows them. Until then it shows euros to everyone, because a dollar
+   price on the page that is not the dollar price at checkout is misleading pricing.
+
+**How to change a price without the site lying.** Stripe prices cannot be edited, only replaced:
+create the new price (with its currency options), make it the product's default, change the amounts
+in `src/lib/pricing/products.ts` in the same deploy, and run
+`node --env-file=<live env> scripts/check-prices.mjs`: it compares every shown price with the
+charged one and fails on any difference.
+
 ## 4. Games: growth first, revenue second
 
 A two-phone game invites somebody by link every time it is played, and that somebody lands on

@@ -779,7 +779,9 @@
         "q": "¿Reembolsos?",
         "a": "Los desbloqueos son digitales y se entregan al instante, así que no podemos reembolsar un cambio de opinión; pero si algo no funciona como se describe, escríbenos y lo arreglaremos."
       }
-    ]
+    ],
+    "perTemplate": "Las {n} plantillas premium · {price} cada una",
+    "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe"
   },
   "legal": {
     "terms": "Términos del servicio",
