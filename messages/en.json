@@ -1206,18 +1206,10 @@
       "cityB": "Madrid"
     },
     "games": {
-      "eyebrow": "Games · coming soon",
+      "eyebrow": "Games · six to play now",
       "title": "Play for who does the dishes.",
-      "blurb": "Quick games made for two people who like each other. No downloads: open a link and you're playing.",
-      "cta": "See the first games",
-      "one": {
-        "title": "One screen",
-        "blurb": "Pass the phone on the sofa."
-      },
-      "two": {
-        "title": "Two phones",
-        "blurb": "Send a link, play from anywhere."
-      }
+      "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
+      "cta": "Deal me in"
     },
     "closing": {
       "title": "Saturday isn't going to plan itself.",
@@ -1272,22 +1264,10 @@
   "games": {
     "meta": {
       "title": "Games for two",
-      "description": "Little games for couples, played on one phone on the sofa or on two phones far apart. Start with a deck of question cards; more are on the way."
+      "description": "Card games for couples: How well do you know me, Would you rather, Memory with your photos, question cards, truth or dare and a roulette for the chores. One phone or two, no downloads."
     },
-    "eyebrow": "Games · five to play now",
     "h1a": "Games for",
     "h1b": "exactly two.",
-    "sub": "Quick things to play with the person you like most. No downloads and no accounts: open a link and you're in.",
-    "modes": {
-      "one": {
-        "title": "One screen",
-        "blurb": "Pass the phone back and forth on the sofa."
-      },
-      "two": {
-        "title": "Two phones",
-        "blurb": "Send a link and play from anywhere."
-      }
-    },
     "deck": {
       "playable": "Play this one now",
       "choose": "Choose a deck",
@@ -1296,22 +1276,15 @@
       "done": "That's the whole deck. You two talk a lot.",
       "doneEyebrow": "The end",
       "again": "Shuffle and go again",
-      "how": "Whoever is holding the phone reads it out. You both answer."
+      "how": "Whoever is holding the phone reads it out. You both answer.",
+      "title": "Question cards",
+      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer."
     },
     "coming": {
-      "eyebrow": "Still coming",
-      "title": "Next on the list.",
-      "memory": {
-        "title": "Memory, with your photos",
-        "blurb": "The classic pairs game, dealt from your own camera roll."
-      },
       "draw": {
         "title": "Draw it, guess it",
         "blurb": "One of you draws with a finger, the other guesses, live, from anywhere."
-      },
-      "meanwhile": "Meanwhile:",
-      "dates": "Plan a date",
-      "gifts": "Make a gift"
+      }
     },
     "lobby": {
       "one": {
@@ -1336,7 +1309,9 @@
         "waiting": "Waiting for them to open the link…",
         "here": "{name} is here",
         "hostStarts": "{name} starts the game from their phone.",
-        "failed": "The room couldn't open. Check the connection and try again."
+        "failed": "The room couldn't open. Check the connection and try again.",
+        "full": "This room already has two players. Ask for a new link.",
+        "waitingHost": "Waiting for the person who made the room…"
       },
       "you": "Your name",
       "them": "Their name",
@@ -1345,7 +1320,9 @@
       "back": "Back",
       "shareText": "{name} wants to play a game with you",
       "copyFallback": "Copy this link:",
-      "privacy": "Nothing is stored. A room lives while you're both in it and is gone when you leave."
+      "privacy": "Nothing is stored. A room lives while you're both in it and is gone when you leave.",
+      "change": "Change players",
+      "left": "{name} left the room. Waiting for them to come back…"
     },
     "know": {
       "title": "How well do you know me?",
@@ -1402,7 +1379,8 @@
         "sub": "You agreed on {same} of {total}. The other ones are the conversation.",
         "again": "Play again",
         "date": "Plan a date"
-      }
+      },
+      "or": "or"
     },
     "roulette": {
       "title": "Dishes roulette",
@@ -1422,16 +1400,50 @@
       "dare": "Dare",
       "for": "For {name}",
       "done": "Done. {name}'s turn",
-      "soft": "Twelve of each, in a fresh order every time."
+      "soft": "Twelve of each, in a fresh order every time.",
+      "left": "{n} left"
     },
     "play": {
-      "eyebrow": "Play now",
-      "title": "Five games, ready.",
-      "one": "One phone",
-      "two": "One or two phones",
-      "deckTitle": "Question cards",
-      "deckBlurb": "Three decks. Pass the phone, read it out, both answer.",
+      "one": "1 phone",
+      "two": "1 or 2 phones",
       "cta": "Play"
+    },
+    "hub": {
+      "eyebrow": "Game night for two",
+      "sub": "Six little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "one": "Pass one phone",
+      "two": "Or two phones, one link",
+      "deal": "Deal me in",
+      "pickTitle": "Pick a game",
+      "pickSub": "Every one is quick, and every one ends with something to talk about.",
+      "minutes": "{n} min",
+      "soon": "Soon"
+    },
+    "memory": {
+      "title": "Memory",
+      "blurb": "The pairs game for two. Turn two cards over; a pair is yours and you go again. Dealt from our stickers, or from your own photos.",
+      "turn": "{name}'s turn",
+      "pair": "A pair! {name} goes again",
+      "miss": "Not a pair. {name}'s turn",
+      "winner": "{name} wins",
+      "tie": "A draw. Obviously.",
+      "again": "Deal again",
+      "photos": "Use our photos",
+      "photosAgain": "Change photos",
+      "photo": "photo {n}",
+      "cardDown": "Card {n}, face down",
+      "cardUp": "Card {n}: {face}",
+      "rules": "Photos stay on this phone. Nothing is uploaded.",
+      "faces": {
+        "heart": "a heart",
+        "cherries": "cherries",
+        "strawberry": "a strawberry",
+        "bow": "a bow",
+        "daisy": "a daisy",
+        "kiss": "a kiss",
+        "butterfly": "a butterfly",
+        "cake": "a cake"
+      }
     }
   },
   "forTwo": {

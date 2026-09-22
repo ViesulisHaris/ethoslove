@@ -29,7 +29,7 @@ export function GET() {
     "",
     `- [Dates](${localizedUrl("en", "/dates")}): date ideas made from real places near you, on a map. Pick a town and a day; the page shows the forecast and the sunset, suggests ideas that suit the weather (a picnic is never offered in the rain), fills each idea with real cafés, viewpoints, restaurants, museums and things to play from OpenStreetMap, and saves the evening as a plan that is sent as a link. Free, no account, and the plan never leaves the browser except inside the link itself.`,
     `- [Long distance](${localizedUrl("en", "/long-distance")}): for two towns, the distance between them, the city halfway along the great circle, how many hours apart their clocks are and when both people are awake; plus date ideas for two screens.`,
-    `- [Games](${localizedUrl("en", "/games")}): small games for two. The first is a deck of question cards played on one phone; games for two phones joined by a link are being built.`,
+    `- [Games](${localizedUrl("en", "/games")}): six card games for two. How well do you know me? and Would you rather? play on one phone passed back and forth or on two phones joined by a four-letter room code; Memory (dealt from stickers or the couple's own photos, which never leave the phone), question cards, truth or dare (soft edition) and a roulette for the chores play on one phone. No downloads, no accounts.`,
     "",
     "## How gifts work",
     "",

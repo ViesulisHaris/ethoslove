@@ -65,7 +65,8 @@ Free stays generous: finding, planning and sharing are never behind it.
 ## 4. Games: growth first, revenue second
 
 A two-phone game invites somebody by link every time it is played, and that somebody lands on
-Ethos. Treat games as the viral loop they are. One deck free; further packs at €1.99 to €2.99 or
+Ethos. Treat games as the viral loop they are. The six games are free and stay free; further card
+packs (more questions, a bolder dare deck, a couple's quiz about the two of you) at €1.99 to €2.99 or
 in the subscription. Which packs to write, and how grown-up any of them gets, is a brand decision
 for you, not a technical one.
 

@@ -61,7 +61,7 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
             <EmojiPicker onPick={insert} label={t("fields.emoji")} />
             <div className="ml-auto">
               {aiEnabled ? (
-                <button type="button" onClick={() => setHelperOpen(true)} className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 text-[13px] font-medium text-ink hover:bg-rose md:h-8 md:px-3 md:text-xs">
+                <button type="button" onClick={() => setHelperOpen(true)} className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 text-[13px] font-medium text-ink hover:bg-rose-tint md:h-8 md:px-3 md:text-xs">
                   <Sparkles className="size-3.5 text-coral" />
                   {t("fields.helpWrite")}
                 </button>

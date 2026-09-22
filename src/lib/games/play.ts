@@ -11,7 +11,8 @@ export type Player = 0 | 1;
 
 /** For each question each player gives two answers: their own, and their guess at the other's. */
 export type KnowAnswer = { self: number; guess: number };
-export type KnowState = { game: "know"; round: number; answers: [Record<string, KnowAnswer>, Record<string, KnowAnswer>]; order: string[] };
+/** `gen` counts restarts, so a phone can tell a fresh game from the last one. */
+export type KnowState = { game: "know"; gen: number; round: number; answers: [Record<string, KnowAnswer>, Record<string, KnowAnswer>]; order: string[] };
 
 export const KNOW_ROUNDS = 8;
 
@@ -36,8 +37,8 @@ export function shuffle<T>(items: T[], seed: number): T[] {
 
 export const seedOf = (code: string): number => [...code].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-export function newKnow(seed: number): KnowState {
-  return { game: "know", round: 0, answers: [{}, {}], order: shuffle(KNOW_QUESTIONS, seed).slice(0, KNOW_ROUNDS).map((q) => q.id) };
+export function newKnow(seed: number, gen = 0): KnowState {
+  return { game: "know", gen, round: 0, answers: [{}, {}], order: shuffle(KNOW_QUESTIONS, seed + gen * 7919).slice(0, KNOW_ROUNDS).map((q) => q.id) };
 }
 
 export const knowQuestion = (state: KnowState) => KNOW_QUESTIONS.find((q) => q.id === state.order[state.round]) ?? null;
@@ -75,11 +76,11 @@ export function knowScore(state: KnowState): [number, number] {
 
 /* ------------------------------------------------------------------ would you rather */
 
-export type RatherState = { game: "rather"; round: number; picks: [Record<string, 0 | 1>, Record<string, 0 | 1>]; order: string[] };
+export type RatherState = { game: "rather"; gen: number; round: number; picks: [Record<string, 0 | 1>, Record<string, 0 | 1>]; order: string[] };
 export const RATHER_ROUNDS = 10;
 
-export function newRather(seed: number): RatherState {
-  return { game: "rather", round: 0, picks: [{}, {}], order: shuffle(RATHER_PAIRS, seed).slice(0, RATHER_ROUNDS).map((p) => p.id) };
+export function newRather(seed: number, gen = 0): RatherState {
+  return { game: "rather", gen, round: 0, picks: [{}, {}], order: shuffle(RATHER_PAIRS, seed + gen * 7919).slice(0, RATHER_ROUNDS).map((p) => p.id) };
 }
 export const ratherPair = (state: RatherState) => RATHER_PAIRS.find((p) => p.id === state.order[state.round]) ?? null;
 export const ratherPicked = (state: RatherState, player: Player): boolean => state.order[state.round] in state.picks[player];

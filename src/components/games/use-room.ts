@@ -9,7 +9,7 @@ import { playerId } from "@/lib/games/room";
  * nothing kept once both leave. The host (whoever made the code) holds the game and sends the
  * whole state after every move; the guest sends moves. Presence says who is here and by what name.
  */
-export type Peer = { id: string; name: string; host: boolean };
+export type Peer = { id: string; name: string; host: boolean; at: number };
 export type RoomStatus = "off" | "connecting" | "open" | "failed";
 
 type Listener = (payload: unknown, from: string) => void;
@@ -25,6 +25,9 @@ export function useRoom(code: string | null, name: string, host: boolean) {
     if (!code || !name) return;
     let cancelled = false;
     let ch: RealtimeChannel | null = null;
+    // When this phone came in. Every phone sorts the same presence list by it, so all of them agree
+    // which guest arrived first and keeps the seat.
+    const at = Date.now();
     (async () => {
       const { getSupabaseBrowserClient } = await import("@/lib/supabase/client");
       if (cancelled) return;
@@ -33,9 +36,9 @@ export function useRoom(code: string | null, name: string, host: boolean) {
       if (!supabase) return setStatus("failed");
       ch = supabase.channel(`game:${code}`, { config: { presence: { key: me }, broadcast: { self: false } } });
       ch.on("presence", { event: "sync" }, () => {
-        const state = ch!.presenceState<{ name: string; host: boolean }>();
-        const list: Peer[] = Object.entries(state).map(([id, metas]) => ({ id, name: metas[0]?.name ?? "", host: Boolean(metas[0]?.host) }));
-        setPeers(list.sort((a, b) => Number(b.host) - Number(a.host) || a.id.localeCompare(b.id)));
+        const state = ch!.presenceState<{ name: string; host: boolean; at?: number }>();
+        const list: Peer[] = Object.entries(state).map(([id, metas]) => ({ id, name: metas[0]?.name ?? "", host: Boolean(metas[0]?.host), at: Number(metas[0]?.at) || 0 }));
+        setPeers(list.sort((a, b) => Number(b.host) - Number(a.host) || a.at - b.at || a.id.localeCompare(b.id)));
       });
       ch.on("broadcast", { event: "*" }, ({ event, payload }) => {
         const { from, data } = (payload ?? {}) as { from?: string; data?: unknown };
@@ -45,7 +48,7 @@ export function useRoom(code: string | null, name: string, host: boolean) {
       ch.subscribe(async (state) => {
         if (cancelled) return;
         if (state === "SUBSCRIBED") {
-          await ch!.track({ name, host });
+          await ch!.track({ name, host, at });
           setStatus("open");
         } else if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") setStatus("failed");
       });

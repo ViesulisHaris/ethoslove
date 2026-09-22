@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]">, 
 
 /**
  * The front door: dates on a map, gifts that open like a story, a corner for long distance and
- * the games to come. The gifts' own front page, which used to live here, is at /gifts unchanged.
+ * a table of games. The gifts' own front page, which used to live here, is at /gifts unchanged.
  */
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   const { locale } = await params;

@@ -288,7 +288,7 @@ test.describe("the other rooms", () => {
   });
 
   test("games: the question deck deals, runs out and reshuffles", async ({ page }) => {
-    await page.goto("/games");
+    await page.goto("/games/deck");
     const card = page.getByRole("button", { name: /Card 1 of 12/ });
     await expect(card).toBeVisible();
     // One steady button whose name is the card: its number, the question, and what a tap does.
@@ -305,12 +305,23 @@ test.describe("the other rooms", () => {
     await expect(page.getByRole("button", { name: /Card 1 of 12/ })).toBeVisible();
     expect(first).toMatch(/^Card 1 of 12\. .{15,}\? Next card$/);
 
-    await page.goto("/es/games");
+    await page.goto("/es/games/deck");
     await expect(page.getByRole("button", { name: /Carta 1 de 12/ })).toBeVisible();
   });
 });
 
 test.describe("games on one phone", () => {
+  test("the games table deals every game, and each card opens it", async ({ page }) => {
+    await page.goto("/games");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Games for");
+    for (const [name, path] of [["How well do you know me?", "/games/know"], ["Would you rather?", "/games/rather"], ["Memory", "/games/memory"], ["Question cards", "/games/deck"], ["Truth or dare, soft edition", "/games/dare"], ["Dishes roulette", "/games/roulette"]]) {
+      await expect(page.getByRole("link", { name, exact: true })).toHaveAttribute("href", path);
+    }
+    await page.getByRole("link", { name: "Memory", exact: true }).click();
+    await expect(page).toHaveURL(/\/games\/memory$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Memory" })).toBeVisible();
+  });
+
   test("how well do you know me: two players, one phone, a reveal and a score", async ({ page }) => {
     await page.goto("/games/know");
     await page.getByRole("button", { name: /^One phone/ }).click();
@@ -343,9 +354,9 @@ test.describe("games on one phone", () => {
     await page.getByRole("button", { name: "Start" }).click();
     for (let round = 1; round <= 10; round++) {
       await expect(page.getByText(`${round} of 10 · Maya`)).toBeVisible();
-      await page.getByRole("heading", { name: "Would you rather…" }).locator("..").getByRole("button").nth(0).click();
+      await page.getByTestId("choice-a").click();
       await page.getByRole("button", { name: "I'm Marco, go" }).click();
-      await page.getByRole("heading", { name: "Would you rather…" }).locator("..").getByRole("button").nth(round === 1 ? 1 : 0).click();
+      await page.getByTestId(round === 1 ? "choice-b" : "choice-a").click();
       await expect(page.getByRole("heading", { name: round === 1 ? "Not the same." : "Same!" })).toBeVisible();
       await page.getByRole("button", { name: round < 10 ? "Next one" : "See the results" }).click();
       if (round < 10) await page.getByRole("button", { name: "I'm Maya, go" }).click();
@@ -369,6 +380,71 @@ test.describe("games on one phone", () => {
     await expect(page.getByText("For Maya")).toBeVisible();
     await page.getByRole("button", { name: /Done\. Marco's turn/ }).click();
     await expect(page.getByRole("heading", { name: "Marco, truth or dare?" })).toBeVisible();
+  });
+
+  test("memory: a miss passes the turn, a pair scores and goes again, and the board ends in a winner", async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.goto("/games/memory");
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    await expect(page.getByText("Maya's turn")).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Card \d+, face down$/ })).toHaveCount(16);
+
+    // Play it like a person with a perfect memory: remember every face seen, take a known pair when there is one.
+    const card = (n: number) => page.getByRole("button", { name: new RegExp(`^Card ${n}[,:]`) });
+    const names = ["Maya", "Marco"];
+    const seen = new Map<number, string>();
+    const taken = new Set<number>();
+    const flip = async (n: number) => {
+      await card(n).click();
+      const face = ((await card(n).getAttribute("aria-label")) ?? "").split(": ")[1] ?? "";
+      expect(face, `card ${n} turned over`).not.toBe("");
+      seen.set(n, face);
+      return face;
+    };
+    const unseen = (not?: number) => Array.from({ length: 16 }, (_, i) => i + 1).find((n) => !seen.has(n) && n !== not)!;
+    let turn = 0;
+    let checkedMiss = false;
+    let checkedPair = false;
+    while (taken.size < 16) {
+      const open = [...seen].filter(([n]) => !taken.has(n));
+      const known = open.find(([n, f]) => open.some(([m, g]) => m !== n && g === f));
+      let a: number;
+      let b: number;
+      if (known) {
+        a = known[0];
+        b = open.find(([m, g]) => m !== a && g === known[1])![0];
+        await flip(a);
+      } else {
+        a = unseen();
+        const face = await flip(a);
+        b = open.find(([m, g]) => m !== a && g === face)?.[0] ?? unseen(a);
+      }
+      await flip(b);
+      const pair = seen.get(a) === seen.get(b);
+      if (pair) {
+        taken.add(a);
+        taken.add(b);
+        if (!checkedPair && taken.size < 16) {
+          await expect(page.getByText(`A pair! ${names[turn]} goes again`)).toBeVisible();
+          checkedPair = true;
+        }
+      } else {
+        turn = 1 - turn;
+        if (!checkedMiss) {
+          await expect(page.getByText(`Not a pair. ${names[turn]}'s turn`)).toBeVisible();
+          checkedMiss = true;
+        }
+      }
+      // The board takes a moment to settle before the next card can be turned.
+      const rest = Array.from({ length: 16 }, (_, i) => i + 1).find((n) => !taken.has(n));
+      if (rest) await expect(card(rest)).toBeEnabled();
+    }
+    await expect(page.getByText(/^(Maya wins|Marco wins|A draw\. Obviously\.)$/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Deal again" })).toBeVisible();
+    await page.getByRole("button", { name: "Deal again" }).click();
+    await expect(page.getByRole("button", { name: /^Card \d+, face down$/ })).toHaveCount(16);
   });
 
   test("two phones: a room opens with a code and a link to send", async ({ page }) => {

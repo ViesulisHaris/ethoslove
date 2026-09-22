@@ -1206,18 +1206,10 @@
       "cityB": "Madrid"
     },
     "games": {
-      "eyebrow": "Juegos · muy pronto",
+      "eyebrow": "Juegos · seis para jugar ya",
       "title": "Jugaos quién friega los platos.",
-      "blurb": "Juegos rápidos para dos personas que se gustan. Sin descargas: abrís un enlace y a jugar.",
-      "cta": "Ver los primeros juegos",
-      "one": {
-        "title": "Una pantalla",
-        "blurb": "Pasaos el móvil en el sofá."
-      },
-      "two": {
-        "title": "Dos móviles",
-        "blurb": "Envía un enlace y jugad desde donde sea."
-      }
+      "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
+      "cta": "Reparte"
     },
     "closing": {
       "title": "El sábado no se va a planear solo.",
@@ -1272,22 +1264,10 @@
   "games": {
     "meta": {
       "title": "Juegos para dos",
-      "description": "Juegos pequeños para parejas, en un móvil en el sofá o en dos móviles a distancia. Empieza con una baraja de preguntas; vienen más en camino."
+      "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
     },
-    "eyebrow": "Juegos · cinco para jugar ya",
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
-    "sub": "Cosas rápidas a las que jugar con la persona que más te gusta. Sin descargas y sin cuentas: abrís un enlace y ya estáis dentro.",
-    "modes": {
-      "one": {
-        "title": "Una pantalla",
-        "blurb": "Pasaos el móvil en el sofá."
-      },
-      "two": {
-        "title": "Dos móviles",
-        "blurb": "Envía un enlace y jugad desde donde sea."
-      }
-    },
     "deck": {
       "playable": "A este ya se puede jugar",
       "choose": "Elige una baraja",
@@ -1296,22 +1276,15 @@
       "done": "Se acabó la baraja. Habláis un montón.",
       "doneEyebrow": "Fin",
       "again": "Barajar y otra vez",
-      "how": "Quien tenga el móvil la lee en voz alta. Respondéis los dos."
+      "how": "Quien tenga el móvil la lee en voz alta. Respondéis los dos.",
+      "title": "Cartas de preguntas",
+      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leedla en voz alta y respondéis los dos."
     },
     "coming": {
-      "eyebrow": "Todavía por llegar",
-      "title": "Lo siguiente en la lista.",
-      "memory": {
-        "title": "Memory, con vuestras fotos",
-        "blurb": "El juego de parejas de toda la vida, repartido desde tu propio carrete."
-      },
       "draw": {
         "title": "Dibuja y adivina",
         "blurb": "Uno dibuja con el dedo y el otro adivina, en directo, desde donde sea."
-      },
-      "meanwhile": "Mientras tanto:",
-      "dates": "Planear una cita",
-      "gifts": "Crear un regalo"
+      }
     },
     "lobby": {
       "one": {
@@ -1336,7 +1309,9 @@
         "waiting": "Esperando a que abra el enlace…",
         "here": "{name} está aquí",
         "hostStarts": "{name} empieza la partida desde su móvil.",
-        "failed": "No se ha podido abrir la sala. Comprueba la conexión y prueba otra vez."
+        "failed": "No se ha podido abrir la sala. Comprueba la conexión y prueba otra vez.",
+        "full": "Esta sala ya tiene dos jugadores. Pide un enlace nuevo.",
+        "waitingHost": "Esperando a quien creó la sala…"
       },
       "you": "Tu nombre",
       "them": "Su nombre",
@@ -1345,7 +1320,9 @@
       "back": "Atrás",
       "shareText": "{name} quiere jugar contigo",
       "copyFallback": "Copia este enlace:",
-      "privacy": "No se guarda nada. La sala existe mientras estáis los dos y desaparece al salir."
+      "privacy": "No se guarda nada. La sala existe mientras estáis los dos y desaparece al salir.",
+      "change": "Cambiar de jugadores",
+      "left": "{name} ha salido de la sala. Esperando a que vuelva…"
     },
     "know": {
       "title": "¿Cuánto me conoces?",
@@ -1402,7 +1379,8 @@
         "sub": "Coincidisteis en {same} de {total}. Los demás son la conversación.",
         "again": "Jugar otra vez",
         "date": "Planear una cita"
-      }
+      },
+      "or": "o"
     },
     "roulette": {
       "title": "La ruleta de los platos",
@@ -1422,16 +1400,50 @@
       "dare": "Reto",
       "for": "Para {name}",
       "done": "Hecho. Turno de {name}",
-      "soft": "Doce de cada, en un orden nuevo cada vez."
+      "soft": "Doce de cada, en un orden nuevo cada vez.",
+      "left": "Quedan {n}"
     },
     "play": {
-      "eyebrow": "Para jugar ya",
-      "title": "Cinco juegos, listos.",
-      "one": "Un móvil",
-      "two": "Uno o dos móviles",
-      "deckTitle": "Cartas de preguntas",
-      "deckBlurb": "Tres barajas. Pasaos el móvil, leedla en voz alta y respondéis los dos.",
+      "one": "1 móvil",
+      "two": "1 o 2 móviles",
       "cta": "Jugar"
+    },
+    "hub": {
+      "eyebrow": "Noche de juegos para dos",
+      "sub": "Seis juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "one": "Pasaos un móvil",
+      "two": "O dos móviles, un enlace",
+      "deal": "Reparte",
+      "pickTitle": "Elige un juego",
+      "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
+      "minutes": "{n} min",
+      "soon": "Pronto"
+    },
+    "memory": {
+      "title": "Memory",
+      "blurb": "El juego de parejas para dos. Da la vuelta a dos cartas; si son pareja son tuyas y repites. Con nuestras pegatinas o con vuestras fotos.",
+      "turn": "Turno de {name}",
+      "pair": "¡Pareja! {name} repite",
+      "miss": "No son pareja. Turno de {name}",
+      "winner": "Gana {name}",
+      "tie": "Empate. Cómo no.",
+      "again": "Repartir otra vez",
+      "photos": "Usar nuestras fotos",
+      "photosAgain": "Cambiar fotos",
+      "photo": "foto {n}",
+      "cardDown": "Carta {n}, boca abajo",
+      "cardUp": "Carta {n}: {face}",
+      "rules": "Las fotos se quedan en este móvil. No se sube nada.",
+      "faces": {
+        "heart": "un corazón",
+        "cherries": "cerezas",
+        "strawberry": "una fresa",
+        "bow": "un lazo",
+        "daisy": "una margarita",
+        "kiss": "un beso",
+        "butterfly": "una mariposa",
+        "cake": "una tarta"
+      }
     }
   },
   "forTwo": {

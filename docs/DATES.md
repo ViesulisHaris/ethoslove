@@ -13,7 +13,7 @@ the gifts site in production is `reasj2/ethoslove`, which this one pulls from an
 | `/plan` | The date being planned: editable when it is theirs, read-only when it came in a link. |
 | `/gifts` | What used to be the homepage, unchanged. `/templates`, `/occasions`, `/pricing` are as they were. |
 | `/long-distance` | Meet in the middle, clocks, dates for two screens, gifts for the distance. |
-| `/games` | One playable deck of question cards, and what is being built. |
+| `/games` | Six card games for two, on the table: pick one and play. |
 
 ## How a date is made
 
@@ -89,15 +89,30 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 
 ## Games
 
-Five to play, at `/games`. The deck of question cards (one phone). **How well do you know me?** and
-**Would you rather?** run on one phone passed back and forth or on two phones joined by a room
-code: a room is a Supabase Realtime channel named after its four-letter code (`use-room.ts`), with
-presence for who is here and broadcast for the moves. No table, no row: the room exists while both
-are in it. The host (whoever made the code) holds the game state and sends it after every move; the
-guest sends moves (`use-synced.ts`). The game logic itself is pure (`src/lib/games/play.ts`) and
-runs identically in both modes, so it is unit-tested once. **Dishes roulette** and **Truth or dare,
-soft edition** are one-screen games. Memory and Draw-it are still to come, and say so.
-Tested for real in two tabs of one browser: room, join, answer on both, reveal, guest-driven next.
+Six to play, at `/games`, all of them card games on a dark wine table (`GameTable`). The deck is in
+`src/components/games/cards.tsx`: a `PlayingCard` with corner ranks, a patterned back and a 3D turn
+(`.card-3d` in globals.css); `GameHand` fans the six, sized in container units so it fits any
+column; `Chip` is a score token. Which games exist, and the rank, suit, sticker and minutes each is
+dealt with, is one list: `src/lib/games/catalogue.ts`, read by the hub, the home page's band and
+the sitemap. Adding a game means a row there, a page, and its strings.
+
+**How well do you know me?** and **Would you rather?** run on one phone passed back and forth or on
+two phones joined by a room code: a room is a Supabase Realtime channel named after its four-letter
+code (`use-room.ts`), with presence for who is here and broadcast for the moves. No table, no row:
+the room exists while both are in it. The host (whoever made the code) holds the game state and
+sends it after every move, addressed to the one guest it is playing with; the guest sends moves
+(`use-synced.ts`), and `restart()` deals a fresh game in the same room. Presence carries the moment
+each phone arrived, so every phone sorts the same list the same way and agrees that **the first
+guest in keeps the seat**: a third phone on the link is told the room is full and is never sent the
+game. **Memory** (eight pairs, from our stickers or from photos the couple picks, which stay in the
+browser as object URLs and are never uploaded), **question cards**, **Truth or dare, soft edition**
+and **Dishes roulette** are one-phone games. Draw-it is still to come, and says so.
+
+The game logic is pure (`src/lib/games/play.ts`, `memory.ts`) and runs identically in both modes,
+so it is unit-tested once. `ScreenTop` scrolls each new screen up under the header — without it a
+phone starts the next question halfway down the page. Two phones are tested for real in
+`tests/e2e/games-rooms.spec.ts`: three browser contexts, a full ten rounds, the third turned away,
+play again, and one phone leaving.
 
 ## Ethos for Two
 

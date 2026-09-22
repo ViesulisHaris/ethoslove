@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CHORES, DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
 import { knowFinished, knowQuestion, knowReduce, knowRoundDone, knowScore, newKnow, newRather, ratherFinished, ratherMatches, ratherReduce, seedOf, shuffle } from "@/lib/games/play";
+import { MEMORY_PAIRS, memoryDone, memoryFlip, memoryIsPair, memoryResolve, newMemory, type MemoryState } from "@/lib/games/memory";
 import { makeRoomCode, parseRoomCode, playerId } from "@/lib/games/room";
 
 describe("room codes", () => {
@@ -48,6 +49,15 @@ describe("how well do you know me", () => {
     expect(shuffle([1, 2, 3, 4, 5], 9).sort()).toEqual([1, 2, 3, 4, 5]);
   });
 
+  it("deals a fresh game when the room plays again, the same one on both phones", () => {
+    const first = newKnow(seedOf("KJQD"), 0);
+    const again = newKnow(seedOf("KJQD"), 1);
+    expect(again.gen).toBe(1);
+    expect(again.order).not.toEqual(first.order);
+    expect(newKnow(seedOf("KJQD"), 1).order).toEqual(again.order);
+    expect(newRather(seedOf("KJQD"), 1).order).not.toEqual(newRather(seedOf("KJQD"), 0).order);
+  });
+
   it("scores guesses about the other person, one answer per player per round, and ignores nonsense", () => {
     let s = newKnow(1);
     const q = knowQuestion(s)!;
@@ -91,5 +101,74 @@ describe("would you rather", () => {
     s = ratherReduce(s, { type: "next" });
     expect(ratherFinished(s)).toBe(true);
     expect(ratherMatches(s)).toEqual({ same: 9, answered: 10 });
+  });
+});
+
+describe("memory", () => {
+  /** The two slots holding pair `face`. */
+  const slotsOf = (s: MemoryState, face: number) => s.cards.flatMap((c, i) => (c === face ? [i] : []));
+
+  it("deals every pair exactly twice, the same way for the same seed", () => {
+    const s = newMemory(seedOf("PAIR"));
+    expect(s.cards).toHaveLength(MEMORY_PAIRS * 2);
+    for (let face = 0; face < MEMORY_PAIRS; face++) expect(slotsOf(s, face)).toHaveLength(2);
+    expect(newMemory(seedOf("PAIR")).cards).toEqual(s.cards);
+    expect(newMemory(seedOf("PEAR")).cards).not.toEqual(s.cards);
+    expect(memoryDone(s)).toBe(false);
+  });
+
+  it("gives a pair to whoever found it and lets them go again", () => {
+    let s = newMemory(7);
+    const [a, b] = slotsOf(s, 3);
+    s = memoryFlip(memoryFlip(s, a), b);
+    expect(memoryIsPair(s)).toBe(true);
+    s = memoryResolve(s);
+    expect(s.matched[a]).toBe(0);
+    expect(s.matched[b]).toBe(0);
+    expect(s.scores).toEqual([1, 0]);
+    expect(s.turn).toBe(0);
+    expect(s.open).toEqual([]);
+    // A taken card can't be turned over again.
+    expect(memoryFlip(s, a)).toBe(s);
+  });
+
+  it("turns a miss back over and passes the turn", () => {
+    let s = newMemory(7);
+    const a = slotsOf(s, 0)[0];
+    const b = slotsOf(s, 1)[0];
+    s = memoryFlip(memoryFlip(s, a), b);
+    expect(memoryIsPair(s)).toBe(false);
+    s = memoryResolve(s);
+    expect(s.open).toEqual([]);
+    expect(s.turn).toBe(1);
+    expect(s.scores).toEqual([0, 0]);
+    expect(s.matched.every((m) => m === null)).toBe(true);
+  });
+
+  it("ignores a card already up, a third card, a slot off the board, and settling one card", () => {
+    let s = newMemory(7);
+    const a = slotsOf(s, 0)[0];
+    const b = slotsOf(s, 1)[0];
+    const c = slotsOf(s, 2)[0];
+    s = memoryFlip(s, a);
+    expect(memoryFlip(s, a)).toBe(s);
+    expect(memoryResolve(s)).toBe(s);
+    expect(memoryFlip(s, -1)).toBe(s);
+    expect(memoryFlip(s, 99)).toBe(s);
+    s = memoryFlip(s, b);
+    expect(memoryFlip(s, c)).toBe(s);
+  });
+
+  it("ends when every pair is taken, and the scores add up to the pairs", () => {
+    let s = newMemory(seedOf("DONE"));
+    for (let face = 0; face < MEMORY_PAIRS; face++) {
+      const [a, b] = slotsOf(s, face);
+      // Every other pair, miss first so the turn changes hands.
+      if (face % 2) s = memoryResolve(memoryFlip(memoryFlip(s, a), slotsOf(s, (face + 1) % MEMORY_PAIRS)[0]));
+      s = memoryResolve(memoryFlip(memoryFlip(s, a), b));
+    }
+    expect(memoryDone(s)).toBe(true);
+    expect(s.scores[0] + s.scores[1]).toBe(MEMORY_PAIRS);
+    expect(s.scores[1]).toBeGreaterThan(0);
   });
 });

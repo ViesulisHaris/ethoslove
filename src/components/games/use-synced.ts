@@ -5,55 +5,98 @@ import type { Session } from "./lobby";
 import type { useRoom } from "./use-room";
 
 /**
- * A game's state, kept where the session says: on one phone it is simply here; on two, the host
- * keeps it and sends it after every move, and the guest sends moves and takes what comes back.
- * A guest who arrives late (or reloads) says hello and gets the whole state again.
+ * A game's state, kept where the session says. On one phone it is simply here. On two, the host
+ * keeps it and sends it after every move; the guest sends moves and takes what comes back, and
+ * says hello until it has something (a guest who reloads gets the whole game again). Only the
+ * other player's messages count, and every state is addressed to that player: a third phone on
+ * the link can watch nothing and change nothing.
+ * `restart` deals a fresh game in the same room, so "play again" needs no new link.
  */
-export function useSynced<S, M>(session: Session, room: ReturnType<typeof useRoom>, initial: () => S, reduce: (state: S, move: M) => S) {
-  const [state, setState] = useState<S>(initial);
+export function useSynced<S, M>(session: Session, room: ReturnType<typeof useRoom>, make: (generation: number) => S, reduce: (state: S, move: M) => S) {
+  const [state, setState] = useState<S>(() => make(0));
   const latest = useRef(state);
+  const generation = useRef(0);
+  const makeRef = useRef(make);
+  const reduceRef = useRef(reduce);
   useEffect(() => {
     latest.current = state;
   }, [state]);
+  useEffect(() => {
+    makeRef.current = make;
+    reduceRef.current = reduce;
+  });
+
   const guest = session.mode === "two" && !session.host;
   const host = session.mode === "two" && session.host;
   const [waiting, setWaiting] = useState(guest);
+  const waitingRef = useRef(waiting);
+  useEffect(() => {
+    waitingRef.current = waiting;
+  }, [waiting]);
+  const { on, send, me } = room;
+  const push = useCallback((next: S) => send("state", { to: session.peer, state: next }), [send, session.peer]);
+
+  const apply = useCallback(
+    (next: S) => {
+      latest.current = next;
+      setState(next);
+      if (host) push(next);
+    },
+    [host, push],
+  );
 
   const dispatch = useCallback(
     (move: M) => {
-      if (guest) return room.send("move", move);
-      const next = reduce(latest.current, move);
-      latest.current = next;
-      setState(next);
-      if (host) room.send("state", next);
+      if (guest) return send("move", move);
+      apply(reduceRef.current(latest.current, move));
     },
-    [guest, host, reduce, room],
+    [guest, send, apply],
   );
+
+  const restart = useCallback(() => {
+    if (guest) return send("restart", null);
+    generation.current += 1;
+    apply(makeRef.current(generation.current));
+  }, [guest, send, apply]);
 
   useEffect(() => {
     if (session.mode !== "two") return;
+    const fromPeer = (from: string) => !session.peer || from === session.peer;
     if (host) {
-      const offMove = room.on("move", (payload) => {
-        const next = reduce(latest.current, payload as M);
-        latest.current = next;
-        setState(next);
-        room.send("state", next);
-      });
-      const offHello = room.on("hello", () => room.send("state", latest.current));
-      room.send("state", latest.current);
-      return () => {
-        offMove();
-        offHello();
-      };
+      const offs = [
+        on("move", (payload, from) => {
+          if (fromPeer(from)) apply(reduceRef.current(latest.current, payload as M));
+        }),
+        on("restart", (_payload, from) => {
+          if (!fromPeer(from)) return;
+          generation.current += 1;
+          apply(makeRef.current(generation.current));
+        }),
+        on("hello", (_payload, from) => {
+          if (fromPeer(from)) push(latest.current);
+        }),
+      ];
+      push(latest.current);
+      return () => offs.forEach((off) => off());
     }
-    const off = room.on("state", (payload) => {
-      latest.current = payload as S;
-      setState(payload as S);
+    const off = on("state", (payload, from) => {
+      const { to, state: next } = (payload ?? {}) as { to?: string; state?: S };
+      if (!fromPeer(from) || to !== me || next === undefined) return;
+      latest.current = next;
+      setState(next);
       setWaiting(false);
     });
-    room.send("hello", null);
-    return off;
-  }, [session.mode, host, room, reduce]);
+    send("hello", null);
+    // Until the first state arrives, keep asking: the host may have been mid-reload.
+    const retry = window.setInterval(() => {
+      if (!waitingRef.current) return window.clearInterval(retry);
+      send("hello", null);
+    }, 1500);
+    return () => {
+      off();
+      window.clearInterval(retry);
+    };
+  }, [session.mode, session.peer, host, me, on, send, push, apply]);
 
-  return { state, dispatch, waiting };
+  return { state, dispatch, restart, waiting };
 }

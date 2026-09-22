@@ -508,3 +508,38 @@
 .maplibregl-ctrl-attrib {
   font-size: 11px;
 }
+
+/* ------------------------------------------------------------------ */
+/* Games: a card turns over in 3D. The face sets the size; the back    */
+/* lies over it, turned away. Reduced motion makes the turn instant.   */
+/* ------------------------------------------------------------------ */
+.card-3d {
+  perspective: 1400px;
+}
+.card-3d > .card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease-out-quint);
+}
+.card-3d.is-flipped > .card-inner {
+  transform: rotateY(180deg);
+}
+.card-3d .card-face,
+.card-3d .card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-3d .card-back {
+  transform: rotateY(180deg);
+}
+
+/* A card dealt onto the table. */
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    translate: 0 -28px;
+    rotate: -4deg;
+  }
+}
+.deal-in {
+  animation: deal-in 0.55s var(--ease-out-quint) both;
+}

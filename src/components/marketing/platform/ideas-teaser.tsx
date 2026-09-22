@@ -21,7 +21,8 @@ export async function IdeasTeaser() {
         </div>
         <div className="lg:col-span-5 lg:pb-1">
           <p className="max-w-md text-lg leading-relaxed text-forest/70">{t("blurb")}</p>
-          <Link href="/dates" className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
+          {/* min-h-11: a line of 14px text is a 20px tap target, which is half of what a thumb needs. */}
+          <Link href="/dates" className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
             {t("all", { count: IDEAS.length })}
             <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>

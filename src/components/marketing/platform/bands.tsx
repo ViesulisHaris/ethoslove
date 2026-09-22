@@ -2,6 +2,9 @@ import { ArrowRight, Smartphone, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
+import { TableFelt } from "@/components/games/cards";
+import { GameHand } from "@/components/games/game-hand";
+import { GAMES, type GameKey } from "@/lib/games/catalogue";
 
 /** Long distance, on the dark ground: two dots and the arc between them. */
 export async function LongDistanceBand() {
@@ -46,31 +49,35 @@ export async function LongDistanceBand() {
   );
 }
 
-/** Games, before there are games: what is coming, and the two ways to play. */
+/** Games: the whole hand of them on a little card table, and the two ways to play. */
 export async function GamesBand() {
   const t = await getTranslations("platform.games");
+  const tg = await getTranslations("games");
+  const titles = Object.fromEntries(GAMES.map((g) => [g.key, tg(`${g.key}.title`)])) as Record<GameKey, string>;
   return (
     <section className="bg-paper py-20 lg:py-28">
       <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-        <div className="order-2 grid grid-cols-2 gap-4 lg:order-1">
-          {(["one", "two"] as const).map((mode, i) => {
-            const Icon = i === 0 ? Users : Smartphone;
-            return (
-              <div key={mode} className="rounded-[26px] p-6 shadow-soft" style={{ background: i === 0 ? "linear-gradient(160deg,#E6E0F8,#D2C8F0)" : "linear-gradient(160deg,#FCE0EE,#F5BFD9)", rotate: i === 0 ? "-2deg" : "2deg" }}>
-                <Icon aria-hidden="true" className="size-8 text-forest/80" strokeWidth={1.6} />
-                <p className="mt-10 font-display text-[22px] leading-tight text-forest">{t(`${mode}.title`)}</p>
-                <p className="mt-2 text-[14px] leading-snug text-forest/70">{t(`${mode}.blurb`)}</p>
-              </div>
-            );
-          })}
+        <div className="relative isolate order-2 overflow-hidden rounded-[32px] bg-[#200b18] px-4 pt-6 pb-2 shadow-lift sm:px-10 sm:pt-10 lg:order-1">
+          <TableFelt />
+          <GameHand titles={titles} label={tg("hub.pickTitle")} />
         </div>
         <div className="order-1 lg:order-2">
           <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
-          <Link href="/games" className="group mt-7 inline-flex items-center gap-1.5 text-[15px] font-semibold text-lilac underline-offset-4 hover:underline">
+          <div className="mt-6 flex flex-wrap gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full bg-forest/[0.06] px-4 py-2 text-[13.5px] font-semibold text-forest/80">
+              <Users aria-hidden="true" className="size-4 text-rose-deep" />
+              {tg("hub.one")}
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-forest/[0.06] px-4 py-2 text-[13.5px] font-semibold text-forest/80">
+              <Smartphone aria-hidden="true" className="size-4 text-rose-deep" />
+              {tg("hub.two")}
+            </span>
+          </div>
+          <Link href="/games" className="btn-rose mt-8 inline-flex h-13 items-center gap-2 rounded-full px-7 text-base font-semibold">
             {t("cta")}
-            <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
+            <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>
       </div>
