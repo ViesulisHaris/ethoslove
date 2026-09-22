@@ -1,0 +1,93 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "3 days marco"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "u posted a gym story on day 2"
+        },
+        {
+          "from": "them",
+          "text": "so ur watching my stories now"
+        },
+        {
+          "from": "me",
+          "text": "i just wanted to know u were alive"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i needed space. u know what ur like when u get going"
+        },
+        {
+          "from": "them",
+          "text": "anyway i made u this while i was thinking"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (i was thinking about u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Something that took three days to make: photos of the two of them, or the letter. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u made this during the 3 days?"
+        },
+        {
+          "from": "them",
+          "text": "yeah. thats what i was doing"
+        },
+        {
+          "from": "me",
+          "text": "u couldnt send one text"
+        },
+        {
+          "from": "them",
+          "text": "i was making u that"
+        },
+        {
+          "from": "me",
+          "text": "ok thats actually so sweet. im sorry i panicked"
+        },
+        {
+          "from": "me",
+          "text": "i rang dan. i sat outside urs for a bit"
+        },
+        {
+          "from": "them",
+          "text": "u did what"
+        },
+        {
+          "from": "them",
+          "text": "dont ever ring my mates about me again"
+        }
+      ]
+    }
+  ]
+}

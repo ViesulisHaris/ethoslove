@@ -1,0 +1,93 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:19",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u posted dans dog"
+        },
+        {
+          "from": "them",
+          "text": "and?"
+        },
+        {
+          "from": "me",
+          "text": "we've been together 14 months marco"
+        },
+        {
+          "from": "them",
+          "text": "im not putting my private life on there"
+        },
+        {
+          "from": "me",
+          "text": "the dog is private life?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur really doing this over instagram"
+        },
+        {
+          "from": "them",
+          "text": "i was up til 2 making u this. thats worth more than a post"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (the people that matter)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Photos of the two of them, the more the better: the post he won't make, made privately. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its beautiful. i know it is"
+        },
+        {
+          "from": "me",
+          "text": "i just want people to know im urs"
+        },
+        {
+          "from": "them",
+          "text": "the people that matter know"
+        },
+        {
+          "from": "them",
+          "text": "i show u off in real life. thats the bit that counts"
+        },
+        {
+          "from": "me",
+          "text": "ur right. sorry. its silly"
+        },
+        {
+          "from": "them",
+          "text": "and take ur story down"
+        },
+        {
+          "from": "me",
+          "text": "which one"
+        },
+        {
+          "from": "them",
+          "text": "the one with my hoodie in it"
+        }
+      ]
+    }
+  ]
+}

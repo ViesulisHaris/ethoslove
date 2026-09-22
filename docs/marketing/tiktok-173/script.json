@@ -1,0 +1,94 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:38",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u said 8"
+        },
+        {
+          "from": "them",
+          "text": "i never said 8"
+        },
+        {
+          "from": "me",
+          "text": "marco i have the text"
+        },
+        {
+          "from": "them",
+          "text": "ur really going to screenshot me"
+        },
+        {
+          "from": "me",
+          "text": "i didnt have to. its right there"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur obsessed with being right"
+        },
+        {
+          "from": "them",
+          "text": "i was going to send u this tonight. u've ruined it now"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (i do listen)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The letter, long, in his handwriting font: it has to read like a man who listens. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is gorgeous"
+        },
+        {
+          "from": "me",
+          "text": "i still think u said 8 tho"
+        },
+        {
+          "from": "them",
+          "text": "ok. so im a liar and ur perfect"
+        },
+        {
+          "from": "them",
+          "text": "ask anyone. they'll tell u ur exhausting"
+        },
+        {
+          "from": "me",
+          "text": "ok. maybe i got it wrong. sorry"
+        },
+        {
+          "from": "them",
+          "text": "whats the folder called maya"
+        },
+        {
+          "from": "me",
+          "text": "what folder"
+        },
+        {
+          "from": "them",
+          "text": "the one on ur phone",
+          "status": "Read|01:04"
+        }
+      ]
+    }
+  ]
+}

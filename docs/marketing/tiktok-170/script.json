@@ -1,0 +1,93 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "did u ring the agent back"
+        },
+        {
+          "from": "them",
+          "text": "which one"
+        },
+        {
+          "from": "me",
+          "text": "the flat. the one we saw in march"
+        },
+        {
+          "from": "them",
+          "text": "ur still on about that"
+        },
+        {
+          "from": "me",
+          "text": "u said we'd have keys by summer marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i dont want to argue about a flat"
+        },
+        {
+          "from": "them",
+          "text": "i've been doing something better anyway. for us"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (this time next year)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The frame that looks like a future: the countdown, or the long letter about the two of them. It has to look like he means it. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this time next year?"
+        },
+        {
+          "from": "them",
+          "text": "yes. when things settle down"
+        },
+        {
+          "from": "me",
+          "text": "u said that last march"
+        },
+        {
+          "from": "them",
+          "text": "u keep a list?"
+        },
+        {
+          "from": "me",
+          "text": "no. i just remember"
+        },
+        {
+          "from": "them",
+          "text": "this is why i dont make plans with u"
+        },
+        {
+          "from": "me",
+          "text": "ok. im sorry. i do love it"
+        },
+        {
+          "from": "them",
+          "text": "dont tell ur mum about this one til its real"
+        }
+      ]
+    }
+  ]
+}

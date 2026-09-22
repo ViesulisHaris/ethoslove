@@ -1,0 +1,93 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who picked the photos"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "the ones in my present. that beach one isnt even on my phone"
+        },
+        {
+          "from": "them",
+          "text": "amy helped me. she has a good eye"
+        },
+        {
+          "from": "me",
+          "text": "amy from work amy?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "unbelievable. i make u something and this is what u do with it"
+        },
+        {
+          "from": "them",
+          "text": "she spent her lunch on this. for U"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my favourite person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The most beautiful one you have, with photos: the whole point is that it is gorgeous and she cannot enjoy it. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it is beautiful. i just cant look at it now"
+        },
+        {
+          "from": "them",
+          "text": "thats on u"
+        },
+        {
+          "from": "them",
+          "text": "amy said ur so lucky btw"
+        },
+        {
+          "from": "me",
+          "text": "i went on her page. i know i shouldnt have"
+        },
+        {
+          "from": "me",
+          "text": "she put 3 fire emojis on ur gym pic in june"
+        },
+        {
+          "from": "them",
+          "text": "and there it is"
+        },
+        {
+          "from": "me",
+          "text": "sorry. im being weird. i love it i promise"
+        },
+        {
+          "from": "them",
+          "text": "dont make it awkward with amy. she thinks ur lovely"
+        }
+      ]
+    }
+  ]
+}

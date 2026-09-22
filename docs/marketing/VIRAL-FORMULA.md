@@ -883,7 +883,7 @@ Two rules that come out of it:
 - **Reply to "break up" in character, every time.** It is the cheapest comment to write, so there
   are hundreds, and each reply is another notification pulling somebody back to the post.
 
-## The other engine: he is the problem (164, 167 to 169)
+## The other engine: he is the problem (164, 167 to 175)
 
 156 to 163 are two silly crimes and a happy mess. 164 is the story the app argues about most:
 **he did something wrong, and the gift is how he gets out of it.** He followed a girl at 1:47am
@@ -915,7 +915,37 @@ Rules for this register, because it cuts both ways:
   delete it"). The account is never on his side, and never lectures either: the viewers do that.
 - **One at a time.** It is a reach post: the most comments of the batch and the fewest sales.
   It brings people to the account, where the next post sells. Never two in a row, and never let it
-  become the account's voice. Four of these exist now (164, 167, 168, 169): that is a month's supply.
+  become the account's voice.
+
+### Six more tactics: 170 to 175
+
+Ten of these exist now, which is a quarter's supply at one a week with lighter posts between them,
+not a fortnight of them. Each is one tactic, named, with nothing carried over between stories:
+
+| | The tactic | His line for it | Her crime, confessed | Last words |
+|---|---|---|---|---|
+| 170 | future faking: the flat that is always next year | "u keep a list?" / "this is why i dont make plans with u" | told her mum they were moving, twice | "dont tell ur mum about this one til its real" |
+| 171 | the silent treatment, and the gift he made during it | "i needed space. u know what ur like when u get going" | rang his mate, sat outside his flat "for a bit" | "dont ever ring my mates about me again" |
+| 172 | he won't post her; the gift is the private version | "i show u off in real life. thats the bit that counts" | keeps checking a grid with his mate's dog on it | "take ur story down. the one with my hoodie in it" |
+| 173 | gaslighting: a time, denied, with the text right there | "ask anyone. they'll tell u ur exhausting" | a screenshot folder called "just in case" | "whats the folder called maya" · Read 01:04 |
+| 174 | triangulation: a colleague picked the photos | "amy said ur so lucky btw" | went through Amy's page; found 3 fire emojis | "dont make it awkward with amy. she thinks ur lovely" |
+| 175 | conditional love: the gift as the price of leaving | "i cant do distance. u know that about me" | emailed HR at 1am and told him after | "smart girl. told u we'd sort it" |
+
+What makes these ones work, on top of the rules above:
+
+- **The tactic has to have a name a viewer already knows** — future faking, the silent treatment,
+  gaslighting — because the comment section is people teaching each other the word for it. That is
+  the sharing mechanism: somebody sends it to a friend with "this is literally X".
+- **No props.** No boxes, no rings, no set pieces. A flat viewing, a gym story, a colleague at
+  lunch, an email to HR. The moment a viewer has to work out what object is being described, the
+  story is over.
+- **One small verifiable fact, denied or dodged**: 8 o'clock, day 2, the beach photo, March. The
+  fight is never about feelings, which is what makes it feel real and keeps it short.
+- **She is the one who closes the loop against herself** — she apologises, cancels, deletes,
+  emails. Nothing the viewer wants to happen happens inside the post, and that is what the
+  comments are for.
+- **172 and 175 are the two with something to buy inside them** (a post he won't make, a goodbye
+  he is buying off). 174 has an anniversary in it. The rest are pure reach.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 

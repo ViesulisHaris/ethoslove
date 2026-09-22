@@ -1,0 +1,93 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i got dublin"
+        },
+        {
+          "from": "them",
+          "text": "got what"
+        },
+        {
+          "from": "me",
+          "text": "the 3 month placement. i told u about it in august"
+        },
+        {
+          "from": "them",
+          "text": "when were u going to ask me"
+        },
+        {
+          "from": "me",
+          "text": "i didnt think i had to ask"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u do what u want anyway. u always do"
+        },
+        {
+          "from": "them",
+          "text": "i made u this before u told me. read it before u decide"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (stay)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The one about the two of them and everything they have: it is being used as the price of leaving. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is the nicest thing anyone has made me"
+        },
+        {
+          "from": "them",
+          "text": "i just wanted u to see what ur leaving"
+        },
+        {
+          "from": "me",
+          "text": "its 3 months. its not leaving"
+        },
+        {
+          "from": "them",
+          "text": "i cant do distance. u know that about me"
+        },
+        {
+          "from": "me",
+          "text": "i emailed hr. i said no. its done"
+        },
+        {
+          "from": "them",
+          "text": "u didnt have to do that"
+        },
+        {
+          "from": "me",
+          "text": "i know. i wanted to"
+        },
+        {
+          "from": "them",
+          "text": "smart girl. told u we'd sort it"
+        }
+      ]
+    }
+  ]
+}
