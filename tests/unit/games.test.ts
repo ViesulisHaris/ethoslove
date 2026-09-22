@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CHORES, DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
 import { knowFinished, knowQuestion, knowReduce, knowRoundDone, knowScore, newKnow, newRather, ratherFinished, ratherMatches, ratherReduce, seedOf, shuffle } from "@/lib/games/play";
+import { DRAW_ROUNDS, DRAW_WORDS, drawArtist, drawFinished, drawMatches, drawReduce, drawRoundDone, drawScore, drawWord, newDraw } from "@/lib/games/draw";
 import { MEMORY_PAIRS, memoryDone, memoryFlip, memoryIsPair, memoryResolve, newMemory, type MemoryState } from "@/lib/games/memory";
 import { makeRoomCode, parseRoomCode, playerId } from "@/lib/games/room";
 
@@ -170,5 +171,71 @@ describe("memory", () => {
     expect(memoryDone(s)).toBe(true);
     expect(s.scores[0] + s.scores[1]).toBe(MEMORY_PAIRS);
     expect(s.scores[1]).toBeGreaterThan(0);
+  });
+});
+
+describe("draw it, guess it", () => {
+  it("is complete in both languages, with no word twice", () => {
+    for (const w of DRAW_WORDS) expect(w.word.en && w.word.es, w.id).toBeTruthy();
+    expect(new Set(DRAW_WORDS.map((w) => w.id)).size).toBe(DRAW_WORDS.length);
+    expect(DRAW_WORDS.length).toBeGreaterThan(DRAW_ROUNDS * 2);
+  });
+
+  it("deals the same six words on both phones and takes the drawing in turns", () => {
+    const a = newDraw(seedOf("KJQD"));
+    expect(a.order).toHaveLength(DRAW_ROUNDS);
+    expect(newDraw(seedOf("KJQD")).order).toEqual(a.order);
+    expect(newDraw(seedOf("ABCD")).order).not.toEqual(a.order);
+    expect(newDraw(seedOf("KJQD"), 1).order).not.toEqual(a.order);
+    expect(drawArtist(a)).toBe(0);
+    expect(drawArtist({ ...a, round: 1 })).toBe(1);
+    expect(drawArtist({ ...a, round: 2 })).toBe(0);
+  });
+
+  it("takes a guess in either language, and forgives spelling, accents and articles", () => {
+    const word = DRAW_WORDS.find((w) => w.id === "icecream")!;
+    expect(drawMatches(word, "ice cream")).toBe(true);
+    expect(drawMatches(word, "  ICE CREAM!  ")).toBe(true);
+    expect(drawMatches(word, "helado")).toBe(true);
+    expect(drawMatches(word, "un helado")).toBe(true);
+    expect(drawMatches(word, "icecream")).toBe(true);
+    expect(drawMatches(word, "cake")).toBe(false);
+    expect(drawMatches(word, "")).toBe(false);
+    const phone = DRAW_WORDS.find((w) => w.id === "phone")!;
+    expect(drawMatches(phone, "móvil")).toBe(true);
+    expect(drawMatches(phone, "movil")).toBe(true);
+    expect(drawMatches(phone, "the phone")).toBe(true);
+  });
+
+  it("scores a right guess, ignores the one drawing, and ends the round either way", () => {
+    let s = newDraw(3);
+    const word = drawWord(s)!;
+    // The one drawing can't guess their own word, and a wrong guess just goes on the pile.
+    expect(drawReduce(s, { type: "guess", player: drawArtist(s), text: word.word.en })).toBe(s);
+    s = drawReduce(s, { type: "guess", player: 1, text: "something else" });
+    expect(s.guesses).toHaveLength(1);
+    expect(s.guesses[0].right).toBe(false);
+    expect(drawRoundDone(s)).toBe(false);
+    expect(drawReduce(s, { type: "next" })).toBe(s);
+    s = drawReduce(s, { type: "guess", player: 1, text: word.word.es });
+    expect(drawRoundDone(s)).toBe(true);
+    expect(drawScore(s)).toBe(1);
+    // Once it is got, nothing else lands on that round.
+    expect(drawReduce(s, { type: "guess", player: 1, text: "late" })).toBe(s);
+    expect(drawReduce(s, { type: "pass" })).toBe(s);
+    s = drawReduce(s, { type: "next" });
+    expect(s.round).toBe(1);
+    expect(s.guesses).toEqual([]);
+    s = drawReduce(s, { type: "pass" });
+    expect(drawScore(s)).toBe(1);
+    expect(drawRoundDone(s)).toBe(true);
+    // One phone: whoever is drawing says the other got it.
+    s = drawReduce(drawReduce(s, { type: "next" }), { type: "got" });
+    expect(drawScore(s)).toBe(2);
+    for (let r = 2; r < DRAW_ROUNDS; r++) s = drawReduce(drawReduce(s, { type: "next" }), { type: "pass" });
+    s = drawReduce(s, { type: "next" });
+    expect(drawFinished(s)).toBe(true);
+    expect(drawReduce(s, { type: "next" })).toBe(s);
+    expect(drawScore(s)).toBe(2);
   });
 });

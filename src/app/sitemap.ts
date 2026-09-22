@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
     { path: "/long-distance", priority: 0.8, changeFrequency: "monthly" },
     { path: "/games", priority: 0.7, changeFrequency: "monthly" },
-    ...["know", "rather", "memory", "deck", "dare", "roulette"].map((g): Page => ({ path: `/games/${g}`, priority: 0.6, changeFrequency: "monthly" })),
+    ...["know", "rather", "draw", "memory", "deck", "dare", "roulette"].map((g): Page => ({ path: `/games/${g}`, priority: 0.6, changeFrequency: "monthly" })),
     { path: "/templates", priority: 0.9, changeFrequency: "weekly" },
     { path: "/occasions", priority: 0.8, changeFrequency: "monthly" },
     { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },

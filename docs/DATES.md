@@ -13,7 +13,7 @@ the gifts site in production is `reasj2/ethoslove`, which this one pulls from an
 | `/plan` | The date being planned: editable when it is theirs, read-only when it came in a link. |
 | `/gifts` | What used to be the homepage, unchanged. `/templates`, `/occasions`, `/pricing` are as they were. |
 | `/long-distance` | Meet in the middle, clocks, dates for two screens, gifts for the distance. |
-| `/games` | Six card games for two, on the table: pick one and play. |
+| `/games` | Seven card games for two, on the table: pick one and play. |
 
 ## How a date is made
 
@@ -89,15 +89,15 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 
 ## Games
 
-Six to play, at `/games`, all of them card games on a dark wine table (`GameTable`). The deck is in
+Seven to play, at `/games`, all of them card games on a dark wine table (`GameTable`). The deck is in
 `src/components/games/cards.tsx`: a `PlayingCard` with corner ranks, a patterned back and a 3D turn
-(`.card-3d` in globals.css); `GameHand` fans the six, sized in container units so it fits any
+(`.card-3d` in globals.css); `GameHand` fans them all, sized in container units so it fits any
 column; `Chip` is a score token. Which games exist, and the rank, suit, sticker and minutes each is
 dealt with, is one list: `src/lib/games/catalogue.ts`, read by the hub, the home page's band and
 the sitemap. Adding a game means a row there, a page, and its strings.
 
-**How well do you know me?** and **Would you rather?** run on one phone passed back and forth or on
-two phones joined by a room code: a room is a Supabase Realtime channel named after its four-letter
+**How well do you know me?**, **Would you rather?** and **Draw it, guess it** run on one phone
+passed back and forth or on two phones joined by a room code: a room is a Supabase Realtime channel named after its four-letter
 code (`use-room.ts`), with presence for who is here and broadcast for the moves. No table, no row:
 the room exists while both are in it. The host (whoever made the code) holds the game state and
 sends it after every move, addressed to the one guest it is playing with; the guest sends moves
@@ -106,13 +106,23 @@ each phone arrived, so every phone sorts the same list the same way and agrees t
 guest in keeps the seat**: a third phone on the link is told the room is full and is never sent the
 game. **Memory** (eight pairs, from our stickers or from photos the couple picks, which stay in the
 browser as object URLs and are never uploaded), **question cards**, **Truth or dare, soft edition**
-and **Dishes roulette** are one-phone games. Draw-it is still to come, and says so.
+and **Dishes roulette** are one-phone games.
+
+Draw it, guess it is the one game whose moves are not the synced state: strokes are their own
+broadcasts on the same channel (`ink` a new stroke, `ink+` more points about once a frame, `ink=`
+the whole paper, `ink0` a wipe, `ink?` "what have I missed"), and points are fractions of the board
+rather than pixels, so a finger on a phone and a mouse on a laptop draw the same picture. The word
+is only ever on the screen of whoever is drawing; on one phone it is peeked at behind a hand-over
+card and then hidden. A guess counts in either language, so two phones set to different ones can
+still play.
 
 The game logic is pure (`src/lib/games/play.ts`, `memory.ts`) and runs identically in both modes,
-so it is unit-tested once. `ScreenTop` scrolls each new screen up under the header — without it a
+so it is unit-tested once (`draw.ts` too, including how loosely a guess is matched). `ScreenTop`
+scrolls each new screen up under the header — without it a
 phone starts the next question halfway down the page. Two phones are tested for real in
 `tests/e2e/games-rooms.spec.ts`: three browser contexts, a full ten rounds, the third turned away,
-play again, and one phone leaving.
+play again, and one phone leaving; and a drawing round where the ink has to reach the other
+browser's canvas and the right word has to end the round.
 
 ## Ethos for Two
 

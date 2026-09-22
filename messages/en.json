@@ -1206,7 +1206,7 @@
       "cityB": "Madrid"
     },
     "games": {
-      "eyebrow": "Games · six to play now",
+      "eyebrow": "Games · seven to play now",
       "title": "Play for who does the dishes.",
       "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
       "cta": "Deal me in"
@@ -1264,7 +1264,7 @@
   "games": {
     "meta": {
       "title": "Games for two",
-      "description": "Card games for couples: How well do you know me, Would you rather, Memory with your photos, question cards, truth or dare and a roulette for the chores. One phone or two, no downloads."
+      "description": "Card games for couples: How well do you know me, Would you rather, Draw it guess it, Memory with your photos, question cards, truth or dare and a roulette for the chores. One phone or two, no downloads."
     },
     "h1a": "Games for",
     "h1b": "exactly two.",
@@ -1279,12 +1279,6 @@
       "how": "Whoever is holding the phone reads it out. You both answer.",
       "title": "Question cards",
       "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer."
-    },
-    "coming": {
-      "draw": {
-        "title": "Draw it, guess it",
-        "blurb": "One of you draws with a finger, the other guesses, live, from anywhere."
-      }
     },
     "lobby": {
       "one": {
@@ -1410,14 +1404,13 @@
     },
     "hub": {
       "eyebrow": "Game night for two",
-      "sub": "Six little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "sub": "Seven little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
       "one": "Pass one phone",
       "two": "Or two phones, one link",
       "deal": "Deal me in",
       "pickTitle": "Pick a game",
       "pickSub": "Every one is quick, and every one ends with something to talk about.",
-      "minutes": "{n} min",
-      "soon": "Soon"
+      "minutes": "{n} min"
     },
     "memory": {
       "title": "Memory",
@@ -1444,6 +1437,53 @@
         "butterfly": "a butterfly",
         "cake": "a cake"
       }
+    },
+    "draw": {
+      "title": "Draw it, guess it",
+      "blurb": "Six words. One of you draws them with a finger, the other guesses. On two phones the drawing appears live on the other screen, an ocean away.",
+      "waitingHost": "Waiting for the room to start…",
+      "round": "Round {n} of {total}",
+      "gotLabel": "Got",
+      "youDraw": "You're drawing",
+      "theyDraw": "{name} is drawing",
+      "passTo": "Pass the phone to {name}",
+      "passNote": "{name} draws. You guess out loud.",
+      "peekEyebrow": "{name}, your word",
+      "peekNote": "Keep it to yourself. {name} shouldn't see this bit.",
+      "peekGo": "Got it, hide it",
+      "boardDraw": "Draw here with your finger",
+      "boardWatch": "The drawing, as it happens",
+      "inkLabel": "Pick an ink",
+      "ink": {
+        "ink": "Ink",
+        "rose": "Rose",
+        "violet": "Violet",
+        "blue": "Blue",
+        "gold": "Gold"
+      },
+      "undo": "Undo",
+      "clear": "Clear",
+      "guessLabel": "Your guess",
+      "guessPlaceholder": "What is it?",
+      "guessSend": "Guess",
+      "guessesLabel": "Guesses so far",
+      "got": "{name} got it",
+      "pass": "Give up on this one",
+      "gotIt": "Got it.",
+      "missed": "Nobody got that one.",
+      "wordWas": "It was {word}",
+      "next": "Next round",
+      "results": "See how you did",
+      "end": {
+        "eyebrow": "Six words later",
+        "great": "You two think alike.",
+        "good": "Not bad at all.",
+        "ok": "Art was never the point.",
+        "sub": "You got {n} of {total} between you. The misses are the ones you'll keep quoting.",
+        "again": "Play again",
+        "gift": "Make them something"
+      },
+      "imHere": "I'm {name}, go"
     }
   },
   "forTwo": {

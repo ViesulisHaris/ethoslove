@@ -314,7 +314,7 @@ test.describe("games on one phone", () => {
   test("the games table deals every game, and each card opens it", async ({ page }) => {
     await page.goto("/games");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Games for");
-    for (const [name, path] of [["How well do you know me?", "/games/know"], ["Would you rather?", "/games/rather"], ["Memory", "/games/memory"], ["Question cards", "/games/deck"], ["Truth or dare, soft edition", "/games/dare"], ["Dishes roulette", "/games/roulette"]]) {
+    for (const [name, path] of [["How well do you know me?", "/games/know"], ["Would you rather?", "/games/rather"], ["Draw it, guess it", "/games/draw"], ["Memory", "/games/memory"], ["Question cards", "/games/deck"], ["Truth or dare, soft edition", "/games/dare"], ["Dishes roulette", "/games/roulette"]]) {
       await expect(page.getByRole("link", { name, exact: true })).toHaveAttribute("href", path);
     }
     await page.getByRole("link", { name: "Memory", exact: true }).click();
@@ -445,6 +445,49 @@ test.describe("games on one phone", () => {
     await expect(page.getByRole("button", { name: "Deal again" })).toBeVisible();
     await page.getByRole("button", { name: "Deal again" }).click();
     await expect(page.getByRole("button", { name: /^Card \d+, face down$/ })).toHaveCount(16);
+  });
+
+  test("draw it, guess it: the phone goes over, the word stays private, and a finger leaves ink", async ({ page }) => {
+    await page.goto("/games/draw");
+    await page.getByRole("button", { name: /^One phone/ }).click();
+    await page.getByLabel("Your name").fill("Maya");
+    await page.getByLabel("Their name").fill("Marco");
+    await page.getByRole("button", { name: "Start" }).click();
+    await expect(page.getByRole("heading", { name: "Pass the phone to Maya" })).toBeVisible();
+    await page.getByRole("button", { name: "I'm Maya, go" }).click();
+    await expect(page.getByText("Maya, your word")).toBeVisible();
+    // The word is shown in private, and is gone from the screen once the drawing starts.
+    const word = ((await page.getByTestId("peek-word").textContent()) ?? "").trim();
+    expect(word.length).toBeGreaterThan(2);
+    await page.getByRole("button", { name: "Got it, hide it" }).click();
+    const board = page.getByRole("img", { name: "Draw here with your finger" });
+    await expect(board).toBeVisible();
+    await expect(page.getByText(word, { exact: true })).toHaveCount(0);
+
+    const ink = () => board.evaluate((el) => {
+      const canvas = el as HTMLCanvasElement;
+      const pixels = canvas.getContext("2d")!.getImageData(0, 0, canvas.width, canvas.height).data;
+      let lit = 0;
+      for (let i = 3; i < pixels.length; i += 4) if (pixels[i] > 10) lit++;
+      return lit;
+    });
+    expect(await ink()).toBe(0);
+    const box = (await board.boundingBox())!;
+    await page.mouse.move(box.x + 40, box.y + 40);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width - 50, box.y + box.height / 2, { steps: 14 });
+    await page.mouse.move(box.x + 60, box.y + box.height - 40, { steps: 14 });
+    await page.mouse.up();
+    expect(await ink()).toBeGreaterThan(300);
+    await page.getByRole("button", { name: "Clear" }).click();
+    expect(await ink()).toBe(0);
+
+    await page.getByRole("button", { name: "Marco got it" }).click();
+    await expect(page.getByText(`It was ${word}`)).toBeVisible();
+    await expect(page.getByText("Got it.")).toBeVisible();
+    await page.getByRole("button", { name: "Next round" }).click();
+    // The two take it in turns, so the second round goes the other way.
+    await expect(page.getByRole("heading", { name: "Pass the phone to Marco" })).toBeVisible();
   });
 
   test("two phones: a room opens with a code and a link to send", async ({ page }) => {

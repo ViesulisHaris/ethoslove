@@ -1,11 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { PlayingCard } from "./cards";
+import { PlayingCard, type BackTone } from "./cards";
 import { ScreenTop } from "./screen-top";
 
 /** The phone changes hands: one face-down card and a button for the next person. */
-export function Handover({ eyebrow, title, note, button, onGo, back = "rose" }: { eyebrow: string; title: string; note?: string; button: string; onGo: () => void; back?: "rose" | "lilac" }) {
+export function Handover({ eyebrow, title, note, button, onGo, back = "rose" }: { eyebrow: string; title: string; note?: string; button: string; onGo: () => void; back?: BackTone }) {
   return (
     <section className="container-narrow py-12 text-center sm:py-16">
       <ScreenTop />

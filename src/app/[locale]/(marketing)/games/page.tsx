@@ -80,13 +80,6 @@ export default async function GamesPage({ params }: PageProps<"/[locale]/games">
               </Link>
             </li>
           ))}
-          <li>
-            <div className="flex h-full flex-col items-center pt-4 text-center">
-              <PlayingCard faceDown back="wine" radius={20} className="aspect-[5/7] w-28 rotate-[-4deg] sm:w-40" backLabel={<span className="rounded-full bg-cream/95 px-3 py-1 text-[12px] font-bold tracking-[0.12em] text-forest uppercase">{t("hub.soon")}</span>} />
-              <p className="mt-5 font-display text-[19px] text-cream/85 sm:mt-6 sm:text-[22px]">{t("coming.draw.title")}</p>
-              <p className="mt-1.5 hidden max-w-xs text-[14px] leading-relaxed text-cream/55 sm:block">{t("coming.draw.blurb")}</p>
-            </div>
-          </li>
         </ul>
       </section>
     </GameTable>

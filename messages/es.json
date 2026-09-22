@@ -1206,7 +1206,7 @@
       "cityB": "Madrid"
     },
     "games": {
-      "eyebrow": "Juegos · seis para jugar ya",
+      "eyebrow": "Juegos · siete para jugar ya",
       "title": "Jugaos quién friega los platos.",
       "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
       "cta": "Reparte"
@@ -1264,7 +1264,7 @@
   "games": {
     "meta": {
       "title": "Juegos para dos",
-      "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
+      "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Dibuja y adivina, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
     },
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
@@ -1279,12 +1279,6 @@
       "how": "Quien tenga el móvil la lee en voz alta. Respondéis los dos.",
       "title": "Cartas de preguntas",
       "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leedla en voz alta y respondéis los dos."
-    },
-    "coming": {
-      "draw": {
-        "title": "Dibuja y adivina",
-        "blurb": "Uno dibuja con el dedo y el otro adivina, en directo, desde donde sea."
-      }
     },
     "lobby": {
       "one": {
@@ -1410,14 +1404,13 @@
     },
     "hub": {
       "eyebrow": "Noche de juegos para dos",
-      "sub": "Seis juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "sub": "Siete juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
       "one": "Pasaos un móvil",
       "two": "O dos móviles, un enlace",
       "deal": "Reparte",
       "pickTitle": "Elige un juego",
       "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
-      "minutes": "{n} min",
-      "soon": "Pronto"
+      "minutes": "{n} min"
     },
     "memory": {
       "title": "Memory",
@@ -1444,6 +1437,53 @@
         "butterfly": "una mariposa",
         "cake": "una tarta"
       }
+    },
+    "draw": {
+      "title": "Dibuja y adivina",
+      "blurb": "Seis palabras. Uno las dibuja con el dedo y el otro adivina. Con dos móviles el dibujo aparece en la otra pantalla en directo, aunque haya un océano de por medio.",
+      "waitingHost": "Esperando a que empiece la sala…",
+      "round": "Ronda {n} de {total}",
+      "gotLabel": "Acertadas",
+      "youDraw": "Dibujas tú",
+      "theyDraw": "Dibuja {name}",
+      "passTo": "Pásale el móvil a {name}",
+      "passNote": "{name} dibuja. Tú adivinas en voz alta.",
+      "peekEyebrow": "{name}, tu palabra",
+      "peekNote": "No la enseñes. {name} no debería ver esta parte.",
+      "peekGo": "Vale, escóndela",
+      "boardDraw": "Dibuja aquí con el dedo",
+      "boardWatch": "El dibujo, en directo",
+      "inkLabel": "Elige un color",
+      "ink": {
+        "ink": "Tinta",
+        "rose": "Rosa",
+        "violet": "Violeta",
+        "blue": "Azul",
+        "gold": "Dorado"
+      },
+      "undo": "Deshacer",
+      "clear": "Borrar",
+      "guessLabel": "Tu respuesta",
+      "guessPlaceholder": "¿Qué es?",
+      "guessSend": "Adivinar",
+      "guessesLabel": "Intentos hasta ahora",
+      "got": "{name} lo ha adivinado",
+      "pass": "Rendirse con esta",
+      "gotIt": "¡Adivinada!",
+      "missed": "Esa no la ha adivinado nadie.",
+      "wordWas": "Era {word}",
+      "next": "Siguiente ronda",
+      "results": "Ver qué tal",
+      "end": {
+        "eyebrow": "Seis palabras después",
+        "great": "Pensáis igual.",
+        "good": "Nada mal.",
+        "ok": "El arte nunca fue el objetivo.",
+        "sub": "Habéis acertado {n} de {total} entre los dos. Las falladas son las que seguiréis recordando.",
+        "again": "Jugar otra vez",
+        "gift": "Regálale algo"
+      },
+      "imHere": "Soy {name}, vamos"
     }
   },
   "forTwo": {
