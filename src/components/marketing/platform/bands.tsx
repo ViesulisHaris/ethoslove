@@ -68,7 +68,7 @@ export async function GamesBand() {
           <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
-          <Link href="/games" className="group mt-7 inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#4B3F9A] underline-offset-4 hover:underline">
+          <Link href="/games" className="group mt-7 inline-flex items-center gap-1.5 text-[15px] font-semibold text-lilac underline-offset-4 hover:underline">
             {t("cta")}
             <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
           </Link>

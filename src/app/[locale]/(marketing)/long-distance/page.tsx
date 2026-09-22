@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
-import { HERO_ART } from "@/lib/dates/art";
+import { HERO_ART, heroSrcSet } from "@/lib/dates/art";
 import { VIRTUAL_DATES } from "@/lib/dates/virtual";
 import { listManifests } from "@/templates/manifests";
 import { Sticker } from "@/templates/_shared/covers/stickers";
@@ -32,20 +32,20 @@ export default async function LongDistancePage({ params }: PageProps<"/[locale]/
   return (
     <>
       {/* Not clipped, and above what follows: the town picker's list drops down past the torn edge. The flowers clip themselves. */}
-      <section className="relative isolate z-10 -mt-[var(--header-h)] bg-[#FFF5F2] pt-[var(--header-h)] text-forest">
+      <section className="relative isolate z-10 -mt-[var(--header-h)] bg-blush-paper pt-[var(--header-h)] text-forest">
         <FloralFrame frame="band" ground="light" />
         <div className="relative container-x pt-14 pb-16 sm:pt-20 lg:pb-20">
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-16">
             <div>
-              <p className="text-[12px] font-medium tracking-[0.22em] text-[#B0245A] uppercase">{t("eyebrow")}</p>
+              <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
               <h1 className="mt-5 max-w-[14ch] display-hero text-balance">
-                {t("h1a")} <em className="text-[#D6336C]">{t("h1b")}</em>
+                {t("h1a")} <em className="text-rose">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
             <div className="relative mx-auto w-full max-w-[460px]" aria-hidden="true">
-              <img src={HERO_ART.ldr} alt="" width={1280} height={960} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-white px-4 py-2.5 font-hand text-[1.5rem] leading-none text-[#B0245A] shadow-lift">{t("polaroid")}</span>
+              <img src={HERO_ART.ldr} srcSet={heroSrcSet(HERO_ART.ldr)} sizes="(min-width: 1024px) 460px, 100vw" alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+              <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-white px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
             </div>
           </div>
           <div className="mt-12">
@@ -82,19 +82,19 @@ export default async function LongDistancePage({ params }: PageProps<"/[locale]/
       </section>
 
       {gifts.length > 0 ? (
-        <section className="border-t border-line bg-[#FFF5F2] py-20 lg:py-28">
+        <section className="border-t border-line bg-blush-paper py-20 lg:py-28">
           <div className="container-x">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="text-eyebrow text-[#B0245A]">{t("gifts.eyebrow")}</p>
+                <p className="text-eyebrow text-rose-deep">{t("gifts.eyebrow")}</p>
                 <h2 className="display-xl mt-4 max-w-[16ch] text-forest">{t("gifts.title")}</h2>
               </div>
-              <Link href="/occasions/long-distance" className="group inline-flex items-center gap-1.5 text-sm font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+              <Link href="/occasions/long-distance" className="group -my-2.5 inline-flex min-h-11 items-center gap-1.5 py-2.5 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
                 {t("gifts.all")}
                 <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
+            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {gifts.map((m, i) => (
                 <TemplateCard key={m.slug} manifest={m} index={i} />
               ))}

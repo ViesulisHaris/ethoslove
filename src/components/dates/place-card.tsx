@@ -28,7 +28,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
     <div
       onPointerEnter={() => onHover(true)}
       onPointerLeave={() => onHover(false)}
-      className={cn("group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", selected && "ring-2 ring-[#D6336C]")}
+      className={cn("group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", selected && "ring-2 ring-rose")}
     >
       <PlaceThumb place={place} className="size-[92px] rounded-[16px] sm:size-[104px]" />
       <div className="flex min-w-0 flex-1 flex-col justify-center py-1">
@@ -66,7 +66,7 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
         onClick={onTogglePlan}
         aria-pressed={inPlan}
         aria-label={`${inPlan ? labels.remove : labels.add}: ${place.name}`}
-        className={cn("relative z-10 my-auto mr-1 grid size-11 shrink-0 place-items-center rounded-full transition-colors", inPlan ? "bg-[#D6336C] text-white" : "bg-[#FFE8EF] text-[#9C1F4A] hover:bg-[#FFD6E2]")}
+        className={cn("relative z-10 my-auto mr-1 grid size-11 shrink-0 place-items-center rounded-full transition-colors", inPlan ? "bg-rose text-white" : "bg-rose-soft text-rose-ink hover:bg-rose-tint")}
       >
         {inPlan ? <Check className="size-[18px]" /> : <Plus className="size-[18px]" />}
       </button>

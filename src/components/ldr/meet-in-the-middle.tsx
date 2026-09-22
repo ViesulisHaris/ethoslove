@@ -64,7 +64,7 @@ export function MeetInTheMiddle() {
           <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("you")}</p>
           <WhereBox value={a} locale={locale} labels={{ ...labels, label: t("you") }} onPick={setA} />
         </div>
-        <MoveHorizontal aria-hidden="true" className="mx-auto mb-3.5 hidden size-5 text-[#B0245A] sm:block" />
+        <MoveHorizontal aria-hidden="true" className="mx-auto mb-3.5 hidden size-5 text-rose-deep sm:block" />
         <div>
           <p className="mb-1.5 text-[12.5px] font-medium text-forest/60">{t("them")}</p>
           <WhereBox value={b} locale={locale} labels={{ ...labels, label: t("them") }} onPick={setB} />
@@ -73,8 +73,8 @@ export function MeetInTheMiddle() {
 
       {result && a && b ? (
         <div className="mt-7 grid gap-4 lg:grid-cols-3" aria-live="polite">
-          <div className="rounded-[24px] bg-[#FFF5F2] p-5">
-            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-[#B0245A] uppercase">
+          <div className="rounded-[24px] bg-blush-paper p-5">
+            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-rose-deep uppercase">
               <Plane aria-hidden="true" className="size-4" />
               {t("apart")}
             </p>
@@ -82,8 +82,8 @@ export function MeetInTheMiddle() {
             <p className="mt-1.5 text-[14px] text-forest/60">{t("miles", { miles: number(milesOf(result.km)) })}</p>
           </div>
 
-          <div className="rounded-[24px] bg-[#FFF5F2] p-5">
-            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-[#B0245A] uppercase">
+          <div className="rounded-[24px] bg-blush-paper p-5">
+            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-rose-deep uppercase">
               <MoveHorizontal aria-hidden="true" className="size-4" />
               {t("halfway")}
             </p>
@@ -91,7 +91,7 @@ export function MeetInTheMiddle() {
               <>
                 <p className="mt-3 font-display text-[32px] leading-[1.05] text-forest">{result.near.city.name}</p>
                 <p className="mt-1.5 text-[14px] text-forest/60">{result.near.km < 40 ? t("halfwayExact") : t("halfwayNear", { km: number(result.near.km) })}</p>
-                <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(result.near.city.name)}`} className="group mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+                <Link href={`/dates?lat=${result.near.city.lat}&lng=${result.near.city.lng}&q=${encodeURIComponent(result.near.city.name)}`} className="group mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: result.near.city.name })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
@@ -100,7 +100,7 @@ export function MeetInTheMiddle() {
               <>
                 <p className="mt-3 font-display text-[26px] leading-[1.1] text-forest">{t("nowhere")}</p>
                 <p className="mt-1.5 text-[14px] leading-snug text-forest/60">{t("nowhereSub")}</p>
-                <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+                <Link href={`/dates?lat=${b.lat}&lng=${b.lng}&q=${encodeURIComponent(b.name)}`} className="group mt-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
                   {t("datesThere", { city: b.name })}
                   <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
@@ -108,8 +108,8 @@ export function MeetInTheMiddle() {
             )}
           </div>
 
-          <div className="rounded-[24px] bg-[#FFF5F2] p-5">
-            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-[#B0245A] uppercase">
+          <div className="rounded-[24px] bg-blush-paper p-5">
+            <p className="flex items-center gap-2 text-[12.5px] font-semibold tracking-wide text-rose-deep uppercase">
               <Clock3 aria-hidden="true" className="size-4" />
               {t("clocks")}
             </p>

@@ -43,6 +43,32 @@ export const KIND_ART: Record<PlaceKind, string> = {
   winery: kind("winery"),
 };
 
-export const kindImage = (k: PlaceKind): string => KIND_ART[k];
+/** A second picture for the commonest kinds, so two cafés side by side are not the same tile twice. */
+const KIND_ART_ALT: Partial<Record<PlaceKind, string>> = {
+  restaurant: kind("bar"),
+  bar: idea("karaoke-duet"),
+  cafe: idea("bookshop-and-coffee"),
+  dessert: kind("cafe"),
+  viewpoint: idea("golden-hour-picnic"),
+  park: idea("ice-cream-walk"),
+  garden: kind("park"),
+  museum: idea("gallery-hop"),
+  gallery: idea("museum-then-wine"),
+  theatre: idea("cinema-and-late-dessert"),
+  landmark: idea("pasta-and-a-slow-walk"),
+  bookshop: kind("cafe"),
+};
+
+/** The tile for a kind of place; `seed` (a place id) picks between the two where there are two. */
+export function kindImage(k: PlaceKind, seed = ""): string {
+  const alt = KIND_ART_ALT[k];
+  if (!alt) return KIND_ART[k];
+  let h = 0;
+  for (const ch of seed) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h % 2 === 0 ? KIND_ART[k] : alt;
+}
 
 export const HERO_ART = { home: "/dates/hero/home.webp", dates: "/dates/hero/dates.webp", gifts: "/dates/hero/gifts.webp", ldr: "/dates/hero/ldr.webp", games: "/dates/hero/games.webp" } as const;
+
+/** The hero in two sizes: a phone's card gets half the pixels of a desktop's. */
+export const heroSrcSet = (path: string): string => `${path.replace(".webp", "-sm.webp")} 900w, ${path} 1800w`;

@@ -34,13 +34,13 @@ export function ForTwo() {
     <section className="container-x pb-4">
       <div className="grid gap-5 lg:grid-cols-2">
         <div className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-8">
-          <p className="text-eyebrow text-[#2E6B4E]">{t("free.eyebrow")}</p>
+          <p className="text-eyebrow text-moss">{t("free.eyebrow")}</p>
           <h2 className="mt-3 font-display text-[34px] leading-none text-forest">{t("free.price")}</h2>
           <p className="mt-2 text-[15px] text-forest/70">{t("free.blurb")}</p>
           <ul className="mt-6 space-y-2.5">
             {FREE.map((k) => (
               <li key={k} className="flex items-start gap-2.5 text-[15px] text-forest/85">
-                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-[#2E6B4E]" />
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
                 {t(`free.${k}`)}
               </li>
             ))}
@@ -51,7 +51,7 @@ export function ForTwo() {
         </div>
 
         <div className="relative overflow-hidden rounded-[28px] bg-forest p-6 text-cream shadow-lift sm:p-8">
-          <span className="absolute -top-16 -right-16 size-56 rounded-full bg-[#D6336C]/30 blur-3xl" aria-hidden="true" />
+          <span className="absolute -top-16 -right-16 size-56 rounded-full bg-rose/30 blur-3xl" aria-hidden="true" />
           <p className="relative text-eyebrow text-blush">{t("two.eyebrow")}</p>
           <h2 className="relative mt-3 font-display text-[34px] leading-none">
             {t("two.price")} <span className="text-[17px] text-cream/70">{t("two.per")}</span>

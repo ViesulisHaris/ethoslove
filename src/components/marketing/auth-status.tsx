@@ -16,7 +16,7 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
   const t = useTranslations("common");
   const [authed, setAuthed] = useState(false);
   const dark = tone === "dark";
-  const ghost = cn(block && "h-11", dark ? "text-cream/85 hover:bg-white/10 hover:text-cream" : "text-forest/75 hover:bg-[#FFF0F4] hover:text-forest");
+  const ghost = cn(block && "h-11", dark ? "text-cream/85 hover:bg-white/10 hover:text-cream" : "text-forest/75 hover:bg-rose-mist hover:text-forest");
 
   useEffect(() => {
     // Most visitors have never signed in, and without a session cookie there is no one to ask

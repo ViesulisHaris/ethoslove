@@ -89,8 +89,8 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
 
   return (
     <div ref={box} className={cn("relative", className)}>
-      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-white pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-[#D6336C]/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]", size === "lg" ? "h-14" : "h-12")}>
-        <MapPin aria-hidden="true" className="size-[18px] shrink-0 text-[#B0245A]" />
+      <div className={cn("flex items-center gap-2 rounded-full border border-forest/15 bg-white pr-1.5 pl-4 shadow-soft transition-shadow focus-within:border-rose/50 focus-within:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]", size === "lg" ? "h-14" : "h-12")}>
+        <MapPin aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
         <input
           type="text"
           role="combobox"
@@ -138,7 +138,7 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
         />
         {busy ? <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin text-forest/40" /> : null}
         {onNearMe ? (
-          <button type="button" onClick={onNearMe} className={cn("inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#FFE8EF] font-semibold text-[#9C1F4A] transition-colors hover:bg-[#FFD6E2]", size === "lg" ? "h-11 px-4 text-[14px]" : "h-9 px-3 text-[13px]")}>
+          <button type="button" onClick={onNearMe} className={cn("inline-flex shrink-0 items-center gap-1.5 rounded-full bg-rose-soft font-semibold text-rose-ink transition-colors hover:bg-rose-tint", size === "lg" ? "h-11 px-4 text-[14px]" : "h-9 px-3 text-[13px]")}>
             {locating ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <LocateFixed aria-hidden="true" className="size-4" />}
             <span className="max-[380px]:sr-only">{labels.nearMe}</span>
           </button>
@@ -152,7 +152,7 @@ export function WhereBox({ value, locale, labels, locating, autoFocus, size = "m
           ) : (
             results.map((p, i) => (
               <li key={`${p.name}-${p.lat}-${p.lng}`} id={`${listId}-${i}`} role="option" aria-selected={i === active}>
-                <button type="button" tabIndex={-1} onPointerEnter={() => setActive(i)} onClick={() => pick(p)} className={cn("flex w-full items-baseline gap-2 rounded-xl px-3 py-2.5 text-left", i === active && "bg-[#FFE8EF]")}>
+                <button type="button" tabIndex={-1} onPointerEnter={() => setActive(i)} onClick={() => pick(p)} className={cn("flex w-full items-baseline gap-2 rounded-xl px-3 py-2.5 text-left", i === active && "bg-rose-soft")}>
                   <span className="text-[15px] font-medium text-forest">{p.name}</span>
                   <span className="truncate text-[13px] text-forest/55">{describe(p)}</span>
                 </button>

@@ -50,7 +50,7 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
       </div>
       <div className="p-5 sm:p-6">
       <p className="text-[15px] leading-relaxed text-forest/70">{idea.blurb[locale]}</p>
-      <p className="mt-4 flex gap-2.5 rounded-2xl bg-[#FFE8EF] p-3.5 text-[14px] leading-snug text-[#8A1C42]">
+      <p className="mt-4 flex gap-2.5 rounded-2xl bg-rose-soft p-3.5 text-[14px] leading-snug text-rose-ink">
         <Sparkles aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
         <span>
           <span className="font-semibold">{labels.twist}</span> {idea.twist[locale]}
@@ -63,8 +63,8 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
           const previous = i > 0 ? stops[i - 1].place : null;
           return (
             <li key={i} className="relative pb-4 pl-[52px] last:pb-0">
-              {i < stops.length - 1 ? <span aria-hidden="true" className="absolute top-10 bottom-0 left-[19px] border-l-2 border-dotted border-[#D6336C]/40" /> : null}
-              <span className="absolute top-0 left-0 grid size-10 place-items-center rounded-full bg-[#D6336C] text-[14px] font-bold text-white shadow-[0_6px_14px_-6px_rgba(176,36,90,0.7)]">{i + 1}</span>
+              {i < stops.length - 1 ? <span aria-hidden="true" className="absolute top-10 bottom-0 left-[19px] border-l-2 border-dotted border-rose/40" /> : null}
+              <span className="absolute top-0 left-0 grid size-10 place-items-center rounded-full bg-rose text-[14px] font-bold text-white shadow-[0_6px_14px_-6px_rgba(176,36,90,0.7)]">{i + 1}</span>
               {previous && stop.place ? <p className="-mt-1 mb-1.5 text-[11.5px] font-medium tracking-wide text-forest/45 uppercase">{labels.walk(walkingMinutes(distanceKm(previous, stop.place)))}</p> : null}
               {stop.place ? (
                 <div className="flex items-start gap-2" onPointerEnter={() => onHover(stop.place!.id)} onPointerLeave={() => onHover(null)}>

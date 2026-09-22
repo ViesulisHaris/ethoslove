@@ -16,7 +16,7 @@ export function PairsWith({ from, picks, locale, labels, onOpen }: { from: Place
       <ul className="mt-3 space-y-2">
         {picks.map((p) => (
           <li key={p.id}>
-            <button type="button" onClick={() => onOpen(p.id)} className="group flex w-full items-center gap-3 rounded-2xl bg-white p-2 text-left ring-1 ring-forest/5 transition-colors hover:bg-[#FFF5F2]">
+            <button type="button" onClick={() => onOpen(p.id)} className="group flex w-full items-center gap-3 rounded-2xl bg-white p-2 text-left ring-1 ring-forest/5 transition-colors hover:bg-blush-paper">
               <PlaceThumb place={p} className="size-14 rounded-xl" />
               <span className="min-w-0 flex-1">
                 <span className="block text-[11.5px] font-semibold text-forest/55">{KINDS[p.kind].label[locale]} · {labels.walk(walkingMinutes(distanceKm(from, p)))}</span>

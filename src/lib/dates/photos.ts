@@ -132,7 +132,7 @@ export function matchPhotos(places: Place[], sights: Sight[]): { byPlace: Map<st
 }
 
 export const geosearchUrl = (lang: "en" | "es", center: LatLng, radiusM: number): string =>
-  `https://${lang}.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&generator=geosearch&ggscoord=${center.lat}%7C${center.lng}&ggsradius=${Math.min(10000, Math.max(500, Math.round(radiusM)))}&ggslimit=50&prop=pageimages%7Ccoordinates%7Cdescription%7Cinfo&inprop=url&piprop=thumbnail%7Cname&pithumbsize=640&pilicense=free&pilimit=50&colimit=50`;
+  `https://${lang}.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&generator=geosearch&ggscoord=${center.lat}%7C${center.lng}&ggsradius=${Math.min(10000, Math.max(500, Math.round(radiusM)))}&ggslimit=50&prop=pageimages%7Ccoordinates%7Cdescription%7Cinfo&inprop=url&piprop=thumbnail%7Cname&pithumbsize=1024&pilicense=free&pilimit=50&colimit=50`;
 
 export const imageInfoUrl = (lang: "en" | "es", files: string[]): string =>
   `https://${lang}.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&prop=imageinfo&iiprop=extmetadata%7Curl&iiextmetadatafilter=Artist%7CLicenseShortName&titles=${files.slice(0, 50).map((f) => encodeURIComponent(`File:${f}`)).join("%7C")}`;
@@ -145,12 +145,12 @@ export const imageInfoUrl = (lang: "en" | "es", files: string[]): string =>
 export const COMMONS_REACH_M = 250;
 
 export const commonsSearchUrl = (name: string, at: LatLng): string =>
-  `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch=${encodeURIComponent(`${name.replace(/["\\:]/g, " ")} nearcoord:${COMMONS_REACH_M}m,${at.lat},${at.lng}`)}&prop=imageinfo&iiprop=url%7Cextmetadata%7Cmime%7Csize&iiurlwidth=640&iiextmetadatafilter=Artist%7CLicenseShortName`;
+  `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&generator=search&gsrnamespace=6&gsrlimit=10&gsrsearch=${encodeURIComponent(`${name.replace(/["\\:]/g, " ")} nearcoord:${COMMONS_REACH_M}m,${at.lat},${at.lng}`)}&prop=imageinfo&iiprop=url%7Cextmetadata%7Cmime%7Csize&iiurlwidth=1024&iiextmetadatafilter=Artist%7CLicenseShortName`;
 
 export const wikidataImageUrl = (qid: string): string => `https://www.wikidata.org/w/api.php?action=wbgetclaims&format=json&entity=${qid}&property=P18`;
 
 export const commonsFileUrl = (file: string): string =>
-  `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&titles=${encodeURIComponent(`File:${file}`)}&prop=imageinfo&iiprop=url%7Cextmetadata%7Cmime%7Csize&iiurlwidth=640&iiextmetadatafilter=Artist%7CLicenseShortName`;
+  `https://commons.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&titles=${encodeURIComponent(`File:${file}`)}&prop=imageinfo&iiprop=url%7Cextmetadata%7Cmime%7Csize&iiurlwidth=1024&iiextmetadatafilter=Artist%7CLicenseShortName`;
 
 export const isQid = (value: string): boolean => /^Q[1-9]\d{0,11}$/.test(value);
 

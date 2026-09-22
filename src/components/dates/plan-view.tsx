@@ -100,9 +100,9 @@ export function PlanView() {
 
   return (
     <section className="container-x grid gap-8 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
-      <article className="relative rounded-[32px] bg-[#FFFDF9] p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
+      <article className="relative rounded-[32px] bg-card p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
-        <p className="text-[12px] font-medium tracking-[0.22em] text-[#B0245A] uppercase">{shared ? t("eyebrowShared") : t("eyebrow")}</p>
+        <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{shared ? t("eyebrowShared") : t("eyebrow")}</p>
         <h1 className="mt-3 display-xl text-forest first-letter:uppercase">{plan.date ? formatDay(plan.date, locale) : t("someday")}</h1>
         <p className="mt-2 text-[17px] text-forest/70">{[plan.where, idea?.title[locale]].filter(Boolean).join(" · ")}</p>
 
@@ -110,19 +110,19 @@ export function PlanView() {
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <label className="block">
               <span className="text-[12.5px] font-medium text-forest/60">{t("to")}</span>
-              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-[#D6336C]/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <input value={plan.to ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, to: e.target.value }))} placeholder={t("toPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
             <label className="block">
               <span className="text-[12.5px] font-medium text-forest/60">{t("from")}</span>
-              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-[#D6336C]/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+              <input value={plan.from ?? ""} maxLength={40} onChange={(e) => updateOwn((p) => ({ ...p, from: e.target.value }))} placeholder={t("fromPlaceholder")} className="mt-1 h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
             </label>
           </div>
         ) : plan.to || plan.from ? (
-          <p className="mt-5 font-hand text-[1.9rem] leading-tight text-[#B0245A]">{plan.to && plan.from ? t("forFrom", { to: plan.to, from: plan.from }) : plan.to ? t("forOnly", { to: plan.to }) : t("fromOnly", { from: plan.from ?? "" })}</p>
+          <p className="mt-5 font-hand text-[1.9rem] leading-tight text-rose-deep">{plan.to && plan.from ? t("forFrom", { to: plan.to, from: plan.from }) : plan.to ? t("forOnly", { to: plan.to }) : t("fromOnly", { from: plan.from ?? "" })}</p>
         ) : null}
 
         {day ? (
-          <p className="mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-[#FFF5F2] px-4 py-3 text-[14.5px] text-forest/80">
+          <p className="mt-6 inline-flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-blush-paper px-4 py-3 text-[14.5px] text-forest/80">
             <WeatherGlyph condition={day.condition} className="size-5" />
             <span className="font-semibold text-forest tabular-nums">
               {day.tMax}° / {day.tMin}°
@@ -130,7 +130,7 @@ export function PlanView() {
             {day.rainChance !== null ? <span>{t("rain", { chance: day.rainChance })}</span> : null}
             {day.sunset ? (
               <span className="inline-flex items-center gap-1.5">
-                <Sunset aria-hidden="true" className="size-4 text-[#E0962A]" />
+                <Sunset aria-hidden="true" className="size-4 text-star" />
                 {t("sunset", { time: day.sunset })}
               </span>
             ) : null}
@@ -144,12 +144,12 @@ export function PlanView() {
             const previous = plan.stops[i - 1];
             return (
               <li key={stop.id} className="relative pb-7 pl-[58px] last:pb-0">
-                {i < plan.stops.length - 1 ? <span aria-hidden="true" className="absolute top-11 bottom-0 left-[21px] border-l-2 border-dotted border-[#D6336C]/40" /> : null}
-                <span className="absolute top-0 left-0 grid size-11 place-items-center rounded-full bg-[#D6336C] text-[15px] font-bold text-white shadow-[0_8px_16px_-8px_rgba(176,36,90,0.8)]">{i + 1}</span>
+                {i < plan.stops.length - 1 ? <span aria-hidden="true" className="absolute top-11 bottom-0 left-[21px] border-l-2 border-dotted border-rose/40" /> : null}
+                <span className="absolute top-0 left-0 grid size-11 place-items-center rounded-full bg-rose text-[15px] font-bold text-white shadow-[0_8px_16px_-8px_rgba(176,36,90,0.8)]">{i + 1}</span>
                 {previous ? <p className="-mt-2 mb-2 text-[11.5px] font-medium tracking-wide text-forest/45 uppercase">{t("walk", { minutes: walkingMinutes(distanceKm(previous, stop)) })}</p> : null}
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.color }}>
                   {editable ? (
-                    <input type="time" aria-label={t("timeFor", { name: stop.name })} value={stop.time ?? ""} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time: e.target.value || undefined } : s)) }))} className="h-9 rounded-xl border border-forest/15 bg-white px-2 text-[14px] text-forest tabular-nums outline-none focus:border-[#D6336C]/50" />
+                    <input type="time" aria-label={t("timeFor", { name: stop.name })} value={stop.time ?? ""} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time: e.target.value || undefined } : s)) }))} className="h-9 rounded-xl border border-forest/15 bg-white px-2 text-[14px] text-forest tabular-nums outline-none focus:border-rose/50" />
                   ) : stop.time ? (
                     <span className="text-[15px] text-forest tabular-nums">{stop.time}</span>
                   ) : null}
@@ -161,7 +161,7 @@ export function PlanView() {
                 <h2 className="mt-1 font-display text-[23px] leading-tight text-forest">{stop.name}</h2>
                 {stop.address ? <p className="text-[14px] text-forest/60">{stop.address}</p> : null}
                 {editable ? (
-                  <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name: stop.name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-10 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[14.5px] text-forest outline-none placeholder:text-forest/35 focus:border-[#D6336C]/50" />
+                  <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name: stop.name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-10 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[14.5px] text-forest outline-none placeholder:text-forest/35 focus:border-rose/50" />
                 ) : stop.note ? (
                   <p className="mt-1.5 font-hand text-[1.45rem] leading-snug text-forest/80">{stop.note}</p>
                 ) : null}
@@ -178,7 +178,7 @@ export function PlanView() {
                       <button type="button" disabled={i === plan.stops.length - 1} aria-label={t("moveDown", { name: stop.name })} onClick={() => updateOwn((p) => moveStop(p, stop.id, 1))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-forest hover:bg-forest/5 disabled:opacity-25">
                         <ArrowDown className="size-4" />
                       </button>
-                      <button type="button" aria-label={t("removeStop", { name: stop.name })} onClick={() => updateOwn((p) => removeStop(p, stop.id))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-[#B5341C] hover:bg-[#B5341C]/5">
+                      <button type="button" aria-label={t("removeStop", { name: stop.name })} onClick={() => updateOwn((p) => removeStop(p, stop.id))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-destructive hover:bg-destructive/5">
                         <Trash2 className="size-4" />
                       </button>
                     </>
@@ -192,12 +192,12 @@ export function PlanView() {
         {editable ? (
           <label className="mt-8 block">
             <span className="text-[12.5px] font-medium text-forest/60">{t("note")}</span>
-            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-white px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-[#D6336C]/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
+            <textarea value={plan.note ?? ""} maxLength={280} rows={3} onChange={(e) => updateOwn((p) => ({ ...p, note: e.target.value }))} placeholder={t("notePlaceholder")} className="mt-1 w-full resize-none rounded-2xl border border-forest/15 bg-white px-4 py-3 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(178,58,94,0.12)]" />
           </label>
         ) : plan.note ? (
           <p className="mt-8 border-t border-dashed border-forest/15 pt-6 font-hand text-[1.7rem] leading-snug text-forest/85">{plan.note}</p>
         ) : null}
-        {idea && !editable ? <p className="mt-6 rounded-2xl bg-[#FFE8EF] p-4 text-[14.5px] leading-snug text-[#8A1C42]"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
+        {idea && !editable ? <p className="mt-6 rounded-2xl bg-rose-soft p-4 text-[14.5px] leading-snug text-rose-ink"><span className="font-semibold">{t("twist")}</span> {idea.twist[locale]}</p> : null}
       </article>
 
       <aside className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
@@ -208,11 +208,11 @@ export function PlanView() {
             <h2 className="font-display text-[22px] text-forest">{t("send.title")}</h2>
             <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{t("send.sub")}</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <button type="button" onClick={share} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#D6336C] text-[14.5px] font-semibold text-white shadow-[0_16px_34px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
+              <button type="button" onClick={share} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-rose text-[14.5px] font-semibold text-white shadow-[0_16px_34px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
                 <Share2 aria-hidden="true" className="size-4" />
                 {t("send.share")}
               </button>
-              <button type="button" onClick={copy} className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-full border text-[14.5px] font-semibold transition-colors", copied ? "border-[#2E6B4E]/30 bg-[#DCEBDF] text-[#2E6B4E]" : "border-forest/15 text-forest hover:bg-forest/5")}>
+              <button type="button" onClick={copy} className={cn("inline-flex h-12 items-center justify-center gap-2 rounded-full border text-[14.5px] font-semibold transition-colors", copied ? "border-moss/30 bg-moss-soft text-moss" : "border-forest/15 text-forest hover:bg-forest/5")}>
                 {copied ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
                 <span aria-live="polite">{copied ? t("send.copied") : t("send.copy")}</span>
               </button>
@@ -231,7 +231,7 @@ export function PlanView() {
                   updateOwn(() => ({ ...EMPTY_PLAN, ...plan }));
                   setKept(true);
                 }}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream disabled:bg-[#DCEBDF] disabled:text-[#2E6B4E]"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream disabled:bg-moss-soft disabled:text-moss"
               >
                 {kept ? <Check aria-hidden="true" className="size-4" /> : <MapPinned aria-hidden="true" className="size-4" />}
                 {kept ? t("received.kept") : t("received.keep")}
@@ -257,10 +257,10 @@ export function PlanView() {
 
         {editable ? (
           <div className="flex items-center justify-between gap-3 px-1">
-            <Link href="/dates" className="text-[14px] font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+            <Link href="/dates" className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
               {t("addMore")}
             </Link>
-            <button type="button" onClick={() => window.confirm(t("clearConfirm")) && updateOwn(() => EMPTY_PLAN)} className="text-[13.5px] text-forest/50 underline-offset-4 hover:text-[#B5341C] hover:underline">
+            <button type="button" onClick={() => window.confirm(t("clearConfirm")) && updateOwn(() => EMPTY_PLAN)} className="text-[13.5px] text-forest/50 underline-offset-4 hover:text-destructive hover:underline">
               {t("clear")}
             </button>
           </div>

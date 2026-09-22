@@ -7,7 +7,7 @@ import { ArrowRight, ArrowUpDown, CloudOff, List, Map as MapIcon, Sunset } from 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { HERO_ART } from "@/lib/dates/art";
+import { HERO_ART, heroSrcSet } from "@/lib/dates/art";
 import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
@@ -370,12 +370,12 @@ export function DatesExplorer() {
     return (
       <section className="container-x grid items-center gap-12 pt-10 pb-20 sm:pt-14 lg:grid-cols-2 lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
         <div>
-          <p className="text-[12px] font-medium tracking-[0.22em] text-[#B0245A] uppercase">{t("eyebrow")}</p>
+          <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
           <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{t("empty.sub")}</p>
           <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
           {notice ? (
-            <p role="status" className="mt-3 text-sm text-[#B5341C]">
+            <p role="status" className="mt-3 text-sm text-destructive">
               {notice}
             </p>
           ) : null}
@@ -383,7 +383,7 @@ export function DatesExplorer() {
           <ul className="mt-4 flex max-w-xl flex-wrap gap-2">
             {STARTER_CITIES.map((city) => (
               <li key={city.name}>
-                <button type="button" onClick={() => go(city)} className="h-11 rounded-full border border-[#D6336C]/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#FFF0F4]">
+                <button type="button" onClick={() => go(city)} className="h-11 rounded-full border border-rose/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist">
                   {city.name}
                 </button>
               </li>
@@ -391,8 +391,8 @@ export function DatesExplorer() {
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
-          <img src={HERO_ART.dates} alt="" width={1280} height={960} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
-          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-white px-4 py-3 font-hand text-[1.5rem] leading-none text-[#B0245A] shadow-lift sm:-left-6">{t("empty.note")}</span>
+          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes="(min-width: 1024px) 560px, 100vw" alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+          <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-white px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
         </div>
       </section>
     );
@@ -473,7 +473,7 @@ export function DatesExplorer() {
     <div className="relative lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
       {/* ---------------------------------------------------------------- the list */}
       <div className="px-5 pt-7 pb-32 sm:px-8 lg:px-6 lg:pt-[calc(var(--header-h)+1.25rem)]">
-        <p className="text-[12px] font-medium tracking-[0.22em] text-[#B0245A] uppercase">{t("eyebrow")}</p>
+        <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
         <h1 className="mt-2 display-lg text-forest">{where.name && shareable ? t("titleIn", { place: where.name }) : t("titleNear")}</h1>
 
         <div className="mt-5 flex flex-wrap gap-2">
@@ -488,7 +488,7 @@ export function DatesExplorer() {
           />
         </div>
         {notice ? (
-          <p role="status" className="mt-2 text-[13.5px] text-[#B5341C]">
+          <p role="status" className="mt-2 text-[13.5px] text-destructive">
             {notice}
           </p>
         ) : null}
@@ -509,7 +509,7 @@ export function DatesExplorer() {
               </p>
               {day.sunset ? (
                 <span className="flex shrink-0 flex-col items-center text-[11px] font-medium text-forest/55">
-                  <Sunset aria-hidden="true" className="size-4 text-[#E0962A]" />
+                  <Sunset aria-hidden="true" className="size-4 text-star" />
                   <span className="sr-only">{t("weather.sunset")}</span>
                   <span className="tabular-nums">{day.sunset}</span>
                 </span>
@@ -541,7 +541,7 @@ export function DatesExplorer() {
             filters={
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:px-6" role="group" aria-label={t("ideas.vibes")}>
                 {VIBE_IDS.map((v) => (
-                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => setVibe(vibe === v ? null : v)} className={cn("h-9 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors", vibe === v ? "bg-[#D6336C] text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-[#FFE8EF]")}>
+                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => setVibe(vibe === v ? null : v)} className={cn("h-9 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
                     {VIBES[v][locale]}
                   </button>
                 ))}
@@ -639,7 +639,7 @@ export function DatesExplorer() {
           {status === "error" && all.length === 0 ? (
             <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               {t("places.error")}{" "}
-              <button type="button" onClick={() => go(where, { share: shareable })} className="font-semibold text-[#B0245A] underline underline-offset-4">
+              <button type="button" onClick={() => go(where, { share: shareable })} className="font-semibold text-rose-deep underline underline-offset-4">
                 {t("places.retry")}
               </button>
             </div>
@@ -718,8 +718,8 @@ export function DatesExplorer() {
             {view === "map" ? t("map.list") : t("map.show")}
           </button>
           {plan.stops.length > 0 ? (
-            <Link href="/plan" className="pointer-events-auto inline-flex h-12 items-center gap-2.5 rounded-full bg-[#D6336C] pr-4 pl-2 text-[14.5px] font-semibold text-white shadow-[0_18px_40px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
-              <span className="grid size-8 place-items-center rounded-full bg-white text-[13px] font-bold text-[#B0245A] tabular-nums">{plan.stops.length}</span>
+            <Link href="/plan" className="pointer-events-auto inline-flex h-12 items-center gap-2.5 rounded-full bg-rose pr-4 pl-2 text-[14.5px] font-semibold text-white shadow-[0_18px_40px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
+              <span className="grid size-8 place-items-center rounded-full bg-white text-[13px] font-bold text-rose-deep tabular-nums">{plan.stops.length}</span>
               {t("plan.open")}
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
@@ -744,7 +744,7 @@ function ExplorerSkeleton() {
           ))}
         </div>
       </div>
-      <div className="hidden h-dvh bg-[#FBF3EE] lg:block" />
+      <div className="hidden h-dvh bg-blush-paper lg:block" />
     </div>
   );
 }

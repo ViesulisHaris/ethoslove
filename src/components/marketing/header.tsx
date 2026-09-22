@@ -47,7 +47,7 @@ export function MarketingHeader() {
         className="flex h-9 items-center justify-center gap-2 bg-[linear-gradient(90deg,#a61e52_0%,#d6336c_50%,#e8447a_100%)] px-4 text-center text-[13px] font-medium text-white transition-[filter] hover:brightness-110"
       >
         <span className="truncate">{t("promo.line")}</span>
-        <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold tracking-[0.14em] text-[#B0245A]">{t("promo.code")}</span>
+        <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold tracking-[0.14em] text-rose-deep">{t("promo.code")}</span>
       </Link>
 
       <div className="px-3 pt-3 sm:px-5">
@@ -73,7 +73,7 @@ export function MarketingHeader() {
                   aria-current={here ? "page" : undefined}
                   className={cn(
                     "rounded-full px-3.5 py-2 text-[14.5px] font-medium whitespace-nowrap transition-colors",
-                    here ? "bg-[#FFE8EF] text-[#B0245A]" : "text-forest/70 hover:bg-[#FFF0F4] hover:text-forest",
+                    here ? "bg-rose-soft text-rose-deep" : "text-forest/70 hover:bg-rose-mist hover:text-forest",
                   )}
                 >
                   {t(`nav.${key}`)}
@@ -83,7 +83,7 @@ export function MarketingHeader() {
           </nav>
 
           <div className="hidden items-center gap-1 lg:flex">
-            <LocaleSwitcher className="text-forest/75 hover:bg-[#FFF0F4] hover:text-forest" />
+            <LocaleSwitcher className="text-forest/75 hover:bg-rose-mist hover:text-forest" />
             <AuthStatus />
           </div>
 
@@ -93,11 +93,11 @@ export function MarketingHeader() {
             </MakeGiftLink>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <button type="button" aria-label={t("common.openMenu")} className="grid size-10 place-items-center rounded-full text-forest hover:bg-[#FFF0F4]">
+                <button type="button" aria-label={t("common.openMenu")} className="grid size-10 place-items-center rounded-full text-forest hover:bg-rose-mist">
                   <Menu className="size-5" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[86vw] max-w-sm border-l-0 bg-[#FFF7F3] text-forest">
+              <SheetContent side="right" className="w-[86vw] max-w-sm border-l-0 bg-blush-paper text-forest">
                 <SheetTitle className="sr-only">{t("common.openMenu")}</SheetTitle>
                 <div className="flex h-full flex-col gap-6 px-2 pt-10">
                   <Logo />
@@ -110,9 +110,9 @@ export function MarketingHeader() {
                           href={href}
                           aria-current={here ? "page" : undefined}
                           onClick={() => setOpen(false)}
-                          className={cn("flex items-center gap-3.5 rounded-2xl px-3 py-3.5 font-display text-[1.6rem] leading-none", here ? "bg-[#FFE8EF] text-[#B0245A]" : "text-forest hover:bg-[#FFF0F4]")}
+                          className={cn("flex items-center gap-3.5 rounded-2xl px-3 py-3.5 font-display text-[1.6rem] leading-none", here ? "bg-rose-soft text-rose-deep" : "text-forest hover:bg-rose-mist")}
                         >
-                          <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", here ? "bg-white text-[#D6336C]" : "bg-white text-forest/60 shadow-soft")}>
+                          <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", here ? "bg-white text-rose" : "bg-white text-forest/60 shadow-soft")}>
                             <Icon aria-hidden="true" className="size-5" strokeWidth={1.8} />
                           </span>
                           {t(`nav.${key}`)}
@@ -122,7 +122,7 @@ export function MarketingHeader() {
                   </nav>
                   <div className="mt-auto flex flex-col gap-3 pb-6">
                     <AuthStatus onNavigate={() => setOpen(false)} block />
-                    <LocaleSwitcher className="text-forest/75 hover:bg-[#FFF0F4] hover:text-forest" />
+                    <LocaleSwitcher className="text-forest/75 hover:bg-rose-mist hover:text-forest" />
                   </div>
                 </div>
               </SheetContent>

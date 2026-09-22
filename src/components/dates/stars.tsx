@@ -13,9 +13,9 @@ export function Stars({ value, size = "sm", className, label }: { value: number;
         const fill = Math.max(0, Math.min(1, value - (n - 1)));
         return (
           <span key={n} className={cn("relative inline-block", px)}>
-            <Star className={cn("absolute inset-0 text-[#E9C0CB]", px)} fill="currentColor" strokeWidth={0} />
+            <Star className={cn("absolute inset-0 text-star-empty", px)} fill="currentColor" strokeWidth={0} />
             <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
-              <Star className={cn("text-[#E0962A]", px)} fill="currentColor" strokeWidth={0} />
+              <Star className={cn("text-star", px)} fill="currentColor" strokeWidth={0} />
             </span>
           </span>
         );
@@ -42,7 +42,7 @@ export function StarPicker({ value, onChange, labels }: { value: number; onChang
           onClick={() => onChange(n)}
           className="grid size-10 place-items-center rounded-full transition-transform hover:scale-110"
         >
-          <Star className={cn("size-7 transition-colors", n <= shown ? "text-[#E0962A]" : "text-[#E9C0CB]")} fill="currentColor" strokeWidth={0} />
+          <Star className={cn("size-7 transition-colors", n <= shown ? "text-star" : "text-star-empty")} fill="currentColor" strokeWidth={0} />
         </button>
       ))}
       <span className="ml-2 text-[13px] font-medium text-forest/70" aria-live="polite">

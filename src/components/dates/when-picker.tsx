@@ -48,7 +48,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
     >
       <PopoverTrigger asChild>
         <button type="button" aria-label={`${labels.label}: ${formatDay(value, locale)}`} className={cn("inline-flex h-12 items-center gap-2 rounded-full border border-forest/15 bg-white px-4 text-[15px] font-medium text-forest shadow-soft transition-colors hover:border-forest/30", className)}>
-          <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-[#B0245A]" />
+          <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
           <span className="truncate first-letter:uppercase">{value === today ? labels.today : formatDay(value, locale, "short")}</span>
           {weather.get(value) ? <WeatherGlyph condition={weather.get(value)!.condition} className="size-4 shrink-0" /> : null}
         </button>
@@ -56,7 +56,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
       <PopoverContent align="start" sideOffset={8} className="w-[318px] gap-3 rounded-3xl border-0 bg-white p-4 shadow-lift ring-1 ring-forest/10">
         <div className="flex flex-wrap gap-1.5">
           {quick.map(([name, date]) => (
-            <button key={name} type="button" onClick={() => choose(date)} className={cn("h-9 rounded-full px-3.5 text-[13px] font-semibold transition-colors", value === date ? "bg-forest text-cream" : "bg-[#FFE8EF] text-[#9C1F4A] hover:bg-[#FFD6E2]")}>
+            <button key={name} type="button" onClick={() => choose(date)} className={cn("h-9 rounded-full px-3.5 text-[13px] font-semibold transition-colors", value === date ? "bg-forest text-cream" : "bg-rose-soft text-rose-ink hover:bg-rose-tint")}>
               {name}
             </button>
           ))}
@@ -90,7 +90,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
                 aria-label={formatDay(date, locale)}
                 aria-pressed={date === value}
                 onClick={() => choose(date)}
-                className={cn("mx-auto flex size-10 flex-col items-center justify-center rounded-2xl text-[13.5px] leading-none text-forest transition-colors", off ? "opacity-25" : "hover:bg-[#FFE8EF]", date === value && "bg-forest text-cream hover:bg-forest", date === today && date !== value && "ring-1 ring-[#D6336C]/50")}
+                className={cn("mx-auto flex size-10 flex-col items-center justify-center rounded-2xl text-[13.5px] leading-none text-forest transition-colors", off ? "opacity-25" : "hover:bg-rose-soft", date === value && "bg-forest text-cream hover:bg-forest", date === today && date !== value && "ring-1 ring-rose/50")}
               >
                 <span className="font-medium tabular-nums">{Number(date.slice(8))}</span>
                 {day ? <WeatherGlyph condition={day.condition} className="mt-0.5 size-3" /> : <span className="mt-0.5 h-3" />}

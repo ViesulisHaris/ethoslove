@@ -13,21 +13,21 @@ export async function IdeasTeaser() {
   const locale = (await getLocale()) === "es" ? "es" : "en";
   const ideas = SHOWN.flatMap((id) => IDEAS.filter((i) => i.id === id));
   return (
-    <section className="relative overflow-hidden border-y border-line bg-[#FFF5F2] py-20 lg:py-28">
+    <section className="relative overflow-hidden border-y border-line bg-blush-paper py-20 lg:py-28">
       <div className="container-x mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
-          <p className="text-eyebrow text-[#B0245A]">{t("eyebrow")}</p>
+          <p className="text-eyebrow text-rose-deep">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[17ch] text-forest">{t("title")}</h2>
         </div>
         <div className="lg:col-span-5 lg:pb-1">
           <p className="max-w-md text-lg leading-relaxed text-forest/70">{t("blurb")}</p>
-          <Link href="/dates" className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+          <Link href="/dates" className="group mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">
             {t("all", { count: IDEAS.length })}
             <ArrowRight aria-hidden="true" className="size-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
       </div>
-      <ul className="scrollbar-none flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pt-2 pb-6 sm:scroll-px-8 sm:px-8 lg:scroll-px-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]">
+      <ul className="scrollbar-none flex snap-x snap-proximity scroll-px-5 gap-4 overflow-x-auto px-5 pt-2 pb-6 sm:scroll-px-8 sm:px-8 lg:scroll-px-[max(2rem,calc((100vw-80rem)/2+2rem))] lg:px-[max(2rem,calc((100vw-80rem)/2+2rem))]">
         {ideas.map((idea, i) => (
           <li key={idea.id} className="w-[256px] shrink-0 snap-start">
             <Link href={`/dates?idea=${idea.id}`} className="group relative flex h-[340px] flex-col justify-end overflow-hidden rounded-[28px] p-5 shadow-soft transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1.5 hover:shadow-lift" style={{ backgroundColor: idea.art.to, rotate: `${((i * 5) % 3) - 1}deg` }}>

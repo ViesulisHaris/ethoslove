@@ -41,6 +41,9 @@ type Props = {
 const PLACES = "ethos-places";
 const HALO = "ethos-halo";
 const ROUTE = "ethos-route";
+/* The same rose as the site's tokens, as literals: MapLibre paints on a canvas and cannot read CSS variables. */
+const ROSE = "#D6336C";
+const ROSE_INK = "#8F1F47";
 /** How far the map has to be dragged, as a share of what it shows, before it offers to search again. */
 const MOVED_SHARE = 0.35;
 
@@ -152,12 +155,12 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
             if (image) map.addImage(`pin-${group}`, image, { pixelRatio: 2 });
           }
           map.addSource(ROUTE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-          map.addLayer({ id: ROUTE, type: "line", source: ROUTE, layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#D6336C", "line-width": 3, "line-dasharray": [0.2, 2], "line-opacity": 0.85 } });
+          map.addLayer({ id: ROUTE, type: "line", source: ROUTE, layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ROSE, "line-width": 3, "line-dasharray": [0.2, 2], "line-opacity": 0.85 } });
           map.addSource(HALO, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
-          map.addLayer({ id: HALO, type: "circle", source: HALO, paint: { "circle-radius": 21, "circle-color": "#D6336C", "circle-opacity": 0.18, "circle-stroke-color": "#D6336C", "circle-stroke-width": 1.5, "circle-stroke-opacity": 0.55 } });
+          map.addLayer({ id: HALO, type: "circle", source: HALO, paint: { "circle-radius": 21, "circle-color": ROSE, "circle-opacity": 0.18, "circle-stroke-color": ROSE, "circle-stroke-width": 1.5, "circle-stroke-opacity": 0.55 } });
           map.addSource(PLACES, { type: "geojson", data: { type: "FeatureCollection", features: [] }, cluster: true, clusterRadius: 38, clusterMaxZoom: 15, promoteId: "id" });
           map.addLayer({ id: `${PLACES}-clusters`, type: "circle", source: PLACES, filter: ["has", "point_count"], paint: { "circle-color": "#FFFFFF", "circle-radius": ["step", ["get", "point_count"], 15, 10, 18, 40, 22], "circle-stroke-color": "#F2A7C0", "circle-stroke-width": 3 } });
-          map.addLayer({ id: `${PLACES}-count`, type: "symbol", source: PLACES, filter: ["has", "point_count"], layout: { "text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-allow-overlap": true }, paint: { "text-color": "#9C1F4A" } });
+          map.addLayer({ id: `${PLACES}-count`, type: "symbol", source: PLACES, filter: ["has", "point_count"], layout: { "text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-allow-overlap": true }, paint: { "text-color": ROSE_INK } });
           map.addLayer({
             id: `${PLACES}-pins`,
             type: "symbol",
@@ -293,14 +296,14 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
       {/* Sized with height, not inset: MapLibre's stylesheet sets `position: relative` on this element. */}
       <div ref={holder} className="h-full w-full" role="application" aria-label={labels.map} data-map-state={state} />
       {state === "loading" ? (
-        <div className="absolute inset-0 grid place-items-center text-[13px] text-[#8A6F78]">
+        <div className="absolute inset-0 grid place-items-center text-[13px] text-forest/55">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 shadow-soft backdrop-blur">
             <Loader2 className="size-4 animate-spin" />
             {labels.loading}
           </span>
         </div>
       ) : null}
-      {state === "failed" ? <p className="absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-sm leading-relaxed text-[#8A6F78]">{labels.unavailable}</p> : null}
+      {state === "failed" ? <p className="absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-sm leading-relaxed text-forest/55">{labels.unavailable}</p> : null}
 
       {interactive && state === "ready" ? (
         <>
@@ -327,7 +330,7 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
           </div>
           <div className="absolute right-3 bottom-10 z-10 flex flex-col overflow-hidden rounded-2xl bg-white shadow-lift ring-1 ring-forest/10 max-lg:bottom-24">
             {onNearMe ? (
-              <button type="button" onClick={onNearMe} aria-label={labels.nearMe} title={labels.nearMe} className="grid size-11 place-items-center text-[#9C1F4A] hover:bg-[#FFE8EF]">
+              <button type="button" onClick={onNearMe} aria-label={labels.nearMe} title={labels.nearMe} className="grid size-11 place-items-center text-rose-ink hover:bg-rose-soft">
                 {locating ? <Loader2 className="size-[18px] animate-spin" /> : <LocateFixed className="size-[18px]" />}
               </button>
             ) : null}

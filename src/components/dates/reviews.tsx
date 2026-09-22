@@ -68,7 +68,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           )}
         </div>
         {!open ? (
-          <button type="button" onClick={() => setOpen(true)} className="h-10 shrink-0 rounded-full bg-[#FFE8EF] px-4 text-[13.5px] font-semibold text-[#9C1F4A] hover:bg-[#FFD6E2]">
+          <button type="button" onClick={() => setOpen(true)} className="h-10 shrink-0 rounded-full bg-rose-soft px-4 text-[13.5px] font-semibold text-rose-ink hover:bg-rose-tint">
             {mine ? labels.edit : labels.rate}
           </button>
         ) : null}
@@ -76,7 +76,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
 
       {open ? (
         <form
-          className="mt-4 rounded-[20px] bg-[#FFF5F2] p-4"
+          className="mt-4 rounded-[20px] bg-blush-paper p-4"
           onSubmit={(e) => {
             e.preventDefault();
             void submit();
@@ -102,18 +102,18 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           </div>
           <label className="mt-3 block">
             <span className="text-[12.5px] font-semibold text-forest/70">{labels.body}</span>
-            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-white px-3.5 py-2.5 text-[15px] leading-relaxed text-forest outline-none focus:border-[#D6336C]/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
+            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-white px-3.5 py-2.5 text-[15px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
           </label>
           {state === "unauthenticated" ? (
             <p className="mt-3 rounded-2xl bg-white p-3.5 text-[13.5px] leading-snug text-forest/75">
               {labels.signInBlurb}{" "}
-              <Link href={{ pathname: "/login", query: { next: loginNext } }} className="inline-flex items-center gap-1 font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+              <Link href={{ pathname: "/login", query: { next: loginNext } }} className="inline-flex items-center gap-1 font-semibold text-rose-deep underline-offset-4 hover:underline">
                 <LogIn aria-hidden="true" className="size-3.5" />
                 {labels.signIn}
               </Link>
             </p>
           ) : null}
-          {state === "failed" ? <p className="mt-3 text-[13.5px] text-[#B5341C]">{labels.failed}</p> : null}
+          {state === "failed" ? <p className="mt-3 text-[13.5px] text-destructive">{labels.failed}</p> : null}
           <div className="mt-4 flex items-center gap-2">
             <button type="submit" disabled={!stars || state === "sending"} className="btn-rose inline-flex h-11 items-center gap-2 rounded-full px-5 text-[14px] font-semibold disabled:bg-none disabled:bg-forest/10 disabled:text-forest/50 disabled:shadow-none">
               {state === "sending" ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
@@ -123,7 +123,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
               {labels.cancel}
             </button>
             {mine ? (
-              <button type="button" onClick={() => void onDelete().then((ok) => ok && setOpen(false))} className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-[#B5341C] hover:bg-[#B5341C]/5">
+              <button type="button" onClick={() => void onDelete().then((ok) => ok && setOpen(false))} className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-destructive hover:bg-destructive/5">
                 <Trash2 aria-hidden="true" className="size-3.5" />
                 {labels.remove}
               </button>
@@ -132,7 +132,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
         </form>
       ) : null}
       {state === "done" && !open ? (
-        <p role="status" className="mt-3 text-[13.5px] font-medium text-[#2E6B4E]">
+        <p role="status" className="mt-3 text-[13.5px] font-medium text-moss">
           {labels.thanks}
         </p>
       ) : null}
@@ -144,7 +144,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
       ) : reviews.length > 0 ? (
         <ul className="mt-4 space-y-3">
           {reviews.map((r) => (
-            <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-[#FFF5F2]" : "bg-white")}>
+            <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-blush-paper" : "bg-white")}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
                 <Stars value={r.stars} size="xs" />
                 <span className="font-semibold text-forest">{r.name}</span>

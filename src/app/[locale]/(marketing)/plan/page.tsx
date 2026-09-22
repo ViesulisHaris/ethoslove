@@ -14,7 +14,7 @@ export default async function PlanPage({ params }: PageProps<"/[locale]/plan">) 
   const { locale } = await params;
   setRequestLocale(locale);
   return (
-    <div className="-mt-[var(--header-h)] min-h-dvh bg-[#FFF5F2] pt-[var(--header-h)]">
+    <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)]">
       <PlanView />
     </div>
   );

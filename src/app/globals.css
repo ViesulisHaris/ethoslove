@@ -358,6 +358,21 @@
   --color-cream: var(--brand-cream);
   --color-blush: var(--brand-blush);
   --color-sage: var(--brand-sage);
+
+  /* The couples' side: one rose in five weights, the amber of a star, and the greens and lilac
+     the rooms use. Components use these names, never a hex, so the palette is one block here. */
+  --color-rose: #d6336c;
+  --color-rose-deep: #b0245a;
+  --color-rose-ink: #8f1f47;
+  --color-rose-soft: #ffe8ef;
+  --color-rose-tint: #ffd6e2;
+  --color-rose-mist: #fff0f4;
+  --color-blush-paper: #fff5f2;
+  --color-star: #e0962a;
+  --color-star-empty: #e9c0cb;
+  --color-moss-soft: #dcebdf;
+  --color-lilac: #4b3f9a;
+  --color-lilac-soft: #e6e0f8;
 }
 
 @utility glass-forest {
@@ -427,7 +442,7 @@
   height: 30px;
   border-radius: 999px;
   border: 3px solid #fff;
-  background: #d6336c;
+  background: var(--color-rose);
   color: #fff;
   font: 700 13px/1 var(--font-sans);
   box-shadow: 0 6px 14px -4px rgba(90, 20, 45, 0.55);
@@ -448,7 +463,7 @@
   height: 34px;
   border-radius: 999px 999px 999px 0;
   rotate: -45deg;
-  background: var(--pin, #d6336c);
+  background: var(--pin, var(--color-rose));
   border: 3px solid #fff;
   box-shadow: 0 10px 20px -6px rgba(70, 20, 40, 0.6);
   animation: ethos-pin-drop 0.35s var(--ease-spring) both;
@@ -491,5 +506,5 @@
   box-shadow: 0 0 0 7px rgba(47, 127, 168, 0.2), 0 4px 10px -3px rgba(20, 60, 90, 0.6);
 }
 .maplibregl-ctrl-attrib {
-  font-size: 10.5px;
+  font-size: 11px;
 }

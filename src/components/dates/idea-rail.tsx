@@ -46,17 +46,17 @@ export function IdeaRail({ heading, filters, empty, ideas, doable, selectedId, l
       <div className="flex items-end justify-between gap-4">
         <div className="min-w-0">{heading}</div>
         <div className={cn("hidden shrink-0 gap-1.5 pb-0.5 lg:flex", ideas.length === 0 && "lg:hidden")}>
-          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-[#FFF0F4] disabled:opacity-35">
+          <button type="button" aria-label={labels.previous} disabled={edges.start} onClick={() => scroll(-1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
             <ChevronLeft className="size-4" />
           </button>
-          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-[#FFF0F4] disabled:opacity-35">
+          <button type="button" aria-label={labels.next} disabled={edges.end} onClick={() => scroll(1)} className="grid size-9 place-items-center rounded-full bg-white text-forest shadow-soft ring-1 ring-forest/10 transition-opacity hover:bg-rose-mist disabled:opacity-35">
             <ChevronRight className="size-4" />
           </button>
         </div>
       </div>
       {filters}
       {ideas.length === 0 ? empty : null}
-      <div ref={rail} hidden={ideas.length === 0} className="scrollbar-none -mx-5 flex snap-x snap-mandatory scroll-px-5 gap-3.5 overflow-x-auto px-5 pt-3 pb-5 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:-mx-6 lg:scroll-px-6 lg:px-6" role="list">
+      <div ref={rail} hidden={ideas.length === 0} className="scrollbar-none -mx-5 flex snap-x snap-proximity scroll-px-5 gap-3.5 overflow-x-auto px-5 pt-3 pb-5 sm:-mx-8 sm:scroll-px-8 sm:px-8 lg:-mx-6 lg:scroll-px-6 lg:px-6" role="list">
         {ideas.map((idea, i) => {
           const selected = idea.id === selectedId;
           const near = doable === null || doable.has(idea.id);
@@ -68,7 +68,7 @@ export function IdeaRail({ heading, filters, empty, ideas, doable, selectedId, l
                 onClick={() => onPick(selected ? null : idea.id)}
                 className={cn(
                   "group relative flex h-[236px] w-[184px] flex-col justify-end overflow-hidden rounded-[24px] p-3.5 text-left shadow-soft transition-[transform,box-shadow] duration-300 ease-(--ease-out-quint) hover:-translate-y-1 hover:shadow-lift",
-                  selected && "-translate-y-1 shadow-lift ring-[3px] ring-[#D6336C] ring-offset-2 ring-offset-[#FFF5F2]",
+                  selected && "-translate-y-1 shadow-lift ring-[3px] ring-rose ring-offset-2 ring-offset-blush-paper",
                   !near && "opacity-60 saturate-50",
                 )}
                 style={{ backgroundColor: idea.art.to }}

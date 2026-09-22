@@ -164,14 +164,14 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         </div>
         <div className="flex gap-2.5">
           <dt className="sr-only">Hours</dt>
-          <Clock3 aria-hidden="true" className={cn("mt-0.5 size-4 shrink-0", closed ? "text-[#B5341C]" : "text-forest/40")} />
-          <dd className={cn(closed && "font-medium text-[#B5341C]")}>{details === undefined && !rawHours ? <span className="inline-block h-4 w-36 animate-pulse rounded bg-forest/10 align-middle" aria-label={labels.loading} /> : hoursLine}</dd>
+          <Clock3 aria-hidden="true" className={cn("mt-0.5 size-4 shrink-0", closed ? "text-destructive" : "text-forest/40")} />
+          <dd className={cn(closed && "font-medium text-destructive")}>{details === undefined && !rawHours ? <span className="inline-block h-4 w-36 animate-pulse rounded bg-forest/10 align-middle" aria-label={labels.loading} /> : hoursLine}</dd>
         </div>
       </dl>
 
       {chips.length > 0 || info.free ? (
         <ul className="mt-3.5 flex flex-wrap gap-1.5">
-          {info.free ? <li className="rounded-full bg-[#DCEBDF] px-2.5 py-1 text-[12px] font-semibold text-[#2E6B4E]">{labels.free}</li> : null}
+          {info.free ? <li className="rounded-full bg-moss-soft px-2.5 py-1 text-[12px] font-semibold text-moss">{labels.free}</li> : null}
           {chips.map(([Icon, name]) => (
             <li key={name} className="inline-flex items-center gap-1 rounded-full bg-forest/5 px-2.5 py-1 text-[12px] font-medium text-forest/75">
               <Icon aria-hidden="true" className="size-3" />
@@ -187,7 +187,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           {place.articleUrl ? (
             <>
               {" "}
-              <a href={place.articleUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#B0245A] underline-offset-4 hover:underline">
+              <a href={place.articleUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-rose-deep underline-offset-4 hover:underline">
                 {labels.readMore}
               </a>
             </>
@@ -197,7 +197,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         <p className="mt-3.5 text-[14px] leading-relaxed text-forest/65 italic">“{details.description}”</p>
       ) : null}
 
-      <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-[#FFE8EF] text-[#9C1F4A]" : "btn-rose")}>
+      <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-rose-soft text-rose-ink" : "btn-rose")}>
         {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
         {inPlan ? labels.remove : labels.add}
       </button>

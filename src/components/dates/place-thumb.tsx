@@ -43,7 +43,7 @@ export function PlaceThumb({ place, className, eager = false }: { place: Place; 
         <img src={photo.src} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" />
       ) : (
         <>
-          <img src={kindImage(place.kind)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full scale-110 object-cover opacity-55 blur-[1.5px] saturate-[0.7]" />
+          <img src={kindImage(place.kind, place.id)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full scale-110 object-cover opacity-55 blur-[1.5px] saturate-[0.7]" />
           <span className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: group.color, opacity: 0.42 }} />
           <span className="absolute inset-0 grid place-items-center text-white drop-shadow-[0_2px_6px_rgba(40,10,25,0.45)]">
             <GroupIcon group={place.group} className="size-[38%] max-h-9 max-w-9" />
