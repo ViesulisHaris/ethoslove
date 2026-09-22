@@ -1,0 +1,40 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        { "from": "them", "text": "hbd" },
+        { "from": "me", "text": "hbd" },
+        { "from": "me", "text": "three letters marco" },
+        { "from": "them", "text": "its midnight" },
+        { "from": "me", "text": "SO IS MY BIRTHDAY" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "SO IS MY BIRTHDAY" },
+        { "from": "them", "text": "i know. the rest of the letters are in here" },
+        { "from": "them", "text": "wanted it to land at 00:00. it landed at 00:03" },
+        { "from": "them", "link": { "title": "for maya (hbd. all the letters)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. A birthday template suits it. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "at 00:01 i cancelled our dinner" },
+        { "from": "them", "text": "what" },
+        { "from": "me", "text": "and booked one with the girls. out of spite" },
+        { "from": "them", "text": "it was 3 minutes" },
+        { "from": "me", "text": "i booked FAST. this is so lovely. ur invited. theyll be nice", "tapback": "heart" },
+        { "from": "them", "text": "maya uncancel the dinner" }
+      ]
+    }
+  ]
+}

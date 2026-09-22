@@ -839,7 +839,7 @@ Nothing in the texts says what the gift looks like; slide 3 is a gap for a scree
 template. 154 is built on "open when" letters, which people already search for and make by hand,
 and it makes the case for a bundle without saying so: there is one for every bad night.
 
-## Two crimes and a confession: what 149's comments said, and 156 to 160
+## Two crimes and a confession: what 149's comments said, and 156 to 163
 
 149 ("are u mad at me") is the first of the four-slide batch to break out, and its comment
 section says why more exactly than the view count does. It is two camps shouting past each other:
@@ -858,8 +858,8 @@ has to pick one**:
 - **The gift sits between the two** as the turn, and says nothing for itself.
 - **The loop stays open**, and the last bubble is him still asking: "send me the speech maya".
 
-A thread where one of them is simply right gives the comments nothing to do. 156 to 160 are that
-engine five more times, each a new story with nothing carried over from 149 but the shape:
+A thread where one of them is simply right gives the comments nothing to do. 156 to 163 are that
+engine eight more times, each a new story with nothing carried over from 149 but the shape:
 
 | | His crime | Her confession | Still open |
 |---|---|---|---|
@@ -868,9 +868,12 @@ engine five more times, each a new story with nothing carried over from 149 but 
 | 158 | online, seen, not answering | changed the Netflix password out of spite and cannot remember it | "maya im on the last episode" |
 | 159 | "thanks" to "love u", then eleven minutes of "one sec" | told her mum: he is uninvited from Sunday lunch and the dog is getting his roast potatoes | "maya tell her i said it back" |
 | 160 | "do u know what today is" / "tuesday" / "bin day" (it is their anniversary) | already posted a story, "happy anniversary to me i guess"; his sister replied "oh no" | "maya delete the story" |
+| 161 | "hbd" at 00:00, on her birthday | at 00:01 cancelled their dinner and booked one with the girls, out of spite | "maya uncancel the dinner" |
+| 162 | liked an ex's photo from 2019 ("my thumb slipped") | liked 47 of the ex's photos "so it looks like a glitch", and messaged her that his phone got hacked | "maya what exactly did u send her" |
+| 163 | "nice", to a photo | sent the photo to his best friend to see if he would say nice; he said "wow" | "maya why does dan have ur photo" |
 
-160 is the only one with an occasion in it, on purpose. The others travel further; this one gives
-somebody with an anniversary inside the month a reason to buy today, and "views are not sales".
+160 and 161 are the ones with an occasion in them, on purpose. The others travel further; these give
+somebody with an anniversary or a birthday inside the month a reason to buy today, and "views are not sales".
 
 Two rules that come out of it:
 
@@ -1178,5 +1181,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 158 | u were active 4 minutes ago | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
 | 159 | u said thanks to love u | four slides; no occasion; 149's engine | any (yours) | yours |
 | 160 | bin day | four slides; an anniversary; 149's engine with a reason to buy | any (yours), photos suit it | yours |
+| 161 | hbd | four slides; her birthday; 149's engine with a reason to buy | a birthday one | yours |
+| 162 | u liked her photo | four slides; no occasion; 149's engine, the ex | one with their photos | yours |
+| 163 | nice | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

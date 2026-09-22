@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:19",
+      "messages": [
+        { "from": "me", "text": "u liked her photo" },
+        { "from": "them", "text": "which" },
+        { "from": "me", "text": "from 2019" },
+        { "from": "them", "text": "my thumb slipped" },
+        { "from": "me", "text": "to 2019??" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "to 2019??" },
+        { "from": "them", "text": "was going back through old photos for this" },
+        { "from": "them", "text": "went back a bit far. sorry" },
+        { "from": "them", "link": { "title": "for maya (i wasnt looking at her)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. One with photos of the two of you suits it best (he was scrolling for them). Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "i need to say something" },
+        { "from": "me", "text": "i liked 47 of her photos so it looks like a glitch" },
+        { "from": "them", "text": "thats not how glitches work" },
+        { "from": "me", "text": "and i messaged her that ur phone got hacked" },
+        { "from": "them", "text": "maya" },
+        { "from": "me", "text": "she hasnt replied. this is so nice. block her", "tapback": "heart" },
+        { "from": "them", "text": "maya what exactly did u send her" }
+      ]
+    }
+  ]
+}
