@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "he made me an anniversary present\nwith a photo of him and his ex in it",
       "timestamp": "Today|23:12",
       "messages": [
         {
@@ -15,7 +14,7 @@
         },
         {
           "from": "me",
-          "text": "photo 4. theres someone elses hand on ur shoulder"
+          "text": "photo 4. someone elses hand on ur shoulder"
         },
         {
           "from": "them",
@@ -32,40 +31,15 @@
       "messages": [
         {
           "from": "me",
-          "text": "thats the lakes. 2021"
-        },
-        {
-          "from": "me",
-          "text": "i met u in 2023"
+          "text": "cropped from what marco"
         },
         {
           "from": "them",
-          "text": "u zoomed into a present"
+          "text": "u zoomed into ur own present"
         },
         {
           "from": "them",
-          "text": "it was a nice photo of ME"
-        },
-        {
-          "from": "them",
-          "text": "sorry for liking a photo of my own face"
-        },
-        {
-          "from": "me",
-          "text": "u could have used literally any of ours"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
-        {
-          "from": "them",
-          "text": "i spent 4 hours on this"
-        },
-        {
-          "from": "them",
-          "text": "and ur looking for a reason to be upset"
+          "text": "it was a nice photo of ME. 4 hours i spent on that"
         },
         {
           "from": "them",
@@ -80,14 +54,14 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The most beautiful frame you have, full of photos: the whole point is that it is lovely and she cannot enjoy it. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. The most beautiful frame you have, full of photos: the point is that it is lovely and she cannot enjoy it. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "it is beautiful. i just cant unsee it now"
+          "text": "its beautiful. i cant unsee it now"
         },
         {
           "from": "them",
@@ -95,7 +69,7 @@
         },
         {
           "from": "me",
-          "text": "can u take it out"
+          "text": "can u just take it out"
         },
         {
           "from": "them",
@@ -108,14 +82,40 @@
         {
           "from": "them",
           "text": "shes irrelevant. dont make her a thing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
         },
         {
           "from": "me",
-          "text": "i wont"
+          "text": "i sent photo 4 to ur sister"
         },
         {
           "from": "them",
-          "text": "and dont go on her page again. i know u did"
+          "text": "u did WHAT"
+        },
+        {
+          "from": "me",
+          "text": "she knew who it was straight away"
+        },
+        {
+          "from": "them",
+          "text": "what did she say"
+        },
+        {
+          "from": "me",
+          "text": "nothing",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what did she say"
         }
       ]
     }

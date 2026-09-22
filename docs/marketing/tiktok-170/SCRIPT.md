@@ -1,56 +1,49 @@
 # 170 · what have u been telling her
 
-**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
-164's register: he is the problem, and the gift is how he gets out of it. One tactic: future faking, with his mum as the witness.
-**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Sound:** quiet, slow, no drop. **Post:** 22:47 UK, and reply in character all night.
+**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
+the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
+164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
+future faking, with his mum as the witness.
+**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 22:47 UK.
 
-## The hook (slide 1, typed over the picture)
+## The engine
 
-> his mum asked me when we're moving in. he's been saying "next year" since last christmas
+Both of them are in the wrong, and there is **one object the comments will demand**: the list.
+The last bubble is him asking for it, so the comment section inherits the question and argues with
+itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
 
-It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
-immediately, and slide 2 has to work on its own, because Instagram will show this to people
-starting there.
+- **Against him:** he's told his mum it's happening and there is still no date. Seven of them.
+- **Against her:** she keeps a dated list of her boyfriend's promises, with a voice note in it.
 
-## Why this one
+**The last bubble:** "send me the list maya" — and the account never hands it over.
 
-The tactic is **future faking, with his mum as the witness**:
+## The slides
 
-- **His mum is in the story**, which means somebody else has been told a version of the future. A third person is what turns a private stall into a lie.
-- **"so ur keeping a diary of me now"**: remembering becomes the crime. Everyone who has been asked this arrives already furious.
-- **"u make me feel like a project"**: the guilt line. It is what makes half the comments defend him.
-- **The gift is a year of the future, for free**, in the place where a date should be.
-- **"dont say anything to my mum yet"**: he told her it was happening; now she can't mention it. The last bubble takes the one witness away.
-
-## The comment engine
-
-- **Against him:** he's told his mum, he's told her, and there is still no date.
-- **Against her:** she brought up three old dates from memory in one message, and she's counting.
-
-The caption asks the viewer to settle it, and the account never does.
-
-**Open loop:** what did he actually tell his mum
-
-## The gift (slide 4)
-
-Your screenshot of the gift goes here. The frame that promises a future — the countdown, or the letter about the life he's describing. It has to look like a man who means it. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
-`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
+2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** Any template, as long as it looks like a future he means. This is the part that sells, and in 149 it
+   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
+   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
+4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
+   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
 
 ## Caption
 
-his mum asked me when we're moving in 🥹 he's been saying next year since last christmas. but he made me this so he means it this time right
+his mum asked me when we're moving in and he's been saying next year since last christmas 🥹 then he sent me this. whos in the wrong here
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. and for everyone asking: christmas, march, and the flat with the balcony. that's 3. i'm not counting in a weird way, i just remember
+it's tryethos, template [TEMPLATE NAME]. and no i'm not sending him the list
 
 ## Replies to have ready
 
-- To "he's never moving in": "he's put a deposit down on nothing but he did make me a whole thing"
-- To "the balcony one": "we saw it in june. he said it was too north facing"
-- To "break up": "over a flat? be serious" — and then let them be serious
-- To "what app": "tryethos, code LOVE. make one for someone who books the viewing"
+- To "SEND THE LIST": "7 dates. the earliest is 14 nov last year. thats all ur getting"
+- To "why do u have a list": "because he says i remember things wrong"
+- To "break up": "over a flat? he stayed up making me that" — and then let them"
+- To "what app": "tryethos, code LOVE"
+
+Reply to everything for the first hour, never settle it, and never take his side or hers.
 
 ## Files
 

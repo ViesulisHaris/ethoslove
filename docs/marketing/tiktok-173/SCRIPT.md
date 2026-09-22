@@ -1,56 +1,49 @@
 # 173 · marco unsent a message
 
-**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
-164's register: he is the problem, and the gift is how he gets out of it. One tactic: gaslighting, by unsending the evidence.
-**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Sound:** quiet, slow, no drop. **Post:** 21:38 UK, and reply in character all night.
+**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
+the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
+164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
+gaslighting, by unsending the evidence.
+**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 21:38 UK.
 
-## The hook (slide 1, typed over the picture)
+## The engine
 
-> he unsends the messages and then tells me i imagined them
-
-It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
-immediately, and slide 2 has to work on its own, because Instagram will show this to people
-starting there.
-
-## Why this one
-
-The tactic is **gaslighting, by unsending the evidence**:
-
-- **"Marco unsent a message."** The grey line does the work no bubble can: the evidence disappearing, on screen, at the top of the story.
-- **"u screenshot everything like a psycho"**: the folder is introduced by him, as her illness, which is why she is apologising by slide 5.
-- **"ask anyone" / "ask who"**: he invents a crowd and she asks for a name. Nobody ever gets one.
-- **She apologises for being right**, one bubble after being right. That reversal is the quote.
-- **"whats the folder on ur phone called"**: he found it. Last bubble, no answer, and the viewer is currently reading it.
-
-## The comment engine
+Both of them are in the wrong, and there is **one object the comments will demand**: the folder.
+The last bubble is him asking for it, so the comment section inherits the question and argues with
+itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
 
 - **Against him:** he unsends messages and calls her mad for noticing.
-- **Against her:** she has a secret folder of screenshots of her boyfriend. Half the comments keep one too.
+- **Against her:** 341 secret screenshots of her boyfriend, kept since February.
 
-The caption asks the viewer to settle it, and the account never does.
+**The last bubble:** "whats the folder called maya" — and the account never hands it over.
 
-**Open loop:** what did the unsent message say
+## The slides
 
-## The gift (slide 4)
-
-Your screenshot of the gift goes here. The letter, long, in his handwriting: it has to read like a man who listens to every word. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
-`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
+2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** The letter, long, in his handwriting: it has to read like a man who listens to every word. This is the part that sells, and in 149 it
+   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
+   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
+4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
+   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
 
 ## Caption
 
-he unsent it before i could read it and now i'm the mad one 🥹 i screenshot everything because i keep "getting things wrong". thats normal right
+he unsent it before i could read it and now im the mad one 🥹 i have 341 screenshots of him. whos worse
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. the folder is called just in case, i've had it since february, and no i'm not deleting it
+it's tryethos, template [TEMPLATE NAME]. the folder is called just in case. i've had it since february
 
 ## Replies to have ready
 
-- To "KEEP THE FOLDER": "i've had it since february"
-- To "that's gaslighting": "he says i take things too literally. i do do that"
-- To "what did he say after": "nothing. it's been read since 1am"
-- To "what app": "tryethos, code LOVE. the present is real, thats the part that gets me"
+- To "KEEP THE FOLDER": "341 and counting"
+- To "whats it called": "just in case"
+- To "thats gaslighting": "he says i take things too literally. i do do that"
+- To "what app": "tryethos, code LOVE. the present is real, thats the bit that gets me"
+
+Reply to everything for the first hour, never settle it, and never take his side or hers.
 
 ## Files
 

@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "he went quiet for 3 days —\nand restricted me so i couldn't\nsee his story",
       "timestamp": "Today|19:02",
       "messages": [
         {
@@ -19,53 +18,28 @@
         },
         {
           "from": "them",
-          "text": "ur really doing this"
+          "text": "ur really doing this now"
         },
         {
           "from": "me",
-          "text": "3 days marco. and u restricted me"
+          "text": "3 days marco. u restricted me"
         }
       ]
     },
     {
       "type": "chat",
       "messages": [
+        {
+          "from": "me",
+          "text": "3 days marco. u restricted me"
+        },
         {
           "from": "them",
           "text": "i needed to think without u watching me"
         },
         {
-          "from": "me",
-          "text": "watching u?"
-        },
-        {
           "from": "them",
-          "text": "u check everything i do"
-        },
-        {
-          "from": "me",
-          "text": "i sent 2 messages. in 3 days"
-        },
-        {
-          "from": "them",
-          "text": "and rang dan. and made that account"
-        },
-        {
-          "from": "me",
-          "text": "i thought something happened to u"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
-        {
-          "from": "them",
-          "text": "nothing happened to me. i was doing this"
-        },
-        {
-          "from": "them",
-          "text": "3 days on it. i was going to give it u friday"
+          "text": "i was making this the whole time"
         },
         {
           "from": "them",
@@ -80,7 +54,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. Something that plainly took three days — photos of the two of them, or the long letter. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Something that plainly took three days: photos of the two of them, or the long letter. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -108,15 +82,40 @@
         {
           "from": "them",
           "text": "its ok. i know ur head"
-        },
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
         {
-          "from": "them",
-          "text": "delete the other account. i mean it maya"
+          "from": "me",
+          "text": "marco"
         },
         {
           "from": "me",
-          "text": "its gone",
-          "status": "Read|23:58"
+          "text": "i made a fake account to watch ur story"
+        },
+        {
+          "from": "them",
+          "text": "u WHAT"
+        },
+        {
+          "from": "me",
+          "text": "u watched the first one back twice"
+        },
+        {
+          "from": "them",
+          "text": "whats it called"
+        },
+        {
+          "from": "me",
+          "text": "no. its deleted. i deleted it",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "whats the username maya"
         }
       ]
     }

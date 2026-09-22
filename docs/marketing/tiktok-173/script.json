@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "he unsends the messages\nand then tells me i imagined them",
       "timestamp": "Today|21:38",
       "messages": [
         {
@@ -23,52 +22,27 @@
         {
           "from": "them",
           "text": "nothing. typo"
-        },
-        {
-          "from": "me",
-          "text": "it was 3 lines marco"
         }
       ]
     },
     {
       "type": "chat",
       "messages": [
+        {
+          "from": "them",
+          "text": "nothing. typo"
+        },
+        {
+          "from": "me",
+          "text": "it was 3 lines marco"
+        },
         {
           "from": "them",
           "text": "ur really making this a thing"
         },
         {
-          "from": "me",
-          "text": "u unsend stuff twice a week"
-        },
-        {
           "from": "them",
-          "text": "and u screenshot everything like a psycho"
-        },
-        {
-          "from": "me",
-          "text": "because u tell me i imagined things"
-        },
-        {
-          "from": "them",
-          "text": "u DO imagine things. ask anyone"
-        },
-        {
-          "from": "me",
-          "text": "ask who"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
-        {
-          "from": "them",
-          "text": "im not arguing about a typo"
-        },
-        {
-          "from": "them",
-          "text": "i was going to send u this when i got in"
+          "text": "i was sending u this when i got in"
         },
         {
           "from": "them",
@@ -83,7 +57,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The letter, long, in his handwriting: it has to read like a man who listens to every word. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. The letter, long, in his handwriting: it has to read like a man who listens to every word. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -98,7 +72,7 @@
         },
         {
           "from": "them",
-          "text": "ok. so im a liar and ur perfect"
+          "text": "ok so im a liar and ur perfect"
         },
         {
           "from": "me",
@@ -106,15 +80,45 @@
         },
         {
           "from": "them",
-          "text": "its always something with u maya"
+          "text": "u DO imagine things maya. ask anyone"
         },
         {
           "from": "me",
           "text": "ok. sorry. maybe i read it wrong"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i screenshot everything u send me"
         },
         {
           "from": "them",
-          "text": "whats the folder on ur phone called"
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since february. 341 of them"
+        },
+        {
+          "from": "them",
+          "text": "open it"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "whats the folder called maya"
         }
       ]
     }

@@ -917,55 +917,60 @@ Rules for this register, because it cuts both ways:
   It brings people to the account, where the next post sells. Never two in a row, and never let it
   become the account's voice.
 
-### Six more tactics, five slides each: 170 to 175
+### What 149 actually looked like when it did 1.1M, and 170 to 175
 
-Ten of these exist now, which is a quarter's supply at one a week with lighter posts between them,
-not a fortnight of them. 170 to 175 change the shape twice over:
+The posted version of 149 is **ten slides**, and the script in this folder is only the words:
 
-**A typed hook over slide 1.** 164 and 167 to 169 have none, and they ask the first bubble to do a
-job it cannot do at thumbnail size. Every one of these opens with the line a creator types over the
-screenshot — the promise of the story, not the first line of it — because that is the only text
-legible before somebody decides to swipe.
+1. Chat, with the timestamp. Ends on "doing what".
+2. Chat, opening on "doing what" again — the way a real person screenshots a thread they are
+   scrolling — then his two lines and the link card at the bottom.
+3 to 9. **The gift, being opened, frame by frame.** Seven slides of it. This is most of the
+   carousel, it is the only part that sells, and it is why people bought from a post about a
+   text message.
+10. Chat: the confession, in the rhythm the comments quoted — "marco" / "i wrote a breakup speech
+   in my notes app" / "u what" / "it was really good too" / "send it" / her refusing with a heart
+   Tapback on it / **"send me the speech maya"**.
 
-**Five slides, not four**: the hook, the escalation, the gift arriving, the gift itself, the turn.
-The extra slide is the escalation, where he says the worst thing and she starts taking the blame;
-it is what makes the gift land as a move rather than a gesture, and it is one more swipe counted.
+**No text is typed over any of it.** Not one slide. A hook drawn over the picture is what the
+lighter carousels need; this register is a screenshot somebody is not supposed to be seeing, and a
+caption printed on it breaks that in half.
 
-| | The hook over slide 1 | The tactic | His line for it | Last words |
+**Why the comments went to war, which is the whole point.** They are not arguing with the post,
+they are arguing with each other: *break up* · *why did you write the breakup speech* · *SEND THE
+SPEECH* · *who is in the wrong here*. Three things cause that, and every carousel from 170 on is
+built to cause it on purpose:
+
+- **Both of them are in the wrong.** His is small and universally hated. Hers is bigger, weirder
+  and she confesses it herself, so the room splits and neither half is wrong.
+- **There is one object the comments can demand.** The speech. It exists, it is named, it is never
+  handed over, and hundreds of people will type the same three words asking for it. A demand is the
+  cheapest comment on the app and every one of them is another notification pulling somebody back.
+- **The last bubble is him asking for it, with her name on it.** The thread ends unresolved, and
+  the argument moves into the comments, where it costs us nothing and earns everything.
+
+170 to 175 are that, six times, with the toxic register from 164 underneath. Each is 10 or 11
+slides: two chat, five to seven gift frames, two chat.
+
+| | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
 |---|---|---|---|---|
-| 170 | his mum asked me when we're moving in. he's been saying "next year" since last christmas | future faking, with his mum as the witness | "so ur keeping a diary of me now" / "u make me feel like a project" | "dont say anything to my mum yet. let me do it properly" |
-| 171 | he went quiet for 3 days — and restricted me so i couldn't see his story | the silent treatment, with a soft block on top | "i needed to think without u watching me" | "delete the other account. i mean it maya" · her "its gone", Read 23:58 |
-| 172 | his sister posted the whole family. i'm the only one cropped out of it | he won't post her; the gift is the private version | "u exist in my house. in my bed. at my sisters christening" | "take ur story down. the one with my hoodie in it" |
-| 173 | he unsends the messages and then tells me i imagined them | gaslighting, by unsending the evidence | "u DO imagine things. ask anyone" | "whats the folder on ur phone called" |
-| 174 | he made me an anniversary present with a photo of him and his ex in it | the ex, kept in the room | "sorry for liking a photo of my own face" | "dont go on her page again. i know u did" |
-| 175 | i got the job. he asked when i was going to ask him | conditional love: the gift as the price of leaving | "i cant do distance. u know that about me" | "smart girl. we'll go to dublin together one day" |
+| 170 | future faking; his mum has been told it's happening | a note of every time he's said "next year" — 7 dates, one a voice note | the list | "send me the list maya" |
+| 171 | the silent treatment, plus a soft block | a burner account made to watch his story | the username | "whats the username maya" |
+| 172 | he won't post her; the gift is the private version | posted his family's uncropped photo herself; his mum replied with 3 hearts | her story | "maya take it down" |
+| 173 | gaslighting, by unsending the evidence | 341 secret screenshots since February | the folder | "whats the folder called maya" |
+| 174 | his ex's hand in photo 4 of her present | sent photo 4 to his sister behind his back | what the sister said | "maya what did she say" |
+| 175 | conditional love; he never says don't go | lied that she'd sent the email; it's in drafts | the sent folder | "show me ur sent folder maya" |
 
-Her crime, in each, because the two-camp engine has to keep running under the tactic: she recites
-three old dates from memory (170); she rang his mate and made a burner account to watch his story
-(171); she counted the dog's posts (172); she keeps a screenshot folder called *just in case*
-(173); she zoomed into her own present and went on the ex's page (174); she emailed HR at 1am
-before sleeping on it (175).
+Rules that come out of it:
 
-What makes this batch work, on top of the rules above:
-
-- **The hook names the tactic in the viewer's own words.** "He restricted me", "he unsends the
-  messages", "he asked when i was going to ask him". The comment section is people teaching each
-  other the word for it, and that is the sharing mechanism: somebody sends it on with "this is
-  literally X".
-- **Something on screen proves it.** The grey "Marco unsent a message." line in 173 does more than
-  any bubble could; so does a photo bubble of the offer in 175. Use what Messages itself draws.
-- **No props.** A flat viewing, a gym story, a christening photo, a lunch break, an email to HR.
-  The moment a viewer has to work out what object is being described, the story is over. This is
-  what killed the ring-and-box draft.
-- **One small verifiable fact, denied or dodged**: 8 o'clock, day 2, 2021, "since august". The
-  fight is never about feelings, which is what makes it feel real and keeps it short.
-- **He never asks for the thing he gets.** He doesn't say don't go, don't see her, delete it (until
-  the last bubble, when it is already won). That is the difference between a villain and this, and
-  it is why the comments cannot agree.
-- **She closes the loop against herself.** She apologises, cancels, deletes, emails, complies.
-  Nothing the viewer wants to happen happens inside the post. That is what the comments are for.
-- **172, 174 and 175 have something to buy inside them** (a post he won't make, an anniversary, a
-  goodbye he is buying off). The other three are pure reach.
+- **Never resolve it in the caption.** The caption asks the room ("whos in the wrong here", "am i
+  the problem", "what would u do"), and the pinned comment refuses the object.
+- **The refusal has to be believable.** She doesn't send the list because he'd see it; she can't
+  repeat what his sister said because his sister would know. A refusal with a reason gets argued
+  with; a coy one reads as a bit.
+- **His crime stays small enough to defend.** A vague "next year", a quiet three days, a crop. The
+  moment he is a monster, everybody agrees, and agreement is silence.
+- **No props.** A flat viewing, a gym story, a christening photo, a draft email. This is what killed
+  the ring-and-box version: a viewer working out what object is being described has stopped reading.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 

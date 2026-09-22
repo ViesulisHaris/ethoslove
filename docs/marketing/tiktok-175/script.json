@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "i got the job.\nhe asked when i was going to\nask him",
       "timestamp": "Today|00:41",
       "messages": [
         {
@@ -31,38 +30,13 @@
       "type": "chat",
       "messages": [
         {
-          "from": "me",
-          "text": "ive talked about it since august marco"
+          "from": "them",
+          "text": "when were u going to ask me"
         },
         {
           "from": "me",
           "text": "ask u?"
         },
-        {
-          "from": "them",
-          "text": "we're meant to be a team"
-        },
-        {
-          "from": "me",
-          "text": "its 3 months. ill be back for christmas"
-        },
-        {
-          "from": "them",
-          "text": "so u've already decided"
-        },
-        {
-          "from": "me",
-          "text": "no. i wanted to tell u first"
-        },
-        {
-          "from": "them",
-          "text": "u told ur mum first. she liked the post"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
         {
           "from": "them",
           "text": "do what u want. u always do"
@@ -84,7 +58,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. Everything they have, in one frame, titled so it reads as what she'd be giving up. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Everything the two of them have, in one frame, so it reads as what she would be giving up. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -99,7 +73,7 @@
         },
         {
           "from": "me",
-          "text": "its 3 months"
+          "text": "its 3 months marco"
         },
         {
           "from": "them",
@@ -112,14 +86,40 @@
         {
           "from": "them",
           "text": "u didnt have to do that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
         },
         {
           "from": "me",
-          "text": "i know. i wanted to"
+          "text": "i didnt send the email"
         },
         {
           "from": "them",
-          "text": "smart girl. we'll go to dublin together one day"
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "its in drafts. i read it every day"
+        },
+        {
+          "from": "them",
+          "text": "send it now then"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "show me ur sent folder maya"
         }
       ]
     }

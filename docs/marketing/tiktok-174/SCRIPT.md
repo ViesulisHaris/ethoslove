@@ -1,56 +1,49 @@
 # 174 · whose hand is that
 
-**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
-164's register: he is the problem, and the gift is how he gets out of it. One tactic: the ex, kept in the room: a cropped photo in the present.
-**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Sound:** quiet, slow, no drop. **Post:** 23:12 UK, and reply in character all night.
+**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
+the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
+164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
+the ex, kept in the room.
+**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 23:12 UK.
 
-## The hook (slide 1, typed over the picture)
+## The engine
 
-> he made me an anniversary present with a photo of him and his ex in it
+Both of them are in the wrong, and there is **one object the comments will demand**: what his sister said.
+The last bubble is him asking for it, so the comment section inherits the question and argues with
+itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
 
-It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
-immediately, and slide 2 has to work on its own, because Instagram will show this to people
-starting there.
+- **Against him:** he used a photo from a holiday with his ex in her anniversary present, and won't take it out.
+- **Against her:** she zoomed into her own present and then went to his sister behind his back.
 
-## Why this one
+**The last bubble:** "maya what did she say" — and the account never hands it over.
 
-The tactic is **the ex, kept in the room: a cropped photo in the present**:
+## The slides
 
-- **"whose hand is that"** is the whole post in four words, and it makes slide 2 compulsory.
-- **A date does the arguing**: 2021, and they met in 2023. No feelings, one fact, impossible to talk round.
-- **"sorry for liking a photo of my own face"**: the sulk that turns her into the unreasonable one.
-- **He refuses to take it out**, which is the tell. Removing it costs him nothing, so keeping it is the point.
-- **"dont go on her page again. i know u did"**: her crime, produced by him, at the end, so the last word is his.
-
-## The comment engine
-
-- **Against him:** he used a photo from a holiday with his ex in his girlfriend's anniversary present, and won't remove it.
-- **Against her:** she zoomed into a present looking for something, and she's been on the ex's page.
-
-The caption asks the viewer to settle it, and the account never does.
-
-**Open loop:** where did he get the beach photo
-
-## The gift (slide 4)
-
-Your screenshot of the gift goes here. The most beautiful frame you have, full of photos: the whole point is that it is lovely and she cannot enjoy it. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
-`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
+2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** The most beautiful frame you have, full of photos: the point is that it is lovely and she cannot enjoy it. This is the part that sells, and in 149 it
+   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
+   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
+4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
+   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
 
 ## Caption
 
-he made me an anniversary present and his ex's hand is in photo 4 😭 he says im looking for reasons. am i
+he made my anniversary present with a photo of him and his ex in it 😭 so i sent it to his sister. am i the problem
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. it is genuinely stunning. photo 4 is the lake district in 2021 and i met him in 2023. that's all i'm saying
+it's tryethos, template [TEMPLATE NAME]. photo 4 is the lake district in 2021. i met him in 2023. thats all im saying
 
 ## Replies to have ready
 
-- To "HE KEPT THE PHOTO": "he says its a photo of him. technically it is a photo of him"
-- To "did u find her page": "i'm not saying anything else. he reads these"
-- To "break up": "over a crop? he spent 4 hours on it" — and then let them"
-- To "what app": "tryethos, code LOVE. use ur own photos tho. all of them"
+- To "WHAT DID THE SISTER SAY": "i cant. she'd know it was me"
+- To "u went to his SISTER": "she replied in 4 minutes. at 11pm"
+- To "he kept the photo": "he says its a photo of him. technically it is a photo of him"
+- To "what app": "tryethos, code LOVE. use ur own photos tho"
+
+Reply to everything for the first hour, never settle it, and never take his side or hers.
 
 ## Files
 

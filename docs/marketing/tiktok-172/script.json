@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "his sister posted the whole family.\ni'm the only one cropped out of it",
       "timestamp": "Today|20:19",
       "messages": [
         {
@@ -31,41 +30,16 @@
       "type": "chat",
       "messages": [
         {
-          "from": "them",
-          "text": "the dogs a running joke"
-        },
-        {
           "from": "me",
-          "text": "u never post me either. 14 months"
+          "text": "dans dog is in it"
         },
         {
           "from": "them",
-          "text": "im private. u knew that when u met me"
-        },
-        {
-          "from": "me",
-          "text": "i just want to exist somewhere"
+          "text": "the dogs a joke. ur being dramatic"
         },
         {
           "from": "them",
-          "text": "u exist in my house. in my bed. at my sisters christening"
-        },
-        {
-          "from": "them",
-          "text": "thats not enough for u?"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
-        {
-          "from": "them",
-          "text": "hold on. i was giving u this tomorrow"
-        },
-        {
-          "from": "them",
-          "text": "40 photos of u. because apparently i hide u"
+          "text": "i made u this last night. 40 photos of u"
         },
         {
           "from": "them",
@@ -80,7 +54,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. As many photos of the two of them as the template holds: the post he will not make, made privately. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. As many photos of the two of them as the template holds: the post he will not make, made privately. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -104,18 +78,40 @@
         {
           "from": "them",
           "text": "it is a bit"
-        },
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
         {
-          "from": "them",
-          "text": "and take ur story down"
+          "from": "me",
+          "text": "marco"
         },
         {
           "from": "me",
-          "text": "which one"
+          "text": "i posted the uncropped one on my story"
         },
         {
           "from": "them",
-          "text": "the one with my hoodie in it. u know which one"
+          "text": "u did what"
+        },
+        {
+          "from": "me",
+          "text": "ur mum replied to it. 3 hearts"
+        },
+        {
+          "from": "them",
+          "text": "take it down"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya take it down"
         }
       ]
     }

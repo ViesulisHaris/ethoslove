@@ -2,7 +2,6 @@
   "slides": [
     {
       "type": "chat",
-      "hook": "his mum asked me when we're moving in.\nhe's been saying \"next year\" since\nlast christmas",
       "timestamp": "Today|22:47",
       "messages": [
         {
@@ -19,40 +18,11 @@
         },
         {
           "from": "me",
-          "text": "marco"
+          "text": "when marco"
         },
         {
           "from": "them",
-          "text": "it IS happening"
-        }
-      ]
-    },
-    {
-      "type": "chat",
-      "messages": [
-        {
-          "from": "me",
-          "text": "u said that at christmas"
-        },
-        {
-          "from": "me",
-          "text": "and in march. and the one with the balcony"
-        },
-        {
-          "from": "them",
-          "text": "so ur keeping a diary of me now"
-        },
-        {
-          "from": "me",
-          "text": "no i just remember things"
-        },
-        {
-          "from": "them",
-          "text": "u make me feel like a project"
-        },
-        {
-          "from": "me",
-          "text": "i just want a date. any date"
+          "text": "when it happens"
         }
       ]
     },
@@ -61,11 +31,15 @@
       "messages": [
         {
           "from": "them",
-          "text": "im not doing this tonight"
+          "text": "when it happens"
         },
         {
           "from": "them",
-          "text": "i was saving this for the weekend. here"
+          "text": "why are u like this tonight"
+        },
+        {
+          "from": "them",
+          "text": "i was giving u this at the weekend"
         },
         {
           "from": "them",
@@ -80,7 +54,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The frame that promises a future — the countdown, or the letter about the life he's describing. It has to look like a man who means it. Their name: Maya. Your name: Marco."
+      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Any template, as long as it looks like a future he means. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -91,7 +65,7 @@
         },
         {
           "from": "me",
-          "text": "this time next year?"
+          "text": "i just want a date. any date"
         },
         {
           "from": "them",
@@ -99,23 +73,49 @@
         },
         {
           "from": "me",
-          "text": "u said that last march"
+          "text": "u said that at christmas. and in march"
         },
         {
           "from": "them",
-          "text": "and this is exactly why i dont plan things with u"
+          "text": "so ur keeping a diary of me now"
         },
         {
           "from": "me",
-          "text": "ok. im sorry. i love it. i really do"
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have a note in my phone of every time u've said next year"
         },
         {
           "from": "them",
-          "text": "thats my maya"
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "theres 7 dates in it. one of them is a voice note"
         },
         {
           "from": "them",
-          "text": "dont say anything to my mum yet. let me do it properly"
+          "text": "send it"
+        },
+        {
+          "from": "me",
+          "text": "no. im deleting it. i hate that i love this",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "send me the list maya"
         }
       ]
     }

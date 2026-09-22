@@ -1,56 +1,49 @@
 # 175 · got what
 
-**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
-164's register: he is the problem, and the gift is how he gets out of it. One tactic: conditional love: the gift as the price of leaving.
-**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Sound:** quiet, slow, no drop. **Post:** 00:41 UK, and reply in character all night.
+**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
+the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
+164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
+conditional love: the gift as the price of leaving.
+**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 00:41 UK.
 
-## The hook (slide 1, typed over the picture)
+## The engine
 
-> i got the job. he asked when i was going to ask him
+Both of them are in the wrong, and there is **one object the comments will demand**: the email she never sent.
+The last bubble is him asking for it, so the comment section inherits the question and argues with
+itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
 
-It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
-immediately, and slide 2 has to work on its own, because Instagram will show this to people
-starting there.
+- **Against him:** he never once said don't go. He just made her something and let her do it herself.
+- **Against her:** she lied to his face about sending it, and she's been reading the draft every day.
 
-## Why this one
+**The last bubble:** "show me ur sent folder maya" — and the account never hands it over.
 
-The tactic is **conditional love: the gift as the price of leaving**:
+## The slides
 
-- **"got what"** to the best news of her year. One word, and everyone has received it.
-- **He never says don't go.** Not once, anywhere in the thread. That is the tactic, and it is why the comments can't agree.
-- **"u told ur mum first. she liked the post"**: he has been watching the timeline of who knew what.
-- **The gift is made before she told him** and sent as the thing she'd be throwing away, titled *stay*.
-- **"smart girl. we'll go to dublin together one day"**: the reward, and a second promise for a future that will move again.
-
-## The comment engine
-
-- **Against him:** he made her choose without ever asking her to.
-- **Against her:** she emailed HR at 1am, before sleeping on it, and she's telling herself she wanted to.
-
-The caption asks the viewer to settle it, and the account never does.
-
-**Open loop:** the offer stands til friday — email them back
-
-## The gift (slide 4)
-
-Your screenshot of the gift goes here. Everything they have, in one frame, titled so it reads as what she'd be giving up. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
-`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
+2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** Everything the two of them have, in one frame, so it reads as what she would be giving up. This is the part that sells, and in 149 it
+   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
+   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
+4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
+   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
 
 ## Caption
 
-i turned dublin down at 1am 🥹 he never told me not to go. he just made me this instead. thats not the same thing right
+i told him i turned dublin down 🥹 i didnt send the email. its still in my drafts. what would u do
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. the placement was 3 months, paid, back for christmas. hr said the offer stands til friday. it's tuesday
+it's tryethos, template [TEMPLATE NAME]. hr said the offer stands til friday. its wednesday now
 
 ## Replies to have ready
 
-- To "EMAIL THEM BACK": "the draft is open. it's been open since tuesday"
-- To "he made u choose": "he literally never said dont go. thats what im trying to explain"
-- To "'smart girl'": "he says it when im being reasonable"
-- To "what app": "tryethos, code LOVE. make one for someone who'd drive u to the airport"
+- To "SEND THE EMAIL": "which one"
+- To "go to dublin": "its 3 months. id be back for christmas. thats what i keep saying"
+- To "he made u choose": "he literally never said dont go. thats the bit i cant explain"
+- To "what app": "tryethos, code LOVE"
+
+Reply to everything for the first hour, never settle it, and never take his side or hers.
 
 ## Files
 
