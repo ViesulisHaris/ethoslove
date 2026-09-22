@@ -1001,7 +1001,8 @@
       "readMore": "Read more on Wikipedia",
       "reviewsLink": "Photos & reviews",
       "rank": "#{n} of {of} in {group}",
-      "pairs": "Make it a date"
+      "pairs": "Make it a date",
+      "elsewhere": "On other sites"
     },
     "map": {
       "label": "Map of places for a date",

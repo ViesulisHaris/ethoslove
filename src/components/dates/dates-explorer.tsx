@@ -422,6 +422,7 @@ export function DatesExplorer() {
         add: t("place.add"),
         remove: t("place.remove"),
         directions: t("place.directions"),
+        elsewhere: t("place.elsewhere"),
         website: t("place.website"),
         photosLink: t("place.reviewsLink"),
         call: t("place.call"),

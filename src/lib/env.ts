@@ -52,6 +52,14 @@ export const env = {
    * proved by DNS instead.
    */
   googleSiteVerification: read("GOOGLE_SITE_VERIFICATION"),
+
+  /**
+   * Ratings from the rest of the web, each behind its owner's key. With neither set, a place still
+   * gets its links out (dates/elsewhere.ts); with one set, its score is shown beside ours, with
+   * their name and a link back, which is what their terms require.
+   */
+  tripadvisorKey: read("TRIPADVISOR_API_KEY"),
+  googlePlacesKey: read("GOOGLE_PLACES_API_KEY"),
   bingSiteVerification: read("BING_SITE_VERIFICATION"),
 
   /** Apple Sign-In is hidden until the provider is configured in Supabase. */

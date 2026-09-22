@@ -1001,7 +1001,8 @@
       "readMore": "Leer más en Wikipedia",
       "reviewsLink": "Fotos y reseñas",
       "rank": "N.º {n} de {of} en {group}",
-      "pairs": "Que sea una cita"
+      "pairs": "Que sea una cita",
+      "elsewhere": "En otras webs"
     },
     "map": {
       "label": "Mapa de sitios para una cita",

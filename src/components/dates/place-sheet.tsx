@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useRef } from "react";
-import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Sun, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Star, Sun, X } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
 import type { PlaceDetails } from "@/lib/dates/details";
+import { linksFor, SOURCE_NAMES, type Elsewhere } from "@/lib/dates/elsewhere";
 import { formatDistance } from "@/lib/dates/geo";
 import { formatHours, hoursOn } from "@/lib/dates/hours";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
@@ -22,6 +23,8 @@ import { Stars } from "./stars";
 import { requestPhoto, usePhoto } from "./photo-store";
 
 export type PlaceSheetLabels = {
+  /** "On other sites": scores from Tripadvisor and Google when this install has their keys, and links to look it up otherwise. */
+  elsewhere: string;
   close: string;
   add: string;
   remove: string;
@@ -93,6 +96,21 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   if (details?.stepFree || place.stepFree) chips.push([Accessibility, labels.stepFree]);
   if (details?.notable || place.notable) chips.push([Landmark, labels.landmark]);
   const query = encodeURIComponent(`${place.name} ${where}`.trim());
+
+  // What Tripadvisor and Google say, when this install has their keys; an empty answer otherwise,
+  // and the links below stand in for it. Kept per place, so a stale answer never shows on another.
+  const [elsewhere, setElsewhere] = useState<{ id: string; ratings: Elsewhere[] } | null>(null);
+  useEffect(() => {
+    if (!place.named) return;
+    const ask = new AbortController();
+    fetch(`/api/dates/elsewhere?name=${encodeURIComponent(place.name)}&lat=${place.lat}&lng=${place.lng}`, { signal: ask.signal })
+      .then((res) => (res.ok ? (res.json() as Promise<{ ratings?: Elsewhere[] }>) : null))
+      .then((json) => json && setElsewhere({ id: place.id, ratings: json.ratings ?? [] }))
+      .catch(() => undefined);
+    return () => ask.abort();
+  }, [place.id, place.name, place.lat, place.lng, place.named]);
+  const scores = elsewhere?.id === place.id ? elsewhere.ratings : [];
+  const lookUp = place.named ? linksFor(place).filter((l) => !scores.some((r) => r.source === l.source)) : [];
 
   return (
     <motion.aside
@@ -225,6 +243,29 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </a>
         ) : null}
       </div>
+
+      {scores.length > 0 || lookUp.length > 0 ? (
+        <div className="mt-5">
+          <p className="text-[11.5px] font-semibold tracking-[0.14em] text-forest/50 uppercase">{labels.elsewhere}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {scores.map((r) => (
+              <a key={r.source} href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full bg-forest/[0.05] px-3.5 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/10">
+                <Star aria-hidden="true" className="size-3.5 fill-star text-star" />
+                {r.stars.toFixed(1)}
+                <span className="font-medium text-forest/60">
+                  {SOURCE_NAMES[r.source]} · {labels.reviewsCount(r.reviews)}
+                </span>
+              </a>
+            ))}
+            {lookUp.map((l) => (
+              <a key={l.source} href={l.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full border border-forest/15 px-3.5 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5">
+                {SOURCE_NAMES[l.source]}
+                <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
       <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
       <p className="mt-4 text-[11.5px] leading-snug text-forest/45">{labels.source}</p>

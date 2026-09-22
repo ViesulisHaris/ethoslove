@@ -174,6 +174,10 @@ test.describe("finding a date", () => {
     await expect(sheet.getByText("First date")).toBeVisible();
     // Somewhere to go after: a different kind of place, a short walk away.
     await expect(sheet.getByRole("region", { name: "Make it a date" }).getByRole("button").first()).toBeVisible();
+    // What other sites say: with no keys, a search for this exact place on each of them.
+    await expect(sheet.getByText("On other sites")).toBeVisible();
+    await expect(sheet.getByRole("link", { name: "Tripadvisor" })).toHaveAttribute("href", /tripadvisor\.com\/Search\?q=Livraria%20do%20Bairro/);
+    await expect(sheet.getByRole("link", { name: "Yelp" })).toHaveAttribute("href", /yelp\.com\/search/);
     await sheet.getByRole("button", { name: "Rate it" }).click();
     await sheet.getByRole("radio", { name: "Lovely" }).click();
     await sheet.getByRole("button", { name: "Post it" }).click();
