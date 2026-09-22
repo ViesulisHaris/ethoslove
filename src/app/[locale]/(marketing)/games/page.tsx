@@ -50,11 +50,13 @@ export default async function GamesPage({ params }: PageProps<"/[locale]/games">
       </section>
 
       <section id="pick" className="container-x scroll-mt-28 pb-24">
-        <h2 className="display-lg text-cream">{t("hub.pickTitle")}</h2>
+        <h2 data-reveal className="display-lg text-cream">
+          {t("hub.pickTitle")}
+        </h2>
         <p className="mt-2 max-w-xl text-[15.5px] text-cream/60">{t("hub.pickSub")}</p>
         <ul className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6 lg:grid-cols-3">
-          {GAMES.map((g) => (
-            <li key={g.key}>
+          {GAMES.map((g, i) => (
+            <li key={g.key} data-reveal style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}>
               <Link href={g.href} className="group block h-full rounded-[24px]">
                 <PlayingCard rank={g.rank} suit={g.suit} radius={24} className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="items-center px-3 pt-9 pb-5 text-center sm:px-7 sm:pt-10 sm:pb-7">
                   <span className="block size-16 transition-transform duration-500 ease-(--ease-spring) group-hover:scale-110 group-hover:rotate-6 sm:size-24">

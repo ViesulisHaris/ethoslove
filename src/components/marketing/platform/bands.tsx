@@ -13,7 +13,7 @@ export async function LongDistanceBand() {
     <section className="relative isolate overflow-hidden bg-forest py-24 text-cream lg:py-32">
       <FloralFrame frame="band" ground="bare" />
       <div className="container-x relative grid items-center gap-12 lg:grid-cols-2">
-        <div>
+        <div data-reveal>
           <p className="text-eyebrow text-cream/60">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[15ch]">
             {t("titleA")} <em className="text-blush">{t("titleB")}</em>
@@ -24,7 +24,7 @@ export async function LongDistanceBand() {
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>
         </div>
-        <svg viewBox="0 0 520 300" className="mx-auto h-auto w-full max-w-[520px]" aria-hidden="true">
+        <svg data-reveal viewBox="0 0 520 300" className="mx-auto h-auto w-full max-w-[520px]" aria-hidden="true" style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
           <path d="M60 236 Q260 -20 460 236" fill="none" stroke="#F0C8C2" strokeWidth="2.5" strokeDasharray="1 11" strokeLinecap="round" />
           <circle cx="260" cy="108" r="30" fill="#F0C8C2" opacity="0.16" />
           <circle cx="260" cy="108" r="9" fill="#F0C8C2" />
@@ -57,11 +57,11 @@ export async function GamesBand() {
   return (
     <section className="bg-paper py-20 lg:py-28">
       <div className="container-x grid items-center gap-12 lg:grid-cols-2">
-        <div className="relative isolate order-2 overflow-hidden rounded-[32px] bg-[#200b18] px-4 pt-6 pb-2 shadow-lift sm:px-10 sm:pt-10 lg:order-1">
+        <div data-reveal className="relative isolate order-2 overflow-hidden rounded-[32px] bg-[#200b18] px-4 pt-6 pb-2 shadow-lift sm:px-10 sm:pt-10 lg:order-1" style={{ "--reveal-delay": "100ms" } as React.CSSProperties}>
           <TableFelt />
           <GameHand titles={titles} label={tg("hub.pickTitle")} />
         </div>
-        <div className="order-1 lg:order-2">
+        <div data-reveal className="order-1 lg:order-2">
           <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
@@ -90,7 +90,7 @@ export async function PlatformClosing() {
   return (
     <section className="relative isolate overflow-hidden bg-forest py-28 text-cream lg:py-36">
       <FloralFrame frame="closing" ground="dark" />
-      <div className="container-x relative flex flex-col items-center text-center">
+      <div data-reveal className="container-x relative flex flex-col items-center text-center">
         <h2 className="display-hero max-w-[14ch] italic">{t("title")}</h2>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-cream/75">{t("blurb")}</p>
         <div className="mt-10 flex flex-wrap justify-center gap-3">

@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { MarketingHeader } from "@/components/marketing/header";
 import { MarketingFooter } from "@/components/marketing/footer";
 import { StickyCta } from "@/components/marketing/sticky-cta";
+import { RevealRoot } from "@/components/motion/reveal-root";
 
 export default async function MarketingLayout({ children, params }: LayoutProps<"/[locale]">) {
   const { locale } = await params;
@@ -16,6 +17,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
       </main>
       <MarketingFooter />
       <StickyCta />
+      <RevealRoot />
     </div>
   );
 }

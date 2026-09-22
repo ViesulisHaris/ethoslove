@@ -15,11 +15,11 @@ export async function IdeasTeaser() {
   return (
     <section className="relative overflow-hidden border-y border-line bg-blush-paper py-20 lg:py-28">
       <div className="container-x mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
+        <div data-reveal className="lg:col-span-7">
           <p className="text-eyebrow text-rose-deep">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[17ch] text-forest">{t("title")}</h2>
         </div>
-        <div className="lg:col-span-5 lg:pb-1">
+        <div data-reveal className="lg:col-span-5 lg:pb-1" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p className="max-w-md text-lg leading-relaxed text-forest/70">{t("blurb")}</p>
           {/* min-h-11: a line of 14px text is a 20px tap target, which is half of what a thumb needs. */}
           <Link href="/dates" className="group mt-2 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-rose-deep underline-offset-4 hover:underline">

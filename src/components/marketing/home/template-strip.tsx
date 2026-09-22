@@ -12,7 +12,7 @@ export function TemplateStrip({ manifests }: { manifests: TemplateManifest[] }) 
   return (
     <section className="border-b border-line py-20 lg:py-28">
       <div className="container-x mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
+        <div data-reveal className="lg:col-span-7">
           <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
           <h2 className="display-xl mt-4 max-w-[16ch]">{t("title")}</h2>
         </div>

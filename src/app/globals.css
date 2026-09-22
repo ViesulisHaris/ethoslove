@@ -674,3 +674,24 @@
 .deal-in {
   animation: deal-in 0.55s var(--ease-out-quint) both;
 }
+
+/* ------------------------------------------------------------------ */
+/* Sections that fade up into view (components/motion/reveal-root).    */
+/* Armed only once the observer has run, so nothing is ever hidden     */
+/* without the script that shows it; reduced motion only fades.        */
+/* ------------------------------------------------------------------ */
+.reveal-ready [data-reveal]:not(.is-in) {
+  opacity: 0;
+  translate: 0 22px;
+}
+.reveal-ready [data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out-quint),
+    translate 0.8s var(--ease-out-quint);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready [data-reveal]:not(.is-in) {
+    translate: none;
+  }
+}

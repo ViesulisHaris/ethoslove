@@ -81,6 +81,8 @@ export function PricingCards({
           return (
             <article
               key={id}
+              data-reveal
+              style={{ "--reveal-delay": `${PRODUCT_ORDER.indexOf(id) * 90}ms` } as React.CSSProperties}
               className={cn(
                 "relative flex flex-col rounded-3xl border p-7 sm:p-8",
                 dominant ? "border-forest bg-forest text-paper shadow-lift" : "border-line bg-card",
