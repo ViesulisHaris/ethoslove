@@ -311,7 +311,7 @@
       "video": {
         "n": "04b",
         "title": "A short clip",
-        "blurb": "Optional. A few seconds of them laughing beats a paragraph. Plays muted until they tap."
+        "blurb": "Optional, and premium. A few seconds of them laughing beats a paragraph. Plays muted until they tap."
       },
       "voice": {
         "n": "04c",
@@ -565,7 +565,8 @@
       "uploading": "Uploading…",
       "local": "On this device",
       "failed": "Upload failed",
-      "remove": "Remove"
+      "remove": "Remove",
+      "premium": "Premium"
     },
     "voice": {
       "record": "Record a voice message",
