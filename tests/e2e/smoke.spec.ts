@@ -5,7 +5,7 @@ test("the front page asks where they are, in English", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Find the date.");
   await expect(page.getByRole("combobox", { name: "Where" })).toBeVisible();
   // The four rooms, as cards with a way in.
-  for (const cta of ["Find a date", "Make a gift", "Close the distance", "See what's coming"]) await expect(page.getByRole("link", { name: new RegExp(cta) }).first()).toBeAttached();
+  for (const cta of ["Find a date", "Make a gift", "Close the distance", "Play a game"]) await expect(page.getByRole("link", { name: new RegExp(cta) }).first()).toBeAttached();
 });
 
 test("the Spanish front page is served at /es", async ({ page }) => {
