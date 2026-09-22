@@ -2,6 +2,7 @@
  * Database types. Hand-maintained to mirror supabase/migrations.
  * Regenerate once a project is linked:  npm run db:types
  */
+export type WentAs = "first" | "date" | "anniversary" | "birthday" | "friends";
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type GiftStatus = "draft" | "scheduled" | "live" | "archived";
@@ -158,6 +159,56 @@ export interface Database {
         Update: never;
         Relationships: [];
       };
+      place_reviews: {
+        Row: {
+          id: string;
+          place_id: string;
+          user_id: string;
+          stars: number;
+          cost: number | null;
+          went_as: WentAs | null;
+          body: string | null;
+          place_name: string | null;
+          lat: number | null;
+          lng: number | null;
+          locale: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          place_id: string;
+          user_id: string;
+          stars: number;
+          cost?: number | null;
+          went_as?: WentAs | null;
+          body?: string | null;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          locale?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          stars?: number;
+          cost?: number | null;
+          went_as?: WentAs | null;
+          body?: string | null;
+          place_name?: string | null;
+          lat?: number | null;
+          lng?: number | null;
+          locale?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      waitlist: {
+        Row: { email: string; product: string; locale: string | null; created_at: string };
+        Insert: { email: string; product?: string; locale?: string | null; created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
       purchases: {
         Row: {
           id: string;
@@ -241,6 +292,7 @@ export interface Database {
       };
     };
     Functions: {
+      place_rating_summary: { Args: { ids: string[] }; Returns: { place_id: string; stars: number; reviews: number; cost: number | null }[] };
       has_template_unlock: { Args: { p_user: string; p_slug: string }; Returns: boolean };
       gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };
       storage_orphans: { Args: { p_limit?: number }; Returns: { name: string; bytes: number }[] };

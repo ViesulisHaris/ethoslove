@@ -698,8 +698,8 @@
   },
   "pricing": {
     "eyebrow": "Precios",
-    "title": "Paga una vez. Quédatelo para siempre.",
-    "subtitle": "Dos plantillas son gratis, con un pequeño pie. Las canciones reales, el vídeo, los mensajes de voz y el resto de plantillas se desbloquean con un solo pago: sin suscripción, sin renovaciones, sin sorpresas.",
+    "title": "Las citas, gratis. Los regalos, un solo pago.",
+    "subtitle": "El mapa, los planes y las herramientas a distancia son gratis, para siempre. Las plantillas de regalo se desbloquean con un solo pago: sin suscripción ni renovaciones.",
     "oneTime": "Un solo pago. Tuyo para siempre.",
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
@@ -975,7 +975,8 @@
       "none": "El mapa no conoce ningún sitio para una cita justo aquí. Arrástralo hacia la ciudad más cercana y busca en esa zona.",
       "noneInFilter": "Nada de ese tipo por aquí cerca. Elige otro, o mueve el mapa y busca en una zona más amplia.",
       "more": "Ver {count} más",
-      "credit": "Sitios y datos del mapa © colaboradores de OpenStreetMap. Cualquiera puede añadir lo que falte en openstreetmap.org."
+      "credit": "Sitios y datos del mapa © colaboradores de OpenStreetMap. Cualquiera puede añadir lo que falte en openstreetmap.org.",
+      "cost": "Precio"
     },
     "place": {
       "open": "Abrir",
@@ -984,7 +985,6 @@
       "close": "Cerrar",
       "directions": "Cómo llegar",
       "website": "Web",
-      "reviews": "Fotos y reseñas",
       "call": "Llamar",
       "walk": "{minutes} min a pie",
       "walkBetween": "{minutes} min a pie",
@@ -1001,7 +1001,10 @@
       "photo": "Foto real",
       "photoBy": "Foto: {author}",
       "photoFrom": "Wikimedia Commons",
-      "readMore": "Leer más en Wikipedia"
+      "readMore": "Leer más en Wikipedia",
+      "reviewsLink": "Fotos y reseñas",
+      "rank": "N.º {n} de {of} en {group}",
+      "pairs": "Que sea una cita"
     },
     "map": {
       "label": "Mapa de sitios para una cita",
@@ -1016,6 +1019,45 @@
     "plan": {
       "open": "Nuestro plan",
       "full": "Un plan admite {max} paradas. Quita una primero."
+    },
+    "picks": {
+      "title": "Lo mejor de {place}",
+      "here": "esta zona",
+      "sub": "Las mejores apuestas por aquí, en orden. Primero las que tienen foto real."
+    },
+    "sort": {
+      "label": "Ordenar por",
+      "best": "Mejor para una cita",
+      "rated": "Mejor valorados",
+      "nearest": "Más cerca",
+      "cheapest": "Más baratos"
+    },
+    "reviews": {
+      "title": "Las parejas dicen",
+      "count": "{n, plural, one {# reseña} other {# reseñas}}",
+      "summary": "{stars} de {n, plural, one {# pareja} other {# parejas}}",
+      "none": "Aún no hay reseñas. Sed la primera pareja en valorarlo.",
+      "noneShort": "Sin valorar",
+      "rate": "Valorar",
+      "edit": "Editar la tuya",
+      "yourStars": "Tus estrellas",
+      "star1": "Nunca más",
+      "star2": "No es para nosotros",
+      "star3": "Bien",
+      "star4": "Precioso",
+      "star5": "Cita perfecta",
+      "cost": "Lo que costó para dos",
+      "wentAs": "Fuisteis por",
+      "body": "Una línea para la siguiente pareja",
+      "bodyPlaceholder": "Pedid la mesa de la ventana.",
+      "send": "Publicar",
+      "sending": "Publicando…",
+      "cancel": "Cancelar",
+      "remove": "Borrar mi reseña",
+      "signIn": "Iniciar sesión",
+      "signInBlurb": "Las reseñas necesitan cuenta, para que nadie valore un sitio cincuenta veces. Es gratis y se hace en un momento.",
+      "failed": "No se ha enviado. Prueba otra vez en un momento.",
+      "thanks": "Publicada. Gracias, de parte de la siguiente pareja."
     }
   },
   "plan": {
@@ -1287,5 +1329,34 @@
       },
       "blurb": "Un sofá, un móvil y una discusión sobre quién conoce mejor a quién. Los primeros son cortos a propósito: cinco minutos y de vuelta a la peli."
     }
+  },
+  "forTwo": {
+    "free": {
+      "eyebrow": "Citas, planes, a distancia",
+      "price": "Gratis",
+      "blurb": "El mapa, las ideas, el plan que envías. Para todo el mundo, para siempre.",
+      "dates": "Ideas para citas en un mapa de cualquier ciudad, con el tiempo y la puesta de sol",
+      "plans": "Planes que envías como enlace, y las reseñas que dejan las parejas",
+      "ldr": "A medio camino, los relojes, citas para dos pantallas",
+      "deck": "Una baraja de preguntas",
+      "cta": "Buscar una cita"
+    },
+    "two": {
+      "eyebrow": "Muy pronto",
+      "price": "29 €",
+      "per": "al año, por pareja",
+      "blurb": "Paga uno y lo tienen los dos. Más o menos la propina de una cena.",
+      "weekly": "Cada jueves, una cita ya planeada para tu ciudad y el tiempo del finde",
+      "shared": "El mismo plan y los mismos sitios guardados en los dos móviles, y una cuenta atrás hasta la siguiente",
+      "templates": "Todas las plantillas de regalo incluidas, todo el año",
+      "games": "Todos los packs de juegos, para un sofá o dos móviles",
+      "memories": "Una foto después de cada cita, y vuestro año de citas al final",
+      "placeholder": "tu@correo.com",
+      "cta": "Avisadme cuando esté",
+      "thanks": "Estás en la lista. Escribiremos una vez, cuando esté listo, y nunca más.",
+      "failed": "No se ha enviado. Prueba otra vez en un momento.",
+      "note": "Sin tarjeta, sin cargo. Un correo cuando salga."
+    },
+    "giftsEyebrow": "Regalos, pagados una vez"
   }
 }

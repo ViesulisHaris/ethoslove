@@ -10,8 +10,15 @@ import type { PlaceDetails } from "@/lib/dates/details";
 import { formatDistance } from "@/lib/dates/geo";
 import { formatHours, hoursOn } from "@/lib/dates/hours";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import type { Place } from "@/lib/dates/places";
+import type { Ranked } from "@/lib/dates/rank";
+import type { PublicReview } from "@/lib/dates/reviews";
+import type { Cost } from "@/lib/dates/cost";
+import type { WentAs } from "@/lib/supabase/types";
+import { CostChip } from "./cost-chip";
 import { GroupIcon } from "./group-icon";
+import { PairsWith } from "./pairs-with";
+import { Reviews, type ReviewsLabels } from "./reviews";
+import { Stars } from "./stars";
 import { requestPhoto, usePhoto } from "./photo-store";
 
 export type PlaceSheetLabels = {
@@ -20,7 +27,7 @@ export type PlaceSheetLabels = {
   remove: string;
   directions: string;
   website: string;
-  reviews: string;
+  photosLink: string;
   call: string;
   openOn: (day: string, hours: string) => string;
   closedOn: (day: string) => string;
@@ -36,16 +43,21 @@ export type PlaceSheetLabels = {
   photoBy: (author: string) => string;
   photoFrom: string;
   readMore: string;
+  rank: (n: number, of: number, group: string) => string;
+  reviewsCount: (n: number) => string;
+  pairs: string;
+  walkBetween: (m: number) => string;
+  reviews: ReviewsLabels;
 };
 
-type Props = { place: Place; details: PlaceDetails | null | undefined; date: Ymd; where: string; locale: "en" | "es"; labels: PlaceSheetLabels; inPlan: boolean; onTogglePlan: () => void; onClose: () => void; className?: string };
+type Props = { place: Ranked; pairs: Ranked[]; reviews: PublicReview[] | undefined; loginNext: string; onSubmitReview: (input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }) => Promise<"ok" | "unauthenticated" | "failed">; onDeleteReview: () => Promise<boolean>; onOpenPlace: (id: string) => void; details: PlaceDetails | null | undefined; date: Ymd; where: string; locale: "en" | "es"; labels: PlaceSheetLabels; inPlan: boolean; onTogglePlan: () => void; onClose: () => void; className?: string };
 
 /**
  * One place, opened. What the map knows about it arrives a moment after the sheet does (address,
  * the hours for the day they picked, a website), and where it knows nothing the sheet says so and
  * hands them a search for photos and reviews, which this site does not pretend to have.
  */
-export function PlaceSheet({ place, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, className }: Props) {
+export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, className }: Props) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
@@ -121,6 +133,18 @@ export function PlaceSheet({ place, details, date, where, locale, labels, inPlan
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
           </h2>
+          <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
+            {place.rating?.reviews ? (
+              <>
+                <Stars value={place.rating.stars} />
+                <span className="font-semibold text-forest/85">{place.rating.stars.toFixed(1)}</span>
+                <span>{labels.reviewsCount(place.rating.reviews)}</span>
+                <span aria-hidden="true">·</span>
+              </>
+            ) : null}
+            <span>{labels.rank(place.groupRank, place.groupSize, group.label[locale].toLowerCase())}</span>
+            <CostChip cost={place.cost} locale={locale} reported={place.rating?.cost !== null && place.rating?.cost !== undefined} />
+          </p>
         </div>
         {photo ? null : (
           <button type="button" onClick={onClose} aria-label={labels.close} className="-mt-1 -mr-1 grid size-10 shrink-0 place-items-center rounded-full text-forest/50 hover:bg-forest/5 hover:text-forest">
@@ -185,7 +209,7 @@ export function PlaceSheet({ place, details, date, where, locale, labels, inPlan
         </a>
         <a href={`https://www.google.com/search?q=${query}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
           <Images aria-hidden="true" className="size-4" />
-          {labels.reviews}
+          {labels.photosLink}
         </a>
         {website ? (
           <a href={website} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
@@ -201,6 +225,8 @@ export function PlaceSheet({ place, details, date, where, locale, labels, inPlan
           </a>
         ) : null}
       </div>
+      <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
+      <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
       <p className="mt-4 text-[11.5px] leading-snug text-forest/45">{labels.source}</p>
     </motion.aside>
   );

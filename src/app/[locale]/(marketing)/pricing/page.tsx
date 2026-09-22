@@ -8,6 +8,7 @@ import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { PricingCards } from "@/components/pricing/pricing-cards";
+import { ForTwo } from "@/components/pricing/for-two";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/pricing">, "searchParams">): Promise<Metadata> {
@@ -36,6 +37,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
         ]}
       />
       <PageHeader eyebrow={t("eyebrow")} title={t("title")} subtitle={t("subtitle")} />
+      <ForTwo />
       <section className="container-x pb-6">
         <PricingCards
           currency={currency}

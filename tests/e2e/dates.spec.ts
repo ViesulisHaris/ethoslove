@@ -53,6 +53,13 @@ async function mockWorld(page: Page, { wet = false }: { wet?: boolean } = {}) {
     return route.fulfill({ json: { photo: name === "Café da Esquina" ? { src: "https://upload.wikimedia.org/wikipedia/commons/thumb/test/640px-cafe.jpg", width: 640, height: 427, credit: "Inês Almeida", licence: "CC BY 4.0", fileUrl: "https://commons.wikimedia.org/wiki/File:Cafe.jpg" } : null } });
   });
   await page.route("**/api/dates/photos*", (route) => route.fulfill({ json: { center: LISBON, sights: [] } }));
+  // Two couples have rated the bookshop; nobody is signed in, so writing one is refused.
+  await page.route("**/api/dates/ratings", (route) => route.fulfill({ json: { ratings: { "node/101": { stars: 4.5, reviews: 2, cost: 0 } } } }));
+  await page.route("**/api/dates/reviews*", (route) => {
+    if (route.request().method() === "POST") return route.fulfill({ status: 401, json: { error: "unauthenticated" } });
+    const id = new URL(route.request().url()).searchParams.get("place");
+    return route.fulfill({ json: { reviews: id === "node/101" ? [{ id: "r1", stars: 5, cost: 0, wentAs: "first", body: "Ask for the poetry shelf.", name: "Inês", createdAt: "2026-09-20T10:00:00Z", mine: false }, { id: "r2", stars: 4, cost: null, wentAs: null, body: null, name: "Marco", createdAt: "2026-09-19T10:00:00Z", mine: false }] : [] } });
+  });
   await page.route("https://upload.wikimedia.org/**", (route) => route.fulfill({ contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64") }));
   // The map draws on plain paper: a style with no sources asks for no tiles.
   await page.route("https://tiles.openfreemap.org/**", (route) =>
@@ -134,6 +141,43 @@ test.describe("finding a date", () => {
     await page.keyboard.press("Escape");
     await expect(sheet).toHaveCount(0);
     await expect(page.getByRole("link", { name: /Our plan/ })).toContainText("1");
+  });
+
+  test("places carry stars, a cost and a rank; the list sorts and filters by cost", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    const shop = page.getByRole("button", { name: /^Livraria do Bairro/ });
+    await expect(shop).toBeVisible();
+    // The rated bookshop leads the top picks, and its card shows the stars.
+    await expect(page.getByRole("region", { name: /Top picks/ }).getByText("#1")).toBeVisible();
+    await expect(page.getByText("4.5", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("2 reviews").first()).toBeVisible();
+    // A place nobody has rated shows where it stands in its group instead.
+    await expect(page.getByText(/#\d+ of \d+ in dinner & drinks/).first()).toBeVisible();
+    const cost = page.getByRole("group", { name: "Cost" });
+    await cost.getByRole("button", { name: "Free", exact: true }).click();
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toHaveCount(0);
+    await expect(shop).toBeVisible();
+    await cost.getByRole("button", { name: "Free", exact: true }).click();
+    await page.getByRole("combobox", { name: "Sort by" }).selectOption("nearest");
+    await expect(page.getByRole("combobox", { name: "Sort by" })).toHaveValue("nearest");
+  });
+
+  test("a place opens on what couples said, and asks the signed-out to sign in before rating", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    await page.getByRole("button", { name: /^Livraria do Bairro/ }).first().click();
+    const sheet = page.getByRole("dialog", { name: "Livraria do Bairro" });
+    await expect(sheet.getByText("4.5 from 2 couples")).toBeVisible();
+    await expect(sheet.getByText("Ask for the poetry shelf.")).toBeVisible();
+    await expect(sheet.getByText("Inês")).toBeVisible();
+    await expect(sheet.getByText("First date")).toBeVisible();
+    // Somewhere to go after: a different kind of place, a short walk away.
+    await expect(sheet.getByRole("region", { name: "Make it a date" }).getByRole("button").first()).toBeVisible();
+    await sheet.getByRole("button", { name: "Rate it" }).click();
+    await sheet.getByRole("radio", { name: "Lovely" }).click();
+    await sheet.getByRole("button", { name: "Post it" }).click();
+    await expect(sheet.getByRole("link", { name: "Sign in" })).toHaveAttribute("href", /\/login\?next=/);
   });
 
   test("filters narrow the list to one kind of place", async ({ page }) => {

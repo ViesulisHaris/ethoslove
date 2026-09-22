@@ -68,6 +68,32 @@ parts of the grammar), and every place has a "Photos & reviews" link out to a we
 - **Nominatim's policy is one request a second.** Month-long caching keeps a normal day far under
   it; a viral day would not be. Same fix: a paid geocoder or a private instance.
 
+## Stars, cost and rank (what makes it read like TripAdvisor)
+
+- **Stars are real.** They come from `place_reviews` (migration 0008): one review per signed-in
+  person per place, 1 to 5 stars, what it cost for two, what they went as, and up to 400
+  characters. Anyone can read them; only the author can write theirs (row-level security). The
+  server strips links and phone numbers and lowercases shouting. A place nobody has rated says so;
+  nothing is ever shown as a rating that is not one.
+- **Cost** is on the ideas' four-step scale (free, pocket change, dinner money, a treat). It is
+  guessed from the kind of place and the cuisine (`cost.ts`), and the typical answer in reviews
+  replaces the guess as soon as there is one (a gold ring on the chip says it came from couples).
+- **Rank** ("#3 of 41 in dinner & drinks") is by *date score* (`rank.ts`): the map's own score,
+  ratings pulled towards the middle when there are few of them (a Bayesian average with a prior of
+  3.8 and the weight of four reviews), and a lift for a real photograph. Rank is always by score,
+  whatever the list is sorted by, so it means the same thing on every card.
+- **Sort**: best for a date, top rated, nearest, cheapest. **Filter** by group and by cost.
+- **Top picks**: the ten best, as a shelf with photographs and rank badges.
+- **Make it a date**: on every place, two others of a different kind within a short walk (dinner
+  then a view; coffee then a gallery), the better ranked first.
+
+## Ethos for Two
+
+`/pricing` now leads with the couples' side: Free (everything above) and "Ethos for Two", €29 a
+year per couple, **not for sale yet**: a waitlist (`waitlist` table, written by the server only,
+rate-limited, no email sent). What it will include, and why it is priced so, is in
+MONETIZATION.md. The gifts' one-time prices follow, unchanged.
+
 ## Privacy, by construction
 
 - A position is snapped to a grid of about 100 m (`snapSearch`) **in the browser**, before any

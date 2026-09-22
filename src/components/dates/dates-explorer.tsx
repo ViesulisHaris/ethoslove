@@ -3,19 +3,23 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence } from "motion/react";
-import { ArrowRight, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
+import { ArrowRight, ArrowUpDown, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { HERO_ART } from "@/lib/dates/art";
 import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
 import { STARTER_CITIES } from "@/lib/dates/cities";
+import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
 import { distanceKm, isLatLng, round, snapSearch, type LatLng } from "@/lib/dates/geo";
 import { fillStops, ideaById, ideasFor, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
+import { pairsWith, rankPlaces, SORTS, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
+import type { PublicReview } from "@/lib/dates/reviews";
+import type { WentAs } from "@/lib/supabase/types";
 import { addStop, MAX_STOPS, removeStop, type PlanStop } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
 import { suggestTimes } from "@/lib/dates/timing";
@@ -26,6 +30,7 @@ import { IdeaRail } from "./idea-rail";
 import { MapView } from "./map-view";
 import { PlaceCard } from "./place-card";
 import { PlaceSheet } from "./place-sheet";
+import { TopPicks } from "./top-picks";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
@@ -68,6 +73,10 @@ export function DatesExplorer() {
   const [sights, setSights] = useState<Sight[]>([]);
   const [forecast, setForecast] = useState<Forecast | null>(null);
   const [groups, setGroups] = useState<PlaceGroup[]>([]);
+  const [costs, setCosts] = useState<Cost[]>([]);
+  const [sort, setSort] = useState<Sort>("best");
+  const [ratings, setRatings] = useState<Ratings>({});
+  const [reviews, setReviews] = useState<Record<string, PublicReview[]>>({});
   const [vibe, setVibe] = useState<Vibe | null>(null);
   const [ideaId, setIdeaId] = useState<string | null>(null);
   const [skip, setSkip] = useState<number[]>([]);
@@ -247,29 +256,95 @@ export function DatesExplorer() {
     return from ? pictured.map((p) => ({ ...p, distanceKm: Math.round(distanceKm(from, p) * 100) / 100 })) : pictured;
   }, [places, rare, sights, origin, where]);
 
+  const ratingKey = useMemo(() => all.map((p) => p.id).sort().join(","), [all]);
+  const loadRatings = useCallback(async (key: string) => {
+    if (!key) return;
+    try {
+      const res = await fetch("/api/dates/ratings", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ids: key.split(",") }) });
+      const json = res.ok ? ((await res.json()) as { ratings?: Ratings }) : null;
+      if (json?.ratings) setRatings((r) => ({ ...r, ...json.ratings }));
+    } catch {
+      // The cards show the map's own order until the ratings arrive.
+    }
+  }, []);
+  useEffect(() => {
+    // A tick later: the list settles in a few renders as places, rare finds and photos arrive.
+    const timer = setTimeout(() => void loadRatings(ratingKey), 150);
+    return () => clearTimeout(timer);
+  }, [ratingKey, loadRatings]);
+
   const day = forecast?.days.find((d) => d.date === date);
   const ideas = useMemo(() => ideasFor(day, all, vibe ?? undefined), [day, all, vibe]);
   const doable = useMemo(() => (status === "ready" || all.length > 0 ? new Set(ideas.filter((i) => isDoable(i, all)).map((i) => i.id)) : null), [ideas, all, status]);
   const idea = ideaById(ideaId ?? undefined);
   const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
-  const visible = useMemo(() => (groups.length === 0 ? all : all.filter((p) => groups.includes(p.group))), [all, groups]);
+  const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
+  const visible = useMemo(() => ranked.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [ranked, groups, costs]);
+  const picks = useMemo(() => topPicks(ranked), [ranked]);
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
-  const selected = selectedId ? (all.find((p) => p.id === selectedId) ?? null) : null;
+  const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
+  const pairs = useMemo(() => (selected ? pairsWith(selected, ranked) : []), [selected, ranked]);
   const planIds = useMemo(() => new Set(plan.stops.map((s) => s.id)), [plan.stops]);
   const ideaInPlan = stops.some((s) => s.place) && stops.every((s) => !s.place || planIds.has(s.place.id));
   const route = useMemo(() => (idea ? stops.flatMap((s) => (s.place ? [{ lat: s.place.lat, lng: s.place.lng, name: s.place.name }] : [])) : plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: s.name }))), [idea, stops, plan.stops]);
 
+  const loadReviews = useCallback(
+    async (id: string) => {
+      try {
+        const res = await fetch(`/api/dates/reviews?place=${encodeURIComponent(id)}&locale=${locale}`);
+        const json = res.ok ? ((await res.json()) as { reviews?: PublicReview[] }) : null;
+        setReviews((r) => ({ ...r, [id]: json?.reviews ?? [] }));
+      } catch {
+        setReviews((r) => ({ ...r, [id]: [] }));
+      }
+    },
+    [locale],
+  );
+  const submitReview = useCallback(
+    async (place: Place, input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }): Promise<"ok" | "unauthenticated" | "failed"> => {
+      try {
+        const res = await fetch("/api/dates/reviews", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ placeId: place.id, stars: input.stars, cost: input.cost, wentAs: input.wentAs, body: input.body, placeName: place.name, lat: place.lat, lng: place.lng, locale }) });
+        if (res.status === 401) return "unauthenticated";
+        if (!res.ok) return "failed";
+        await Promise.all([loadReviews(place.id), loadRatings(place.id)]);
+        return "ok";
+      } catch {
+        return "failed";
+      }
+    },
+    [locale, loadReviews, loadRatings],
+  );
+  const deleteReview = useCallback(
+    async (place: Place): Promise<boolean> => {
+      try {
+        const res = await fetch(`/api/dates/reviews?place=${encodeURIComponent(place.id)}`, { method: "DELETE" });
+        if (!res.ok) return false;
+        setRatings((r) => {
+          const next = { ...r };
+          delete next[place.id];
+          return next;
+        });
+        await Promise.all([loadReviews(place.id), loadRatings(place.id)]);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [loadReviews, loadRatings],
+  );
+
   const open = useCallback(
     (id: string | null) => {
       setSelectedId(id);
+      if (id && !(id in reviews)) void loadReviews(id);
       if (!id || id in details) return;
       fetch(`/api/dates/place?id=${encodeURIComponent(id)}&locale=${locale}`)
         .then((r) => (r.ok ? (r.json() as Promise<{ details?: PlaceDetails }>) : null))
         .then((json) => setDetails((d) => ({ ...d, [id]: json?.details ?? null })))
         .catch(() => setDetails((d) => ({ ...d, [id]: null })));
     },
-    [details, locale],
+    [details, locale, reviews, loadReviews],
   );
 
   const stamp = useCallback((p: typeof plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
@@ -329,6 +404,12 @@ export function DatesExplorer() {
     <PlaceSheet
       key={selected.id}
       place={selected}
+      pairs={pairs}
+      reviews={reviews[selected.id]}
+      loginNext={typeof window === "undefined" ? "/dates" : `${window.location.pathname}${window.location.search}`}
+      onSubmitReview={(input) => submitReview(selected, input)}
+      onDeleteReview={() => deleteReview(selected)}
+      onOpenPlace={open}
       details={details[selected.id]}
       date={date}
       where={shareable ? where.name : ""}
@@ -342,7 +423,7 @@ export function DatesExplorer() {
         remove: t("place.remove"),
         directions: t("place.directions"),
         website: t("place.website"),
-        reviews: t("place.reviews"),
+        photosLink: t("place.reviewsLink"),
         call: t("place.call"),
         openOn: (d, h) => t("place.openOn", { day: d, hours: h }),
         closedOn: (d) => t("place.closedOn", { day: d }),
@@ -358,6 +439,32 @@ export function DatesExplorer() {
         photoBy: (author) => t("place.photoBy", { author }),
         photoFrom: t("place.photoFrom"),
         readMore: t("place.readMore"),
+        rank: (n, of, group) => t("place.rank", { n, of, group }),
+        reviewsCount: (n) => t("reviews.count", { n }),
+        pairs: t("place.pairs"),
+        walkBetween: (m) => t("place.walkBetween", { minutes: m }),
+        reviews: {
+          title: t("reviews.title"),
+          summary: (stars, n) => t("reviews.summary", { stars, n }),
+          none: t("reviews.none"),
+          rate: t("reviews.rate"),
+          edit: t("reviews.edit"),
+          yourStars: t("reviews.yourStars"),
+          starWords: [t("reviews.yourStars"), t("reviews.star1"), t("reviews.star2"), t("reviews.star3"), t("reviews.star4"), t("reviews.star5")],
+          cost: t("reviews.cost"),
+          wentAs: t("reviews.wentAs"),
+          body: t("reviews.body"),
+          bodyPlaceholder: t("reviews.bodyPlaceholder"),
+          send: t("reviews.send"),
+          sending: t("reviews.sending"),
+          cancel: t("reviews.cancel"),
+          remove: t("reviews.remove"),
+          signIn: t("reviews.signIn"),
+          signInBlurb: t("reviews.signInBlurb"),
+          failed: t("reviews.failed"),
+          thanks: t("reviews.thanks"),
+          when: (iso) => formatDay(iso.slice(0, 10), locale, "short"),
+        },
       }}
     />
   ) : null;
@@ -470,10 +577,36 @@ export function DatesExplorer() {
           />
         ) : null}
 
+        {/* the best bets, as a shelf */}
+        {status === "ready" && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort") }} /> : null}
+
         {/* places */}
         <div className="mt-9 flex items-end justify-between gap-4">
           <h2 className="display-md text-forest">{t("places.title")}</h2>
           {status === "ready" || all.length > 0 ? <p className="text-[13px] text-forest/55 tabular-nums">{t("places.count", { count: visible.length })}</p> : null}
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <label className="inline-flex h-10 items-center gap-2 rounded-full bg-white pr-3 pl-3.5 text-[13.5px] font-semibold text-forest ring-1 ring-forest/10">
+            <ArrowUpDown aria-hidden="true" className="size-4 text-forest/50" />
+            <span className="sr-only">{t("sort.label")}</span>
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="bg-transparent pr-1 outline-none">
+              {SORTS.map((s) => (
+                <option key={s} value={s}>
+                  {t(`sort.${s}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="flex gap-1.5" role="group" aria-label={t("places.cost")}>
+            {COST_IDS.map((c) => {
+              const on = costs.includes(c);
+              return (
+                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); }} className={cn("h-10 rounded-full px-3.5 text-[13px] font-semibold transition-colors", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+                  {COST_LABELS[c][locale]}
+                </button>
+              );
+            })}
+          </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
           <button type="button" aria-pressed={groups.length === 0} onClick={() => setGroups([])} className={cn("h-10 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
@@ -522,7 +655,7 @@ export function DatesExplorer() {
               onOpen={() => open(place.id)}
               onHover={(on) => setHoveredId(on ? place.id : null)}
               onTogglePlan={() => togglePlan(place)}
-              labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo") }}
+              labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo"), reviews: (n) => t("reviews.count", { n }), rank: (n, of, group) => t("place.rank", { n, of, group }) }}
             />
           ))}
           {visible.length > shown ? (

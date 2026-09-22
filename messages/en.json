@@ -698,8 +698,8 @@
   },
   "pricing": {
     "eyebrow": "Pricing",
-    "title": "Pay once. Keep it forever.",
-    "subtitle": "Two templates are free, with a small footer. Real songs, video, voice messages and the other templates unlock with one payment. No subscription, no renewals.",
+    "title": "Free to date. Pay once for a gift.",
+    "subtitle": "The map, the plans and the long-distance tools are free, for good. Gift templates unlock with one payment: no subscription, no renewals.",
     "oneTime": "One payment. Yours for good.",
     "bestValue": "Best value",
     "priority": "Includes priority support",
@@ -975,7 +975,8 @@
       "none": "The map doesn't know anywhere for a date right here. Drag it towards the nearest town and search that area.",
       "noneInFilter": "Nothing of that kind close by. Pick another, or drag the map and search a wider area.",
       "more": "Show {count} more",
-      "credit": "Places and map data © OpenStreetMap contributors. Anyone can add what is missing at openstreetmap.org."
+      "credit": "Places and map data © OpenStreetMap contributors. Anyone can add what is missing at openstreetmap.org.",
+      "cost": "Cost"
     },
     "place": {
       "open": "Open",
@@ -984,7 +985,6 @@
       "close": "Close",
       "directions": "Directions",
       "website": "Website",
-      "reviews": "Photos & reviews",
       "call": "Call",
       "walk": "{minutes} min walk",
       "walkBetween": "{minutes} min walk",
@@ -1001,7 +1001,10 @@
       "photo": "Real photo",
       "photoBy": "Photo: {author}",
       "photoFrom": "Wikimedia Commons",
-      "readMore": "Read more on Wikipedia"
+      "readMore": "Read more on Wikipedia",
+      "reviewsLink": "Photos & reviews",
+      "rank": "#{n} of {of} in {group}",
+      "pairs": "Make it a date"
     },
     "map": {
       "label": "Map of places for a date",
@@ -1016,6 +1019,45 @@
     "plan": {
       "open": "Our plan",
       "full": "A plan holds {max} stops. Take one out first."
+    },
+    "picks": {
+      "title": "Top picks in {place}",
+      "here": "this area",
+      "sub": "The best bets near here, ranked. Real photos first."
+    },
+    "sort": {
+      "label": "Sort by",
+      "best": "Best for a date",
+      "rated": "Top rated",
+      "nearest": "Nearest",
+      "cheapest": "Cheapest"
+    },
+    "reviews": {
+      "title": "Couples say",
+      "count": "{n, plural, one {# review} other {# reviews}}",
+      "summary": "{stars} from {n, plural, one {# couple} other {# couples}}",
+      "none": "No reviews yet. Be the first couple to rate it.",
+      "noneShort": "Not rated yet",
+      "rate": "Rate it",
+      "edit": "Edit yours",
+      "yourStars": "Your stars",
+      "star1": "Never again",
+      "star2": "Not for us",
+      "star3": "Fine",
+      "star4": "Lovely",
+      "star5": "Perfect date",
+      "cost": "What it cost for two",
+      "wentAs": "You went as",
+      "body": "A line for the next couple",
+      "bodyPlaceholder": "Ask for the table by the window.",
+      "send": "Post it",
+      "sending": "Posting…",
+      "cancel": "Cancel",
+      "remove": "Delete my review",
+      "signIn": "Sign in",
+      "signInBlurb": "Reviews need an account, so nobody can rate a place fifty times. It's free and takes a moment.",
+      "failed": "That didn't go through. Try again in a moment.",
+      "thanks": "Posted. Thank you, on behalf of the next couple."
     }
   },
   "plan": {
@@ -1287,5 +1329,34 @@
       },
       "blurb": "A sofa, one phone, and an argument about who knows who better. The first ones are short on purpose: five minutes, then back to the film."
     }
+  },
+  "forTwo": {
+    "free": {
+      "eyebrow": "Dates, plans, long distance",
+      "price": "Free",
+      "blurb": "The map, the ideas, the plan you send. For everyone, for good.",
+      "dates": "Date ideas on a map of any town, with the forecast and the sunset",
+      "plans": "Plans you send as a link, and the reviews couples leave",
+      "ldr": "Meet in the middle, the clocks, dates for two screens",
+      "deck": "One deck of question cards",
+      "cta": "Find a date"
+    },
+    "two": {
+      "eyebrow": "Coming soon",
+      "price": "€29",
+      "per": "a year, per couple",
+      "blurb": "One pays, both have it. About the price of one dinner's tip.",
+      "weekly": "Every Thursday, one date already planned for your town and the weekend's weather",
+      "shared": "The same plan and saved places on both phones, and a countdown to the next one",
+      "templates": "Every gift template included, all year",
+      "games": "Every game pack, for one sofa or two phones",
+      "memories": "A photo after each date, and your year of dates at the end of it",
+      "placeholder": "you@example.com",
+      "cta": "Tell me when it's ready",
+      "thanks": "You're on the list. We'll write once, when it's ready, and never otherwise.",
+      "failed": "That didn't go through. Try again in a moment.",
+      "note": "No card, no charge. One email when it launches."
+    },
+    "giftsEyebrow": "Gifts, paid once"
   }
 }
