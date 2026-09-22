@@ -227,11 +227,15 @@ await page.evaluate((phone) => {
 }, PHONE);
 await page.addStyleTag({ content: "nextjs-portal{display:none!important}" });
 
-// The cover, when there is one: its hint only shows once the pictures have loaded.
+// The cover, when there is one: its hint only shows once the pictures have loaded. For stills it is
+// a slide of its own — every gift in the account's hits opens on "For Maya · tap to open" — so keep it.
 const cover = page.getByRole("button", { name: /tap to open/i });
+let coverShot = null;
 if (await cover.last().waitFor({ timeout: 15000 }).then(() => true, () => false)) {
   await page.getByText(/tap to open/i).last().waitFor({ timeout: 30000 }).catch(() => {});
-  await page.waitForTimeout(800);
+  // The name letters itself in over a second and a half; a still wants it written.
+  await page.waitForTimeout(STILLS ? 2600 : 800);
+  if (STILLS) coverShot = await page.screenshot({ type: "jpeg", quality: 95 });
   await cover.last().evaluate((b) => b.click());
 }
 
@@ -334,6 +338,12 @@ const onSlide = async (frame) =>
     : sharp(backdrop)
         .composite([{ input: await sharp(frame).resize(W, H, { kernel: "lanczos3" }).composite([{ input: corners, blend: "dest-in" }]).png().toBuffer(), left: L, top: T }])
         .removeAlpha();
+
+if (coverShot) {
+  const out = join(dir, "still-cover.jpg");
+  await (await onSlide(coverShot)).jpeg({ quality: 95 }).toFile(out);
+  console.log(`wrote ${out}`);
+}
 
 // ── Cutting: frames held until the next one arrives, at a steady 30fps, into H.264 ───────────────
 async function cut(name, from, to, stillAt = from) {
