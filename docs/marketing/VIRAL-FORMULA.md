@@ -917,35 +917,55 @@ Rules for this register, because it cuts both ways:
   It brings people to the account, where the next post sells. Never two in a row, and never let it
   become the account's voice.
 
-### Six more tactics: 170 to 175
+### Six more tactics, five slides each: 170 to 175
 
 Ten of these exist now, which is a quarter's supply at one a week with lighter posts between them,
-not a fortnight of them. Each is one tactic, named, with nothing carried over between stories:
+not a fortnight of them. 170 to 175 change the shape twice over:
 
-| | The tactic | His line for it | Her crime, confessed | Last words |
+**A typed hook over slide 1.** 164 and 167 to 169 have none, and they ask the first bubble to do a
+job it cannot do at thumbnail size. Every one of these opens with the line a creator types over the
+screenshot — the promise of the story, not the first line of it — because that is the only text
+legible before somebody decides to swipe.
+
+**Five slides, not four**: the hook, the escalation, the gift arriving, the gift itself, the turn.
+The extra slide is the escalation, where he says the worst thing and she starts taking the blame;
+it is what makes the gift land as a move rather than a gesture, and it is one more swipe counted.
+
+| | The hook over slide 1 | The tactic | His line for it | Last words |
 |---|---|---|---|---|
-| 170 | future faking: the flat that is always next year | "u keep a list?" / "this is why i dont make plans with u" | told her mum they were moving, twice | "dont tell ur mum about this one til its real" |
-| 171 | the silent treatment, and the gift he made during it | "i needed space. u know what ur like when u get going" | rang his mate, sat outside his flat "for a bit" | "dont ever ring my mates about me again" |
-| 172 | he won't post her; the gift is the private version | "i show u off in real life. thats the bit that counts" | keeps checking a grid with his mate's dog on it | "take ur story down. the one with my hoodie in it" |
-| 173 | gaslighting: a time, denied, with the text right there | "ask anyone. they'll tell u ur exhausting" | a screenshot folder called "just in case" | "whats the folder called maya" · Read 01:04 |
-| 174 | triangulation: a colleague picked the photos | "amy said ur so lucky btw" | went through Amy's page; found 3 fire emojis | "dont make it awkward with amy. she thinks ur lovely" |
-| 175 | conditional love: the gift as the price of leaving | "i cant do distance. u know that about me" | emailed HR at 1am and told him after | "smart girl. told u we'd sort it" |
+| 170 | his mum asked me when we're moving in. he's been saying "next year" since last christmas | future faking, with his mum as the witness | "so ur keeping a diary of me now" / "u make me feel like a project" | "dont say anything to my mum yet. let me do it properly" |
+| 171 | he went quiet for 3 days — and restricted me so i couldn't see his story | the silent treatment, with a soft block on top | "i needed to think without u watching me" | "delete the other account. i mean it maya" · her "its gone", Read 23:58 |
+| 172 | his sister posted the whole family. i'm the only one cropped out of it | he won't post her; the gift is the private version | "u exist in my house. in my bed. at my sisters christening" | "take ur story down. the one with my hoodie in it" |
+| 173 | he unsends the messages and then tells me i imagined them | gaslighting, by unsending the evidence | "u DO imagine things. ask anyone" | "whats the folder on ur phone called" |
+| 174 | he made me an anniversary present with a photo of him and his ex in it | the ex, kept in the room | "sorry for liking a photo of my own face" | "dont go on her page again. i know u did" |
+| 175 | i got the job. he asked when i was going to ask him | conditional love: the gift as the price of leaving | "i cant do distance. u know that about me" | "smart girl. we'll go to dublin together one day" |
 
-What makes these ones work, on top of the rules above:
+Her crime, in each, because the two-camp engine has to keep running under the tactic: she recites
+three old dates from memory (170); she rang his mate and made a burner account to watch his story
+(171); she counted the dog's posts (172); she keeps a screenshot folder called *just in case*
+(173); she zoomed into her own present and went on the ex's page (174); she emailed HR at 1am
+before sleeping on it (175).
 
-- **The tactic has to have a name a viewer already knows** — future faking, the silent treatment,
-  gaslighting — because the comment section is people teaching each other the word for it. That is
-  the sharing mechanism: somebody sends it to a friend with "this is literally X".
-- **No props.** No boxes, no rings, no set pieces. A flat viewing, a gym story, a colleague at
-  lunch, an email to HR. The moment a viewer has to work out what object is being described, the
-  story is over.
-- **One small verifiable fact, denied or dodged**: 8 o'clock, day 2, the beach photo, March. The
+What makes this batch work, on top of the rules above:
+
+- **The hook names the tactic in the viewer's own words.** "He restricted me", "he unsends the
+  messages", "he asked when i was going to ask him". The comment section is people teaching each
+  other the word for it, and that is the sharing mechanism: somebody sends it on with "this is
+  literally X".
+- **Something on screen proves it.** The grey "Marco unsent a message." line in 173 does more than
+  any bubble could; so does a photo bubble of the offer in 175. Use what Messages itself draws.
+- **No props.** A flat viewing, a gym story, a christening photo, a lunch break, an email to HR.
+  The moment a viewer has to work out what object is being described, the story is over. This is
+  what killed the ring-and-box draft.
+- **One small verifiable fact, denied or dodged**: 8 o'clock, day 2, 2021, "since august". The
   fight is never about feelings, which is what makes it feel real and keeps it short.
-- **She is the one who closes the loop against herself** — she apologises, cancels, deletes,
-  emails. Nothing the viewer wants to happen happens inside the post, and that is what the
-  comments are for.
-- **172 and 175 are the two with something to buy inside them** (a post he won't make, a goodbye
-  he is buying off). 174 has an anniversary in it. The rest are pure reach.
+- **He never asks for the thing he gets.** He doesn't say don't go, don't see her, delete it (until
+  the last bubble, when it is already won). That is the difference between a villain and this, and
+  it is why the comments cannot agree.
+- **She closes the loop against herself.** She apologises, cancels, deletes, emails, complies.
+  Nothing the viewer wants to happen happens inside the post. That is what the comments are for.
+- **172, 174 and 175 have something to buy inside them** (a post he won't make, an anniversary, a
+  goodbye he is buying off). The other three are pure reach.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 

@@ -2,27 +2,31 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "he unsends the messages\nand then tells me i imagined them",
       "timestamp": "Today|21:38",
       "messages": [
         {
+          "from": "them",
+          "text": "out with work. dont wait up"
+        },
+        {
+          "system": "Marco unsent a message."
+        },
+        {
           "from": "me",
-          "text": "u said 8"
+          "text": "?"
+        },
+        {
+          "from": "me",
+          "text": "what did that one say"
         },
         {
           "from": "them",
-          "text": "i never said 8"
+          "text": "nothing. typo"
         },
         {
           "from": "me",
-          "text": "marco i have the text"
-        },
-        {
-          "from": "them",
-          "text": "ur really going to screenshot me"
-        },
-        {
-          "from": "me",
-          "text": "i didnt have to. its right there"
+          "text": "it was 3 lines marco"
         }
       ]
     },
@@ -31,11 +35,40 @@
       "messages": [
         {
           "from": "them",
-          "text": "ur obsessed with being right"
+          "text": "ur really making this a thing"
+        },
+        {
+          "from": "me",
+          "text": "u unsend stuff twice a week"
         },
         {
           "from": "them",
-          "text": "i was going to send u this tonight. u've ruined it now"
+          "text": "and u screenshot everything like a psycho"
+        },
+        {
+          "from": "me",
+          "text": "because u tell me i imagined things"
+        },
+        {
+          "from": "them",
+          "text": "u DO imagine things. ask anyone"
+        },
+        {
+          "from": "me",
+          "text": "ask who"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "im not arguing about a typo"
+        },
+        {
+          "from": "them",
+          "text": "i was going to send u this when i got in"
         },
         {
           "from": "them",
@@ -50,7 +83,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The letter, long, in his handwriting font: it has to read like a man who listens. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. The letter, long, in his handwriting: it has to read like a man who listens to every word. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -61,32 +94,27 @@
         },
         {
           "from": "me",
-          "text": "i still think u said 8 tho"
+          "text": "i still want to know what it said"
         },
         {
           "from": "them",
           "text": "ok. so im a liar and ur perfect"
         },
         {
+          "from": "me",
+          "text": "thats not what i said"
+        },
+        {
           "from": "them",
-          "text": "ask anyone. they'll tell u ur exhausting"
+          "text": "its always something with u maya"
         },
         {
           "from": "me",
-          "text": "ok. maybe i got it wrong. sorry"
+          "text": "ok. sorry. maybe i read it wrong"
         },
         {
           "from": "them",
-          "text": "whats the folder called maya"
-        },
-        {
-          "from": "me",
-          "text": "what folder"
-        },
-        {
-          "from": "them",
-          "text": "the one on ur phone",
-          "status": "Read|01:04"
+          "text": "whats the folder on ur phone called"
         }
       ]
     }

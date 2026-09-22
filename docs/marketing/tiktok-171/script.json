@@ -2,27 +2,28 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "he went quiet for 3 days —\nand restricted me so i couldn't\nsee his story",
       "timestamp": "Today|19:02",
       "messages": [
         {
           "from": "me",
-          "text": "3 days marco"
+          "text": "why cant i see ur story"
         },
         {
           "from": "them",
-          "text": "i was busy"
+          "text": "what"
         },
         {
           "from": "me",
-          "text": "u posted a gym story on day 2"
+          "text": "jess can see it. i cant"
         },
         {
           "from": "them",
-          "text": "so ur watching my stories now"
+          "text": "ur really doing this"
         },
         {
           "from": "me",
-          "text": "i just wanted to know u were alive"
+          "text": "3 days marco. and u restricted me"
         }
       ]
     },
@@ -31,11 +32,40 @@
       "messages": [
         {
           "from": "them",
-          "text": "i needed space. u know what ur like when u get going"
+          "text": "i needed to think without u watching me"
+        },
+        {
+          "from": "me",
+          "text": "watching u?"
         },
         {
           "from": "them",
-          "text": "anyway i made u this while i was thinking"
+          "text": "u check everything i do"
+        },
+        {
+          "from": "me",
+          "text": "i sent 2 messages. in 3 days"
+        },
+        {
+          "from": "them",
+          "text": "and rang dan. and made that account"
+        },
+        {
+          "from": "me",
+          "text": "i thought something happened to u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "nothing happened to me. i was doing this"
+        },
+        {
+          "from": "them",
+          "text": "3 days on it. i was going to give it u friday"
         },
         {
           "from": "them",
@@ -50,7 +80,7 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. Something that took three days to make: photos of the two of them, or the letter. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. Something that plainly took three days — photos of the two of them, or the long letter. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
@@ -65,27 +95,28 @@
         },
         {
           "from": "me",
-          "text": "u couldnt send one text"
+          "text": "i thought u were done with me"
         },
         {
           "from": "them",
-          "text": "i was making u that"
+          "text": "i just go quiet. u know that about me"
         },
         {
           "from": "me",
-          "text": "ok thats actually so sweet. im sorry i panicked"
+          "text": "i know. im sorry i panicked"
+        },
+        {
+          "from": "them",
+          "text": "its ok. i know ur head"
+        },
+        {
+          "from": "them",
+          "text": "delete the other account. i mean it maya"
         },
         {
           "from": "me",
-          "text": "i rang dan. i sat outside urs for a bit"
-        },
-        {
-          "from": "them",
-          "text": "u did what"
-        },
-        {
-          "from": "them",
-          "text": "dont ever ring my mates about me again"
+          "text": "its gone",
+          "status": "Read|23:58"
         }
       ]
     }

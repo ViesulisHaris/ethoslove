@@ -1,47 +1,56 @@
-# 175 · i got dublin
+# 175 · got what
 
-**Shape:** four slides, 164's register: he is the problem, and the gift is how he gets out of it. One tactic, conditional love: the gift as the thing she'd be giving up. No text typed over the picture.
-**Occasion:** no occasion · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Template:** see the gift note below.
-**Sound:** quiet, slow, no drop.
-**Post:** 00:41 UK. Reply in character, and never settle it.
+**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
+164's register: he is the problem, and the gift is how he gets out of it. One tactic: conditional love: the gift as the price of leaving.
+**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
+**Sound:** quiet, slow, no drop. **Post:** 00:41 UK, and reply in character all night.
 
-## The first bubble
+## The hook (slide 1, typed over the picture)
 
-"i got dublin" / "when were u going to ask me".
+> i got the job. he asked when i was going to ask him
+
+It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
+immediately, and slide 2 has to work on its own, because Instagram will show this to people
+starting there.
 
 ## Why this one
 
-The tactic is **conditional love: the gift as the thing she'd be giving up**:
+The tactic is **conditional love: the gift as the price of leaving**:
 
-- **Nothing he says is a no.** "i cant do distance" is about him, and it costs her the job. That is the tactic, and it is the one people recognise years later.
-- **The gift is the argument.** He made it before she told him, and sends it as the thing she'd be throwing away.
-- **"u do what u want anyway"**: the sulk that makes a three month placement into a betrayal.
-- **She does it to herself**: she emails HR at 1am and tells him after. The comments will beg her to email back.
-- **"smart girl. told u we'd sort it"**: the reward, and the whole relationship in three words.
+- **"got what"** to the best news of her year. One word, and everyone has received it.
+- **He never says don't go.** Not once, anywhere in the thread. That is the tactic, and it is why the comments can't agree.
+- **"u told ur mum first. she liked the post"**: he has been watching the timeline of who knew what.
+- **The gift is made before she told him** and sent as the thing she'd be throwing away, titled *stay*.
+- **"smart girl. we'll go to dublin together one day"**: the reward, and a second promise for a future that will move again.
 
-## The gift (slide 3)
+## The comment engine
 
-Your screenshot of the gift goes here. The one about the two of them and everything they have: it is being used as the price of leaving. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in `script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+- **Against him:** he made her choose without ever asking her to.
+- **Against her:** she emailed HR at 1am, before sleeping on it, and she's telling herself she wanted to.
+
+The caption asks the viewer to settle it, and the account never does.
+
+**Open loop:** the offer stands til friday — email them back
+
+## The gift (slide 4)
+
+Your screenshot of the gift goes here. Everything they have, in one frame, titled so it reads as what she'd be giving up. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
+`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
 
 ## Caption
 
-i turned dublin down at 1am 🥹 he made me this so i'd see what i'd be missing. he says he cant do distance. thats not a red flag is it
+i turned dublin down at 1am 🥹 he never told me not to go. he just made me this instead. thats not the same thing right
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. the placement was 3 months, paid, and i'd have been back for christmas. hr said the offer stands til friday
+it's tryethos, template [TEMPLATE NAME]. the placement was 3 months, paid, back for christmas. hr said the offer stands til friday. it's tuesday
 
 ## Replies to have ready
 
-- To "EMAIL THEM BACK": "the offer stands til friday. i keep opening the draft"
-- To "he made u choose": "he didnt make me do anything. i chose. thats what im saying"
+- To "EMAIL THEM BACK": "the draft is open. it's been open since tuesday"
+- To "he made u choose": "he literally never said dont go. thats what im trying to explain"
 - To "'smart girl'": "he says it when im being reasonable"
 - To "what app": "tryethos, code LOVE. make one for someone who'd drive u to the airport"
-
-## The open loop
-
-maya email them back
 
 ## Files
 

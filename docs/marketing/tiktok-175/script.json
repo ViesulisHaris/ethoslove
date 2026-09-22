@@ -2,11 +2,16 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "i got the job.\nhe asked when i was going to\nask him",
       "timestamp": "Today|00:41",
       "messages": [
         {
           "from": "me",
-          "text": "i got dublin"
+          "text": "I GOT IT"
+        },
+        {
+          "from": "me",
+          "image": true
         },
         {
           "from": "them",
@@ -14,15 +19,44 @@
         },
         {
           "from": "me",
-          "text": "the 3 month placement. i told u about it in august"
+          "text": "dublin. the 3 month placement"
         },
         {
           "from": "them",
           "text": "when were u going to ask me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ive talked about it since august marco"
         },
         {
           "from": "me",
-          "text": "i didnt think i had to ask"
+          "text": "ask u?"
+        },
+        {
+          "from": "them",
+          "text": "we're meant to be a team"
+        },
+        {
+          "from": "me",
+          "text": "its 3 months. ill be back for christmas"
+        },
+        {
+          "from": "them",
+          "text": "so u've already decided"
+        },
+        {
+          "from": "me",
+          "text": "no. i wanted to tell u first"
+        },
+        {
+          "from": "them",
+          "text": "u told ur mum first. she liked the post"
         }
       ]
     },
@@ -31,11 +65,11 @@
       "messages": [
         {
           "from": "them",
-          "text": "u do what u want anyway. u always do"
+          "text": "do what u want. u always do"
         },
         {
           "from": "them",
-          "text": "i made u this before u told me. read it before u decide"
+          "text": "i made u this last week btw. read it before u decide anything"
         },
         {
           "from": "them",
@@ -50,14 +84,14 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The one about the two of them and everything they have: it is being used as the price of leaving. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. Everything they have, in one frame, titled so it reads as what she'd be giving up. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "marco this is the nicest thing anyone has made me"
+          "text": "this is the nicest thing anyones ever made me"
         },
         {
           "from": "them",
@@ -65,7 +99,7 @@
         },
         {
           "from": "me",
-          "text": "its 3 months. its not leaving"
+          "text": "its 3 months"
         },
         {
           "from": "them",
@@ -73,7 +107,7 @@
         },
         {
           "from": "me",
-          "text": "i emailed hr. i said no. its done"
+          "text": "i emailed them. i said no"
         },
         {
           "from": "them",
@@ -85,7 +119,7 @@
         },
         {
           "from": "them",
-          "text": "smart girl. told u we'd sort it"
+          "text": "smart girl. we'll go to dublin together one day"
         }
       ]
     }

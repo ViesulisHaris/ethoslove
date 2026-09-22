@@ -2,27 +2,57 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "his mum asked me when we're moving in.\nhe's been saying \"next year\" since\nlast christmas",
       "timestamp": "Today|22:47",
       "messages": [
         {
           "from": "me",
-          "text": "did u ring the agent back"
-        },
-        {
-          "from": "them",
-          "text": "which one"
+          "text": "ur mum asked me when we're moving in"
         },
         {
           "from": "me",
-          "text": "the flat. the one we saw in march"
+          "text": "what have u been telling her"
         },
         {
           "from": "them",
-          "text": "ur still on about that"
+          "text": "that its happening"
         },
         {
           "from": "me",
-          "text": "u said we'd have keys by summer marco"
+          "text": "marco"
+        },
+        {
+          "from": "them",
+          "text": "it IS happening"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u said that at christmas"
+        },
+        {
+          "from": "me",
+          "text": "and in march. and the one with the balcony"
+        },
+        {
+          "from": "them",
+          "text": "so ur keeping a diary of me now"
+        },
+        {
+          "from": "me",
+          "text": "no i just remember things"
+        },
+        {
+          "from": "them",
+          "text": "u make me feel like a project"
+        },
+        {
+          "from": "me",
+          "text": "i just want a date. any date"
         }
       ]
     },
@@ -31,11 +61,11 @@
       "messages": [
         {
           "from": "them",
-          "text": "i dont want to argue about a flat"
+          "text": "im not doing this tonight"
         },
         {
           "from": "them",
-          "text": "i've been doing something better anyway. for us"
+          "text": "i was saving this for the weekend. here"
         },
         {
           "from": "them",
@@ -50,18 +80,22 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The frame that looks like a future: the countdown, or the long letter about the two of them. It has to look like he means it. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. The frame that promises a future — the countdown, or the letter about the life he's describing. It has to look like a man who means it. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
+          "text": "marco this is beautiful"
+        },
+        {
+          "from": "me",
           "text": "this time next year?"
         },
         {
           "from": "them",
-          "text": "yes. when things settle down"
+          "text": "when work settles down. u know that"
         },
         {
           "from": "me",
@@ -69,23 +103,19 @@
         },
         {
           "from": "them",
-          "text": "u keep a list?"
+          "text": "and this is exactly why i dont plan things with u"
         },
         {
           "from": "me",
-          "text": "no. i just remember"
+          "text": "ok. im sorry. i love it. i really do"
         },
         {
           "from": "them",
-          "text": "this is why i dont make plans with u"
-        },
-        {
-          "from": "me",
-          "text": "ok. im sorry. i do love it"
+          "text": "thats my maya"
         },
         {
           "from": "them",
-          "text": "dont tell ur mum about this one til its real"
+          "text": "dont say anything to my mum yet. let me do it properly"
         }
       ]
     }

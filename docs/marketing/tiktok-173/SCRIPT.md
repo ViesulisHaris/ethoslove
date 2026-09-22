@@ -1,47 +1,56 @@
-# 173 · i never said 8
+# 173 · marco unsent a message
 
-**Shape:** four slides, 164's register: he is the problem, and the gift is how he gets out of it. One tactic, gaslighting, and the folder she keeps because of it. No text typed over the picture.
-**Occasion:** no occasion · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Template:** see the gift note below.
-**Sound:** quiet, slow, no drop.
-**Post:** 21:38 UK. Reply in character, and never settle it.
+**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
+164's register: he is the problem, and the gift is how he gets out of it. One tactic: gaslighting, by unsending the evidence.
+**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
+**Sound:** quiet, slow, no drop. **Post:** 21:38 UK, and reply in character all night.
 
-## The first bubble
+## The hook (slide 1, typed over the picture)
 
-"u said 8" / "i never said 8" / "marco i have the text".
+> he unsends the messages and then tells me i imagined them
+
+It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
+immediately, and slide 2 has to work on its own, because Instagram will show this to people
+starting there.
 
 ## Why this one
 
-The tactic is **gaslighting, and the folder she keeps because of it**:
+The tactic is **gaslighting, by unsending the evidence**:
 
-- **A time, and a text that proves it.** The smallest possible fact, denied. Everybody has been told they remembered something wrong.
-- **"ask anyone. they'll tell u ur exhausting"**: the line that does the work, because it invents a crowd.
-- **She apologises for being right**, one bubble after proving it, which is the reversal the comments quote.
-- **Her crime is the folder**, and it is also why this post exists: she keeps screenshots. The viewer is standing in it.
-- **"whats the folder called maya" / Read 01:04**: he found it, she doesn't answer, and the thread ends on a read receipt.
+- **"Marco unsent a message."** The grey line does the work no bubble can: the evidence disappearing, on screen, at the top of the story.
+- **"u screenshot everything like a psycho"**: the folder is introduced by him, as her illness, which is why she is apologising by slide 5.
+- **"ask anyone" / "ask who"**: he invents a crowd and she asks for a name. Nobody ever gets one.
+- **She apologises for being right**, one bubble after being right. That reversal is the quote.
+- **"whats the folder on ur phone called"**: he found it. Last bubble, no answer, and the viewer is currently reading it.
 
-## The gift (slide 3)
+## The comment engine
 
-Your screenshot of the gift goes here. The letter, long, in his handwriting font: it has to read like a man who listens. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in `script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+- **Against him:** he unsends messages and calls her mad for noticing.
+- **Against her:** she has a secret folder of screenshots of her boyfriend. Half the comments keep one too.
+
+The caption asks the viewer to settle it, and the account never does.
+
+**Open loop:** what did the unsent message say
+
+## The gift (slide 4)
+
+Your screenshot of the gift goes here. The letter, long, in his handwriting: it has to read like a man who listens to every word. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
+`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
 
 ## Caption
 
-he swears he never said 8 🥹 i've started screenshotting everything because i keep "getting things wrong". thats normal right
+he unsent it before i could read it and now i'm the mad one 🥹 i screenshot everything because i keep "getting things wrong". thats normal right
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. the folder is called just in case. i've had it since february and i'm not deleting it
+it's tryethos, template [TEMPLATE NAME]. the folder is called just in case, i've had it since february, and no i'm not deleting it
 
 ## Replies to have ready
 
-- To "keep the folder": "i've had it since february"
+- To "KEEP THE FOLDER": "i've had it since february"
 - To "that's gaslighting": "he says i take things too literally. i do do that"
-- To "what did he say back": "nothing yet. it's been read since 1am"
-- To "what app": "tryethos, code LOVE. it's genuinely beautiful, that bits not a lie"
-
-## The open loop
-
-whats in the folder
+- To "what did he say after": "nothing. it's been read since 1am"
+- To "what app": "tryethos, code LOVE. the present is real, thats the part that gets me"
 
 ## Files
 

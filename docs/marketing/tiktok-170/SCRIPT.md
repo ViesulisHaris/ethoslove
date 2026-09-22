@@ -1,47 +1,56 @@
-# 170 · did u ring the agent
+# 170 · what have u been telling her
 
-**Shape:** four slides, 164's register: he is the problem, and the gift is how he gets out of it. One tactic, future faking: the flat that is always next year. No text typed over the picture.
-**Occasion:** no occasion · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Template:** see the gift note below.
-**Sound:** quiet, slow, no drop.
-**Post:** 22:47 UK. Reply in character, and never settle it.
+**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
+164's register: he is the problem, and the gift is how he gets out of it. One tactic: future faking, with his mum as the witness.
+**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
+**Sound:** quiet, slow, no drop. **Post:** 22:47 UK, and reply in character all night.
 
-## The first bubble
+## The hook (slide 1, typed over the picture)
 
-"did u ring the agent back". The flat they saw in March. The keys by summer.
+> his mum asked me when we're moving in. he's been saying "next year" since last christmas
+
+It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
+immediately, and slide 2 has to work on its own, because Instagram will show this to people
+starting there.
 
 ## Why this one
 
-The tactic is **future faking: the flat that is always next year**:
+The tactic is **future faking, with his mum as the witness**:
 
-- **"u keep a list?"**: the question that makes remembering the crime. Everybody who has ever been asked it arrives furious.
-- **"this is why i dont make plans with u"**: the plan he never made becomes her fault.
-- **The gift stands in for the flat.** A year of the future, for free, instead of the one thing she asked about.
-- **"dont tell ur mum about this one til its real"**: the last line, and the tell. He knows it isn't.
-- She confesses her own: she told her mum twice already. Both camps get something.
+- **His mum is in the story**, which means somebody else has been told a version of the future. A third person is what turns a private stall into a lie.
+- **"so ur keeping a diary of me now"**: remembering becomes the crime. Everyone who has been asked this arrives already furious.
+- **"u make me feel like a project"**: the guilt line. It is what makes half the comments defend him.
+- **The gift is a year of the future, for free**, in the place where a date should be.
+- **"dont say anything to my mum yet"**: he told her it was happening; now she can't mention it. The last bubble takes the one witness away.
 
-## The gift (slide 3)
+## The comment engine
 
-Your screenshot of the gift goes here. The frame that looks like a future: the countdown, or the long letter about the two of them. It has to look like he means it. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in `script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+- **Against him:** he's told his mum, he's told her, and there is still no date.
+- **Against her:** she brought up three old dates from memory in one message, and she's counting.
+
+The caption asks the viewer to settle it, and the account never does.
+
+**Open loop:** what did he actually tell his mum
+
+## The gift (slide 4)
+
+Your screenshot of the gift goes here. The frame that promises a future — the countdown, or the letter about the life he's describing. It has to look like a man who means it. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
+`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
 
 ## Caption
 
-he still hasn't rung the estate agent but he made me this instead 🥹 he says next year. he means it this time right
+his mum asked me when we're moving in 🥹 he's been saying next year since last christmas. but he made me this so he means it this time right
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, template [TEMPLATE NAME]. and before u ask - march was the third time he's said it. i counted after i posted this
+it's tryethos, template [TEMPLATE NAME]. and for everyone asking: christmas, march, and the flat with the balcony. that's 3. i'm not counting in a weird way, i just remember
 
 ## Replies to have ready
 
-- To "the third time": "march, august, and last night. i'm not counting in a weird way. i just have a memory"
-- To "break up": "he's not a bad person he just gets stressed at work" (and then let them)
-- To "my ex did this": "how long did u give it"
-- To "what app": "tryethos. code LOVE. make one for someone who actually turns up"
-
-## The open loop
-
-how many times has he said next year
+- To "he's never moving in": "he's put a deposit down on nothing but he did make me a whole thing"
+- To "the balcony one": "we saw it in june. he said it was too north facing"
+- To "break up": "over a flat? be serious" — and then let them be serious
+- To "what app": "tryethos, code LOVE. make one for someone who books the viewing"
 
 ## Files
 

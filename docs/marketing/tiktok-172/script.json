@@ -2,27 +2,28 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "his sister posted the whole family.\ni'm the only one cropped out of it",
       "timestamp": "Today|20:19",
       "messages": [
         {
           "from": "me",
-          "text": "u posted dans dog"
-        },
-        {
-          "from": "them",
-          "text": "and?"
+          "text": "ur sister posted the christening photos"
         },
         {
           "from": "me",
-          "text": "we've been together 14 months marco"
+          "text": "im cropped out of the big one"
         },
         {
           "from": "them",
-          "text": "im not putting my private life on there"
+          "text": "she probably needed it square"
         },
         {
           "from": "me",
-          "text": "the dog is private life?"
+          "text": "everyone else is in it marco"
+        },
+        {
+          "from": "me",
+          "text": "dans dog is in it"
         }
       ]
     },
@@ -31,11 +32,40 @@
       "messages": [
         {
           "from": "them",
-          "text": "ur really doing this over instagram"
+          "text": "the dogs a running joke"
+        },
+        {
+          "from": "me",
+          "text": "u never post me either. 14 months"
         },
         {
           "from": "them",
-          "text": "i was up til 2 making u this. thats worth more than a post"
+          "text": "im private. u knew that when u met me"
+        },
+        {
+          "from": "me",
+          "text": "i just want to exist somewhere"
+        },
+        {
+          "from": "them",
+          "text": "u exist in my house. in my bed. at my sisters christening"
+        },
+        {
+          "from": "them",
+          "text": "thats not enough for u?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "hold on. i was giving u this tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "40 photos of u. because apparently i hide u"
         },
         {
           "from": "them",
@@ -50,30 +80,30 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. Photos of the two of them, the more the better: the post he won't make, made privately. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. As many photos of the two of them as the template holds: the post he will not make, made privately. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "its beautiful. i know it is"
-        },
-        {
-          "from": "me",
-          "text": "i just want people to know im urs"
+          "text": "ok this is gorgeous. im sorry"
         },
         {
           "from": "them",
-          "text": "the people that matter know"
+          "text": "the people that matter know about u"
         },
         {
           "from": "them",
-          "text": "i show u off in real life. thats the bit that counts"
+          "text": "i dont need an audience for my relationship"
         },
         {
           "from": "me",
-          "text": "ur right. sorry. its silly"
+          "text": "ur right. its silly"
+        },
+        {
+          "from": "them",
+          "text": "it is a bit"
         },
         {
           "from": "them",
@@ -85,7 +115,7 @@
         },
         {
           "from": "them",
-          "text": "the one with my hoodie in it"
+          "text": "the one with my hoodie in it. u know which one"
         }
       ]
     }

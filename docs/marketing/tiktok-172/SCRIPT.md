@@ -1,47 +1,56 @@
-# 172 · u posted dans dog
+# 172 · im cropped out
 
-**Shape:** four slides, 164's register: he is the problem, and the gift is how he gets out of it. One tactic, he won't post her, and the gift is the answer to it. No text typed over the picture.
-**Occasion:** no occasion · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
-**Template:** see the gift note below.
-**Sound:** quiet, slow, no drop.
-**Post:** 20:19 UK. Reply in character, and never settle it.
+**Shape:** five slides — the hook, the escalation, the gift arriving, the gift itself, the turn.
+164's register: he is the problem, and the gift is how he gets out of it. One tactic: he won't post her, and the gift is the private version of it.
+**Occasion:** see the tracker · **Who posts:** Maya, who receives it (blue). Marco made it (grey).
+**Sound:** quiet, slow, no drop. **Post:** 20:19 UK, and reply in character all night.
 
-## The first bubble
+## The hook (slide 1, typed over the picture)
 
-"u posted dans dog" / "and?" / "we've been together 14 months marco".
+> his sister posted the whole family. i'm the only one cropped out of it
+
+It is the only thing legible at thumbnail size. The first bubbles under it have to pay it off
+immediately, and slide 2 has to work on its own, because Instagram will show this to people
+starting there.
 
 ## Why this one
 
-The tactic is **he won't post her, and the gift is the answer to it**:
+The tactic is **he won't post her, and the gift is the private version of it**:
 
-- **Everyone has had this argument**, or watched a friend have it. It arrives with a side already picked.
-- **The dog.** A detail, not an insult: it is funnier and worse than "he never posts me", and it is what gets quoted.
-- **"i show u off in real life"**: a line that sounds reasonable enough for half the comments to defend him with.
-- **The gift is the private version of the thing she asked for publicly**, which is the argument the post is for.
-- **"take ur story down. the one with my hoodie in it"**: he won't post her, and she can't post him. The last bubble does the whole job.
+- **Being cropped out of a family photo is a picture**, not a complaint. It lands in one line and everyone can see it.
+- **"u exist in my house. in my bed. at my sisters christening"**: the list that sounds like love and reads like a cupboard.
+- **40 photos, privately.** The gift proves he has them, which is the exact thing that makes it worse.
+- **"i dont need an audience for my relationship"** is the line half the comments will agree with, and that is the argument.
+- **"take ur story down. the one with my hoodie in it"**: he won't post her and she can't post him. Last bubble, whole story.
 
-## The gift (slide 3)
+## The comment engine
 
-Your screenshot of the gift goes here. Photos of the two of them, the more the better: the post he won't make, made privately. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in `script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
+- **Against him:** 14 months, no photo, and now she has to delete hers.
+- **Against her:** she counted the dog's posts, and she's making a christening about herself.
+
+The caption asks the viewer to settle it, and the account never does.
+
+**Open loop:** did she take the story down
+
+## The gift (slide 4)
+
+Your screenshot of the gift goes here. As many photos of the two of them as the template holds: the post he will not make, made privately. Their name: Maya. Your name: Marco. Phone, portrait, full screen. Save it here as `gift-1.png`, change the `gift` slide in
+`script.json` to `{ "type": "photo", "src": "gift-1.png" }`, and render again.
 
 ## Caption
 
-14 months and the only thing on his instagram is dans dog 😭 he says the people that matter know. thats fair enough right
+his sister posted the whole family and i'm the only one cropped out 😭 he made me this instead. private isn't the same as hidden right
 
 ## Pinned comment (in character, not a brand)
 
-it's tryethos, the [TEMPLATE NAME] one. it's got 40 photos of us in it. the dog has 3 posts
+it's tryethos, the [TEMPLATE NAME] one, and it has 40 photos of me in it. his grid has 6 posts. one of them is a dog
 
 ## Replies to have ready
 
-- To "he's hiding u": "he says hes just private. his whole family is private"
-- To "did u take it down": "...it's still up. for now"
-- To "the DOG": "dans dog is called biscuit and he has a better grid than me"
+- To "he's hiding u": "his whole family is private. even the dog is a joke account"
+- To "did u take it down": "...it's still up. it's a hoodie"
+- To "his SISTER cropped u": "she says it was for the frame. she reposted it square with me in it at 1am, so"
 - To "what app": "tryethos, code LOVE. use it on someone who'd post u"
-
-## The open loop
-
-maya did u take the story down
 
 ## Files
 

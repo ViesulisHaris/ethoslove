@@ -2,11 +2,12 @@
   "slides": [
     {
       "type": "chat",
+      "hook": "he made me an anniversary present\nwith a photo of him and his ex in it",
       "timestamp": "Today|23:12",
       "messages": [
         {
           "from": "me",
-          "text": "who picked the photos"
+          "text": "whose hand is that"
         },
         {
           "from": "them",
@@ -14,15 +15,44 @@
         },
         {
           "from": "me",
-          "text": "the ones in my present. that beach one isnt even on my phone"
+          "text": "photo 4. theres someone elses hand on ur shoulder"
         },
         {
           "from": "them",
-          "text": "amy helped me. she has a good eye"
+          "text": "its cropped. its fine"
         },
         {
           "from": "me",
-          "text": "amy from work amy?"
+          "text": "cropped from what marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "thats the lakes. 2021"
+        },
+        {
+          "from": "me",
+          "text": "i met u in 2023"
+        },
+        {
+          "from": "them",
+          "text": "u zoomed into a present"
+        },
+        {
+          "from": "them",
+          "text": "it was a nice photo of ME"
+        },
+        {
+          "from": "them",
+          "text": "sorry for liking a photo of my own face"
+        },
+        {
+          "from": "me",
+          "text": "u could have used literally any of ours"
         }
       ]
     },
@@ -31,11 +61,11 @@
       "messages": [
         {
           "from": "them",
-          "text": "unbelievable. i make u something and this is what u do with it"
+          "text": "i spent 4 hours on this"
         },
         {
           "from": "them",
-          "text": "she spent her lunch on this. for U"
+          "text": "and ur looking for a reason to be upset"
         },
         {
           "from": "them",
@@ -50,42 +80,42 @@
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here. The most beautiful one you have, with photos: the whole point is that it is gorgeous and she cannot enjoy it. Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. The most beautiful frame you have, full of photos: the whole point is that it is lovely and she cannot enjoy it. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "it is beautiful. i just cant look at it now"
+          "text": "it is beautiful. i just cant unsee it now"
         },
         {
           "from": "them",
-          "text": "thats on u"
-        },
-        {
-          "from": "them",
-          "text": "amy said ur so lucky btw"
+          "text": "then dont look at photo 4"
         },
         {
           "from": "me",
-          "text": "i went on her page. i know i shouldnt have"
-        },
-        {
-          "from": "me",
-          "text": "she put 3 fire emojis on ur gym pic in june"
+          "text": "can u take it out"
         },
         {
           "from": "them",
-          "text": "and there it is"
+          "text": "no. thats mad. its a photo of me"
         },
         {
           "from": "me",
-          "text": "sorry. im being weird. i love it i promise"
+          "text": "ok. sorry. i love the rest of it"
         },
         {
           "from": "them",
-          "text": "dont make it awkward with amy. she thinks ur lovely"
+          "text": "shes irrelevant. dont make her a thing"
+        },
+        {
+          "from": "me",
+          "text": "i wont"
+        },
+        {
+          "from": "them",
+          "text": "and dont go on her page again. i know u did"
         }
       ]
     }
