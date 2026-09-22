@@ -109,6 +109,42 @@ in `src/lib/pricing/products.ts` in the same deploy, and run
 `node --env-file=<live env> scripts/check-prices.mjs`: it compares every shown price with the
 charged one and fails on any difference.
 
+## What Wanderlog does, and what to take from it (September 2026)
+
+Wanderlog is the nearest thing to what Dates is becoming: a free planner on a map, used by people
+about to spend money. From its own reviews and pricing write-ups (third-party "business model"
+pages that quote revenue splits are guesswork and are not used here):
+
+- **The planning is free, and generous**: unlimited trips and places, the map, collaboration, budget
+  tracking. Collaboration stays free on purpose: every trip shared with a friend is a new user.
+- **Pro, about $39.99 to $59.99 a year** depending on region and offers, sells *conveniences at the
+  moment of use*, not the planning: offline maps, route optimisation, export to Google Maps, an AI
+  assistant, reservations imported automatically from Gmail, unlimited attachments, flight alerts.
+- **Affiliate commission on bookings made from the plan**: hotels, flights and activities booked
+  through its search. The booking link sits on the item in the itinerary, which is the moment the
+  decision is made.
+- **No ads**, and it says it does not sell data.
+
+**What this means for Ethos.** We already have the same shape (free Dates, paid gifts, a planned
+subscription, affiliate rows on the list), and Wanderlog shows where each piece earns:
+
+1. **Put "Book" on the plan, not only on the list.** A stop in a plan is a decision already made;
+   a "Book a table" (TheFork, OpenTable) or "Get tickets" (GetYourGuide, Viator) button on it
+   converts far better than a banner. The affiliate sign-ups are yours; the code is one module and
+   a button per stop.
+2. **Keep sharing the plan free**, like Wanderlog keeps collaboration free: a plan sent to the other
+   person is how Ethos meets its next couple.
+3. **Build "Ethos for Two" out of moment-of-use conveniences**, the way Pro is built:
+   - "Plan our Saturday": an AI planner that turns a mood, a budget and a town into a full date;
+   - open the whole date in Google or Apple Maps, stops in order;
+   - the best walking order between stops;
+   - a calendar invite for both, and reminders for the anniversary and birthdays;
+   - one shared plan on both phones, kept in sync.
+
+   Priced per couple (€3.99 a month or €29 a year), it stays under Wanderlog's single-traveller
+   Pro, which is the comparison people will make.
+4. **No ads, ever**, which is also what keeps the site worth sharing.
+
 ## 4. Games: growth first, revenue second
 
 A two-phone game invites somebody by link every time it is played, and that somebody lands on
