@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:31",
+      "messages": [
+        { "from": "me", "text": "who is she" },
+        { "from": "them", "text": "who" },
+        { "from": "me", "text": "the girl u followed at 1:47am" },
+        { "from": "them", "text": "its a gym page" },
+        { "from": "me", "text": "she has 4 posts marco. u liked 3" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "she has 4 posts marco. u liked 3" },
+        { "from": "them", "text": "ur going through my likes now?" },
+        { "from": "them", "text": "i was up til 3 making u this and THIS is what u lead with" },
+        { "from": "them", "link": { "title": "for maya (my whole world)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The most romantic frame you have: photos of the two of them, or the letter with a long message. It has to look like he means it. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "see" },
+        { "from": "them", "text": "i love u so much maya. i love spoiling u" },
+        { "from": "them", "text": "and i get interrogated over a like" },
+        { "from": "me", "text": "u followed her at 1:47am" },
+        { "from": "them", "text": "ur being so ungrateful rn" },
+        { "from": "them", "text": "i stayed up all night for u. other girls would be in tears" },
+        { "from": "them", "text": "say it back" },
+        { "from": "me", "text": "idk", "status": "Read|00:12" }
+      ]
+    }
+  ]
+}

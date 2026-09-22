@@ -883,6 +883,28 @@ Two rules that come out of it:
 - **Reply to "break up" in character, every time.** It is the cheapest comment to write, so there
   are hundreds, and each reply is another notification pulling somebody back to the post.
 
+## The other engine: he is the problem (164)
+
+156 to 163 are two silly crimes and a happy mess. 164 is the story the app argues about most:
+**he did something wrong, and the gift is how he gets out of it.** He followed a girl at 1:47am
+and liked three of her four posts; the gift arrives with "ur going through my likes now?", "i was
+up til 3 making u this", "i love spoiling u", "ungrateful", "other girls would be in tears", "say
+it back". She answers "idk", and under it: Read 00:12. She never decides. The caption asks the
+viewer to, and the comments do.
+
+Rules for this register, because it cuts both ways:
+
+- **The narrator is not sold.** The account stays on the viewer's side; the post is her doubting.
+- **The pinned comment does not cheer and does not carry the code.** It answers "what app" and
+  stays in character. The code goes in one reply, in the line that turns it: "use it on someone
+  who deserves it".
+- **The gift frame has to look like real love** (their photos, a long letter). If it looks thin
+  the story is "a like and a text" and dies; if it looks real, the comments have something to
+  fight about.
+- **One at a time.** It is a reach post: the most comments of the batch and the fewest sales.
+  It brings people to the account, where the next post sells. Never two in a row, and never let it
+  become the account's voice.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1184,5 +1206,6 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 161 | hbd | four slides; her birthday; 149's engine with a reason to buy | a birthday one | yours |
 | 162 | u liked her photo | four slides; no occasion; 149's engine, the ex | one with their photos | yours |
 | 163 | nice | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
+| 164 | who is she | four slides; no occasion; the other engine: he is the problem, she ends on idk | the most romantic frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
