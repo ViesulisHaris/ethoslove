@@ -1,0 +1,39 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:14",
+      "messages": [
+        { "from": "them", "text": "who is dan" },
+        { "from": "me", "text": "from work?? why" },
+        { "from": "them", "text": "he liked ur story" },
+        { "from": "me", "text": "he likes everyones stories marco" },
+        { "from": "them", "text": "so ur defending him" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "delete him. if its nothing then its nothing" },
+        { "from": "me", "text": "ok. done. deleted" },
+        { "from": "them", "text": "good. i made u this earlier. i forgive u" },
+        { "from": "them", "link": { "title": "for maya (i forgive u)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Photos of the two of them, or the letter. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "u didnt have to make me anything" },
+        { "from": "me", "text": "i love u so much" },
+        { "from": "them", "text": "i know" },
+        { "from": "them", "text": "i just cant lose u. thats why i get like this" },
+        { "from": "me", "text": "i know. i get it. im sorry i made u feel that way" },
+        { "from": "them", "text": "show me ur phone when u get in" }
+      ]
+    }
+  ]
+}

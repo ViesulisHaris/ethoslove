@@ -2,39 +2,38 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|20:31",
+      "timestamp": "Today|23:52",
       "messages": [
-        { "from": "them", "text": "are u home" },
-        { "from": "me", "text": "yes why" },
-        { "from": "them", "text": "dont open the door yet" },
-        { "from": "me", "text": "why is there a box on the mat marco" },
-        { "from": "them", "text": "open this first. read to the end" }
+        { "from": "them", "text": "i think we should break up" },
+        { "from": "me", "text": "what?? why" },
+        { "from": "them", "text": "u went out. i asked u not to" },
+        { "from": "me", "text": "it was jess's birthday marco" },
+        { "from": "them", "text": "and i was here. alone" }
       ]
     },
     {
       "type": "chat",
       "messages": [
-        { "from": "them", "link": { "title": "for maya (read to the end)", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
-        { "from": "me", "text": "marco why does this start with our first photo" },
-        { "from": "me", "text": "and the second one" },
-        { "from": "them", "text": "keep going" }
+        { "from": "me", "text": "im sorry. im getting a taxi now" },
+        { "from": "them", "text": "dont bother" },
+        { "from": "them", "text": "i made u this before u decided ur friends matter more" },
+        { "from": "them", "link": { "title": "for maya (my whole world)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
       ]
     },
     {
       "type": "gift",
-      "note": "Your screenshot of the gift goes here: a frame with their photos in it, from a template that ends on a message (The Letter, Our Timeline, Scrapbook). Their name: Maya. Your name: Marco."
+      "note": "Your screenshot of the gift goes here. The most romantic frame you have: photos of the two of them, or a long letter. It has to look like he means it; that is what makes the comments angry. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
-        { "from": "me", "text": "MARCO" },
-        { "from": "me", "text": "THERE IS A QUESTION AT THE END" },
-        { "from": "them", "text": "yes" },
-        { "from": "me", "text": "IS THIS REAL" },
-        { "from": "them", "text": "open the door" },
-        { "from": "me", "text": "i have a face mask on" },
-        { "from": "me", "text": "im crying through a face mask", "tapback": "heart" },
-        { "from": "them", "text": "maya open the door" }
+        { "from": "me", "text": "marco im crying" },
+        { "from": "me", "text": "im so sorry. i wont go next friday. i'll tell jess" },
+        { "from": "them", "text": "i never said u couldnt go" },
+        { "from": "them", "text": "i just need to know im ur priority" },
+        { "from": "me", "text": "u are. u are. can i still come home" },
+        { "from": "them", "text": "ur choice" },
+        { "from": "them", "text": "u always have a choice maya" }
       ]
     }
   ]

@@ -883,7 +883,7 @@ Two rules that come out of it:
 - **Reply to "break up" in character, every time.** It is the cheapest comment to write, so there
   are hundreds, and each reply is another notification pulling somebody back to the post.
 
-## The other engine: he is the problem (164)
+## The other engine: he is the problem (164, 167 to 169)
 
 156 to 163 are two silly crimes and a happy mess. 164 is the story the app argues about most:
 **he did something wrong, and the gift is how he gets out of it.** He followed a girl at 1:47am
@@ -891,6 +891,15 @@ and liked three of her four posts; the gift arrives with "ur going through my li
 up til 3 making u this", "i love spoiling u", "ungrateful", "other girls would be in tears", "say
 it back". She answers "idk", and under it: Read 00:12. She never decides. The caption asks the
 viewer to, and the comments do.
+
+167 to 169 are the same register, one tactic each, and in each she explains it away in the
+caption and starts to hear the comments in the pinned comment:
+
+| | The tactic | His line for it | Hers, taking the blame | Last words |
+|---|---|---|---|---|
+| 167 | isolation: a breakup threat for a friend's birthday | "u always have a choice maya" | "i wont go next friday. i'll tell jess" | his |
+| 168 | control by jealousy: a colleague liked a story | "delete him. if its nothing then its nothing" / "i forgive u" | "im sorry i made u feel that way" | "show me ur phone when u get in" |
+| 169 | the gift instead of the apology | "i made u a whole thing maya. what more do u want" | "no ur right. im sorry" | "delete this thread" |
 
 Rules for this register, because it cuts both ways:
 
@@ -901,13 +910,16 @@ Rules for this register, because it cuts both ways:
 - **The gift frame has to look like real love** (their photos, a long letter). If it looks thin
   the story is "a like and a text" and dies; if it looks real, the comments have something to
   fight about.
+- **She explains the red flag away in the caption** ("he was right tho… right"), and **the pinned
+  comment is where she starts to hear the comments** ("i'm going to ring jess back", "i didn't
+  delete it"). The account is never on his side, and never lectures either: the viewers do that.
 - **One at a time.** It is a reach post: the most comments of the batch and the fewest sales.
   It brings people to the account, where the next post sells. Never two in a row, and never let it
-  become the account's voice.
+  become the account's voice. Four of these exist now (164, 167, 168, 169): that is a month's supply.
 
-## Shockers: the sentence that means something else after the gift (165 to 167)
+## Shockers: the sentence that means something else after the gift (165 and 166)
 
-Three posts built on one move: the first bubble is the worst text a person can receive, and the
+Two posts built on one move: the first bubble is the worst text a person can receive, and the
 gift is what turns it into the best one. The reader believes the bad version for a whole slide,
 and the comment section is people telling each other they nearly threw their phone.
 
@@ -915,7 +927,6 @@ and the comment section is people telling each other they nearly threw their pho
 |---|---|---|---|
 | 165 | "i think we should break up" | with the flat: he found them a house, with a garden; her mum is already on her way with wine and a speech | "maya does she still have the speech" |
 | 166 | "im not coming tomorrow" (booked in March) | the gift is a countdown to six minutes from now; he has been in an Airbnb round the corner since Tuesday and FaceTimed her from it ("the airbnb has a similar lamp") | "maya its raining out here" |
-| 167 | "dont open the door yet", a box on the mat | a question at the end of the gift; she reads it twice with a face mask on | "maya open the door" |
 
 Rules for the shocker, because it is a bigger lever and it cuts:
 
@@ -925,8 +936,6 @@ Rules for the shocker, because it is a bigger lever and it cuts:
   went to trouble, not because he was careless with a sentence. The comments forgive trouble.
 - **She still commits her crime** (rang her mum, will not open the door, read it twice). It keeps
   the two-camp engine from 149 running under the shock.
-- **The proposal ends before the answer**, and the pinned comment gives it. The post is the
-  question; the comments are the answer; the pin is the receipt.
 - **Never two shockers in a row.** The lever only works while "i think we should break up" still
   reads as real for a slide. The fourth one in a month reads as a bit.
 
@@ -1234,6 +1243,8 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 164 | who is she | four slides; no occasion; the other engine: he is the problem, she ends on idk | the most romantic frame | yours |
 | 165 | i think we should break up | four slides; a move; shocker: with the flat | one with their photos | yours |
 | 166 | im not coming tomorrow | four slides; long distance; shocker: he is at the door, since Tuesday | a countdown | yours |
-| 167 | read to the end | four slides; a proposal; shocker: the question is the last line, never shown | photos, not the last frame | yours |
+| 167 | i think we should break up (the real one) | four slides; he is the problem: isolation | the most romantic frame | yours |
+| 168 | who is dan | four slides; he is the problem: control by jealousy | their photos, or the letter | yours |
+| 169 | u called me pathetic | four slides; he is the problem: the gift instead of the apology | the most beautiful frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
