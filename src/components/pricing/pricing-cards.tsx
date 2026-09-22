@@ -104,13 +104,8 @@ export function PricingCards({
                   {formatAmount(p.amounts[currency], currency, locale)}
                 </span>
                 {p.compareAt ? (
-                  <span
-                    className={cn(
-                      "mb-2 text-sm line-through",
-                      dominant ? "text-paper/45" : "text-muted-foreground",
-                    )}
-                  >
-                    {formatAmount(p.compareAt[currency], currency, locale)}
+                  <span className={cn("mb-2 text-sm", dominant ? "text-paper/55" : "text-muted-foreground")}>
+                    {t("separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}
                   </span>
                 ) : null}
               </div>

@@ -200,7 +200,12 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
        * A block is as wide as the screen, whatever is inside it; `min-w-0` does the same job in
        * the desktop grid, and `overflow-x-clip` means one wide control can never widen the page.
        */}
-      <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]">
+      {/*
+       * The editor is the funnel, so session recordings (Clarity, with consent) keep watching it —
+       * but what people type and upload is somebody's private message, names and photos. Both
+       * columns are masked: the recording keeps the clicks and the scrolling and loses the words.
+       */}
+      <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]" data-clarity-mask="true">
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && mod ? (

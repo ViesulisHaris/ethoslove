@@ -481,7 +481,7 @@
       "planSingleBlurb": "Tuya para siempre, con todo lo que lleva",
       "planEverything": "Todas las plantillas",
       "planEverythingBlurb": "Las {n} plantillas, y cada una que añadamos",
-      "payNote": "Sin suscripción. Tarjeta, Apple Pay o Google Pay.",
+      "payNote": "Sin suscripción. Tarjeta, Apple Pay y más al pagar.",
       "paying": "Abriendo el pago seguro…",
       "signInBlurbPaid": "Tu borrador está guardado en este dispositivo. Inicia sesión, paga {price} una vez y se envía.",
       "payGuestBlurb": "Este regalo usa {features}. Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
@@ -773,7 +773,7 @@
       },
       {
         "q": "¿Qué monedas y métodos de pago?",
-        "a": "USD, EUR y GBP, con tarjeta, Apple Pay y Google Pay a través de Stripe. Los precios incluyen IVA cuando corresponde."
+        "a": "Los precios están en euros y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay y otros métodos, a través de Stripe. Los precios incluyen IVA cuando corresponde."
       },
       {
         "q": "¿Reembolsos?",
@@ -781,7 +781,8 @@
       }
     ],
     "perTemplate": "Las {n} plantillas premium · {price} cada una",
-    "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe"
+    "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
+    "separately": "{price} por separado"
   },
   "legal": {
     "terms": "Términos del servicio",
@@ -1035,7 +1036,7 @@
     "reviews": {
       "title": "Las parejas dicen",
       "count": "{n, plural, one {# reseña} other {# reseñas}}",
-      "summary": "{stars} de {n, plural, one {# pareja} other {# parejas}}",
+      "summary": "{stars} de {n, plural, one {# reseña} other {# reseñas}}",
       "none": "Aún no hay reseñas. Sed la primera pareja en valorarlo.",
       "noneShort": "Sin valorar",
       "rate": "Valorar",
@@ -1057,7 +1058,9 @@
       "signIn": "Iniciar sesión",
       "signInBlurb": "Las reseñas necesitan cuenta, para que nadie valore un sitio cincuenta veces. Es gratis y se hace en un momento.",
       "failed": "No se ha enviado. Prueba otra vez en un momento.",
-      "thanks": "Publicada. Gracias, de parte de la siguiente pareja."
+      "thanks": "Publicada. Gracias, de parte de la siguiente pareja.",
+      "publicNote": "Las reseñas son públicas, con tu nombre de pila.",
+      "report": "Denunciar"
     }
   },
   "plan": {

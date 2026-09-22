@@ -481,7 +481,7 @@
       "planSingleBlurb": "Yours for good, with everything in it",
       "planEverything": "Every template",
       "planEverythingBlurb": "All {n} templates, and every one we add",
-      "payNote": "No subscription. Card, Apple Pay or Google Pay.",
+      "payNote": "No subscription. Card, Apple Pay and more at checkout.",
       "paying": "Opening secure checkout…",
       "signInBlurbPaid": "Your draft is saved on this device. Sign in, pay {price} once, and it's sent.",
       "payGuestBlurb": "This gift uses {features}. Pay once and it's sent. Your account is created from the email you give at checkout, no password needed.",
@@ -773,7 +773,7 @@
       },
       {
         "q": "Which currencies and payment methods?",
-        "a": "USD, EUR and GBP, with cards, Apple Pay and Google Pay via Stripe. Prices include VAT where it applies."
+        "a": "Prices are in euros, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay and other methods, through Stripe. Prices include VAT where it applies."
       },
       {
         "q": "Refunds?",
@@ -781,7 +781,8 @@
       }
     ],
     "perTemplate": "All {n} premium templates · {price} each",
-    "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe"
+    "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
+    "separately": "{price} separately"
   },
   "legal": {
     "terms": "Terms of Service",
@@ -1035,7 +1036,7 @@
     "reviews": {
       "title": "Couples say",
       "count": "{n, plural, one {# review} other {# reviews}}",
-      "summary": "{stars} from {n, plural, one {# couple} other {# couples}}",
+      "summary": "{stars} from {n, plural, one {# review} other {# reviews}}",
       "none": "No reviews yet. Be the first couple to rate it.",
       "noneShort": "Not rated yet",
       "rate": "Rate it",
@@ -1057,7 +1058,9 @@
       "signIn": "Sign in",
       "signInBlurb": "Reviews need an account, so nobody can rate a place fifty times. It's free and takes a moment.",
       "failed": "That didn't go through. Try again in a moment.",
-      "thanks": "Posted. Thank you, on behalf of the next couple."
+      "thanks": "Posted. Thank you, on behalf of the next couple.",
+      "publicNote": "Reviews are public, under your first name.",
+      "report": "Report"
     }
   },
   "plan": {

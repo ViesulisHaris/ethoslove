@@ -217,7 +217,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
 
       <p className="mt-7 text-center text-sm text-muted-foreground">
         {mode === "login" ? t("noAccount") : t("haveAccount")}{" "}
-        <Link href={mode === "login" ? "/signup" : "/login"} className="font-medium text-coral">
+        <Link href={mode === "login" ? "/signup" : "/login"} className="inline-block py-2 font-medium text-coral">
           {mode === "login" ? t("signupTitle") : t("loginTitle")}
         </Link>
       </p>

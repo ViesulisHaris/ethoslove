@@ -446,6 +446,8 @@ export function DatesExplorer() {
         walkBetween: (m) => t("place.walkBetween", { minutes: m }),
         reviews: {
           title: t("reviews.title"),
+          publicNote: t("reviews.publicNote"),
+          report: t("reviews.report"),
           summary: (stars, n) => t("reviews.summary", { stars, n }),
           none: t("reviews.none"),
           rate: t("reviews.rate"),

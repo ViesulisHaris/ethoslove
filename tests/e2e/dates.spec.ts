@@ -168,7 +168,7 @@ test.describe("finding a date", () => {
     await page.goto(lisbonUrl);
     await page.getByRole("button", { name: /^Livraria do Bairro/ }).first().click();
     const sheet = page.getByRole("dialog", { name: "Livraria do Bairro" });
-    await expect(sheet.getByText("4.5 from 2 couples")).toBeVisible();
+    await expect(sheet.getByText("4.5 from 2 reviews")).toBeVisible();
     await expect(sheet.getByText("Ask for the poetry shelf.")).toBeVisible();
     await expect(sheet.getByText("Inês")).toBeVisible();
     await expect(sheet.getByText("First date")).toBeVisible();

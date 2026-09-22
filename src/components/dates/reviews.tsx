@@ -9,9 +9,21 @@ import type { Rating } from "@/lib/dates/rank";
 import { WENT_AS_IDS, WENT_AS_LABELS, type PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
 import { Stars, StarPicker } from "./stars";
+import { BRAND } from "@/config/brand";
+
+/**
+ * A report is an email to a person, with what a notice needs already in it: which review, why, and
+ * who is asking (Digital Services Act art. 16). Nothing to build, and nothing lost to a form.
+ */
+const reportLink = (id: string) =>
+  `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(`Report review ${id}`)}&body=${encodeURIComponent(`Review: ${id}\n\nWhat is wrong with it, and why (for example: fake, offensive, someone's personal details, illegal):\n\n\nYour name:\n\nI believe the information in this report is accurate and complete.`)}`;
 
 export type ReviewsLabels = {
   title: string;
+  /** Shown by the post button: a review is public, under the writer's first name. */
+  publicNote: string;
+  /** Anyone can flag a review; it goes to a person (Digital Services Act notice-and-action). */
+  report: string;
   summary: (stars: string, n: number) => string;
   none: string;
   rate: string;
@@ -122,6 +134,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
             <button type="button" onClick={() => setOpen(false)} className="h-11 rounded-full px-4 text-[14px] font-semibold text-forest/70 hover:bg-forest/5">
               {labels.cancel}
             </button>
+
             {mine ? (
               <button type="button" onClick={() => void onDelete().then((ok) => ok && setOpen(false))} className="ml-auto inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-destructive hover:bg-destructive/5">
                 <Trash2 aria-hidden="true" className="size-3.5" />
@@ -129,6 +142,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
               </button>
             ) : null}
           </div>
+          <p className="mt-2 text-[12px] text-forest/50">{labels.publicNote}</p>
         </form>
       ) : null}
       {state === "done" && !open ? (
@@ -153,6 +167,11 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
                 {r.cost !== null && r.cost !== undefined ? <span className="rounded-full bg-forest/5 px-2 py-0.5 text-[11px] font-medium">{COST_LABELS[r.cost as Cost][locale]}</span> : null}
               </div>
               {r.body ? <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/85">{r.body}</p> : null}
+              {!r.mine ? (
+                <a href={reportLink(r.id)} className="mt-1.5 inline-flex min-h-8 items-center text-[12px] font-medium text-forest/45 underline-offset-2 hover:text-forest/70 hover:underline">
+                  {labels.report}
+                </a>
+              ) : null}
             </li>
           ))}
         </ul>
