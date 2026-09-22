@@ -2,27 +2,27 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|20:19",
+      "timestamp": "Today|00:22",
       "messages": [
         {
           "from": "me",
-          "text": "ur sister posted the christening photos"
-        },
-        {
-          "from": "me",
-          "text": "im cropped out of the big one"
+          "text": "u told them i cried about a menu"
         },
         {
           "from": "them",
-          "text": "she probably needed it square"
+          "text": "it was funny"
         },
         {
           "from": "me",
-          "text": "everyone else is in it marco"
+          "text": "dan was filming it marco"
+        },
+        {
+          "from": "them",
+          "text": "ur so sensitive"
         },
         {
           "from": "me",
-          "text": "dans dog is in it"
+          "text": "they were all laughing at me"
         }
       ]
     },
@@ -31,20 +31,24 @@
       "messages": [
         {
           "from": "me",
-          "text": "dans dog is in it"
+          "text": "they were all laughing at me"
         },
         {
           "from": "them",
-          "text": "the dogs a joke. ur being dramatic"
+          "text": "WITH u. theres a difference"
         },
         {
           "from": "them",
-          "text": "i made u this last night. 40 photos of u"
+          "text": "u cant take a joke and thats not my fault"
+        },
+        {
+          "from": "them",
+          "text": "i was giving u this in the car btw"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (the people that matter)",
+            "title": "for maya (my favourite person)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -54,30 +58,30 @@
     },
     {
       "type": "gift",
-      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. As many photos of the two of them as the template holds: the post he will not make, made privately. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. The soppiest frame you have. The softer it is, the better the joke about the menu goes down. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "ok this is gorgeous. im sorry"
+          "text": "its lovely. i do mean that"
         },
         {
           "from": "them",
-          "text": "the people that matter know about u"
+          "text": "see. i do love u"
         },
         {
           "from": "them",
-          "text": "i dont need an audience for my relationship"
+          "text": "i just take the mick. thats how we are"
         },
         {
           "from": "me",
-          "text": "ur right. its silly"
+          "text": "i know. im sorry i went quiet"
         },
         {
           "from": "them",
-          "text": "it is a bit"
+          "text": "its fine. u were tired"
         }
       ]
     },
@@ -90,28 +94,28 @@
         },
         {
           "from": "me",
-          "text": "i posted the uncropped one on my story"
+          "text": "i told dan u still sleep with gerald"
         },
         {
           "from": "them",
-          "text": "u did what"
+          "text": "u WHAT"
         },
         {
           "from": "me",
-          "text": "ur mum replied to it. 3 hearts"
+          "text": "its in the group chat now"
         },
         {
           "from": "them",
-          "text": "take it down"
+          "text": "delete it. now"
         },
         {
           "from": "me",
           "text": "no",
-          "tapback": "excl"
+          "tapback": "heart"
         },
         {
           "from": "them",
-          "text": "maya take it down"
+          "text": "maya who else did u tell"
         }
       ]
     }

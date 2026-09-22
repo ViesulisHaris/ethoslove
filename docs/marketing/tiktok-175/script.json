@@ -2,27 +2,27 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|00:41",
+      "timestamp": "Today|01:14",
       "messages": [
         {
-          "from": "me",
-          "text": "I GOT IT"
+          "from": "them",
+          "text": "i recorded it"
         },
         {
           "from": "me",
-          "image": true
+          "text": "recorded what"
         },
         {
           "from": "them",
-          "text": "got what"
+          "text": "last night. so u can hear how u sound"
         },
         {
           "from": "me",
-          "text": "dublin. the 3 month placement"
+          "text": "u recorded me crying?"
         },
         {
           "from": "them",
-          "text": "when were u going to ask me"
+          "text": "u werent crying. thats my point"
         }
       ]
     },
@@ -31,24 +31,24 @@
       "messages": [
         {
           "from": "them",
-          "text": "when were u going to ask me"
+          "text": "u werent crying. thats my point"
         },
         {
           "from": "me",
-          "text": "ask u?"
+          "text": "delete it marco"
         },
         {
           "from": "them",
-          "text": "do what u want. u always do"
+          "text": "im not sending it anywhere. its for u"
         },
         {
           "from": "them",
-          "text": "i made u this last week btw. read it before u decide anything"
+          "text": "and im not doing this at 1am. i made u this earlier"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (stay)",
+            "title": "for maya (i love u even then)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -58,34 +58,34 @@
     },
     {
       "type": "gift",
-      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Everything the two of them have, in one frame, so it reads as what she would be giving up. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. The kindest thing in the catalogue. The gap between it and the recording is the post. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "this is the nicest thing anyones ever made me"
-        },
-        {
-          "from": "them",
-          "text": "i just wanted u to see what ur leaving"
+          "text": "this is so beautiful"
         },
         {
           "from": "me",
-          "text": "its 3 months marco"
+          "text": "it doesnt make the recording ok"
         },
         {
           "from": "them",
-          "text": "i cant do distance. u know that about me"
+          "text": "i did it so u could see it from my side"
         },
         {
           "from": "me",
-          "text": "i emailed them. i said no"
+          "text": "i know"
         },
         {
           "from": "them",
-          "text": "u didnt have to do that"
+          "text": "u always remember it different to me"
+        },
+        {
+          "from": "me",
+          "text": "maybe i do"
         }
       ]
     },
@@ -98,28 +98,28 @@
         },
         {
           "from": "me",
-          "text": "i didnt send the email"
+          "text": "ive got one from tuesday"
         },
         {
           "from": "them",
-          "text": "u what"
+          "text": "one what"
         },
         {
           "from": "me",
-          "text": "its in drafts. i read it every day"
+          "text": "a recording. tuesday. 9 minutes"
         },
         {
           "from": "them",
-          "text": "send it now then"
+          "text": "why would u do that"
         },
         {
           "from": "me",
-          "text": "no",
+          "text": "same reason as u",
           "tapback": "heart"
         },
         {
           "from": "them",
-          "text": "show me ur sent folder maya"
+          "text": "send me the one from tuesday maya"
         }
       ]
     }

@@ -2,27 +2,27 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|19:02",
+      "timestamp": "Today|08:12",
       "messages": [
         {
-          "from": "me",
-          "text": "why cant i see ur story"
+          "from": "them",
+          "text": "whos 'the committee'"
         },
         {
-          "from": "them",
+          "from": "me",
           "text": "what"
         },
         {
+          "from": "them",
+          "text": "the group chat. with jess and priya"
+        },
+        {
           "from": "me",
-          "text": "jess can see it. i cant"
+          "text": "how do u know what my group chats are called"
         },
         {
           "from": "them",
-          "text": "ur really doing this now"
-        },
-        {
-          "from": "me",
-          "text": "3 days marco. u restricted me"
+          "text": "u were asleep. ur phone was right there"
         }
       ]
     },
@@ -30,21 +30,25 @@
       "type": "chat",
       "messages": [
         {
+          "from": "them",
+          "text": "u were asleep. ur phone was right there"
+        },
+        {
           "from": "me",
-          "text": "3 days marco. u restricted me"
+          "text": "u used my face marco"
         },
         {
           "from": "them",
-          "text": "i needed to think without u watching me"
+          "text": "if u had nothing to hide it wouldnt matter"
         },
         {
           "from": "them",
-          "text": "i was making this the whole time"
+          "text": "i made u this last night. before any of this"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (i was thinking about u)",
+            "title": "for maya (my whole world)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -54,34 +58,34 @@
     },
     {
       "type": "gift",
-      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Something that plainly took three days: photos of the two of them, or the long letter. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Photos of the two of them, or the long letter: it has to look like he means every word. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "u made this during the 3 days?"
-        },
-        {
-          "from": "them",
-          "text": "yeah. thats what i was doing"
+          "text": "this is beautiful"
         },
         {
           "from": "me",
-          "text": "i thought u were done with me"
+          "text": "u still went through my phone"
         },
         {
           "from": "them",
-          "text": "i just go quiet. u know that about me"
+          "text": "i wanted to know why u've been off with me"
+        },
+        {
+          "from": "them",
+          "text": "and now i know. ur mates are in ur ear"
         },
         {
           "from": "me",
-          "text": "i know. im sorry i panicked"
+          "text": "theyre not. theyre just my friends"
         },
         {
           "from": "them",
-          "text": "its ok. i know ur head"
+          "text": "they hate me maya"
         }
       ]
     },
@@ -94,28 +98,28 @@
         },
         {
           "from": "me",
-          "text": "i made a fake account to watch ur story"
+          "text": "the chat is called the red flag committee"
         },
         {
           "from": "them",
-          "text": "u WHAT"
+          "text": "u what"
         },
         {
           "from": "me",
-          "text": "u watched the first one back twice"
+          "text": "they rate u out of 10. after every argument"
         },
         {
           "from": "them",
-          "text": "whats it called"
+          "text": "what did they rate me"
         },
         {
           "from": "me",
-          "text": "no. its deleted. i deleted it",
-          "tapback": "heart"
+          "text": "im not telling u that",
+          "tapback": "excl"
         },
         {
           "from": "them",
-          "text": "whats the username maya"
+          "text": "maya what did they rate me"
         }
       ]
     }

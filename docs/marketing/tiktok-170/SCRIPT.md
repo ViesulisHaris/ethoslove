@@ -1,49 +1,47 @@
-# 170 · what have u been telling her
+# 170 · ur phone hasnt moved
 
-**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
-the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
-164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
-future faking, with his mum as the witness.
-**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 22:47 UK.
+**Shape:** 149's shape, the one that did 1.1M — **no text typed over any slide**. Two chat slides,
+the gift opened over five to seven frames, two chat slides. Ten or eleven in all.
+**His tactic:** checking her location, and calling it worry. **Who posts:** Maya (blue). Marco made the gift (grey).
+**Post:** 23:41 UK, and answer comments for the first hour.
 
 ## The engine
 
-Both of them are in the wrong, and there is **one object the comments will demand**: the list.
-The last bubble is him asking for it, so the comment section inherits the question and argues with
-itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
+- **Against him:** he watches a dot on a map and asks for photographic proof of a sofa.
+- **Against her:** she deliberately left her phone somewhere to go out untracked, and still won't say where.
 
-- **Against him:** he's told his mum it's happening and there is still no date. Seven of them.
-- **Against her:** she keeps a dated list of her boyfriend's promises, with a voice note in it.
+Neither half of the room is wrong, so they argue with each other instead of with the post.
 
-**The last bubble:** "send me the list maya" — and the account never hands it over.
+**The object they'll demand:** where she actually was. It is named, it exists, and it is never handed over.
+**The last bubble:** "where were u maya" — his demand, with her name on it, so the thread ends
+unresolved and the argument moves into the comments.
 
 ## The slides
 
-1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
-2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
-3. **The gift, opened: five to seven frames.** Any template, as long as it looks like a future he means. This is the part that sells, and in 149 it
-   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
-   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
-4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+1. Chat, with the timestamp: his tactic, in his own words. Ends on the line slide 2 repeats.
+2. Chat: he justifies it, then the gift arrives as the answer. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** Any template, as long as it looks like hours of work. This is the part that sells — capture with
+   `scripts/tiktok-demo-frames.mjs` and drop them in as `{ "type": "photo", "src": "gift-1.png" }`.
+4. Chat: she folds. His softest, worst line lands here.
 5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
-   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
+   makes it worse / his demand / her refusing, with a Tapback on it / his last demand, with her name.
 
 ## Caption
 
-his mum asked me when we're moving in and he's been saying next year since last christmas 🥹 then he sent me this. whos in the wrong here
+he checks my location so i left my phone at jess's and went out 🥹 whos in the wrong here
 
-## Pinned comment (in character, not a brand)
+## Pinned comment (in character, never a brand)
 
-it's tryethos, template [TEMPLATE NAME]. and no i'm not sending him the list
+it's tryethos, template [TEMPLATE NAME]. and im not saying where i was, he reads these
 
 ## Replies to have ready
 
-- To "SEND THE LIST": "7 dates. the earliest is 14 nov last year. thats all ur getting"
-- To "why do u have a list": "because he says i remember things wrong"
-- To "break up": "over a flat? he stayed up making me that" — and then let them"
+- To "WHERE WERE U": "nowhere he'd hate. thats genuinely all im saying"
+- To "she's cheating": "i was at my sisters. see how easy that was to say. now ask why i didnt"
+- To "find my is normal": "we both have it. he checks it. i dont"
 - To "what app": "tryethos, code LOVE"
 
-Reply to everything for the first hour, never settle it, and never take his side or hers.
+Never settle it. Never take his side or hers. The refusal always has a reason.
 
 ## Files
 

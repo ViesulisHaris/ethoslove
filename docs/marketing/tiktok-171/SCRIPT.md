@@ -1,49 +1,47 @@
-# 171 · u restricted me
+# 171 · the red flag committee
 
-**Shape:** 149's shape, the one that did 1.1M — **no text over the pictures**. Two chat slides, then
-the gift being opened over five to seven frames, then two more chat slides. Ten or eleven in total.
-164's register underneath it: he is the problem, and the gift is how he gets out of it. One tactic:
-the silent treatment, with a soft block on top of it.
-**Who posts:** Maya, who receives it (blue). Marco made it (grey). **Post:** 19:02 UK.
+**Shape:** 149's shape, the one that did 1.1M — **no text typed over any slide**. Two chat slides,
+the gift opened over five to seven frames, two chat slides. Ten or eleven in all.
+**His tactic:** opening her phone with her face while she slept. **Who posts:** Maya (blue). Marco made the gift (grey).
+**Post:** 08:12 UK, and answer comments for the first hour.
 
 ## The engine
 
-Both of them are in the wrong, and there is **one object the comments will demand**: the burner account.
-The last bubble is him asking for it, so the comment section inherits the question and argues with
-itself about it — which is what 149 proved is worth more than anybody agreeing with the post.
+- **Against him:** he used her face to unlock her phone while she was asleep, and thinks that's fine.
+- **Against her:** her friends have been scoring her boyfriend out of 10 for months and she's kept every screenshot.
 
-- **Against him:** he restricted his own girlfriend for three days and called it thinking.
-- **Against her:** she made a burner account to watch his story, and she's still lying about deleting it.
+Neither half of the room is wrong, so they argue with each other instead of with the post.
 
-**The last bubble:** "whats the username maya" — and the account never hands it over.
+**The object they'll demand:** what the group chat rated him. It is named, it exists, and it is never handed over.
+**The last bubble:** "maya what did they rate me" — his demand, with her name on it, so the thread ends
+unresolved and the argument moves into the comments.
 
 ## The slides
 
-1. Chat, with the timestamp: the tactic surfaces, ending on the line the next slide repeats.
-2. Chat: his justification, and the gift arrives as the answer to it. Link card last, at the bottom.
-3. **The gift, opened: five to seven frames.** Something that plainly took three days: photos of the two of them, or the long letter. This is the part that sells, and in 149 it
-   was most of the carousel. Capture with `scripts/tiktok-demo-frames.mjs`, drop them in as
-   `{ "type": "photo", "src": "gift-1.png" }` slides in order.
-4. Chat: she folds. His worst line lands here, and she takes the blame for it.
+1. Chat, with the timestamp: his tactic, in his own words. Ends on the line slide 2 repeats.
+2. Chat: he justifies it, then the gift arrives as the answer. Link card last, at the bottom.
+3. **The gift, opened: five to seven frames.** Photos of the two of them, or the long letter: it has to look like he means every word. This is the part that sells — capture with
+   `scripts/tiktok-demo-frames.mjs` and drop them in as `{ "type": "photo", "src": "gift-1.png" }`.
+4. Chat: she folds. His softest, worst line lands here.
 5. Chat: her confession, in 149's rhythm — "marco" / the confession / "u what" / the detail that
-   makes it worse / "send it" / her refusing, with a Tapback on it / his demand, with her name.
+   makes it worse / his demand / her refusing, with a Tapback on it / his last demand, with her name.
 
 ## Caption
 
-he restricted me for 3 days and then sent me this 😭 i did something worse tho. whos in the wrong
+he opened my phone with my face while i was asleep 😭 my group chat is called the red flag committee. whos worse
 
-## Pinned comment (in character, not a brand)
+## Pinned comment (in character, never a brand)
 
-it's tryethos, template [TEMPLATE NAME]. the account had one follower. i'm aware of how that sounds
+it's tryethos, template [TEMPLATE NAME]. im not telling him the rating. jess would actually kill me. it wasnt a 1 tho
 
 ## Replies to have ready
 
-- To "whats the username": "absolutely not"
-- To "restricting is crazy": "he says his dad was the same. he just goes quiet"
-- To "i'd have done the same": "thank u. thats 400 of u and 2 of me"
+- To "WHAT DID THEY RATE HIM": "last night he went up. thats all thats happening here"
+- To "he did WHAT while u slept": "he says the phone was face up on the side. it was"
+- To "the committee is sending me": "priya named it. priya is the chair"
 - To "what app": "tryethos, code LOVE"
 
-Reply to everything for the first hour, never settle it, and never take his side or hers.
+Never settle it. Never take his side or hers. The refusal always has a reason.
 
 ## Files
 

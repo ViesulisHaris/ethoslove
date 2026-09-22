@@ -949,16 +949,17 @@ built to cause it on purpose:
   the argument moves into the comments, where it costs us nothing and earns everything.
 
 170 to 175 are that, six times, with the toxic register from 164 underneath. Each is 10 or 11
-slides: two chat, five to seven gift frames, two chat.
+slides: two chat, five to seven gift frames, two chat. His tactic is always small enough for half
+the room to defend; her crime is bigger, funnier and confessed by her.
 
 | | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
 |---|---|---|---|---|
-| 170 | future faking; his mum has been told it's happening | a note of every time he's said "next year" — 7 dates, one a voice note | the list | "send me the list maya" |
-| 171 | the silent treatment, plus a soft block | a burner account made to watch his story | the username | "whats the username maya" |
-| 172 | he won't post her; the gift is the private version | posted his family's uncropped photo herself; his mum replied with 3 hearts | her story | "maya take it down" |
-| 173 | gaslighting, by unsending the evidence | 341 secret screenshots since February | the folder | "whats the folder called maya" |
-| 174 | his ex's hand in photo 4 of her present | sent photo 4 to his sister behind his back | what the sister said | "maya what did she say" |
-| 175 | conditional love; he never says don't go | lied that she'd sent the email; it's in drafts | the sent folder | "show me ur sent folder maya" |
+| 170 | checks her location, calls it worry, asks for a photo "so i can relax" | left her phone at her friend's and went out untracked | where she actually was | "where were u maya" |
+| 171 | opened her phone with her face while she was asleep | her group chat is called the red flag committee and rates him out of 10 after every argument | the rating | "maya what did they rate me" |
+| 172 | made her the joke in front of his mates, on camera: "u cant take a joke" | told his mate he still sleeps with a teddy called Gerald | who else she told | "maya who else did u tell" |
+| 173 | brings up the ticket he paid for in every argument: "i dont want ur money, i want u to remember it" | has been repaying him £20 a week with pointed bank references | what the other references say | "maya what do the other ones say" |
+| 174 | "becca wouldve let it go" | messaged the ex, who replied in two minutes | what else the ex said | "maya what else did she say" |
+| 175 | recorded the argument "so u can hear how u sound" | has been recording him too | her recording from Tuesday | "send me the one from tuesday maya" |
 
 Rules that come out of it:
 

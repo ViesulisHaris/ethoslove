@@ -2,27 +2,27 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|23:12",
+      "timestamp": "Today|22:18",
       "messages": [
         {
+          "from": "them",
+          "text": "becca wouldve let this go"
+        },
+        {
           "from": "me",
-          "text": "whose hand is that"
+          "text": "u did not just say that"
         },
         {
           "from": "them",
-          "text": "what"
+          "text": "im just saying. she didnt make everything a thing"
         },
         {
           "from": "me",
-          "text": "photo 4. someone elses hand on ur shoulder"
+          "text": "becca left u marco"
         },
         {
           "from": "them",
-          "text": "its cropped. its fine"
-        },
-        {
-          "from": "me",
-          "text": "cropped from what marco"
+          "text": "and look how u speak to me"
         }
       ]
     },
@@ -30,21 +30,21 @@
       "type": "chat",
       "messages": [
         {
-          "from": "me",
-          "text": "cropped from what marco"
+          "from": "them",
+          "text": "and look how u speak to me"
         },
         {
           "from": "them",
-          "text": "u zoomed into ur own present"
+          "text": "i dont compare u. i said one sentence"
         },
         {
           "from": "them",
-          "text": "it was a nice photo of ME. 4 hours i spent on that"
+          "text": "and i spent my whole sunday making u this"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (my favourite person)",
+            "title": "for maya (my person)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -54,34 +54,30 @@
     },
     {
       "type": "gift",
-      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. The most beautiful frame you have, full of photos: the point is that it is lovely and she cannot enjoy it. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Their photos, and a long message: it has to look like a Sunday. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "its beautiful. i cant unsee it now"
+          "text": "its beautiful. im sorry for what i said"
         },
         {
           "from": "them",
-          "text": "then dont look at photo 4"
+          "text": "i know u are"
+        },
+        {
+          "from": "them",
+          "text": "i just miss when u were easy going"
         },
         {
           "from": "me",
-          "text": "can u just take it out"
+          "text": "ok"
         },
         {
           "from": "them",
-          "text": "no. thats mad. its a photo of me"
-        },
-        {
-          "from": "me",
-          "text": "ok. sorry. i love the rest of it"
-        },
-        {
-          "from": "them",
-          "text": "shes irrelevant. dont make her a thing"
+          "text": "dont sulk. it doesnt suit u"
         }
       ]
     },
@@ -94,7 +90,7 @@
         },
         {
           "from": "me",
-          "text": "i sent photo 4 to ur sister"
+          "text": "i messaged becca"
         },
         {
           "from": "them",
@@ -102,7 +98,7 @@
         },
         {
           "from": "me",
-          "text": "she knew who it was straight away"
+          "text": "she replied in 2 minutes"
         },
         {
           "from": "them",
@@ -110,12 +106,12 @@
         },
         {
           "from": "me",
-          "text": "nothing",
+          "text": "she said good luck",
           "tapback": "excl"
         },
         {
           "from": "them",
-          "text": "maya what did she say"
+          "text": "maya what else did she say"
         }
       ]
     }

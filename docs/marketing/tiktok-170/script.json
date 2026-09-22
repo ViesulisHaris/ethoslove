@@ -2,27 +2,27 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|22:47",
+      "timestamp": "Today|23:41",
       "messages": [
         {
-          "from": "me",
-          "text": "ur mum asked me when we're moving in"
+          "from": "them",
+          "text": "u still at jess's"
         },
         {
           "from": "me",
-          "text": "what have u been telling her"
+          "text": "yes"
         },
         {
           "from": "them",
-          "text": "that its happening"
+          "text": "ur phone hasnt moved in 4 hours"
         },
         {
           "from": "me",
-          "text": "when marco"
+          "text": "because im sat on her sofa"
         },
         {
           "from": "them",
-          "text": "when it happens"
+          "text": "send me a photo. just so i can relax"
         }
       ]
     },
@@ -31,20 +31,24 @@
       "messages": [
         {
           "from": "them",
-          "text": "when it happens"
+          "text": "send me a photo. just so i can relax"
+        },
+        {
+          "from": "me",
+          "text": "im not sending u a hostage photo marco"
         },
         {
           "from": "them",
-          "text": "why are u like this tonight"
+          "text": "fine. forget it"
         },
         {
           "from": "them",
-          "text": "i was giving u this at the weekend"
+          "text": "i was going to send u this tonight but whatever"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (this time next year)",
+            "title": "for maya (i worry because i love u)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -54,34 +58,34 @@
     },
     {
       "type": "gift",
-      "note": "Frames of the gift being opened go here — five to seven of them, in order, the way 149 was posted. Any template, as long as it looks like a future he means. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Any template, as long as it looks like hours of work. Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "marco this is beautiful"
+          "text": "marco this is unreal"
         },
         {
           "from": "me",
-          "text": "i just want a date. any date"
+          "text": "u made this today?"
         },
         {
           "from": "them",
-          "text": "when work settles down. u know that"
-        },
-        {
-          "from": "me",
-          "text": "u said that at christmas. and in march"
+          "text": "while u were at jess's"
         },
         {
           "from": "them",
-          "text": "so ur keeping a diary of me now"
+          "text": "i dont like not knowing where u are. thats all it is"
         },
         {
           "from": "me",
-          "text": "no"
+          "text": "i know. i get it"
+        },
+        {
+          "from": "them",
+          "text": "i only check because i care. u know that"
         }
       ]
     },
@@ -94,7 +98,7 @@
         },
         {
           "from": "me",
-          "text": "i have a note in my phone of every time u've said next year"
+          "text": "my phones been on her sofa since 8"
         },
         {
           "from": "them",
@@ -102,20 +106,20 @@
         },
         {
           "from": "me",
-          "text": "theres 7 dates in it. one of them is a voice note"
+          "text": "i went out. i didnt want the 20 questions"
         },
         {
           "from": "them",
-          "text": "send it"
+          "text": "where"
         },
         {
           "from": "me",
-          "text": "no. im deleting it. i hate that i love this",
+          "text": "nowhere bad. i promise",
           "tapback": "heart"
         },
         {
           "from": "them",
-          "text": "send me the list maya"
+          "text": "where were u maya"
         }
       ]
     }
