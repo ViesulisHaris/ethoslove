@@ -75,6 +75,12 @@ const PHONE = { width: 432, height: 768, zoom: 2.5 };
 // cropping the slide's sides. 9:16, so the gift is exactly as it was drawn, just smaller.
 const SLIDE = { width: 1080, height: 1920 };
 const SCREEN = { left: 189, top: 200, width: 702, height: 1248, radius: 60 };
+// How the gift sits on the slide. "phone" is the phone's screen on black. "safari" is how the
+// account's hits are posted: the gift full-bleed, as a screenshot, with Safari's bar along the
+// bottom carrying tryethos.io — so the domain is on every gift slide. TIKTOK_STILLS=1 writes only
+// the stills (still-<name>.jpg), no Live Photos, which is what a screenshot carousel needs.
+const FRAME = process.env.TIKTOK_FRAME ?? "phone";
+const STILLS = !!process.env.TIKTOK_STILLS;
 const SLOW = Math.max(1, Math.round(Number(process.env.TIKTOK_SLOW ?? 8)));
 const context = await browser.newContext({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1, locale: "en-GB" });
 await context.addInitScript(() => {
@@ -307,14 +313,40 @@ const { left: L, top: T, width: W, height: H, radius: R } = SCREEN;
 // A hairline round the screen, so a dark gift doesn't melt into the black.
 const backdrop = await sharp(svg(`<rect width="100%" height="100%" fill="#000"/><rect x="${L - 1.5}" y="${T - 1.5}" width="${W + 3}" height="${H + 3}" rx="${R + 1.5}" fill="none" stroke="#fff" stroke-opacity="0.16" stroke-width="3"/>`)).png().toBuffer();
 const corners = await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><rect width="${W}" height="${H}" rx="${R}" fill="#fff"/></svg>`)).png().toBuffer();
+// Safari's bar, the way an iPhone draws it over a page: three pills along the foot of the screen,
+// the middle one with the site's name. Drawn over the frame, as on a screenshot.
+const safariBar = await sharp(svg(`
+  <defs><filter id="s" x="-10%" y="-30%" width="120%" height="170%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.13"/></filter></defs>
+  <g filter="url(#s)" fill="#fbf8f2" fill-opacity="0.94">
+    <rect x="96" y="1770" width="112" height="110" rx="55"/><rect x="258" y="1770" width="568" height="110" rx="55"/><rect x="858" y="1770" width="116" height="110" rx="58"/>
+  </g>
+  <g fill="none" stroke="#3a3a3c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M162 1802 l-22 23 22 23" stroke="#b8b8bc"/>
+    <rect x="300" y="1811" width="34" height="22" rx="4"/><path d="M296 1841 h42" stroke-width="6"/>
+    <path d="M785 1812 a15 15 0 1 1 -4 -11" /><path d="M781 1796 l4 5 -6 3"/>
+  </g>
+  <g fill="#3a3a3c"><circle cx="898" cy="1825" r="4.5"/><circle cx="916" cy="1825" r="4.5"/><circle cx="934" cy="1825" r="4.5"/></g>
+  <text x="542" y="1840" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="38" font-weight="600" fill="#1c1c1e">tryethos.io</text>
+`)).png().toBuffer();
 const onSlide = async (frame) =>
-  sharp(backdrop)
-    .composite([{ input: await sharp(frame).resize(W, H, { kernel: "lanczos3" }).composite([{ input: corners, blend: "dest-in" }]).png().toBuffer(), left: L, top: T }])
-    .removeAlpha();
+  FRAME === "safari"
+    ? sharp(frame).resize(SLIDE.width, SLIDE.height, { kernel: "lanczos3" }).composite([{ input: safariBar, left: 0, top: 0 }]).removeAlpha()
+    : sharp(backdrop)
+        .composite([{ input: await sharp(frame).resize(W, H, { kernel: "lanczos3" }).composite([{ input: corners, blend: "dest-in" }]).png().toBuffer(), left: L, top: T }])
+        .removeAlpha();
 
 // ── Cutting: frames held until the next one arrives, at a steady 30fps, into H.264 ───────────────
 async function cut(name, from, to, stillAt = from) {
   const fps = 30;
+  if (STILLS) {
+    // Just the moment: the last frame the screencast caught before stillAt, on the slide.
+    let k = 0;
+    while (k + 1 < frames.length && frames[k + 1].t <= stillAt) k++;
+    const out = join(dir, `still-${name}.jpg`);
+    await (await onSlide(frames[k].file)).jpeg({ quality: 95 }).toFile(out);
+    console.log(`wrote ${out}`);
+    return;
+  }
   const tmp = join(tmpdir(), `tiktok-live-${name}-${process.pid}`);
   rmSync(tmp, { recursive: true, force: true });
   mkdirSync(tmp, { recursive: true });
