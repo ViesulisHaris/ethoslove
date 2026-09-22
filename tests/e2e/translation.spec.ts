@@ -65,7 +65,9 @@ test.describe("a page the browser is translating", () => {
     await page.locator("#recipientName").pressSequentially("oana", { delay: 30 });
     await page.locator("#senderName").pressSequentially("Mihai", { delay: 30 });
     await page.locator("#message").pressSequentially("Îți mulțumesc pentru tot.", { delay: 15 });
-    await page.locator("#message").press("Home");
+    // To the start of the text, not of the line: where the box has wrapped the sentence, Home
+    // stops at the wrap, and the new line lands in the middle of it.
+    await page.locator("#message").press("ControlOrMeta+Home");
     await page.locator("#message").press("Enter");
     await page.locator("#message").pressSequentially("Dragă mamă,", { delay: 15 });
 
