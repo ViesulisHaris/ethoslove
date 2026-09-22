@@ -8,6 +8,9 @@ test.describe("template engine", () => {
   });
 
   test("The Letter opens from the seal to the signed letter", async ({ page }) => {
+    // ~24 s from the page to the signature even on an idle machine: the default 30 s budget left
+    // no room under load, and the 60 s wait for the signature below could never run its course.
+    test.setTimeout(90_000);
     await page.goto("/demo/the-letter");
     // The intro screen shows the line and the recipient's name as separate elements.
     const loading = page.getByText(/someone made this for you/i);

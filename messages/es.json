@@ -311,7 +311,7 @@
       "video": {
         "n": "04b",
         "title": "Un vídeo corto",
-        "blurb": "Opcional. Unos segundos riéndose valen más que un párrafo. Se reproduce sin sonido hasta que toquen."
+        "blurb": "Opcional, y premium. Unos segundos riéndose valen más que un párrafo. Se reproduce sin sonido hasta que toquen."
       },
       "voice": {
         "n": "04c",
@@ -565,7 +565,8 @@
       "uploading": "Subiendo…",
       "local": "En este dispositivo",
       "failed": "Error al subir",
-      "remove": "Quitar"
+      "remove": "Quitar",
+      "premium": "Premium"
     },
     "voice": {
       "record": "Grabar un mensaje de voz",
