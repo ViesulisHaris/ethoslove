@@ -184,6 +184,24 @@ test.describe("finding a date", () => {
     await expect(sheet.getByRole("link", { name: "Sign in" })).toHaveAttribute("href", /\/login\?next=/);
   });
 
+  test("a vibe picks the places too, and every pin on the map says what it costs", async ({ page, isMobile }) => {
+    test.skip(isMobile, "the map sits beside the list on a wide screen; on a phone it is behind its button");
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    await expect(page.locator(".ethos-pin").first()).toBeAttached({ timeout: 20_000 });
+    // Every pin carries its price level, the way the cards do.
+    const pins = page.locator(".ethos-pin:not(.is-out)");
+    await expect.poll(async () => (await pins.count()) > 0 && (await pins.count()) === (await page.locator(".ethos-pin:not(.is-out) .ethos-pin-price").count())).toBe(true);
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toBeVisible();
+    // "Free" keeps only free places, on the map and in the list.
+    await page.getByRole("group", { name: "Mood" }).getByRole("button", { name: "Free", exact: true }).click();
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toHaveCount(0);
+    await expect.poll(async () => (await page.locator(".ethos-pin:not(.is-out) .ethos-pin-price").allTextContents()).every((t) => t === "Free")).toBe(true);
+    // Off again, and everything is back.
+    await page.getByRole("group", { name: "Mood" }).getByRole("button", { name: "Free", exact: true }).click();
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toBeVisible();
+  });
+
   test("filters narrow the list to one kind of place", async ({ page }) => {
     await mockWorld(page);
     await page.goto(lisbonUrl);

@@ -1,5 +1,6 @@
 import type { Map as MapLibreMap, Marker } from "maplibre-gl";
 import { GROUP_GLYPHS } from "@/lib/dates/glyphs";
+import { COST_LABELS, COST_MARKS, costOf, type Cost } from "@/lib/dates/cost";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import type { Ratings } from "@/lib/dates/rank";
@@ -40,7 +41,11 @@ function glyph(group: Place["group"]): SVGSVGElement {
 const metres = (km: number) => (km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`);
 
 export function createPins(lib: MapLibre, map: MapLibreMap, opts: { locale: "en" | "es"; ratings: () => Ratings; onSelect?: (id: string) => void; onHover?: (id: string | null) => void }): PinsController {
-  type Pin = { marker: Marker; el: HTMLButtonElement; sub: HTMLSpanElement; place: Place };
+  type Pin = { marker: Marker; el: HTMLButtonElement; sub: HTMLSpanElement; price: HTMLSpanElement; place: Place };
+
+  /** The same tier the cards show: what couples reported, else the kind's usual cost. */
+  const tierOf = (place: Place): Cost => ("cost" in place ? (place as Place & { cost: Cost }).cost : costOf(place, opts.ratings()[place.id]?.cost));
+  const priceText = (tier: Cost) => (tier === 0 ? COST_LABELS[0][opts.locale] : COST_MARKS[tier]);
   const pins = new Map<string, Pin>();
   const leaving = new Set<string>();
   let last: { places: Place[]; selected: Place | null; hoveredId: string | null } = { places: [], selected: null, hoveredId: null };
@@ -73,13 +78,17 @@ export function createPins(lib: MapLibre, map: MapLibreMap, opts: { locale: "en"
     sub.className = "ethos-pin-sub";
     sub.textContent = label(place);
     text.append(name, sub);
-    el.append(icon, text);
+    const price = document.createElement("span");
+    const tier = tierOf(place);
+    price.className = `ethos-pin-price${tier === 0 ? " is-free" : ""}`;
+    price.textContent = priceText(tier);
+    el.append(icon, text, price);
     // The list beside the map is the same places, as real buttons, and it is the keyboard and
     // screen-reader path. Twenty pills in the tab order would only be the list again, in a worse
     // order and in the way, so the map is left to the pointer.
     el.setAttribute("aria-hidden", "true");
     el.tabIndex = -1;
-    el.title = `${place.name} · ${label(place)}`;
+    el.title = `${place.name} · ${priceText(tierOf(place))} · ${label(place)}`;
 
     el.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -95,14 +104,14 @@ export function createPins(lib: MapLibre, map: MapLibreMap, opts: { locale: "en"
     });
 
     const marker = new lib.Marker({ element: el, anchor: "bottom", offset: [0, -6] }).setLngLat([place.lng, place.lat]).addTo(map);
-    return { marker, el, sub, place };
+    return { marker, el, sub, price, place };
   }
 
   /** Roughly how wide this pill will be: the icon and padding, plus the name at ~7px a letter. */
   function widthOf(place: Place, compact: boolean): number {
     if (compact) return 36;
     const name = place.named ? place.name : KINDS[place.kind].label[opts.locale];
-    return Math.min(210, 52 + Math.min(name.length, 24) * 7.1);
+    return Math.min(250, 88 + Math.min(name.length, 24) * 7.1);
   }
 
   /** The pills that fit: best first, the chosen and hovered ones always, and none on top of another. */
@@ -164,6 +173,9 @@ export function createPins(lib: MapLibre, map: MapLibreMap, opts: { locale: "en"
         pins.set(place.id, pin);
       } else if (pin.place !== place) {
         pin.sub.textContent = label(place);
+        const tier = tierOf(place);
+        pin.price.textContent = priceText(tier);
+        pin.price.classList.toggle("is-free", tier === 0);
         pin.el.title = `${place.name} · ${label(place)}`;
         pin.marker.setLngLat([place.lng, place.lat]);
         pin.place = place;

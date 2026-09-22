@@ -280,8 +280,17 @@ export function DatesExplorer() {
   const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
   const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
-  const visible = useMemo(() => ranked.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [ranked, groups, costs]);
-  const picks = useMemo(() => topPicks(ranked), [ranked]);
+  // A vibe chooses places as well as ideas: the kinds of place its ideas are made of. "Playful"
+  // puts the bowling, the arcade and the karaoke on the map, and nothing else. If there is no such
+  // place here the filter steps aside, so a chip never empties the map.
+  const vibeKinds = useMemo(() => (vibe ? new Set(ideas.flatMap((i) => i.stops.flat())) : null), [vibe, ideas]);
+  const inVibe = useMemo(() => {
+    if (!vibeKinds) return ranked;
+    const matching = ranked.filter((p) => vibeKinds.has(p.kind) && (vibe !== "free" || p.cost === 0));
+    return matching.length > 0 ? matching : ranked;
+  }, [ranked, vibeKinds, vibe]);
+  const visible = useMemo(() => inVibe.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [inVibe, groups, costs]);
+  const picks = useMemo(() => topPicks(inVibe), [inVibe]);
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
   const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
   const pairs = useMemo(() => (selected ? pairsWith(selected, ranked) : []), [selected, ranked]);
