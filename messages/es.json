@@ -1008,11 +1008,11 @@
       "label": "Mapa de sitios para una cita",
       "show": "Mapa",
       "list": "Lista",
-      "searchHere": "Buscar en esta zona",
       "loading": "Cargando…",
       "unavailable": "El mapa no ha podido cargarse aquí. La lista de al lado sigue funcionando.",
       "zoomIn": "Acercar",
-      "zoomOut": "Alejar"
+      "zoomOut": "Alejar",
+      "zoomToSee": "Acércate para ver sitios aquí"
     },
     "plan": {
       "open": "Nuestro plan",

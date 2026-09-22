@@ -3,7 +3,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import type { DataDrivenPropertyValueSpecification, GeoJSONSource, Map as MapLibreMap, MapMouseEvent, Marker } from "maplibre-gl";
-import { Loader2, LocateFixed, Minus, Plus, Search } from "lucide-react";
+import { Loader2, LocateFixed, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { distanceKm, type LatLng } from "@/lib/dates/geo";
 import { GROUP_IDS, GROUPS } from "@/lib/dates/kinds";
@@ -15,7 +15,7 @@ import { createPins, type PinsController } from "./map-pins";
 
 type MapLibre = typeof import("maplibre-gl");
 
-export type MapLabels = { searchHere: string; nearMe: string; loading: string; unavailable: string; map: string; zoomIn: string; zoomOut: string };
+export type MapLabels = { zoomToSee: string; nearMe: string; loading: string; unavailable: string; map: string; zoomIn: string; zoomOut: string };
 
 type Props = {
   center: LatLng | null;
@@ -49,8 +49,16 @@ const HALO = "ethos-halo";
 const ROUTE = "ethos-route";
 /* The same rose as the site's tokens, as literals: MapLibre paints on a canvas and cannot read CSS variables. */
 const ROSE = "#D6336C";
-/** How far the map has to be dragged, as a share of what it shows, before it offers to search again. */
+/** How far the map has to be dragged, as a share of what it shows, before it looks again. */
 const MOVED_SHARE = 0.35;
+/**
+ * Closer than this, a moved map finds the places in the new view by itself, the way Airbnb does.
+ * Further out it would be searching a whole region at once, which the tiles cannot answer well, so
+ * it asks for a zoom instead.
+ */
+const AUTO_FROM_ZOOM = 12;
+/** A drag often comes in two or three flicks: wait for the map to settle before searching. */
+const SETTLE_MS = 450;
 
 /** One colour per group, as the expression MapLibre wants: match, then a pair per group, then a fallback. */
 const groupColour = () => ["match", ["get", "group"], ...GROUP_IDS.flatMap((g) => [g, GROUPS[g].color]), ROSE] as unknown as DataDrivenPropertyValueSpecification<string>;
@@ -79,7 +87,9 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
   const mapRef = useRef<MapLibreMap | null>(null);
   const libRef = useRef<MapLibre | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
-  const [moved, setMoved] = useState<{ center: LatLng; radiusM: number } | null>(null);
+  // Too far out to show places: the map says so rather than searching a country at once.
+  const [farOut, setFarOut] = useState(false);
+  const settle = useRef<number | undefined>(undefined);
   const searchedAt = useRef<LatLng | null>(null);
   const callbacks = useRef({ onSelect, onSearchArea, onHover });
   const live = useRef({ ratings: ratings ?? {}, locale });
@@ -158,16 +168,23 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
           map.on("mouseenter", `${PLACES}-dots`, () => map && (map.getCanvas().style.cursor = "pointer"));
           map.on("mouseleave", `${PLACES}-dots`, () => map && (map.getCanvas().style.cursor = ""));
 
-          // Only a drag or a pinch by a person counts; the map moving itself to a new search does not.
-          map.on("moveend", (e: { originalEvent?: unknown }) => {
-            if (!map || !e.originalEvent) return;
+          // A drag, a pinch, a scroll or our own zoom buttons count; the map moving itself to a new
+          // search does not, or every search would set off another.
+          map.on("moveend", (e: { originalEvent?: unknown; byPerson?: boolean }) => {
+            if (!map || (!e.originalEvent && !e.byPerson)) return;
+            window.clearTimeout(settle.current);
+            if (map.getZoom() < AUTO_FROM_ZOOM) return setFarOut(true);
+            setFarOut(false);
             const c = map.getCenter();
             const bounds = map.getBounds();
             const here = { lat: c.lat, lng: c.lng };
             const half = Math.min(distanceKm(here, { lat: bounds.getNorth(), lng: c.lng }), distanceKm(here, { lat: c.lat, lng: bounds.getEast() })) * 1000;
             const from = searchedAt.current;
-            if (from && distanceKm(from, here) * 1000 < Math.max(250, half * MOVED_SHARE)) return setMoved(null);
-            setMoved({ center: here, radiusM: Math.round(half) });
+            if (from && distanceKm(from, here) * 1000 < Math.max(250, half * MOVED_SHARE)) return;
+            settle.current = window.setTimeout(() => {
+              searchedAt.current = here;
+              callbacks.current.onSearchArea?.(here, Math.round(half));
+            }, SETTLE_MS);
           });
           pins.current = createPins(lib, map, {
             locale: live.current.locale,
@@ -185,6 +202,7 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
     })();
     return () => {
       cancelled = true;
+      window.clearTimeout(settle.current);
       mapRef.current = null;
       pins.current?.destroy();
       pins.current = null;
@@ -278,18 +296,11 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
                 <Loader2 className="size-4 animate-spin" />
                 {labels.loading}
               </span>
-            ) : moved && onSearchArea ? (
-              <button
-                type="button"
-                onClick={() => {
-                  onSearchArea(moved.center, moved.radiusM);
-                  setMoved(null);
-                }}
-                className="pointer-events-auto inline-flex h-11 items-center gap-2 rounded-full bg-forest px-5 text-[13.5px] font-semibold text-cream shadow-lift transition-transform hover:-translate-y-0.5"
-              >
-                <Search className="size-4" />
-                {labels.searchHere}
-              </button>
+            ) : farOut && onSearchArea ? (
+              <span className="inline-flex h-10 items-center gap-2 rounded-full bg-white/95 px-4 text-[13px] font-medium text-forest shadow-lift">
+                <Plus className="size-4 text-rose-deep" />
+                {labels.zoomToSee}
+              </span>
             ) : null}
           </div>
           <div className="absolute right-3 bottom-10 z-10 flex flex-col overflow-hidden rounded-2xl bg-white shadow-lift ring-1 ring-forest/10 max-lg:bottom-24">
@@ -298,10 +309,10 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
                 {locating ? <Loader2 className="size-[18px] animate-spin" /> : <LocateFixed className="size-[18px]" />}
               </button>
             ) : null}
-            <button type="button" onClick={() => mapRef.current?.zoomIn()} aria-label={labels.zoomIn} className="hidden size-11 place-items-center border-t border-forest/10 text-forest hover:bg-forest/5 lg:grid">
+            <button type="button" onClick={() => mapRef.current?.zoomIn(undefined, { byPerson: true })} aria-label={labels.zoomIn} className="hidden size-11 place-items-center border-t border-forest/10 text-forest hover:bg-forest/5 lg:grid">
               <Plus className="size-[18px]" />
             </button>
-            <button type="button" onClick={() => mapRef.current?.zoomOut()} aria-label={labels.zoomOut} className="hidden size-11 place-items-center border-t border-forest/10 text-forest hover:bg-forest/5 lg:grid">
+            <button type="button" onClick={() => mapRef.current?.zoomOut(undefined, { byPerson: true })} aria-label={labels.zoomOut} className="hidden size-11 place-items-center border-t border-forest/10 text-forest hover:bg-forest/5 lg:grid">
               <Minus className="size-[18px]" />
             </button>
           </div>

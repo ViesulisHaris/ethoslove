@@ -360,7 +360,7 @@ export function DatesExplorer() {
     updatePlan((p) => stamp({ ...stops.reduce((acc, s, i) => (s.place ? addStop(acc, toStop(s.place, times[i])) : acc), p), idea: idea.id }));
   }, [idea, stops, times, stamp, updatePlan]);
 
-  const mapLabels = useMemo(() => ({ searchHere: t("map.searchHere"), nearMe: t("where.nearMe"), loading: t("map.loading"), unavailable: t("map.unavailable"), map: t("map.label"), zoomIn: t("map.zoomIn"), zoomOut: t("map.zoomOut") }), [t]);
+  const mapLabels = useMemo(() => ({ zoomToSee: t("map.zoomToSee"), nearMe: t("where.nearMe"), loading: t("map.loading"), unavailable: t("map.unavailable"), map: t("map.label"), zoomIn: t("map.zoomIn"), zoomOut: t("map.zoomOut") }), [t]);
   const budget = useMemo(() => [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string], [t]);
   const whereLabels = { label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing") };
 

@@ -1008,11 +1008,11 @@
       "label": "Map of places for a date",
       "show": "Map",
       "list": "List",
-      "searchHere": "Search this area",
       "loading": "Loading…",
       "unavailable": "The map couldn't load here. The list beside it still works.",
       "zoomIn": "Zoom in",
-      "zoomOut": "Zoom out"
+      "zoomOut": "Zoom out",
+      "zoomToSee": "Zoom in to see date spots here"
     },
     "plan": {
       "open": "Our plan",

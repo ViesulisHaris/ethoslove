@@ -61,7 +61,7 @@ export function PlanView() {
   const idea = ideaById(plan.idea);
   const past = Boolean(plan.date && plan.date < toYmd(new Date()));
   const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: s.name })), [plan.stops]);
-  const mapLabels = useMemo(() => ({ searchHere: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "" }), [t]);
+  const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "" }), [t]);
 
   const link = () => `${window.location.origin}${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
   const copy = async () => {
