@@ -22,9 +22,9 @@ const ROOMS = [
 ] as const;
 
 /**
- * A floating pill of frosted white under a thin rose promo strip. Light, so it reads as part of
- * the paper it floats over, and it still holds on the wine sections; the room you are in is
- * marked, because with five of them "where am I" is a real question.
+ * A floating pill of frosted white. Light, so it reads as part of the paper it floats over, and it
+ * still holds on the wine sections; the room you are in is marked, because with five of them
+ * "where am I" is a real question.
  */
 export function MarketingHeader() {
   const t = useTranslations();
@@ -41,14 +41,6 @@ export function MarketingHeader() {
       >
         {t("common.skipToContent")}
       </a>
-
-      <Link
-        href="/pricing"
-        className="flex h-9 items-center justify-center gap-2 bg-[linear-gradient(90deg,#a61e52_0%,#d6336c_50%,#e8447a_100%)] px-4 text-center text-[13px] font-medium text-white transition-[filter] hover:brightness-110"
-      >
-        <span className="truncate">{t("promo.line")}</span>
-        <span className="shrink-0 rounded-full bg-white px-2 py-0.5 text-[11px] font-bold tracking-[0.14em] text-rose-deep">{t("promo.code")}</span>
-      </Link>
 
       <div className="px-3 pt-3 sm:px-5">
         <div

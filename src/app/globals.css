@@ -435,6 +435,137 @@
 /* ------------------------------------------------------------------ */
 /* The Dates map: markers MapLibre positions as plain DOM elements.    */
 /* ------------------------------------------------------------------ */
+/* A place on the map: a white pill with the kind's colour and glyph, the name beside it, and what
+   it is underneath once it is pointed at. MapLibre writes `transform` on a marker's root, so every
+   move of our own — the lift on hover, the deal-in — belongs on the button inside it. */
+.ethos-pin {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 210px;
+  padding: 4px 12px 4px 4px;
+  border: 0;
+  border-radius: 999px;
+  background: #fffdfb;
+  color: var(--color-forest);
+  font: 600 13px/1.2 var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(90, 40, 60, 0.08),
+    0 8px 18px -8px rgba(80, 25, 50, 0.45);
+  transition:
+    transform 0.22s var(--ease-out-quint),
+    box-shadow 0.22s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    padding 0.2s ease;
+  animation: ethos-pin-in 0.34s var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 16ms);
+}
+.ethos-pin-ico {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--pin, var(--color-rose));
+  transition: background-color 0.2s ease;
+}
+.ethos-pin-ico svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ethos-pin-text {
+  display: grid;
+  min-width: 0;
+  /* 0fr to 1fr: the second line grows out of nothing, which animates where `height: auto` cannot. */
+  grid-template-rows: auto 0fr;
+  transition: grid-template-rows 0.22s var(--ease-out-quint);
+}
+.ethos-pin-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ethos-pin-sub {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: color-mix(in oklab, var(--color-forest) 62%, transparent);
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+.ethos-pin:hover,
+.ethos-pin:focus-visible,
+.ethos-pin.is-near {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow:
+    0 0 0 1px rgba(90, 40, 60, 0.1),
+    0 16px 30px -12px rgba(80, 25, 50, 0.6);
+}
+.ethos-pin:hover .ethos-pin-text,
+.ethos-pin:focus-visible .ethos-pin-text,
+.ethos-pin.is-near .ethos-pin-text,
+.ethos-pin.is-on .ethos-pin-text {
+  grid-template-rows: auto 1fr;
+}
+.ethos-pin:hover .ethos-pin-sub,
+.ethos-pin:focus-visible .ethos-pin-sub,
+.ethos-pin.is-near .ethos-pin-sub,
+.ethos-pin.is-on .ethos-pin-sub {
+  opacity: 1;
+}
+/* Chosen: the pill takes the rose, and keeps it while the sheet is open. */
+.ethos-pin.is-on {
+  background: var(--color-rose);
+  color: #fff;
+  transform: translateY(-3px) scale(1.06);
+  box-shadow:
+    0 0 0 1px rgba(214, 51, 108, 0.5),
+    0 18px 34px -12px rgba(120, 20, 60, 0.7);
+}
+.ethos-pin.is-on .ethos-pin-ico {
+  background: rgba(255, 255, 255, 0.22);
+}
+.ethos-pin.is-on .ethos-pin-sub {
+  color: rgba(255, 255, 255, 0.82);
+}
+/* Far out, a pill is its icon alone: the names would be a hedge of text. */
+.ethos-pin.is-compact {
+  max-width: none;
+  padding: 3px;
+  gap: 0;
+}
+.ethos-pin.is-compact .ethos-pin-text {
+  display: none;
+}
+.ethos-pin.is-out {
+  animation: ethos-pin-out 0.18s ease-in both;
+  pointer-events: none;
+}
+@keyframes ethos-pin-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px) scale(0.84);
+  }
+}
+@keyframes ethos-pin-out {
+  to {
+    opacity: 0;
+    transform: scale(0.84);
+  }
+}
+
 .ethos-stop-pin {
   display: grid;
   place-items: center;

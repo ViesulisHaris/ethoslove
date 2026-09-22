@@ -675,6 +675,9 @@ export function DatesExplorer() {
             places={visible}
             selected={selected}
             hoveredId={hoveredId}
+            ratings={ratings}
+            locale={locale}
+            onHover={setHoveredId}
             route={route}
             fitRoute={Boolean(idea)}
             origin={origin}

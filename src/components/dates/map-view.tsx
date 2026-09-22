@@ -2,15 +2,16 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
-import type { GeoJSONSource, Map as MapLibreMap, MapMouseEvent, Marker } from "maplibre-gl";
+import type { DataDrivenPropertyValueSpecification, GeoJSONSource, Map as MapLibreMap, MapMouseEvent, Marker } from "maplibre-gl";
 import { Loader2, LocateFixed, Minus, Plus, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { distanceKm, type LatLng } from "@/lib/dates/geo";
-import { GROUP_GLYPHS } from "@/lib/dates/glyphs";
-import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
+import { GROUP_IDS, GROUPS } from "@/lib/dates/kinds";
 import { applyPalette, MAP_PAPER, type MapStyle } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_URL } from "@/lib/dates/map-vendor";
 import type { Place } from "@/lib/dates/places";
+import type { Ratings } from "@/lib/dates/rank";
+import { createPins, type PinsController } from "./map-pins";
 
 type MapLibre = typeof import("maplibre-gl");
 
@@ -22,6 +23,9 @@ type Props = {
   places: Place[];
   selected: Place | null;
   hoveredId: string | null;
+  /** What the cards know about stars, so a pin can say it too. */
+  ratings?: Ratings;
+  locale?: "en" | "es";
   /** The stops of the date being put together, in order, joined by a dotted line. */
   route: { lat: number; lng: number; name: string }[];
   /** Frame the route whenever it changes: for an idea just picked, not for a plan being added to while browsing. */
@@ -34,6 +38,8 @@ type Props = {
   interactive?: boolean;
   className?: string;
   onSelect?: (id: string | null) => void;
+  /** Pointing at a pin lights its card in the list, the way pointing at a card lights its pin. */
+  onHover?: (id: string | null) => void;
   onSearchArea?: (center: LatLng, radiusM: number) => void;
   onNearMe?: () => void;
 };
@@ -43,39 +49,11 @@ const HALO = "ethos-halo";
 const ROUTE = "ethos-route";
 /* The same rose as the site's tokens, as literals: MapLibre paints on a canvas and cannot read CSS variables. */
 const ROSE = "#D6336C";
-const ROSE_INK = "#8F1F47";
 /** How far the map has to be dragged, as a share of what it shows, before it offers to search again. */
 const MOVED_SHARE = 0.35;
 
-/** A round pin for one group: its colour, a white rim, its glyph. Drawn once, at twice the size, for sharp screens. */
-function pinImage(group: PlaceGroup): ImageData | null {
-  const size = 60;
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return null;
-  const c = size / 2;
-  ctx.shadowColor = "rgba(70,25,40,0.35)";
-  ctx.shadowBlur = 6;
-  ctx.shadowOffsetY = 2;
-  ctx.beginPath();
-  ctx.arc(c, c - 1, 22, 0, Math.PI * 2);
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fill();
-  ctx.shadowColor = "transparent";
-  ctx.beginPath();
-  ctx.arc(c, c - 1, 18.5, 0, Math.PI * 2);
-  ctx.fillStyle = GROUPS[group].color;
-  ctx.fill();
-  ctx.translate(c - 11, c - 12);
-  ctx.scale(22 / 24, 22 / 24);
-  ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 2.2;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-  for (const d of GROUP_GLYPHS[group]) ctx.stroke(new Path2D(d));
-  return ctx.getImageData(0, 0, size, size);
-}
+/** One colour per group, as the expression MapLibre wants: match, then a pair per group, then a fallback. */
+const groupColour = () => ["match", ["get", "group"], ...GROUP_IDS.flatMap((g) => [g, GROUPS[g].color]), ROSE] as unknown as DataDrivenPropertyValueSpecification<string>;
 
 const toFeatures = (places: Place[]) => ({
   type: "FeatureCollection" as const,
@@ -96,19 +74,21 @@ const numbered = (n: number, name: string): HTMLElement => {
  * drawn by the GPU as one clustered layer, so three hundred pins cost the same as three. If any of
  * that fails (no WebGL, tiles unreachable) the list beside it still works, and this says so.
  */
-export function MapView({ center, zoom = 14, places, selected, hoveredId, route, fitRoute, origin, searching, locating, labels, interactive = true, className, onSelect, onSearchArea, onNearMe }: Props) {
+export function MapView({ center, zoom = 14, places, selected, hoveredId, ratings, locale = "en", route, fitRoute, origin, searching, locating, labels, interactive = true, className, onSelect, onHover, onSearchArea, onNearMe }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const libRef = useRef<MapLibre | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
   const [moved, setMoved] = useState<{ center: LatLng; radiusM: number } | null>(null);
   const searchedAt = useRef<LatLng | null>(null);
-  const callbacks = useRef({ onSelect, onSearchArea });
+  const callbacks = useRef({ onSelect, onSearchArea, onHover });
+  const live = useRef({ ratings: ratings ?? {}, locale });
   useEffect(() => {
-    callbacks.current = { onSelect, onSearchArea };
+    callbacks.current = { onSelect, onSearchArea, onHover };
+    live.current = { ratings: ratings ?? {}, locale };
   });
+  const pins = useRef<PinsController | null>(null);
   const stopMarkers = useRef<Marker[]>([]);
-  const selectedMarker = useRef<Marker | null>(null);
   const originMarker = useRef<Marker | null>(null);
   const first = useRef({ center, zoom, interactive });
 
@@ -150,53 +130,34 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
         // beneath them. Waiting for "load" left a blank panel saying "Loading…" for as long as that took.
         map.once("style.load", () => {
           if (cancelled || !map) return;
-          for (const group of GROUP_IDS) {
-            const image = pinImage(group);
-            if (image) map.addImage(`pin-${group}`, image, { pixelRatio: 2 });
-          }
           map.addSource(ROUTE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
           map.addLayer({ id: ROUTE, type: "line", source: ROUTE, layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ROSE, "line-width": 3, "line-dasharray": [0.2, 2], "line-opacity": 0.85 } });
           map.addSource(HALO, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
           map.addLayer({ id: HALO, type: "circle", source: HALO, paint: { "circle-radius": 21, "circle-color": ROSE, "circle-opacity": 0.18, "circle-stroke-color": ROSE, "circle-stroke-width": 1.5, "circle-stroke-opacity": 0.55 } });
-          map.addSource(PLACES, { type: "geojson", data: { type: "FeatureCollection", features: [] }, cluster: true, clusterRadius: 38, clusterMaxZoom: 15, promoteId: "id" });
-          map.addLayer({ id: `${PLACES}-clusters`, type: "circle", source: PLACES, filter: ["has", "point_count"], paint: { "circle-color": "#FFFFFF", "circle-radius": ["step", ["get", "point_count"], 15, 10, 18, 40, 22], "circle-stroke-color": "#F2A7C0", "circle-stroke-width": 3 } });
-          map.addLayer({ id: `${PLACES}-count`, type: "symbol", source: PLACES, filter: ["has", "point_count"], layout: { "text-field": ["get", "point_count_abbreviated"], "text-font": ["Noto Sans Bold"], "text-size": 12, "text-allow-overlap": true }, paint: { "text-color": ROSE_INK } });
+          map.addSource(PLACES, { type: "geojson", data: { type: "FeatureCollection", features: [] }, promoteId: "id" });
+          // Every place is a dot, so the shape of a neighbourhood reads at a glance; the pills on
+          // top of them are elements, and only as many as fit (map-pins.ts).
           map.addLayer({
-            id: `${PLACES}-pins`,
-            type: "symbol",
+            id: `${PLACES}-dots`,
+            type: "circle",
             source: PLACES,
-            filter: ["!", ["has", "point_count"]],
-            layout: {
-              "icon-image": ["concat", "pin-", ["get", "group"]],
-              "icon-size": ["interpolate", ["linear"], ["zoom"], 11, 0.62, 15, 0.86, 18, 1],
-              "icon-allow-overlap": true,
-              "symbol-sort-key": ["-", 0, ["get", "score"]],
-              "text-field": ["step", ["zoom"], "", 15.5, ["get", "name"]],
-              "text-font": ["Noto Sans Regular"],
-              "text-size": 11,
-              "text-offset": [0, 1.35],
-              "text-anchor": "top",
-              "text-optional": true,
-              "text-max-width": 9,
+            paint: {
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 2.5, 15, 4, 18, 5.5],
+              "circle-color": groupColour(),
+              "circle-opacity": 0.5,
+              "circle-stroke-color": "#FFFFFF",
+              "circle-stroke-width": 1.5,
+              "circle-stroke-opacity": 0.8,
             },
-            paint: { "text-color": "#5B3F49", "text-halo-color": "rgba(255,250,247,0.95)", "text-halo-width": 1.4 },
           });
 
-          map.on("click", `${PLACES}-pins`, (e: MapMouseEvent & { features?: { properties?: Record<string, unknown> }[] }) => {
+          map.on("click", `${PLACES}-dots`, (e: MapMouseEvent & { features?: { properties?: Record<string, unknown> }[] }) => {
             const id = e.features?.[0]?.properties?.id;
             if (typeof id === "string") callbacks.current.onSelect?.(id);
           });
-          map.on("click", `${PLACES}-clusters`, async (e: MapMouseEvent & { features?: { properties?: Record<string, unknown>; geometry?: unknown }[] }) => {
-            const feature = e.features?.[0];
-            const clusterId = feature?.properties?.cluster_id;
-            if (typeof clusterId !== "number" || !map) return;
-            const target = await (map.getSource(PLACES) as GeoJSONSource).getClusterExpansionZoom(clusterId);
-            map.easeTo({ center: (feature?.geometry as { coordinates: [number, number] }).coordinates, zoom: Math.min(target + 0.3, 18), duration: 450 });
-          });
-          for (const layer of [`${PLACES}-pins`, `${PLACES}-clusters`]) {
-            map.on("mouseenter", layer, () => map && (map.getCanvas().style.cursor = "pointer"));
-            map.on("mouseleave", layer, () => map && (map.getCanvas().style.cursor = ""));
-          }
+          map.on("mouseenter", `${PLACES}-dots`, () => map && (map.getCanvas().style.cursor = "pointer"));
+          map.on("mouseleave", `${PLACES}-dots`, () => map && (map.getCanvas().style.cursor = ""));
+
           // Only a drag or a pinch by a person counts; the map moving itself to a new search does not.
           map.on("moveend", (e: { originalEvent?: unknown }) => {
             if (!map || !e.originalEvent) return;
@@ -207,6 +168,12 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
             const from = searchedAt.current;
             if (from && distanceKm(from, here) * 1000 < Math.max(250, half * MOVED_SHARE)) return setMoved(null);
             setMoved({ center: here, radiusM: Math.round(half) });
+          });
+          pins.current = createPins(lib, map, {
+            locale: live.current.locale,
+            ratings: () => live.current.ratings,
+            onSelect: (id) => callbacks.current.onSelect?.(id),
+            onHover: (id) => callbacks.current.onHover?.(id),
           });
           mapRef.current = map;
           setState("ready");
@@ -219,6 +186,8 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
     return () => {
       cancelled = true;
       mapRef.current = null;
+      pins.current?.destroy();
+      pins.current = null;
       map?.remove();
     };
   }, []);
@@ -239,6 +208,12 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
     (map.getSource(PLACES) as GeoJSONSource | undefined)?.setData(toFeatures(places));
   }, [places, state]);
 
+  // The pills follow the places, the chosen one and the pointed-at one.
+  useEffect(() => {
+    if (state !== "ready") return;
+    pins.current?.sync({ places, selected, hoveredId });
+  }, [places, selected, hoveredId, ratings, state]);
+
   useEffect(() => {
     const map = mapRef.current;
     if (state !== "ready" || !map) return;
@@ -246,21 +221,10 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, route,
     (map.getSource(HALO) as GeoJSONSource | undefined)?.setData({ type: "FeatureCollection", features: hovered ? [{ type: "Feature", geometry: { type: "Point", coordinates: [hovered.lng, hovered.lat] }, properties: {} }] : [] });
   }, [hoveredId, places, state]);
 
+  // A place chosen from the list may be off the screen: bring it into view, its pill and all.
   useEffect(() => {
     const map = mapRef.current;
-    const lib = libRef.current;
-    if (state !== "ready" || !map || !lib) return;
-    selectedMarker.current?.remove();
-    selectedMarker.current = null;
-    if (!selected) return;
-    const el = document.createElement("div");
-    el.className = "ethos-selected-pin";
-    el.style.setProperty("--pin", GROUPS[selected.group].color);
-    el.appendChild(document.createElement("i"));
-    const label = document.createElement("span");
-    label.textContent = selected.name;
-    el.appendChild(label);
-    selectedMarker.current = new lib.Marker({ element: el, anchor: "bottom" }).setLngLat([selected.lng, selected.lat]).addTo(map);
+    if (state !== "ready" || !map || !selected) return;
     if (!map.getBounds().contains([selected.lng, selected.lat])) map.easeTo({ center: [selected.lng, selected.lat], duration: 500 });
   }, [selected, state]);
 

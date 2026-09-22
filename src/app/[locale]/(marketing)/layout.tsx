@@ -9,7 +9,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
 
   return (
     // The header floats; pages start below it, and a hero can pull itself up underneath it.
-    <div className="flex min-h-dvh flex-col" style={{ "--header-h": "112px" } as React.CSSProperties}>
+    <div className="flex min-h-dvh flex-col" style={{ "--header-h": "76px" } as React.CSSProperties}>
       <MarketingHeader />
       <main id="main" className="flex-1 pt-[var(--header-h)]">
         {children}
