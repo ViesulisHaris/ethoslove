@@ -18,6 +18,7 @@ const ASPECTS: { label: string; value: number | undefined }[] = [
 
 export function CropDialog({ photo, onClose, onApply }: { photo: GiftPhoto | null; onClose: () => void; onApply: (crop: Area) => Promise<void> }) {
   const t = useTranslations("editor.photos");
+  const tCommon = useTranslations("common");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [aspect, setAspect] = useState<number>(1);
@@ -26,7 +27,7 @@ export function CropDialog({ photo, onClose, onApply }: { photo: GiftPhoto | nul
 
   return (
     <Dialog open={Boolean(photo)} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent closeLabel={tCommon("close")} className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-display text-xl">{t("crop")}</DialogTitle>
         </DialogHeader>

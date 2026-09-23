@@ -976,6 +976,9 @@
       "network": "No connection. Check it and try again.",
       "generic": "Couldn't open checkout. Please try again."
     },
+    "recovery": {
+      "optIn": "If I don't finish paying, email me one link to come back to it."
+    },
     "product": {
       "single": "One template",
       "pick3": "Pick three",

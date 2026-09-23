@@ -50,6 +50,19 @@ test.describe("the pricing page", () => {
     await expect(page.getByRole("button", { name: "How do gift cards work?" })).toHaveCount(0);
   });
 
+  test("asks for the checkout reminder from the pass card only when its box is ticked", async ({ page }) => {
+    const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
+    await page.goto("/es/pricing");
+    const pass = page.getByTestId("pass-card");
+    const box = pass.getByTestId("recovery-optin").getByRole("checkbox");
+    await expect(pass.getByTestId("recovery-optin")).toHaveText("Si no termino de pagar, enviadme un solo enlace para volver.");
+    await expect(box).not.toBeChecked();
+    await box.check();
+    await pass.getByTestId("buy-pass").click();
+    await expect.poll(() => asked.length).toBe(1);
+    expect(asked[0]).toMatchObject({ product: "pass", locale: "es", remindMe: true });
+  });
+
   test("buys the pass with nothing but the product: no code, no amount", async ({ page }) => {
     const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
     await page.goto("/pricing");
@@ -58,6 +71,8 @@ test.describe("the pricing page", () => {
     expect(asked[0]).toMatchObject({ product: "pass", currency: "eur", locale: "en", returnTo: "/account" });
     expect(asked[0]).not.toHaveProperty("creatorCode");
     expect(noAmounts(asked[0])).toEqual([]);
+    // The checkout reminder travels only when its box is ticked.
+    expect(asked[0]).not.toHaveProperty("remindMe");
     await expect(page.getByText("Too many tries. Wait a minute and try again.")).toBeVisible();
   });
 
@@ -148,6 +163,23 @@ test.describe("the paywall in the publish sheet", () => {
     await expect(panel.getByTestId("pay-single")).toHaveText("Pay €24.99 and send");
 
     await expect(panel.getByTestId("guarantee")).toHaveText("If it doesn't open on their phone, you get your money back.");
+  });
+
+  test("offers the checkout reminder unticked under the pay button, and asks for it only when ticked", async ({ page }) => {
+    const asked = await answerCheckout(page, { status: 400, body: { error: "checkout" } });
+    const panel = await openSheet(page, "/create/bouquet");
+    const remind = panel.getByTestId("recovery-optin");
+    await expect(remind).toHaveText("If I don't finish paying, email me one link to come back to it.");
+    await expect(remind.getByRole("checkbox")).not.toBeChecked();
+    await panel.getByTestId("pay-single").click();
+    await expect.poll(() => asked.length).toBe(1);
+    expect(asked[0]).not.toHaveProperty("remindMe");
+
+    await expect(panel.getByTestId("pay-single")).toBeEnabled();
+    await remind.getByRole("checkbox").check();
+    await panel.getByTestId("pay-single").click();
+    await expect.poll(() => asked.length).toBe(2);
+    expect(asked[1]).toMatchObject({ product: "single", templateSlugs: ["bouquet"], remindMe: true });
   });
 
   test("sends the template and the bump, never an amount or a code", async ({ page }) => {

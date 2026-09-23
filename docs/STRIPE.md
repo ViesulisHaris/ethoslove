@@ -143,10 +143,18 @@ the buyer closed the tab.
   URL in the checkout page's footer, so an Ethos buyer could see another business's terms there.
 - Checkout's marketing-consent box (`consent_collection.promotions`) is requested on every
   session. If the account can't show it, checkout retries without it (and stops asking for the life
-  of that server instance); that buyer just gets no abandoned-checkout email. **On this account
-  Stripe refuses it** ("`consent_collection.promotions` is not available in your country", test
-  mode, 23 Sept: the box is for US merchants only), so as things stand nobody can tick it and no
-  recovery email is ever sent.
+  of that server instance). **On this account Stripe refuses it** ("`consent_collection.promotions`
+  is not available in your country", test mode, 23 Sept: the box is for US merchants only), so nobody
+  can tick Stripe's box.
+- The abandoned-checkout email therefore rests on **our own opt-in**: an unticked, optional checkbox
+  under the pay button (publish-sheet paywall; `/pricing`'s Everything button, plan picker, pass and
+  gift card), "If I don't finish paying, email me one link to come back to it." The browser sends
+  `remindMe: true` to `POST /api/stripe/checkout`, which writes `recovery_optin: "1"` into the
+  session's metadata (the key is absent otherwise). `checkout.session.expired` sends the recovery
+  email when `consent.promotions === "opt_in"` **or** `metadata.recovery_optin === "1"`, an email is
+  known, the address isn't in `email_optouts`, nothing was paid since, and the address has had no
+  recovery email this week (`src/lib/stripe/recovery.ts`). The email carries the one-click
+  unsubscribe link.
 - Promotion codes are off on every Ethos checkout, whatever codes the account holds.
 - Every session is headed "Ethos" with the site's icon (`branding_settings`). If Stripe ever refuses
   it, checkout retries without it and logs it.
@@ -185,5 +193,6 @@ on the success page only to the signed-in buyer, or to a guest whose account tha
    the purchase in `terms_consent` / `terms_consent_at` (migration 0012) and quoted on the receipt),
    revokes on refund or dispute
    (`src/lib/commerce/revoke.ts`), or emails the recovery link for an expired session to a buyer who
-   ticked the marketing box (`src/lib/stripe/recovery.ts`).
+   ticked our box under the pay button (`recovery_optin`) or Stripe's marketing box
+   (`src/lib/stripe/recovery.ts`).
 3. Publishing checks the unlock rows on the server. Nothing client-side is trusted.

@@ -22,8 +22,8 @@ export const CLIENT_NAMESPACES = {
   // every other marketing page's HTML.
   "(marketing)/layout": ["nav", "tour"],
   "(marketing)/page": ["dates.where", "home.templates", "templates"],
-  "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors"],
-  "(marketing)/pricing/layout": ["pricing", "forTwo", "money.plans", "money.account", "money.checkoutErrors", "money.pass", "money.giftcard"],
+  "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors", "money.recovery"],
+  "(marketing)/pricing/layout": ["pricing", "forTwo", "money.plans", "money.account", "money.checkoutErrors", "money.recovery", "money.pass", "money.giftcard"],
   "(marketing)/checkout/layout": ["money.success", "money.invite"],
   "(marketing)/redeem/layout": ["auth", "money.redeem"],
   "(marketing)/for-two/layout": ["auth", "money.join"],

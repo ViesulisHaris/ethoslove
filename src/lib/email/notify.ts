@@ -6,24 +6,13 @@ import { isConfigured } from "@/lib/env";
 import { emailKey, linkSecret, signToken } from "@/lib/lifecycle/links";
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
+import { optedOut } from "./optouts";
 import { sendEmail } from "./send";
 import { pageUrl, siteUrl } from "./urls";
 import { GiftOpenedEmail, GiftPublishedEmail, GiftUnlockedEmail, ReactionEmail, ReceiptEmail, WelcomeEmail } from "@/emails/templates";
 import { CheckoutRecoveryEmail, GiftCardEmail, PassRenewalEmail, PassWelcomeEmail, ReminderEmail, recoveryHeading, reminderHeading } from "@/emails/lifecycle";
 
 type L = "en" | "es";
-type Admin = NonNullable<ReturnType<typeof getSupabaseAdminClient>>;
-
-/**
- * Whether an address (by its emailKey) is on the unsubscribe list. Besides the checkout reminder, the
- * list covers the offers inside service emails (the receipt's "Everything for the difference", the
- * "start the next gift" line), which the privacy policy promises to leave out for anyone on it. A
- * lookup that fails counts as on the list: no offer is worth sending against someone's wishes.
- */
-async function optedOut(admin: Admin, key: string): Promise<boolean> {
-  const { data, error } = await admin.from("email_optouts").select("email_sha256").eq("email_sha256", key).maybeSingle();
-  return Boolean(error || data);
-}
 
 async function ownerOf(giftId: string): Promise<{ email: string; locale: L; recipientName: string; shortId: string } | null> {
   const admin = getSupabaseAdminClient();
@@ -135,9 +124,10 @@ async function deliver(what: string, message: Parameters<typeof sendEmail>[0]): 
 const unsubscribeHeaders = (url: string) => ({ "List-Unsubscribe": `<${url}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" });
 
 /**
- * "Your gift is still waiting", for a checkout that expired unpaid. Call it only when the Stripe
- * session's consent.promotions is "opt_in", and once per session. It is the one optional email, so
- * it checks the opt-out list first and carries a way out; when either can't be done it isn't sent.
+ * "Your gift is still waiting", for a checkout that expired unpaid. Call it only for a buyer who
+ * asked for it (our box under the pay button, or Stripe's marketing box: lib/stripe/recovery.ts),
+ * and once per session. It is the one optional email, so it checks the opt-out list first and
+ * carries a way out; when either can't be done it isn't sent.
  */
 export async function sendCheckoutRecovery({ to, locale, url, templateSlug }: { to: string; locale: L; url: string; templateSlug?: string }): Promise<boolean> {
   return safely("checkout recovery", async () => {

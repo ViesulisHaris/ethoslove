@@ -44,7 +44,7 @@ export function WritingHelper({ open, onOpenChange, onUse }: { open: boolean; on
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
+      <DialogContent closeLabel={t("common.close")} className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl">{t("editor.writer.title")}</DialogTitle>
           <DialogDescription>{t("editor.writer.blurb")}</DialogDescription>

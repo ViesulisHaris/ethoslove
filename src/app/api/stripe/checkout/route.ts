@@ -36,6 +36,9 @@ const input = z.object({
     .object({ recipientName: z.string().trim().max(60).optional(), note: z.string().trim().max(300).optional() })
     .optional()
     .catch(undefined),
+  // The buyer ticked "email me one link to come back to it" under the pay button. Only a literal true
+  // counts: anything else is no, never an error that costs the sale.
+  remindMe: z.boolean().optional().catch(undefined),
 });
 
 /** What the buyer already holds for good, and paid, when signed in. */
@@ -127,6 +130,7 @@ export async function POST(request: NextRequest) {
     ref: body.ref,
     automaticTax: process.env.STRIPE_AUTOMATIC_TAX === "true",
     productIds: stripeProductIds(),
+    recoveryOptIn: body.remindMe === true,
   });
   let session: Stripe.Checkout.Session;
   try {

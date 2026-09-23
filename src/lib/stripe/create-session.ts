@@ -58,8 +58,8 @@ export function withoutTermsConsent(params: Params, notice: string): Params {
  * Creates the Checkout Session, stepping down rather than failing a sale over something optional:
  * - no terms-of-service URL on the account: no tickbox, the notice above the pay button instead,
  *   logged loudly because every such sale keeps its 14-day right to cancel;
- * - the marketing-consent box isn't offered to this account or country: no box (that buyer just
- *   gets no recovery email);
+ * - the marketing-consent box isn't offered to this account or country: no box (the recovery
+ *   email then goes only to a buyer who ticked our own box before checkout: lib/stripe/recovery.ts);
  * - the branding is refused: Stripe's own header.
  * Anything else is a real failure and is thrown.
  */

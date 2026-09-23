@@ -23,6 +23,8 @@ export type CheckoutRequest = {
   ref?: string;
   /** A gift card's personal touch, printed with the code in the buyer's email. */
   giftCard?: { recipientName?: string; note?: string };
+  /** The unticked box under the pay button: one email with a link back if they don't finish paying. */
+  remindMe?: boolean;
 };
 
 export type CheckoutResult = { url: string } | { error: string };

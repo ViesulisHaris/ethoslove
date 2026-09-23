@@ -5,6 +5,7 @@ import type Stripe from "stripe";
 import { isProductId } from "@/lib/pricing/products";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { sendCheckoutRecovery } from "@/lib/email/notify";
+import { optedOut } from "@/lib/email/optouts";
 import { rateLimit } from "@/lib/rate-limit";
 
 export type RecoveryTarget = { to: string; locale: "en" | "es"; url: string; templateSlug?: string };
@@ -13,14 +14,24 @@ export type RecoveryTarget = { to: string; locale: "en" | "es"; url: string; tem
 export const RECOVERY_PER_ADDRESS_SECONDS = 7 * 86_400;
 
 /**
+ * Whether the buyer asked for the reminder. Stripe shows its marketing box to US merchants only, and
+ * this account isn't one ("not available in your country"), so our own box under the pay button is
+ * the one that counts; checkout writes recovery_optin: "1" when it was ticked. Stripe's box still
+ * counts wherever Stripe does show it.
+ */
+function askedForRecovery(session: Stripe.Checkout.Session): boolean {
+  return session.consent?.promotions === "opt_in" || session.metadata?.recovery_optin === "1";
+}
+
+/**
  * Who to send an abandoned checkout's recovery link to, if anyone. Only a session this site made
- * (the Stripe account is shared), only a buyer who ticked Stripe's box agreeing to hear from us, and
- * only when Stripe made a recovery link and an email was typed.
+ * (the Stripe account is shared), only a buyer who asked for it (askedForRecovery), and only when
+ * Stripe made a recovery link and an email was typed.
  */
 export function recoveryTarget(session: Stripe.Checkout.Session): RecoveryTarget | null {
   const m = session.metadata ?? {};
   if (!m.purchase_id || !m.product || !isProductId(m.product)) return null;
-  if (session.consent?.promotions !== "opt_in") return null;
+  if (!askedForRecovery(session)) return null;
   const url = session.after_expiration?.recovery?.url;
   const to = (session.customer_details?.email ?? session.customer_email ?? "").trim().toLowerCase();
   if (!url || !to) return null;
@@ -55,11 +66,16 @@ async function paidSince(session: Stripe.Checkout.Session, email: string): Promi
 export async function recoverExpiredSession(session: Stripe.Checkout.Session): Promise<boolean> {
   const target = recoveryTarget(session);
   if (!target) return false;
+  // Hashed: the limiter's store has no business holding email addresses. The same hash is the
+  // unsubscribe list's key (emailKey).
+  const address = createHash("sha256").update(target.to).digest("hex");
+  // Ticking the box on a later checkout doesn't undo an unsubscribe. Checked before the limits, so an
+  // address on the list doesn't use up its week. The email checks again, next to its opt-out link.
+  const admin = getSupabaseAdminClient();
+  if (!admin || (await optedOut(admin, address))) return false;
   if (await paidSince(session, target.to)) return false;
   // Stripe may deliver the same event more than once.
   if (!(await rateLimit(`checkout-recovery:${session.id}`, { limit: 1, windowSeconds: 7 * 86_400 }))) return false;
-  // Hashed: the limiter's store has no business holding email addresses.
-  const address = createHash("sha256").update(target.to).digest("hex");
   if (!(await rateLimit(`checkout-recovery-to:${address}`, { limit: 1, windowSeconds: RECOVERY_PER_ADDRESS_SECONDS }))) return false;
   return sendCheckoutRecovery(target);
 }

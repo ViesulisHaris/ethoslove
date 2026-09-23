@@ -11,6 +11,7 @@ import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { RecoveryOptIn } from "@/components/pricing/recovery-opt-in";
 import {
   bumpOffered,
   defaultPaywallPlan,
@@ -28,7 +29,8 @@ import { cn } from "@/lib/utils";
 /**
  * The paywall inside the publish sheet, for guests and signed-in senders alike. Two rows to choose
  * between (this template, or every template), the bump below them, unticked, and the pay button
- * with the guarantee right beside it. Every amount comes from the catalogue, and is what checkout
+ * with the guarantee right beside it. Under the button, also unticked, the one email a buyer can ask
+ * for if they leave checkout unpaid. Every amount comes from the catalogue, and is what checkout
  * charges: there are no codes or discounts to apply on the way.
  */
 export function Paywall({
@@ -69,6 +71,7 @@ export function Paywall({
   // A plan that stopped existing (the upgrade quote arrived, or went) falls back to its row.
   const chosen: PaywallPlan = plan === null ? defaultPaywallPlan(forTemplate, all, currency) : plan === forTemplate ? forTemplate : all.plan;
   const [bump, setBump] = useState(false);
+  const [remindMe, setRemindMe] = useState(false);
   const [paying, setPaying] = useState(false);
   const showCheckoutError = useCheckoutError();
   const money = (minor: number) => formatAmount(minor, currency, locale);
@@ -85,7 +88,7 @@ export function Paywall({
   const pay = async () => {
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest });
-    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale });
+    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale, remindMe });
     if ("url" in result) {
       window.location.assign(result.url);
       return;
@@ -215,6 +218,7 @@ export function Paywall({
         {paying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
         <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
+      <RecoveryOptIn checked={remindMe} onChange={setRemindMe} disabled={paying} className="mt-1" />
       <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[13px] font-medium text-ink" data-testid="guarantee">
         <ShieldCheck aria-hidden="true" className="size-4 shrink-0 text-moss" />
         {tm("guarantee")}

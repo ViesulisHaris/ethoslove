@@ -976,6 +976,9 @@
       "network": "Sin conexión. Compruébala y vuelve a intentarlo.",
       "generic": "No se ha podido abrir el pago. Inténtalo de nuevo."
     },
+    "recovery": {
+      "optIn": "Si no termino de pagar, enviadme un solo enlace para volver."
+    },
     "product": {
       "single": "Una plantilla",
       "pick3": "Elige tres",
