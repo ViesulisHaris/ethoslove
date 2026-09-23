@@ -34,8 +34,8 @@ export const demoData: Record<"en" | "es", GiftData<PaperCraneFields>> = {
       p8: "you leave notes. I kept every one",
     }),
     countdown: {
-      targetAt: "2027-06-12T09:30:00+02:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2027-06-12T09:30:00+03:00",
+      timezone: "Europe/Riga",
       label: "Until the trip we still have booked",
     },
     surprise: {
@@ -65,8 +65,8 @@ export const demoData: Record<"en" | "es", GiftData<PaperCraneFields>> = {
       p8: "tú dejas notas. yo las guardé todas",
     }),
     countdown: {
-      targetAt: "2027-06-12T09:30:00+02:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2027-06-12T09:30:00+03:00",
+      timezone: "Europe/Riga",
       label: "Hasta el viaje que sigue reservado",
     },
     surprise: {

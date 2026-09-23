@@ -168,7 +168,7 @@
     "privacy": "Privacy",
     "contact": "Contact",
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
-    "madeWith": "Made in Riga and Madrid.",
+    "madeWith": "Made in Riga.",
     "explore": "Explore"
   },
   "auth": {
@@ -1205,7 +1205,7 @@
       "cta": "Open the long-distance room",
       "halfway": "halfway",
       "cityA": "Riga",
-      "cityB": "Madrid"
+      "cityB": "London"
     },
     "games": {
       "eyebrow": "Games · seven to play now",

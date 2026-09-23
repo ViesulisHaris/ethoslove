@@ -15,7 +15,7 @@ const shared = {
   music: { source: "library" as const, url: "/audio/library/under-the-stars.mp3", trackId: "under-the-stars", title: "Under the Stars", startAt: 0 },
   video: undefined,
   surprise: undefined,
-  countdown: { targetAt: "2027-01-01T00:00:00+01:00", timezone: "Europe/Madrid", label: "Until midnight" },
+  countdown: { targetAt: "2027-01-01T00:00:00+02:00", timezone: "Europe/Riga", label: "Until midnight" },
 };
 
 export const demoData: Record<"en" | "es", GiftData<MidnightFields>> = {

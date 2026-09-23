@@ -14,7 +14,7 @@ const shared = {
   watermark: false,
   music: undefined,
   video: undefined,
-  countdown: { targetAt: "2026-12-20T18:30:00+01:00", timezone: "Europe/Madrid", label: "Until I land" },
+  countdown: { targetAt: "2026-12-20T18:30:00+02:00", timezone: "Europe/Riga", label: "Until I land" },
   surprise: undefined,
 };
 

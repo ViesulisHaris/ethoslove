@@ -4,7 +4,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   en: {
     fromCity: {
       label: "Your city",
-      help: "Any major city works: Madrid, Berlin, New York, Tokyo…",
+      help: "Any major city works: Riga, Berlin, New York, Tokyo…",
     },
     toCity: { label: "Their city" },
     fromCoords: {
@@ -30,7 +30,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
   es: {
     fromCity: {
       label: "Tu ciudad",
-      help: "Vale cualquier ciudad grande: Madrid, Berlín, Nueva York, Tokio…",
+      help: "Vale cualquier ciudad grande: Riga, Berlín, Nueva York, Tokio…",
     },
     toCity: { label: "Su ciudad" },
     fromCoords: {

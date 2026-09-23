@@ -15,7 +15,7 @@ const shared = {
   music: { source: "library" as const, url: "/audio/library/first-light.mp3", trackId: "first-light", title: "First Light", startAt: 0 },
   video: undefined,
   surprise: undefined,
-  countdown: { targetAt: "2027-06-14T00:00:00+02:00", timezone: "Europe/Madrid", label: "Until four" },
+  countdown: { targetAt: "2027-06-14T00:00:00+03:00", timezone: "Europe/Riga", label: "Until four" },
 };
 
 export const demoData: Record<"en" | "es", GiftData<TimelineFields>> = {

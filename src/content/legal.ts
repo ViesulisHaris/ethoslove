@@ -431,7 +431,7 @@ const privacyEn: LegalDoc = {
       paragraphs: [
         `You have the right to access your data and get a copy, to have it corrected or erased, to restrict its use, to data portability, to object to processing based on our legitimate interests, and to withdraw consent at any time. Your account page lets you download your data (account, gifts, purchases, unlocks, views and reactions, as a JSON file) and delete your account; for anything else, including your reviews and the waitlist, write to ${E.email}.`,
         "We answer within one month, or within three months for complex requests, in which case we'll tell you why. It's free, and we may ask you to confirm your identity first. We don't make decisions about you based solely on automated processing that have legal or similarly significant effects.",
-        "You can complain to the Latvian Data State Inspectorate (Datu valsts inspekcija, dvi.gov.lv) or to the supervisory authority where you live or work, for example the Spanish Data Protection Agency (AEPD, aepd.es). We'd welcome the chance to help first.",
+        "You can complain to the Latvian Data State Inspectorate (Datu valsts inspekcija, dvi.gov.lv) or to the supervisory authority where you live or work. We'd welcome the chance to help first.",
         "Recipients who want a reaction or view record removed can write to us with the gift link; we'll remove it and tell the sender it was withdrawn. If a gift or review contains information about you that you want taken down, you can also report it as section 11 of our Terms of Service explains.",
       ],
     },
@@ -558,7 +558,7 @@ const privacyEs: LegalDoc = {
       paragraphs: [
         `Tienes derecho a acceder a tus datos y obtener una copia, a rectificarlos o suprimirlos, a limitar su tratamiento, a la portabilidad, a oponerte al tratamiento basado en nuestros intereses legítimos y a retirar tu consentimiento en cualquier momento. En la página de tu cuenta puedes descargar tus datos (cuenta, regalos, compras, desbloqueos, visualizaciones y reacciones, en un archivo JSON) y eliminar tu cuenta; para todo lo demás, incluidas tus reseñas y la lista de espera, escribe a ${E.email}.`,
         "Respondemos en el plazo de un mes, o de tres meses en solicitudes complejas, en cuyo caso te explicaremos por qué. Es gratuito, y puede que antes te pidamos que confirmes tu identidad. No tomamos decisiones sobre ti basadas únicamente en tratamientos automatizados que produzcan efectos jurídicos o te afecten de forma similarmente significativa.",
-        "Puedes presentar una reclamación ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija, dvi.gov.lv) o ante la autoridad de control del lugar donde vives o trabajas, como la Agencia Española de Protección de Datos (AEPD, aepd.es). Nos gustaría tener antes la oportunidad de ayudarte.",
+        "Puedes presentar una reclamación ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija, dvi.gov.lv) o ante la autoridad de control del lugar donde vives o trabajas. Nos gustaría tener antes la oportunidad de ayudarte.",
         "Los destinatarios que quieran que se elimine una reacción o un registro de visualización pueden escribirnos con el enlace del regalo; lo eliminaremos e informaremos al remitente de que se ha retirado. Si un regalo o una reseña contiene información sobre ti que quieres que se retire, también puedes denunciarlo como explica la sección 11 de nuestros Términos del servicio.",
       ],
     },

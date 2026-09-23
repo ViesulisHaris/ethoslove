@@ -34,7 +34,7 @@ export const demoData: Record<"en" | "es", GiftData<RecipeBoxFields>> = {
       p4: "You fed him too. Of course you did.",
     }),
     countdown: {
-      targetAt: "2027-05-09T13:00:00+01:00",
+      targetAt: "2027-05-09T13:00:00+02:00",
       timezone: "Europe/London",
       label: "Until Sunday lunch",
     },
@@ -69,8 +69,8 @@ export const demoData: Record<"en" | "es", GiftData<RecipeBoxFields>> = {
       p4: "A él también le dabas de comer, claro",
     }),
     countdown: {
-      targetAt: "2027-05-02T14:00:00+02:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2027-05-02T14:00:00+03:00",
+      timezone: "Europe/Riga",
       label: "Para la comida del domingo",
     },
     surprise: {
