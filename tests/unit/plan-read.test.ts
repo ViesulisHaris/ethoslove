@@ -47,11 +47,3 @@ describe("reading a plan without zod", () => {
     expect(readPlan({ v: 1, date: "2026-09-26", stops: [] })).toEqual({ v: 1, date: "2026-09-26", stops: [] });
   });
 });
-
-describe("the plan gift's copy of Paper Crane's limits", () => {
-  it("matches the template's schema, which /plan must not import", async () => {
-    const { MAX_LINES, MIN_LINES } = await import("@/lib/dates/plan-gift");
-    const crane = await import("@/templates/paper-crane/schema");
-    expect([MIN_LINES, MAX_LINES]).toEqual([crane.MIN_LINES, crane.MAX_LINES]);
-  });
-});

@@ -16,6 +16,7 @@ import { Watermark } from "./Watermark";
 import { TemplateErrorBoundary } from "./ErrorBoundary";
 import { ReplyModeContext } from "./reply-mode";
 import { GiftChromeContext } from "./gift-chrome";
+import { UnwrapPeek } from "./UnwrapGift";
 
 const MIN_LOADING_MS = 1600;
 
@@ -159,6 +160,8 @@ export function GiftRenderer({
             <p className="font-display text-xl">Unknown template “{slug}”.</p>
           </div>
         ) : null}
+        {/* The still frame rarely shows the end screen, where a surprise inside waits: it peeks in instead, until the real one is in view. */}
+        {mode === "preview" && ready && resolved?.unwrap && !endScreen ? <UnwrapPeek data={resolved} /> : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
         {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} /> : null}
       </div>

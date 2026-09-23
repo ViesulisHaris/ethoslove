@@ -1,8 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
 /**
- * The partner links outside the trips pages: "Tickets" on a plan's stops, the plan wrapped as a
- * Paper Crane, and Meet in the middle's flights. Nothing is booked or fetched from a partner; the
+ * The partner links outside the trips pages: "Tickets" on a plan's stops, the plan wrapped inside
+ * a gift, and Meet in the middle's flights. Nothing is booked or fetched from a partner; the
  * tests read the links. The map's tiles and the forecast are replaced, so nothing waits on them.
  */
 
@@ -44,30 +44,34 @@ test.describe("a plan's partner links", () => {
     await expect(page.getByText(/We may earn a commission if you book through some of these links/)).toBeVisible();
   });
 
-  test("Wrap it in a gift opens Paper Crane with the plan on its folds", async ({ page }) => {
+  test("Wrap it in a gift offers every gift, and the plan goes inside the one picked", async ({ page }) => {
     test.setTimeout(120_000);
     await quietWorld(page);
     await withPlan(page);
+    await page.route("**/api/dates/photo?*", (route) => route.fulfill({ json: { photo: null } }));
     await page.goto("/plan");
     await page.getByTestId("plan-gift").click();
+    const chooser = page.getByRole("dialog", { name: "Wrap your date in a gift" });
+    await expect(chooser).toBeVisible();
+    await chooser.getByTestId("chooser-paper-crane").click();
     await page.waitForURL(/\/create\/paper-crane/, { timeout: 60_000 });
     // Generous: against a dev server this may be the first compile of the editor and the template.
-    await expect
-      .poll(() => page.locator("input, textarea").evaluateAll((els) => els.map((el) => (el as HTMLInputElement).value)), { timeout: 60_000 })
-      .toEqual(expect.arrayContaining(["1. Museu do Fado Pequeno at 17:00", "2. Gelados Santini at 18:30", "Wear something you can walk in"]));
+    const attached = page.getByTestId("unwrap-attached");
+    await expect(attached).toContainText("Lisbon", { timeout: 60_000 });
+    await expect(attached).toContainText("2 stops");
   });
 
-  test("in Spanish the gift is written in Spanish", async ({ page }) => {
+  test("in Spanish the surprise is in Spanish", async ({ page }) => {
     test.setTimeout(120_000);
     await quietWorld(page);
     await withPlan(page);
+    await page.route("**/api/dates/photo?*", (route) => route.fulfill({ json: { photo: null } }));
     await page.goto("/es/plan");
     await expect(page.getByRole("link", { name: /Entradas para Museu do Fado Pequeno/ })).toHaveAttribute("href", /tiqets\.com%2Fes%2Fsearch/);
     await page.getByTestId("plan-gift").click();
-    await page.waitForURL(/\/es\/create\/paper-crane/, { timeout: 60_000 });
-    await expect
-      .poll(() => page.locator("input, textarea").evaluateAll((els) => els.map((el) => (el as HTMLInputElement).value)), { timeout: 60_000 })
-      .toEqual(expect.arrayContaining(["1. Museu do Fado Pequeno a las 17:00"]));
+    await page.getByRole("dialog", { name: "Envuelve tu cita en un regalo" }).getByTestId("chooser-the-letter").click();
+    await page.waitForURL(/\/es\/create\/the-letter/, { timeout: 60_000 });
+    await expect(page.getByTestId("unwrap-attached")).toContainText("Noche de cita · 2 paradas", { timeout: 60_000 });
   });
 });
 

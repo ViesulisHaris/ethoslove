@@ -21,7 +21,8 @@ export type FunnelEvent =
   | "pack_offer_shown"
   | "tour_step"
   | "tour_skipped"
-  | "city_page_cta";
+  | "city_page_cta"
+  | "unwrap_picked";
 
 type Props = Record<string, string | number | boolean | null>;
 

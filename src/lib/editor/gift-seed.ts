@@ -3,14 +3,16 @@ import type { z } from "zod";
 /**
  * A gift that starts half made: a page elsewhere on the site (a preset trip, say) hands the editor
  * the template fields it already knows, so "Make it a surprise" opens the ticket with the
- * destination, the stops and the nights filled in. Kept in sessionStorage rather than the URL, read
- * once, and only by the template it was meant for; the editor still validates every field.
+ * destination, the stops and the nights filled in. It can also hand over "a surprise inside" (a
+ * planned date or a trip, GiftData.unwrap), which any template carries. Kept in sessionStorage
+ * rather than the URL, read once, and only by the template it was meant for; the editor still
+ * validates every field. No zod here: /plan saves seeds, and keeps the schema library out of its page.
  */
 const KEY = "ethos:gift-seed";
 const MAX_AGE_MS = 60 * 60 * 1000;
 const FIELDS_MAX_CHARS = 20_000;
 
-export type GiftSeed = { slug: string; fields: Record<string, unknown> };
+export type GiftSeed = { slug: string; fields: Record<string, unknown>; unwrap?: Record<string, unknown> };
 
 const isRecord = (v: unknown): v is Record<string, unknown> => Boolean(v) && typeof v === "object" && !Array.isArray(v);
 
@@ -29,7 +31,8 @@ export function takeGiftSeed(slug: string): GiftSeed | null {
     if (raw.length > FIELDS_MAX_CHARS) return null;
     const seed = JSON.parse(raw) as Partial<GiftSeed & { savedAt: number }>;
     if (seed.slug !== slug || typeof seed.savedAt !== "number" || Date.now() - seed.savedAt > MAX_AGE_MS) return null;
-    return isRecord(seed.fields) ? { slug, fields: seed.fields } : null;
+    if (!isRecord(seed.fields)) return null;
+    return { slug, fields: seed.fields, ...(isRecord(seed.unwrap) ? { unwrap: seed.unwrap } : {}) };
   } catch {
     return null;
   }
@@ -53,4 +56,15 @@ export function mergeSeedFields(schema: z.ZodType, base: Record<string, unknown>
     if (next.success) merged = next.data as Record<string, unknown>;
   }
   return merged;
+}
+
+/**
+ * The seed's surprise, as the gift schema reads it (`schema` is giftUnwrapSchema, passed in for the
+ * reason above), or null. All or nothing: half a plan, or a picture from a host the allow-list
+ * doesn't name, is not something to wrap. It replaces whatever surprise a draft already had.
+ */
+export function seedUnwrap<T>(schema: z.ZodType<T>, unwrap: unknown): T | null {
+  if (!isRecord(unwrap)) return null;
+  const parsed = schema.safeParse(unwrap);
+  return parsed.success ? parsed.data : null;
 }

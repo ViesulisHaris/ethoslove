@@ -161,16 +161,20 @@ export function PublishSheet({
     options.removeWatermark && t("featureNoWatermark"),
     options.schedule && t("featureSchedule"),
     options.password && t("featurePassword"),
-    ...(serialized ? premiumExtras(serialized) : []).map(
-      (extra) =>
-        ({
-          // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
-          song: t("featureSong"),
-          video: t("featureVideo"),
-          voiceNote: t("featureVoiceNote"),
-          morePhotos: t("featurePhotos"),
-        })[extra],
-    ),
+    ...(serialized ? premiumExtras(serialized) : [])
+      // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
+      .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply)
+      .map(
+        (extra) =>
+          ({
+            // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
+            song: t("featureSong"),
+            video: t("featureVideo"),
+            voiceNote: t("featureVoiceNote"),
+            morePhotos: t("featurePhotos"),
+            unwrap: t("featureUnwrap"),
+          })[extra],
+      ),
   ].filter(Boolean) as string[];
 
   const publish = async () => {

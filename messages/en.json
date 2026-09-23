@@ -338,6 +338,11 @@
         "n": "04c",
         "title": "Your voice",
         "blurb": "Say it out loud. Up to a minute, played at the very end. Premium."
+      },
+      "unwrap": {
+        "n": "02b",
+        "title": "A surprise inside",
+        "blurb": "A date or a trip, wrapped as a present under your last words. They tap it to open it."
       }
     },
     "fields": {
@@ -488,6 +493,7 @@
       "featureVideo": "a video clip",
       "featureVoiceNote": "a voice message",
       "featureMorePhotos": "more than 10 photos",
+      "featureUnwrap": "a surprise inside",
       "payTitle": "One payment, then it's sent",
       "payBlurb": "This gift uses {features}. Pay once and this template is yours for good, with everything in it.",
       "payButton": "Pay {price} and send",
@@ -600,6 +606,29 @@
       "premium": "Premium",
       "hint": "Works best somewhere quiet. Recipients hear it after the last screen."
     },
+    "unwrap": {
+      "included": "Included",
+      "special": "Make it special",
+      "specialNote": "On this template it comes with “Make it special”, paid once when you send it.",
+      "addPlan": "Add your date plan",
+      "addPlanHelp": "The plan from the dates map, with a photo of every stop.",
+      "noPlan": "Plan a date on the map first, then come back for it.",
+      "planLink": "Plan a date",
+      "addTrip": "Add a trip",
+      "addTripHelp": "One of our twelve trips for two.",
+      "pickTrip": "Which trip?",
+      "date": "Date night",
+      "trip": "Trip",
+      "stops": "{count, plural, one {# stop} other {# stops}}",
+      "nights": "{count, plural, one {# night} other {# nights}}",
+      "noDay": "No day yet",
+      "day": "The day",
+      "depart": "Leaving",
+      "back": "Coming back",
+      "remove": "Remove",
+      "wrapping": "Wrapping it…",
+      "cancel": "Cancel"
+    },
     "covers": {
       "label": "Cover",
       "help": "The first screen they see. They tap it to open the gift.",
@@ -676,7 +705,7 @@
     "makeThis": "Make this gift",
     "priceOnce": "{price} once",
     "priceFree": "Free",
-    "detailPriceFree": "Free, forever. Add a video, a voice message or 20 photos for {price}, paid once.",
+    "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
     "sections": {
       "popular": {
@@ -725,7 +754,7 @@
     "oneTime": "One payment. Yours for good.",
     "bestValue": "Best value",
     "priority": "Includes priority support",
-    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, no footer, scheduling and a password come with any unlock, or with “Make it special” on a free template.",
+    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, or with “Make it special” on a free template.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -777,7 +806,7 @@
       },
       {
         "q": "What does the free tier actually include?",
-        "a": "Two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise. Free gifts show a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, no footer, scheduling and a password come with “Make it special”, a small one-time payment for that template, or with any unlock."
+        "a": "Two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise. Free gifts show a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with “Make it special”, a small one-time payment for that template, or with any unlock."
       },
       {
         "q": "Can I try a template before paying?",
@@ -961,7 +990,7 @@
   "money": {
     "paywall": {
       "extras": "Make it special",
-      "extrasBlurb": "Video, voice, 20 photos, no footer, scheduling and a password, on this template for good",
+      "extrasBlurb": "Video, voice, 20 photos, a surprise inside, no footer, scheduling and a password, on this template for good",
       "extrasIntro": "This gift uses {features}. Make it special once and this template keeps them for good.",
       "extrasGuestIntro": "This gift uses {features}. Make it special once and it's sent. Your account is made from the email you give at checkout, no password needed.",
       "upgrade": "Everything for the difference",
@@ -1548,7 +1577,8 @@
       "replaceConfirm": "This replaces the plan you were making on this device. Keep this one instead?"
     },
     "gift": {
-      "title": "Wrap it in a gift"
+      "title": "Wrap it in a gift",
+      "sub": "Pick any gift. The plan goes inside it, wrapped, with a photo of every stop."
     },
     "addMore": "Add another stop",
     "clear": "Clear the plan",
@@ -1853,9 +1883,6 @@
     },
     "meet": {
       "via": "Each flight opens on Aviasales; Google Flights is there to compare."
-    },
-    "planGift": {
-      "sub": "Fold the plan into a paper crane: every crease they fold gives away one more stop."
     }
   },
   "trips": {
@@ -1945,7 +1972,8 @@
         "title": "Don't tell them where.",
         "sub": "Turn this trip into a gift: a ticket they open on their phone, with {city} already on it and the packing list as clues. You choose when they find out.",
         "cta": "Make it a surprise",
-        "note": "Opens the gift editor. Free to start."
+        "note": "Opens the gift editor. Free to start.",
+        "anyGift": "…or put it inside any gift"
       }
     },
     "flights": {
@@ -2360,5 +2388,23 @@
       "unavailableBody": "Try the link again in a few minutes.",
       "home": "Go to Ethos"
     }
+  },
+  "giftChooser": {
+    "titleDate": "Wrap your date in a gift",
+    "titleTrip": "Wrap your trip in a gift",
+    "sub": "Pick any gift. Your plan waits inside it, wrapped, at the end.",
+    "subTrip": "Pick any gift. The trip waits inside it, wrapped, at the end.",
+    "filterLabel": "Show",
+    "filter": {
+      "all": "All",
+      "loved": "Most loved",
+      "free": "Free"
+    },
+    "free": "Free",
+    "price": "{price} once",
+    "included": "Surprise included",
+    "extra": "The surprise inside: {price}",
+    "pick": "Wrap it in {name}",
+    "wrapping": "Wrapping it…"
   }
 }

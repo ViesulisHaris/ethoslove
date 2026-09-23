@@ -13,6 +13,7 @@ import { ReplyModeContext } from "./reply-mode";
 import { SongDedication } from "./SongDedication";
 import { SongPreviewCard } from "./SongPreview";
 import { claimSound, onSoundClaimed } from "./sound-floor";
+import { UnwrapGift } from "./UnwrapGift";
 import { Watermark } from "./Watermark";
 
 /**
@@ -104,6 +105,9 @@ export function EndScreen({
       <p className={cn("mt-2 max-w-full text-sm [overflow-wrap:anywhere]", dark ? "text-white/60" : "text-black/50")}>
         {giftString(locale, "madeBy", { sender: data.senderName, recipient: data.recipientName })}
       </p>
+
+      {/* The P.S. of the whole gift: under its last words and before anything asks them to act. */}
+      {data.unwrap ? <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark={dark} className="mt-10" /> : null}
 
       {data.voiceNote ? (
         <VoiceNotePlayer

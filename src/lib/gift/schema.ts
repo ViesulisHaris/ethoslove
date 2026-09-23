@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isSongThumbnail, parseSongLink } from "./song-link";
+import { isUnwrapDay, isUnwrapImage, isUnwrapLink, UNWRAP_LIMITS, UNWRAP_TIME } from "./unwrap-rules";
 
 export const GIFT_LOCALES = ["en", "es"] as const;
 export type GiftLocale = (typeof GIFT_LOCALES)[number];
@@ -69,6 +70,49 @@ export const giftDedicationSchema = z.object({
   note: z.string().max(80).optional(),
 });
 
+const unwrapDay = z.string().refine(isUnwrapDay, "invalid_day");
+const unwrapImage = z.string().refine(isUnwrapImage, "unsupported_image");
+
+export const giftUnwrapStopSchema = z.object({
+  name: z.string().trim().min(1).max(UNWRAP_LIMITS.stopName),
+  time: z.string().regex(UNWRAP_TIME).optional(),
+  /** A kind of place from the dates map ("museum"), drawn as that kind's picture when there is no photo. */
+  kind: z.string().max(UNWRAP_LIMITS.stopKind).optional(),
+  lat: z.number().min(-90).max(90).optional(),
+  lng: z.number().min(-180).max(180).optional(),
+  image: unwrapImage.optional(),
+  note: z.string().max(UNWRAP_LIMITS.stopNote).optional(),
+});
+
+export const giftUnwrapTripSchema = z.object({
+  from: z.string().max(UNWRAP_LIMITS.place).optional(),
+  to: z.string().trim().min(1).max(UNWRAP_LIMITS.place),
+  depart: unwrapDay.optional(),
+  back: unwrapDay.optional(),
+  nights: z.number().int().min(1).max(UNWRAP_LIMITS.nights).optional(),
+  mode: z.enum(["flight", "road", "train"]),
+});
+
+/**
+ * "A surprise inside": a planned date or a trip, wrapped as a present under the gift's last words
+ * and opened with a tap. Pictures and the link are held to an allow-list (./unwrap-rules), so a
+ * gift can only ever load pictures from Wikimedia or this site, and only link to a plan or a trip.
+ * Paid on the free templates, included on the premium ones (./publish).
+ */
+export const giftUnwrapSchema = z.object({
+  kind: z.enum(["date", "trip"]),
+  title: z.string().trim().min(1).max(UNWRAP_LIMITS.title),
+  date: unwrapDay.optional(),
+  /** Said instead of a day when there isn't one yet ("This spring"). */
+  when: z.string().max(UNWRAP_LIMITS.when).optional(),
+  city: z.string().max(UNWRAP_LIMITS.city).optional(),
+  stops: z.array(giftUnwrapStopSchema).max(UNWRAP_LIMITS.stops).default([]),
+  /** The cover: a trip's photograph. */
+  image: unwrapImage.optional(),
+  link: z.string().refine(isUnwrapLink, "unsupported_link").optional(),
+  trip: giftUnwrapTripSchema.optional(),
+});
+
 export const FONT_PAIRINGS = ["editorial", "modern", "handwritten"] as const;
 
 /** The screen a recipient taps to open the gift. "classic" is the plain name-and-hairline intro. */
@@ -101,6 +145,7 @@ export const giftDataBaseSchema = z.object({
   countdown: giftCountdownSchema.optional(),
   surprise: giftSurpriseSchema.optional(),
   dedication: giftDedicationSchema.optional(),
+  unwrap: giftUnwrapSchema.optional(),
   accentColor: z.string().regex(HEX_COLOR).default("#E8604C"),
   fontPairing: z.enum(FONT_PAIRINGS).default("editorial"),
   cover: z.enum(COVER_IDS).optional(),
@@ -116,6 +161,8 @@ export type GiftVideo = z.infer<typeof giftVideoSchema>;
 export type GiftCountdown = z.infer<typeof giftCountdownSchema>;
 export type GiftSurprise = z.infer<typeof giftSurpriseSchema>;
 export type GiftDedication = z.infer<typeof giftDedicationSchema>;
+export type GiftUnwrap = z.infer<typeof giftUnwrapSchema>;
+export type GiftUnwrapStop = z.infer<typeof giftUnwrapStopSchema>;
 export type GiftDataBase = z.infer<typeof giftDataBaseSchema>;
 
 export type GiftData<TFields = Record<string, unknown>> = Omit<GiftDataBase, "fields"> & {

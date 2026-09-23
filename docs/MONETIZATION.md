@@ -689,7 +689,7 @@ Post before the buying hours: 19:00 UK for UK stories, 23:00 UK for US ones.
 ### Q4. Hand-offs to a prefilled premium gift
 
 - **What.**
-  - **/plan:** the choice sits at the send step, in the planner's view only: "Send the link" (free) or "Send it as a surprise they open · €9.99", opening the plan gift drafted in `src/lib/dates/plan-gift.ts` with the plan carried in. A plan someone received shows only "Plan the next one" (free), with no gift button and no partner links.
+  - **/plan:** the choice sits at the send step, in the planner's view only: "Send the link" (free) or "Send it as a surprise they open · €9.99", opening the gift chooser, where the plan goes inside whichever gift they pick as "a surprise inside" (`src/lib/dates/plan-gift.ts`, `src/components/gifts/template-chooser.tsx`). A plan someone received shows only "Plan the next one" (free), with no gift button and no partner links.
   - **Meet in the middle:** "Send them the halfway point" opens Halfway with both towns filled in.
   - **Games:** an end card, "Loser makes the next gift", with both names filled in (`game-end.tsx`).
   - **Free editor:** a "See it as…" strip (Birthday Cinema, Bouquet, Scrapbook) that carries the words and photos into a premium template in one tap. Shown once, as a December test.

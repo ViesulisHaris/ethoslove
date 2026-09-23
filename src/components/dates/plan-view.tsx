@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname } from "@/i18n/navigation";
@@ -10,11 +10,12 @@ import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/li
 import { ideaById } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, removeStop, stopName, type Plan } from "@/lib/dates/plan";
-import { PLAN_GIFT_SLUG, planGiftFields } from "@/lib/dates/plan-gift";
+import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
-import { saveGiftSeed } from "@/lib/editor/gift-seed";
 import { tiqetsSearch } from "@/lib/trips/partners";
+import { TemplateChooser } from "@/components/gifts/template-chooser";
+import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { GroupIcon } from "./group-icon";
@@ -45,6 +46,7 @@ export function PlanView() {
   // weather is not shown while (or if never) the new one comes.
   const [forecastFor, setForecastFor] = useState<{ at: string; forecast: Forecast } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [chooser, setChooser] = useState(false);
   // Which link was kept, not just "kept": another link opened in this tab later is a new plan to keep.
   const [keptHash, setKeptHash] = useState<string | null>(null);
 
@@ -76,7 +78,16 @@ export function PlanView() {
   // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
   const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "", credits: t("mapCredits"), retry: t("mapRetry") }), [t]);
 
-  const link = () => `${window.location.origin}${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
+  const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
+  const link = () => `${window.location.origin}${sitePath()}`;
+
+  // The stops' photographs are asked for as the chooser opens, so they are usually in by the time a gift is picked.
+  const photos = useRef<Promise<Record<string, string | null>> | null>(null);
+  const openChooser = () => {
+    photos.current = gatherPhotos(plan.stops.filter((s) => s.named !== false).map((s) => ({ id: s.id, name: s.name, lat: s.lat, lng: s.lng })));
+    setChooser(true);
+  };
+  const wrapPlan = async () => planUnwrap(plan, locale, { photos: (await photos.current) ?? {}, link: sitePath(), title: idea?.title[locale] });
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(link());
@@ -283,22 +294,24 @@ export function PlanView() {
           </div>
         )}
 
-        {/* The plan goes to the editor as the crane's lines, written just before the click navigates so it is always this plan. */}
-        <Link
-          href={`/create/${PLAN_GIFT_SLUG}`}
-          onClick={() => saveGiftSeed({ slug: PLAN_GIFT_SLUG, fields: planGiftFields(plan, locale) })}
+        {/* Any gift they like, with the plan wrapped inside it at the end (components/gifts/template-chooser). */}
+        <button
+          type="button"
+          onClick={openChooser}
           data-testid="plan-gift"
-          className="group flex items-center gap-4 rounded-[28px] bg-forest p-5 text-cream shadow-soft transition-transform hover:-translate-y-0.5"
+          aria-haspopup="dialog"
+          className="group flex w-full items-center gap-4 rounded-[28px] bg-forest p-5 text-left text-cream shadow-soft transition-transform hover:-translate-y-0.5"
         >
           <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/10">
             <Gift aria-hidden="true" className="size-6" />
           </span>
           <span className="min-w-0 flex-1">
             <span className="block font-display text-[20px] leading-tight">{t("gift.title")}</span>
-            <span className="mt-1 block text-[13.5px] leading-snug text-cream/70">{ta("planGift.sub")}</span>
+            <span className="mt-1 block text-[13.5px] leading-snug text-cream/70">{t("gift.sub")}</span>
           </span>
           <ArrowRight aria-hidden="true" className="size-5 shrink-0 transition-transform group-hover:translate-x-1" />
-        </Link>
+        </button>
+        <TemplateChooser open={chooser} onOpenChange={setChooser} kind="date" build={wrapPlan} />
 
         {editable ? (
           <div className="flex items-center justify-between gap-3 px-1">
