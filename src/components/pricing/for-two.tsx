@@ -10,7 +10,6 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { useEntitlements } from "./entitlements";
-import { RecoveryOptIn } from "./recovery-opt-in";
 
 const FREE = ["dates", "plans", "ldr", "deck"] as const;
 const PASS_FEATURES = ["templates", "extras", "packs", "invite"] as const;
@@ -38,7 +37,6 @@ export function PassCard({
   const tPricing = useTranslations("pricing");
   const locale = useLocale() === "es" ? "es" : "en";
   const [busy, setBusy] = useState(false);
-  const [remindMe, setRemindMe] = useState(false);
   const showCheckoutError = useCheckoutError();
   const ref = useRef<HTMLElement>(null);
   // Someone whose own pass is running is renewing it, whichever way they arrived: buying again adds
@@ -54,7 +52,7 @@ export function PassCard({
     if (!paymentsEnabled) return void toast(tPricing("comingSoon"));
     setBusy(true);
     track("pay_clicked", { product: "pass", source: "pricing", renew: renewal });
-    const result = await startCheckout({ product: "pass", currency, locale, returnTo: "/account", remindMe });
+    const result = await startCheckout({ product: "pass", currency, locale, returnTo: "/account" });
     if ("url" in result) return void window.location.assign(result.url);
     setBusy(false);
     showCheckoutError(result.error);
@@ -99,7 +97,6 @@ export function PassCard({
           {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
           {renewal ? t("renewCta") : t("cta")}
         </button>
-        {paymentsEnabled ? <RecoveryOptIn checked={remindMe} onChange={setRemindMe} disabled={busy} className="mt-2 text-cream/75" /> : null}
         <p className="mt-3 text-[13px] text-cream/60">{t("note")}</p>
       </div>
     </article>

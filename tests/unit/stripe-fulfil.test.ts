@@ -405,38 +405,27 @@ describe("abandoned checkout recovery", () => {
     expect(mail.sendCheckoutRecovery).toHaveBeenCalledTimes(2);
   });
 
-  // Stripe won't show its marketing box to this (non-US) account, so on it the session carries no
-  // consent at all and our own box under the pay button is the only way to ask.
-  const ours = (email: string, extra: Record<string, unknown> = {}) => {
-    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] }, { locale: "es", recoveryOptIn: true });
-    return expired({ metadata: meta, consent: null, customer_details: { email }, ...extra });
-  };
   const hashed = (email: string) => createHash("sha256").update(email).digest("hex");
 
-  it("writes when the buyer ticked our box or Stripe's, and never to one who ticked neither, unsubscribed, or had one this week", async () => {
+  it("writes only to a buyer who ticked Stripe's box, never one who didn't, unsubscribed, or had one this week", async () => {
     useDb({ email_optouts: [{ email_sha256: hashed("gone@example.com") }] });
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] }, { locale: "es" });
     const table: [string, Stripe.Checkout.Session, boolean][] = [
-      ["our box, on an account without Stripe's", ours("ours@example.com"), true],
       ["Stripe's box", expired({ customer_details: { email: "stripes@example.com" } }), true],
-      ["both boxes", ours("both@example.com", { consent: { promotions: "opt_in", terms_of_service: null } }), true],
-      ["neither box", expired({ consent: null, customer_details: { email: "neither@example.com" } }), false],
+      ["no box on this account (no consent at all)", expired({ metadata: meta, consent: null, customer_details: { email: "neither@example.com" } }), false],
+      ["an old recovery_optin flag no longer counts", expired({ metadata: { ...meta, recovery_optin: "1" }, consent: null, customer_details: { email: "flag@example.com" } }), false],
       ["Stripe's box shown and left unticked", expired({ consent: { promotions: "opt_out", terms_of_service: null }, customer_details: { email: "declined@example.com" } }), false],
-      ["our box, but no email was typed", ours(""), false],
-      ["our box, from an address that unsubscribed", ours("gone@example.com"), false],
-      ["Stripe's box, from that address as typed", expired({ customer_details: { email: " Gone@Example.com" } }), false],
-      ["our box, to an address already written to this week", ours("stripes@example.com"), false],
+      ["Stripe's box, from an address that unsubscribed", expired({ customer_details: { email: " Gone@Example.com" } }), false],
+      ["Stripe's box, to an address already written to this week", expired({ customer_details: { email: "stripes@example.com" } }), false],
     ];
     for (const [why, session, sends] of table) expect(await recoverExpiredSession(session), why).toBe(sends);
-    expect(mail.sendCheckoutRecovery).toHaveBeenCalledTimes(3);
-    expect(mail.sendCheckoutRecovery).toHaveBeenCalledWith({ to: "ours@example.com", locale: "es", url: "https://buy.stripe.com/r/live_abc", templateSlug: "vinyl" });
+    expect(mail.sendCheckoutRecovery).toHaveBeenCalledTimes(1);
     expect(mail.sendCheckoutRecovery).not.toHaveBeenCalledWith(expect.objectContaining({ to: "gone@example.com" }));
   });
 
-  it("reads our box only as the exact flag checkout writes", () => {
+  it("never writes recovery_optin into the metadata", () => {
     const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] }, { locale: "es" });
     expect(meta).not.toHaveProperty("recovery_optin");
     expect(recoveryTarget(expired({ metadata: meta, consent: null }))).toBeNull();
-    expect(recoveryTarget(expired({ metadata: { ...meta, recovery_optin: "true" }, consent: null }))).toBeNull();
-    expect(recoveryTarget(ours("buyer@example.com"))).toEqual({ to: "buyer@example.com", locale: "es", url: "https://buy.stripe.com/r/live_abc", templateSlug: "vinyl" });
   });
 });

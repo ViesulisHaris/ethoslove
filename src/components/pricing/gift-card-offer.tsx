@@ -10,7 +10,6 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { GIFT_CARD_NAME_MAX, GIFT_CARD_NOTE_MAX, giftCardTouch } from "./offers";
-import { RecoveryOptIn } from "./recovery-opt-in";
 
 const FEATURES = ["templates", "forever", "valid"] as const;
 
@@ -38,7 +37,6 @@ export function GiftCardOffer({
   const [personal, setPersonal] = useState(false);
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
-  const [remindMe, setRemindMe] = useState(false);
   const showCheckoutError = useCheckoutError();
 
   const buy = async () => {
@@ -46,7 +44,7 @@ export function GiftCardOffer({
     setBusy(true);
     const giftCard = personal ? giftCardTouch(name, note) : undefined;
     track("pay_clicked", { product: "giftcard", source: "pricing", personal: Boolean(giftCard) });
-    const result = await startCheckout({ product: "giftcard", currency, locale, returnTo: "/account", remindMe, ...(giftCard ? { giftCard } : {}) });
+    const result = await startCheckout({ product: "giftcard", currency, locale, returnTo: "/account", ...(giftCard ? { giftCard } : {}) });
     if ("url" in result) return void window.location.assign(result.url);
     setBusy(false);
     showCheckoutError(result.error);
@@ -128,7 +126,6 @@ export function GiftCardOffer({
           {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
           {t("cta")}
         </button>
-        {paymentsEnabled ? <RecoveryOptIn checked={remindMe} onChange={setRemindMe} disabled={busy} className="mt-2 text-forest/70" /> : null}
         <p className="mt-3 text-[13px] text-forest/60">{t("note")}</p>
         <Link href="/redeem" className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-rose-ink underline-offset-4 hover:underline">
           {t("redeem")}

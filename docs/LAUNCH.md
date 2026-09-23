@@ -159,15 +159,10 @@ Full detail in `docs/STRIPE.md`. The checklist:
   carries on without it. **This account can't**: Stripe answers "`consent_collection.promotions` is
   not available in your country" (US merchants only), so no buyer can tick Stripe's box. (Before the
   fallback that refusal failed every checkout: Stripe names the parameter only in its message.)
-  **Our own box replaces it**: one unticked, optional checkbox under the pay button in the publish
-  sheet's paywall and on `/pricing` (Everything, the pick-three/one-template picker, the pass, the
-  gift card): "If I don't finish paying, email me one link to come back to it." A tick is sent as
-  `remindMe: true` and recorded in the session's metadata as `recovery_optin: "1"` (never present
-  otherwise). On `checkout.session.expired` the recovery email goes out when the buyer ticked ours
-  *or* Stripe's (`consent.promotions === "opt_in"`), an email is known, the address isn't on the
-  unsubscribe list (`email_optouts`) and it has had none this week; it carries the one-click
-  unsubscribe link. Game packs and the account page's upgrade button don't show the box (yet), so
-  those checkouts get no recovery email. The privacy policy (§1 emails, §8 legal basis) says so.
+  So **no abandoned-checkout email goes out** on this account. An opt-in box of our own under the pay
+  button was built and taken out on 23 Sept at the owner's request: no checkout does that, and it
+  cluttered the moment of paying. The recovery code still runs for a buyer who ticks Stripe's box,
+  should Stripe ever offer it here.
 - **No subscriptions**: nothing here creates one; keep it that way (other businesses' webhooks act on
   subscription events).
 
@@ -320,16 +315,13 @@ included.
 3. Pay with `4000 0000 0000 0259` (charge then dispute) → the unlock goes when the dispute opens.
 
 ### 7.13 Abandoned checkout
-0. On the current (non-US) account Stripe doesn't offer its marketing box; our own box under the pay
-   button is what counts (§5).
-1. In the publish sheet or on `/pricing`, **tick "If I don't finish paying, email me one link to come
-   back to it"** under the pay button, start the checkout, give a real email on the Stripe page,
-   close the tab. In the Dashboard the session's metadata has `recovery_optin: 1`; without the tick
-   it has no such key.
+0. On the current (non-US) account Stripe doesn't offer its marketing box, so this can only be tested
+   on an account where it does (§5). There, tick Stripe's box on its checkout page, give a real
+   email, close the tab.
 2. Expire it: `stripe checkout sessions expire cs_test_…` (or wait the 24 hours).
 3. Expect: one "Your gift is still waiting" email (a single template or Make it special, named) or
    "Your checkout is still saved" (anything else), with a working link back to checkout and
-   **Unsubscribe**. Without the box ticked: no email. A second abandoned checkout the same week: no
+   **Unsubscribe**. Without Stripe's box ticked: no email. A second abandoned checkout the same week: no
    second email. **Unsubscribe** → no further recovery emails to that address, even when it ticks the
    box again.
 

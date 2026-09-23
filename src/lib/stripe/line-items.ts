@@ -44,8 +44,6 @@ export type SessionOptions = {
   automaticTax: boolean;
   /** STRIPE_PRODUCT_* values from the environment, by variable name. */
   productIds: Record<string, string | undefined>;
-  /** The buyer ticked our box under the pay button: one email with the way back if they don't finish. */
-  recoveryOptIn?: boolean;
 };
 
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
@@ -173,8 +171,6 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
-    // Read back on checkout.session.expired (lib/stripe/recovery.ts): the only record of the ask.
-    ...(options.recoveryOptIn ? { recovery_optin: "1" } : {}),
   };
 }
 
@@ -183,8 +179,8 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
  * Stripe account is shared with businesses whose codes (LAUNCH40, WELCOME20…) are live, and none of
  * them is an Ethos price. Stripe's default expiry (24 hours) keeps a checkout open for a buyer who
  * comes back to it; an abandoned one gets a recovery link, which is only ever emailed to a buyer who
- * ticked our box under the pay button (recovery_optin) or Stripe's marketing box, which Stripe offers
- * US merchants only and so is asked for and usually refused (lib/stripe/create-session.ts). The withdrawal tickbox is required of every buyer, wherever they
+ * ticked Stripe's marketing box. Stripe offers that box to US merchants only, so it is asked for and,
+ * on this account, refused (lib/stripe/create-session.ts): no recovery email goes out until it can be. The withdrawal tickbox is required of every buyer, wherever they
  * are: the law goes by where they live, which no IP address tells.
  */
 export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stripe.Checkout.SessionCreateParams {

@@ -14,13 +14,13 @@ export type RecoveryTarget = { to: string; locale: "en" | "es"; url: string; tem
 export const RECOVERY_PER_ADDRESS_SECONDS = 7 * 86_400;
 
 /**
- * Whether the buyer asked for the reminder. Stripe shows its marketing box to US merchants only, and
- * this account isn't one ("not available in your country"), so our own box under the pay button is
- * the one that counts; checkout writes recovery_optin: "1" when it was ticked. Stripe's box still
- * counts wherever Stripe does show it.
+ * Whether the buyer asked for the reminder: only by ticking Stripe's marketing box. Stripe shows it to
+ * US merchants only and this account isn't one ("not available in your country"), so today nobody can
+ * tick it and no recovery email is sent. An opt-in box of our own under the pay button was tried and
+ * taken out: it cluttered the moment of paying for a promise nobody expects there.
  */
 function askedForRecovery(session: Stripe.Checkout.Session): boolean {
-  return session.consent?.promotions === "opt_in" || session.metadata?.recovery_optin === "1";
+  return session.consent?.promotions === "opt_in";
 }
 
 /**

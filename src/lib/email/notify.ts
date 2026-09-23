@@ -125,7 +125,7 @@ const unsubscribeHeaders = (url: string) => ({ "List-Unsubscribe": `<${url}>`, "
 
 /**
  * "Your gift is still waiting", for a checkout that expired unpaid. Call it only for a buyer who
- * asked for it (our box under the pay button, or Stripe's marketing box: lib/stripe/recovery.ts),
+ * asked for it (Stripe's marketing box: lib/stripe/recovery.ts),
  * and once per session. It is the one optional email, so it checks the opt-out list first and
  * carries a way out; when either can't be done it isn't sent.
  */

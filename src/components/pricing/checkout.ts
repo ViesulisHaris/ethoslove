@@ -11,9 +11,8 @@ import { errorOf, postJson } from "./requests";
  * carries the visitor's ref the same way (a creator's personal link is how they are credited) and
  * reads the server's answer the same way: a URL to go to, or an error code for the caller to show.
  */
-export async function startCheckout({ remindMe, ...body }: CheckoutRequest): Promise<CheckoutResult> {
-  // The recovery box travels only when ticked: an untouched box sends exactly what it did before.
-  const result = await postJson("/api/stripe/checkout", { ...body, ...(remindMe ? { remindMe: true } : {}), ref: body.ref ?? currentRef() });
+export async function startCheckout(body: CheckoutRequest): Promise<CheckoutResult> {
+  const result = await postJson("/api/stripe/checkout", { ...body, ref: body.ref ?? currentRef() });
   const url = result.json.url;
   if (typeof url === "string" && url.length > 0) return { url };
   return { error: errorOf(result) ?? (result.status === 0 ? "network" : "checkout") };

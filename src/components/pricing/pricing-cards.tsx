@@ -17,7 +17,6 @@ import type { TemplateManifest } from "@/templates/types";
 import { cn } from "@/lib/utils";
 import { startCheckout, useCheckoutError } from "./checkout";
 import { everythingPlan } from "./offers";
-import { RecoveryOptIn } from "./recovery-opt-in";
 import { useUpgradeQuote } from "./upgrade-quote";
 import {
   Dialog,
@@ -56,7 +55,6 @@ export function PricingCards({
   const [busy, setBusy] = useState(false);
   // One answer for this set of cards: shown under Everything's button and under the picker's, the
   // two places a checkout starts from here.
-  const [remindMe, setRemindMe] = useState(false);
   const showCheckoutError = useCheckoutError();
   // Someone who already bought templates is never asked for Everything's full price, here or in the
   // home page's teaser: the card becomes the upgrade, the price the owner set for them.
@@ -67,7 +65,7 @@ export function PricingCards({
     // Guests pay first; the account is created from the email Stripe collects.
     setBusy(true);
     track("pay_clicked", { product, source: "pricing" });
-    const result = await startCheckout({ product, templateSlugs: slugs, currency, returnTo, locale, remindMe });
+    const result = await startCheckout({ product, templateSlugs: slugs, currency, returnTo, locale });
     if ("url" in result) return void window.location.assign(result.url);
     setBusy(false);
     showCheckoutError(result.error);
@@ -183,15 +181,6 @@ export function PricingCards({
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null}
                 <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
               </button>
-              {/* Only under the button that goes straight to checkout: the other two open the picker, which has its own. */}
-              {id === "everything" && paymentsEnabled ? (
-                <RecoveryOptIn
-                  checked={remindMe}
-                  onChange={setRemindMe}
-                  disabled={busy}
-                  className={cn("mt-2", dominant ? "text-paper/75" : "text-muted-foreground")}
-                />
-              ) : null}
               {dominant ? (
                 <p className="mt-3 text-center text-xs text-paper/55">{t("priority")}</p>
               ) : null}
@@ -260,7 +249,6 @@ export function PricingCards({
             {busy ? <Loader2 className="size-4 animate-spin" /> : null}
             <span>{t("pick.continue", { n: chosen.length, total: needed })}</span>
           </button>
-          <RecoveryOptIn checked={remindMe} onChange={setRemindMe} disabled={busy} className="-mt-2" />
         </DialogContent>
       </Dialog>
     </>
