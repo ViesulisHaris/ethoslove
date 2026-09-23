@@ -24,7 +24,7 @@ export async function glide(page, find, { offset = 40, ms = 1200 } = {}) {
           if (find.leaf) all = all.filter((e) => !e.children.length);
           all = all.filter((e) => !all.some((o) => o !== e && e.contains(o)));
         }
-        const el = all[find.nth ?? 0];
+        const el = all.at(find.nth ?? 0); // a negative nth counts from the end
         if (!el) return `nothing for ${JSON.stringify(find)}`;
         let y = 0;
         for (let e = el; e && e !== sc; e = e.offsetParent) y += e.offsetTop;
