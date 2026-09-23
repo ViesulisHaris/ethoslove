@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeftRight, ArrowUpRight, Minus, Plus, TrainFront, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { toYmd } from "@/lib/dates/calendar";
 import { distanceKm } from "@/lib/dates/geo";
 import { findAirport, type Airport } from "@/lib/trips/airports";
-import { estimateFlight, flightLinks, formatFlightTime, MAX_ADULTS, MIN_ADULTS, trainHint, weekendAhead, withDepart } from "@/lib/trips/flights";
+import { estimateFlight, flightLinks, formatFlightTime, MAX_ADULTS, MIN_ADULTS, trainHint, weekendAhead } from "@/lib/trips/flights";
 import { readLastFrom, saveLastFrom } from "@/lib/trips/last-from";
 import { PARTNER_NAMES, type PartnerPlacement } from "@/lib/trips/partners";
 import { AirportBox } from "./airport-box";
+import { DateRangePicker, type DateRangeLabels } from "./date-range-picker";
 import { PartnerLink } from "./partner-link";
 
 type Props = {
@@ -41,6 +42,7 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
   const [to, setTo] = useState<Airport | null>(() => (toCode ? findAirport(toCode) : null));
   const [picked, setPicked] = useState<{ depart: string; back: string } | null>(null);
   const [adults, setAdults] = useState(2);
+  const dateRow = useRef<HTMLDivElement>(null);
   // No date before today, and today is the visitor's: on the server there is no minimum at all.
   const today = useSyncExternalStore(noop, localDay, () => undefined);
   // A search without dates finds no fares, so until they pick their own the dates are a long
@@ -66,14 +68,35 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
     setFrom(to);
     setTo(from);
   };
-  const pickDepart = (d: string) => setPicked(withDepart(dates, d));
-  const pickBack = (d: string) => setPicked({ depart: dates.depart, back: d });
 
   const same = Boolean(from && to && from.iata === to.iata);
   const km = from && to ? distanceKm(from, to) : 0;
   const links = from && to && !same ? flightLinks({ from, to, depart: dates.depart || undefined, back: dates.back || undefined, adults, locale }) : null;
   const number = (n: number) => Math.round(n).toLocaleString(locale === "es" ? "es-ES" : "en-GB");
   const boxLabels = { placeholder: t("placeholder"), nothing: t("nothing"), locale };
+  const dateLabels: DateRangeLabels = {
+    start: t("depart"),
+    end: t("return"),
+    optional: t("optional"),
+    title: t("picker.title"),
+    add: t("picker.add"),
+    roundTrip: t("picker.roundTrip"),
+    oneWay: t("picker.oneWay"),
+    tripType: t("picker.tripType"),
+    quick: t("picker.quick"),
+    thisWeekend: t("picker.thisWeekend"),
+    nextWeekend: t("picker.nextWeekend"),
+    weekAway: t("picker.weekAway"),
+    nights: (count) => t("picker.nights", { count }),
+    pickStart: t("picker.pickStart"),
+    pickEnd: t("picker.pickEnd"),
+    clear: t("picker.clear"),
+    done: t("picker.done"),
+    close: t("picker.close"),
+    previous: t("picker.previous"),
+    next: t("picker.next"),
+    today: t("picker.today"),
+  };
 
   return (
     <div className={cn("@container", className)} data-testid="flight-finder">
@@ -95,18 +118,18 @@ export function FlightFinder({ from: fromCode, to: toCode, placement = "trips_fi
         </div>
       </div>
 
-      {/* Two dates side by side even in a 280px card: a date box needs about 105px, so the padding gives way first. */}
-      <div className="mt-2.5 grid grid-cols-2 gap-2.5 @xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
-        <label className="flex h-14 min-w-0 flex-col justify-center rounded-2xl border border-forest/15 bg-white px-3 focus-within:border-rose/50 @sm:px-4">
-          <span className="text-[12px] leading-none font-semibold tracking-wide text-forest/55 uppercase">{t("depart")}</span>
-          <input type="date" value={dates.depart} min={today} onChange={(e) => pickDepart(e.target.value)} className="mt-1 w-full min-w-0 bg-transparent text-[16px] font-medium text-forest outline-none" />
-        </label>
-        <label className="flex h-14 min-w-0 flex-col justify-center rounded-2xl border border-forest/15 bg-white px-3 focus-within:border-rose/50 @sm:px-4">
-          <span className="truncate text-[12px] leading-none font-semibold tracking-wide text-forest/55 uppercase">
-            {t("return")} <span className="font-normal tracking-normal normal-case">· {t("optional")}</span>
-          </span>
-          <input type="date" value={dates.back} min={dates.depart || today} onChange={(e) => pickBack(e.target.value)} className="mt-1 w-full min-w-0 bg-transparent text-[16px] font-medium text-forest outline-none" />
-        </label>
+      {/* Two dates side by side even in a 280px card: a date box needs about 105px, so the padding and the icon give way first. */}
+      <div ref={dateRow} className="mt-2.5 grid grid-cols-2 gap-2.5 @xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+        <DateRangePicker
+          className="col-span-2"
+          value={{ start: dates.depart, end: dates.back }}
+          onChange={(range) => setPicked({ depart: range.start, back: range.end })}
+          today={today}
+          locale={locale}
+          labels={dateLabels}
+          allowOneWay
+          alignTo={dateRow}
+        />
         <div className="col-span-2 flex h-14 items-center justify-between gap-1 rounded-2xl border border-forest/15 bg-white px-1.5 @xl:col-span-1">
           <button type="button" onClick={() => setAdults((n) => Math.max(MIN_ADULTS, n - 1))} disabled={adults <= MIN_ADULTS} aria-label={t("fewer")} className="grid size-11 place-items-center rounded-xl text-forest hover:bg-rose-mist disabled:opacity-35 disabled:hover:bg-transparent">
             <Minus aria-hidden="true" className="size-4" />

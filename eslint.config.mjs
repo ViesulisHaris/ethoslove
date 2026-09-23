@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "public/workers/**",
     // Copied from node_modules by scripts/copy-maplibre.mjs: MapLibre's own minified build.
     "public/vendor/**",
+    // Git worktrees that Claude Code workflows check out here: another copy of the repo, linted in its own run.
+    ".claude/worktrees/**",
   ]),
 ]);
 

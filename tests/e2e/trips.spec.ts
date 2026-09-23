@@ -45,9 +45,10 @@ test.describe("the trips room", () => {
     await page.goto("/trips");
     const finder = page.getByTestId("flight-finder");
     // Before any airport is picked, the dates are already a long weekend: a Friday and the Monday after.
-    const dates = finder.locator('input[type="date"]');
-    await expect(dates.nth(0)).toHaveValue(new RegExp(`^${ISO}$`));
-    const [out, home] = await dates.evaluateAll((els) => els.map((el) => (el as HTMLInputElement).value));
+    const dates = finder.locator("button[data-date]");
+    await expect(dates.nth(0)).toHaveAttribute("data-date", new RegExp(`^${ISO}$`));
+    await expect(dates.nth(0)).toHaveAccessibleName(/^Depart: Friday \d+ \w+ \d{4}$/);
+    const [out, home] = await dates.evaluateAll((els) => els.map((el) => el.getAttribute("data-date") ?? ""));
     expect(new Date(`${out}T12:00`).getDay()).toBe(5);
     expect(new Date(`${home}T12:00`).getDay()).toBe(1);
 
@@ -79,11 +80,33 @@ test.describe("the trips room", () => {
     await expect(finder).toContainText("We may earn a commission if you book through some of these links. It costs you nothing extra.");
     await expect(finder).not.toContainText("We don't sell flights");
 
-    // Their own dates replace the weekend; no return makes it one way.
-    await dates.nth(0).fill("2030-05-10");
-    await dates.nth(1).fill("");
-    await expect(finder.getByRole("link", { name: /Kayak/ })).toHaveAttribute("href", /RIX-LIS\/2030-05-10\/2adults$/);
-    expect(landsOn(await aviasales.getAttribute("href"))).toBe("https://www.aviasales.com/search/RIX1005LIS2");
+    // Their own dates replace the weekend, picked on the calendar: the first tap is the day out, the second the way back.
+    const later = (iso: string, days: number) => new Date(Date.parse(iso) + days * 86_400_000).toISOString().slice(0, 10);
+    const [go, back] = [later(out, 14), later(out, 19)];
+    await dates.nth(0).click();
+    const picker = page.getByRole("dialog", { name: "Choose your dates" });
+    await expect(picker).toBeVisible();
+    await expect(picker.getByRole("grid").first()).toBeVisible();
+    await picker.locator(`[data-day="${go}"]`).click();
+    await expect(picker.locator(`[data-day="${go}"]`)).toHaveAccessibleName(/, Depart$/);
+    await picker.locator(`[data-day="${back}"]`).click();
+    await expect(picker).toContainText("5 nights");
+    await picker.getByRole("button", { name: "Done" }).click();
+    await expect(picker).toBeHidden();
+    await expect(dates.nth(1)).toHaveAttribute("data-date", back);
+    await expect(finder.getByRole("link", { name: /Kayak/ })).toHaveAttribute("href", new RegExp(`RIX-LIS/${go}/${back}/2adults$`));
+
+    // One way drops the return; Escape puts the calendar away and the focus back on the field.
+    await dates.nth(1).click();
+    await expect(picker).toBeVisible();
+    await picker.getByRole("button", { name: "One-way" }).click();
+    await expect(picker).toContainText(`One-way · `);
+    await page.keyboard.press("Escape");
+    await expect(picker).toBeHidden();
+    await expect(dates.nth(1)).toBeFocused();
+    await expect(dates.nth(1)).toHaveAttribute("data-date", "");
+    await expect(finder.getByRole("link", { name: /Kayak/ })).toHaveAttribute("href", new RegExp(`RIX-LIS/${go}/2adults$`));
+    expect(landsOn(await aviasales.getAttribute("href"))).toBe(`https://www.aviasales.com/search/RIX${ddmm(go)}LIS2`);
     noErrors();
   });
 
