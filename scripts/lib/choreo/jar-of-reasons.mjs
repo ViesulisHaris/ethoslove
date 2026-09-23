@@ -1,12 +1,14 @@
 /**
- * Jar of Reasons: the jar as she finds it, the first note tumbling out and unfolding, then a run of
- * them one after another — the point is how many there are — and, once the jar is empty, the letter.
+ * Jar of Reasons: the jar as she finds it, then the first notes pulled one at a time, each on a
+ * screen of its own, and — once the rest are out, off camera — the letter, read from its top.
  *
  * The jar is a button ("tap the jar"; shaking needs a phone); each note sits over a dim overlay that
  * folds it back when tapped; after the first, "Pull another" pulls the next. Which reason comes out
- * first is the template's own seeded order, so the log says what each note said and the stills can
- * be picked afterwards.
+ * first is the template's own seeded order, so the log says what each note said (a closing chat that
+ * names a note should name one of these).
  */
+const SHOWN = 5; // enough to say "there are a lot", not enough to bore
+
 export async function film({ page, live, spec, inGift, now }) {
   const marks = {};
   const total = spec.fields.reasons.length;
@@ -20,43 +22,27 @@ export async function film({ page, live, spec, inGift, now }) {
   await jar.waitFor({ timeout: 60000 });
   // The cover is still fading out when the jar first exists underneath it.
   await inGift(() => !/tap to open/i.test(document.querySelector('[data-mode="live"]')?.innerText ?? ""), null, 8);
-  await page.waitForTimeout(1800);
-
-  // ── The first note ────────────────────────────────────────────────────────────────────────────
-  marks.jar = now() - 0.8;
-  await jar.evaluate((b) => b.click());
-  await inGift(noteUp, null, 6);
-  await page.waitForTimeout(700); // it unfolds
-  const first = await noteText();
-  console.log(`  note 1: ${first}`);
   await page.waitForTimeout(2000);
-  marks.jarEnd = now();
+  marks.jar = now();
+  const clips = [{ name: "jar", from: marks.jar - 1.6, to: marks.jar + 0.2, stillAt: marks.jar - 0.1 }];
 
-  // ── One after another: fold, pull, read, fold… ────────────────────────────────────────────────
-  await fold();
-  await inGift(noteGone, null, 4);
-  await page.waitForTimeout(500);
-  marks.run = now() - 0.2;
-  const said = [first];
-  const shown = 5; // enough to say "there are a lot", not enough to bore
-  for (let n = 2; n <= shown; n++) {
-    await pullButton().evaluate((b) => b.click());
+  // ── The first notes, one screen each ──────────────────────────────────────────────────────────
+  const shown = Math.min(SHOWN, total);
+  for (let n = 1; n <= shown; n++) {
+    const from = now();
+    if (n === 1) await jar.evaluate((b) => b.click());
+    else await pullButton().evaluate((b) => b.click());
     await inGift(noteUp, null, 6);
-    await page.waitForTimeout(450);
-    said.push(await noteText());
-    console.log(`  note ${n}: ${said.at(-1)}`);
-    await page.waitForTimeout(n === shown ? 1500 : 350);
-    if (n < shown) {
-      await fold();
-      await inGift(noteGone, null, 4);
-      await page.waitForTimeout(100);
-    }
+    await page.waitForTimeout(1500); // it unfolds, the photo lands
+    console.log(`  note ${n}: ${await noteText()}`);
+    marks[`note${n}`] = now();
+    clips.push({ name: `note-${n}`, from, to: marks[`note${n}`] + 0.2, stillAt: marks[`note${n}`] - 0.1 });
+    await fold();
+    await inGift(noteGone, null, 4);
+    await page.waitForTimeout(250);
   }
-  marks.runEnd = now();
 
-  // ── The rest, quickly, off camera; then the empty jar and the letter ─────────────────────────
-  await fold();
-  await inGift(noteGone, null, 4);
+  // ── The rest, quickly, off camera; then the letter from its top ───────────────────────────────
   for (let n = shown + 1; n <= total; n++) {
     await pullButton().evaluate((b) => b.click());
     await inGift(noteUp, null, 6);
@@ -66,18 +52,13 @@ export async function film({ page, live, spec, inGift, now }) {
   }
   const read = live.getByRole("button", { name: /read the letter/i });
   await read.waitFor({ timeout: 15000 });
-  await page.waitForTimeout(1200);
-  marks.empty = now() - 1.0;
+  await page.waitForTimeout(800);
   await read.evaluate((b) => b.click());
   await inGift((t) => document.querySelector('[data-mode="live"]')?.innerText.includes(t), spec.message.slice(0, 30), 8);
+  await page.waitForTimeout(3000);
   marks.letter = now();
-  await page.waitForTimeout(3200);
-  marks.end = now();
+  clips.push({ name: "letter", from: marks.letter - 3, to: marks.letter + 0.2, stillAt: marks.letter - 0.1 });
 
   console.log("marks:", JSON.stringify(Object.fromEntries(Object.entries(marks).map(([k, v]) => [k, +(v - marks.jar).toFixed(2)]))));
-  return [
-    { name: "jar", from: marks.jar, to: marks.jarEnd, stillAt: marks.jarEnd - 0.3 }, // the first note
-    { name: "notes", from: marks.run, to: marks.runEnd, stillAt: marks.runEnd - 0.4 }, // the last of the run
-    { name: "letter", from: marks.empty, to: marks.end, stillAt: marks.end - 0.3 }, // the letter
-  ];
+  return clips;
 }
