@@ -65,7 +65,9 @@ const pictures = (spec.photos ?? []).map((p, i) => {
 // software rendering for it on its own — without these flags the pot comes out empty. Only for them:
 // software GL slows everything else down.
 const THREE_D = ["bloom", "passport"];
-const browser = await chromium.launch({ args: THREE_D.includes(slug) ? ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] : [] });
+// TIKTOK_CHROMIUM points at a browser already on the machine (a cloud box that cannot download
+// Playwright's own); otherwise Playwright's.
+const browser = await chromium.launch({ ...(process.env.TIKTOK_CHROMIUM ? { executablePath: process.env.TIKTOK_CHROMIUM } : {}), args: THREE_D.includes(slug) ? ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] : [] });
 // A 1080×1920 window, and the gift in a phone-sized box inside it drawn at 2.5×: it lays out exactly as
 // it does on a 432-wide phone — including every size clamped in rem — and is filmed at full resolution.
 // (A 2× device scale lays out right too, but the screencast then only hands back the CSS pixels.)

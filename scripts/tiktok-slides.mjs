@@ -508,7 +508,7 @@ function gapHtml(slide, n) {
   </style></head><body><div class="n">${String(n).padStart(2, "0")} · ${esc(slide.type)} · yours</div>${slide.note ? `<p class="note">${esc(slide.note)}</p>` : ""}</body></html>`;
 }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.TIKTOK_CHROMIUM ? { executablePath: process.env.TIKTOK_CHROMIUM } : {});
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 // The stand-in is a data URL, so it loads after first use; a slide shot before it lands is set in the
 // very Arial it is there to prevent.
