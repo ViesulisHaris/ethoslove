@@ -40,7 +40,7 @@ export function PlaceThumb({ place, className, eager = false }: { place: Place; 
   return (
     <span ref={holder} aria-hidden="true" className={cn("relative block shrink-0 overflow-hidden bg-white", className)} style={{ backgroundColor: group.soft }}>
       {photo ? (
-        <img src={photo.src} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" className="absolute inset-0 size-full object-cover" />
+        <img src={photo.src} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onLoad={(e) => (e.currentTarget.dataset.loaded = "1")} className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-500 data-[loaded=1]:opacity-100" />
       ) : (
         <>
           <img src={kindImage(place.kind, place.id)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full scale-110 object-cover opacity-55 blur-[1.5px] saturate-[0.7]" />

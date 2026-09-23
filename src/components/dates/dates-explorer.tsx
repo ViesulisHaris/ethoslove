@@ -657,9 +657,11 @@ export function DatesExplorer() {
             </div>
           ) : null}
           {status === "ready" && visible.length === 0 ? <p className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{all.length === 0 ? t("places.none") : t("places.noneInFilter")}</p> : null}
-          {visible.slice(0, shown).map((place) => (
+          {visible.slice(0, shown).map((place, i) => (
             <PlaceCard
               key={place.id}
+              index={i}
+              hovered={place.id === hoveredId}
               place={place}
               locale={locale}
               selected={place.id === selectedId}

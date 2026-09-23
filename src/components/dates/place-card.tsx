@@ -13,13 +13,13 @@ import { Stars } from "./stars";
 
 export type PlaceCardLabels = { add: string; remove: string; walk: (minutes: number) => string; free: string; photo: string; reviews: (n: number) => string; rank: (n: number, of: number, group: string) => string };
 
-type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void };
+type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void; /** Its pin is being pointed at on the map. */ hovered?: boolean; /** Place in the list, for the stagger as cards arrive. */ index?: number };
 
 /** How far is still a walk. Past this the card gives the distance and leaves how to get there to them. */
 const WALK_KM = 2.2;
 
 /** One place in the list: its picture, what it is, how far, and a button to put it in the plan. */
-export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onHover, onTogglePlan }: Props) {
+export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onHover, onTogglePlan, hovered = false, index = 0 }: Props) {
   const group = GROUPS[place.group];
   const info = KINDS[place.kind];
   void info.free;
@@ -28,7 +28,8 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
     <div
       onPointerEnter={() => onHover(true)}
       onPointerLeave={() => onHover(false)}
-      className={cn("group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", selected && "ring-2 ring-rose")}
+      style={{ animationDelay: `${Math.min(index, 8) * 35}ms` }}
+      className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
     >
       <PlaceThumb place={place} className="size-[92px] rounded-[16px] sm:size-[104px]" />
       <div className="flex min-w-0 flex-1 flex-col justify-center py-1">

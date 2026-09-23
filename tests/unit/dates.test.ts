@@ -265,6 +265,21 @@ describe("places from map tiles", () => {
     expect(merged.map((p) => p.id)).toEqual(["node/2", "node/1"]);
     expect(merged[1]).toMatchObject({ hours: "Mo-Su 10:00-22:00", score: 70 });
   });
+
+  it("shows one place for one name close together, and keeps branches of a chain apart", () => {
+    const north = LISBON.lat + 0.0027; // about 300 m
+    const garden = [place({ id: "way/1", kind: "park", name: "Whitehall Gardens", score: 60 }), place({ id: "way/2", kind: "park", name: "Whitehall Gardens", score: 64, lat: north })];
+    const merged = mergePlaces(garden);
+    expect(merged).toHaveLength(1);
+    // The better-scored piece stands for the garden.
+    expect(merged[0].id).toBe("way/2");
+    // Two bookshops of one chain 600 m apart are two places; one café mapped twice 90 m apart is one.
+    const far = LISBON.lat + 0.0054;
+    expect(mergePlaces([place({ id: "node/10", kind: "bookshop", name: "Waterstones" }), place({ id: "node/11", kind: "bookshop", name: "Waterstones", lat: far })])).toHaveLength(2);
+    expect(mergePlaces([place({ id: "node/20", kind: "cafe", name: "Café Luz" }), place({ id: "node/21", kind: "cafe", name: "Café Luz", lat: LISBON.lat + 0.0008 })])).toHaveLength(1);
+    // A garden and a café that happen to share a name are not one place.
+    expect(mergePlaces([place({ id: "way/30", kind: "park", name: "Estrela" }), place({ id: "node/31", kind: "cafe", name: "Estrela" })])).toHaveLength(2);
+  });
 });
 
 describe("a place's details", () => {

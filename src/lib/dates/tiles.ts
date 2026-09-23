@@ -120,19 +120,59 @@ export function placesFromPois(features: PoiFeature[], tile: TileXY, center: Lat
 }
 
 /** One list from many tiles and sources: no place twice (the richer record wins), best first. */
+/**
+ * How far apart two mapped things with one name and one kind can be and still be one place. A
+ * museum mapped as a building and again as a point is metres apart; a long garden or a beach is
+ * often mapped in pieces hundreds of metres apart. Two branches of a chain are further than this.
+ */
+const SAME_PLACE_M: Partial<Record<Place["group"], number>> = { outdoors: 450 };
+const SAME_PLACE_DEFAULT_M = 160;
+
+const metresBetween = (a: { lat: number; lng: number }, b: { lat: number; lng: number }) => {
+  const dy = (a.lat - b.lat) * 111_320;
+  const dx = (a.lng - b.lng) * 111_320 * Math.cos((((a.lat + b.lat) / 2) * Math.PI) / 180);
+  return Math.hypot(dx, dy);
+};
+
 export function mergePlaces(...lists: Place[][]): Place[] {
   const byId = new Map<string, Place>();
-  const byName = new Set<string>();
+  const byName = new Map<string, Place[]>();
   for (const place of lists.flat()) {
     const existing = byId.get(place.id);
     if (existing) {
-      if (!existing.hours && place.hours) byId.set(place.id, { ...place, score: Math.max(place.score, existing.score) });
+      if (!existing.hours && place.hours) {
+        const merged = { ...place, score: Math.max(place.score, existing.score) };
+        byId.set(place.id, merged);
+        // Keep the name index pointing at the record that knows more, too.
+        for (const kept of byName.values()) {
+          const at = kept.findIndex((k) => k.id === place.id);
+          if (at >= 0) kept[at] = merged;
+        }
+      }
       continue;
     }
-    // A museum mapped as a building and again as a point has two ids and one name, a few metres apart.
-    const key = `${place.kind}|${place.name.toLowerCase()}|${place.lat.toFixed(3)},${place.lng.toFixed(3)}`;
-    if (place.named && byName.has(key)) continue;
-    byName.add(key);
+    if (place.named) {
+      const key = `${place.kind}|${place.name.toLowerCase().trim()}`;
+      const kept = byName.get(key) ?? [];
+      const limit = SAME_PLACE_M[place.group] ?? SAME_PLACE_DEFAULT_M;
+      const twin = kept.find((k) => metresBetween(k, place) <= limit);
+      if (twin) {
+        // The better-scored piece stands for the place, with whatever the other knew that it didn't.
+        if (place.score > twin.score) {
+          const merged = { ...place, hours: place.hours ?? twin.hours };
+          byId.delete(twin.id);
+          byId.set(place.id, merged);
+          kept[kept.indexOf(twin)] = merged;
+        } else if (!twin.hours && place.hours) {
+          const merged = { ...twin, hours: place.hours };
+          byId.set(twin.id, merged);
+          kept[kept.indexOf(twin)] = merged;
+        }
+        continue;
+      }
+      kept.push(place);
+      byName.set(key, kept);
+    }
     byId.set(place.id, place);
   }
   return [...byId.values()].sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm || a.id.localeCompare(b.id));

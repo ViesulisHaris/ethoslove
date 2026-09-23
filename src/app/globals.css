@@ -460,7 +460,7 @@
     background-color 0.2s ease,
     color 0.2s ease,
     padding 0.2s ease;
-  animation: ethos-pin-in 0.34s var(--ease-spring) both;
+  animation: ethos-pin-in 0.34s var(--ease-spring) backwards;
   animation-delay: calc(var(--i, 0) * 16ms);
 }
 .ethos-pin-ico {
@@ -701,7 +701,7 @@
   }
 }
 .deal-in {
-  animation: deal-in 0.55s var(--ease-out-quint) both;
+  animation: deal-in 0.55s var(--ease-out-quint) backwards;
 }
 
 /* ------------------------------------------------------------------ */
@@ -723,4 +723,17 @@
   .reveal-ready [data-reveal]:not(.is-in) {
     translate: none;
   }
+}
+
+/* A place card arriving in the Dates list: a short rise and fade, staggered by its place in the
+   list. Keyed cards that survive a re-sort or a filter keep their element and don't replay it. */
+@keyframes place-card-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.place-card-in {
+  /* backwards, not both: once it has played, the card's own hover lift owns `translate` again. */
+  animation: place-card-in 0.42s var(--ease-out-quint) backwards;
 }
