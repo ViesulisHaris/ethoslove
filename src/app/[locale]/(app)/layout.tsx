@@ -4,6 +4,7 @@ import { redirect } from "@/i18n/navigation";
 import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { AppShell } from "@/components/app/app-shell";
+import { SiteMotion } from "@/components/motion/site-motion";
 
 /** Authenticated app shell. Without Supabase configured it renders a "not connected" state. */
 export default async function AppLayout({ children, params }: LayoutProps<"/[locale]">) {
@@ -29,6 +30,7 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[loc
       >
         {children}
       </AppShell>
+      <SiteMotion />
     </ClientMessages>
   );
 }

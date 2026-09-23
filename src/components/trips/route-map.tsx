@@ -4,6 +4,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { drawRoute, revealWhenDrawn } from "@/lib/dates/map-motion";
 import { applyPalette, MAP_PAPER, type MapStyle } from "@/lib/dates/map-style";
 import { MAPLIBRE_URL, loadMapStyle, preloadMapLibre } from "@/lib/dates/map-vendor";
 import type { TripKind } from "@/lib/trips/presets";
@@ -40,15 +42,23 @@ const LINE: Record<TripKind, { color: string; width: number; dash?: number[] }> 
 };
 /** Neighbourhoods a kilometre apart should not fill the screen as if they were a street. */
 const MAX_ZOOM = 13.5;
+/** The route is drawn in over this long, once the map is in view; each stop pops in as it is reached. */
+const DRAW_MS = 1100;
+/** How much of the map has to be on the screen before the route starts drawing itself. */
+const SEEN = 0.35;
 
-const numbered = (n: number, name: string): HTMLElement => {
-  const el = document.createElement("div");
-  el.className = "ethos-stop-pin";
-  el.setAttribute("role", "img");
-  el.setAttribute("aria-label", `${n}. ${name}`);
-  el.title = name;
-  el.textContent = String(n);
-  return el;
+/** A numbered stop. MapLibre moves the root; the disc inside it waits until the line reaches it. */
+const numbered = (n: number, name: string): { root: HTMLElement; disc: HTMLElement } => {
+  const root = document.createElement("div");
+  root.className = "ethos-stop-root";
+  root.setAttribute("role", "img");
+  root.setAttribute("aria-label", `${n}. ${name}`);
+  root.title = name;
+  const disc = document.createElement("span");
+  disc.className = "ethos-stop-pin is-waiting";
+  disc.textContent = String(n);
+  root.append(disc);
+  return { root, disc };
 };
 
 /**
@@ -61,11 +71,14 @@ const numbered = (n: number, name: string): HTMLElement => {
 export default function RouteMap({ stops, kind, labels }: Props) {
   const holder = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
+  // The canvas fades in over the paper once its first tiles are drawn.
+  const [drawn, setDrawn] = useState(false);
   const first = useRef({ stops, kind, labels });
 
   useEffect(() => {
     let cancelled = false;
     let map: MapLibreMap | null = null;
+    const undo: (() => void)[] = [];
     (async () => {
       try {
         // Both of MapLibre's files at once (the second is only found by reading the first), and the
@@ -106,7 +119,8 @@ export default function RouteMap({ stops, kind, labels }: Props) {
         live.once("style.load", () => {
           if (cancelled) return;
           const line = LINE[routeKind];
-          live.addSource(ROUTE, { type: "geojson", data: { type: "Feature", geometry: { type: "LineString", coordinates: route.map((s) => [s.lng, s.lat]) }, properties: {} } });
+          // Empty at first: the line is drawn in, stop by stop, once someone is looking at it.
+          live.addSource(ROUTE, { type: "geojson", data: { type: "FeatureCollection", features: [] } });
           live.addLayer({
             id: ROUTE,
             type: "line",
@@ -114,7 +128,43 @@ export default function RouteMap({ stops, kind, labels }: Props) {
             layout: { "line-cap": "round", "line-join": "round" },
             paint: { "line-color": line.color, "line-width": line.width, "line-opacity": 0.9, ...(line.dash ? { "line-dasharray": line.dash } : {}) },
           });
-          route.forEach((s, i) => new lib.Marker({ element: numbered(i + 1, s.name), anchor: "center" }).setLngLat([s.lng, s.lat]).addTo(live));
+          const discs = route.map((s, i) => {
+            const { root, disc } = numbered(i + 1, s.name);
+            new lib.Marker({ element: root, anchor: "center" }).setLngLat([s.lng, s.lat]).addTo(live);
+            return disc;
+          });
+          // The pen starts once the streets are showing (the canvas fades in over the paper when
+          // its tiles are drawn) and the map is on the screen: TripMap starts loading it a screen
+          // ahead, and a route drawn then would play out to nobody.
+          const waits = { streets: true, seen: true };
+          const draw = () => {
+            if (cancelled || waits.streets || waits.seen) return;
+            undo.push(drawRoute(live, ROUTE, route.map((s) => [s.lng, s.lat]), { ms: DRAW_MS, onReach: (i) => discs[i]?.classList.remove("is-waiting") }));
+          };
+          undo.push(
+            revealWhenDrawn(live, () => {
+              setDrawn(true);
+              waits.streets = false;
+              draw();
+            }),
+          );
+          const box = holder.current;
+          if (!box || !("IntersectionObserver" in window)) {
+            waits.seen = false;
+            draw();
+          } else {
+            const seen = new IntersectionObserver(
+              (entries) => {
+                if (!entries.some((e) => e.intersectionRatio >= SEEN)) return;
+                seen.disconnect();
+                waits.seen = false;
+                draw();
+              },
+              { threshold: SEEN },
+            );
+            seen.observe(box);
+            undo.push(() => seen.disconnect());
+          }
           setState("ready");
         });
         // A tile that fails is a gap in the paper, not a broken map; MapLibre would log each one.
@@ -125,6 +175,7 @@ export default function RouteMap({ stops, kind, labels }: Props) {
     })();
     return () => {
       cancelled = true;
+      for (const fn of undo) fn();
       map?.remove();
     };
   }, []);
@@ -132,9 +183,10 @@ export default function RouteMap({ stops, kind, labels }: Props) {
   return (
     <div className="relative isolate h-full w-full overflow-hidden" style={{ background: MAP_PAPER }}>
       {/* Sized with height, not inset: MapLibre's stylesheet sets `position: relative` on this element. */}
-      <div ref={holder} className="h-full w-full" role="region" aria-label={labels.map} data-map-state={state} />
-      {state === "loading" ? (
-        <div className="absolute inset-0 grid place-items-center text-[13px] text-forest/55">
+      <div ref={holder} className="ethos-map-canvas h-full w-full" role="region" aria-label={labels.map} data-map-state={state} data-drawn={drawn ? "true" : "false"} />
+      {/* Fades out as the map comes in, and goes once the canvas has been drawn over the paper. */}
+      {state !== "failed" && !drawn ? (
+        <div className={cn("pointer-events-none absolute inset-0 grid place-items-center text-[13px] text-forest/55 transition-opacity duration-200 ease-(--ease-out-quint)", state === "ready" && "opacity-0")}>
           <span className="inline-flex items-center gap-2 rounded-full bg-white/85 px-4 py-2 shadow-soft backdrop-blur">
             <Loader2 aria-hidden="true" className="size-4 animate-spin" />
             {labels.loading}

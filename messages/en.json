@@ -51,7 +51,15 @@
     "longDistance": "Long distance",
     "games": "Games",
     "mainLabel": "Main",
-    "menuLabel": "Menu"
+    "menuLabel": "Menu",
+    "blurb": {
+      "dates": "Real places near you",
+      "trips": "Trips for two, day by day",
+      "gifts": "Surprises for their phone",
+      "longDistance": "Meet in the middle",
+      "games": "Card games for two",
+      "pricing": "Free to date, no subscriptions"
+    }
   },
   "home": {
     "hero": {

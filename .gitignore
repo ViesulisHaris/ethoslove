@@ -54,3 +54,6 @@ next-env.d.ts
 
 # MapLibre browser files, copied from node_modules by scripts/copy-maplibre.mjs
 /public/vendor/
+
+# Git worktrees that Claude Code workflows check out inside the repo
+/.claude/worktrees/

@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { AnimatePresence } from "motion/react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps } from "react";
+import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
 import { ArrowRight, ArrowUpDown, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -16,6 +16,7 @@ import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/da
 import { distanceKm, isLatLng, snapSearch, type LatLng } from "@/lib/dates/geo";
 import { fillStops, fitsVibe, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
+import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
 import type { Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
@@ -28,6 +29,7 @@ import { suggestTimes } from "@/lib/dates/timing";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
 import { GroupIcon } from "./group-icon";
+import { createHoverStore, useHoveredId, useIsHovered, type HoverStore } from "./hover-store";
 import { IdeaPanel } from "./idea-panel";
 import { IdeaRail } from "./idea-rail";
 import { MapView } from "./map-view";
@@ -48,6 +50,12 @@ const SAME_PLACE_KM = 6;
 const FORECAST_KM = 10;
 /** How long "the plan is full" and its like stay on the screen. */
 const PLAN_NOTICE_MS = 4000;
+/** The site's ease-out-quint, for motion. */
+const QUINT = [0.22, 1, 0.36, 1] as const;
+/** A scrim or a notice leaving: a short fade. */
+const FADE_OUT = { opacity: 0, transition: { duration: 0.2, ease: QUINT } } as const;
+/** A set of cards (or the skeletons) giving way to the next, which fades in under it (place-card-in). */
+const LIST_OUT = { opacity: 0, transition: { duration: 0.26, ease: QUINT } } as const;
 
 const noop = () => () => undefined;
 const desktopQuery = "(min-width: 1024px)";
@@ -68,6 +76,30 @@ const subscribeDesktop = (onChange: () => void) => {
 // A place with no name of its own is kept as one (`named: false`), so the plan calls it by its kind
 // in whichever language it is read in, not in the one it was added in (plan.ts stopName).
 const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
+
+/**
+ * One set of cards, or the skeletons. On its way out it is lifted from the flow where it stands
+ * (AnimatePresence's popLayout) and fades over the next set arriving under it; while it does, it is
+ * inert and hidden from screen readers, so nothing in it can be focused, pressed or read twice.
+ */
+function ListSet({ ref, children }: { ref?: React.Ref<HTMLDivElement>; children: React.ReactNode }) {
+  const present = useIsPresent();
+  return (
+    <motion.div ref={ref} exit={LIST_OUT} aria-hidden={present ? undefined : true} inert={!present} className="space-y-2.5">
+      {children}
+    </motion.div>
+  );
+}
+
+/** A card in the list, lit when its place is pointed at (here or on the map) without the page re-rendering. */
+function ListedCard({ hover, ...card }: Omit<ComponentProps<typeof PlaceCard>, "hovered"> & { hover: HoverStore }) {
+  return <PlaceCard {...card} hovered={useIsHovered(hover, card.place.id)} />;
+}
+
+/** The map, told which place is pointed at on its own (see hover-store.ts). */
+function HoveredMap({ hover, ...map }: Omit<ComponentProps<typeof MapView>, "hoveredId"> & { hover: HoverStore }) {
+  return <MapView {...map} hoveredId={useHoveredId(hover)} />;
+}
 
 /**
  * The Dates page: where, when, then ideas made of real places on a map. Everything it shows is
@@ -100,7 +132,10 @@ export function DatesExplorer() {
   const [ideaId, setIdeaId] = useState<string | null>(null);
   const [skip, setSkip] = useState<number[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  // Which place is pointed at: outside React state, so a hover re-renders a card or two and the map,
+  // not the page (hover-store.ts).
+  const [hover] = useState(createHoverStore);
+  const setHoveredId = hover.set;
   const [details, setDetails] = useState<Record<string, PlaceDetails | null>>({});
   const [view, setView] = useState<"list" | "map">("list");
   const [mapOpened, setMapOpened] = useState(false);
@@ -116,6 +151,11 @@ export function DatesExplorer() {
   const [townMissing, setTownMissing] = useState(false);
   // Counts Back presses that landed on this page's own entries (see the layers below).
   const [popped, setPopped] = useState(0);
+  // Which set of results the list is showing. A new answer, a new sort or a new filter is a new
+  // set: the list crossfades to it whole, where re-sorting the cards on the screen slid every one
+  // of them to a new place under the reader's eyes.
+  const [listGen, setListGen] = useState(0);
+  const nextList = useCallback(() => setListGen((n) => n + 1), []);
   const [plan, updatePlan] = usePlan();
 
   const token = useRef(0);
@@ -201,6 +241,7 @@ export function DatesExplorer() {
         if (mine !== token.current) return;
         if (!res.ok || !Array.isArray(json.places)) throw new Error("search");
         setPlaces(json.places);
+        setListGen((n) => n + 1);
         setStatus("ready");
       } catch {
         if (mine === token.current) setStatus("error");
@@ -402,9 +443,27 @@ export function DatesExplorer() {
     return matching.length > 0 ? matching : ranked;
   }, [ranked, vibe]);
   const visible = useMemo(() => inVibe.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [inVibe, groups, costs]);
+  // The list keeps the order its set arrived in. What lands after it (couples' ratings, the
+  // photographs, a rare find) fills in what the cards say but moves none of them: re-ranked on the
+  // spot, the card being read slid away down the list seconds after the list had settled. A place
+  // that arrives late joins at the end; the next set (a search, a sort, a filter) is ranked afresh.
+  const [listOrder, setListOrder] = useState<{ gen: number; at: Map<string, number> }>({ gen: -1, at: new Map() });
+  if (listOrder.gen !== listGen) setListOrder({ gen: listGen, at: new Map(visible.map((p, i) => [p.id, i])) });
+  const listed = useMemo(() => {
+    const at = listOrder.at;
+    return visible
+      .map((p, i) => ({ p, key: at.get(p.id) ?? at.size + i }))
+      .sort((a, b) => a.key - b.key)
+      .map(({ p }) => p);
+  }, [visible, listOrder]);
   const picks = useMemo(() => topPicks(inVibe), [inVibe]);
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
   const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
+  // A place opened over another (a pairing from inside the sheet) swaps what the sheet shows in
+  // place, with a fade; only a sheet opening from nothing slides in. Worked out while rendering,
+  // from the last render's choice (React's way to follow a change of state without an effect).
+  const [sheetOf, setSheetOf] = useState<{ id: string | null; swapped: boolean }>({ id: null, swapped: false });
+  if (sheetOf.id !== (selected?.id ?? null)) setSheetOf({ id: selected?.id ?? null, swapped: sheetOf.id !== null && selected !== null });
   const pairs = useMemo(() => (selected ? pairsWith(selected, ranked) : []), [selected, ranked]);
   const planIds = useMemo(() => new Set(plan.stops.map((s) => s.id)), [plan.stops]);
   const ideaInPlan = stops.some((s) => s.place) && stops.every((s) => !s.place || planIds.has(s.place.id));
@@ -652,6 +711,7 @@ export function DatesExplorer() {
       onTogglePlan={() => togglePlan(selected)}
       onClose={() => setSelectedId(null)}
       swipe={!isDesktop}
+      entrance={sheetOf.swapped ? "swap" : "open"}
       // Over a phone's map, shorter than over the list: the place that was tapped stays in view above it.
       className={phoneMap ? "max-h-[62dvh]" : undefined}
       labels={{
@@ -712,6 +772,8 @@ export function DatesExplorer() {
   ) : null;
 
   return (
+    // Reduced motion: whatever slides here only fades (motion's "user" setting drops the transforms).
+    <MotionConfig reducedMotion="user">
     <div className="relative lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
       {/* ---------------------------------------------------------------- the list */}
       <div className="px-5 pt-7 pb-32 sm:px-8 lg:px-6 lg:pt-[calc(var(--header-h)+1.25rem)]">
@@ -785,7 +847,7 @@ export function DatesExplorer() {
               // Wrapped on a desktop: a mouse wheel can't scroll a row sideways, and "Rainy day" was out of reach.
               <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("ideas.vibes")} data-tour="vibes">
                 {VIBE_IDS.map((v) => (
-                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => setVibe(vibe === v ? null : v)} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
+                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => { setVibe(vibe === v ? null : v); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
                     {VIBES[v][locale]}
                   </button>
                 ))}
@@ -824,7 +886,7 @@ export function DatesExplorer() {
         ) : null}
 
         {/* the best bets, as a shelf */}
-        {status === "ready" && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
+        {(status === "ready" || (status === "loading" && all.length > 0)) && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
 
         {/* places */}
         <div className="mt-9 flex items-end justify-between gap-4">
@@ -837,7 +899,7 @@ export function DatesExplorer() {
           <label className="relative inline-flex h-11 items-center rounded-full lg:h-10 bg-white text-[13.5px] font-semibold text-forest ring-1 ring-forest/10 has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-rose/60">
             <ArrowUpDown aria-hidden="true" className="pointer-events-none absolute left-3.5 size-4 text-forest/50" />
             <span className="sr-only">{t("sort.label")}</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-full cursor-pointer rounded-full bg-transparent pr-3 pl-10 outline-none max-lg:text-[16px]">
+            <select value={sort} onChange={(e) => { setSort(e.target.value as Sort); nextList(); }} className="h-full cursor-pointer rounded-full bg-transparent pr-3 pl-10 outline-none max-lg:text-[16px]">
               {SORTS.map((s) => (
                 <option key={s} value={s}>
                   {t(`sort.${s}`)}
@@ -850,7 +912,7 @@ export function DatesExplorer() {
             {COST_IDS.map((c) => {
               const on = costs.includes(c);
               return (
-                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); nextList(); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
                   {COST_LABELS[c][locale]}
                 </button>
               );
@@ -858,7 +920,7 @@ export function DatesExplorer() {
           </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
-          <button type="button" aria-pressed={groups.length === 0} onClick={() => setGroups([])} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+          <button type="button" aria-pressed={groups.length === 0} onClick={() => { if (groups.length > 0) nextList(); setGroups([]); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
             {t("places.all")}
           </button>
           {GROUP_IDS.map((g) => {
@@ -872,6 +934,7 @@ export function DatesExplorer() {
                 onClick={() => {
                   setGroups(on ? groups.filter((x) => x !== g) : [...groups, g]);
                   setShown(PAGE);
+                  nextList();
                 }}
                 className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-white ring-forest/10 hover:bg-forest/5")}
                 // The group's ink, not its pin colour: gold chip text on white, and white on a gold chip, read at 3.7:1.
@@ -884,8 +947,14 @@ export function DatesExplorer() {
           })}
         </div>
 
-        <div className="mt-4 space-y-2.5" aria-busy={status === "loading"} data-tour="places">
-          {status === "loading" && all.length === 0 ? Array.from({ length: 6 }, (_, i) => <div key={i} className="h-[72px] animate-pulse rounded-[20px] bg-white/70" />) : null}
+        {/* Relative: a set of cards on its way out (and the skeletons) is lifted out of the flow where
+            it stands, "popLayout", and fades there while the next set fades in under it. */}
+        <div className="ethos-place-list relative mt-4 space-y-2.5" aria-busy={status === "loading"} data-tour="places">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {status === "loading" && all.length === 0 ? (
+              <ListSet key="skeleton">{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-[72px] animate-pulse rounded-[20px] bg-white/70" />)}</ListSet>
+            ) : null}
+          </AnimatePresence>
           {status === "error" && all.length === 0 ? (
             <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
               {t("places.error")}{" "}
@@ -921,11 +990,14 @@ export function DatesExplorer() {
               </ul>
             </div>
           ) : null}
-          {visible.slice(0, shown).map((place, i) => (
-            <PlaceCard
+          <AnimatePresence mode="popLayout" initial={false}>
+            <ListSet key={listGen}>
+          {listed.slice(0, shown).map((place, i) => (
+            <ListedCard
               key={place.id}
-              index={i}
-              hovered={place.id === hoveredId}
+              hover={hover}
+              // Its place in its own page: the cards "show more" adds arrive in a stagger of their own.
+              index={i % PAGE}
               place={place}
               locale={locale}
               selected={place.id === selectedId}
@@ -936,6 +1008,8 @@ export function DatesExplorer() {
               labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo"), reviews: (n) => t("reviews.count", { n }), rank: (n, of, group) => t("place.rank", { n, of, group }) }}
             />
           ))}
+            </ListSet>
+          </AnimatePresence>
           {visible.length > shown ? (
             <button type="button" onClick={() => setShown((n) => n + PAGE)} className="mt-2 h-12 w-full rounded-full border border-forest/15 bg-white text-[14.5px] font-semibold text-forest hover:bg-forest/5">
               {t("places.more", { count: Math.min(PAGE, visible.length - shown) })}
@@ -946,18 +1020,19 @@ export function DatesExplorer() {
       </div>
 
       {/* ---------------------------------------------------------------- the map */}
-      <div className={cn("lg:sticky lg:inset-auto lg:top-0 lg:z-auto lg:block lg:h-dvh", showMap ? "fixed inset-0 z-50" : "hidden", phoneMap && "ethos-map-full")}>
+      <div className={cn("ethos-phone-map lg:sticky lg:inset-auto lg:top-0 lg:z-auto lg:block lg:h-dvh", showMap && "is-open", phoneMap && "ethos-map-full")}>
         {mountMap ? (
-          <MapView
+          <HoveredMap
+            hover={hover}
             center={where}
             places={visible}
             selected={selected}
-            hoveredId={hoveredId}
             ratings={ratings}
             locale={locale}
             onHover={setHoveredId}
             route={route}
-            fitRoute={Boolean(idea)}
+            // The idea and its shuffles: the map frames each one (see MapView's fitRoute).
+            fitRoute={idea ? `${idea.id}:${skip.join(".")}` : null}
             origin={origin}
             searching={status === "loading"}
             locating={locating}
@@ -986,22 +1061,36 @@ export function DatesExplorer() {
         </div>
       </div>
 
-      {/* On a phone looking at the list, a place opens over the list. */}
+      {/* On a phone looking at the list, a place opens over the list, on a scrim that fades in behind
+          it; a tap on the scrim puts it away, and a finger dragged on it still scrolls the page. */}
       {!showMap ? (
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60]">
-          <AnimatePresence>{sheet ? <div className="pointer-events-auto">{sheet}</div> : null}</AnimatePresence>
-        </div>
+        <>
+          <AnimatePresence>{sheet ? <motion.div key="scrim" aria-hidden="true" initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { duration: 0.25, ease: QUINT } }} exit={FADE_OUT} onClick={() => setSelectedId(null)} className="fixed inset-0 z-[58] bg-forest/25" /> : null}</AnimatePresence>
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60]">
+            <AnimatePresence>{sheet ? <div className="pointer-events-auto">{sheet}</div> : null}</AnimatePresence>
+          </div>
+        </>
       ) : null}
 
       {/* What adding to the plan had to say, over whatever they are looking at, the open sheet included,
           just above the dock. The live region is always there, so a message put in it is read out. */}
       <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(max(1rem,env(safe-area-inset-bottom))+3.75rem)] z-[70] flex justify-center px-4 lg:right-auto lg:w-[560px]">
-        {planNotice ? <p className="max-w-md rounded-2xl bg-forest px-4 py-2.5 text-center text-[13.5px] leading-snug font-semibold text-cream shadow-lift">{planNotice.text}</p> : null}
+        <AnimatePresence>
+          {planNotice ? (
+            <motion.p key="plan-notice" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.24, ease: QUINT } }} exit={FADE_OUT} className="max-w-md rounded-2xl bg-forest px-4 py-2.5 text-center text-[13.5px] leading-snug font-semibold text-cream shadow-lift">
+              {planNotice.text}
+            </motion.p>
+          ) : null}
+        </AnimatePresence>
       </div>
 
       {/* ---------------------------------------------------------------- the dock */}
+      {/* It steps aside while a place is open (the sheet has the same buttons), sliding down and
+          back up rather than blinking out. */}
+      <AnimatePresence initial={false}>
       {!selected ? (
-        <div className={cn("pointer-events-none fixed inset-x-0 bottom-0 z-[55] flex items-center justify-center gap-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:right-auto lg:w-[560px]", showMap && !isDesktop && "z-[55]")}>
+        // Back a beat after the sheet has gone: at once, it rose over the sheet still on its way down.
+        <motion.div key="dock" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0, transition: { duration: 0.26, delay: 0.14, ease: QUINT } }} exit={{ opacity: 0, y: 16, transition: { duration: 0.2, ease: QUINT } }} className={cn("pointer-events-none fixed inset-x-0 bottom-0 z-[55] flex items-center justify-center gap-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:right-auto lg:w-[560px]", showMap && !isDesktop && "z-[55]")}>
           <button
             type="button"
             // The press starts MapLibre's download a beat before the click opens the map.
@@ -1022,9 +1111,11 @@ export function DatesExplorer() {
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           ) : null}
-        </div>
+        </motion.div>
       ) : null}
+      </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }
 
@@ -1079,7 +1170,8 @@ function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boole
           />
         </div>
       </div>
-      <div className="hidden h-dvh bg-blush-paper lg:block" />
+      {/* The map's own paper, so the map fades in over the same colour instead of a lighter one. */}
+      <div className="hidden h-dvh lg:block" style={{ background: MAP_PAPER }} />
     </div>
   );
 }

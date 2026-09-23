@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Star, Sun, Ticket, X } from "lucide-react";
-import { motion, useDragControls } from "motion/react";
+import { animate, motion, useDragControls, useMotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
@@ -81,21 +81,45 @@ type Props = {
   onClose: () => void;
   /** A phone's bottom sheet: it has a handle, and dragging it down puts the sheet away. */
   swipe?: boolean;
+  /** "swap" when it replaces another place's sheet: its content fades in where the last one was. */
+  entrance?: "open" | "swap";
   className?: string;
 };
 
 /** How far down, or how fast, a drag of the handle has to go to put the sheet away. */
 const FLING_PX = 90;
 const FLING_SPEED = 600;
+const QUINT = [0.22, 1, 0.36, 1] as const;
+/**
+ * A phone's sheet rides a spring with no bounce: in from below, and away the same way, carrying
+ * whatever speed the finger flung it with. A desktop's slides a little in from the side it stands
+ * on. Reduced motion (the explorer's MotionConfig) keeps only the fades.
+ */
+const SHEET = {
+  phone: {
+    open: { initial: { y: "100%" }, animate: { y: 0, opacity: 1 } },
+    swap: { initial: { opacity: 0 }, animate: { y: 0, opacity: 1 } },
+    exit: { y: "100%", transition: { type: "spring", bounce: 0, visualDuration: 0.28 } },
+    transition: { type: "spring", bounce: 0, visualDuration: 0.34 },
+  },
+  desktop: {
+    open: { initial: { opacity: 0, x: -16 }, animate: { opacity: 1, x: 0 } },
+    swap: { initial: { opacity: 0 }, animate: { opacity: 1, x: 0 } },
+    exit: { opacity: 0, x: -16, transition: { duration: 0.18, ease: QUINT } },
+    transition: { duration: 0.26, ease: QUINT },
+  },
+} as const;
 
 /**
  * One place, opened. What the map knows about it arrives a moment after the sheet does (address,
  * the hours for the day they picked, a website), and where it knows nothing the sheet says so and
  * hands them a search for photos and reviews, which this site does not pretend to have.
  */
-export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, swipe = false, className }: Props) {
+export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, swipe = false, entrance = "open", className }: Props) {
   const ta = useTranslations("affiliate");
   const drag = useDragControls();
+  // Where a phone's sheet has been dragged to: let go short of putting it away, it springs back.
+  const y = useMotionValue(0);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
@@ -151,12 +175,13 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   // and three branches of Waterstones got the same links. The sheet's address, or at least the town.
   const lookUp = place.named ? linksFor({ ...place, address: address || where || undefined }).filter((l) => !scores.some((r) => r.source === l.source)) : [];
 
+  const motionOf = swipe ? SHEET.phone : SHEET.desktop;
   return (
     <motion.aside
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 24 }}
-      transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+      initial={motionOf[entrance].initial}
+      animate={motionOf[entrance].animate}
+      exit={motionOf.exit}
+      transition={motionOf.transition}
       role="dialog"
       aria-modal="false"
       aria-labelledby="place-sheet-name"
@@ -164,10 +189,15 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
       drag={swipe ? "y" : false}
       dragListener={false}
       dragControls={drag}
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={{ top: 0, bottom: 0.8 }}
+      // Down, it follows the finger one to one and, let go, keeps the speed it was flung with, so
+      // one put away carries on out of sight (a constraint at the bottom pulled it back up first).
+      // Let go short of that, it springs back without overshooting. Up, it doesn't move.
+      style={{ y }}
+      dragConstraints={{ top: 0 }}
+      dragElastic={{ top: 0, bottom: 0 }}
       onDragEnd={(_, info) => {
         if (info.offset.y > FLING_PX || info.velocity.y > FLING_SPEED) onClose();
+        else animate(y, 0, { type: "spring", bounce: 0, visualDuration: 0.3, velocity: info.velocity.y });
       }}
       className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
     >

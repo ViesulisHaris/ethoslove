@@ -4,6 +4,7 @@ import { MarketingHeader } from "@/components/marketing/header";
 import { MarketingFooter } from "@/components/marketing/footer";
 import { StickyCta } from "@/components/marketing/sticky-cta";
 import { RevealRoot } from "@/components/motion/reveal-root";
+import { SiteMotion } from "@/components/motion/site-motion";
 import { TourMount } from "@/components/tour/tour-mount";
 
 export default async function MarketingLayout({ children, params }: LayoutProps<"/[locale]">) {
@@ -21,6 +22,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
         <MarketingFooter />
         <StickyCta />
         <RevealRoot />
+        <SiteMotion />
         <TourMount />
       </div>
     </ClientMessages>

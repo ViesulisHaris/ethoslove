@@ -11,7 +11,8 @@ export async function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto overflow-hidden bg-forest text-cream">
+    // The site's focus ring is ink, which vanishes on the wine: here it is cream.
+    <footer className="relative mt-auto overflow-hidden bg-forest text-cream [--ring:var(--color-cream)]">
       <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
       {/*
        * Two columns on a phone: with every link 44px tall for a thumb, one column made the footer
@@ -47,7 +48,7 @@ export async function MarketingFooter() {
           <FooterLink href="/creators">{t("growth.creators.eyebrow")}</FooterLink>
           <FooterLink href="/redeem">{t("money.account.redeem")}</FooterLink>
           <li>
-            <a href={`mailto:${BRAND.supportEmail}`} className="inline-block py-3 text-sm text-cream/65 transition-colors hover:text-cream lg:py-1">
+            <a href={`mailto:${BRAND.supportEmail}`} className="inline-block py-3 text-sm text-cream/65 transition-colors duration-200 hover:text-cream lg:py-1">
               {t("footer.contact")}
             </a>
           </li>
@@ -58,9 +59,8 @@ export async function MarketingFooter() {
         <div className="flex items-center gap-5">
           <p className="hidden sm:block">{t("footer.madeWith")}</p>
           {/* The privacy policy promises the choice can be changed from here. */}
-          <CookieChoiceButton className="min-h-11 text-cream/50 transition-colors hover:text-cream" />
-          {/* The negative margin lines the globe up with the text beside it, not the button's padding. */}
-          <LocaleSwitcher className="-mx-2.5 h-11 text-xs text-cream/70 hover:bg-white/10 hover:text-cream" />
+          <CookieChoiceButton className="min-h-11 text-cream/50 transition-colors duration-200 hover:text-cream" />
+          <LocaleSwitcher tone="dark" />
         </div>
       </div>
     </footer>
@@ -80,7 +80,7 @@ function FooterColumn({ title, className, children }: { title: string; className
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link href={href} className="inline-block py-3 text-sm text-cream/65 transition-colors hover:text-cream lg:py-1">
+      <Link href={href} className="inline-block py-3 text-sm text-cream/65 transition-colors duration-200 hover:text-cream lg:py-1">
         {children}
       </Link>
     </li>

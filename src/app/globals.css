@@ -231,13 +231,20 @@
     outline-offset: 3px;
     border-radius: 4px;
   }
+  /* Reduced motion: nothing moves, and nothing waits its turn. Transitions are off (0s), not merely
+     short: every element transitions `all` by default, so a 0.01ms transition still ran for one
+     frame on every class change, and a frame in which a card's `flex-grow` was on its way from 0 to 1
+     laid the Dates weather card out 259px tall and shoved the page down by 187px. Animations keep
+     their 0.01ms, so the libraries that wait for `animationend` (Radix) still hear it. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }
@@ -405,6 +412,204 @@
   backdrop-filter: blur(12px);
 }
 
+/* ------------------------------------------------------------------ */
+/* Motion for the site's chrome: the navbar, its menu, the route bar,  */
+/* images, and the feel of a press. Transform and opacity only, bar    */
+/* one height noted below. Under reduced motion the base rule above    */
+/* makes every transition instant; what would still move is off here.  */
+/* ------------------------------------------------------------------ */
+
+/* Every rose button moves the same way: a pixel up under a mouse, a little give under a press. In
+   the utilities layer and after Tailwind's own, so it outranks a call site's `transition-[filter]`
+   (which would make the lift snap) or its own `hover:-translate-y-0.5`. */
+@layer utilities {
+  .btn-rose {
+    transition-property: translate, scale, filter, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: var(--ease-out-quint);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-rose:not(:disabled, [aria-disabled="true"]):hover {
+      translate: 0 -1px;
+      filter: brightness(1.07) saturate(1.04);
+    }
+  }
+  .btn-rose:not(:disabled, [aria-disabled="true"]):active {
+    translate: 0 0;
+    scale: 0.98;
+    filter: brightness(0.96);
+    transition-duration: 0.08s;
+  }
+}
+
+/* The navbar (components/marketing/header). It floats 12px down; past 24px of scroll it tightens
+   from 56 to 50px and rises 4px, and scrolling down slides it away until scrolling up brings it back.
+   `data-hidden` is never set while its menu is open.
+   The tightening moves nothing's layout: the bar stays 56px and only its glass (the two layers
+   behind the content) is scaled to 50px about its middle, while the whole float rises 7px, so the
+   glass's top edge lands 4px higher and everything in it stays centred on the glass. */
+.site-header-float {
+  transition: translate 0.34s var(--ease-out-quint);
+}
+.site-header[data-compact] .site-header-float {
+  translate: 0 -7px;
+}
+.site-header[data-hidden] .site-header-float {
+  /* Past its own height and the shadow under it. */
+  translate: 0 calc(-100% - 64px);
+  transition-duration: 0.28s;
+}
+/* It stays while a keyboard user is in it (a Tab brings it back) and while a mouse points at it.
+   Not plain :focus-within or :hover: on a phone the menu hands focus back to its button when it
+   closes, and a tap leaves :hover behind, and either would pin the bar for the rest of the page. */
+.site-header[data-hidden]:has(:focus-visible) .site-header-float {
+  translate: 0 -7px;
+  transition-duration: 0.34s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-header[data-hidden]:hover .site-header-float {
+    translate: 0 -7px;
+    transition-duration: 0.34s;
+  }
+}
+/* 50/56: the glass of the tightened bar. Its round ends go a hair oval (25px tall, 28px wide), which
+   no eye catches at this size, where animating the bar's height relaid it out every frame. */
+.site-header-glass {
+  transition:
+    scale 0.3s var(--ease-out-quint),
+    opacity 0.3s var(--ease-out-quint);
+}
+.site-header[data-compact] .site-header-glass {
+  scale: 1 0.893;
+}
+/* The denser glass and the deeper shadow of the tightened bar, faded in over the airy one. */
+.site-header-frost {
+  opacity: 0;
+}
+.site-header[data-compact] .site-header-frost {
+  opacity: 1;
+}
+/* Reduced motion: the bar never slides away. */
+@media (prefers-reduced-motion: reduce) {
+  .site-header[data-hidden] .site-header-float {
+    translate: 0 -7px;
+  }
+}
+
+/* The rose pill under the navbar's rooms: shows the room you are in, follows the pointer, glides
+   back when it leaves. Drawn in three pieces — two round ends that only move and a middle that only
+   stretches — so it can change width with `translate` and `scale` alone and its ends stay round
+   (one stretched pill would squash them). Positions come from the header as --x, --w and --sx. */
+.nav-lit {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 36px;
+  width: 0;
+  margin-top: -18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out-quint);
+}
+.nav-lit[data-on] {
+  opacity: 1;
+}
+/* Before the script has placed the pill, the room you are in carries the rose itself. */
+.nav-rooms:not([data-armed]) a[aria-current="page"] {
+  background: var(--color-rose-soft);
+}
+.nav-lit > i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-rose-soft);
+  transition:
+    translate 0.3s var(--ease-out-quint),
+    scale 0.3s var(--ease-out-quint);
+}
+.nav-lit[data-snap] > i {
+  transition: none;
+}
+.nav-lit > i:nth-child(1) {
+  width: 18px;
+  border-radius: 18px 0 0 18px;
+  translate: var(--x, 0px) 0;
+}
+.nav-lit > i:nth-child(2) {
+  width: 100px;
+  transform-origin: 0 50%;
+  /* A pixel into each end, so no seam shows between the pieces. */
+  translate: calc(var(--x, 0px) + 17px) 0;
+  scale: var(--sx, 0) 1;
+}
+.nav-lit > i:nth-child(3) {
+  width: 18px;
+  border-radius: 0 18px 18px 0;
+  translate: calc(var(--x, 0px) + var(--w, 36px) - 18px) 0;
+}
+
+/* The menu's rooms deal in after the sheet, one after another. */
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    translate: 16px 0;
+  }
+}
+/* Quick about it: the last of seven lands 0.6s after the tap, where 0.8s felt like waiting for it. */
+.menu-item-in {
+  animation: menu-item-in 0.38s var(--ease-out-quint) backwards;
+  animation-delay: calc(60ms + var(--i, 0) * 28ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-item-in {
+    animation: none;
+  }
+}
+
+/* The route progress bar (components/motion/site-motion). The script moves it; this is its look. */
+.route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 70;
+  height: 2.5px;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #f0719c, var(--color-rose) 45%, var(--color-rose-deep));
+  box-shadow: 0 0 10px rgba(214, 51, 108, 0.45);
+}
+
+/* A grey placeholder only appears if the wait is long enough to notice, and then fades in. */
+@keyframes skeleton-in {
+  from {
+    opacity: 0;
+  }
+}
+/* What replaces a placeholder fades in over it rather than cutting. */
+@utility animate-content-in {
+  animation: skeleton-in 0.32s var(--ease-out-quint) backwards;
+}
+
+@layer base {
+  /* Pictures that load late (every lazy one) fade in once they have, instead of painting in bands.
+     Armed by the script (site-motion), which marks what was already there `data-img="shown"`, so
+     nothing waits on JavaScript that never runs and nothing on screen blinks when it arms; eager
+     pictures, the hero's among them, are never touched, so the largest paint is never held back.
+     :where() keeps this under any opacity or animation a component gives its own images. */
+  :where(.img-fade-ready img[loading="lazy"]:not([data-img])) {
+    opacity: 0;
+  }
+  :where(.img-fade-ready img[loading="lazy"][data-img="in"]) {
+    animation: skeleton-in 0.45s var(--ease-out-quint);
+  }
+  /* An in-page link lands its target clear of the floating header. */
+  :where(#main [id]) {
+    scroll-margin-top: calc(var(--header-h, 0px) + 12px);
+  }
+}
+
 /* A gift fills the screen on every device; the demo page keeps its control strip on top. */
 .gift-backdrop {
   position: relative;
@@ -438,10 +643,13 @@
 /* ------------------------------------------------------------------ */
 /* The Dates map: markers MapLibre positions as plain DOM elements.    */
 /* ------------------------------------------------------------------ */
-/* A place on the map: a white pill with the kind's colour and glyph, the name beside it, and what
-   it is underneath once it is pointed at. MapLibre writes `transform` on a marker's root, so every
-   move of our own — the lift on hover, the deal-in — belongs on the button inside it. */
+/* A place on the map: a white pill with the kind's colour and glyph, its name and its price, and a
+   caption over it saying what it is and how far once it is pointed at. MapLibre writes `transform`
+   and `opacity` on a marker's root (.ethos-pin-root) as the map moves, so every move of our own —
+   arriving, leaving, the lift when pointed at — is on the pill inside it, and is transform and
+   opacity only: nothing a pill does ever changes its size or moves a neighbour. */
 .ethos-pin {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -453,26 +661,50 @@
   color: var(--color-forest);
   font: 600 13px/1.2 var(--font-sans);
   text-align: left;
+  white-space: nowrap;
   cursor: pointer;
   box-shadow:
     0 0 0 1px rgba(90, 40, 60, 0.08),
     0 8px 18px -8px rgba(80, 25, 50, 0.45);
+  /* It grows from the point it stands on, not from its middle. */
+  transform-origin: 50% 100%;
+  /* `--d` is its turn in an arriving batch (map-pins.ts); the lift on hover never waits for it. */
   transition:
     transform 0.22s var(--ease-out-quint),
-    box-shadow 0.22s ease,
+    scale 0.22s var(--ease-out-quint) var(--d, 0ms),
+    opacity 0.22s var(--ease-out-quint) var(--d, 0ms),
     background-color 0.2s ease,
-    color 0.2s ease,
-    padding 0.2s ease;
-  animation: ethos-pin-in 0.34s var(--ease-spring) backwards;
-  animation-delay: calc(var(--i, 0) * 16ms);
+    color 0.2s ease;
+}
+/* Arriving: a short scale and fade from where it will stand. */
+@starting-style {
+  .ethos-pin {
+    opacity: 0;
+    scale: 0.85;
+  }
+  .ethos-pin.is-swap-in {
+    scale: 0.96;
+  }
 }
 /* The pill is 36px tall (34 when it is only an icon); a finger needs 44. The target reaches a few
-   pixels past the pill, which stays the size it is. MapLibre makes a marker's root absolute, so
-   this is placed against the pill. */
+   pixels past the pill, which stays the size it is. */
 .ethos-pin::before {
   content: "";
   position: absolute;
   inset: -5px -3px;
+}
+/* The deeper shadow and the rose edge of a pill pointed at, faded in rather than repainted. */
+.ethos-pin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1.5px rgba(214, 51, 108, 0.55),
+    0 16px 30px -12px rgba(80, 25, 50, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s var(--ease-out-quint);
 }
 .ethos-pin-ico {
   display: grid;
@@ -494,31 +726,31 @@
   stroke-linejoin: round;
 }
 .ethos-pin-text {
-  display: grid;
   min-width: 0;
-  /* 0fr to 1fr: the second line grows out of nothing, which animates where `height: auto` cannot. */
-  grid-template-rows: auto 0fr;
-  transition: grid-template-rows 0.22s var(--ease-out-quint);
-}
-.ethos-pin-name {
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  transition: color 0.2s ease;
 }
+/* What it is, its stars and how far: over the pill, so showing it moves nothing. */
 .ethos-pin-sub {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 7px);
+  max-width: 260px;
   overflow: hidden;
-  min-height: 0;
-  /* Collapsed, the second line must not widen the pill: zero width of its own, the column's when
-     shown. Otherwise "Hotel Chocolat" is as wide as "Something sweet · 540 m" with a hole in it. */
-  width: 0;
-  min-width: 100%;
+  text-overflow: ellipsis;
+  border-radius: 999px;
+  background: var(--color-forest);
+  padding: 4px 10px;
+  color: #fff;
+  font: 600 11.5px/1.3 var(--font-sans);
+  box-shadow: 0 8px 18px -8px rgba(42, 15, 31, 0.6);
+  pointer-events: none;
   opacity: 0;
-  font-size: 11.5px;
-  font-weight: 500;
-  line-height: 1.45;
-  color: color-mix(in oklab, var(--color-forest) 62%, transparent);
-  white-space: nowrap;
-  transition: opacity 0.2s ease;
+  translate: -50% 4px;
+  transition:
+    opacity 0.18s var(--ease-out-quint),
+    translate 0.22s var(--ease-out-quint);
 }
 /* What it costs, always on the pill: € to €€€, or Free in green. */
 .ethos-pin-price {
@@ -541,44 +773,60 @@
   background: rgba(255, 255, 255, 0.22);
   color: #fff;
 }
-.ethos-pin.is-compact .ethos-pin-price {
-  display: none;
-}
-.ethos-pin:hover,
-.ethos-pin:focus-visible,
+/* Pointed at, here or at its card in the list: it lifts, takes a rose edge and shows its caption.
+   Only a mouse points: a tap leaves :hover stuck on whatever it touched, and on a phone the pill that
+   had been opened kept its lift and its caption over the map after its sheet was put away. */
 .ethos-pin.is-near {
-  transform: translateY(-3px) scale(1.04);
-  box-shadow:
-    0 0 0 1px rgba(90, 40, 60, 0.1),
-    0 16px 30px -12px rgba(80, 25, 50, 0.6);
+  transform: translateY(-3px) scale(1.06);
 }
-.ethos-pin:hover .ethos-pin-text,
-.ethos-pin:focus-visible .ethos-pin-text,
-.ethos-pin.is-near .ethos-pin-text,
-.ethos-pin.is-on .ethos-pin-text {
-  grid-template-rows: auto 1fr;
-}
-.ethos-pin:hover .ethos-pin-sub,
-.ethos-pin:focus-visible .ethos-pin-sub,
-.ethos-pin.is-near .ethos-pin-sub,
-.ethos-pin.is-on .ethos-pin-sub {
+.ethos-pin.is-near::after,
+.ethos-pin.is-on::after {
   opacity: 1;
-  width: auto;
+}
+.ethos-pin.is-near .ethos-pin-text {
+  color: var(--color-rose-deep);
+}
+.ethos-pin.is-near .ethos-pin-sub {
+  opacity: 1;
+  translate: -50% 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ethos-pin:hover {
+    transform: translateY(-3px) scale(1.06);
+  }
+  .ethos-pin:hover::after {
+    opacity: 1;
+  }
+  .ethos-pin:hover .ethos-pin-text {
+    color: var(--color-rose-deep);
+  }
+  .ethos-pin:hover .ethos-pin-sub {
+    opacity: 1;
+    translate: -50% 0;
+  }
+}
+/* The chosen one needs no caption: its sheet is open and says all of it. With one, a chosen pill and
+   a pointed-at one wore two dark labels at once, each over the pill above it. */
+.ethos-pin.is-on .ethos-pin-sub {
+  opacity: 0;
+  translate: -50% 4px;
 }
 /* Chosen: the pill takes the rose, and keeps it while the sheet is open. */
 .ethos-pin.is-on {
   background: var(--color-rose);
   color: #fff;
-  transform: translateY(-3px) scale(1.06);
+  transform: translateY(-3px) scale(1.08);
+}
+.ethos-pin.is-on::after {
   box-shadow:
     0 0 0 1px rgba(214, 51, 108, 0.5),
     0 18px 34px -12px rgba(120, 20, 60, 0.7);
 }
+.ethos-pin.is-on .ethos-pin-text {
+  color: #fff;
+}
 .ethos-pin.is-on .ethos-pin-ico {
   background: rgba(255, 255, 255, 0.22);
-}
-.ethos-pin.is-on .ethos-pin-sub {
-  color: rgba(255, 255, 255, 0.82);
 }
 /* Far out, a pill is its icon alone: the names would be a hedge of text. */
 .ethos-pin.is-compact {
@@ -586,31 +834,51 @@
   padding: 3px;
   gap: 0;
 }
-.ethos-pin.is-compact .ethos-pin-text {
+.ethos-pin.is-compact .ethos-pin-text,
+.ethos-pin.is-compact .ethos-pin-price {
   display: none;
 }
-.ethos-pin.is-out {
-  animation: ethos-pin-out 0.18s ease-in both;
+/* Leaving (the search moved on, or there is no room for it now): the arrival in reverse, from
+   wherever it has got to, so one pushed out mid-arrival never jumps to full size first. */
+.ethos-pin.is-out,
+.ethos-pin.is-swap-out {
+  opacity: 0;
+  scale: 0.85;
   pointer-events: none;
+  transition-delay: 0s;
+  transition-duration: 0.18s;
 }
-@keyframes ethos-pin-in {
-  from {
-    opacity: 0;
-    transform: translateY(7px) scale(0.84);
+/* The form a pill has just traded away, laid over the new one where it stands while it fades. */
+.ethos-pin.is-swap-out {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: max-content;
+  translate: -50% 0;
+  scale: 0.96;
+}
+/* Reduced motion makes every transition instant (the base layer), but a stagger's delays would
+   still deal pins, stops and cards in one by one: they all arrive at once instead. */
+@media (prefers-reduced-motion: reduce) {
+  .ethos-pin,
+  .ethos-stop-pin,
+  .ethos-you-pin {
+    transition-delay: 0s !important;
   }
-}
-@keyframes ethos-pin-out {
-  to {
-    opacity: 0;
-    transform: scale(0.84);
+  .place-card-in {
+    animation-delay: 0s !important;
   }
 }
 
-/* A numbered stop of the date being planned. The pills carry an inline z-index (1, or 3 hovered and
+/* A numbered stop of a date or a trip. The pills' roots carry an inline z-index (1, or 3 hovered and
    4 chosen: map-pins.ts), and a stop with none sat under every one of them, its "1" hidden under its
-   own place's pill. 2 puts the stops over the pills, and the one being pointed at or chosen over them. */
-.ethos-stop-pin {
+   own place's pill. 2 puts the stops over the pills, and the one being pointed at or chosen over them.
+   The root is MapLibre's to move; the disc inside it pops in, in order (`--d`), or waits (is-waiting)
+   until the line being drawn reaches it. */
+.ethos-stop-root {
   z-index: 2;
+}
+.ethos-stop-pin {
   display: grid;
   place-items: center;
   width: 30px;
@@ -621,64 +889,42 @@
   color: #fff;
   font: 700 13px/1 var(--font-sans);
   box-shadow: 0 6px 14px -4px rgba(90, 20, 45, 0.55);
+  /* A marker on the map, not a control: it may pop a touch past full size as it lands. */
+  transition:
+    opacity 0.2s var(--ease-out-quint) var(--d, 0ms),
+    scale 0.34s cubic-bezier(0.34, 1.4, 0.64, 1) var(--d, 0ms);
 }
-/* MapLibre positions a marker by writing `transform` on its root, so the root carries none of its own:
-   the teardrop's rotation and the drop-in animation live on the elements inside it. */
-.ethos-selected-pin {
-  position: relative;
-  width: 36px;
-  height: 46px;
-  pointer-events: none;
-}
-.ethos-selected-pin > i {
-  position: absolute;
-  left: 1px;
-  bottom: 7px;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px 999px 999px 0;
-  rotate: -45deg;
-  background: var(--pin, var(--color-rose));
-  border: 3px solid #fff;
-  box-shadow: 0 10px 20px -6px rgba(70, 20, 40, 0.6);
-  animation: ethos-pin-drop 0.35s var(--ease-spring) both;
-}
-.ethos-selected-pin > i::after {
-  content: "";
-  position: absolute;
-  inset: 8px;
-  border-radius: 999px;
-  background: #fff;
-}
-.ethos-selected-pin > span {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 4px);
-  translate: -50% 0;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: 999px;
-  background: #17130f;
-  padding: 5px 11px;
-  color: #fff;
-  font: 600 12px/1.2 var(--font-sans);
-  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.6);
-}
-@keyframes ethos-pin-drop {
-  from {
+@starting-style {
+  .ethos-stop-pin {
     opacity: 0;
-    translate: 10px -10px;
+    scale: 0.4;
   }
 }
+.ethos-stop-pin.is-waiting,
+.ethos-stop-pin.is-out {
+  opacity: 0;
+  scale: 0.4;
+  transition-delay: 0s;
+  transition-timing-function: var(--ease-out-quint);
+}
+/* Where they are, when they pressed "Near me": a blue dot that fades in where it stands. */
 .ethos-you-pin {
+  display: block;
   width: 18px;
   height: 18px;
   border-radius: 999px;
   border: 3px solid #fff;
   background: #2f7fa8;
   box-shadow: 0 0 0 7px rgba(47, 127, 168, 0.2), 0 4px 10px -3px rgba(20, 60, 90, 0.6);
+  transition:
+    opacity 0.3s var(--ease-out-quint),
+    scale 0.3s var(--ease-out-quint);
+}
+@starting-style {
+  .ethos-you-pin {
+    opacity: 0;
+    scale: 0.6;
+  }
 }
 .maplibregl-ctrl-attrib {
   font-size: 11px;
@@ -699,6 +945,39 @@
 .ethos-map-full .maplibregl-ctrl-bottom-left,
 .ethos-map-full .maplibregl-ctrl-bottom-right {
   bottom: env(safe-area-inset-bottom);
+}
+/* A map's canvas fades in over the paper behind it (the same colour as the style's land) once its
+   first tiles are drawn, instead of the streets popping in square by square (map-motion.ts). */
+.ethos-map-canvas .maplibregl-canvas {
+  transition: opacity 0.45s var(--ease-out-quint);
+}
+.ethos-map-canvas[data-drawn="false"] .maplibregl-canvas {
+  opacity: 0;
+}
+/* A phone's map is a screen of its own over the list: it slides up from the Map button at the
+   bottom when opened and back down when put away, and is out of the page (display: none) between.
+   The slide is transform only; `display` flips at the end of the way out (allow-discrete), and
+   @starting-style gives the way in its first frame. Browsers without either just show and hide it. */
+@media (width < 64rem) {
+  .ethos-phone-map {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    translate: 0 100%;
+    transition:
+      translate 0.34s var(--ease-out-quint),
+      display 0.34s allow-discrete;
+  }
+  .ethos-phone-map.is-open {
+    display: block;
+    translate: 0 0;
+  }
+  @starting-style {
+    .ethos-phone-map.is-open {
+      translate: 0 100%;
+    }
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -768,4 +1047,9 @@
 .place-card-in {
   /* backwards, not both: once it has played, the card's own hover lift owns `translate` again. */
   animation: place-card-in 0.42s var(--ease-out-quint) backwards;
+}
+/* The set of cards on its way out while the next fades in under it (dates-explorer, motion's
+   popLayout lifts it out of the flow where it stood): seen, never clicked. */
+.ethos-place-list > [data-motion-pop-id] {
+  pointer-events: none;
 }

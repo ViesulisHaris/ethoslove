@@ -39,7 +39,9 @@ const EDITOR_BAR = 60;
  */
 export const TRIP_GIFT_LINK = 'a[href$="/templates/pack-your-bags"]';
 
-const FIRST_PLACE = '[data-tour="places"] > .place-card-in';
+// The cards sit in a set of their own (dates-explorer's ListSet), and while one set gives way to the
+// next the old one lingers, inert, for its fade: the first card is the live set's.
+const FIRST_PLACE = '[data-tour="places"] > :not([inert]) > .place-card-in';
 
 export const TOURS: Record<TourRoom, TourConfig> = {
   dates: {

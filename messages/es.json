@@ -51,7 +51,15 @@
     "longDistance": "A distancia",
     "games": "Juegos",
     "mainLabel": "Principal",
-    "menuLabel": "Menú"
+    "menuLabel": "Menú",
+    "blurb": {
+      "dates": "Sitios reales cerca de ti",
+      "trips": "Viajes para dos, día a día",
+      "gifts": "Sorpresas para su móvil",
+      "longDistance": "Quedad a medio camino",
+      "games": "Juegos de cartas para dos",
+      "pricing": "Citas gratis, sin suscripciones"
+    }
   },
   "home": {
     "hero": {

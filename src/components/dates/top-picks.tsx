@@ -86,7 +86,9 @@ export function TopPicks({ picks, locale, labels, selectedId, onOpen, onHover }:
                 <span className="block text-[11.5px] font-semibold" style={{ color: GROUPS[p.group].ink }}>
                   {KINDS[p.kind].label[locale]}
                 </span>
-                <span className="mt-0.5 line-clamp-1 block font-display text-[17px] leading-tight text-forest">{p.name}</span>
+                {/* One line, always: `block` beat line-clamp's display, so a long name took two lines and
+                    the whole shelf grew by one when such a place came up, pushing the list down. */}
+                <span className="mt-0.5 block truncate font-display text-[17px] leading-tight text-forest">{p.name}</span>
                 <span className="mt-1.5 flex items-center gap-1.5 text-[12px] text-forest/65">
                   {p.rating?.reviews ? (
                     <>

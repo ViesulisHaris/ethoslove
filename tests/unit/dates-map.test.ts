@@ -5,7 +5,8 @@ import { datesUrls, EARLY_KEY, earlyScript, earlyStart, takeEarly, type EarlyOpt
 import { formatShort, formatStars, ideaHours } from "@/lib/dates/format";
 import { MAPLIBRE_SHARED_URL, MAPLIBRE_URL, maplibreUrl, preloadMapLibre } from "@/lib/dates/map-vendor";
 import { railStartsOver } from "@/components/dates/idea-rail";
-import { createExits, fitsView, openArea, pinInArea, pinOrder } from "@/components/dates/map-pins";
+import { createExits, fitsView, openArea, pinInArea, pinOrder, staggerFor } from "@/components/dates/map-pins";
+import { easeOutQuint, easeOutSine, routeLengths, routeUpTo } from "@/lib/dates/map-motion";
 import type { Place } from "@/lib/dates/places";
 
 describe("pins on their way out", () => {
@@ -100,6 +101,57 @@ describe("where a pill can go", () => {
     expect(pinInArea({ x: 195, y: 40 }, area)).toBe(false);
     // A chosen pill is up to 250px wide: one near the side of a phone would be cut by the edge.
     expect(pinInArea({ x: 100, y: 150 }, area)).toBe(false);
+  });
+});
+
+describe("pins arriving", () => {
+  it("staggers a small batch 15 ms apart", () => {
+    expect(staggerFor(1)).toBe(0);
+    expect(staggerFor(5)).toBe(15);
+  });
+
+  it("closes the gaps for a big batch, so the last is in within 400 ms of the first starting", () => {
+    for (const n of [13, 20, 70]) expect((n - 1) * staggerFor(n) + 220).toBeLessThanOrEqual(400 + 1e-9);
+    expect(staggerFor(70)).toBeLessThan(15);
+  });
+});
+
+describe("a route drawn as if by pen", () => {
+  // Three stops along a line of latitude at the equator, 0.01° apart: ~1113 m a leg.
+  const stops: [number, number][] = [
+    [0, 0],
+    [0.01, 0],
+    [0.02, 0],
+  ];
+  const lengths = routeLengths(stops);
+
+  it("measures how far along the route each stop is", () => {
+    expect(lengths[0]).toBe(0);
+    expect(lengths[1]).toBeCloseTo(1113.2, 0);
+    expect(lengths[2]).toBeCloseTo(2226.4, 0);
+  });
+
+  it("gives the stops passed and a point part-way along the next leg", () => {
+    const half = routeUpTo(stops, lengths, lengths[1] / 2);
+    expect(half).toHaveLength(2);
+    expect(half[1][0]).toBeCloseTo(0.005, 6);
+    const past = routeUpTo(stops, lengths, lengths[1] * 1.5);
+    expect(past.slice(0, 2)).toEqual(stops.slice(0, 2));
+    expect(past[2][0]).toBeCloseTo(0.015, 6);
+  });
+
+  it("is the first stop alone before the pen moves, and the whole route at the end", () => {
+    expect(routeUpTo(stops, lengths, 0)).toEqual([stops[0]]);
+    expect(routeUpTo(stops, lengths, lengths[2])).toEqual(stops);
+    expect(routeUpTo(stops, lengths, Infinity)).toEqual(stops);
+  });
+
+  it("eases out without passing the mark", () => {
+    for (const ease of [easeOutQuint, easeOutSine]) {
+      expect(ease(0)).toBe(0);
+      expect(ease(1)).toBeCloseTo(1, 12);
+      for (let t = 0; t <= 1; t += 0.05) expect(ease(t)).toBeLessThanOrEqual(1 + 1e-12);
+    }
   });
 });
 

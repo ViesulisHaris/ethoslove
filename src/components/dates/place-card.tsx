@@ -17,6 +17,9 @@ export type PlaceCardLabels = { add: string; remove: string; walk: (minutes: num
 
 type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void; /** Its pin is being pointed at on the map. */ hovered?: boolean; /** Place in the list, for the stagger as cards arrive. */ index?: number };
 
+const STAGGERED = 8;
+const STAGGER_MS = 35;
+
 /** One place in the list: its picture, what it is, how far, and a button to put it in the plan. */
 export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onHover, onTogglePlan, hovered = false, index = 0 }: Props) {
   const group = GROUPS[place.group];
@@ -28,7 +31,10 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
     <div
       onPointerEnter={() => onHover(true)}
       onPointerLeave={() => onHover(false)}
-      style={{ animationDelay: `${Math.min(index, 8) * 35}ms` }}
+      // The first few cards of a set arrive in a stagger; the rest at once. Capping the delay instead
+      // held every card past the eighth back by the whole stagger, so a list read from its middle
+      // went blank for a moment when it changed.
+      style={{ animationDelay: `${index < STAGGERED ? index * STAGGER_MS : 0}ms` }}
       className={cn("place-card-in group relative flex items-stretch gap-3.5 rounded-[22px] bg-white p-2.5 shadow-soft ring-1 ring-forest/5 transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lift", hovered && !selected && "-translate-y-0.5 shadow-lift ring-2 ring-rose/35", selected && "ring-2 ring-rose")}
     >
       <PlaceThumb place={place} className="size-[92px] rounded-[16px] sm:size-[104px]" />
