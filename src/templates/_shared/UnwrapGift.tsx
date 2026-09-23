@@ -163,7 +163,8 @@ export function UnwrapGift({
       ) : (
         // A little wider than the end screen's column, which was drawn for a line of text: the
         // itinerary needs the room, and a template's paper card still leaves a margin around it.
-        <div className="relative mt-4 w-[calc(100%+1.5rem)] max-w-[24rem]">
+        // Same margin as the button it replaces, so the present coming apart starts exactly where it was tapped.
+        <div className="relative mt-3 w-[calc(100%+1.5rem)] max-w-[24rem]">
           <motion.div
             className="@container"
             // It grows out of the middle of the box, behind the paper as that falls away.
@@ -202,11 +203,18 @@ export function UnwrapGift({
 export function UnwrapPeek({ data }: { data: GiftData }) {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
+  const button = useRef<HTMLButtonElement>(null);
   const colors = useMemo(() => presentColors(data.accentColor), [data.accentColor]);
   const { locale } = data;
+  // Back to the present it was opened from, so a keyboard is not dropped at the top of the page.
+  const close = () => {
+    setOpen(false);
+    button.current?.focus({ preventScroll: true });
+  };
   return (
     <>
       <motion.button
+        ref={button}
         type="button"
         onClick={() => {
           playUnwrap();
@@ -244,6 +252,9 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="absolute inset-0 z-[60] bg-[#140c10]/85 text-white backdrop-blur-md"
+            onKeyDown={(e) => {
+              if (e.key === "Escape") close();
+            }}
             data-testid="unwrap-peek-open"
           >
             <div className="absolute inset-0 overflow-y-auto overscroll-contain">
@@ -251,7 +262,7 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
                 <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark autoOpen />
               </div>
             </div>
-            <button type="button" onClick={() => setOpen(false)} aria-label={giftString(locale, "unwrapClose")} className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20">
+            <button type="button" onClick={close} aria-label={giftString(locale, "unwrapClose")} className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20">
               <X className="size-5" />
             </button>
           </motion.div>
@@ -294,6 +305,17 @@ function Present({ vars, phase, reduce, small = false }: { vars: CSSProperties; 
         animate={opening ? { opacity: 0, scaleX: 0.6 } : undefined}
         transition={go(T.paper, 0.5)}
       />
+
+      {/* Light from inside, as the lid comes off: behind the box's front, so only what spills over its rim shows. */}
+      {opening ? (
+        <motion.span
+          className="absolute block rounded-full"
+          style={{ ...pct(10, 2, 180, 180), background: "radial-gradient(closest-side, rgba(255,247,226,0.95), rgba(255,226,170,0.55) 38%, rgba(var(--gift-accent-rgb),0.22) 62%, transparent)" }}
+          initial={{ opacity: 0, scale: 0.35 }}
+          animate={{ opacity: [0, 1, 0], scale: [0.35, 1.05, 1.35] }}
+          transition={{ delay: T.lid - 0.04, duration: 0.95, times: [0, 0.35, 1], ease: "easeOut" }}
+        />
+      ) : null}
 
       {/* The box, in two halves that fall apart. */}
       {(["left", "right"] as const).map((side) => (
@@ -451,13 +473,18 @@ const cardClass = (dark: boolean) =>
   );
 const muted = (dark: boolean) => (dark ? "text-white/60" : "text-black/50");
 
-/** A stop's picture: the photograph, or the kind's picture washed in its colour with its glyph, never passed off as the place. */
+/**
+ * A stop's picture: the photograph, or the kind's picture washed in its colour with its glyph, never
+ * passed off as the place. A town on a trip has no kind to draw, so it gets its initial on the
+ * gift's colour, like a contact without a photo: a pin on a pale disc read as a picture that failed.
+ */
 function StopPhoto({ stop, className }: { stop: GiftUnwrapStop; className?: string }) {
   const [broken, setBroken] = useState<string | null>(null);
   const photo = stop.image && stop.image !== broken ? stop.image : null;
   const art = stopArt(stop);
+  const initial = Array.from(stop.name.trim())[0]?.toLocaleUpperCase() ?? "";
   return (
-    <span className={cn("relative block shrink-0 overflow-hidden", className)} style={{ background: art ? `${art.tint}33` : "var(--gift-accent-pale)" }} aria-hidden="true">
+    <span className={cn("@container relative block shrink-0 overflow-hidden", className)} style={{ background: art ? `${art.tint}33` : "var(--gift-accent-pale)" }} aria-hidden="true">
       {photo ? (
         <img src={photo} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setBroken(photo)} className="absolute inset-0 size-full object-cover" />
       ) : art ? (
@@ -470,6 +497,13 @@ function StopPhoto({ stop, className }: { stop: GiftUnwrapStop; className?: stri
             ))}
           </svg>
         </>
+      ) : initial ? (
+        <span
+          className="absolute inset-0 grid place-items-center text-[48cqw] leading-none"
+          style={{ background: "linear-gradient(140deg, var(--gift-accent-soft), var(--gift-accent) 55%, var(--gift-accent-deep))", color: "var(--gift-on-accent)", fontFamily: "var(--gift-font-display)" }}
+        >
+          {initial}
+        </span>
       ) : (
         <MapPin className="absolute top-1/2 left-1/2 size-[42%] -translate-x-1/2 -translate-y-1/2" style={{ color: "var(--gift-accent-deep)" }} />
       )}
@@ -501,7 +535,7 @@ function DateCard({ unwrap, locale, dark, headingRef, reduce }: CardProps) {
         <p className="text-[11px] font-semibold tracking-[0.24em] uppercase" style={{ color: dark ? "var(--gift-accent-soft)" : "var(--gift-accent-deep)" }}>
           {giftString(locale, "unwrapDate")}
         </p>
-        <h3 ref={headingRef} tabIndex={-1} className="mt-2 text-[2rem] leading-[1.02] tracking-[-0.01em] outline-none first-letter:uppercase @max-2xs:text-[1.7rem]" style={{ fontFamily: "var(--gift-font-display)" }}>
+        <h3 ref={headingRef} tabIndex={-1} className="mt-2 text-[2rem] leading-[1.02] tracking-[-0.01em] text-balance outline-none first-letter:uppercase @max-2xs:text-[1.7rem]" style={{ fontFamily: "var(--gift-font-display)" }}>
           {day ?? giftString(locale, "unwrapSoon")}
         </h3>
         {subtitle ? (
@@ -605,7 +639,7 @@ function TripCard({ unwrap, locale, dark, headingRef, reduce }: CardProps) {
         <p className="text-[11px] font-semibold tracking-[0.24em] uppercase" style={{ color: dark ? "var(--gift-accent-soft)" : "var(--gift-accent-deep)" }}>
           {giftString(locale, "unwrapTrip")}
         </p>
-        <h3 ref={headingRef} tabIndex={-1} className="mt-2 text-[2rem] leading-[1.02] tracking-[-0.01em] outline-none [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)" }}>
+        <h3 ref={headingRef} tabIndex={-1} className="mt-2 text-[2rem] leading-[1.02] tracking-[-0.01em] text-balance outline-none [overflow-wrap:anywhere] @max-2xs:text-[1.6rem]" style={{ fontFamily: "var(--gift-font-display)" }}>
           {unwrap.title}
         </h3>
         {trip ? (

@@ -303,7 +303,7 @@ export default async function TripPage({ params }: PageProps<"/[locale]/trips/[i
                 <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
               </SurpriseLink>
               <p className="text-[13px] text-cream/55">{t("detail.surprise.note")}</p>
-              <SurpriseAnyGift unwrap={tripUnwrap(trip, l)} className="-my-1 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-cream/90 underline decoration-cream/35 underline-offset-4 transition-colors hover:text-cream hover:decoration-cream">
+              <SurpriseAnyGift unwrap={tripUnwrap(trip, l)} searchNames={trip.stops.map((s) => s.name)} className="-my-1 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-cream/90 underline decoration-cream/35 underline-offset-4 transition-colors hover:text-cream hover:decoration-cream">
                 <Gift aria-hidden="true" className="size-4" />
                 {t("detail.surprise.anyGift")}
               </SurpriseAnyGift>

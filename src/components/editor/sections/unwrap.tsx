@@ -66,7 +66,7 @@ export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
     try {
       const [{ tripUnwrap }, { readLastFrom }] = await Promise.all([import("@/lib/trips/trip-gift"), import("@/lib/trips/last-from")]);
       const base = tripUnwrap(trip, giftLocale, { from: trip.kind === "road" ? null : readLastFrom() });
-      patch({ unwrap: withStopPhotos(base, await gatherPhotos(stopPlaces(base), CHIP_PHOTO_WIDTH)) });
+      patch({ unwrap: withStopPhotos(base, await gatherPhotos(stopPlaces(base, trip.stops.map((s) => s.name)), CHIP_PHOTO_WIDTH)) });
       setTrips(null);
     } finally {
       setBusy(null);
@@ -74,12 +74,12 @@ export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
   };
 
   const badge = included ? (
-    <span className="inline-flex items-center gap-1 rounded-full bg-ink/8 px-2 py-0.5 text-[11px] font-semibold text-ink">
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-ink/8 px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap text-ink">
       <Check className="size-3" />
       {t("included")}
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-ink">
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap text-ink">
       <Sparkles className="size-3" />
       {t("special")}
     </span>
@@ -182,12 +182,13 @@ function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; 
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[11px] font-semibold tracking-[0.08em] text-coral uppercase">{facts}</p>
-          <p className="mt-0.5 truncate font-display text-[1.15rem] leading-tight">{unwrap.title}</p>
-          {day ? <p className="mt-0.5 truncate text-xs text-muted-foreground first-letter:uppercase">{day}</p> : null}
+          {/* Wrapped, not cut: "Ciudad de M…" on a phone told them less than the whole name would. */}
+          <p className="mt-0.5 line-clamp-2 font-display text-[1.15rem] leading-tight [overflow-wrap:anywhere]">{unwrap.title}</p>
+          {day ? <p className="mt-0.5 text-xs text-muted-foreground first-letter:uppercase">{day}</p> : null}
         </div>
-        <button type="button" onClick={onRemove} className="flex min-h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] text-ink-soft hover:bg-ink/5" data-testid="unwrap-remove">
-          <Trash2 className="size-3.5" />
-          {t("remove")}
+        {/* A bin, as the voice note's is: the word took a third of a phone's row from the title. */}
+        <button type="button" onClick={onRemove} aria-label={t("remove")} title={t("remove")} className="-mt-1 -mr-1 grid size-11 shrink-0 place-items-center self-start rounded-full text-ink-soft hover:bg-ink/5 hover:text-ink" data-testid="unwrap-remove">
+          <Trash2 className="size-4" />
         </button>
       </div>
       <div className="grid gap-3 border-t border-border bg-paper/50 px-3 py-3 sm:grid-cols-2">

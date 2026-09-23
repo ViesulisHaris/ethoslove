@@ -5,6 +5,7 @@ import { giftUnwrapSchema } from "@/lib/gift/schema";
 import { getTrip, TRIPS } from "@/lib/trips/presets";
 import { tripUnwrap } from "@/lib/trips/trip-gift";
 import type { Airport } from "@/lib/trips/airports";
+import { stopPlaces, withStopPhotos } from "@/components/gifts/unwrap-photos";
 
 const stop = (name: string, time?: string, extra: Partial<PlanStop> = {}): PlanStop => ({ id: `node/${name}`, name, kind: "cafe", lat: 38.712345678, lng: -9.14, ...(time ? { time } : {}), ...extra });
 const plan = (stops: PlanStop[], extra: Partial<Plan> = {}): Plan => ({ v: 1, stops, ...extra });
@@ -104,5 +105,19 @@ describe("a preset trip wrapped inside a gift", () => {
     const unwrap = tripUnwrap(amalfi, "en", { photos: { [first]: PHOTO, [second]: "https://tracker.example/x.jpg" } });
     expect(unwrap.stops[0].image).toBe(PHOTO);
     expect(unwrap.stops[1]).not.toHaveProperty("image");
+  });
+
+  it("asks for the towns' photographs by their own names, and puts each one back on its stop", () => {
+    const road = getTrip("amalfi-coast")!;
+    const unwrap = tripUnwrap(road, "es");
+    // The card says Pompeya; Commons only knows the ruins as Pompeii.
+    expect(unwrap.stops[1].name).toBe("Pompeya");
+    const places = stopPlaces(unwrap, road.stops.map((s) => s.name));
+    expect(places.map((p) => p.name)).toEqual(road.stops.map((s) => s.name));
+    expect(stopPlaces(unwrap)[1].name).toBe("Pompeya");
+    const withPhotos = withStopPhotos(unwrap, { [places[1].id]: PHOTO, [places[2].id]: null });
+    expect(withPhotos.stops[1].image).toBe(PHOTO);
+    expect(withPhotos.stops[1].name).toBe("Pompeya");
+    expect(withPhotos.stops[2]).not.toHaveProperty("image");
   });
 });

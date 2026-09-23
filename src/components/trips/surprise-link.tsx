@@ -37,7 +37,18 @@ export function SurpriseLink({ slug, fields, className, children }: Props) {
  * at the end of whichever gift they pick. The towns' photographs are asked for as the chooser opens,
  * and the airport they last flew from is added here, where it is known.
  */
-export function SurpriseAnyGift({ unwrap, className, children }: { unwrap: GiftUnwrap; className?: string; children: ReactNode }) {
+export function SurpriseAnyGift({
+  unwrap,
+  searchNames,
+  className,
+  children,
+}: {
+  unwrap: GiftUnwrap;
+  /** The towns' own names, in the stops' order, to find their photographs by (./unwrap-photos). */
+  searchNames?: readonly string[];
+  className?: string;
+  children: ReactNode;
+}) {
   const locale = useLocale() === "es" ? "es" : "en";
   const [open, setOpen] = useState(false);
   const photos = useRef<Promise<Record<string, string | null>> | null>(null);
@@ -58,7 +69,7 @@ export function SurpriseAnyGift({ unwrap, className, children }: { unwrap: GiftU
         type="button"
         aria-haspopup="dialog"
         onClick={() => {
-          photos.current = gatherPhotos(stopPlaces(unwrap), CHIP_PHOTO_WIDTH);
+          photos.current = gatherPhotos(stopPlaces(unwrap, searchNames), CHIP_PHOTO_WIDTH);
           setOpen(true);
         }}
         className={className}

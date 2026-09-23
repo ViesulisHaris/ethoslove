@@ -49,6 +49,8 @@ export function TemplateChooser({
   const router = useRouter();
   const [filter, setFilter] = useState<Filter>("all");
   const [picking, setPicking] = useState<string | null>(null);
+  // On a phone the header took a third of a small screen: once they scroll the gifts, the line under the title folds away.
+  const [scrolled, setScrolled] = useState(false);
   const sheet = useRef<HTMLDivElement>(null);
   const drag = useRef<{ y: number; at: number; dy: number } | null>(null);
 
@@ -108,6 +110,8 @@ export function TemplateChooser({
         <DialogPrimitive.Content
           ref={sheet}
           aria-describedby="gift-chooser-sub"
+          // Each time it opens the list starts at the top, so the line under the title is back too.
+          onOpenAutoFocus={() => setScrolled(false)}
           data-testid="gift-chooser"
           className={cn(
             "fixed z-50 flex flex-col overflow-hidden bg-paper text-forest shadow-[0_-20px_60px_-20px_rgba(42,15,31,0.45)] outline-none",
@@ -125,21 +129,23 @@ export function TemplateChooser({
               </span>
               <div className="min-w-0">
                 <DialogPrimitive.Title className="font-display text-[26px] leading-[1.1] text-balance sm:text-[32px]">{kind === "trip" ? t("titleTrip") : t("titleDate")}</DialogPrimitive.Title>
-                <DialogPrimitive.Description id="gift-chooser-sub" className="mt-1.5 text-[14.5px] leading-snug text-forest/65 sm:text-[16px]">
-                  {kind === "trip" ? t("subTrip") : t("sub")}
-                </DialogPrimitive.Description>
+                <div className={cn("grid transition-[grid-template-rows,opacity] duration-300 ease-out sm:grid-rows-[1fr] sm:opacity-100", scrolled ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr]")}>
+                  <DialogPrimitive.Description id="gift-chooser-sub" className="min-h-0 overflow-hidden pt-1.5 text-[14.5px] leading-snug text-forest/65 sm:text-[16px]">
+                    {kind === "trip" ? t("subTrip") : t("sub")}
+                  </DialogPrimitive.Description>
+                </div>
               </div>
             </div>
             <DialogPrimitive.Close className="absolute top-3 right-3 grid size-11 place-items-center rounded-full text-forest/70 hover:bg-forest/5 hover:text-forest sm:top-6 sm:right-6" aria-label={tc("close")}>
               <X className="size-5" />
             </DialogPrimitive.Close>
-            <div role="radiogroup" aria-label={t("filterLabel")} className="mt-4 flex gap-2">
+            {/* Toggle buttons, not radios: a radio group promises arrow keys between its options, and Tab is what these take. */}
+            <div role="group" aria-label={t("filterLabel")} className="mt-4 flex gap-2">
               {FILTERS.map((f) => (
                 <button
                   key={f}
                   type="button"
-                  role="radio"
-                  aria-checked={filter === f}
+                  aria-pressed={filter === f}
                   onClick={() => setFilter(f)}
                   className={cn(
                     "inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-[14px] font-semibold transition-colors",
@@ -153,7 +159,10 @@ export function TemplateChooser({
             </div>
           </header>
 
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-9 sm:pt-7">
+          <div
+            onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 24)}
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-9 sm:pt-7"
+          >
             <ul className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4 xl:grid-cols-5">
               {shown.map((m, i) => (
                 <li key={m.slug}>

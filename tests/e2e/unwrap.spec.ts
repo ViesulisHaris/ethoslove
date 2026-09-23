@@ -64,7 +64,7 @@ test.describe("a surprise inside", () => {
     expect(await chooser.locator("[data-testid^=chooser-]").count()).toBeGreaterThan(30);
     await expect(chooser.getByTestId("chooser-the-letter")).toContainText("The surprise inside: €7.49");
     await expect(chooser.getByTestId("chooser-vinyl")).toContainText("Surprise included");
-    await chooser.getByRole("radio", { name: "Free" }).click();
+    await chooser.getByRole("button", { name: "Free", exact: true }).click();
     await expect(chooser.locator("[data-testid^=chooser-]")).toHaveCount(2);
     await chooser.getByTestId("chooser-the-letter").click();
 
@@ -155,6 +155,12 @@ test.describe("a surprise inside", () => {
     await expect(card.getByTestId("unwrap-link")).toHaveAttribute("href", "/es/trips/amalfi-coast");
     await open.getByRole("button", { name: "Cerrar" }).click();
     await expect(open).toBeHidden();
+    // From the keyboard too: Escape puts it away and gives the present its focus back.
+    await peek.click();
+    await expect(open.getByTestId("unwrap-card")).toBeVisible({ timeout: 2_000 });
+    await page.keyboard.press("Escape");
+    await expect(open).toBeHidden();
+    await expect(peek).toBeFocused();
     noErrors();
   });
 

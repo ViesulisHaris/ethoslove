@@ -604,7 +604,7 @@
       "specialNote": "En esta plantilla viene con «Hazlo especial», un solo pago al enviarlo.",
       "addPlan": "Añadir tu plan de cita",
       "addPlanHelp": "El plan del mapa de citas, con una foto de cada parada.",
-      "noPlan": "Planea antes una cita en el mapa y vuelve a por ella.",
+      "noPlan": "Primero planea una cita en el mapa y luego vuelve aquí.",
       "planLink": "Planear una cita",
       "addTrip": "Añadir un viaje",
       "addTripHelp": "Uno de nuestros doce viajes en pareja.",
@@ -1965,7 +1965,7 @@
         "sub": "Convierte este viaje en un regalo: un billete que abrirá en su móvil, con {city} ya puesto y la lista de equipaje convertida en pistas. Tú decides cuándo se entera.",
         "cta": "Que sea una sorpresa",
         "note": "Abre el editor del regalo. Empezar es gratis.",
-        "anyGift": "…o mételo dentro de cualquier regalo"
+        "anyGift": "…o escóndelo dentro de cualquier regalo"
       }
     },
     "flights": {

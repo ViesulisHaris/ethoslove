@@ -34,9 +34,13 @@ export async function gatherPhotos(places: Place[], width = UNWRAP_PHOTO_WIDTH, 
 /** A key for a stop that has no id of its own (a trip's towns): where it is, and where it comes in the list. */
 const stopKey = (s: { lat?: number; lng?: number }, i: number) => `unwrap-stop:${s.lat},${s.lng}:${i}`;
 
-/** The stops of a surprise worth asking a photograph for: the ones on the map that have none yet. */
-export function stopPlaces(unwrap: GiftUnwrap): Place[] {
-  return unwrap.stops.flatMap((s, i) => (s.lat !== undefined && s.lng !== undefined && !s.image ? [{ id: stopKey(s, i), name: s.name, lat: s.lat, lng: s.lng }] : []));
+/**
+ * The stops of a surprise worth asking a photograph for: the ones on the map that have none yet.
+ * `searchNames` are the names to look them up by, in order, when the ones on the card are
+ * translated: Commons files Pompeii under "Pompeii", and asked for "Pompeya" it finds nothing.
+ */
+export function stopPlaces(unwrap: GiftUnwrap, searchNames: readonly string[] = []): Place[] {
+  return unwrap.stops.flatMap((s, i) => (s.lat !== undefined && s.lng !== undefined && !s.image ? [{ id: stopKey(s, i), name: searchNames[i] || s.name, lat: s.lat, lng: s.lng }] : []));
 }
 
 /** The surprise with each photograph that was found (by gatherPhotos over stopPlaces) put on its stop. */
