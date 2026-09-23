@@ -16,6 +16,14 @@ export type GiftAudio = {
 const FADE_MS = 1600;
 
 /**
+ * Whether the recipient has muted this gift. The pieces every template shares (the present on the
+ * end screen) make a sound of their own and are nowhere near the template's audio, so the mute
+ * button is remembered here, where they can ask it. A new gift, or a replay, starts unmuted.
+ */
+let giftMuted = false;
+export const isGiftMuted = (): boolean => giftMuted;
+
+/**
  * Background music with fade-in, start offset, loop and tab-visibility pause.
  *
  * Only a library track or the sender's own file: a real song from Apple's catalogue never plays
@@ -31,6 +39,7 @@ export function useGiftAudio(songOrMusic: GiftMusic | undefined, enabled = true)
   const startAt = music?.startAt ?? 0;
 
   useEffect(() => {
+    giftMuted = false;
     if (!music || !enabled) return;
     const audio = new Audio(music.url);
     audio.loop = true;
@@ -81,6 +90,7 @@ export function useGiftAudio(songOrMusic: GiftMusic | undefined, enabled = true)
     const audio = audioRef.current;
     if (!audio) return;
     audio.muted = !audio.muted;
+    giftMuted = audio.muted;
     setMuted(audio.muted);
     if (!audio.muted && audio.paused) audio.play().catch(() => {});
   }, []);

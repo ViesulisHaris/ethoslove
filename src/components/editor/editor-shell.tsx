@@ -4,12 +4,12 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { defaultCoverFor } from "@/templates/_shared/covers/looks";
 import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import type { GiftData, GiftLocale } from "@/lib/gift/schema";
+import { giftUnwrapSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
-import { mergeSeedFields, takeGiftSeed } from "@/lib/editor/gift-seed";
+import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
 import { TopBar } from "./top-bar";
@@ -22,6 +22,7 @@ import { VideoSection } from "./sections/video";
 import { VoiceSection } from "./sections/voice";
 import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
+import { UnwrapSection } from "./sections/unwrap";
 import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
@@ -109,6 +110,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       const seed = remote ? null : takeGiftSeed(slug);
       const seeded = seed ? mergeSeedFields(m.fieldsSchema, initial.fields as Record<string, unknown>, seed.fields) : null;
       if (seeded) initial.fields = seeded;
+      // A date or a trip chosen to go inside this gift ("Wrap it in a gift" on /plan, a trip's page).
+      const unwrap = seed?.unwrap ? seedUnwrap(giftUnwrapSchema, seed.unwrap) : null;
+      if (unwrap) initial.unwrap = unwrap;
       void useEditor
         .getState()
         .init({
@@ -123,10 +127,14 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           // init() puts a draft left in this browser in place of `initial`. They have just asked
           // for this (a trip, say), so the seed goes on top of the old draft, not under it.
           const editor = useEditor.getState();
-          if (!active || !seed || !seeded || editor.slug !== slug) return;
-          const current = editor.data.fields as Record<string, unknown>;
-          const merged = mergeSeedFields(m.fieldsSchema, current, seed.fields);
-          if (merged && JSON.stringify(merged) !== JSON.stringify(current)) editor.patchFields(merged);
+          if (!active || !seed || editor.slug !== slug) return;
+          if (seeded) {
+            const current = editor.data.fields as Record<string, unknown>;
+            const merged = mergeSeedFields(m.fieldsSchema, current, seed.fields);
+            if (merged && JSON.stringify(merged) !== JSON.stringify(current)) editor.patchFields(merged);
+          }
+          // The surprise too: the one they just wrapped, not one an old draft was carrying.
+          if (unwrap && JSON.stringify(editor.data.unwrap) !== JSON.stringify(unwrap)) editor.patch({ unwrap });
         });
     });
     return () => {
@@ -241,6 +249,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                   ) : null}
                 </WhoSection>
                 <WordsSection aiEnabled={aiEnabled} />
+                <UnwrapSection manifest={manifest} />
                 <PhotosSection manifest={manifest} />
                 {manifest.features.music ? <MusicSection /> : null}
                 {manifest.features.video ? <VideoSection /> : null}

@@ -69,6 +69,25 @@ export function requestPhoto(place: Asked, qid?: string) {
   pump();
 }
 
+/**
+ * A place's photo as a promise, for code that wants the answer rather than a re-render: a gift
+ * that carries the stops of a plan (plan-gift.ts) asks for each one this way. Through the same
+ * cache and queue as the cards, so a photo the list already found costs nothing.
+ */
+export function photoFor(place: Asked): Promise<Entry> {
+  if (cache.get(place.id)) return Promise.resolve(cache.get(place.id)!);
+  return new Promise((resolve) => {
+    const check = () => {
+      if (!cache.has(place.id)) return;
+      listeners.delete(check);
+      resolve(cache.get(place.id) ?? null);
+    };
+    listeners.add(check);
+    requestPhoto(place);
+    check();
+  });
+}
+
 export function usePhoto(id: string | null | undefined): Entry | undefined {
   return useSyncExternalStore(
     subscribe,

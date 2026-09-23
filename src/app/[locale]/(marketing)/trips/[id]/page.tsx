@@ -9,12 +9,12 @@ import { cityName, findAirport } from "@/lib/trips/airports";
 import { monthRanges } from "@/lib/trips/months";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
-import { TRIP_GIFT_SLUG, tripGiftFields } from "@/lib/trips/trip-gift";
+import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
-import { SurpriseLink } from "@/components/trips/surprise-link";
+import { SurpriseAnyGift, SurpriseLink } from "@/components/trips/surprise-link";
 import { TripArt } from "@/components/trips/trip-art";
 import { TripMap } from "@/components/trips/trip-map";
 
@@ -303,6 +303,10 @@ export default async function TripPage({ params }: PageProps<"/[locale]/trips/[i
                 <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
               </SurpriseLink>
               <p className="text-[13px] text-cream/55">{t("detail.surprise.note")}</p>
+              <SurpriseAnyGift unwrap={tripUnwrap(trip, l)} className="-my-1 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-cream/90 underline decoration-cream/35 underline-offset-4 transition-colors hover:text-cream hover:decoration-cream">
+                <Gift aria-hidden="true" className="size-4" />
+                {t("detail.surprise.anyGift")}
+              </SurpriseAnyGift>
             </div>
           </div>
         </div>

@@ -111,7 +111,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // A live or scheduled gift is what recipients see: edits to it are held to the publish rules.
   const manifest = getManifest(row.template_slug);
   if (!manifest) return { ok: false, error: "unknown_template" };
-  const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [] };
+  const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [], unwrap: data.unwrap };
   const flags = { hasSchedule: row.unlock_at !== null, hasPassword: row.password_hash !== null, watermark: row.watermark };
   const needs = liveEditNeedsUnlock(manifest, content, flags);
   if (needs) {

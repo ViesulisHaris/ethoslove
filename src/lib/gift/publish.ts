@@ -44,15 +44,20 @@ export function decidePublish(
  * ours — not our library, not the sender's upload, not an Apple preview — which the editor never
  * produces, so hosting someone else's audio behind a free gift still takes an unlock.
  */
-export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos";
+export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos" | "unwrap";
 
-/** Content-level extras that need an unlock on any template (the free tier stays a real gift, these are the upsell). */
-export function premiumExtras(data: GiftData): PremiumExtra[] {
+/**
+ * Content-level extras that need an unlock on any template (the free tier stays a real gift, these are the upsell).
+ * "unwrap" is a date or a trip wrapped inside the gift: on a premium template it comes with the
+ * template's unlock like everything else, and on The Letter or Constellations "Make it special" adds it.
+ */
+export function premiumExtras(data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos" | "unwrap">): PremiumExtra[] {
   const extras: PremiumExtra[] = [];
   if (data.music && !isKnownMusic(data.music)) extras.push("song");
   if (data.video) extras.push("video");
   if (data.voiceNote) extras.push("voiceNote");
   if (data.photos.length > 10) extras.push("morePhotos");
+  if (data.unwrap) extras.push("unwrap");
   return extras;
 }
 
@@ -63,10 +68,10 @@ export function premiumExtras(data: GiftData): PremiumExtra[] {
  */
 export function liveEditNeedsUnlock(
   manifest: TemplateManifest,
-  data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos">,
+  data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos" | "unwrap">,
   row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean; freeReply?: boolean },
 ): boolean {
-  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data as GiftData).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
+  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
 }
 
 /** Human-readable blockers, keyed for translation on the client. */

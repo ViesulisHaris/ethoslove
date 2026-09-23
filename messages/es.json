@@ -330,6 +330,11 @@
         "n": "04c",
         "title": "Tu voz",
         "blurb": "Dilo en voz alta. Hasta un minuto, al final del todo. Premium."
+      },
+      "unwrap": {
+        "n": "02b",
+        "title": "Una sorpresa dentro",
+        "blurb": "Una cita o un viaje, envuelto como un regalo bajo tus últimas palabras. Lo abre con un toque."
       }
     },
     "fields": {
@@ -480,6 +485,7 @@
       "featureVideo": "un vídeo",
       "featureVoiceNote": "un mensaje de voz",
       "featureMorePhotos": "más de 10 fotos",
+      "featureUnwrap": "una sorpresa dentro",
       "payTitle": "Un pago y se envía",
       "payBlurb": "Este regalo usa {features}. Pagas una vez y esta plantilla es tuya para siempre, con todo lo que lleva.",
       "payButton": "Pagar {price} y enviar",
@@ -592,6 +598,29 @@
       "premium": "Premium",
       "hint": "Mejor en un sitio tranquilo. Lo escucharán después de la última pantalla."
     },
+    "unwrap": {
+      "included": "Incluida",
+      "special": "Hazlo especial",
+      "specialNote": "En esta plantilla viene con «Hazlo especial», un solo pago al enviarlo.",
+      "addPlan": "Añadir tu plan de cita",
+      "addPlanHelp": "El plan del mapa de citas, con una foto de cada parada.",
+      "noPlan": "Planea antes una cita en el mapa y vuelve a por ella.",
+      "planLink": "Planear una cita",
+      "addTrip": "Añadir un viaje",
+      "addTripHelp": "Uno de nuestros doce viajes en pareja.",
+      "pickTrip": "¿Qué viaje?",
+      "date": "Noche de cita",
+      "trip": "Viaje",
+      "stops": "{count, plural, one {# parada} other {# paradas}}",
+      "nights": "{count, plural, one {# noche} other {# noches}}",
+      "noDay": "Sin día todavía",
+      "day": "El día",
+      "depart": "Ida",
+      "back": "Vuelta",
+      "remove": "Quitar",
+      "wrapping": "Envolviéndolo…",
+      "cancel": "Cancelar"
+    },
     "covers": {
       "label": "Portada",
       "help": "La primera pantalla que ven. La tocan para abrir el regalo.",
@@ -668,7 +697,7 @@
     "makeThis": "Crear regalo",
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
-    "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz o 20 fotos por {price}, pagado una vez.",
+    "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
     "sections": {
       "popular": {
@@ -717,7 +746,7 @@
     "oneTime": "Un solo pago. Tuyo para siempre.",
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
-    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, quitar el pie, programación y contraseña vienen con cualquier desbloqueo, o con «Hazlo especial» en una plantilla gratis.",
+    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, o con «Hazlo especial» en una plantilla gratis.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
     "plans": {
       "single": {
@@ -769,7 +798,7 @@
       },
       {
         "q": "¿Qué incluye exactamente el plan gratis?",
-        "a": "Dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta. Los regalos gratis muestran un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», un pequeño pago único para esa plantilla, o con cualquier desbloqueo."
+        "a": "Dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta. Los regalos gratis muestran un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, la programación y la contraseña vienen con «Hazlo especial», un pequeño pago único para esa plantilla, o con cualquier desbloqueo."
       },
       {
         "q": "¿Puedo probar una plantilla antes de pagar?",
@@ -953,7 +982,7 @@
   "money": {
     "paywall": {
       "extras": "Hazlo especial",
-      "extrasBlurb": "Vídeo, voz, 20 fotos, sin pie, programación y contraseña, en esta plantilla para siempre",
+      "extrasBlurb": "Vídeo, voz, 20 fotos, una sorpresa dentro, sin pie, programación y contraseña, en esta plantilla para siempre",
       "extrasIntro": "Este regalo usa {features}. Hazlo especial una vez y esta plantilla los conserva para siempre.",
       "extrasGuestIntro": "Este regalo usa {features}. Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
       "upgrade": "Todo por la diferencia",
@@ -1540,7 +1569,8 @@
       "replaceConfirm": "Esto sustituye el plan que estabas preparando en este dispositivo. ¿Guardar este en su lugar?"
     },
     "gift": {
-      "title": "Envuélvelo en un regalo"
+      "title": "Envuélvelo en un regalo",
+      "sub": "Elige el regalo que quieras. El plan va dentro, envuelto, con una foto de cada parada."
     },
     "addMore": "Añadir otra parada",
     "clear": "Borrar el plan",
@@ -1845,9 +1875,6 @@
     },
     "meet": {
       "via": "Cada vuelo se abre en Aviasales; Google Flights está ahí para comparar."
-    },
-    "planGift": {
-      "sub": "Dobla el plan en una grulla de papel: con cada pliegue descubre una parada más."
     }
   },
   "trips": {
@@ -1937,7 +1964,8 @@
         "title": "No le digas adónde.",
         "sub": "Convierte este viaje en un regalo: un billete que abrirá en su móvil, con {city} ya puesto y la lista de equipaje convertida en pistas. Tú decides cuándo se entera.",
         "cta": "Que sea una sorpresa",
-        "note": "Abre el editor del regalo. Empezar es gratis."
+        "note": "Abre el editor del regalo. Empezar es gratis.",
+        "anyGift": "…o mételo dentro de cualquier regalo"
       }
     },
     "flights": {
@@ -2332,5 +2360,23 @@
       "unavailableBody": "Vuelve a probar el enlace dentro de unos minutos.",
       "home": "Ir a Ethos"
     }
+  },
+  "giftChooser": {
+    "titleDate": "Envuelve tu cita en un regalo",
+    "titleTrip": "Envuelve tu viaje en un regalo",
+    "sub": "Elige el regalo que quieras. Tu plan irá dentro, envuelto, esperando al final.",
+    "subTrip": "Elige el regalo que quieras. El viaje irá dentro, envuelto, esperando al final.",
+    "filterLabel": "Mostrar",
+    "filter": {
+      "all": "Todos",
+      "loved": "Los favoritos",
+      "free": "Gratis"
+    },
+    "free": "Gratis",
+    "price": "{price} una vez",
+    "included": "Sorpresa incluida",
+    "extra": "La sorpresa dentro: {price}",
+    "pick": "Envolverlo en {name}",
+    "wrapping": "Envolviéndolo…"
   }
 }

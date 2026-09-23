@@ -1,50 +1,52 @@
-import { formatDay } from "./calendar";
+import type { GiftUnwrap, GiftUnwrapStop } from "@/lib/gift/schema";
+import { clipText, isUnwrapImage, isUnwrapLink, UNWRAP_LIMITS } from "@/lib/gift/unwrap-rules";
+import { round } from "./geo";
 import { stopName, type Plan } from "./plan";
 
 /**
- * The gift a planned date turns into. Paper Crane, not Scratch Card: a seed can only fill a
- * template's own fields, and Scratch Card's one text field (the final card's headline) is sixty
- * characters and is printed on the ticket's cover before anything is scratched, so the plan would
- * be read before it was revealed. Paper Crane says one line per fold, in order, and only as each
- * fold lands: the day first, then the stops as they will happen, then the line left on the table.
- * It needs no photos, so it can be sent as it comes.
+ * A planned date as "a surprise inside" a gift (GiftData.unwrap): the day, the town, and each stop
+ * with its time, its kind and a photograph of it where one exists. Whichever gift they choose
+ * carries it, wrapped, under its last words. Written without zod: this runs on /plan, which keeps
+ * the schema library out of its bundle (plan.ts), and the builder checks its own pictures and link
+ * against the same allow-list the schema holds every gift to.
  */
-export const PLAN_GIFT_SLUG = "paper-crane";
-
-/**
- * Paper Crane's limits (its schema.ts); the unit test parses the result with the real schema and
- * checks these against it. Copied, not imported: that schema is zod, and this file is in the
- * browser on /plan, where importing two numbers from it brought 85 KB (gzipped) of zod along.
- */
-const LINE_MAX = 72;
-const CLOSING_MAX = 90;
-export const MIN_LINES = 3;
-export const MAX_LINES = 6;
-
 const WORDS = {
-  en: { someday: "One day soon. I'll tell you which.", at: "at", fillers: ["I've planned all of it.", "The rest is a surprise."], closing: "It's a date." },
-  es: { someday: "Un día de estos. Ya te diré cuál.", at: "a las", fillers: ["Lo tengo todo planeado.", "Lo demás es sorpresa."], closing: "Tenemos una cita." },
+  en: { title: "Our date" },
+  es: { title: "Nuestra cita" },
 } as const;
 
-const clip = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s);
-const capital = (s: string) => s.charAt(0).toLocaleUpperCase() + s.slice(1);
+export type PlanUnwrapOptions = {
+  /** Photographs found for the stops, by stop id: a Wikimedia URL, already sized for a thumbnail. */
+  photos?: Record<string, string | null | undefined>;
+  /** Where "Open our plan" goes: the plan's own share link, as a site path. */
+  link?: string;
+  /** A name for the evening, like the idea it was built from ("Museum, then wine"). */
+  title?: string;
+};
 
-/**
- * Paper Crane's fields for a plan, in the gift's language: the day, then "1. Café Tal at 18:00"
- * for each stop. Six folds is all the paper there is, so stops past the fifth share the last line.
- * The crane needs three folds to fly, so a plan of one stop gets a line of promise between the
- * day and the stop. Their note to the other person is the closing line when it fits in one.
- */
-export function planGiftFields(plan: Plan, locale: "en" | "es"): { lines: string[]; closing: string } {
-  const w = WORDS[locale];
-  const day = plan.date ? `${capital(formatDay(plan.date, locale))}.` : w.someday;
-  const stops = plan.stops.map((s, i) => `${i + 1}. ${stopName(s, locale).trim()}${s.time ? ` ${w.at} ${s.time}` : ""}`);
-  const room = MAX_LINES - 1;
-  const stopLines = stops.length > room ? [...stops.slice(0, room - 1), stops.slice(room - 1).join(", ")] : stops;
-  const fillers = w.fillers.slice(0, Math.max(0, MIN_LINES - 1 - stopLines.length));
-  const note = plan.note?.trim() ?? "";
+export function planUnwrap(plan: Plan, locale: "en" | "es", options: PlanUnwrapOptions = {}): GiftUnwrap {
+  const { photos = {}, link, title } = options;
+  const stops: GiftUnwrapStop[] = plan.stops.slice(0, UNWRAP_LIMITS.stops).map((s) => {
+    const photo = photos[s.id];
+    return {
+      name: clipText(stopName(s, locale), UNWRAP_LIMITS.stopName),
+      ...(s.time ? { time: s.time } : {}),
+      kind: s.kind,
+      lat: round(s.lat, 5),
+      lng: round(s.lng, 5),
+      // No photo is left as none: the gift draws the kind's picture, marked as a kind, so an
+      // illustration is never passed off as this very café (lib/dates/art.ts).
+      ...(isUnwrapImage(photo) ? { image: photo } : {}),
+      ...(s.note?.trim() ? { note: clipText(s.note, UNWRAP_LIMITS.stopNote) } : {}),
+    };
+  });
+  const where = plan.where?.trim();
   return {
-    lines: [day, ...fillers, ...stopLines].map((line) => clip(line, LINE_MAX)),
-    closing: note && note.length <= CLOSING_MAX ? note : w.closing,
+    kind: "date",
+    title: clipText(title?.trim() || where || WORDS[locale].title, UNWRAP_LIMITS.title),
+    ...(plan.date ? { date: plan.date } : {}),
+    ...(where ? { city: clipText(where, UNWRAP_LIMITS.city) } : {}),
+    stops,
+    ...(isUnwrapLink(link) ? { link } : {}),
   };
 }

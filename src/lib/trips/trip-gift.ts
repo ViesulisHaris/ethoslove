@@ -1,8 +1,10 @@
 import { resolvePlace } from "@/templates/_shared/places";
 import { distanceKm } from "@/lib/dates/geo";
+import type { GiftUnwrap, GiftUnwrapStop } from "@/lib/gift/schema";
+import { clipText, isUnwrapImage, UNWRAP_LIMITS } from "@/lib/gift/unwrap-rules";
 import { cityName, findAirport, type Airport } from "./airports";
 import { fromFields } from "./last-from";
-import { stopName, type Trip, type TripStop } from "./presets";
+import { stopName, tripImageSm, type Trip, type TripStop } from "./presets";
 
 /** The gift a preset trip turns into: a ticket, a date, and a packing list. */
 export const TRIP_GIFT_SLUG = "pack-your-bags";
@@ -59,5 +61,52 @@ export function tripGiftFields(trip: Trip, locale: "en" | "es", from?: Airport |
     nights: tripNights(trip),
     clues: [],
     ...(from ? fromFields(from, locale) : {}),
+  };
+}
+
+export type TripUnwrapOptions = {
+  /** Where they last flew from (./last-from), which only their browser knows. */
+  from?: Airport | null;
+  /** Photographs found for the stops, by the stop's own (English) name, already sized for a chip. */
+  photos?: Record<string, string | null | undefined>;
+};
+
+/**
+ * A preset trip as "a surprise inside" any gift (GiftData.unwrap): its title and photograph, from
+ * where to where and how, the nights, and the towns on the way. A road trip runs from where its
+ * road starts, as the ticket does; the others fly from the airport they last searched from, when
+ * there is one. The link is the trip's own page, in the gift's language.
+ */
+export function tripUnwrap(trip: Trip, locale: "en" | "es", options: TripUnwrapOptions = {}): GiftUnwrap {
+  const { from, photos = {} } = options;
+  const road = trip.kind === "road";
+  const airport = findAirport(trip.flyTo);
+  const to = road ? stopName(trip.stops[trip.stops.length - 1], locale) : airport ? cityName(airport, locale) : stopName(trip.stops[0], locale);
+  const start = road ? stopName(trip.stops[0], locale) : from ? cityName(from, locale) : undefined;
+  const stops: GiftUnwrapStop[] = trip.stops.slice(0, UNWRAP_LIMITS.stops).map((s) => {
+    const photo = photos[s.name];
+    return {
+      name: clipText(stopName(s, locale), UNWRAP_LIMITS.stopName),
+      lat: s.lat,
+      lng: s.lng,
+      ...(isUnwrapImage(photo) ? { image: photo } : {}),
+      note: clipText(s.note[locale], UNWRAP_LIMITS.stopNote),
+    };
+  });
+  // The small copy: the card is a phone's width, and the full photograph is four times the bytes.
+  const cover = trip.image ? tripImageSm(trip.image) : undefined;
+  return {
+    kind: "trip",
+    title: clipText(trip.title[locale], UNWRAP_LIMITS.title),
+    city: clipText(to, UNWRAP_LIMITS.city),
+    stops,
+    ...(isUnwrapImage(cover) ? { image: cover } : {}),
+    link: `${locale === "es" ? "/es" : ""}/trips/${trip.id}`,
+    trip: {
+      ...(start && start !== to ? { from: clipText(start, UNWRAP_LIMITS.place) } : {}),
+      to: clipText(to, UNWRAP_LIMITS.place),
+      nights: Math.min(UNWRAP_LIMITS.nights, tripNights(trip)),
+      mode: road ? "road" : trip.kind === "train" ? "train" : "flight",
+    },
   };
 }

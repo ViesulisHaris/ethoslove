@@ -24,11 +24,12 @@ the trips on the hub, a `TouristTrip` with its itinerary as an `ItemList` of pla
 | `src/lib/trips/flights.ts` | `flightLinks` (Aviasales, then the three comparison URLs), `weekendAhead` (the dates every search starts with) and `withDepart` (a new departure moves the return with it), `estimateFlight` and `formatFlightTime` ("about 3 h 10 min in the air"), `trainHint` (under 600 km), `withPartner` (see below). |
 | `src/lib/trips/partners.ts` | The Travelpayouts short links and the deep links built on them (`aviasalesSearch`, `tiqetsSearch`, `autoEuropeHire`), each trip's ticketed sights (`tripTickets`) and car-hire page (`tripCarHire`), and `PartnerPlacement`. |
 | `src/lib/dates/ticketed.ts` | Which kinds of place get a "Tickets" button (`sellsTickets`) and what Tiqets is asked (`ticketQuery`). |
-| `src/lib/dates/plan-gift.ts` | What Paper Crane starts with when a date plan is wrapped as a gift (`planGiftFields`). |
+| `src/lib/dates/plan-gift.ts` | A date plan as "a surprise inside" a gift (`planUnwrap`): the day, the town, the stops with their times, kinds and photographs. |
 | `src/lib/trips/presets.ts` | `TRIPS`: the twelve trips, all text in English and Spanish. |
-| `src/lib/trips/trip-gift.ts` | What "Pack your bags" starts with for a trip (`tripGiftFields`). |
+| `src/lib/trips/trip-gift.ts` | What "Pack your bags" starts with for a trip (`tripGiftFields`), and a trip as a surprise inside any other gift (`tripUnwrap`). |
 | `src/lib/trips/last-from.ts` | The last airport someone searched from, in `localStorage`, so the next search and the next surprise start there. |
-| `src/lib/editor/gift-seed.ts` | Hands template fields to the editor through `sessionStorage` (read once, an hour at most, size-capped); `editor-shell.tsx` merges them over the defaults and over a restored draft. |
+| `src/lib/editor/gift-seed.ts` | Hands template fields (and a surprise inside, `unwrap`) to the editor through `sessionStorage` (read once, an hour at most, size-capped); `editor-shell.tsx` merges them over the defaults and over a restored draft. |
+| `src/components/gifts/` | `template-chooser.tsx` (every gift, to wrap a date or a trip in) and `unwrap-photos.ts` (the stops' photographs, through the dates photo store). |
 | `src/components/trips/` | `flight-finder.tsx`, `airport-box.tsx`, `trip-card.tsx`, `trips-grid.tsx`, `trip-map.tsx` + `route-map.tsx`, `trip-art.tsx`, `surprise-link.tsx`, `partner-link.tsx` (every link that earns goes through it). |
 | `public/trips/<id>.webp`, `<id>-sm.webp` | The pictures, 1600×1200 and 800×600. |
 
@@ -155,15 +156,28 @@ The button saves a gift seed for `pack-your-bags` and opens `/create/pack-your-b
 The editor validates the seed against the template's schema field by field; whatever fails stays
 at the default.
 
-## A date plan as a gift
+## A surprise inside any gift
 
-"Wrap it in a gift" on `/plan` works the same way, with Paper Crane (`src/lib/dates/plan-gift.ts`):
-the day on the first fold, then one stop per fold ("1. Café Tal at 18:00"), the fifth fold onward
-sharing the last line, and their note as the line left on the table when it fits (else "It's a
-date."). Scratch Card was the first idea and doesn't fit: a seed only fills a template's own fields,
-Scratch Card's one text field is a 60-character headline, and that headline is printed on the
-ticket's cover before anything is scratched. Paper Crane shows each line only as its fold lands and
-needs no photos.
+"Wrap it in a gift" on `/plan`, and "…or put it inside any gift" under a trip's "Make it a
+surprise", open the gift chooser (`src/components/gifts/template-chooser.tsx`): every template, in
+the gallery's order, each saying what the surprise costs in it. The one they pick opens in the
+editor with the plan or the trip attached as `GiftData.unwrap` (`planUnwrap` / `tripUnwrap`), and
+the gift carries it as a present on its end screen, under the last words (`UnwrapGift` in
+`src/templates/_shared`). Tapped, it unwraps into the itinerary: the day, each stop with its
+photograph (or its kind's picture, marked as a kind), "Open our plan" and "Add to calendar"; or the
+trip's photograph, from where to where, the nights and the towns on the way.
+
+- Pictures and the link are held to an allow-list (`src/lib/gift/unwrap-rules.ts`): Wikimedia's two
+  image hosts and this site's own `/dates/`, `/trips/` and `/templates/` pictures, and a link only to
+  a plan or a preset trip. A gift is opened by someone who agreed to nothing, so it may not load a
+  picture from anywhere else.
+- The photographs come through the same store as the Dates list (`photoFor` in
+  `components/dates/photo-store.ts`), asked for as the chooser opens and waited on for a few seconds
+  at most.
+- It is one of the paid extras on the two free templates ("Make it special") and comes with every
+  premium template (`premiumExtras` in `src/lib/gift/publish.ts`).
+- The editor has a section for it, after "Your words": the attached plan or trip with its day, or
+  "Add your date plan" (the one this browser keeps) and "Add a trip" (the twelve presets).
 
 ## The map
 
