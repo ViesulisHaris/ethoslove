@@ -9,7 +9,8 @@ export const EMAIL_BRAND = { name: "Ethos", site: SITE_URL, from: process.env.EM
 
 const paper = "#FAF7F2";
 const ink = "#1A1614";
-const coral = "#E8604C";
+// The site's rose (--brand-coral), which carries white type at 4.6:1.
+const coral = "#d6336c";
 const muted = "#6F665F";
 
 /** `footerLink` is the way out of an optional email (unsubscribe, remove a reminder), kept beside why it was sent. */

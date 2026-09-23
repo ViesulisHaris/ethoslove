@@ -204,13 +204,30 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
+  const closer = useRef<HTMLButtonElement>(null);
   const colors = useMemo(() => presentColors(data.accentColor), [data.accentColor]);
   const { locale } = data;
   // Back to the present it was opened from, so a keyboard is not dropped at the top of the page.
   const close = () => {
     setOpen(false);
-    button.current?.focus({ preventScroll: true });
+    requestAnimationFrame(() => requestAnimationFrame(() => button.current?.focus({ preventScroll: true })));
   };
+  // Escape closes it wherever focus is: a tap on the present leaves focus on the present, outside
+  // the overlay, so a handler on the overlay alone never heard it on a phone. Focus moves in on open,
+  // so a keyboard lands on the close button rather than behind the overlay.
+  useEffect(() => {
+    if (!open) return;
+    closer.current?.focus({ preventScroll: true });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      // After the overlay's exit has started: focusing in the same tick lost it again on a phone,
+      // where the focused close button was still being taken out of the page.
+      requestAnimationFrame(() => requestAnimationFrame(() => button.current?.focus({ preventScroll: true })));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
   return (
     <>
       <motion.button
@@ -252,9 +269,9 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="absolute inset-0 z-[60] bg-[#140c10]/85 text-white backdrop-blur-md"
-            onKeyDown={(e) => {
-              if (e.key === "Escape") close();
-            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={giftString(locale, "unwrapOneMore")}
             data-testid="unwrap-peek-open"
           >
             <div className="absolute inset-0 overflow-y-auto overscroll-contain">
@@ -262,7 +279,7 @@ export function UnwrapPeek({ data }: { data: GiftData }) {
                 <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark autoOpen />
               </div>
             </div>
-            <button type="button" onClick={close} aria-label={giftString(locale, "unwrapClose")} className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20">
+            <button ref={closer} type="button" onClick={close} aria-label={giftString(locale, "unwrapClose")} className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20">
               <X className="size-5" />
             </button>
           </motion.div>

@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { BRAND } from "@/config/brand";
+import { HEART, SEAL } from "@/components/shared/logo";
 import { getManifest } from "@/templates/manifests";
 
 const COPY = {
@@ -46,22 +47,11 @@ export async function GET(request: NextRequest) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 999,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "radial-gradient(circle at 36% 30%, #F4C7C3, #E8604C 48%, #B23A2E 100%)",
-            }}
-          >
-            <svg width="30" height="30" viewBox="0 0 24 24">
-              <path
-                d="M12 20.8s-7.2-4.4-9.2-8.8C1.4 8.6 3.1 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3.2 1.7-2.1 3.2-3.2 5.2-3.2 3.7 0 5.4 3.8 4 7.2-2 4.4-9.2 8.8-9.2 8.8Z"
-                fill="#FFF8F4"
-              />
+          <div style={{ width: 64, height: 64, display: "flex" }}>
+            {/* The site's own seal, not a stand-in: the link preview is often the first time anyone sees the mark. */}
+            <svg width="64" height="64" viewBox="0 0 32 32">
+              <path d={SEAL} fill="#d6336c" />
+              <path d={HEART} fill="#FBF6EE" opacity="0.95" />
             </svg>
           </div>
           <div style={{ marginLeft: 20, fontSize: 34, letterSpacing: 10, display: "flex" }}>{BRAND.name.toUpperCase()}</div>
