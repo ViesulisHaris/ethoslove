@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
   },
   // Three.js and GSAP ship ESM that Turbopack handles fine; keep sharp server-only.
   serverExternalPackages: ["sharp"],
+  // Search Console showed `www.tryethos.io/&` with 700 impressions and 19 clicks in four days — a
+  // mangled link somewhere out there (an `&amp;` left behind), and every click landed on a 404.
+  redirects: async () => [
+    { source: "/&", destination: "/", permanent: true },
+    { source: "/es/&", destination: "/es", permanent: true },
+  ],
   headers: async () => [
     {
       source: "/audio/library/:path*",

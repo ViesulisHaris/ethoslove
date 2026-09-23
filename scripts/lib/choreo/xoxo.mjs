@@ -55,7 +55,8 @@ export async function film({ page, live, spec, inGift, now }) {
   marks.more = now();
 
   // ── The letter, then the end ──────────────────────────────────────────────────────────────────
-  console.log("  letter:", await glide(page, { selector: "[data-scroller] > div > section", nth: 3 }, { offset: 8 }));
+  // The letter is the last section: with fewer photos the pair and the rest sections aren't there.
+  console.log("  letter:", await glide(page, { selector: "[data-scroller] > div > section", nth: -1 }, { offset: 8 }));
   await inGift(says, spec.message.slice(0, 24).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), 10);
   await page.waitForTimeout(2600);
   marks.letter = now();
