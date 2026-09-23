@@ -1,3 +1,14 @@
+/** How a game is being played: one phone passed between two people, or two phones in a room. */
+export type Mode = "one" | "two";
+/**
+ * A game under way. `names` is always [player 0, player 1]: on two phones the host is player 0.
+ * `peer` is the other phone. `first` is the host's first state as it reached a guest, so the game
+ * opens on it instead of asking for it again; it is never saved.
+ */
+export type Session = { mode: Mode; code: string | null; host: boolean; names: [string, string]; peer: string | null; first?: unknown };
+/** A room this phone has gone into, before or during a game: the code, the name it goes by, and whether it made the room. */
+export type Entry = { code: string; name: string; host: boolean };
+
 /** Room codes: four letters from an alphabet with no look-alikes, so one can be read out across a table. */
 const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ";
 export const CODE_LENGTH = 4;

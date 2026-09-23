@@ -1088,12 +1088,16 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
   return { data: { ...local.data, photos, music, video, voiceNote }, assets };
 }
 
-/** Preview data: whatever the store has, with a non-empty recipient so templates render. */
-export function previewData(data: GiftData, fallbackName: string): GiftData {
+/**
+ * Preview data: whatever the store has, with sample names until the real ones are typed, so
+ * templates render. A sample name rather than a dash, which made the preview read "Made by — for
+ * Ana" and "Send — a reaction".
+ */
+export function previewData(data: GiftData, fallbackRecipient: string, fallbackSender: string): GiftData {
   return {
     ...data,
-    recipientName: data.recipientName || fallbackName,
-    senderName: data.senderName || "—",
+    recipientName: data.recipientName || fallbackRecipient,
+    senderName: data.senderName || fallbackSender,
   };
 }
 

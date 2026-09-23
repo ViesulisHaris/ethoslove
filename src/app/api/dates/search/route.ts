@@ -3,15 +3,13 @@ import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import { isLatLng, snapSearch } from "@/lib/dates/geo";
 import { GROUP_IDS, type PlaceGroup } from "@/lib/dates/kinds";
-import { balance } from "@/lib/dates/places";
+import { balance, SEARCH_PER_GROUP } from "@/lib/dates/places";
 import { poisOfTile } from "@/lib/dates/tile-source";
 import { mergePlaces, placesFromPois, tilesCovering } from "@/lib/dates/tiles";
 
 export const runtime = "nodejs";
 export const maxDuration = 20;
 
-/** Enough of each group to fill the map without sending a city's every restaurant to a phone. */
-const PER_GROUP = 60;
 /** A neighbourhood changes slowly: a day fresh, a week stale-but-served while it refreshes. */
 const FRESH_SECONDS = 60 * 60 * 24;
 
@@ -38,7 +36,7 @@ export async function GET(request: NextRequest) {
   if (results.every((r) => !r.ok)) return NextResponse.json({ error: "unavailable", center, radiusM, places: [] }, { status: 503 });
 
   const all = mergePlaces(...results.map((r) => placesFromPois(r.features, r.tile, center, radiusM, locale)));
-  const places = balance(all.filter((p) => groups.includes(p.group)), PER_GROUP);
+  const places = balance(all.filter((p) => groups.includes(p.group)), SEARCH_PER_GROUP);
   // A missing tile is a hole in the map; say so, and do not let the CDN keep the holey answer for a day.
   const complete = results.every((r) => r.ok);
   return NextResponse.json(

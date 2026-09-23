@@ -486,6 +486,7 @@ export function defaultCoverFor(slug: string): CoverId {
     case "constellations":
     case "midnight-countdown":
     case "passport":
+    case "pack-your-bags":
       return "starry";
     case "party-animals":
       return "party";

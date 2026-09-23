@@ -1,33 +1,47 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { RotateCcw, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useReducedMotion } from "motion/react";
 import { CHORES } from "@/lib/games/content";
+import { readSaved, reviveRoulette, savedKey, tabStorage, writeSaved, type RouletteTable } from "@/lib/games/saved";
+import { cn } from "@/lib/utils";
 import { GameArt, PlayingCard, Suit } from "./cards";
-import { Lobby, useGameRoom, type Session } from "./lobby";
+import { GameEnd } from "./game-end";
+import { Lobby } from "./lobby";
 import { ScreenTop } from "./screen-top";
+import { LeaveGame } from "./screens";
+import { useGame } from "./use-game";
 
 const SEGMENTS = 8;
 const SPIN_MS = 3800;
+const SAVED = savedKey("roulette", "play");
+/** A name longer than this is set a size smaller on the wheel, so more of it fits before the ellipsis. */
+const LONG_NAME = 9;
 
 /** Dishes roulette: a wheel of the two of you, a chore per spin, and the wheel's word is final. */
 export function Roulette() {
   const t = useTranslations("games.roulette");
-  const { room, entry, setEntry } = useGameRoom();
-  const [session, setSession] = useState<Session | null>(null);
-  if (!session) return <Lobby room={room} entry={entry} onEnter={setEntry} onePhoneOnly title={t("title")} blurb={t("blurb")} art={<GameArt sticker="candy" rank="7" suit="club" back="gold" />} onStart={setSession} />;
-  return <Wheel names={session.names} />;
+  const { room, entry, enter, session, start, leave } = useGame("roulette", { twoPhones: false });
+  if (!session) return <Lobby room={room} entry={entry} onEnter={enter} onePhoneOnly title={t("title")} blurb={t("blurb")} art={<GameArt sticker="candy" rank="7" suit="club" back="gold" />} onStart={start} />;
+  return <Wheel names={session.names} onChangePlayers={leave} />;
 }
 
-function Wheel({ names }: { names: [string, string] }) {
+function Wheel({ names, onChangePlayers }: { names: [string, string]; onChangePlayers: () => void }) {
   const t = useTranslations("games.roulette");
+  const tl = useTranslations("games.lobby");
   const locale = useLocale() === "es" ? "es" : "en";
   const reduced = useReducedMotion();
+  // What the wheel had settled before a reload: a spin still turning when the page went never landed.
+  const [kept] = useState(() => readSaved(tabStorage(), SAVED, (raw) => reviveRoulette(raw, CHORES.length)));
   const [angle, setAngle] = useState(0);
   const [spinning, setSpinning] = useState(false);
-  const [chore, setChore] = useState(0);
-  const [results, setResults] = useState<{ who: 0 | 1; chore: number; n: number }[]>([]);
+  const [chore, setChore] = useState(kept?.chore ?? 0);
+  const [results, setResults] = useState<RouletteTable["results"]>(kept?.results ?? []);
+  // A wheel has no last spin: the game ends when they say everything is settled.
+  const [settled, setSettled] = useState(kept?.settled ?? false);
+  useEffect(() => writeSaved(tabStorage(), SAVED, { chore, results, settled } satisfies RouletteTable), [chore, results, settled]);
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);
 
@@ -53,6 +67,35 @@ function Wheel({ names }: { names: [string, string] }) {
   const gradient = `conic-gradient(${Array.from({ length: SEGMENTS }, (_, i) => `${i % 2 === 0 ? "#D6336C" : "#FFF6F0"} ${i * slice}deg ${(i + 1) * slice}deg`).join(", ")})`;
   const latest = results[0];
 
+  if (settled) {
+    return (
+      <section className="container-narrow py-12 text-center sm:py-16">
+        <ScreenTop screen="settled" />
+        <p className="text-eyebrow text-blush">{t("end.eyebrow")}</p>
+        <h1 className="mt-3 display-xl text-cream">{t("end.title")}</h1>
+        <ul className="mx-auto mt-6 max-w-sm space-y-1.5 text-[15.5px] text-cream/75">
+          {results.map((r) => (
+            <li key={r.n}>
+              <span className="font-semibold text-cream">{names[r.who]}</span> {CHORES[r.chore][locale]}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          <button type="button" onClick={() => setSettled(false)} className="btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold">
+            <RotateCcw aria-hidden="true" className="size-4" />
+            {t("end.again")}
+          </button>
+          {/* The wheel now comes back after a reload, which used to be the only way to new names. */}
+          <button type="button" onClick={onChangePlayers} className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
+            <Users aria-hidden="true" className="size-4" />
+            {tl("change")}
+          </button>
+        </div>
+        <GameEnd />
+      </section>
+    );
+  }
+
   return (
     <section className="container-narrow py-10 text-center sm:py-14">
       <ScreenTop />
@@ -63,9 +106,12 @@ function Wheel({ names }: { names: [string, string] }) {
           <Suit suit="heart" className="size-10 rotate-180" color="#E0962A" />
         </div>
         <div className="size-full rounded-full shadow-[0_30px_60px_-24px_rgba(0,0,0,0.8)] ring-[10px] ring-cream" style={{ background: gradient, transform: `rotate(${angle}deg)`, transition: reduced ? "none" : `transform ${SPIN_MS}ms cubic-bezier(0.12, 0.8, 0.12, 1)` }}>
+          {/* Each name runs from the rim towards the middle and stops short of the heart in the centre
+              (the padding on the left clears its 32px radius); a name too long for that ends in an
+              ellipsis rather than being cut mid-word or slipping under the heart. */}
           {Array.from({ length: SEGMENTS }, (_, i) => (
-            <span key={i} className="absolute top-1/2 left-1/2 w-[46%] origin-left -translate-y-1/2 truncate pr-6 text-right font-display text-[16px]" style={{ transform: `rotate(${i * slice + slice / 2 - 90}deg)`, color: i % 2 === 0 ? "#FFFFFF" : "#2A0F1F" }}>
-              {names[i % 2].slice(0, 12)}
+            <span key={i} className={cn("absolute top-1/2 left-1/2 w-[46%] origin-left -translate-y-1/2 truncate pr-5 pl-10 text-right font-display", names[i % 2].length > LONG_NAME ? "text-[14px]" : "text-[16px]")} style={{ transform: `rotate(${i * slice + slice / 2 - 90}deg)`, color: i % 2 === 0 ? "#FFFFFF" : "#2A0F1F" }}>
+              {names[i % 2]}
             </span>
           ))}
         </div>
@@ -95,6 +141,14 @@ function Wheel({ names }: { names: [string, string] }) {
         </ul>
       ) : null}
       <p className="mt-6 text-[12.5px] text-cream/45">{t("binding")}</p>
+      {/* After a spin, "everything settled" leads to the end, and "change players" is there. */}
+      {latest && !spinning ? (
+        <button type="button" onClick={() => setSettled(true)} className="mt-3 h-11 rounded-full px-5 text-[14px] font-semibold text-cream/70 underline-offset-4 hover:text-cream hover:underline">
+          {t("finish")}
+        </button>
+      ) : !latest ? (
+        <LeaveGame label={tl("change")} onLeave={onChangePlayers} />
+      ) : null}
     </section>
   );
 }

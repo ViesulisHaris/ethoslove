@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { inkPairs, type Stroke } from "@/lib/games/ink";
 import { cn } from "@/lib/utils";
 
 /**
@@ -8,7 +9,7 @@ import { cn } from "@/lib/utils";
  * so a finger on a phone and a mouse on a laptop draw the same picture on both screens. Strokes
  * are flat number arrays (x, y, x, y…) because they travel over the room many times a second.
  */
-export type Stroke = { id: number; points: number[]; colour: string; width: number };
+export type { Stroke };
 
 /** Five inks, named so the buttons can say which is which. */
 export const INK = [
@@ -28,7 +29,8 @@ export function drawStrokes(canvas: HTMLCanvasElement, strokes: Stroke[]) {
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   for (const stroke of strokes) {
-    const points = stroke.points;
+    // A batch still on its way from the other phone leaves a gap: draw around it, not through (0, 0).
+    const points = inkPairs(stroke.points);
     if (points.length < 2) continue;
     ctx.beginPath();
     ctx.strokeStyle = stroke.colour;
@@ -52,14 +54,15 @@ type Props = {
   canDraw: boolean;
   colour?: string;
   onStart?: (stroke: Stroke) => void;
-  onPoints?: (id: number, points: number[]) => void;
+  /** `at` is where the batch starts in the stroke's points, so the other phone can put it in its place. */
+  onPoints?: (id: number, points: number[], at: number) => void;
   label: string;
   className?: string;
 };
 
 export function DrawBoard({ strokes, canDraw, colour = INK[0].colour, onStart, onPoints, label, className }: Props) {
   const canvas = useRef<HTMLCanvasElement>(null);
-  const live = useRef<{ id: number; pending: number[]; frame: number } | null>(null);
+  const live = useRef<{ id: number; pending: number[]; sent: number; frame: number } | null>(null);
   const handlers = useRef({ onStart, onPoints });
   useEffect(() => {
     handlers.current = { onStart, onPoints };
@@ -100,7 +103,8 @@ export function DrawBoard({ strokes, canDraw, colour = INK[0].colour, onStart, o
     if (!drawing) return;
     drawing.frame = 0;
     if (drawing.pending.length === 0) return;
-    handlers.current.onPoints?.(drawing.id, drawing.pending);
+    handlers.current.onPoints?.(drawing.id, drawing.pending, drawing.sent);
+    drawing.sent += drawing.pending.length;
     drawing.pending = [];
   }, []);
 
@@ -108,7 +112,8 @@ export function DrawBoard({ strokes, canDraw, colour = INK[0].colour, onStart, o
     if (!canDraw || event.button > 0) return;
     event.currentTarget.setPointerCapture(event.pointerId);
     const id = Date.now();
-    live.current = { id, pending: [], frame: 0 };
+    // The first point goes with the stroke itself: two numbers already sent.
+    live.current = { id, pending: [], sent: 2, frame: 0 };
     handlers.current.onStart?.({ id, points: at(event), colour, width: LINE });
   };
 

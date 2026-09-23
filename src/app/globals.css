@@ -375,18 +375,21 @@
   --color-lilac-soft: #e6e0f8;
 }
 
+/* The -webkit- line goes first in every glass utility: Lightning CSS (Tailwind's minifier) treats
+   the pair as one property and keeps only the last, so with the prefixed one last, Chrome and
+   Firefox got no blur at all and text scrolled under the header stayed sharp. */
 @utility glass-forest {
   background: color-mix(in oklab, var(--brand-forest) 88%, transparent);
   border: 1px solid rgba(255, 246, 240, 0.12);
-  backdrop-filter: blur(18px) saturate(1.25);
   -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  backdrop-filter: blur(18px) saturate(1.25);
 }
 /* The navbar: frosted white with a breath of rose, light enough to sit on paper and on wine alike. */
 @utility glass-petal {
   background: color-mix(in oklab, #ffffff 84%, transparent);
   border: 1px solid rgba(214, 51, 108, 0.16);
-  backdrop-filter: blur(20px) saturate(1.5);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.5);
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 14px 40px -20px rgba(176, 36, 90, 0.4);
 }
 /* The one button that matters on a page. */
@@ -398,8 +401,8 @@
 @utility glass-cream {
   background: rgba(244, 237, 224, 0.1);
   border: 1px solid rgba(244, 237, 224, 0.2);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 /* A gift fills the screen on every device; the demo page keeps its control strip on top. */
@@ -462,6 +465,14 @@
     padding 0.2s ease;
   animation: ethos-pin-in 0.34s var(--ease-spring) backwards;
   animation-delay: calc(var(--i, 0) * 16ms);
+}
+/* The pill is 36px tall (34 when it is only an icon); a finger needs 44. The target reaches a few
+   pixels past the pill, which stays the size it is. MapLibre makes a marker's root absolute, so
+   this is placed against the pill. */
+.ethos-pin::before {
+  content: "";
+  position: absolute;
+  inset: -5px -3px;
 }
 .ethos-pin-ico {
   display: grid;
@@ -595,7 +606,11 @@
   }
 }
 
+/* A numbered stop of the date being planned. The pills carry an inline z-index (1, or 3 hovered and
+   4 chosen: map-pins.ts), and a stop with none sat under every one of them, its "1" hidden under its
+   own place's pill. 2 puts the stops over the pills, and the one being pointed at or chosen over them. */
 .ethos-stop-pin {
+  z-index: 2;
   display: grid;
   place-items: center;
   width: 30px;
@@ -667,6 +682,23 @@
 }
 .maplibregl-ctrl-attrib {
   font-size: 11px;
+}
+/* MapLibre draws its credits on half-transparent white, so whatever passes under them (a green or
+   gold pin, a park) shows through, and the 11px text measured 2.9:1. Near-solid paper and the
+   site's ink keep them readable over anything. Scoped under the map to outrank MapLibre's own sheet,
+   which loads after this one. */
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib {
+  background-color: rgb(255 255 255 / 0.92);
+  color: var(--color-forest);
+}
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  color: var(--color-forest);
+}
+/* The phone's full-screen map runs under the home indicator (the layout is viewport-fit=cover), so
+   the credits' (i) is lifted clear of it, the way the dock is. */
+.ethos-map-full .maplibregl-ctrl-bottom-left,
+.ethos-map-full .maplibregl-ctrl-bottom-right {
+  bottom: env(safe-area-inset-bottom);
 }
 
 /* ------------------------------------------------------------------ */

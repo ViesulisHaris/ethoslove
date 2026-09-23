@@ -3,6 +3,7 @@ import { ArrowRight, Clock3 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ideaImage } from "@/lib/dates/art";
+import { ideaHours } from "@/lib/dates/format";
 import { IDEAS } from "@/lib/dates/ideas";
 
 const SHOWN = ["golden-hour-picnic", "bookshop-and-coffee", "mini-golf-and-milkshakes", "museum-then-wine", "sunrise-and-breakfast", "stars-and-planets", "cinema-and-late-dessert", "garden-afternoon"];
@@ -38,7 +39,7 @@ export async function IdeasTeaser() {
               <span className="relative mt-2 line-clamp-2 text-[13.5px] leading-snug text-white/85">{idea.blurb[locale]}</span>
               <span className="relative mt-3 flex items-center gap-1.5 text-[12px] font-medium text-white/80">
                 <Clock3 aria-hidden="true" className="size-3.5" />
-                {t("hours", { hours: String(idea.minutes / 60).replace(/\.0$/, "") })}
+                {t("hours", { hours: ideaHours(idea.minutes, locale) })}
               </span>
             </Link>
           </li>

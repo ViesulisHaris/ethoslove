@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 
 export function DangerZone({ email }: { email: string }) {
   const t = useTranslations("account");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState("");
@@ -24,7 +25,7 @@ export function DangerZone({ email }: { email: string }) {
         <Button variant="destructive" className="rounded-full" onClick={() => setOpen(true)}><Trash2 className="size-4" />{t("deleteAccount")}</Button>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent closeLabel={tCommon("close")}>
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">{t("deleteAccount")}</DialogTitle>
             <DialogDescription>{t("deleteConfirm", { email })}</DialogDescription>

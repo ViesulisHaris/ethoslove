@@ -17,10 +17,15 @@ use **Import .env** on that page; tick Production and Preview. Otherwise copy th
 | `SUPABASE_SERVICE_ROLE_KEY` | same page, server only |
 | `STRIPE_SECRET_KEY` | Stripe → Developers → API keys (test key first, live key when you go live). Products must be in the same mode as the key: `node scripts/stripe-create-test-products.mjs` creates the test-mode set |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | same page |
-| `STRIPE_PRODUCT_SINGLE` / `STRIPE_PRODUCT_PICK3` / `STRIPE_PRODUCT_EVERYTHING` | the three `prod_…` IDs |
+| `STRIPE_PRODUCT_*` | optional: `prod_…` ids that checkout files its lines under, for reporting. The amount always comes from `src/lib/pricing/products.ts` (docs/STRIPE.md) |
+| `STRIPE_AUTOMATIC_TAX` | `true` in production (Stripe Tax must be set up first) |
 | `STRIPE_WEBHOOK_SECRET` | after step 3 |
 | `RESEND_API_KEY` | Resend → API keys (emails are skipped and logged until this exists) |
-| `CRON_SECRET` | any long random string; protects `/api/cron/unlock` |
+| `CRON_SECRET` | any long random string; protects every `/api/cron/*` route |
+| `VIEWER_HASH_SECRET` | long random string that signs email links (reminder removal, unsubscribe) and seals the free-reply token in a gift's "send one back" link. The service key is used when it's unset, but then rotating that key voids every open reply link, so set it |
+| `GIFT_CARDS_ENABLED` | leave unset: gift cards stay off sale until VAT on vouchers is settled. `true` shows the card on `/pricing` and lets checkout sell it; `/redeem` works either way |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier): rate limits and "one recovery email per address a week" only hold across serverless instances with it |
+| `NEXT_PUBLIC_PRICE_CURRENCIES` | leave unset (euros only): the terms say we charge in euros |
 
 Google sign-in is always shown in the UI when Supabase is configured (magic link stays
 available too). Apple is not offered for now.
@@ -44,13 +49,20 @@ Authentication → URL configuration:
 
 Developers → Webhooks → Add endpoint → `https://<your-domain>/api/stripe/webhook` with the
 events `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
-`checkout.session.async_payment_failed`, `charge.refunded`. Paste the signing secret into
-`STRIPE_WEBHOOK_SECRET` and redeploy. Full detail in `docs/STRIPE.md`.
+`checkout.session.expired`, `charge.refunded` and `charge.dispute.created`. Paste the signing
+secret into `STRIPE_WEBHOOK_SECRET` and redeploy. Full detail in `docs/STRIPE.md`; the launch
+checklist is `docs/LAUNCH.md`.
+
+Also set Settings → Business → Public details → **Terms of service URL** (docs/STRIPE.md §7).
+Checkout asks every buyer to tick the withdrawal box, and Stripe refuses that box on an account
+without the URL: checkout then falls back to a notice above the pay button (logged as `CHECKOUT
+WITHOUT THE WITHDRAWAL TICKBOX`), and those buyers keep their 14-day right to cancel.
 
 ## 4. Cron
 
-`vercel.json` schedules `/api/cron/unlock` once a day (`0 8 * * *`). That is the most the
-**Hobby** plan allows; a more frequent schedule makes every deployment fail instantly with a
+`vercel.json` schedules three daily jobs: `/api/cron/passes` (`0 6 * * *`: Ethos for Two renewal
+emails and ended passes), `/api/cron/reminders` (`0 7 * * *`: "remind me next year") and
+`/api/cron/unlock` (`0 8 * * *`). Once a day is the most the **Hobby** plan allows; a more frequent schedule makes every deployment fail instantly with a
 link to Vercel's cron pricing page. Scheduled gifts don't depend on it: the recipient page
 flips a gift to live (and emails you) the first time it is opened after its unlock time. On
 Pro you can change the schedule to `*/5 * * * *`. Vercel sends `Authorization: Bearer
@@ -65,5 +77,5 @@ $CRON_SECRET` automatically once the variable exists.
 
 ## 6. Going live with real payments
 
-See `docs/STRIPE.md` → "Going live": six Vercel variables change (live keys, live product IDs,
-live webhook secret) and a redeploy. Nothing in the code changes.
+See `docs/STRIPE.md` → "Going live": the live keys, the live webhook secret, any live
+`STRIPE_PRODUCT_*` ids, and a redeploy. Nothing in the code changes.

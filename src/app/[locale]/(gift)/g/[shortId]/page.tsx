@@ -7,6 +7,9 @@ import { fetchPublicGift, fetchPublicGiftMeta, passwordCookieName } from "@/lib/
 import { promoteScheduledGift } from "@/lib/gift/promote";
 import { unseal } from "@/lib/crypto";
 import { isShortId } from "@/lib/gift/short-id";
+import { replyTokenForGift } from "@/lib/commerce/free-reply";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
+import { SHARE_CARD, shareCardUrl } from "@/lib/gift/share-card";
 import { SITE } from "@/config/site";
 import { GiftExperience } from "@/components/gift/gift-experience";
 import { LockScreen } from "@/components/gift/lock-screen";
@@ -22,12 +25,14 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/g/[
     gift.title?.trim() ||
     (es ? `${gift.recipientName}, alguien te ha hecho algo 💌` : `${gift.recipientName}, someone made you something 💌`);
   const description = es ? "Ábrelo con el sonido activado." : "Open it with your sound on.";
+  // Named here, not by an opengraph-image file: that one's URL began /en/ and was redirected.
+  const image = { url: shareCardUrl(shortId, gift), ...SHARE_CARD, type: "image/jpeg", alt: es ? "Alguien te ha hecho algo" : "Someone made you something" };
   return {
     title,
     description,
     robots: { index: false, follow: false },
-    openGraph: { title, description, type: "website", url: `${SITE.url}/g/${shortId}` },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { title, description, type: "website", url: `${SITE.url}/g/${shortId}`, images: [image] },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -51,10 +56,17 @@ export default async function GiftPage({ params }: PageProps<"/[locale]/g/[short
   }
   if (!gift.data) notFound();
 
+  // "Send one back" is free after a paid premium gift. The token is minted here, past the password
+  // check above, so only someone who can open the gift can spend its one free reply. A scheduled gift
+  // promoted a moment ago is live now.
+  const admin = getSupabaseAdminClient();
+  const replyToken = admin
+    ? await replyTokenForGift(admin, { id: gift.id, template_slug: gift.templateSlug, status: gift.unlocked ? "live" : gift.status, watermark: gift.watermark })
+    : null;
   const messages = (await import(`../../../../../../messages/${gift.locale}.json`)).default;
   return (
     <NextIntlClientProvider locale={gift.locale} messages={{ gift: messages.gift }}>
-      <GiftExperience shortId={shortId} data={gift.data} locale={gift.locale} />
+      <GiftExperience shortId={shortId} data={gift.data} locale={gift.locale} replyToken={replyToken} />
     </NextIntlClientProvider>
   );
 }

@@ -541,6 +541,21 @@ describe("long distance", () => {
     expect(nearestCity(LONDON, [])).toBeNull();
   });
 
+  it("never names a city in a country the site keeps out of its copy as the halfway point", async () => {
+    const { halfwayPlace } = await import("@/lib/dates/apart");
+    const cities = [
+      { name: "Lisbon", country: "PT", ...LISBON },
+      { name: "Paris", country: "FR", lat: 48.8566, lng: 2.3522 },
+      { name: "Central", country: "ES", lat: 40.4, lng: -3.7 },
+    ];
+    const rules = { maxKm: 400, neverNamed: new Set(["ES"]) };
+    // Halfway lands in the middle of the peninsula: the nearest city is one never named, and Lisbon,
+    // the next nearest, is not what is halfway, so no city is named at all.
+    expect(halfwayPlace({ lat: 40.5, lng: -3.5 }, cities, rules)).toBe("unnamed");
+    expect(halfwayPlace({ lat: 48.5, lng: 2.3 }, cities, rules)).toMatchObject({ city: { name: "Paris" } });
+    expect(halfwayPlace({ lat: 30, lng: -40 }, cities, rules)).toBe("nowhere");
+  });
+
   it("works out when two people in different time zones are both awake", async () => {
     const { awakeOverlap, clockOf, hoursAhead, milesOf } = await import("@/lib/dates/apart");
     // Same zone: the whole waking day.

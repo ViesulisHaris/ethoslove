@@ -45,6 +45,7 @@ export function TopBar({
       <div className="flex h-14 items-center gap-2 px-2 sm:gap-3 sm:px-5">
         <Link
           href="/templates"
+          data-tour="template"
           className="flex h-11 shrink-0 items-center gap-2 rounded-full pr-3 pl-2 text-sm text-ink-soft hover:bg-ink/5 max-[359px]:pr-2"
           aria-label={t("back")}
         >
@@ -81,6 +82,7 @@ export function TopBar({
         <Button
           onClick={onPublish}
           disabled={publishing}
+          data-tour="publish"
           className="relative h-10 shrink-0 rounded-full px-5 text-sm shadow-glow after:absolute after:inset-x-0 after:-inset-y-0.5 max-[374px]:px-3.5"
         >
           {t("publish")}

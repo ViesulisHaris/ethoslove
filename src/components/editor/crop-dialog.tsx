@@ -7,6 +7,7 @@ import type { GiftPhoto } from "@/lib/gift/schema";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 const ASPECTS: { label: string; value: number | undefined }[] = [
   { label: "1:1", value: 1 },
@@ -36,7 +37,7 @@ export function CropDialog({ photo, onClose, onApply }: { photo: GiftPhoto | nul
             </div>
             <div className="flex items-center gap-2">
               {ASPECTS.map((a) => (
-                <button key={a.label} type="button" onClick={() => setAspect(a.value ?? 1)} className={aspect === a.value ? "relative h-8 rounded-full bg-ink px-3 text-xs text-paper after:absolute after:inset-x-0 after:-inset-y-1.5" : "relative h-8 rounded-full border border-border px-3 text-xs after:absolute after:inset-x-0 after:-inset-y-1.5"}>
+                <button key={a.label} type="button" onClick={() => setAspect(a.value ?? 1)} className={cn("relative h-10 min-w-11 rounded-full px-3 text-xs after:absolute after:inset-x-0 after:-inset-y-0.5", aspect === a.value ? "bg-ink text-paper" : "border border-border")}>
                   {a.label}
                 </button>
               ))}

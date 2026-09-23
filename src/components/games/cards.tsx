@@ -112,13 +112,18 @@ export function PlayingCard({ rank, suit = "heart", faceDown = false, back = "ro
 /** A score token like a poker chip: a dashed ring inside, the number in the middle. */
 export function Chip({ value, tone = "rose", label, active = false, size = "md" }: { value: ReactNode; tone?: "rose" | "lilac" | "gold"; label?: string; active?: boolean; size?: "md" | "lg" }) {
   const bg = tone === "rose" ? "bg-rose" : tone === "lilac" ? "bg-[#5B4FB0]" : "bg-star";
+  // The end chip's score is set smaller the more figures it has: at 34px "7/10" ran over the
+  // stitching and "10/10" off the chip altogether.
+  const figures = typeof value === "string" || typeof value === "number" ? String(value).length : 0;
+  const big = figures >= 5 ? "text-[22px]" : figures === 4 ? "text-[26px]" : "text-[34px]";
   return (
     <span className="inline-flex flex-col items-center gap-1.5">
-      <span className={cn("relative grid place-items-center rounded-full font-display text-white shadow-[0_10px_22px_-10px_rgba(0,0,0,0.7)] transition-transform", bg, size === "lg" ? "size-20 text-[34px]" : "size-12 text-[20px]", active && "scale-110 ring-4 ring-cream/80")}>
+      <span className={cn("relative grid place-items-center rounded-full font-display text-white shadow-[0_10px_22px_-10px_rgba(0,0,0,0.7)] transition-transform", bg, size === "lg" ? cn("size-20", big) : "size-12 text-[20px]", active && "scale-110 ring-4 ring-cream/80")}>
         <span aria-hidden="true" className="absolute inset-[4px] rounded-full border-2 border-dashed border-white/55" />
         <span className="relative tabular-nums">{value}</span>
       </span>
-      {label ? <span className={cn("max-w-28 truncate text-[12.5px] font-semibold", active ? "text-cream" : "text-cream/65")}>{label}</span> : null}
+      {/* In play a long name is cut short, to keep the chips beside the question; under a big end-of-game chip it wraps, so it reads whole. */}
+      {label ? <span className={cn("text-[12.5px] font-semibold", size === "lg" ? "max-w-32 text-center text-balance break-words" : "max-w-28 truncate", active ? "text-cream" : "text-cream/65")}>{label}</span> : null}
     </span>
   );
 }

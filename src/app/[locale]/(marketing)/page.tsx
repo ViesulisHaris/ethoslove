@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ClientMessages } from "@/i18n/client-messages";
+import { homeHeroFor } from "@/lib/attribution/landing";
 import { organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -19,24 +21,32 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]">, 
 /**
  * The front door: dates on a map, gifts that open like a story, a corner for long distance and
  * a table of games. The gifts' own front page, which used to live here, is at /gifts unchanged.
+ *
+ * Someone who came from a gift on social media, or from a gift's badge, gets the gift hero and the
+ * gallery straight after it: that is who buys. Reading `ref` here makes the page render per
+ * request, which is the price of choosing the hero in the HTML rather than swapping it after load.
  */
-export default async function HomePage({ params }: PageProps<"/[locale]">) {
+export default async function HomePage({ params, searchParams }: PageProps<"/[locale]">) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const hero = homeHeroFor((await searchParams).ref);
+  const strip = <TemplateStrip manifests={listManifests()} />;
   return (
-    <>
+    <ClientMessages scope="(marketing)/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), websiteNode()]} />
-      <PlatformHero />
+      <PlatformHero variant={hero} />
       <TornEdge from="#FFE9EC" to="var(--brand-paper)" />
+      {hero === "gift" ? strip : null}
       <Doors />
       <IdeasTeaser />
-      <TemplateStrip manifests={listManifests()} />
-      <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
+      {hero === "dates" ? strip : null}
+      {/* The tear starts in the colour of whatever sits above it: the blush of the ideas when the gallery moved up. */}
+      <TornEdge from={hero === "gift" ? "#FFF5F2" : "var(--brand-paper)"} to="var(--brand-forest)" fibre="#4d2139" />
       <LongDistanceBand />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" fibre="#4d2139" />
       <GamesBand />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <PlatformClosing />
-    </>
+    </ClientMessages>
   );
 }

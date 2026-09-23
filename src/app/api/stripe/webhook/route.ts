@@ -3,9 +3,12 @@ import type Stripe from "stripe";
 import { env } from "@/lib/env";
 import { getStripe } from "@/lib/stripe/server";
 import { fulfilCheckoutSession, revokePurchaseByPaymentIntent } from "@/lib/stripe/fulfil";
+import { recoverExpiredSession } from "@/lib/stripe/recovery";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
+
+const FINAL_FAILURES = new Set(["bad_metadata", "refunded", "purchase_mismatch", "no_email", "account_deleted"]);
 
 /** The only place money turns into unlocks. Verifies the Stripe signature on the raw body. */
 export async function POST(request: NextRequest) {
@@ -27,7 +30,18 @@ export async function POST(request: NextRequest) {
       const session = event.data.object;
       // Expand nothing: everything we need is in metadata + payment_status.
       const result = await fulfilCheckoutSession(session);
-      if (!result.ok && result.reason !== "unpaid") console.error("[stripe] fulfilment failed", event.id, result.reason);
+      if (result.ok || result.reason === "unpaid") break;
+      // Another business's session on the shared account: not ours to fulfil.
+      if (result.reason === "bad_metadata" && !session.metadata?.purchase_id) break;
+      console.error("[stripe] fulfilment failed", event.id, result.reason);
+      // Every grant is safe to repeat, so anything that might pass on a second try asks Stripe for
+      // one (it retries with backoff for days); a decided outcome doesn't.
+      if (!FINAL_FAILURES.has(result.reason ?? "")) return NextResponse.json({ error: "fulfilment_failed" }, { status: 500 });
+      break;
+    }
+    case "checkout.session.expired": {
+      // Abandoned checkout: a recovery email, only to a buyer who opted in to hearing from us.
+      await recoverExpiredSession(event.data.object).catch((e) => console.error("[stripe] recovery failed", event.id, (e as Error).message));
       break;
     }
     case "charge.refunded": {

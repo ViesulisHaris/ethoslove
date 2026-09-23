@@ -89,7 +89,7 @@ export function AppShell({ user, children }: { user: ShellUser | null; children:
                     <Menu className="size-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-72 bg-sidebar p-4">
+                <SheetContent side="left" closeLabel={t("closeMenu")} className="w-72 bg-sidebar p-4">
                   <SheetTitle className="sr-only">{t("openMenu")}</SheetTitle>
                   <div className="flex h-full flex-col gap-6 pt-8">
                     <Logo />

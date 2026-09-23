@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -157,7 +158,9 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
   const { hero, strip, scatter } = arrangePhotos(data.photos);
   const spots = scatterSpots(scatter.length);
   const f = look.flowers;
-  const hasSong = Boolean(data.music?.title);
+  // The player card is for music that plays under the gift; a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
+  const hasSong = Boolean(song?.title);
   const heroH = hasSong ? 188 : 158;
   const stripH = Math.max(stripHeight(strip.length) + 16, 124);
   const frame = { backgroundColor: look.frame, ...gingham(look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
@@ -226,9 +229,9 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </div>
               </Piece>
 
-              {hasSong && data.music ? (
+              {hasSong && song ? (
                 <Piece x={64} y={131} w={66} rotate={2} z={8} entrance="right" delay={0.2}>
-                  <MusicCard music={data.music} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
+                  <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
                 </Piece>
               ) : null}
 

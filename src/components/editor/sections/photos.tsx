@@ -199,23 +199,30 @@ function PhotoTile({
     <li ref={setNodeRef} style={style} className={cn("group flex flex-col gap-2", isDragging && "z-10 opacity-80")}>
       <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-paper-deep shadow-soft @container">
         <img src={photo.url} alt={photo.alt ?? ""} className="h-full w-full object-cover" draggable={false} {...attributes} {...listeners} />
-        {/* The order number only where the tile has room for it beside the three buttons (136px); in
-            a narrower tile — three across on an iPad, two on a 320px phone — the rotate button sat on
-            top of it. The grid itself still shows the order. */}
-        <span className="absolute top-2 left-2 hidden size-6 place-items-center rounded-full bg-black/55 text-[11px] font-semibold text-white tabular-nums @min-[8.5rem]:grid">{index + 1}</span>
+        {/* The order number only where the tile has room for it beside the three buttons (160px); in
+            a narrower tile — three across on an iPad, two on a phone — the rotate button sat on top
+            of it. The grid itself still shows the order. */}
+        <span className="absolute top-2 left-2 hidden size-6 place-items-center rounded-full bg-black/55 text-[11px] font-semibold text-white tabular-nums @min-[10rem]:grid">{index + 1}</span>
         <span className={cn("absolute bottom-2 left-2 max-w-[calc(100%-1rem)] truncate rounded-full px-2 py-0.5 text-[10px] font-medium whitespace-nowrap backdrop-blur", status === "uploaded" ? "bg-moss/80 text-white" : status === "error" ? "bg-destructive text-white" : "bg-black/55 text-white")}>
           {status === "uploading" ? <Loader2 className="mr-1 inline size-3 animate-spin" /> : null}
           <span>{statusLabel[status] ?? status}</span>
         </span>
-        <div className="absolute top-2 right-2 flex gap-1">
-          <button type="button" onClick={onRotate} aria-label={t("rotate")} className="grid size-7 place-items-center rounded-full bg-black/55 text-white hover:bg-black/75">
-            <RotateCw className="size-3.5" />
+        {/* 28px circles, each in a 40px button: a finger needs the bigger target, the photo doesn't need bigger circles. */}
+        <div className="absolute top-0.5 right-0.5 flex">
+          <button type="button" onClick={onRotate} aria-label={t("rotate")} className="group/btn grid size-10 place-items-center rounded-full text-white">
+            <span className="grid size-7 place-items-center rounded-full bg-black/55 group-hover/btn:bg-black/75">
+              <RotateCw className="size-3.5" />
+            </span>
           </button>
-          <button type="button" onClick={onCrop} aria-label={t("crop")} className="grid size-7 place-items-center rounded-full bg-black/55 text-white hover:bg-black/75">
-            <Crop className="size-3.5" />
+          <button type="button" onClick={onCrop} aria-label={t("crop")} className="group/btn grid size-10 place-items-center rounded-full text-white">
+            <span className="grid size-7 place-items-center rounded-full bg-black/55 group-hover/btn:bg-black/75">
+              <Crop className="size-3.5" />
+            </span>
           </button>
-          <button type="button" onClick={onRemove} aria-label={t("remove")} className="grid size-7 place-items-center rounded-full bg-black/55 text-white hover:bg-destructive">
-            <X className="size-3.5" />
+          <button type="button" onClick={onRemove} aria-label={t("remove")} className="group/btn grid size-10 place-items-center rounded-full text-white">
+            <span className="grid size-7 place-items-center rounded-full bg-black/55 group-hover/btn:bg-destructive">
+              <X className="size-3.5" />
+            </span>
           </button>
         </div>
       </div>

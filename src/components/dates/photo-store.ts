@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { PlacePhoto } from "@/lib/dates/photos";
+import { PHOTO_NAME_MIN, type PlacePhoto } from "@/lib/dates/photos";
 
 /**
  * Photographs of places, looked up one at a time and only for places somebody has actually
@@ -48,6 +48,12 @@ export function requestPhoto(place: Asked, qid?: string) {
   const key = qid ? `${place.id}|${qid}` : place.id;
   if (asked.has(key) || cache.get(place.id)) return;
   asked.add(key);
+  // The server refuses a name this short without an id (and each refusal is a red line in the console).
+  if (place.name.trim().length < PHOTO_NAME_MIN && !qid) {
+    if (!cache.has(place.id)) cache.set(place.id, null);
+    tell();
+    return;
+  }
   waiting.push(async () => {
     try {
       const params = new URLSearchParams({ name: place.name, lat: place.lat.toFixed(4), lng: place.lng.toFixed(4) });

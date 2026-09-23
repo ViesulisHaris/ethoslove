@@ -47,34 +47,37 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
       }}
     >
       <PopoverTrigger asChild>
-        <button type="button" aria-label={`${labels.label}: ${formatDay(value, locale)}`} className={cn("inline-flex h-12 items-center gap-2 rounded-full border border-forest/15 bg-white px-4 text-[15px] font-medium text-forest shadow-soft transition-colors hover:border-forest/30", className)}>
+        <button type="button" data-tour="when" aria-label={`${labels.label}: ${formatDay(value, locale)}`} className={cn("inline-flex h-12 items-center gap-2 rounded-full border border-forest/15 bg-white px-4 text-[15px] font-medium text-forest shadow-soft transition-colors hover:border-forest/30", className)}>
           <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
           <span className="truncate first-letter:uppercase">{value === today ? labels.today : formatDay(value, locale, "short")}</span>
           {weather.get(value) ? <WeatherGlyph condition={weather.get(value)!.condition} className="size-4 shrink-0" /> : null}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" sideOffset={8} className="w-[318px] gap-3 rounded-3xl border-0 bg-white p-4 shadow-lift ring-1 ring-forest/10">
+      {/* Above the phone's floating Map button (z-55) and the place sheet (z-60): at 50 the button
+          sat on the calendar's last rows and a tap on a day opened the map. It also stops at the edge
+          of the screen and scrolls inside, where it used to run off the bottom of a small phone. */}
+      <PopoverContent align="start" sideOffset={8} collisionPadding={12} className="z-[70] max-h-(--radix-popover-content-available-height) w-[318px] gap-3 overflow-y-auto overscroll-contain rounded-3xl border-0 bg-white p-4 shadow-lift ring-1 ring-forest/10">
         <div className="flex flex-wrap gap-1.5">
           {quick.map(([name, date]) => (
-            <button key={name} type="button" onClick={() => choose(date)} className={cn("h-9 rounded-full px-3.5 text-[13px] font-semibold transition-colors", value === date ? "bg-forest text-cream" : "bg-rose-soft text-rose-ink hover:bg-rose-tint")}>
+            <button key={name} type="button" onClick={() => choose(date)} className={cn("h-11 rounded-full px-3.5 text-[13px] font-semibold transition-colors", value === date ? "bg-forest text-cream" : "bg-rose-soft text-rose-ink hover:bg-rose-tint")}>
               {name}
             </button>
           ))}
         </div>
         <div className="flex items-center justify-between">
-          <button type="button" disabled={!canGoBack} aria-label={labels.previous} onClick={() => setMonth(({ y, m }) => (m === 0 ? { y: y - 1, m: 11 } : { y, m: m - 1 }))} className="grid size-9 place-items-center rounded-full text-forest hover:bg-forest/5 disabled:opacity-25">
+          <button type="button" disabled={!canGoBack} aria-label={labels.previous} onClick={() => setMonth(({ y, m }) => (m === 0 ? { y: y - 1, m: 11 } : { y, m: m - 1 }))} className="grid size-11 place-items-center rounded-full text-forest hover:bg-forest/5 disabled:opacity-25">
             <ChevronLeft className="size-4" />
           </button>
           <p className="font-display text-[17px] text-forest first-letter:uppercase" aria-live="polite">
             {title}
           </p>
-          <button type="button" disabled={!canGoOn} aria-label={labels.next} onClick={() => setMonth(({ y, m }) => (m === 11 ? { y: y + 1, m: 0 } : { y, m: m + 1 }))} className="grid size-9 place-items-center rounded-full text-forest hover:bg-forest/5 disabled:opacity-25">
+          <button type="button" disabled={!canGoOn} aria-label={labels.next} onClick={() => setMonth(({ y, m }) => (m === 11 ? { y: y + 1, m: 0 } : { y, m: m + 1 }))} className="grid size-11 place-items-center rounded-full text-forest hover:bg-forest/5 disabled:opacity-25">
             <ChevronRight className="size-4" />
           </button>
         </div>
         <div className="grid grid-cols-7 gap-y-1 text-center" role="grid" aria-label={title}>
           {weekdays.map((d, i) => (
-            <span key={i} className="pb-1 text-[11px] font-medium text-forest/45 uppercase">
+            <span key={i} className="pb-1 text-[11px] font-medium text-forest/65 uppercase">
               {d}
             </span>
           ))}
@@ -98,7 +101,7 @@ export function WhenPicker({ value, today, days, locale, labels, className, onPi
             );
           })}
         </div>
-        {days.length > 0 ? <p className="text-[11.5px] leading-snug text-forest/50">{labels.forecastNote}</p> : null}
+        {days.length > 0 ? <p className="text-[11.5px] leading-snug text-forest/65">{labels.forecastNote}</p> : null}
       </PopoverContent>
     </Popover>
   );

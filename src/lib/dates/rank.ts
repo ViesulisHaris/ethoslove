@@ -1,11 +1,20 @@
 import { costOf, type Cost } from "./cost";
 import { distanceKm } from "./geo";
-import type { PlaceGroup } from "./kinds";
-import type { Place } from "./places";
+import { GROUP_IDS, type PlaceGroup } from "./kinds";
+import { RARE_CAP } from "./overpass";
+import { SEARCH_PER_GROUP, type Place } from "./places";
 
 /** What couples have said about a place, summed up. */
 export type Rating = { stars: number; reviews: number; cost: number | null };
 export type Ratings = Record<string, Rating>;
+
+/**
+ * The most places one search can put on the page, and so the most the ratings route answers for
+ * at once: every group full, and every rare find. It took 300, the page sent 356 for London, and
+ * the ones cut (the last in alphabetical order, every place mapped as an area, "way/…") never got
+ * their stars.
+ */
+export const MAX_RATED_PLACES = GROUP_IDS.length * SEARCH_PER_GROUP + RARE_CAP;
 
 export type Sort = "best" | "rated" | "nearest" | "cheapest";
 export const SORTS: Sort[] = ["best", "rated", "nearest", "cheapest"];

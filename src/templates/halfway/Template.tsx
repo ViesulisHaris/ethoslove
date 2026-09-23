@@ -155,7 +155,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   }, [data.photos.length]);
 
   const arrived = progress >= 1;
-  const remaining = Math.round(route.km * (1 - progress));
+  // The still preview draws the plane part-way for the picture, but a sender checking the numbers
+  // they set should read the whole trip, as the gift opens with.
+  const remaining = preview ? Math.round(route.km) : Math.round(route.km * (1 - progress));
 
   const advance = useCallback((next: number) => {
     setProgress(Math.min(1, Math.max(0, next)));
@@ -251,7 +253,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
               className="absolute inset-x-0 text-center font-semibold tracking-[0.24em] uppercase"
               style={{ top: "calc(var(--top) + 26.5 * var(--k))", fontSize: "calc(2.9 * var(--k))", color: p.soft }}
             >
-              {arrived ? s.together : progress > 0 ? s.toGo : s.between}
+              {arrived ? s.together : progress > 0 && !preview ? s.toGo : s.between}
             </p>
 
             {/* The postcard */}

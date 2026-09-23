@@ -2,42 +2,33 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Check, Copy, Loader2, Share2, Smartphone, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { usePathname } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { getPathname, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { makeRoomCode, parseRoomCode } from "@/lib/games/room";
+import { makeRoomCode, parseRoomCode, type Entry, type Mode, type Session } from "@/lib/games/room";
 import { PlayingCard } from "./cards";
-import { useRoom } from "./use-room";
+import { ScreenTop } from "./screen-top";
+import type { useRoom } from "./use-room";
 
-export type Mode = "one" | "two";
-/** `names` is always [player 0, player 1]: on two phones the host is player 0. `peer` is the other phone. */
-export type Session = { mode: Mode; code: string | null; host: boolean; names: [string, string]; peer: string | null };
-export type Entry = { code: string; name: string; host: boolean };
+export type { Entry, Mode, Session };
 
 const NAMES_KEY = "ethos.games.names";
+/** How long a guest waits for the room's maker before being told the room may be gone. */
+const NO_HOST_MS = 8000;
 const input = "h-12 w-full rounded-2xl border border-forest/15 bg-white px-4 text-[16px] text-forest outline-none placeholder:text-forest/40 focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]";
+const quiet = "h-12 rounded-full px-4 text-[14px] font-semibold text-forest/65 hover:bg-forest/5";
 
-/**
- * The room lives in the game, not in the lobby: the lobby leaves the screen when the game starts,
- * and the connection has to stay. A game calls this once and hands `room` to both.
- */
-export function useGameRoom() {
-  const [entry, setEntry] = useState<Entry | null>(null);
-  const room = useRoom(entry?.code ?? null, entry?.name ?? "", entry?.host ?? true);
-  return { room, entry, setEntry };
-}
-
-type Props = { title: string; blurb: string; art: ReactNode; room: ReturnType<typeof useRoom>; entry: Entry | null; onEnter: (entry: Entry | null) => void; onStart: (session: Session) => void; onePhoneOnly?: boolean; children?: ReactNode };
+/** `setup` is for whoever deals (a pack to play, say): it is not shown to a guest joining a room. */
+type Props = { title: string; blurb: string; art: ReactNode; room: ReturnType<typeof useRoom>; entry: Entry | null; onEnter: (entry: Entry | null) => void; onStart: (session: Session) => void; onePhoneOnly?: boolean; setup?: ReactNode; children?: ReactNode };
 
 /**
  * The door to every game, on the table: two names for one phone, or a room for two. A room is
  * four letters and a link; whoever opens the link is the guest, and a third person who opens it
  * is told the room is full.
  */
-export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePhoneOnly = false, children }: Props) {
+export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePhoneOnly = false, setup, children }: Props) {
   const t = useTranslations("games.lobby");
-  const pathname = usePathname();
-  const [mode, setMode] = useState<Mode | null>(onePhoneOnly ? "one" : null);
+  const [picked, setMode] = useState<Mode | null>(onePhoneOnly ? "one" : null);
   const [names, setNames] = useState<[string, string]>(["", ""]);
   const [joinCode, setJoinCode] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
@@ -47,17 +38,26 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
   // Nobody enters a room until they have pressed the button beside their name, even when the name
   // is remembered: a guest on a shared laptop should not join as somebody else.
   const entered = entry !== null;
-  const host = joinCode === null;
-  const roomCode = joinCode ?? code;
+  // A room this tab went back into after a reload arrives as `entry`, before anything was picked here.
+  const mode: Mode | null = entered ? "two" : picked;
+  const host = entry ? entry.host : joinCode === null;
+  const roomCode = entry?.code ?? joinCode ?? code;
 
   useEffect(() => {
     // A frame after mount: the page is rendered on the server without a room or names, and reading
     // them here rather than during render keeps the first client render identical to the server's.
     const frame = requestAnimationFrame(() => {
-      const wanted = parseRoomCode(new URL(window.location.href).searchParams.get("room"));
+      const params = new URL(window.location.href).searchParams;
+      const wanted = parseRoomCode(params.get("room"));
       if (wanted && !onePhoneOnly) {
         setJoinCode(wanted);
         setMode("two");
+      } else if (params.get("mode") === "two" && !onePhoneOnly) {
+        // A guest at the end of somebody else's game, asked to start their own room. Taken out of
+        // the address once read: left there, it would also say "nothing old" to the reload that
+        // should bring this phone back into the room it is about to make.
+        setMode("two");
+        window.history.replaceState(window.history.state, "", window.location.pathname);
       }
       try {
         const saved = JSON.parse(window.localStorage.getItem(NAMES_KEY) ?? "null") as [string, string] | null;
@@ -78,7 +78,8 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
     }
   };
 
-  const link = () => `${window.location.origin}${pathname}?room=${roomCode ?? ""}`;
+  // The address as it is in the bar, /es and all, so the other phone opens the room in the language it was made in.
+  const link = () => `${window.location.origin}${window.location.pathname}?room=${roomCode ?? ""}`;
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(link());
@@ -91,7 +92,7 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
   const share = async () => {
     if (!navigator.share) return copy();
     try {
-      await navigator.share({ title, text: t("shareText", { name: names[0] || t("someone") }), url: link() });
+      await navigator.share({ title, text: t("shareText", { name: entry?.name || names[0] || t("someone") }), url: link() });
     } catch {
       // Closed.
     }
@@ -99,6 +100,32 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
 
   const others = room.peers.filter((p) => p.id !== room.me);
   const hostPeer = others.find((p) => p.host);
+  const hostHere = hostPeer !== undefined;
+  // A guest on a link whose room nobody is in (the host closed the tab, or it's an old link): after
+  // a while, say so and offer a room of their own. The channel stays open, so a host who comes back
+  // still turns this into "is here".
+  const [noHost, setNoHost] = useState(false);
+  const lonely = entered && !host && !hostHere && room.status === "open";
+  useEffect(() => {
+    if (!lonely) {
+      const frame = requestAnimationFrame(() => setNoHost(false));
+      return () => cancelAnimationFrame(frame);
+    }
+    const timer = window.setTimeout(() => setNoHost(true), NO_HOST_MS);
+    return () => window.clearTimeout(timer);
+  }, [lonely]);
+
+  /** Out of the room, before any game: the host closes it, a guest stops waiting. A guest's link is forgotten, so the lobby offers a room of their own. */
+  const leave = (then: Mode | null = "two") => {
+    onEnter(null);
+    setTaken(false);
+    setCode(null);
+    setMode(then);
+    if (joinCode) {
+      setJoinCode(null);
+      window.history.replaceState(window.history.state, "", window.location.pathname);
+    }
+  };
   // Peers come sorted by arrival, so this is the first guest in — the same one on every phone.
   // A second guest (the link opened twice, a friend being nosy) is told the room is full.
   const seated = room.peers.find((p) => !p.host);
@@ -107,18 +134,21 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
   const ready = mode === "two" && room.status === "open" && !full && Boolean(host ? guestPeer : hostPeer);
 
   return (
-    <section className="container-x grid items-center gap-10 pt-10 pb-16 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:pb-24">
+    // As far down on a phone as anywhere: the tour's "How it works" button floats top right under
+    // the header, and a title that fills the first line ("¿Cuánto me conoces?") ran into it.
+    <section className="container-x grid items-center gap-10 pt-14 pb-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16 lg:pb-24">
       <div>
         <h1 className="display-xl text-cream">{title}</h1>
         <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-cream/70">{blurb}</p>
         {children}
+        {host ? setup : null}
 
         {mode === null ? (
-          <div className="mt-8 grid max-w-xl gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid max-w-xl gap-4 sm:grid-cols-2" data-tour="mode">
             {(["one", "two"] as const).map((m, i) => {
               const Icon = m === "one" ? Users : Smartphone;
               return (
-                <button key={m} type="button" onClick={() => setMode(m)} className="group block rounded-[20px] text-left">
+                <button key={m} type="button" onClick={() => setMode(m)} className="group block rounded-[20px] text-left" data-tour={m === "two" ? "room" : undefined}>
                   <PlayingCard rank={String(i + 1)} suit={i === 0 ? "heart" : "diamond"} className="transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="min-h-[190px] px-6 pt-12 pb-6">
                     <Icon aria-hidden="true" className="size-6 text-rose-deep" />
                     <span className="mt-3 block font-display text-[23px] leading-tight">{t(`${m}.title`)}</span>
@@ -149,7 +179,7 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                   {t("start")}
                 </button>
                 {!onePhoneOnly ? (
-                  <button type="button" onClick={() => setMode(null)} className="h-12 rounded-full px-4 text-[14px] font-semibold text-forest/65 hover:bg-forest/5">
+                  <button type="button" onClick={() => setMode(null)} className={quiet}>
                     {t("back")}
                   </button>
                 ) : null}
@@ -158,6 +188,10 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
           </PlayingCard>
         ) : null}
 
+        {/* The room takes the name form's place, and on a phone the form had been scrolled up to
+            reach its button: the code, the thing read out across the table, came in half under
+            the header. Above the card's margin, so the whole card comes into view. */}
+        {entry ? <ScreenTop screen={`room:${entry.code}`} /> : null}
         {mode === "two" ? (
           <PlayingCard className="mt-8 max-w-xl" faceClassName="p-6 sm:p-7">
             {!entered ? (
@@ -176,11 +210,10 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                   <button type="submit" className="btn-rose h-12 rounded-full px-7 text-[15px] font-semibold">
                     {joinCode ? t("two.join") : t("two.create")}
                   </button>
-                  {!joinCode ? (
-                    <button type="button" onClick={() => setMode(null)} className="h-12 rounded-full px-4 text-[14px] font-semibold text-forest/65 hover:bg-forest/5">
-                      {t("back")}
-                    </button>
-                  ) : null}
+                  {/* A guest can step back too: the link might be old, or they'd rather play on one phone. */}
+                  <button type="button" onClick={() => (joinCode ? leave(null) : setMode(null))} className={quiet}>
+                    {t("back")}
+                  </button>
                 </div>
               </form>
             ) : (
@@ -209,6 +242,8 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                     t("two.failed")
                   ) : full ? (
                     t("two.full")
+                  ) : noHost && !ready ? (
+                    t("two.noHost")
                   ) : ready ? (
                     <>
                       <Check aria-hidden="true" className="size-4 text-moss" />
@@ -222,21 +257,32 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
                   )}
                 </p>
                 {ready && host && guestPeer ? (
-                  <button type="button" onClick={() => onStart({ mode: "two", code: entry?.code ?? null, host: true, names: [names[0].trim(), guestPeer.name || t("someone")], peer: guestPeer.id })} className="btn-rose mt-4 h-12 rounded-full px-7 text-[15px] font-semibold">
+                  <button type="button" onClick={() => onStart({ mode: "two", code: entry?.code ?? null, host: true, names: [entry?.name ?? names[0].trim(), guestPeer.name || t("someone")], peer: guestPeer.id })} className="btn-rose mt-4 h-12 rounded-full px-7 text-[15px] font-semibold">
                     {t("start")}
                   </button>
                 ) : null}
                 {ready && !host && hostPeer ? (
                   <>
                     <p className="mt-3 text-[13.5px] text-forest/55">{t("two.hostStarts", { name: hostPeer.name || t("someone") })}</p>
-                    <GuestAutoStart room={room} hostId={hostPeer.id} onTaken={() => setTaken(true)} onStart={() => onStart({ mode: "two", code: entry?.code ?? null, host: false, names: [hostPeer.name || t("someone"), names[0].trim()], peer: hostPeer.id })} />
+                    <GuestAutoStart room={room} hostId={hostPeer.id} onTaken={() => setTaken(true)} onStart={(first) => onStart({ mode: "two", code: entry?.code ?? null, host: false, names: [hostPeer.name || t("someone"), entry?.name ?? names[0].trim()], peer: hostPeer.id, first })} />
                   </>
                 ) : null}
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  {(noHost && !ready) || full || room.status === "failed" ? (
+                    <button type="button" onClick={() => leave("two")} className="btn-rose h-12 rounded-full px-7 text-[15px] font-semibold">
+                      {t("two.makeOwn")}
+                    </button>
+                  ) : null}
+                  <button type="button" onClick={() => leave(onePhoneOnly ? "one" : null)} className={quiet}>
+                    {host ? t("two.cancel") : t("two.leave")}
+                  </button>
+                </div>
               </div>
             )}
           </PlayingCard>
         ) : null}
-        <p className="mt-6 max-w-xl text-[12.5px] leading-snug text-cream/45">{t("privacy")}</p>
+        {/* About rooms, so not under a game that never opens one (Memory, Truth or dare, the wheel). */}
+        {!onePhoneOnly ? <p className="mt-6 max-w-xl text-[12.5px] leading-snug text-cream/45">{t("privacy")}</p> : null}
       </div>
       <div className="relative mx-auto w-full max-w-[420px]">{art}</div>
     </section>
@@ -247,8 +293,9 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
  * The guest's game begins when the host's first state arrives, addressed to this phone. It says
  * hello every so often in the meantime, so a start the guest missed (the host pressed it a moment
  * too soon) is sent again. A state addressed to someone else means the host started without us.
+ * The state itself goes into the game, which opens on it rather than asking the host again.
  */
-function GuestAutoStart({ room, hostId, onStart, onTaken }: { room: ReturnType<typeof useRoom>; hostId: string; onStart: () => void; onTaken: () => void }) {
+function GuestAutoStart({ room, hostId, onStart, onTaken }: { room: ReturnType<typeof useRoom>; hostId: string; onStart: (first: unknown) => void; onTaken: () => void }) {
   const startRef = useRef(onStart);
   const takenRef = useRef(onTaken);
   useEffect(() => {
@@ -260,7 +307,7 @@ function GuestAutoStart({ room, hostId, onStart, onTaken }: { room: ReturnType<t
     const off = on("state", (payload, from) => {
       if (from !== hostId) return;
       const to = (payload as { to?: unknown } | null)?.to;
-      if (to === me) startRef.current();
+      if (to === me) startRef.current(payload);
       else if (typeof to === "string") takenRef.current();
     });
     send("hello", null);
@@ -273,9 +320,15 @@ function GuestAutoStart({ room, hostId, onStart, onTaken }: { room: ReturnType<t
   return null;
 }
 
-/** On two phones, when the other one goes quiet for a few seconds: say so, and keep the game where it is. */
-export function PeerGone({ session, room }: { session: Session; room: ReturnType<typeof useRoom> }) {
+/**
+ * On two phones, when the other one goes quiet for a few seconds: say so, and keep the game where
+ * it is. When it left on purpose (`closed`: "change players" over there), there is nothing to wait
+ * for: say that instead, with the way to a room of one's own.
+ */
+export function PeerGone({ session, room, closed = false, onLeave }: { session: Session; room: ReturnType<typeof useRoom>; closed?: boolean; onLeave?: () => void }) {
   const t = useTranslations("games.lobby");
+  const locale = useLocale();
+  const pathname = usePathname();
   const present = session.mode !== "two" || room.peers.some((p) => p.id === session.peer);
   const [gone, setGone] = useState(false);
   useEffect(() => {
@@ -286,11 +339,32 @@ export function PeerGone({ session, room }: { session: Session; room: ReturnType
     const timer = window.setTimeout(() => setGone(true), 3500);
     return () => window.clearTimeout(timer);
   }, [present]);
+  const name = session.names[session.host ? 1 : 0];
+  if (closed) {
+    // A plain link, as at the end of a game: a fresh load leaves this room for good.
+    const ownRoom = getPathname({ href: { pathname, query: { mode: "two" } }, locale });
+    return (
+      <div role="status" className="mx-auto mb-6 flex max-w-xl flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-white/10 px-4 py-3 text-left text-[14px] text-cream ring-1 ring-white/15">
+        <p>{t("closed", { name })}</p>
+        <a href={ownRoom} className="inline-flex h-11 shrink-0 items-center rounded-full bg-cream px-5 text-[14px] font-semibold text-forest hover:bg-white">
+          {t("closedCta")}
+        </a>
+      </div>
+    );
+  }
   if (!gone || present) return null;
   return (
-    <p role="status" className="mx-auto mb-6 flex max-w-xl items-center gap-2 rounded-2xl bg-white/10 px-4 py-3 text-[14px] text-cream ring-1 ring-white/15">
-      <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin" />
-      {t("left", { name: session.names[session.host ? 1 : 0] })}
-    </p>
+    <div role="status" className="mx-auto mb-6 flex max-w-xl flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-white/10 px-4 py-3 text-left text-[14px] text-cream ring-1 ring-white/15">
+      <p className="flex items-center gap-2">
+        <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin" />
+        {t("left", { name })}
+      </p>
+      {/* Waiting is the default, since they usually come back; this is for when they won't. */}
+      {onLeave ? (
+        <button type="button" onClick={onLeave} className="h-11 shrink-0 rounded-full px-4 text-[14px] font-semibold text-cream/75 underline-offset-4 hover:text-cream hover:underline">
+          {t("two.leave")}
+        </button>
+      ) : null}
+    </div>
   );
 }

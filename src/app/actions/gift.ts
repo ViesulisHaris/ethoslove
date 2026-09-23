@@ -17,6 +17,7 @@ import { getManifest } from "@/templates/manifests";
 import { loadFieldsSchema } from "@/templates/schemas";
 import type { Json } from "@/lib/supabase/types";
 import { notifyPublished } from "@/lib/email/notify";
+import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -111,14 +112,16 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   const manifest = getManifest(row.template_slug);
   if (!manifest) return { ok: false, error: "unknown_template" };
   const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [] };
-  const needs = liveEditNeedsUnlock(manifest, content, {
-    hasSchedule: row.unlock_at !== null,
-    hasPassword: row.password_hash !== null,
-    watermark: row.watermark,
-  });
+  const flags = { hasSchedule: row.unlock_at !== null, hasPassword: row.password_hash !== null, watermark: row.watermark };
+  const needs = liveEditNeedsUnlock(manifest, content, flags);
   if (needs) {
     const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
-    if (!unlocked) return { ok: false, error: "payment_required" };
+    if (!unlocked) {
+      // A free reply (lib/commerce/free-reply.ts) may be edited in its own template, footer on.
+      const admin = manifest.tier === "premium" ? recipientFacingWriter() : null;
+      const reply = admin ? await freeReplyFor(admin, { replyGiftId: input.data.giftId, templateSlug: row.template_slug, userId: ctx.user.id }) : null;
+      if (!reply?.free || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true })) return { ok: false, error: "payment_required" };
+    }
   }
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
@@ -140,6 +143,8 @@ const publishInput = z.object({
   removeWatermark: z.boolean().default(false),
   password: z.string().max(64).optional(),
   schedule: z.object({ unlockAt: z.iso.datetime({ offset: true }), timezone: z.string().min(1) }).optional(),
+  // "Send one back" from a paid premium gift: the signed token that makes this reply free.
+  replyToken: z.string().max(400).optional(),
 });
 
 export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId: string; status: "live" | "scheduled" }>> {
@@ -166,24 +171,38 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const data = { ...(parsed.data as GiftData), templateSlug: gift.template_slug };
 
   const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: gift.template_slug });
+  const writer = recipientFacingWriter();
+  if (!writer) return { ok: false, error: "not_configured" };
+  // A reply to a paid premium gift goes out free, footer on (lib/commerce/free-reply.ts). Only
+  // looked at when nothing the sender owns already covers the template.
+  const reply =
+    !unlocked && manifest.tier === "premium"
+      ? await freeReplyFor(writer, { replyGiftId: gift.id, templateSlug: gift.template_slug, userId: ctx.user.id, token: input.data.replyToken })
+      : null;
 
   const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked) }, {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),
+    freeReply: reply?.free === true,
   });
-  if (!decision.ok) return { ok: false, error: decision.reason, problems: decision.problems };
+  // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
+  if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();
   const status = scheduled ? "scheduled" : "live";
-  const writer = recipientFacingWriter();
-  if (!writer) return { ok: false, error: "not_configured" };
+  // Taken before the gift goes live, so two replies published with one token can't both be free.
+  const claimed = reply?.free && !reply.held ? reply.originalGiftId : null;
+  if (claimed && !(await claimFreeReply(writer, claimed, gift.id))) return { ok: false, error: "reply_used" };
 
   // The password goes on before the gift goes live: it only needs ownership, so it works on a draft,
   // and if the unlock disappeared in the meantime the password is refused before anything is public.
   const { error: pwError } = await ctx.supabase.rpc("set_gift_password", { p_gift_id: gift.id, p_password: input.data.password ?? null });
-  if (pwError) return { ok: false, error: pwError.message };
+  if (pwError) {
+    if (claimed) await releaseFreeReply(writer, claimed, gift.id);
+    return { ok: false, error: pwError.message };
+  }
 
   const { error: updateError } = await writer
     .from("gifts")
@@ -200,7 +219,10 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     })
     .eq("id", gift.id)
     .eq("user_id", ctx.user.id);
-  if (updateError) return { ok: false, error: updateError.message };
+  if (updateError) {
+    if (claimed) await releaseFreeReply(writer, claimed, gift.id);
+    return { ok: false, error: updateError.message };
+  }
 
   const { data: row } = await ctx.supabase.from("gifts").select("short_id").eq("id", gift.id).single();
   revalidatePath("/dashboard");

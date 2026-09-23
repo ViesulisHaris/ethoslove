@@ -241,6 +241,24 @@ const SCRIPTS = {
     await page.waitForTimeout(8000);
     return poster;
   },
+  "pack-your-bags": async (page) => {
+    // Pack every tag, open the board, and shoot it the moment the destination has landed; then
+    // the recording carries on to the boarding pass and tears the stub off.
+    const clues = page.getByTestId("pyb-clue");
+    await clues.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    const count = await clues.count();
+    for (let i = 0; i < count; i++) { await clues.nth(i).click({ force: true }); await page.waitForTimeout(700); }
+    await page.getByTestId("pyb-where").click({ force: true, timeout: 12000 });
+    await page.locator('[data-testid="pyb-board"][data-resolved="true"]').waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1100);
+    const poster = await page.screenshot();
+    await page.getByTestId("pyb-to-ticket").click({ force: true, timeout: 8000 });
+    await page.waitForTimeout(2600);
+    await page.getByTestId("pyb-stub").click({ force: true });
+    await page.waitForTimeout(3500);
+    return poster;
+  },
   scrapbook: async (page) => {
     const book = page.getByRole("button", { name: /open the scrapbook/i });
     await book.waitFor({ timeout: 20000 });
@@ -446,12 +464,24 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     locale: "en-US",
     recordVideo: { dir: videoDir, size: { width: W, height: H } },
   });
+  // Page chrome and the dev indicator do not belong in marketing assets. Hidden from the first paint,
+  // not after the page settles: the recording starts with the page, and the gallery plays it from 0,
+  // so a style added after load left the demo bar and the dev badge on the preview's opening second.
+  // Into <head> as soon as there is one; React 19 hydrates past an extra tag there.
+  await context.addInitScript((css) => {
+    const add = () => {
+      if (!document.head) return false;
+      const style = document.createElement("style");
+      style.textContent = css;
+      document.head.appendChild(style);
+      return true;
+    };
+    if (add()) return;
+    const watch = new MutationObserver(() => add() && watch.disconnect());
+    watch.observe(document, { childList: true, subtree: true });
+  }, '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }');
   const page = await context.newPage();
   await page.goto(`${base}/demo/${slug}`, { waitUntil: "networkidle" });
-  // Page chrome and the dev indicator do not belong in marketing assets.
-  await page.addStyleTag({
-    content: '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }',
-  });
   let poster;
   try {
     poster = await run(page);

@@ -3,11 +3,9 @@
 import { useRef, useState } from "react";
 import { Bold, Italic, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 import { useEditor } from "@/lib/editor/store";
 import { LIMITS } from "@/config/site";
 import { Textarea } from "@/components/ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Field, SectionHeader, Segmented } from "../field";
 import { EmojiPicker } from "../emoji-picker";
 import { WritingHelper } from "../writing-helper";
@@ -59,24 +57,19 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
               <Italic className="size-4" />
             </button>
             <EmojiPicker onPick={insert} label={t("fields.emoji")} />
-            <div className="ml-auto">
-              {aiEnabled ? (
+            {/*
+             * Only when the writing helper is switched on. Off, it was a button that looked live and
+             * answered with a note meant for us ("needs an API key"); a feature that isn't there
+             * is better not shown at all.
+             */}
+            {aiEnabled ? (
+              <div className="ml-auto">
                 <button type="button" onClick={() => setHelperOpen(true)} className="flex h-10 items-center gap-1.5 rounded-full bg-accent px-3.5 text-[13px] font-medium text-ink hover:bg-rose-tint md:h-8 md:px-3 md:text-xs">
                   <Sparkles className="size-3.5 text-coral" />
                   {t("fields.helpWrite")}
                 </button>
-              ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button type="button" onClick={() => toast(t("fields.helpWriteSoon"))} className="flex h-10 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-medium text-muted-foreground md:h-8 md:px-3 md:text-xs">
-                      <Sparkles className="size-3.5" />
-                      {t("fields.helpWrite")}
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent className="max-w-xs">{t("fields.helpWriteSoon")}</TooltipContent>
-                </Tooltip>
-              )}
-            </div>
+              </div>
+            ) : null}
           </div>
           <Textarea
             ref={ref}
@@ -101,7 +94,7 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
           ]}
         />
       </Field>
-      <WritingHelper open={helperOpen} onOpenChange={setHelperOpen} onUse={(text) => patch({ message: text })} />
+      {aiEnabled ? <WritingHelper open={helperOpen} onOpenChange={setHelperOpen} onUse={(text) => patch({ message: text })} /> : null}
     </section>
   );
 }

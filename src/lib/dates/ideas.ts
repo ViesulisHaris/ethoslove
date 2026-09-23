@@ -1,5 +1,5 @@
 import { distanceKm } from "./geo";
-import type { PlaceKind } from "./kinds";
+import { KINDS, type PlaceKind } from "./kinds";
 import type { Place } from "./places";
 import { isWet, type DayWeather } from "./weather";
 import type { StickerId } from "@/templates/_shared/covers/stickers";
@@ -336,18 +336,33 @@ export const ideaById = (id: string | undefined): DateIdea | undefined => IDEAS.
 const WALKABLE_KM = 1.6;
 
 /**
- * The places that would do for each stop of an idea, best first: the kind the idea was written
- * for before its stand-ins, within a walk of the stop before where there are any, then by rank.
- * `skip[i]` takes the next one along for stop i, which is what "show me another" presses.
+ * The places that would do for each stop of an idea, best first. A stop is only as good as the
+ * walk to the next one: a boat hire six kilometres out with nowhere to eat near it makes an
+ * evening of the bus, so places with the next stop within a walk come first, then the kind the
+ * idea was written for before its stand-ins, then by rank. Each later stop is looked for within a
+ * walk of the one before; when nothing is, the nearest one is taken, never the best-ranked, which
+ * is simply the one nearest where they searched. `skip[i]` takes the next one along for stop i,
+ * which is what "show me another" presses. Places in `usedElsewhere` come after the others of the
+ * same kind: a city's page fills sixteen ideas from one neighbourhood, and every one of them ending
+ * in the same top-ranked bar read as a page that knew one bar.
  */
-export function fillStops(idea: DateIdea, places: Place[], skip: number[] = []): { place: Place | null; options: number }[] {
+export function fillStops(idea: DateIdea, places: Place[], skip: number[] = [], usedElsewhere?: ReadonlySet<string>): { place: Place | null; options: number }[] {
   const chosen: Place[] = [];
+  const used = (p: Place): number => (usedElsewhere?.has(p.id) ? 1 : 0);
   return idea.stops.map((kinds, i) => {
     const candidates = places.filter((p) => kinds.includes(p.kind) && !chosen.some((c) => c.id === p.id));
     if (candidates.length === 0) return { place: null, options: 0 };
+    const next = idea.stops[i + 1];
+    const leadsOn = (p: Place): boolean => !next || places.some((q) => q.id !== p.id && next.includes(q.kind) && distanceKm(p, q) <= WALKABLE_KM);
     const previous = chosen[chosen.length - 1];
     const near = previous ? candidates.filter((p) => distanceKm(previous, p) <= WALKABLE_KM) : candidates;
-    const pool = (near.length > 0 ? near : candidates).sort((a, b) => kinds.indexOf(a.kind) - kinds.indexOf(b.kind) || b.score - a.score || a.id.localeCompare(b.id));
+    let pool: Place[];
+    if (near.length > 0) {
+      const onward = new Map(near.map((p) => [p.id, leadsOn(p)]));
+      pool = near.sort((a, b) => Number(onward.get(b.id)) - Number(onward.get(a.id)) || kinds.indexOf(a.kind) - kinds.indexOf(b.kind) || used(a) - used(b) || b.score - a.score || a.id.localeCompare(b.id));
+    } else {
+      pool = candidates.sort((a, b) => distanceKm(previous, a) - distanceKm(previous, b) || a.id.localeCompare(b.id));
+    }
     const place = pool[(skip[i] ?? 0) % pool.length];
     chosen.push(place);
     return { place, options: pool.length };
@@ -355,7 +370,32 @@ export function fillStops(idea: DateIdea, places: Place[], skip: number[] = []):
 }
 
 /** The same, as just the places: fewer than the idea has stops when the neighbourhood has nothing for one of them. */
-export const suggestStops = (idea: DateIdea, places: Place[], skip: number[] = []): Place[] => fillStops(idea, places, skip).flatMap((s) => (s.place ? [s.place] : []));
+export const suggestStops = (idea: DateIdea, places: Place[], skip: number[] = [], usedElsewhere?: ReadonlySet<string>): Place[] => fillStops(idea, places, skip, usedElsewhere).flatMap((s) => (s.place ? [s.place] : []));
+
+/**
+ * The kinds of place a mood is made of, for the map and the list. Not every kind in its ideas:
+ * the dessert after the mini golf and the walk after dinner are how an idea ends, not what the
+ * mood is, and counting them filled "Foodie" with parks and "Outdoorsy" with chocolate shops.
+ * "Free" is a price, not a kind: whatever costs nothing to walk into.
+ */
+export const VIBE_KINDS: Record<Vibe, readonly PlaceKind[] | null> = {
+  playful: ["bowling", "minigolf", "arcade", "escape", "climbing", "skating", "karaoke", "boats", "zoo", "themepark"],
+  outdoorsy: ["viewpoint", "park", "garden", "beach", "picnic", "boats", "minigolf"],
+  foodie: ["restaurant", "bar", "winery"],
+  artsy: ["museum", "gallery", "theatre", "cinema", "bookshop", "planetarium", "landmark"],
+  fancy: ["theatre", "spa", "restaurant", "winery", "museum", "gallery"],
+  cozy: ["bookshop", "cafe", "dessert", "garden", "cinema", "spa", "planetarium"],
+  // Something to do under a roof, not just somewhere dry to sit.
+  rainy: ["museum", "gallery", "cinema", "theatre", "bookshop", "planetarium", "bowling", "arcade", "escape", "climbing", "skating", "karaoke", "spa", "cafe"],
+  free: null,
+};
+
+/** Whether a place suits a mood. `cost` is what the cards show (couples' reports over the guess); without it, the kind's own. */
+export function fitsVibe(place: { kind: PlaceKind; cost?: number }, vibe: Vibe): boolean {
+  const kinds = VIBE_KINDS[vibe];
+  if (kinds) return kinds.includes(place.kind);
+  return place.cost === undefined ? KINDS[place.kind].free : place.cost === 0;
+}
 
 /** True when every stop of an idea can be filled near here. */
 export const isDoable = (idea: DateIdea, places: Place[]): boolean => idea.stops.every((kinds) => places.some((p) => kinds.includes(p.kind)));

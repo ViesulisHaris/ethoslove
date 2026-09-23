@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftMusic } from "@/lib/gift/schema";
+import { backgroundMusic } from "@/lib/gift/music";
 
 export type GiftAudio = {
   /** Call from a user gesture (autoplay policies). Safe to call repeatedly. */
@@ -14,8 +15,15 @@ export type GiftAudio = {
 
 const FADE_MS = 1600;
 
-/** Background music with fade-in, start offset, loop and tab-visibility pause. */
-export function useGiftAudio(music: GiftMusic | undefined, enabled = true): GiftAudio {
+/**
+ * Background music with fade-in, start offset, loop and tab-visibility pause.
+ *
+ * Only a library track or the sender's own file: a real song from Apple's catalogue never plays
+ * here, on any template, however old the gift. It waits on the end screen for a tap instead
+ * (`SongPreviewCard`), and `hasMusic` is false, so nothing claims it is playing.
+ */
+export function useGiftAudio(songOrMusic: GiftMusic | undefined, enabled = true): GiftAudio {
+  const music = backgroundMusic(songOrMusic);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);

@@ -3,7 +3,8 @@ import { COST_IDS, COST_LABELS, costOf, guessCost } from "@/lib/dates/cost";
 import { KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
 import { dateScore, pairsWith, rankPlaces, topPicks } from "@/lib/dates/rank";
-import { cleanBody, firstName, reviewInput, WENT_AS_IDS, WENT_AS_LABELS } from "@/lib/dates/reviews";
+import { cleanBody, firstName, WENT_AS_IDS, WENT_AS_LABELS } from "@/lib/dates/reviews";
+import { reviewInput } from "@/lib/dates/review-input";
 
 const place = (over: Partial<Place> & Pick<Place, "id" | "kind">): Place => ({ name: over.id, named: true, group: KINDS[over.kind].group, lat: 51.5119, lng: -0.1257, distanceKm: 0.2, cuisine: [], outdoorSeating: false, vegetarian: false, stepFree: false, notable: false, score: 60, ...over });
 

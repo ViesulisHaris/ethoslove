@@ -1,15 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
-import { HERO_ART, heroSrcSet } from "@/lib/dates/art";
+import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { VIRTUAL_DATES } from "@/lib/dates/virtual";
 import { listManifests } from "@/templates/manifests";
 import { Sticker } from "@/templates/_shared/covers/stickers";
 import { FloralFrame, TornEdge } from "@/components/marketing/home/cutouts";
 import { MeetInTheMiddle } from "@/components/ldr/meet-in-the-middle";
+import { EagerImg } from "@/components/shared/eager-img";
 import { TemplateCard } from "@/components/templates/template-card";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/long-distance">, "searchParams">): Promise<Metadata> {
@@ -38,13 +38,16 @@ export default async function LongDistancePage({ params }: PageProps<"/[locale]/
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-16">
             <div>
               <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
-              <h1 className="mt-5 max-w-[14ch] display-hero text-balance">
+              {/* In em, not ch, so the fallback font wraps it as Newsreader will (platform-hero.tsx): 8.4em is Newsreader's 14ch. */}
+              <h1 className="mt-5 max-w-[8.4em] display-hero text-balance">
                 {t("h1a")} <em className="text-rose">{t("h1b")}</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
             </div>
             <div className="relative mx-auto w-full max-w-[460px]" aria-hidden="true">
-              <img src={HERO_ART.ldr} srcSet={heroSrcSet(HERO_ART.ldr)} sizes="(min-width: 1024px) 460px, 100vw" alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+              {/* Through EagerImg: drawn here it was a preload hint in this page's RSC payload, which the
+                  header's prefetch of /long-distance added to every other page it was open on. */}
+              <EagerImg src={HERO_ART.ldr} srcSet={heroSrcSet(HERO_ART.ldr)} sizes={heroSizes("(min-width: 1024px) 460px")} alt="" width={1800} height={1350} fetchPriority="high" decoding="async" className="aspect-[4/3] w-full rotate-[2deg] rounded-[32px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
               <span className="absolute -bottom-4 -left-3 rotate-[-4deg] rounded-2xl bg-white px-4 py-2.5 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift">{t("polaroid")}</span>
             </div>
           </div>

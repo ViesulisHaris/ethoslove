@@ -12,7 +12,8 @@ the gifts site in production is `reasj2/ethoslove`, which this one pulls from an
 | `/dates` | Where, when, ideas, a map. The main new thing. |
 | `/plan` | The date being planned: editable when it is theirs, read-only when it came in a link. |
 | `/gifts` | What used to be the homepage, unchanged. `/templates`, `/occasions`, `/pricing` are as they were. |
-| `/long-distance` | Meet in the middle, clocks, dates for two screens, gifts for the distance. |
+| `/trips` | Twelve ready-made trips for two and a flight search that only builds links. See [TRIPS.md](TRIPS.md). |
+| `/long-distance` | Meet in the middle (with flight links from each of you to halfway), clocks, dates for two screens, gifts for the distance. |
 | `/games` | Seven card games for two, on the table: pick one and play. |
 
 ## How a date is made

@@ -43,11 +43,15 @@ describe("publish rules", () => {
     const many = { ...base, photos: Array.from({ length: 11 }, (_, i) => photo(`gifts/g/${i}.webp`)) };
     expect(decidePublish(letter, many, { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
   });
-  it("a real song, a video clip or a voice note is a premium extra on any template", () => {
-    const song = { ...base, music: { source: "catalog" as const, url: "https://audio.example/p.m4a", title: "Perfect", artist: "Ed", startAt: 0 } };
-    expect(premiumExtras(song)).toEqual(["song"]);
-    expect(decidePublish(letter, song, { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
-    expect(decidePublish(letter, song, { unlocked: true }, none)).toEqual({ ok: true, watermark: false, isPremium: false });
+  it("a real song is free on every gift: Apple's previews may not be sold", () => {
+    const preview = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/p.m4a";
+    const song = { ...base, music: { source: "catalog" as const, url: preview, title: "Perfect", artist: "Ed", provider: "itunes" as const, startAt: 0 } };
+    expect(premiumExtras(song)).toEqual([]);
+    expect(decidePublish(letter, song, { unlocked: false }, none)).toEqual({ ok: true, watermark: true, isPremium: false });
+    // A live gift that already has one can be edited without an unlock too.
+    expect(liveEditNeedsUnlock(letter, song, { hasSchedule: false, hasPassword: false, watermark: true })).toBe(false);
+  });
+  it("a video clip or a voice note is a premium extra on any template", () => {
     const clip = { ...base, video: { url: "gifts/g1/v.webm" } };
     expect(premiumExtras(clip)).toEqual(["video"]);
     const voice = { ...base, voiceNote: { url: "gifts/g1/vn.webm", duration: 12 } };
@@ -57,12 +61,18 @@ describe("publish rules", () => {
     expect(premiumExtras(lib)).toEqual([]);
     expect(readinessProblems(letter, { ...base, voiceNote: { url: "blob:x" } })).toContain("uploadsPending");
   });
-  it("only our own library and the sender's upload count as free music", () => {
+  it("music from anywhere but our library, the sender's upload or Apple's catalogue still takes an unlock", () => {
     const preview = "https://audio-ssl.itunes.apple.com/itunes-assets/p.m4a";
-    expect(premiumExtras({ ...base, music: { source: "library" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
-    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
+    // A preview is a preview whatever the label says: free, and (see music.test) never looped.
+    expect(premiumExtras({ ...base, music: { source: "library" as const, url: preview, startAt: 0 } })).toEqual([]);
+    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: preview, startAt: 0 } })).toEqual([]);
     expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "gifts/g1/song.mp3", startAt: 0 } })).toEqual([]);
     expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "idb:song", startAt: 0 } })).toEqual([]);
+    // Someone else's audio, however it is labelled, is not ours to host behind a free gift.
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "https://audio.example/p.m4a", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "library" as const, url: "https://audio.example/p.mp3", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "http://audio-ssl.itunes.apple.com/p.m4a", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "https://itunes.apple.com.evil.example/p.m4a", startAt: 0 } })).toEqual(["song"]);
   });
   it("edits to a live gift are held to the publish rules", () => {
     const plain = { hasSchedule: false, hasPassword: false, watermark: true };

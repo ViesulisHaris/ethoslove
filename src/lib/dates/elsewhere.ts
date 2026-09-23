@@ -27,11 +27,16 @@ export const SOURCE_NAMES: Record<SourceId, string> = { tripadvisor: "Tripadviso
 
 const query = (place: Place) => encodeURIComponent(`${place.name} ${place.address ?? ""}`.trim());
 
-/** A search on each site for this exact place. No key, no permission, no data kept. */
+/**
+ * A search on each site for this exact place. No key, no permission, no data kept. The sheet passes
+ * the address it shows (or the town, before that arrives): a list place carries none, and "Waterstones"
+ * alone could be any of three branches. Google's search takes no place id here: an empty one was
+ * only noise in the link.
+ */
 export function linksFor(place: Place): { source: SourceId; url: string }[] {
   return [
     { source: "tripadvisor", url: `https://www.tripadvisor.com/Search?q=${query(place)}` },
-    { source: "google", url: `https://www.google.com/maps/search/?api=1&query=${query(place)}&query_place_id=` },
+    { source: "google", url: `https://www.google.com/maps/search/?api=1&query=${query(place)}` },
     { source: "yelp", url: `https://www.yelp.com/search?find_desc=${encodeURIComponent(place.name)}&find_loc=${place.lat},${place.lng}` },
   ];
 }

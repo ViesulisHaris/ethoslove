@@ -12,7 +12,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
 const CATALOG = [
   { key: "STRIPE_PRODUCT_SINGLE", name: "Ethos — One template", description: "One premium gift template, unlocked on your account forever. No subscription.", eur: 749, usd: 799, gbp: 649 },
-  { key: "STRIPE_PRODUCT_PICK3", name: "Ethos — Pick three", description: "Any three premium templates, unlocked forever. No subscription.", eur: 1099, usd: 1199, gbp: 949 },
+  { key: "STRIPE_PRODUCT_PICK3", name: "Ethos — Pick three", description: "Any three templates, free or premium, unlocked forever. No subscription.", eur: 1099, usd: 1199, gbp: 949 },
   { key: "STRIPE_PRODUCT_EVERYTHING", name: "Ethos — Everything", description: "Every template, current and future, unlocked forever. No subscription.", eur: 2299, usd: 2499, gbp: 1999 },
 ];
 

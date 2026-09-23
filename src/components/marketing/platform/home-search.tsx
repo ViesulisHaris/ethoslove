@@ -15,7 +15,7 @@ export function HomeSearch({ className }: { className?: string }) {
       locale={locale}
       size="lg"
       className={className}
-      labels={{ label: t("label"), placeholder: t("placeholder"), nearMe: t("nearMe"), searching: t("searching"), nothing: t("nothing") }}
+      labels={{ label: t("label"), placeholder: t("placeholder"), nearMe: t("nearMe"), searching: t("searching"), nothing: t("nothing"), failed: t("failed") }}
       onPick={(where) => router.push(`/dates?lat=${where.lat}&lng=${where.lng}&q=${encodeURIComponent(where.name)}`)}
     />
   );

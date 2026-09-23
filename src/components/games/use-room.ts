@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { playerId } from "@/lib/games/room";
+import { tabStorage } from "@/lib/games/saved";
 
 /**
  * Two phones in one room. A room is a realtime channel named after its code: no table, no row,
@@ -19,7 +20,9 @@ export function useRoom(code: string | null, name: string, host: boolean) {
   const [peers, setPeers] = useState<Peer[]>([]);
   const channel = useRef<RealtimeChannel | null>(null);
   const listeners = useRef(new Map<string, Set<Listener>>());
-  const [me] = useState(() => (typeof window === "undefined" ? "" : playerId(window.sessionStorage)));
+  // Through tabStorage: with site data blocked, reading window.sessionStorage itself throws, and a
+  // throw here took the whole page down. Without storage the id is simply new on every load.
+  const [me] = useState(() => (typeof window === "undefined" ? "" : playerId(tabStorage())));
 
   useEffect(() => {
     if (!code || !name) return;
@@ -53,7 +56,11 @@ export function useRoom(code: string | null, name: string, host: boolean) {
         } else if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") setStatus("failed");
       });
       channel.current = ch;
-    })();
+    })().catch(() => {
+      // The client's chunk didn't load (offline), or the browser refused it something (site data
+      // blocked): the room says it couldn't open, with its way out, rather than connecting for ever.
+      if (!cancelled) setStatus("failed");
+    });
     return () => {
       cancelled = true;
       channel.current = null;

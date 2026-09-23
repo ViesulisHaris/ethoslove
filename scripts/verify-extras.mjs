@@ -40,7 +40,7 @@ await page.getByTestId("song-search").fill("perfect ed sheeran");
 await page.getByTestId("song-result").first().waitFor({ timeout: 20000 });
 await shot("01-song-results");
 await page.getByTestId("song-result").first().click();
-await page.getByText("Playing in the gift").waitFor({ timeout: 5000 });
+await page.getByText("At the end of the gift").waitFor({ timeout: 5000 });
 await shot("02-song-selected");
 
 // voice message
@@ -57,7 +57,7 @@ await page.waitForTimeout(1200);
 const draft = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.includes("the-letter")).map(([, v]) => v).join(""));
 console.log("draft has catalog song:", draft.includes('"source":"catalog"'), "| has voice note:", draft.includes('"voiceNote"'));
 
-// preview pane reflects the song credit? (letter end screen is far; just confirm no errors)
+// the real song is free and sits on the end screen as a tap-to-play card (tests/unit/song-preview); just confirm no errors
 await browser.close();
 console.log(errors.length ? `ERRORS:\n${errors.join("\n")}` : "no page errors");
 console.log(Object.values(durations).every((d) => typeof d === "number" && d > 30) && draft.includes('"source":"catalog"') && draft.includes('"voiceNote"') ? "EXTRAS OK" : "EXTRAS FAILED");

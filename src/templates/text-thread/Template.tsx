@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, Phone, Video } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { initialOf } from "@/lib/gift/graphemes";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -191,7 +192,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
             className="grid size-9 place-items-center rounded-full text-sm font-semibold text-white"
             style={{ background: bubble }}
           >
-            {name.slice(0, 1).toUpperCase()}
+            {initialOf(name)}
           </span>
           <div className="leading-tight">
             <p className="text-[15px] font-semibold">{name}</p>
@@ -396,7 +397,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ delay: 0.45 + i * 0.6, type: "spring", stiffness: 240, damping: 24 }}
                   >
-                    <NotificationCard name={name} badge={name.slice(0, 1).toUpperCase()} text={line} color={bubble} now={s.now} />
+                    <NotificationCard name={name} badge={initialOf(name)} text={line} color={bubble} now={s.now} />
                   </motion.div>
                 ))}
               </div>

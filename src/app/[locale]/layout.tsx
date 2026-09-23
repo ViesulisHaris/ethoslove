@@ -2,8 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Caveat, Caveat_Brush, DM_Serif_Display, Fraunces, Homemade_Apple, JetBrains_Mono, Newsreader, Schibsted_Grotesk, Special_Elite } from "next/font/google";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { CLIENT_NAMESPACES } from "@/i18n/client-namespaces";
+import { pickMessages } from "@/i18n/messages-subset";
 import { SITE } from "@/config/site";
 import { ogImageUrl } from "@/lib/seo";
 import { env } from "@/lib/env";
@@ -15,11 +17,28 @@ import "../globals.css";
 // `subsets` is only what gets preloaded. Every subset is still declared, so a name like Mārtiņš
 // or Łucja fetches latin-ext the moment it appears; English and Spanish never need it, and
 // preloading it cost every first visit five font files (~250 KB) that no page drew.
+//
+// Preloaded: only what the first screen of a page draws — the body face and Newsreader, whose
+// italic is the logo and the headline's second line. Every preload is fetched at high priority
+// alongside the render-blocking CSS, so on slow 4G the six the site used to preload (482 KB)
+// held first paint back by a second; the rest now load, with `swap`, once text asks for them.
 const sans = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-  style: ["normal", "italic"],
+  style: ["normal"],
+});
+
+// The body face's italic, on its own so it isn't preloaded: no first screen sets sans text in
+// italic. Same family name, so the browser pairs it with the upright face above for any italic
+// that does turn up; no fallback of its own, since the upright one already declares it.
+const sansItalic = Schibsted_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans-italic",
+  display: "swap",
+  style: ["italic"],
+  preload: false,
+  adjustFontFallback: false,
 });
 
 const display = Newsreader({
@@ -30,11 +49,14 @@ const display = Newsreader({
   axes: ["opsz"],
 });
 
+// Small labels (a card's number and price) and a few form fields: never a headline, and when it
+// swaps in, a one-line label changes nothing around it.
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
   weight: ["400", "500"],
+  preload: false,
 });
 
 // The gift templates keep Fraunces (their type was tuned to it); the site itself uses Newsreader.
@@ -58,10 +80,12 @@ const coverScript = Caveat_Brush({
   preload: false,
 });
 
+// Handwriting on a card or two in the heroes' art; the words beside them come first.
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-hand",
   display: "swap",
+  preload: false,
 });
 
 // Lettering for scrapbook-style gifts: typewriter notes, poster headlines and a loopy script.
@@ -135,16 +159,19 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[lo
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  // Only the few namespaces every page's client components read; each route group and page adds
+  // its own below (src/i18n/client-namespaces.ts). Left to default, this sent the whole catalogue.
+  const messages = pickMessages(await getMessages(), CLIENT_NAMESPACES.layout);
 
   return (
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${sans.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} ${typewriter.variable} ${poster.variable} ${script.variable} h-full`}
+      className={`${sans.variable} ${sansItalic.variable} ${fraunces.variable} ${display.variable} ${mono.variable} ${caveat.variable} ${coverScript.variable} ${typewriter.variable} ${poster.variable} ${script.variable} h-full`}
     >
       <body className="flex min-h-full flex-col">
         <RefCapture />
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>
           {/* Inside the provider: the consent banner is translated and reads the locale-less path. */}
           <SiteAnalytics />

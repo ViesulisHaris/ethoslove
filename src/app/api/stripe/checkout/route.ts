@@ -1,70 +1,90 @@
 import { NextResponse, type NextRequest } from "next/server";
+import type Stripe from "stripe";
 import { z } from "zod";
-import { SITE } from "@/config/site";
 import { REF_PATTERN } from "@/lib/attribution/ref";
-import { PRODUCTS, currencyFor, isProductId, type Currency } from "@/lib/pricing/products";
-import { getStripe, resolvePriceId } from "@/lib/stripe/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, isProductId, type Currency } from "@/lib/pricing/products";
+import { getStripe, stripeProductIds } from "@/lib/stripe/server";
+import { RETURN_PATH, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
+import { createCheckoutSession } from "@/lib/stripe/create-session";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { TEMPLATE_SLUGS } from "@/templates/manifests";
+import { rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/request-ip";
+import { siteOrigin, type Db } from "@/lib/commerce/db";
+import { creditedCreator } from "@/lib/commerce/creators";
+import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
+import { planCheckout } from "@/lib/commerce/plan";
+import { passPurchaseIds, splitUnlocks } from "@/lib/commerce/unlocks";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
 
 const input = z.object({
   product: z.string(),
-  templateSlugs: z.array(z.string()).default([]),
-  returnTo: z.string().startsWith("/").optional(),
+  templateSlugs: z.array(z.string().max(80)).max(10).default([]),
+  packId: z.string().max(40).optional(),
+  addEverything: z.boolean().optional(),
+  returnTo: z.string().max(1000).regex(RETURN_PATH).optional(),
   currency: z.enum(["usd", "eur", "gbp"]).optional(),
   locale: z.enum(["en", "es"]).optional(),
-  // Where the buyer came from (lib/attribution/ref.ts). A malformed one is dropped, never an error.
+  // Where the buyer came from (lib/attribution/ref.ts); a creator's personal link is "c-<code>".
+  // A malformed one is dropped, never an error.
   ref: z.string().trim().toLowerCase().regex(REF_PATTERN).optional().catch(undefined),
+  // A gift card's optional personal touch, printed in the email with the code. Kept in our database
+  // until fulfilment, never sent to Stripe.
+  giftCard: z
+    .object({ recipientName: z.string().trim().max(60).optional(), note: z.string().trim().max(300).optional() })
+    .optional()
+    .catch(undefined),
 });
 
+/** What the buyer already holds for good, and paid, when signed in. */
+async function buyerContext(admin: Db, userId: string | null): Promise<{ ownedForever: string[]; purchases: { product: string; amount: number; currency: string; status: string }[] }> {
+  if (!userId) return { ownedForever: [], purchases: [] };
+  const [{ data: rows }, passIds, { data: purchases }] = await Promise.all([
+    admin.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
+    passPurchaseIds(admin, userId),
+    admin.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
+  ]);
+  return { ownedForever: splitUnlocks(rows ?? [], passIds).forever, purchases: purchases ?? [] };
+}
+
 /**
- * Creates a Stripe Checkout Session and returns its URL. Signed-in users get a pending
- * purchase row up front; guests pay first, and fulfilment creates their account from the
- * email Stripe collects (see lib/stripe/fulfil.ts), so nobody has to sign in before paying.
+ * Creates a Stripe Checkout Session and returns its URL (contract C1). Every amount is worked out
+ * here from the catalogue (lib/commerce/plan.ts) and charged as exactly that, so the price shown is
+ * the price charged. Signed-in users get a pending purchase row up front; guests pay first, and
+ * fulfilment creates their account from the email Stripe collects (lib/stripe/fulfil.ts), so nobody
+ * has to sign in before paying. Only the upgrade needs an account: its price depends on it.
  */
 export async function POST(request: NextRequest) {
   const stripe = getStripe();
-  if (!stripe) return NextResponse.json({ error: "payments_not_configured" }, { status: 503 });
-  const supabase = await getSupabaseServerClient();
-  const user = await getCurrentUser();
-  if (!supabase) return NextResponse.json({ error: "payments_not_configured" }, { status: 503 });
-  // Purchases are written with the service role: users can only read their own rows (RLS),
-  // and the amount/currency must come from the server, never the client.
+  // Purchases are written with the service role: users can only read their own rows (RLS), and the
+  // amount must come from the server, never the client.
   const admin = getSupabaseAdminClient();
-  if (!admin) return NextResponse.json({ error: "payments_not_configured" }, { status: 503 });
+  if (!stripe || !admin) return NextResponse.json({ error: "payments_not_configured" }, { status: 503 });
+  if (!(await rateLimit(`checkout:${clientIp(request.headers)}`, { limit: 60, windowSeconds: 600 })))
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
   const parsed = input.safeParse(await request.json().catch(() => null));
-  if (!parsed.success || !isProductId(parsed.data.product))
-    return NextResponse.json({ error: "invalid_input" }, { status: 400 });
-  const { product, returnTo, ref } = parsed.data;
-  const price = await resolvePriceId(stripe, product).catch(() => undefined);
-  if (!price) return NextResponse.json({ error: "price_not_configured" }, { status: 503 });
+  if (!parsed.success || !isProductId(parsed.data.product)) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  const body = parsed.data;
+  const product = parsed.data.product;
+  const user = await getCurrentUser();
+  const userId = user?.id ?? null;
 
-  const slugs = Array.from(
-    new Set(parsed.data.templateSlugs.filter((s) => TEMPLATE_SLUGS.includes(s))),
+  // Only ever a currency the site shows prices in.
+  const currency: Currency =
+    body.currency && CHARGED_CURRENCIES.includes(body.currency)
+      ? body.currency
+      : currencyFor(request.headers.get("x-vercel-ip-country") ?? request.headers.get("accept-language")?.split(",")[0]);
+
+  const [creatorCode, owned] = await Promise.all([creditedCreator(admin, body.ref, user?.email), buyerContext(admin, userId)]);
+  const plan = planCheckout(
+    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, currency },
+    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), ...owned },
   );
-  const needed = PRODUCTS[product].picks;
-  if (Number.isFinite(needed) && slugs.length !== needed)
-    return NextResponse.json({ error: "wrong_template_count", needed }, { status: 400 });
+  if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
 
-  const wanted: Currency =
-    parsed.data.currency ??
-    currencyFor(
-      request.headers.get("x-vercel-ip-country") ??
-        request.headers.get("accept-language")?.split(",")[0],
-    );
-  // Only charge in a currency the Price actually carries; otherwise fall back to its default.
-  const priceObject = await stripe.prices.retrieve(price, { expand: ["currency_options"] });
-  const supported = new Set<string>([
-    priceObject.currency,
-    ...Object.keys(priceObject.currency_options ?? {}),
-  ]);
-  const currency: Currency = supported.has(wanted) ? wanted : (priceObject.currency as Currency);
   let purchaseId: string;
   if (user) {
     const { data: purchase, error } = await admin
@@ -72,10 +92,14 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: user.id,
         product,
-        template_slugs: product === "everything" ? [] : slugs,
-        amount: PRODUCTS[product].amounts[currency],
+        template_slugs: plan.templateSlugs,
+        amount: plan.total,
         currency,
         status: "pending",
+        kind: plan.kind,
+        creator_code: plan.creatorCode,
+        ref: body.ref ?? null,
+        discount_amount: null,
       })
       .select("id")
       .single();
@@ -88,48 +112,31 @@ export async function POST(request: NextRequest) {
     // Guest: the purchase row is written at fulfilment, under the account created for the buyer.
     purchaseId = crypto.randomUUID();
   }
-  const locale =
-    parsed.data.locale ??
-    (request.headers.get("accept-language")?.toLowerCase().startsWith("es") ? "es" : "en");
+  if (plan.product === "giftcard" && body.giftCard && !(await saveGiftCardDetails(admin, purchaseId, body.giftCard)))
+    return NextResponse.json({ error: "purchase_failed" }, { status: 500 });
+  const locale = body.locale ?? (request.headers.get("accept-language")?.toLowerCase().startsWith("es") ? "es" : "en");
+  const origin = siteOrigin();
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? SITE.url;
-  const back = returnTo ?? "/dashboard";
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: [{ price, quantity: 1 }],
-    currency,
-    customer_email: user?.email ?? undefined,
-    client_reference_id: purchaseId,
-    metadata: {
-      purchase_id: purchaseId,
-      user_id: user?.id ?? "",
-      guest: user ? "0" : "1",
-      locale,
-      product,
-      template_slugs: slugs.join(","),
-      withdrawal_notice: "shown_at_payment",
-      ...(ref ? { ref } : {}),
-    },
-    allow_promotion_codes: true,
-    // Digital content supplied at once: under EU consumer law the 14-day right to cancel only ends
-    // if the buyer asks for it to be unlocked straight away and acknowledges losing that right,
-    // before paying. This line sits directly above Stripe's pay button, which is the moment it has
-    // to be seen; the receipt email confirms it afterwards, as the law also requires.
-    custom_text: {
-      submit: {
-        message:
-          locale === "es"
-            ? `Al pagar, pides que tu compra se desbloquee al instante y aceptas que, una vez desbloqueada, pierdes el derecho de desistimiento de 14 días. Términos: ${origin}/es/legal/terms`
-            : `By paying, you ask for your purchase to be unlocked straight away and accept that, once it is, you lose the 14-day right to cancel. Terms: ${origin}/legal/terms`,
-      },
-    },
-    // Shared Stripe account: make the charge recognisable on statements.
-    payment_intent_data: { statement_descriptor_suffix: "ETHOS" },
-    automatic_tax: process.env.STRIPE_AUTOMATIC_TAX === "true" ? { enabled: true } : undefined,
-    success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&return=${encodeURIComponent(back)}`,
-    cancel_url: `${origin}${back}`,
+  const params = sessionParams(plan, {
+    purchaseId,
+    userId,
+    email: user?.email ?? null,
+    locale,
+    origin,
+    returnTo: body.returnTo ?? "/dashboard",
+    ref: body.ref,
+    automaticTax: process.env.STRIPE_AUTOMATIC_TAX === "true",
+    productIds: stripeProductIds(),
   });
-  if (user)
-    await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
+  let session: Stripe.Checkout.Session;
+  try {
+    session = await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin) });
+  } catch (e) {
+    // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
+    const err = e as Partial<Stripe.errors.StripeError>;
+    console.error("[stripe] checkout session failed", err.type ?? "unknown", err.code ?? "", err.param ?? "");
+    return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
+  }
+  if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
   return NextResponse.json({ url: session.url });
 }

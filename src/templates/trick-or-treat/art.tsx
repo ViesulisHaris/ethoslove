@@ -1,3 +1,5 @@
+import { sliceGraphemes } from "@/lib/gift/graphemes";
+
 /**
  * Halloween night, drawn cute rather than scary: a moon, a crooked little house, a
  * jack-o'-lantern, and the three hosts who can answer the door. All original SVG.
@@ -114,7 +116,7 @@ export function Moon({ p }: { p: Palette }) {
  * Give it a `name` and the grin is carved into their name instead.
  */
 export function Pumpkin({ p, lit, face = true, name }: { p: Palette; lit: boolean; face?: boolean; name?: string }) {
-  const carved = name ? (name.trim().split(/\s+/)[0] || name.trim()).toUpperCase().slice(0, 9) : "";
+  const carved = name ? sliceGraphemes((name.trim().split(/\s+/)[0] || name.trim()).toUpperCase(), 9) : "";
   return (
     <svg viewBox="0 0 100 90" className="h-full w-full overflow-visible" aria-hidden="true">
       <defs>

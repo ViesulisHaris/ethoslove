@@ -53,6 +53,33 @@ describe("place search results", () => {
     expect(parsePhoton({ features })).toHaveLength(8);
     expect(parsePhoton({ features }, 3)).toHaveLength(3);
   });
+
+  it("puts cities ahead of villages with the same name, accents or not", () => {
+    // Photon's real order for "Valparaiso", trimmed: the Chilean city came ninth and was cut off.
+    const features = [
+      feature("Valparaiso", "city", -87.06, 41.47, { state: "Indiana", extent: [-87.11, 41.51, -87.0, 41.44] }),
+      feature("Valparaiso", "village", -96.83, 41.08, { state: "Nebraska", extent: [-96.84, 41.09, -96.82, 41.07] }),
+      feature("Valparaiso", "village", -86.5, 30.5, { state: "Florida" }),
+      feature("Valparaiso", "village", -104.19, 52.85, { state: "Saskatchewan" }),
+      feature("Valparaíso", "municipality", -50.9, -21.2, { state: "São Paulo", extent: [-51.15, -20.94, -50.74, -21.44] }),
+      feature("Valparaiso", "municipality", -42.1, -7.1, { state: "Piauí" }),
+      feature("Valparaiso", "suburb", -42.8, -5.1, { state: "Piauí" }),
+      feature("Valparaiso", "village", -67.2, -11.1, { state: "Pando" }),
+      feature("Valparaíso", "city", -71.62, -33.05, { state: "Valparaiso Region", country: "Chile", extent: [-80.12, -26.27, -71.38, -33.21] }),
+      feature("Valparaíso de Goiás", "municipality", -47.98, -16.07),
+    ];
+    const out = parsePhoton({ features }, 8, "Valparaiso");
+    expect(out.slice(0, 2).map((p) => p.region)).toEqual(["Indiana", "Valparaiso Region"]);
+    expect(out.slice(2, 4).map((p) => p.kind)).toEqual(["municipality", "municipality"]);
+    // An exact name beats one that only starts with it, whatever the size.
+    expect(out.map((p) => p.name)).not.toContain("Valparaíso de Goiás");
+  });
+
+  it("keeps Photon's order among places of the same kind", () => {
+    // Cambridge in England is a point with no extent; only Photon's order says it comes first.
+    const out = parsePhoton({ features: [feature("Cambridge", "city", 0.12, 52.2), feature("Cambridge", "city", -80.3, 43.4, { extent: [-80.4, 43.5, -80.2, 43.3] })] }, 8, "cambridge");
+    expect(out.map((p) => p.lng)).toEqual([0.12, -80.3]);
+  });
 });
 
 describe("built-in city search", () => {

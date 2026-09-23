@@ -1,14 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ArrowLeft, RotateCcw, Sparkles } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Link, useRouter } from "@/i18n/navigation";
-import { COVER_IDS, type CoverId, type GiftLocale } from "@/lib/gift/schema";
+import type { CoverId, GiftLocale } from "@/lib/gift/schema";
 import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
+import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
 import { LogoMark } from "@/components/shared/logo";
+
+const noSubscribe = () => () => {};
+
+/**
+ * `?cover=`, read once the page is running. Not `useSearchParams`: on this statically rendered
+ * page it made everything up to the Suspense boundary render only in the browser, so the HTML
+ * held nothing but a dark box and a phone showed a blank screen for five seconds. Now the bar and
+ * the gift's loading screen are in the HTML. Checked against the cover looks rather than
+ * `COVER_IDS`, which lives with the zod schema and pulled all of zod into this page.
+ */
+function useCoverParam(): CoverId | undefined {
+  const raw = useSyncExternalStore(noSubscribe, () => new URLSearchParams(window.location.search).get("cover"), () => null);
+  if (!raw) return undefined;
+  return raw === "classic" || Object.prototype.hasOwnProperty.call(COVER_LOOKS, raw) ? (raw as CoverId) : undefined;
+}
 
 /**
  * Full-screen live demo. The control strip sits in its own row above the template so it
@@ -19,22 +34,29 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
   const router = useRouter();
   const t = useTranslations("templates");
   const [replayKey, setReplayKey] = useState(0);
-  const coverParam = useSearchParams().get("cover");
-  const cover = (COVER_IDS as readonly string[]).includes(coverParam ?? "") ? (coverParam as CoverId) : undefined;
+  const cover = useCoverParam();
 
   return (
     <div className="flex h-dvh w-full flex-col bg-night">
-      <div data-demo-chrome className="flex h-12 shrink-0 items-center justify-between gap-2 border-b border-white/10 bg-night px-3 pt-[env(safe-area-inset-top)]">
-        <Link href={backHref} className="flex h-8 items-center gap-1.5 rounded-full px-2 text-xs font-medium text-white/80 hover:bg-white/10">
-          <LogoMark className="size-5" />
-          <ArrowLeft className="size-3.5" />
-          {t("backToGallery")}
+      {/*
+       * 44px controls, the size a thumb can hit, in a 48px bar that grows by the notch's inset
+       * rather than giving it its own height. The labels never wrap: on a narrow phone the way
+       * back shortens ("Todas las plantillas" is the longest) and "Use this template", the one
+       * that turns a visitor into a customer, keeps its full width.
+       */}
+      <div data-demo-chrome className="flex h-[calc(3rem+env(safe-area-inset-top))] shrink-0 items-center justify-between gap-2 border-b border-white/10 bg-night px-2 pt-[env(safe-area-inset-top)] sm:px-3">
+        {/* At least 44px wide too: below 360px the label is screen-reader only and the arrow alone was 30. */}
+        {/* Not prefetched: on a slow phone that download competed with the gift's own. */}
+        <Link href={backHref} prefetch={false} className="flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium whitespace-nowrap text-white/80 hover:bg-white/10 sm:text-sm">
+          <LogoMark className="hidden size-5 shrink-0 min-[400px]:block" />
+          <ArrowLeft className="size-3.5 shrink-0" />
+          <span className="truncate max-[359px]:sr-only">{t("backToGallery")}</span>
         </Link>
-        <div className="flex items-center gap-1.5">
-          <button type="button" onClick={() => setReplayKey((k) => k + 1)} className="grid size-8 place-items-center rounded-full text-white/80 hover:bg-white/10" aria-label={t("replay")}>
-            <RotateCcw className="size-3.5" />
+        <div className="flex shrink-0 items-center gap-1">
+          <button type="button" onClick={() => setReplayKey((k) => k + 1)} className="grid size-11 shrink-0 place-items-center rounded-full text-white/80 hover:bg-white/10" aria-label={t("replay")}>
+            <RotateCcw className="size-4" />
           </button>
-          <Link href={`/create/${slug}`} className="flex h-8 items-center gap-1.5 rounded-full bg-coral px-3 text-xs font-semibold text-white hover:bg-coral-deep">
+          <Link href={`/create/${slug}`} className="flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-coral px-3.5 text-xs font-semibold whitespace-nowrap text-white hover:bg-coral-deep sm:text-sm">
             <Sparkles className="size-3.5" />
             {t("useTemplate")}
           </Link>

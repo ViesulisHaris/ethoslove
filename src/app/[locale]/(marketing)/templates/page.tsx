@@ -9,6 +9,7 @@ import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
+import { parseTier } from "@/components/templates/gallery-tier";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/templates">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/tem
 
 export default async function TemplatesPage({ params, searchParams }: PageProps<"/[locale]/templates">) {
   const { locale } = await params;
-  const { occasion } = await searchParams;
+  const { occasion, tier } = await searchParams;
   // An occasion has its own page; send the old query-param form there rather than serving the
   // same list under two URLs, which would have them compete with each other in search.
   if (typeof occasion === "string" && isOccasion(occasion)) redirect({ href: `/occasions/${occasion}`, locale });
@@ -42,7 +43,7 @@ export default async function TemplatesPage({ params, searchParams }: PageProps<
         ]}
       />
       <PageHeader eyebrow={t("templates.title")} title={t("seo.templatesTitle")} subtitle={t("templates.subtitle")} />
-      <TemplateGallery manifests={manifests} />
+      <TemplateGallery manifests={manifests} initialTier={parseTier(typeof tier === "string" ? tier : null)} />
     </>
   );
 }

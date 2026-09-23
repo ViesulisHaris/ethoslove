@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 
 export function GiftCard({ gift }: { gift: DashboardGift }) {
   const t = useTranslations("dashboard");
+  const tCommon = useTranslations("common");
   const locale = useLocale() as GiftLocale;
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -73,7 +74,7 @@ export function GiftCard({ gift }: { gift: DashboardGift }) {
         </DropdownMenu>
       </div>
       <Dialog open={confirm} onOpenChange={setConfirm}>
-        <DialogContent>
+        <DialogContent closeLabel={tCommon("close")}>
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">{t("deleteTitle")}</DialogTitle>
             <DialogDescription>{t("deleteBlurb")}</DialogDescription>

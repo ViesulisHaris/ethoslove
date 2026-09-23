@@ -180,7 +180,7 @@ test.describe("Halfway: the recipient", () => {
     await expect(page.getByRole("button", { name: "sopla el avión hasta Clara" })).toBeVisible();
     await page.getByRole("button", { name: "Volar hasta Clara" }).click({ force: true });
     await expect(page.getByText("una postal de Iván", { exact: true })).toBeVisible({ timeout: 12_000 });
-    await expect(page.getByRole("heading", { name: "Querida Clara," })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Hola, Clara:" })).toBeVisible();
     noErrors();
   });
 });

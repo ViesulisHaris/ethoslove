@@ -6,10 +6,14 @@ import { useReducedMotion } from "motion/react";
 import type { GiftLocale, GiftVideo as GiftVideoData } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import { giftString } from "./i18n";
+import { claimSound, isSongPreviewPlaying, onSoundClaimed } from "./sound-floor";
 
 /**
  * The sender's clip. Autoplays muted when scrolled into view (that's the only autoplay
  * browsers allow); one tap turns the sound on. Reduced motion: poster + a play button.
+ *
+ * A real song's preview may never play under a video (Apple's terms), so the clip pauses when the
+ * song starts, doesn't autoplay while it plays, and stops the song when it starts itself.
  */
 export function GiftVideo({ video, locale, className, rounded = "rounded-2xl" }: { video: GiftVideoData; locale: GiftLocale; className?: string; rounded?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -22,14 +26,23 @@ export function GiftVideo({ video, locale, className, rounded = "rounded-2xl" }:
     if (!el || reduce) return;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) el.play().then(() => setPlaying(true)).catch(() => {});
-        else el.pause();
+        if (entry.isIntersecting) {
+          if (!isSongPreviewPlaying()) el.play().then(() => setPlaying(true)).catch(() => {});
+        } else el.pause();
       },
       { threshold: 0.5 },
     );
     io.observe(el);
     return () => io.disconnect();
   }, [reduce]);
+
+  useEffect(
+    () =>
+      onSoundClaimed((kind) => {
+        if (kind === "songPreview") ref.current?.pause();
+      }),
+    [],
+  );
 
   const toggleSound = () => {
     const el = ref.current;
@@ -41,7 +54,21 @@ export function GiftVideo({ video, locale, className, rounded = "rounded-2xl" }:
 
   return (
     <div className={cn("relative overflow-hidden bg-black", rounded, className)}>
-      <video ref={ref} src={video.url} poster={video.poster} muted={muted} loop playsInline preload="metadata" className="block h-full w-full object-cover" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} />
+      <video
+        ref={ref}
+        src={video.url}
+        poster={video.poster}
+        muted={muted}
+        loop
+        playsInline
+        preload="metadata"
+        className="block h-full w-full object-cover"
+        onPlay={(e) => {
+          setPlaying(true);
+          claimSound("video", e.currentTarget);
+        }}
+        onPause={() => setPlaying(false)}
+      />
       {!playing ? (
         <button type="button" onClick={toggleSound} className="absolute inset-0 grid place-items-center bg-black/25" aria-label={giftString(locale, "playClip")}>
           <span className="grid size-14 place-items-center rounded-full bg-white/90 text-night shadow-lg">

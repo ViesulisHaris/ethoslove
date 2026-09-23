@@ -1,4 +1,4 @@
-import { EmailLayout, P, Quiet } from "./layout";
+import { EmailLayout, InlineLink, P, Quiet } from "./layout";
 
 type L = "en" | "es";
 const footer: Record<L, string> = { en: "You're getting this because you have an Ethos account.", es: "Recibes esto porque tienes una cuenta en Ethos." };
@@ -26,12 +26,19 @@ export function GiftPublishedEmail({ locale, recipientName, url, scheduledFor }:
   );
 }
 
-export function GiftOpenedEmail({ locale, recipientName, dashboardUrl }: { locale: L; recipientName: string; dashboardUrl: string }) {
+/** `nextUrl` offers the next gift: the moment it lands is when making another one sounds best. */
+export function GiftOpenedEmail({ locale, recipientName, dashboardUrl, nextUrl }: { locale: L; recipientName: string; dashboardUrl: string; nextUrl?: string }) {
   const es = locale === "es";
   return (
     <EmailLayout preview={es ? `${recipientName} acaba de abrir tu regalo.` : `${recipientName} just opened your gift.`} heading={es ? `${recipientName} lo ha abierto.` : `${recipientName} opened it.`} cta={{ label: es ? "Ver estadísticas" : "See the stats", href: dashboardUrl }} footer={footer[locale]}>
       <P>{es ? "Ahora mismo. Con el sonido activado, esperamos." : "Just now. Sound on, we hope."}</P>
       <Quiet>{es ? "Solo te avisamos de la primera apertura. El resto está en tu panel." : "We only email about the first open. The rest is on your dashboard."}</Quiet>
+      {nextUrl ? (
+        <Quiet>
+          {es ? "¿Ya piensas en la próxima ocasión? " : "Already thinking about the next occasion? "}
+          <InlineLink href={nextUrl}>{es ? "Empieza el siguiente regalo" : "Start the next gift"}</InlineLink>.
+        </Quiet>
+      ) : null}
     </EmailLayout>
   );
 }
@@ -55,21 +62,81 @@ export function GiftUnlockedEmail({ locale, recipientName, url }: { locale: L; r
   );
 }
 
-export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string }) {
+/**
+ * What the buyer agreed to at checkout. With `consent` (the sentence they ticked, as fulfilment
+ * recorded it on the purchase) it is quoted word for word and called a tick: the withdraw page tells
+ * buyers to look here to know whether they can still cancel. Without it, Stripe couldn't show the box
+ * and only the notice above the pay button was there. Nothing was ticked, so, like a purchase made
+ * before the box existed, the sale keeps its 14-day right to cancel (terms s.9), and the receipt says so.
+ *
+ * A pass renewal bought early starts when the running year ends, and the right to cancel only goes
+ * once supply has begun, so a pass's receipt ties the loss to the year starting.
+ */
+function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: string | undefined): string {
+  if (consent) {
+    const ticked = es ? `Al pagar marcaste: «${consent}»` : `At checkout you ticked: “${consent}”`;
+    if (kind === "giftcard")
+      return es
+        ? `${ticked} Para desistir en esos 14 días, antes de que se canjee el código, responde a este correo.`
+        : `${ticked} To cancel within those 14 days, before the code is redeemed, reply to this email.`;
+    if (kind === "pass")
+      return es
+        ? `${ticked} Por eso, una vez que empieza el año del pase, el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos.`
+        : `${ticked} So once the pass year has started, the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right.`;
+    return es
+      ? `${ticked} Por eso, el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos.`
+      : `${ticked} So the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right.`;
+  }
+  if (kind === "giftcard")
+    return es
+      ? "Puedes desistir en los 14 días siguientes a la compra, con el reembolso íntegro, siempre que el código no se haya canjeado: responde a este correo. Si algo no funciona, también lo solucionamos."
+      : "You can cancel within 14 days of buying, for a full refund, as long as the code hasn't been redeemed: reply to this email. If anything doesn't work, we'll put that right too.";
+  return es
+    ? "Pagaste tras un aviso encima del botón Pagar, sin marcar ninguna casilla, así que conservas el derecho de desistimiento de 14 días: para ejercerlo, responde a este correo en los 14 días siguientes a la compra. Si algo no funciona, también lo solucionamos."
+    : "You paid after a notice above the Pay button, without ticking a box, so you keep the 14-day right to cancel: to use it, reply to this email within 14 days of buying. If anything doesn't work, we'll put that right too.";
+}
+
+/**
+ * `until` is for what doesn't last forever (the Ethos for Two pass, already formatted), and so also
+ * marks a pass's receipt, whose right to cancel goes when its year starts (consentLine). `upgrade` is
+ * the "Everything for the difference" offer after a single or a pick three: its price already takes
+ * off what they've paid. `giftCard` is for a "Give Everything" card: nothing is unlocked for the
+ * buyer, and the right to cancel stays until the code is redeemed (terms, section 8), so the receipt
+ * must not say it has gone. `consent` is the withdrawal sentence the buyer ticked (consentLine).
+ */
+export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashboardUrl, until, upgrade, giftCard = false, consent }: { locale: L; productLabel: string; amountLabel: string; unlocks: string[]; dashboardUrl: string; until?: string; upgrade?: { url: string; amountLabel: string }; giftCard?: boolean; consent?: string }) {
   const es = locale === "es";
+  const heading = giftCard
+    ? es
+      ? "Gracias. El código te llega en otro correo."
+      : "Thank you. The code comes in its own email."
+    : until
+      ? es
+        ? `Gracias. Es tuyo hasta el ${until}.`
+        : `Thank you. It's yours until ${until}.`
+      : es
+        ? "Gracias. Es tuyo para siempre."
+        : "Thank you. It's yours, forever.";
   return (
-    <EmailLayout preview={es ? `Recibo: ${productLabel}` : `Receipt: ${productLabel}`} heading={es ? "Gracias. Es tuyo para siempre." : "Thank you. It's yours, forever."} cta={{ label: es ? "Ir a mis regalos" : "Go to my gifts", href: dashboardUrl }} footer={footer[locale]}>
+    <EmailLayout preview={es ? `Recibo: ${productLabel}` : `Receipt: ${productLabel}`} heading={heading} cta={{ label: es ? "Ir a mis regalos" : "Go to my gifts", href: dashboardUrl }} footer={footer[locale]}>
       <P>
         <strong>{productLabel}</strong> · {amountLabel}
       </P>
-      <P>{es ? "Desbloqueado:" : "Unlocked:"} {unlocks.join(", ")}</P>
+      {unlocks.length ? (
+        <P>
+          {es ? "Desbloqueado:" : "Unlocked:"} {unlocks.join(", ")}
+        </P>
+      ) : null}
+      {upgrade ? (
+        <Quiet>
+          {es ? "¿Quieres todas las plantillas? " : "Want every template? "}
+          <InlineLink href={upgrade.url}>{es ? `Para ti, «Todo» cuesta ahora ${upgrade.amountLabel}` : `For you, Everything is now ${upgrade.amountLabel}`}</InlineLink>
+          {es ? ": lo que ya has pagado cuenta." : ": what you've paid already counts."}
+        </Quiet>
+      ) : null}
       <Quiet>{es ? "Pago único, sin renovaciones. Stripe te envía la factura por separado." : "One-time payment, no renewals. Stripe sends the invoice separately."}</Quiet>
       {/* The confirmation, on a durable medium, of the consent given at payment (Consumer Rights Directive art. 8(7)). */}
-      <Quiet>
-        {es
-          ? "Pediste que se desbloqueara al instante, así que el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos."
-          : "You asked for it to be unlocked straight away, so the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right."}
-      </Quiet>
+      <Quiet>{consentLine(es, giftCard ? "giftcard" : until ? "pass" : "other", consent)}</Quiet>
     </EmailLayout>
   );
 }

@@ -8,7 +8,8 @@ import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
 import { SoundGate } from "./sound-gate";
 import { ReactionSheet } from "./reaction-sheet";
 import { HomeScreenTip } from "./home-screen-tip";
-import { saveReplySeed } from "@/lib/editor/reply-seed";
+import { replyEditorHref, saveReplySeed } from "@/lib/editor/reply-seed";
+import { track } from "@/lib/analytics/track";
 
 const VIEW_TTL_MS = 24 * 60 * 60 * 1000;
 const PROGRESS_STEP = 25;
@@ -43,7 +44,11 @@ function rememberView(shortId: string, viewId: string) {
  * A gift with a decorated cover skips the plain gate: tapping the cover is the gesture that
  * lets sound play, so asking for a second tap would only get in the way.
  */
-export function GiftExperience({ shortId, data, locale }: { shortId: string; data: GiftData; locale: GiftLocale }) {
+/**
+ * `replyToken` makes "send one back" free: the gift page mints it for a paid premium gift whose free
+ * reply is still unused, once the gift (and its password, if any) has been checked. Null otherwise.
+ */
+export function GiftExperience({ shortId, data, locale, replyToken = null }: { shortId: string; data: GiftData; locale: GiftLocale; replyToken?: string | null }) {
   const router = useRouter();
   const hasCover = Boolean(data.cover && data.cover !== "classic");
   const [opened, setOpened] = useState(hasCover);
@@ -118,7 +123,10 @@ export function GiftExperience({ shortId, data, locale }: { shortId: string; dat
             // The easiest gift to make is a reply: the same template, the names already swapped, and
             // whatever else the template carries across (Halfway flips the two places).
             saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
-            router.push(`${data.locale === "es" ? "/es" : ""}/create/${data.templateSlug}?ref=${shortId}`);
+            track("reply_started", { template: data.templateSlug });
+            // A paid premium gift's reply is free: the link carries the sealed token that proves it,
+            // never this gift's id.
+            router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
           }}
           replyMode
           onCoverOpened={hasCover ? recordView : undefined}

@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
+import { EagerImg } from "@/components/shared/eager-img";
 
 /**
  * The real flowers, bows and kisses the collage templates are made of (public/scraps), used on the
@@ -26,10 +26,15 @@ const CUTOUTS = {
 
 export type CutoutId = keyof typeof CUTOUTS;
 
-/** One cut-out. Decorative: never announced, never clickable, never the thing the page waits for. */
+/**
+ * One cut-out. Decorative: never announced, never clickable, never the thing the page waits for.
+ * An eager one is drawn through EagerImg, so the homepage's hero lilies stop being preloaded by
+ * every page that merely links to the homepage (see eager-img.tsx); a lazy one needs no such care.
+ */
 export function Cutout({ id, eager = false, className, style }: { id: CutoutId; eager?: boolean; className?: string; style?: CSSProperties }) {
   const [width, height] = CUTOUTS[id];
-  return <img src={`/scraps/${id}.webp`} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
+  const Img = eager ? EagerImg : "img";
+  return <Img src={`/scraps/${id}.webp`} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
 }
 
 /**

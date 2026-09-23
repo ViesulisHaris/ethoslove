@@ -5,6 +5,7 @@ import { Loader2, LogIn, Trash2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
+import { formatStars } from "@/lib/dates/format";
 import type { Rating } from "@/lib/dates/rank";
 import { WENT_AS_IDS, WENT_AS_LABELS, type PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
@@ -72,15 +73,17 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           <h3 className="font-display text-[19px] text-forest">{labels.title}</h3>
           {rating?.reviews ? (
             <p className="mt-1 flex items-center gap-2 text-[13.5px] text-forest/70">
-              <Stars value={rating.stars} />
-              {labels.summary(rating.stars.toFixed(1), rating.reviews)}
+              <Stars value={rating.stars} locale={locale} />
+              {labels.summary(formatStars(rating.stars, locale), rating.reviews)}
             </p>
-          ) : (
-            <p className="mt-1 text-[13.5px] text-forest/55">{labels.none}</p>
-          )}
+          ) : reviews !== undefined && reviews.length === 0 ? (
+            // Only once the list has answered: the stars behind the heading can still be on their way,
+            // and "No reviews yet" over a list still loading was saying two things at once.
+            <p className="mt-1 text-[13.5px] text-forest/65">{labels.none}</p>
+          ) : null}
         </div>
         {!open ? (
-          <button type="button" onClick={() => setOpen(true)} className="h-10 shrink-0 rounded-full bg-rose-soft px-4 text-[13.5px] font-semibold text-rose-ink hover:bg-rose-tint">
+          <button type="button" onClick={() => setOpen(true)} className="h-11 shrink-0 rounded-full lg:h-10 bg-rose-soft px-4 text-[13.5px] font-semibold text-rose-ink hover:bg-rose-tint">
             {mine ? labels.edit : labels.rate}
           </button>
         ) : null}
@@ -99,7 +102,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           <p className="mt-3 text-[12.5px] font-semibold text-forest/70">{labels.cost}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label={labels.cost}>
             {COST_IDS.map((c) => (
-              <button key={c} type="button" aria-pressed={cost === c} onClick={() => setCost(cost === c ? null : c)} className={cn("h-9 rounded-full px-3 text-[13px] font-semibold", cost === c ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
+              <button key={c} type="button" aria-pressed={cost === c} onClick={() => setCost(cost === c ? null : c)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", cost === c ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
                 {COST_LABELS[c][locale]}
               </button>
             ))}
@@ -107,14 +110,14 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           <p className="mt-3 text-[12.5px] font-semibold text-forest/70">{labels.wentAs}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label={labels.wentAs}>
             {WENT_AS_IDS.map((w) => (
-              <button key={w} type="button" aria-pressed={wentAs === w} onClick={() => setWentAs(wentAs === w ? null : w)} className={cn("h-9 rounded-full px-3 text-[13px] font-semibold", wentAs === w ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
+              <button key={w} type="button" aria-pressed={wentAs === w} onClick={() => setWentAs(wentAs === w ? null : w)} className={cn("h-11 rounded-full px-3 text-[13px] font-semibold lg:h-10", wentAs === w ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10")}>
                 {WENT_AS_LABELS[w][locale]}
               </button>
             ))}
           </div>
           <label className="mt-3 block">
             <span className="text-[12.5px] font-semibold text-forest/70">{labels.body}</span>
-            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-white px-3.5 py-2.5 text-[15px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
+            <textarea value={body} maxLength={400} rows={3} onChange={(e) => setBody(e.target.value)} placeholder={labels.bodyPlaceholder} className="mt-1.5 w-full resize-none rounded-2xl border border-forest/15 bg-white px-3.5 py-2.5 text-[16px] leading-relaxed text-forest outline-none focus:border-rose/50 focus:shadow-[0_0_0_4px_rgba(214,51,108,0.12)]" />
           </label>
           {state === "unauthenticated" ? (
             <p className="mt-3 rounded-2xl bg-white p-3.5 text-[13.5px] leading-snug text-forest/75">
@@ -142,7 +145,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
               </button>
             ) : null}
           </div>
-          <p className="mt-2 text-[12px] text-forest/50">{labels.publicNote}</p>
+          <p className="mt-2 text-[12px] text-forest/65">{labels.publicNote}</p>
         </form>
       ) : null}
       {state === "done" && !open ? (
@@ -160,7 +163,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
           {reviews.map((r) => (
             <li key={r.id} className={cn("rounded-2xl p-3.5 ring-1 ring-forest/5", r.mine ? "bg-blush-paper" : "bg-white")}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
-                <Stars value={r.stars} size="xs" />
+                <Stars value={r.stars} size="xs" locale={locale} />
                 <span className="font-semibold text-forest">{r.name}</span>
                 <span>· {labels.when(r.createdAt)}</span>
                 {r.wentAs ? <span className="rounded-full bg-forest/5 px-2 py-0.5 text-[11px] font-medium">{WENT_AS_LABELS[r.wentAs][locale]}</span> : null}
@@ -168,7 +171,7 @@ export function Reviews({ rating, reviews, locale, labels, loginNext, onSubmit, 
               </div>
               {r.body ? <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/85">{r.body}</p> : null}
               {!r.mine ? (
-                <a href={reportLink(r.id)} className="mt-1.5 inline-flex min-h-8 items-center text-[12px] font-medium text-forest/45 underline-offset-2 hover:text-forest/70 hover:underline">
+                <a href={reportLink(r.id)} className="mt-1.5 inline-flex min-h-8 items-center text-[12px] font-medium text-forest/65 underline-offset-2 hover:text-forest/80 hover:underline">
                   {labels.report}
                 </a>
               ) : null}

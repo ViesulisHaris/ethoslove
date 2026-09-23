@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Mic, Wind } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
@@ -12,6 +12,7 @@ import { hashString } from "../_shared/random";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
+import { useSwipe } from "../_shared/hooks/use-swipe";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
@@ -132,13 +133,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     setStage("cake");
   };
 
-  const swipeStart = useRef<number | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => (swipeStart.current = e.clientY);
-  const onPointerUp = (e: ReactPointerEvent) => {
-    if (stage !== "cake" || swipeStart.current === null) return;
-    if (swipeStart.current - e.clientY > 90) blowOne();
-    swipeStart.current = null;
-  };
+  const swipe = useSwipe((dir) => dir === "up" && blowOne(), { distance: 70, enabled: stage === "cake" });
 
   const replay = () => {
     setLit(Array(candleCount).fill("lit"));
@@ -150,7 +145,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const open = stage !== "curtains";
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none" style={{ ...COVER_VARS, ...vars, fontFamily: "var(--gift-font-body)" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div ref={rootRef} className={cn("absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none", stage === "cake" && "touch-none")} style={{ ...COVER_VARS, ...vars, fontFamily: "var(--gift-font-body)" }} {...swipe}>
       <style>{CINEMA_KEYFRAMES}</style>
       {/* Stage floor + spotlight */}
       <div className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_62%,rgba(255,200,120,0.14),transparent_70%)]" />

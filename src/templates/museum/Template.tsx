@@ -271,7 +271,7 @@ function WallText({ data, mode, blocks, reduce, palette, label, onEvent, onReact
     <div ref={ref} className="flex w-[min(88cqw,520px)] flex-col gap-5">
       <div>
         <p className="text-[10px] tracking-[0.35em] uppercase" style={{ color: palette.muted, fontFamily: "var(--gift-font-body)" }}>{label}</p>
-        <h2 className="mt-4 text-[clamp(1.6rem,7cqw,2.1rem)] italic">{t("dear", { name: data.recipientName })}</h2>
+        <h2 className="mt-4 text-[clamp(1.6rem,7cqw,2.1rem)] italic [overflow-wrap:anywhere]">{t("dear", { name: data.recipientName })}</h2>
         <div className="mt-4 text-[clamp(1.05rem,4.6cqw,1.2rem)] leading-relaxed [&_p+p]:mt-4 [&_strong]:font-semibold [&_em]:text-[var(--gift-accent-deep)]" style={{ fontFamily: "var(--gift-font-body)" }}>
           {inView ? (instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.55} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={34} onDone={() => setDone(true)} />) : null}
         </div>

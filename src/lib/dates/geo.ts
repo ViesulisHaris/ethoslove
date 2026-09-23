@@ -33,6 +33,9 @@ export function walkingMinutes(km: number): number {
   return Math.max(1, Math.round(km * 1.3 * 12));
 }
 
+/** How far is still a walk. Past this the pages give the distance and leave how to get there to them, never "93 min walk". */
+export const WALK_KM = 2.2;
+
 export const round = (n: number, places: number): number => {
   const f = 10 ** places;
   return Math.round(n * f) / f;

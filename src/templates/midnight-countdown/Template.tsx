@@ -309,7 +309,7 @@ function GiftPanel({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, on
         </div>
       ) : null}
       <div className="rounded-3xl border border-white/10 bg-black/45 p-6 backdrop-blur-xl sm:p-8">
-        <h2 className="text-[clamp(1.5rem,6.5cqw,1.9rem)] leading-tight italic" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
+        <h2 className="text-[clamp(1.5rem,6.5cqw,1.9rem)] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
         <div className="mt-4 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed text-white/90 [&_em]:text-[var(--gift-accent-soft)] [&_p+p]:mt-4 [&_strong]:font-semibold [&_strong]:text-white">
           {instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={38} onDone={() => setDone(true)} />}
         </div>

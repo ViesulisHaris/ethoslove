@@ -25,6 +25,19 @@ describe("ratings from other sites", () => {
     expect(links[2].url).toContain("find_loc=38.7139,-9.1394");
   });
 
+  it("searches Google by name and address, with no empty place id", () => {
+    const google = linksFor(place).find((l) => l.source === "google")!.url;
+    expect(google).toBe("https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20da%20Esquina%20Rua%20Augusta%2010%2C%20Lisboa");
+    expect(google).not.toContain("query_place_id");
+  });
+
+  it("links a place from the list, which has no address, by its name alone or with the town it is given", () => {
+    const bare = { ...place, address: undefined } as Place;
+    expect(linksFor(bare)[0].url).toBe("https://www.tripadvisor.com/Search?q=Caf%C3%A9%20da%20Esquina");
+    // The sheet passes the address it shows, or the town before that has arrived.
+    expect(linksFor({ ...bare, address: "Lisboa" })[1].url).toBe("https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20da%20Esquina%20Lisboa");
+  });
+
   it("only takes a score for the same place: close by, and the same name", () => {
     expect(samePlace(place, { name: "Cafe da Esquina", lat: 38.714, lng: -9.1393 })).toBe(true);
     expect(samePlace(place, { name: "CAFÉ DA ESQUINA - Lisboa", lat: 38.7139, lng: -9.1394 })).toBe(true);

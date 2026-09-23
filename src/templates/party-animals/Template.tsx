@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/re
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -313,6 +314,8 @@ function Lightbox({ photo, onClose, closeLabel }: { photo: GiftPhoto; onClose: (
 }
 
 function CardSheet({ data, mode, blocks, look, s, t, reduce, onEvent, onReact, onMakeOne, onReplay }: { data: TemplateProps<PartyAnimalsFields>["data"]; mode: TemplateProps["mode"]; blocks: ReturnType<typeof parseRichText>; look: Look; s: Copy; t: ReturnType<typeof useGiftStrings>; reduce: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
+  // "Now playing" names only music that plays: a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
 
@@ -345,10 +348,10 @@ function CardSheet({ data, mode, blocks, look, s, t, reduce, onEvent, onReact, o
             <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face="hand" accent={data.accentColor} />
           </article>
 
-          {data.music?.title ? (
+          {song?.title ? (
             <p className="mt-[calc(6*var(--k))] text-center text-[calc(2.6*var(--k))] tracking-[0.2em] uppercase opacity-55">
-              {s.playing} · {data.music.title}
-              {data.music.artist ? ` — ${data.music.artist}` : ""}
+              {s.playing} · {song.title}
+              {song.artist ? ` — ${song.artist}` : ""}
             </p>
           ) : null}
 

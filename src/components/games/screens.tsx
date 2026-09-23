@@ -30,3 +30,17 @@ export function Waiting({ text, peerGone }: { text: string; peerGone?: ReactNode
     </section>
   );
 }
+
+/**
+ * A quiet way out of a game on one phone, back to the names. A game in progress now comes back
+ * after a reload, so reloading is no longer that way out.
+ */
+export function LeaveGame({ label, onLeave }: { label: string; onLeave: () => void }) {
+  return (
+    <div className="mt-10 text-center">
+      <button type="button" onClick={onLeave} className="h-11 rounded-full px-5 text-[13.5px] font-semibold text-cream/55 underline-offset-4 hover:text-cream hover:underline">
+        {label}
+      </button>
+    </div>
+  );
+}

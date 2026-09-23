@@ -25,7 +25,8 @@ const RARE_FILTERS = [
 ] as const;
 
 export const RARE_RADIUS_M = 8000;
-const RARE_CAP = 160;
+/** The most rare finds one answer holds. */
+export const RARE_CAP = 160;
 
 /** South, west, north, east of a square round a point: a box is far cheaper for Overpass than a circle. */
 export function boxAround(center: LatLng, radiusM: number): [number, number, number, number] {

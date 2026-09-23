@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { parseRichText } from "@/lib/gift/rich-text";
+import { cn } from "@/lib/utils";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -156,9 +157,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         >
           {data.senderName} → {data.recipientName}
         </motion.p>
+        {/* The poster serif is the Editorial look; the other type pairings set the title in their own face, or picking one changed nothing on the cover. */}
         <motion.h1
-          className="mx-auto mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
-          style={{ fontFamily: POSTER_FONT }}
+          className={cn(
+            "mx-auto mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] leading-[1.05] text-balance [overflow-wrap:anywhere]",
+            data.fontPairing === "modern" ? "text-[calc(7.4*var(--k))] font-semibold tracking-[-0.02em]" : data.fontPairing === "handwritten" ? "text-[calc(9.4*var(--k))]" : "text-[calc(8*var(--k))] italic",
+          )}
+          style={{ fontFamily: data.fontPairing === "modern" || data.fontPairing === "handwritten" ? "var(--gift-font-display)" : POSTER_FONT }}
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.18, duration: 0.8 }}

@@ -6,10 +6,14 @@ import { ImagePlus, RotateCcw, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { MEMORY_PAIRS, memoryDone, memoryFlip, memoryIsPair, memoryResolve, newMemory, type MemoryState } from "@/lib/games/memory";
+import { readSaved, reviveMemory, savedKey, tabStorage, writeSaved } from "@/lib/games/saved";
 import { Sticker, type StickerId } from "@/templates/_shared/covers/stickers";
 import { Chip, GameArt, PlayingCard } from "./cards";
-import { Lobby, useGameRoom, type Session } from "./lobby";
+import { GameEnd } from "./game-end";
+import { Lobby } from "./lobby";
 import { ScreenTop } from "./screen-top";
+import { LeaveGame } from "./screens";
+import { useGame } from "./use-game";
 
 const FACES: StickerId[] = ["heart", "cherries", "strawberry", "bow", "daisy", "kiss", "butterfly", "cake"];
 const SHOW_PAIR_MS = 650;
@@ -20,16 +24,24 @@ const initial = (name: string) => (Array.from(name.trim())[0] ?? "").toUpperCase
 /** Memory: the pairs game, dealt from our stickers or from your own photos. */
 export function MemoryGame() {
   const t = useTranslations("games.memory");
-  const { room, entry, setEntry } = useGameRoom();
-  const [session, setSession] = useState<Session | null>(null);
-  if (!session) return <Lobby room={room} entry={entry} onEnter={setEntry} onePhoneOnly title={t("title")} blurb={t("blurb")} art={<GameArt sticker="butterfly" rank="2" suit="diamond" back="lilac" />} onStart={setSession} />;
-  return <Board names={session.names} onChangePlayers={() => setSession(null)} />;
+  const { room, entry, enter, session, start, leave } = useGame("memory", { twoPhones: false });
+  if (!session) return <Lobby room={room} entry={entry} onEnter={enter} onePhoneOnly title={t("title")} blurb={t("blurb")} art={<GameArt sticker="butterfly" rank="2" suit="diamond" back="lilac" />} onStart={start} />;
+  return <Board names={session.names} onChangePlayers={leave} />;
 }
+
+const SAVED = savedKey("memory", "play");
 
 function Board({ names, onChangePlayers }: { names: [string, string]; onChangePlayers: () => void }) {
   const t = useTranslations("games.memory");
   const tl = useTranslations("games.lobby");
-  const [state, setState] = useState<MemoryState>(() => newMemory(Math.floor(Math.random() * 1e9)));
+  // The board as it was before a reload, if there was one. Two cards left face up were about to be
+  // settled when the page went, so they are settled now. Photos were this page's own object URLs
+  // and don't survive it: the pairs come back as our stickers, in the same places.
+  const [state, setState] = useState<MemoryState>(() => {
+    const kept = readSaved(tabStorage(), SAVED, reviveMemory);
+    return kept ? memoryResolve(kept) : newMemory(Math.floor(Math.random() * 1e9));
+  });
+  useEffect(() => writeSaved(tabStorage(), SAVED, state), [state]);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<"pair" | "miss" | null>(null);
   // Photos stay on this phone: object URLs, let go of when they are replaced or the game ends.
@@ -73,17 +85,18 @@ function Board({ names, onChangePlayers }: { names: [string, string]; onChangePl
   const status = done ? (a === b ? t("tie") : t("winner", { name: names[a > b ? 0 : 1] })) : note === "pair" ? t("pair", { name: names[state.turn] }) : note === "miss" ? t("miss", { name: names[state.turn] }) : t("turn", { name: names[state.turn] });
 
   return (
-    <section className="container-narrow py-8 sm:py-12">
+    <section className="container-narrow py-8 sm:py-12 max-lg:landscape:py-4">
       <ScreenTop screen={done ? "done" : "board"} />
-      <div className="flex items-end justify-between gap-4">
+      {/* Wraps under long names rather than hiding the photos button's words on a phone: the photos are the point. */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex items-start gap-5">
           {([0, 1] as const).map((p) => (
             <Chip key={p} value={state.scores[p]} tone={p === 0 ? "rose" : "lilac"} label={names[p]} active={!done && state.turn === p} />
           ))}
         </div>
-        <button type="button" onClick={() => picker.current?.click()} className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-[13.5px] font-semibold text-cream hover:bg-white/10">
+        <button type="button" onClick={() => picker.current?.click()} className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-white/20 px-4 text-[13.5px] font-semibold text-cream hover:bg-white/10">
           <ImagePlus aria-hidden="true" className="size-4" />
-          <span className="max-sm:sr-only">{photos.length ? t("photosAgain") : t("photos")}</span>
+          <span>{photos.length ? t("photosAgain") : t("photos")}</span>
         </button>
         <input
           ref={picker}
@@ -105,7 +118,11 @@ function Board({ names, onChangePlayers }: { names: [string, string]; onChangePl
         {status}
       </p>
 
-      <div className="mx-auto mt-5 grid max-w-[560px] grid-cols-4 gap-2.5 sm:gap-3.5">
+      {/* Every card on one screen, since the game is flipping back and forth across the board: its
+          width is capped by the height left under the header, the chips and the buttons (a card is
+          3:4, so four rows are 4/3 of the width tall), and floored so cards stay big enough to tap.
+          A phone on its side lays the sixteen out in two rows of eight. */}
+      <div className="mx-auto mt-5 grid max-w-[min(560px,max(260px,calc((100svh-370px)*0.75)))] grid-cols-4 gap-2.5 sm:gap-3.5 max-lg:landscape:max-w-[max(452px,calc((100svh-var(--header-h,76px)-9rem)*3))] max-lg:landscape:grid-cols-8">
         {state.cards.map((face, slot) => {
           const up = state.open.includes(slot) || state.matched[slot] !== null;
           const owner = state.matched[slot];
@@ -127,18 +144,24 @@ function Board({ names, onChangePlayers }: { names: [string, string]; onChangePl
       </div>
 
       {done ? (
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
-          <button type="button" onClick={deal} className="btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold">
-            <RotateCcw aria-hidden="true" className="size-4" />
-            {t("again")}
-          </button>
-          <button type="button" onClick={onChangePlayers} className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
-            <Users aria-hidden="true" className="size-4" />
-            {tl("change")}
-          </button>
-        </div>
+        <>
+          <div className="mt-8 flex flex-wrap justify-center gap-2">
+            <button type="button" onClick={deal} className="btn-rose inline-flex h-12 items-center gap-2 rounded-full px-6 text-[15px] font-semibold">
+              <RotateCcw aria-hidden="true" className="size-4" />
+              {t("again")}
+            </button>
+            <button type="button" onClick={onChangePlayers} className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
+              <Users aria-hidden="true" className="size-4" />
+              {tl("change")}
+            </button>
+          </div>
+          <GameEnd />
+        </>
       ) : (
-        <p className="mt-6 text-center text-[12.5px] text-cream/45">{t("rules")}</p>
+        <>
+          <p className="mt-6 text-center text-[12.5px] text-cream/45">{t("rules")}</p>
+          <LeaveGame label={tl("change")} onLeave={onChangePlayers} />
+        </>
       )}
     </section>
   );

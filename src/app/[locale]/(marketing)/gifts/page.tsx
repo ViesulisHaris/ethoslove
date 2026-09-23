@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
+import { ClientMessages } from "@/i18n/client-messages";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { appNode, organizationNode, pageMetadata } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
@@ -34,7 +35,7 @@ export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">
     everything: t("pricing.plans.everything.name"),
   };
   return (
-    <>
+    <ClientMessages scope="(marketing)/gifts/page" locale={locale}>
       <JsonLd nodes={[organizationNode(), appNode(locale as Locale, t("meta.description"), plans)]} />
       <Hero />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" />
@@ -47,6 +48,6 @@ export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">
       <Faq />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <FinalCta />
-    </>
+    </ClientMessages>
   );
 }

@@ -548,7 +548,7 @@ function Note({
       </button>
       <div className="rounded-[18px] bg-[#fffdf8] px-7 py-8 text-[#1A1614] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.5)]">
         <h2
-          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic"
+          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic [overflow-wrap:anywhere]"
           style={{ fontFamily: "var(--gift-font-display)" }}
         >
           {t("dear", { name: data.recipientName })}

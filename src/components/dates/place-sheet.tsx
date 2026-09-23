@@ -2,19 +2,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Star, Sun, X } from "lucide-react";
-import { motion } from "motion/react";
+import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Star, Sun, Ticket, X } from "lucide-react";
+import { motion, useDragControls } from "motion/react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
 import type { PlaceDetails } from "@/lib/dates/details";
+import { cuisineWords } from "@/lib/dates/cuisines";
 import { linksFor, SOURCE_NAMES, type Elsewhere } from "@/lib/dates/elsewhere";
+import { formatStars } from "@/lib/dates/format";
 import { formatDistance } from "@/lib/dates/geo";
 import { formatHours, hoursOn } from "@/lib/dates/hours";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
+import { photoAt } from "@/lib/dates/photos";
 import type { Ranked } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { Cost } from "@/lib/dates/cost";
+import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { WentAs } from "@/lib/supabase/types";
+import { tiqetsSearch } from "@/lib/trips/partners";
+import { PartnerLink } from "@/components/trips/partner-link";
 import { CostChip } from "./cost-chip";
 import { GroupIcon } from "./group-icon";
 import { PairsWith } from "./pairs-with";
@@ -26,6 +33,9 @@ export type PlaceSheetLabels = {
   /** "On other sites": scores from Tripadvisor and Google when this install has their keys, and links to look it up otherwise. */
   elsewhere: string;
   close: string;
+  /** The address and the hours are marked for screen readers only; their names were English on /es. */
+  address: string;
+  hours: string;
   add: string;
   remove: string;
   directions: string;
@@ -53,14 +63,39 @@ export type PlaceSheetLabels = {
   reviews: ReviewsLabels;
 };
 
-type Props = { place: Ranked; pairs: Ranked[]; reviews: PublicReview[] | undefined; loginNext: string; onSubmitReview: (input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }) => Promise<"ok" | "unauthenticated" | "failed">; onDeleteReview: () => Promise<boolean>; onOpenPlace: (id: string) => void; details: PlaceDetails | null | undefined; date: Ymd; where: string; locale: "en" | "es"; labels: PlaceSheetLabels; inPlan: boolean; onTogglePlan: () => void; onClose: () => void; className?: string };
+type Props = {
+  place: Ranked;
+  pairs: Ranked[];
+  reviews: PublicReview[] | undefined;
+  loginNext: string;
+  onSubmitReview: (input: { stars: number; cost: Cost | null; wentAs: WentAs | null; body: string }) => Promise<"ok" | "unauthenticated" | "failed">;
+  onDeleteReview: () => Promise<boolean>;
+  onOpenPlace: (id: string) => void;
+  details: PlaceDetails | null | undefined;
+  date: Ymd;
+  where: string;
+  locale: "en" | "es";
+  labels: PlaceSheetLabels;
+  inPlan: boolean;
+  onTogglePlan: () => void;
+  onClose: () => void;
+  /** A phone's bottom sheet: it has a handle, and dragging it down puts the sheet away. */
+  swipe?: boolean;
+  className?: string;
+};
+
+/** How far down, or how fast, a drag of the handle has to go to put the sheet away. */
+const FLING_PX = 90;
+const FLING_SPEED = 600;
 
 /**
  * One place, opened. What the map knows about it arrives a moment after the sheet does (address,
  * the hours for the day they picked, a website), and where it knows nothing the sheet says so and
  * hands them a search for photos and reviews, which this site does not pretend to have.
  */
-export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, className }: Props) {
+export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, swipe = false, className }: Props) {
+  const ta = useTranslations("affiliate");
+  const drag = useDragControls();
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus({ preventScroll: true });
@@ -89,13 +124,15 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   const address = details?.address ?? place.address;
   const website = details?.website ?? place.website;
   const phone = details?.phone ?? place.phone;
-  const cuisine = details?.cuisine.length ? details.cuisine : place.cuisine;
+  const cuisine = cuisineWords(details?.cuisine.length ? details.cuisine : place.cuisine, locale, info.label[locale]);
   const chips: [typeof Sun, string][] = [];
   if (details?.outdoorSeating || place.outdoorSeating) chips.push([Sun, labels.terrace]);
   if (details?.vegetarian || place.vegetarian) chips.push([Leaf, labels.vegetarian]);
   if (details?.stepFree || place.stepFree) chips.push([Accessibility, labels.stepFree]);
   if (details?.notable || place.notable) chips.push([Landmark, labels.landmark]);
   const query = encodeURIComponent(`${place.name} ${where}`.trim());
+  // The details can say it is famous when the map's first answer didn't.
+  const tickets = sellsTickets({ kind: place.kind, named: place.named, notable: place.notable || details?.notable }) ? tiqetsSearch(ticketQuery(place.name, where), locale) : null;
 
   // What Tripadvisor and Google say, when this install has their keys; an empty answer otherwise,
   // and the links below stand in for it. Kept per place, so a stale answer never shows on another.
@@ -110,7 +147,9 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
     return () => ask.abort();
   }, [place.id, place.name, place.lat, place.lng, place.named]);
   const scores = elsewhere?.id === place.id ? elsewhere.ratings : [];
-  const lookUp = place.named ? linksFor(place).filter((l) => !scores.some((r) => r.source === l.source)) : [];
+  // A place from the map has no address of its own; without one the links searched the bare name,
+  // and three branches of Waterstones got the same links. The sheet's address, or at least the town.
+  const lookUp = place.named ? linksFor({ ...place, address: address || where || undefined }).filter((l) => !scores.some((r) => r.source === l.source)) : [];
 
   return (
     <motion.aside
@@ -121,14 +160,35 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
       role="dialog"
       aria-modal="false"
       aria-labelledby="place-sheet-name"
+      data-place-sheet=""
+      drag={swipe ? "y" : false}
+      dragListener={false}
+      dragControls={drag}
+      dragConstraints={{ top: 0, bottom: 0 }}
+      dragElastic={{ top: 0, bottom: 0.8 }}
+      onDragEnd={(_, info) => {
+        if (info.offset.y > FLING_PX || info.velocity.y > FLING_SPEED) onClose();
+      }}
       className={cn("max-h-[80dvh] overflow-y-auto overscroll-contain rounded-t-[28px] bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-[0_-18px_50px_-20px_rgba(60,20,35,0.45)] ring-1 ring-forest/5 lg:max-h-[min(640px,calc(100dvh-var(--header-h)-48px))] lg:rounded-[28px] lg:shadow-lift", className)}
     >
+      {/* Pinned to the top of the sheet as it scrolls, so it can always be put away: the close
+          button used to scroll off with the photo, and on a phone a handle to drag it down. Zero
+          height, so it takes no room from what is under it. */}
+      <div className="sticky top-0 z-10 -mx-5 -mt-5 mb-5 h-0">
+        {swipe ? (
+          <div aria-hidden="true" onPointerDown={(e) => drag.start(e)} className="absolute inset-x-16 top-0 flex h-11 cursor-grab touch-none justify-center pt-2 active:cursor-grabbing">
+            <span className="h-1.5 w-10 rounded-full bg-forest/30 ring-1 ring-white/70" />
+          </div>
+        ) : null}
+        <button type="button" onClick={onClose} aria-label={labels.close} className="absolute top-3 right-3 grid size-11 place-items-center rounded-full bg-white/90 text-forest shadow-soft backdrop-blur hover:bg-white">
+          <X className="size-[18px]" />
+        </button>
+      </div>
       {photo ? (
         <figure className="relative -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-[28px]">
-          <img src={photo.src} alt="" width={photo.width} height={photo.height} decoding="async" referrerPolicy="no-referrer" className="aspect-[16/10] w-full object-cover" />
-          <button type="button" onClick={onClose} aria-label={labels.close} className="absolute top-3 right-3 grid size-10 place-items-center rounded-full bg-white/90 text-forest shadow-soft backdrop-blur hover:bg-white">
-            <X className="size-[18px]" />
-          </button>
+          {/* Capped on phones: at 16:10 the photo alone filled a landscape phone's sheet. The sheet is at
+              most ~480px wide, so Wikimedia's 960 px size is sharp on any screen; 1280 was a third more. */}
+          <img src={photoAt(photo, 480)} alt="" width={photo.width} height={photo.height} decoding="async" referrerPolicy="no-referrer" className="aspect-[16/10] w-full object-cover max-lg:max-h-[26dvh]" />
           <figcaption className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(30,8,20,0.72))] px-4 pt-6 pb-2 text-[10.5px] leading-snug text-white/90">
             {photo.fileUrl ? (
               <a href={photo.fileUrl} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline">
@@ -140,13 +200,13 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </figcaption>
         </figure>
       ) : null}
-      <div className="flex items-start gap-3">
+      <div className={cn("flex items-start gap-3", !photo && "pr-11")}>
         <span aria-hidden="true" className="grid size-12 shrink-0 place-items-center rounded-2xl" style={{ background: group.soft, color: group.color }}>
           <GroupIcon group={place.group} className="size-[22px]" />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[12.5px] font-semibold" style={{ color: group.color }}>
-            {[info.label[locale], ...cuisine.slice(0, 2)].join(" · ")}
+            {[info.label[locale], ...cuisine].join(" · ")}
           </p>
           <h2 ref={heading} tabIndex={-1} id="place-sheet-name" className="font-display text-[24px] leading-[1.08] text-forest outline-none">
             {place.name}
@@ -154,8 +214,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/60">
             {place.rating?.reviews ? (
               <>
-                <Stars value={place.rating.stars} />
-                <span className="font-semibold text-forest/85">{place.rating.stars.toFixed(1)}</span>
+                <Stars value={place.rating.stars} locale={locale} />
+                <span className="font-semibold text-forest/85">{formatStars(place.rating.stars, locale)}</span>
                 <span>{labels.reviewsCount(place.rating.reviews)}</span>
                 <span aria-hidden="true">·</span>
               </>
@@ -164,24 +224,19 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
             <CostChip cost={place.cost} locale={locale} reported={place.rating?.cost !== null && place.rating?.cost !== undefined} />
           </p>
         </div>
-        {photo ? null : (
-          <button type="button" onClick={onClose} aria-label={labels.close} className="-mt-1 -mr-1 grid size-10 shrink-0 place-items-center rounded-full text-forest/50 hover:bg-forest/5 hover:text-forest">
-            <X className="size-[18px]" />
-          </button>
-        )}
       </div>
 
       <dl className="mt-4 space-y-2.5 text-[14.5px] leading-snug text-forest/80">
         <div className="flex gap-2.5">
-          <dt className="sr-only">Address</dt>
+          <dt className="sr-only">{labels.address}</dt>
           <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/40" />
           <dd>
             {details === undefined && !address ? <span className="inline-block h-4 w-44 animate-pulse rounded bg-forest/10 align-middle" aria-label={labels.loading} /> : address ? `${address} · ` : null}
-            <span className="text-forest/55">{formatDistance(place.distanceKm, locale)}</span>
+            <span className="text-forest/65">{formatDistance(place.distanceKm, locale)}</span>
           </dd>
         </div>
         <div className="flex gap-2.5">
-          <dt className="sr-only">Hours</dt>
+          <dt className="sr-only">{labels.hours}</dt>
           <Clock3 aria-hidden="true" className={cn("mt-0.5 size-4 shrink-0", closed ? "text-destructive" : "text-forest/40")} />
           <dd className={cn(closed && "font-medium text-destructive")}>{details === undefined && !rawHours ? <span className="inline-block h-4 w-36 animate-pulse rounded bg-forest/10 align-middle" aria-label={labels.loading} /> : hoursLine}</dd>
         </div>
@@ -201,7 +256,9 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
 
       {place.about ? (
         <p className="mt-3.5 text-[14.5px] leading-relaxed text-forest/75 first-letter:uppercase">
-          {place.about}
+          {/* Wikipedia's short descriptions end without a full stop, so the link ran on from them
+              ("…in central London Read more on Wikipedia"). */}
+          {/[.!?…)"”»]$/.test(place.about.trim()) ? place.about : `${place.about.trim()}.`}
           {place.articleUrl ? (
             <>
               {" "}
@@ -215,10 +272,14 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         <p className="mt-3.5 text-[14px] leading-relaxed text-forest/65 italic">“{details.description}”</p>
       ) : null}
 
-      <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-rose-soft text-rose-ink" : "btn-rose")}>
-        {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
-        {inPlan ? labels.remove : labels.add}
-      </button>
+      {/* On a phone the sheet is short and the photo, the hours and the blurb come first, so the one
+          thing to do here waits at the bottom of the sheet (on a white band) until it scrolls into place. */}
+      <div className="mt-3 pt-2 max-lg:sticky max-lg:bottom-0 max-lg:z-[5] max-lg:-mx-5 max-lg:bg-white max-lg:px-5 max-lg:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <button type="button" onClick={onTogglePlan} aria-pressed={inPlan} className={cn("inline-flex h-12 w-full items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform hover:-translate-y-0.5", inPlan ? "bg-rose-soft text-rose-ink" : "btn-rose")}>
+          {inPlan ? <Check aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
+          {inPlan ? labels.remove : labels.add}
+        </button>
+      </div>
 
       <div className="mt-2.5 grid grid-cols-2 gap-2 text-[13.5px] font-semibold text-forest">
         <a href={`https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
@@ -236,6 +297,14 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
             <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
           </a>
         ) : null}
+        {tickets ? (
+          <PartnerLink partner="tiqets" placement="place_sheet" href={tickets} className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
+            <Ticket aria-hidden="true" className="size-4" />
+            {ta("tickets.button")}
+            <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
+            <span className="sr-only">(Tiqets, {ta("newTab")})</span>
+          </PartnerLink>
+        ) : null}
         {phone ? (
           <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-forest/15 hover:bg-forest/5">
             <Phone aria-hidden="true" className="size-4" />
@@ -243,22 +312,27 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
           </a>
         ) : null}
       </div>
+      {tickets ? (
+        <p className="mt-2 px-1 text-[12px] leading-snug text-forest/60">
+          {ta("tickets.via")} {ta("disclosure")}
+        </p>
+      ) : null}
 
       {scores.length > 0 || lookUp.length > 0 ? (
         <div className="mt-5">
-          <p className="text-[11.5px] font-semibold tracking-[0.14em] text-forest/50 uppercase">{labels.elsewhere}</p>
+          <p className="text-[11.5px] font-semibold tracking-[0.14em] text-forest/65 uppercase">{labels.elsewhere}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {scores.map((r) => (
-              <a key={r.source} href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full bg-forest/[0.05] px-3.5 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/10">
+              <a key={r.source} href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-full bg-forest/[0.05] px-3.5 lg:h-10 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/10">
                 <Star aria-hidden="true" className="size-3.5 fill-star text-star" />
-                {r.stars.toFixed(1)}
+                {formatStars(r.stars, locale)}
                 <span className="font-medium text-forest/60">
                   {SOURCE_NAMES[r.source]} · {labels.reviewsCount(r.reviews)}
                 </span>
               </a>
             ))}
             {lookUp.map((l) => (
-              <a key={l.source} href={l.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-full border border-forest/15 px-3.5 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5">
+              <a key={l.source} href={l.url} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-3.5 lg:h-10 text-[13.5px] font-semibold text-forest transition-colors hover:bg-forest/5">
                 {SOURCE_NAMES[l.source]}
                 <ExternalLink aria-hidden="true" className="size-3 opacity-50" />
               </a>
@@ -268,7 +342,7 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
       ) : null}
       <Reviews rating={place.rating} reviews={reviews} locale={locale} labels={labels.reviews} loginNext={loginNext} onSubmit={onSubmitReview} onDelete={onDeleteReview} />
       <PairsWith from={place} picks={pairs} locale={locale} labels={{ title: labels.pairs, walk: labels.walkBetween }} onOpen={onOpenPlace} />
-      <p className="mt-4 text-[11.5px] leading-snug text-forest/45">{labels.source}</p>
+      <p className="mt-4 text-[11.5px] leading-snug text-forest/65">{labels.source}</p>
     </motion.aside>
   );
 }

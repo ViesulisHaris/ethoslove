@@ -1,19 +1,7 @@
-import { z } from "zod";
 import type { WentAs } from "@/lib/supabase/types";
 
-/** What a review looks like on the way in. Short on purpose: it is a line for the next couple, not an essay. */
-export const reviewInput = z.object({
-  placeId: z.string().regex(/^(node|way|relation)\/\d{1,15}$/),
-  stars: z.number().int().min(1).max(5),
-  cost: z.number().int().min(0).max(3).nullable().optional(),
-  wentAs: z.enum(["first", "date", "anniversary", "birthday", "friends"]).nullable().optional(),
-  body: z.string().trim().max(400).optional(),
-  placeName: z.string().trim().min(1).max(120),
-  lat: z.number().min(-90).max(90),
-  lng: z.number().min(-180).max(180),
-  locale: z.enum(["en", "es"]).optional(),
-});
-export type ReviewInput = z.infer<typeof reviewInput>;
+// The shape a review is checked against on the way in is in ./review-input: this file reaches the
+// browser (the place sheet's labels), and zod must not come with it.
 
 /** A review as the page shows it: no user ids, a first name only, and only the fields anyone should see. */
 export type PublicReview = { id: string; stars: number; cost: number | null; wentAs: WentAs | null; body: string | null; name: string; createdAt: string; mine: boolean };

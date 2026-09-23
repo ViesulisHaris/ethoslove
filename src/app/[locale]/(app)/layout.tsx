@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { ClientMessages } from "@/i18n/client-messages";
 import { redirect } from "@/i18n/navigation";
 import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
@@ -15,17 +16,19 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[loc
   }
 
   return (
-    <AppShell
-      user={
-        user
-          ? {
-              email: user.email ?? "",
-              name: (user.user_metadata?.full_name as string | undefined) ?? null,
-            }
-          : null
-      }
-    >
-      {children}
-    </AppShell>
+    <ClientMessages scope="(app)/layout" locale={locale}>
+      <AppShell
+        user={
+          user
+            ? {
+                email: user.email ?? "",
+                name: (user.user_metadata?.full_name as string | undefined) ?? null,
+              }
+            : null
+        }
+      >
+        {children}
+      </AppShell>
+    </ClientMessages>
   );
 }

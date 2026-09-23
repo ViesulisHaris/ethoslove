@@ -9,7 +9,7 @@ const COPY = {
   es: { eyebrow: "REGALOS DIGITALES", templateEyebrow: "UN REGALO DIGITAL", line: "Fotos, su canción y tus palabras, enviadas con un enlace." },
 } as const;
 
-// Same serif as the gift link card (see g/[shortId]/opengraph-image.tsx).
+// Same serif as the gift link card (see g/[shortId]/card.jpg).
 const serifFont = () => readFile(new URL("../../fonts/newsreader-regular.ttf", import.meta.url));
 const italicFont = () => readFile(new URL("../../fonts/newsreader-italic.ttf", import.meta.url));
 

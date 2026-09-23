@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AlertCircle, Check, Loader2, Lock } from "lucide-react";
+import { AlertCircle, Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
-import { currentRef } from "@/lib/attribution/ref";
+import { track } from "@/lib/analytics/track";
 import { decidePublish, readinessProblems, premiumExtras } from "@/lib/gift/publish";
-import { PRODUCTS, currencyFor, formatAmount, type ProductId } from "@/lib/pricing/products";
-import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
-import { toast } from "sonner";
+import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
 import { LIMITS } from "@/config/site";
@@ -24,7 +24,10 @@ import {
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
+import { replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
+import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
+import { Paywall } from "./paywall";
 import { ShareScreen } from "./share-screen";
 
 export function PublishSheet({
@@ -49,20 +52,24 @@ export function PublishSheet({
   const tCommon = useTranslations("common");
   const locale = useLocale() as GiftLocale;
   const state = useEditor();
+  const search = useSearchParams();
   const [fetchedEntitlement, setFetchedEntitlement] = useState<{ unlocked: boolean; owned: string[] } | null>(null);
   const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [] };
   const [busy, setBusy] = useState(false);
-  const [paying, setPaying] = useState<ProductId | null>(null);
-  // Which unlock to buy. The bundle used to be a line of small print under the pay button, and
-  // nobody took it; as a second row beside the single it is a choice, priced.
-  const [plan, setPlan] = useState<"single" | "everything">("single");
+  const [upgrade, setUpgrade] = useState<UpgradeQuote | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const autoPublished = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const currency = currencyFor(locale === "es" ? "ES" : "US");
-  const priceOne = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
-  const priceAll = formatAmount(PRODUCTS.everything.amounts[currency], currency, locale);
-  const price = plan === "everything" ? priceAll : priceOne;
+  // The price a guest is told before signing in: what this gift's own row costs.
+  const priceHint = formatAmount(PRODUCTS[templatePlan(manifest.tier)].amounts[currency], currency, locale);
+  // "Send one back" from a paid premium gift opens this editor with ?reply=<token>: the reply is free
+  // (footer on, no extras). Only the server can open the token; until it says otherwise at publish,
+  // the sheet takes it at its word. A premium template only: a free one is free anyway.
+  const replyToken = manifest.tier === "premium" ? replyTokenFrom(search.get("reply")) : undefined;
+  // The server said no ("reply_used", "reply_invalid"): the gift goes back to its normal price.
+  const [replyRefused, setReplyRefused] = useState<string | null>(null);
+  const freeReply = Boolean(replyToken) && replyRefused === null;
   const [published, setPublished] = useState<{
     shortId: string;
     status: "live" | "scheduled";
@@ -74,8 +81,12 @@ export function PublishSheet({
     // Anything still waiting on this device goes up now, including files an earlier visit never sent.
     void state.ensureRemote().then(() => useEditor.getState().uploadPending());
     getEntitlement(slug).then(setFetchedEntitlement);
+    void fetchUpgradeQuote(currency).then(setUpgrade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
+  useEffect(() => {
+    if (open) track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
+  }, [open, slug, manifest.tier, state.authed]);
 
   const serialized = useMemo(() => (state.hydrated ? state.serializedForServer() : null), [state]);
   const uploadsInFlight = Object.values(state.assets).some(
@@ -134,7 +145,7 @@ export function PublishSheet({
     password: state.password.length > 0,
   };
   const decision =
-    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, options) : null;
+    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply }) : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -145,13 +156,15 @@ export function PublishSheet({
     [fetchedEntitlement, state.authed, slug],
   );
   const premiumFeatures = [
-    manifest.tier === "premium" && t("featurePremiumTemplate"),
+    // A free reply's template costs nothing: what it's paying for is the rest of the list.
+    manifest.tier === "premium" && !freeReply && t("featurePremiumTemplate"),
     options.removeWatermark && t("featureNoWatermark"),
     options.schedule && t("featureSchedule"),
     options.password && t("featurePassword"),
     ...(serialized ? premiumExtras(serialized) : []).map(
       (extra) =>
         ({
+          // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
           song: t("featureSong"),
           video: t("featureVideo"),
           voiceNote: t("featureVoiceNote"),
@@ -179,20 +192,22 @@ export function PublishSheet({
         state.schedule.enabled && state.schedule.unlockAt
           ? { unlockAt: state.schedule.unlockAt, timezone: state.schedule.timezone }
           : undefined,
+      ...(freeReply ? { replyToken } : {}),
     });
     setBusy(false);
     if (!result.ok) {
-      setError(result.error);
+      if (result.error === "reply_used" || result.error === "reply_invalid") setReplyRefused(result.error);
+      else setError(result.error);
       return;
     }
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
   };
 
-  const next = `/create/${slug}?resume=publish`;
+  const next = resumePath(slug, freeReply ? replyToken : undefined);
   // Anything that would need an unlock at publish time, shown before sign-in as a price hint.
   const wouldNeedPayment =
-    manifest.tier === "premium" ||
+    (manifest.tier === "premium" && !freeReply) ||
     options.removeWatermark ||
     options.schedule ||
     options.password ||
@@ -202,29 +217,6 @@ export function PublishSheet({
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
 
-  const checkout = async (product: ProductId) => {
-    setPaying(product);
-    try {
-      const res = await fetch("/api/stripe/checkout", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          product,
-          templateSlugs: product === "single" ? [slug] : [],
-          currency,
-          returnTo: next,
-          locale,
-          ref: currentRef(),
-        }),
-      });
-      const json = (await res.json().catch(() => ({}))) as { url?: string };
-      if (!json.url) throw new Error("no_url");
-      window.location.assign(json.url);
-    } catch {
-      setPaying(null);
-      toast.error(t("error", { error: "checkout" }));
-    }
-  };
   // Back from Stripe, signed in, everything in place: one less tap.
   const canAutoPublish =
     resume &&
@@ -252,7 +244,8 @@ export function PublishSheet({
         onOpenChange(v);
       }}
     >
-      <SheetContent side="right" className="w-full overflow-y-auto bg-paper p-0 sm:max-w-lg">
+      {/* A phone's whole screen, so the plans and the pay button have room; 32rem beside the editor from `sm`. */}
+      <SheetContent side="right" closeLabel={tCommon("close")} className="w-full overflow-y-auto overscroll-contain bg-paper p-0 sm:max-w-lg">
         {published ? (
           <ShareScreen
             shortId={published.shortId}
@@ -262,8 +255,9 @@ export function PublishSheet({
             giftId={state.giftId}
           />
         ) : (
-          <div className="px-6 pt-8 pb-10 sm:px-8">
-            <SheetHeader className="p-0 text-left">
+          <div className="px-4 pt-8 pb-10 min-[360px]:px-5 sm:px-8">
+            {/* Clear of the 44px close button, which "¿Listo para enviarlo?" ran under on a 320px phone. */}
+            <SheetHeader className="p-0 pr-10 text-left">
               <SheetTitle className="font-display text-3xl">{t("title")}</SheetTitle>
               <SheetDescription>
                 {t.rich("subtitle", { name: state.data.recipientName || "…", who: keepAsWritten })}
@@ -287,7 +281,11 @@ export function PublishSheet({
                   .map((key) => {
                     const bad = problems.includes(key);
                     const stuck = key === "uploadsPending" && bad && lastingProblem;
-                    const label = stuck
+                    // Ticked-off items read as the task they were ("Add their name"), so a finished
+                    // upload can't keep saying the files are still uploading.
+                    const label = key === "uploadsPending" && !bad
+                      ? t("problems.uploadsDone")
+                      : stuck
                       ? t("problems.uploadsFailed")
                       : key === "uploadsPending" && bad && uploadTotals.total > 1
                         ? t("uploadingCount", { done: uploadTotals.done, total: uploadTotals.total })
@@ -348,108 +346,65 @@ export function PublishSheet({
             </section>
 
             {!state.authed && supabaseConfigured && guestCanPay && !showSignIn ? (
-              <section
-                className="mt-7 rounded-xl border border-ink bg-card p-5"
-                data-testid="pay-panel"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="flex items-center gap-2 font-display text-xl">
-                      <Lock className="size-4 text-coral" />
-                      {t("payTitle")}
-                    </p>
-                    <p className="mt-1 text-sm text-ink-soft">
-                      {t("payGuestBlurb", { features: premiumFeatures.join(", ") })}
-                    </p>
-                  </div>
-                </div>
-                <PlanChoice plan={plan} onChange={setPlan} priceOne={priceOne} priceAll={priceAll} disabled={paying !== null} />
-                <Button
-                  className="mt-4 h-12 w-full rounded-full text-base"
-                  disabled={paying !== null || guestProblems.length > 0}
-                  onClick={() => checkout(plan)}
-                  data-testid="pay-single"
-                >
-                  {paying ? <Loader2 className="size-4 animate-spin" /> : null}
-                  <span>{paying ? t("paying") : t("payButton", { price })}</span>
-                </Button>
-                <p className="mt-3 text-center text-mono-meta text-muted-foreground">
-                  {t("payNote")} {t("uploadsAfterPay")}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setShowSignIn(true)}
-                  className="mt-4 w-full text-center text-sm text-muted-foreground underline-offset-4 hover:text-ink hover:underline"
-                >
-                  {t("signInInstead")}
-                </button>
-              </section>
+              <Paywall
+                manifest={manifest}
+                currency={currency}
+                locale={locale}
+                guest
+                features={premiumFeatures}
+                returnTo={next}
+                freeReply={freeReply}
+                upgrade={null}
+                blocked={guestProblems.length > 0}
+                onSignInInstead={() => setShowSignIn(true)}
+              />
             ) : null}
             {!state.authed && supabaseConfigured && (!guestCanPay || showSignIn) ? (
               <section className="mt-7 rounded-xl border border-line bg-card p-5">
                 <p className="font-display text-xl">{t("signInTitle")}</p>
                 <p className="mt-1 mb-4 text-sm text-muted-foreground">
                   {wouldNeedPayment && paymentsEnabled
-                    ? t("signInBlurbPaid", { price: priceOne })
-                    : t("signInBlurb")}
+                    ? t("signInBlurbPaid", { price: priceHint })
+                    : freeReply
+                      ? t("signInBlurbFreeReply")
+                      : t("signInBlurb")}
                 </p>
                 <AuthForm mode="login" next={next} compact />
               </section>
             ) : null}
 
             {state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
-              <section
-                className="mt-7 rounded-xl border border-ink bg-card p-5"
-                data-testid="pay-panel"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="flex items-center gap-2 font-display text-xl">
-                      <Lock className="size-4 text-coral" />
-                      {t("payTitle")}
-                    </p>
-                    <p className="mt-1 text-sm text-ink-soft">
-                      {t("payBlurb", { features: premiumFeatures.join(", ") })}
-                    </p>
-                    {ownedElsewhere.length ? (
-                      <p className="mt-3 text-sm text-ink-soft">
-                        {t("ownedElsewhere", { templates: ownedElsewhere.map((m) => m.name[locale]).join(", ") })}
-                      </p>
-                    ) : null}
-                  </div>
-                </div>
-                {paymentsEnabled ? (
-                  <>
-                    <PlanChoice plan={plan} onChange={setPlan} priceOne={priceOne} priceAll={priceAll} disabled={paying !== null} />
-                    <Button
-                      className="mt-4 h-12 w-full rounded-full text-base"
-                      disabled={paying !== null}
-                      onClick={() => checkout(plan)}
-                      data-testid="pay-single"
-                    >
-                      {paying ? <Loader2 className="size-4 animate-spin" /> : null}
-                      <span>{paying ? t("paying") : t("payButton", { price })}</span>
-                    </Button>
-                    {ownedElsewhere.length === 1 ? (
-                      <a
-                        href={`/create/${ownedElsewhere[0].slug}`}
-                        className="mt-3 block w-full text-center text-sm font-medium text-coral underline-offset-4 hover:underline"
-                      >
-                        {t("openOwned", { template: ownedElsewhere[0].name[locale] })}
-                      </a>
-                    ) : null}
-                    <p className="mt-3 text-center text-mono-meta text-muted-foreground">
-                      {t("payNote")}
-                    </p>
-                  </>
-                ) : (
-                  <Notice tone="info" className="mt-4">
-                    {t("paymentSoon")}
-                  </Notice>
-                )}
-              </section>
+              paymentsEnabled ? (
+                <Paywall
+                  manifest={manifest}
+                  currency={currency}
+                  locale={locale}
+                  guest={false}
+                  features={premiumFeatures}
+                  returnTo={next}
+                  freeReply={freeReply}
+                  upgrade={upgrade}
+                  blocked={false}
+                  ownedElsewhere={ownedElsewhere}
+                />
+              ) : (
+                <Notice tone="info" className="mt-7">
+                  {t("paymentSoon")}
+                </Notice>
+              )
             ) : null}
 
+            {/* Only when the reply is what makes it free: someone who owns the template sends it without the footer. */}
+            {freeReply && decision?.ok && !entitlement?.unlocked ? (
+              <Notice tone="info" className="mt-6">
+                {t.rich("freeReply", { name: state.data.recipientName || "…", who: keepAsWritten })}
+              </Notice>
+            ) : null}
+            {replyRefused ? (
+              <Notice tone="warn" className="mt-6">
+                {t(replyRefused === "reply_used" ? "freeReplyUsed" : "freeReplyInvalid")}
+              </Notice>
+            ) : null}
             {error ? (
               <Notice tone="warn" className="mt-6">
                 {t("error", { error })}
@@ -507,61 +462,6 @@ function Notice({
       )}
     >
       {children}
-    </div>
-  );
-}
-
-/**
- * The two ways to unlock, as rows the sender picks between: the single, or every template. Drawn
- * like the rows of the pricing page's pick-three dialog, so the two read as one product.
- */
-function PlanChoice({
-  plan,
-  onChange,
-  priceOne,
-  priceAll,
-  disabled,
-}: {
-  plan: "single" | "everything";
-  onChange: (plan: "single" | "everything") => void;
-  priceOne: string;
-  priceAll: string;
-  disabled: boolean;
-}) {
-  const t = useTranslations("editor.publishSheet");
-  const rows = [
-    { id: "single" as const, name: t("planSingle"), blurb: t("planSingleBlurb"), price: priceOne },
-    { id: "everything" as const, name: t("planEverything"), blurb: t("planEverythingBlurb", { n: TEMPLATE_MANIFESTS.length }), price: priceAll },
-  ];
-  return (
-    <div role="radiogroup" aria-label={t("planLabel")} className="mt-5 grid gap-2">
-      {rows.map((row) => {
-        const on = plan === row.id;
-        return (
-          <button
-            key={row.id}
-            type="button"
-            role="radio"
-            aria-checked={on}
-            disabled={disabled}
-            onClick={() => onChange(row.id)}
-            data-testid={`plan-${row.id}`}
-            className={cn(
-              "flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors disabled:opacity-50",
-              on ? "border-ink bg-ink/5" : "border-line hover:border-ink/40",
-            )}
-          >
-            <span className="min-w-0 flex-1">
-              <span className="block font-medium">{row.name}</span>
-              <span className="block text-xs text-muted-foreground">{row.blurb}</span>
-            </span>
-            <span className="shrink-0 font-display text-lg">{row.price}</span>
-            <span className={cn("grid size-5 shrink-0 place-items-center rounded-full border", on ? "border-coral bg-coral text-paper" : "border-border")}>
-              {on ? <Check className="size-3" /> : null}
-            </span>
-          </button>
-        );
-      })}
     </div>
   );
 }

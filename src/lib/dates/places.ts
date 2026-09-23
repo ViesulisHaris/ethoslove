@@ -122,13 +122,32 @@ export function parseOverpass(json: unknown, center: LatLng, radiusM: number, ki
   return places.sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm || a.id.localeCompare(b.id));
 }
 
-/** The best of each group, so a city's two hundred restaurants never crowd out its one planetarium. */
-export function balance(places: Place[], perGroup: number): Place[] {
-  const taken: Partial<Record<PlaceGroup, number>> = {};
+/** Enough of each group to fill the map without sending a city's every restaurant to a phone. */
+export const SEARCH_PER_GROUP = 60;
+/** Held for every kind before a group's other places are counted: enough for an idea's stop and a "show me another". */
+const PER_KIND = 5;
+
+/**
+ * The best of each group, so a city's two hundred restaurants never crowd out its one planetarium;
+ * and inside a group, the best few of every kind first, so twenty-five bookshops and nineteen
+ * theatres never crowd out the cinema that "a film and a late dessert" needs. Order is kept, and
+ * no group ever gets more than `perGroup`.
+ */
+export function balance(places: Place[], perGroup: number, perKind = PER_KIND): Place[] {
+  const byGroup: Partial<Record<PlaceGroup, number>> = {};
+  const byKind: Partial<Record<PlaceKind, number>> = {};
+  const held = new Set<string>();
+  for (const p of places) {
+    if ((byKind[p.kind] ?? 0) >= perKind || (byGroup[p.group] ?? 0) >= perGroup) continue;
+    byKind[p.kind] = (byKind[p.kind] ?? 0) + 1;
+    byGroup[p.group] = (byGroup[p.group] ?? 0) + 1;
+    held.add(p.id);
+  }
   return places.filter((p) => {
-    const n = taken[p.group] ?? 0;
+    if (held.has(p.id)) return true;
+    const n = byGroup[p.group] ?? 0;
     if (n >= perGroup) return false;
-    taken[p.group] = n + 1;
+    byGroup[p.group] = n + 1;
     return true;
   });
 }

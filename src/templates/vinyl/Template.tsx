@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Pause, Play } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
+import { backgroundMusic } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
@@ -70,20 +71,24 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const album = data.fields.album || data.title || data.recipientName;
   const artist = data.fields.artist || data.senderName;
 
+  // A real song never goes on the platter: Apple's previews may not play under an animation or on
+  // a loop. The record then spins in silence, and the song waits on the end screen for a tap.
+  const music = backgroundMusic(data.music);
+
   // Real sync: the platter angle is derived from the audio clock, not a CSS animation.
   useEffect(() => {
-    if (!data.music || mode === "preview") return;
-    const audio = new Audio(data.music.url);
+    if (!music || mode === "preview") return;
+    const audio = new Audio(music.url);
     audio.loop = true;
     audio.preload = "auto";
-    if (data.music.startAt) audio.currentTime = data.music.startAt;
+    if (music.startAt) audio.currentTime = music.startAt;
     audioRef.current = audio;
     return () => {
       audio.pause();
       audio.src = "";
       audioRef.current = null;
     };
-  }, [data.music, mode]);
+  }, [music, mode]);
 
   useEffect(() => {
     let raf = 0;
@@ -309,7 +314,7 @@ function LinerNotes({ data, mode, blocks, reduce, paper, muted, tone, label, onE
     <section ref={ref} className="mx-auto mt-10 flex w-[min(92cqw,560px)] flex-col gap-5 pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="rounded-[6px] p-6 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] sm:p-8" style={{ background: paper }}>
         <p className="text-[11px] tracking-[0.3em] uppercase" style={{ color: muted }}>{label}</p>
-        <h2 className="mt-3 text-[clamp(1.4rem,6.5cqw,1.8rem)] italic" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
+        <h2 className="mt-3 text-[clamp(1.4rem,6.5cqw,1.8rem)] italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
         <div className="mt-3 font-mono text-[clamp(0.9rem,4cqw,1rem)] leading-relaxed [&_p+p]:mt-4 [&_strong]:font-bold [&_em]:text-[var(--gift-accent)]">
           {inView ? (instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={40} onDone={() => setDone(true)} />) : null}
         </div>

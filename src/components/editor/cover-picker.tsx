@@ -4,9 +4,13 @@ import { useTranslations } from "next-intl";
 import { COVER_IDS, type CoverId, type GiftLocale } from "@/lib/gift/schema";
 import { Cover } from "@/templates/_shared/covers/Cover";
 import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
+import { thumbLook } from "@/lib/covers/thumbs";
 import { cn } from "@/lib/utils";
 
-/** Live thumbnails of every cover with their name in it, so the choice is made by eye. */
+/**
+ * Live thumbnails of every cover with their name in it, so the choice is made by eye. Drawn from
+ * the small copies of the cut-outs (see thumbLook): a tile is a few dozen pixels across.
+ */
 export function CoverPicker({
   value,
   onChange,
@@ -51,7 +55,7 @@ export function CoverPicker({
                   <span className="mt-[5cqh] h-px w-[40cqw] bg-[var(--brand-coral)]" />
                 </span>
               ) : (
-                <Cover look={COVER_LOOKS[id]} recipientName={name} locale={locale} still />
+                <Cover look={thumbLook(COVER_LOOKS[id])} recipientName={name} locale={locale} still />
               )}
             </span>
             <span className={cn("text-xs", active ? "font-semibold text-ink" : "text-muted-foreground")}>{t(`names.${id}`)}</span>

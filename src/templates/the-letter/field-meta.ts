@@ -14,7 +14,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
     paper: { label: "Papel", options: { cream: "Crema", white: "Blanco", kraft: "Kraft" } },
     desk: { label: "Escritorio", options: { walnut: "Madera de nogal", linen: "Lino", slate: "Pizarra" } },
     inkColor: { label: "Color de la tinta" },
-    greeting: { label: "Saludo", help: "Déjalo vacío para «Querida Nombre,»." },
+    greeting: { label: "Saludo", help: "Déjalo vacío para «Hola, Nombre:», o escribe «Querida Clara,» o «Querido Leo,»." },
     signOff: { label: "Despedida", help: "p. ej. «Todo, siempre,»" },
   },
 };

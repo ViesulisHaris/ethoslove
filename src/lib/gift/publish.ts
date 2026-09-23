@@ -1,6 +1,7 @@
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
-import { isLocalRef, isStoragePath } from "./assets";
+import { isStoragePath } from "./assets";
+import { isKnownMusic } from "./music";
 
 export type Entitlement = {
   /** User owns this template (or Everything). */
@@ -15,30 +16,40 @@ export type PublishDecision =
  * Pure publish rules — unit tested, shared by the server action and the publish sheet.
  *
  * Free templates publish for free with a watermark. Any unlock (the template or "Everything")
- * removes the watermark and lifts limits. Premium templates need an unlock, full stop.
+ * removes the watermark and lifts limits. Premium templates need an unlock, except for a free reply:
+ * someone who received a paid premium gift sends one back in that template for free, and it then
+ * goes out like a free template, footer on, extras still paid (`freeReply` is only ever set once the
+ * server has checked the reply's token, lib/commerce/free-reply.ts).
  */
 export function decidePublish(
   manifest: TemplateManifest,
   data: GiftData,
   entitlement: Entitlement,
-  options: { removeWatermark: boolean; schedule: boolean; password: boolean },
+  options: { removeWatermark: boolean; schedule: boolean; password: boolean; freeReply?: boolean },
 ): PublishDecision {
   const problems = readinessProblems(manifest, data);
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
 
-  const needsUnlock = manifest.tier === "premium" || options.removeWatermark || options.schedule || options.password || premiumExtras(data).length > 0;
+  const premiumTemplate = manifest.tier === "premium" && !options.freeReply;
+  const needsUnlock = premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data).length > 0;
 
   if (needsUnlock && !entitlement.unlocked) return { ok: false, reason: "payment_required" };
 
   return { ok: true, watermark: !entitlement.unlocked, isPremium: manifest.tier === "premium" };
 }
 
+/**
+ * "song" is no longer the real song: Apple's previews may not be sold, so a song from the catalogue
+ * is free on every gift (see ./music). It now stands only for music from somewhere that is none of
+ * ours — not our library, not the sender's upload, not an Apple preview — which the editor never
+ * produces, so hosting someone else's audio behind a free gift still takes an unlock.
+ */
 export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos";
 
 /** Content-level extras that need an unlock on any template (the free tier stays a real gift, these are the upsell). */
 export function premiumExtras(data: GiftData): PremiumExtra[] {
   const extras: PremiumExtra[] = [];
-  if (data.music && !isFreeMusic(data.music)) extras.push("song");
+  if (data.music && !isKnownMusic(data.music)) extras.push("song");
   if (data.video) extras.push("video");
   if (data.voiceNote) extras.push("voiceNote");
   if (data.photos.length > 10) extras.push("morePhotos");
@@ -46,26 +57,16 @@ export function premiumExtras(data: GiftData): PremiumExtra[] {
 }
 
 /**
- * Free music is a track from our own library or a file the sender uploaded. Anything else is the
- * paid real-song feature whatever its `source` says, so a catalog preview relabelled "library" or
- * "upload" still counts as one.
- */
-function isFreeMusic(music: NonNullable<GiftData["music"]>): boolean {
-  if (music.source === "library") return music.url.startsWith("/audio/library/");
-  if (music.source === "upload") return isStoragePath(music.url) || isLocalRef(music.url);
-  return false;
-}
-
-/**
  * Editing a gift that is already live or scheduled must not sneak premium content past the
- * paywall: anything that would have needed an unlock at publish time needs one now too.
+ * paywall: anything that would have needed an unlock at publish time needs one now too. A free
+ * reply (`freeReply`, from the free_replies row it holds) may be edited in its own template.
  */
 export function liveEditNeedsUnlock(
   manifest: TemplateManifest,
   data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos">,
-  row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean },
+  row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean; freeReply?: boolean },
 ): boolean {
-  return manifest.tier === "premium" || premiumExtras(data as GiftData).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
+  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data as GiftData).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
 }
 
 /** Human-readable blockers, keyed for translation on the client. */

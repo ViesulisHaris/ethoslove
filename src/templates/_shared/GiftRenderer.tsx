@@ -160,7 +160,7 @@ export function GiftRenderer({
           </div>
         ) : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
-        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} /> : null}
+        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} /> : null}
       </div>
     </MotionConfig>
   );

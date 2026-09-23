@@ -7,23 +7,26 @@ import { ArrowRight, ArrowUpDown, CloudOff, List, Map as MapIcon, Sunset } from 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { HERO_ART, heroSrcSet } from "@/lib/dates/art";
+import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { formatDay, isYmd, thisWeekend, toYmd, type Ymd } from "@/lib/dates/calendar";
-import { STARTER_CITIES } from "@/lib/dates/cities";
+import { STARTER_CITIES, starterName } from "@/lib/dates/cities";
 import { COST_IDS, COST_LABELS, type Cost } from "@/lib/dates/cost";
 import type { PlaceDetails } from "@/lib/dates/details";
-import { distanceKm, isLatLng, round, snapSearch, type LatLng } from "@/lib/dates/geo";
-import { fillStops, ideaById, ideasFor, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
+import { datesUrls, EARLY_KEY, earlyScript, HERE_URL, takeEarly } from "@/lib/dates/early";
+import { distanceKm, isLatLng, snapSearch, type LatLng } from "@/lib/dates/geo";
+import { fillStops, fitsVibe, ideaById, ideasFor, IDEAS, isDoable, VIBE_IDS, VIBES, type Vibe } from "@/lib/dates/ideas";
 import { GROUP_IDS, GROUPS, type PlaceGroup } from "@/lib/dates/kinds";
+import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
 import type { Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
 import { pairsWith, rankPlaces, SORTS, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
-import { addStop, MAX_STOPS, removeStop, type PlanStop } from "@/lib/dates/plan";
+import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
 import { suggestTimes } from "@/lib/dates/timing";
 import { isWet, type Forecast } from "@/lib/dates/weather";
+import { findTown } from "@/lib/dates/where";
 import { GroupIcon } from "./group-icon";
 import { IdeaPanel } from "./idea-panel";
 import { IdeaRail } from "./idea-rail";
@@ -41,16 +44,30 @@ const DEFAULT_RADIUS_M = 1500;
 const PAGE = 24;
 /** Moving the map further than this from the named place stops calling it by that name. */
 const SAME_PLACE_KM = 6;
+/** The forecast is for a cell this wide: a search nearer than this to the last one has its weather already. */
+const FORECAST_KM = 10;
+/** How long "the plan is full" and its like stay on the screen. */
+const PLAN_NOTICE_MS = 4000;
 
 const noop = () => () => undefined;
 const desktopQuery = "(min-width: 1024px)";
+/** The heading the page's HTML carries before the explorer has loaded (ExplorerSkeleton). */
+const TITLE_ID = "dates-title";
+/** In history.state: how many of the phone's layers (the full-screen map, an open place) are open at this entry. */
+const LAYERS = "ethosDatesLayers";
+const layersIn = (state: unknown): number => {
+  const n = (state as Record<string, unknown> | null)?.[LAYERS];
+  return typeof n === "number" && n > 0 ? n : 0;
+};
 const subscribeDesktop = (onChange: () => void) => {
   const mq = window.matchMedia(desktopQuery);
   mq.addEventListener("change", onChange);
   return () => mq.removeEventListener("change", onChange);
 };
 
-const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}) });
+// A place with no name of its own is kept as one (`named: false`), so the plan calls it by its kind
+// in whichever language it is read in, not in the one it was added in (plan.ts stopName).
+const toStop = (place: Place, time?: string): PlanStop => ({ id: place.id, name: place.name.slice(0, 120), kind: place.kind, lat: place.lat, lng: place.lng, ...(place.address ? { address: place.address.slice(0, 160) } : {}), ...(time ? { time } : {}), ...(place.named ? {} : { named: false }) });
 
 /**
  * The Dates page: where, when, then ideas made of real places on a map. Everything it shows is
@@ -72,6 +89,8 @@ export function DatesExplorer() {
   const [rare, setRare] = useState<Place[]>([]);
   const [sights, setSights] = useState<Sight[]>([]);
   const [forecast, setForecast] = useState<Forecast | null>(null);
+  // The forecast couldn't be had (the weather service timed out): said, instead of "Checking…" for ever.
+  const [forecastFailed, setForecastFailed] = useState(false);
   const [groups, setGroups] = useState<PlaceGroup[]>([]);
   const [costs, setCosts] = useState<Cost[]>([]);
   const [sort, setSort] = useState<Sort>("best");
@@ -88,38 +107,52 @@ export function DatesExplorer() {
   const [shown, setShown] = useState(PAGE);
   const [locating, setLocating] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  // What adding to the plan has to say ("the plan is full"). Not `notice`, which is written under the
+  // where box: a + pressed on the fortieth card put it a screen and a half above the one looking.
+  // `at` tells two of the same message apart, so the second press shows it for as long again.
+  const [planNotice, setPlanNotice] = useState<{ text: string; at: number } | null>(null);
   const [shareable, setShareable] = useState(false);
+  // The link named a town (?q=) and there is none by that name: said on the empty page.
+  const [townMissing, setTownMissing] = useState(false);
+  // Counts Back presses that landed on this page's own entries (see the layers below).
+  const [popped, setPopped] = useState(0);
   const [plan, updatePlan] = usePlan();
 
   const token = useRef(0);
   const rareKey = useRef("");
   const sightsKey = useRef("");
   const forecastAt = useRef<LatLng | null>(null);
+  const searchedAt = useRef<LatLng | null>(null);
 
   const search = useCallback(
     async (center: LatLng, radiusM: number) => {
       const mine = ++token.current;
       setStatus("loading");
       setShown(PAGE);
-      const snapped = snapSearch(center, radiusM);
-      try {
-        const res = await fetch(`/api/dates/search?lat=${snapped.center.lat}&lng=${snapped.center.lng}&radius=${snapped.radiusM}&locale=${locale}`);
-        const json = (await res.json()) as { places?: Place[] };
-        if (mine !== token.current) return;
-        if (!res.ok || !Array.isArray(json.places)) throw new Error("search");
-        setPlaces(json.places);
-        setStatus("ready");
-      } catch {
-        if (mine === token.current) setStatus("error");
+      // The first search of a visit was usually started by the page's HTML already (lib/dates/early.ts).
+      const urls = datesUrls(center, radiusM, locale);
+
+      // Another town: the last one's places go at once. They used to stay up under the new town's
+      // name for the five seconds a cold search takes ("Date ideas in Vienna" over London's 356
+      // places), and a tap on one flew the map back to London. The list shows it is loading instead.
+      // A nudge within the same area keeps what is there until the new answer replaces it.
+      const previous = searchedAt.current;
+      searchedAt.current = center;
+      if (previous && distanceKm(previous, center) > SAME_PLACE_KM) {
+        setPlaces([]);
+        setRare([]);
+        setSights([]);
+        rareKey.current = "";
+        sightsKey.current = "";
       }
 
-      // The rare finds (bowling, a spa, the beach) come from slower servers; never wait for them.
-      const wide = { lat: round(center.lat, 2) + 0, lng: round(center.lng, 2) + 0 };
-      const key = `${wide.lat},${wide.lng}`;
+      // The rare finds (bowling, a spa, the beach), the photographs and the forecast are asked for
+      // alongside the places, not after them: the forecast used to wait for a five-second search.
+      const key = `${urls.wide.lat},${urls.wide.lng}`;
       if (rareKey.current !== key) {
         rareKey.current = key;
         setRare([]);
-        fetch(`/api/dates/rare?lat=${wide.lat}&lng=${wide.lng}&locale=${locale}`)
+        takeEarly(urls.rare)
           .then((r) => (r.ok ? (r.json() as Promise<{ places?: Place[] }>) : null))
           .then((json) => {
             if (json?.places && rareKey.current === key) setRare(json.places);
@@ -128,10 +161,10 @@ export function DatesExplorer() {
       }
 
       // Photographs of the neighbourhood's landmarks, matched to places by name further down.
-      const photoKey = `${snapped.center.lat},${snapped.center.lng},${snapped.radiusM}`;
+      const photoKey = `${urls.snapped.center.lat},${urls.snapped.center.lng},${urls.snapped.radiusM}`;
       if (sightsKey.current !== photoKey) {
         sightsKey.current = photoKey;
-        fetch(`/api/dates/photos?lat=${snapped.center.lat}&lng=${snapped.center.lng}&radius=${snapped.radiusM}&locale=${locale}`)
+        takeEarly(urls.photos)
           .then((r) => (r.ok ? (r.json() as Promise<{ sights?: Sight[] }>) : null))
           .then((json) => {
             if (json?.sights && sightsKey.current === photoKey) setSights(json.sights);
@@ -140,14 +173,37 @@ export function DatesExplorer() {
       }
 
       const last = forecastAt.current;
-      if (!last || distanceKm(last, center) > 10) {
+      if (!last || distanceKm(last, center) > FORECAST_KM) {
         forecastAt.current = center;
-        fetch(`/api/dates/weather?lat=${round(center.lat, 2)}&lng=${round(center.lng, 2)}`)
+        // Never the last town's weather under this one's name, while it loads or if it never comes.
+        setForecast(null);
+        setForecastFailed(false);
+        // A failure is said, and forgotten: the next search here (or "Try again") asks again, where
+        // before the failed spot was remembered as asked and nothing within 10 km ever asked again.
+        const failed = () => {
+          if (forecastAt.current !== center) return;
+          forecastAt.current = null;
+          setForecastFailed(true);
+        };
+        takeEarly(urls.weather)
           .then((r) => (r.ok ? (r.json() as Promise<Forecast>) : null))
           .then((json) => {
-            if (json?.days && forecastAt.current === center) setForecast(json);
+            if (forecastAt.current !== center) return;
+            if (json?.days) setForecast(json);
+            else failed();
           })
-          .catch(() => undefined);
+          .catch(failed);
+      }
+
+      try {
+        const res = await takeEarly(urls.search);
+        const json = (await res.json()) as { places?: Place[] };
+        if (mine !== token.current) return;
+        if (!res.ok || !Array.isArray(json.places)) throw new Error("search");
+        setPlaces(json.places);
+        setStatus("ready");
+      } catch {
+        if (mine === token.current) setStatus("error");
       }
     },
     [locale],
@@ -161,8 +217,12 @@ export function DatesExplorer() {
       setShareable(options.share ?? true);
       setSelectedId(null);
       setSkip([]);
+      setNotice(null);
       try {
-        window.localStorage.setItem(WHERE_KEY, JSON.stringify(place));
+        // With whether it can be named: a town they picked comes back next time as "Date ideas in
+        // Lisbon" with a link to send; "near me" and the connection's guess stay private. The
+        // page's HTML reads this too, to name the heading before the app loads (lib/dates/early.ts).
+        window.localStorage.setItem(WHERE_KEY, JSON.stringify({ ...place, share: options.share ?? true }));
       } catch {
         // No storage: it just will not be remembered.
       }
@@ -181,17 +241,28 @@ export function DatesExplorer() {
       const wantedDate = params.get("date");
       const wantedIdea = params.get("idea");
       let start: (Where & { share: boolean }) | null = params.get("lat") && params.get("lng") && isLatLng(lat, lng) ? { lat, lng, name: (params.get("q") ?? "").slice(0, 80), share: true } : null;
-      if (!start) {
+      // A town named without coordinates (/dates?q=Lisboa, typed or pasted into a bio) is looked up
+      // the way the where box would. None by that name is said, not swapped for last time's town;
+      // a lookup that couldn't be made falls through to the usual start.
+      const wanted = (params.get("q") ?? "").trim();
+      let missing = false;
+      if (!start && wanted.length >= 2) {
+        const town = await findTown(wanted, locale);
+        if (town && isLatLng(town.lat, town.lng)) start = { ...town, share: true };
+        else if (town === null) missing = true;
+      }
+      if (!start && !missing) {
         try {
-          const saved = JSON.parse(window.localStorage.getItem(WHERE_KEY) ?? "null") as Where | null;
-          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { ...saved, share: false };
+          const saved = JSON.parse(window.localStorage.getItem(WHERE_KEY) ?? "null") as (Where & { share?: unknown }) | null;
+          // Saved before the share flag was: private, as they all were then.
+          if (saved && isLatLng(saved.lat, saved.lng) && typeof saved.name === "string") start = { lat: saved.lat, lng: saved.lng, name: saved.name.slice(0, 80), share: saved.share === true };
         } catch {
           // Unreadable: ask again.
         }
       }
-      if (!start) {
+      if (!start && !missing) {
         try {
-          const json = (await (await fetch("/api/dates/here")).json()) as { place?: Where | null };
+          const json = (await (await takeEarly(HERE_URL)).json()) as { place?: Where | null };
           if (json.place && isLatLng(json.place.lat, json.place.lng)) start = { ...json.place, share: false };
         } catch {
           // Offline or blocked: ask.
@@ -200,13 +271,18 @@ export function DatesExplorer() {
       if (cancelled) return;
       if (wantedDate && isYmd(wantedDate) && wantedDate >= toYmd(new Date())) setDate(wantedDate);
       if (wantedIdea && ideaById(wantedIdea)) setIdeaId(wantedIdea);
-      if (start) go(start, { share: start.share });
-      else setStatus("empty");
+      if (start) return go(start, { share: start.share });
+      if (missing) {
+        setTownMissing(true);
+        // The address bar is only written once there is a town; the ?q= that found none goes now.
+        window.history.replaceState(window.history.state, "", window.location.pathname);
+      }
+      setStatus("empty");
     })();
     return () => {
       cancelled = true;
     };
-  }, [go]);
+  }, [go, locale]);
 
   // The address bar follows a search for a named town, so it can be sent to someone. A search round
   // "near me" never goes in it: a link is forwarded without a thought for what is inside.
@@ -222,7 +298,43 @@ export function DatesExplorer() {
     }
     const query = params.toString();
     window.history.replaceState(window.history.state, "", query ? `?${query}` : window.location.pathname);
-  }, [where, date, ideaId, shareable]);
+    // `popped`: Back lands on an entry written before the last search on the map; write it again.
+  }, [where, date, ideaId, shareable, popped]);
+
+  // On a phone the full-screen map and an open place look like screens of their own, and Back is how
+  // a phone closes a screen; it used to leave Dates altogether, map, place and scroll with it. Each
+  // open layer now has an entry in the history, at the same address, and Back closes the top one.
+  // One closed from the page instead (the X, List, a tap on the map) takes its entry back off, so
+  // no dead Back presses pile up behind it. A desktop has no such layers.
+  const layers = isDesktop ? 0 : (view === "map" ? 1 : 0) + (selectedId ? 1 : 0);
+  const layersNow = useRef(0);
+  // How many entries this page has put on the history, once the `go()` calls it made have landed.
+  const pushed = useRef(0);
+  useEffect(() => {
+    layersNow.current = layers;
+    // The entries carry Next's own state (spread from the current one), so Back to one of them is a
+    // same-page restore and not a new load of /dates.
+    for (; pushed.current < layers; pushed.current++) window.history.pushState({ ...window.history.state, [LAYERS]: pushed.current + 1 }, "");
+    if (pushed.current > layers) {
+      window.history.go(layers - pushed.current);
+      pushed.current = layers;
+    }
+  }, [layers]);
+  useEffect(() => {
+    // A reload on one of those entries opens with nothing on top: count from nothing.
+    if (layersIn(window.history.state) > 0) window.history.replaceState({ ...window.history.state, [LAYERS]: 0 }, "");
+    const onPop = (event: PopStateEvent) => {
+      const depth = layersIn(event.state);
+      pushed.current = depth;
+      setPopped((n) => n + 1);
+      if (depth >= layersNow.current) return;
+      // The place is always on top of the map.
+      setSelectedId(null);
+      if (depth === 0) setView("list");
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const nearMe = useCallback(() => {
     if (!("geolocation" in navigator)) return setNotice(t("where.noGeo"));
@@ -280,15 +392,15 @@ export function DatesExplorer() {
   const stops = useMemo(() => (idea ? fillStops(idea, all, skip) : []), [idea, all, skip]);
   const times = useMemo(() => (idea ? suggestTimes(idea, day) : []), [idea, day]);
   const ranked = useMemo(() => rankPlaces(all, ratings, sort), [all, ratings, sort]);
-  // A vibe chooses places as well as ideas: the kinds of place its ideas are made of. "Playful"
-  // puts the bowling, the arcade and the karaoke on the map, and nothing else. If there is no such
-  // place here the filter steps aside, so a chip never empties the map.
-  const vibeKinds = useMemo(() => (vibe ? new Set(ideas.flatMap((i) => i.stops.flat())) : null), [vibe, ideas]);
+  // A vibe chooses places as well as ideas: the kinds of place the mood is made of (ideas.ts
+  // VIBE_KINDS), not every kind in its ideas, whose dessert-after-the-mini-golf filled "Playful" with
+  // chocolate shops. The map and the list are both drawn from this. If there is no such place here
+  // the filter steps aside, so a chip never empties the map.
   const inVibe = useMemo(() => {
-    if (!vibeKinds) return ranked;
-    const matching = ranked.filter((p) => vibeKinds.has(p.kind) && (vibe !== "free" || p.cost === 0));
+    if (!vibe) return ranked;
+    const matching = ranked.filter((p) => fitsVibe(p, vibe));
     return matching.length > 0 ? matching : ranked;
-  }, [ranked, vibeKinds, vibe]);
+  }, [ranked, vibe]);
   const visible = useMemo(() => inVibe.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [inVibe, groups, costs]);
   const picks = useMemo(() => topPicks(inVibe), [inVibe]);
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
@@ -296,7 +408,13 @@ export function DatesExplorer() {
   const pairs = useMemo(() => (selected ? pairsWith(selected, ranked) : []), [selected, ranked]);
   const planIds = useMemo(() => new Set(plan.stops.map((s) => s.id)), [plan.stops]);
   const ideaInPlan = stops.some((s) => s.place) && stops.every((s) => !s.place || planIds.has(s.place.id));
-  const route = useMemo(() => (idea ? stops.flatMap((s) => (s.place ? [{ lat: s.place.lat, lng: s.place.lng, name: s.place.name }] : [])) : plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: s.name }))), [idea, stops, plan.stops]);
+  // With no idea open, the plan's stops: unless the plan is in another town, whose line ran off the
+  // edge of this one's map towards it.
+  const planHere = !where || !isFarFromPlan(plan, where);
+  const route = useMemo(
+    () => (idea ? stops.flatMap((s) => (s.place ? [{ lat: s.place.lat, lng: s.place.lng, name: s.place.name }] : [])) : planHere ? plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })) : []),
+    [idea, stops, plan.stops, planHere, locale],
+  );
 
   const loadReviews = useCallback(
     async (id: string) => {
@@ -343,8 +461,15 @@ export function DatesExplorer() {
     [loadReviews, loadRatings],
   );
 
+  // What a place was opened from, so that closing it hands the keyboard back there instead of
+  // dropping it on the page (the next Tab went to the footer, or to the Map button).
+  const opener = useRef<HTMLElement | null>(null);
   const open = useCallback(
     (id: string | null) => {
+      const from = document.activeElement;
+      // A place opened from inside the sheet (its pairings) keeps the first one's opener; a map pill
+      // is kept out of the tab order on purpose, so there is nothing to hand back to.
+      if (id && from instanceof HTMLElement && !from.closest("[data-place-sheet]")) opener.current = from.tabIndex >= 0 && from.getAttribute("aria-hidden") !== "true" ? from : null;
       setSelectedId(id);
       if (id && !(id in reviews)) void loadReviews(id);
       if (!id || id in details) return;
@@ -356,51 +481,150 @@ export function DatesExplorer() {
     [details, locale, reviews, loadReviews],
   );
 
-  const stamp = useCallback((p: typeof plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
+  const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
+  const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
+  /**
+   * A place in another town is not one more stop of this date: London's plan with a café in Lisbon
+   * read "24756 min walk". It starts a new plan once they have said so: true then, null when they
+   * would rather keep the old one, false when the place is near enough to join it.
+   */
+  const startsOver = useCallback((at: LatLng): boolean | null => {
+    if (!isFarFromPlan(plan, at)) return false;
+    return window.confirm(plan.where ? t("plan.newCity", { place: plan.where }) : t("plan.newCityUnnamed")) ? true : null;
+  }, [plan, t]);
   const togglePlan = useCallback(
     (place: Place) => {
-      if (!planIds.has(place.id) && plan.stops.length >= MAX_STOPS) return setNotice(t("plan.full", { max: MAX_STOPS }));
-      updatePlan((p) => (p.stops.some((s) => s.id === place.id) ? removeStop(p, place.id) : stamp(addStop(p, toStop(place)))));
+      if (planIds.has(place.id)) return updatePlan((p) => removeStop(p, place.id));
+      const fresh = startsOver(place);
+      if (fresh === null) return;
+      if (!fresh && plan.stops.length >= MAX_STOPS) return sayAboutPlan(t("plan.full", { max: MAX_STOPS }));
+      updatePlan((p) => stamp(addStop(fresh ? EMPTY_PLAN : p, toStop(place))));
     },
-    [plan.stops.length, planIds, stamp, t, updatePlan],
+    [plan.stops.length, planIds, startsOver, sayAboutPlan, stamp, t, updatePlan],
   );
+  // An idea goes in whole or not at all: with one space left, its first stop went in, its second
+  // didn't, nothing was said, and the button went on offering to add it.
   const addIdea = useCallback(() => {
     if (!idea) return;
-    updatePlan((p) => stamp({ ...stops.reduce((acc, s, i) => (s.place ? addStop(acc, toStop(s.place, times[i])) : acc), p), idea: idea.id }));
-  }, [idea, stops, times, stamp, updatePlan]);
+    const picked = stops.flatMap((s, i) => (s.place ? [toStop(s.place, times[i])] : []));
+    if (picked.length === 0) return;
+    const fresh = startsOver(picked[0]);
+    if (fresh === null) return;
+    if (!addStops(fresh ? EMPTY_PLAN : plan, picked).fits) return sayAboutPlan(t("plan.ideaFull", { max: MAX_STOPS }));
+    updatePlan((p) => {
+      const { plan: next, fits } = addStops(fresh ? EMPTY_PLAN : p, picked);
+      return fits ? stamp({ ...next, idea: idea.id }) : p;
+    });
+  }, [idea, stops, times, plan, startsOver, sayAboutPlan, stamp, t, updatePlan]);
+  useEffect(() => {
+    if (!planNotice) return;
+    const timer = window.setTimeout(() => setPlanNotice(null), PLAN_NOTICE_MS);
+    return () => window.clearTimeout(timer);
+  }, [planNotice]);
 
-  const mapLabels = useMemo(() => ({ zoomToSee: t("map.zoomToSee"), nearMe: t("where.nearMe"), loading: t("map.loading"), unavailable: t("map.unavailable"), map: t("map.label"), zoomIn: t("map.zoomIn"), zoomOut: t("map.zoomOut") }), [t]);
+  // A place put away hands the keyboard back to what opened it, if the keyboard was in the sheet
+  // (or had nowhere to be once the sheet went); a tap somewhere else keeps its own focus.
+  const sheetWasOpen = useRef(false);
+  useEffect(() => {
+    if (selectedId) {
+      sheetWasOpen.current = true;
+      return;
+    }
+    if (!sheetWasOpen.current) return;
+    sheetWasOpen.current = false;
+    const target = opener.current;
+    opener.current = null;
+    const active = document.activeElement;
+    if (!target?.isConnected || (active && active !== document.body && !active.closest("[data-place-sheet]"))) return;
+    target.focus({ preventScroll: true });
+  }, [selectedId]);
+
+  // An idea opens under the rail, and on a phone that is below the fold: the only sign of the tap was
+  // a ring on the card. So is a link with ?idea= in it, which landed at the top of the page. When it
+  // opens that low, it is brought up under the header.
+  const ideaBox = useRef<HTMLDivElement>(null);
+  const started = status !== "starting";
+  useEffect(() => {
+    const el = ideaBox.current;
+    if (!ideaId || !started || !el || el.getBoundingClientRect().top < window.innerHeight * 0.6) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+  }, [ideaId, started]);
+
+  // A phone only makes the map when Map is tapped, and MapLibre is ~300 KB: once the list is up and
+  // the phone has nothing else to do, its files and the style are fetched, so the tap shows pins at
+  // once instead of after seconds of "Loading…". Not when the phone has asked to save data.
+  const listReady = status === "ready";
+  useEffect(() => {
+    if (!listReady || isDesktop || mapOpened || !navigator.onLine) return;
+    if ((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return;
+    // Safari has no requestIdleCallback.
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(() => warmMap(), { timeout: 5000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(() => warmMap(), 2500);
+    return () => window.clearTimeout(id);
+  }, [listReady, isDesktop, mapOpened]);
+
+  // Where the open place's sheet sits over the map, so the map keeps the chosen place out from under it.
+  const sheetBox = useRef<HTMLDivElement>(null);
+  const sheetCover = useCallback(() => sheetBox.current?.getBoundingClientRect() ?? null, []);
+
+  const mapLabels = useMemo(
+    () => ({
+      zoomToSee: t("map.zoomToSee"),
+      nearMe: t("where.nearMe"),
+      loading: t("map.loading"),
+      // On a phone the map is a screen of its own, with no list beside it: point at the List button.
+      unavailable: isDesktop ? t("map.unavailable") : t("map.unavailablePhone"),
+      map: t("map.label"),
+      zoomIn: t("map.zoomIn"),
+      zoomOut: t("map.zoomOut"),
+      credits: t("map.credits"),
+      retry: t("map.retry"),
+    }),
+    [t, isDesktop],
+  );
   const budget = useMemo(() => [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string], [t]);
-  const whereLabels = { label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing") };
+  const whereLabels = { label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing"), failed: t("where.failed") };
 
-  if (!isClient || status === "starting") return <ExplorerSkeleton />;
+  // The script that starts the search from the HTML only belongs in the server's HTML (and the
+  // hydration that matches it); rendered afterwards, React would only complain it cannot run.
+  if (!isClient || status === "starting") return <ExplorerSkeleton locale={locale} early={!isClient} />;
 
   if (status === "empty" || !where) {
     return (
-      <section className="container-x grid items-center gap-12 pt-10 pb-20 sm:pt-14 lg:grid-cols-2 lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
+      // At least a screen tall and centred in it on a desktop: on a big monitor it sat in the top 40%
+      // of a page that is always a screen tall (for the map), over blank paper.
+      <section className="container-x grid items-center gap-12 pt-10 pb-20 sm:pt-14 lg:min-h-dvh lg:grid-cols-2 lg:content-center lg:gap-16 lg:pt-[calc(var(--header-h)+3.5rem)]">
         <div>
           <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
           <h1 className="mt-4 display-hero text-forest">{t("empty.title")}</h1>
           <p className="mt-5 max-w-md text-[18px] leading-relaxed text-forest/70">{t("empty.sub")}</p>
           <WhereBox value={null} locale={locale} labels={whereLabels} locating={locating} autoFocus size="lg" className="mt-8 max-w-xl" onPick={(w) => go(w)} onNearMe={nearMe} />
-          {notice ? (
+          {notice || townMissing ? (
             <p role="status" className="mt-3 text-sm text-destructive">
-              {notice}
+              {notice ?? t("where.nothing")}
             </p>
           ) : null}
-          <p className="mt-9 text-[12px] font-medium tracking-[0.2em] text-forest/50 uppercase">{t("empty.or")}</p>
+          <p className="mt-9 text-[12px] font-medium tracking-[0.2em] text-forest/65 uppercase">{t("empty.or")}</p>
           <ul className="mt-4 flex max-w-xl flex-wrap gap-2">
-            {STARTER_CITIES.map((city) => (
-              <li key={city.name}>
-                <button type="button" onClick={() => go(city)} className="h-11 rounded-full border border-rose/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist">
-                  {city.name}
-                </button>
-              </li>
-            ))}
+            {STARTER_CITIES.map((city) => {
+              // The name the page's language uses, for the chip and for the heading and link it leads to.
+              const name = starterName(city, locale);
+              return (
+                <li key={city.name}>
+                  <button type="button" onClick={() => go({ lat: city.lat, lng: city.lng, name })} className="h-11 rounded-full border border-rose/15 bg-white px-4 text-[14.5px] font-medium text-forest shadow-soft transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-rose-mist">
+                    {name}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="relative mx-auto w-full max-w-[560px]" aria-hidden="true">
-          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes="(min-width: 1024px) 560px, 100vw" alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
+          <img src={HERO_ART.dates} srcSet={heroSrcSet(HERO_ART.dates)} sizes={heroSizes("(min-width: 1024px) 560px")} alt="" width={1800} height={1350} decoding="async" className="aspect-[4/3] w-full rotate-[1.5deg] rounded-[36px] object-cover shadow-[0_40px_90px_-40px_rgba(120,20,60,0.6)] ring-8 ring-white" />
           <span className="absolute -bottom-5 -left-3 rotate-[-5deg] rounded-2xl bg-white px-4 py-3 font-hand text-[1.5rem] leading-none text-rose-deep shadow-lift sm:-left-6">{t("empty.note")}</span>
         </div>
       </section>
@@ -409,6 +633,7 @@ export function DatesExplorer() {
 
   const showMap = isDesktop || view === "map";
   const mountMap = isDesktop || mapOpened;
+  const phoneMap = showMap && !isDesktop;
   const sheet = selected ? (
     <PlaceSheet
       key={selected.id}
@@ -426,8 +651,13 @@ export function DatesExplorer() {
       inPlan={planIds.has(selected.id)}
       onTogglePlan={() => togglePlan(selected)}
       onClose={() => setSelectedId(null)}
+      swipe={!isDesktop}
+      // Over a phone's map, shorter than over the list: the place that was tapped stays in view above it.
+      className={phoneMap ? "max-h-[62dvh]" : undefined}
       labels={{
         close: t("place.close"),
+        address: t("a11y.address"),
+        hours: t("a11y.hours"),
         add: t("place.add"),
         remove: t("place.remove"),
         directions: t("place.directions"),
@@ -500,7 +730,8 @@ export function DatesExplorer() {
           />
         </div>
         {notice ? (
-          <p role="status" className="mt-2 text-[13.5px] text-destructive">
+          // Under a phone's full-screen map the map says it instead (MapView's notice), and once is enough.
+          <p role="status" aria-hidden={phoneMap || undefined} className="mt-2 text-[13.5px] text-destructive">
             {notice}
           </p>
         ) : null}
@@ -520,7 +751,7 @@ export function DatesExplorer() {
                 {isWet(day) ? t("weather.wet", { chance: day.rainChance ?? 60 }) : day.tMax >= 18 ? t("weather.warm") : day.tMax < 8 ? t("weather.cold") : t("weather.mild")}
               </p>
               {day.sunset ? (
-                <span className="flex shrink-0 flex-col items-center text-[11px] font-medium text-forest/55">
+                <span className="flex shrink-0 flex-col items-center text-[11px] font-medium text-forest/65">
                   <Sunset aria-hidden="true" className="size-4 text-star" />
                   <span className="sr-only">{t("weather.sunset")}</span>
                   <span className="tabular-nums">{day.sunset}</span>
@@ -535,7 +766,7 @@ export function DatesExplorer() {
               <p className="text-[14px] leading-snug text-forest/70">
                 <span className="font-semibold text-forest first-letter:uppercase">{formatDay(date, locale)}</span>
                 <br />
-                {forecast ? t("weather.tooFar") : t("weather.loading")}
+                {forecast ? t("weather.tooFar") : forecastFailed ? t("weather.unavailable") : t("weather.loading")}
               </p>
             </>
           )}
@@ -547,13 +778,14 @@ export function DatesExplorer() {
             heading={
               <>
                 <h2 className="display-md text-forest">{t("ideas.title")}</h2>
-                <p className="mt-1 text-[14px] text-forest/55">{t("ideas.sub")}</p>
+                <p className="mt-1 text-[14px] text-forest/65">{t("ideas.sub")}</p>
               </>
             }
             filters={
-              <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:px-6" role="group" aria-label={t("ideas.vibes")}>
+              // Wrapped on a desktop: a mouse wheel can't scroll a row sideways, and "Rainy day" was out of reach.
+              <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("ideas.vibes")} data-tour="vibes">
                 {VIBE_IDS.map((v) => (
-                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => setVibe(vibe === v ? null : v)} className={cn("h-9 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
+                  <button key={v} type="button" aria-pressed={vibe === v} onClick={() => setVibe(vibe === v ? null : v)} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold transition-colors lg:h-10", vibe === v ? "bg-rose text-white" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-rose-soft")}>
                     {VIBES[v][locale]}
                   </button>
                 ))}
@@ -573,35 +805,39 @@ export function DatesExplorer() {
           />
         </div>
         {idea ? (
-          <IdeaPanel
-            key={idea.id}
-            idea={idea}
-            stops={stops}
-            times={times}
-            inPlan={ideaInPlan}
-            locale={locale}
-            onShuffle={(i) => setSkip((s) => Object.assign([...s], { [i]: (s[i] ?? 0) + 1 }))}
-            onOpenPlace={open}
-            onHover={setHoveredId}
-            onAdd={addIdea}
-            onClose={() => setIdeaId(null)}
-            labels={{ twist: t("ideas.twist"), another: t("ideas.another"), nothing: (kind) => t("ideas.nothingFor", { kind }), walk: (m) => t("place.walkBetween", { minutes: m }), add: t("ideas.add"), added: t("ideas.added"), close: t("ideas.close"), open: t("place.open") }}
-          />
+          <div ref={ideaBox} className="scroll-mt-[calc(var(--header-h)+12px)]">
+            <IdeaPanel
+              key={idea.id}
+              idea={idea}
+              stops={stops}
+              times={times}
+              inPlan={ideaInPlan}
+              locale={locale}
+              onShuffle={(i) => setSkip((s) => Object.assign([...s], { [i]: (s[i] ?? 0) + 1 }))}
+              onOpenPlace={open}
+              onHover={setHoveredId}
+              onAdd={addIdea}
+              onClose={() => setIdeaId(null)}
+              labels={{ twist: t("ideas.twist"), another: t("ideas.another"), nothing: (kind) => t("ideas.nothingFor", { kind }), walk: (m) => t("place.walkBetween", { minutes: m }), add: t("ideas.add"), added: t("ideas.added"), close: t("ideas.close"), open: t("place.open") }}
+            />
+          </div>
         ) : null}
 
         {/* the best bets, as a shelf */}
-        {status === "ready" && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort") }} /> : null}
+        {status === "ready" && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
 
         {/* places */}
         <div className="mt-9 flex items-end justify-between gap-4">
           <h2 className="display-md text-forest">{t("places.title")}</h2>
-          {status === "ready" || all.length > 0 ? <p className="text-[13px] text-forest/55 tabular-nums">{t("places.count", { count: visible.length })}</p> : null}
+          {status === "ready" || all.length > 0 ? <p className="text-[13px] text-forest/65 tabular-nums">{t("places.count", { count: visible.length })}</p> : null}
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <label className="inline-flex h-10 items-center gap-2 rounded-full bg-white pr-3 pl-3.5 text-[13.5px] font-semibold text-forest ring-1 ring-forest/10">
-            <ArrowUpDown aria-hidden="true" className="size-4 text-forest/50" />
+          {/* The select is the whole pill: tapping the pill around a smaller one focused it on Android
+              without opening it. 16px on a phone, where iOS zooms the page into anything smaller. */}
+          <label className="relative inline-flex h-11 items-center rounded-full lg:h-10 bg-white text-[13.5px] font-semibold text-forest ring-1 ring-forest/10 has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-rose/60">
+            <ArrowUpDown aria-hidden="true" className="pointer-events-none absolute left-3.5 size-4 text-forest/50" />
             <span className="sr-only">{t("sort.label")}</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="bg-transparent pr-1 outline-none">
+            <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} className="h-full cursor-pointer rounded-full bg-transparent pr-3 pl-10 outline-none max-lg:text-[16px]">
               {SORTS.map((s) => (
                 <option key={s} value={s}>
                   {t(`sort.${s}`)}
@@ -609,11 +845,12 @@ export function DatesExplorer() {
               ))}
             </select>
           </label>
-          <div className="flex gap-1.5" role="group" aria-label={t("places.cost")}>
+          {/* Each chip on one line; the row wraps instead. Squeezed, "Lo de una cena" broke onto three lines and hung out of its pill. */}
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label={t("places.cost")}>
             {COST_IDS.map((c) => {
               const on = costs.includes(c);
               return (
-                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); }} className={cn("h-10 rounded-full px-3.5 text-[13px] font-semibold transition-colors", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+                <button key={c} type="button" aria-pressed={on} onClick={() => { setCosts(on ? costs.filter((x) => x !== c) : [...costs, c]); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-3.5 text-[13px] font-semibold whitespace-nowrap transition-colors lg:h-10", on ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
                   {COST_LABELS[c][locale]}
                 </button>
               );
@@ -621,7 +858,7 @@ export function DatesExplorer() {
           </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
-          <button type="button" aria-pressed={groups.length === 0} onClick={() => setGroups([])} className={cn("h-10 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+          <button type="button" aria-pressed={groups.length === 0} onClick={() => setGroups([])} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
             {t("places.all")}
           </button>
           {GROUP_IDS.map((g) => {
@@ -636,8 +873,9 @@ export function DatesExplorer() {
                   setGroups(on ? groups.filter((x) => x !== g) : [...groups, g]);
                   setShown(PAGE);
                 }}
-                className={cn("inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35", on ? "text-white ring-transparent" : "bg-white ring-forest/10 hover:bg-forest/5")}
-                style={on ? { background: GROUPS[g].color } : { color: GROUPS[g].color }}
+                className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", on ? "text-white ring-transparent" : "bg-white ring-forest/10 hover:bg-forest/5")}
+                // The group's ink, not its pin colour: gold chip text on white, and white on a gold chip, read at 3.7:1.
+                style={on ? { background: GROUPS[g].ink } : { color: GROUPS[g].ink }}
               >
                 <GroupIcon group={g} className="size-4" />
                 {GROUPS[g].label[locale]}
@@ -646,7 +884,7 @@ export function DatesExplorer() {
           })}
         </div>
 
-        <div className="mt-4 space-y-2.5" aria-busy={status === "loading"}>
+        <div className="mt-4 space-y-2.5" aria-busy={status === "loading"} data-tour="places">
           {status === "loading" && all.length === 0 ? Array.from({ length: 6 }, (_, i) => <div key={i} className="h-[72px] animate-pulse rounded-[20px] bg-white/70" />) : null}
           {status === "error" && all.length === 0 ? (
             <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
@@ -656,7 +894,33 @@ export function DatesExplorer() {
               </button>
             </div>
           ) : null}
-          {status === "ready" && visible.length === 0 ? <p className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{all.length === 0 ? t("places.none") : t("places.noneInFilter")}</p> : null}
+          {status === "ready" && visible.length === 0 && all.length > 0 ? <p className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">{t("places.noneInFilter")}</p> : null}
+          {status === "ready" && all.length === 0 ? (
+            // Nothing mapped here at all (the middle of the sea): "drag the map to the nearest town" was
+            // no help on a blank blue phone map. The box above, or a city, in one tap.
+            <div className="rounded-[20px] bg-white p-5 text-[14.5px] leading-relaxed text-forest/70 ring-1 ring-forest/5">
+              <p>{t("map.nothingHere")}</p>
+              <ul className="mt-3.5 flex flex-wrap gap-2">
+                {STARTER_CITIES.map((city) => {
+                  const name = starterName(city, locale);
+                  return (
+                    <li key={city.name}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOrigin(null);
+                          go({ lat: city.lat, lng: city.lng, name });
+                        }}
+                        className="h-11 rounded-full border border-rose/15 bg-white px-3.5 text-[13.5px] font-medium text-forest shadow-soft transition-colors hover:bg-rose-mist lg:h-10"
+                      >
+                        {name}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
           {visible.slice(0, shown).map((place, i) => (
             <PlaceCard
               key={place.id}
@@ -678,11 +942,11 @@ export function DatesExplorer() {
             </button>
           ) : null}
         </div>
-        <p className="mt-6 text-[12px] leading-relaxed text-forest/45">{t("places.credit")}</p>
+        <p className="mt-6 text-[12px] leading-relaxed text-forest/65">{t("places.credit")}</p>
       </div>
 
       {/* ---------------------------------------------------------------- the map */}
-      <div className={cn("lg:sticky lg:inset-auto lg:top-0 lg:z-auto lg:block lg:h-dvh", showMap ? "fixed inset-0 z-50" : "hidden")}>
+      <div className={cn("lg:sticky lg:inset-auto lg:top-0 lg:z-auto lg:block lg:h-dvh", showMap ? "fixed inset-0 z-50" : "hidden", phoneMap && "ethos-map-full")}>
         {mountMap ? (
           <MapView
             center={where}
@@ -697,6 +961,9 @@ export function DatesExplorer() {
             origin={origin}
             searching={status === "loading"}
             locating={locating}
+            // On a phone the map covers the list, where the notice is written ("we couldn't get your location").
+            notice={phoneMap ? notice : null}
+            cover={sheetCover}
             labels={mapLabels}
             className="h-full w-full"
             onSelect={open}
@@ -709,7 +976,13 @@ export function DatesExplorer() {
           />
         ) : null}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[60] lg:inset-x-auto lg:bottom-6 lg:left-6 lg:w-[390px]">
-          <AnimatePresence>{showMap && sheet ? <div className="pointer-events-auto">{sheet}</div> : null}</AnimatePresence>
+          <AnimatePresence>
+            {showMap && sheet ? (
+              <div ref={sheetBox} className="pointer-events-auto">
+                {sheet}
+              </div>
+            ) : null}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -720,11 +993,19 @@ export function DatesExplorer() {
         </div>
       ) : null}
 
+      {/* What adding to the plan had to say, over whatever they are looking at, the open sheet included,
+          just above the dock. The live region is always there, so a message put in it is read out. */}
+      <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(max(1rem,env(safe-area-inset-bottom))+3.75rem)] z-[70] flex justify-center px-4 lg:right-auto lg:w-[560px]">
+        {planNotice ? <p className="max-w-md rounded-2xl bg-forest px-4 py-2.5 text-center text-[13.5px] leading-snug font-semibold text-cream shadow-lift">{planNotice.text}</p> : null}
+      </div>
+
       {/* ---------------------------------------------------------------- the dock */}
       {!selected ? (
         <div className={cn("pointer-events-none fixed inset-x-0 bottom-0 z-[55] flex items-center justify-center gap-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] lg:right-auto lg:w-[560px]", showMap && !isDesktop && "z-[55]")}>
           <button
             type="button"
+            // The press starts MapLibre's download a beat before the click opens the map.
+            onPointerDown={() => warmMap(true)}
             onClick={() => {
               setMapOpened(true);
               setView(view === "map" ? "list" : "map");
@@ -735,7 +1016,7 @@ export function DatesExplorer() {
             {view === "map" ? t("map.list") : t("map.show")}
           </button>
           {plan.stops.length > 0 ? (
-            <Link href="/plan" className="pointer-events-auto inline-flex h-12 items-center gap-2.5 rounded-full bg-rose pr-4 pl-2 text-[14.5px] font-semibold text-white shadow-[0_18px_40px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
+            <Link href="/plan" data-tour="plan" className="pointer-events-auto inline-flex h-12 items-center gap-2.5 rounded-full bg-rose pr-4 pl-2 text-[14.5px] font-semibold text-white shadow-[0_18px_40px_-16px_rgba(176,36,90,0.85)] transition-transform hover:-translate-y-0.5">
               <span className="grid size-8 place-items-center rounded-full bg-white text-[13px] font-bold text-rose-deep tabular-nums">{plan.stops.length}</span>
               {t("plan.open")}
               <ArrowRight aria-hidden="true" className="size-4" />
@@ -747,18 +1028,55 @@ export function DatesExplorer() {
   );
 }
 
-function ExplorerSkeleton() {
+/**
+ * What the page's HTML carries before the explorer has loaded, which on a slow phone is seconds: the
+ * heading, and the ideas, which don't depend on where anybody is (their photographs are what a phone
+ * paints first). A few lines of script in it start the search the explorer is about to make and write
+ * the town from the link into the heading (lib/dates/early.ts). The heading's text is theirs from
+ * then on, so hydration is told to leave it as it finds it.
+ */
+function ExplorerSkeleton({ locale, early }: { locale: "en" | "es"; early: boolean }) {
+  const t = useTranslations("dates");
+  const budget = [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string];
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]" aria-hidden="true">
-      <div className="space-y-4 px-5 pt-9 pb-24 sm:px-8 lg:px-6 lg:pt-[calc(var(--header-h)+1.25rem)]">
-        <div className="h-4 w-32 animate-pulse rounded bg-forest/10" />
-        <div className="h-10 w-72 animate-pulse rounded-lg bg-forest/10" />
-        <div className="h-12 animate-pulse rounded-full bg-white/70" />
-        <div className="h-[72px] animate-pulse rounded-[20px] bg-white/70" />
-        <div className="flex gap-3 overflow-hidden pt-6">
-          {Array.from({ length: 4 }, (_, i) => (
-            <div key={i} className="h-[188px] w-[164px] shrink-0 animate-pulse rounded-[22px] bg-white/70" />
-          ))}
+    <div className="lg:grid lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
+      <div className="px-5 pt-7 pb-32 sm:px-8 lg:px-6 lg:pt-[calc(var(--header-h)+1.25rem)]">
+        <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{t("eyebrow")}</p>
+        <h1 id={TITLE_ID} suppressHydrationWarning className="mt-2 display-lg text-forest">
+          {t("titleNear")}
+        </h1>
+        {/* The server's copy of earlyStart and the browser's are compiled separately and need not match
+            to the character; the one that runs is the server's, so hydration isn't to compare them. */}
+        {early ? <script suppressHydrationWarning dangerouslySetInnerHTML={{ __html: earlyScript({ key: EARLY_KEY, whereKey: WHERE_KEY, locale, radius: snapSearch({ lat: 0, lng: 0 }, DEFAULT_RADIUS_M).radiusM, headingId: TITLE_ID, titleIn: t.raw("titleIn") as string, warm: [MAPLIBRE_URL, MAPLIBRE_SHARED_URL, MAP_STYLE_URL] }) }} /> : null}
+        <div className="mt-5 flex flex-wrap gap-2" aria-hidden="true">
+          <div className="h-12 min-w-[230px] flex-1 animate-pulse rounded-full bg-white/70" />
+          <div className="h-12 w-36 animate-pulse rounded-full bg-white/70" />
+        </div>
+        <div className="mt-4 h-[72px] animate-pulse rounded-[20px] bg-white/70" aria-hidden="true" />
+        <div className="mt-9">
+          <IdeaRail
+            heading={
+              <>
+                <h2 className="display-md text-forest">{t("ideas.title")}</h2>
+                <p className="mt-1 text-[14px] text-forest/65">{t("ideas.sub")}</p>
+              </>
+            }
+            filters={
+              <div className="scrollbar-none -mx-5 mt-3.5 flex gap-1.5 overflow-x-auto px-5 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" aria-hidden="true">
+                {VIBE_IDS.map((v) => (
+                  <span key={v} className="inline-flex h-11 shrink-0 items-center rounded-full bg-white px-3.5 text-[13px] font-semibold text-forest/75 ring-1 ring-forest/10 lg:h-10">
+                    {VIBES[v][locale]}
+                  </span>
+                ))}
+              </div>
+            }
+            ideas={IDEAS}
+            doable={null}
+            selectedId={null}
+            locale={locale}
+            onPick={() => undefined}
+            labels={{ previous: t("ideas.previous"), next: t("ideas.next"), budget, hours: (h) => t("ideas.hours", { hours: h }), notNearby: t("ideas.notNearby") }}
+          />
         </div>
       </div>
       <div className="hidden h-dvh bg-blush-paper lg:block" />

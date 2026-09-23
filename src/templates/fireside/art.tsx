@@ -4,6 +4,7 @@
  * to a laptop without a single image.
  */
 import { cn } from "@/lib/utils";
+import { graphemes } from "@/lib/gift/graphemes";
 
 const POSTER = "var(--font-poster), Georgia, serif";
 
@@ -213,7 +214,7 @@ export function Blanket({ p }: { p: Palette }) {
 
 /** Bunting strung across the top of the page, one pennant per letter of their name. */
 export function Garland({ name, p, reduce }: { name: string; p: Palette; reduce: boolean }) {
-  const letters = [...(name.trim().split(/\s+/)[0] || name.trim()).toUpperCase()].slice(0, 10);
+  const letters = graphemes((name.trim().split(/\s+/)[0] || name.trim()).toUpperCase()).slice(0, 10);
   const n = Math.max(1, letters.length);
   // The cord is one quadratic; every pennant reads its drop off the same curve, so they hang on it.
   const dropAt = (u: number) => (1 - u) ** 2 * 1.5 + 2 * u * (1 - u) * 13 + u ** 2 * 1.5;

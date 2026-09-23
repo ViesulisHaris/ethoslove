@@ -4,7 +4,7 @@
 import { Check, Plus, Shuffle, Sparkles, X } from "lucide-react";
 import { motion } from "motion/react";
 import { ideaImage } from "@/lib/dates/art";
-import { formatDistance, walkingMinutes, distanceKm } from "@/lib/dates/geo";
+import { distanceKm, formatDistance, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import type { DateIdea } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Place } from "@/lib/dates/places";
@@ -61,32 +61,36 @@ export function IdeaPanel({ idea, stops, times, inPlan, locale, labels, onShuffl
         {stops.map((stop, i) => {
           const kind = idea.stops[i][0];
           const previous = i > 0 ? stops[i - 1].place : null;
+          const apart = previous && stop.place ? distanceKm(previous, stop.place) : null;
           return (
             <li key={i} className="relative pb-4 pl-[52px] last:pb-0">
               {i < stops.length - 1 ? <span aria-hidden="true" className="absolute top-10 bottom-0 left-[19px] border-l-2 border-dotted border-rose/40" /> : null}
               <span className="absolute top-0 left-0 grid size-10 place-items-center rounded-full bg-rose text-[14px] font-bold text-white shadow-[0_6px_14px_-6px_rgba(176,36,90,0.7)]">{i + 1}</span>
-              {previous && stop.place ? <p className="-mt-1 mb-1.5 text-[11.5px] font-medium tracking-wide text-forest/45 uppercase">{labels.walk(walkingMinutes(distanceKm(previous, stop.place)))}</p> : null}
+              {/* Past a walk, the distance: "93 min walk" is not a plan anybody follows. */}
+              {apart !== null ? <p className="-mt-1 mb-1.5 text-[11.5px] font-medium tracking-wide text-forest/65 uppercase">{apart <= WALK_KM ? labels.walk(walkingMinutes(apart)) : formatDistance(apart, locale)}</p> : null}
               {stop.place ? (
                 <div className="flex items-start gap-2" onPointerEnter={() => onHover(stop.place!.id)} onPointerLeave={() => onHover(null)}>
                   <button type="button" onClick={() => onOpenPlace(stop.place!.id)} aria-label={`${labels.open}: ${stop.place.name}`} className="min-w-0 flex-1 rounded-xl text-left">
-                    <span className="flex items-center gap-2 text-[12px] font-semibold" style={{ color: GROUPS[stop.place.group].color }}>
-                      <span className="tabular-nums">{times[i]}</span>
+                    <span className="flex min-w-0 items-center gap-2 text-[12px] font-semibold" style={{ color: GROUPS[stop.place.group].ink }}>
+                      <span className="shrink-0 tabular-nums">{times[i]}</span>
                       <span aria-hidden="true">·</span>
                       <GroupIcon group={stop.place.group} className="size-3.5" />
-                      {KINDS[stop.place.kind].label[locale]}
+                      {/* A place with no name is already called by its kind on the line below: "Viewpoint", twice. */}
+                      {stop.place.named ? <span className="min-w-0 truncate">{KINDS[stop.place.kind].label[locale]}</span> : null}
                     </span>
                     <span className="mt-0.5 block truncate text-[16px] font-semibold text-forest underline-offset-4 hover:underline">{stop.place.name}</span>
-                    <span className="block text-[13px] text-forest/55">{formatDistance(stop.place.distanceKm, locale)}</span>
+                    <span className="block text-[13px] text-forest/65">{formatDistance(stop.place.distanceKm, locale)}</span>
                   </button>
                   {stop.options > 1 ? (
-                    <button type="button" onClick={() => onShuffle(i)} className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-forest/15 px-3 text-[12.5px] font-semibold text-forest transition-colors hover:bg-forest/5">
+                    // Only its icon on the narrowest phones, where the word left the stop's own line 125px.
+                    <button type="button" onClick={() => onShuffle(i)} className="inline-flex h-11 min-w-11 shrink-0 items-center justify-center gap-1.5 rounded-full border border-forest/15 px-3 text-[12.5px] font-semibold text-forest transition-colors hover:bg-forest/5">
                       <Shuffle aria-hidden="true" className="size-3.5" />
-                      {labels.another}
+                      <span className="max-[379px]:sr-only">{labels.another}</span>
                     </button>
                   ) : null}
                 </div>
               ) : (
-                <p className="pt-2 text-[14px] leading-snug text-forest/55">{labels.nothing(KINDS[kind].label[locale].toLowerCase())}</p>
+                <p className="pt-2 text-[14px] leading-snug text-forest/65">{labels.nothing(KINDS[kind].label[locale].toLowerCase())}</p>
               )}
             </li>
           );

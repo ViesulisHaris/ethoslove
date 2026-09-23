@@ -127,9 +127,12 @@ SMTP with host `smtp.resend.com`, port `465`, user `resend`, password = your Res
 
 Free gifts get the bundled library (`public/audio/library`, rendered by `scripts/gen-library.mjs`:
 eight loopable pieces synthesised in-house, so nothing needs licensing) and up to 10 photos, with
-the footer. Extras that need any unlock, on any template: a real song (30-second preview from
-Apple's catalogue via `/api/music/search`, credited at the end), a video clip, a voice message
-from the sender, more than 10 photos, scheduling, passwords. The rules live in
+the footer. A real song is free on every gift too: a 30-second preview from Apple's catalogue via
+`/api/music/search`, which Apple allows only to promote the track, so it never plays under the gift.
+It waits on the end screen (`src/templates/_shared/SongPreview.tsx`) and plays once per tap, never
+under a video, beside "Listen on Apple Music" and "Preview courtesy of Apple Music"; the rules are
+in `src/lib/gift/music.ts`. Extras that need any unlock, on any template: a video clip, a voice
+message from the sender, more than 10 photos, scheduling, passwords, no footer. The rules live in
 `src/lib/gift/publish.ts` (`premiumExtras`).
 
 ## Scheduled gifts

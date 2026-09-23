@@ -1,13 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { ImageResponse } from "next/og";
+import type { NextRequest } from "next/server";
+import sharp from "sharp";
 import { BRAND } from "@/config/brand";
-import { fetchPublicGift } from "@/lib/gift/public";
+import { fetchPublicGiftMeta } from "@/lib/gift/public";
+import { SHARE_CARD } from "@/lib/gift/share-card";
 import { isShortId } from "@/lib/gift/short-id";
 
-export const alt = "Someone made you something";
-// iMessage only shows the full-width preview for images at least 2400×1256; smaller ones become a thumbnail.
-export const size = { width: 2400, height: 1256 };
-export const contentType = "image/png";
+export const runtime = "nodejs";
 
 const HEART =
   "data:image/svg+xml;utf8," +
@@ -17,23 +17,31 @@ const HEART =
 
 // The image generator only knows the fonts it is handed, so the site's display serif ships with
 // it. Both paths are spelled out: a template literal here resolves to one file for both faces.
-const serifFont = () => readFile(new URL("../../../../../fonts/newsreader-regular.ttf", import.meta.url));
-const italicFont = () => readFile(new URL("../../../../../fonts/newsreader-italic.ttf", import.meta.url));
+const serifFont = () => readFile(new URL("../../../../fonts/newsreader-regular.ttf", import.meta.url));
+const italicFont = () => readFile(new URL("../../../../fonts/newsreader-italic.ttf", import.meta.url));
 
 /**
- * The card every gift link shows in Messages, WhatsApp and everywhere else: a pressed
- * invitation with their name on it. It never reveals the gift, only who it is for.
+ * A crawler fetches this for every chat a gift is pasted into. As the PNG the generator draws it
+ * was 521 KB, drawn afresh on every fetch — past the ~300 KB WhatsApp is known to drop previews
+ * over — so it is sent as a JPEG (~50 KB; the card is gradients and type, nothing JPEG blurs) and
+ * the CDN keeps it for a day. The URL carries a version of what it shows (see shareCardUrl).
  */
-export default async function Image({ params }: { params: Promise<{ shortId: string }> }) {
-  const { shortId } = await params;
-  const gift = isShortId(shortId) ? await fetchPublicGift(shortId) : null;
+const CACHE = "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800";
+
+/**
+ * The card every gift link shows in Messages, WhatsApp and everywhere else: a pressed invitation
+ * with their name on it. It never reveals the gift, only who it is for.
+ */
+export async function GET(_request: NextRequest, ctx: RouteContext<"/g/[shortId]/card.jpg">) {
+  const { shortId } = await ctx.params;
+  const gift = isShortId(shortId) ? await fetchPublicGiftMeta(shortId) : null;
   const [serif, serifItalic] = await Promise.all([serifFont(), italicFont()]);
   const name = gift?.recipientName || "Hey";
   const es = gift?.locale === "es";
   const eyebrow = es ? "UN REGALO PARA" : "A GIFT FOR";
   const line = es ? "alguien te ha hecho algo" : "someone made you something";
 
-  return new ImageResponse(
+  const png = await new ImageResponse(
     (
       <div
         style={{
@@ -64,6 +72,7 @@ export default async function Image({ params }: { params: Promise<{ shortId: str
             boxShadow: "0 30px 70px rgba(232,96,76,0.32)",
           }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element -- drawn by the image generator, not a browser */}
           <img src={HEART} width={66} height={66} alt="" />
         </div>
         <div style={{ marginTop: 54, fontSize: 52, letterSpacing: 18, color: "rgba(23,19,15,0.5)", fontStyle: "normal", display: "flex" }}>{eyebrow}</div>
@@ -75,11 +84,16 @@ export default async function Image({ params }: { params: Promise<{ shortId: str
       </div>
     ),
     {
-      ...size,
+      ...SHARE_CARD,
       fonts: [
         { name: "Newsreader", data: serif, weight: 400, style: "normal" },
         { name: "Newsreader Italic", data: serifItalic, weight: 400, style: "normal" },
       ],
     },
-  );
+  ).arrayBuffer();
+
+  const jpeg = await sharp(Buffer.from(png)).flatten({ background: "#F7F1E7" }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+  return new Response(new Uint8Array(jpeg), {
+    headers: { "Content-Type": "image/jpeg", "Content-Length": String(jpeg.length), "Cache-Control": CACHE },
+  });
 }

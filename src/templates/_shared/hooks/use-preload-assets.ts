@@ -16,34 +16,24 @@ function preloadImage(url: string): Promise<void> {
   });
 }
 
-function preloadAudio(url: string): Promise<void> {
-  return new Promise((resolve) => {
-    const audio = new Audio();
-    audio.preload = "auto";
-    const finish = () => resolve();
-    audio.addEventListener("canplaythrough", finish, { once: true });
-    audio.addEventListener("error", finish, { once: true });
-    audio.src = url;
-    audio.load();
-    // Audio can legitimately never reach canplaythrough on slow networks; cap the wait.
-    setTimeout(finish, 4000);
-  });
-}
-
 /**
- * Warms the browser cache for every asset a gift references and reports progress.
+ * Warms the browser cache for the images a gift opens on and reports progress.
  * Never blocks forever: an overall timeout lets the template start regardless.
+ *
+ * Not the music. Warming it here downloaded the whole track twice — this element and the one
+ * `useGiftAudio` plays from are separate media requests (and one is CORS), which never share a
+ * cache entry — and the first copy competed for the connection with the photos the gift was
+ * waiting on. `useGiftAudio` starts the one download when the template mounts, after the photos.
  */
 export function usePreloadAssets(data: GiftData | null | undefined, enabled = true): PreloadState {
   const [state, setState] = useState<PreloadState>({ progress: 0, done: false });
-  const key = data ? JSON.stringify([data.photos.map((p) => p.url), data.music?.url, data.video?.poster, data.voiceNote?.url]) : "";
+  const key = data ? JSON.stringify([data.photos.map((p) => p.url), data.video?.poster]) : "";
 
   useEffect(() => {
     if (!enabled || !data) return;
     let cancelled = false;
     const tasks: Promise<void>[] = [
       ...data.photos.map((p) => preloadImage(p.url)),
-      ...(data.music ? [preloadAudio(data.music.url)] : []),
       ...(data.video?.poster ? [preloadImage(data.video.poster)] : []),
     ];
     if (tasks.length === 0) {

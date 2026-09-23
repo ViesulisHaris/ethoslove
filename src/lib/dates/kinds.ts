@@ -78,13 +78,17 @@ export const KINDS: Record<PlaceKind, KindInfo> = {
   winery: { group: "unwind", label: { en: "Winery", es: "Bodega" }, indoor: true, free: false },
 };
 
-export const GROUPS: Record<PlaceGroup, { label: L; blurb: L; color: string; soft: string }> = {
-  eat: { label: { en: "Dinner & drinks", es: "Cena y copas" }, blurb: { en: "Tables for two", es: "Mesas para dos" }, color: "#B23A5E", soft: "#F9DCE4" },
-  sweet: { label: { en: "Coffee & sweet", es: "Café y dulce" }, blurb: { en: "Slow afternoons", es: "Tardes sin prisa" }, color: "#B9772E", soft: "#F8E6CF" },
-  outdoors: { label: { en: "Views & outdoors", es: "Vistas y aire libre" }, blurb: { en: "Sunsets, parks, water", es: "Atardeceres, parques, agua" }, color: "#3F7D5C", soft: "#DCEBDF" },
-  culture: { label: { en: "Art & culture", es: "Arte y cultura" }, blurb: { en: "Something to talk about after", es: "Algo de lo que hablar después" }, color: "#5B4FB0", soft: "#E4E0F6" },
-  play: { label: { en: "Play", es: "Jugar" }, blurb: { en: "Loser buys dessert", es: "Quien pierda invita al postre" }, color: "#2F7FA8", soft: "#D8EAF3" },
-  unwind: { label: { en: "Unwind", es: "Relajarse" }, blurb: { en: "Do nothing, together", es: "No hacer nada, juntos" }, color: "#8A5A83", soft: "#EFDFEC" },
+/**
+ * `color` fills pins and chips; `ink` is the same colour dark enough to be read as small text on
+ * white or paper (4.5:1 and over). The gold of "Coffee & sweet" and the blue of "Play" are not.
+ */
+export const GROUPS: Record<PlaceGroup, { label: L; blurb: L; color: string; ink: string; soft: string }> = {
+  eat: { label: { en: "Dinner & drinks", es: "Cena y copas" }, blurb: { en: "Tables for two", es: "Mesas para dos" }, color: "#B23A5E", ink: "#B23A5E", soft: "#F9DCE4" },
+  sweet: { label: { en: "Coffee & sweet", es: "Café y dulce" }, blurb: { en: "Slow afternoons", es: "Tardes sin prisa" }, color: "#B9772E", ink: "#945F25", soft: "#F8E6CF" },
+  outdoors: { label: { en: "Views & outdoors", es: "Vistas y aire libre" }, blurb: { en: "Sunsets, parks, water", es: "Atardeceres, parques, agua" }, color: "#3F7D5C", ink: "#3C7657", soft: "#DCEBDF" },
+  culture: { label: { en: "Art & culture", es: "Arte y cultura" }, blurb: { en: "Something to talk about after", es: "Algo de lo que hablar después" }, color: "#5B4FB0", ink: "#5B4FB0", soft: "#E4E0F6" },
+  play: { label: { en: "Play", es: "Jugar" }, blurb: { en: "Loser buys dessert", es: "Quien pierda invita al postre" }, color: "#2F7FA8", ink: "#2A7196", soft: "#D8EAF3" },
+  unwind: { label: { en: "Unwind", es: "Relajarse" }, blurb: { en: "Do nothing, together", es: "No hacer nada, juntos" }, color: "#8A5A83", ink: "#8A5A83", soft: "#EFDFEC" },
 };
 
 export const GROUP_IDS = Object.keys(GROUPS) as PlaceGroup[];
@@ -92,6 +96,19 @@ export const KIND_IDS = Object.keys(KINDS) as PlaceKind[];
 export const kindsIn = (group: PlaceGroup): PlaceKind[] => KIND_IDS.filter((k) => KINDS[k].group === group);
 
 type Tags = Record<string, string | undefined>;
+
+const ONE_GROUP = new Set(["only", "primary"]);
+/**
+ * A spa or sauna that lets in only one group of people: most often a men-only gay sauna, which a
+ * couple planning a spa evening together would be turned away from. Asked only of spas: a bar
+ * tagged `lgbtq=primary` welcomes any couple.
+ */
+function admitsOneGroup(tags: Tags): boolean {
+  if (["lgbtq", "lgbtq:men", "lgbtq:women", "lgbtq:gay", "lgbtq:lesbian", "gay"].some((k) => ONE_GROUP.has(tags[k] ?? ""))) return true;
+  if (tags.male === "only" || tags.female === "only" || tags.access === "private" || tags.access === "no") return true;
+  // Some are not tagged at all and say so on their own sign or website ("gaysaunabar.com").
+  return /\bgay\b|men[- ]only/i.test(tags.name ?? "") || /gay-?(sauna|spa)/i.test(tags.website ?? tags["contact:website"] ?? "");
+}
 
 /**
  * Which kind a set of OpenStreetMap tags is, or null for anything a date would not be planned
@@ -109,9 +126,11 @@ export function kindOf(tags: Tags): PlaceKind | null {
   if (natural === "beach") return "beach";
   if (tourism === "picnic_site") return "picnic";
   if (tourism === "museum") return "museum";
-  if (tourism === "gallery" || amenity === "arts_centre") return "gallery";
+  if (tourism === "gallery") return "gallery";
   if (amenity === "cinema") return "cinema";
-  if (amenity === "theatre") return "theatre";
+  // An arts centre is a stage more often than a gallery (the Royal Opera House is one), and a
+  // gallery is free: filed as one, an opera house turned up in "Gallery hop" and under Free.
+  if (amenity === "theatre" || amenity === "arts_centre") return "theatre";
   if (amenity === "planetarium") return "planetarium";
   if (shop === "books") return "bookshop";
   if (tourism === "attraction") return "landmark";
@@ -125,7 +144,7 @@ export function kindOf(tags: Tags): PlaceKind | null {
   if (amenity === "boat_rental") return "boats";
   if (tourism === "zoo" || tourism === "aquarium") return "zoo";
   if (tourism === "theme_park") return "themepark";
-  if (leisure === "spa" || leisure === "sauna" || amenity === "public_bath") return "spa";
+  if (leisure === "spa" || leisure === "sauna" || amenity === "public_bath") return admitsOneGroup(tags) ? null : "spa";
   if (craft === "winery") return "winery";
   return null;
 }
@@ -152,7 +171,7 @@ const POI_KINDS: Record<string, PlaceKind> = {
   picnic_site: "picnic",
   museum: "museum",
   gallery: "gallery",
-  arts_centre: "gallery",
+  arts_centre: "theatre",
   cinema: "cinema",
   theatre: "theatre",
   books: "bookshop",

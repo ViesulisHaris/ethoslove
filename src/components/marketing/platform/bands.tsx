@@ -19,7 +19,8 @@ export async function LongDistanceBand() {
             {t("titleA")} <em className="text-blush">{t("titleB")}</em>
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-cream/75">{t("blurb")}</p>
-          <Link href="/long-distance" className="mt-9 inline-flex h-13 items-center gap-2 rounded-full bg-cream px-7 text-base font-semibold text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5">
+          {/* Less padding, and under 360px a point less type, keep both labels on one line at 320px ("Abrir la habitación a distancia" is 228px at 16px); if one ever wraps, it wraps balanced and centred. */}
+          <Link href="/long-distance" className="mt-9 inline-flex h-13 items-center gap-2 rounded-full bg-cream px-4 text-center text-base leading-tight font-semibold text-balance text-forest shadow-[0_18px_50px_-18px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5 max-[359px]:text-[15px] sm:px-7">
             {t("cta")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>

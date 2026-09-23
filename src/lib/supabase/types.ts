@@ -8,6 +8,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type GiftStatus = "draft" | "scheduled" | "live" | "archived";
 export type PurchaseStatus = "pending" | "paid" | "refunded";
 export type AssetType = "photo" | "audio" | "video";
+export type ReminderOccasion = "birthday" | "anniversary" | "valentines" | "other";
 
 export interface Database {
   public: {
@@ -212,7 +213,8 @@ export interface Database {
       purchases: {
         Row: {
           id: string;
-          user_id: string;
+          /** Null once the buyer deleted their account: the sale is kept for the accounts (0011). */
+          user_id: string | null;
           stripe_session_id: string | null;
           stripe_payment_intent_id: string | null;
           product: string;
@@ -221,10 +223,17 @@ export interface Database {
           currency: string;
           status: PurchaseStatus;
           created_at: string;
+          creator_code: string | null;
+          ref: string | null;
+          discount_amount: number | null;
+          kind: string | null;
+          /** The withdrawal sentence the buyer ticked at checkout, and when (0012). Null without the tickbox. */
+          terms_consent: string | null;
+          terms_consent_at: string | null;
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id: string | null;
           stripe_session_id?: string | null;
           stripe_payment_intent_id?: string | null;
           product: string;
@@ -233,11 +242,25 @@ export interface Database {
           currency?: string;
           status?: PurchaseStatus;
           created_at?: string;
+          creator_code?: string | null;
+          ref?: string | null;
+          discount_amount?: number | null;
+          kind?: string | null;
+          terms_consent?: string | null;
+          terms_consent_at?: string | null;
         };
         Update: {
           stripe_session_id?: string | null;
           stripe_payment_intent_id?: string | null;
           status?: PurchaseStatus;
+          amount?: number;
+          currency?: string;
+          creator_code?: string | null;
+          ref?: string | null;
+          discount_amount?: number | null;
+          kind?: string | null;
+          terms_consent?: string | null;
+          terms_consent_at?: string | null;
         };
         Relationships: [];
       };
@@ -256,6 +279,154 @@ export interface Database {
           purchase_id?: string | null;
           created_at?: string;
         };
+        Update: { purchase_id?: string | null };
+        Relationships: [];
+      };
+      couple_passes: {
+        Row: {
+          id: string;
+          purchase_id: string;
+          owner_user_id: string;
+          partner_user_id: string | null;
+          invite_code: string;
+          starts_at: string;
+          ends_at: string;
+          renewal_reminded_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          purchase_id: string;
+          owner_user_id: string;
+          partner_user_id?: string | null;
+          invite_code: string;
+          starts_at?: string;
+          ends_at: string;
+          renewal_reminded_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          partner_user_id?: string | null;
+          starts_at?: string;
+          ends_at?: string;
+          renewal_reminded_at?: string | null;
+        };
+        Relationships: [];
+      };
+      gift_cards: {
+        Row: {
+          id: string;
+          code: string;
+          purchase_id: string | null;
+          buyer_user_id: string | null;
+          recipient_name: string | null;
+          note: string | null;
+          redeemed_by: string | null;
+          redeemed_at: string | null;
+          expires_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          code: string;
+          purchase_id?: string | null;
+          buyer_user_id?: string | null;
+          recipient_name?: string | null;
+          note?: string | null;
+          redeemed_by?: string | null;
+          redeemed_at?: string | null;
+          expires_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          redeemed_by?: string | null;
+          redeemed_at?: string | null;
+          expires_at?: string | null;
+        };
+        Relationships: [];
+      };
+      creators: {
+        Row: {
+          code: string;
+          name: string;
+          contact: string | null;
+          commission_pct: number;
+          discount_pct: number;
+          active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+          contact?: string | null;
+          commission_pct?: number;
+          discount_pct?: number;
+          active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          name?: string;
+          contact?: string | null;
+          commission_pct?: number;
+          discount_pct?: number;
+          active?: boolean;
+        };
+        Relationships: [];
+      };
+      reminders: {
+        Row: {
+          id: string;
+          user_id: string;
+          recipient_name: string;
+          occasion: ReminderOccasion;
+          month: number;
+          day: number;
+          locale: "en" | "es";
+          template_slug: string | null;
+          last_sent_year: number | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          recipient_name: string;
+          occasion: ReminderOccasion;
+          month: number;
+          day: number;
+          locale?: "en" | "es";
+          template_slug?: string | null;
+          last_sent_year?: number | null;
+          created_at?: string;
+        };
+        Update: {
+          recipient_name?: string;
+          occasion?: ReminderOccasion;
+          month?: number;
+          day?: number;
+          locale?: "en" | "es";
+          template_slug?: string | null;
+          last_sent_year?: number | null;
+        };
+        Relationships: [];
+      };
+      email_optouts: {
+        Row: { email_sha256: string; created_at: string };
+        Insert: { email_sha256: string; created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      /** One free reply per paid premium gift answered (0012). Service role only. */
+      free_replies: {
+        /** reply_gift_id goes null when the reply is deleted: the gift it answered stays answered. */
+        Row: { original_gift_id: string; reply_gift_id: string | null; created_at: string };
+        Insert: { original_gift_id: string; reply_gift_id: string; created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      /** A gift card's name and note between checkout and fulfilment, never sent to Stripe (0012). Service role only. */
+      gift_card_details: {
+        Row: { purchase_id: string; recipient_name: string | null; note: string | null; created_at: string };
+        Insert: { purchase_id: string; recipient_name?: string | null; note?: string | null; created_at?: string };
         Update: never;
         Relationships: [];
       };

@@ -70,5 +70,24 @@ export function kindImage(k: PlaceKind, seed = ""): string {
 
 export const HERO_ART = { home: "/dates/hero/home.webp", dates: "/dates/hero/dates.webp", gifts: "/dates/hero/gifts.webp", ldr: "/dates/hero/ldr.webp", games: "/dates/hero/games.webp" } as const;
 
-/** The hero in two sizes: a phone's card gets half the pixels of a desktop's. */
-export const heroSrcSet = (path: string): string => `${path.replace(".webp", "-sm.webp")} 900w, ${path} 1800w`;
+/**
+ * How wide each full-size hero really is; every -sm file is half. The home hero is the one portrait
+ * picture (1350 by 1800): described as 1800 wide, the browser thought the 675-pixel small file was
+ * sharp enough for a 432-pixel box on a 2x screen, and drew it soft.
+ */
+const HERO_WIDTH: Partial<Record<string, number>> = { [HERO_ART.home]: 1350 };
+
+/** The hero in two sizes, described by their real widths so the browser picks the sharp one it needs. */
+export const heroSrcSet = (path: string): string => {
+  const width = HERO_WIDTH[path] ?? 1800;
+  return `${path.replace(".webp", "-sm.webp")} ${width / 2}w, ${path} ${width}w`;
+};
+
+/**
+ * `sizes` for a landscape hero, from the widest layout down, ending with a phone's full width. A
+ * 2.6–3x phone asks for ~1100 px for a full-width card, and the next file up from 900 px is 1800 px:
+ * four times the bytes (the four doors on the home page came to 565 KB instead of 176 KB) for detail
+ * nobody can see in a photo that size, and there is no file in between. Past 2.2x a phone is told its
+ * slot is 300px, so it takes the 900 px file, which still puts ~2.4 pixels in each of its own.
+ */
+export const heroSizes = (...wider: string[]): string => [...wider, "(max-width: 639px) and (min-resolution: 2.2dppx) 300px", "100vw"].join(", ");

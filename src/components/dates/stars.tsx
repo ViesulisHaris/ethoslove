@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { formatShort } from "@/lib/dates/format";
 
-/** Five stars, filled to a value with halves, read out as a number. */
-export function Stars({ value, size = "sm", className, label }: { value: number; size?: "xs" | "sm" | "md"; className?: string; label?: string }) {
+/** Five stars, filled to a value with halves, read out as a number in the reader's decimals ("4,5 / 5"). */
+export function Stars({ value, size = "sm", className, label, locale = "en" }: { value: number; size?: "xs" | "sm" | "md"; className?: string; label?: string; locale?: "en" | "es" }) {
   const px = size === "xs" ? "size-3" : size === "sm" ? "size-3.5" : "size-5";
   return (
-    <span className={cn("inline-flex items-center gap-px", className)} role="img" aria-label={label ?? `${value} / 5`}>
+    <span className={cn("inline-flex items-center gap-px", className)} role="img" aria-label={label ?? `${formatShort(value, locale)} / 5`}>
       {[1, 2, 3, 4, 5].map((n) => {
         const fill = Math.max(0, Math.min(1, value - (n - 1)));
         return (
@@ -40,7 +41,7 @@ export function StarPicker({ value, onChange, labels }: { value: number; onChang
           onPointerEnter={() => setHover(n)}
           onPointerLeave={() => setHover(0)}
           onClick={() => onChange(n)}
-          className="grid size-10 place-items-center rounded-full transition-transform hover:scale-110"
+          className="grid size-11 place-items-center rounded-full transition-transform hover:scale-110"
         >
           <Star className={cn("size-7 transition-colors", n <= shown ? "text-star" : "text-star-empty")} fill="currentColor" strokeWidth={0} />
         </button>

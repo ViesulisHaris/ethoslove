@@ -16,7 +16,10 @@ export const giftPhotoSchema = z.object({
 });
 
 export const giftMusicSchema = z.object({
-  /** upload = the sender's file · library = bundled track · catalog = 30-second preview of a real song */
+  /**
+   * upload = the sender's file · library = bundled track (both play under the gift) ·
+   * catalog = 30-second Apple preview of a real song, free, heard only on a tap (see ./music)
+   */
   source: z.enum(["upload", "library", "catalog"]),
   url: z.string().min(1),
   trackId: z.string().optional(),

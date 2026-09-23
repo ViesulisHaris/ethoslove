@@ -9,7 +9,9 @@ import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
+import { mergeSeedFields, takeGiftSeed } from "@/lib/editor/gift-seed";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
+import { track } from "@/lib/analytics/track";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
 import { WhoSection } from "./sections/who";
@@ -78,6 +80,10 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // template's data (and anything touched in that moment saved under this template's key).
   const ready = hydrated && storeSlug === slug && (!remote || storeGiftId === remote.id);
 
+  useEffect(() => {
+    track("editor_opened", { template: slug });
+  }, [slug]);
+
   // Load the template module (schema + field meta), then hydrate the store.
   useEffect(() => {
     let active = true;
@@ -98,14 +104,30 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           if (merged.success) initial.fields = merged.data as Record<string, unknown>;
         }
       }
-      void useEditor.getState().init({
-        slug,
-        manifest,
-        initial,
-        authed: Boolean(user),
-        userId: user?.id ?? null,
-        remote,
-      });
+      // Arrived from a page that already knew part of this gift, like a preset trip: those fields
+      // start filled in. Whatever doesn't validate stays at the template's defaults.
+      const seed = remote ? null : takeGiftSeed(slug);
+      const seeded = seed ? mergeSeedFields(m.fieldsSchema, initial.fields as Record<string, unknown>, seed.fields) : null;
+      if (seeded) initial.fields = seeded;
+      void useEditor
+        .getState()
+        .init({
+          slug,
+          manifest,
+          initial,
+          authed: Boolean(user),
+          userId: user?.id ?? null,
+          remote,
+        })
+        .then(() => {
+          // init() puts a draft left in this browser in place of `initial`. They have just asked
+          // for this (a trip, say), so the seed goes on top of the old draft, not under it.
+          const editor = useEditor.getState();
+          if (!active || !seed || !seeded || editor.slug !== slug) return;
+          const current = editor.data.fields as Record<string, unknown>;
+          const merged = mergeSeedFields(m.fieldsSchema, current, seed.fields);
+          if (merged && JSON.stringify(merged) !== JSON.stringify(current)) editor.patchFields(merged);
+        });
     });
     return () => {
       active = false;
@@ -205,11 +227,11 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
        * but what people type and upload is somebody's private message, names and photos. Both
        * columns are masked: the recording keeps the clicks and the scrolling and loses the words.
        */}
-      <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]" data-clarity-mask="true">
+      <div className="flex-1 md:grid md:grid-cols-2 lg:grid-cols-[minmax(380px,460px)_minmax(0,1fr)]" data-clarity-mask="true">
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
             {ready && mod ? (
-              <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0">
+              <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>
                   {mod.leadFields ? (
                     <div className="mt-7 border-t border-dashed border-border pt-6">
@@ -231,9 +253,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
             )}
           </div>
         </div>
-        <div className={view === "preview" ? "block" : "hidden md:block"}>
+        <div className={view === "preview" ? "block min-w-0" : "hidden min-w-0 md:block"}>
           <div className="md:sticky md:top-14 md:h-[calc(100dvh-3.5rem)]">
-            <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-8 md:flex">
+            <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-4 md:flex lg:p-8" data-tour="preview">
               <PreviewPane slug={slug} />
             </div>
             {/*

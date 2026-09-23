@@ -35,6 +35,8 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
   const t = await getTranslations();
   const title = t(`seo.occasion.${occasion}.title`);
   const templates = listManifests({ occasion });
+  // What "Free" shows when this occasion has no free template of its own.
+  const alsoFree = listManifests({ tier: "free" }).filter((m) => !m.occasions.includes(occasion));
   const guide = OCCASION_GUIDES[occasion][locale as Locale];
   return (
     <>
@@ -50,7 +52,7 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
         ]}
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
-      <TemplateGallery manifests={templates} occasion={occasion} />
+      <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} />
       <OccasionGuide occasion={occasion} locale={locale as Locale} />
     </>
   );

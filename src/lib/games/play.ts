@@ -1,4 +1,5 @@
-import { KNOW_QUESTIONS, RATHER_PAIRS } from "./content";
+import { KNOW_QUESTIONS, RATHER_PAIRS, type KnowQuestion, type RatherPair } from "./content";
+import type { PackId } from "./packs";
 
 /**
  * The two games that need both people to answer, as pure state and pure moves, so the same code
@@ -11,8 +12,14 @@ export type Player = 0 | 1;
 
 /** For each question each player gives two answers: their own, and their guess at the other's. */
 export type KnowAnswer = { self: number; guess: number };
-/** `gen` counts restarts, so a phone can tell a fresh game from the last one. */
-export type KnowState = { game: "know"; gen: number; round: number; answers: [Record<string, KnowAnswer>, Record<string, KnowAnswer>]; order: string[] };
+/**
+ * `gen` counts restarts, so a phone can tell a fresh game from the last one. A game dealt from a
+ * pack carries its dealt cards: the guest phone has not got the pack, only the host has to.
+ */
+export type KnowState = { game: "know"; gen: number; round: number; answers: [Record<string, KnowAnswer>, Record<string, KnowAnswer>]; order: string[]; pack?: PackId; cards?: KnowQuestion[] };
+
+/** A pack's cards for one of these games, as the host holds them. */
+export type PackDeal<T> = { pack: PackId; cards: T[] };
 
 export const KNOW_ROUNDS = 8;
 
@@ -37,11 +44,13 @@ export function shuffle<T>(items: T[], seed: number): T[] {
 
 export const seedOf = (code: string): number => [...code].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-export function newKnow(seed: number, gen = 0): KnowState {
-  return { game: "know", gen, round: 0, answers: [{}, {}], order: shuffle(KNOW_QUESTIONS, seed + gen * 7919).slice(0, KNOW_ROUNDS).map((q) => q.id) };
+export function newKnow(seed: number, gen = 0, deal: PackDeal<KnowQuestion> | null = null): KnowState {
+  const dealt = shuffle(deal?.cards ?? KNOW_QUESTIONS, seed + gen * 7919).slice(0, KNOW_ROUNDS);
+  const state: KnowState = { game: "know", gen, round: 0, answers: [{}, {}], order: dealt.map((q) => q.id) };
+  return deal ? { ...state, pack: deal.pack, cards: dealt } : state;
 }
 
-export const knowQuestion = (state: KnowState) => KNOW_QUESTIONS.find((q) => q.id === state.order[state.round]) ?? null;
+export const knowQuestion = (state: KnowState) => (state.cards ?? KNOW_QUESTIONS).find((q) => q.id === state.order[state.round]) ?? null;
 export const knowAnswered = (state: KnowState, player: Player): boolean => state.order[state.round] in state.answers[player];
 export const knowRoundDone = (state: KnowState): boolean => knowAnswered(state, 0) && knowAnswered(state, 1);
 export const knowFinished = (state: KnowState): boolean => state.round >= state.order.length;
@@ -76,13 +85,15 @@ export function knowScore(state: KnowState): [number, number] {
 
 /* ------------------------------------------------------------------ would you rather */
 
-export type RatherState = { game: "rather"; gen: number; round: number; picks: [Record<string, 0 | 1>, Record<string, 0 | 1>]; order: string[] };
+export type RatherState = { game: "rather"; gen: number; round: number; picks: [Record<string, 0 | 1>, Record<string, 0 | 1>]; order: string[]; pack?: PackId; cards?: RatherPair[] };
 export const RATHER_ROUNDS = 10;
 
-export function newRather(seed: number, gen = 0): RatherState {
-  return { game: "rather", gen, round: 0, picks: [{}, {}], order: shuffle(RATHER_PAIRS, seed + gen * 7919).slice(0, RATHER_ROUNDS).map((p) => p.id) };
+export function newRather(seed: number, gen = 0, deal: PackDeal<RatherPair> | null = null): RatherState {
+  const dealt = shuffle(deal?.cards ?? RATHER_PAIRS, seed + gen * 7919).slice(0, RATHER_ROUNDS);
+  const state: RatherState = { game: "rather", gen, round: 0, picks: [{}, {}], order: dealt.map((p) => p.id) };
+  return deal ? { ...state, pack: deal.pack, cards: dealt } : state;
 }
-export const ratherPair = (state: RatherState) => RATHER_PAIRS.find((p) => p.id === state.order[state.round]) ?? null;
+export const ratherPair = (state: RatherState) => (state.cards ?? RATHER_PAIRS).find((p) => p.id === state.order[state.round]) ?? null;
 export const ratherPicked = (state: RatherState, player: Player): boolean => state.order[state.round] in state.picks[player];
 export const ratherRoundDone = (state: RatherState): boolean => ratherPicked(state, 0) && ratherPicked(state, 1);
 export const ratherFinished = (state: RatherState): boolean => state.round >= state.order.length;

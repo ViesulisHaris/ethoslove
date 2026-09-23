@@ -72,7 +72,8 @@ test.describe("The Garden", () => {
     await arrive(page, "/es/demo/garden");
     await expect(page.getByRole("button", { name: /abre la verja/i })).toBeVisible({ timeout: 20000 });
     await page.getByRole("button", { name: /abre la verja/i }).click({ force: true });
-    await walkTo(page, page.getByText(/querida ana/i));
+    // The Spanish greeting is "Hola, Ana:" for everyone now (_shared/i18n.ts), not "Querida".
+    await walkTo(page, page.getByText(/hola, ana:/i));
     await expect(page.getByText(/cortadas para ti/i).first()).toBeVisible({ timeout: 15000 });
     noErrors();
   });

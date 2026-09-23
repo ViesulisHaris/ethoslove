@@ -12,7 +12,8 @@ const ink = "#1A1614";
 const coral = "#E8604C";
 const muted = "#6F665F";
 
-export function EmailLayout({ preview, heading, children, cta, footer }: { preview: string; heading: string; children: ReactNode; cta?: { label: string; href: string }; footer: string }) {
+/** `footerLink` is the way out of an optional email (unsubscribe, remove a reminder), kept beside why it was sent. */
+export function EmailLayout({ preview, heading, children, cta, footer, footerLink }: { preview: string; heading: string; children: ReactNode; cta?: { label: string; href: string }; footer: string; footerLink?: { label: string; href: string } }) {
   return (
     <Html>
       <Head />
@@ -35,7 +36,16 @@ export function EmailLayout({ preview, heading, children, cta, footer }: { previ
           ) : null}
           <Hr style={{ borderColor: "#E6DFD4", margin: "32px 0 16px" }} />
           <Text style={{ fontSize: 12, lineHeight: 1.6, color: muted, margin: 0 }}>
-            {footer} · <Link href={EMAIL_BRAND.site} style={{ color: muted }}>{EMAIL_BRAND.site.replace(/^https?:\/\//, "")}</Link>
+            {footer}
+            {footerLink ? (
+              <>
+                {" "}
+                <Link href={footerLink.href} style={{ color: muted, textDecoration: "underline" }}>
+                  {footerLink.label}
+                </Link>
+              </>
+            ) : null}{" "}
+            · <Link href={EMAIL_BRAND.site} style={{ color: muted }}>{EMAIL_BRAND.site.replace(/^https?:\/\//, "")}</Link>
           </Text>
         </Container>
       </Body>
@@ -45,3 +55,15 @@ export function EmailLayout({ preview, heading, children, cta, footer }: { previ
 
 export const P = ({ children }: { children: ReactNode }) => <Text style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.6 }}>{children}</Text>;
 export const Quiet = ({ children }: { children: ReactNode }) => <Text style={{ margin: "0 0 14px", fontSize: 14, lineHeight: 1.6, color: muted }}>{children}</Text>;
+/** A link inside body text, in the ink colour so it reads as part of the sentence. */
+export const InlineLink = ({ href, children }: { href: string; children: ReactNode }) => (
+  <Link href={href} style={{ color: ink, textDecoration: "underline" }}>
+    {children}
+  </Link>
+);
+/** Something to copy exactly: an invite link, a code. */
+export const Mono = ({ children, large = false }: { children: ReactNode; large?: boolean }) => (
+  <Text style={{ margin: "0 0 14px", fontFamily: "ui-monospace, Menlo, monospace", fontSize: large ? 24 : 14, letterSpacing: large ? 3 : 0, lineHeight: 1.5, wordBreak: "break-all", ...(large ? { background: "#FFFFFF", border: "1px solid #E6DFD4", borderRadius: 12, padding: "14px 18px", display: "inline-block" } : {}) }}>
+    {children}
+  </Text>
+);

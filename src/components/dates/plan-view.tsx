@@ -1,17 +1,22 @@
 "use client";
 
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, MapPinned, Navigation, Share2, Sunset, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDay, toYmd } from "@/lib/dates/calendar";
-import { distanceKm, round, walkingMinutes } from "@/lib/dates/geo";
+import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { ideaById } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, removeStop, type Plan } from "@/lib/dates/plan";
+import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, removeStop, stopName, type Plan } from "@/lib/dates/plan";
+import { PLAN_GIFT_SLUG, planGiftFields } from "@/lib/dates/plan-gift";
+import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
+import { saveGiftSeed } from "@/lib/editor/gift-seed";
+import { tiqetsSearch } from "@/lib/trips/partners";
 import { Cutout } from "@/components/marketing/home/cutouts";
+import { PartnerLink } from "@/components/trips/partner-link";
 import { GroupIcon } from "./group-icon";
 import { MapView } from "./map-view";
 import { usePlan } from "./use-plan";
@@ -31,15 +36,20 @@ const readHash = () => window.location.hash;
  */
 export function PlanView() {
   const t = useTranslations("plan");
+  const ta = useTranslations("affiliate");
   const locale = useLocale() === "es" ? "es" : "en";
   const isClient = useSyncExternalStore(noop, () => true, () => false);
   const hash = useSyncExternalStore(subscribeHash, readHash, () => "");
   const [own, updateOwn] = usePlan();
-  const [forecast, setForecast] = useState<Forecast | null>(null);
+  // Kept with the place it is for: when the first stop moves to another town, the last town's
+  // weather is not shown while (or if never) the new one comes.
+  const [forecastFor, setForecastFor] = useState<{ at: string; forecast: Forecast } | null>(null);
   const [copied, setCopied] = useState(false);
-  const [kept, setKept] = useState(false);
+  // Which link was kept, not just "kept": another link opened in this tab later is a new plan to keep.
+  const [keptHash, setKeptHash] = useState<string | null>(null);
 
   const shared = useMemo(() => (hash.startsWith("#p=") ? decodePlan(hash.slice(3)) : null), [hash]);
+  const kept = keptHash === hash;
   const broken = hash.startsWith("#p=") && !shared;
   const plan: Plan = shared ?? own;
   const editable = !shared;
@@ -52,16 +62,19 @@ export function PlanView() {
     const controller = new AbortController();
     fetch(`/api/dates/weather?lat=${lat}&lng=${lng}`, { signal: controller.signal })
       .then((r) => (r.ok ? (r.json() as Promise<Forecast>) : null))
-      .then((json) => json?.days && setForecast(json))
+      .then((json) => json?.days && setForecastFor({ at, forecast: json }))
       .catch(() => undefined);
     return () => controller.abort();
   }, [at, plan.date]);
 
+  const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
   const idea = ideaById(plan.idea);
   const past = Boolean(plan.date && plan.date < toYmd(new Date()));
-  const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: s.name })), [plan.stops]);
-  const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "" }), [t]);
+  const route = useMemo(() => plan.stops.map((s) => ({ lat: s.lat, lng: s.lng, name: stopName(s, locale) })), [plan.stops, locale]);
+  const ticketed = plan.stops.some((s) => sellsTickets(s));
+  // The canvas and the credits' (i) are named by MapLibre in English unless told otherwise.
+  const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "", credits: t("mapCredits"), retry: t("mapRetry") }), [t]);
 
   const link = () => `${window.location.origin}${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
   const copy = async () => {
@@ -136,58 +149,75 @@ export function PlanView() {
             ) : null}
           </p>
         ) : null}
-        {past ? <p className="mt-4 text-[14px] text-forest/55">{t("past")}</p> : null}
+        {past ? <p className="mt-4 text-[14px] text-forest/65">{t("past")}</p> : null}
 
         <ol className="mt-8">
           {plan.stops.map((stop, i) => {
             const group = GROUPS[KINDS[stop.kind].group];
+            const name = stopName(stop, locale);
             const previous = plan.stops[i - 1];
+            const apart = previous ? distanceKm(previous, stop) : null;
             return (
               <li key={stop.id} className="relative pb-7 pl-[58px] last:pb-0">
                 {i < plan.stops.length - 1 ? <span aria-hidden="true" className="absolute top-11 bottom-0 left-[21px] border-l-2 border-dotted border-rose/40" /> : null}
                 <span className="absolute top-0 left-0 grid size-11 place-items-center rounded-full bg-rose text-[15px] font-bold text-white shadow-[0_8px_16px_-8px_rgba(176,36,90,0.8)]">{i + 1}</span>
-                {previous ? <p className="-mt-2 mb-2 text-[11.5px] font-medium tracking-wide text-forest/45 uppercase">{t("walk", { minutes: walkingMinutes(distanceKm(previous, stop)) })}</p> : null}
-                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.color }}>
+                {/* Past a walk, the distance: an old plan with a stop in another city once read "24756 min walk". */}
+                {apart !== null ? <p className="-mt-2 mb-2 text-[11.5px] font-medium tracking-wide text-forest/65 uppercase">{apart <= WALK_KM ? t("walk", { minutes: walkingMinutes(apart) }) : formatDistance(apart, locale)}</p> : null}
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.ink }}>
                   {editable ? (
-                    <input type="time" aria-label={t("timeFor", { name: stop.name })} value={stop.time ?? ""} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time: e.target.value || undefined } : s)) }))} className="h-9 rounded-xl border border-forest/15 bg-white px-2 text-[14px] text-forest tabular-nums outline-none focus:border-rose/50" />
+                    // 16px: iPhone Safari zooms the whole page into any smaller field it focuses.
+                    <input type="time" aria-label={t("timeFor", { name })} value={stop.time ?? ""} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time: e.target.value || undefined } : s)) }))} className="h-11 rounded-xl border border-forest/15 bg-white px-2 text-[16px] text-forest tabular-nums outline-none focus:border-rose/50" />
                   ) : stop.time ? (
                     <span className="text-[15px] text-forest tabular-nums">{stop.time}</span>
                   ) : null}
                   <span className="inline-flex items-center gap-1.5">
                     <GroupIcon group={KINDS[stop.kind].group} className="size-4" />
-                    {KINDS[stop.kind].label[locale]}
+                    {/* A place with no name is called by its kind in the heading below: not twice. */}
+                    {stop.named === false ? null : KINDS[stop.kind].label[locale]}
                   </span>
                 </div>
-                <h2 className="mt-1 font-display text-[23px] leading-tight text-forest">{stop.name}</h2>
+                <h2 className="mt-1 font-display text-[23px] leading-tight text-forest">{name}</h2>
                 {stop.address ? <p className="text-[14px] text-forest/60">{stop.address}</p> : null}
                 {editable ? (
-                  <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name: stop.name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-10 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[14.5px] text-forest outline-none placeholder:text-forest/35 focus:border-rose/50" />
+                  <input value={stop.note ?? ""} maxLength={140} aria-label={t("noteFor", { name })} placeholder={t("stopNotePlaceholder")} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, note: e.target.value || undefined } : s)) }))} className="mt-2 h-11 w-full rounded-xl border border-dashed border-forest/20 bg-transparent px-3 text-[16px] text-ellipsis text-forest outline-none placeholder:text-forest/45 focus:border-rose/50" />
                 ) : stop.note ? (
                   <p className="mt-1.5 font-hand text-[1.45rem] leading-snug text-forest/80">{stop.note}</p>
                 ) : null}
                 <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-                  <a href={`https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-full border border-forest/15 px-3 text-[12.5px] font-semibold text-forest hover:bg-forest/5">
+                  <a href={`https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-3.5 text-[12.5px] font-semibold text-forest hover:bg-forest/5">
                     <Navigation aria-hidden="true" className="size-3.5" />
                     {t("directions")}
                   </a>
+                  {sellsTickets(stop) ? (
+                    <PartnerLink partner="tiqets" placement="plan" href={tiqetsSearch(ticketQuery(name, plan.where), locale)} aria-label={ta("tickets.label", { name })} className="inline-flex h-11 items-center gap-1.5 rounded-full border border-forest/15 px-3.5 text-[12.5px] font-semibold text-forest hover:bg-forest/5">
+                      <Ticket aria-hidden="true" className="size-3.5" />
+                      {ta("tickets.button")}
+                    </PartnerLink>
+                  ) : null}
                   {editable ? (
-                    <>
-                      <button type="button" disabled={i === 0} aria-label={t("moveUp", { name: stop.name })} onClick={() => updateOwn((p) => moveStop(p, stop.id, -1))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-forest hover:bg-forest/5 disabled:opacity-25">
+                    // One group, so on a narrow phone the three wrap together instead of leaving the bin alone on a line.
+                    <div className="flex gap-1.5">
+                      <button type="button" disabled={i === 0} aria-label={t("moveUp", { name })} onClick={() => updateOwn((p) => moveStop(p, stop.id, -1))} className="grid size-11 place-items-center rounded-full border border-forest/15 text-forest hover:bg-forest/5 disabled:opacity-25">
                         <ArrowUp className="size-4" />
                       </button>
-                      <button type="button" disabled={i === plan.stops.length - 1} aria-label={t("moveDown", { name: stop.name })} onClick={() => updateOwn((p) => moveStop(p, stop.id, 1))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-forest hover:bg-forest/5 disabled:opacity-25">
+                      <button type="button" disabled={i === plan.stops.length - 1} aria-label={t("moveDown", { name })} onClick={() => updateOwn((p) => moveStop(p, stop.id, 1))} className="grid size-11 place-items-center rounded-full border border-forest/15 text-forest hover:bg-forest/5 disabled:opacity-25">
                         <ArrowDown className="size-4" />
                       </button>
-                      <button type="button" aria-label={t("removeStop", { name: stop.name })} onClick={() => updateOwn((p) => removeStop(p, stop.id))} className="grid size-9 place-items-center rounded-full border border-forest/15 text-destructive hover:bg-destructive/5">
+                      <button type="button" aria-label={t("removeStop", { name })} onClick={() => updateOwn((p) => removeStop(p, stop.id))} className="grid size-11 place-items-center rounded-full border border-forest/15 text-destructive hover:bg-destructive/5">
                         <Trash2 className="size-4" />
                       </button>
-                    </>
+                    </div>
                   ) : null}
                 </div>
               </li>
             );
           })}
         </ol>
+        {ticketed ? (
+          <p className="mt-4 text-[12px] leading-snug text-forest/60">
+            {ta("tickets.via")} {ta("disclosure")}
+          </p>
+        ) : null}
 
         {editable ? (
           <label className="mt-8 block">
@@ -217,7 +247,7 @@ export function PlanView() {
                 <span aria-live="polite">{copied ? t("send.copied") : t("send.copy")}</span>
               </button>
             </div>
-            <p className="mt-3 text-[12px] leading-snug text-forest/45">{t("send.private")}</p>
+            <p className="mt-3 text-[12px] leading-snug text-forest/65">{t("send.private")}</p>
           </div>
         ) : (
           <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
@@ -228,8 +258,17 @@ export function PlanView() {
                 type="button"
                 disabled={kept}
                 onClick={() => {
+                  // Their own plan in progress is the one thing on this page that cannot be got
+                  // back: ask before a link from somebody else writes over it, as "Clear" does.
+                  const other = own.stops.length > 0 && encodePlan(own) !== encodePlan(plan);
+                  if (other && !window.confirm(t("received.replaceConfirm"))) return;
                   updateOwn(() => ({ ...EMPTY_PLAN, ...plan }));
-                  setKept(true);
+                  setKeptHash(hash);
+                  // Kept, it is theirs: drop the link's copy from the address, so the page shows
+                  // it as their own to edit, and a reload does not offer to keep it again.
+                  // replaceState fires no hashchange, so the page is told by hand.
+                  window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+                  window.dispatchEvent(new HashChangeEvent("hashchange"));
                 }}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream disabled:bg-moss-soft disabled:text-moss"
               >
@@ -244,13 +283,19 @@ export function PlanView() {
           </div>
         )}
 
-        <Link href="/templates" className="group flex items-center gap-4 rounded-[28px] bg-forest p-5 text-cream shadow-soft transition-transform hover:-translate-y-0.5">
+        {/* The plan goes to the editor as the crane's lines, written just before the click navigates so it is always this plan. */}
+        <Link
+          href={`/create/${PLAN_GIFT_SLUG}`}
+          onClick={() => saveGiftSeed({ slug: PLAN_GIFT_SLUG, fields: planGiftFields(plan, locale) })}
+          data-testid="plan-gift"
+          className="group flex items-center gap-4 rounded-[28px] bg-forest p-5 text-cream shadow-soft transition-transform hover:-translate-y-0.5"
+        >
           <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/10">
             <Gift aria-hidden="true" className="size-6" />
           </span>
           <span className="min-w-0 flex-1">
             <span className="block font-display text-[20px] leading-tight">{t("gift.title")}</span>
-            <span className="mt-1 block text-[13.5px] leading-snug text-cream/70">{t("gift.sub")}</span>
+            <span className="mt-1 block text-[13.5px] leading-snug text-cream/70">{ta("planGift.sub")}</span>
           </span>
           <ArrowRight aria-hidden="true" className="size-5 shrink-0 transition-transform group-hover:translate-x-1" />
         </Link>
@@ -260,7 +305,7 @@ export function PlanView() {
             <Link href="/dates" className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
               {t("addMore")}
             </Link>
-            <button type="button" onClick={() => window.confirm(t("clearConfirm")) && updateOwn(() => EMPTY_PLAN)} className="text-[13.5px] text-forest/50 underline-offset-4 hover:text-destructive hover:underline">
+            <button type="button" onClick={() => window.confirm(t("clearConfirm")) && updateOwn(() => EMPTY_PLAN)} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-destructive hover:underline">
               {t("clear")}
             </button>
           </div>

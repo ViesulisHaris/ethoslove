@@ -10,6 +10,22 @@ export function nearestCity<T extends LatLng>(point: LatLng, cities: readonly T[
   return best;
 }
 
+/**
+ * What to call the halfway point: the nearest known city within `maxKm`, "nowhere" when none is
+ * that close (open sea, mostly), or "unnamed" when the nearest one is in a country the site never
+ * names (the owner's rule). Skipping to the next-nearest city there would name the wrong place, so
+ * the caller says how far each of them travels instead.
+ */
+export function halfwayPlace<T extends LatLng & { country: string }>(
+  point: LatLng,
+  cities: readonly T[],
+  { maxKm, neverNamed }: { maxKm: number; neverNamed: ReadonlySet<string> },
+): { city: T; km: number } | "nowhere" | "unnamed" {
+  const near = nearestCity(point, cities);
+  if (!near || near.km > maxKm) return "nowhere";
+  return neverNamed.has(near.city.country) ? "unnamed" : near;
+}
+
 /** People are reachable from eight in the morning until eleven at night, their own time. */
 const AWAKE_FROM = 8 * 60;
 const AWAKE_TO = 23 * 60;

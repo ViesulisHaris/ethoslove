@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SITE } from "@/config/site";
-import { currencyFor, type Currency } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, type Currency } from "@/lib/pricing/products";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { stripeReady } from "@/lib/stripe/server";
-import { listManifests } from "@/templates/manifests";
+import { isTemplateSlug, listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
-import { PricingCards } from "@/components/pricing/pricing-cards";
-import { ForTwo } from "@/components/pricing/for-two";
+import { PricingOffers } from "@/components/pricing/pricing-offers";
+import { FreeForever } from "@/components/pricing/for-two";
+import { pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/pricing">, "searchParams">): Promise<Metadata> {
@@ -17,13 +18,24 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/pri
   return pageMetadata({ locale, path: "/pricing", title: t("seo.pricingTitle"), description: t("pricing.subtitle") });
 }
 
+const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+
 export default async function PricingPage({ params, searchParams }: PageProps<"/[locale]/pricing">) {
   const { locale } = await params;
-  const { template, return: returnTo, currency: qCurrency } = await searchParams;
+  const query = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("pricing");
-  const currency: Currency = qCurrency === "eur" || qCurrency === "gbp" || qCurrency === "usd" ? qCurrency : currencyFor(locale === "es" ? "ES" : "US");
-  const faq = t.raw("faq") as { q: string; a: string }[];
+  const qCurrency = one(query.currency);
+  // Only a currency checkout charges in: showing £ for a sale Stripe then takes in € would make the
+  // price on the page something other than the price paid.
+  const currency: Currency = CHARGED_CURRENCIES.find((c) => c === qCurrency) ?? currencyFor(locale === "es" ? "ES" : "US");
+  const giftCards = giftCardsOnSale();
+  // A question about something not on sale (the gift card, while it's off) isn't asked here.
+  const faq = pricingFaq(t.raw("faq") as FaqItem[], { giftCards });
+  // A slug that isn't a template would sit in the picker unseen, taking one of the three places.
+  const qTemplate = one(query.template);
+  const template = qTemplate && isTemplateSlug(qTemplate) ? qTemplate : undefined;
+  const returnTo = one(query.return);
 
   return (
     <>
@@ -37,17 +49,21 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
         ]}
       />
       <PageHeader eyebrow={t("eyebrow")} title={t("title")} subtitle={t("subtitle")} />
-      <ForTwo />
       <section className="container-x pb-6">
-        <PricingCards
+        <PricingOffers
           currency={currency}
           manifests={listManifests()}
-          authed={false}
           paymentsEnabled={stripeReady()}
-          preselect={typeof template === "string" ? template : undefined}
-          returnTo={typeof returnTo === "string" ? returnTo : undefined}
+          giftCards={giftCards}
+          preselect={template}
+          openPick3={one(query.plan) === "pick3" && Boolean(template)}
+          renewPass={one(query.renew) === "pass"}
+          returnTo={returnTo ? safeReturnPath(returnTo, "/dashboard") : undefined}
         />
         <p className="mt-8 text-center text-sm text-muted-foreground">{t("freeNote")}</p>
+      </section>
+      <section className="container-x pt-10">
+        <FreeForever />
       </section>
       <section className="container-narrow py-20">
         <h2 className="display-md mb-8">{t("faqTitle")}</h2>

@@ -62,6 +62,9 @@ export function hoursOn(raw: string | undefined, weekday: number): DayHours {
   if (text === "24/7") return { known: true, ranges: [[0, 24 * 60]] };
   let result: DayHours = { known: true, ranges: [] };
   let matched = false;
+  // Whether any rule named a weekday at all. "PH off" (shut on public holidays) names none, and
+  // says nothing about a Saturday: read as "no rule for this day", it closed the place all week.
+  let namedDays = false;
   for (const ruleText of text.split(";")) {
     const rule = ruleText.trim();
     if (!rule) continue;
@@ -73,6 +76,7 @@ export function hoursOn(raw: string | undefined, weekday: number): DayHours {
     const rest = startsWithDay ? rule.slice(head.length).trim() : rule;
     const days = selector ? daysOf(selector) : [0, 1, 2, 3, 4, 5, 6];
     if (days === null) return UNKNOWN;
+    if (days.length > 0) namedDays = true;
     if (rest === "off" || rest === "closed") {
       if (days.includes(weekday)) {
         result = { known: true, ranges: [] };
@@ -89,7 +93,8 @@ export function hoursOn(raw: string | undefined, weekday: number): DayHours {
     }
   }
   // Rules that never mention this weekday mean it is shut ("Mo-Fr …" on a Sunday).
-  return matched ? result : { known: true, ranges: [] };
+  if (matched) return result;
+  return namedDays ? { known: true, ranges: [] } : UNKNOWN;
 }
 
 export function isOpenAt(hours: DayHours, minuteOfDay: number): boolean | null {

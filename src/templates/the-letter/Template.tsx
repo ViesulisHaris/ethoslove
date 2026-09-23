@@ -7,6 +7,7 @@ import { ChevronDown } from "lucide-react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { initialOf } from "@/lib/gift/graphemes";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -116,7 +117,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const fields = data.fields;
   const palette = PAPER[fields.paper] ?? PAPER.cream;
-  const sealInitial = (fields.sealInitial || data.senderName.charAt(0) || "♥").toUpperCase();
+  const sealInitial = fields.sealInitial ? fields.sealInitial.toUpperCase() : initialOf(data.senderName, "♥");
   const greeting = fields.greeting || t("dear", { name: data.recipientName });
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const s = S[data.locale] ?? S.en;

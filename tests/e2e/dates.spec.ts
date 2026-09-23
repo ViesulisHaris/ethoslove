@@ -255,7 +255,9 @@ test.describe("a plan in a link", () => {
     expect(new URL(page.url()).search).toBe("");
 
     await page.getByRole("button", { name: "Keep this plan" }).click();
-    await expect(page.getByRole("button", { name: "Kept on this device" })).toBeDisabled();
+    // Kept, it is theirs: the link's copy leaves the address and the plan opens as their own to edit.
+    await expect(page.getByLabel("Who is it for?")).toHaveValue("Maya");
+    expect(new URL(page.url()).hash).toBe("");
     await page.goto("/plan");
     await expect(page.getByLabel("Who is it for?")).toHaveValue("Maya");
     await expect(page.getByRole("heading", { level: 2, name: "Gelados Santini" })).toBeVisible();
