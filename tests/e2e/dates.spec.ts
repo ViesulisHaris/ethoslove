@@ -28,7 +28,14 @@ const PLACES: Mock[] = [
   { id: "node/106", name: "Taberna Boa Noite", kind: "restaurant", group: "eat", dLat: 0.0005, dLng: -0.002, score: 70 },
   { id: "node/107", name: "Museu do Fado Pequeno", kind: "museum", group: "culture", dLat: 0.003, dLng: 0.0005, score: 74 },
   { id: "node/108", name: "Bar do Rio", kind: "bar", group: "eat", dLat: -0.0015, dLng: -0.0015, score: 60 },
+  // Places with a story: their names say so, in English and in Portuguese.
+  { id: "node/109", name: "Cellar Door", kind: "bar", group: "eat", dLat: 0.0012, dLng: -0.0025, score: 58 },
+  { id: "node/110", name: "Red Frog Speakeasy", kind: "bar", group: "eat", dLat: -0.0022, dLng: 0.0024, score: 57 },
+  { id: "node/111", name: "Limão Rooftop Bar", kind: "bar", group: "eat", dLat: 0.0026, dLng: -0.0006, score: 56 },
+  { id: "node/112", name: "Tasca do Chico (Casa de Fado)", kind: "restaurant", group: "eat", dLat: -0.0006, dLng: -0.0028, score: 55 },
 ];
+/** The places above whose names make them "something different", and the bowling alley the rare finds add. */
+const UNUSUAL = ["Cellar Door", "Red Frog Speakeasy", "Limão Rooftop Bar", "Tasca do Chico (Casa de Fado)", "Bowling Alvalade"];
 const toPlace = (p: Mock) => ({ id: p.id, name: p.name, named: true, kind: p.kind, group: p.group, lat: LISBON.lat + p.dLat, lng: LISBON.lng + p.dLng, distanceKm: 0.2, cuisine: [], outdoorSeating: false, vegetarian: false, stepFree: false, notable: false, score: p.score });
 
 async function mockWorld(page: Page, { wet = false }: { wet?: boolean } = {}) {
@@ -149,7 +156,7 @@ test.describe("finding a date", () => {
     const shop = page.getByRole("button", { name: /^Livraria do Bairro/ });
     await expect(shop).toBeVisible();
     // The rated bookshop leads the top picks, and its card shows the stars.
-    await expect(page.getByRole("region", { name: /Top picks/ }).getByText("#1")).toBeVisible();
+    await expect(page.getByRole("region", { name: /Top picks/ }).getByText("#1", { exact: true })).toBeVisible();
     await expect(page.getByText("4.5", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("2 reviews").first()).toBeVisible();
     // A place nobody has rated shows where it stands in its group instead.
@@ -226,6 +233,78 @@ test.describe("finding a date", () => {
     await expect(page.getByText("3 places")).toBeVisible();
     await page.getByRole("button", { name: "All", exact: true }).click();
     await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toBeVisible();
+  });
+
+  test("something different: a shelf of places with a story, and a chip that keeps only them in the list and on the map", async ({ page, isMobile }) => {
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    const shelf = page.getByRole("region", { name: "Something different in Lisbon" });
+    await expect(shelf).toBeVisible();
+    await expect(shelf).toContainText("Hidden bars, rooftops, cellars and other places with a story.");
+    // Each card says what makes it different, on its picture.
+    await expect(shelf.getByRole("button", { name: /^Speakeasy.*Red Frog Speakeasy/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^Rooftop.*Limão Rooftop Bar/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^Underground.*Cellar Door/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^Live music.*Casa de Fado/ })).toBeVisible();
+    // A plain café is not on it.
+    await expect(shelf.getByRole("button", { name: /Café da Esquina/ })).toHaveCount(0);
+    // The list's card says it too.
+    await expect(page.locator(".place-card-in").filter({ hasText: "Cellar Door" })).toContainText("Underground");
+    await expect(page.locator(".place-card-in").filter({ hasText: "Taberna Boa Noite" })).not.toContainText("Underground");
+    // The rare find joins the list before the chip is pressed.
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
+
+    const filters = page.getByRole("group", { name: "Kind of place" });
+    const chip = filters.getByRole("button", { name: "Something different", exact: true });
+    await expect(chip).toHaveAttribute("aria-pressed", "false");
+    await chip.click();
+    await expect(chip).toHaveAttribute("aria-pressed", "true");
+    await expect(filters.getByRole("button", { name: "All", exact: true })).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByText(`${UNUSUAL.length} places`)).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Cellar Door/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /^Livraria do Bairro/ })).toHaveCount(0);
+    if (!isMobile) {
+      // The map keeps the same places: every pin left is one of them.
+      await expect(page.getByRole("application", { name: "Map of places for a date" })).toHaveAttribute("data-map-state", "ready", { timeout: 20_000 });
+      await expect.poll(async () => {
+        const names = await page.locator(".ethos-pin:not(.is-out) .ethos-pin-text").allTextContents();
+        return names.length > 0 && names.every((n) => UNUSUAL.includes(n));
+      }).toBe(true);
+    }
+    // With a group as well, the two narrow each other.
+    await filters.getByRole("button", { name: "Play", exact: true }).click();
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Cellar Door/ })).toHaveCount(0);
+    // "All" lets everything back.
+    await filters.getByRole("button", { name: "All", exact: true }).click();
+    await expect(chip).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toBeVisible();
+
+    // Opened from the shelf, the place's sheet says what makes it different.
+    await shelf.getByRole("button", { name: /Red Frog Speakeasy/ }).click();
+    const sheet = page.getByRole("dialog", { name: "Red Frog Speakeasy" });
+    await expect(sheet).toContainText("Speakeasy");
+  });
+
+  test("something different, in Spanish", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto(`/es${lisbonUrl}`);
+    const shelf = page.getByRole("region", { name: "Algo diferente en Lisbon" });
+    await expect(shelf).toBeVisible();
+    await expect(shelf).toContainText("Bares escondidos, azoteas, sótanos y otros sitios con historia.");
+    await expect(shelf.getByRole("button", { name: /^Bar escondido.*Red Frog Speakeasy/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^En la azotea.*Limão Rooftop Bar/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^Bajo tierra.*Cellar Door/ })).toBeVisible();
+    await expect(shelf.getByRole("button", { name: /^Música en directo/ })).toBeVisible();
+    const chip = page.getByRole("group", { name: "Tipo de sitio" }).getByRole("button", { name: "Algo diferente", exact: true });
+    await chip.click();
+    await expect(chip).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toHaveCount(0);
+    // The last set of cards fades out over the new one; once it has gone, the card says it in Spanish.
+    const card = page.locator(".place-card-in").filter({ hasText: "Red Frog Speakeasy" });
+    await expect(card).toHaveCount(1);
+    await expect(card).toContainText("Bar escondido");
   });
 
   test("the map draws, on a phone behind its button", async ({ page, isMobile }) => {

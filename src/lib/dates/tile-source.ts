@@ -2,8 +2,7 @@ import "server-only";
 
 import { VectorTile } from "@mapbox/vector-tile";
 import { PbfReader } from "pbf";
-import { kindOfPoi } from "./kinds";
-import { POI_ZOOM, type PoiFeature, type TileXY } from "./tiles";
+import { keepsPoi, POI_ZOOM, type PoiFeature, type TileXY } from "./tiles";
 
 const TILEJSON_URL = "https://tiles.openfreemap.org/planet";
 const USER_AGENT = "Ethos/1.0 (+https://tryethos.io)";
@@ -56,7 +55,7 @@ export async function poisOfTile(tile: TileXY): Promise<TileResult> {
     const features: PoiFeature[] = [];
     for (let i = 0; i < (layer?.length ?? 0); i++) {
       const f = layer.feature(i);
-      if (f.type !== 1 || !kindOfPoi(f.properties.subclass)) continue;
+      if (f.type !== 1 || !keepsPoi(f.properties.subclass)) continue;
       const point = f.loadGeometry()[0]?.[0];
       if (!point) continue;
       const properties: Record<string, unknown> = {};

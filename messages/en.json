@@ -1502,6 +1502,13 @@
       "previous": "Earlier picks",
       "next": "More picks"
     },
+    "unusual": {
+      "title": "Something different in {place}",
+      "sub": "Hidden bars, rooftops, cellars and other places with a story.",
+      "chip": "Something different",
+      "previous": "Earlier finds",
+      "next": "More finds"
+    },
     "sort": {
       "label": "Sort by",
       "best": "Best for a date",

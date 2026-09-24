@@ -3,6 +3,7 @@ import { distanceKm } from "./geo";
 import { GROUP_IDS, type PlaceGroup } from "./kinds";
 import { RARE_CAP } from "./overpass";
 import { SEARCH_PER_GROUP, type Place } from "./places";
+import { UNUSUAL_EXTRA } from "./unusual";
 
 /** What couples have said about a place, summed up. */
 export type Rating = { stars: number; reviews: number; cost: number | null };
@@ -14,7 +15,7 @@ export type Ratings = Record<string, Rating>;
  * the ones cut (the last in alphabetical order, every place mapped as an area, "way/…") never got
  * their stars.
  */
-export const MAX_RATED_PLACES = GROUP_IDS.length * SEARCH_PER_GROUP + RARE_CAP;
+export const MAX_RATED_PLACES = GROUP_IDS.length * SEARCH_PER_GROUP + UNUSUAL_EXTRA + RARE_CAP;
 
 export type Sort = "best" | "rated" | "nearest" | "cheapest";
 export const SORTS: Sort[] = ["best", "rated", "nearest", "cheapest"];

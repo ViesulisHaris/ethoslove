@@ -1,3 +1,6 @@
+import { kindOf } from "./kinds";
+import { quirkOfTags, type Quirk } from "./unusual";
+
 /**
  * What is worth knowing about one place before going: where exactly, when it is open, how to book.
  * Looked up when somebody opens a place, from OpenStreetMap through Nominatim, and shown as it is
@@ -19,6 +22,8 @@ export type PlaceDetails = {
   description?: string;
   /** Its Wikidata item ("Q42"), which is how its photograph is found. */
   wikidata?: string;
+  /** A cellar, a roof, a lighthouse: what the full tags say that the list's name didn't. */
+  quirk?: Quirk;
 };
 
 export const isPlaceId = (id: string): boolean => /^(node|way|relation)\/\d{1,15}$/.test(id);
@@ -48,6 +53,8 @@ export function detailsFromTags(id: string, tags: Record<string, string | undefi
   const street = tags["addr:street"];
   const line = street ? [tags["addr:housenumber"] ? `${street} ${tags["addr:housenumber"]}` : street, tags["addr:city"]].filter(Boolean).join(", ") : undefined;
   const description = (tags.description ?? "").trim();
+  const kind = kindOf(tags);
+  const quirk = kind ? quirkOfTags(tags, kind) : null;
   return {
     id,
     address: address || line,
@@ -61,10 +68,11 @@ export function detailsFromTags(id: string, tags: Record<string, string | undefi
     notable: Boolean(tags.wikidata || tags.wikipedia),
     wikidata: /^Q[1-9]\d{0,11}$/.test(tags.wikidata ?? "") ? tags.wikidata : undefined,
     description: description ? (description.length > 220 ? `${description.slice(0, 217).trimEnd()}…` : description) : undefined,
+    ...(quirk ? { quirk } : {}),
   };
 }
 
-type NominatimResult = { osm_type?: string; osm_id?: number; address?: Record<string, string>; extratags?: Record<string, string> | null };
+type NominatimResult = { osm_type?: string; osm_id?: number; category?: string; type?: string; name?: string; address?: Record<string, string>; extratags?: Record<string, string> | null };
 
 /** A street address the way it is written locally enough to find the door: "Rua X 12, Bairro Alto, Lisbon". */
 export function addressLine(address: Record<string, string> | undefined): string | undefined {
@@ -82,7 +90,9 @@ export function parseNominatim(json: unknown, id: string): PlaceDetails | null {
   const wanted = nominatimIdOf(id);
   const hit = (json as NominatimResult[]).find((r) => r && typeof r.osm_id === "number" && `${(r.osm_type ?? "")[0]?.toUpperCase()}${r.osm_id}` === wanted);
   if (!hit) return null;
-  return detailsFromTags(id, hit.extratags ?? {}, addressLine(hit.address));
+  // Nominatim keeps what the place is (amenity=bar) apart from its other tags; put it back to read them.
+  const main = hit.category && hit.type ? { [hit.category]: hit.type } : {};
+  return detailsFromTags(id, { ...(hit.extratags ?? {}), ...main, ...(hit.name ? { name: hit.name } : {}) }, addressLine(hit.address));
 }
 
 export function parseOverpassOne(json: unknown, id: string): PlaceDetails | null {

@@ -1,6 +1,7 @@
 import { distanceKm, type LatLng } from "./geo";
 import { KINDS, kindOf, type PlaceGroup, type PlaceKind } from "./kinds";
 import type { PlacePhoto } from "./photos";
+import { quirkOfTags, type Quirk } from "./unusual";
 
 /** One place worth going to, as the pages use it. Everything here came off the map; nothing is invented. */
 export type Place = {
@@ -31,6 +32,8 @@ export type Place = {
   /** A line about it, and where that line came from. */
   about?: string;
   articleUrl?: string;
+  /** What its OpenStreetMap tags say makes it out of the ordinary (a cellar, a roof), when we had its tags. */
+  quirk?: Quirk;
 };
 
 type Element = { type: string; id: number; lat?: number; lon?: number; center?: { lat: number; lon: number }; tags?: Record<string, string> };
@@ -98,6 +101,7 @@ export function parseOverpass(json: unknown, center: LatLng, radiusM: number, ki
     if (seen.has(key)) continue;
     seen.add(key);
     const km = distanceKm(center, { lat, lng });
+    const quirk = quirkOfTags(tags, kind);
     places.push({
       id: `${el.type}/${el.id}`,
       name: ownName || kindLabel(kind),
@@ -117,6 +121,7 @@ export function parseOverpass(json: unknown, center: LatLng, radiusM: number, ki
       stepFree: tags.wheelchair === "yes",
       notable: Boolean(tags.wikidata || tags.wikipedia),
       score: scorePlace(tags, kind, km, radiusM / 1000),
+      ...(quirk ? { quirk } : {}),
     });
   }
   return places.sort((a, b) => b.score - a.score || a.distanceKm - b.distanceKm || a.id.localeCompare(b.id));

@@ -7,21 +7,23 @@ import { formatStars } from "@/lib/dates/format";
 import { formatDistance, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import type { Ranked } from "@/lib/dates/rank";
+import { isTold, type Unusual } from "@/lib/dates/unusual";
 import { CostChip } from "./cost-chip";
 import { GroupIcon } from "./group-icon";
 import { usePhoto } from "./photo-store";
 import { PlaceThumb } from "./place-thumb";
+import { QuirkBadge } from "./quirk-icon";
 import { Stars } from "./stars";
 
 export type PlaceCardLabels = { add: string; remove: string; walk: (minutes: number) => string; free: string; photo: string; reviews: (n: number) => string; rank: (n: number, of: number, group: string) => string };
 
-type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void; /** Its pin is being pointed at on the map. */ hovered?: boolean; /** Place in the list, for the stagger as cards arrive. */ index?: number };
+type Props = { place: Ranked; locale: "en" | "es"; labels: PlaceCardLabels; selected: boolean; inPlan: boolean; onOpen: () => void; onHover: (on: boolean) => void; onTogglePlan: () => void; /** Its pin is being pointed at on the map. */ hovered?: boolean; /** Place in the list, for the stagger as cards arrive. */ index?: number; /** What makes it out of the ordinary, if anything (unusual.ts). */ unusual?: Unusual };
 
 const STAGGERED = 8;
 const STAGGER_MS = 35;
 
 /** One place in the list: its picture, what it is, how far, and a button to put it in the plan. */
-export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onHover, onTogglePlan, hovered = false, index = 0 }: Props) {
+export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onHover, onTogglePlan, hovered = false, index = 0, unusual }: Props) {
   const group = GROUPS[place.group];
   const info = KINDS[place.kind];
   const real = Boolean(usePhoto(place.id) ?? place.photo);
@@ -60,6 +62,8 @@ export function PlaceCard({ place, locale, labels, selected, inPlan, onOpen, onH
         <span className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-forest/65">
           <CostChip cost={place.cost} locale={locale} reported={place.rating?.cost !== null && place.rating?.cost !== undefined} />
           <span>{place.distanceKm <= WALK_KM ? labels.walk(walkingMinutes(place.distanceKm)) : formatDistance(place.distanceKm, locale)}</span>
+          {/* Only what the name or the map says: "Karaoke" on a karaoke bar would say it twice. */}
+          {isTold(unusual) ? <QuirkBadge quirk={unusual.quirk} locale={locale} className="h-6 bg-rose-mist px-2 text-[11.5px] text-rose-ink" /> : null}
           {real ? (
             <span className="inline-flex items-center gap-1 text-[11.5px] text-forest/65">
               <Camera aria-hidden="true" className="size-3" />

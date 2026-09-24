@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps } from "react";
 import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
-import { ArrowRight, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
+import { ArrowRight, CloudOff, List, Map as MapIcon, Sparkles, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
 import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
 import { mergePlaces } from "@/lib/dates/tiles";
+import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/dates/unusual";
 import { suggestTimes } from "@/lib/dates/timing";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
@@ -37,6 +38,7 @@ import { PlaceCard } from "./place-card";
 import { PlaceSheet } from "./place-sheet";
 import { SortMenu, type SortLabels } from "./sort-menu";
 import { TopPicks } from "./top-picks";
+import { UnusualShelf } from "./unusual-shelf";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 import { WhenPicker } from "./when-picker";
@@ -125,6 +127,8 @@ export function DatesExplorer() {
   // The forecast couldn't be had (the weather service timed out): said, instead of "Checking…" for ever.
   const [forecastFailed, setForecastFailed] = useState(false);
   const [groups, setGroups] = useState<PlaceGroup[]>([]);
+  // "Something different": only the places with a story (unusual.ts), whatever their group.
+  const [oddOnly, setOddOnly] = useState(false);
   const [costs, setCosts] = useState<Cost[]>([]);
   const [sort, setSort] = useState<Sort>("best");
   const [ratings, setRatings] = useState<Ratings>({});
@@ -443,7 +447,16 @@ export function DatesExplorer() {
     const matching = ranked.filter((p) => fitsVibe(p, vibe));
     return matching.length > 0 ? matching : ranked;
   }, [ranked, vibe]);
-  const visible = useMemo(() => inVibe.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost))), [inVibe, groups, costs]);
+  // Which places are out of the ordinary, and why: judged once per set of places, not per render.
+  const found = useMemo(() => unusualIndex(all), [all]);
+  const visible = useMemo(() => {
+    const shown = inVibe.filter((p) => (groups.length === 0 || groups.includes(p.group)) && (costs.length === 0 || costs.includes(p.cost)) && (!oddOnly || found.has(p.id)));
+    // In "Something different", best for a date means the places whose name or map says what makes
+    // them different come first; the escape rooms and ice rinks follow. Otherwise the category led
+    // with the Play filter's places, twenty escape rooms before the first cellar bar.
+    if (!oddOnly || sort !== "best") return shown;
+    return shown.sort((a, b) => (found.get(b.id)?.strength ?? 0) - (found.get(a.id)?.strength ?? 0));
+  }, [inVibe, groups, costs, oddOnly, found, sort]);
   // The list keeps the order its set arrived in. What lands after it (couples' ratings, the
   // photographs, a rare find) fills in what the cards say but moves none of them: re-ranked on the
   // spot, the card being read slid away down the list seconds after the list had settled. A place
@@ -458,7 +471,25 @@ export function DatesExplorer() {
       .map(({ p }) => p);
   }, [visible, listOrder]);
   const picks = useMemo(() => topPicks(inVibe), [inVibe]);
+  const listUp = status === "ready" || (status === "loading" && all.length > 0);
+  const pickIds = useMemo(() => new Set(picks.map((p) => p.id)), [picks]);
+  const oddPicks = useMemo(() => unusualPicks(inVibe, found, UNUSUAL_SHELF, pickIds), [inVibe, found, pickIds]);
+  // The shelf of unusual places is chosen when an answer arrives (or the mood changes) and keeps its
+  // cards: a rare find landing seconds later joins its end, and one too few to show when the list
+  // came never pops in above a list somebody is already reading.
+  const [shelf, setShelf] = useState<{ of: Place[] | null; vibe: Vibe | null; ids: string[] }>({ of: null, vibe: null, ids: [] });
+  if (listUp && (shelf.of !== places || shelf.vibe !== vibe)) setShelf({ of: places, vibe, ids: oddPicks.map((p) => p.id) });
+  const shelfPicks = useMemo(() => {
+    if (shelf.ids.length < MIN_UNUSUAL) return [];
+    const byId = new Map(inVibe.map((p) => [p.id, p]));
+    const kept = shelf.ids.flatMap((id) => {
+      const p = byId.get(id);
+      return p && found.has(id) ? [p] : [];
+    });
+    return unusualPicks(inVibe, found, UNUSUAL_SHELF, pickIds, kept);
+  }, [shelf.ids, inVibe, found, pickIds]);
   const counts = useMemo(() => Object.fromEntries(GROUP_IDS.map((g) => [g, all.filter((p) => p.group === g).length])) as Record<PlaceGroup, number>, [all]);
+  const oddCount = found.size;
   const selected = selectedId ? (ranked.find((p) => p.id === selectedId) ?? null) : null;
   // A place opened over another (a pairing from inside the sheet) swaps what the sheet shows in
   // place, with a fade; only a sheet opening from nothing slides in. Worked out while rendering,
@@ -718,6 +749,7 @@ export function DatesExplorer() {
       onClose={() => setSelectedId(null)}
       swipe={!isDesktop}
       entrance={sheetOf.swapped ? "swap" : "open"}
+      quirk={found.get(selected.id)?.quirk}
       // Over a phone's map, shorter than over the list: the place that was tapped stays in view above it.
       className={phoneMap ? "max-h-[62dvh]" : undefined}
       labels={{
@@ -892,7 +924,10 @@ export function DatesExplorer() {
         ) : null}
 
         {/* the best bets, as a shelf */}
-        {(status === "ready" || (status === "loading" && all.length > 0)) && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
+        {listUp && !idea ? <TopPicks picks={picks} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("picks.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("picks.sub"), reviews: (n) => t("reviews.count", { n }), noReviews: t("reviews.noneShort"), previous: t("picks.previous"), next: t("picks.next") }} /> : null}
+
+        {/* the places with a story, as a shelf of their own */}
+        {listUp && !idea ? <UnusualShelf picks={shelfPicks} found={found} locale={locale} selectedId={selectedId} onOpen={open} onHover={setHoveredId} labels={{ title: t("unusual.title", { place: where.name && shareable ? where.name : t("picks.here") }), sub: t("unusual.sub"), reviews: (n) => t("reviews.count", { n }), walk: (m) => t("place.walk", { minutes: m }), previous: t("unusual.previous"), next: t("unusual.next") }} /> : null}
 
         {/* places */}
         <div className="mt-9 flex items-end justify-between gap-4">
@@ -921,8 +956,23 @@ export function DatesExplorer() {
           </div>
         </div>
         <div className="scrollbar-none -mx-5 mt-3 flex gap-1.5 overflow-x-auto px-5 pb-1 sm:-mx-8 sm:px-8 lg:-mx-6 lg:flex-wrap lg:px-6" role="group" aria-label={t("places.filter")}>
-          <button type="button" aria-pressed={groups.length === 0} onClick={() => { if (groups.length > 0) nextList(); setGroups([]); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
+          <button type="button" aria-pressed={groups.length === 0 && !oddOnly} onClick={() => { if (groups.length > 0 || oddOnly) nextList(); setGroups([]); setOddOnly(false); setShown(PAGE); }} className={cn("h-11 shrink-0 rounded-full px-4 text-[13.5px] font-semibold transition-colors lg:h-10", groups.length === 0 && !oddOnly ? "bg-forest text-cream" : "bg-white text-forest/75 ring-1 ring-forest/10 hover:bg-forest/5")}>
             {t("places.all")}
+          </button>
+          {/* A category across the groups, the way Airbnb's "OMG!" is: a cellar bar, a rooftop, a planetarium. */}
+          <button
+            type="button"
+            aria-pressed={oddOnly}
+            disabled={oddCount === 0 && !oddOnly}
+            onClick={() => {
+              setOddOnly(!oddOnly);
+              setShown(PAGE);
+              nextList();
+            }}
+            className={cn("inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-[13.5px] font-semibold ring-1 transition-colors disabled:opacity-35 lg:h-10", oddOnly ? "bg-rose-deep text-white ring-transparent" : "bg-white text-rose-deep ring-forest/10 hover:bg-rose-mist")}
+          >
+            <Sparkles aria-hidden="true" className="size-4" />
+            {t("unusual.chip")}
           </button>
           {GROUP_IDS.map((g) => {
             const on = groups.includes(g);
@@ -1006,6 +1056,7 @@ export function DatesExplorer() {
               onOpen={() => open(place.id)}
               onHover={(on) => setHoveredId(on ? place.id : null)}
               onTogglePlan={() => togglePlan(place)}
+              unusual={found.get(place.id)}
               labels={{ add: t("place.add"), remove: t("place.remove"), walk: (m) => t("place.walk", { minutes: m }), free: t("place.free"), photo: t("place.photo"), reviews: (n) => t("reviews.count", { n }), rank: (n, of, group) => t("place.rank", { n, of, group }) }}
             />
           ))}

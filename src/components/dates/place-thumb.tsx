@@ -16,7 +16,7 @@ import { requestPhoto, usePhoto } from "./photo-store";
  * colour with its glyph on top, which reads as "a café" and never as "this café". `width` is how
  * wide it is drawn, in CSS pixels: the photograph is fetched at the Wikimedia size that fits it.
  */
-export function PlaceThumb({ place, className, eager = false, width = 104 }: { place: Place; className?: string; eager?: boolean; width?: number }) {
+export function PlaceThumb({ place, className, eager = false, width = 104, glyph }: { place: Place; className?: string; eager?: boolean; width?: number; /** Drawn on the tile in place of the group's glyph (a shelf of quirks shows the quirk). */ glyph?: React.ReactNode }) {
   const holder = useRef<HTMLSpanElement>(null);
   const stored = usePhoto(place.id);
   // A thumbnail Wikimedia won't serve (a 404, or a rate-limit page the browser blocks) left an
@@ -56,7 +56,7 @@ export function PlaceThumb({ place, className, eager = false, width = 104 }: { p
           <img src={kindImage(place.kind, place.id)} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full scale-110 object-cover opacity-55 blur-[1.5px] saturate-[0.7]" />
           <span className="absolute inset-0 mix-blend-multiply" style={{ backgroundColor: group.color, opacity: 0.42 }} />
           <span className="absolute inset-0 grid place-items-center text-white drop-shadow-[0_2px_6px_rgba(40,10,25,0.45)]">
-            <GroupIcon group={place.group} className="size-[38%] max-h-9 max-w-9" />
+            {glyph ?? <GroupIcon group={place.group} className="size-[38%] max-h-9 max-w-9" />}
           </span>
         </>
       )}
