@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { TemplateManifest } from "@/templates/types";
 import { useEditor } from "@/lib/editor/store";
 import { allTimezones, isoToWallTime, wallTimeToIso } from "@/lib/editor/time";
@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DateTimeFields } from "@/components/pickers/date-time-fields";
+import { useToday } from "@/components/pickers/use-today";
 import { Field, PremiumBadge, SectionHeader, Segmented } from "../field";
 
 function Toggle({ label, help, checked, onChange, premium }: { label: string; help?: string; checked: boolean; onChange: (v: boolean) => void; premium?: string }) {
@@ -57,6 +59,9 @@ export function ExtrasSection({ manifest }: { manifest: TemplateManifest }) {
   const setRemoveWatermark = useEditor((s) => s.setRemoveWatermark);
   const premium = t("premiumBadge");
   const tz = schedule.timezone;
+  const locale = useLocale() === "es" ? "es" : "en";
+  // A countdown and a reveal are both still to come: no day before today.
+  const today = useToday();
 
   const nextWeek = () => {
     const d = new Date(Date.now() + 7 * 864e5);
@@ -81,17 +86,19 @@ export function ExtrasSection({ manifest }: { manifest: TemplateManifest }) {
               <Field id="countdownLabel" label={t("countdownLabel")}>
                 <Input id="countdownLabel" value={data.countdown.label ?? ""} maxLength={80} placeholder={t("countdownLabelPlaceholder")} onChange={(e) => patch({ countdown: { ...data.countdown!, label: e.target.value } })} className="h-11" />
               </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
+              {/* One above the other: the day and the time need the card's whole width in the editor's column. */}
+              <div className="grid gap-4">
                 <Field id="countdownAt" label={t("dateTime")}>
-                  <Input
+                  <DateTimeFields
                     id="countdownAt"
-                    type="datetime-local"
+                    label={t("dateTime")}
+                    locale={locale}
+                    min={today}
                     value={isoToWallTime(data.countdown.targetAt, data.countdown.timezone)}
-                    onChange={(e) => {
-                      const iso = wallTimeToIso(e.target.value, data.countdown!.timezone);
+                    onChange={(wall) => {
+                      const iso = wallTimeToIso(wall, data.countdown!.timezone);
                       if (iso) patch({ countdown: { ...data.countdown!, targetAt: iso } });
                     }}
-                    className="h-11"
                   />
                 </Field>
                 <Field label={t("timezone")}>
@@ -143,17 +150,18 @@ export function ExtrasSection({ manifest }: { manifest: TemplateManifest }) {
       <div className="flex flex-col gap-4">
         <Toggle label={t("schedule")} help={t("scheduleHelp")} premium={premium} checked={schedule.enabled} onChange={(v) => setSchedule({ enabled: v, unlockAt: v ? (schedule.unlockAt ?? nextWeek()) : schedule.unlockAt })} />
         {schedule.enabled ? (
-          <div className="grid gap-4 rounded-xl border border-border bg-card p-4 sm:grid-cols-2">
+          <div className="grid gap-4 rounded-xl border border-border bg-card p-4">
             <Field id="unlockAt" label={t("unlockAt")}>
-              <Input
+              <DateTimeFields
                 id="unlockAt"
-                type="datetime-local"
+                label={t("unlockAt")}
+                locale={locale}
+                min={today}
                 value={schedule.unlockAt ? isoToWallTime(schedule.unlockAt, tz) : ""}
-                onChange={(e) => {
-                  const iso = wallTimeToIso(e.target.value, tz);
+                onChange={(wall) => {
+                  const iso = wallTimeToIso(wall, tz);
                   if (iso) setSchedule({ unlockAt: iso });
                 }}
-                className="h-11"
               />
             </Field>
             <Field label={t("timezone")}>

@@ -1,19 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { BellRing, Check, Loader2 } from "lucide-react";
+import { BellRing, Cake, Check, Gem, Heart, Loader2, Sparkles, type LucideIcon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { GiftData } from "@/lib/gift/schema";
 import { getManifest } from "@/templates/manifests";
 import { track } from "@/lib/analytics/track";
-import { A_LEAP_YEAR, MAX_REMINDERS, REMINDER_NAME_MAX, REMINDER_OCCASIONS, countdownDay, daysInMonth, formatMonthDay, reminderDateFor, reminderOccasionFor, type ReminderOccasion } from "@/lib/lifecycle/reminders";
+import { MAX_REMINDERS, REMINDER_NAME_MAX, REMINDER_OCCASIONS, countdownDay, formatMonthDay, reminderDateFor, reminderOccasionFor, type MonthDay, type ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { Button } from "@/components/ui/button";
+import { ChoiceMenu } from "@/components/pickers/choice-menu";
+import { MonthDayPicker } from "@/components/pickers/month-day-picker";
 
 type Status = "idle" | "saving" | "saved" | "failed" | "tooMany";
 
-const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 const fieldClass = "h-11 w-full rounded-xl border border-border bg-paper px-3 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+/** The pickers' fields, drawn as this form's name field is. */
+const pickerClass = "rounded-xl border-border bg-paper hover:border-ink/30 md:text-base";
+const OCCASION_ICONS: Record<ReminderOccasion, LucideIcon> = { birthday: Cake, anniversary: Gem, valentines: Heart, other: Sparkles };
 
 /**
  * "Remind me next year", under a published gift. It starts filled in from the gift (who it's for,
@@ -35,7 +39,6 @@ export function RemindNextYear({ data }: { data: GiftData }) {
   const [editing, setEditing] = useState(() => !data.recipientName.trim());
   const [status, setStatus] = useState<Status>("idle");
 
-  const monthName = (m: number) => new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(new Date(Date.UTC(A_LEAP_YEAR, m - 1, 1)));
   const shownName = name.trim() || data.recipientName;
   const canSave = name.trim().length > 0 && status !== "saving";
 
@@ -47,13 +50,10 @@ export function RemindNextYear({ data }: { data: GiftData }) {
     }
     setStatus("idle");
   };
-  const changeMonth = (next: number) => {
-    setMonth(next);
-    setDay((d) => Math.min(d, daysInMonth(A_LEAP_YEAR, next)));
-    setStatus("idle");
-  };
-  const changeDay = (next: number) => {
-    setDay(next);
+  // The picker keeps the day inside the month (31 January → 29 February), as the two selects did.
+  const changeDate = (next: MonthDay) => {
+    setMonth(next.month);
+    setDay(next.day);
     setStatus("idle");
   };
   const changeName = (next: string) => {
@@ -96,37 +96,21 @@ export function RemindNextYear({ data }: { data: GiftData }) {
             {t("name")}
             <input value={name} maxLength={REMINDER_NAME_MAX} onChange={(e) => changeName(e.target.value)} className={fieldClass} autoComplete="off" />
           </label>
-          <label className="grid gap-1.5 text-sm font-medium">
-            {t("occasion")}
-            <select value={occasion} onChange={(e) => changeOccasion(e.target.value as ReminderOccasion)} className={fieldClass}>
-              {REMINDER_OCCASIONS.map((o) => (
-                <option key={o} value={o}>
-                  {t(`occasions.${o}`)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="grid grid-cols-[5.5rem_1fr] gap-3">
-            <label className="grid gap-1.5 text-sm font-medium">
-              {t("day")}
-              <select value={day} onChange={(e) => changeDay(Number(e.target.value))} className={fieldClass}>
-                {Array.from({ length: daysInMonth(A_LEAP_YEAR, month) }, (_, i) => i + 1).map((d) => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="grid gap-1.5 text-sm font-medium">
-              {t("month")}
-              <select value={month} onChange={(e) => changeMonth(Number(e.target.value))} className={fieldClass}>
-                {MONTHS.map((m) => (
-                  <option key={m} value={m}>
-                    {monthName(m)}
-                  </option>
-                ))}
-              </select>
-            </label>
+          {/* Not <label>s round the pickers: a label names the button it holds, and the name would lose the choice. Each field says both. */}
+          <div className="grid gap-1.5 text-sm font-medium">
+            <span aria-hidden="true">{t("occasion")}</span>
+            <ChoiceMenu
+              look="field"
+              label={t("occasion")}
+              value={occasion}
+              choices={REMINDER_OCCASIONS.map((o) => ({ value: o, label: t(`occasions.${o}`), icon: OCCASION_ICONS[o] }))}
+              onChange={changeOccasion}
+              className={pickerClass}
+            />
+          </div>
+          <div className="grid gap-1.5 text-sm font-medium">
+            <span aria-hidden="true">{t("date")}</span>
+            <MonthDayPicker label={t("date")} value={{ month, day }} locale={locale} onChange={changeDate} className={pickerClass} />
           </div>
         </div>
       ) : (

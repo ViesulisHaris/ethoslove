@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CalendarHeart, Check, Gift, Loader2, Plane, Sparkles, Trash2, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -10,8 +10,11 @@ import { useEditor } from "@/lib/editor/store";
 import type { GiftLocale, GiftUnwrap } from "@/lib/gift/schema";
 import { isUnwrapDay } from "@/lib/gift/unwrap-rules";
 import type { Trip } from "@/lib/trips/presets";
+import type { DateRange } from "@/lib/dates/range";
 import { usePlan } from "@/components/dates/use-plan";
-import { Input } from "@/components/ui/input";
+import { DayPicker } from "@/components/pickers/day-picker";
+import { useToday } from "@/components/pickers/use-today";
+import { DateRangePicker, type DateRangeLabels } from "@/components/trips/date-range-picker";
 import { CHIP_PHOTO_WIDTH, gatherPhotos, stopPlaces, withStopPhotos } from "@/components/gifts/unwrap-photos";
 import { stopArt, tripNights, unwrapDay } from "@/templates/_shared/unwrap";
 import type { TemplateManifest } from "@/templates/types";
@@ -145,7 +148,7 @@ export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
   );
 }
 
-/** The day a surprise is for, set or cleared from a date input ("" clears it). */
+/** The day a surprise is for, set or cleared from its picker ("" clears it). */
 function withDay<K extends "date" | "depart" | "back">(unwrap: GiftUnwrap, key: K, value: string): GiftUnwrap {
   const day = isUnwrapDay(value) ? value : undefined;
   if (key === "date") {
@@ -161,8 +164,36 @@ function withDay<K extends "date" | "depart" | "back">(unwrap: GiftUnwrap, key: 
   return { ...unwrap, trip };
 }
 
+/** A trip's two days from the range picker, each set or cleared as the date inputs did it. */
+const withTripDays = (unwrap: GiftUnwrap, range: DateRange): GiftUnwrap => withDay(withDay(unwrap, "depart", range.start), "back", range.end);
+
 function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; locale: GiftLocale; onChange: (next: GiftUnwrap) => void; onRemove: () => void }) {
   const t = useTranslations("editor.unwrap");
+  const tp = useTranslations("pickers");
+  const today = useToday();
+  const card = useRef<HTMLDivElement>(null);
+  const rangeLabels: DateRangeLabels = {
+    start: t("depart"),
+    end: t("back"),
+    title: tp("range.title"),
+    add: tp("range.add"),
+    roundTrip: tp("range.roundTrip"),
+    oneWay: tp("range.oneWay"),
+    tripType: tp("range.tripType"),
+    quick: tp("range.quick"),
+    thisWeekend: tp("range.thisWeekend"),
+    nextWeekend: tp("range.nextWeekend"),
+    weekAway: tp("range.weekAway"),
+    nights: (count) => tp("range.nights", { count }),
+    pickStart: tp("range.pickStart"),
+    pickEnd: tp("range.pickEnd"),
+    clear: tp("clear"),
+    done: tp("done"),
+    close: tp("range.close"),
+    previous: tp("previousMonth"),
+    next: tp("nextMonth"),
+    today: tp("today"),
+  };
   const first = unwrap.stops[0];
   const art = first ? stopArt(first) : null;
   const picture = unwrap.image ?? unwrap.stops.find((s) => s.image)?.image ?? art?.src ?? null;
@@ -172,7 +203,7 @@ function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; 
   const day = unwrap.kind === "date" ? (unwrapDay(unwrap, locale) ?? t("noDay")) : trip ? `${trip.from ? `${trip.from} → ` : ""}${trip.to}` : null;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card" data-testid="unwrap-attached">
+    <div ref={card} className="overflow-hidden rounded-2xl border border-border bg-card" data-testid="unwrap-attached">
       <div className="flex items-center gap-3.5 p-3">
         <span className="relative grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-coral/10 text-coral">
           {picture ? <img src={picture} alt="" className="absolute inset-0 size-full object-cover" /> : <Gift className="size-6" />}
@@ -193,18 +224,20 @@ function Attached({ unwrap, locale, onChange, onRemove }: { unwrap: GiftUnwrap; 
       </div>
       <div className="grid gap-3 border-t border-border bg-paper/50 px-3 py-3 sm:grid-cols-2">
         {unwrap.kind === "date" ? (
-          <Field id="unwrap-day" label={t("day")}>
-            <Input id="unwrap-day" type="date" value={unwrap.date ?? ""} onChange={(e) => onChange(withDay(unwrap, "date", e.target.value))} className="h-11" />
+          <Field id="unwrap-day" label={t("day")} className="sm:col-span-2">
+            <DayPicker id="unwrap-day" label={t("day")} locale={locale} clearable value={unwrap.date ?? ""} onChange={(day) => onChange(withDay(unwrap, "date", day))} />
           </Field>
         ) : trip ? (
-          <>
-            <Field id="unwrap-depart" label={t("depart")}>
-              <Input id="unwrap-depart" type="date" value={trip.depart ?? ""} onChange={(e) => onChange(withDay(unwrap, "depart", e.target.value))} className="h-11" />
-            </Field>
-            <Field id="unwrap-back" label={t("back")}>
-              <Input id="unwrap-back" type="date" value={trip.back ?? ""} min={trip.depart} onChange={(e) => onChange(withDay(unwrap, "back", e.target.value))} className="h-11" />
-            </Field>
-          </>
+          // The trips' own range picker: the return can't come before the departure, as the date inputs' min had it.
+          <DateRangePicker
+            className="sm:col-span-2"
+            value={{ start: trip.depart ?? "", end: trip.back ?? "" }}
+            onChange={(range) => onChange(withTripDays(unwrap, range))}
+            today={today}
+            locale={locale}
+            labels={rangeLabels}
+            alignTo={card}
+          />
         ) : null}
       </div>
     </div>

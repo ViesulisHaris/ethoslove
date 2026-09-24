@@ -7,6 +7,7 @@ import type QRCodeStyling from "qr-code-styling";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
 import { ColorInput } from "./color-input";
 import { Field, Segmented } from "./field";
 
@@ -151,9 +152,10 @@ export function QrDesigner({ url, photos, accent, giftId }: { url: string; photo
         <Field label={t("centre")}>
           <Segmented ariaLabel={t("centre")} value={centre} onChange={setCentre} options={[{ value: "none", label: t("centreNone") }, { value: "logo", label: t("centreLogo") }, { value: "photo", label: t("centrePhoto") }]} />
         </Field>
-        <label className="flex items-center gap-3 self-end rounded-xl border border-border bg-card px-3.5 py-3 text-sm">
-          <input type="checkbox" checked={gradient} onChange={(e) => setGradient(e.target.checked)} className="size-4 accent-coral" />
+        {/* The site's own switch, not the browser's checkbox: the one control here that looked borrowed. */}
+        <label className="flex min-h-11 items-center justify-between gap-3 self-end rounded-xl border border-border bg-card px-3.5 py-2 text-sm">
           {t("gradient")}
+          <Switch checked={gradient} onCheckedChange={setGradient} />
         </label>
       </div>
       {centre === "photo" && photos.length > 0 ? (
