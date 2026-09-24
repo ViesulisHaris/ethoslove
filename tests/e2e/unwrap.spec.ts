@@ -180,8 +180,18 @@ test.describe("a surprise inside", () => {
     const attached = section.getByTestId("unwrap-attached");
     await expect(attached).toContainText("Lisbon, slowly", { timeout: 15_000 });
     await expect(attached).toContainText("2 nights");
-    await attached.getByLabel("Leaving").fill("2030-06-14");
-    await attached.getByLabel("Coming back").fill("2030-06-18");
+    // The trips' own range picker: a tap on the first day, one on the last, and Done.
+    const day = (fromToday: number) => {
+      const d = new Date();
+      d.setDate(d.getDate() + fromToday);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    };
+    await attached.getByRole("button", { name: /^Leaving/ }).click();
+    const picker = page.getByRole("dialog", { name: "Choose the dates" });
+    await picker.locator(`[data-day="${day(3)}"]`).click();
+    await picker.locator(`[data-day="${day(7)}"]`).click();
+    await picker.getByRole("button", { name: "Done" }).click();
+    await expect(picker).toBeHidden();
     await expect(attached).toContainText("4 nights");
     await section.getByTestId("unwrap-remove").click();
     await expect(attached).toBeHidden();

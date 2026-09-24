@@ -18,6 +18,7 @@ import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
 import { PartnerLink } from "@/components/trips/partner-link";
+import { TimePicker } from "@/components/pickers/time-picker";
 import { GroupIcon } from "./group-icon";
 import { MapView } from "./map-view";
 import { usePlan } from "./use-plan";
@@ -177,7 +178,7 @@ export function PlanView() {
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] font-semibold" style={{ color: group.ink }}>
                   {editable ? (
                     // 16px: iPhone Safari zooms the whole page into any smaller field it focuses.
-                    <input type="time" aria-label={t("timeFor", { name })} value={stop.time ?? ""} onChange={(e) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time: e.target.value || undefined } : s)) }))} className="h-11 rounded-xl border border-forest/15 bg-white px-2 text-[16px] text-forest tabular-nums outline-none focus:border-rose/50" />
+                    <TimePicker label={t("timeFor", { name })} value={stop.time} onChange={(time) => updateOwn((p) => ({ ...p, stops: p.stops.map((s) => (s.id === stop.id ? { ...s, time } : s)) }))} className="w-auto rounded-xl border-forest/15 bg-white pr-2.5 pl-3 text-forest md:text-base" />
                   ) : stop.time ? (
                     <span className="text-[15px] text-forest tabular-nums">{stop.time}</span>
                   ) : null}

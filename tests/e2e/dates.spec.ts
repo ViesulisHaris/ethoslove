@@ -106,7 +106,15 @@ test.describe("finding a date", () => {
     await expect(page).toHaveURL(/\/plan$/);
     await expect(page.getByRole("heading", { level: 2, name: "Second Chapter Books" })).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "Café da Esquina" })).toBeVisible();
-    await expect(page.getByLabel("Time at Second Chapter Books")).toHaveValue("14:00");
+    // The time is our own picker, not the browser's: an hour, then the minutes, which close it.
+    const time = page.getByRole("button", { name: /^Time at Second Chapter Books/ });
+    await expect(time).toHaveText("14:00");
+    await time.click();
+    const clock = page.getByRole("dialog", { name: "Time at Second Chapter Books" });
+    await clock.getByRole("radio", { name: "19" }).click();
+    await clock.getByRole("radio", { name: ":30" }).click();
+    await expect(clock).toBeHidden();
+    await expect(time).toHaveText("19:30");
 
     // It is theirs to edit, and it is still there after a reload.
     await page.getByLabel("Who is it for?").fill("Maya");
@@ -114,6 +122,7 @@ test.describe("finding a date", () => {
     await page.reload();
     await expect(page.getByLabel("Who is it for?")).toHaveValue("Maya");
     await expect(page.getByRole("heading", { level: 2 }).first()).toHaveText("Café da Esquina");
+    await expect(page.getByRole("button", { name: /^Time at Second Chapter Books/ })).toHaveText("19:30");
   });
 
   test("rain takes the picnic off the table and says why", async ({ page }) => {

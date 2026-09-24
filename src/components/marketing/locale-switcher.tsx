@@ -1,16 +1,17 @@
 "use client";
 
 import { useTransition } from "react";
-import { Check, ChevronDown, Globe } from "lucide-react";
+import { ChevronDown, Globe } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { LOCALE_LABELS, routing, type Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { TILE } from "@/components/pickers/styles";
 
 /**
- * The language, as a small pill (a globe and "EN") in a 44px target, opening a short menu of the
- * languages by their own names. `tone="dark"` is for the wine footer.
+ * The language, as a small pill (a globe and "EN") in a 44px target, opening the site's menu card
+ * with the languages by their own names, the one in use checked. `tone="dark"` is for the wine footer.
  */
 export function LocaleSwitcher({ className, tone = "light" }: { className?: string; tone?: "light" | "dark" }) {
   const t = useTranslations("common");
@@ -50,29 +51,20 @@ export function LocaleSwitcher({ className, tone = "light" }: { className?: stri
         </button>
       </DropdownMenuTrigger>
       {/* Over the phone menu (80), which it also opens from. */}
-      <DropdownMenuContent
-        align="end"
-        sideOffset={4}
-        className="z-[85] min-w-48 rounded-2xl bg-white/95 p-1.5 shadow-[0_20px_44px_-18px_rgba(80,20,50,0.4)] ring-forest/[0.08] backdrop-blur-xl data-open:duration-200 data-open:ease-(--ease-out-quint) data-closed:duration-150"
-      >
-        <p className="px-2.5 pt-1.5 pb-1 text-[11px] font-medium tracking-[0.14em] text-forest/45 uppercase">{t("language")}</p>
-        {routing.locales.map((l) => {
-          const here = l === locale;
-          return (
-            <DropdownMenuItem key={l} onSelect={() => change(l)} className="h-11 gap-3 rounded-xl px-2 text-[14.5px] text-forest focus:bg-rose-mist focus:text-forest">
-              <span
-                aria-hidden="true"
-                className={cn("grid size-7 shrink-0 place-items-center rounded-full text-[10.5px] font-semibold tracking-[0.06em] uppercase", here ? "bg-rose text-white" : "bg-forest/[0.06] text-forest/60")}
-              >
+      <DropdownMenuContent align="end" className="z-[85] w-60">
+        <DropdownMenuLabel>{t("language")}</DropdownMenuLabel>
+        <DropdownMenuRadioGroup value={locale} onValueChange={(next) => change(next as Locale)}>
+          {routing.locales.map((l) => (
+            <DropdownMenuRadioItem key={l} value={l} className="px-2.5">
+              <span aria-hidden="true" className={cn(TILE, "text-[11.5px] font-semibold tracking-[0.06em] uppercase")}>
                 {l}
               </span>
-              <span lang={l} className={cn("flex-1", here && "font-medium")}>
+              <span lang={l} className="flex-1 text-[15px] font-semibold">
                 {LOCALE_LABELS[l]}
               </span>
-              {here ? <Check aria-hidden="true" className="size-4 text-rose" strokeWidth={2.2} /> : null}
-            </DropdownMenuItem>
-          );
-        })}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

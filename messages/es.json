@@ -2355,8 +2355,7 @@
       "edit": "Cambiar los datos",
       "name": "Para quién",
       "occasion": "Ocasión",
-      "day": "Día",
-      "month": "Mes",
+      "date": "Fecha",
       "manage": "Todos tus recordatorios",
       "occasions": {
         "birthday": "Cumpleaños",
@@ -2422,5 +2421,35 @@
     "extra": "La sorpresa dentro: {price}",
     "pick": "Envolverlo en {name}",
     "wrapping": "Envolviéndolo…"
+  },
+  "pickers": {
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "today": "Hoy",
+    "clear": "Borrar",
+    "done": "Listo",
+    "close": "Cerrar",
+    "addDate": "Añadir fecha",
+    "addTime": "Añadir hora",
+    "hour": "Hora",
+    "minutes": "Minutos",
+    "month": "Mes",
+    "day": "Día",
+    "time": "Hora",
+    "range": {
+      "title": "Elegid las fechas",
+      "add": "Añadir fecha",
+      "roundTrip": "Ida y vuelta",
+      "oneWay": "Solo ida",
+      "tripType": "Ida y vuelta o solo ida",
+      "quick": "Atajos",
+      "thisWeekend": "Este fin de semana",
+      "nextWeekend": "El finde que viene",
+      "weekAway": "Una semana",
+      "nights": "{count, plural, =0 {En el día} one {# noche} other {# noches}}",
+      "pickStart": "Elegid el día de salida",
+      "pickEnd": "ahora, el día de vuelta",
+      "close": "Cerrar"
+    }
   }
 }

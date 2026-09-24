@@ -69,7 +69,7 @@ export function GiftCard({ gift }: { gift: DashboardGift }) {
             <DropdownMenuItem asChild><Link href={editHref}><Pencil className="size-4" />{t("edit")}</Link></DropdownMenuItem>
             <DropdownMenuItem onSelect={() => start(async () => { const r = await duplicateGift(gift.id); if (r.ok) { toast(t("duplicated")); router.refresh(); } })}><Files className="size-4" />{t("duplicate")}</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => setConfirm(true)} className="text-destructive"><Trash2 className="size-4" />{t("delete")}</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" onSelect={() => setConfirm(true)}><Trash2 className="size-4 text-destructive" />{t("delete")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

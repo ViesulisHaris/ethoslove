@@ -44,7 +44,7 @@ export function UserMenu({ user }: { user: ShellUser }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-60">
-        <DropdownMenuLabel className="truncate font-normal text-muted-foreground">
+        <DropdownMenuLabel className="truncate text-[13px] font-normal tracking-normal normal-case">
           {user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
