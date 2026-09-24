@@ -1507,7 +1507,11 @@
       "best": "Best for a date",
       "rated": "Top rated",
       "nearest": "Nearest",
-      "cheapest": "Cheapest"
+      "cheapest": "Cheapest",
+      "bestSub": "Our ranking for couples",
+      "ratedSub": "Most stars from couples",
+      "nearestSub": "Closest to your search",
+      "cheapestSub": "Free and low-cost first"
     },
     "reviews": {
       "title": "Couples say",

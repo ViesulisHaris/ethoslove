@@ -1507,7 +1507,11 @@
       "best": "Mejor para una cita",
       "rated": "Mejor valorados",
       "nearest": "Más cerca",
-      "cheapest": "Más baratos"
+      "cheapest": "Más baratos",
+      "bestSub": "Nuestro ranking para parejas",
+      "ratedSub": "Con más estrellas de parejas",
+      "nearestSub": "Lo más cerca de tu búsqueda",
+      "cheapestSub": "Gratis y económicos primero"
     },
     "reviews": {
       "title": "Las parejas dicen",

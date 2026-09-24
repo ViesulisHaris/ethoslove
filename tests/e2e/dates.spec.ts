@@ -159,8 +159,22 @@ test.describe("finding a date", () => {
     await expect(page.getByRole("button", { name: /^Taberna Boa Noite/ })).toHaveCount(0);
     await expect(shop).toBeVisible();
     await cost.getByRole("button", { name: "Free", exact: true }).click();
-    await page.getByRole("combobox", { name: "Sort by" }).selectOption("nearest");
-    await expect(page.getByRole("combobox", { name: "Sort by" })).toHaveValue("nearest");
+    // Our own menu, not the browser's select: every order says what it does, and the pill shows the choice.
+    const sort = page.getByRole("button", { name: /^Sort by/ });
+    await expect(sort).toHaveText(/Best for a date/);
+    await sort.click();
+    const menu = page.getByRole("menu");
+    await expect(menu.getByRole("menuitemradio", { name: /^Best for a date/ })).toHaveAttribute("aria-checked", "true");
+    await expect(menu.getByText("Closest to your search")).toBeVisible();
+    await menu.getByRole("menuitemradio", { name: /^Nearest/ }).click();
+    await expect(menu).toHaveCount(0);
+    await expect(sort).toHaveText(/Nearest/);
+    await expect(sort).toBeFocused();
+    // The keyboard works it too.
+    await sort.press("Enter");
+    await expect(page.getByRole("menuitemradio", { name: /^Nearest/ })).toHaveAttribute("aria-checked", "true");
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("menu")).toHaveCount(0);
   });
 
   test("a place opens on what couples said, and asks the signed-out to sign in before rating", async ({ page }) => {

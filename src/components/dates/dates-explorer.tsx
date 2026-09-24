@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentProps } from "react";
 import { AnimatePresence, motion, MotionConfig, useIsPresent } from "motion/react";
-import { ArrowRight, ArrowUpDown, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
+import { ArrowRight, CloudOff, List, Map as MapIcon, Sunset } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ import { MAP_PAPER } from "@/lib/dates/map-style";
 import { MAP_STYLE_URL, MAPLIBRE_SHARED_URL, MAPLIBRE_URL, warmMap } from "@/lib/dates/map-vendor";
 import type { Place } from "@/lib/dates/places";
 import { matchPhotos, type Sight } from "@/lib/dates/photos";
-import { pairsWith, rankPlaces, SORTS, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
+import { pairsWith, rankPlaces, topPicks, type Ratings, type Sort } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
 import type { WentAs } from "@/lib/supabase/types";
 import { addStop, addStops, EMPTY_PLAN, isFarFromPlan, MAX_STOPS, removeStop, stopName, type Plan, type PlanStop } from "@/lib/dates/plan";
@@ -35,6 +35,7 @@ import { IdeaRail } from "./idea-rail";
 import { MapView } from "./map-view";
 import { PlaceCard } from "./place-card";
 import { PlaceSheet } from "./place-sheet";
+import { SortMenu, type SortLabels } from "./sort-menu";
 import { TopPicks } from "./top-picks";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
@@ -646,7 +647,12 @@ export function DatesExplorer() {
     [t, isDesktop],
   );
   const budget = useMemo(() => [t("ideas.budget.0"), t("ideas.budget.1"), t("ideas.budget.2"), t("ideas.budget.3")] as [string, string, string, string], [t]);
-  const whereLabels = { label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing"), failed: t("where.failed") };
+  const sortLabels: SortLabels = {
+    label: t("sort.label"),
+    name: { best: t("sort.best"), rated: t("sort.rated"), nearest: t("sort.nearest"), cheapest: t("sort.cheapest") },
+    sub: { best: t("sort.bestSub"), rated: t("sort.ratedSub"), nearest: t("sort.nearestSub"), cheapest: t("sort.cheapestSub") },
+  };
+  const whereLabels ={ label: t("where.label"), placeholder: t("where.placeholder"), nearMe: t("where.nearMe"), searching: t("where.searching"), nothing: t("where.nothing"), failed: t("where.failed") };
 
   // The script that starts the search from the HTML only belongs in the server's HTML (and the
   // hydration that matches it); rendered afterwards, React would only complain it cannot run.
@@ -894,19 +900,14 @@ export function DatesExplorer() {
           {status === "ready" || all.length > 0 ? <p className="text-[13px] text-forest/65 tabular-nums">{t("places.count", { count: visible.length })}</p> : null}
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          {/* The select is the whole pill: tapping the pill around a smaller one focused it on Android
-              without opening it. 16px on a phone, where iOS zooms the page into anything smaller. */}
-          <label className="relative inline-flex h-11 items-center rounded-full lg:h-10 bg-white text-[13.5px] font-semibold text-forest ring-1 ring-forest/10 has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-rose/60">
-            <ArrowUpDown aria-hidden="true" className="pointer-events-none absolute left-3.5 size-4 text-forest/50" />
-            <span className="sr-only">{t("sort.label")}</span>
-            <select value={sort} onChange={(e) => { setSort(e.target.value as Sort); nextList(); }} className="h-full cursor-pointer rounded-full bg-transparent pr-3 pl-10 outline-none max-lg:text-[16px]">
-              {SORTS.map((s) => (
-                <option key={s} value={s}>
-                  {t(`sort.${s}`)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <SortMenu
+            value={sort}
+            labels={sortLabels}
+            onChange={(s) => {
+              setSort(s);
+              nextList();
+            }}
+          />
           {/* Each chip on one line; the row wraps instead. Squeezed, "Lo de una cena" broke onto three lines and hung out of its pill. */}
           <div className="flex flex-wrap gap-1.5" role="group" aria-label={t("places.cost")}>
             {COST_IDS.map((c) => {
