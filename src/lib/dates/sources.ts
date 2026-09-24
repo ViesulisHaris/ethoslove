@@ -27,6 +27,7 @@ import { balance, parseOverpass, SEARCH_PER_GROUP, type Place } from "./places";
 import { MAX_RATED_PLACES, type Ratings } from "./rank";
 import { poisOfTile } from "./tile-source";
 import { mergePlaces, placesFromPois, tilesCovering } from "./tiles";
+import { UNUSUAL_EXTRA, unusualOf } from "./unusual";
 
 /**
  * Where the Dates pages' places, photographs, ratings and details come from, asked of the outside
@@ -62,8 +63,13 @@ export async function searchPlaces(at: LatLng, radius: number, locale: "en" | "e
   const results = await Promise.all(tiles.map(async (tile) => ({ tile, ...(await poisOfTile(tile)) })));
   if (results.every((r) => !r.ok)) return { unavailable: true, center, radiusM };
   const all = mergePlaces(...results.map((r) => placesFromPois(r.features, r.tile, center, radiusM, locale)));
-  const places = balance(all.filter((p) => groups.includes(p.group)), SEARCH_PER_GROUP);
-  return { center, radiusM, total: all.length, complete: results.every((r) => r.ok), places };
+  const wanted = all.filter((p) => groups.includes(p.group));
+  const kept = balance(wanted, SEARCH_PER_GROUP);
+  // The places with a story are kept past the cap: a cellar bar is not the two-hundredth best bar
+  // in a city centre for any reason a couple would care about.
+  const keptIds = new Set(kept.map((p) => p.id));
+  const extra = wanted.filter((p) => !keptIds.has(p.id) && (unusualOf(p)?.strength ?? 0) > 1).slice(0, UNUSUAL_EXTRA);
+  return { center, radiusM, total: all.length, complete: results.every((r) => r.ok), places: [...kept, ...extra] };
 }
 
 /** The wider cell the rare finds are asked for: about a kilometre, rounded from wherever the search is. */

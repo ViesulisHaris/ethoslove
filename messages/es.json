@@ -1502,6 +1502,13 @@
       "previous": "Sitios anteriores",
       "next": "Más sitios"
     },
+    "unusual": {
+      "title": "Algo diferente en {place}",
+      "sub": "Bares escondidos, azoteas, sótanos y otros sitios con historia.",
+      "chip": "Algo diferente",
+      "previous": "Hallazgos anteriores",
+      "next": "Más hallazgos"
+    },
     "sort": {
       "label": "Ordenar por",
       "best": "Mejor para una cita",

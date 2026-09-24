@@ -17,6 +17,7 @@ import { GROUPS, KINDS } from "@/lib/dates/kinds";
 import { photoAt } from "@/lib/dates/photos";
 import type { Ranked } from "@/lib/dates/rank";
 import type { PublicReview } from "@/lib/dates/reviews";
+import type { Quirk } from "@/lib/dates/unusual";
 import type { Cost } from "@/lib/dates/cost";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { WentAs } from "@/lib/supabase/types";
@@ -28,6 +29,7 @@ import { PairsWith } from "./pairs-with";
 import { Reviews, type ReviewsLabels } from "./reviews";
 import { Stars } from "./stars";
 import { requestPhoto, usePhoto } from "./photo-store";
+import { QuirkBadge } from "./quirk-icon";
 
 export type PlaceSheetLabels = {
   /** "On other sites": scores from Tripadvisor and Google when this install has their keys, and links to look it up otherwise. */
@@ -83,6 +85,8 @@ type Props = {
   swipe?: boolean;
   /** "swap" when it replaces another place's sheet: its content fades in where the last one was. */
   entrance?: "open" | "swap";
+  /** What makes it out of the ordinary, as the list worked it out (unusual.ts). */
+  quirk?: Quirk;
   className?: string;
 };
 
@@ -115,7 +119,7 @@ const SHEET = {
  * the hours for the day they picked, a website), and where it knows nothing the sheet says so and
  * hands them a search for photos and reviews, which this site does not pretend to have.
  */
-export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, swipe = false, entrance = "open", className }: Props) {
+export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, onDeleteReview, onOpenPlace, details, date, where, locale, labels, inPlan, onTogglePlan, onClose, swipe = false, entrance = "open", quirk, className }: Props) {
   const ta = useTranslations("affiliate");
   const drag = useDragControls();
   // Where a phone's sheet has been dragged to: let go short of putting it away, it springs back.
@@ -154,6 +158,8 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   if (details?.vegetarian || place.vegetarian) chips.push([Leaf, labels.vegetarian]);
   if (details?.stepFree || place.stepFree) chips.push([Accessibility, labels.stepFree]);
   if (details?.notable || place.notable) chips.push([Landmark, labels.landmark]);
+  // The full tags, read when it opened, can say what the name didn't (a bar tagged as on a roof).
+  const oddity = quirk ?? details?.quirk;
   const query = encodeURIComponent(`${place.name} ${where}`.trim());
   // The details can say it is famous when the map's first answer didn't.
   const tickets = sellsTickets({ kind: place.kind, named: place.named, notable: place.notable || details?.notable }) ? tiqetsSearch(ticketQuery(place.name, where), locale) : null;
@@ -272,8 +278,13 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
         </div>
       </dl>
 
-      {chips.length > 0 || info.free ? (
+      {chips.length > 0 || info.free || oddity ? (
         <ul className="mt-3.5 flex flex-wrap gap-1.5">
+          {oddity ? (
+            <li>
+              <QuirkBadge quirk={oddity} locale={locale} className="h-[26px] bg-rose-mist px-2.5 text-[12px] text-rose-ink" />
+            </li>
+          ) : null}
           {info.free ? <li className="rounded-full bg-moss-soft px-2.5 py-1 text-[12px] font-semibold text-moss">{labels.free}</li> : null}
           {chips.map(([Icon, name]) => (
             <li key={name} className="inline-flex items-center gap-1 rounded-full bg-forest/5 px-2.5 py-1 text-[12px] font-medium text-forest/75">

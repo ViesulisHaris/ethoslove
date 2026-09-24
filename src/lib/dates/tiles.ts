@@ -1,6 +1,7 @@
 import { distanceKm, type LatLng } from "./geo";
 import { KINDS, kindOfPoi, type PlaceKind } from "./kinds";
 import type { Place } from "./places";
+import { isListeningClub } from "./unusual";
 
 /**
  * Places read out of the map's own vector tiles. The tiles that draw the streets also carry every
@@ -82,18 +83,24 @@ const localName = (p: Record<string, unknown>, locale: "en" | "es"): string => {
   return pick("name") || pick(`name:${locale}`) || pick("name_en") || pick("name:latin");
 };
 
+/**
+ * Nightclubs are left off these pages, and the map files jazz clubs with them: Ronnie Scott's,
+ * Smalls, the Caveau de la Huchette. A tile source keeps them, so a jazz club can come back as a bar.
+ */
+export const keepsPoi = (subclass: unknown): boolean => kindOfPoi(subclass) !== null || subclass === "nightclub";
+
 /** The date-worthy places in one tile's points of interest that fall inside the search circle. */
 export function placesFromPois(features: PoiFeature[], tile: TileXY, center: LatLng, radiusM: number, locale: "en" | "es"): Place[] {
   const places: Place[] = [];
   for (const f of features) {
     // A tile repeats what lies just over its edge, for drawing labels; the neighbour owns those.
     if (f.px < 0 || f.py < 0 || f.px >= f.extent || f.py >= f.extent) continue;
-    const kind = kindOfPoi(f.properties.subclass);
+    const name = localName(f.properties, locale);
+    const kind = kindOfPoi(f.properties.subclass) ?? (f.properties.subclass === "nightclub" && name && isListeningClub(name) ? "bar" : null);
     if (!kind) continue;
     const id = osmIdOf(f.id);
     if (!id) continue;
     const info = KINDS[kind];
-    const name = localName(f.properties, locale);
     if (!name && !info.nameless) continue;
     const { lat, lng } = tilePointToLatLng(tile, f.px, f.py, f.extent);
     const km = distanceKm(center, { lat, lng });
@@ -140,8 +147,10 @@ export function mergePlaces(...lists: Place[][]): Place[] {
   for (const place of lists.flat()) {
     const existing = byId.get(place.id);
     if (existing) {
-      if (!existing.hours && place.hours) {
-        const merged = { ...place, score: Math.max(place.score, existing.score) };
+      if ((!existing.hours && place.hours) || (!existing.quirk && place.quirk)) {
+        // The rare finds read the tags as well: whatever they know that the tile didn't is kept.
+        const quirk = place.quirk ?? existing.quirk;
+        const merged = { ...existing, ...place, hours: place.hours ?? existing.hours, ...(quirk ? { quirk } : {}), score: Math.max(place.score, existing.score) };
         byId.set(place.id, merged);
         // Keep the name index pointing at the record that knows more, too.
         for (const kept of byName.values()) {
@@ -159,12 +168,12 @@ export function mergePlaces(...lists: Place[][]): Place[] {
       if (twin) {
         // The better-scored piece stands for the place, with whatever the other knew that it didn't.
         if (place.score > twin.score) {
-          const merged = { ...place, hours: place.hours ?? twin.hours };
+          const merged = { ...place, hours: place.hours ?? twin.hours, ...(place.quirk ?? twin.quirk ? { quirk: place.quirk ?? twin.quirk } : {}) };
           byId.delete(twin.id);
           byId.set(place.id, merged);
           kept[kept.indexOf(twin)] = merged;
-        } else if (!twin.hours && place.hours) {
-          const merged = { ...twin, hours: place.hours };
+        } else if ((!twin.hours && place.hours) || (!twin.quirk && place.quirk)) {
+          const merged = { ...twin, hours: twin.hours ?? place.hours, ...(twin.quirk ?? place.quirk ? { quirk: twin.quirk ?? place.quirk } : {}) };
           byId.set(twin.id, merged);
           kept[kept.indexOf(twin)] = merged;
         }
