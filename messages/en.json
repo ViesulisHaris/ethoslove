@@ -38,10 +38,11 @@
     "closeNotification": "Close notification"
   },
   "meta": {
-    "defaultTitle": "Ethos — Digital gifts that open like a story",
+    "defaultTitle": "Ethos — Date ideas, trips and gifts for couples",
     "titleTemplate": "%s · Ethos",
-    "description": "Create a personalised, animated digital gift for someone you love. Photos, their song, your words. Share with a link or QR code. Free to start.",
-    "giftsTitle": "Ethos — Digital gifts that open like a story"
+    "description": "Find date ideas near you on a map, plan the day together and wrap it in a gift they'll keep. Weekend trips, games for two and personal gifts. Free to start.",
+    "giftsTitle": "Ethos — Gifts that open like a story",
+    "giftsDescription": "Make a personal gift that opens like a story: your photos, their song and your words, sent as a link or a QR code. Free to start."
   },
   "nav": {
     "templates": "Templates",
@@ -67,7 +68,7 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Digital gifts. Ten minutes to make, years to keep.",
+      "eyebrow": "Personal gifts. Ten minutes to make, years to keep.",
       "h1a": "Give them a moment they'll",
       "h1b": "open again",
       "h1c": "and again.",
@@ -1745,8 +1746,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Dates, gifts and games for the two of you",
-      "description": "Find date ideas on a map of your town, plan the evening and send it as a link. Make a digital gift that opens like a story. Built for couples, near or far."
+      "title": "Ethos — Date ideas, trips and gifts for couples",
+      "description": "Find date ideas near you on a map, plan the day together and wrap it in a gift they'll keep. Weekend trips, games for two and personal gifts. Free to start."
     },
     "hero": {
       "eyebrow": "For the two of you",

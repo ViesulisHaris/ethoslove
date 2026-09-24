@@ -6,8 +6,8 @@ import { HEART, SEAL } from "@/components/shared/logo";
 import { getManifest } from "@/templates/manifests";
 
 const COPY = {
-  en: { eyebrow: "DIGITAL GIFTS", templateEyebrow: "A DIGITAL GIFT", line: "Photos, their song and your words, sent as a link." },
-  es: { eyebrow: "REGALOS DIGITALES", templateEyebrow: "UN REGALO DIGITAL", line: "Fotos, su canción y tus palabras, enviadas con un enlace." },
+  en: { eyebrow: "FOR THE TWO OF YOU", headline: "Find the date. Keep the person.", templateEyebrow: "A GIFT BY ETHOS", line: "Date ideas near you, trips, games and gifts for two." },
+  es: { eyebrow: "PARA VOSOTROS DOS", headline: "Encuentra la cita. Quédate con la persona.", templateEyebrow: "UN REGALO DE ETHOS", line: "Ideas para citas cerca de ti, escapadas, juegos y regalos para dos." },
 } as const;
 
 // Same serif as the gift link card (see g/[shortId]/card.jpg).
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   const manifest = getManifest(params.get("template") ?? "");
   const copy = COPY[locale];
   const eyebrow = manifest ? copy.templateEyebrow : copy.eyebrow;
-  const headline = manifest ? manifest.name[locale] : BRAND.tagline[locale];
+  const headline = manifest ? manifest.name[locale] : copy.headline;
   const line = manifest ? manifest.tagline[locale] : copy.line;
   const [serif, serifItalic] = await Promise.all([serifFont(), italicFont()]);
 

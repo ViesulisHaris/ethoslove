@@ -20,7 +20,7 @@ import { TornEdge } from "@/components/marketing/home/cutouts";
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/gifts">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t("description"), absoluteTitle: true });
+  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t("giftsDescription"), absoluteTitle: true });
 }
 
 /** Gifts: what was the whole site's front page before Dates arrived, kept as it was. */

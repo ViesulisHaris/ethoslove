@@ -27,7 +27,7 @@ export function GET() {
   const lines = [
     `# ${BRAND.name}`,
     "",
-    `> ${BRAND.name} (${BRAND.domain}) makes personal, animated digital gifts. You pick a template, add their name, your message, photos and a song, and send the gift as a link or a QR code. It opens on their phone as a short interactive experience, in English or Spanish, with no app to install. Free to start; premium templates and extras are a one-time payment, never a subscription.`,
+    `> ${BRAND.name} (${BRAND.domain}) is for couples: date ideas made from real places near you on a map, ready-made trips, games for two, and personal gifts that open like a story. For a gift you pick a template, add their name, your message, photos and a song, and send it as a link or a QR code. It opens on their phone as a short interactive experience, in English or Spanish, with no app to install. Free to start; premium templates and extras are a one-time payment, never a subscription.`,
     "",
     `People use ${BRAND.name} when a text feels too small and a physical gift is too slow or too far away: birthdays, anniversaries, Valentine's Day, long-distance relationships, apologies, Mother's Day and Father's Day, weddings, graduations and Christmas.`,
     "",
