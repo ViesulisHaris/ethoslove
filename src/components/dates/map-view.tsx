@@ -8,7 +8,7 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { cn } from "@/lib/utils";
 import { distanceKm, type LatLng } from "@/lib/dates/geo";
 import { GROUP_IDS, GROUPS } from "@/lib/dates/kinds";
-import { CAMERA_MS, DOTS_MS, drawRoute, easeOutQuint, FRAME_MS, prefersStill, revealWhenDrawn, setDataDrawn } from "@/lib/dates/map-motion";
+import { CAMERA_MS, DOTS_MS, drawRoute, easeOutQuint, FRAME_MS, paintLayer, prefersStill, revealWhenDrawn, setDataDrawn } from "@/lib/dates/map-motion";
 import { applyPalette, MAP_PAPER, type MapStyle } from "@/lib/dates/map-style";
 import { loadMapStyle, maplibreUrl, preloadMapLibre } from "@/lib/dates/map-vendor";
 import type { Place } from "@/lib/dates/places";
@@ -420,11 +420,8 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
     const token = ++turn.token;
     void setDataDrawn(map, DOTS[back], toFeatures(places)).then(() => {
       if (token !== turn.token || mapRef.current !== map) return;
-      const show = (i: number, on: boolean) => {
-        map.setPaintProperty(DOTS[i], "circle-opacity", on ? DOT_OPACITY : 0);
-        map.setPaintProperty(DOTS[i], "circle-stroke-opacity", on ? DOT_STROKE : 0);
-        map.setPaintProperty(DOTS[i], "circle-radius", dotRadius(on ? 1 : 0.5));
-      };
+      const show = (i: number, on: boolean) =>
+        paintLayer(map, DOTS[i], { "circle-opacity": on ? DOT_OPACITY : 0, "circle-stroke-opacity": on ? DOT_STROKE : 0, "circle-radius": dotRadius(on ? 1 : 0.5) });
       show(back, true);
       show(turn.front, false);
       turn.front = back;
@@ -445,11 +442,7 @@ export function MapView({ center, zoom = 14, places, selected, hoveredId, rating
   useEffect(() => {
     const map = mapRef.current;
     if (state !== "ready" || !map) return;
-    const ring = (on: boolean) => {
-      map.setPaintProperty(HALO, "circle-opacity", on ? 0.18 : 0);
-      map.setPaintProperty(HALO, "circle-stroke-opacity", on ? 0.55 : 0);
-      map.setPaintProperty(HALO, "circle-radius", on ? 21 : 12);
-    };
+    const ring = (on: boolean) => paintLayer(map, HALO, { "circle-opacity": on ? 0.18 : 0, "circle-stroke-opacity": on ? 0.55 : 0, "circle-radius": on ? 21 : 12 });
     ring(false);
     if (hoveredLat === undefined || hoveredLng === undefined) return;
     let current = true;

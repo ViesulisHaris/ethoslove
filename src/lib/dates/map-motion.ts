@@ -102,6 +102,33 @@ export function drawRoute(map: MapLibreMap, sourceId: string, coords: LngLat[], 
 }
 
 /**
+ * Sets paint properties on a layer, and when MapLibre refuses because its style is (re)loading —
+ * "Style is not done loading", thrown for instance when React's development double mount leaves an
+ * effect holding the map that is being torn down — tries once more when the style next reports in,
+ * instead of throwing out of an effect. A map that is gone never reports again, which is the end of it.
+ */
+type PaintName = Parameters<MapLibreMap["setPaintProperty"]>[1];
+type PaintValue = Parameters<MapLibreMap["setPaintProperty"]>[2];
+
+export function paintLayer(map: MapLibreMap, layer: string, props: Partial<Record<PaintName, PaintValue>>): void {
+  const apply = () => {
+    if (!map.getLayer(layer)) return;
+    for (const [name, value] of Object.entries(props)) map.setPaintProperty(layer, name as PaintName, value as PaintValue);
+  };
+  try {
+    apply();
+  } catch {
+    map.once("styledata", () => {
+      try {
+        apply();
+      } catch {
+        // Torn down meanwhile: nothing left to paint.
+      }
+    });
+  }
+}
+
+/**
  * New data for a GeoJSON source is cut into tiles in a worker and drawn a frame or two later. This
  * resolves once it has been (or after `patience` ms), so a fade started then shows the new dots
  * arriving, not the old ones for a frame.
