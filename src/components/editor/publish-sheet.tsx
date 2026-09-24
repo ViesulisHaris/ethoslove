@@ -27,6 +27,9 @@ import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
 import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
+import { SITE } from "@/config/site";
+import { request, tell } from "@/lib/app/bridge";
+import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
 import { ShareScreen } from "./share-screen";
 
@@ -60,6 +63,11 @@ export function PublishSheet({
   const [showSignIn, setShowSignIn] = useState(false);
   const autoPublished = useRef(false);
   const [error, setError] = useState<string | null>(null);
+  // Inside the iPhone app (lib/app/bridge.ts): paying is the App Store's sheet, signing in is the
+  // app's, and once the app says a purchase went through the gift goes out as it does back from Stripe.
+  const inApp = useInApp();
+  const [appUnlocked, setAppUnlocked] = useState(false);
+  const signingIn = useRef(false);
   const currency = currencyFor(locale === "es" ? "ES" : "US");
   // The price a guest is told before signing in: what this gift's own row costs.
   const priceHint = formatAmount(PRODUCTS[templatePlan(manifest.tier)].amounts[currency], currency, locale);
@@ -87,6 +95,10 @@ export function PublishSheet({
   useEffect(() => {
     if (open) track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
   }, [open, slug, manifest.tier, state.authed]);
+  // The app says what this account owns changed (a purchase, a restore, a pass joined): check again.
+  useNativeEvents((event) => {
+    if (event.type === "entitlements" && open && state.authed) void getEntitlement(slug).then(setFetchedEntitlement);
+  });
 
   const serialized = useMemo(() => (state.hydrated ? state.serializedForServer() : null), [state]);
   const uploadsInFlight = Object.values(state.assets).some(
@@ -206,6 +218,55 @@ export function PublishSheet({
     }
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
+    // The app closes the editor and shows its own "It's ready" sheet; the share screen below stays
+    // as the fallback for an app that doesn't.
+    if (inApp) {
+      const sent = useEditor.getState();
+      tell("published", {
+        giftId,
+        shortId: result.data.shortId,
+        url: `${window.location.origin}${SITE.giftPath}/${result.data.shortId}`,
+        status: result.data.status,
+        ...(result.data.status === "scheduled" && sent.schedule.unlockAt ? { unlockAt: sent.schedule.unlockAt } : {}),
+        title: sent.data.title,
+        recipientName: sent.data.recipientName,
+        templateSlug: slug,
+      });
+    }
+  };
+
+  /** The App Store's sheet for this gift; on "unlocked", check again, and the gift goes out below. */
+  const unlockInApp = async (): Promise<"unlocked" | "cancelled" | "failed"> => {
+    const reply = await request("paywall", { templateSlug: slug, tier: manifest.tier, features: premiumFeatures });
+    if (reply.status !== "unlocked") return reply.status === "cancelled" ? "cancelled" : "failed";
+    try {
+      setFetchedEntitlement(await getEntitlement(slug));
+    } catch {
+      // Bought all the same: the next check (reopening the sheet, the app's "entitlements") sees it.
+    }
+    setAppUnlocked(true);
+    return "unlocked";
+  };
+
+  /**
+   * Signing in happens in the app, which then hands this page a session of its own. The page is
+   * loaded again to pick it up, back on this sheet (the draft is kept on this device meanwhile).
+   */
+  const signInInApp = async () => {
+    if (signingIn.current) return;
+    signingIn.current = true;
+    try {
+      const reply = await request("signIn", { reason: "publish" });
+      if (reply.status !== "signedIn") return;
+      // Back to this editor in the page's own language, with the sheet open again. A whole page load,
+      // not a client-side hop: the server has to render it with the session the app just handed over.
+      const back = new URL(`${/^\/es(\/|$)/.test(window.location.pathname) ? "/es" : ""}${next}`, window.location.origin);
+      window.location.assign(back.href);
+    } catch {
+      // The app said no: the sheet stays as it is.
+    } finally {
+      signingIn.current = false;
+    }
   };
 
   const next = resumePath(slug, freeReply ? replyToken : undefined);
@@ -223,7 +284,7 @@ export function PublishSheet({
 
   // Back from Stripe, signed in, everything in place: one less tap.
   const canAutoPublish =
-    resume &&
+    (resume || appUnlocked) &&
     open &&
     state.authed &&
     Boolean(decision?.ok) &&
@@ -349,7 +410,16 @@ export function PublishSheet({
               ) : null}
             </section>
 
-            {!state.authed && supabaseConfigured && guestCanPay && !showSignIn ? (
+            {!state.authed && supabaseConfigured && inApp ? (
+              <section className="mt-7 rounded-xl border border-line bg-card p-5" data-testid="app-sign-in">
+                <p className="font-display text-xl">{t("signInTitle")}</p>
+                <p className="mt-1 mb-4 text-sm text-muted-foreground">{freeReply ? t("signInBlurbFreeReply") : t("signInBlurb")}</p>
+                <Button className="h-12 w-full rounded-full text-base" onClick={() => void signInInApp()}>
+                  {t("appSignIn")}
+                </Button>
+              </section>
+            ) : null}
+            {!state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
               <Paywall
                 manifest={manifest}
                 currency={currency}
@@ -363,7 +433,7 @@ export function PublishSheet({
                 onSignInInstead={() => setShowSignIn(true)}
               />
             ) : null}
-            {!state.authed && supabaseConfigured && (!guestCanPay || showSignIn) ? (
+            {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
               <section className="mt-7 rounded-xl border border-line bg-card p-5">
                 <p className="font-display text-xl">{t("signInTitle")}</p>
                 <p className="mt-1 mb-4 text-sm text-muted-foreground">
@@ -378,7 +448,7 @@ export function PublishSheet({
             ) : null}
 
             {state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
-              paymentsEnabled ? (
+              paymentsEnabled || inApp ? (
                 <Paywall
                   manifest={manifest}
                   currency={currency}
@@ -390,6 +460,7 @@ export function PublishSheet({
                   upgrade={upgrade}
                   blocked={false}
                   ownedElsewhere={ownedElsewhere}
+                  onAppUnlock={unlockInApp}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">
@@ -419,7 +490,8 @@ export function PublishSheet({
               className={cn(
                 "mt-8 h-12 w-full rounded-full text-base",
                 ((decision && !decision.ok && decision.reason === "payment_required") ||
-                  (!state.authed && guestCanPay && !showSignIn)) &&
+                  (!state.authed && guestCanPay && !showSignIn) ||
+                  (!state.authed && inApp)) &&
                   "hidden",
               )}
               disabled={

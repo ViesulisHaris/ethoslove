@@ -44,7 +44,7 @@ export const KIND_ART: Record<PlaceKind, string> = {
 };
 
 /** A second picture for the commonest kinds, so two cafés side by side are not the same tile twice. */
-const KIND_ART_ALT: Partial<Record<PlaceKind, string>> = {
+export const KIND_ART_ALT: Partial<Record<PlaceKind, string>> = {
   restaurant: kind("bar"),
   bar: idea("karaoke-duet"),
   cafe: idea("bookshop-and-coffee"),

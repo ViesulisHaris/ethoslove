@@ -12,6 +12,7 @@ import { tabStorage } from "@/lib/games/saved";
 import { PACKS, adultConfirmed, confirmAdult, packAccess, packCheckoutBody, packFromSearch, packReturnPath, packsFor, type PackAccess, type PackId } from "@/lib/games/packs";
 import { fetchEntitlements, type Entitlements } from "@/components/pricing/entitlements";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { isInApp, request } from "@/lib/app/bridge";
 
 /** sessionStorage, or nothing: some browsers throw on the property itself when storage is blocked. */
 export { tabStorage };
@@ -96,8 +97,50 @@ export function usePacks(game: GameKey) {
     };
   }, [game]);
 
+  /**
+   * Inside the iPhone app: the App Store's sheet, never Stripe (lib/app/bridge.ts). A page with no
+   * session asks the app to sign in first, which also hands this page a session, so the pack bought
+   * is on the account the page then reads; on "unlocked" it reads again and opens the pack.
+   */
+  const buyInApp = async (id: PackId) => {
+    setBuying(true);
+    try {
+      if (owned.data?.signedIn === false) {
+        const signedIn = await request("signIn", { reason: "pack" });
+        if (signedIn.status !== "signedIn") return;
+      }
+      const reply = await request("buyPack", { packId: id });
+      if (reply.status !== "unlocked") {
+        if (reply.status !== "cancelled") toast.error(t("sheet.appFailed"));
+        return;
+      }
+      const data = await fetchEntitlements();
+      setOwned({ data, loaded: true });
+      setOffer(null);
+      void load(id);
+    } catch {
+      toast.error(t("sheet.appFailed"));
+    } finally {
+      setBuying(false);
+    }
+  };
+
+  /** "Bought it already? Sign in", inside the app: its own sign-in, then this page reads what is owned again. */
+  const signInInApp = async () => {
+    const reply = await request("signIn", { reason: "pack" }).catch(() => null);
+    if (reply?.status !== "signedIn") return;
+    const data = await fetchEntitlements();
+    setOwned({ data, loaded: true });
+    const id = offer;
+    if (id && packAccess(data?.packs ?? [], Boolean(data?.pass), id) !== "locked") {
+      setOffer(null);
+      void load(id);
+    }
+  };
+
   const buy = async (id: PackId) => {
     if (buying) return;
+    if (isInApp()) return buyInApp(id);
     setBuying(true);
     // No code travels: a creator is credited through the ref of their personal link, which
     // startCheckout adds to every checkout.
@@ -149,6 +192,7 @@ export function usePacks(game: GameKey) {
     },
     declineAge: () => setAsking(null),
     buy,
+    signInInApp,
   };
 }
 

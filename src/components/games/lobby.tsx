@@ -7,6 +7,7 @@ import { getPathname, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { makeRoomCode, parseRoomCode, type Entry, type Mode, type Session } from "@/lib/games/room";
 import { PlayingCard } from "./cards";
+import { isInApp, shareLink } from "@/lib/app/bridge";
 import { ScreenTop } from "./screen-top";
 import type { useRoom } from "./use-room";
 
@@ -90,12 +91,9 @@ export function Lobby({ title, blurb, art, room, entry, onEnter, onStart, onePho
     }
   };
   const share = async () => {
-    if (!navigator.share) return copy();
-    try {
-      await navigator.share({ title, text: t("shareText", { name: entry?.name || names[0] || t("someone") }), url: link() });
-    } catch {
-      // Closed.
-    }
+    // Inside the iPhone app, its own share sheet (lib/app/bridge.ts); in a browser, the browser's.
+    if (!isInApp() && !navigator.share) return copy();
+    if (!(await shareLink({ title, text: t("shareText", { name: entry?.name || names[0] || t("someone") }), url: link() }))) return copy();
   };
 
   const others = room.peers.filter((p) => p.id !== room.me);

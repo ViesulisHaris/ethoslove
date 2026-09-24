@@ -97,7 +97,7 @@ function RatherPlay({ session, room, deal, closed, onChangePlayers }: { session:
             <Users aria-hidden="true" className="size-4" />
             {tl("change")}
           </button>
-          <Link href="/dates" className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
+          <Link href="/dates" data-app-hide className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
             {t("end.date")}
             <ArrowRight aria-hidden="true" className="size-4" />
           </Link>

@@ -9,6 +9,7 @@ import { SITE } from "@/config/site";
 import { useEditor } from "@/lib/editor/store";
 import { track } from "@/lib/analytics/track";
 import { tripLinks } from "@/lib/lifecycle/trip-links";
+import { isInApp, shareLink } from "@/lib/app/bridge";
 import { PARTNER_NAMES, type PartnerId, type PartnerPlacement } from "@/lib/trips/partners";
 import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
@@ -37,12 +38,9 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
   };
 
   const native = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: data.title || data.recipientName, text, url });
-      } catch {
-        /* cancelled */
-      }
+    // Inside the iPhone app, its own share sheet; in a browser, the browser's.
+    if (isInApp() || typeof navigator.share === "function") {
+      if (!(await shareLink({ title: data.title || data.recipientName, text, url }))) void copy();
     } else void copy();
   };
 
@@ -92,7 +90,8 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
         <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} />
       </section>
 
-      <div className="mt-8 flex flex-col gap-2">
+      {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}
+      <div className="mt-8 flex flex-col gap-2" data-app-hide>
         <Button asChild variant="outline" className="h-11 rounded-full">
           <Link href="/dashboard">{t("dashboard")}</Link>
         </Button>

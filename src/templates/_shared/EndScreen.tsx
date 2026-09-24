@@ -158,9 +158,11 @@ export function EndScreen({
             ) : null}
           </div>
         ) : null}
-        {/* Not everyone who liked the gift wants to answer its sender: the gallery, for anyone else. */}
+        {/* Not everyone who liked the gift wants to answer its sender: the gallery, for anyone else.
+            Not inside the iPhone app, where the gifts are a tab of their own. */}
         {reply && onMakeOne ? (
           <a
+            data-app-hide
             href={`${locale === "es" ? "/es" : ""}/templates?ref=gift-end`}
             className={cn(
               "flex min-h-11 items-center justify-center text-sm underline-offset-4 hover:underline",

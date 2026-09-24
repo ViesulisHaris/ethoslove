@@ -4,6 +4,7 @@ import { ArrowRight, Gift, Shuffle } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname, usePathname } from "@/i18n/navigation";
 import { PlayingCard } from "./cards";
+import { closeInApp } from "@/lib/app/bridge";
 
 /**
  * What every game ends on, under its own score: a gift for the person across the table, or another
@@ -19,14 +20,15 @@ export function GameEnd({ guest = false }: { guest?: boolean }) {
   return (
     <nav aria-label={t("label")} className="mx-auto mt-10 w-full max-w-xl text-left">
       <div className="grid gap-3 sm:grid-cols-2">
-        <Link href="/templates?ref=game-end" className="group block rounded-[20px]">
+        {/* Inside the iPhone app the gifts are a tab of their own: no link out to the site's gallery. */}
+        <Link href="/templates?ref=game-end" data-app-hide className="group block rounded-[20px]">
           <PlayingCard rank="A" suit="heart" className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="min-h-[164px] px-6 pt-11 pb-6">
             <Gift aria-hidden="true" className="size-6 text-rose-deep" />
             <span className="mt-3 block font-display text-[23px] leading-tight">{t("gift")}</span>
             <span className="mt-1.5 block text-[14px] leading-snug text-forest/65">{t("giftBlurb")}</span>
           </PlayingCard>
         </Link>
-        <Link href="/games#pick" className="group block rounded-[20px]">
+        <Link href="/games#pick" onClick={closeInApp} className="group block rounded-[20px]">
           <PlayingCard rank="K" suit="spade" className="h-full transition-transform duration-300 ease-(--ease-out-quint) group-hover:-translate-y-1.5" faceClassName="min-h-[164px] px-6 pt-11 pb-6">
             <Shuffle aria-hidden="true" className="size-6 text-rose-deep" />
             <span className="mt-3 block font-display text-[23px] leading-tight">{t("another")}</span>

@@ -11,6 +11,7 @@ import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { useInApp } from "@/lib/app/use-bridge";
 import {
   bumpOffered,
   defaultPaywallPlan,
@@ -44,6 +45,7 @@ export function Paywall({
   blocked,
   ownedElsewhere = [],
   onSignInInstead,
+  onAppUnlock,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -59,6 +61,11 @@ export function Paywall({
   blocked: boolean;
   ownedElsewhere?: TemplateManifest[];
   onSignInInstead?: () => void;
+  /**
+   * Inside the iPhone app: the App Store's sheet instead of Stripe (lib/app/bridge.ts). Resolves once
+   * the app has answered; on "unlocked" the publish sheet re-checks and sends the gift.
+   */
+  onAppUnlock?: () => Promise<"unlocked" | "cancelled" | "failed">;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -82,6 +89,12 @@ export function Paywall({
   useEffect(() => {
     if (manifest.tier === "free") track("extras_offer_shown", { template: slug, guest });
   }, [manifest.tier, slug, guest]);
+
+  // Inside the iPhone app nothing is sold here: no prices, plans, bump or checkout. Apple's own
+  // sheet shows the options and their App Store prices (guideline 3.1.1).
+  const inApp = useInApp();
+  if (inApp && onAppUnlock && !guest)
+    return <AppUnlock manifest={manifest} locale={locale} features={features} freeReply={freeReply} ownedElsewhere={ownedElsewhere} blocked={blocked} onUnlock={onAppUnlock} />;
 
   const pay = async () => {
     setPaying(true);
@@ -238,6 +251,72 @@ export function Paywall({
           href={`/create/${ownedElsewhere[0].slug}`}
           className="mt-2 flex min-h-11 w-full items-center justify-center text-center text-sm font-medium text-coral underline-offset-4 hover:underline"
         >
+          {t("openOwned", { template: ownedElsewhere[0].name[locale] })}
+        </a>
+      ) : null}
+    </section>
+  );
+}
+
+/** The paywall inside the iPhone app: what needs unlocking, and one button to the App Store's sheet. */
+function AppUnlock({
+  manifest,
+  locale,
+  features,
+  freeReply,
+  ownedElsewhere,
+  blocked,
+  onUnlock,
+}: {
+  manifest: TemplateManifest;
+  locale: GiftLocale;
+  features: string[];
+  freeReply: boolean;
+  ownedElsewhere: TemplateManifest[];
+  blocked: boolean;
+  onUnlock: () => Promise<"unlocked" | "cancelled" | "failed">;
+}) {
+  const t = useTranslations("editor.publishSheet");
+  const tm = useTranslations("money.paywall");
+  const [state, setState] = useState<"idle" | "waiting" | "failed">("idle");
+
+  const unlock = async () => {
+    setState("waiting");
+    let outcome: "unlocked" | "cancelled" | "failed" = "failed";
+    try {
+      outcome = await onUnlock();
+    } catch {
+      outcome = "failed";
+    }
+    setState(outcome === "failed" ? "failed" : "idle");
+  };
+
+  return (
+    <section className="mt-7 rounded-xl border border-ink bg-card p-4 sm:p-5" data-testid="pay-panel-app">
+      <p className="flex items-center gap-2 font-display text-xl">
+        <Lock aria-hidden="true" className="size-4 text-coral" />
+        {t("payTitle")}
+      </p>
+      <p className="mt-1 text-sm text-ink-soft">{manifest.tier === "free" ? tm("extrasIntro", { features: features.join(", ") }) : t("payBlurb", { features: features.join(", ") })}</p>
+      {freeReply ? (
+        <p className="mt-3 flex items-start gap-2 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink">
+          <Gift aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-coral" />
+          <span>{tm("freeReplyExtras")}</span>
+        </p>
+      ) : null}
+      {ownedElsewhere.length ? <p className="mt-3 text-sm text-ink-soft">{t("ownedElsewhere", { templates: ownedElsewhere.map((m) => m.name[locale]).join(", ") })}</p> : null}
+      <Button className="mt-5 h-12 w-full rounded-full text-base" disabled={state === "waiting" || blocked} onClick={unlock} data-testid="app-unlock">
+        {state === "waiting" ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Lock aria-hidden="true" className="size-4" />}
+        <span>{t("appUnlock")}</span>
+      </Button>
+      <p className="mt-3 text-center text-mono-meta text-muted-foreground">{t("appUnlockNote")}</p>
+      {state === "failed" ? (
+        <p role="alert" className="mt-3 text-center text-sm text-ink">
+          {t("appUnlockFailed")}
+        </p>
+      ) : null}
+      {ownedElsewhere.length === 1 ? (
+        <a href={`/create/${ownedElsewhere[0].slug}`} className="mt-2 flex min-h-11 w-full items-center justify-center text-center text-sm font-medium text-coral underline-offset-4 hover:underline">
           {t("openOwned", { template: ownedElsewhere[0].name[locale] })}
         </a>
       ) : null}

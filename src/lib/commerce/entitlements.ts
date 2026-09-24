@@ -3,7 +3,8 @@ import { EVERY_PACK, EVERY_TEMPLATE, type Currency } from "@/lib/pricing/product
 import type { Pass } from "./passes";
 import { isRunning, paidUntil } from "./passes";
 import { UPGRADE_CREDITED, upgradeAmount, type PaidPurchase } from "./pricing";
-import { iso } from "./db";
+import { inviteUrl, iso, type Db, type Locale } from "./db";
+import { splitUnlocks } from "./unlocks";
 
 /** GET /api/entitlements (contract C3), plus the buyer's upgrade price when there is one to offer. */
 export type Entitlements = {
@@ -55,4 +56,30 @@ export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], 
   if (ownedForever.includes(EVERY_TEMPLATE)) return null;
   const credited = purchases.some((p) => p.status === "paid" && (UPGRADE_CREDITED as readonly string[]).includes(p.product));
   return credited ? { amount: upgradeAmount(currency, purchases), currency } : null;
+}
+
+/**
+ * What a signed-in user can use right now, read with `db`: the user's own session (row-level
+ * security decides, as GET /api/entitlements reads it) or the service role for that user id (the
+ * app's purchase routes, right after they have written). Before migration 0009 the pass table
+ * doesn't exist: that reads as "no pass", not an error.
+ */
+export async function readEntitlements(db: Db, userId: string, options: { locale: Locale; currency: Currency; now: number }): Promise<Entitlements> {
+  const [unlocks, owned, joined, purchases] = await Promise.all([
+    db.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
+    db.from("couple_passes").select("*").eq("owner_user_id", userId),
+    db.from("couple_passes").select("*").eq("partner_user_id", userId),
+    db.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
+  ]);
+  const rows = unlocks.data ?? [];
+  const passes = [...(owned.data ?? []), ...(joined.data ?? [])];
+  const slugs = rows.map((row) => row.template_slug);
+  const forever = splitUnlocks(rows, passes.map((pass) => pass.purchase_id)).forever;
+  return {
+    signedIn: true,
+    templates: templatesFromRows(slugs),
+    packs: packsFromRows(slugs),
+    pass: summarisePass(passes, userId, options.now, (code) => inviteUrl(code, options.locale)),
+    upgrade: upgradeOffer(forever, purchases.data ?? [], options.currency),
+  };
 }

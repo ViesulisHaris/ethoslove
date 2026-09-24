@@ -10,9 +10,9 @@ import type { PlaceKind } from "./kinds";
  *
  * Every kind is listed, so a new kind in kinds.ts fails the type check until it is decided here.
  */
-type Tickets = "yes" | "famous" | "no";
+export type Tickets = "yes" | "famous" | "no";
 
-const TICKETS = {
+export const TICKETS = {
   restaurant: "no",
   bar: "no",
   cafe: "no",

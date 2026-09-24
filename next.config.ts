@@ -35,6 +35,17 @@ const nextConfig: NextConfig = {
     { source: "/es/&", destination: "/es", permanent: true },
   ],
   headers: async () => [
+    // Universal links for the iPhone app (public/.well-known/apple-app-site-association): a shared plan,
+    // a For Two invite, a trip and a template's page open in the app. Gift links (/g/…) are deliberately
+    // not claimed: whoever receives one always gets the full-screen web gift. Apple fetches the file over
+    // HTTPS with no redirects and wants JSON; it has no extension, so the type is said here.
+    {
+      source: "/.well-known/apple-app-site-association",
+      headers: [
+        { key: "Content-Type", value: "application/json" },
+        { key: "Cache-Control", value: "public, max-age=3600" },
+      ],
+    },
     {
       source: "/audio/library/:path*",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],

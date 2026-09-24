@@ -12,7 +12,7 @@ type Result = { data: unknown; error: { code?: string; message: string } | null 
 
 const UNIQUE: Record<string, string[][]> = {
   profiles: [["id"], ["email"]],
-  purchases: [["id"], ["stripe_session_id"]],
+  purchases: [["id"], ["stripe_session_id"], ["store", "store_transaction_id"]],
   template_unlocks: [["id"], ["user_id", "template_slug"]],
   couple_passes: [["id"], ["purchase_id"], ["invite_code"]],
   gift_cards: [["id"], ["code"], ["purchase_id"]],
@@ -23,7 +23,7 @@ const UNIQUE: Record<string, string[][]> = {
 };
 
 const DEFAULTS: Record<string, Row> = {
-  purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null },
+  purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null },
   template_unlocks: { purchase_id: null },
   couple_passes: { partner_user_id: null, renewal_reminded_at: null },
   gift_cards: { purchase_id: null, buyer_user_id: null, recipient_name: null, note: null, redeemed_by: null, redeemed_at: null, expires_at: null },
@@ -86,6 +86,14 @@ class Query implements PromiseLike<Result> {
   }
   in(column: string, values: unknown[]) {
     this.filters.push((row) => values.includes(row[column]));
+    return this;
+  }
+  /** PostgREST's raw filter; only `eq` is needed, with an array written as Postgres does ("{}", "{a,b}"). */
+  filter(column: string, operator: string, value: string) {
+    if (operator !== "eq") throw new Error(`fake db: filter ${operator} is not supported`);
+    const array = /^\{(.*)\}$/.exec(value);
+    const wanted = array ? (array[1] ? array[1].split(",") : []) : value;
+    this.filters.push((row) => JSON.stringify(row[column]) === JSON.stringify(wanted));
     return this;
   }
   is(column: string, value: null) {

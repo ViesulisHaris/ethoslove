@@ -14,7 +14,8 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
   return (
     <ClientMessages scope="(marketing)/layout" locale={locale}>
       {/* The header floats; pages start below it, and a hero can pull itself up underneath it. */}
-      <div className="flex min-h-dvh flex-col" style={{ "--header-h": "76px" } as React.CSSProperties}>
+      {/* data-header-offset: inside the iPhone app the header is hidden, and its room with it (globals.css). */}
+      <div className="flex min-h-dvh flex-col" data-header-offset style={{ "--header-h": "76px" } as React.CSSProperties}>
         <MarketingHeader />
         <main id="main" className="flex-1 pt-[var(--header-h)]">
           {children}

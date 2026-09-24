@@ -54,8 +54,8 @@ export function AppShell({ user, children }: { user: ShellUser | null; children:
   return (
     <AppTheme>
       <div className="flex min-h-dvh bg-background text-foreground">
-        {/* Desktop sidebar */}
-        <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 md:flex">
+        {/* Desktop sidebar. Neither bar shows inside the iPhone app, whose own bar and tabs stand in for them. */}
+        <aside data-app-hide className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar p-4 md:flex">
           <Link href="/" className="mb-8 px-2 pt-1" aria-label={t("brand")}>
             <Logo />
           </Link>
@@ -77,7 +77,7 @@ export function AppShell({ user, children }: { user: ShellUser | null; children:
 
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Mobile top bar */}
-          <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur md:hidden">
+          <header data-app-hide className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur md:hidden">
             <Link href="/" aria-label={t("brand")}>
               <Logo />
             </Link>

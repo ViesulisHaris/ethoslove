@@ -9,6 +9,8 @@ import type { CoverId, GiftLocale } from "@/lib/gift/schema";
 import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
 import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
 import { LogoMark } from "@/components/shared/logo";
+import { closeInApp } from "@/lib/app/bridge";
+import { useNativeReady } from "@/lib/app/use-bridge";
 
 const noSubscribe = () => () => {};
 
@@ -35,6 +37,8 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
   const t = useTranslations("templates");
   const [replayKey, setReplayKey] = useState(0);
   const cover = useCoverParam();
+  // The app titles its own bar from its catalogue: no need to load every template's name here.
+  useNativeReady("demo");
 
   return (
     <div className="flex h-dvh w-full flex-col bg-night">
@@ -47,7 +51,8 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
       <div data-demo-chrome className="flex h-[calc(3rem+env(safe-area-inset-top))] shrink-0 items-center justify-between gap-2 border-b border-white/10 bg-night px-2 pt-[env(safe-area-inset-top)] sm:px-3">
         {/* At least 44px wide too: below 360px the label is screen-reader only and the arrow alone was 30. */}
         {/* Not prefetched: on a slow phone that download competed with the gift's own. */}
-        <Link href={backHref} prefetch={false} className="flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium whitespace-nowrap text-white/80 hover:bg-white/10 sm:text-sm">
+        {/* Inside the iPhone app the way back closes the demo, onto the app's own template page. */}
+        <Link href={backHref} prefetch={false} onClick={closeInApp} className="flex h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-medium whitespace-nowrap text-white/80 hover:bg-white/10 sm:text-sm">
           <LogoMark className="hidden size-5 shrink-0 min-[400px]:block" />
           <ArrowLeft className="size-3.5 shrink-0" />
           <span className="truncate max-[359px]:sr-only">{t("backToGallery")}</span>

@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Sticker, type StickerId } from "@/templates/_shared/covers/stickers";
+import { AppReady } from "@/components/app/app-ready";
 
 /**
  * The games' deck: cards that look like cards. A cream face with a thin inner frame and the rank
@@ -145,6 +146,7 @@ export function TableFelt() {
 export function GameTable({ children }: { children: ReactNode }) {
   return (
     <div className="relative isolate -mt-[var(--header-h)] min-h-dvh overflow-hidden bg-[#200b18] pt-[var(--header-h)] text-cream">
+      <AppReady route="game" />
       <TableFelt />
       {children}
     </div>

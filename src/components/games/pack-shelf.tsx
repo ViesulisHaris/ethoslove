@@ -11,6 +11,8 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@
 import { PlayingCard, type BackTone, type SuitName } from "./cards";
 import { ScreenTop } from "./screen-top";
 import { tabStorage, type Shelf } from "./use-packs";
+import { useInApp } from "@/lib/app/use-bridge";
+import { closeInApp } from "@/lib/app/bridge";
 
 const SUITS: SuitName[] = ["heart", "spade", "diamond"];
 
@@ -24,6 +26,8 @@ export function PackStatus({ shelf, id }: { shelf: Shelf; id: PackId }) {
   const t = useTranslations("packs");
   const locale = useLocale();
   const access = shelf.accessOf(id);
+  // Inside the iPhone app a price is the App Store's to show, in its own sheet.
+  const inApp = useInApp();
   if (shelf.opening === id)
     return (
       <>
@@ -35,6 +39,13 @@ export function PackStatus({ shelf, id }: { shelf: Shelf; id: PackId }) {
   if (access === null) return <span aria-hidden="true">&nbsp;</span>;
   if (access === "pass") return <>{t("included")}</>;
   if (access === "owned") return <>{t("owned")}</>;
+  if (inApp)
+    return (
+      <>
+        <Lock aria-hidden="true" className="size-3.5" />
+        {t("appLocked")}
+      </>
+    );
   return (
     <>
       <Lock aria-hidden="true" className="size-3.5" />
@@ -101,6 +112,8 @@ export function PackSheets({ shelf }: { shelf: Shelf }) {
 function OfferSheet({ shelf }: { shelf: Shelf }) {
   const t = useTranslations("packs");
   const locale = useLocale() === "es" ? "es" : "en";
+  // Inside the iPhone app: no price and no link to the site's pricing; the App Store's sheet sells it.
+  const inApp = useInApp();
   // The pack stays on the sheet while it slides away, after the offer itself has been cleared.
   const [shown, setShown] = useState<PackId | null>(shelf.offer);
   if (shelf.offer !== null && shelf.offer !== shown) setShown(shelf.offer);
@@ -142,14 +155,18 @@ function OfferSheet({ shelf }: { shelf: Shelf }) {
             <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:items-center">
               <button type="button" onClick={() => void shelf.buy(info.id)} disabled={shelf.buying} className="btn-rose inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-[15px] font-semibold disabled:opacity-70">
                 {shelf.buying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Lock aria-hidden="true" className="size-4" />}
-                {t("sheet.buy", { price: packPrice(locale) })}
+                {inApp ? t("sheet.appBuy") : t("sheet.buy", { price: packPrice(locale) })}
               </button>
-              <Link href="/pricing?renew=pass" className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-center text-[14.5px] font-semibold text-forest hover:bg-forest/5">
+              <Link href="/pricing?renew=pass" data-app-hide className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-center text-[14.5px] font-semibold text-forest hover:bg-forest/5">
                 {t("sheet.pass")}
               </Link>
             </div>
-            <p className="mt-3 text-[13px] leading-snug text-forest/60">{t("sheet.once")}</p>
-            {shelf.signedOut ? (
+            <p className="mt-3 text-[13px] leading-snug text-forest/60">{inApp ? t("sheet.appOnce") : t("sheet.once")}</p>
+            {shelf.signedOut && inApp ? (
+              <button type="button" onClick={() => void shelf.signInInApp()} className="inline-flex min-h-11 items-center text-[14px] font-semibold text-forest underline underline-offset-4 hover:text-rose-deep">
+                {t("sheet.signIn")}
+              </button>
+            ) : shelf.signedOut ? (
               <Link href={`/login?next=${encodeURIComponent(shelf.returnPath(info.id))}`} className="inline-flex min-h-11 items-center text-[14px] font-semibold text-forest underline underline-offset-4 hover:text-rose-deep">
                 {t("sheet.signIn")}
               </Link>
@@ -223,7 +240,15 @@ export function AdultGate({ pack, host, onYes, onLeave }: { pack: PackId; host: 
           {t("adult.yes")}
         </button>
         {/* Leaving tells the other phone, so it isn't left waiting for somebody who has gone. */}
-        <Link href="/games" onClick={onLeave} className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10">
+        <Link
+          href="/games"
+          onClick={(event) => {
+            onLeave?.();
+            // Inside the iPhone app leaving closes the game, onto the app's own shelf.
+            closeInApp(event);
+          }}
+          className="inline-flex h-12 items-center rounded-full border border-white/20 px-6 text-[15px] font-semibold text-cream hover:bg-white/10"
+        >
           {t("adult.leave")}
         </Link>
       </div>

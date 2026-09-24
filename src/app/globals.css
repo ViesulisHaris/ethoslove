@@ -1053,3 +1053,16 @@
 .ethos-place-list > [data-motion-pop-id] {
   pointer-events: none;
 }
+
+/* Inside the iPhone app (lib/app/bridge.ts): the app's script marks <html data-app="ios"> before
+   the page draws, and the app's own bar, tabs and sheets stand in for the site's chrome. Marked
+   elements never show there, from the first paint on: the marketing header and footer, the sticky
+   call to action, the tour, the consent strip, links back to the site, and anything that would sell
+   outside the App Store. Nothing changes for a browser, which never has the attribute. */
+html[data-app] [data-app-hide] {
+  display: none !important;
+}
+/* The floating header's room at the top of a page (the marketing layout's --header-h), gone with it. */
+html[data-app] [data-header-offset] {
+  --header-h: 0px !important;
+}

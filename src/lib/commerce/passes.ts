@@ -70,15 +70,21 @@ export async function grantPassUnlocks(db: Db, pass: Pass, now: number): Promise
 /**
  * Turns a paid pass purchase into a year: from now, or from the end of the owner's paid-up time when
  * they renew early. A renewal keeps the partner. Safe to run twice for the same purchase.
+ *
+ * `now` is when the year is reckoned from: the moment of purchase. `grantAt` (default `now`) is the
+ * moment the unlock rows are handed over for, which differs only when a purchase is recorded after
+ * the fact (an App Store purchase heard about later, lib/commerce/app-store.ts): a year that has
+ * already run out then gets no rows, which nothing would ever sweep away again.
  */
 export async function startPass(
   db: Db,
-  args: { purchaseId: string; ownerId: string; now: number },
+  args: { purchaseId: string; ownerId: string; now: number; grantAt?: number },
 ): Promise<{ pass: Pass; created: boolean; paidUntil: number } | { error: string }> {
   const { purchaseId, ownerId, now } = args;
+  const grantAt = args.grantAt ?? now;
   const existing = await db.from("couple_passes").select("*").eq("purchase_id", purchaseId).maybeSingle();
   if (existing.data) {
-    const granted = await grantPassUnlocks(db, existing.data, now);
+    const granted = await grantPassUnlocks(db, existing.data, grantAt);
     if (granted.error) return { error: granted.error };
     return { pass: existing.data, created: false, paidUntil: paidUntil(await ownerPasses(db, ownerId), now) ?? now };
   }
@@ -101,7 +107,7 @@ export async function startPass(
     const created = data?.[0];
     const pass = created ?? (await db.from("couple_passes").select("*").eq("purchase_id", purchaseId).maybeSingle()).data;
     if (!pass) return { error: "pass_missing" };
-    const granted = await grantPassUnlocks(db, pass, now);
+    const granted = await grantPassUnlocks(db, pass, grantAt);
     if (granted.error) return { error: granted.error };
     return { pass, created: Boolean(created), paidUntil: start + PASS_MS };
   }

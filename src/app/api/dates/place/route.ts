@@ -1,15 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
-import { isPlaceId, nominatimIdOf, parseNominatim, parseOverpassOne } from "@/lib/dates/details";
-import { askOverpass } from "@/lib/dates/overpass-fetch";
-import { buildIdQuery } from "@/lib/dates/overpass";
+import { isPlaceId } from "@/lib/dates/details";
+import { lookupPlaceDetails } from "@/lib/dates/sources";
 
 export const runtime = "nodejs";
 export const maxDuration = 20;
 
 const MONTH = 60 * 60 * 24 * 30;
-const USER_AGENT = "Ethos/1.0 (+https://tryethos.io)";
 
 /**
  * One place's address, opening hours, website and phone, looked up when somebody opens it: from
@@ -22,23 +20,7 @@ export async function GET(request: NextRequest) {
   const locale = request.nextUrl.searchParams.get("locale") === "es" ? "es" : "en";
   if (!(await rateLimit(`dates-place:${clientIp(request.headers)}`, { limit: 60, windowSeconds: 60 }))) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
-  const headers = { "cache-control": `public, s-maxage=${MONTH}, stale-while-revalidate=${MONTH * 3}` };
-  try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/lookup?osm_ids=${nominatimIdOf(id)}&format=jsonv2&extratags=1&addressdetails=1&accept-language=${locale}`, {
-      next: { revalidate: MONTH },
-      headers: { "user-agent": USER_AGENT, accept: "application/json" },
-      signal: AbortSignal.timeout(6000),
-    });
-    if (res.ok) {
-      const details = parseNominatim(await res.json(), id);
-      if (details) return NextResponse.json({ details }, { headers });
-    }
-  } catch {
-    // Fall through to Overpass.
-  }
-  const query = buildIdQuery(id);
-  const json = query ? await askOverpass(query, { deadlineMs: 9000, hedgeMs: 3000, revalidate: MONTH }) : null;
-  const details = json ? parseOverpassOne(json, id) : null;
+  const details = await lookupPlaceDetails(id, locale);
   if (!details) return NextResponse.json({ error: "unavailable" }, { status: 503, headers: { "cache-control": "no-store" } });
-  return NextResponse.json({ details }, { headers });
+  return NextResponse.json({ details }, { headers: { "cache-control": `public, s-maxage=${MONTH}, stale-while-revalidate=${MONTH * 3}` } });
 }

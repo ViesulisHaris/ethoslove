@@ -33,6 +33,7 @@ export function MarketingHeader() {
 
   return (
     <header
+      data-app-hide
       className="site-header pointer-events-none fixed inset-x-0 top-0 z-40"
       data-compact={compact ? "" : undefined}
       data-hidden={hidden && !menuOpen ? "" : undefined}

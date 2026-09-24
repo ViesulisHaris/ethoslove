@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "@/i18n/navigation";
+import { useInApp } from "@/lib/app/use-bridge";
 import { roomForPath } from "@/lib/tour/room";
 
 /** The tour, the button that replays it and their words are one chunk, fetched only in a room that has a tour. */
@@ -22,7 +23,9 @@ export function TourMount() {
   const pathname = usePathname();
   const room = roomForPath(pathname);
   const idle = useAfterIdle();
-  if (!room || !idle) return null;
+  // Inside the iPhone app the pages are the app's screens, which explain themselves.
+  const inApp = useInApp();
+  if (!room || !idle || inApp) return null;
   // Keyed by path: moving to another page mid-tour ends it, rather than leaving it pointing at nothing.
   return <TourRoot key={pathname} room={room} pathname={pathname} />;
 }

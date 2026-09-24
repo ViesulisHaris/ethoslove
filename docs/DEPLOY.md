@@ -26,6 +26,8 @@ use **Import .env** on that page; tick Production and Preview. Otherwise copy th
 | `GIFT_CARDS_ENABLED` | leave unset: gift cards stay off sale until VAT on vouchers is settled. `true` shows the card on `/pricing` and lets checkout sell it; `/redeem` works either way |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier): rate limits and "one recovery email per address a week" only hold across serverless instances with it |
 | `NEXT_PUBLIC_PRICE_CURRENCIES` | leave unset (euros only): the terms say we charge in euros |
+| `REVENUECAT_SECRET_API_KEY` | the iPhone app's In-App Purchases: RevenueCat → Project → API keys → a **v1 secret** key (`sk_…`), server only. Lets `POST /api/app/purchases/sync` ask RevenueCat what a user bought (restores, a webhook that hasn't arrived). Unset: sync with `pull` answers 503 `not_configured`, and a credit only applies once the webhook has recorded it |
+| `REVENUECAT_WEBHOOK_AUTH` | the exact Authorization value set on RevenueCat's webhook (step 7), e.g. `Bearer <long random string>`. Unset: the webhook answers 503 |
 
 Google sign-in is always shown in the UI when Supabase is configured (magic link stays
 available too). Apple is not offered for now.
@@ -79,3 +81,33 @@ $CRON_SECRET` automatically once the variable exists.
 
 See `docs/STRIPE.md` → "Going live": the live keys, the live webhook secret, any live
 `STRIPE_PRODUCT_*` ids, and a redeploy. Nothing in the code changes.
+
+## 7. The iPhone app (App Store purchases, universal links)
+
+The app is a separate project (`~/Developer/Ethos`); its contract with this site is that repo's
+`docs/ARCHITECTURE.md`. What the site needs for it:
+
+1. **Migration `supabase/migrations/0013_app_store.sql`**: four nullable columns on `purchases`
+   (`store`, `store_product_id`, `store_transaction_id`, `store_environment`) and a unique index on
+   `(store, store_transaction_id)`. Additive and safe to run twice, like 0009. Run it before the
+   RevenueCat webhook is switched on: recording an App Store purchase needs the columns.
+2. **RevenueCat**: products `xyz.secuora.ethos.template`, `.special`, `.everything`, `.fortwo`,
+   `.pack.deep`, `.pack.distance`, `.pack.spicy` (`src/lib/commerce/app-store-products.ts` maps each
+   to the website product it stands for). Restore behaviour **Keep with original App User ID**, so a
+   restore under another account never moves a purchase (the site never moves one either). Webhook
+   URL `https://<your-domain>/api/revenuecat/webhook`, with the Authorization header value you put in
+   `REVENUECAT_WEBHOOK_AUTH`. Our database stays the truth for what someone owns; RevenueCat's own
+   entitlements aren't read.
+3. **Universal links**: `https://<your-domain>/.well-known/apple-app-site-association` is served from
+   `public/.well-known/` as JSON (`next.config.ts`). It names the app as `6STLVMDPXB.xyz.secuora.ethos`
+   and claims `/plan`, `/for-two/join`, `/trips/*` and `/templates/*` (and their `/es` twins), never
+   `/g/*`. The App ID needs the Associated Domains capability with `applinks:<your-domain>`.
+
+### Release blockers for the app
+
+- **Sign in with Apple token revocation on account deletion.** Apple requires an app that offers
+  Sign in with Apple to revoke the user's Apple tokens when they delete their account.
+  `POST /api/app/account/delete` deletes everything on our side (`src/lib/auth/delete-account.ts`),
+  but revoking with Apple (`https://appleid.apple.com/auth/revoke`) needs the Sign in with Apple
+  private key (a `.p8` for the Services ID / the app's bundle id), which the site doesn't have yet.
+  Add it, revoke in that route, and only then ship the app with Sign in with Apple.

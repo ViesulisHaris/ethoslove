@@ -9,7 +9,7 @@ import type { Place } from "./places";
  */
 export type Cost = 0 | 1 | 2 | 3;
 
-const BY_KIND: Record<PlaceKind, Cost> = {
+export const BY_KIND: Record<PlaceKind, Cost> = {
   restaurant: 2,
   bar: 2,
   cafe: 1,

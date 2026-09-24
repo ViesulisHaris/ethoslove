@@ -7,6 +7,8 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 
 export type GiftStatus = "draft" | "scheduled" | "live" | "archived";
 export type PurchaseStatus = "pending" | "paid" | "refunded";
+export type PurchaseStore = "stripe" | "app_store";
+export type StoreEnvironment = "production" | "sandbox";
 export type AssetType = "photo" | "audio" | "video";
 export type ReminderOccasion = "birthday" | "anniversary" | "valentines" | "other";
 
@@ -230,6 +232,12 @@ export interface Database {
           /** The withdrawal sentence the buyer ticked at checkout, and when (0012). Null without the tickbox. */
           terms_consent: string | null;
           terms_consent_at: string | null;
+          /** Where it was bought (0013): null (Stripe, before 0013), 'stripe' or 'app_store'. */
+          store: PurchaseStore | null;
+          /** The App Store's product and transaction ids and environment (0013); null for Stripe. */
+          store_product_id: string | null;
+          store_transaction_id: string | null;
+          store_environment: StoreEnvironment | null;
         };
         Insert: {
           id?: string;
@@ -248,6 +256,10 @@ export interface Database {
           kind?: string | null;
           terms_consent?: string | null;
           terms_consent_at?: string | null;
+          store?: PurchaseStore | null;
+          store_product_id?: string | null;
+          store_transaction_id?: string | null;
+          store_environment?: StoreEnvironment | null;
         };
         Update: {
           stripe_session_id?: string | null;
@@ -261,6 +273,8 @@ export interface Database {
           kind?: string | null;
           terms_consent?: string | null;
           terms_consent_at?: string | null;
+          /** An App Store template credit, spent on one template (lib/commerce/app-store.ts applyCredit). */
+          template_slugs?: string[];
         };
         Relationships: [];
       };

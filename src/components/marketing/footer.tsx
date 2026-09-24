@@ -12,7 +12,7 @@ export async function MarketingFooter() {
 
   return (
     // The site's focus ring is ink, which vanishes on the wine: here it is cream.
-    <footer className="relative mt-auto overflow-hidden bg-forest text-cream [--ring:var(--color-cream)]">
+    <footer data-app-hide className="relative mt-auto overflow-hidden bg-forest text-cream [--ring:var(--color-cream)]">
       <div className="grain-overlay opacity-[0.08] mix-blend-overlay" />
       {/*
        * Two columns on a phone: with every link 44px tall for a thumb, one column made the footer

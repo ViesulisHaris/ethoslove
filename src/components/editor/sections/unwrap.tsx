@@ -127,7 +127,7 @@ export function UnwrapSection({ manifest }: { manifest: TemplateManifest }) {
               <span className="mt-0.5 text-xs text-muted-foreground">{plan.stops.length === 0 ? t("noPlan") : t("addPlanHelp")}</span>
             </button>
             {plan.stops.length === 0 ? (
-              <Link href="/dates" target="_blank" className="mx-4 mb-3 -mt-1 inline-flex min-h-10 items-center self-start text-[13px] font-semibold text-coral underline-offset-4 hover:underline">
+              <Link href="/dates" target="_blank" data-app-hide className="mx-4 mb-3 -mt-1 inline-flex min-h-10 items-center self-start text-[13px] font-semibold text-coral underline-offset-4 hover:underline">
                 {t("planLink")}
               </Link>
             ) : null}

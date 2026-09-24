@@ -20,6 +20,14 @@ export const env = {
   stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
   stripePublishableKey: read("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
 
+  /**
+   * The iPhone app's In-App Purchases (lib/commerce/app-store.ts). The v1 secret key (`sk_…`) asks
+   * RevenueCat what a user bought; the webhook's Authorization value is whatever the RevenueCat
+   * dashboard sends with each event (e.g. `Bearer <random>`), compared exactly.
+   */
+  revenueCatSecretKey: read("REVENUECAT_SECRET_API_KEY"),
+  revenueCatWebhookAuth: read("REVENUECAT_WEBHOOK_AUTH"),
+
   resendApiKey: read("RESEND_API_KEY"),
   emailFrom: read("EMAIL_FROM") ?? "Ethos <hello@tryethos.io>",
 
@@ -73,6 +81,7 @@ export const isConfigured = {
   // The webhook secret is checked by the webhook route itself; the success page fulfils
   // purchases without it, so checkout only needs the secret key.
   stripe: Boolean(env.stripeSecretKey),
+  revenueCat: Boolean(env.revenueCatSecretKey),
   resend: Boolean(env.resendApiKey),
   posthog: Boolean(env.posthogKey),
   clarity: Boolean(env.clarityId),

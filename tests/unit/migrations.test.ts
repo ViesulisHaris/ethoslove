@@ -24,7 +24,7 @@ const migrations = readdirSync(DIR)
 
 describe("migrations from 0008 on", () => {
   it("are all found", () => {
-    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql"]));
+    expect(migrations.map((m) => m.file)).toEqual(expect.arrayContaining(["0009_commerce.sql", "0010_reminders.sql", "0011_privacy_fixes.sql", "0012_consent.sql", "0013_app_store.sql"]));
   });
 
   for (const { file, sql } of migrations) {
@@ -86,5 +86,22 @@ describe("0012: consent, free replies and gift card details", () => {
     expect(sql).toContain("revoke all on public.free_replies from anon, authenticated");
     expect(sql).toContain("revoke all on public.gift_card_details from anon, authenticated");
     expect(sql).not.toMatch(/create policy/);
+  });
+});
+
+describe("0013: App Store purchases", () => {
+  const sql = migrations.find((m) => m.file === "0013_app_store.sql")!.sql;
+
+  it("adds the store columns as nullable, so the live site's inserts still work", () => {
+    for (const column of ["store", "store_product_id", "store_transaction_id", "store_environment"]) expect(sql).toContain(`alter table public.purchases add column if not exists ${column} text`);
+    expect(sql).not.toMatch(/not null/);
+    expect(sql).toContain("check (store in ('stripe', 'app_store'))");
+    expect(sql).toContain("check (store_environment in ('production', 'sandbox'))");
+  });
+
+  it("records an Apple transaction once, with an index ON CONFLICT (store, store_transaction_id) can use", () => {
+    expect(sql).toMatch(/create unique index if not exists purchases_store_tx_idx on public\.purchases \(store, store_transaction_id\);/);
+    // A partial index can't be the target of PostgREST's on_conflict, which is how the code inserts.
+    expect(sql).not.toMatch(/purchases_store_tx_idx[^;]*where/);
   });
 });

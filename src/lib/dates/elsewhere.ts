@@ -25,7 +25,7 @@ export type Elsewhere = {
 
 export const SOURCE_NAMES: Record<SourceId, string> = { tripadvisor: "Tripadvisor", google: "Google", yelp: "Yelp" };
 
-const query = (place: Place) => encodeURIComponent(`${place.name} ${place.address ?? ""}`.trim());
+const query = (place: Pick<Place, "name" | "address">) => encodeURIComponent(`${place.name} ${place.address ?? ""}`.trim());
 
 /**
  * A search on each site for this exact place. No key, no permission, no data kept. The sheet passes
@@ -33,7 +33,7 @@ const query = (place: Place) => encodeURIComponent(`${place.name} ${place.addres
  * alone could be any of three branches. Google's search takes no place id here: an empty one was
  * only noise in the link.
  */
-export function linksFor(place: Place): { source: SourceId; url: string }[] {
+export function linksFor(place: Pick<Place, "name" | "address" | "lat" | "lng">): { source: SourceId; url: string }[] {
   return [
     { source: "tripadvisor", url: `https://www.tripadvisor.com/Search?q=${query(place)}` },
     { source: "google", url: `https://www.google.com/maps/search/?api=1&query=${query(place)}` },

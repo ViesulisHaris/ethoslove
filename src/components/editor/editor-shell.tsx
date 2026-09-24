@@ -10,6 +10,8 @@ import { loadTemplate } from "@/templates/registry";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
+import { withoutUrlSeed } from "@/lib/editor/url-seed";
+import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
 import { TopBar } from "./top-bar";
@@ -26,6 +28,7 @@ import { UnwrapSection } from "./sections/unwrap";
 import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
+import { loadUrlSeed } from "./url-seed";
 
 export type EditorShellProps = {
   slug: string;
@@ -85,10 +88,12 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     track("editor_opened", { template: slug });
   }, [slug]);
 
-  // Load the template module (schema + field meta), then hydrate the store.
+  // Load the template module (schema + field meta), then hydrate the store. A seed in the address
+  // (?seed=trip:…, ?unwrap=…: the iPhone app, or a link) is read alongside it.
   useEffect(() => {
     let active = true;
-    loadTemplate(slug).then((m) => {
+    const fromUrl = remote ? Promise.resolve(null) : loadUrlSeed(slug, locale === "es" ? "es" : "en").catch(() => null);
+    void Promise.all([loadTemplate(slug), fromUrl]).then(([m, url]) => {
       if (!active || !m) return;
       setMod(m);
       const initial = blankGift(manifest, locale, m);
@@ -106,8 +111,11 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         }
       }
       // Arrived from a page that already knew part of this gift, like a preset trip: those fields
-      // start filled in. Whatever doesn't validate stays at the template's defaults.
-      const seed = remote ? null : takeGiftSeed(slug);
+      // start filled in. Whatever doesn't validate stays at the template's defaults. The address's
+      // seed wins over one another page left in this tab, and leaves the address once it is read.
+      const stored = remote ? null : takeGiftSeed(slug);
+      const seed = url?.seed ?? stored;
+      if (url) window.history.replaceState(window.history.state, "", withoutUrlSeed(window.location.href));
       const seeded = seed ? mergeSeedFields(m.fieldsSchema, initial.fields as Record<string, unknown>, seed.fields) : null;
       if (seeded) initial.fields = seeded;
       // A date or a trip chosen to go inside this gift ("Wrap it in a gift" on /plan, a trip's page).
@@ -135,6 +143,15 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           }
           // The surprise too: the one they just wrapped, not one an old draft was carrying.
           if (unwrap && JSON.stringify(editor.data.unwrap) !== JSON.stringify(unwrap)) editor.patch({ unwrap });
+          // A surprise from the address gets its stops' photographs when they come, if it is still
+          // the one that was built (nobody has taken it off or changed it in the meantime).
+          if (url && unwrap)
+            void url.photographed().then((photographed) => {
+              const now = useEditor.getState();
+              if (!active || !photographed || now.slug !== slug || JSON.stringify(now.data.unwrap) !== JSON.stringify(unwrap)) return;
+              const checked = seedUnwrap(giftUnwrapSchema, photographed);
+              if (checked) now.patch({ unwrap: checked });
+            });
         });
     });
     return () => {
@@ -216,6 +233,20 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   }, [view]);
 
   const templateName = useMemo(() => manifest.name[locale], [manifest, locale]);
+
+  // Inside the iPhone app: the app's loading screen goes once the form is up, and its bar takes the name.
+  useNativeReady("editor", templateName, ready && Boolean(mod));
+  // The app signed in or out while this page was open (it hands the page a session of its own): the
+  // editor re-reads it from the cookies, as it does for a sign-in made in another tab.
+  useNativeEvents((event) => {
+    if (event.type !== "session") return;
+    void import("@/lib/supabase/client").then(async ({ getSupabaseBrowserClient }) => {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase) return;
+      const { data } = await supabase.auth.getSession();
+      useEditor.getState().setAuth(Boolean(data.session?.user), data.session?.user?.id ?? null);
+    });
+  });
 
   return (
     <div className="flex min-h-dvh flex-col bg-paper">

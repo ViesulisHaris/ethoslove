@@ -1,23 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
-import { isLatLng, round } from "@/lib/dates/geo";
-import { commonsFileUrl, commonsSearchUrl, isQid, parseCommonsFile, parseWikidataImage, pickCommonsPhoto, PHOTO_NAME_MIN, wikidataImageUrl, type PlacePhoto } from "@/lib/dates/photos";
+import { isLatLng } from "@/lib/dates/geo";
+import { isQid, PHOTO_NAME_MIN } from "@/lib/dates/photos";
+import { findPlacePhoto } from "@/lib/dates/sources";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
 
 const MONTH = 60 * 60 * 24 * 30;
-const USER_AGENT = "Ethos/1.0 (+https://tryethos.io)";
-
-async function ask(url: string): Promise<unknown | null> {
-  try {
-    const res = await fetch(url, { next: { revalidate: MONTH }, headers: { "user-agent": USER_AGENT, accept: "application/json" }, signal: AbortSignal.timeout(6000) });
-    return res.ok ? await res.json() : null;
-  } catch {
-    return null;
-  }
-}
 
 /**
  * A real photograph of one place, if anybody has given one away: the picture its Wikidata item
@@ -35,11 +26,6 @@ export async function GET(request: NextRequest) {
   if ((name.length < PHOTO_NAME_MIN && !qid) || name.length === 0 || !params.get("lat") || !params.get("lng") || !isLatLng(lat, lng) || (qid !== "" && !isQid(qid))) return NextResponse.json({ error: "bad_request" }, { status: 400 });
   if (!(await rateLimit(`dates-photo:${clientIp(request.headers)}`, { limit: 120, windowSeconds: 60 }))) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
 
-  let photo: PlacePhoto | null = null;
-  if (qid) {
-    const file = parseWikidataImage(await ask(wikidataImageUrl(qid)));
-    if (file) photo = parseCommonsFile(await ask(commonsFileUrl(file)));
-  }
-  if (!photo && name.length >= PHOTO_NAME_MIN) photo = pickCommonsPhoto(await ask(commonsSearchUrl(name, { lat: round(lat, 4), lng: round(lng, 4) })), name);
+  const photo = await findPlacePhoto({ name, lat, lng, qid });
   return NextResponse.json({ photo }, { headers: { "cache-control": `public, s-maxage=${MONTH}, stale-while-revalidate=${MONTH * 3}` } });
 }

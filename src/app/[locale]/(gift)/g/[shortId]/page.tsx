@@ -14,6 +14,7 @@ import { SITE } from "@/config/site";
 import { GiftExperience } from "@/components/gift/gift-experience";
 import { LockScreen } from "@/components/gift/lock-screen";
 import { ScheduledScreen } from "@/components/gift/scheduled-screen";
+import { AppReady } from "@/components/app/app-ready";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/g/[shortId]">, "searchParams">): Promise<Metadata> {
   const { shortId } = await params;
@@ -49,10 +50,20 @@ export default async function GiftPage({ params }: PageProps<"/[locale]/g/[short
   if (gift.status === "scheduled" && gift.unlocked) await promoteScheduledGift(gift.id);
 
   if (!gift.unlocked && gift.unlockAt) {
-    return <ScheduledScreen senderName={gift.senderName} unlockAt={gift.unlockAt} timezone={gift.timezone} locale={gift.locale} />;
+    return (
+      <>
+        <AppReady route="gift" />
+        <ScheduledScreen senderName={gift.senderName} unlockAt={gift.unlockAt} timezone={gift.timezone} locale={gift.locale} />
+      </>
+    );
   }
   if (gift.requiresPassword && !gift.passwordOk) {
-    return <LockScreen shortId={shortId} senderName={gift.senderName} locale={gift.locale} />;
+    return (
+      <>
+        <AppReady route="gift" />
+        <LockScreen shortId={shortId} senderName={gift.senderName} locale={gift.locale} />
+      </>
+    );
   }
   if (!gift.data) notFound();
 
@@ -66,6 +77,7 @@ export default async function GiftPage({ params }: PageProps<"/[locale]/g/[short
   const messages = (await import(`../../../../../../messages/${gift.locale}.json`)).default;
   return (
     <NextIntlClientProvider locale={gift.locale} messages={{ gift: messages.gift }}>
+      <AppReady route="gift" />
       <GiftExperience shortId={shortId} data={gift.data} locale={gift.locale} replyToken={replyToken} />
     </NextIntlClientProvider>
   );

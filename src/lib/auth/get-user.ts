@@ -1,15 +1,19 @@
 import "server-only";
 
 import { cache } from "react";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { bearerToken, getSupabaseServerClient } from "@/lib/supabase/server";
 
-/** Current user for the request, or null. Memoised per request. */
+/**
+ * Current user for the request, or null. Memoised per request. The app's Bearer token is checked
+ * with Supabase itself (a token it no longer accepts is nobody); a browser's cookie session as always.
+ */
 export const getCurrentUser = cache(async () => {
   const supabase = await getSupabaseServerClient();
   if (!supabase) return null;
+  const token = await bearerToken();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = token ? await supabase.auth.getUser(token) : await supabase.auth.getUser();
   return user ?? null;
 });
 

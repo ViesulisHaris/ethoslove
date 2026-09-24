@@ -5,6 +5,7 @@ import type { HomeHero } from "@/lib/attribution/landing";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
 import { Cutout, FloralFrame } from "@/components/marketing/home/cutouts";
 import { EagerImg } from "@/components/shared/eager-img";
+import { AppSoon } from "./app-soon";
 import { HomeSearch } from "./home-search";
 import { MapCard } from "./map-card";
 
@@ -62,6 +63,7 @@ async function DatesFirst() {
             </div>
           ))}
         </dl>
+        <AppSoon className="mt-8" />
       </div>
 
       {/* what the answer turns into: the two of them, the map that got them there, the invitation that started it */}
@@ -137,6 +139,9 @@ async function GiftFirst() {
         <Link href="/dates" className="-my-2.5 mt-6 inline-flex min-h-11 items-center py-2.5 text-[14.5px] font-medium text-forest/70 underline-offset-4 hover:text-forest hover:underline">
           {t("orDate")}
         </Link>
+        <div>
+          <AppSoon className="mt-6" />
+        </div>
       </div>
 
       <div className="relative mx-auto w-full max-w-[540px] lg:col-span-6 lg:justify-self-end" aria-hidden="true">

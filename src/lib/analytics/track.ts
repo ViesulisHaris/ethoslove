@@ -1,4 +1,5 @@
 import { track as vercelTrack } from "@vercel/analytics";
+import { isInApp } from "@/lib/app/bridge";
 
 /**
  * The funnel, as named events in Vercel Web Analytics (cookieless, so no consent is needed, the
@@ -27,6 +28,8 @@ export type FunnelEvent =
 type Props = Record<string, string | number | boolean | null>;
 
 export function track(event: FunnelEvent, props?: Props): void {
+  // Nothing is measured inside the iPhone app, which promises no analytics.
+  if (isInApp()) return;
   try {
     vercelTrack(event, props);
   } catch {
