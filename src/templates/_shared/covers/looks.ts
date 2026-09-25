@@ -465,6 +465,7 @@ export function defaultCoverFor(slug: string): CoverId {
     case "garden":
     case "popup-card":
     case "sketchbook":
+    case "party-animals":
       return "classic"; // each opens with its own envelope, book or gate
     case "kawaii":
       return "gingham";
@@ -488,8 +489,6 @@ export function defaultCoverFor(slug: string): CoverId {
     case "passport":
     case "pack-your-bags":
       return "starry";
-    case "party-animals":
-      return "party";
     case "birthday-cinema":
     case "arcade":
     case "balloons":

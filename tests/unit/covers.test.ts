@@ -93,7 +93,8 @@ describe("gift covers", () => {
 
   it("starts every template on a cover that exists", () => {
     for (const m of listManifests()) expect(COVER_IDS as readonly string[], m.slug).toContain(defaultCoverFor(m.slug));
-    expect(defaultCoverFor("party-animals")).toBe("party");
+    expect(defaultCoverFor("party-animals")).toBe("classic");
+    expect(defaultCoverFor("kawaii")).toBe("gingham");
     expect(defaultCoverFor("no-such-template")).toBe("gingham");
   });
 });

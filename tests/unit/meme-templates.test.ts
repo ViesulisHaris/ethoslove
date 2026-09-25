@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { MEME_IDS, MEMES, memeSrc, withTag } from "@/templates/_shared/memes/catalogue";
-import { bannerRows, letterSize, planFrames, planGuests, shoutFor, stripHeight } from "@/templates/party-animals/scene";
+import { addPop, ageDigits, arrangePhotos, bannerRows, candleLayout, candlePlan, GUESTS, letterSize, listHeight, MAX_POPS, nameSize, photosHeight, planGuests, popAt, scatter, shoutFor, stripCellY, stripHeight, wordFace, type Pop } from "@/templates/party-animals/scene";
 import { caseNumber, exhibitLetter, findingsFor, SEATS, SPEAKING_ORDER, speakerFor } from "@/templates/the-council/hearing";
 import { DROPS, packIds, planDrops, restingSpot, sideMargin, stickerWidth } from "@/templates/sticker-bomb/plan";
 
@@ -23,51 +23,72 @@ describe("the meme stickers", () => {
   });
 });
 
-describe("party animals: the collage", () => {
-  it("fills the big polaroid first, then the wide one, then the strip", () => {
-    expect(planFrames(0)).toEqual([]);
-    expect(planFrames(1).map((f) => f.kind)).toEqual(["big"]);
-    expect(planFrames(2).map((f) => f.kind)).toEqual(["big", "wide"]);
-    expect(planFrames(3).map((f) => f.kind)).toEqual(["big", "wide", "small"]);
-    expect(planFrames(4).map((f) => f.kind)).toEqual(["big", "wide", "strip"]);
-    expect(planFrames(7).map((f) => f.kind)).toEqual(["big", "wide", "strip", "small"]);
-  });
-
-  it("shows every photo exactly once, whatever the count", () => {
-    for (let n = 1; n <= 7; n++) {
-      const used = planFrames(n).flatMap((f) => f.photos).sort((a, b) => a - b);
-      expect(used).toEqual(Array.from({ length: n }, (_, i) => i));
+describe("party animals: the page", () => {
+  it("puts every photo in exactly one frame, the first under the headline", () => {
+    for (let n = 0; n <= 7; n++) {
+      const plan = arrangePhotos(n);
+      const used = [plan.hero, plan.word, ...plan.strip, ...plan.loose].filter((i) => i !== undefined).sort((a, b) => a! - b!);
+      expect(used, `${n} photos`).toEqual(Array.from({ length: n }, (_, i) => i));
+      expect(plan.strip.length === 0 || plan.strip.length >= 2).toBe(true);
     }
-    expect(planFrames(12).flatMap((f) => f.photos)).toHaveLength(7);
+    expect(arrangePhotos(1).hero).toBe(0);
+    expect(arrangePhotos(3).loose).toEqual([2]);
+    expect(arrangePhotos(6).strip).toEqual([2, 3, 4, 5]);
+    expect(arrangePhotos(12).loose).toEqual([6]);
   });
 
-  it("keeps a strip of four inside the page", () => {
-    expect(23.5 + stripHeight(4)).toBeLessThan(80);
-    expect(stripHeight(2)).toBeLessThan(stripHeight(3));
+  it("makes room for the strip, and nothing for a second photo that isn't there", () => {
+    expect(stripHeight(0)).toBe(0);
+    expect(stripHeight(3)).toBeGreaterThan(stripHeight(2));
+    expect(stripCellY(1)).toBeGreaterThan(stripCellY(0));
+    expect(photosHeight(arrangePhotos(1))).toBe(0);
+    for (let n = 4; n <= 7; n++) {
+      const plan = arrangePhotos(n);
+      expect(photosHeight(plan)).toBeGreaterThan(stripCellY(plan.strip.length - 1) + 10);
+    }
   });
 
-  it("invites at least nine guests, no one twice, all on the page, the same every time", () => {
+  it("invites the same ten guests to every party, once each, spread down the page", () => {
     for (let n = 1; n <= 7; n++) {
-      const guests = planGuests(n, 1234);
-      expect(guests.length).toBeGreaterThanOrEqual(9);
-      expect(new Set(guests.map((g) => g.id)).size).toBe(guests.length);
-      for (const g of guests) {
-        expect(g.x).toBeGreaterThan(4);
-        expect(g.x).toBeLessThan(96);
-        expect(g.y).toBeGreaterThan(12);
-        expect(g.y).toBeLessThan(94);
-        expect(MEMES[g.id].tags).toContain("party");
+      for (const song of [true, false]) {
+        const guests = planGuests(n, song, 1234);
+        expect(guests.map((g) => g.id)).toEqual(GUESTS);
+        expect(new Set(guests.map((g) => g.id)).size).toBe(10);
+        guests.forEach((g, i) => {
+          expect(g.index).toBe(i);
+          expect(MEMES[g.id].tags).toContain("party");
+          expect(g.x - g.w / 2).toBeGreaterThan(-3);
+          expect(g.x + g.w / 2).toBeLessThan(103);
+        });
+        expect(new Set(guests.map((g) => g.section)).size).toBeGreaterThanOrEqual(4);
+        expect(planGuests(n, song, 1234)).toEqual(guests);
       }
-      expect(planGuests(n, 1234)).toEqual(guests);
     }
   });
 
-  it("breaks the banner by word and shrinks the letters to fit", () => {
+  it("sends the guests of a missing section to the guest list instead", () => {
+    const bare = planGuests(1, false, 7);
+    for (const id of ["hamster-cake", "sad-hamster", "balloon-cat"]) expect(bare.find((g) => g.id === id)?.section).toBe("list");
+    const full = planGuests(6, true, 7);
+    expect(full.find((g) => g.id === "hamster-cake")?.section).toBe("photos");
+    expect(full.find((g) => g.id === "balloon-cat")?.section).toBe("song");
+    expect(listHeight(bare)).toBeGreaterThan(listHeight(full));
+  });
+
+  it("breaks the banner by word, and sizes the letters and the name to fit", () => {
     expect(bannerRows("happy birthday")).toEqual(["happy", "birthday"]);
     expect(bannerRows("we did it")).toEqual(["we did it"]);
     expect(bannerRows("  ")).toEqual([]);
-    expect(letterSize(["happy", "birthday"])).toBeLessThanOrEqual(8.8);
-    expect(letterSize(["congratulations"]) * 15).toBeLessThan(90);
+    for (const rows of [["happy", "birthday"], ["congratulations"], ["feliz", "cumple"]]) expect(letterSize(rows) * Math.max(...rows.map((r) => r.length)) * 0.95).toBeLessThanOrEqual(66.01);
+    expect(nameSize("Ana")).toBe(14);
+    expect(nameSize("Maximiliano")).toBeLessThan(nameSize("Ana"));
+    expect(nameSize("a name far too long to ever fit on one line")).toBe(5.2);
+  });
+
+  it("writes a short word in script and a long one in plain handwriting", () => {
+    expect(wordFace("happiness.")).toMatchObject({ script: true });
+    expect(wordFace("happiness.").size).toBeLessThanOrEqual(9);
+    expect(wordFace("the best year yet!")).toMatchObject({ script: false });
   });
 
   it("lets the sender's lines go first, then the house ones, with one about their age", () => {
@@ -77,6 +98,49 @@ describe("party animals: the collage", () => {
     expect(shoutFor(1, [], house, 30, "{age}?? already")).toBe("30?? already");
     expect(shoutFor(1, [], house, undefined, "{age}?? already")).toBe("b");
     expect(shoutFor(7, [], house)).toBe("b");
+  });
+
+  it("puts the age in number candles, with thin ones where they don't crowd the number", () => {
+    expect(ageDigits(30)).toEqual(["3", "0"]);
+    expect(ageDigits(undefined)).toEqual([]);
+    expect(ageDigits(400)).toEqual(["1", "2", "0"]);
+    expect(candlePlan(undefined)).toEqual({ digits: [], small: 5 });
+    for (const age of [undefined, 1, 7, 30, 99, 104]) {
+      const candles = candleLayout(candlePlan(age));
+      expect(candles.filter((c) => c.kind === "digit").map((c) => c.digit)).toEqual(ageDigits(age));
+      // Every flame has room: no two wicks closer than a flame is wide.
+      const xs = candles.map((c) => c.x).sort((a, b) => a - b);
+      xs.slice(1).forEach((x, i) => expect(x - xs[i], `age ${age}`).toBeGreaterThanOrEqual(14));
+      for (const c of candles) {
+        expect(c.x).toBeGreaterThan(20);
+        expect(c.x).toBeLessThan(180);
+        expect(c.wick).toBeGreaterThan(20);
+      }
+    }
+  });
+
+  it("throws the same handful of confetti for the same tap, and sweeps up the oldest past the limit", () => {
+    const pop = popAt(3, 40.26, 120.04, 9);
+    expect(pop).toMatchObject({ id: 3, x: 40.3, y: 120 });
+    expect(pop.bits).toHaveLength(12);
+    expect(popAt(3, 40.26, 120.04, 9)).toEqual(pop);
+    expect(popAt(4, 40.26, 120.04, 9)).not.toEqual(pop);
+    let page: Pop[] = [];
+    for (let i = 1; i <= MAX_POPS + 3; i++) page = addPop(page, popAt(i, i, i, 9));
+    expect(page).toHaveLength(MAX_POPS);
+    expect(page[0].id).toBe(4);
+  });
+
+  it("scatters paper on the page inside the stretch it's given, the same way every time", () => {
+    const flecks = scatter(5, 30, 120);
+    expect(flecks).toHaveLength(30);
+    expect(scatter(5, 30, 120)).toEqual(flecks);
+    for (const f of flecks) {
+      expect(f.x).toBeGreaterThanOrEqual(2);
+      expect(f.x).toBeLessThanOrEqual(98);
+      expect(f.y).toBeGreaterThanOrEqual(2);
+      expect(f.y).toBeLessThanOrEqual(118);
+    }
   });
 });
 
