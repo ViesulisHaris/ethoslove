@@ -139,7 +139,10 @@ MONETIZATION.md. The gifts' one-time prices follow, unchanged.
   search in a neighbourhood the same cacheable URL.
 - A "near me" search is never written into the address bar; a named town is, so it can be shared.
 - A plan lives in `localStorage` and travels in the link's `#fragment`, which browsers do not send
-  to servers. There is no plan table, and nothing new in the database at all.
+  to servers. There is no plan table, and nothing new in the database at all. A shared plan's link
+  also carries, in its query, only what its preview shows (a Wikimedia photo, a title of public
+  place names, the day); who it is for, who from, the notes and the times stay after the `#`. The
+  link formats, shared with the iPhone app, are in [SHARING.md](SHARING.md).
 - `Permissions-Policy` now allows `geolocation=(self)`; the CSP allows `tiles.openfreemap.org` for
   `connect-src` and `img-src`, and Wikimedia's two image hosts for `img-src`, and nothing else new.
 

@@ -1,13 +1,28 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { pageMetadata } from "@/lib/seo";
+import { localizedUrl, pageMetadata, withSharePreview } from "@/lib/seo";
+import { SITE } from "@/config/site";
+import { hasSharePreview, previewQuery, readSharePreview, shareCardPath } from "@/lib/share/links";
 import { PlanView } from "@/components/dates/plan-view";
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/plan">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps<"/[locale]/plan">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "plan.meta" });
   // One address for everybody's plan, and whatever is in it lives after the `#`: nothing here to index.
-  return { ...pageMetadata({ locale, path: "/plan", title: t("title"), description: t("description") }), robots: { index: false, follow: true } };
+  const base: Metadata = { ...pageMetadata({ locale, path: "/plan", title: t("title"), description: t("description") }), robots: { index: false, follow: true } };
+  // A shared plan's link also carries what its preview shows: the first stop's photograph, a title
+  // and the day (lib/share/links.ts). Read for the preview only; the plan never leaves the `#`.
+  const preview = readSharePreview(await searchParams);
+  if (!hasSharePreview(preview)) return base;
+  const l = locale === "es" ? "es" : "en";
+  const title = preview.title ?? t("title");
+  return withSharePreview(base, {
+    url: `${localizedUrl(locale, "/plan")}${previewQuery(preview)}`,
+    title,
+    description: t("shared"),
+    image: `${SITE.url}${shareCardPath({ kind: "plan", locale: l, cover: preview.cover, title: preview.title, date: preview.date })}`,
+    alt: title,
+  });
 }
 
 export default async function PlanPage({ params }: PageProps<"/[locale]/plan">) {

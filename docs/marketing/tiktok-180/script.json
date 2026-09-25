@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:41",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok i need to tell u something"
+        },
+        {
+          "from": "them",
+          "text": "i asked dan to message u. to see if u'd reply"
+        },
+        {
+          "from": "me",
+          "text": "the \"u up\" at 7pm was a test??"
+        },
+        {
+          "from": "them",
+          "text": "i needed to know maya"
+        },
+        {
+          "from": "me",
+          "text": "u tested me with ur own best friend"
+        },
+        {
+          "from": "them",
+          "text": "i was scared. thats all it was"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i was scared. thats all it was"
+        },
+        {
+          "from": "me",
+          "text": "i dont know what to say"
+        },
+        {
+          "from": "them",
+          "text": "dont say anything. i made u this so u'd know how i feel"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (im an idiot)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Bouquet (an apology you can see: flowers, and a long message under them). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this is so beautiful"
+        },
+        {
+          "from": "me",
+          "text": "i hate the test. i love this"
+        },
+        {
+          "from": "them",
+          "text": "u didnt reply to him btw"
+        },
+        {
+          "from": "them",
+          "text": "i knew u wouldnt. i just needed to see it"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "dan told me the same night"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "hes been telling me everything u say about me since june"
+        },
+        {
+          "from": "them",
+          "text": "what has he told u"
+        },
+        {
+          "from": "me",
+          "text": "if i say, u'll know which bits",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya what has dan told u"
+        }
+      ]
+    }
+  ]
+}

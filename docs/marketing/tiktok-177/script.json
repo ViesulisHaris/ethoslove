@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:41",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my mum was really upset u didnt come on sunday"
+        },
+        {
+          "from": "me",
+          "text": "i told u i had work"
+        },
+        {
+          "from": "them",
+          "text": "i know. im not upset"
+        },
+        {
+          "from": "them",
+          "text": "shes upset. i just thought u should know"
+        },
+        {
+          "from": "me",
+          "text": "should i text her"
+        },
+        {
+          "from": "them",
+          "text": "i wouldnt. she needs time"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i wouldnt. she needs time"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "i didnt want to argue about it so i made u this instead"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (from me, not my mum)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Jar of Reasons (a jar full of his own reasons, the opposite of blaming his mum). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is so thoughtful"
+        },
+        {
+          "from": "me",
+          "text": "i feel awful about sunday now"
+        },
+        {
+          "from": "them",
+          "text": "u dont need to feel awful"
+        },
+        {
+          "from": "them",
+          "text": "just come next week and make it up to her"
+        },
+        {
+          "from": "me",
+          "text": "i will. ill bring the lemon cake she likes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "me and ur mum text"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since april. every day. she wasnt upset. she said u wanted to skip sunday for the football"
+        },
+        {
+          "from": "them",
+          "text": "what else did she say"
+        },
+        {
+          "from": "me",
+          "text": "i promised her",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya what did my mum say"
+        }
+      ]
+    }
+  ]
+}

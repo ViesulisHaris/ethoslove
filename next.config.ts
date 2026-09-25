@@ -28,6 +28,17 @@ const nextConfig: NextConfig = {
   },
   // Three.js and GSAP ship ESM that Turbopack handles fine; keep sharp server-only.
   serverExternalPackages: ["sharp"],
+  // Link-preview fetchers get a page's metadata in its <head> rather than streamed after it: a shared
+  // plan's or place's preview tags read the query, so those pages render per request, and a fetcher
+  // that stops at </head> saw no photograph. Next's own list (next/dist/shared/lib/router/utils/
+  // html-bots.js, which this replaces, so it is copied whole) plus the chat and social apps it lacks.
+  htmlLimitedBots:
+    /[\w-]+-Google|Google-[\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|TelegramBot|Viber|Snapchat|Pinterest|Mastodon|Bluesky|Cardyb|Embedly|Iframely|Signal/i,
+  // A trip's link preview is drawn from its own picture, read from disk by the card's route
+  // (app/og/share.jpg): public/ is served by the CDN and is not otherwise in the function.
+  outputFileTracingIncludes: {
+    "/og/share.jpg": ["./public/trips/*.webp"],
+  },
   // Search Console showed `www.tryethos.io/&` with 700 impressions and 19 clicks in four days — a
   // mangled link somewhere out there (an `&amp;` left behind), and every click landed on a 404.
   redirects: async () => [

@@ -29,6 +29,7 @@ import { MIN_UNUSUAL, UNUSUAL_SHELF, unusualIndex, unusualPicks } from "@/lib/da
 import { suggestTimes } from "@/lib/dates/timing";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
+import { readSharedPlace } from "@/lib/share/links";
 import { GroupIcon } from "./group-icon";
 import { createHoverStore, useHoveredId, useIsHovered, type HoverStore } from "./hover-store";
 import { IdeaPanel } from "./idea-panel";
@@ -152,6 +153,9 @@ export function DatesExplorer() {
   // `at` tells two of the same message apart, so the second press shows it for as long again.
   const [planNotice, setPlanNotice] = useState<{ text: string; at: number } | null>(null);
   const [shareable, setShareable] = useState(false);
+  // A shared place's link (?place=node/123, lib/share/links.ts): opened once the search around it
+  // finds it, and forgotten when it doesn't, or when they go looking somewhere else.
+  const [linkedPlace, setLinkedPlace] = useState<{ id: string; at: LatLng } | null>(null);
   // The link named a town (?q=) and there is none by that name: said on the empty page.
   const [townMissing, setTownMissing] = useState(false);
   // Counts Back presses that landed on this page's own entries (see the layers below).
@@ -315,6 +319,8 @@ export function DatesExplorer() {
         }
       }
       if (cancelled) return;
+      const linked = readSharedPlace(params);
+      if (linked && start?.share && (params.get("lat") || wanted)) setLinkedPlace({ id: linked, at: { lat: start.lat, lng: start.lng } });
       if (wantedDate && isYmd(wantedDate) && wantedDate >= toYmd(new Date())) setDate(wantedDate);
       if (wantedIdea && ideaById(wantedIdea)) setIdeaId(wantedIdea);
       if (start) return go(start, { share: start.share });
@@ -561,6 +567,7 @@ export function DatesExplorer() {
       // A place opened from inside the sheet (its pairings) keeps the first one's opener; a map pill
       // is kept out of the tab order on purpose, so there is nothing to hand back to.
       if (id && from instanceof HTMLElement && !from.closest("[data-place-sheet]")) opener.current = from.tabIndex >= 0 && from.getAttribute("aria-hidden") !== "true" ? from : null;
+      setLinkedPlace(null);
       setSelectedId(id);
       if (id && !(id in reviews)) void loadReviews(id);
       if (!id || id in details) return;
@@ -571,6 +578,17 @@ export function DatesExplorer() {
     },
     [details, locale, reviews, loadReviews],
   );
+
+  // The link's place, once the search around it has an answer with it in. A frame later, not in the
+  // effect itself: the sheet opens as if tapped (details, reviews), which sets state.
+  useEffect(() => {
+    if (!linkedPlace || !where) return;
+    const moved = distanceKm(where, linkedPlace.at) > SAME_PLACE_KM;
+    const found = !moved && ranked.some((p) => p.id === linkedPlace.id);
+    if (!found && !moved) return;
+    const frame = requestAnimationFrame(() => (found ? open(linkedPlace.id) : setLinkedPlace(null)));
+    return () => cancelAnimationFrame(frame);
+  }, [linkedPlace, where, ranked, open]);
 
   const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
   const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
@@ -781,6 +799,9 @@ export function DatesExplorer() {
         reviewsCount: (n) => t("reviews.count", { n }),
         pairs: t("place.pairs"),
         walkBetween: (m) => t("place.walkBetween", { minutes: m }),
+        share: t("place.share"),
+        shareCopied: t("place.shareCopied"),
+        shareText: t("place.shareText"),
         reviews: {
           title: t("reviews.title"),
           publicNote: t("reviews.publicNote"),

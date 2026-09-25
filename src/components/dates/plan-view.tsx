@@ -13,6 +13,7 @@ import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, removeStop, stopName, typ
 import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
+import { planShareHref } from "@/lib/share/links";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
@@ -21,6 +22,7 @@ import { PartnerLink } from "@/components/trips/partner-link";
 import { TimePicker } from "@/components/pickers/time-picker";
 import { GroupIcon } from "./group-icon";
 import { MapView } from "./map-view";
+import { firstCover } from "./share-cover";
 import { usePlan } from "./use-plan";
 import { WeatherGlyph } from "./weather-glyph";
 
@@ -30,6 +32,19 @@ const subscribeHash = (onChange: () => void) => {
   return () => window.removeEventListener("hashchange", onChange);
 };
 const readHash = () => window.location.hash;
+/** The query a shared plan's preview is drawn from (lib/share/links.ts); a plan kept from a link leaves it behind. */
+const PREVIEW_KEYS = ["c", "t", "d"];
+
+/**
+ * The line a shared plan's preview shows: its idea's name, or its places in order. Public names
+ * only: who it is for, who from and the notes stay after the `#`, where no server sees them.
+ */
+function previewTitle(plan: Plan, locale: "en" | "es"): string | null {
+  const idea = ideaById(plan.idea);
+  if (idea) return idea.title[locale];
+  const names = plan.stops.filter((s) => s.named !== false).map((s) => s.name);
+  return names.length > 0 ? names.join(" · ") : null;
+}
 
 /**
  * A date, written down. Their own plan is edited here and kept in this browser; a plan that came
@@ -80,7 +95,20 @@ export function PlanView() {
   const mapLabels = useMemo(() => ({ zoomToSee: "", nearMe: "", loading: t("mapLoading"), unavailable: t("mapUnavailable"), map: t("mapLabel"), zoomIn: "", zoomOut: "", credits: t("mapCredits"), retry: t("mapRetry") }), [t]);
 
   const sitePath = () => `${getPathname({ href: "/plan", locale })}#p=${encodePlan(plan)}`;
-  const link = () => `${window.location.origin}${sitePath()}`;
+  // Their own plan's cover for the link's preview, looked up while they look at it: the share sheet
+  // has to open within the tap, so it cannot wait for Wikimedia then (share-cover.ts).
+  const pictured = useMemo(() => (editable ? plan.stops.filter((s) => s.named !== false) : []), [editable, plan.stops]);
+  const coverKey = pictured.map((s) => s.id).join(",");
+  const [cover, setCover] = useState<{ key: string; src: string | null } | null>(null);
+  useEffect(() => {
+    if (!coverKey) return;
+    let live = true;
+    void firstCover(pictured).then((src) => live && setCover({ key: coverKey, src }));
+    return () => {
+      live = false;
+    };
+  }, [coverKey, pictured]);
+  const link = () => `${window.location.origin}${planShareHref(getPathname({ href: "/plan", locale }), encodePlan(plan), { cover: cover?.key === coverKey ? cover.src : null, title: previewTitle(plan, locale), date: plan.date })}`;
 
   // The stops' photographs are asked for as the chooser opens, so they are usually in by the time a gift is picked.
   const photos = useRef<Promise<Record<string, string | null>> | null>(null);
@@ -279,7 +307,9 @@ export function PlanView() {
                   // Kept, it is theirs: drop the link's copy from the address, so the page shows
                   // it as their own to edit, and a reload does not offer to keep it again.
                   // replaceState fires no hashchange, so the page is told by hand.
-                  window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+                  const search = new URLSearchParams(window.location.search);
+                  for (const key of PREVIEW_KEYS) search.delete(key);
+                  window.history.replaceState(window.history.state, "", window.location.pathname + (search.size > 0 ? `?${search}` : ""));
                   window.dispatchEvent(new HashChangeEvent("hashchange"));
                 }}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-forest text-[14.5px] font-semibold text-cream disabled:bg-moss-soft disabled:text-moss"

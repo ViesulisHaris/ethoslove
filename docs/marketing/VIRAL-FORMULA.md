@@ -973,6 +973,24 @@ Rules that come out of it:
 - **No props.** A flat viewing, a gym story, a christening photo, a draft email. This is what killed
   the ring-and-box version: a viewer working out what object is being described has stopped reading.
 
+### 176 to 181: the same engine, six new tactics
+
+Standalone stories, not sequels. Same cast, same 10–11 slide shape, and the same rules as 170 to 175:
+his tactic small enough for half the room to defend, her crime bigger and confessed by her, one
+object the comments can demand, and his last bubble asking for it with her name on it.
+
+| | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
+|---|---|---|---|---|
+| 176 | a 2am "last night was fun" from "gym jess", turned on her: "are u done being crazy", three days of silence, "other girls wouldve just said thank u" | she messaged gym jess the first night; they've been talking for three days | what jess told her | "maya what did she tell u" |
+| 177 | "its not me whos upset. its my mum" | she and his mum have texted every day since april; the mum says he wanted the football | what his mum said | "maya what did my mum say" |
+| 178 | "its not a curfew. i just cant sleep until ur home" | she set every clock in his flat fifteen minutes fast in april | which clocks | "maya which clocks" |
+| 179 | "im not telling u what to wear. id just change" | she changed back in the uber; jess's photos are on close friends, and he isn't | the photos from the uber | "send me the photos from the uber maya" |
+| 180 | got his best friend to message her at 7pm to see if she'd reply | the best friend told her that night and has reported everything since june | what dan told her | "maya what has dan told u" |
+| 181 | "the lasagne was dry. im not being mean, im being honest" | every other meal came from the italian on gorse road, in her own dishes | how many were from the restaurant | "maya how many were from the restaurant" |
+
+There is no discount code any more (checkout takes none since the 24 September launch), so "what app"
+is answered with the name only. Older SCRIPT.md files that say "code LOVE" are out of date.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

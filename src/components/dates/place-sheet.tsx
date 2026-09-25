@@ -2,9 +2,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Star, Sun, Ticket, X } from "lucide-react";
+import { Accessibility, Check, Clock3, ExternalLink, Globe, Images, Landmark, Leaf, MapPin, Navigation, Phone, Plus, Share2, Star, Sun, Ticket, X } from "lucide-react";
 import { animate, motion, useDragControls, useMotionValue } from "motion/react";
 import { useTranslations } from "next-intl";
+import { getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDay, weekdayOf, type Ymd } from "@/lib/dates/calendar";
 import type { PlaceDetails } from "@/lib/dates/details";
@@ -20,6 +21,7 @@ import type { PublicReview } from "@/lib/dates/reviews";
 import type { Quirk } from "@/lib/dates/unusual";
 import type { Cost } from "@/lib/dates/cost";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
+import { placeShareHref } from "@/lib/share/links";
 import type { WentAs } from "@/lib/supabase/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { PartnerLink } from "@/components/trips/partner-link";
@@ -62,6 +64,10 @@ export type PlaceSheetLabels = {
   reviewsCount: (n: number) => string;
   pairs: string;
   walkBetween: (m: number) => string;
+  share: string;
+  shareCopied: string;
+  /** Before the place's name in the text a share sheet sends with the link. */
+  shareText: string;
   reviews: ReviewsLabels;
 };
 
@@ -92,6 +98,8 @@ type Props = {
 
 /** How far down, or how fast, a drag of the handle has to go to put the sheet away. */
 const FLING_PX = 90;
+/** Half the width of a link preview's card: photoAt asks Wikimedia for twice this, its 1280-pixel size. */
+const SHARE_PHOTO_WIDTH = 600;
 const FLING_SPEED = 600;
 const QUINT = [0.22, 1, 0.36, 1] as const;
 /**
@@ -180,6 +188,29 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
   // A place from the map has no address of its own; without one the links searched the bare name,
   // and three branches of Waterstones got the same links. The sheet's address, or at least the town.
   const lookUp = place.named ? linksFor({ ...place, address: address || where || undefined }).filter((l) => !scores.some((r) => r.source === l.source)) : [];
+
+  // The link to this place (lib/share/links.ts): the Dates page around it, this sheet open, and its
+  // photograph and name for the preview a chat draws. Without a photograph, the preview is the site's card.
+  const [copied, setCopied] = useState(false);
+  const share = async () => {
+    const cover = photo ? photoAt(photo, SHARE_PHOTO_WIDTH).split("?")[0] : null;
+    const url = `${window.location.origin}${placeShareHref(getPathname({ href: "/dates", locale }), place, where, cover)}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: place.name, text: `${labels.shareText} ${place.name}`, url });
+      } catch {
+        // Closed the share sheet: nothing to do.
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      window.prompt(labels.share, url);
+    }
+  };
 
   const motionOf = swipe ? SHEET.phone : SHEET.desktop;
   return (
@@ -352,6 +383,10 @@ export function PlaceSheet({ place, pairs, reviews, loginNext, onSubmitReview, o
             {labels.call}
           </a>
         ) : null}
+        <button type="button" onClick={share} className={cn("inline-flex h-11 items-center justify-center gap-1.5 rounded-full border transition-colors", copied ? "border-moss/30 bg-moss-soft text-moss" : "border-forest/15 hover:bg-forest/5")}>
+          {copied ? <Check aria-hidden="true" className="size-4" /> : <Share2 aria-hidden="true" className="size-4" />}
+          <span aria-live="polite">{copied ? labels.shareCopied : labels.share}</span>
+        </button>
       </div>
       {tickets ? (
         <p className="mt-2 px-1 text-[12px] leading-snug text-forest/60">

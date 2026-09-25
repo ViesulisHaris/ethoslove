@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:37",
+      "messages": [
+        {
+          "from": "them",
+          "text": "is that what ur wearing tonight"
+        },
+        {
+          "from": "me",
+          "text": "yes? u said u liked it"
+        },
+        {
+          "from": "them",
+          "text": "i do. on u. at home"
+        },
+        {
+          "from": "them",
+          "text": "im not telling u what to wear"
+        },
+        {
+          "from": "them",
+          "text": "id just change"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "id just change"
+        },
+        {
+          "from": "me",
+          "text": "fine. ill change"
+        },
+        {
+          "from": "them",
+          "text": "thank u. i know im annoying"
+        },
+        {
+          "from": "them",
+          "text": "i made u something to make up for it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my favourite person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Coquette (bows and lace, the most \"her\" thing in the catalogue). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is actually so cute"
+        },
+        {
+          "from": "me",
+          "text": "i changed btw"
+        },
+        {
+          "from": "them",
+          "text": "u look perfect in anything"
+        },
+        {
+          "from": "them",
+          "text": "u just look more perfect in the other one"
+        },
+        {
+          "from": "me",
+          "text": "noted"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i changed back in the uber"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "jess took photos. theyre on close friends"
+        },
+        {
+          "from": "them",
+          "text": "im not on close friends"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "send me the photos from the uber maya"
+        }
+      ]
+    }
+  ]
+}

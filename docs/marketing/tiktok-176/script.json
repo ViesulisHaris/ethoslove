@@ -1,0 +1,127 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:52",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u done being crazy now"
+        },
+        {
+          "from": "me",
+          "text": "u havent spoken to me in 3 days"
+        },
+        {
+          "from": "them",
+          "text": "i was giving u space"
+        },
+        {
+          "from": "them",
+          "text": "to think about why u went through my phone"
+        },
+        {
+          "from": "me",
+          "text": "bc \"gym jess\" texted u \"last night was fun 🤍\" at 2am"
+        },
+        {
+          "from": "them",
+          "text": "and u couldnt just ask me like a normal person"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "and u couldnt just ask me like a normal person"
+        },
+        {
+          "from": "me",
+          "text": "ok. who is she"
+        },
+        {
+          "from": "them",
+          "text": "no one. and now i cant trust u"
+        },
+        {
+          "from": "them",
+          "text": "i was up til 3 making u this. read it and tell me im the bad guy"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (only ever u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Scrapbook (their photos on every page, \"only ever u\" — it has to look like nights of work, so the room fights over whether a man who made this is cheating). Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this is so beautiful marco"
+        },
+        {
+          "from": "me",
+          "text": "im sorry i went through ur phone"
+        },
+        {
+          "from": "them",
+          "text": "other girls wouldve just said thank u"
+        },
+        {
+          "from": "them",
+          "text": "but i forgive u. just dont ever make me feel like that again"
+        },
+        {
+          "from": "me",
+          "text": "i wont"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i messaged gym jess"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "the first night. weve been talking for 3 days"
+        },
+        {
+          "from": "them",
+          "text": "what did she say"
+        },
+        {
+          "from": "me",
+          "text": "if i tell u, u'll know what to delete",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya what did she tell u"
+        }
+      ]
+    }
+  ]
+}
