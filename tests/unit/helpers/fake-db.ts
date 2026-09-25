@@ -12,9 +12,9 @@ type Result = { data: unknown; error: { code?: string; message: string } | null 
 
 const UNIQUE: Record<string, string[][]> = {
   profiles: [["id"], ["email"]],
-  purchases: [["id"], ["stripe_session_id"], ["store", "store_transaction_id"]],
+  purchases: [["id"], ["stripe_session_id"], ["store", "store_transaction_id"], ["stripe_invoice_id"]],
   template_unlocks: [["id"], ["user_id", "template_slug"]],
-  couple_passes: [["id"], ["purchase_id"], ["invite_code"]],
+  couple_passes: [["id"], ["purchase_id"], ["invite_code"], ["stripe_subscription_id"], ["store_original_transaction_id"]],
   gift_cards: [["id"], ["code"], ["purchase_id"]],
   creators: [["code"]],
   gifts: [["id"], ["short_id"]],
@@ -23,9 +23,25 @@ const UNIQUE: Record<string, string[][]> = {
 };
 
 const DEFAULTS: Record<string, Row> = {
-  purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null },
+  purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null, stripe_invoice_id: null, membership_id: null },
   template_unlocks: { purchase_id: null },
-  couple_passes: { partner_user_id: null, renewal_reminded_at: null },
+  couple_passes: {
+    partner_user_id: null,
+    renewal_reminded_at: null,
+    provider: "stripe_pass",
+    plan: "yearly",
+    status: "active",
+    stripe_customer_id: null,
+    stripe_subscription_id: null,
+    store_original_transaction_id: null,
+    current_period_end: null,
+    cancel_at_period_end: false,
+    pending_plan: null,
+    provider_event_at: null,
+    renewal_reminded_for: null,
+    payment_failed_invoice: null,
+    ended_notified_at: null,
+  },
   gift_cards: { purchase_id: null, buyer_user_id: null, recipient_name: null, note: null, redeemed_by: null, redeemed_at: null, expires_at: null },
 };
 
@@ -43,8 +59,9 @@ class Query implements PromiseLike<Result> {
   private ignoreDuplicates = false;
   private returning = false;
   private cardinality: "one" | "maybe" | null = null;
-  private sort: { column: string; ascending: boolean } | null = null;
+  private sort: { column: string; ascending: boolean; nullsFirst?: boolean } | null = null;
   private max: number | null = null;
+  private offset = 0;
 
   constructor(
     private readonly store: FakeDb,
@@ -116,12 +133,18 @@ class Query implements PromiseLike<Result> {
     this.filters.push((row) => !isNull(row[column]) && (row[column] as string | number) >= value);
     return this;
   }
-  order(column: string, options: { ascending?: boolean } = {}) {
-    this.sort = { column, ascending: options.ascending !== false };
+  order(column: string, options: { ascending?: boolean; nullsFirst?: boolean } = {}) {
+    this.sort = { column, ascending: options.ascending !== false, nullsFirst: options.nullsFirst };
     return this;
   }
   limit(n: number) {
     this.max = n;
+    return this;
+  }
+  /** Rows `from` to `to`, both included, as PostgREST's range. */
+  range(from: number, to: number) {
+    this.offset = from;
+    this.max = to - from + 1;
     return this;
   }
   single() {
@@ -178,10 +201,14 @@ class Query implements PromiseLike<Result> {
     if (this.op === "select") {
       let rows = this.matches();
       if (this.sort) {
-        const { column, ascending } = this.sort;
-        rows = [...rows].sort((a, b) => ((a[column] as string) < (b[column] as string) ? -1 : (a[column] as string) > (b[column] as string) ? 1 : 0) * (ascending ? 1 : -1));
+        const { column, ascending, nullsFirst } = this.sort;
+        rows = [...rows].sort((a, b) => {
+          // Where nulls go only when the query says (nullsFirst), as PostgREST's order takes it.
+          if (nullsFirst !== undefined && isNull(a[column]) !== isNull(b[column])) return isNull(a[column]) === nullsFirst ? -1 : 1;
+          return ((a[column] as string) < (b[column] as string) ? -1 : (a[column] as string) > (b[column] as string) ? 1 : 0) * (ascending ? 1 : -1);
+        });
       }
-      if (this.max !== null) rows = rows.slice(0, this.max);
+      if (this.max !== null || this.offset) rows = rows.slice(this.offset, this.max === null ? undefined : this.offset + this.max);
       return this.shape(rows);
     }
 
@@ -229,6 +256,9 @@ export class FakeDb {
 
   constructor(seed: Record<string, Row[]> = {}, now = Date.parse("2026-09-23T12:00:00.000Z")) {
     this.tables = structuredClone(seed);
+    // A membership row always has its 0014 columns in the database (they have defaults), so a seeded
+    // pass reads the way a real one does: a one-time year, active, not cancelling.
+    this.tables.couple_passes &&= this.tables.couple_passes.map((row) => ({ ...DEFAULTS.couple_passes, ...row }));
     this.clock = now;
   }
 

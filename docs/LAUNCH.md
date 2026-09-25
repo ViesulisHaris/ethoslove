@@ -5,6 +5,10 @@ deployed, no migration has been applied, and no live Stripe call or email has be
 is the checklist to get it live: what changed, what to apply and set, in what order, and how to test
 every money flow by hand in Stripe test mode.
 
+**24 Sept: Ethos for Two became a membership, and saved dates arrived** (docs/MEMBERSHIP.md).
+Section 10 is that build's checklist. Where it and the sections before it disagree (the €29 pass,
+"no subscriptions", the pass-only tickbox), section 10 is the current one.
+
 ## 1. What was built
 
 **Commerce (server).** One catalogue, `src/lib/pricing/products.ts`, is the only place a price lives;
@@ -18,7 +22,7 @@ checkout charges it with Stripe `price_data`, VAT included, so the price shown i
 | Make it special | €7.49 | a free template (The Letter, Constellations) gets its paid extras (video, voice note, 20 photos, scheduling, a password, no footer), forever |
 | Order bump | +€15.00 on a single, +€17.50 on Make it special | "Add every other template, forever", unticked; always takes the order to exactly €24.99; not shown when the buyer's upgrade is cheaper |
 | Upgrade to Everything | €24.99 − what was paid, at least €4.99 | signed-in buyers who own singles, pick three or Make it special |
-| Ethos for Two | €29 | a yearly pass paid once, 365 days, for the buyer and a partner; no auto-renewal |
+| Ethos for Two | €4.99 a month or €29.99 a year | since 24 Sept a subscription for the buyer and a partner (section 10); while `STRIPE_SUBSCRIPTIONS_ENABLED` is off it is sold as a one-time €29.99 year (365 days, no auto-renewal) |
 | Game pack | €2.99 | or included in the pass |
 | Gift card "Give Everything" | €24.99 | built but **off** until `GIFT_CARDS_ENABLED=true` (voucher VAT); `/redeem` works either way |
 
@@ -163,8 +167,9 @@ Full detail in `docs/STRIPE.md`. The checklist:
   button was built and taken out on 23 Sept at the owner's request: no checkout does that, and it
   cluttered the moment of paying. The recovery code still runs for a buyer who ticks Stripe's box,
   should Stripe ever offer it here.
-- **No subscriptions**: nothing here creates one; keep it that way (other businesses' webhooks act on
-  subscription events).
+- **Subscriptions**: only Ethos for Two, and only once `STRIPE_SUBSCRIPTIONS_ENABLED=true` (section
+  10), under the shared-account rules R1–R11 in docs/STRIPE.md: the other businesses' webhooks act
+  on subscription events. Nothing else creates one.
 
 ## 6. Crons (`vercel.json`, Vercel sends `Authorization: Bearer $CRON_SECRET`)
 
@@ -408,14 +413,11 @@ included.
   under €7.49 now sees the paywall open on "Everything for the difference" on a free template.
 - **Pass holders can still buy a pack** they already have through the pass (they then keep it for
   good). The games never offer it; a stale page could.
-- **Lawyer: is the pass "digital content" or a "digital service"** under EU consumer law? The
-  withdrawal tickbox uses the same digital-content wording for it as for everything else ("I ask
-  Ethos to unlock my purchase straight away… I lose my right to cancel", plus "It's one payment for
-  one year and never renews by itself"). If the pass is a service (a year of access for two), the
-  waiver works differently: the buyer asks for it to start within the 14 days and, on cancelling,
-  pays for the days used (art. 14(3) and 16(a) of the Consumer Rights Directive), so a cancellation
-  within 14 days would mean a partial refund, and the tickbox, Terms s.7 and the receipt would need
-  their own pass wording. Worth a lawyer's five minutes before the first pass is sold.
+- **Settled on 24 Sept: Ethos for Two is a digital service**, the pass included (the owner's
+  decision). Its buyers ask for it to start straight away and keep the right to withdraw within 14
+  days, paying for the days used (Consumer Rights Directive arts. 7(3), 8(8), 14(3)); the tickbox,
+  Terms s.7 and s.9, the welcome email and `/legal/withdraw` all say so. What is still for the
+  lawyer is listed in docs/MEMBERSHIP.md section 7, step 7.
 - **The tickbox wording** is quoted in Terms s.9 (the right of withdrawal) straight from
   `consentSentence` in `src/lib/stripe/line-items.ts`, so the two can't drift, and
   `tests/unit/legal.test.ts` checks it. (The plan called it "s.7"; in the Terms as numbered, s.7 is
@@ -435,9 +437,9 @@ included.
   prefilled) and a promise to confirm by email. Ask whether that is enough, or whether it needs an
   on-site form with a confirm button and an automatic acknowledgement email.
 - **Lawyer: early pass renewals.** A renewal bought before the running year ends starts only when it
-  ends. The pass tickbox still says "unlock my purchase straight away", which isn't literally true
-  for an early renewal; the Terms (s.7) and the withdraw page already keep the right to cancel until
-  the new year starts. Ask whether the renewal needs its own tickbox sentence.
+  ends, so withdrawing from it before then refunds it in full (Terms s.7, the withdraw page). The
+  pass tickbox says "start my Ethos for Two year straight away", which isn't literally true for an
+  early renewal. Ask whether the renewal needs its own tickbox sentence.
 - **Terms change notice.** Terms s.17 promises account holders email notice at least 14 days before
   a material change takes effect. The new Terms (prices, free replies, no codes, creators, the
   tickbox, gift cards off) are material: send current account holders that email, and date the
@@ -460,3 +462,201 @@ included.
 - The world-city search lists still contain Spanish cities on purpose, so people who live there can
   find their own city (the owner's call in "made in Riga, and nowhere else"). The site never suggests
   or names one by itself.
+
+## 10. Ethos for Two as a membership, and saved dates (24 Sept)
+
+Built on 24 Sept to docs/MEMBERSHIP.md, which has the whole spec: the shared-account rules, every
+route and state, the tests. Nothing has been deployed, no migration applied, no live Stripe call
+made and no email sent.
+
+### 10.1 What was built
+
+**The offer.** Ethos for Two is a subscription for a couple: €4.99 a month or €29.99 a year (USD
+$5.99/$34.99 and GBP £4.49/£25.99 set for later; only euros are charged), one payment for the buyer
+and a partner who joins with the invite link. While it runs, both get unlimited saved dates and
+trips, shared and editable on both phones; every gift template and game pack (the pass's lent `*`
+and `pack:*` rows); an email the day before each saved date; a whole date opened in Apple or Google
+Maps; and, on yearly, an email a week before each renewal. Cancelling keeps it to the end of the
+paid period. Free accounts save up to 3 dates and trips; planning a date and sending it with no
+account stays free, exactly as before (the local plan, the `#p=` link). While
+`STRIPE_SUBSCRIPTIONS_ENABLED` is off (the default) it is sold as the one-time pass, now €29.99 for
+365 days, with no monthly option; both grant the same membership. The iPhone app will sell it through
+RevenueCat (`xyz.secuora.ethos.fortwo.monthly` and `.yearly`), whose webhook already drives the same
+membership.
+
+**Billing.** `couple_passes` is the membership table (0014): one row per subscription for its whole
+life, access still `starts_at <= now < ends_at`, with 7 days of grace while a renewal is collected.
+Checkout takes `{ product: "membership", plan }` and makes a subscription or the pass depending on
+the switch; it refuses a second membership (`already_member`), a buyer whose subscription is still
+being collected (`payment_issue`) and a plan that isn't sold (`not_on_sale`). The Stripe account is
+shared, so every Ethos object follows R1–R11 (docs/STRIPE.md): no `supabase_user_id` anywhere (Ethos's
+key is `ethos_user_id`), no `client_reference_id` on a subscription session, `metadata.app = "ethos"`
+on every session, customer, subscription and invoice, no trials, codes or standing Prices, and a
+webhook that ignores every subscription, invoice and session that isn't Ethos's
+(`tests/unit/stripe-shared-account.test.ts`, `stripe-subscription-events.test.ts`). The webhook
+re-reads each subscription and sets the membership from it (event order doesn't matter), records
+each paid invoice as a purchase, emails the owner once when a renewal fails, and ends the membership
+for both people on a dispute, a full refund of the current period or a withdrawal (a partial refund
+"requested by customer"). `POST /api/membership` cancels, resumes, switches monthly ↔ yearly, lets a
+partner leave and an owner remove one; `POST /api/stripe/portal` opens Ethos's own Customer Portal
+(card, invoices, cancel). Deleting an account cancels a web subscription first.
+
+**Saved dates** (0015). `GET`/`POST /api/saved-dates` and `GET`/`PATCH`/`DELETE
+/api/saved-dates/[id]`: a free account's 4th save answers `limit_reached`, an edit carries its
+version and a stale one answers `conflict`, and once a membership ends the 3 most recently changed
+stay editable and the rest read-only. `/my-dates`, "Save to my dates" with autosave on `/plan`,
+"Save trip" on trip pages, the upsell sheet, "Open the whole date in Maps" for members, and the
+day-before email with a signed "turn off" link.
+
+**Pages.** `/pricing` redesigned around Ethos for Two: a full-width hero in its own "dusk" colours
+(indigo, a peach horizon, gold) with the Monthly/Yearly toggle and the site's own photographs,
+template posters, game cards and scraps; then Free vs Ethos for Two; then "Or buy a single gift"; then
+the FAQ. The account page's Ethos for Two section (`/account#for-two`: plan and renewal, manage
+billing, cancel and resume, switch plans, invite, remove or leave, payment problems), the success
+page for a subscription, `/for-two/join`, "My dates" in the menus, and the home page's "Yours" fact.
+
+**Emails.** The membership welcome (the confirmation of the contract, with the invite and the
+sentence the buyer ticked), the yearly renewal reminder, "payment didn't go through" or "confirm the
+payment", "Ethos for Two has ended" (never after a refund or a withdrawal), and the saved date's
+reminder, in both languages.
+
+**Legal** (`src/content/legal.ts`, `LEGAL_UPDATED` 2026-09-24). Terms: s.1 and s.11 (saving dates, the
+free limit of 3, read-only after a membership ends, reminders), s.6 (one subscription among one-time
+products, both prices, creators earn on a membership's first payment only), s.7 rewritten (the plans,
+what's included, automatic renewal at the price you subscribed at, cancelling from the account, failed
+payments and the 7 days, switching plans, sharing with a partner, price changes only after 30 days'
+notice, the one-year pass, App Store memberships), s.9 (Ethos for Two is a digital service: withdrawal
+within 14 days, paying for the days used, in full without the tickbox; cancelling isn't withdrawing;
+the monthly, yearly and pass tickboxes quoted from `consentSentence`), s.10 (refunds and chargebacks
+end it for both) and s.15 (deleting an account cancels a web subscription). Privacy: s.1 (Stripe's
+customer record, the membership's data and emails, the day-before email), s.3 (a plan reaches us only
+if saved; saved dates and what a partner sees), s.7 (the new analytics events), s.8, s.9 (RevenueCat,
+Apple), s.11, s.12 and s.13. `/legal/withdraw` covers the pro-rata withdrawal. `tests/unit/legal.test.ts`
+checks the quoted sentences, the prices and the free limit against the code, in both languages.
+
+### 10.2 The order to do it in
+
+1. **Migrations 0014 and 0015** (10.3), before this code serves a single request: every membership
+   write needs 0014, saved dates need 0015.
+2. **Stripe, test mode** (10.5): `node scripts/setup-billing-portal.mjs`, the two variables it prints
+   in `.env.local` and Vercel Preview, the five new events on the test endpoint.
+3. **The test script** (10.7), first with `STRIPE_SUBSCRIPTIONS_ENABLED` unset (the pass), then set to
+   `true`.
+4. **docs/MEMBERSHIP.md section 7**: the account-wide Stripe settings the other businesses share,
+   telling the secuora and domainscan owner, the lawyer's questions.
+5. **Deploy with the switch off**: the site sells the €29.99 pass, and saved dates work.
+6. **Live**: `node scripts/setup-billing-portal.mjs --live`, the two variables in Vercel Production,
+   the five events on the live endpoint, then `STRIPE_SUBSCRIPTIONS_ENABLED=true` and redeploy.
+
+### 10.3 Migrations
+
+| File | What it does |
+| --- | --- |
+| `0014_membership.sql` | `couple_passes` becomes the membership table: `provider` (`stripe_pass`, `stripe_subscription`, `app_store`, `app_store_pass`; every existing row is a pass, App Store ones backfilled), `plan`, `status`, the Stripe customer and subscription ids (the subscription id unique), Apple's original transaction id (unique), `current_period_end`, `cancel_at_period_end`, `pending_plan`, and the claims its emails use. `purchases` gains `stripe_invoice_id` (unique: one row per paid invoice) and `membership_id`, and a trigger takes a membership's lent unlocks when its purchase row is deleted. No policy changes. |
+| `0015_saved_dates.sql` | `saved_dates` (owner or partner may read through RLS; written only by the API with the service role), `couple_partner(uuid)` and `is_member(uuid)` (they only answer about the caller, except to the service role), and a 500-row backstop per account. |
+
+Both are additive, safe to run twice, and safe with the live site, which never reads `couple_passes`
+or `saved_dates`.
+
+### 10.4 Environment variables
+
+| Variable | Value |
+| --- | --- |
+| `STRIPE_SUBSCRIPTIONS_ENABLED` | Unset (the default): Ethos for Two is the €29.99 one-time year, no monthly. `true`: real subscriptions. It governs new sales only: switched off again, running subscriptions keep renewing and working |
+| `STRIPE_PORTAL_CONFIGURATION` | `bpc_…`, printed by the setup script. Without it `POST /api/stripe/portal` answers 503 rather than open the account's default portal, which the other businesses share |
+| `STRIPE_PRODUCT_FORTWO` | `prod_…`, printed by the setup script: the price-less "Ethos for Two" Product that subscription lines are filed under ("ETHOS FOR TWO" on bank statements) |
+| `REVENUECAT_SECRET_API_KEY` | optional (docs/DEPLOY.md): also lets the daily job re-check App Store subscriptions with RevenueCat |
+
+### 10.5 Stripe
+
+- **Five new webhook events** on the Ethos endpoint, test and then live, before the switch goes on:
+  `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`,
+  `invoice.payment_failed`, `invoice.payment_action_required`. Locally: `stripe listen --forward-to
+  localhost:3000/api/stripe/webhook --events checkout.session.completed,checkout.session.async_payment_succeeded,checkout.session.expired,charge.refunded,charge.dispute.created,customer.subscription.updated,customer.subscription.deleted,invoice.paid,invoice.payment_failed,invoice.payment_action_required`.
+- **The setup script** (`scripts/setup-billing-portal.mjs`, test first, `--live` for live) makes or
+  updates Ethos's portal configuration (cancel at the period end with no survey, card, invoices,
+  billing name and address, no plan switching) and the "Ethos for Two" Product. It never touches the
+  account's default portal or anything without Ethos's marker.
+- **Account-wide settings** the other businesses share (docs/MEMBERSHIP.md 7.3): whether Stripe itself
+  emails customers about renewals, failed payments and receipts (if on, members get those too, under
+  the account's name), and the retry schedule. The code works with any choice.
+
+### 10.6 Crons
+
+- `/api/cron/passes` (06:00): re-reads subscriptions whose period has passed (and App Store ones, with
+  the RevenueCat key), makes the yearly → monthly switches owners asked for, emails a week before each
+  yearly renewal, sends the 14-day email to passes only, then sweeps ended memberships. It answers
+  `{ reconciled, appStore, switched, yearly, reminders, swept }`.
+- `/api/cron/reminders` (07:00): after "Remind me next year", the day-before emails for members'
+  saved dates.
+
+### 10.7 Manual test script (Stripe test mode)
+
+Section 7's setup, plus the setup script's two variables in `.env.local` and the five new events in
+`stripe listen`. Accounts: **A** (buyer), **B** (partner), **C** (someone else), and fresh ones where
+a step says so. The database is the production one: delete the accounts afterwards.
+
+1. **The pass (switch off).** `/pricing` shows no toggle: "€29.99 for a year", "Paid once · it doesn't
+   renew by itself". Buy it as A: Stripe charges €29.99 once and the tickbox reads "I ask Ethos to start
+   my Ethos for Two year straight away. It's one payment for one year and doesn't renew by itself…".
+   The success page shows the invite; B joins; both have every template and pack. A hand-made
+   `POST /api/stripe/checkout {"product":"membership","plan":"monthly"}` answers `not_on_sale`.
+2. **Monthly, signed in** (`STRIPE_SUBSCRIPTIONS_ENABLED=true`, restart). A fresh account,
+   `/pricing?plan=monthly` → Monthly is selected, "€4.99 a month" → **Get Ethos for Two** → Stripe says
+   "€4.99 per month", the tickbox has the monthly sentence, the line above the button says "€4.99 a
+   month for both of you, charged today and then every month until you cancel…", no code field, no
+   trial. Pay. Expect "Ethos for Two is on." with the invite; the welcome email with the plan and the
+   ticked sentence; `/account#for-two` "Monthly · €4.99 a month · renews on …". In the Dashboard: the
+   session has no `client_reference_id`; the subscription's metadata has `app: ethos`,
+   `ethos_user_id` and `purchase_id`; the customer and the first invoice get `app: ethos` a moment
+   later; `supabase_user_id` appears nowhere.
+3. **Yearly, as a guest.** Signed out, `/pricing` (Yearly is selected: "€29.99 a year · That's €2.50 a
+   month") → pay with a new email → the account is made and signed in; the welcome email says "We'll
+   email you a week before each renewal".
+4. **The partner.** B opens the invite from step 2 → joins → B's account shows "You're in on …'s Ethos
+   for Two". Both save a date on `/plan` and see both in `/my-dates`; edit the same date on two phones:
+   the second one to save gets "… changed this date: you're seeing the latest". The owner →
+   **Remove** → B loses the shared dates, the templates and the packs, the owner's invite link
+   changes, and C opening the old link is refused.
+5. **Cancel and resume.** **Cancel membership** → "Ends on {date}: you keep everything until then" →
+   **Resume** → it renews again. **Manage billing** opens Stripe's portal headed "Ethos for Two": update
+   the card, see the invoices, cancel there → back on `/account#for-two` with the end date.
+6. **Switching.** Monthly → **Switch to yearly · save 50%** → the dialog's amount equals the invoice
+   Stripe then makes (€29.99 minus the rest of the month) → "Yearly". Yearly → **Switch to monthly** →
+   "Switches to monthly around {date}" → **Keep yearly** undoes it.
+7. **Refunds and withdrawal.** Dashboard → a subscription → **Cancel subscription → Immediately →
+   Refund last payment: prorated** → it ends for both people, no "has ended" email, the payment stays
+   paid and gifts stay published. A full refund of a yearly payment → it ends for both, and gifts that
+   need it go back to drafts. Subscribe with `4000 0000 0000 0259` → when the dispute opens, it ends and
+   the subscription is cancelled.
+8. **Free saved dates.** A fresh account saves three dates or trips; the fourth opens the upsell sheet
+   (it links to `/pricing`, it sells nothing itself); "Open the whole date in Maps" shows a lock.
+   Deleting one lets it save again.
+9. **Day-before email.** A member's saved date for tomorrow → `curl -H "Authorization: Bearer
+   $CRON_SECRET" localhost:3000/api/cron/reminders` → the owner and the partner each get "Tomorrow:
+   {title}"; its "turn off" link asks first, then turns it off.
+10. **Deleting an account** with a running Stripe subscription → the Dashboard shows it cancelled at
+    once; the partner loses access.
+
+Renewals and failed renewals are covered by the unit tests (`tests/unit/memberships.test.ts`,
+`stripe-subscription-events.test.ts`); watch the first real ones in the logs.
+
+### 10.8 Check in a browser (both languages)
+
+- `/pricing` at 360, 390, 768, 1024, 1440 and 2560 wide. On a development server
+  `?subscriptions=on|off` shows either state without touching the real switch. The toggle (arrow keys
+  too) changes the price and the terms line without the page moving; `?plan=monthly` preselects;
+  `?from=saved-dates|packs|account` lands on the hero; then the comparison, "Or buy a single gift"
+  and the FAQ.
+- `/account#for-two` in each state: not a member, monthly, yearly, cancelling, a pending switch, a
+  pass, the App Store, a partner, a failed payment. Inside the iPhone app's web view: no prices and no
+  billing buttons.
+- `/checkout/success` after a subscription, and while a bank confirms ("Your payment is being
+  processed…").
+- `/for-two/join` signed in and out: the owner, a partner already in, someone with their own
+  membership ("You already have Ethos for Two…").
+- `/my-dates`, `/plan` (Save to my dates, autosave, Maps), `/trips/<id>` (Save trip). Signed out,
+  saving opens the sign-in dialog and `/my-dates` sends you to sign in.
+- `/legal/terms` s.6, s.7, s.9 (the three Ethos for Two tickbox sentences, exactly as Stripe shows
+  them) and s.11; `/legal/privacy` s.1 and s.3; `/legal/withdraw`.
+- Every new email in a real inbox, in both languages.

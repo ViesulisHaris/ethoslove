@@ -32,3 +32,9 @@ export const inviteUrl = (code: string, locale: Locale) => `${siteOrigin()}${loc
 export const redeemUrl = (code: string, locale: Locale) => `${siteOrigin()}${localePath(locale, "/redeem")}?code=${encodeURIComponent(code)}`;
 
 export const renewUrl = (locale: Locale) => `${siteOrigin()}${localePath(locale, "/pricing")}?renew=pass`;
+
+/** Ethos for Two on the pricing page, where a membership is bought (again). */
+export const pricingUrl = (locale: Locale) => `${siteOrigin()}${localePath(locale, "/pricing")}#for-two`;
+
+/** The account page's Ethos for Two section, where a membership is managed. */
+export const accountUrl = (locale: Locale) => `${siteOrigin()}${localePath(locale, "/account")}#for-two`;

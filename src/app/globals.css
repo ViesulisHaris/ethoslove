@@ -382,6 +382,55 @@
   --color-lilac-soft: #e6e0f8;
 }
 
+/* ------------------------------------------------------------------ */
+/* Dusk: Ethos for Two's own colours (docs/MEMBERSHIP.md 4.1). The rest */
+/* of the site is paper, rose and wine; the membership is the sky after */
+/* the date: deep indigo, a peach horizon, gold starlight. It matches   */
+/* the planetarium photograph and the gold felt star in the scraps.     */
+/* Gold is the membership's call to action wherever it appears; rose    */
+/* stays everyone else's. Text on dusk is cream, secondary moonlight.   */
+/* ------------------------------------------------------------------ */
+:root {
+  --brand-dusk: #171a3f; /* the section */
+  --brand-dusk-deep: #0e1030; /* top of the sky */
+  --brand-dusk-raised: #242a5e; /* cards on it */
+  --brand-moonlight: #e4e7ff; /* secondary text on dusk (≈14:1) */
+  --brand-horizon: #f4a58f; /* the glow at the bottom edge (≈8.7:1 on dusk) */
+  --brand-starlight: #f5cf6b; /* the membership's buttons and accents (≈11:1 on dusk) */
+  --brand-starlight-deep: #e3b54c;
+}
+
+@theme inline {
+  --color-dusk: var(--brand-dusk);
+  --color-dusk-deep: var(--brand-dusk-deep);
+  --color-dusk-raised: var(--brand-dusk-raised);
+  --color-moonlight: var(--brand-moonlight);
+  --color-horizon: var(--brand-horizon);
+  --color-starlight: var(--brand-starlight);
+  --color-starlight-deep: var(--brand-starlight-deep);
+}
+
+/* The sky: indigo from the top and a soft horizon rising from the bottom edge. No stars in it: a
+   dot beside a word reads as a full stop, so the stars are a layer of their own (dusk-stars) that a
+   component lays where no text sits. */
+@utility bg-dusk-sky {
+  background-color: var(--brand-dusk);
+  background-image:
+    radial-gradient(75% 42% at 50% 112%, rgba(244, 165, 143, 0.5) 0%, rgba(244, 165, 143, 0.16) 48%, transparent 78%),
+    radial-gradient(60% 50% at 88% -6%, rgba(98, 88, 190, 0.34) 0%, transparent 72%),
+    linear-gradient(180deg, var(--brand-dusk-deep) 0%, var(--brand-dusk) 58%, #262a5c 100%);
+}
+/* Faint stars: one tile of dots, drawn once (no image to fetch), for an absolutely placed layer. */
+@utility dusk-stars {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='460'><g fill='%23fff'><circle cx='254' cy='257' r='1.25' fill-opacity='0.42'/><circle cx='284' cy='269' r='0.65' fill-opacity='0.53'/><circle cx='267' cy='281' r='0.65' fill-opacity='0.29'/><circle cx='172' cy='47' r='1.25' fill-opacity='0.56'/><circle cx='354' cy='273' r='0.85' fill-opacity='0.59'/><circle cx='364' cy='282' r='0.65' fill-opacity='0.47'/><circle cx='462' cy='34' r='0.55' fill-opacity='0.32'/><circle cx='139' cy='19' r='0.85' fill-opacity='0.37'/><circle cx='330' cy='94' r='0.65' fill-opacity='0.48'/><circle cx='280' cy='303' r='0.85' fill-opacity='0.48'/><circle cx='229' cy='253' r='1.25' fill-opacity='0.29'/><circle cx='145' cy='346' r='0.95' fill-opacity='0.36'/><circle cx='44' cy='349' r='0.85' fill-opacity='0.3'/><circle cx='165' cy='36' r='0.55' fill-opacity='0.55'/><circle cx='6' cy='100' r='0.55' fill-opacity='0.42'/><circle cx='543' cy='184' r='0.55' fill-opacity='0.45'/><circle cx='115' cy='308' r='0.75' fill-opacity='0.29'/><circle cx='188' cy='438' r='1.25' fill-opacity='0.57'/><circle cx='80' cy='323' r='0.55' fill-opacity='0.28'/><circle cx='443' cy='86' r='0.95' fill-opacity='0.32'/><circle cx='285' cy='447' r='1.25' fill-opacity='0.3'/><circle cx='359' cy='58' r='0.85' fill-opacity='0.6'/><circle cx='6' cy='393' r='1.25' fill-opacity='0.46'/><circle cx='553' cy='15' r='0.65' fill-opacity='0.39'/><circle cx='474' cy='294' r='0.55' fill-opacity='0.27'/><circle cx='86' cy='204' r='0.55' fill-opacity='0.52'/></g></svg>");
+}
+/* The membership's one button: starlight, with dusk type (≈12:1). Moves like btn-rose (below). */
+@utility btn-star {
+  background-image: linear-gradient(135deg, #fbe39c 0%, var(--brand-starlight) 42%, var(--brand-starlight-deep) 100%);
+  color: var(--brand-dusk-deep);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 16px 34px -16px rgba(245, 207, 107, 0.7);
+}
+
 /* The -webkit- line goes first in every glass utility: Lightning CSS (Tailwind's minifier) treats
    the pair as one property and keeps only the last, so with the prefixed one last, Chrome and
    Firefox got no blur at all and text scrolled under the header stayed sharp. */
@@ -423,18 +472,21 @@
    the utilities layer and after Tailwind's own, so it outranks a call site's `transition-[filter]`
    (which would make the lift snap) or its own `hover:-translate-y-0.5`. */
 @layer utilities {
-  .btn-rose {
+  .btn-rose,
+  .btn-star {
     transition-property: translate, scale, filter, opacity;
     transition-duration: 0.2s;
     transition-timing-function: var(--ease-out-quint);
   }
   @media (hover: hover) and (pointer: fine) {
-    .btn-rose:not(:disabled, [aria-disabled="true"]):hover {
+    .btn-rose:not(:disabled, [aria-disabled="true"]):hover,
+    .btn-star:not(:disabled, [aria-disabled="true"]):hover {
       translate: 0 -1px;
       filter: brightness(1.07) saturate(1.04);
     }
   }
-  .btn-rose:not(:disabled, [aria-disabled="true"]):active {
+  .btn-rose:not(:disabled, [aria-disabled="true"]):active,
+  .btn-star:not(:disabled, [aria-disabled="true"]):active {
     translate: 0 0;
     scale: 0.98;
     filter: brightness(0.96);

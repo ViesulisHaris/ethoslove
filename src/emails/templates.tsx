@@ -69,8 +69,8 @@ export function GiftUnlockedEmail({ locale, recipientName, url }: { locale: L; r
  * and only the notice above the pay button was there. Nothing was ticked, so, like a purchase made
  * before the box existed, the sale keeps its 14-day right to cancel (terms s.9), and the receipt says so.
  *
- * A pass renewal bought early starts when the running year ends, and the right to cancel only goes
- * once supply has begun, so a pass's receipt ties the loss to the year starting.
+ * Ethos for Two's year (the pass) is a service: the right to withdraw doesn't go, and a buyer who
+ * withdraws within 14 days pays only for the days used (in full back when nothing was ticked).
  */
 function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: string | undefined): string {
   if (consent) {
@@ -81,8 +81,8 @@ function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: 
         : `${ticked} To cancel within those 14 days, before the code is redeemed, reply to this email.`;
     if (kind === "pass")
       return es
-        ? `${ticked} Por eso, una vez que empieza el año del pase, el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos.`
-        : `${ticked} So once the pass year has started, the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right.`;
+        ? `${ticked} Aún puedes desistir en los 14 días siguientes a la compra: responde a este correo y te devolvemos lo que quede, descontando los días ya disfrutados.`
+        : `${ticked} You can still withdraw within 14 days of buying: reply to this email, and we'll refund what's left after the days you've used.`;
     return es
       ? `${ticked} Por eso, el derecho de desistimiento de 14 días ya no se aplica. Si algo no funciona, responde a este correo y lo solucionamos.`
       : `${ticked} So the 14-day right to cancel no longer applies. If anything doesn't work, reply to this email and we'll put it right.`;
@@ -91,6 +91,10 @@ function consentLine(es: boolean, kind: "giftcard" | "pass" | "other", consent: 
     return es
       ? "Puedes desistir en los 14 días siguientes a la compra, con el reembolso íntegro, siempre que el código no se haya canjeado: responde a este correo. Si algo no funciona, también lo solucionamos."
       : "You can cancel within 14 days of buying, for a full refund, as long as the code hasn't been redeemed: reply to this email. If anything doesn't work, we'll put that right too.";
+  if (kind === "pass")
+    return es
+      ? "Pagaste tras un aviso encima del botón Pagar, sin marcar ninguna casilla: si desistes en los 14 días siguientes a la compra, responde a este correo y te devolvemos el importe íntegro."
+      : "You paid after a notice above the Pay button, without ticking a box: if you withdraw within 14 days of buying, reply to this email and we'll refund you in full.";
   return es
     ? "Pagaste tras un aviso encima del botón Pagar, sin marcar ninguna casilla, así que conservas el derecho de desistimiento de 14 días: para ejercerlo, responde a este correo en los 14 días siguientes a la compra. Si algo no funciona, también lo solucionamos."
     : "You paid after a notice above the Pay button, without ticking a box, so you keep the 14-day right to cancel: to use it, reply to this email within 14 days of buying. If anything doesn't work, we'll put that right too.";

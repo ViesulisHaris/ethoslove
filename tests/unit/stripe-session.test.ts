@@ -44,7 +44,7 @@ describe("the Checkout Session", () => {
 
   it("files a line under the Stripe Product when one is configured", () => {
     const params = sessionParams(plan({ product: "pass" }), { ...options, productIds: { STRIPE_PRODUCT_PASS: "prod_123" } });
-    expect(params.line_items?.[0].price_data).toEqual({ currency: "eur", unit_amount: 2900, tax_behavior: "inclusive", product: "prod_123" });
+    expect(params.line_items?.[0].price_data).toEqual({ currency: "eur", unit_amount: 2999, tax_behavior: "inclusive", product: "prod_123" });
   });
 
   it("never shows a Spanish buyer the Stripe Product's English name, and still says which Product it is", () => {
@@ -67,6 +67,7 @@ describe("the Checkout Session", () => {
     const params = sessionParams(p, { ...options, ref: "c-maria" });
     expect(params.line_items?.[0].price_data?.unit_amount).toBe(2499);
     expect(params.metadata).toEqual({
+      app: "ethos",
       purchase_id: options.purchaseId,
       user_id: "",
       guest: "1",
@@ -159,9 +160,14 @@ describe("the withdrawal tickbox", () => {
     );
   });
 
-  it("uses the same words for the pass, and says it never renews", () => {
-    expect(consentSentence("pass", "en")).toMatch(/^I ask Ethos to unlock my purchase straight away.*I lose my right to cancel\. It's one payment for one year and never renews by itself\.$/);
-    expect(consentSentence("pass", "es")).toMatch(/pierdo mi derecho de desistimiento\. Es un pago único por un año: no se renueva solo\.$/);
+  it("words the pass as the service it is: it starts at once, never renews, and the right to withdraw stays", () => {
+    expect(consentSentence("pass", "en")).toBe(
+      "I ask Ethos to start my Ethos for Two year straight away. It's one payment for one year and doesn't renew by itself. I understand that I can still withdraw within 14 days, and that I would then pay only for the days I've used.",
+    );
+    expect(consentSentence("pass", "es")).toBe(
+      "Pido a Ethos que active mi año de Ethos for Two de inmediato. Es un pago único por un año y no se renueva solo. Entiendo que aún puedo desistir en un plazo de 14 días y que, en ese caso, solo pagaría la parte correspondiente a los días ya disfrutados.",
+    );
+    for (const locale of ["en", "es"] as const) expect(consentSentence("pass", locale)).not.toMatch(/lose my right|pierdo mi derecho/);
   });
 
   it("keeps a gift card's right to cancel until the code is redeemed", () => {
@@ -171,11 +177,12 @@ describe("the withdrawal tickbox", () => {
   });
 
   it("fits Stripe's 1,200 characters", () => {
-    for (const product of ["single", "pass", "giftcard"] as const)
-      for (const locale of ["en", "es"] as const) {
-        expect(consentText(product, locale, "https://tryethos.io").length).toBeLessThanOrEqual(1200);
-        expect(withdrawalNotice(product, locale, "https://tryethos.io").length).toBeLessThanOrEqual(1200);
-      }
+    for (const product of ["single", "pass", "giftcard", "membership"] as const)
+      for (const locale of ["en", "es"] as const)
+        for (const membershipPlan of ["monthly", "yearly"] as const) {
+          expect(consentText(product, locale, "https://tryethos.io", { plan: membershipPlan, currency: "gbp" }).length).toBeLessThanOrEqual(1200);
+          expect(withdrawalNotice(product, locale, "https://tryethos.io", { plan: membershipPlan, currency: "gbp" }).length).toBeLessThanOrEqual(1200);
+        }
   });
 
   it("falls back to the notice above the pay button, keeping the marketing box", () => {
@@ -184,7 +191,9 @@ describe("the withdrawal tickbox", () => {
     expect(fallback.consent_collection).toEqual({ promotions: "auto" });
     expect(fallback.custom_text).toEqual({ submit: { message: withdrawalNotice("pass", "en", "https://ethos.test") } });
     expect(fallback.metadata).toMatchObject({ withdrawal_notice: "shown_at_payment", product: "pass" });
-    expect(withdrawalNotice("pass", "en", "https://ethos.test")).toMatch(/^By paying, you ask for your pass to start straight away.*Terms: https:\/\/ethos\.test\/legal\/terms$/);
+    expect(withdrawalNotice("pass", "en", "https://ethos.test")).toBe(
+      "By paying, you ask for your year of Ethos for Two to start straight away. It's one payment for one year and doesn't renew by itself. You can withdraw within 14 days. Terms: https://ethos.test/legal/terms",
+    );
     // The original is left as it was.
     expect(params.consent_collection).toEqual({ promotions: "auto", terms_of_service: "required" });
   });

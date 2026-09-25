@@ -157,7 +157,7 @@ function OfferSheet({ shelf }: { shelf: Shelf }) {
                 {shelf.buying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Lock aria-hidden="true" className="size-4" />}
                 {inApp ? t("sheet.appBuy") : t("sheet.buy", { price: packPrice(locale) })}
               </button>
-              <Link href="/pricing?renew=pass" data-app-hide className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-center text-[14.5px] font-semibold text-forest hover:bg-forest/5">
+              <Link href="/pricing?from=packs#for-two" data-app-hide className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-center text-[14.5px] font-semibold text-forest hover:bg-forest/5">
                 {t("sheet.pass")}
               </Link>
             </div>

@@ -35,7 +35,8 @@
     "skipToContent": "Ir al contenido",
     "close": "Cerrar",
     "notifications": "Notificaciones",
-    "closeNotification": "Cerrar notificación"
+    "closeNotification": "Cerrar notificación",
+    "myDates": "Mis citas"
   },
   "meta": {
     "defaultTitle": "Ethos — Ideas para citas, escapadas y regalos en pareja",
@@ -63,7 +64,7 @@
       "gifts": "Sorpresas para su móvil",
       "longDistance": "Quedad a medio camino",
       "games": "Juegos de cartas para dos",
-      "pricing": "Citas gratis, sin suscripciones"
+      "pricing": "Citas gratis, o Ethos for Two"
     }
   },
   "home": {
@@ -288,7 +289,11 @@
     "deleteAccount": "Eliminar cuenta",
     "deleteConfirm": "Esto elimina tu cuenta y todos los regalos, archivos, imágenes, vídeos, notas de voz y reacciones. El almacenamiento activo se borra primero; las copias de seguridad caducan en 30 días. Escribe {email} para confirmar.",
     "deleteForever": "Eliminar para siempre",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "dangerSubscription": "Al eliminar tu cuenta también se cancela de inmediato tu suscripción a Ethos for Two; el tiempo que quede no se reembolsa.",
+    "dangerAppStore": "Te suscribiste desde la app del iPhone: cancélala primero en los Ajustes de tu iPhone, porque eliminar la cuenta no detiene los cobros de Apple.",
+    "deleteFailed": "No se ha podido eliminar tu cuenta. No se ha borrado nada; inténtalo de nuevo en un momento.",
+    "deleteSubscriptionFailed": "No hemos podido cancelar tu suscripción a Ethos for Two, así que no se ha borrado nada. Inténtalo de nuevo en un momento."
   },
   "editor": {
     "title": "Editor",
@@ -759,11 +764,11 @@
   "pricing": {
     "eyebrow": "Precios",
     "title": "Las citas, gratis. Los regalos, un solo pago.",
-    "subtitle": "El mapa, los planes y las herramientas a distancia son gratis, para siempre. Las plantillas de regalo se desbloquean con un solo pago. Aquí no hay suscripciones.",
+    "subtitle": "El mapa, los planes y las herramientas a distancia son gratis, para siempre. Las plantillas de regalo se desbloquean con un solo pago y se quedan contigo.",
     "oneTime": "Un solo pago. Tuyo para siempre.",
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
-    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, o con «Hazlo especial» en una plantilla gratis.",
+    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
     "plans": {
       "single": {
@@ -807,23 +812,79 @@
       "blurb": "Puedes cambiar tu elección hasta que pagues.",
       "continue": "Continuar ({n}/{total})"
     },
+    "faqEyebrow": "Preguntas",
     "faqTitle": "Preguntas frecuentes",
+    "faqHelp": "¿Otra cosa? Escríbenos a <email>{address}</email> y te responde una persona.",
+    "faqGroups": {
+      "forTwo": "Ethos for Two",
+      "rest": "Regalos, juegos y pagos"
+    },
     "faq": [
       {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Qué es Ethos for Two?",
+        "a": "Una suscripción para los dos. Guardad todas las citas y viajes que queráis, planeadlos juntos desde vuestros dos móviles, recibid un aviso el día antes de cada una y abrid una cita entera en Apple Maps o Google Maps; y mientras esté activa, todas las plantillas de regalo y todos los packs de juegos son vuestros. Paga uno, al mes o al año; el otro se une con el enlace de invitación que le envías."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Qué es Ethos for Two?",
+        "a": "Un año de todo para los dos: todas las citas y viajes guardados que queráis, planeados juntos desde vuestros dos móviles, un aviso el día antes de cada una, una cita entera abierta en Apple Maps o Google Maps, y todas las plantillas de regalo y los packs de juegos. Paga uno, una sola vez; el otro se une con el enlace de invitación que le envías. Dura 365 días y no se renueva solo."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
         "q": "¿Es una suscripción?",
-        "a": "No. Las plantillas, los packs de juegos y las tarjetas regalo son pagos únicos, y lo que desbloqueas se queda en tu cuenta para siempre. Ethos for Two es un pase: un solo pago por 365 días, para los dos. Nunca se renueva solo; te escribimos dos semanas antes de que termine, y para renovarlo basta un toque."
+        "a": "Ethos for Two sí: un pago al mes o al año os cubre a los dos, y se renueva hasta que lo canceles, algo que puedes hacer cuando quieras desde tu cuenta. Todo lo demás se paga una sola vez: las plantillas, «Hazlo especial» y los packs de juegos se quedan en tu cuenta para siempre."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Es una suscripción?",
+        "a": "No. Ethos for Two es un solo pago por 365 días, para los dos, y no se renueva solo: te escribimos dos semanas antes de que termine, y para renovarlo basta un toque. Las plantillas, «Hazlo especial» y los packs de juegos también son pagos únicos y se quedan en tu cuenta para siempre."
+      },
+      {
+        "group": "forTwo",
+        "q": "¿Puede usarlo mi pareja en su móvil?",
+        "a": "Sí, para eso está. Al pagar recibes un enlace de invitación: tu pareja lo abre en su móvil e inicia sesión (gratis), y desde ese momento los dos veis y editáis las mismas citas guardadas, y todas las plantillas y los packs también están en su cuenta. Solo puede unirse una persona; puedes quitarla, o puede salir, cuando queráis."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Cómo cancelo?",
+        "a": "Desde tu cuenta: «Cancelar la suscripción» y confirmas. Es tan rápido como suscribirse. No se cobra nada más, y los dos conserváis Ethos for Two hasta el final del mes o del año que ya habéis pagado. Vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Podemos cambiar entre mensual y anual?",
+        "a": "Sí, desde tu cuenta. De mensual a anual es inmediato: pagas el año, menos lo que te queda del mes. De anual a mensual se hace cuando termina tu año, así que nunca pagas dos veces."
+      },
+      {
+        "group": "forTwo",
+        "q": "¿Qué pasa con nuestras citas guardadas si lo dejamos?",
+        "a": "No se borra nada. Vuestras citas y viajes guardados siguen en vuestra cuenta y siguen siendo vuestros; solo dejáis de compartirlos. Con el plan gratis, las tres que hayáis cambiado más recientemente siguen siendo editables y el resto se pueden leer, hasta que borréis alguna o volváis. Los regalos publicados siguen en línea."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Puedo cambiar de opinión después de suscribirme?",
+        "a": "Sí. Puedes desistir en un plazo de 14 días desde que te suscribes, sin dar explicaciones: usa «Desistir de una compra», al pie de cada página, o responde al email de bienvenida. Como pediste que empezara de inmediato, te devolvemos lo que pagaste menos los días que ya habéis disfrutado. Pasados los 14 días puedes cancelar cuando quieras; seguirá activa hasta el final del periodo pagado."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Puedo cambiar de opinión después de comprarlo?",
+        "a": "Sí, en un plazo de 14 días desde la compra, sin dar explicaciones: usa «Desistir de una compra», al pie de cada página, o responde al recibo. Como pediste que tu año empezara de inmediato, te devolvemos lo que pagaste menos los días que ya habéis disfrutado."
       },
       {
         "q": "¿Qué incluye exactamente el plan gratis?",
-        "a": "Dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta. Los regalos gratis muestran un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, la programación y la contraseña vienen con «Hazlo especial», un pequeño pago único para esa plantilla, o con cualquier desbloqueo."
+        "a": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta, con un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two."
       },
       {
         "q": "¿Puedo probar una plantilla antes de pagar?",
         "a": "Todas las plantillas tienen una demo completa en vivo, y el editor es gratis con vista previa en directo. Solo pagas cuando publicas algo que necesita una función premium."
-      },
-      {
-        "q": "¿Qué es Ethos for Two?",
-        "a": "Un año de todo para los dos: todas las plantillas de regalo y todos los packs de juegos, en vuestras dos cuentas. Paga uno; el otro se une con el enlace de invitación que le envías. Es un solo pago por 365 días, no una suscripción."
       },
       {
         "id": "giftcard",
@@ -832,7 +893,7 @@
       },
       {
         "q": "¿Qué son los packs de juegos?",
-        "a": "Barajas extra para los juegos: más preguntas, retos más atrevidos. Cada uno es un pago único y tuyo para siempre, y todos vienen con Ethos for Two. Los juegos en sí siguen siendo gratis."
+        "a": "Barajas extra para los juegos: más preguntas, retos más atrevidos. Cada uno es un pago único y tuyo para siempre, y todos vienen con Ethos for Two mientras esté activo. Los juegos en sí siguen siendo gratis."
       },
       {
         "q": "¿Pueden devolverme uno?",
@@ -852,11 +913,11 @@
       },
       {
         "q": "¿Qué monedas y métodos de pago?",
-        "a": "Los precios están en euros y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay y otros métodos, a través de Stripe. Los precios incluyen IVA cuando corresponde."
+        "a": "Los precios están en euros, con el IVA incluido cuando corresponde, y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay, Google Pay y otros métodos, a través de Stripe."
       },
       {
         "q": "¿Reembolsos?",
-        "a": "Al pagar nos pides que desbloqueemos tu compra de inmediato y marcas que así pierdes el derecho de desistimiento de 14 días. Si un regalo no se abre o no se reproduce bien en su móvil y no podemos arreglarlo, avísanos en un plazo de 30 días y te devolvemos el dinero. Las tarjetas regalo son distintas: si cambias de opinión en un plazo de 14 días y el código no se ha canjeado, te devolvemos el importe íntegro. Donde el derecho de desistimiento sigue vigente, «Desistir de una compra» (al pie de cada página) explica cómo."
+        "a": "Plantillas, «Hazlo especial» y packs de juegos: al pagar nos pides que desbloqueemos tu compra de inmediato y marcas que así pierdes el derecho de desistimiento de 14 días. Si un regalo no se abre o no se reproduce bien en su móvil y no podemos arreglarlo, avísanos en un plazo de 30 días y te devolvemos el dinero. Ethos for Two es distinto: es un servicio, así que puedes desistir en un plazo de 14 días y te devolvemos lo que pagaste, menos los días ya disfrutados. Tarjetas regalo: si cambias de opinión en un plazo de 14 días y el código no se ha canjeado, te devolvemos el importe íntegro. «Desistir de una compra», al pie de cada página, explica cómo."
       }
     ],
     "perTemplate": "Las {n} plantillas premium · {price} cada una",
@@ -1020,7 +1081,11 @@
       "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
       "unavailable": "Los pagos no están disponibles ahora mismo. Vuelve a probar en un rato.",
       "network": "Sin conexión. Compruébala y vuelve a intentarlo.",
-      "generic": "No se ha podido abrir el pago. Inténtalo de nuevo."
+      "generic": "No se ha podido abrir el pago. Inténtalo de nuevo.",
+      "alreadyMember": "Ya tienes Ethos for Two: está en tu cuenta.",
+      "paymentIssue": "Tu último pago no se completó: actualiza primero tu tarjeta en tu cuenta.",
+      "notOnSale": "Eso no está a la venta ahora mismo. Recarga la página.",
+      "toAccount": "Tu cuenta"
     },
     "recovery": {
       "optIn": "Si no termino de pagar, enviadme un solo enlace para volver."
@@ -1031,26 +1096,11 @@
       "everything": "Todo",
       "extras": "Hazlo especial",
       "pass": "Ethos for Two",
+      "membership": "Ethos for Two",
       "pack": "Pack de juegos",
       "giftcard": "Tarjeta regalo",
       "upgrade": "Pasar a Todo",
       "withBump": "{product}, más todas las plantillas"
-    },
-    "pass": {
-      "eyebrow": "Ethos for Two",
-      "title": "Un año de todo, para los dos",
-      "per": "un año, para dos",
-      "blurb": "Paga uno y lo tenéis los dos. Un solo pago: nunca se renueva solo.",
-      "features": {
-        "templates": "Todas las plantillas de regalo, en vuestras dos cuentas",
-        "packs": "Todos los packs de juegos, para un sofá o dos móviles",
-        "extras": "Vídeo y mensajes de voz en cada regalo",
-        "invite": "Tu pareja se une con un enlace que le envías"
-      },
-      "cta": "Conseguir Ethos for Two",
-      "renewCta": "Renovar otro año",
-      "renewing": "Al renovar se suma un año desde el día en que termina tu pase, así que renovar antes no te hace perder nada.",
-      "note": "Un solo pago, sin suscripción. Te escribiremos dos semanas antes de que termine."
     },
     "giftcard": {
       "eyebrow": "Tarjeta regalo",
@@ -1103,15 +1153,6 @@
       "toGift": "Volver a tu regalo"
     },
     "account": {
-      "passTitle": "Ethos for Two",
-      "passActive": "Activo hasta el {date}.",
-      "passPartnerJoined": "Tu pareja ya se ha unido: todo está en las dos cuentas.",
-      "passWaiting": "Tu pareja aún no se ha unido. Envíale este enlace:",
-      "passAsPartner": "Estás dentro con el pase de tu pareja, hasta el {date}.",
-      "passEndingSoon": "Termina en {days, plural, one {# día} other {# días}}. Al renovar se suma un año desde el día en que termina.",
-      "passRenew": "Renovar por {price}",
-      "passNone": "Todas las plantillas y todos los packs de juegos para los dos, durante un año. {price}, un solo pago.",
-      "passSee": "Ver Ethos for Two",
       "upgradeTitle": "Pasa a Todo",
       "upgradeBlurb": "Lo que has pagado por plantillas cuenta: todas las plantillas, actuales y futuras, por {price} más.",
       "upgradeCta": "Pasar a Todo por {price}",
@@ -1137,7 +1178,7 @@
       "copied": "Copiado",
       "share": "Compartir",
       "shareTitle": "Ethos for Two",
-      "shareText": "Tengo Ethos for Two para los dos: todas las plantillas de regalo y todos los packs de juegos. Únete aquí:",
+      "shareText": "Tengo Ethos for Two para los dos: nuestras citas guardadas y compartidas en los dos móviles, y todas las plantillas de regalo y los packs de juegos. Únete aquí:",
       "note": "Solo puede unirse una persona, así que envíaselo a tu pareja y a nadie más."
     },
     "redeem": {
@@ -1169,8 +1210,9 @@
     "join": {
       "eyebrow": "Ethos for Two",
       "title": "Tu pareja te ha guardado un sitio.",
-      "subtitle": "Su pase os cubre a los dos: todas las plantillas de regalo y todos los packs de juegos, mientras dure. A ti no te cuesta nada.",
+      "subtitle": "Su Ethos for Two os cubre a los dos: citas y viajes guardados y compartidos en vuestros dos móviles, todas las plantillas de regalo y todos los packs de juegos, mientras siga activo. A ti no te cuesta nada.",
       "features": {
+        "dates": "Vuestras citas y viajes guardados, compartidos y editables en los dos móviles",
         "templates": "Todas las plantillas de regalo, en tu propia cuenta",
         "packs": "Todos los packs de juegos, para jugar juntos",
         "free": "Nada que pagar, sin tarjeta"
@@ -1178,21 +1220,23 @@
       "codeLabel": "Enlace o código de invitación",
       "noCode": "Este enlace ha perdido su código. Pega el enlace que te envió tu pareja, o pídeselo otra vez.",
       "signInTitle": "Inicia sesión para unirte",
-      "signInBlurb": "Tu parte del pase va en tu propia cuenta. Inicia sesión o crea una, gratis; esta página te esperará.",
-      "button": "Unirme al pase",
+      "signInBlurb": "Tu parte de Ethos for Two va en tu propia cuenta. Inicia sesión o crea una, gratis; esta página te esperará.",
+      "button": "Unirme a Ethos for Two",
       "joining": "Uniéndote…",
       "done": {
         "title": "Ya estás dentro.",
-        "detail": "Todas las plantillas y los packs de juegos también son tuyos, hasta el {date}.",
-        "detailNoDate": "Todas las plantillas y los packs de juegos también son tuyos, mientras dure el pase.",
+        "detail": "Vuestras citas guardadas están compartidas, y todas las plantillas y los packs de juegos también son tuyos, hasta el {date}.",
+        "detailNoDate": "Vuestras citas guardadas están compartidas, y todas las plantillas y los packs de juegos también son tuyos, mientras siga activo.",
+        "ctaDates": "Ver mis citas",
         "ctaGift": "Crear un regalo",
         "ctaGames": "Jugar"
       },
       "errors": {
         "notFound": "Esa invitación no funciona. Pide a tu pareja un enlace nuevo.",
-        "taken": "Alguien ya se ha unido a este pase.",
-        "own": "Es tu propio pase: envíale el enlace a tu pareja.",
-        "expired": "Ese pase ha terminado.",
+        "taken": "Alguien ya se ha unido a este Ethos for Two.",
+        "own": "Es tu propio Ethos for Two: envíale el enlace a tu pareja.",
+        "hasOwn": "Ya tienes tu propio Ethos for Two. Cancela el tuyo primero o pide a tu pareja que se una al tuyo.",
+        "expired": "Ese Ethos for Two ha terminado.",
         "signIn": "Inicia sesión primero y luego únete.",
         "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
         "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
@@ -1586,7 +1630,7 @@
       "share": "Compartir",
       "copy": "Copiar enlace",
       "copied": "Copiado",
-      "private": "El plan se guarda en este navegador y viaja dentro del propio enlace. Nunca se almacena en nuestros servidores."
+      "private": "El plan se guarda en este navegador y viaja dentro del propio enlace. Solo se almacena en nuestros servidores si lo guardas en tu cuenta."
     },
     "received": {
       "title": "Alguien ha planeado esto para ti",
@@ -1767,7 +1811,7 @@
         },
         "private": {
           "a": "Tuyo",
-          "b": "los planes no salen de tu móvil"
+          "b": "los planes se quedan en tu móvil salvo que los guardes"
         }
       },
       "card": {
@@ -2334,22 +2378,240 @@
     },
     "hub": {
       "title": "Packs de juegos",
-      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo durante un año, para compartir en pareja, con Ethos for Two.",
+      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo, para los dos, con Ethos for Two.",
       "cta": "Ver qué trae: {n} cartas"
     }
   },
-  "forTwo": {
-    "free": {
-      "eyebrow": "Citas, planes, a distancia",
-      "price": "Gratis",
-      "blurb": "El mapa, las ideas, el plan que envías. Para todo el mundo, para siempre.",
-      "dates": "Ideas para citas en un mapa de cualquier ciudad, con el tiempo y la puesta de sol",
-      "plans": "Planes que envías como enlace, y las reseñas que dejan las parejas",
-      "ldr": "A medio camino, los relojes, citas para dos pantallas",
-      "deck": "Una baraja de preguntas",
-      "cta": "Buscar una cita"
+  "membership": {
+    "hero": {
+      "eyebrow": "Ethos for Two",
+      "title": "Cada cita que planeáis, <em>guardada para los dos.</em>",
+      "sub": "Una sola suscripción para los dos: guardad todas vuestras citas y viajes, planeadlos juntos desde vuestros dos móviles y desbloquead todas las plantillas de regalo y los packs de juegos.",
+      "subPass": "Un año para los dos: guardad todas vuestras citas y viajes, planeadlos juntos desde vuestros dos móviles y desbloquead todas las plantillas de regalo y los packs de juegos.",
+      "choose": "Cómo pagáis",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "save": "Ahorra un {pct} %",
+      "perMonth": "{price} al mes",
+      "perYear": "{price} al año",
+      "unitMonth": "al mes",
+      "unitYear": "al año",
+      "unitPass": "por un año",
+      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} % frente al plan mensual",
+      "monthlyNote": "Se cobra cada mes · cancela cuando quieras",
+      "cta": "Conseguir Ethos for Two",
+      "termsMonthly": "{price} hoy y después cada mes hasta que canceles. Cancela cuando quieras desde tu cuenta.",
+      "termsYearly": "{price} hoy y después cada año hasta que canceles. Te avisamos una semana antes de cada renovación.",
+      "passNote": "Se paga una vez · no se renueva solo",
+      "passCta": "Conseguir un año para los dos",
+      "passTerms": "Un solo pago por 365 días. Te escribiremos dos semanas antes de que termine.",
+      "renewCta": "Renovar otro año",
+      "renewNote": "Al renovar se suma un año desde el día en que termina el tuyo, así que renovar antes no te hace perder nada.",
+      "covers": "Un solo pago os cubre a los dos",
+      "coversCancel": "Un solo pago os cubre a los dos · cancela cuando quieras",
+      "trust": {
+        "stripe": "Pago seguro con Stripe",
+        "wallets": "Tarjeta, Apple Pay o Google Pay",
+        "cancel": "Cancela en dos toques",
+        "once": "Sin renovaciones ni sorpresas"
+      },
+      "art": {
+        "myDates": "Mis citas",
+        "shared": "Compartidas con {name}",
+        "partner": "Sam",
+        "stops": "{n, plural, one {# parada} other {# paradas}}",
+        "days": "{n, plural, one {# día} other {# días}}",
+        "saturday": "Sábado",
+        "friday": "Viernes",
+        "date": "Cita",
+        "trip": "Viaje",
+        "polaroid": "Sábado, 20:00",
+        "templates": "Todas las plantillas",
+        "packs": "Todos los packs",
+        "cities": {
+          "paris": "París",
+          "rome": "Roma"
+        }
+      }
     },
-    "giftsEyebrow": "Regalos, pagados una vez"
+    "features": {
+      "title": "Qué incluye",
+      "saved": "Citas y viajes guardados, sin límite",
+      "shared": "Planeados juntos, compartidos y editables desde vuestros dos móviles",
+      "templates": "Todas las plantillas de regalo, con todos los extras",
+      "packs": "Todos los packs de juegos, para un sofá o dos móviles",
+      "reminders": "Un aviso el día antes de cada cita",
+      "maps": "Una cita entera, abierta en Apple Maps o Google Maps"
+    },
+    "member": {
+      "title": "Tienes Ethos for Two",
+      "monthlyRenews": "Mensual · se renueva el {date}",
+      "yearlyRenews": "Anual · se renueva el {date}",
+      "ends": "Termina el {date}",
+      "passRuns": "Tu año dura hasta el {date}",
+      "appStore": "A través de la App Store",
+      "paymentFailed": "El pago ha fallado: actualiza tu tarjeta",
+      "processing": "Tu pago aún se está confirmando",
+      "partnerIn": "Estás dentro del Ethos for Two de tu pareja",
+      "manage": "Gestionar"
+    },
+    "compare": {
+      "eyebrow": "Gratis y For Two",
+      "title": "Lo que es gratis y lo que añade For Two",
+      "sub": "Buscar una cita, planearla y enviarla sigue siendo gratis para todo el mundo, sin cuenta.",
+      "feature": "Qué incluye",
+      "free": "Gratis",
+      "forTwo": "Ethos for Two",
+      "included": "Incluido",
+      "notIncluded": "No incluido",
+      "rows": {
+        "ideas": "Ideas para citas en un mapa, con el tiempo y la puesta de sol",
+        "plan": "Planear una cita y enviarla como enlace",
+        "saved": "Citas y viajes guardados",
+        "shared": "Compartidos con tu pareja, editables en los dos móviles",
+        "reminders": "Un aviso el día antes de una cita",
+        "maps": "Abrir una cita entera en Apple Maps o Google Maps",
+        "templates": "Plantillas de regalo",
+        "packs": "Packs de juegos",
+        "ldr": "Herramientas a distancia y los juegos",
+        "price": "Precio"
+      },
+      "values": {
+        "upTo": "Hasta {n}",
+        "unlimited": "Sin límite",
+        "freeTemplates": "{names}",
+        "freeTemplatesCount": "{free} de {n}",
+        "allTemplates": "Las {n}, con todos los extras",
+        "freeDecks": "Las barajas gratis",
+        "everyPack": "Todos los packs",
+        "freeForGood": "Gratis, para siempre",
+        "priceSub": "{monthly} al mes o {yearly} al año, para dos",
+        "pricePass": "{yearly} por un año, un solo pago, para dos"
+      },
+      "cta": "Conseguir Ethos for Two",
+      "noAccount": "Buscar una cita"
+    },
+    "single": {
+      "eyebrow": "Un solo pago",
+      "title": "O compra un regalo suelto",
+      "sub": "Pagas una vez y es tuyo para siempre. Sin suscripción.",
+      "special": {
+        "eyebrow": "Para una plantilla gratis",
+        "name": "Hazlo especial",
+        "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin pie, en esa plantilla para siempre.",
+        "note": "Se compra en el editor, al publicar.",
+        "cta": "Abrir {name}"
+      }
+    },
+    "account": {
+      "title": "Ethos for Two",
+      "monthly": "Mensual · {price} al mes · se renueva el {date}",
+      "yearly": "Anual · {price} al año · se renueva el {date}",
+      "monthlyPlan": "Mensual · {price} al mes",
+      "yearlyPlan": "Anual · {price} al año",
+      "ending": "Termina el {date}: lo conserváis todo hasta entonces",
+      "switching": "Pasa a mensual hacia el {date}",
+      "pass": "Tu año dura hasta el {date}",
+      "passEnding": "Termina en {days, plural, one {# día} other {# días}}. Al renovar se suma un año desde el día en que termina.",
+      "passCarryOn": "Termina en {days, plural, one {# día} other {# días}}. Para seguir después, elige mensual o anual a partir del {date}.",
+      "passRenew": "Renovar por {price}",
+      "seePlans": "Ver los planes",
+      "appStore": "A través de la App Store · se renueva el {date}",
+      "appStoreEnds": "A través de la App Store · termina el {date}",
+      "appStoreManage": "Gestiónalo en los Ajustes de tu iPhone → tu nombre → Suscripciones.",
+      "partnerOf": "Estás dentro del Ethos for Two de {name}",
+      "partnerOfNoName": "Estás dentro del Ethos for Two de tu pareja",
+      "partnerRenews": "Mientras siga activo.",
+      "partnerUntil": "Hasta el {date}.",
+      "pastDue": "No hemos podido cobrar tu último pago. Actualiza tu tarjeta antes del {date} para conservar Ethos for Two.",
+      "paused": "Ethos for Two está en pausa hasta que se complete el pago.",
+      "updateCard": "Actualizar tarjeta",
+      "joined": "{name} ya se ha unido",
+      "joinedNoName": "Tu pareja ya se ha unido",
+      "remove": "Quitar",
+      "leave": "Salir",
+      "manageBilling": "Gestionar la facturación",
+      "manageBillingBlurb": "Tarjeta, facturas y dirección de facturación",
+      "switchYearly": "Pasar a anual · ahorra un {pct} %",
+      "switchMonthly": "Pasar a mensual",
+      "cancel": "Cancelar la suscripción",
+      "resume": "Reactivar",
+      "resumeHint": "No se renovará. ¿Has cambiado de idea?",
+      "keepYearly": "Mantener anual",
+      "none": "Citas guardadas sin límite, todas las plantillas y los packs de juegos, para los dos. {monthly} al mes o {yearly} al año.",
+      "nonePass": "Citas guardadas sin límite, todas las plantillas y los packs de juegos, para los dos. {yearly} por un año, un solo pago.",
+      "see": "Ver Ethos for Two",
+      "inApp": "Gestiona tu suscripción en tryethos.io/account",
+      "done": {
+        "cancel": "Cancelada. Los dos lo conserváis todo hasta el {date}.",
+        "cancelNow": "Cancelada. No se cobrará nada más.",
+        "resume": "Vuelve a renovarse.",
+        "switchYearly": "Ya estás en el plan anual.",
+        "switchMonthly": "Pasará a mensual hacia el {date}.",
+        "keepPlan": "Sigues en el plan anual.",
+        "leave": "Has salido.",
+        "removePartner": "Hecho. Tu enlace de invitación ha cambiado."
+      },
+      "errors": {
+        "generic": "No ha funcionado. Inténtalo de nuevo en un momento.",
+        "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+        "signIn": "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
+        "unavailable": "Eso no se puede cambiar desde aquí ahora mismo. Recarga la página.",
+        "appStore": "Esta suscripción la cobra Apple: gestiónala en los Ajustes de tu iPhone.",
+        "notConfigured": "La facturación no está disponible ahora mismo. Vuelve a probar más tarde.",
+        "paymentFailed": "El pago no se ha completado, así que no ha cambiado nada. Actualiza tu tarjeta y vuelve a intentarlo.",
+        "requiresAction": "Tu banco quiere que confirmes el pago. Abriendo su página…"
+      },
+      "dialogs": {
+        "cancel": {
+          "title": "¿Cancelar Ethos for Two?",
+          "body": "Los dos lo conserváis todo hasta el {date}. Después no se cobra nada más, vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea.",
+          "bodyNow": "Termina ahora y la renovación pendiente no se cobra. Vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea.",
+          "confirm": "Cancelar la suscripción",
+          "keep": "Mantenerla"
+        },
+        "yearly": {
+          "title": "¿Pasar a anual?",
+          "body": "Hoy pagarás {amount}: {yearly} por un año, menos {credit} por lo que queda de este mes. Después se renueva cada año el {date} hasta que canceles.",
+          "loading": "Calculando el importe de hoy…",
+          "confirm": "Cambiar y pagar {amount}",
+          "confirmLoading": "Pasar a anual",
+          "keep": "Seguir en mensual"
+        },
+        "monthly": {
+          "title": "¿Pasar a mensual?",
+          "body": "Hacia el {date} empezarás a pagar {monthly} al mes en lugar de {yearly} al año, hasta que canceles. Hacemos el cambio un par de días antes de que termine tu año y descontamos lo que quede, así que no pierdes nada.",
+          "confirm": "Pasar a mensual",
+          "keep": "Mantener anual"
+        },
+        "leave": {
+          "title": "¿Salir del Ethos for Two de {name}?",
+          "titleNoName": "¿Salir del Ethos for Two de tu pareja?",
+          "body": "Dejaréis de compartir las citas guardadas, y las plantillas y los packs que desbloquea desaparecerán de tu cuenta. Tus propias citas guardadas siguen siendo tuyas.",
+          "confirm": "Salir",
+          "keep": "Quedarme"
+        },
+        "remove": {
+          "title": "¿Quitar a {name}?",
+          "titleNoName": "¿Quitar a tu pareja?",
+          "body": "Dejará de ver tus citas guardadas y perderá lo que desbloquea Ethos for Two. Tu enlace de invitación cambia, así que puedes invitar a otra persona.",
+          "confirm": "Quitar",
+          "keep": "Mantener"
+        }
+      }
+    },
+    "success": {
+      "title": "Ethos for Two ya está activo.",
+      "detail": "{plan}: se renueva el {date}. Envía a tu pareja el enlace de abajo y también lo tendrá en su móvil.",
+      "emailed": "{plan}: se renueva el {date}. Te hemos enviado por email el enlace para tu pareja.",
+      "noDate": "Envía a tu pareja el enlace de abajo y también lo tendrá en su móvil.",
+      "noDateEmailed": "Te hemos enviado por email el enlace para tu pareja, y también lo tienes en tu cuenta.",
+      "processing": "Tu pago se está procesando. Ethos for Two empieza en cuanto se confirme, y te escribiremos.",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "planFirst": "Planea vuestra primera cita",
+      "toAccount": "Ir a tu cuenta"
+    }
   },
   "lifecycle": {
     "remind": {
@@ -2458,6 +2720,161 @@
       "pickStart": "Elegid el día de salida",
       "pickEnd": "ahora, el día de vuelta",
       "close": "Cerrar"
+    }
+  },
+  "savedDates": {
+    "meta": {
+      "title": "Mis citas"
+    },
+    "page": {
+      "title": "Mis citas",
+      "sub": "Las citas y los viajes que has guardado.",
+      "subShared": "Las citas y los viajes que has guardado, compartidos con {name}.",
+      "quota": "{used} de {limit} guardados gratis",
+      "upgrade": "Guarda todos los que quieras",
+      "error": "Tus citas guardadas no se han podido cargar.",
+      "retry": "Probar otra vez",
+      "empty": {
+        "title": "Aún no has guardado ninguna cita",
+        "sub": "Planea una cita en el mapa y guárdala aquí, o guarda un viaje que te guste.",
+        "dates": "Buscar una cita",
+        "trips": "Ver los viajes"
+      }
+    },
+    "card": {
+      "date": "Cita",
+      "trip": "Viaje",
+      "stops": "{count, plural, one {# parada} other {# paradas}}",
+      "days": "{count, plural, one {# día} other {# días}}",
+      "someday": "Sin día todavía",
+      "from": "De {name}",
+      "readOnly": "Solo lectura",
+      "reminder": "Aviso activado",
+      "menu": {
+        "label": "Más opciones de {title}",
+        "open": "Abrir",
+        "rename": "Cambiar el nombre",
+        "remind": "Avisarnos el día antes",
+        "delete": "Borrar",
+        "deleteConfirm": "Has borrado «{title}»"
+      },
+      "renameTitle": "Cambiar el nombre",
+      "renameLabel": "Nombre",
+      "renameSave": "Guardar",
+      "undo": "Deshacer",
+      "deleteFailed": "No se ha podido borrar «{title}». Prueba otra vez.",
+      "renameFailed": "El nombre nuevo no se ha guardado. Prueba otra vez.",
+      "remindFailed": "El aviso no ha cambiado. Prueba otra vez.",
+      "notOwner": "Solo {name} puede borrarla.",
+      "editedBy": "Último cambio de {name}"
+    },
+    "save": {
+      "title": "Guarda esta cita",
+      "sub": "Guárdala en tu cuenta y encuéntrala en cualquier móvil en el que inicies sesión.",
+      "cta": "Guardar en mis citas",
+      "saving": "Guardando…",
+      "saved": "Guardada en mis citas",
+      "synced": "Todos los cambios guardados",
+      "offline": "Aún sin guardar",
+      "open": "Ver mis citas",
+      "close": "Cerrar esta cita",
+      "closeConfirm": "¿Cerrar esta cita? Sigue en Mis citas, y en este dispositivo empiezas un plan nuevo.",
+      "remind": "Avisarnos el día antes",
+      "remindNeedsDay": "Elige un día para la cita y os avisaremos a los dos el día antes.",
+      "defaultTitle": "Una cita",
+      "shared": "Compartida con {name}, que también puede cambiarla.",
+      "partners": "La cita de {name}, compartida contigo.",
+      "quota": "{used} de {limit} guardados gratis usados",
+      "signIn": {
+        "title": "Inicia sesión para guardar tu cita",
+        "sub": "Tu plan se queda en este dispositivo mientras inicias sesión y se guarda solo cuando vuelvas."
+      },
+      "trip": {
+        "cta": "Guardar viaje",
+        "saved": "Guardado",
+        "remove": "Quitar",
+        "removeLabel": "Quitar {title} de Mis citas",
+        "byPartner": "Guardado por {name}",
+        "failed": "El viaje no se ha guardado. Prueba otra vez.",
+        "signIn": {
+          "title": "Inicia sesión para guardar este viaje",
+          "sub": "Irá a Mis citas y se guardará solo cuando vuelvas."
+        }
+      }
+    },
+    "upsell": {
+      "eyebrow": "Ethos for Two",
+      "limit": {
+        "title": "Has usado tus {limit} guardados gratis",
+        "body": "Las cuentas gratuitas guardan {limit} citas y viajes. Con Ethos for Two guardáis todos los que queráis, compartidos con tu pareja y editables desde vuestros dos móviles."
+      },
+      "read_only": {
+        "title": "Por ahora, esta cita es de solo lectura",
+        "body": "Sin Ethos for Two, tus {limit} citas cambiadas más recientemente siguen siendo editables. Las demás se conservan y puedes leerlas hasta que borres alguna o vuelvas."
+      },
+      "maps": {
+        "title": "Abre la cita entera en Mapas",
+        "body": "Con Ethos for Two, todas las paradas se abren en Apple Maps o Google Maps con un toque, en orden y con el camino de una a la siguiente."
+      },
+      "reminders": {
+        "title": "Un aviso el día antes",
+        "body": "Con Ethos for Two, os escribimos a los dos el día antes de cada cita guardada, con el plan dentro."
+      },
+      "cta": "Ver Ethos for Two",
+      "manage": "Gestionar mis citas",
+      "notNow": "Ahora no",
+      "perMonth": "{price} al mes",
+      "perYear": "{price} al año",
+      "forYear": "{price} por un año",
+      "or": "o",
+      "forBoth": "para los dos"
+    },
+    "sync": {
+      "conflict": "{name} ha cambiado esta cita: estás viendo la última versión",
+      "conflictHere": "Esta cita ha cambiado en otro sitio: estás viendo la última versión",
+      "readOnly": "Ahora esta cita es de solo lectura, así que los cambios de aquí no se guardan en ella.",
+      "gone": "Esta cita ya no está en Mis citas. El plan sigue en este dispositivo."
+    },
+    "open": {
+      "loading": "Abriendo tu cita…",
+      "replaceConfirm": "Esto sustituye el plan que estabas preparando en este dispositivo, que no está guardado. ¿Abrir esta cita?",
+      "notFound": "Esa cita no está en tu cuenta o se ha borrado.",
+      "failed": "La cita no se ha abierto. Revisa tu conexión y prueba otra vez.",
+      "signIn": "Inicia sesión para abrir esta cita.",
+      "signInSub": "Inicia sesión con la cuenta en la que se guardó y se abrirá aquí mismo."
+    },
+    "readOnly": {
+      "title": "Solo lectura",
+      "body": "Sin Ethos for Two, solo se pueden editar tus {limit} citas cambiadas más recientemente. Esta sigue a salvo en Mis citas.",
+      "why": "¿Por qué?"
+    },
+    "maps": {
+      "cta": "Abrir en Mapas",
+      "label": "Abrir la cita entera en una app de mapas",
+      "google": "Google Maps",
+      "apple": "Apple Maps",
+      "locked": "Con Ethos for Two"
+    },
+    "remindOff": {
+      "title": "¿Quitar el aviso?",
+      "body": "Ninguno de los dos recibirá un correo el día antes de «{title}».",
+      "confirm": "Quitar el aviso",
+      "done": "Aviso quitado.",
+      "doneBody": "No habrá correo el día antes de «{title}». Puedes volver a activarlo en Mis citas."
+    },
+    "errors": {
+      "unauthenticated": "Inicia sesión para guardar tus citas.",
+      "invalid_input": "No se ha podido guardar. Recarga la página y prueba otra vez.",
+      "empty_plan": "Añade antes una parada al plan.",
+      "unknown_trip": "Ese viaje ya no está en Ethos.",
+      "limit_reached": "Has usado tus guardados gratis.",
+      "read_only": "Esta cita es de solo lectura.",
+      "not_found": "Esa cita ya no está en tu cuenta.",
+      "not_owner": "Solo quien la guardó puede borrarla.",
+      "conflict": "Alguien la ha cambiado antes. Estás viendo la última versión.",
+      "rate_limited": "Demasiados cambios a la vez. Prueba otra vez en un minuto.",
+      "not_configured": "Ahora mismo no se puede guardar.",
+      "network": "No tienes conexión. Prueba otra vez cuando vuelvas a tenerla."
     }
   }
 }

@@ -87,6 +87,7 @@ describe("reading a session back", () => {
       creatorCode: "MARIA",
       ref: "c-maria",
       locale: "en",
+      plan: null,
     });
     // Another business on the shared Stripe account, or a pack with no pack.
     expect(readSession(session({ order: "42" }))).toBeNull();

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Sparkles } from "lucide-react";
+import { Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { JoinForm } from "@/components/pricing/join-form";
+import { SealMark } from "@/components/pricing/seal-mark";
 import { inviteCodeFrom } from "@/components/pricing/offers";
 
-const FEATURES = ["templates", "packs", "free"] as const;
+const FEATURES = ["dates", "templates", "packs", "free"] as const;
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/for-two/join">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -22,14 +23,20 @@ export default async function JoinPassPage({ params, searchParams }: PageProps<"
 
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-14 sm:px-8 sm:py-20">
-      <p className="text-eyebrow text-rose-ink">{t("eyebrow")}</p>
+      <p className="flex items-center gap-2.5 text-eyebrow text-rose-ink">
+        <SealMark className="size-6" />
+        {t("eyebrow")}
+      </p>
       <h1 className="mt-3 display-lg">{t("title")}</h1>
       <p className="mt-4 text-lg leading-relaxed text-ink-soft">{t("subtitle")}</p>
       <ul className="mt-6 mb-8 grid gap-2.5">
         {FEATURES.map((k) => (
-          <li key={k} className="flex items-start gap-2.5 text-[15px] text-ink">
-            <Sparkles aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-rose" />
-            {t(`features.${k}`)}
+          <li key={k} className="flex items-start gap-3 text-[15px] leading-snug text-ink">
+            {/* Ethos for Two's gold on its dusk, as on /pricing. */}
+            <span aria-hidden="true" className="grid size-6 shrink-0 place-items-center rounded-full bg-dusk">
+              <Check className="size-3.5 text-starlight" strokeWidth={2.6} />
+            </span>
+            <span className="pt-0.5">{t(`features.${k}`)}</span>
           </li>
         ))}
       </ul>

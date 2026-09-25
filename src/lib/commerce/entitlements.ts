@@ -1,7 +1,9 @@
 import { PACK_IDS } from "@/lib/games/packs";
-import { EVERY_PACK, EVERY_TEMPLATE, type Currency } from "@/lib/pricing/products";
+import { EVERY_PACK, EVERY_TEMPLATE, FREE_SAVED_DATES, type Currency } from "@/lib/pricing/products";
+import type { MembershipSummary } from "@/lib/membership/types";
 import type { Pass } from "./passes";
 import { isRunning, paidUntil } from "./passes";
+import { currentMembership, personOf, summariseMembership, type Person } from "./memberships";
 import { UPGRADE_CREDITED, upgradeAmount, type PaidPurchase } from "./pricing";
 import { inviteUrl, iso, type Db, type Locale } from "./db";
 import { splitUnlocks } from "./unlocks";
@@ -13,14 +15,33 @@ export type Entitlements = {
   templates: string[];
   /** Game pack ids; "*" (with every current id listed too) when all packs are covered. */
   packs: string[];
+  /** The pass as the iPhone app's current build reads it: filled for any running membership. */
   pass: PassSummary | null;
+  /** Ethos for Two as it is now (docs/MEMBERSHIP.md 2.8): running, or a subscription whose payment failed. */
+  membership: MembershipSummary | null;
+  /** How many dates and trips the account can save: FREE_SAVED_DATES, or null (no limit) while a membership runs. */
+  savedDatesLimit: number | null;
   /** "Upgrade to Everything for the difference", for a buyer who paid for singles, pick-threes or extras. */
   upgrade: { amount: number; currency: Currency } | null;
 };
 
 export type PassSummary = { endsAt: string; isOwner: boolean; partnerJoined: boolean; inviteUrl?: string };
 
-export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, upgrade: null };
+export const SIGNED_OUT: Entitlements = { signedIn: false, templates: [], packs: [], pass: null, membership: null, savedDatesLimit: FREE_SAVED_DATES, upgrade: null };
+
+/**
+ * The old `pass` field, from the membership, for app builds that only know the pass: any running
+ * membership reads as a pass that ends when the membership would (its period end while it renews).
+ */
+export function passFromMembership(membership: MembershipSummary | null): PassSummary | null {
+  if (!membership?.running) return null;
+  return {
+    endsAt: membership.endsAt ?? membership.periodEnd,
+    isOwner: membership.isOwner,
+    partnerJoined: membership.partnerJoined,
+    ...(membership.inviteUrl ? { inviteUrl: membership.inviteUrl } : {}),
+  };
+}
 
 export function templatesFromRows(rows: string[]): string[] {
   return rows.filter((row) => !row.startsWith("pack:"));
@@ -61,10 +82,12 @@ export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], 
 /**
  * What a signed-in user can use right now, read with `db`: the user's own session (row-level
  * security decides, as GET /api/entitlements reads it) or the service role for that user id (the
- * app's purchase routes, right after they have written). Before migration 0009 the pass table
- * doesn't exist: that reads as "no pass", not an error.
+ * app's purchase routes, right after they have written). The other person's name in the membership
+ * is read with `names` (the service role: profiles are own-row only), or `db` when it is the service
+ * role already. Before migration 0009 the pass table doesn't exist: that reads as "no pass", not an
+ * error.
  */
-export async function readEntitlements(db: Db, userId: string, options: { locale: Locale; currency: Currency; now: number }): Promise<Entitlements> {
+export async function readEntitlements(db: Db, userId: string, options: { locale: Locale; currency: Currency; now: number; names?: Db | null }): Promise<Entitlements> {
   const [unlocks, owned, joined, purchases] = await Promise.all([
     db.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
     db.from("couple_passes").select("*").eq("owner_user_id", userId),
@@ -72,14 +95,24 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     db.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
   ]);
   const rows = unlocks.data ?? [];
-  const passes = [...(owned.data ?? []), ...(joined.data ?? [])];
+  const passes = [...(owned.data ?? []), ...(joined.data ?? [])].filter((pass, i, all) => all.findIndex((other) => other.id === pass.id) === i);
   const slugs = rows.map((row) => row.template_slug);
   const forever = splitUnlocks(rows, passes.map((pass) => pass.purchase_id)).forever;
+  const current = currentMembership(passes, userId, options.now);
+  const other = current ? (current.owner_user_id === userId ? current.partner_user_id : current.owner_user_id) : null;
+  let partner: Person | null = null;
+  if (other) {
+    const { data } = await (options.names ?? db).from("profiles").select("name, email").eq("id", other).maybeSingle();
+    partner = personOf(data) ?? { name: null, initial: "?" };
+  }
+  const membership = summariseMembership(passes, userId, options.now, { invite: (code) => inviteUrl(code, options.locale), partner });
   return {
     signedIn: true,
     templates: templatesFromRows(slugs),
     packs: packsFromRows(slugs),
-    pass: summarisePass(passes, userId, options.now, (code) => inviteUrl(code, options.locale)),
+    pass: passFromMembership(membership),
+    membership,
+    savedDatesLimit: membership?.running ? null : FREE_SAVED_DATES,
     upgrade: upgradeOffer(forever, purchases.data ?? [], options.currency),
   };
 }

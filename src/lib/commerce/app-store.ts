@@ -1,9 +1,11 @@
-import { EVERY_TEMPLATE, PRODUCTS, hasUnlock, packUnlock } from "@/lib/pricing/products";
-import type { Tables } from "@/lib/supabase/types";
+import { EVERY_TEMPLATE, hasUnlock, packUnlock } from "@/lib/pricing/products";
+import type { Tables, Updates } from "@/lib/supabase/types";
 import { getManifest } from "@/templates/manifests";
-import { appStoreProduct, type AppStoreProduct } from "./app-store-products";
+import { appStoreEurCents, appStoreProduct, type AppStoreProduct } from "./app-store-products";
+import { generateInviteCode } from "./codes";
 import { iso, type Db } from "./db";
-import { startPass } from "./passes";
+import { MEMBERSHIP_GRACE_MS, endMembershipNow, settleUnlocks, type SendEnded } from "./memberships";
+import { startPass, type Pass } from "./passes";
 import { revokePurchase } from "./revoke";
 import { foreverUnlocks, grantForever } from "./unlocks";
 
@@ -66,7 +68,9 @@ export function parseSubscriber(json: unknown): StoreTransaction[] {
   const bought = subscriber && isRecord(subscriber.non_subscriptions) ? subscriber.non_subscriptions : {};
   const out: StoreTransaction[] = [];
   for (const [productId, purchases] of Object.entries(bought)) {
-    if (!appStoreProduct(productId) || !Array.isArray(purchases)) continue;
+    const product = appStoreProduct(productId);
+    // A subscription's transactions come through its own events (handleAppStoreSubscriptionEvent).
+    if (!product || product.type === "autoRenewable" || !Array.isArray(purchases)) continue;
     for (const p of purchases) {
       if (!isRecord(p) || (p.store !== undefined && p.store !== "app_store")) continue;
       const transactionId = p.store_transaction_id;
@@ -78,7 +82,8 @@ export function parseSubscriber(json: unknown): StoreTransaction[] {
   return out;
 }
 
-export async function fetchSubscriber(userId: string, secretKey: string, doFetch: typeof fetch = fetch): Promise<StoreTransaction[] | null> {
+/** RevenueCat's whole record of a user (GET /v1/subscribers/{id}), or null when it couldn't be asked. */
+export async function fetchSubscriberJson(userId: string, secretKey: string, doFetch: typeof fetch = fetch): Promise<unknown> {
   try {
     const res = await doFetch(`https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(userId)}`, {
       headers: { Authorization: `Bearer ${secretKey}`, accept: "application/json" },
@@ -86,10 +91,15 @@ export async function fetchSubscriber(userId: string, secretKey: string, doFetch
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) return null;
-    return parseSubscriber(await res.json());
+    return await res.json();
   } catch {
     return null;
   }
+}
+
+export async function fetchSubscriber(userId: string, secretKey: string, doFetch: typeof fetch = fetch): Promise<StoreTransaction[] | null> {
+  const json = await fetchSubscriberJson(userId, secretKey, doFetch);
+  return json === null ? null : parseSubscriber(json);
 }
 
 async function findByTransaction(db: Db, transactionId: string): Promise<PurchaseRow | null> {
@@ -111,7 +121,7 @@ async function record(db: Db, userId: string, tx: StoreTransaction, product: App
       user_id: userId,
       product: product.product,
       template_slugs: startingSlugs(product),
-      amount: tx.price?.amount ?? PRODUCTS[product.product].amounts.eur,
+      amount: tx.price?.amount ?? appStoreEurCents(product),
       currency: tx.price?.currency ?? "eur",
       status,
       kind: product.product,
@@ -142,9 +152,12 @@ async function grant(db: Db, userId: string, row: PurchaseRow, product: AppStore
       return grantForever(db, userId, startingSlugs(product), row.id);
     case "pass": {
       // The year runs from the purchase (or from the end of the year it renews), however late we hear of it.
-      const started = await startPass(db, { purchaseId: row.id, ownerId: userId, now: Math.min(purchasedAt, now), grantAt: now });
+      const started = await startPass(db, { purchaseId: row.id, ownerId: userId, now: Math.min(purchasedAt, now), grantAt: now, provider: "app_store_pass" });
       return "error" in started ? { error: started.error } : {};
     }
+    case "membership":
+      // A subscription's rows are handleAppStoreSubscriptionEvent's; nothing is granted from here.
+      return {};
     default:
       // A credit: nothing until it is spent on a template, then that template, for good.
       return row.template_slugs.length > 0 ? grantForever(db, userId, row.template_slugs, row.id) : {};
@@ -161,7 +174,7 @@ export async function ingestAppStore(db: Db, userId: string, transactions: reado
   const errors: string[] = [];
   for (const tx of transactions) {
     const product = appStoreProduct(tx.productId);
-    if (!product) continue;
+    if (!product || product.type === "autoRenewable") continue;
     const row = await record(db, userId, tx, product);
     if ("error" in row) {
       errors.push(row.error);
@@ -300,9 +313,16 @@ export type WebhookOutcome = { status: "ignored" | "recorded" | "revoked" } | { 
  * user's purchases when `pull` can. A failure comes back as `failed`, so the route answers 500 and
  * RevenueCat tries again.
  */
-export async function handleRevenueCatEvent(db: Db, event: Record<string, unknown>, now: number, options: { pull?: ((userId: string) => Promise<{ ok: boolean }>) | null } = {}): Promise<WebhookOutcome> {
+export async function handleRevenueCatEvent(
+  db: Db,
+  event: Record<string, unknown>,
+  now: number,
+  options: { pull?: ((userId: string) => Promise<{ ok: boolean }>) | null; sendEnded?: SendEnded } = {},
+): Promise<WebhookOutcome> {
   const type = typeof event.type === "string" ? event.type : "";
   if (type === "TEST") return { status: "ignored" };
+  const subscription = appStoreProduct(event.product_id as string | undefined) ?? appStoreProduct(event.new_product_id as string | undefined);
+  if (subscription?.type === "autoRenewable" && type !== "TRANSFER") return handleAppStoreSubscriptionEvent(db, event, now, { sendEnded: options.sendEnded });
   const userIds = [event.app_user_id, ...(type === "TRANSFER" && Array.isArray(event.transferred_to) ? event.transferred_to : [])].filter(isUserId);
   const userId = isUserId(event.app_user_id) ? event.app_user_id : null;
   const tx = eventTransaction(event, now);
@@ -330,4 +350,250 @@ export async function handleRevenueCatEvent(db: Db, event: Record<string, unknow
 async function accountExists(db: Db, userId: string): Promise<boolean> {
   const { data } = await db.from("profiles").select("id").eq("id", userId).maybeSingle();
   return Boolean(data);
+}
+
+// ---------------------------------------------------------------------------
+// Ethos for Two as an App Store subscription (docs/MEMBERSHIP.md 2.11)
+// ---------------------------------------------------------------------------
+
+const num = (value: unknown): number | null => (typeof value === "number" && Number.isFinite(value) ? value : null);
+
+async function rowByOriginal(db: Db, originalTransactionId: string): Promise<Pass | null> {
+  const { data } = await db.from("couple_passes").select("*").eq("store_original_transaction_id", originalTransactionId).maybeSingle();
+  return data ?? null;
+}
+
+/** When access ends if nothing else happens, as for a Stripe subscription: the period end, plus a week while it renews. */
+function appStoreEndsAt(row: Pick<Pass, "starts_at">, status: Pass["status"], cancelling: boolean, periodEnd: number): string {
+  const end = status === "active" && !cancelling ? periodEnd + MEMBERSHIP_GRACE_MS : periodEnd;
+  return iso(Math.max(Date.parse(row.starts_at), end));
+}
+
+/**
+ * RevenueCat's events for Ethos for Two bought in the iPhone app as an auto-renewable subscription:
+ * the same membership a Stripe subscription is (one couple_passes row for the subscription's whole
+ * life, keyed by Apple's original transaction id), and each purchase or renewal a `purchases` row
+ * as the one-time products are. Events can arrive out of order, so a state change only applies when
+ * the event is newer than the last one applied (provider_event_at), except where noted: the period end
+ * only ever moves forward, and an EXPIRATION counts only when it is about the latest period. Apple
+ * bills, renews and cancels, so nothing here reaches back to it. Anonymous or deleted accounts: ignored.
+ */
+export async function handleAppStoreSubscriptionEvent(db: Db, event: Record<string, unknown>, now: number, options: { sendEnded?: SendEnded } = {}): Promise<WebhookOutcome> {
+  const type = typeof event.type === "string" ? event.type : "";
+  const product = appStoreProduct(event.product_id as string | undefined) ?? appStoreProduct(event.new_product_id as string | undefined);
+  if (!product?.plan || product.type !== "autoRenewable") return { status: "ignored" };
+  if (event.store !== undefined && event.store !== null && event.store !== "APP_STORE") return { status: "ignored" };
+  const userId = isUserId(event.app_user_id) ? event.app_user_id : null;
+  const original = isTransactionId(event.original_transaction_id) ? event.original_transaction_id : null;
+  if (!userId || !original || !(await accountExists(db, userId))) return { status: "ignored" };
+  const eventAt = num(event.event_timestamp_ms) ?? now;
+  const expiration = num(event.expiration_at_ms);
+  const tx = eventTransaction(event, now);
+
+  let row = await rowByOriginal(db, original);
+  if (row && row.owner_user_id !== userId) {
+    console.error("[app-store] a subscription recorded for another account: not moved", original);
+    return { status: "ignored" };
+  }
+  const fresh = !row?.provider_event_at || eventAt >= Date.parse(row.provider_event_at);
+  const failed = (error: string): WebhookOutcome => ({ status: "failed", error });
+  const write = async (current: Pass, patch: Updates<"couple_passes">): Promise<Pass | { error: string }> => {
+    const { data, error } = await db.from("couple_passes").update(patch).eq("id", current.id).select("*");
+    if (error) return { error: error.message };
+    return data?.[0] ?? { ...current, ...(patch as Partial<Pass>) };
+  };
+
+  switch (type) {
+    case "INITIAL_PURCHASE":
+    case "RENEWAL": {
+      if (!tx || expiration === null) return { status: "ignored" };
+      const purchase = await record(db, userId, tx, product);
+      if ("error" in purchase) return failed(purchase.error);
+      if (purchase.user_id !== userId) return { status: "ignored" };
+      if (!row) {
+        const created = await createAppStoreRow(db, { purchaseId: purchase.id, ownerId: userId, originalTransactionId: original, plan: product.plan, purchasedAt: num(event.purchased_at_ms) ?? now, periodEnd: expiration, eventAt });
+        if ("error" in created) return failed(created.error);
+        row = created;
+      } else {
+        const periodEnd = Math.max(Date.parse(row.current_period_end ?? row.ends_at), expiration);
+        const status = fresh ? "active" : row.status;
+        const cancelling = fresh ? false : row.cancel_at_period_end;
+        const updated = await write(row, {
+          current_period_end: iso(periodEnd),
+          ...(fresh ? { status, cancel_at_period_end: cancelling, plan: product.plan, provider_event_at: iso(eventAt), ...(row.status === "ended" ? { ended_notified_at: null } : {}) } : {}),
+          ends_at: status === "ended" ? row.ends_at : appStoreEndsAt(row, status, cancelling, periodEnd),
+        });
+        if ("error" in updated) return failed(updated.error);
+        row = updated;
+      }
+      if (purchase.status === "paid") await db.from("purchases").update({ membership_id: row.id }).eq("id", purchase.id);
+      const settled = await settleUnlocks(db, row, now);
+      return settled.error ? failed(settled.error) : { status: "recorded" };
+    }
+    case "CANCELLATION": {
+      if (event.cancel_reason === "CUSTOMER_SUPPORT") {
+        // Apple's refund: the transaction's payment goes back, and when it paid for the period the
+        // membership is in, it ends now for both (a refund of an older period changes nothing else).
+        if (!tx) return { status: "ignored" };
+        const found = await findByTransaction(db, tx.transactionId);
+        if (found) {
+          if (found.status !== "refunded") await revokePurchase(db, { ...found, membership_id: row?.id ?? null }, now, { mode: "refund" });
+          return { status: "revoked" };
+        }
+        const tombstone = await record(db, userId, tx, product, "refunded");
+        if ("error" in tombstone) return failed(tombstone.error);
+        if (row) {
+          const ended = await endMembershipNow(db, row, now, { relock: true });
+          if (ended.error) return failed(ended.error);
+        }
+        return { status: "revoked" };
+      }
+      if (!row || !fresh) return { status: "ignored" };
+      const periodEnd = Date.parse(row.current_period_end ?? row.ends_at);
+      const updated = await write(row, { cancel_at_period_end: true, provider_event_at: iso(eventAt), ...(row.status === "ended" ? {} : { ends_at: appStoreEndsAt(row, row.status, true, periodEnd) }) });
+      if ("error" in updated) return failed(updated.error);
+      const settled = await settleUnlocks(db, updated, now);
+      return settled.error ? failed(settled.error) : { status: "recorded" };
+    }
+    case "UNCANCELLATION": {
+      if (!row || !fresh) return { status: "ignored" };
+      const periodEnd = Date.parse(row.current_period_end ?? row.ends_at);
+      const updated = await write(row, { cancel_at_period_end: false, provider_event_at: iso(eventAt), ...(row.status === "ended" ? {} : { ends_at: appStoreEndsAt(row, row.status, false, periodEnd) }) });
+      if ("error" in updated) return failed(updated.error);
+      const settled = await settleUnlocks(db, updated, now);
+      return settled.error ? failed(settled.error) : { status: "recorded" };
+    }
+    case "BILLING_ISSUE": {
+      if (!row || !fresh || row.status === "ended") return { status: "ignored" };
+      const grace = num(event.grace_period_expiration_at_ms);
+      const periodEnd = Date.parse(row.current_period_end ?? row.ends_at);
+      const updated = await write(row, { status: "past_due", provider_event_at: iso(eventAt), ends_at: iso(Math.max(Date.parse(row.starts_at), grace ?? periodEnd + MEMBERSHIP_GRACE_MS)) });
+      if ("error" in updated) return failed(updated.error);
+      const settled = await settleUnlocks(db, updated, now);
+      return settled.error ? failed(settled.error) : { status: "recorded" };
+    }
+    case "EXPIRATION": {
+      if (!row || row.status === "ended" || expiration === null) return { status: "ignored" };
+      // About an older period, arriving after the renewal that followed it: nothing has ended.
+      if (row.current_period_end && expiration < Date.parse(row.current_period_end) - 60_000) return { status: "ignored" };
+      const updated = await write(row, { status: "ended", provider_event_at: iso(Math.max(eventAt, Date.parse(row.provider_event_at ?? "0") || 0)), ends_at: iso(Math.max(Date.parse(row.starts_at), Math.min(Date.parse(row.ends_at), now))) });
+      if ("error" in updated) return failed(updated.error);
+      const settled = await settleUnlocks(db, updated, now);
+      if (settled.error) return failed(settled.error);
+      const { data: claimed } = await db.from("couple_passes").update({ ended_notified_at: iso(now) }).eq("id", row.id).is("ended_notified_at", null).select("id");
+      if ((claimed ?? []).length > 0 && options.sendEnded && !(await options.sendEnded(updated))) await db.from("couple_passes").update({ ended_notified_at: null }).eq("id", row.id);
+      return { status: "recorded" };
+    }
+    case "SUBSCRIPTION_EXTENDED": {
+      if (!row || expiration === null) return { status: "ignored" };
+      const periodEnd = Math.max(Date.parse(row.current_period_end ?? row.ends_at), expiration);
+      const updated = await write(row, { current_period_end: iso(periodEnd), ...(row.status === "ended" ? {} : { ends_at: appStoreEndsAt(row, row.status, row.cancel_at_period_end, periodEnd) }) });
+      if ("error" in updated) return failed(updated.error);
+      const settled = await settleUnlocks(db, updated, now);
+      return settled.error ? failed(settled.error) : { status: "recorded" };
+    }
+    case "PRODUCT_CHANGE":
+      // Apple applies a change between monthly and yearly at the next renewal, which arrives as a
+      // RENEWAL with the new product: nothing changes until then.
+      console.info("[app-store] plan change requested", original, event.new_product_id);
+      return { status: "ignored" };
+    default:
+      return { status: "ignored" };
+  }
+}
+
+async function createAppStoreRow(
+  db: Db,
+  args: { purchaseId: string; ownerId: string; originalTransactionId: string; plan: Pass["plan"]; purchasedAt: number; periodEnd: number; eventAt: number },
+): Promise<Pass | { error: string }> {
+  const startsAt = iso(Math.min(args.purchasedAt, args.periodEnd));
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const { data, error } = await db
+      .from("couple_passes")
+      .upsert(
+        {
+          purchase_id: args.purchaseId,
+          owner_user_id: args.ownerId,
+          invite_code: generateInviteCode(),
+          provider: "app_store",
+          plan: args.plan,
+          status: "active",
+          starts_at: startsAt,
+          current_period_end: iso(args.periodEnd),
+          ends_at: appStoreEndsAt({ starts_at: startsAt }, "active", false, args.periodEnd),
+          store_original_transaction_id: args.originalTransactionId,
+          provider_event_at: iso(args.eventAt),
+        },
+        { onConflict: "store_original_transaction_id", ignoreDuplicates: true },
+      )
+      .select("*");
+    // 23505 on the invite code: draw again.
+    if (error?.code === "23505") continue;
+    if (error) return { error: error.message };
+    const row = data?.[0] ?? (await rowByOriginal(db, args.originalTransactionId));
+    return row ?? { error: "membership_missing" };
+  }
+  return { error: "invite_code_collision" };
+}
+
+/** An App Store subscription of ours as RevenueCat's subscriber record has it (`subscriptions[productId]`). Times in ms. */
+export type StoreSubscription = { productId: string; expiresAt: number; unsubscribedAt: number | null; billingIssueAt: number | null; graceExpiresAt: number | null; refundedAt: number | null };
+
+export function parseSubscriberSubscriptions(json: unknown): StoreSubscription[] {
+  const subscriber = isRecord(json) && isRecord(json.subscriber) ? json.subscriber : null;
+  const subscriptions = subscriber && isRecord(subscriber.subscriptions) ? subscriber.subscriptions : {};
+  const time = (value: unknown) => {
+    const at = typeof value === "string" ? Date.parse(value) : NaN;
+    return Number.isFinite(at) ? at : null;
+  };
+  const out: StoreSubscription[] = [];
+  for (const [productId, entry] of Object.entries(subscriptions)) {
+    if (appStoreProduct(productId)?.type !== "autoRenewable" || !isRecord(entry) || (entry.store !== undefined && entry.store !== "app_store")) continue;
+    const expiresAt = time(entry.expires_date);
+    if (expiresAt === null) continue;
+    out.push({ productId, expiresAt, unsubscribedAt: time(entry.unsubscribe_detected_at), billingIssueAt: time(entry.billing_issues_detected_at), graceExpiresAt: time(entry.grace_period_expires_date), refundedAt: time(entry.refunded_at) });
+  }
+  return out;
+}
+
+/**
+ * The cron's safety net for App Store subscriptions whose paid period has passed (docs/MEMBERSHIP.md
+ * 2.9): RevenueCat is asked what it knows, so a missed renewal event never costs a couple access and
+ * a missed expiration doesn't leave a row saying it renews. A refund is left to its webhook event,
+ * which knows the transaction; one found here only ends the membership, quietly.
+ */
+export async function reconcileAppStoreSubscriptions(db: Db, now: number, fetchJson: (userId: string) => Promise<unknown>, options: { sendEnded?: SendEnded } = {}): Promise<{ checked: number; failed: number }> {
+  const { data } = await db.from("couple_passes").select("*").eq("provider", "app_store").in("status", ["active", "past_due"]).lte("current_period_end", iso(now)).limit(100);
+  let failed = 0;
+  for (const row of data ?? []) {
+    const json = await fetchJson(row.owner_user_id);
+    if (json === null) {
+      failed += 1;
+      continue;
+    }
+    const latest = parseSubscriberSubscriptions(json).sort((a, b) => b.expiresAt - a.expiresAt)[0];
+    if (!latest) continue;
+    const periodEnd = Math.max(Date.parse(row.current_period_end ?? row.ends_at), latest.expiresAt);
+    const plan = appStoreProduct(latest.productId)?.plan ?? row.plan;
+    const inGrace = latest.billingIssueAt !== null && latest.graceExpiresAt !== null && latest.graceExpiresAt > now;
+    let patch: Updates<"couple_passes">;
+    if (latest.refundedAt === null && (latest.expiresAt > now || inGrace)) {
+      const cancelling = latest.unsubscribedAt !== null;
+      patch = inGrace && latest.expiresAt <= now
+        ? { status: "past_due", ends_at: iso(Math.max(Date.parse(row.starts_at), latest.graceExpiresAt!)), current_period_end: iso(periodEnd), plan }
+        : { status: "active", cancel_at_period_end: cancelling, current_period_end: iso(periodEnd), plan, ends_at: appStoreEndsAt(row, "active", cancelling, periodEnd) };
+    } else patch = { status: "ended", ends_at: iso(Math.max(Date.parse(row.starts_at), Math.min(Date.parse(row.ends_at), now))) };
+    const { data: updated, error } = await db.from("couple_passes").update(patch).eq("id", row.id).select("*");
+    const after = updated?.[0];
+    if (error || !after) {
+      failed += 1;
+      continue;
+    }
+    await settleUnlocks(db, after, now);
+    if (after.status === "ended") {
+      const { data: claimed } = await db.from("couple_passes").update({ ended_notified_at: iso(now) }).eq("id", row.id).is("ended_notified_at", null).select("id");
+      if ((claimed ?? []).length > 0 && latest.refundedAt === null && options.sendEnded && !(await options.sendEnded(after))) await db.from("couple_passes").update({ ended_notified_at: null }).eq("id", row.id);
+    }
+  }
+  return { checked: (data ?? []).length, failed };
 }

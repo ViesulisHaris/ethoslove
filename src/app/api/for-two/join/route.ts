@@ -17,14 +17,16 @@ const STATUS: Record<Extract<JoinResult, { ok: false }>["error"], number> = {
   not_found: 404,
   expired: 410,
   own_pass: 409,
+  has_own: 409,
   taken: 409,
   failed: 500,
 };
 
 /**
- * The partner joins an "Ethos for Two" pass with the owner's invite code (signed in, not the owner,
- * pass running, place empty) and gets every template and game pack while it runs.
- * → { ok: true, endsAt } | { error: "unauthenticated" | "rate_limited" | "invalid_input" | "not_found" | "expired" | "own_pass" | "taken" | "failed" }
+ * The partner joins the owner's Ethos for Two with the invite code (signed in, not the owner, the
+ * membership running, the place empty, no membership of their own) and gets everything it covers
+ * while it runs. `endsAt` is when it ends, or null while it renews by itself (`renews`).
+ * → { ok: true, endsAt: string | null, renews: boolean } | { error: "unauthenticated" | "rate_limited" | "invalid_input" | "not_found" | "expired" | "own_pass" | "has_own" | "taken" | "failed" }
  */
 export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
@@ -41,5 +43,5 @@ export async function POST(request: NextRequest) {
 
   const result = await joinPass(admin, { code: parsed.data.code, userId: user.id, now: Date.now() });
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: STATUS[result.error] });
-  return NextResponse.json({ ok: true, endsAt: iso(result.paidUntil) });
+  return NextResponse.json({ ok: true, endsAt: result.renews ? null : iso(result.paidUntil), renews: result.renews });
 }

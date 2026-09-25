@@ -3,10 +3,14 @@
  * charges these exact numbers through Stripe `price_data` (lib/stripe/line-items.ts), so the price on
  * the page is the price charged by construction; nothing in Stripe has to be kept in step with it.
  * STRIPE_PRODUCT_* only names the Stripe Product a line is filed under, for reporting. Every product
- * is a ONE-TIME payment: the Stripe account is shared with businesses whose webhooks act on
- * subscription events, so Ethos never creates one (the yearly pass is paid once for 365 days).
+ * is a one-time payment except one: Ethos for Two ("membership") is a subscription. The Stripe
+ * account is shared with businesses whose webhooks act on subscription events, so every Ethos
+ * subscription follows the rules in docs/MEMBERSHIP.md 2.1 (its own metadata keys, no standing
+ * Prices, no trials), and while STRIPE_SUBSCRIPTIONS_ENABLED is off it is sold as the one-time
+ * yearly pass instead.
  */
-export type ProductId = "single" | "pick3" | "everything" | "extras" | "pass" | "pack" | "giftcard" | "upgrade";
+export type ProductId = "single" | "pick3" | "everything" | "extras" | "pass" | "membership" | "pack" | "giftcard" | "upgrade";
+export type MembershipPlan = "monthly" | "yearly";
 /** The three template plans the pricing page shows as cards. */
 export type PlanId = "single" | "pick3" | "everything";
 export type Currency = "usd" | "eur" | "gbp";
@@ -26,6 +30,28 @@ export type Product = {
   name: Record<"en" | "es", string>;
 };
 
+/** Ethos for Two as a subscription: one payment covers the couple. Minor units, VAT included. */
+export const MEMBERSHIP_PLANS: Record<MembershipPlan, { interval: "month" | "year"; amounts: Record<Currency, number> }> = {
+  monthly: { interval: "month", amounts: { eur: 499, usd: 599, gbp: 449 } },
+  yearly: { interval: "year", amounts: { eur: 2999, usd: 3499, gbp: 2599 } },
+};
+export const membershipAmount = (plan: MembershipPlan, currency: Currency) => MEMBERSHIP_PLANS[plan].amounts[currency];
+/** The yearly price per month, to the cent: what "€2.50 a month" shows. */
+export const yearlyPerMonth = (currency: Currency) => Math.round(MEMBERSHIP_PLANS.yearly.amounts[currency] / 12);
+/** How much less a yearly year costs than twelve months, whole percent (50 in euros). */
+export const yearlySavingPct = (currency: Currency) =>
+  Math.round((1 - MEMBERSHIP_PLANS.yearly.amounts[currency] / (12 * MEMBERSHIP_PLANS.monthly.amounts[currency])) * 100);
+export const isMembershipPlan = (v: unknown): v is MembershipPlan => v === "monthly" || v === "yearly";
+/** Free accounts keep this many saved dates and trips; members, any number. */
+export const FREE_SAVED_DATES = 3;
+/**
+ * Whether Ethos for Two is sold as a real subscription. Server-side only, like giftCardsOnSale: the
+ * browser reads false, so pages pass it down as a prop. Off, the membership is the one-time pass.
+ */
+export function subscriptionsEnabled(env: Record<string, string | undefined> = process.env): boolean {
+  return env.STRIPE_SUBSCRIPTIONS_ENABLED === "true";
+}
+
 export const PRODUCTS: Record<ProductId, Product> = {
   single: { id: "single", picks: 1, amounts: { usd: 1199, eur: 999, gbp: 899 }, highlight: false, envProductKey: "STRIPE_PRODUCT_SINGLE", name: { en: "Ethos: one template, forever", es: "Ethos: una plantilla, para siempre" } },
   pick3: { id: "pick3", picks: 3, amounts: { usd: 1799, eur: 1499, gbp: 1299 }, compareAt: { usd: 3597, eur: 2997, gbp: 2697 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PICK3", name: { en: "Ethos: three templates, forever", es: "Ethos: tres plantillas, para siempre" } },
@@ -33,7 +59,11 @@ export const PRODUCTS: Record<ProductId, Product> = {
   // The Letter's and Constellations' paid extras (video, voice, 20 photos, scheduling, a password, no
   // footer), for that free template, forever. The song is free on every gift and not among them.
   extras: { id: "extras", picks: 1, amounts: { usd: 899, eur: 749, gbp: 649 }, highlight: false, envProductKey: "STRIPE_PRODUCT_EXTRAS", name: { en: "Ethos: make it special", es: "Ethos: hazlo especial" } },
-  pass: { id: "pass", picks: 0, amounts: { usd: 2900, eur: 2900, gbp: 2500 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PASS", name: { en: "Ethos for Two: one year, for both of you", es: "Ethos for Two: un año, para los dos" } },
+  // The membership's one-time fallback (a year, paid once), at the yearly subscription's price.
+  pass: { id: "pass", picks: 0, amounts: MEMBERSHIP_PLANS.yearly.amounts, highlight: false, envProductKey: "STRIPE_PRODUCT_PASS", name: { en: "Ethos for Two: one year, for both of you", es: "Ethos for Two: un año, para los dos" } },
+  // `amounts` is the yearly figure for code that reads any product generically; a plan's own amount
+  // always comes from membershipAmount.
+  membership: { id: "membership", picks: 0, amounts: MEMBERSHIP_PLANS.yearly.amounts, highlight: false, envProductKey: "STRIPE_PRODUCT_FORTWO", name: { en: "Ethos for Two", es: "Ethos for Two" } },
   pack: { id: "pack", picks: 0, amounts: { usd: 299, eur: 299, gbp: 249 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PACK", name: { en: "Ethos: game pack", es: "Ethos: pack de juegos" } },
   giftcard: { id: "giftcard", picks: 0, amounts: { usd: 2999, eur: 2499, gbp: 2199 }, highlight: false, envProductKey: "STRIPE_PRODUCT_GIFTCARD", name: { en: "Ethos gift card: Give Everything", es: "Tarjeta regalo Ethos: Regálalo todo" } },
   upgrade: { id: "upgrade", picks: 0, amounts: { usd: 499, eur: 499, gbp: 499 }, highlight: false, envProductKey: "STRIPE_PRODUCT_UPGRADE", name: { en: "Ethos: upgrade to every template, forever", es: "Ethos: pasa a todas las plantillas, para siempre" } },
@@ -110,13 +140,13 @@ export const packUnlock = (packId: string) => `pack:${packId}`;
 
 /**
  * Which template_unlocks rows a paid product grants its buyer. "everything" (and an upgrade) is the
- * wildcard "*": all current AND future templates. A pass grants every template and every pack for
- * as long as it runs (lib/commerce/passes.ts takes them back). A gift card grants the buyer nothing:
+ * wildcard "*": all current AND future templates. A pass or a membership grants every template and
+ * every pack for as long as it runs (lib/commerce/passes.ts takes them back). A gift card grants the buyer nothing:
  * the person who redeems it gets "*".
  */
 export function unlocksFor(product: ProductId, chosenSlugs: string[], options: { packId?: string } = {}): string[] {
   if (product === "everything" || product === "upgrade") return [EVERY_TEMPLATE];
-  if (product === "pass") return [EVERY_TEMPLATE, EVERY_PACK];
+  if (product === "pass" || product === "membership") return [EVERY_TEMPLATE, EVERY_PACK];
   if (product === "giftcard") return [];
   if (product === "pack") {
     if (!options.packId) throw new Error("product pack needs a pack id");

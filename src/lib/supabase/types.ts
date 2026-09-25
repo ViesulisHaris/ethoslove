@@ -2,6 +2,8 @@
  * Database types. Hand-maintained to mirror supabase/migrations.
  * Regenerate once a project is linked:  npm run db:types
  */
+import type { MembershipPlan, MembershipProvider, MembershipStatus } from "@/lib/membership/types";
+
 export type WentAs = "first" | "date" | "anniversary" | "birthday" | "friends";
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -238,6 +240,10 @@ export interface Database {
           store_product_id: string | null;
           store_transaction_id: string | null;
           store_environment: StoreEnvironment | null;
+          /** A subscription's paid invoice this row records (0014): one row per invoice. */
+          stripe_invoice_id: string | null;
+          /** The membership (couple_passes row) this payment is for (0014). */
+          membership_id: string | null;
         };
         Insert: {
           id?: string;
@@ -260,6 +266,8 @@ export interface Database {
           store_product_id?: string | null;
           store_transaction_id?: string | null;
           store_environment?: StoreEnvironment | null;
+          stripe_invoice_id?: string | null;
+          membership_id?: string | null;
         };
         Update: {
           stripe_session_id?: string | null;
@@ -275,6 +283,8 @@ export interface Database {
           terms_consent_at?: string | null;
           /** An App Store template credit, spent on one template (lib/commerce/app-store.ts applyCredit). */
           template_slugs?: string[];
+          stripe_invoice_id?: string | null;
+          membership_id?: string | null;
         };
         Relationships: [];
       };
@@ -296,6 +306,7 @@ export interface Database {
         Update: { purchase_id?: string | null };
         Relationships: [];
       };
+      /** The membership table (0009 as the pass, 0014 for subscriptions): see docs/MEMBERSHIP.md 1.2. */
       couple_passes: {
         Row: {
           id: string;
@@ -307,6 +318,19 @@ export interface Database {
           ends_at: string;
           renewal_reminded_at: string | null;
           created_at: string;
+          provider: MembershipProvider;
+          plan: MembershipPlan;
+          status: MembershipStatus;
+          stripe_customer_id: string | null;
+          stripe_subscription_id: string | null;
+          store_original_transaction_id: string | null;
+          current_period_end: string | null;
+          cancel_at_period_end: boolean;
+          pending_plan: MembershipPlan | null;
+          provider_event_at: string | null;
+          renewal_reminded_for: string | null;
+          payment_failed_invoice: string | null;
+          ended_notified_at: string | null;
         };
         Insert: {
           id?: string;
@@ -318,12 +342,87 @@ export interface Database {
           ends_at: string;
           renewal_reminded_at?: string | null;
           created_at?: string;
+          provider?: MembershipProvider;
+          plan?: MembershipPlan;
+          status?: MembershipStatus;
+          stripe_customer_id?: string | null;
+          stripe_subscription_id?: string | null;
+          store_original_transaction_id?: string | null;
+          current_period_end?: string | null;
+          cancel_at_period_end?: boolean;
+          pending_plan?: MembershipPlan | null;
+          provider_event_at?: string | null;
+          renewal_reminded_for?: string | null;
+          payment_failed_invoice?: string | null;
+          ended_notified_at?: string | null;
         };
         Update: {
           partner_user_id?: string | null;
+          invite_code?: string;
           starts_at?: string;
           ends_at?: string;
           renewal_reminded_at?: string | null;
+          provider?: MembershipProvider;
+          plan?: MembershipPlan;
+          status?: MembershipStatus;
+          stripe_customer_id?: string | null;
+          current_period_end?: string | null;
+          cancel_at_period_end?: boolean;
+          pending_plan?: MembershipPlan | null;
+          provider_event_at?: string | null;
+          renewal_reminded_for?: string | null;
+          payment_failed_invoice?: string | null;
+          ended_notified_at?: string | null;
+        };
+        Relationships: [];
+      };
+      /** Saved dates and trips (0015). Owner and partner read through RLS; every write is the service role's. */
+      saved_dates: {
+        Row: {
+          id: string;
+          owner_user_id: string;
+          kind: "date" | "trip";
+          title: string;
+          city: string | null;
+          day: string | null;
+          data: Json;
+          stops_count: number;
+          remind: boolean;
+          reminded_for: string | null;
+          version: number;
+          last_edited_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_user_id: string;
+          kind: "date" | "trip";
+          title?: string;
+          city?: string | null;
+          day?: string | null;
+          data: Json;
+          stops_count?: number;
+          remind?: boolean;
+          reminded_for?: string | null;
+          version?: number;
+          last_edited_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          kind?: "date" | "trip";
+          title?: string;
+          city?: string | null;
+          day?: string | null;
+          data?: Json;
+          stops_count?: number;
+          remind?: boolean;
+          reminded_for?: string | null;
+          version?: number;
+          last_edited_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -493,6 +592,10 @@ export interface Database {
         Args: { p_short_id: string; p_emoji: string; p_text?: string | null; p_audio_path?: string | null };
         Returns: string;
       };
+      /** The other person in the user's running membership (0015); a signed-in caller can only ask about themselves. */
+      couple_partner: { Args: { p_user: string }; Returns: string | null };
+      /** Whether the user holds a running membership, as owner or partner (0015). Same guard. */
+      is_member: { Args: { p_user: string }; Returns: boolean };
     };
     Enums: {
       gift_status: GiftStatus;
