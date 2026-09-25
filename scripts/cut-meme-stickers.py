@@ -1,6 +1,6 @@
 """Cut meme stickers out of sticker sheets as die-cut WebPs: transparent ground, white edge, 2x.
 
-    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder> [memes|scraps]
+    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder> [memes|scraps] [sheet ...]
 
 A sheet is a flat-coloured page of cut-outs (the kind people post on Pinterest). The ground is
 flooded in from the borders, what is left is labelled blob by blob, and CATALOGUE below says which
@@ -21,6 +21,10 @@ A sheet that is itself a finished collage (every sticker laid over torn paper, n
 flood) goes in COLLAGE instead: a round thing is cut by its `circle` (centre and radius), anything
 else by colour, `keep` naming which pixels belong to it and `seeds` where it is. Sheets missing
 from the folder are skipped, so one new sheet can be cut without the rest to hand.
+
+A sticker laid on a busy collage has no flat ground to flood in from, so RINGED cuts it from the
+inside instead: a flood from a point in the middle of it that stops at its own white die-cut edge,
+then the usual sealing and a fresh white edge. Name sheets after the set to cut only those.
 """
 import sys, json, os
 from collections import deque
@@ -29,6 +33,7 @@ from PIL import Image, ImageFilter, ImageChops, ImageDraw
 IMG = sys.argv[1]
 OUT = sys.argv[2]
 SET = sys.argv[3] if len(sys.argv) > 3 else "memes"
+ONLY = set(sys.argv[4:])
 os.makedirs(OUT, exist_ok=True)
 
 def segment(path, tol):
@@ -67,6 +72,22 @@ def segment(path, tol):
             comps.append({"id": n, "box": [minx, miny, maxx + 1, maxy + 1], "area": area})
     big = [c for c in comps if c["area"] > 1500]
     return im, label, big, bg, is_bg
+
+def inside(im, seed, box, pale=222):
+    """The region round `seed`, inside `box`, that stops at near-white: a sticker's own white edge."""
+    W, H = im.size; px = im.load(); x0, y0, x1, y1 = box
+    def white(x, y):
+        r, g, b = px[x, y]
+        return min(r, g, b) > pale and max(r, g, b) - min(r, g, b) < 26
+    label = bytearray(W * H); q = deque([seed]); label[seed[1] * W + seed[0]] = 1
+    minx = maxx = seed[0]; miny = maxy = seed[1]; area = 0
+    while q:
+        x, y = q.popleft(); area += 1
+        minx = min(minx, x); maxx = max(maxx, x); miny = min(miny, y); maxy = max(maxy, y)
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if x0 <= nx < x1 and y0 <= ny < y1 and not label[ny * W + nx] and not white(nx, ny):
+                label[ny * W + nx] = 1; q.append((nx, ny))
+    return label, {"id": 1, "box": [minx, miny, maxx + 1, maxy + 1], "area": area}
 
 def largest(mask, w, h):
     """Keep the biggest 8-connected blob of a 0/1 bytearray mask."""
@@ -238,6 +259,12 @@ COLLAGE = {
     },
 }
 
+# Stickers on a busy collage, cut from the inside: (a point inside it, a box round it, the white edge).
+RINGED = {
+    # 54.webp: the two glossy resin stars on the blue gingham, for Picnic.
+    "54.webp": {"star-glossy": ((335, 760), (230, 660, 440, 850), 5), "star-glossy-small": ((462, 845), (385, 760, 540, 920), 5)},
+}
+
 def collage_segment(path, pick):
     """The one sticker `pick` names, as a labelled mask `cut` can take: blob 1, on no ground."""
     im = Image.open(path).convert("RGB"); W, H = im.size; px = im.load()
@@ -272,6 +299,7 @@ def collage_segment(path, pick):
 CATALOGUE = SCRAPS if SET == "scraps" else MEMES
 sizes = {}
 for sheet, (tol, picks) in CATALOGUE.items():
+    if ONLY and sheet not in ONLY: continue
     if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
     im, label, comps, bg, is_bg = segment(f"{IMG}/{sheet}", tol)
     for name, pick in picks.items():
@@ -279,10 +307,20 @@ for sheet, (tol, picks) in CATALOGUE.items():
         sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False)
         print(name, sizes[name])
 for sheet, picks in (COLLAGE if SET == "scraps" else {}).items():
+    if ONLY and sheet not in ONLY: continue
     if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
     for name, pick in picks.items():
         im, label, comp, bg, is_bg = collage_segment(f"{IMG}/{sheet}", pick)
         sizes[name] = cut(im, label, comp, bg, is_bg, name, None, 0 if "circle" in pick else 2, pick.get("edge"))
+        print(name, sizes[name])
+json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
+for sheet, picks in (RINGED if SET == "scraps" else {}).items():
+    if ONLY and sheet not in ONLY: continue
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
+    im = Image.open(f"{IMG}/{sheet}").convert("RGB")
+    for name, (seed, box, edge) in picks.items():
+        label, comp = inside(im, seed, box)
+        sizes[name] = cut(im, label, comp, (255, 255, 255), lambda x, y: False, name, None, 2, edge)
         print(name, sizes[name])
 json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
 

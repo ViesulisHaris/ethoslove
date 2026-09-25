@@ -404,6 +404,25 @@ const SCRIPTS = {
     await page.waitForTimeout(1400);
     return poster;
   },
+  picnic: async (page) => {
+    const scene = page.getByTestId("picnic-scene");
+    await scene.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    const tap = () => scene.click({ force: true, position: { x: 30, y: 120 } });
+    // The lid, then everything in the basket but the date and the note, one tap at a time.
+    await tap();
+    await page.waitForTimeout(1300);
+    for (let i = 0; i < 9; i++) { await tap(); await page.waitForTimeout(950); }
+    await page.waitForTimeout(2400);
+    // The poster is the picnic laid out: every tag, the photos, the basket open.
+    const poster = await page.screenshot();
+    // Then the parcel comes out and the date inside it is unwrapped.
+    await tap();
+    await page.waitForTimeout(2200);
+    await tap();
+    await page.waitForTimeout(2800);
+    return poster;
+  },
   "party-animals": async (page) => {
     await open(page);
     const guests = page.locator("[data-guest]");

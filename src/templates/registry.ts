@@ -51,6 +51,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "pack-your-bags": () => import("./pack-your-bags"),
   digicam: () => import("./digicam"),
   "photo-booth": () => import("./photo-booth"),
+  picnic: () => import("./picnic"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
