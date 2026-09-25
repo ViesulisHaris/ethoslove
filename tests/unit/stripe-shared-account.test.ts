@@ -145,8 +145,15 @@ describe("R6, R8: no trial, coupon or promotion code is ever written, anywhere",
   it("appears in no Stripe parameter in src/ or scripts/", () => {
     // allow_promotion_codes is how a session says "no codes"; nothing else about them may appear.
     const forbidden = /\b(trial_period_days|trial_end|trial_settings|trial_from_plan|coupon|promotion_code|discounts)\s*:/;
-    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => forbidden.test(readFileSync(file, "utf8")));
+    // Code only: a comment may well say there are none.
+    const code = (file: string) =>
+      readFileSync(file, "utf8")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/(^|[^:])\/\/.*$/gm, "$1");
+    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => forbidden.test(code(file)));
     expect(offenders).toEqual([]);
+    expect(forbidden.test(code(join(process.cwd(), "src/lib/commerce/plan.ts")))).toBe(false);
+    expect(forbidden.test("{ trial_period_days: 7 }")).toBe(true);
   });
 });
 
