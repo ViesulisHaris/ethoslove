@@ -157,7 +157,7 @@ export function MyDatesGrid({ initial, monthly, currency, trips = {}, failed = f
           </p>
         </div>
         {limit !== null && state !== "error" ? (
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full bg-muted/70 py-1.5 pr-1.5 pl-4 text-[14px]" data-testid="saved-quota">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-full bg-muted/70 py-1 pr-1 pl-4 text-[14px]" data-testid="saved-quota">
             <span className="inline-flex items-center gap-2 tabular-nums">
               <span aria-hidden="true" className="flex gap-1">
                 {Array.from({ length: limit }, (_, i) => (
@@ -166,7 +166,7 @@ export function MyDatesGrid({ initial, monthly, currency, trips = {}, failed = f
               </span>
               {t("page.quota", { used: Math.min(list.quota.used, limit), limit })}
             </span>
-            <Link href="/pricing?from=saved-dates#for-two" className="btn-star inline-flex min-h-9 items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold">
+            <Link href="/pricing?from=saved-dates#for-two" className="btn-star inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-[13.5px] font-semibold">
               {t("page.upgrade")}
               <ArrowRight aria-hidden="true" className="size-3.5" />
             </Link>
