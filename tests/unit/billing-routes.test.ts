@@ -337,7 +337,10 @@ describe("the daily job's safety nets (docs/MEMBERSHIP.md 2.9)", () => {
       [U1]: { subscriber: { subscriptions: { [product]: { store: "app_store", expires_date: iso(NOW + 29 * DAY_MS), unsubscribe_detected_at: null, billing_issues_detected_at: null, grace_period_expires_date: null, refunded_at: null } } } },
       [U2]: { subscriber: { subscriptions: { [product]: { store: "app_store", expires_date: iso(NOW - DAY_MS), unsubscribe_detected_at: iso(NOW - 10 * DAY_MS), billing_issues_detected_at: null, grace_period_expires_date: null, refunded_at: null } } } },
     };
-    const fetchMock = vi.fn(async (url: string) => new Response(JSON.stringify(subscriber[decodeURIComponent(url.split("/").at(-1)!)]), { status: 200 }));
+    const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
+      void init;
+      return new Response(JSON.stringify(subscriber[decodeURIComponent(url.split("/").at(-1)!)]), { status: 200 });
+    });
     vi.stubGlobal("fetch", fetchMock);
 
     // Without RevenueCat's key the step doesn't run at all.
