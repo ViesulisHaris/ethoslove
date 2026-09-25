@@ -2,12 +2,15 @@
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { isHydrated, whenHydrated } from "./when-hydrated";
 
 /** A navigation that lands sooner than this shows no bar at all: a flash would be noise. */
 const SHOW_AFTER = 140;
 /** A navigation that never lands (cancelled, or a download) doesn't leave the bar up forever. */
 const GIVE_UP_AFTER = 15_000;
 const EASE_OUT_QUINT = "cubic-bezier(0.22, 1, 0.36, 1)";
+/** A picture React never reaches (none today) is marked after this long all the same. */
+const HYDRATION_WAIT = 10_000;
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -58,7 +61,7 @@ export function SiteMotion() {
     riseIn();
   }, [pathname]);
 
-  useEffect(() => armImageFades(), []);
+  useEffect(() => armImageFades(bar.current), []);
   useEffect(() => smoothInPageLinks(), []);
 
   return <div ref={bar} aria-hidden="true" className="route-progress" />;
@@ -126,10 +129,41 @@ function riseIn() {
   }
 }
 
-function armImageFades() {
+/**
+ * `probe` is an element of this component's, hydrated by the time effects run. A picture is marked
+ * only once React has hydrated it (./when-hydrated says why), and the fades are armed only once
+ * what is already there is marked: armed sooner, a picture React hadn't reached yet would be hidden
+ * as "not loaded" and blink out until it had.
+ */
+function armImageFades(probe: Element | null) {
   const root = document.documentElement;
+  let armed = false;
+  const arm = () => {
+    if (armed) return;
+    armed = true;
+    root.classList.add("img-fade-ready");
+  };
+  const hydration = whenHydrated({
+    frame: (callback) => requestAnimationFrame(callback),
+    cancel: (id) => cancelAnimationFrame(id),
+    now: () => performance.now(),
+    maxWait: HYDRATION_WAIT,
+    settled: arm,
+  });
+  // Without the key on our own element this React names it differently, and nothing can be told
+  // apart: everything is marked at once, as before.
+  const canTell = probe !== null && isHydrated(probe);
+  const mark = (img: HTMLImageElement, value: "in" | "shown") => {
+    const write = () => {
+      if (!img.hasAttribute("data-img")) img.setAttribute("data-img", value);
+    };
+    if (canTell) hydration.run(img, write);
+    else write();
+  };
   const loaded = (event: Event) => {
-    if (event.target instanceof HTMLImageElement && !event.target.hasAttribute("data-img")) event.target.setAttribute("data-img", "in");
+    // Before the fades are armed a picture that arrives is simply there: marked "in", it would fade
+    // up from nothing the moment they were.
+    if (event.target instanceof HTMLImageElement && !event.target.hasAttribute("data-img")) mark(event.target, armed ? "in" : "shown");
   };
   // Load and error don't bubble; capture sees them for every picture on the page.
   document.addEventListener("load", loaded, true);
@@ -140,10 +174,11 @@ function armImageFades() {
   document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => {
     const box = img.getBoundingClientRect();
     const onScreen = box.bottom > 0 && box.top < innerHeight && box.right > 0 && box.left < innerWidth;
-    if (img.complete || onScreen) img.setAttribute("data-img", "shown");
+    if (img.complete || onScreen) mark(img, "shown");
   });
-  root.classList.add("img-fade-ready");
+  if (hydration.waiting === 0) arm();
   return () => {
+    hydration.stop();
     document.removeEventListener("load", loaded, true);
     document.removeEventListener("error", loaded, true);
   };
