@@ -2835,6 +2835,13 @@
       "readOnly": "Ahora esta cita es de solo lectura, así que los cambios de aquí no se guardan en ella.",
       "gone": "Esta cita ya no está en Mis citas. El plan sigue en este dispositivo."
     },
+    "detached": {
+      "title": "Ahora esta cita es de solo lectura",
+      "body": "Lo que cambies aquí se queda en este dispositivo y no se guarda en Mis citas. Sin Ethos for Two, solo se pueden editar tus {limit} citas cambiadas más recientemente.",
+      "why": "¿Por qué?",
+      "manage": "Gestionar mis citas",
+      "dismiss": "Cerrar este aviso"
+    },
     "open": {
       "loading": "Abriendo tu cita…",
       "replaceConfirm": "Esto sustituye el plan que estabas preparando en este dispositivo, que no está guardado. ¿Abrir esta cita?",

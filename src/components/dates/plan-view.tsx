@@ -21,6 +21,7 @@ import { tiqetsSearch } from "@/lib/trips/partners";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
+import { DetachedBanner } from "@/components/saved-dates/detached-banner";
 import { MapsMenu } from "@/components/saved-dates/maps-menu";
 import { SavePlanPanel } from "@/components/saved-dates/save-plan-panel";
 import { SignInDialog } from "@/components/saved-dates/sign-in-dialog";
@@ -76,7 +77,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
   const [notice, setNotice] = useState<{ text: string; at: number } | null>(null);
 
   const noticeText = useSyncNoticeText();
-  const onNotice = useCallback((n: SyncNotice) => setNotice({ text: noticeText(n), at: Date.now() }), [noticeText]);
+  // A date that turned read-only says so in the banner at the top (DetachedBanner), which stays; the rest in a toast.
+  const onNotice = useCallback((n: SyncNotice) => (n.kind === "readOnly" ? undefined : setNotice({ text: noticeText(n), at: Date.now() })), [noticeText]);
   const account = useSavedAccount();
   const { link: savedLink, status } = useSavedPlanSync(onNotice);
   const opened = useOpenSavedDate(hash, { confirmReplace: () => window.confirm(ts("open.replaceConfirm")), replacePlan: (next) => updateOwn(() => next) });
@@ -221,6 +223,8 @@ export function PlanView({ monthly = false, currency = "eur" }: { monthly?: bool
               </button>
             </p>
           </div>
+        ) : editable ? (
+          <DetachedBanner onWhy={() => openUpsell("read_only")} />
         ) : null}
         <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{shared ? t("eyebrowShared") : t("eyebrow")}</p>
         <h1 className="mt-3 display-xl text-forest first-letter:uppercase">{plan.date ? formatDay(plan.date, locale) : t("someday")}</h1>

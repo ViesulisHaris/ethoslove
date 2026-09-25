@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { isSavingUnavailable, markSavingUnavailable, subscribeAvailability } from "@/lib/saved-dates/availability";
 import { listSavedDates } from "@/lib/saved-dates/client";
 import type { SavedDatesList, SavedKind } from "@/lib/saved-dates/types";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
@@ -65,8 +66,12 @@ export function useSignedInWhile(open: boolean, onSignedIn: () => void): void {
 }
 
 export type SavedAccount = {
-  /** `guest`: signed out (or the session has gone); `error`: the list couldn't be had, which reads as unknown, never as "free". */
-  status: "guest" | "loading" | "ready" | "error";
+  /**
+   * `guest`: signed out (or the session has gone); `error`: the list couldn't be had, which reads as
+   * unknown, never as "free"; `unavailable`: saving is off right now (lib/saved-dates/availability),
+   * and the saving buttons are hidden.
+   */
+  status: "guest" | "loading" | "ready" | "error" | "unavailable";
   list: SavedDatesList | null;
   reload: () => void;
 };
@@ -76,27 +81,33 @@ export type SavedAccount = {
  * panel, the Maps button and the trip page's button decide from. Nothing is asked for without a
  * session, so a visitor who never signed in makes no request at all.
  */
+const readUnavailable = () => isSavingUnavailable();
+export const useSavingUnavailable = (): boolean => useSyncExternalStore(subscribeAvailability, readUnavailable, () => false);
+
 export function useSavedAccount(kind?: SavedKind): SavedAccount {
   const session = useSessionKey();
   const signedIn = session > 0;
+  const unavailable = useSavingUnavailable();
   const [version, setVersion] = useState(0);
   const [answer, setAnswer] = useState<{ key: string; list: SavedDatesList | null; guest: boolean } | null>(null);
   const key = `${kind ?? "all"}:${session}:${version}`;
 
   useEffect(() => {
-    if (!signedIn) return;
+    // Known to be off: nothing is asked until it is worth asking again.
+    if (!signedIn || unavailable) return;
     let live = true;
     void listSavedDates(kind).then((res) => {
+      if (!res.ok && res.error === "not_configured") markSavingUnavailable();
       if (!live) return;
       setAnswer({ key, list: res.ok ? { items: res.items, quota: res.quota, member: res.member, partner: res.partner } : null, guest: !res.ok && res.error === "unauthenticated" });
     });
     return () => {
       live = false;
     };
-  }, [signedIn, kind, key]);
+  }, [signedIn, unavailable, kind, key]);
 
   const reload = useCallback(() => setVersion((v) => v + 1), []);
   // A reload keeps showing the last answer until the new one is in, rather than blinking to "loading".
-  const status: SavedAccount["status"] = !signedIn || answer?.guest ? "guest" : !answer ? "loading" : answer.list ? "ready" : "error";
+  const status: SavedAccount["status"] = !signedIn || answer?.guest ? "guest" : unavailable ? "unavailable" : !answer ? "loading" : answer.list ? "ready" : "error";
   return { status, list: signedIn && answer && !answer.guest ? answer.list : null, reload };
 }

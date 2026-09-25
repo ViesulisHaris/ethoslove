@@ -32,6 +32,11 @@ export type SyncStep = {
   notice: SyncNotice | null;
   /** Nothing reached the server: keep the change and try again later. */
   retry: boolean;
+  /**
+   * The saved date the plan was unlinked from because it is read-only now: the plan page shows a
+   * banner about it (link.ts writeDetached) rather than a toast that is gone in five seconds.
+   */
+  detached: string | null;
 };
 
 const samePerson = (a: SavedPerson | null, b: SavedPerson | null) => Boolean(a && b && a.name === b.name && a.initial === b.initial);
@@ -58,20 +63,25 @@ export type SaveAnswer = { ok: true; savedDate: SavedDate } | Failure;
  * After a PATCH. `currentKey` is the plan as it is now, which may have moved on while the request
  * was out: the link records what the server holds, so any difference is saved next.
  */
+const step = (link: SavedLink | null, rest: Partial<Omit<SyncStep, "link">> = {}): SyncStep => ({ link, plan: null, notice: null, retry: false, detached: null, ...rest });
+
+/** The date can't be saved to any more (read-only): unlinked, and the page shows the banner. */
+const readOnlyStep = (link: SavedLink) => step(null, { notice: { kind: "readOnly" }, detached: link.id });
+
 export function afterSave(link: SavedLink, currentKey: string, answer: SaveAnswer): SyncStep {
-  if (answer.ok) return { link: { ...link, version: answer.savedDate.version, synced: planKey(answer.savedDate.data as Plan) }, plan: null, notice: null, retry: false };
+  if (answer.ok) return step({ ...link, version: answer.savedDate.version, synced: planKey(answer.savedDate.data as Plan) });
   if (answer.error === "conflict" && answer.savedDate) {
     const server = planOf(answer.savedDate);
-    if (!server) return { link: null, plan: null, notice: { kind: "gone" }, retry: false };
+    if (!server) return step(null, { notice: { kind: "gone" } });
     const synced = planKey(server);
     // The other phone saved the very same plan: nothing to show, nothing lost.
     const same = synced === currentKey;
-    return { link: { ...link, version: answer.savedDate.version, synced }, plan: same ? null : server, notice: same ? null : { kind: "conflict", name: editorName(answer.savedDate) }, retry: false };
+    return step({ ...link, version: answer.savedDate.version, synced }, { plan: same ? null : server, notice: same ? null : { kind: "conflict", name: editorName(answer.savedDate) } });
   }
-  if (answer.error === "read_only") return { link: null, plan: null, notice: { kind: "readOnly" }, retry: false };
-  if (answer.error === "not_found") return { link: null, plan: null, notice: { kind: "gone" }, retry: false };
+  if (answer.error === "read_only") return readOnlyStep(link);
+  if (answer.error === "not_found") return step(null, { notice: { kind: "gone" } });
   // Offline, signed out, rate limited, the server down, a plan it refuses: the change stays here, unsaved.
-  return { link, plan: null, notice: null, retry: true };
+  return step(link, { retry: true });
 }
 
 /**
@@ -79,16 +89,44 @@ export function afterSave(link: SavedLink, currentKey: string, answer: SaveAnswe
  * is nothing waiting to be saved here; otherwise the next save meets it as a conflict, which says so.
  */
 export function afterRefresh(link: SavedLink, currentKey: string, answer: SaveAnswer): SyncStep {
-  const unchanged = { link, plan: null, notice: null, retry: false };
+  const unchanged = step(link);
   if (!answer.ok) {
-    if (answer.error === "not_found") return { link: null, plan: null, notice: { kind: "gone" }, retry: false };
+    if (answer.error === "not_found") return step(null, { notice: { kind: "gone" } });
     return unchanged;
   }
   const saved = answer.savedDate;
-  if (!saved.editable) return { link: null, plan: null, notice: { kind: "readOnly" }, retry: false };
+  if (!saved.editable) return readOnlyStep(link);
   if (saved.version <= link.version || currentKey !== link.synced) return unchanged;
   const server = planOf(saved);
   if (!server) return unchanged;
   const synced = planKey(server);
-  return { link: { ...link, version: saved.version, synced }, plan: synced === currentKey ? null : server, notice: synced === currentKey ? null : { kind: "conflict", name: editorName(saved) }, retry: false };
+  return step({ ...link, version: saved.version, synced }, { plan: synced === currentKey ? null : server, notice: synced === currentKey ? null : { kind: "conflict", name: editorName(saved) } });
+}
+
+/**
+ * One autosave, as the hook runs it after the pause: what is linked now, the plan now, whether there
+ * is a session, and the PATCH. Null when there was nothing to send (unlinked, unchanged, or the
+ * answer came back about a date no longer linked here); otherwise the step to apply and the key of
+ * the plan that was sent, so a failed save waits for a reason to try again rather than looping.
+ */
+export type SaveEnv = {
+  readLink: () => SavedLink | null;
+  currentPlan: () => Plan;
+  hasSession: () => boolean;
+  patch: (id: string, body: { baseVersion: number; data: Plan }) => Promise<SaveAnswer>;
+};
+
+export async function saveLinkedPlan(env: SaveEnv): Promise<{ step: SyncStep; sentKey: string } | null> {
+  const linked = env.readLink();
+  if (!linked) return null;
+  const sending = env.currentPlan();
+  const sentKey = planKey(sending);
+  if (sentKey === linked.synced) return null;
+  // Signed out (or the session gone): nothing to send it with. It stays here, "not saved yet".
+  if (!env.hasSession()) return { step: step(linked, { retry: true }), sentKey };
+  const answer = await env.patch(linked.id, { baseVersion: linked.version, data: sending });
+  // Unlinked, or another date opened, while it was on its way: the answer is about a plan no longer here.
+  const latest = env.readLink();
+  if (!latest || latest.id !== linked.id) return null;
+  return { step: afterSave(latest, planKey(env.currentPlan()), answer), sentKey };
 }

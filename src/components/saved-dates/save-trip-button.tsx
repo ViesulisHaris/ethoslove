@@ -88,6 +88,9 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn]);
 
+  // Saving is off right now (0015 not applied, the database down): no button that can only fail.
+  if (account.status === "unavailable") return null;
+
   return (
     <>
       {savedId ? (

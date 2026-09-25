@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { getSavedDate, patchSavedDate, type Result } from "@/lib/saved-dates/client";
-import { readLink, useSavedLink, writeLink, type SavedLink } from "@/lib/saved-dates/link";
-import { afterRefresh, afterSave, planKey, type SaveAnswer, type SyncNotice, type SyncStatus, type SyncStep } from "@/lib/saved-dates/sync";
+import { readDetached, readLink, useSavedLink, writeDetached, writeLink, type SavedLink } from "@/lib/saved-dates/link";
+import { afterRefresh, planKey, saveLinkedPlan, type SaveAnswer, type SyncNotice, type SyncStatus, type SyncStep } from "@/lib/saved-dates/sync";
 import type { SavedDate } from "@/lib/saved-dates/types";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { currentPlan, usePlan } from "@/components/dates/use-plan";
@@ -40,7 +40,8 @@ export function useSavedPlanSync(onNotice: (notice: SyncNotice) => void): { link
   const apply = useCallback(
     (step: SyncStep) => {
       // The link first: with the plan replaced before it, the new plan would read as a change to save.
-      writeLink(step.link);
+      if (step.link !== readLink()) writeLink(step.link);
+      if (step.detached) writeDetached(step.detached);
       if (step.plan) {
         const next = step.plan;
         updatePlan(() => next);
@@ -51,24 +52,22 @@ export function useSavedPlanSync(onNotice: (notice: SyncNotice) => void): { link
   );
 
   const save = useCallback(async () => {
-    const linked = readLink();
-    if (!linked || inFlight.current) return;
-    const sending = currentPlan();
-    const sentKey = planKey(sending);
-    if (sentKey === linked.synced) return;
-    if (!hasSessionCookie()) return setFailedKey(sentKey);
+    if (inFlight.current) return;
     inFlight.current = true;
     setSaving(true);
-    const answer = await patchSavedDate(linked.id, { baseVersion: linked.version, data: sending });
+    const saved = await saveLinkedPlan({ readLink, currentPlan, hasSession: hasSessionCookie, patch: async (id, body) => asAnswer(await patchSavedDate(id, body)) });
     inFlight.current = false;
     setSaving(false);
-    // Unlinked, or another date opened, while it was on its way: the answer is about a plan no longer here.
-    const latest = readLink();
-    if (!latest || latest.id !== linked.id) return;
-    const step = afterSave(latest, planKey(currentPlan()), asAnswer(answer));
-    apply(step);
-    setFailedKey(step.retry ? sentKey : null);
+    if (!saved) return;
+    apply(saved.step);
+    setFailedKey(saved.step.retry ? saved.sentKey : null);
   }, [apply]);
+
+  // A plan emptied here is a new plan, not the read-only date it was: the banner about that one goes.
+  const empty = plan.stops.length === 0;
+  useEffect(() => {
+    if (empty && !link && readDetached()) writeDetached(null);
+  }, [empty, link]);
 
   // A change, then a pause: save. A save that didn't arrive waits for a reason to try again.
   const synced = link?.synced ?? null;

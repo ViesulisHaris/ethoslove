@@ -50,17 +50,70 @@ export function readLink(): SavedLink | null {
   return cache.link;
 }
 
-/** Link the plan to a saved date, or unlink it (null). */
+/**
+ * Link the plan to a saved date, or unlink it (null). Either way the plan on this device is now
+ * something else than a date that turned read-only, so the banner about that one goes too.
+ */
 export function writeLink(link: SavedLink | null): void {
   const raw = link ? JSON.stringify(link) : null;
   cache = { raw, link };
+  detachedCache = { raw: null, detached: null };
   try {
     if (raw) window.localStorage.setItem(LINK_KEY, raw);
     else window.localStorage.removeItem(LINK_KEY);
+    window.localStorage.removeItem(DETACHED_KEY);
   } catch {
     // Nowhere to keep it; it still holds for this page.
   }
   window.dispatchEvent(new Event(EVENT));
+}
+
+/**
+ * The saved date this device's plan was unlinked from because it turned read-only while it was
+ * being edited (the membership ended, and it isn't one of the few most recent). The plan page says
+ * so in a banner, on this page and after a reload, until it is closed or the plan is replaced.
+ */
+export type Detached = { id: string; reason: "read_only" };
+export const DETACHED_KEY = "ethos.dates.saved.detached.v1";
+let detachedCache: { raw: string | null; detached: Detached | null } = { raw: null, detached: null };
+
+export function parseDetached(raw: string | null): Detached | null {
+  if (!raw) return null;
+  try {
+    const value = JSON.parse(raw) as Record<string, unknown> | null;
+    return value && typeof value.id === "string" && UUID.test(value.id) && value.reason === "read_only" ? { id: value.id, reason: "read_only" } : null;
+  } catch {
+    return null;
+  }
+}
+
+export function readDetached(): Detached | null {
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(DETACHED_KEY);
+  } catch {
+    return detachedCache.detached;
+  }
+  if (raw !== detachedCache.raw) detachedCache = { raw, detached: parseDetached(raw) };
+  return detachedCache.detached;
+}
+
+/** Say that the plan here was the saved date `id`, which is read-only now (null: stop saying it). */
+export function writeDetached(id: string | null): void {
+  const detached: Detached | null = id ? { id, reason: "read_only" } : null;
+  const raw = detached ? JSON.stringify(detached) : null;
+  detachedCache = { raw, detached };
+  try {
+    if (raw) window.localStorage.setItem(DETACHED_KEY, raw);
+    else window.localStorage.removeItem(DETACHED_KEY);
+  } catch {
+    // It holds for this page.
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+export function useDetached(): Detached | null {
+  return useSyncExternalStore(subscribe, readDetached, () => null);
 }
 
 function subscribe(onChange: () => void) {

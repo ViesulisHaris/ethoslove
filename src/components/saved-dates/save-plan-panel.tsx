@@ -64,8 +64,8 @@ export function SavePlanPanel({
     setError(res.error);
   };
 
-  // Back from signing in with the plan still to save: it saves itself, once.
-  const signedIn = account.status !== "guest";
+  // Back from signing in with the plan still to save: it saves itself, once (not while saving is off).
+  const signedIn = account.status !== "guest" && account.status !== "unavailable";
   useEffect(() => {
     if (!signedIn || link || plan.stops.length === 0) return;
     const timer = window.setTimeout(() => {
@@ -75,6 +75,9 @@ export function SavePlanPanel({
     // Only the moment a session appears: `save` is a new function every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signedIn]);
+
+  // Saving is off right now (0015 not applied, the database down): no button that can only fail.
+  if (!link && account.status === "unavailable") return null;
 
   if (!link)
     return (

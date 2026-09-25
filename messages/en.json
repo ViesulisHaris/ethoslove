@@ -2835,6 +2835,13 @@
       "readOnly": "This date is read-only now, so changes here aren't saved to it.",
       "gone": "This date isn't in My dates any more. The plan is still on this device."
     },
+    "detached": {
+      "title": "This date is read-only now",
+      "body": "What you change here stays on this device and isn't saved to My dates. Without Ethos for Two, only your {limit} most recently changed dates can be edited.",
+      "why": "Why?",
+      "manage": "Manage my dates",
+      "dismiss": "Dismiss this note"
+    },
     "open": {
       "loading": "Opening your date…",
       "replaceConfirm": "This replaces the plan you were making on this device. It isn't saved. Open this date?",
