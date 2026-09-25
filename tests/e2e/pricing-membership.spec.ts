@@ -1,10 +1,12 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { needSubscriptions } from "./server-state";
 
 /**
  * /pricing led by Ethos for Two (docs/MEMBERSHIP.md 4.1), signed out, in both languages and both
- * states of the switch. A development server reads ?subscriptions=on|off to show either (the one at
- * :3300 runs with the switch off); nothing else reads it. Checkout is never reached: the buy button's
- * request is answered here and only looked at, and it must never carry an amount or a code.
+ * states of the switch. A development server reads ?subscriptions=on|off to show either; a production
+ * build shows what its switch says, and there the other state's tests skip (./server-state.ts).
+ * Checkout is never reached: the buy button's request is answered here and only looked at, and it
+ * must never carry an amount or a code.
  */
 
 /** Answers checkout with `answer` and keeps every request body it was sent. */
@@ -26,6 +28,8 @@ const noAmounts = (body: Record<string, unknown>) => Object.keys(body).filter((k
 const hiddenAbove = (line: Locator) => line.locator("xpath=ancestor-or-self::*[@aria-hidden='true']");
 
 test.describe("Ethos for Two, sold as a subscription", () => {
+  test.beforeEach(async ({ request }) => needSubscriptions(request, "on"));
+
   test("leads the page: yearly chosen, what that is a month, and the terms under the one button", async ({ page }) => {
     await page.goto("/pricing?subscriptions=on");
     await expect(page.getByTestId("membership-hero").getByRole("heading", { level: 1 })).toHaveText("Every date you plan, kept for both of you.");
@@ -98,6 +102,8 @@ test.describe("Ethos for Two, sold as a subscription", () => {
 });
 
 test.describe("Ethos for Two, sold as a one-year pass (the switch off)", () => {
+  test.beforeEach(async ({ request }) => needSubscriptions(request, "off"));
+
   test("has no toggle: one year, paid once, and the button asks for the yearly plan", async ({ page }) => {
     const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
     await page.goto("/pricing?subscriptions=off&plan=monthly");
@@ -138,7 +144,8 @@ test.describe("the single gifts under it", () => {
 });
 
 test.describe("in Spanish", () => {
-  test("writes the prices the Spanish way and fits a phone", async ({ page }) => {
+  test("writes the prices the Spanish way and fits a phone", async ({ page, request }) => {
+    await needSubscriptions(request, "on");
     await page.goto("/es/pricing?subscriptions=on");
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
     await expect(page.getByTestId("plan-monthly")).toContainText("4,99 € al mes");
@@ -149,7 +156,8 @@ test.describe("in Spanish", () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
   });
 
-  test("the pass in Spanish", async ({ page }) => {
+  test("the pass in Spanish", async ({ page, request }) => {
+    await needSubscriptions(request, "off");
     await page.goto("/es/pricing?subscriptions=off");
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toContainText("29,99 €");

@@ -1,13 +1,16 @@
 import { expect, test } from "@playwright/test";
+import { needPreviews } from "./server-state";
 
 /**
  * My dates (docs/MEMBERSHIP.md 3.1, 3.4), drawn by the development-only preview
  * (/for-two/preview/my-dates?state=…): the real page needs a signed-in account, and the dev
  * server's database is production, where nobody signs in for a test. The preview hands the grid the
  * list GET /api/saved-dates would answer; what the grid asks the API afterwards is answered here.
+ * A production build answers the preview 404, and these tests skip there (./server-state.ts).
  */
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, request }) => {
+  await needPreviews(request);
   await page.route(/\/api\/saved-dates(\/|\?|$)/, (route) => route.fulfill({ status: 401, json: { error: "unauthenticated" } }));
 });
 

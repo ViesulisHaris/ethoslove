@@ -67,6 +67,9 @@ async function api(page: Page, answer: (asked: Asked) => { status: number; body:
 function consoleErrors(page: Page) {
   const errors: string[] = [];
   page.on("console", (message) => {
+    // Vercel's analytics scripts (/_vercel/insights, /_vercel/speed-insights) are served only on
+    // Vercel: a production build run with `next start` answers them 404, which isn't this page's error.
+    if (/\/_vercel\//.test(`${message.text()} ${message.location().url}`)) return;
     if (message.type() === "error" && !/tile|maplibre|webgl|favicon|hydrat|Download the React DevTools/i.test(message.text())) errors.push(message.text());
   });
   return errors;

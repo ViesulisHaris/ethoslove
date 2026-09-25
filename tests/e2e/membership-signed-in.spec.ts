@@ -1,4 +1,5 @@
 import { expect, test, type BrowserContext, type Page } from "@playwright/test";
+import { needPreviews, needSubscriptions } from "./server-state";
 
 /**
  * Ethos for Two as a signed-in member, partner or free user sees it: the pricing page's hero and
@@ -9,7 +10,8 @@ import { expect, test, type BrowserContext, type Page } from "@playwright/test";
  * session cookie, so the tests set one the server can't read (it isn't the project's, so the server
  * sees a visitor and never calls Supabase with it). The account section is the development-only
  * preview (/for-two/preview?state=…) of the account page's component, whose buttons call the real
- * routes (POST /api/membership, /api/stripe/portal), answered here and only looked at.
+ * routes (POST /api/membership, /api/stripe/portal), answered here and only looked at. A production
+ * build has no preview and shows only its own switch's state: those tests skip there (./server-state.ts).
  */
 
 const DAY = 86_400_000;
@@ -61,8 +63,9 @@ async function answerCheckout(page: Page) {
 }
 
 test.describe("the pricing page, signed in", () => {
-  test.beforeEach(async ({ context, baseURL }) => {
+  test.beforeEach(async ({ context, baseURL, request }, testInfo) => {
     await signedIn(context, baseURL);
+    await needSubscriptions(request, testInfo.tags.includes("@pass-sold") ? "off" : "on");
   });
 
   test("a member sees what they have, with the day it renews, instead of a button to buy it again", async ({ page }) => {
@@ -117,7 +120,7 @@ test.describe("the pricing page, signed in", () => {
     await expect(page.getByTestId("membership-member").getByRole("link", { name: "Manage" })).toBeVisible();
   });
 
-  test("a pass holder runs their year; near its end, while the pass is what's sold, they're offered the next one", async ({ page }) => {
+  test("a pass holder runs their year; near its end, while the pass is what's sold, they're offered the next one", { tag: "@pass-sold" }, async ({ page }) => {
     const pass = (days: number) => member({ provider: "stripe_pass", plan: "yearly", periodEnd: iso(days), renews: false, endsAt: iso(days), manage: "pass", canSwitchToYearly: false });
     await answerEntitlements(page, pass(200));
     await page.goto("/pricing?subscriptions=off");
@@ -173,6 +176,8 @@ async function answerMembership(page: Page, answers: Record<string, { status: nu
 }
 
 test.describe("the account page's Ethos for Two section", () => {
+  test.beforeEach(async ({ request }) => needPreviews(request));
+
   test("a monthly member cancels in one confirm: it says until when, and offers the way back", async ({ page }) => {
     const ends = iso(18);
     const asked = await answerMembership(page, { cancel: { status: 200, body: { ok: true, membership: member({ periodEnd: ends, renews: false, endsAt: ends }) } } });
