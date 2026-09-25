@@ -4,7 +4,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { planCheckout, type CheckoutContext } from "@/lib/commerce/plan";
-import { MEMBERSHIP_PLANS, membershipAmount } from "@/lib/pricing/products";
+import { MEMBERSHIP_PLANS, PRODUCTS, membershipAmount } from "@/lib/pricing/products";
+import { PACK_IDS } from "@/lib/games/packs";
+import { listManifests } from "@/templates/manifests";
 import { membershipSessionParams, sessionParams, type SessionOptions } from "@/lib/stripe/line-items";
 import { FakeDb } from "./helpers/fake-db";
 import { FakeStripe } from "./helpers/fake-stripe";
@@ -135,6 +137,46 @@ describe("a membership's Checkout Session (R2, R3, R6, R7, R8)", () => {
     expect(text.submit.message).toBe(
       "€4.99 a month for both of you, charged today and then every month until you cancel. Cancel any time from your account: you keep Ethos for Two until the end of the month you've paid for.",
     );
+  });
+});
+
+describe("R9: an Ethos kind is a product name, never the other business's credit packs", () => {
+  const CREDIT_PACKS = "ai" + "_credits";
+
+  it("appears nowhere in src/ or scripts/", () => {
+    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => readFileSync(file, "utf8").includes(CREDIT_PACKS));
+    expect(offenders).toEqual([]);
+  });
+
+  it("every product's session, one-time or subscription, carries a catalogue kind", () => {
+    const paid = listManifests().filter((m) => m.tier !== "free").map((m) => m.slug);
+    const free = listManifests().filter((m) => m.tier === "free").map((m) => m.slug);
+    const ctx: CheckoutContext = { ...guest, signedIn: true, giftCardsOnSale: true };
+    // The upgrade is priced from what the buyer paid before.
+    const buyer: CheckoutContext = { ...ctx, purchases: [{ product: "single", amount: 999, currency: "eur", status: "paid" }] };
+    const requests: [Parameters<typeof planCheckout>[0], CheckoutContext][] = [
+      [{ product: "single", templateSlugs: paid.slice(0, 1), currency: "eur" }, ctx],
+      [{ product: "single", templateSlugs: paid.slice(0, 1), addEverything: true, currency: "eur" }, ctx],
+      [{ product: "pick3", templateSlugs: paid.slice(0, 3), currency: "eur" }, ctx],
+      [{ product: "extras", templateSlugs: free.slice(0, PRODUCTS.extras.picks), currency: "eur" }, ctx],
+      [{ product: "everything", templateSlugs: [], currency: "eur" }, ctx],
+      [{ product: "pack", templateSlugs: [], packId: PACK_IDS[0], currency: "eur" }, ctx],
+      [{ product: "giftcard", templateSlugs: [], currency: "eur" }, ctx],
+      [{ product: "upgrade", templateSlugs: [], currency: "eur" }, buyer],
+      [{ product: "membership", plan: "monthly", templateSlugs: [], currency: "eur" }, ctx],
+      [{ product: "membership", plan: "yearly", templateSlugs: [], currency: "eur" }, ctx],
+      // Subscriptions off: the one-time pass.
+      [{ product: "membership", plan: "yearly", templateSlugs: [], currency: "eur" }, { ...ctx, subscriptions: false }],
+    ];
+    const kinds = requests.map(([request, context]) => {
+      const plan = planCheckout(request, context);
+      if (!plan.ok) throw new Error(`${request.product}: ${plan.error}`);
+      const params = plan.billing === "subscription" ? membershipSessionParams(plan, { ...options, customerId: null }) : sessionParams(plan, options);
+      const kind = (params.metadata as Record<string, string>).kind;
+      expect(JSON.stringify(params), request.product).not.toContain(CREDIT_PACKS);
+      return kind;
+    });
+    expect(kinds).toEqual(["single", "bump", "pick3", "extras", "everything", "pack", "giftcard", "upgrade", "membership", "membership", "pass"]);
   });
 });
 

@@ -151,6 +151,31 @@ describe("a subscription checkout, fulfilled", () => {
     expect(mail.notifyWelcome).toHaveBeenCalledTimes(1);
   });
 
+  it("a delayed payment: nothing at checkout.session.completed, the membership once async_payment_succeeded says it's paid", async () => {
+    useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "membership", kind: "membership", status: "pending", amount: 2999, currency: "eur" }] });
+    stripeSubscription("year");
+    // A bank debit: Checkout completes before the money arrives, and the subscription waits for it.
+    stripe.subscriptions.sub_1.status = "incomplete";
+    expect(await handleStripeEvent(event("checkout.session.completed", session(metadata("yearly"), { payment_status: "unpaid", amount_total: 2999 })), deps())).toEqual({ status: 200, handled: "ours" });
+    // Stripe's own update can come first: ours, but fulfilment makes the row.
+    stripe.subscriptions.sub_1.status = "active";
+    expect(await handleStripeEvent(event("customer.subscription.updated", { id: "sub_1", object: "subscription", metadata: { app: "ethos" } }), deps())).toEqual({ status: 200, handled: "ours" });
+    expect(fake.rows("purchases")[0].status).toBe("pending");
+    expect(fake.rows("couple_passes")).toEqual([]);
+    expect(mail.sendMembershipWelcome).not.toHaveBeenCalled();
+
+    const paid = event("checkout.session.async_payment_succeeded", session(metadata("yearly"), { payment_status: "paid", amount_total: 2999 }));
+    expect(await handleStripeEvent(paid, deps())).toEqual({ status: 200, handled: "ours" });
+    expect(membership()).toMatchObject({ purchase_id: PURCHASE, provider: "stripe_subscription", plan: "yearly", status: "active", ends_at: iso(PERIOD_END + MEMBERSHIP_GRACE_MS) });
+    expect(fake.rows("purchases")[0]).toMatchObject({ status: "paid", amount: 2999, stripe_invoice_id: "in_1", stripe_payment_intent_id: "pi_1", membership_id: membership().id });
+    expect(unlocks("u1")).toEqual([`*@${PURCHASE}`, `pack:*@${PURCHASE}`]);
+    expect(mail.sendMembershipWelcome).toHaveBeenCalledTimes(1);
+    // Stripe delivers it again: nothing twice.
+    expect(await handleStripeEvent(paid, deps())).toEqual({ status: 200, handled: "ours" });
+    expect(fake.rows("couple_passes")).toHaveLength(1);
+    expect(mail.sendMembershipWelcome).toHaveBeenCalledTimes(1);
+  });
+
   it("waits for a delayed payment, refuses a session that isn't ours, and asks for a retry when Stripe can't be reached", async () => {
     useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "membership", status: "pending", amount: 499, currency: "eur" }] });
     stripeSubscription("month");

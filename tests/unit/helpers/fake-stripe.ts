@@ -210,6 +210,15 @@ export class FakeStripe {
           },
         },
       },
+      checkout: {
+        sessions: {
+          create: async (params: Obj) => {
+            this.record("checkout.sessions.create", [params]);
+            const n = this.calls.filter((c) => c.method === "checkout.sessions.create").length;
+            return { id: `cs_test_${n}`, object: "checkout.session", url: `https://checkout.stripe.test/c/cs_test_${n}`, mode: params.mode, metadata: params.metadata };
+          },
+        },
+      },
     } as unknown as Stripe;
   }
 }
