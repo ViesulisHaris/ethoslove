@@ -46,5 +46,13 @@ export function buildIdQuery(id: string): string | null {
   return m ? `[out:json][timeout:8];${m[1]}(${m[2]});out center tags 1;` : null;
 }
 
-/** Public Overpass servers, tried in order. All of them refuse requests without a real user agent. */
+/**
+ * Public Overpass servers, tried in order. All of them refuse requests without a real user agent.
+ * The global ones free to ask, as the OpenStreetMap wiki listed them in September 2026: FOSSGIS's main
+ * instance (fastest, four to ten seconds for the rare finds; "less than 10,000 queries and 1 GB a day",
+ * which one question per area a month is far inside), VK Maps ("no requests limitations", eight
+ * seconds before it says anything) and private.coffee ("no rate limit", slow and often silent). Not
+ * lz4. or z.overpass-api.de: they are the main instance's own two servers, and asking the second after
+ * the first said 429 is dodging its limit. Not overpass.kumi.systems, gone from the list and silent.
+ */
 export const OVERPASS_ENDPOINTS = ["https://overpass-api.de/api/interpreter", "https://maps.mail.ru/osm/tools/overpass/api/interpreter", "https://overpass.private.coffee/api/interpreter"] as const;

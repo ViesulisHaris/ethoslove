@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isLatLng, round, snapSearch, type LatLng } from "./geo";
 import { GROUP_IDS, KINDS, type PlaceGroup } from "./kinds";
@@ -76,13 +77,69 @@ export async function searchPlaces(at: LatLng, radius: number, locale: "en" | "e
 export const rareCenter = (at: LatLng): LatLng => ({ lat: round(at.lat, 2) + 0, lng: round(at.lng, 2) + 0 });
 
 /**
+ * How long one area's rare finds are kept. Bowling alleys, spas and beaches outlast a month; past it
+ * the next visitor still gets the kept answer at once while a fresh one is asked for behind them,
+ * and if that fails the kept one stays.
+ */
+const RARE_KEPT_S = MONTH;
+/**
+ * The rare query's timings, from asking each server for Madrid, London, Mexico City, New York,
+ * Barcelona and Sevilla: the main instance answered in 4–10 s, or said 429 after holding the
+ * request 6–16 s; VK Maps in 8–21 s, and it takes 8 s to answer anything at all; private.coffee
+ * rarely inside 30. So the second server is asked after 3 s, not 6 (the first rarely answers
+ * sooner), and no server is cut short before the deadline: one that is slow but answering (VK Maps)
+ * is often the only one that does. The page never waits for this.
+ */
+const RARE_ASK = { deadlineMs: 25_000, hedgeMs: 3000, revalidate: false } as const;
+
+type OverpassAnswer = { elements: unknown[] };
+
+/** No server answered in time. Thrown, so the cache below never keeps "nothing" for an area. */
+class RareUnavailable extends Error {
+  constructor() {
+    super("dates: no Overpass server answered for the rare finds");
+  }
+}
+
+/**
+ * A whole answer with nothing in it: a quiet stretch of countryside, or a server with holes in its
+ * data. Shown, but thrown past the month-long cache so the area is asked again next time.
+ */
+class RareEmpty extends Error {
+  constructor(readonly answer: OverpassAnswer) {
+    super("dates: the rare finds came back empty");
+  }
+}
+
+async function askRare(lat: number, lng: number): Promise<OverpassAnswer> {
+  const json = (await askOverpass(buildRareQuery({ lat, lng }), RARE_ASK)) as OverpassAnswer | null;
+  if (!json) throw new RareUnavailable();
+  // Only what the places are read from: the server's name and version stay out of the cache.
+  const answer = { elements: json.elements };
+  if (answer.elements.length === 0) throw new RareEmpty(answer);
+  return answer;
+}
+
+/**
+ * One area's answer, whichever server gave it, kept by area rather than by server: the data cache
+ * used to key on each server's URL, so an area the second server had answered still waited out the
+ * first server's head start every time. The version goes up whenever what is kept changes.
+ */
+const cachedRare = unstable_cache(askRare, ["dates-rare-v1"], { revalidate: RARE_KEPT_S });
+
+/**
  * The rare finds within a short ride (bowling, arcades, climbing, karaoke, boats, spas, wineries,
  * the beach), asked of the public Overpass servers. Null when none of them answered in time.
  */
 export async function rareFinds(center: LatLng, locale: "en" | "es"): Promise<Place[] | null> {
-  const json = await askOverpass(buildRareQuery(center), { deadlineMs: 24_000, hedgeMs: 6000, revalidate: WEEK });
-  if (!json) return null;
-  return parseOverpass(json, center, RARE_RADIUS_M, (kind) => KINDS[kind].label[locale]);
+  let answer: OverpassAnswer;
+  try {
+    answer = await cachedRare(center.lat, center.lng);
+  } catch (error) {
+    if (!(error instanceof RareEmpty)) return null;
+    answer = error.answer;
+  }
+  return parseOverpass(answer, center, RARE_RADIUS_M, (kind) => KINDS[kind].label[locale]);
 }
 
 /** A little wider than the places search: a landmark just over the line is still in the photograph. */
