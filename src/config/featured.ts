@@ -6,11 +6,12 @@
  * 2026-09-20: The Letter 115, Birthday Cinema 98, Bouquet 52, Constellations 28, then a long way
  * down to the rest). Re-run the count before changing it, and keep it to one row of four.
  *
- * NEW is the latest templates, the cats first. A template leaves this list when the next batch
+ * NEW is the latest templates: the 26 Sept batch (Party Animals redesigned, Digicam, Photo Booth, Music Box,
+ * Picnic), then the strongest of the batch before. A template leaves this list when the next batch
  * ships; a slug that no longer exists is simply skipped, and a unit test says so out loud.
  */
 export const POPULAR_SLUGS = ["the-letter", "birthday-cinema", "bouquet", "constellations"] as const;
-export const NEW_SLUGS = ["party-animals", "the-council", "sticker-bomb", "coquette", "xoxo", "keepsake", "balloons", "popup-card", "sketchbook"] as const;
+export const NEW_SLUGS = ["party-animals", "digicam", "photo-booth", "music-box", "picnic", "xoxo", "the-council", "coquette", "sticker-bomb"] as const;
 
 export type Featured = "popular" | "new";
 export type GallerySection<T> = { id: Featured | "all"; items: T[] };

@@ -17,7 +17,7 @@ describe("what the gallery leads with", () => {
   });
 
   it("puts the cats at the front of what is new", () => {
-    expect(NEW_SLUGS.slice(0, 3)).toEqual(["party-animals", "the-council", "sticker-bomb"]);
+    expect(NEW_SLUGS.slice(0, 3)).toEqual(["party-animals", "digicam", "photo-booth"]);
   });
 
   it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {
