@@ -24,11 +24,22 @@ async function answerCheckout(page: Page, answer: { status: number; body: Record
 
 const noAmounts = (body: Record<string, unknown>) => Object.keys(body).filter((k) => /amount|price|total/i.test(k));
 
+/**
+ * /pricing with Ethos for Two sold as the one-time year (STRIPE_SUBSCRIPTIONS_ENABLED off). A
+ * development server shows that state for ?subscriptions=off whatever its switch says (the one at
+ * :3310 runs with it on); a production build ignores the query, so there, with the switch on,
+ * these tests skip: tests/e2e/pricing-membership.spec.ts covers that page.
+ */
+async function pricingAsOneTimeYear(page: Page, path = "/pricing", query = "") {
+  await page.goto(`${path}?subscriptions=off${query ? `&${query}` : ""}`);
+  test.skip((await page.getByTestId("plan-toggle").count()) > 0, "subscriptions are on, and this server doesn't take ?subscriptions=off");
+}
+
 test.describe("the pricing page", () => {
-  // The dev server runs with STRIPE_SUBSCRIPTIONS_ENABLED unset: Ethos for Two is sold as the
-  // one-time year (docs/MEMBERSHIP.md 2.10). tests/e2e/pricing-membership.spec.ts covers both states.
+  // With STRIPE_SUBSCRIPTIONS_ENABLED off, Ethos for Two is sold as the one-time year
+  // (docs/MEMBERSHIP.md 2.10). tests/e2e/pricing-membership.spec.ts covers both states.
   test("leads with Ethos for Two, then the single gifts at their prices; no gift card and no code field while they're off", async ({ page }) => {
-    await page.goto("/pricing");
+    await pricingAsOneTimeYear(page);
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toContainText("€29.99");
     await expect(offer).toContainText("for a year");
@@ -56,7 +67,7 @@ test.describe("the pricing page", () => {
 
   test("buys Ethos for Two with nothing but the product and the plan: no code, no amount", async ({ page }) => {
     const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
-    await page.goto("/pricing");
+    await pricingAsOneTimeYear(page);
     await page.getByTestId("buy-membership").click();
     await expect.poll(() => asked.length).toBe(1);
     // The server makes the yearly plan the one-time year while subscriptions are off.
@@ -91,7 +102,7 @@ test.describe("the pricing page", () => {
   });
 
   test("?renew=pass (old emails) picks Ethos for Two out, and only talks about renewing to someone who has a pass", async ({ page }) => {
-    await page.goto("/pricing?renew=pass");
+    await pricingAsOneTimeYear(page, "/pricing", "renew=pass");
     const offer = page.getByTestId("membership-offer");
     await expect(offer).toBeInViewport();
     await expect(offer).toHaveClass(/ring-starlight/);
@@ -108,7 +119,7 @@ test.describe("the pricing page", () => {
   });
 
   test("in Spanish, with Spanish prices", async ({ page }) => {
-    await page.goto("/es/pricing");
+    await pricingAsOneTimeYear(page, "/es/pricing");
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
     await expect(page.getByTestId("price-single")).toHaveText("9,99 €");
     await expect(page.getByTestId("price-everything")).toHaveText("24,99 €");
