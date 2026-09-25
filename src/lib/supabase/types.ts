@@ -366,6 +366,8 @@ export interface Database {
           plan?: MembershipPlan;
           status?: MembershipStatus;
           stripe_customer_id?: string | null;
+          stripe_subscription_id?: string | null;
+          store_original_transaction_id?: string | null;
           current_period_end?: string | null;
           cancel_at_period_end?: boolean;
           pending_plan?: MembershipPlan | null;

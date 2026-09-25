@@ -67,3 +67,33 @@ describe("0014: the membership table", () => {
     expect(sql.trim().startsWith("set local lock_timeout = '5s';")).toBe(true);
   });
 });
+
+/** The body of the first `name: { … }` block after `from` in a TypeScript source, braces matched. */
+function block(source: string, name: string, from = 0): { body: string; end: number } {
+  const start = source.indexOf(`${name}: {`, from);
+  if (start < 0) throw new Error(`no ${name} block`);
+  let depth = 0;
+  for (let i = source.indexOf("{", start); i < source.length; i++) {
+    if (source[i] === "{") depth++;
+    else if (source[i] === "}" && --depth === 0) return { body: source.slice(start, i + 1), end: i + 1 };
+  }
+  throw new Error(`unclosed ${name} block`);
+}
+
+describe("0014 in src/lib/supabase/types.ts", () => {
+  const types = readFileSync(join(process.cwd(), "src/lib/supabase/types.ts"), "utf8");
+  const added = (table: string) => [...sql.matchAll(new RegExp(`alter table public\\.${table} add column if not exists (\\w+)`, "g"))].map((m) => m[1]);
+
+  it("every column 0014 adds can be read, inserted and updated through the typed client", () => {
+    for (const table of ["couple_passes", "purchases"]) {
+      const columns = added(table);
+      expect(columns.length, table).toBeGreaterThan(1);
+      const tableBlock = block(types, `      ${table}`).body;
+      for (const part of ["Row", "Insert", "Update"]) {
+        const body = block(tableBlock, part).body;
+        const missing = columns.filter((column) => !new RegExp(`\\b${column}\\??:`).test(body));
+        expect(missing, `${table}.${part}`).toEqual([]);
+      }
+    }
+  });
+});
