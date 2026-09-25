@@ -310,3 +310,46 @@ test.describe("the account page's Ethos for Two section", () => {
     await expect(page.getByTestId("membership-past-due")).toContainText(`Actualiza tu tarjeta antes del ${longDate(iso(5), "es")}`);
   });
 });
+
+test.describe("joining a partner's Ethos for Two, signed in", () => {
+  test.beforeEach(async ({ context, baseURL }) => {
+    await signedIn(context, baseURL);
+  });
+
+  async function answerJoin(page: Page, answer: { status: number; body: unknown }) {
+    const asked: unknown[] = [];
+    await page.route("**/api/for-two/join", async (route) => {
+      asked.push(route.request().postDataJSON());
+      await route.fulfill({ status: answer.status, contentType: "application/json", body: JSON.stringify(answer.body) });
+    });
+    return asked;
+  }
+
+  test("joins with one tap; a membership that renews by itself promises no end date", async ({ page }) => {
+    await answerEntitlements(page, null);
+    const asked = await answerJoin(page, { status: 200, body: { ok: true, endsAt: null, renews: true } });
+    await page.goto("/for-two/join?code=abcdefghij");
+    await page.getByTestId("join-submit").click();
+    await expect.poll(() => asked).toEqual([{ code: "abcdefghij" }]);
+    const done = page.getByTestId("join-done");
+    await expect(done).toContainText("You're in.");
+    await expect(done).toContainText("for as long as it runs.");
+    await expect(done.getByRole("link", { name: "See my dates" })).toHaveAttribute("href", "/my-dates");
+  });
+
+  test("one that ends (a pass, or a cancelled subscription) says until when", async ({ page }) => {
+    await answerEntitlements(page, null);
+    await answerJoin(page, { status: 200, body: { ok: true, endsAt: iso(40), renews: false } });
+    await page.goto("/for-two/join?code=abcdefghij");
+    await page.getByTestId("join-submit").click();
+    await expect(page.getByTestId("join-done")).toContainText(`until ${longDate(iso(40))}.`);
+  });
+
+  test("someone with an Ethos for Two of their own is told why they can't join a second", async ({ page }) => {
+    await answerEntitlements(page, null);
+    await answerJoin(page, { status: 409, body: { error: "has_own" } });
+    await page.goto("/for-two/join?code=abcdefghij");
+    await page.getByTestId("join-submit").click();
+    await expect(page.getByTestId("join-error")).toHaveText("You already have Ethos for Two. Cancel yours first, or ask your partner to join yours.");
+  });
+});

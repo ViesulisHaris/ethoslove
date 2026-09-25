@@ -207,7 +207,7 @@ async function MembershipArt() {
       </div>
 
       {/* the two of them, cut from an old recipe page, standing on the horizon looking up */}
-      <Cutout id="paper-couple" className="absolute -bottom-[1cqw] left-[40cqw] z-30 w-[15.5cqw] -rotate-[3deg] drop-shadow-dusk-tag" />
+      <Cutout id="paper-couple" className="absolute -bottom-[2.5cqw] left-[49.5cqw] z-30 w-[14.5cqw] rotate-[3deg] drop-shadow-dusk-tag" />
 
       {/* scraps: gold felt stars in the sky */}
       <Cutout id="star-felt" className="absolute top-[0cqw] left-[40cqw] w-[7cqw] -rotate-[14deg] drop-shadow-dusk-scrap" />

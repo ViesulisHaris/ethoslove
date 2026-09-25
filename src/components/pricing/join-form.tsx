@@ -85,7 +85,7 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
   return (
     <div className="grid gap-5">
       {!initialCode ? (
-        <div className="rounded-[28px] bg-white p-6 shadow-soft ring-1 ring-forest/5 sm:p-8">
+        <div className="rounded-[28px] bg-card p-6 shadow-soft ring-1 ring-forest/5 sm:p-8">
           <p className="text-sm text-forest/75">{t("noCode")}</p>
           <label htmlFor={id} className="mt-4 block text-sm font-medium text-forest">
             {t("codeLabel")}

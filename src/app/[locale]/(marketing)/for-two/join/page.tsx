@@ -23,7 +23,8 @@ export default async function JoinPassPage({ params, searchParams }: PageProps<"
 
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-14 sm:px-8 sm:py-20">
-      <p className="flex items-center gap-2.5 text-eyebrow text-rose-ink">
+      {/* Ethos for Two's colours on paper: the gold seal, the dusk ink (starlight would be unreadable here). */}
+      <p className="flex items-center gap-2.5 text-eyebrow text-dusk">
         <SealMark className="size-6" />
         {t("eyebrow")}
       </p>
