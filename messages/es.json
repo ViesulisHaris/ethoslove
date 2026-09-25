@@ -1365,7 +1365,8 @@
   "dates": {
     "meta": {
       "title": "Ideas para una cita cerca de ti, en un mapa",
-      "description": "Elige un día, mira el tiempo y la puesta de sol, y recibe ideas de citas hechas con sitios reales cerca de ti: café, vistas, cena, algo a lo que jugar. Guárdalo como plan y envíaselo."
+      "description": "Elige un día, mira el tiempo y la puesta de sol, y recibe ideas de citas hechas con sitios reales cerca de ti: café, vistas, cena, algo a lo que jugar. Guárdalo como plan y envíaselo.",
+      "shared": "Un sitio para una cita, en el mapa de Ethos: ábrelo para ver dónde está, cuándo abre y con qué combinarlo."
     },
     "eyebrow": "Citas",
     "titleIn": "Ideas para una cita en {place}",
@@ -1469,7 +1470,10 @@
       "reviewsLink": "Fotos y reseñas",
       "rank": "N.º {n} de {of} en {group}",
       "pairs": "Que sea una cita",
-      "elsewhere": "En otras webs"
+      "elsewhere": "En otras webs",
+      "share": "Compartir",
+      "shareCopied": "Enlace copiado",
+      "shareText": "Un sitio para una cita:"
     },
     "map": {
       "label": "Mapa de sitios para una cita",
@@ -1554,7 +1558,8 @@
   "plan": {
     "meta": {
       "title": "Nuestro plan para la cita",
-      "description": "Una cita, planeada: el día, las paradas en orden, una nota. Hecha en Ethos y enviada como enlace."
+      "description": "Una cita, planeada: el día, las paradas en orden, una nota. Hecha en Ethos y enviada como enlace.",
+      "shared": "Una cita, planeada en Ethos: el día, las paradas en orden y una nota. Ábrelo para ver la noche entera."
     },
     "eyebrow": "Nuestro plan",
     "eyebrowShared": "Tienes una invitación",

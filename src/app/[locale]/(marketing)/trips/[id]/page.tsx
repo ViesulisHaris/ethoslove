@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { shareCardPath } from "@/lib/share/links";
 import { cityName, findAirport } from "@/lib/trips/airports";
 import { monthRanges } from "@/lib/trips/months";
 import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/tri
   const trip = getTrip(id);
   if (!trip) return {};
   const l = locale === "es" ? "es" : "en";
-  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: trip.title[l], description: trip.blurb[l] });
+  // The trip's own picture on its link preview (app/og/share.jpg), not the site's general card.
+  return pageMetadata({ locale, path: `/trips/${trip.id}`, title: trip.title[l], description: trip.blurb[l], image: shareCardPath({ kind: "trip", locale: l, trip: trip.id }) });
 }
 
 /** One trip: the picture and the facts, the route on a map, the plan day by day, tickets for its sights, flights (and a car for a road trip), and the gift it can become. */

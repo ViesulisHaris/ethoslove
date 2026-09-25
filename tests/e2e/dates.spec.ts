@@ -376,6 +376,95 @@ test.describe("a plan in a link", () => {
   });
 });
 
+/** The one photograph the mocked world has (mockWorld: Café da Esquina's). */
+const CAFE_PHOTO = "https://upload.wikimedia.org/wikipedia/commons/thumb/test/640px-cafe.jpg";
+
+/** navigator.share, caught: what the page would have handed the phone's share sheet. */
+async function catchShares(page: Page) {
+  await page.addInitScript(() => {
+    const sink = window as unknown as { shared: ShareData[] };
+    sink.shared = [];
+    Object.defineProperty(navigator, "share", { configurable: true, value: (data: ShareData) => (sink.shared.push(data), Promise.resolve()) });
+  });
+}
+const lastShare = (page: Page) => page.evaluate(() => (window as unknown as { shared: ShareData[] }).shared.at(-1) ?? null);
+
+test.describe("shared links", () => {
+  test("a place's link opens Dates around it with its sheet open; a place that isn't there opens nothing", async ({ page }) => {
+    await mockWorld(page);
+    await page.goto(`/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisbon&place=node%2F105&c=${encodeURIComponent(CAFE_PHOTO)}&t=Miradouro%20das%20Flores`);
+    await expect(page.getByRole("dialog", { name: "Miradouro das Flores" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Lisbon");
+
+    await page.goto(`/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisbon&place=node%2F999&t=Gone`);
+    await expect(page.getByRole("button", { name: /^Café da Esquina/ })).toBeVisible();
+    await page.waitForTimeout(400);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    // Not a place id at all: ignored the same way.
+    await page.goto(`/dates?lat=${LISBON.lat}&lng=${LISBON.lng}&q=Lisbon&place=%3Cscript%3E`);
+    await expect(page.getByRole("button", { name: /^Café da Esquina/ })).toBeVisible();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  });
+
+  test("a place is shared as a link with its real photograph and its name", async ({ page }) => {
+    await catchShares(page);
+    await mockWorld(page);
+    await page.goto(lisbonUrl);
+    await page.getByRole("button", { name: /^Café da Esquina/ }).click();
+    const sheet = page.getByRole("dialog", { name: "Café da Esquina" });
+    await expect(sheet.getByRole("link", { name: /^Photo: Inês Almeida/ })).toBeVisible();
+    await sheet.getByRole("button", { name: "Share", exact: true }).click();
+    const shared = await lastShare(page);
+    expect(shared?.title).toBe("Café da Esquina");
+    const url = new URL(shared!.url!);
+    expect(url.pathname).toBe("/dates");
+    expect([...url.searchParams.keys()]).toEqual(["lat", "lng", "q", "place", "c", "t"]);
+    expect(Number(url.searchParams.get("lat"))).toBeCloseTo(LISBON.lat + 0.002, 5);
+    expect(Number(url.searchParams.get("lng"))).toBeCloseTo(LISBON.lng + 0.0015, 5);
+    expect(url.searchParams.get("q")).toBe("Lisbon");
+    expect(url.searchParams.get("place")).toBe("node/103");
+    expect(url.searchParams.get("c")).toBe(CAFE_PHOTO);
+    expect(url.searchParams.get("t")).toBe("Café da Esquina");
+
+    // Opened, the link is that place's sheet again.
+    await page.goto(url.pathname + url.search);
+    await expect(page.getByRole("dialog", { name: "Café da Esquina" })).toBeVisible();
+  });
+
+  test("a plan is shared with the first stop that has a real photograph, its title and its day, and the plan stays after the #", async ({ page }) => {
+    const day = ymd(startingDay());
+    const plan = { v: 1, date: day, where: "Lisbon", to: "Maya", idea: "golden-hour-picnic", stops: [{ id: "node/104", name: "Gelados Santini", kind: "dessert", lat: 38.713, lng: -9.137 }, { id: "node/103", name: "Café da Esquina", kind: "cafe", lat: 38.716, lng: -9.1375 }] };
+    await page.addInitScript((value) => window.localStorage.setItem("ethos.dates.plan.v1", value), JSON.stringify(plan));
+    await catchShares(page);
+    await mockWorld(page);
+    await page.goto("/plan");
+    const share = page.getByRole("button", { name: "Share", exact: true });
+    // The cover is looked up while the plan is on the screen; a tap before it comes shares without one.
+    await expect
+      .poll(async () => {
+        await share.click();
+        return new URL((await lastShare(page))?.url ?? "http://x/").searchParams.get("c");
+      })
+      .toBe(CAFE_PHOTO);
+    const url = new URL((await lastShare(page))!.url!);
+    expect(url.pathname).toBe("/plan");
+    expect([...url.searchParams.keys()]).toEqual(["c", "t", "d"]);
+    expect(url.searchParams.get("t")).toBe("Golden hour picnic");
+    expect(url.searchParams.get("d")).toBe(day);
+    // Who it is for travels only after the #, which no server sees.
+    expect(url.search).not.toContain("Maya");
+    const inside = JSON.parse(Buffer.from(url.hash.slice(3).replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8"));
+    expect(inside.to).toBe("Maya");
+    expect(inside.stops.map((s: { name: string }) => s.name)).toEqual(["Gelados Santini", "Café da Esquina"]);
+
+    // Kept by whoever opens it, the preview's query leaves the address with the plan.
+    await page.goto(url.pathname + url.search + url.hash);
+    await page.getByRole("button", { name: "Keep this plan" }).click();
+    await expect(page.getByLabel("Who is it for?")).toHaveValue("Maya");
+    expect(new URL(page.url()).search).toBe("");
+  });
+});
+
 test.describe("the other rooms", () => {
   test("the front page's question leads straight to that town's map", async ({ page }) => {
     await mockWorld(page);

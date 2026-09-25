@@ -1365,7 +1365,8 @@
   "dates": {
     "meta": {
       "title": "Date ideas near you, on a map",
-      "description": "Pick a day, see the forecast and the sunset, and get date ideas built from real places near you: coffee, views, dinner, something to play. Save it as a plan and send it to them."
+      "description": "Pick a day, see the forecast and the sunset, and get date ideas built from real places near you: coffee, views, dinner, something to play. Save it as a plan and send it to them.",
+      "shared": "A place for a date, on the map at Ethos: open it to see where it is, when it is open, and what to pair it with."
     },
     "eyebrow": "Dates",
     "titleIn": "Date ideas in {place}",
@@ -1469,7 +1470,10 @@
       "reviewsLink": "Photos & reviews",
       "rank": "#{n} of {of} in {group}",
       "pairs": "Make it a date",
-      "elsewhere": "On other sites"
+      "elsewhere": "On other sites",
+      "share": "Share",
+      "shareCopied": "Link copied",
+      "shareText": "A place for a date:"
     },
     "map": {
       "label": "Map of places for a date",
@@ -1554,7 +1558,8 @@
   "plan": {
     "meta": {
       "title": "Our date plan",
-      "description": "A date, planned: the day, the stops in order, a note. Made on Ethos and sent as a link."
+      "description": "A date, planned: the day, the stops in order, a note. Made on Ethos and sent as a link.",
+      "shared": "A date, planned on Ethos: the day, the stops in order and a note. Open it to see the whole evening."
     },
     "eyebrow": "Our plan",
     "eyebrowShared": "You're invited",
