@@ -1,0 +1,153 @@
+{
+  "demo": {
+    "template": "birthday-cinema",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap to start the show\"",
+      "wait 3200",
+      "shot gift-2.png",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "wait 7000",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|09:31",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the doorbell camera got u carrying red heels into the flat at 2am"
+        },
+        {
+          "from": "them",
+          "text": "theyre urs"
+        },
+        {
+          "from": "me",
+          "text": "i dont own red heels marco"
+        },
+        {
+          "from": "them",
+          "text": "u do now. happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "why are u checking the camera at 9am on ur birthday"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why are u checking the camera at 9am on ur birthday"
+        },
+        {
+          "from": "me",
+          "text": "because someone walked out in them at 6"
+        },
+        {
+          "from": "them",
+          "text": "ur ruining ur own birthday maya. open ur present"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (happy 30th)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok the cinema is cute"
+        },
+        {
+          "from": "me",
+          "text": "who walked out in the heels"
+        },
+        {
+          "from": "them",
+          "text": "no one. u were dreaming"
+        },
+        {
+          "from": "them",
+          "text": "ur always like this on ur birthday"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i know whose heels they are"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "i sold them to her on vinted in june. i have her name and address"
+        },
+        {
+          "from": "them",
+          "text": "what are u doing with her address"
+        },
+        {
+          "from": "me",
+          "text": "invited her to my party tonight. she said yes",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya cancel the party"
+        }
+      ]
+    }
+  ]
+}

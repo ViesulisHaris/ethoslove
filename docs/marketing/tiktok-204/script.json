@@ -1,0 +1,161 @@
+{
+  "demo": {
+    "template": "museum",
+    "steps": [
+      "swap \"MAMÁ\" \"MAYA\"",
+      "swap \"Mamá\" \"Maya\"",
+      "swap \"DANI\" \"MARCO\"",
+      "swap \"Dani\" \"Marco\"",
+      "swap \"1996–2026\" \"2024–2026\"",
+      "swap \"Thirty years of small, unpaid, unphotographed work.\" \"Two years of us, most of it never photographed.\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"enter\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"Next room\"",
+      "wait 2600",
+      "shot gift-3.png",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 3000",
+      "shot gift-4.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:52",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did 'nat 🤍' just come up on ur mums TV"
+        },
+        {
+          "from": "them",
+          "text": "shes my cousin"
+        },
+        {
+          "from": "me",
+          "text": "with a white heart?"
+        },
+        {
+          "from": "them",
+          "text": "were close. thats allowed"
+        },
+        {
+          "from": "them",
+          "text": "u embarrassed me in front of my whole family maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u embarrassed me in front of my whole family maya"
+        },
+        {
+          "from": "me",
+          "text": "ur mum asked who nat was. she doesnt know ur cousin?"
+        },
+        {
+          "from": "them",
+          "text": "leave my mum out of it. i made u this. look at it and stop"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (a retrospective)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-4.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is really sweet"
+        },
+        {
+          "from": "me",
+          "text": "just tell me who she is"
+        },
+        {
+          "from": "them",
+          "text": "ive told u. my cousin"
+        },
+        {
+          "from": "them",
+          "text": "u owe my mum an apology for that scene"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "nats in my phone too"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "as 'nat 🤍'. since april"
+        },
+        {
+          "from": "them",
+          "text": "why do u have nat"
+        },
+        {
+          "from": "me",
+          "text": "ask ur cousin",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya why do u have nat"
+        }
+      ]
+    }
+  ]
+}

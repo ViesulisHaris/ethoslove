@@ -1088,6 +1088,22 @@ cousin" · "its a joke" · "thats not what happened" · "if u loved me u wouldnt
 viewers comment their own ("my scale did this"), save it, and tag the partner. Pair one real mechanism
 with one real line, then the twist.
 
+### 200 to 205: six real discoveries
+
+The first batch written from "Real stories first": the owner asked for the ones most likely to go viral,
+so these are the six strongest of twelve candidates. Each pairs one discovery people really report with
+the lines manipulators really use, then a twist of our own. The gifts are the best sellers (XOXO, Jar of
+Reasons, Bouquet, Scrapbook, Museum, Birthday Cinema) in real frames from the demos.
+
+| | The real discovery | Gift | Her twist | Last bubble |
+|---|---|---|---|---|
+| 200 | a Reddit post: his gym playlist's first letters spelled his ex's name, and he told her to take a nap | XOXO | the Christmas playlist she made him spells JAKE, and he's sung every word since | "maya who is jake" |
+| 201 | "calculator" vault apps that hide photos behind a working calculator, given away by their screen time | Jar of Reasons | her calculator has eleven hours | "maya whats in ur calculator" |
+| 202 | a smart scale that logged a stranger's weight at 3am (the story went viral in 2025) | Bouquet | it was her: she came home at 3 to surprise him, and he wasn't there | "maya delete the scale app" |
+| 203 | fitness watches and health apps showing a partner's heart rate at 2am | Scrapbook | hers was 160 at 2am too, the same night, and they weren't together | "maya who were u with at 2am" |
+| 204 | texts popping up on the Apple TV or the car screen in front of everyone | Museum | Nat is in her phone too, as "nat 🤍", since April: Nat is seeing both of them | "maya why do u have nat" |
+| 205 | doorbell cameras (and Vinted receipts, which carry a buyer's name and address) | Birthday Cinema | she sold those heels to the girl on Vinted, has her address, and invited her to the party tonight | "maya cancel the party" |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
