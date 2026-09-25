@@ -409,6 +409,19 @@ describe("what an owner or a partner can do (POST /api/membership)", () => {
     for (const call of stripe.calls) expect(JSON.stringify(call.args)).not.toMatch(/trial|coupon|promotion_code|discount/);
   });
 
+  it("starts a new billing period at the switch, in the preview and in the switch alike", async () => {
+    // A subscription in flexible billing mode (Checkout's) keeps its old anchor through a change of
+    // interval unless told otherwise: the "year" would end on the monthly anchor, months short.
+    await act(OWNER, "preview_yearly");
+    const preview = stripe.calls.find((c) => c.method === "invoices.createPreview")!.args[0] as { subscription_details: Record<string, unknown> };
+    expect(preview.subscription_details).toMatchObject({ billing_cycle_anchor: "now", proration_behavior: "always_invoice" });
+    // Stripe refuses a proration_date beside an anchor of now.
+    expect(preview.subscription_details).not.toHaveProperty("proration_date");
+    expect(await act(OWNER, "switch_to_yearly")).toMatchObject({ status: 200 });
+    const update = stripe.calls.find((c) => c.method === "subscriptions.update")!.args[1];
+    expect(update).toMatchObject({ billing_cycle_anchor: "now", proration_behavior: "always_invoice", payment_behavior: "pending_if_incomplete" });
+  });
+
   it("hangs the new price off the configured Ethos for Two product when there is one", async () => {
     // A subscription made before STRIPE_PRODUCT_FORTWO was set sits on the product Checkout made inline.
     vi.stubEnv("STRIPE_PRODUCT_FORTWO", "prod_configured");
@@ -594,6 +607,43 @@ describe("the answers of POST /api/membership are the contract's (docs/MEMBERSHI
     expect(await act(OWNER, "cancel")).toEqual({ status: 502, body: { error: "stripe_failed" } });
   });
 
+  /** The database, with the nth select of couple_passes failing (the ones before it go through). */
+  const failingSelect = (n: number): Db => {
+    let count = 0;
+    return {
+      from: (table: string) => {
+        const query = fake.db.from(table as "couple_passes") as unknown as { select: (columns?: string) => unknown };
+        if (table === "couple_passes") {
+          const select = query.select.bind(query);
+          query.select = (columns) => {
+            if (++count === n) fake.failNext("couple_passes", "select", "connection reset");
+            return select(columns);
+          };
+        }
+        return query;
+      },
+    } as unknown as Db;
+  };
+
+  it("never answers 'done' to leaving or removing when the membership couldn't be read, and never throws", async () => {
+    seedSubscription({ partner_user_id: PARTNER });
+    stripe.addSubscription({ id: "sub_1", interval: "month", periodEnd: NOW + 20 * DAY_MS, metadata: { app: "ethos" } });
+    const failed = { status: 500, body: { error: "failed" } };
+    const ctx = { now: NOW, billing: stripeBilling(stripe.client) };
+    const code = row().invite_code;
+    // The first two selects find the membership; the third is leaving's or removing's own read.
+    expect(await runMembershipAction(failingSelect(3), PARTNER, "leave", ctx)).toEqual(failed);
+    expect(await runMembershipAction(failingSelect(3), OWNER, "remove_partner", ctx)).toEqual(failed);
+    expect(row()).toMatchObject({ partner_user_id: PARTNER, invite_code: code });
+    // The membership itself unreadable: the same answer, not an exception for the route to turn into a bare 500.
+    for (const n of [1, 2]) {
+      expect(await runMembershipAction(failingSelect(n), PARTNER, "leave", ctx)).toEqual(failed);
+      expect(await runMembershipAction(failingSelect(n), OWNER, "cancel", ctx)).toEqual(failed);
+    }
+    expect(row()).toMatchObject({ partner_user_id: PARTNER, invite_code: code, cancel_at_period_end: false });
+    expect(stripe.writes()).toEqual([]);
+  });
+
   it("answers the same through the route, with no reason where there is none", async () => {
     routes.db = fake.db;
     routes.stripe = stripe.client;
@@ -625,6 +675,20 @@ describe("the answers of POST /api/membership are the contract's (docs/MEMBERSHI
     expect(unread.status).toBe(500);
     expect(await unread.json()).toEqual({ error: "failed" });
     expect(row().pending_plan).toBeNull();
+    // Whatever escapes the action itself (here the database client throwing mid-way) is still the contract's 500.
+    fake.tables.couple_passes[0].partner_user_id = PARTNER;
+    routes.user = { id: PARTNER };
+    let calls = 0;
+    routes.db = {
+      from: (table: string) => {
+        if (++calls === 3) throw new Error("pool exhausted");
+        return fake.db.from(table as "couple_passes");
+      },
+    };
+    const thrown = await post({ action: "leave" });
+    expect(thrown.status).toBe(500);
+    expect(await thrown.json()).toEqual({ error: "failed" });
+    routes.user = { id: OWNER };
     routes.db = null;
     const unconfigured = await post({ action: "cancel" });
     expect(unconfigured.status).toBe(503);
@@ -660,7 +724,7 @@ describe("the daily job", () => {
     expect(await applyPendingSwitches(fake.db, NOW, billing)).toEqual({ due: 1, switched: 1 });
     expect(row()).toMatchObject({ plan: "monthly", pending_plan: null });
     const update = stripe.calls.find((c) => c.method === "subscriptions.update")!.args[1];
-    expect(update).toMatchObject({ proration_behavior: "always_invoice", items: [{ price_data: { unit_amount: 499, recurring: { interval: "month" } } }] });
+    expect(update).toMatchObject({ billing_cycle_anchor: "now", proration_behavior: "always_invoice", items: [{ price_data: { unit_amount: 499, recurring: { interval: "month" } } }] });
   });
 
   it("reminds a yearly owner once a week before the renewal, and tries again when sending fails", async () => {

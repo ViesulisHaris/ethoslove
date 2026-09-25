@@ -6,7 +6,11 @@
  *    is as easy as joining), update the card, see invoices, change the billing name and address, and
  *    no plan switching (that happens on our account page, because the portal can only switch between
  *    standing Prices and Ethos keeps none). The account's default configuration belongs to nobody in
- *    particular and is never read, changed or made this one: the portal route always names ours.
+ *    particular and is never changed or made this one: the portal route always names ours. Stripe
+ *    makes the first configuration an account gets its default, so on an account without one this
+ *    refuses to create ours until the account's own default is saved in the Dashboard; a
+ *    configuration of ours that is the default already is left alone and replaced by a new one
+ *    (scripts/lib/portal-configuration.mjs).
  * 2. The "Ethos for Two" Product, with no Price at all (nothing without a price can turn up in another
  *    business's checkout), so subscription lines are filed under one Product with the digital-services
  *    tax code and "ETHOS FOR TWO" on the bank statement.
@@ -20,6 +24,7 @@
  */
 import Stripe from "stripe";
 import { readFileSync } from "node:fs";
+import { PORTAL_MARKER, planPortalConfiguration } from "./lib/portal-configuration.mjs";
 
 const args = process.argv.slice(2);
 const live = args.includes("--live");
@@ -47,8 +52,11 @@ if (!isLiveKey && live) {
 
 const stripe = new Stripe(key);
 const SITE = "https://tryethos.io";
+const dashboard = `https://dashboard.stripe.com${isLiveKey ? "" : "/test"}`;
+/** A stop the owner acts on, printed as it is (not as Stripe's error). */
+class Refusal extends Error {}
 // Which of Ethos's objects each one is, beside the app marker every Ethos object carries (R3).
-const PORTAL = { app: "ethos", ethos_object: "portal_configuration" };
+const PORTAL = PORTAL_MARKER;
 const PRODUCT = { app: "ethos", ethos_object: "fortwo_product" };
 const ours = (object, marker) => Object.entries(marker).every(([k, v]) => object.metadata?.[k] === v);
 
@@ -66,16 +74,31 @@ const portalSettings = {
 };
 
 async function portalConfiguration() {
-  let found = null;
-  for await (const configuration of stripe.billingPortal.configurations.list({ limit: 100 })) {
-    if (ours(configuration, PORTAL) && (!found || configuration.active)) found = configuration;
+  const configurations = [];
+  for await (const configuration of stripe.billingPortal.configurations.list({ limit: 100 })) configurations.push(configuration);
+  const step = planPortalConfiguration(configurations);
+  if (step.strandedDefault) {
+    console.warn(
+      `The portal configuration ${step.strandedDefault} carries Ethos's marker but is the account's DEFAULT (Stripe made it so when it was ` +
+        "the account's first). It is left alone: every portal session opened without a configuration, another business's too, gets it. " +
+        `Change it in the Dashboard (${dashboard}/settings/billing/portal edits the default) to what the account's default should say. ` +
+        "Ethos uses the configuration printed below instead.",
+    );
   }
-  if (found) {
-    const updated = await stripe.billingPortal.configurations.update(found.id, { ...portalSettings, name: "Ethos for Two", active: true });
-    console.log(`updated the portal configuration ${updated.id}${updated.is_default ? " (it is the account's default: that was never done by this script)" : ""}`);
+  if (step.action === "refuse") {
+    throw new Refusal(
+      "This account has no default Customer Portal configuration, and Stripe makes the first one an account gets its default: " +
+        "creating Ethos's now would give every other business on the account Ethos's portal. Save the account's own default first " +
+        `(${dashboard}/settings/billing/portal → Save), then run this again.`,
+    );
+  }
+  if (step.action === "update") {
+    const updated = await stripe.billingPortal.configurations.update(step.id, { ...portalSettings, name: "Ethos for Two", active: true });
+    console.log(`updated the portal configuration ${updated.id}`);
     return updated.id;
   }
   const created = await stripe.billingPortal.configurations.create({ ...portalSettings, name: "Ethos for Two" });
+  if (created.is_default) throw new Refusal(`the new portal configuration ${created.id} came back as the account's default: stop, and fix that in the Dashboard before using it.`);
   console.log(`created the portal configuration ${created.id}`);
   return created.id;
 }
@@ -103,6 +126,7 @@ try {
   console.log(`STRIPE_PORTAL_CONFIGURATION=${configuration}`);
   console.log(`STRIPE_PRODUCT_FORTWO=${fortwo}`);
 } catch (e) {
-  console.error(`Stripe said no: ${e.type ?? ""} ${e.code ?? ""} ${e.param ?? ""} ${e.message}`);
+  if (e instanceof Refusal) console.error(`Stopped: ${e.message}`);
+  else console.error(`Stripe said no: ${e.type ?? ""} ${e.code ?? ""} ${e.param ?? ""} ${e.message}`);
   process.exit(1);
 }

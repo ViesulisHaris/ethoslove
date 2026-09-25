@@ -268,6 +268,51 @@ describe("the subscription's invoices and events", () => {
     expect(mail.sendMembershipPaymentProblem).toHaveBeenCalledTimes(2);
   });
 
+  it("never says a payment didn't go through once the renewal is paid, or once the membership isn't past due, however late the event comes", async () => {
+    const item = (stripe.subscriptions.sub_1.items as { data: Record<string, unknown>[] }).data[0];
+    item.current_period_start = PERIOD_END / 1000;
+    item.current_period_end = (PERIOD_END + 30 * DAY_MS) / 1000;
+    fake.clock = PERIOD_END + DAY_MS;
+    // The card was fixed and the renewal paid; Stripe then delivers (or retries) the failure.
+    const failed = renewal("in_3", 0, { amount_due: 499, status: "open" });
+    stripe.invoices.in_3.status = "paid";
+    for (const type of ["invoice.payment_failed", "invoice.payment_action_required", "invoice.payment_failed"])
+      expect(await handleStripeEvent(event(type, failed), deps())).toMatchObject({ status: 200, handled: "ours" });
+    expect(membership()).toMatchObject({ status: "active", payment_failed_invoice: null });
+    // Still open, but the subscription has ended (the last retry failed): the "has ended" email is the one that goes.
+    stripe.invoices.in_3.status = "open";
+    Object.assign(stripe.subscriptions.sub_1, { status: "canceled", ended_at: (PERIOD_END + DAY_MS) / 1000, cancellation_details: { reason: "payment_failed" } });
+    await handleStripeEvent(event("invoice.payment_failed", failed), deps());
+    expect(mail.sendMembershipPaymentProblem).not.toHaveBeenCalled();
+    expect(mail.sendMembershipEnded).toHaveBeenCalledTimes(1);
+  });
+
+  it("asks Stripe to send an event of ours again when its membership can't be read, and still answers somebody else's 200", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const invoice = renewal("in_2", 499);
+    fake.failNext("couple_passes", "select", "connection pool exhausted");
+    expect(await handleStripeEvent(event("invoice.paid", invoice), deps())).toMatchObject({ status: 500, handled: "ours" });
+    expect(fake.rows("purchases").filter((p) => p.stripe_invoice_id === "in_2")).toEqual([]);
+    // Stripe's retry, once the database answers again, records the renewal.
+    expect(await handleStripeEvent(event("invoice.paid", invoice), deps())).toMatchObject({ status: 200, handled: "ours" });
+    expect(fake.rows("purchases").filter((p) => p.stripe_invoice_id === "in_2")).toHaveLength(1);
+    for (const type of ["customer.subscription.updated", "customer.subscription.deleted"]) {
+      fake.failNext("couple_passes", "select");
+      expect(await handleStripeEvent(event(type, { id: "sub_1", object: "subscription", metadata: { app: "ethos" } }), deps())).toMatchObject({ status: 500, handled: "ours" });
+    }
+    fake.failNext("couple_passes", "select");
+    expect(await handleStripeEvent(event("invoice.payment_failed", renewal("in_3", 0, { amount_due: 499, status: "open" })), deps())).toMatchObject({ status: 500 });
+    // Another business's objects while the database fails: 200, and nothing written anywhere.
+    stripe.calls = [];
+    fake.failNext("couple_passes", "select");
+    expect(await handleStripeEvent(event("customer.subscription.updated", { id: "sub_other", object: "subscription", metadata: { user_id: "x" } }), deps())).toEqual({ status: 200, handled: "foreign" });
+    fake.failNext("couple_passes", "select");
+    const foreign = { id: "in_other", object: "invoice", metadata: {}, billing_reason: "subscription_cycle", parent: { subscription_details: { subscription: "sub_other", metadata: {} } } };
+    expect(await handleStripeEvent(event("invoice.paid", foreign), deps())).toEqual({ status: 200, handled: "foreign" });
+    expect(stripe.writes()).toEqual([]);
+  });
+
   it("says it has ended when it runs out, and never after the owner ended it early", async () => {
     stripe.subscriptions.sub_1.status = "canceled";
     stripe.subscriptions.sub_1.ended_at = PERIOD_END / 1000;

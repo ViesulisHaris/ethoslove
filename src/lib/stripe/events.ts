@@ -94,8 +94,26 @@ async function onCheckout(session: Stripe.Checkout.Session, deps: StripeEventDep
 
 const idOf = (value: string | { id: string } | null | undefined): string | null => (typeof value === "string" ? value : (value?.id ?? null));
 
+/**
+ * The membership row of a subscription the event is about. When the object carries our marker the
+ * event is ours, so a read that fails throws (500: Stripe sends it again) instead of reading as "no
+ * row yet" and answering 200 for good. Without the marker the row is only the fallback for one of
+ * ours whose metadata was removed; a failed read then answers as foreign (foreign events are always
+ * 200, docs/MEMBERSHIP.md 2.6) and says so in the log, since every subscription Ethos makes is marked
+ * from Checkout on.
+ */
+async function rowOf(deps: StripeEventDeps, subscriptionId: string, marked: boolean): Promise<Pass | null> {
+  try {
+    return await rowBySubscription(deps.db, subscriptionId);
+  } catch (e) {
+    if (marked) throw e;
+    console.warn("[stripe] membership lookup failed for an unmarked subscription, answered as not ours", subscriptionId, (e as Error).message);
+    return null;
+  }
+}
+
 async function onSubscription(sub: Stripe.Subscription, deps: StripeEventDeps): Promise<EventOutcome> {
-  const known = await rowBySubscription(deps.db, sub.id);
+  const known = await rowOf(deps, sub.id, isEthosMetadata(sub.metadata));
   if (!known && !isEthosMetadata(sub.metadata)) return ok("foreign");
   // Ours but no row yet: fulfilment makes it (from the subscription as it is then).
   if (!known) return ok();
@@ -107,8 +125,9 @@ async function onSubscription(sub: Stripe.Subscription, deps: StripeEventDeps): 
 /** Whether an invoice is ours, and its membership row when there is one yet. */
 async function ownInvoice(invoice: Stripe.Invoice, deps: StripeEventDeps): Promise<{ ours: boolean; row: Pass | null; subscriptionId: string | null }> {
   const subscriptionId = subscriptionIdOfInvoice(invoice);
-  const row = subscriptionId ? await rowBySubscription(deps.db, subscriptionId) : null;
-  return { ours: Boolean(row) || invoiceIsMarked(invoice), row, subscriptionId };
+  const marked = invoiceIsMarked(invoice);
+  const row = subscriptionId ? await rowOf(deps, subscriptionId, marked) : null;
+  return { ours: Boolean(row) || marked, row, subscriptionId };
 }
 
 /**
@@ -186,6 +205,11 @@ async function onInvoiceUnpaid(event: Stripe.Invoice, kind: "failed" | "action_r
   // the page that asked for it (and its invoice voided).
   if (event.billing_reason !== "subscription_cycle" || applied.row.payment_failed_invoice === event.id) return ok();
   const invoice = await deps.stripe.invoices.retrieve(event.id);
+  // Only while there is still something to do: the event can arrive late or again (Stripe's retry
+  // after a 500 or a timeout), and a renewal paid since (the card fixed, a retry that went through),
+  // voided or written off, or a membership no longer past due (paid, or ended, which has its own
+  // email) must not be told its payment didn't go through. The invoice as it is now decides.
+  if (invoice.status !== "open" || applied.row.status !== "past_due") return ok();
   // Claimed before sending, so two deliveries of the event (or both events for one invoice) email once.
   const previous = applied.row.payment_failed_invoice;
   const claim = deps.db.from("couple_passes").update({ payment_failed_invoice: invoice.id }).eq("id", row.id);

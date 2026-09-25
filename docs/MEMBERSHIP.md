@@ -593,12 +593,16 @@ The route verifies the signature and calls `handleStripeEvent(event, deps)`; `de
 | `checkout.session.expired` | as today | recovery email; `recoveryTarget` ignores subscription sessions | as today |
 | `customer.subscription.updated`, `.deleted` | marker or known id | retrieve → `applySubscriptionState`; no row yet → 200 (fulfilment will make it) | state-based |
 | `invoice.paid` | marker on invoice or its subscription snapshot, or known subscription | retrieve invoice (`expand: ["payments"]`); `amount_paid > 0`: `billing_reason === "subscription_create"` → fill `stripe_invoice_id`/payment intent on the checkout's purchase if empty; any other reason → insert a `membership` purchase (owner, amount, currency, `stripe_invoice_id`, payment intent, `membership_id`, `created_at` = paid time); tag the invoice; then retrieve the subscription → `applySubscriptionState` | `stripe_invoice_id` unique |
-| `invoice.payment_failed`, `invoice.payment_action_required` | same | retrieve → `applySubscriptionState`; then, for a renewal only (`billing_reason` not `subscription_create`: a first payment that fails is Checkout's to show, and there is no membership yet) and a row that exists, claim `payment_failed_invoice = invoice.id` and email the owner (5.1: update your card, or confirm the payment with `hosted_invoice_url`) | the claim |
+| `invoice.payment_failed`, `invoice.payment_action_required` | same | retrieve → `applySubscriptionState`; then, for a renewal only (`billing_reason` not `subscription_create`: a first payment that fails is Checkout's to show, and there is no membership yet) and a row that exists, while the invoice as retrieved now is still `open` and the row is `past_due` (the event can come late or again: a renewal paid since, voided, or a membership that has ended gets nothing), claim `payment_failed_invoice = invoice.id` and email the owner (5.1: update your card, or confirm the payment with `hosted_invoice_url`) | the claim |
 | `charge.refunded`, `charge.dispute.created` | a purchase with that payment intent | as today, plus membership handling below | as today |
 | anything else | — | 200 | — |
 
 A failure that might pass on a retry answers 500 for **our** events only (Stripe retries);
-foreign events are always 200.
+foreign events are always 200. That includes the read that finds the row (`rowBySubscription`,
+which throws on a database error): for a subscription or invoice with our marker the event is ours
+and the answer is 500, never a 200 that drops a renewal for good; for one without the marker the
+row is only the fallback for a marker somebody removed, so a failed read answers 200 as foreign and
+logs a warning.
 
 **Refunds, disputes and the 14-day withdrawal** (in `revokePurchase`, with a `cancelSubscription`
 callback so `src/lib/commerce` stays Stripe-free):
@@ -633,8 +637,8 @@ is `{ action }`, checked against an explicit allowlist (zod enum):
 | --- | --- | --- |
 | `cancel` | owner, `stripe_subscription`, `active` or `past_due` | active: `cancel_at_period_end: true`, clears `pending_plan`; `past_due`: cancel **now** and void its open invoice (the dialog says so) |
 | `resume` | owner, cancelling, not ended | `cancel_at_period_end: false` |
-| `preview_yearly` | owner, monthly, active | `invoices.createPreview` for the switch below → `{ amountDue, currency, periodEnd }` |
-| `switch_to_yearly` | same | the item's price becomes yearly `price_data` on the item's own product, `proration_behavior: "always_invoice"`, `payment_behavior: "pending_if_incomplete"` (a separate call first if it has to un-cancel) |
+| `preview_yearly` | owner, monthly, active | `invoices.createPreview` for the switch below, with the same `billing_cycle_anchor: "now"` (and no `proration_date`, which Stripe refuses beside it) → `{ amountDue, currency, periodEnd }` |
+| `switch_to_yearly` | same | the item's price becomes yearly `price_data` on the item's own product, `billing_cycle_anchor: "now"`, `proration_behavior: "always_invoice"`, `payment_behavior: "pending_if_incomplete"` (a separate call first if it has to un-cancel) |
 | `switch_to_monthly` | owner, yearly, active, not cancelling | sets `pending_plan = "monthly"`: the cron switches it a couple of days before renewal (2.9) |
 | `keep_plan` | owner with `pending_plan` | clears it |
 | `leave` | partner of a running membership | 1.4 "partner leaves" |
@@ -654,9 +658,13 @@ retrieved state (2.5) so the answer is already true.
 
 Monthly → yearly is ours, not the portal's, on purpose: the portal can only switch between Prices
 listed in its configuration, inline prices are archived (`active=false`) and can't be listed, and
-standing Prices would break R6 and give the price a second home. Yearly → monthly waits for the
-renewal because a change of interval restarts the billing period; switching a couple of days early
-with `always_invoice` credits the unused days, so nobody pays twice.
+standing Prices would break R6 and give the price a second home. Every switch passes
+`billing_cycle_anchor: "now"`, so the new plan's period starts at the switch: Checkout's
+subscriptions are in flexible billing mode, which keeps the old anchor through a change of interval,
+and a monthly member who subscribed on 17 July and switched on 17 September would otherwise pay for
+a "year" ending on 17 July, ten months later (verified on a test clock). Yearly → monthly waits for
+the renewal so the year that was paid for is used rather than turned into credit; the cron switches
+a couple of days early and `always_invoice` credits those unused days, so nobody pays twice.
 
 `POST /api/stripe/portal` `{ flow?: "manage" | "update_card" | "cancel" }` (default `manage`):
 owner of a `stripe_subscription` row (running or not: invoices stay reachable), customer checked
@@ -668,8 +676,14 @@ as in R7, `configuration: STRIPE_PORTAL_CONFIGURATION` (unset → 503 `portal_no
 
 `scripts/setup-billing-portal.mjs` (builder A writes it; the owner runs it, test mode first):
 reads `.env.local`; refuses a live key unless `--live`; idempotent (finds its own objects by
-`metadata.app === "ethos"`, never touches anything without the marker, never sets a default). It
-creates or updates:
+`metadata.app === "ethos"`, never touches anything without the marker, never sets a default). Stripe
+makes the first portal configuration an account gets its **default**, which every session opened
+without `configuration` (another business's too) then uses, so the script refuses to create Ethos's
+on an account that has no default yet: save the account's own default first (Dashboard → Settings →
+Billing → Customer portal → Save). A configuration of ours that is the default already (test mode's
+first one became it) is never used as Ethos's again: the script names it, leaves it alone for the
+owner to turn into the account's own default in the Dashboard, and makes a new one beside it
+(`scripts/lib/portal-configuration.mjs`). It creates or updates:
 
 1. The **portal configuration**: `name: "Ethos for Two"`, `metadata: { app: "ethos" }`,
    `business_profile: { headline: "Ethos for Two", privacy_policy_url, terms_of_service_url }`
@@ -710,8 +724,8 @@ In this order, each capped per run:
    subscriber (`subscriptions[productId].expires_date`, `unsubscribe_detected_at`, `refunded_at`)
    when `REVENUECAT_SECRET_API_KEY` is set (lowest priority of builder A's list).
 2. **Pending monthly switches**: `pending_plan = 'monthly'`, active, not cancelling, period end
-   within 72 hours → switch the item to monthly `price_data`, `proration_behavior:
-   "always_invoice"` → apply state → clear `pending_plan`. Safety net: an `invoice.paid` for a
+   within 72 hours → switch the item to monthly `price_data`, `billing_cycle_anchor: "now"`,
+   `proration_behavior: "always_invoice"` → apply state → clear `pending_plan`. Safety net: an `invoice.paid` for a
    yearly `subscription_cycle` while `pending_plan` is still set switches straight away (the unused
    year becomes the customer's credit, spent on the monthly invoices).
 3. **Yearly renewal reminder**: `stripe_subscription`, yearly, active, not cancelling,
@@ -1079,7 +1093,8 @@ pass section was, `id="for-two"`, on `bg-dusk` with a starlight accent:
     **Mantenerla**. (`past_due`: "It ends now, and the unpaid renewal isn't charged.")
   - Switch to yearly: EN "Switch to yearly?" / "You'll pay {amount} today: {yearly} for a year,
     minus {credit} for the rest of this month. It then renews every year on {date} until you
-    cancel." (`credit` = yearly − `amountDue`.)
+    cancel." (`credit` = yearly − `amountDue`, which is the unused part of the month only because
+    the switch restarts the period: 2.7, `billing_cycle_anchor: "now"`.)
   - Switch to monthly: EN "Switch to monthly?" / "From around {date} you'll pay {monthly} a month
     instead of {yearly} a year, until you cancel. We switch a couple of days before your year ends
     and take off what's left of it, so nothing is lost."

@@ -11,7 +11,8 @@ test.describe("entitlements", () => {
     const response = await request.get("/api/entitlements");
     expect(response.status()).toBe(200);
     expect(response.headers()["cache-control"]).toContain("no-store");
-    expect(await response.json()).toEqual({ signedIn: false, templates: [], packs: [], pass: null, upgrade: null });
+    // Contract C3 as extended for Ethos for Two (docs/MEMBERSHIP.md 2.8): no membership, and the free saved-dates limit.
+    expect(await response.json()).toEqual({ signedIn: false, templates: [], packs: [], pass: null, membership: null, upgrade: null, savedDatesLimit: 3 });
   });
 });
 

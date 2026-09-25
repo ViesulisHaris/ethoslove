@@ -38,7 +38,15 @@ export async function POST(request: NextRequest) {
   const locale = parsed.data.locale ?? (request.nextUrl.searchParams.get("locale") === "es" ? "es" : "en");
   const stripe = getStripe();
   const now = Date.now();
-  const result = await runMembershipAction(db, user.id, action, { now, billing: stripe ? stripeBilling(stripe) : null, sendEnded: sendMembershipEnded });
+  let result: Awaited<ReturnType<typeof runMembershipAction>>;
+  try {
+    result = await runMembershipAction(db, user.id, action, { now, billing: stripe ? stripeBilling(stripe) : null, sendEnded: sendMembershipEnded });
+  } catch (e) {
+    // runMembershipAction answers its own failures; anything it lets escape is still the contract's
+    // `failed`, never Next's bare 500 page.
+    console.error("[membership] action threw", action, user.id, (e as Error).message);
+    return reply(500, { error: "failed" });
+  }
   if (result.status !== 200 || action === "preview_yearly" || action === "leave") return reply(result.status, result.body);
   try {
     return reply(200, { ok: true, membership: await readMembership(db, user.id, { locale, now, names: db }) });

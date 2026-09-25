@@ -130,7 +130,13 @@ export function stripeBilling(stripe: Stripe): BillingPort {
       if (!sub.itemId) throw new Error(`subscription ${sub.id} has no item`);
       const preview = await stripe.invoices.createPreview({
         subscription: sub.id,
-        subscription_details: { items: [{ id: sub.itemId, price_data: planPrice(sub, plan) }], proration_behavior: "always_invoice", proration_date: Math.floor(Date.now() / 1000) },
+        subscription_details: {
+          items: [{ id: sub.itemId, price_data: planPrice(sub, plan) }],
+          // Exactly the switch below, so what the dialog says is what gets charged. Stripe refuses a
+          // proration_date beside an anchor of now: the credit is worked out to this moment.
+          billing_cycle_anchor: "now",
+          proration_behavior: "always_invoice",
+        },
       });
       const periodEnd = Math.max(0, ...preview.lines.data.map((line) => line.period?.end ?? 0));
       return { amountDue: preview.amount_due, currency: preview.currency, periodEnd: periodEnd > 0 ? periodEnd * 1000 : Date.now() + (plan === "yearly" ? 365 : 30) * 86_400_000 };
@@ -140,8 +146,11 @@ export function stripeBilling(stripe: Stripe): BillingPort {
 }
 
 /**
- * Moves the subscription's item to the other plan's price. A change of interval restarts the billing
- * period and invoices at once (always_invoice credits the unused part of the old period), and the
+ * Moves the subscription's item to the other plan's price. The billing period restarts now
+ * (`billing_cycle_anchor: "now"`): a subscription in flexible billing mode, which is what Checkout
+ * makes, otherwise keeps its old anchor through a change of interval, and a monthly member switching
+ * on 17 September would pay for a "year" that ends on 17 July, ten months later, while the dialog
+ * says a year. It invoices at once (always_invoice credits the unused part of the old period), and the
  * change only happens if that invoice is paid (pending_if_incomplete): a card that fails leaves the
  * subscription exactly as it was, with the invoice voided; a bank that wants the payment confirmed
  * gets the invoice's own page to do it on, and paying it there applies the switch. When nobody is
@@ -154,6 +163,7 @@ async function switchPlan(stripe: Stripe, sub: SubscriptionSnapshot, plan: Membe
   try {
     updated = await stripe.subscriptions.update(sub.id, {
       items: [{ id: sub.itemId, price_data: planPrice(sub, plan) }],
+      billing_cycle_anchor: "now",
       proration_behavior: "always_invoice",
       payment_behavior: "pending_if_incomplete",
       expand: ["latest_invoice.payments"],

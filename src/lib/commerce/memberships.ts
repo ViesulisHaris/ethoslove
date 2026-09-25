@@ -248,8 +248,16 @@ export async function startSubscriptionMembership(
   return { error: "invite_code_collision" };
 }
 
+/**
+ * The row of a Stripe subscription, or null when it has none. A read that fails throws rather than
+ * reading as "no row": the webhook would answer an Ethos event 200 without acting on it, and Stripe
+ * would never send it again (a renewal unrecorded, a refund of it unrecognised).
+ */
 export async function rowBySubscription(db: Db, subscriptionId: string): Promise<Pass | null> {
-  const { data } = await db.from("couple_passes").select("*").eq("stripe_subscription_id", subscriptionId).maybeSingle();
+  const { data, error } = await db.from("couple_passes").select("*").eq("stripe_subscription_id", subscriptionId).maybeSingle();
+  const missing = missingMembershipColumns(error, "a subscription's membership is read");
+  if (missing) throw missing;
+  if (error) throw new Error(`membership not read: ${error.message}`);
   return data ?? null;
 }
 
@@ -385,13 +393,17 @@ async function dropPartner(db: Db, rows: Pass[], partnerId: string, now: number)
 
 /** "Leave": the partner steps out of every running or bought-ahead membership they share. */
 export async function leaveMembership(db: Db, partnerId: string, now: number): Promise<{ error?: string }> {
-  const { data } = await db.from("couple_passes").select("*").eq("partner_user_id", partnerId).gt("ends_at", iso(now));
+  // A read that fails is an error, never "nothing to leave": that answered 200 with the partner still in.
+  const { data, error } = await db.from("couple_passes").select("*").eq("partner_user_id", partnerId).gt("ends_at", iso(now));
+  if (error) return { error: error.message };
   return dropPartner(db, data ?? [], partnerId, now);
 }
 
 /** "Remove": the owner takes their partner out, and the invite link changes so the old one stops working. */
 export async function removePartner(db: Db, ownerId: string, now: number): Promise<{ error?: string }> {
-  const { data } = await db.from("couple_passes").select("*").eq("owner_user_id", ownerId).gt("ends_at", iso(now));
+  // As in leaving: a failed read must not answer "removed" while the partner and the old link stay.
+  const { data, error } = await db.from("couple_passes").select("*").eq("owner_user_id", ownerId).gt("ends_at", iso(now));
+  if (error) return { error: error.message };
   const rows = data ?? [];
   const partners = unique(rows.map((row) => row.partner_user_id).filter((id): id is string => Boolean(id)));
   for (const partnerId of partners) {
@@ -449,7 +461,13 @@ const failedWith = (action: MembershipAction, rowId: string | null, message: str
  */
 export async function runMembershipAction(db: Db, userId: string, action: MembershipAction, ctx: { now: number; billing: BillingPort | null; sendEnded?: SendEnded }): Promise<ActionResult> {
   const { now, billing } = ctx;
-  const rows = await rowsOf(db, userId);
+  let rows: Pass[];
+  try {
+    rows = await rowsOf(db, userId);
+  } catch (e) {
+    // Nothing is known about the membership, so nothing is decided: the contract's 500 failed.
+    return failedWith(action, null, (e as Error).message);
+  }
   const joined = rows.find((row) => row.partner_user_id === userId && isRunning(row, now));
   const current = currentMembership(rows, userId, now);
   const owned = current && current.owner_user_id === userId ? current : null;

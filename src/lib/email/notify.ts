@@ -7,7 +7,7 @@ import { emailKey, linkSecret, signToken } from "@/lib/lifecycle/links";
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
 import { optedOut } from "./optouts";
-import { sendEmail } from "./send";
+import { isUndeliverable, sendEmail } from "./send";
 import { pageUrl, siteUrl } from "./urls";
 import { GiftOpenedEmail, GiftPublishedEmail, GiftUnlockedEmail, ReactionEmail, ReceiptEmail, WelcomeEmail } from "@/emails/templates";
 import { CheckoutRecoveryEmail, GiftCardEmail, PassRenewalEmail, PassWelcomeEmail, ReminderEmail, recoveryHeading, reminderHeading } from "@/emails/lifecycle";
@@ -118,10 +118,15 @@ async function safely(what: string, run: () => Promise<boolean>): Promise<boolea
   }
 }
 
+/**
+ * Whether the email went. One to an address that can never receive mail (a test account, send.ts)
+ * counts as gone: nothing will ever deliver it, and a claim released for it would be sent again on
+ * every retry of the event, so a once-only email could never be seen being once-only on a test account.
+ */
 async function deliver(what: string, message: Parameters<typeof sendEmail>[0]): Promise<boolean> {
   const result = await sendEmail(message);
   if (!result.ok) console.error(`[email] ${what} not sent: ${result.error}`);
-  return result.ok && !result.skipped;
+  return result.ok && (!result.skipped || isUndeliverable(message.to));
 }
 
 /** RFC 8058 one-click: the mail app POSTs to the link itself, which acts without a confirmation page. */
