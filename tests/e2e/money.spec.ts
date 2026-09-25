@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * What a visitor sees when paying: the pricing page, the paywall in the publish sheet, and the pages
- * for gift cards and the pass. Checkout is never reached: every test that presses a buy button
+ * for gift cards and joining Ethos for Two. Checkout is never reached: every test that presses a buy button
  * answers POST /api/stripe/checkout itself and only looks at what was asked for, which must never
  * carry an amount or a code. Prices are the euro catalogue (NEXT_PUBLIC_PRICE_CURRENCIES unset), and
  * gift cards are off (GIFT_CARDS_ENABLED unset).
@@ -25,40 +25,54 @@ async function answerCheckout(page: Page, answer: { status: number; body: Record
 const noAmounts = (body: Record<string, unknown>) => Object.keys(body).filter((k) => /amount|price|total/i.test(k));
 
 test.describe("the pricing page", () => {
-  test("shows the three plans at their prices, then the pass; no gift card and no code field while they're off", async ({ page }) => {
+  // The dev server runs with STRIPE_SUBSCRIPTIONS_ENABLED unset: Ethos for Two is sold as the
+  // one-time year (docs/MEMBERSHIP.md 2.10). tests/e2e/pricing-membership.spec.ts covers both states.
+  test("leads with Ethos for Two, then the single gifts at their prices; no gift card and no code field while they're off", async ({ page }) => {
     await page.goto("/pricing");
+    const offer = page.getByTestId("membership-offer");
+    await expect(offer).toContainText("€29.99");
+    await expect(offer).toContainText("for a year");
+    await expect(offer).toContainText("Paid once · it doesn't renew by itself");
+    await expect(offer).toContainText("One payment for 365 days. We'll email you two weeks before it ends.");
+    await expect(page.getByTestId("buy-membership")).toHaveText("Get a year of Ethos for Two");
+
     await expect(page.getByTestId("price-single")).toHaveText("€9.99");
     await expect(page.getByTestId("price-pick3")).toHaveText("€14.99");
     await expect(page.getByTestId("price-everything")).toHaveText("€24.99");
+    await expect(page.getByTestId("price-extras")).toHaveText("€7.49");
     await expect(page.getByText("€29.97 separately")).toBeVisible();
-
-    const pass = page.getByTestId("pass-card");
-    await expect(pass).toContainText("€29.00");
-    await expect(pass).toContainText("for a year, for two");
-    await expect(pass).toContainText("One payment, no subscription. We'll email you two weeks before it ends.");
-    await expect(pass.getByTestId("buy-pass")).toHaveText("Get Ethos for Two");
 
     await expect(page.getByTestId("giftcard-card")).toHaveCount(0);
     await expect(page.getByTestId("creator-code-toggle")).toHaveCount(0);
 
-    // The pass is for sale now: the old waitlist form is gone.
+    // Ethos for Two is for sale: no waitlist form anywhere.
     await expect(page.getByRole("textbox", { name: /email/i })).toHaveCount(0);
-    await expect(page.getByRole("button", { name: "Is this a subscription?" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "What is Ethos for Two?" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Is this a subscription?" })).toHaveCount(1);
+    await expect(page.getByRole("button", { name: "What is Ethos for Two?" })).toHaveCount(1);
     await expect(page.getByRole("button", { name: "Can they send one back?" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Is there a discount code?" })).toBeVisible();
     await expect(page.getByRole("button", { name: "How do gift cards work?" })).toHaveCount(0);
   });
 
-  test("buys the pass with nothing but the product: no code, no amount", async ({ page }) => {
+  test("buys Ethos for Two with nothing but the product and the plan: no code, no amount", async ({ page }) => {
     const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
     await page.goto("/pricing");
-    await page.getByTestId("buy-pass").click();
+    await page.getByTestId("buy-membership").click();
     await expect.poll(() => asked.length).toBe(1);
-    expect(asked[0]).toMatchObject({ product: "pass", currency: "eur", locale: "en", returnTo: "/account" });
+    // The server makes the yearly plan the one-time year while subscriptions are off.
+    expect(asked[0]).toMatchObject({ product: "membership", plan: "yearly", currency: "eur", locale: "en", returnTo: "/account" });
     expect(asked[0]).not.toHaveProperty("creatorCode");
     expect(noAmounts(asked[0])).toEqual([]);
     await expect(page.getByText("Too many tries. Wait a minute and try again.")).toBeVisible();
+  });
+
+  test("buys a single gift the same way: the product, never an amount", async ({ page }) => {
+    const asked = await answerCheckout(page, { status: 429, body: { error: "rate_limited" } });
+    await page.goto("/pricing");
+    await page.getByRole("button", { name: "Unlock everything" }).click();
+    await expect.poll(() => asked.length).toBe(1);
+    expect(asked[0]).toMatchObject({ product: "everything", currency: "eur", locale: "en" });
+    expect(noAmounts(asked[0])).toEqual([]);
   });
 
   test("won't sell a gift card while they're off", async ({ request }) => {
@@ -72,17 +86,18 @@ test.describe("the pricing page", () => {
     // Euros only (NEXT_PUBLIC_PRICE_CURRENCIES unset): pounds on the page would be charged as euros.
     await page.goto("/pricing?currency=gbp&template=not-a-template&plan=pick3");
     await expect(page.getByTestId("price-single")).toHaveText("€9.99");
+    await expect(page.getByTestId("membership-offer")).toContainText("€29.99");
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
-  test("?renew=pass picks the pass out, and only talks about renewing to someone who has one", async ({ page }) => {
+  test("?renew=pass (old emails) picks Ethos for Two out, and only talks about renewing to someone who has a pass", async ({ page }) => {
     await page.goto("/pricing?renew=pass");
-    const pass = page.getByTestId("pass-card");
-    await expect(pass).toBeInViewport();
-    await expect(pass).toHaveClass(/ring-4/);
-    // A visitor without a pass (the game packs send them here too) is simply buying one.
-    await expect(pass.getByTestId("buy-pass")).toHaveText("Get Ethos for Two");
-    await expect(page.getByTestId("pass-renewing")).toHaveCount(0);
+    const offer = page.getByTestId("membership-offer");
+    await expect(offer).toBeInViewport();
+    await expect(offer).toHaveClass(/ring-starlight/);
+    // A visitor without a pass (old links send them here too) is simply buying one.
+    await expect(page.getByTestId("buy-membership")).toHaveText("Get a year of Ethos for Two");
+    await expect(offer).not.toContainText("Renew for another year");
   });
 
   test("the publish sheet's pick-three link opens the picker with that template chosen", async ({ page }) => {
@@ -97,7 +112,10 @@ test.describe("the pricing page", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
     await expect(page.getByTestId("price-single")).toHaveText("9,99 €");
     await expect(page.getByTestId("price-everything")).toHaveText("24,99 €");
-    await expect(page.getByTestId("pass-card")).toContainText("Un solo pago, sin suscripción.");
+    const offer = page.getByTestId("membership-offer");
+    await expect(offer).toContainText("29,99 €");
+    await expect(offer).toContainText("Se paga una vez · no se renueva solo");
+    await expect(offer).toContainText("Un solo pago por 365 días.");
   });
 });
 
