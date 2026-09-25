@@ -1061,6 +1061,33 @@ to move people onto a paid one.
 | 198 | Party Animals | funny | she confessed denting his car through a hamster, on his birthday | "im going to check the car" |
 | 199 | Sticker Bomb | funny | she made his family into cat memes and sent it to his family group chat | "she says shell come to peru" |
 
+### Real stories first (25 Sept)
+
+The owner: "go online on reddit … read those stories … like my ex did this". The comments are strongest
+when a viewer recognises her own story and types it underneath. So every new toxic carousel starts from
+something people really report, then gets new people and a new twist. Never copy a post: take the
+mechanism and the line, write everything else.
+
+**How they found out** (Reddit threads collected by AOL, BuzzFeed and Bored Panda, read 25 Sept 2026):
+a smart scale logging a stranger at 3am · a smart mattress scoring sleep on the absent partner's side ·
+a watch showing a 2am heart rate · Alexa's history in someone else's voice · a shared playlist with songs
+added at 2am · a gym playlist whose first letters spell the ex's name · texts popping up on the car
+stereo or the Apple TV · photos syncing to the shared iPad · a Tinder subscription found while setting up
+the TV · a "calculator" vault app with hours of screen time · a contact saved under a man's name · the
+joint card paying for dinner for two at 11pm · a delivery app sending food for two to another address ·
+location sharing at the same house every Friday · Find My showing the car at 4am · his mum mentioning
+"the girlfriend" at Sunday lunch · a neighbour's text: go home now.
+
+**What they say when they're caught** (the same threads, and the standard manipulation lists):
+"ur hunting for drama" · "go take a nap, ur spiralling" · "this is why i dont tell u things" · "u went
+through my phone, thats the real problem" · "ur tracking me through a scale now?" · "after everything
+ive done for u" · "no one else would put up with this" · "ur so insecure" · "shes like a sister" / "my
+cousin" · "its a joke" · "thats not what happened" · "if u loved me u wouldnt ask".
+
+**The detail is the hook.** The more specific and technical the discovery (54 kg at 3:12am), the more
+viewers comment their own ("my scale did this"), save it, and tag the partner. Pair one real mechanism
+with one real line, then the twist.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
