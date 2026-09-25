@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
+import { decidePublish, fieldMustHaves, fieldProblems, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
 import { manifest as letter } from "@/templates/the-letter/manifest";
+import { fieldsSchema as letterSchema } from "@/templates/the-letter/schema";
+import { fieldsSchema as cookieSchema } from "@/templates/fortune-cookie/schema";
+import { fieldsSchema as threadSchema } from "@/templates/text-thread/schema";
+import { SCHEMA_SLUGS, loadFieldsSchema } from "@/templates/schemas";
 import type { GiftData } from "@/lib/gift/schema";
 
 const photo = (url: string) => ({ id: url, url, width: 10, height: 10 });
@@ -88,5 +92,45 @@ describe("publish rules", () => {
     expect(readinessProblems(letter, { ...base, message: "  " })).toContain("message");
     expect(readinessProblems(letter, { ...base, photos: [] })).toContain("photosMin");
     expect(decidePublish(letter, { ...base, photos: [] }, { unlocked: true }, none)).toMatchObject({ ok: false, reason: "not_ready" });
+  });
+});
+
+describe("a template's own fields", () => {
+  // Fortune Cookie was paid for with no fortunes, then refused at publish (fortunes: 3 to 20).
+  const cookie = { ...letter, slug: "fortune-cookie", tier: "premium" as const };
+  const withFortunes = (fortunes: string[]) => ({ ...base, templateSlug: "fortune-cookie", fields: { fortunes, table: "red" } });
+
+  it("counts as not ready, before any payment, until the schema publishing uses accepts them", () => {
+    const empty = withFortunes([]);
+    expect(readinessProblems(cookie, empty, cookieSchema)).toEqual(["fields.fortunes"]);
+    expect(decidePublish(cookie, empty, { unlocked: false }, { ...none, fieldsSchema: cookieSchema })).toEqual({ ok: false, reason: "not_ready", problems: ["fields.fortunes"] });
+    expect(decidePublish(cookie, withFortunes(["a", "b", "c"]), { unlocked: false }, { ...none, fieldsSchema: cookieSchema })).toEqual({ ok: false, reason: "payment_required" });
+    expect(decidePublish(cookie, withFortunes(["a", "b", "c"]), { unlocked: true }, { ...none, fieldsSchema: cookieSchema })).toMatchObject({ ok: true });
+    // The server parses the whole gift itself first, so it leaves the schema out.
+    expect(readinessProblems(cookie, empty)).toEqual([]);
+  });
+
+  it("says what each field still needs", () => {
+    expect(fieldProblems(cookieSchema, { fortunes: [] })).toEqual([{ key: "fortunes", need: "more", count: 3 }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "  ", "c"] })).toEqual([{ key: "fortunes", need: "emptyItem" }]);
+    expect(fieldProblems(cookieSchema, { fortunes: Array.from({ length: 21 }, (_, i) => `f${i}`) })).toEqual([{ key: "fortunes", need: "fewer", count: 20 }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "b", "c"], table: "gold" })).toEqual([{ key: "table", need: "fix" }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "b", "c"] })).toEqual([]);
+  });
+
+  it("lists a new gift's must-haves: the defaults a template starts with aren't always enough", () => {
+    expect(fieldMustHaves(cookieSchema)).toEqual([{ key: "fortunes", need: "more", count: 3 }]);
+    expect(fieldMustHaves(threadSchema)).toEqual([{ key: "lines", need: "more", count: 2 }]);
+    expect(fieldMustHaves(letterSchema)).toEqual([]);
+  });
+
+  it("covers every premium template whose new gift couldn't be sent as it starts", async () => {
+    const blocked: string[] = [];
+    for (const slug of SCHEMA_SLUGS) {
+      const schema = await loadFieldsSchema(slug);
+      if (schema && fieldMustHaves(schema).length > 0) blocked.push(slug);
+    }
+    // Each of these now shows its must-have in the checklist and can't be paid for until it's met.
+    expect(blocked.sort()).toEqual(["fortune-cookie", "jar-of-reasons", "paper-crane", "text-thread"]);
   });
 });

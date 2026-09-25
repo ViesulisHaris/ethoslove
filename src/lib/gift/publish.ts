@@ -1,3 +1,4 @@
+import type { z } from "zod";
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { isStoragePath } from "./assets";
@@ -25,9 +26,9 @@ export function decidePublish(
   manifest: TemplateManifest,
   data: GiftData,
   entitlement: Entitlement,
-  options: { removeWatermark: boolean; schedule: boolean; password: boolean; freeReply?: boolean },
+  options: { removeWatermark: boolean; schedule: boolean; password: boolean; freeReply?: boolean; fieldsSchema?: z.ZodType },
 ): PublishDecision {
-  const problems = readinessProblems(manifest, data);
+  const problems = readinessProblems(manifest, data, options.fieldsSchema);
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
 
   const premiumTemplate = manifest.tier === "premium" && !options.freeReply;
@@ -74,12 +75,17 @@ export function liveEditNeedsUnlock(
   return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
 }
 
-/** Human-readable blockers, keyed for translation on the client. */
-export function readinessProblems(manifest: TemplateManifest, data: GiftData): string[] {
+/**
+ * Human-readable blockers, keyed for translation on the client. With the template's `fieldsSchema`,
+ * its own fields count too, as "fields.<key>": publishing parses the whole gift with that schema
+ * (app/actions/gift.ts), so a Fortune Cookie with no fortunes could be paid for and then refused.
+ */
+export function readinessProblems(manifest: TemplateManifest, data: GiftData, fieldsSchema?: z.ZodType): string[] {
   const problems: string[] = [];
   if (!data.recipientName.trim()) problems.push("recipientName");
   if (!data.senderName.trim()) problems.push("senderName");
   if (!data.message.trim()) problems.push("message");
+  if (fieldsSchema) problems.push(...fieldProblems(fieldsSchema, data.fields).map((problem) => `fields.${problem.key}`));
   if (data.photos.length < manifest.features.photos.min) problems.push("photosMin");
   if (data.photos.length > manifest.features.photos.max) problems.push("photosMax");
   if (data.photos.some((p) => !isStoragePath(p.url) && !p.url.startsWith("http"))) problems.push("uploadsPending");
@@ -87,4 +93,44 @@ export function readinessProblems(manifest: TemplateManifest, data: GiftData): s
   if (data.video && !isStoragePath(data.video.url) && !data.video.url.startsWith("http")) problems.push("uploadsPending");
   if (data.voiceNote && !isStoragePath(data.voiceNote.url) && !data.voiceNote.url.startsWith("http")) problems.push("uploadsPending");
   return Array.from(new Set(problems));
+}
+
+/**
+ * What one of the template's own fields still needs, the way the checklist says it: `more` (a list
+ * under its minimum, `count` being that minimum), `fewer` (over its maximum), `fill` (left empty),
+ * `emptyItem` (a blank line in a list) or `fix` (anything else). One per field: its first issue.
+ */
+export type FieldProblem = { key: string; need: "more" | "fewer" | "fill" | "emptyItem" | "fix"; count?: number };
+
+type Issue = z.ZodError["issues"][number];
+
+function needOf(issue: Issue): Pick<FieldProblem, "need" | "count"> {
+  const whole = issue.path.length <= 1;
+  if (issue.code === "too_small" && issue.origin === "array" && whole) return { need: "more", count: Number(issue.minimum) };
+  if (issue.code === "too_big" && issue.origin === "array" && whole) return { need: "fewer", count: Number(issue.maximum) };
+  if (issue.code === "too_small" && issue.origin === "string") return { need: whole ? "fill" : "emptyItem" };
+  if (issue.code === "invalid_type" && whole) return { need: "fill" };
+  return { need: "fix" };
+}
+
+/** The template's own fields that its schema refuses, as publishing would (see readinessProblems). */
+export function fieldProblems(fieldsSchema: z.ZodType, fields: unknown): FieldProblem[] {
+  const parsed = fieldsSchema.safeParse(fields ?? {});
+  if (parsed.success) return [];
+  const found = new Map<string, FieldProblem>();
+  for (const issue of parsed.error.issues) {
+    const key = issue.path.length > 0 ? String(issue.path[0]) : "";
+    if (!found.has(key)) found.set(key, { key, ...needOf(issue) });
+  }
+  return [...found.values()];
+}
+
+/**
+ * The template's must-haves: what a new gift of it doesn't meet yet (Fortune Cookie's three
+ * fortunes, Text Thread's two messages), so the checklist lists them from the start and ticks them
+ * off. Zod 4 hands a default back without checking it, so the defaults are parsed a second time.
+ */
+export function fieldMustHaves(fieldsSchema: z.ZodType): FieldProblem[] {
+  const blank = fieldsSchema.safeParse({});
+  return fieldProblems(fieldsSchema, blank.success ? blank.data : {});
 }

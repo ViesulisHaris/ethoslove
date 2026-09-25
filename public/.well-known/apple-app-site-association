@@ -15,5 +15,8 @@
         ]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": ["6STLVMDPXB.xyz.secuora.ethos"]
   }
 }

@@ -7,7 +7,8 @@ import { rankForApp } from "@/lib/app/places";
 import { appLocale, NO_STORE, queryNumber } from "@/lib/app/http";
 
 export const runtime = "nodejs";
-// The rare finds wait up to 24 s on the public Overpass servers; the rest runs alongside them.
+// The rare finds wait up to 22 s on the public Overpass servers (lib/dates/sources.ts); the rest runs
+// alongside them. The app asks for them in the background, after its first list without them.
 export const maxDuration = 35;
 
 const CACHED = "public, s-maxage=600, stale-while-revalidate=86400";

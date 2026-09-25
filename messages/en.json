@@ -477,7 +477,14 @@
         "photosMax": "Too many photos for this template",
         "uploadsPending": "Your files are still uploading",
         "uploadsDone": "Upload your files",
-        "uploadsFailed": "Something didn’t upload"
+        "uploadsFailed": "Something didn’t upload",
+        "fields": {
+          "more": "{label}: add at least {count}",
+          "fewer": "{label}: {count} at most",
+          "fill": "{label}: fill this in",
+          "emptyItem": "{label}: fill in or remove the empty one",
+          "fix": "{label}: check this"
+        }
       },
       "signInTitle": "Sign in to publish",
       "signInBlurb": "Your draft is saved on this device. Sign in and we'll pick up right here.",
@@ -494,6 +501,7 @@
       "publishing": "Publishing…",
       "notConfigured": "Publishing needs Supabase. Add the keys to .env.local and restart.",
       "error": "Publishing failed: {error}",
+      "errorFields": "It can’t go yet. Check these first: {fields}.",
       "featureSong": "music from another site",
       "featureVideo": "a video clip",
       "featureVoiceNote": "a voice message",

@@ -13,7 +13,7 @@ import { Field, Segmented } from "./field";
 import { ColorInput } from "./color-input";
 import { ListField } from "./list-field";
 
-function humanize(key: string) {
+export function humanize(key: string) {
   return key.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
 }
 

@@ -37,8 +37,10 @@ const nextConfig: NextConfig = {
   headers: async () => [
     // Universal links for the iPhone app (public/.well-known/apple-app-site-association): a shared plan,
     // a For Two invite, a trip and a template's page open in the app. Gift links (/g/…) are deliberately
-    // not claimed: whoever receives one always gets the full-screen web gift. Apple fetches the file over
-    // HTTPS with no redirects and wants JSON; it has no extension, so the type is said here.
+    // not claimed: whoever receives one always gets the full-screen web gift. Its "webcredentials" lets
+    // iCloud Keychain save and offer tryethos.io passwords in the app, which claims webcredentials:tryethos.io.
+    // Apple fetches the file over HTTPS with no redirects and wants JSON; it has no extension, so the type
+    // is said here.
     {
       source: "/.well-known/apple-app-site-association",
       headers: [

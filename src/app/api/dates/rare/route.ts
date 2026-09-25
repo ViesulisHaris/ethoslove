@@ -8,7 +8,8 @@ import { rareCenter, rareFinds } from "@/lib/dates/sources";
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const WEEK = 60 * 60 * 24 * 7;
+const HOUR = 60 * 60;
+const WEEK = HOUR * 24 * 7;
 
 /**
  * The rare finds within a short ride: bowling, arcades, climbing, karaoke, boats, spas, wineries,
@@ -29,5 +30,7 @@ export async function GET(request: NextRequest) {
   // Not an error as far as the page is concerned: the rare finds are a bonus, and a red line in
   // somebody's console for a busy third-party server helps nobody. Not cached, so the next visitor asks again.
   if (!places) return NextResponse.json({ center, radiusM: RARE_RADIUS_M, places: [], unavailable: true }, { headers: { "cache-control": "no-store" } });
-  return NextResponse.json({ center, radiusM: RARE_RADIUS_M, places }, { headers: { "cache-control": `public, s-maxage=${WEEK}, stale-while-revalidate=${WEEK * 4}` } });
+  // Nothing found is an answer, but kept an hour, not weeks: it may be a server with holes in its data.
+  const kept = places.length > 0 ? `public, s-maxage=${WEEK}, stale-while-revalidate=${WEEK * 4}` : `public, s-maxage=${HOUR}`;
+  return NextResponse.json({ center, radiusM: RARE_RADIUS_M, places }, { headers: { "cache-control": kept } });
 }

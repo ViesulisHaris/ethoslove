@@ -5,9 +5,9 @@ import { AlertCircle, Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
-import type { TemplateManifest } from "@/templates/types";
+import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { track } from "@/lib/analytics/track";
-import { decidePublish, readinessProblems, premiumExtras } from "@/lib/gift/publish";
+import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
 import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
 import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
-import { replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
+import { publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
 import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/config/site";
@@ -32,11 +32,13 @@ import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
 import { ShareScreen } from "./share-screen";
+import { humanize } from "./template-fields";
 
 export function PublishSheet({
   open,
   onOpenChange,
   manifest,
+  mod,
   slug,
   supabaseConfigured,
   paymentsEnabled,
@@ -45,6 +47,8 @@ export function PublishSheet({
   open: boolean;
   onOpenChange: (v: boolean) => void;
   manifest: TemplateManifest;
+  /** The template's schema and field labels: its own fields are checked as publishing checks them. */
+  mod: TemplateModule | null;
   slug: string;
   supabaseConfigured: boolean;
   /** Back from checkout with ?resume=publish: publish as soon as everything is in place. */
@@ -144,12 +148,26 @@ export function PublishSheet({
     window.addEventListener("online", onOnline);
     return () => window.removeEventListener("online", onOnline);
   }, [open]);
+  const fieldsSchema = mod?.fieldsSchema;
   const problems = useMemo(() => {
     if (!serialized) return ["uploadsPending"];
-    const p = readinessProblems(manifest, serialized);
+    const p = readinessProblems(manifest, serialized, fieldsSchema);
     if (uploadsInFlight && !p.includes("uploadsPending")) p.push("uploadsPending");
     return p;
-  }, [manifest, serialized, uploadsInFlight]);
+  }, [manifest, serialized, uploadsInFlight, fieldsSchema]);
+  // The template's own must-haves, ticked off like the names, then anything else its schema refuses
+  // right now: publishing checks the fields too, so nobody pays for a gift that can't be sent.
+  const fieldRows = useMemo(() => {
+    if (!fieldsSchema) return [];
+    const rows = new Map<string, { problem: FieldProblem; bad: boolean }>();
+    for (const problem of fieldMustHaves(fieldsSchema)) rows.set(problem.key, { problem, bad: false });
+    for (const problem of serialized ? fieldProblems(fieldsSchema, serialized.fields) : []) rows.set(problem.key, { problem, bad: true });
+    return [...rows.values()];
+  }, [fieldsSchema, serialized]);
+  const fieldLabel = (key: string) => mod?.fieldMeta?.[locale]?.[key]?.label ?? humanize(key);
+  const fieldTask = ({ key, need, count }: FieldProblem) => t(`problems.fields.${need}`, { label: fieldLabel(key), count: count ?? 0 });
+  // What the server refused, when it was the template's own fields: named, so they know what to fix.
+  const [refusedFields, setRefusedFields] = useState<string[]>([]);
 
   const options = {
     removeWatermark: state.removeWatermark,
@@ -157,7 +175,7 @@ export function PublishSheet({
     password: state.password.length > 0,
   };
   const decision =
-    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply }) : null;
+    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply, fieldsSchema }) : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -192,6 +210,7 @@ export function PublishSheet({
   const publish = async () => {
     setBusy(true);
     setError(null);
+    setRefusedFields([]);
     const giftId = await state.ensureRemote();
     if (!giftId) {
       setBusy(false);
@@ -214,6 +233,8 @@ export function PublishSheet({
     if (!result.ok) {
       if (result.error === "reply_used" || result.error === "reply_invalid") setReplyRefused(result.error);
       else setError(result.error);
+      const refused = result.error === "invalid_data" ? (result.problems ?? []).filter((path) => path.startsWith("fields.")) : [];
+      setRefusedFields([...new Set(refused.map((path) => path.split(".")[1]).filter(Boolean))]);
       return;
     }
     state.markPublished(result.data.shortId, result.data.status);
@@ -279,6 +300,8 @@ export function PublishSheet({
     (serialized ? premiumExtras(serialized).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // "One payment, no subscription" under a free publish read as if sending it cost something.
+  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
 
@@ -337,10 +360,14 @@ export function PublishSheet({
 
             <section className="mt-7">
               <p className="mb-3 text-eyebrow text-ink-soft">{t("checklist")}</p>
-              <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {(
-                  ["recipientName", "senderName", "message", "photosMin", "uploadsPending"] as const
-                )
+              <ul className="divide-y divide-border rounded-2xl border border-border bg-card" data-testid="publish-checklist">
+                {(["recipientName", "senderName", "message"] as const).map((key) => (
+                  <ChecklistItem key={key} bad={problems.includes(key)} label={t(`problems.${key}`)} />
+                ))}
+                {fieldRows.map(({ problem, bad }) => (
+                  <ChecklistItem key={`fields.${problem.key}`} bad={bad} label={fieldTask(problem)} />
+                ))}
+                {(["photosMin", "uploadsPending"] as const)
                   // A template that needs no photos has nothing to tick off for them.
                   .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || manifest.features.photos.min > 0))
                   .map((key) => {
@@ -355,28 +382,7 @@ export function PublishSheet({
                       : key === "uploadsPending" && bad && uploadTotals.total > 1
                         ? t("uploadingCount", { done: uploadTotals.done, total: uploadTotals.total })
                         : t(`problems.${key}`, { min: manifest.features.photos.min });
-                    return (
-                      <li
-                        key={key}
-                        className={cn(
-                          "flex items-center gap-3 px-4 py-3 text-sm",
-                          bad
-                            ? "text-ink"
-                            : "text-muted-foreground line-through decoration-moss/60",
-                        )}
-                      >
-                        {bad ? (
-                          key === "uploadsPending" && !stuck ? (
-                            <Loader2 className="size-4 animate-spin text-coral" />
-                          ) : (
-                            <AlertCircle className="size-4 text-coral" />
-                          )
-                        ) : (
-                          <Check className="size-4 text-moss" />
-                        )}
-                        <span>{label}</span>
-                      </li>
-                    );
+                    return <ChecklistItem key={key} bad={bad} spinning={key === "uploadsPending" && !stuck} label={label} />;
                   })}
               </ul>
               {state.authed && showStuck ? (
@@ -482,7 +488,7 @@ export function PublishSheet({
             ) : null}
             {error ? (
               <Notice tone="warn" className="mt-6">
-                {t("error", { error })}
+                {refusedFields.length ? t("errorFields", { fields: refusedFields.map(fieldLabel).join(", ") }) : t("error", { error })}
               </Notice>
             ) : null}
 
@@ -508,13 +514,32 @@ export function PublishSheet({
                     : t("publishNow")}
               </span>
             </Button>
-            <p className="mt-3 text-center text-xs text-muted-foreground">
-              {tCommon("noSubscription")}
-            </p>
+            {asksForMoney ? (
+              <p className="mt-3 text-center text-xs text-muted-foreground" data-testid="no-subscription">
+                {tCommon("noSubscription")}
+              </p>
+            ) : null}
           </div>
         )}
       </SheetContent>
     </Sheet>
+  );
+}
+
+function ChecklistItem({ bad, spinning = false, label }: { bad: boolean; spinning?: boolean; label: string }) {
+  return (
+    <li className={cn("flex items-center gap-3 px-4 py-3 text-sm", bad ? "text-ink" : "text-muted-foreground line-through decoration-moss/60")}>
+      {bad ? (
+        spinning ? (
+          <Loader2 className="size-4 animate-spin text-coral" />
+        ) : (
+          <AlertCircle className="size-4 text-coral" />
+        )
+      ) : (
+        <Check className="size-4 text-moss" />
+      )}
+      <span>{label}</span>
+    </li>
   );
 }
 
