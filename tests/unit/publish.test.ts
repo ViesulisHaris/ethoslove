@@ -131,6 +131,6 @@ describe("a template's own fields", () => {
       if (schema && fieldMustHaves(schema).length > 0) blocked.push(slug);
     }
     // Each of these now shows its must-have in the checklist and can't be paid for until it's met.
-    expect(blocked.sort()).toEqual(["fortune-cookie", "jar-of-reasons", "paper-crane", "text-thread"]);
+    expect(blocked.sort()).toEqual(["fortune-cookie", "jar-of-reasons", "paper-crane", "picnic", "text-thread"]);
   });
 });

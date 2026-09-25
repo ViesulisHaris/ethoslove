@@ -465,7 +465,8 @@ export function defaultCoverFor(slug: string): CoverId {
     case "garden":
     case "popup-card":
     case "sketchbook":
-      return "classic"; // each opens with its own envelope, book or gate
+    case "picnic":
+      return "classic"; // each opens with its own envelope, book, gate or basket
     case "kawaii":
       return "gingham";
     case "fireside":

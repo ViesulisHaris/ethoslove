@@ -5,7 +5,7 @@
  * changes. No film, game, music or brand artwork is in the set.
  */
 export type ScrapKind = "pink-flower" | "blue-flower" | "kiss" | "soft" | "lace" | "pressed" | "trinket";
-export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "heart-anatomical" | "heart-damask" | "heart-print" | "heart-print-pink" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-couple" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "tag-tofrom" | "teddy" | "wax-seal";
+export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "heart-anatomical" | "heart-damask" | "heart-print" | "heart-print-pink" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-couple" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "star-glossy" | "star-glossy-small" | "tag-tofrom" | "teddy" | "wax-seal";
 export type ScrapInfo = { id: ScrapId; w: number; h: number; kind: ScrapKind };
 
 export const SCRAPS: Record<ScrapId, ScrapInfo> = {
@@ -60,6 +60,8 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "roses-kraft": { id: "roses-kraft", w: 558, h: 752, kind: "pressed" },
   "sakura": { id: "sakura", w: 438, h: 434, kind: "pink-flower" },
   "star-felt": { id: "star-felt", w: 176, h: 178, kind: "trinket" },
+  "star-glossy": { id: "star-glossy", w: 348, h: 340, kind: "trinket" },
+  "star-glossy-small": { id: "star-glossy-small", w: 278, h: 276, kind: "trinket" },
   "tag-tofrom": { id: "tag-tofrom", w: 536, h: 280, kind: "trinket" },
   "teddy": { id: "teddy", w: 498, h: 458, kind: "soft" },
   "wax-seal": { id: "wax-seal", w: 308, h: 300, kind: "trinket" },
