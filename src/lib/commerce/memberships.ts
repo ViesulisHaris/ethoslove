@@ -1,4 +1,4 @@
-import type { MembershipAction, MembershipActionResponse, MembershipPlan, MembershipProvider, MembershipStatus, MembershipSummary } from "@/lib/membership/types";
+import type { MembershipAction, MembershipActionResponse, MembershipPlan, MembershipProvider, MembershipStatus, MembershipSummary, NotAvailableReason } from "@/lib/membership/types";
 import type { Currency } from "@/lib/pricing/products";
 import type { Updates } from "@/lib/supabase/types";
 import type { MembershipContext } from "./plan";
@@ -407,16 +407,38 @@ export async function removePartner(db: Db, ownerId: string, now: number): Promi
 
 export type ActionResult = { status: number; body: MembershipActionResponse };
 
-const refused = (status: number, error: Extract<MembershipActionResponse, { error: string }>["error"], reason?: string, url?: string | null): ActionResult => ({
+type ActionError = Extract<MembershipActionResponse, { error: string }>["error"];
+
+const refused = (status: number, error: ActionError, reason?: NotAvailableReason, url?: string | null): ActionResult => ({
   status,
   body: { error, ...(reason ? { reason } : {}), ...(url ? { url } : {}) },
 });
 
+/** 409: not available to this membership, with the reason the member can act on when there is one. */
+const unavailable = (reason?: NotAvailableReason) => refused(409, "not_available", reason);
+
+/**
+ * A payment Stripe is still collecting (a renewal past due, or a first payment not through yet) is
+ * the one state a member can do something about: `past_due`. A membership that has just ended has no
+ * reason to give.
+ */
+const unavailableIn = (status: MembershipStatus) => unavailable(status === "past_due" || status === "incomplete" ? "past_due" : undefined);
+
+/** A database error after Stripe answered: ours, not Stripe's (500 failed, never 502 stripe_failed). */
+class DatabaseFailure extends Error {}
+
+const failedWith = (action: MembershipAction, rowId: string | null, message: string): ActionResult => {
+  console.error("[membership] action failed in the database", action, rowId, message);
+  return refused(500, "failed");
+};
+
 /**
  * POST /api/membership (docs/MEMBERSHIP.md 2.7): what an owner or a partner can do to their
- * membership. Who may do what is decided here from the row; what changes at Stripe goes through
+ * membership. Who may do what is decided here from the row, exactly as the contract's "who, when"
+ * column says, and nothing that isn't there answers 200; what changes at Stripe goes through
  * `billing`, and the state Stripe answers with is applied at once, so the summary the route reads
  * afterwards is already true. `ok` answers carry no summary: the route reads it (it needs the names).
+ * A Stripe failure is 502 stripe_failed; a database failure, 500 failed.
  */
 export async function runMembershipAction(db: Db, userId: string, action: MembershipAction, ctx: { now: number; billing: BillingPort | null; sendEnded?: SendEnded }): Promise<ActionResult> {
   const { now, billing } = ctx;
@@ -429,33 +451,36 @@ export async function runMembershipAction(db: Db, userId: string, action: Member
   if (action === "leave") {
     if (!joined) return owned ? refused(403, "not_partner") : refused(404, "not_member");
     const left = await leaveMembership(db, userId, now);
-    return left.error ? refused(502, "stripe_failed") : done;
+    return left.error ? failedWith(action, joined.id, left.error) : done;
   }
   if (!owned) return joined ? refused(403, "not_owner") : refused(404, "not_member");
   if (action === "remove_partner") {
+    // Only an owner with somebody in the partner's place, on the running year or one bought ahead.
+    if (!rows.some((row) => row.owner_user_id === userId && row.partner_user_id && ms(row.ends_at) > now)) return unavailable();
     const removed = await removePartner(db, userId, now);
-    return removed.error ? refused(502, "stripe_failed") : done;
+    return removed.error ? failedWith(action, owned.id, removed.error) : done;
   }
-  if (owned.provider === "app_store") return refused(409, "not_available", "app_store");
-  if (owned.provider !== "stripe_subscription" || !owned.stripe_subscription_id) return refused(409, "not_available", "pass");
+  if (owned.provider === "app_store") return unavailable("app_store");
+  if (owned.provider !== "stripe_subscription" || !owned.stripe_subscription_id) return unavailable("pass");
 
   if (action === "keep_plan") {
-    if (owned.pending_plan) await db.from("couple_passes").update({ pending_plan: null }).eq("id", owned.id);
-    return done;
+    if (!owned.pending_plan) return unavailable();
+    const { error } = await db.from("couple_passes").update({ pending_plan: null }).eq("id", owned.id);
+    return error ? failedWith(action, owned.id, error.message) : done;
   }
   if (action === "switch_to_monthly") {
-    if (owned.status !== "active") return refused(409, "not_available", owned.status === "past_due" ? "past_due" : "incomplete");
-    if (owned.plan !== "yearly") return refused(409, "not_available", "not_yearly");
-    if (owned.cancel_at_period_end) return refused(409, "not_available", "cancelling");
+    if (owned.status !== "active") return unavailableIn(owned.status);
+    if (owned.plan !== "yearly") return unavailable("not_yearly");
+    if (owned.cancel_at_period_end) return unavailable("cancelling");
     // The renewal is when it happens: the cron switches it a couple of days before (applyPendingSwitches).
-    await db.from("couple_passes").update({ pending_plan: "monthly" }).eq("id", owned.id);
-    return done;
+    const { error } = await db.from("couple_passes").update({ pending_plan: "monthly" }).eq("id", owned.id);
+    return error ? failedWith(action, owned.id, error.message) : done;
   }
 
   if (!billing) return refused(503, "not_configured");
   const apply = async (sub: SubscriptionSnapshot) => {
     const applied = await applySubscriptionState(db, owned, sub, now, { sendEnded: ctx.sendEnded });
-    if ("error" in applied) throw new Error(applied.error);
+    if ("error" in applied) throw new DatabaseFailure(applied.error);
     return applied.row;
   };
   try {
@@ -470,12 +495,14 @@ export async function runMembershipAction(db: Db, userId: string, action: Member
           await apply(await billing.cancelNow(sub.id, { voidOpenInvoices: true }));
           return done;
         }
-        if (row.status !== "active") return refused(409, "not_available", row.status === "incomplete" ? "incomplete" : "ended");
+        if (row.status !== "active") return unavailableIn(row.status);
+        // Already cancelling: cancelling again changes nothing, and says so with the same answer.
         if (!cancelling) await apply(await billing.setCancelAtPeriodEnd(sub, true));
         return done;
       case "resume":
-        if (row.status !== "active") return refused(409, "not_available", row.status === "past_due" ? "past_due" : row.status);
-        if (cancelling) await apply(await billing.setCancelAtPeriodEnd(sub, false));
+        if (row.status !== "active" && row.status !== "past_due") return unavailableIn(row.status);
+        if (!cancelling) return unavailable();
+        await apply(await billing.setCancelAtPeriodEnd(sub, false));
         return done;
       case "preview_yearly": {
         const refusal = yearlyRefusal(row);
@@ -501,14 +528,15 @@ export async function runMembershipAction(db: Db, userId: string, action: Member
         return refused(400, "invalid_input");
     }
   } catch (e) {
-    console.error("[membership] action failed", action, owned.id, (e as Error).message);
+    if (e instanceof DatabaseFailure) return failedWith(action, owned.id, e.message);
+    console.error("[membership] action failed at Stripe", action, owned.id, (e as Error).message);
     return refused(502, "stripe_failed");
   }
 }
 
 function yearlyRefusal(row: Pass): ActionResult | null {
-  if (row.status !== "active") return refused(409, "not_available", row.status === "past_due" ? "past_due" : row.status);
-  if (row.plan !== "monthly") return refused(409, "not_available", "not_monthly");
+  if (row.status !== "active") return unavailableIn(row.status);
+  if (row.plan !== "monthly") return unavailable("not_monthly");
   return null;
 }
 

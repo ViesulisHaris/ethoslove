@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type Stripe from "stripe";
-import { DAY_MS, iso } from "@/lib/commerce/db";
+import { DAY_MS, iso, type Db } from "@/lib/commerce/db";
 import {
   MEMBERSHIP_GRACE_MS,
   applyPendingSwitches,
@@ -477,6 +477,145 @@ describe("what an owner or a partner can do (POST /api/membership)", () => {
     fake.tables.couple_passes[0].provider = "stripe_subscription";
     vi.spyOn(console, "error").mockImplementation(() => {});
     expect(await act(OWNER, "cancel")).toMatchObject({ status: 502, body: { error: "stripe_failed" } });
+  });
+});
+
+describe("the answers of POST /api/membership are the contract's (docs/MEMBERSHIP.md 2.7)", () => {
+  const act = (userId: string, action: Parameters<typeof runMembershipAction>[2]) => runMembershipAction(fake.db, userId, action, { now: NOW, billing: stripeBilling(stripe.client) });
+  const REASONS = ["app_store", "pass", "cancelling", "past_due", "not_monthly", "not_yearly"];
+  const ACTIONS = ["cancel", "resume", "preview_yearly", "switch_to_yearly", "switch_to_monthly", "keep_plan", "leave", "remove_partner"] as const;
+  /** Every Stripe status a subscription can be in, with the row as the webhook left it. */
+  const STRIPE_STATES = [
+    { stripe: "active", row: "active" },
+    { stripe: "past_due", row: "past_due" },
+    { stripe: "incomplete", row: "incomplete" },
+    { stripe: "canceled", row: "active" },
+  ] as const;
+
+  beforeEach(() => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  /** The database, with the nth update of couple_passes failing (the ones before it go through). */
+  const failingUpdate = (n: number): Db => {
+    let count = 0;
+    return {
+      from: (table: string) => {
+        const query = fake.db.from(table as "couple_passes") as unknown as { update: (patch: unknown) => unknown };
+        if (table === "couple_passes") {
+          const update = query.update.bind(query);
+          query.update = (patch) => {
+            if (++count === n) fake.failNext("couple_passes", "update");
+            return update(patch);
+          };
+        }
+        return query;
+      },
+    } as unknown as Db;
+  };
+
+  it("refuses with 409 what the \"who, when\" column doesn't allow, and changes nothing", async () => {
+    seedSubscription({ plan: "yearly" });
+    stripe.addSubscription({ id: "sub_1", interval: "year", periodEnd: NOW + 20 * DAY_MS, metadata: { app: "ethos" } });
+    const before = row();
+    // Nothing pending to keep, nothing cancelled to resume, nobody to remove: no reason to give.
+    expect(await act(OWNER, "keep_plan")).toEqual({ status: 409, body: { error: "not_available" } });
+    expect(await act(OWNER, "resume")).toEqual({ status: 409, body: { error: "not_available" } });
+    expect(await act(OWNER, "remove_partner")).toEqual({ status: 409, body: { error: "not_available" } });
+    expect(row()).toMatchObject({ pending_plan: null, cancel_at_period_end: false, invite_code: before.invite_code });
+    expect(stripe.writes()).toEqual([]);
+  });
+
+  it("only ever gives one of the reasons the contract lists, whatever state the membership is in", async () => {
+    const seen = new Set<string>();
+    for (const provider of ["stripe_subscription", "stripe_pass", "app_store", "app_store_pass"] as const)
+      for (const state of STRIPE_STATES)
+        for (const plan of ["monthly", "yearly"] as const)
+          for (const cancelling of [false, true])
+            for (const pending of [null, "monthly"] as const)
+              for (const action of ACTIONS) {
+                fake = new FakeDb({ profiles: [{ id: OWNER, email: "alex@x.co", name: "Alex", locale: "en" }] }, NOW);
+                stripe = new FakeStripe(() => fake.clock);
+                seedSubscription({ provider, plan, status: state.row, cancel_at_period_end: cancelling, pending_plan: pending, ...(state.row === "incomplete" ? { ends_at: iso(NOW - 10 * DAY_MS) } : {}) });
+                stripe.addSubscription({ id: "sub_1", status: state.stripe, interval: plan === "monthly" ? "month" : "year", periodEnd: NOW + 20 * DAY_MS, cancelAtPeriodEnd: cancelling, endedAt: state.stripe === "canceled" ? NOW : null, metadata: { app: "ethos" } });
+                const { status, body } = await act(OWNER, action);
+                expect([200, 402, 403, 404, 409], `${provider} ${state.stripe} ${plan} ${action}`).toContain(status);
+                if ("reason" in body && body.reason) seen.add(body.reason);
+                if ("reason" in body && body.reason) expect(REASONS, `${provider} ${state.stripe} ${plan} ${action}`).toContain(body.reason);
+              }
+    // Each of them is reachable.
+    expect([...seen].sort()).toEqual([...REASONS].sort());
+  });
+
+  it("tells a member whose first payment isn't through to sort the payment out, and a membership that has just ended nothing", async () => {
+    seedSubscription({ status: "incomplete", ends_at: iso(NOW - 10 * DAY_MS) });
+    stripe.addSubscription({ id: "sub_1", status: "incomplete", interval: "month", metadata: { app: "ethos" } });
+    expect(await act(OWNER, "cancel")).toEqual({ status: 409, body: { error: "not_available", reason: "past_due" } });
+    expect(await act(OWNER, "preview_yearly")).toEqual({ status: 409, body: { error: "not_available", reason: "past_due" } });
+
+    // Stripe says it ended (the webhook hasn't come yet): the row learns it, and there is nothing to do.
+    fake = new FakeDb({}, NOW);
+    stripe = new FakeStripe(() => fake.clock);
+    seedSubscription();
+    stripe.addSubscription({ id: "sub_1", status: "canceled", interval: "month", endedAt: NOW - DAY_MS, metadata: { app: "ethos" } });
+    expect(await act(OWNER, "cancel")).toEqual({ status: 409, body: { error: "not_available" } });
+    expect(row().status).toBe("ended");
+  });
+
+  it("resumes a renewal Stripe is still collecting that was set to cancel: cancelling, not ended", async () => {
+    seedSubscription({ status: "past_due", cancel_at_period_end: true });
+    stripe.addSubscription({ id: "sub_1", status: "past_due", interval: "month", cancelAtPeriodEnd: true, metadata: { app: "ethos" } });
+    expect(await act(OWNER, "resume")).toEqual({ status: 200, body: { ok: true, membership: null } });
+    expect(stripe.subscriptions.sub_1.cancel_at_period_end).toBe(false);
+    expect(row()).toMatchObject({ status: "past_due", cancel_at_period_end: false });
+  });
+
+  it("answers a database error with 500 failed, never as Stripe's failure", async () => {
+    seedSubscription({ plan: "yearly", partner_user_id: PARTNER, pending_plan: "monthly" });
+    stripe.addSubscription({ id: "sub_1", interval: "year", periodEnd: NOW + 20 * DAY_MS, metadata: { app: "ethos" } });
+    const failed = { status: 500, body: { error: "failed" } };
+    fake.failNext("couple_passes", "update");
+    expect(await act(OWNER, "keep_plan")).toEqual(failed);
+    expect(row().pending_plan).toBe("monthly");
+    fake.failNext("couple_passes", "update");
+    expect(await act(PARTNER, "leave")).toEqual(failed);
+    fake.failNext("couple_passes", "update");
+    expect(await act(OWNER, "remove_partner")).toEqual(failed);
+    // Stripe did cancel it; writing that down failed (the second write: the first is the state read
+    // before acting). The webhook brings the row up to date.
+    expect(await runMembershipAction(failingUpdate(2), OWNER, "cancel", { now: NOW, billing: stripeBilling(stripe.client) })).toEqual(failed);
+    expect(stripe.subscriptions.sub_1.cancel_at_period_end).toBe(true);
+    fake.tables.couple_passes[0].pending_plan = null;
+    fake.tables.couple_passes[0].cancel_at_period_end = false;
+    fake.failNext("couple_passes", "update");
+    expect(await act(OWNER, "switch_to_monthly")).toEqual(failed);
+    // Stripe itself failing is the only 502.
+    stripe.failing.add("subscriptions.retrieve");
+    expect(await act(OWNER, "cancel")).toEqual({ status: 502, body: { error: "stripe_failed" } });
+  });
+
+  it("answers the same through the route, with no reason where there is none", async () => {
+    routes.db = fake.db;
+    routes.stripe = stripe.client;
+    routes.user = { id: OWNER };
+    seedSubscription();
+    stripe.addSubscription({ id: "sub_1", interval: "month", periodEnd: NOW + 20 * DAY_MS, metadata: { app: "ethos" } });
+    const post = (body: unknown) => membershipRoute.POST(new NextRequest("https://ethos.test/api/membership", { method: "POST", body: JSON.stringify(body) }));
+    const kept = await post({ action: "keep_plan" });
+    expect(kept.status).toBe(409);
+    expect(await kept.json()).toEqual({ error: "not_available" });
+    const failed = await post({ action: "switch_to_monthly" });
+    expect(failed.status).toBe(409);
+    expect(await failed.json()).toEqual({ error: "not_available", reason: "not_yearly" });
+    fake.tables.couple_passes[0].plan = "yearly";
+    fake.failNext("couple_passes", "update");
+    const broken = await post({ action: "switch_to_monthly" });
+    expect(broken.status).toBe(500);
+    expect(await broken.json()).toEqual({ error: "failed" });
+    routes.db = null;
+    const unconfigured = await post({ action: "cancel" });
+    expect(unconfigured.status).toBe(503);
+    expect(await unconfigured.json()).toEqual({ error: "not_configured" });
   });
 });
 
