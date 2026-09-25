@@ -73,7 +73,10 @@ test.describe("the pricing page, signed in", () => {
     await expect(card).toContainText("You have Ethos for Two");
     await expect(card).toContainText(`Monthly · renews on ${longDate(summary.periodEnd as string)}`);
     await expect(card.getByRole("link", { name: "Manage" })).toHaveAttribute("href", "/account#for-two");
+    // Nothing to choose or pay for: no plans, no price, no button.
     await expect(page.getByTestId("buy-membership")).toHaveCount(0);
+    await expect(page.getByTestId("plan-toggle")).toHaveCount(0);
+    await expect(page.getByTestId("membership-offer")).not.toContainText("€");
   });
 
   test("a partner is in on it, and isn't sold their own", async ({ page }) => {
