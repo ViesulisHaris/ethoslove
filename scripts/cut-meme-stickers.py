@@ -16,6 +16,11 @@ of by flood, for lace and doilies whose holes must stay holes).
 Needs Pillow only. src/templates/_shared/memes/catalogue.ts and _shared/collage/scraps.ts list the
 sizes. Leave out film, game and brand characters: the three meme templates ship these
 files to paying customers.
+
+A sheet that is itself a finished collage (every sticker laid over torn paper, no flat ground to
+flood) goes in COLLAGE instead: a round thing is cut by its `circle` (centre and radius), anything
+else by colour, `keep` naming which pixels belong to it and `seeds` where it is. Sheets missing
+from the folder are skipped, so one new sheet can be cut without the rest to hand.
 """
 import sys, json, os
 from collections import deque
@@ -202,15 +207,75 @@ SCRAPS = {
         "doily-red": (1, None, 0, 0, True), "bow-gingham": (0, None, None, 0), "tag-tofrom": (2, None, None, 0), "label-ornate": (3, None, None, 0),
         "heart-damask": (8, None, 0, 0, True), "doily-pink": (9, None, 0, 0, True), "lace-red": (7, None, 0, 0, True),
     }),
+    # The owner's "love stickers" sheet: only the plain objects on it (a satin bow, two felt stars).
+    "59.jpg": (12, {
+        "bow-satin-blush": (1, None, 1, 2), "star-felt-plump": (24, None, 1, 0), "star-felt-tilted": (30, None, 1, 0),
+    }),
 }
+
+def pinks_and_greens(r, g, b):
+    """Pink petals and green leaves, and not the pale pink paper they are stuck on."""
+    hi, lo = max(r, g, b), min(r, g, b)
+    sat = (hi - lo) / hi if hi else 0
+    return (g > r + 6 and g > b + 4 and sat > 0.12) or (r - g > 45 and sat > 0.2)
+
+KEEP = {"pinks-and-greens": pinks_and_greens}
+
+# The owner's "happy birthday" collage (Digicam): the disco ball and the tulips. Its camera is a
+# branded one and its lily is a painting, so neither is cut; the envelope runs off the page.
+# `avoid`: corners of the box where the pink paper is as pink as a petal.
+COLLAGE = {
+    "58.jpg": {
+        "disco-ball-silver": {"circle": (511.8, 235.3, 51.8), "edge": 2},
+        "tulips-pink": {"box": (175, 1000, 420, 1300), "seeds": [(300, 1150), (395, 1067)], "keep": "pinks-and-greens", "avoid": [(352, 1218, 420, 1300), (352, 1000, 420, 1013)], "close": 4, "edge": 2},
+    },
+}
+
+def collage_segment(path, pick):
+    """The one sticker `pick` names, as a labelled mask `cut` can take: blob 1, on no ground."""
+    im = Image.open(path).convert("RGB"); W, H = im.size; px = im.load()
+    label = [0] * (W * H)
+    if "circle" in pick:
+        cx, cy, r = pick["circle"]
+        box = [int(cx - r) - 1, int(cy - r) - 1, int(cx + r) + 2, int(cy + r) + 2]
+        for y in range(box[1], box[3]):
+            for x in range(box[0], box[2]):
+                if (x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r: label[y * W + x] = 1
+    else:
+        box = list(pick["box"]); keep = KEEP[pick["keep"]]; avoid = pick.get("avoid", [])
+        x0, y0, x1, y1 = box; w = x1 - x0; h = y1 - y0
+        m = Image.new("L", (w, h), 0); mp = m.load()
+        for y in range(h):
+            for x in range(w):
+                X, Y = x0 + x, y0 + y
+                if keep(*px[X, Y]) and not any(a <= X < c and b <= Y < d for a, b, c, d in avoid): mp[x, y] = 255
+        # Seal the petal edges a highlight broke before choosing what is joined to the seeds.
+        c = pick.get("close", 3)
+        m = m.filter(ImageFilter.MaxFilter(c * 2 + 1)).filter(ImageFilter.MinFilter(c * 2 + 1)); mp = m.load()
+        seen = bytearray(w * h); q = deque()
+        for sx, sy in pick["seeds"]:
+            i = (sy - y0) * w + (sx - x0); seen[i] = 1; q.append((sx - x0, sy - y0))
+        while q:
+            x, y = q.popleft(); label[(y + y0) * W + x + x0] = 1
+            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and mp[nx, ny] > 127:
+                    seen[ny * w + nx] = 1; q.append((nx, ny))
+    return im, label, {"id": 1, "box": box}, (255, 255, 255), lambda x, y: False
 
 CATALOGUE = SCRAPS if SET == "scraps" else MEMES
 sizes = {}
 for sheet, (tol, picks) in CATALOGUE.items():
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
     im, label, comps, bg, is_bg = segment(f"{IMG}/{sheet}", tol)
     for name, pick in picks.items():
         k, box = pick[0], pick[1]
         sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False)
+        print(name, sizes[name])
+for sheet, picks in (COLLAGE if SET == "scraps" else {}).items():
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
+    for name, pick in picks.items():
+        im, label, comp, bg, is_bg = collage_segment(f"{IMG}/{sheet}", pick)
+        sizes[name] = cut(im, label, comp, bg, is_bg, name, None, 0 if "circle" in pick else 2, pick.get("edge"))
         print(name, sizes[name])
 json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
 

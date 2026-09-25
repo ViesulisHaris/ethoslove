@@ -5,7 +5,7 @@
  * changes. No film, game, music or brand artwork is in the set.
  */
 export type ScrapKind = "pink-flower" | "blue-flower" | "kiss" | "soft" | "lace" | "pressed" | "trinket";
-export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "heart-anatomical" | "heart-damask" | "heart-print" | "heart-print-pink" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-couple" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "tag-tofrom" | "teddy" | "wax-seal";
+export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "bow-satin-blush" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "disco-ball-silver" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "heart-anatomical" | "heart-damask" | "heart-print" | "heart-print-pink" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-couple" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "star-felt-plump" | "star-felt-tilted" | "tag-tofrom" | "teddy" | "tulips-pink" | "wax-seal";
 export type ScrapInfo = { id: ScrapId; w: number; h: number; kind: ScrapKind };
 
 export const SCRAPS: Record<ScrapId, ScrapInfo> = {
@@ -23,10 +23,12 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "blue-velvet": { id: "blue-velvet", w: 454, h: 428, kind: "blue-flower" },
   "bow-gingham": { id: "bow-gingham", w: 506, h: 474, kind: "trinket" },
   "bow-red": { id: "bow-red", w: 146, h: 172, kind: "trinket" },
+  "bow-satin-blush": { id: "bow-satin-blush", w: 232, h: 206, kind: "trinket" },
   "cats-cuddle": { id: "cats-cuddle", w: 526, h: 486, kind: "soft" },
   "cats-kiss": { id: "cats-kiss", w: 354, h: 602, kind: "soft" },
   "cats-nose": { id: "cats-nose", w: 412, h: 518, kind: "soft" },
   "columbine": { id: "columbine", w: 336, h: 324, kind: "pink-flower" },
+  "disco-ball-silver": { id: "disco-ball-silver", w: 220, h: 218, kind: "trinket" },
   "doily-pink": { id: "doily-pink", w: 620, h: 644, kind: "lace" },
   "doily-red": { id: "doily-red", w: 804, h: 802, kind: "lace" },
   "dried-flowers": { id: "dried-flowers", w: 340, h: 568, kind: "pressed" },
@@ -60,8 +62,11 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "roses-kraft": { id: "roses-kraft", w: 558, h: 752, kind: "pressed" },
   "sakura": { id: "sakura", w: 438, h: 434, kind: "pink-flower" },
   "star-felt": { id: "star-felt", w: 176, h: 178, kind: "trinket" },
+  "star-felt-plump": { id: "star-felt-plump", w: 172, h: 176, kind: "trinket" },
+  "star-felt-tilted": { id: "star-felt-tilted", w: 176, h: 184, kind: "trinket" },
   "tag-tofrom": { id: "tag-tofrom", w: 536, h: 280, kind: "trinket" },
   "teddy": { id: "teddy", w: 498, h: 458, kind: "soft" },
+  "tulips-pink": { id: "tulips-pink", w: 444, h: 570, kind: "pink-flower" },
   "wax-seal": { id: "wax-seal", w: 308, h: 300, kind: "trinket" },
 };
 

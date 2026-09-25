@@ -428,6 +428,24 @@ const SCRIPTS = {
     for (let i = 0; i < 3; i++) { await page.locator("[data-turn=next]").click({ force: true }).catch(() => {}); await page.waitForTimeout(2600); }
     return poster;
   },
+  digicam: async (page) => {
+    // The poster is the camera switched on, the first photo on its screen with the date in the
+    // corner; then the recording takes two pictures, skips to the last and prints the roll.
+    const power = page.getByRole("button", { name: /turn the camera on/i });
+    await power.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await power.click({ force: true });
+    await page.waitForFunction(() => [...document.querySelectorAll("button[aria-label^='Photo 1 of']")].some((b) => !b.disabled), null, { timeout: 20000 });
+    await page.waitForTimeout(700);
+    const poster = await page.screenshot();
+    const shutter = page.getByRole("button", { name: /take a picture/i });
+    for (let i = 0; i < 2; i++) { await shutter.click({ force: true }); await page.waitForTimeout(1300); }
+    for (let i = 0; i < 4; i++) { await page.getByRole("button", { name: /next photo/i }).click({ force: true }); await page.waitForTimeout(350); }
+    await page.waitForTimeout(500);
+    await shutter.click({ force: true });
+    await page.waitForTimeout(4200);
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);

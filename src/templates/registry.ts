@@ -49,6 +49,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "popup-card": () => import("./popup-card"),
   sketchbook: () => import("./sketchbook"),
   "pack-your-bags": () => import("./pack-your-bags"),
+  digicam: () => import("./digicam"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
