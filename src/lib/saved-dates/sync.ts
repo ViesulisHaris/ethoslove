@@ -60,23 +60,35 @@ const planOf = (saved: SavedDate): Plan | null => (saved.kind === "date" ? readP
 export type SaveAnswer = { ok: true; savedDate: SavedDate } | Failure;
 
 /**
- * After a PATCH. `currentKey` is the plan as it is now, which may have moved on while the request
- * was out: the link records what the server holds, so any difference is saved next.
+ * The plan a PATCH carried (`sent`) and the plan as it is when the answer comes back (`current`):
+ * they differ when more was typed while the request was out.
  */
+export type SaveKeys = { sent: string; current: string };
+
 const step = (link: SavedLink | null, rest: Partial<Omit<SyncStep, "link">> = {}): SyncStep => ({ link, plan: null, notice: null, retry: false, detached: null, ...rest });
 
 /** The date can't be saved to any more (read-only): unlinked, and the page shows the banner. */
 const readOnlyStep = (link: SavedLink) => step(null, { notice: { kind: "readOnly" }, detached: link.id });
 
-export function afterSave(link: SavedLink, currentKey: string, answer: SaveAnswer): SyncStep {
+/**
+ * After a PATCH. The plan may have moved on while the request was out: on success the link records
+ * what the server holds, so any difference is saved next.
+ */
+export function afterSave(link: SavedLink, keys: SaveKeys, answer: SaveAnswer): SyncStep {
   if (answer.ok) return step({ ...link, version: answer.savedDate.version, synced: planKey(answer.savedDate.data as Plan) });
   if (answer.error === "conflict" && answer.savedDate) {
     const server = planOf(answer.savedDate);
     if (!server) return step(null, { notice: { kind: "gone" } });
     const synced = planKey(server);
+    const linked = { ...link, version: answer.savedDate.version, synced };
     // The other phone saved the very same plan: nothing to show, nothing lost.
-    const same = synced === currentKey;
-    return step({ ...link, version: answer.savedDate.version, synced }, { plan: same ? null : server, notice: same ? null : { kind: "conflict", name: editorName(answer.savedDate) } });
+    if (synced === keys.current) return step(linked);
+    // Typed here after this save went out: replacing the plan now would wipe words that were never
+    // sent, and show a copy the other phone may already have saved over while this request was out.
+    // The link stays on the version those words were written on, so they go next and meet the
+    // conflict themselves, and the copy that answer carries, read later, is the one shown.
+    if (keys.current !== keys.sent && keys.current !== link.synced) return step(link);
+    return step(linked, { plan: server, notice: { kind: "conflict", name: editorName(answer.savedDate) } });
   }
   if (answer.error === "read_only") return readOnlyStep(link);
   if (answer.error === "not_found") return step(null, { notice: { kind: "gone" } });
@@ -128,5 +140,5 @@ export async function saveLinkedPlan(env: SaveEnv): Promise<{ step: SyncStep; se
   // Unlinked, or another date opened, while it was on its way: the answer is about a plan no longer here.
   const latest = env.readLink();
   if (!latest || latest.id !== linked.id) return null;
-  return { step: afterSave(latest, planKey(env.currentPlan()), answer), sentKey };
+  return { step: afterSave(latest, { sent: sentKey, current: planKey(env.currentPlan()) }, answer), sentKey };
 }

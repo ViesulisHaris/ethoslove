@@ -366,6 +366,34 @@ describe("editing: versions, read-only after a membership, the partner", () => {
     expect(await updateSavedDate(deps, row.id, { baseVersion: 1, data: plan(1) })).toMatchObject({ status: 409, body: { error: "conflict", savedDate: { version: 2 } } });
   });
 
+  it("answers a stale edit with the row as it is when answering, not as it was before the checks: the editor shows it as the latest", async () => {
+    const w = world();
+    const row = w.seed(ANA, { version: 2, data: plan(3) as unknown as SavedRow["data"] });
+    const deps = w.deps(ANA);
+    const isMember = deps.couple.isMember;
+    deps.couple = {
+      ...deps.couple,
+      isMember: async (userId) => {
+        // While this request checks who may edit (seconds on a slow server), the other phone saves again.
+        Object.assign(w.rows[0], { version: 3, data: plan(5) as unknown as SavedRow["data"], stops_count: 5 });
+        return isMember(userId);
+      },
+    };
+    const answer = await updateSavedDate(deps, row.id, { baseVersion: 1, data: plan(1) });
+    expect(answer).toMatchObject({ status: 409, body: { error: "conflict", savedDate: { version: 3, stopsCount: 5 } } });
+    // Deleted meanwhile (by its owner, a member, on another phone): there is no latest to show.
+    w.join(ANA);
+    const gone = w.deps(ANA);
+    gone.couple = {
+      ...gone.couple,
+      isMember: async (userId) => {
+        w.rows.splice(0, 1);
+        return isMember(userId);
+      },
+    };
+    expect(await updateSavedDate(gone, row.id, { baseVersion: 1, data: plan(1) })).toMatchObject({ status: 404, body: { error: "not_found" } });
+  });
+
   it("switches a reminder without a version, so it never conflicts with an edit or moves the date up the list", async () => {
     const w = world();
     const row = w.seed(ANA, { version: 7 });

@@ -283,8 +283,13 @@ export async function updateSavedDate(deps: SavedDeps, id: string, patch: PatchI
     if (saved.kind === "trip" && saved.data.tripId !== (isFields(row.data) ? row.data.tripId : undefined)) return refuse(400, "invalid_input");
   }
   const edits = saved !== null || patch.title !== undefined;
-  const conflict = (current: SavedRow) => ({ status: 409, body: { error: "conflict" as const, savedDate: full(current, ctx) } });
-  if (edits && patch.baseVersion !== row.version) return conflict(row);
+  // The row as it is now, not as it was read before the checks above (seconds, on a slow day): the
+  // editor shows this copy as "the latest", so one saved meanwhile must not come back as an older one.
+  const conflict = async () => {
+    const current = await deps.store.getVisible(id);
+    return current ? { status: 409, body: { error: "conflict" as const, savedDate: full(current, ctx) } } : refuse(404, "not_found");
+  };
+  if (edits && patch.baseVersion !== row.version) return conflict();
 
   const update: Updates<"saved_dates"> = {
     ...(saved && { data: saved.data as unknown as Json, ...deriveColumns(saved) }),
@@ -299,10 +304,7 @@ export async function updateSavedDate(deps: SavedDeps, id: string, patch: PatchI
     console.warn(`[saved-dates] edit refused by a check: ${written.detail ?? "unknown"}`);
     return refuse(400, "invalid_input");
   }
-  if (!written) {
-    const current = await deps.store.getVisible(id);
-    return current ? conflict(current) : refuse(404, "not_found");
-  }
+  if (!written) return conflict();
   // An edit only ever moves a row up the list, so what was editable a moment ago still is.
   if (row.owner_user_id === deps.viewerId && !ctx.member) ctx.recent.add(written.id);
   return { status: 200, body: { savedDate: full(written, ctx) } };

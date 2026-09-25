@@ -151,11 +151,13 @@ partner, who reads and edits them. Only a row's owner deletes it.
   opened into it (`/plan#s=<id>`) and linked (`ethos.dates.saved.v1`: id, version, the plan as last
   saved). While linked, every change is saved a moment later (`useSavedPlanSync`, on /plan and the
   map; one save is the pure `saveLinkedPlan` in `sync.ts`). A conflict takes the version saved
-  first and says who changed it; offline keeps the change as "Not saved yet" and tries again on the
-  next change, on focus or back online; a date gone is unlinked with a toast. A date that turns
-  **read-only while being edited** is unlinked, the plan stays on the device, and a banner in the
-  membership's dusk colours says why (`DetachedBanner`, `ethos.dates.saved.detached.v1`) until it is
-  closed or the plan is replaced.
+  first and says who changed it (the `409` carries the row as it is when answering, not as it was
+  read before the checks); anything typed while the losing save was out is not wiped: it is sent
+  next on the same version, and that answer's copy is the one shown. Offline keeps the change as
+  "Not saved yet" and tries again on the next change, on focus or back online; a date gone is
+  unlinked with a toast. A date that turns **read-only while being edited** is unlinked, the plan
+  stays on the device, and a banner in the membership's dusk colours says why (`DetachedBanner`,
+  `ethos.dates.saved.detached.v1`) until it is closed or the plan is replaced.
 - **When saving is unavailable** (0015 not applied, the database down) the website's requests carry
   `x-ethos-quiet: 1` and get `200 { unavailable: true }` instead of `503` (the app still gets the
   503), the tab remembers it for ten minutes (`availability.ts`), and "Save to my dates" and "Save

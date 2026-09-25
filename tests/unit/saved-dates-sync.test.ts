@@ -42,6 +42,8 @@ const saved = (p: Plan, over: Partial<SavedDate> = {}): SavedDate => ({
   ...over,
 });
 const failure = (error: Extract<SaveAnswer, { ok: false }>["error"], extra: Partial<Extract<SaveAnswer, { ok: false }>> = {}): SaveAnswer => ({ ok: false, status: 0, error, ...extra });
+/** A save's answer came back with the plan as it was sent, or (`now`) moved on since. */
+const keys = (sent: Plan, now: Plan = sent) => ({ sent: planKey(sent), current: planKey(now) });
 
 /** One device: its link, its plan, whether it's signed in, and what the server answers a PATCH. */
 function device(start: { plan: Plan; link: SavedLink | null; session?: boolean }, answer: (body: { baseVersion: number; data: Plan }) => SaveAnswer | Promise<SaveAnswer>) {
@@ -120,7 +122,7 @@ describe("autosave", () => {
     const result = await saveLinkedPlan(d.env);
     expect(result).toEqual({ step: { link, plan: null, notice: null, retry: true, detached: null }, sentKey: planKey(plan(3)) });
     // The server down, a limit, a session gone: the same.
-    for (const error of ["not_configured", "rate_limited", "unauthenticated", "invalid_input"] as const) expect(afterSave(link, planKey(plan(3)), failure(error)).retry).toBe(true);
+    for (const error of ["not_configured", "rate_limited", "unauthenticated", "invalid_input"] as const) expect(afterSave(link, keys(plan(3)), failure(error)).retry).toBe(true);
   });
 
   it("signed out, sends nothing and waits", async () => {
@@ -148,13 +150,47 @@ describe("conflicts: two phones, one date", () => {
   it("shows the version saved first, and says who changed it", () => {
     const mine = plan(3);
     const theirs = plan(5);
-    const step = afterSave(linkOf(plan(2)), planKey(mine), failure("conflict", { status: 409, savedDate: saved(theirs, { version: 6, lastEditedBy: person("Ben") }) }));
+    const step = afterSave(linkOf(plan(2)), keys(mine), failure("conflict", { status: 409, savedDate: saved(theirs, { version: 6, lastEditedBy: person("Ben") }) }));
     expect(step).toEqual({ link: linkOf(theirs, { version: 6 }), plan: theirs, notice: { kind: "conflict", name: "Ben" }, retry: false, detached: null });
+  });
+
+  it("never wipes what was typed while the losing save was out: that goes next, and the copy its answer carries is the one shown", async () => {
+    // Both phones on v2. Ana's "bring a jacket" is v3; Ben's first line, sent on v2, is answered 409
+    // (slowly), while Ben types a second line and Ana saves v4.
+    const v2 = plan(2, { note: "" });
+    const server = { version: 3, plan: plan(2, { note: "Ana: bring a jacket" }) };
+    const answer = (body: { baseVersion: number; data: Plan }): SaveAnswer =>
+      body.baseVersion === server.version ? { ok: true, savedDate: saved(body.data, { version: ++server.version, mine: false, lastEditedBy: person("Ben") }) } : failure("conflict", { status: 409, savedDate: saved(server.plan, { version: server.version, mine: false, owner: person("Ana"), lastEditedBy: person("Ana") }) });
+    const ben = device({ plan: plan(2, { note: "Ben: book a table" }), link: linkOf(v2, { version: 2, mine: false, ownerName: "Ana" }) }, (body) => {
+      const reply = answer(body);
+      ben.state.plan = plan(2, { note: "Ben again: dessert first" });
+      Object.assign(server, { version: 4, plan: plan(2, { note: "Ana again: 7pm not 6pm" }) });
+      return reply;
+    });
+    const first = await saveLinkedPlan(ben.env);
+    // Nothing replaced, nothing said: the link stays on v2, so the new line is still a change to send.
+    expect(first?.step).toEqual({ link: ben.state.link, plan: null, notice: null, retry: false, detached: null });
+    expect(ben.state.plan.note).toBe("Ben again: dessert first");
+    expect(isDirty(ben.state.plan, first!.step.link)).toBe(true);
+
+    const again = device({ plan: ben.state.plan, link: first!.step.link }, answer);
+    const second = await saveLinkedPlan(again.env);
+    expect(again.sent).toEqual([{ id: ID, body: { baseVersion: 2, data: plan(2, { note: "Ben again: dessert first" }) } }]);
+    // The first save wins and stays; Ben is told, and what he now sees is what the server holds.
+    expect(second?.step).toMatchObject({ plan: server.plan, link: { version: 4, synced: planKey(server.plan) }, notice: { kind: "conflict", name: "Ana" } });
+    expect(isDirty(server.plan, second!.step.link)).toBe(false);
+  });
+
+  it("takes the other copy at once when what changed here meanwhile was only undone back to the last save", () => {
+    const base = plan(2);
+    const theirs = plan(4);
+    const step = afterSave(linkOf(base), keys(plan(3), base), failure("conflict", { status: 409, savedDate: saved(theirs, { version: 6, lastEditedBy: person("Ben") }) }));
+    expect(step).toMatchObject({ plan: theirs, link: { version: 6 }, notice: { kind: "conflict", name: "Ben" } });
   });
 
   it("says nothing when the other phone saved the very same plan", () => {
     const same = plan(3);
-    const step = afterSave(linkOf(plan(2)), planKey(same), failure("conflict", { status: 409, savedDate: saved(same, { version: 6 }) }));
+    const step = afterSave(linkOf(plan(2)), keys(same), failure("conflict", { status: 409, savedDate: saved(same, { version: 6 }) }));
     expect(step).toMatchObject({ plan: null, notice: null, link: { version: 6 } });
   });
 
@@ -184,7 +220,7 @@ describe("conflicts: two phones, one date", () => {
 describe("a date that can't be saved to any more", () => {
   it("read-only while editing: unlinks, keeps the plan here, and leaves a banner (not only a toast)", () => {
     const link = linkOf(plan(2));
-    const step = afterSave(link, planKey(plan(3)), failure("read_only", { status: 403 }));
+    const step = afterSave(link, keys(plan(3)), failure("read_only", { status: 403 }));
     expect(step).toEqual({ link: null, plan: null, notice: { kind: "readOnly" }, retry: false, detached: ID });
   });
 
@@ -195,10 +231,10 @@ describe("a date that can't be saved to any more", () => {
 
   it("deleted (or no longer shared): unlinks and says so, with no banner to close", () => {
     const link = linkOf(plan(2));
-    expect(afterSave(link, planKey(plan(3)), failure("not_found", { status: 404 }))).toEqual({ link: null, plan: null, notice: { kind: "gone" }, retry: false, detached: null });
+    expect(afterSave(link, keys(plan(3)), failure("not_found", { status: 404 }))).toEqual({ link: null, plan: null, notice: { kind: "gone" }, retry: false, detached: null });
     expect(afterRefresh(link, planKey(plan(2)), failure("not_found", { status: 404 }))).toMatchObject({ link: null, notice: { kind: "gone" }, detached: null });
     // A conflict whose server copy is a trip, or unreadable, can't be shown in the plan.
-    expect(afterSave(link, planKey(plan(3)), failure("conflict", { savedDate: { ...saved(plan(2)), kind: "trip", data: { v: 1, tripId: "amalfi-coast" } } }))).toMatchObject({ link: null, notice: { kind: "gone" } });
+    expect(afterSave(link, keys(plan(3)), failure("conflict", { savedDate: { ...saved(plan(2)), kind: "trip", data: { v: 1, tripId: "amalfi-coast" } } }))).toMatchObject({ link: null, notice: { kind: "gone" } });
   });
 });
 
