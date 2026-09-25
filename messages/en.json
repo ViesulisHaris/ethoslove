@@ -2449,11 +2449,15 @@
       "yearlyRenews": "Yearly · renews on {date}",
       "ends": "Ends on {date}",
       "passRuns": "Your year runs until {date}",
-      "appStore": "Through the App Store",
-      "paymentFailed": "Payment failed: update your card",
-      "processing": "Your payment is still being confirmed",
+      "appStore": "Through the App Store · renews on {date}",
+      "appStoreEnds": "Through the App Store · ends on {date}",
+      "appStoreBilling": "Apple couldn't take your last payment: update it in your iPhone's Settings by {date}",
+      "paymentFailed": "Payment failed: update your card by {date}",
+      "paused": "Paused: your last payment didn't go through",
+      "processing": "Your first payment is still being confirmed",
       "partnerIn": "You're in on your partner's Ethos for Two",
-      "manage": "Manage"
+      "manage": "Manage",
+      "fix": "Update your card"
     },
     "compare": {
       "eyebrow": "Free and For Two",
@@ -2519,6 +2523,10 @@
       "appStore": "Through the App Store · renews on {date}",
       "appStoreEnds": "Through the App Store · ends on {date}",
       "appStoreManage": "Manage it in your iPhone's Settings → your name → Subscriptions.",
+      "appStoreOnly": "Through the App Store",
+      "appStoreBilling": "Apple couldn't take your last payment. Update your payment method in your iPhone's Settings → your name → Subscriptions by {date} to keep Ethos for Two.",
+      "processing": "Your first payment is being confirmed",
+      "processingNote": "Ethos for Two starts as soon as your bank confirms it, and we'll email you. There's nothing you need to do.",
       "partnerOf": "You're in on {name}'s Ethos for Two",
       "partnerOfNoName": "You're in on your partner's Ethos for Two",
       "partnerRenews": "For as long as it runs.",
@@ -2607,6 +2615,16 @@
       "noDate": "Send your partner the link below and it's on their phone too.",
       "noDateEmailed": "We've emailed you the link for your partner, and it's on your account page too.",
       "processing": "Your payment is being processed. Ethos for Two starts as soon as it's confirmed, and we'll email you.",
+      "arriving": {
+        "title": "Switching it on…",
+        "detail": "Your payment went through. We're switching Ethos for Two on for you both: it takes a few seconds.",
+        "wait": "Checking again in a moment…",
+        "late": "It's taking longer than usual. It'll be on your account page in a few minutes, and we'll email you."
+      },
+      "unreadable": {
+        "title": "Payment received.",
+        "detail": "We couldn't show your membership here just now. Your account page has everything, and so does the email we've sent you."
+      },
       "monthly": "Monthly",
       "yearly": "Yearly",
       "planFirst": "Plan your first date",

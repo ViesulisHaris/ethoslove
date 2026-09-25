@@ -24,9 +24,12 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/page": ["dates.where", "home.templates", "templates"],
   "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors", "money.recovery"],
   "(marketing)/pricing/layout": ["pricing", "membership", "money.plans", "money.account", "money.checkoutErrors", "money.recovery", "money.giftcard"],
-  "(marketing)/checkout/layout": ["money.success", "money.invite"],
+  // Ethos for Two's success page only needs its own lines in the browser (the one still switching on).
+  "(marketing)/checkout/layout": ["money.success", "money.invite", "membership.success"],
   "(marketing)/redeem/layout": ["auth", "money.redeem"],
   "(marketing)/for-two/layout": ["auth", "money.join"],
+  // Development only: the account's Ethos for Two section in each state, for screenshots and e2e.
+  "(marketing)/for-two/preview/page": ["membership.account", "money.invite"],
   "(marketing)/templates/layout": ["templates", "occasions"],
   "(marketing)/occasions/layout": ["templates", "occasions"],
   "(marketing)/dates/layout": ["dates", "affiliate", "savedDates"],

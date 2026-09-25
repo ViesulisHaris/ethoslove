@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowRight, CalendarCheck, CreditCard, Loader2, Lock } from "lucide-react";
+import { AlertTriangle, ArrowRight, CalendarCheck, CreditCard, Loader2, Lock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { track } from "@/lib/analytics/track";
@@ -123,7 +123,7 @@ export function MembershipOffer({
       data-testid="membership-offer"
       className={cn(
         "relative rounded-[28px] bg-white/[0.06] p-4 ring-1 ring-white/12 backdrop-blur-[2px] sm:p-6",
-        highlight && "ring-2 ring-starlight/70 shadow-[0_0_0_6px_rgba(245,207,107,0.12)]",
+        highlight && "shadow-starlight-halo ring-2 ring-starlight/70",
       )}
     >
       {subscriptions ? <PlanToggle plan={plan} onChange={setPlan} currency={currency} className="mt-2" /> : null}
@@ -141,18 +141,20 @@ export function MembershipOffer({
 
       <div className="mt-6">
         {member ? (
-          <div className="rounded-[20px] bg-dusk-deep/70 p-4 ring-1 ring-starlight/60 sm:p-5" data-testid="membership-member">
+          <div className="rounded-[20px] bg-dusk-deep/70 p-4 ring-1 ring-starlight/60 sm:p-5" data-testid="membership-member" data-state={state.kind === "member" ? state.line : state.kind}>
             <p className="flex items-center gap-2.5 text-[15px] font-semibold text-cream">
               <SealMark className="size-6" />
               {state.kind === "partner" ? tMember("partnerIn") : tMember("title")}
             </p>
             {state.kind === "member" ? (
-              <p className="mt-1.5 pl-[34px] text-[14px] text-moonlight/80">
-                {state.date ? tMember(state.line, { date: longDate(state.date) }) : tMember(state.line, { date: "" })}
+              // A payment to fix reads as one, in the horizon's warm colour, wherever it is fixed (a card here, Settings for Apple).
+              <p className={cn("mt-1.5 flex items-start gap-1.5 pl-[34px] text-[14px]", state.needsPayment ? "font-medium text-horizon" : "text-moonlight/80")} data-testid="membership-member-line">
+                {state.needsPayment ? <AlertTriangle aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" /> : null}
+                <span>{state.date ? tMember(state.line, { date: longDate(state.date) }) : tMember(state.line)}</span>
               </p>
             ) : null}
             <Link href="/account#for-two" className="mt-3 ml-[34px] inline-flex min-h-11 items-center gap-1.5 text-[14.5px] font-semibold text-starlight underline-offset-4 hover:underline">
-              {tMember("manage")}
+              {state.kind === "member" && state.needsPayment && state.line !== "appStoreBilling" ? tMember("fix") : tMember("manage")}
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>

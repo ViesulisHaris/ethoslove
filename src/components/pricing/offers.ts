@@ -1,6 +1,7 @@
 import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
 import type { MembershipSummary } from "@/lib/membership/types";
 import { BUMP, PRODUCTS, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { membershipState, needsPayment } from "@/components/membership/status";
 
 /**
  * What the paywall, the pricing page and the account page offer, worked out from the catalogue
@@ -198,38 +199,64 @@ export function membershipRequest(plan: MembershipPlan): Pick<CheckoutRequest, "
 export const PASS_RENEW_WITHIN_DAYS = 30;
 const DAY = 86_400_000;
 
+/** The member card's line on the pricing page, a key under membership.member. */
+export type HeroMemberLine =
+  | "monthlyRenews"
+  | "yearlyRenews"
+  | "ends"
+  | "passRuns"
+  | "appStore"
+  | "appStoreEnds"
+  | "appStoreBilling"
+  | "paymentFailed"
+  | "paused"
+  | "processing";
+
 /**
  * What the pricing page's Ethos for Two shows a signed-in visitor, from GET /api/entitlements'
- * membership: the offer to buy (nobody's member, or a subscription that has ended), a pass year to
- * renew (only while subscriptions are off, in its last 30 days or when the link asked for it: a
- * renewal is a year from its end), or what they already have. Pure, so each case is unit tested.
+ * membership read through membershipState (the account section reads it the same way): the offer
+ * to buy (nobody's member, or a membership that has ended), a pass year to renew (only while
+ * subscriptions are off, in its last 30 days or when the link asked for it: a renewal is a year
+ * from its end), or what they already have. Pure, so each case is unit tested.
  */
 export type HeroMemberState =
   | { kind: "buy" }
   | { kind: "renew"; endsAt: string }
   | { kind: "partner" }
-  | { kind: "member"; line: "monthlyRenews" | "yearlyRenews" | "ends" | "passRuns" | "appStore" | "paymentFailed" | "processing"; date: string | null };
+  | { kind: "member"; line: HeroMemberLine; date: string | null; needsPayment: boolean };
 
 export function heroMemberState(membership: MembershipSummary | null, context: { subscriptions: boolean; renewAsked: boolean; now: number }): HeroMemberState {
-  if (!membership) return { kind: "buy" };
-  if (!membership.isOwner) return membership.running ? { kind: "partner" } : { kind: "buy" };
-  if (!membership.running) {
-    if (membership.status === "past_due") return { kind: "member", line: "paymentFailed", date: null };
-    if (membership.status === "incomplete") return { kind: "member", line: "processing", date: null };
-    return { kind: "buy" };
+  const state = membershipState(membership);
+  const member = (line: HeroMemberLine, date: string | null = null): HeroMemberState => ({ kind: "member", line, date, needsPayment: needsPayment(state) });
+  switch (state.kind) {
+    case "none":
+      return { kind: "buy" };
+    case "partner":
+      return { kind: "partner" };
+    case "processing":
+      return member("processing");
+    case "renewing":
+      return member(state.plan === "monthly" ? "monthlyRenews" : "yearlyRenews", state.date);
+    case "cancelling":
+      return member("ends", state.date);
+    case "pastDue":
+      return member("paymentFailed", state.date);
+    case "paused":
+      return member("paused");
+    case "appStore":
+      return member("appStore", state.date);
+    case "appStoreEnding":
+      return member("appStoreEnds", state.date);
+    case "appStoreBilling":
+      return member("appStoreBilling", state.date);
+    case "pass": {
+      const lastDays = Date.parse(state.date) - context.now <= PASS_RENEW_WITHIN_DAYS * DAY;
+      // A pass bought on the web renews as a pass only while the pass is what's sold; with
+      // subscriptions on, a running pass can't be carried into one (docs/MEMBERSHIP.md 8).
+      if (state.web && !context.subscriptions && (lastDays || context.renewAsked)) return { kind: "renew", endsAt: state.date };
+      return member("passRuns", state.date);
+    }
   }
-  if (membership.status === "past_due") return { kind: "member", line: "paymentFailed", date: null };
-  if (membership.manage === "app_store") return { kind: "member", line: "appStore", date: membership.renews ? membership.periodEnd : membership.endsAt };
-  if (membership.provider === "stripe_pass" || membership.provider === "app_store_pass") {
-    const endsAt = membership.endsAt ?? membership.periodEnd;
-    const lastDays = Date.parse(endsAt) - context.now <= PASS_RENEW_WITHIN_DAYS * DAY;
-    // A pass bought on the web renews as a pass only while the pass is what's sold; with
-    // subscriptions on, a running pass can't be carried into one (docs/MEMBERSHIP.md 8).
-    if (membership.provider === "stripe_pass" && !context.subscriptions && (lastDays || context.renewAsked)) return { kind: "renew", endsAt };
-    return { kind: "member", line: "passRuns", date: endsAt };
-  }
-  if (!membership.renews) return { kind: "member", line: "ends", date: membership.endsAt ?? membership.periodEnd };
-  return { kind: "member", line: membership.plan === "monthly" ? "monthlyRenews" : "yearlyRenews", date: membership.periodEnd };
 }
 
 /** A partner invite from the link they were sent, pasted whole, or from the bare code. */

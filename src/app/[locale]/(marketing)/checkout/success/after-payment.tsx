@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, Copy, Loader2, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { track } from "@/lib/analytics/track";
@@ -11,6 +12,12 @@ const TRACKED_KEY = "ethos:purchase-tracked";
  * the page goes; short enough that the gift is still the next thing they see.
  */
 const CONTINUE_AFTER_MS = 900;
+/**
+ * Ethos for Two still being switched on when the page was drawn: the page asks the server again this
+ * often, this many times, then stops and says where it will be (the server already waited a moment).
+ */
+const ARRIVING_EVERY_MS = 2500;
+const ARRIVING_REFRESHES = 4;
 
 /**
  * purchase_completed, once per checkout session: reopening the page (the receipt email links back
@@ -88,5 +95,31 @@ export function GiftCardCode({ code, redeemUrl, redeemAt }: { code: string; rede
         </button>
       </div>
     </div>
+  );
+}
+
+/**
+ * The membership a paid checkout started isn't readable yet: ask the server again in a moment (the
+ * page re-renders in place, and this goes once it is there), a few times, then say where it will be
+ * rather than spin for ever. Never a reload loop: the count lives here, and stops.
+ */
+export function RefreshWhileArriving() {
+  const t = useTranslations("membership.success.arriving");
+  const router = useRouter();
+  const [asked, setAsked] = useState(0);
+  const done = asked >= ARRIVING_REFRESHES;
+  useEffect(() => {
+    if (done) return;
+    const id = window.setTimeout(() => {
+      setAsked((n) => n + 1);
+      router.refresh();
+    }, ARRIVING_EVERY_MS);
+    return () => window.clearTimeout(id);
+  }, [asked, done, router]);
+  return (
+    <p className="mt-6 flex max-w-md items-center justify-center gap-2 text-sm text-muted-foreground" role="status" data-testid="membership-arriving">
+      {done ? null : <Loader2 aria-hidden="true" className="size-4 shrink-0 animate-spin" />}
+      {done ? t("late") : t("wait")}
+    </p>
   );
 }

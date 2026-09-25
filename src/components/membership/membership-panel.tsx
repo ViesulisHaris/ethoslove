@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { AlertTriangle, ArrowRight, CreditCard, Loader2, RefreshCcw } from "lucide-react";
+import { AlertTriangle, ArrowRight, Clock, CreditCard, Loader2, RefreshCcw } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import type { MembershipAction, MembershipSummary, PortalFlow } from "@/lib/membership/types";
@@ -14,6 +14,7 @@ import { PASS_RENEW_WITHIN_DAYS } from "@/components/pricing/offers";
 import { SealMark } from "@/components/pricing/seal-mark";
 import { membershipErrorKey, openPortal, postMembership } from "./actions";
 import { ConfirmDialog, YearlyDialog } from "./membership-dialogs";
+import { membershipState, needsPayment } from "./status";
 
 type DialogKind = "cancel" | "yearly" | "monthly" | "leave" | "remove";
 const DAY = 86_400_000;
@@ -85,25 +86,42 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
     toast.error(t(`errors.${key}`));
   };
 
-  if (!membership) return <JoinCard currency={currency} subscriptions={subscriptions} />;
+  // One reading of the summary for every page (./status.ts): the pricing page's hero says the same.
+  const state = membershipState(membership);
+  if (!membership || state.kind === "none") return <JoinCard currency={currency} subscriptions={subscriptions} />;
 
   const owner = membership.isOwner;
   const stripe = membership.provider === "stripe_subscription";
-  const pass = membership.provider === "stripe_pass" || membership.provider === "app_store_pass";
-  const pastDue = membership.status === "past_due" || (stripe && !membership.running);
-  const endsAt = membership.endsAt ?? membership.periodEnd;
-  const daysLeft = Math.max(0, Math.ceil((Date.parse(endsAt) - now) / DAY));
+  const payment = needsPayment(state);
+  // A Stripe payment to fix: the renewal being retried, or one whose grace has run out.
+  const cardProblem = state.kind === "pastDue" || state.kind === "paused";
   const partnerName = membership.partner?.name ?? null;
+  const price = money(membershipAmount(membership.plan, currency));
+  const daysLeft = state.kind === "pass" ? Math.max(0, Math.ceil((Date.parse(state.date) - now) / DAY)) : null;
 
   const status = (() => {
-    if (!owner) return partnerName ? t("partnerOf", { name: partnerName }) : t("partnerOfNoName");
-    if (membership.provider === "app_store") return t(membership.renews ? "appStore" : "appStoreEnds", { date: longDate(membership.renews ? membership.periodEnd : endsAt) });
-    if (pass) return t("pass", { date: longDate(endsAt) });
-    const price = money(membershipAmount(membership.plan, currency));
-    // A renewal that didn't go through hasn't renewed anything: the plan, and the warning below says the rest.
-    if (pastDue) return t(membership.plan === "monthly" ? "monthlyPlan" : "yearlyPlan", { price });
-    if (!membership.renews) return t("ending", { date: longDate(endsAt) });
-    return t(membership.plan, { price, date: longDate(membership.periodEnd) });
+    switch (state.kind) {
+      case "partner":
+        return partnerName ? t("partnerOf", { name: partnerName }) : t("partnerOfNoName");
+      case "processing":
+        return t("processing");
+      case "renewing":
+        return t(state.plan, { price, date: longDate(state.date) });
+      case "cancelling":
+        return t("ending", { date: longDate(state.date) });
+      // A renewal that didn't go through hasn't renewed anything: the plan, and the warning below says the rest.
+      case "pastDue":
+      case "paused":
+        return t(state.plan === "monthly" ? "monthlyPlan" : "yearlyPlan", { price });
+      case "pass":
+        return t("pass", { date: longDate(state.date) });
+      case "appStore":
+        return t("appStore", { date: longDate(state.date) });
+      case "appStoreEnding":
+        return t("appStoreEnds", { date: longDate(state.date) });
+      case "appStoreBilling":
+        return t("appStoreOnly");
+    }
   })();
 
   const busyIcon = (key: MembershipAction | PortalFlow) => (busy === key ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null);
@@ -121,11 +139,17 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
         <p className="mt-3 font-display text-[1.45rem] leading-snug text-cream sm:text-[1.65rem]" data-testid="membership-status" data-app-hide={owner && stripe ? true : undefined}>
           {status}
         </p>
-        {!owner ? <p className="mt-1 text-[14.5px] text-moonlight/75">{membership.renews ? t("partnerRenews") : t("partnerUntil", { date: longDate(endsAt) })}</p> : null}
-        {owner && membership.provider === "app_store" ? <p className="mt-1.5 text-[14.5px] text-moonlight/75">{t("appStoreManage")}</p> : null}
+        {state.kind === "partner" ? <p className="mt-1 text-[14.5px] text-moonlight/75">{state.until ? t("partnerUntil", { date: longDate(state.until) }) : t("partnerRenews")}</p> : null}
+        {state.kind === "processing" ? (
+          <p className="mt-2 flex max-w-xl items-start gap-2 text-[14.5px] leading-snug text-moonlight/80" role="status" data-testid="membership-processing">
+            <Clock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-starlight" />
+            {t("processingNote")}
+          </p>
+        ) : null}
+        {state.kind === "appStore" || state.kind === "appStoreEnding" ? <p className="mt-1.5 text-[14.5px] text-moonlight/75">{t("appStoreManage")}</p> : null}
         {owner && stripe && inApp ? <p className="mt-2 text-[14.5px] text-moonlight/80">{t("inApp")}</p> : null}
 
-        {owner && stripe && membership.pendingPlan === "monthly" && !pastDue ? (
+        {state.kind === "renewing" && state.plan === "yearly" && membership.pendingPlan === "monthly" ? (
           <Row>
             <p className="min-w-0 flex-1 text-[14.5px] text-moonlight/85">{t("switching", { date: longDate(membership.periodEnd) })}</p>
             <button type="button" onClick={() => void act("keep_plan", t("done.keepPlan"))} disabled={busy !== null} className={cn(quiet, "border border-white/25 text-cream hover:bg-white/10")} data-app-hide>
@@ -135,7 +159,7 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
           </Row>
         ) : null}
 
-        {owner && stripe && !membership.renews && !pastDue ? (
+        {state.kind === "cancelling" ? (
           <Row>
             <RefreshCcw aria-hidden="true" className="size-4 shrink-0 text-starlight" />
             {/* The status above already says when it ends: this is the way back. */}
@@ -147,22 +171,27 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
           </Row>
         ) : null}
 
-        {owner && stripe && pastDue ? (
+        {payment ? (
           <div className="mt-5 flex flex-wrap items-center gap-3 rounded-2xl bg-horizon/15 p-4 ring-1 ring-horizon/40" role="status" data-testid="membership-past-due">
             <AlertTriangle aria-hidden="true" className="size-5 shrink-0 text-horizon" />
-            <p className="min-w-0 flex-1 basis-56 text-[14.5px] leading-snug text-cream">{membership.running ? t("pastDue", { date: longDate(endsAt) }) : t("paused")}</p>
-            <button type="button" onClick={() => void portal("update_card")} disabled={busy !== null} className={cn(quiet, "btn-star")} data-app-hide>
-              {busyIcon("update_card")}
-              <CreditCard aria-hidden="true" className="size-4" />
-              {t("updateCard")}
-            </button>
+            <p className="min-w-0 flex-1 basis-56 text-[14.5px] leading-snug text-cream">
+              {state.kind === "pastDue" ? t("pastDue", { date: longDate(state.date) }) : state.kind === "appStoreBilling" ? t("appStoreBilling", { date: longDate(state.date) }) : t("paused")}
+            </p>
+            {/* Apple's billing is fixed in iOS: there is no card of ours to update. */}
+            {cardProblem ? (
+              <button type="button" onClick={() => void portal("update_card")} disabled={busy !== null} className={cn(quiet, "btn-star")} data-app-hide>
+                {busyIcon("update_card")}
+                <CreditCard aria-hidden="true" className="size-4" />
+                {t("updateCard")}
+              </button>
+            ) : null}
           </div>
         ) : null}
 
-        {owner && pass && daysLeft <= PASS_RENEW_WITHIN_DAYS && membership.provider === "stripe_pass" ? (
+        {state.kind === "pass" && state.web && daysLeft !== null && daysLeft <= PASS_RENEW_WITHIN_DAYS ? (
           <Row>
             <p className="min-w-0 flex-1 basis-56 text-[14.5px] text-moonlight/85">
-              {subscriptions ? t("passCarryOn", { days: daysLeft, date: longDate(endsAt) }) : t("passEnding", { days: daysLeft })}
+              {subscriptions ? t("passCarryOn", { days: daysLeft, date: longDate(state.date) }) : t("passEnding", { days: daysLeft })}
             </p>
             <Link href={subscriptions ? "/pricing#for-two" : "/pricing?renew=pass#for-two"} className={cn(quiet, "btn-star")} data-app-hide>
               {subscriptions ? t("seePlans") : t("passRenew", { price: money(membershipAmount("yearly", currency)) })}
@@ -171,7 +200,8 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
           </Row>
         ) : null}
 
-        {owner ? (
+        {/* The invite waits until it runs: a partner can only join a membership that gives them something. */}
+        {owner && (membership.partnerJoined || (membership.inviteUrl && membership.running)) ? (
           <div className="mt-6 border-t border-white/10 pt-5">
             {membership.partnerJoined ? (
               <div className="flex flex-wrap items-center gap-3">
@@ -185,10 +215,10 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
               </div>
             ) : membership.inviteUrl ? (
               // It says what it is ("Your partner's invite link") and who to send it to.
-              <InviteLink url={membership.inviteUrl} tone="dark" className="max-w-md" />
+              <InviteLink url={membership.inviteUrl} tone="dusk" className="max-w-md" />
             ) : null}
           </div>
-        ) : (
+        ) : owner ? null : (
           <div className="mt-5">
             <button type="button" onClick={() => open("leave")} disabled={busy !== null} className={cn(quiet, "border border-white/25 text-cream hover:bg-white/10")} data-testid="membership-leave">
               {t("leave")}
@@ -203,17 +233,17 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
               <CreditCard aria-hidden="true" className="size-4" />
               {t("manageBilling")}
             </button>
-            {membership.canSwitchToYearly && !pastDue ? (
+            {membership.canSwitchToYearly && !payment ? (
               <button type="button" onClick={() => open("yearly")} disabled={busy !== null} className={cn(quiet, "border border-starlight/60 text-starlight hover:bg-starlight/10")} data-testid="membership-switch-yearly">
                 {t("switchYearly", { pct: yearlySavingPct(currency) })}
               </button>
             ) : null}
-            {membership.canSwitchToMonthly && !pastDue ? (
+            {membership.canSwitchToMonthly && !payment ? (
               <button type="button" onClick={() => open("monthly")} disabled={busy !== null} className={cn(quiet, "border border-white/25 text-cream hover:bg-white/10")} data-testid="membership-switch-monthly">
                 {t("switchMonthly")}
               </button>
             ) : null}
-            {membership.renews || pastDue ? (
+            {state.kind === "renewing" || cardProblem ? (
               <button type="button" onClick={() => open("cancel")} disabled={busy !== null} className={cn(quiet, "text-moonlight/85 underline-offset-4 hover:text-cream hover:underline")} data-testid="membership-cancel">
                 {t("cancel")}
               </button>
@@ -227,10 +257,10 @@ export function MembershipPanel({ membership: initial, currency, subscriptions }
         open={dialog === "cancel"}
         onOpenChange={(v) => open(v ? "cancel" : null)}
         title={t("dialogs.cancel.title")}
-        body={pastDue ? t("dialogs.cancel.bodyNow") : t("dialogs.cancel.body", { date: longDate(membership.periodEnd) })}
+        body={cardProblem ? t("dialogs.cancel.bodyNow") : t("dialogs.cancel.body", { date: longDate(membership.periodEnd) })}
         confirm={t("dialogs.cancel.confirm")}
         keep={t("dialogs.cancel.keep")}
-        onConfirm={() => void act("cancel", pastDue ? t("done.cancelNow") : t("done.cancel", { date: longDate(membership.periodEnd) }))}
+        onConfirm={() => void act("cancel", cardProblem ? t("done.cancelNow") : t("done.cancel", { date: longDate(membership.periodEnd) }))}
         busy={busy === "cancel"}
         danger
         error={dialogError}

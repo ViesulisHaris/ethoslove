@@ -22,9 +22,10 @@ const CUTOUTS = {
   "kiss-1": [214, 192],
   "kiss-red": [404, 262],
   "envelope-ps": [356, 432],
-  // Ethos for Two's night sky on /pricing: the gold felt star and the gift tag.
+  // Ethos for Two's night sky on /pricing: the gold felt star, the gift tag and the paper couple.
   "star-felt": [176, 178],
   "tag-tofrom": [536, 280],
+  "paper-couple": [348, 400],
 } as const;
 
 export type CutoutId = keyof typeof CUTOUTS;

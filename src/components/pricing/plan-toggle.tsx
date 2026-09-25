@@ -42,7 +42,7 @@ export function PlanToggle({ plan, onChange, currency, className }: { plan: Memb
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-1.5 left-1.5 w-[calc(50%-0.375rem)] rounded-[17px] bg-cream shadow-[0_10px_24px_-12px_rgba(6,8,30,0.9)] transition-transform duration-300 ease-(--ease-out-quint)"
+        className="pointer-events-none absolute inset-y-1.5 left-1.5 w-[calc(50%-0.375rem)] rounded-[17px] bg-cream shadow-dusk-thumb transition-transform duration-300 ease-(--ease-out-quint)"
         style={{ transform: plan === "yearly" ? "translateX(100%)" : "translateX(0)" }}
       />
       {PLANS.map((p) => {
@@ -69,7 +69,7 @@ export function PlanToggle({ plan, onChange, currency, className }: { plan: Memb
               {t(p === "monthly" ? "perMonth" : "perYear", { price: price(p) })}
             </span>
             {p === "yearly" ? (
-              <span className="absolute -top-3 right-2 rounded-full bg-starlight px-2 py-0.5 text-[11px] leading-4 font-bold whitespace-nowrap text-dusk-deep shadow-[0_6px_14px_-6px_rgba(245,207,107,0.8)] sm:right-3">
+              <span className="absolute -top-3 right-2 rounded-full bg-starlight px-2 py-0.5 text-[11px] leading-4 font-bold whitespace-nowrap text-dusk-deep shadow-starlight-badge sm:right-3">
                 {t("save", { pct: yearlySavingPct(currency) })}
               </span>
             ) : null}

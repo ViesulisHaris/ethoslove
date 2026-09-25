@@ -2449,11 +2449,15 @@
       "yearlyRenews": "Anual · se renueva el {date}",
       "ends": "Termina el {date}",
       "passRuns": "Tu año dura hasta el {date}",
-      "appStore": "A través de la App Store",
-      "paymentFailed": "El pago ha fallado: actualiza tu tarjeta",
-      "processing": "Tu pago aún se está confirmando",
+      "appStore": "A través de la App Store · se renueva el {date}",
+      "appStoreEnds": "A través de la App Store · termina el {date}",
+      "appStoreBilling": "Apple no ha podido cobrar tu último pago: actualízalo en los Ajustes de tu iPhone antes del {date}",
+      "paymentFailed": "El pago ha fallado: actualiza tu tarjeta antes del {date}",
+      "paused": "En pausa: tu último pago no se ha completado",
+      "processing": "Tu primer pago aún se está confirmando",
       "partnerIn": "Estás dentro del Ethos for Two de tu pareja",
-      "manage": "Gestionar"
+      "manage": "Gestionar",
+      "fix": "Actualizar la tarjeta"
     },
     "compare": {
       "eyebrow": "Gratis y For Two",
@@ -2519,6 +2523,10 @@
       "appStore": "A través de la App Store · se renueva el {date}",
       "appStoreEnds": "A través de la App Store · termina el {date}",
       "appStoreManage": "Gestiónalo en los Ajustes de tu iPhone → tu nombre → Suscripciones.",
+      "appStoreOnly": "A través de la App Store",
+      "appStoreBilling": "Apple no ha podido cobrar tu último pago. Actualiza tu método de pago en los Ajustes de tu iPhone → tu nombre → Suscripciones antes del {date} para conservar Ethos for Two.",
+      "processing": "Tu primer pago se está confirmando",
+      "processingNote": "Ethos for Two empieza en cuanto tu banco lo confirme, y te escribiremos. No tienes que hacer nada.",
       "partnerOf": "Estás dentro del Ethos for Two de {name}",
       "partnerOfNoName": "Estás dentro del Ethos for Two de tu pareja",
       "partnerRenews": "Mientras siga activo.",
@@ -2607,6 +2615,16 @@
       "noDate": "Envía a tu pareja el enlace de abajo y también lo tendrá en su móvil.",
       "noDateEmailed": "Te hemos enviado por email el enlace para tu pareja, y también lo tienes en tu cuenta.",
       "processing": "Tu pago se está procesando. Ethos for Two empieza en cuanto se confirme, y te escribiremos.",
+      "arriving": {
+        "title": "Activándolo…",
+        "detail": "Tu pago se ha completado. Estamos activando Ethos for Two para los dos: tarda unos segundos.",
+        "wait": "Volvemos a comprobarlo en un momento…",
+        "late": "Está tardando más de lo normal. En unos minutos lo verás en tu cuenta, y te escribiremos."
+      },
+      "unreadable": {
+        "title": "Pago recibido.",
+        "detail": "Ahora mismo no podemos mostrarte aquí tu suscripción. En tu cuenta lo tienes todo, y también en el email que te hemos enviado."
+      },
       "monthly": "Mensual",
       "yearly": "Anual",
       "planFirst": "Planea vuestra primera cita",

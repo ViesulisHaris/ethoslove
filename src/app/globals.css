@@ -398,16 +398,35 @@
   --brand-horizon: #f4a58f; /* the glow at the bottom edge (≈8.7:1 on dusk) */
   --brand-starlight: #f5cf6b; /* the membership's buttons and accents (≈11:1 on dusk) */
   --brand-starlight-deep: #e3b54c;
+  --brand-starlight-soft: #fbe39c; /* the lit edge of the gold */
+  --brand-dusk-glow: #6258be; /* the violet the sky keeps in its top corner */
+  --brand-dusk-night: #05061a; /* what things laid on the sky cast: the night, never black */
+  --brand-photo-paper: #fffdf8; /* a polaroid's white under the stars */
 }
 
 @theme inline {
   --color-dusk: var(--brand-dusk);
   --color-dusk-deep: var(--brand-dusk-deep);
   --color-dusk-raised: var(--brand-dusk-raised);
+  --color-dusk-night: var(--brand-dusk-night);
   --color-moonlight: var(--brand-moonlight);
   --color-horizon: var(--brand-horizon);
   --color-starlight: var(--brand-starlight);
   --color-starlight-deep: var(--brand-starlight-deep);
+  --color-photo-paper: var(--brand-photo-paper);
+
+  /* Shadows on the dusk, tinted with the night so a card lifts off the sky instead of greying it.
+     The collage's are sized in its own width (cqw), so they scale with it from a phone to a desk. */
+  --shadow-dusk-photo: 0 4cqw 7cqw -3cqw color-mix(in oklab, var(--brand-dusk-night) 75%, transparent);
+  --shadow-dusk-poster: 0 3cqw 5cqw -2cqw color-mix(in oklab, var(--brand-dusk-night) 80%, transparent);
+  --shadow-dusk-label: 0 1cqw 3cqw -1cqw color-mix(in oklab, var(--brand-dusk-night) 60%, transparent);
+  --shadow-dusk-thumb: 0 10px 24px -12px color-mix(in oklab, var(--brand-dusk-night) 90%, transparent);
+  --shadow-dusk-seal: 0 12px 30px -14px color-mix(in oklab, var(--brand-dusk) 90%, transparent);
+  --shadow-starlight-badge: 0 6px 14px -6px color-mix(in oklab, var(--brand-starlight) 80%, transparent);
+  /* The offer a link sent someone to: a soft gold halo outside its ring. */
+  --shadow-starlight-halo: 0 0 0 6px color-mix(in oklab, var(--brand-starlight) 12%, transparent);
+  --drop-shadow-dusk-scrap: 0 1cqw 1.5cqw color-mix(in oklab, var(--brand-dusk-night) 55%, transparent);
+  --drop-shadow-dusk-tag: 0 1.5cqw 2cqw color-mix(in oklab, var(--brand-dusk-night) 60%, transparent);
 }
 
 /* The sky: indigo from the top and a soft horizon rising from the bottom edge. No stars in it: a
@@ -416,9 +435,14 @@
 @utility bg-dusk-sky {
   background-color: var(--brand-dusk);
   background-image:
-    radial-gradient(75% 42% at 50% 112%, rgba(244, 165, 143, 0.5) 0%, rgba(244, 165, 143, 0.16) 48%, transparent 78%),
-    radial-gradient(60% 50% at 88% -6%, rgba(98, 88, 190, 0.34) 0%, transparent 72%),
-    linear-gradient(180deg, var(--brand-dusk-deep) 0%, var(--brand-dusk) 58%, #262a5c 100%);
+    radial-gradient(
+      75% 42% at 50% 112%,
+      color-mix(in oklab, var(--brand-horizon) 50%, transparent) 0%,
+      color-mix(in oklab, var(--brand-horizon) 16%, transparent) 48%,
+      transparent 78%
+    ),
+    radial-gradient(60% 50% at 88% -6%, color-mix(in oklab, var(--brand-dusk-glow) 34%, transparent) 0%, transparent 72%),
+    linear-gradient(180deg, var(--brand-dusk-deep) 0%, var(--brand-dusk) 58%, var(--brand-dusk-raised) 100%);
 }
 /* Faint stars: one tile of dots, drawn once (no image to fetch), for an absolutely placed layer. */
 @utility dusk-stars {
@@ -426,9 +450,11 @@
 }
 /* The membership's one button: starlight, with dusk type (≈12:1). Moves like btn-rose (below). */
 @utility btn-star {
-  background-image: linear-gradient(135deg, #fbe39c 0%, var(--brand-starlight) 42%, var(--brand-starlight-deep) 100%);
+  background-image: linear-gradient(135deg, var(--brand-starlight-soft) 0%, var(--brand-starlight) 42%, var(--brand-starlight-deep) 100%);
   color: var(--brand-dusk-deep);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 16px 34px -16px rgba(245, 207, 107, 0.7);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--brand-photo-paper) 60%, transparent) inset,
+    0 16px 34px -16px color-mix(in oklab, var(--brand-starlight) 70%, transparent);
 }
 
 /* The -webkit- line goes first in every glass utility: Lightning CSS (Tailwind's minifier) treats

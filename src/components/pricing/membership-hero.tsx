@@ -96,7 +96,7 @@ export async function MembershipHero({
           <MembershipArt />
         </div>
       </div>
-      <TornEdge from="transparent" to="var(--brand-paper)" fibre="rgba(255,255,255,0.35)" />
+      <TornEdge from="transparent" to="var(--brand-paper)" fibre="color-mix(in oklab, var(--brand-moonlight) 35%, transparent)" />
     </section>
   );
 }
@@ -108,9 +108,10 @@ const POSTERS = ["birthday-cinema", "constellations", "bouquet"] as const;
  * What the membership is, shown with the site's own things rather than drawn: a phone open on My
  * dates (real pictures, real words in the page's language, the partner's initial on a card), the
  * planetarium from the dates ideas as a polaroid, three real template posters fanned out, the three
- * game packs' card backs, and a few scraps from the collage templates. Measured in the box's own
- * width (container units), so it is one composition from a phone to a wide screen and nothing moves
- * as the pictures arrive. Decorative as a whole: the list beside it says the same in words.
+ * game packs' card backs, and a few scraps from the collage templates: felt stars, the gift tag and
+ * the paper couple on the horizon. Measured in the box's own width (container units), so it is one
+ * composition from a phone to a wide screen and nothing moves as the pictures arrive. Decorative as
+ * a whole: the list beside it says the same in words.
  */
 async function MembershipArt() {
   const t = await getTranslations("membership.hero.art");
@@ -129,7 +130,7 @@ async function MembershipArt() {
       {/* The stars live round the picture, never behind words: a dot beside a word reads as a full stop. */}
       <div className="dusk-stars absolute -top-[14cqw] -right-[24cqw] -bottom-[12cqw] -left-[6cqw] [mask-image:radial-gradient(closest-side,#000_62%,transparent)]" />
       {/* the night out, as a polaroid */}
-      <figure className="absolute top-[7cqw] left-[1cqw] w-[45cqw] -rotate-[7deg] rounded-[1.2cqw] bg-[#fffdf8] p-[2cqw] pb-[1.4cqw] shadow-[0_4cqw_7cqw_-3cqw_rgba(4,5,20,0.75)]">
+      <figure className="absolute top-[7cqw] left-[1cqw] w-[45cqw] -rotate-[7deg] rounded-[1.2cqw] bg-photo-paper p-[2cqw] pb-[1.4cqw] shadow-dusk-photo">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={ideaImage("stars-and-planets")} alt="" width={960} height={720} loading="lazy" decoding="async" className="aspect-[5/4] w-full rounded-[0.5cqw] object-cover" />
         <figcaption className="mt-[1.2cqw] text-center font-hand text-[4.4cqw] leading-none text-dusk">{t("polaroid")}</figcaption>
@@ -147,11 +148,11 @@ async function MembershipArt() {
             height={1800}
             loading="lazy"
             decoding="async"
-            className="absolute top-0 w-[19.5cqw] rounded-[1.6cqw] object-cover shadow-[0_3cqw_5cqw_-2cqw_rgba(4,5,20,0.8)] ring-[0.5cqw] ring-white/90"
+            className="absolute top-0 w-[19.5cqw] rounded-[1.6cqw] object-cover shadow-dusk-poster ring-[0.5cqw] ring-photo-paper/90"
             style={{ left: `${i * 11}cqw`, rotate: `${[-12, -2, 9][i]}deg`, translate: `0 ${[1.5, 0, 2][i]}cqw`, zIndex: i === 1 ? 2 : 1 }}
           />
         ))}
-        <span className="absolute -bottom-[1cqw] left-[9cqw] z-10 rounded-full bg-starlight px-[2.2cqw] py-[0.9cqw] text-[2.5cqw] font-bold whitespace-nowrap text-dusk-deep shadow-[0_1cqw_3cqw_-1cqw_rgba(0,0,0,0.6)]">
+        <span className="absolute -bottom-[1cqw] left-[9cqw] z-10 rounded-full bg-starlight px-[2.2cqw] py-[0.9cqw] text-[2.5cqw] font-bold whitespace-nowrap text-dusk-deep shadow-dusk-label">
           {t("templates")}
         </span>
       </div>
@@ -190,7 +191,7 @@ async function MembershipArt() {
             </ul>
           </div>
         </PhoneFrame>
-        <Cutout id="tag-tofrom" className="absolute -top-[2cqw] -right-[3cqw] w-[16cqw] rotate-[18deg] drop-shadow-[0_1.5cqw_2cqw_rgba(0,0,0,0.45)]" />
+        <Cutout id="tag-tofrom" className="absolute -top-[2cqw] -right-[3cqw] w-[16cqw] rotate-[18deg] drop-shadow-dusk-tag" />
       </div>
 
       {/* every pack: the three packs' card backs */}
@@ -200,15 +201,18 @@ async function MembershipArt() {
             <PlayingCard faceDown back={tone} radius={8} className="aspect-[5/7] w-full" />
           </div>
         ))}
-        <span className="absolute -bottom-[1.4cqw] left-[6cqw] z-10 rounded-full bg-starlight px-[2.2cqw] py-[0.9cqw] text-[2.5cqw] font-bold whitespace-nowrap text-dusk-deep shadow-[0_1cqw_3cqw_-1cqw_rgba(0,0,0,0.6)]">
+        <span className="absolute -bottom-[1.4cqw] left-[6cqw] z-10 rounded-full bg-starlight px-[2.2cqw] py-[0.9cqw] text-[2.5cqw] font-bold whitespace-nowrap text-dusk-deep shadow-dusk-label">
           {t("packs")}
         </span>
       </div>
 
+      {/* the two of them, cut from an old recipe page, standing on the horizon looking up */}
+      <Cutout id="paper-couple" className="absolute -bottom-[1cqw] left-[40cqw] z-30 w-[15.5cqw] -rotate-[3deg] drop-shadow-dusk-tag" />
+
       {/* scraps: gold felt stars in the sky */}
-      <Cutout id="star-felt" className="absolute top-[0cqw] left-[40cqw] w-[7cqw] -rotate-[14deg] drop-shadow-[0_1cqw_1.5cqw_rgba(0,0,0,0.4)]" />
-      <Cutout id="star-felt" className="absolute top-[52cqw] left-[1cqw] w-[4.5cqw] rotate-[12deg] opacity-90 drop-shadow-[0_1cqw_1.5cqw_rgba(0,0,0,0.4)]" />
-      <Cutout id="star-felt" className="absolute top-[58cqw] right-[0cqw] w-[4cqw] rotate-[24deg] opacity-80 drop-shadow-[0_1cqw_1.5cqw_rgba(0,0,0,0.4)]" />
+      <Cutout id="star-felt" className="absolute top-[0cqw] left-[40cqw] w-[7cqw] -rotate-[14deg] drop-shadow-dusk-scrap" />
+      <Cutout id="star-felt" className="absolute top-[52cqw] left-[1cqw] w-[4.5cqw] rotate-[12deg] opacity-90 drop-shadow-dusk-scrap" />
+      <Cutout id="star-felt" className="absolute top-[58cqw] right-[0cqw] w-[4cqw] rotate-[24deg] opacity-80 drop-shadow-dusk-scrap" />
     </div>
   );
 }

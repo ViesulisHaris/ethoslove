@@ -7,11 +7,11 @@ import { accountCreatedByCheckout, fulfilCheckoutSession, readSession, sessionUs
 import { redeemUrl } from "@/lib/commerce/db";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import type { MembershipPlan } from "@/lib/pricing/products";
 import { Button } from "@/components/ui/button";
 import { InviteLink } from "@/components/pricing/invite-link";
 import { purchaseOutcome, safeReturnPath } from "@/components/pricing/offers";
-import { AutoContinue, GiftCardCode, TrackPurchase } from "./after-payment";
+import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
+import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -97,29 +97,33 @@ export default async function CheckoutSuccessPage({
     if (data) pass = { endsAt: data.ends_at, partnerJoined: Boolean(data.partner_user_id) };
   }
   // Ethos for Two as a subscription: the row this checkout started, read by purchase the same way,
-  // for the plan and the day it renews. One still "incomplete" (the bank is confirming the first
-  // payment) grants nothing yet, so the page says it's on its way rather than that it's on.
-  let membership: { plan: MembershipPlan; renewsOn: string | null; partnerJoined: boolean; confirmed: boolean } | null = null;
+  // for the plan and the day it renews (components/membership/success.ts). A bank still confirming
+  // the first payment, a row not written yet and a read that failed each say something different:
+  // only the first is a payment being processed.
+  const forTwo = sold?.product === "membership";
+  let started: StartedRead | null = null;
   if (paid && sold && outcome === "membership") {
     const admin = getSupabaseAdminClient();
-    const { data } = admin
-      ? await admin.from("couple_passes").select("plan, status, current_period_end, partner_user_id").eq("purchase_id", sold.purchaseId).maybeSingle()
-      : { data: null };
-    if (data) membership = { plan: data.plan, renewsOn: data.current_period_end, partnerJoined: Boolean(data.partner_user_id), confirmed: data.status !== "incomplete" };
+    const purchaseId = sold.purchaseId;
+    started = admin
+      ? await readStartedMembership(() => admin.from("couple_passes").select("plan, status, current_period_end, partner_user_id").eq("purchase_id", purchaseId).maybeSingle())
+      : { kind: "unreadable" };
   }
-  const forTwo = sold?.product === "membership";
-  // Paid for, but not running yet: a bank confirming a subscription's first payment.
-  const processing = forTwo && (state === "pending" || (paid && !membership?.confirmed));
+  const forTwoState = forTwo && (paid || state === "pending") ? membershipSuccess(state === "pending", started) : null;
+  const membership = forTwoState?.kind === "on" ? forTwoState : null;
+  const processing = forTwoState?.kind === "processing";
   const longDate = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
 
   const giftCardCode = mayReveal ? result?.giftCardCode : undefined;
   const invite =
-    mayReveal && paid && ((outcome === "pass" && pass && !pass.partnerJoined) || (outcome === "membership" && membership?.confirmed && !membership.partnerJoined))
+    mayReveal && paid && ((outcome === "pass" && pass && !pass.partnerJoined) || (outcome === "membership" && membership && !membership.partnerJoined))
       ? result?.passInviteUrl
       : undefined;
 
   const copy = (() => {
     if (processing) return { title: t("pending.title"), detail: tf("processing") };
+    if (forTwoState?.kind === "arriving") return { title: tf("arriving.title"), detail: tf("arriving.detail") };
+    if (forTwoState?.kind === "unreadable") return { title: tf("unreadable.title"), detail: tf("unreadable.detail") };
     if (!paid) return { title: t(`${state}.title`), detail: t(`${state}.detail`) };
     switch (outcome) {
       case "membership": {
@@ -156,10 +160,15 @@ export default async function CheckoutSuccessPage({
   return (
     <div className="container-narrow flex flex-col items-center py-24 text-center">
       {paid && sold && typeof session_id === "string" ? <TrackPurchase sessionId={session_id} product={sold.product} bump={sold.bump} /> : null}
-      {forTwo && !processing && paid ? (
+      {membership ? (
         // The membership's own colours (docs/MEMBERSHIP.md 4.1): a starlight check on the dusk.
-        <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-[0_12px_30px_-14px_rgba(23,26,63,0.9)] ring-4 ring-starlight/25" data-testid="membership-success">
+        <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid="membership-success">
           <Check aria-hidden="true" className="size-7 text-starlight" strokeWidth={2.6} />
+        </div>
+      ) : forTwoState && forTwoState.kind !== "processing" ? (
+        // Paid, and on its way or on the account page: the dusk seal, with the clock of a moment's wait.
+        <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid={`membership-${forTwoState.kind}`}>
+          <Clock aria-hidden="true" className="size-7 text-starlight" strokeWidth={2.4} />
         </div>
       ) : (
         <div className={state === "pending" || processing ? "grid size-16 place-items-center rounded-full bg-gold/15" : "grid size-16 place-items-center rounded-full bg-moss/10"}>
@@ -173,6 +182,7 @@ export default async function CheckoutSuccessPage({
         <GiftCardCode code={giftCardCode} redeemUrl={giftCardUrl.toString()} redeemAt={`${giftCardUrl.host}${giftCardUrl.pathname}`} />
       ) : null}
       {invite ? <InviteLink url={invite} className="mt-8 w-full max-w-sm text-left" /> : null}
+      {forTwoState?.kind === "arriving" ? <RefreshWhileArriving /> : null}
 
       {autoContinue ? <AutoContinue href={continueHref} /> : null}
       {member ? (

@@ -235,13 +235,17 @@ describe("Ethos for Two on the pricing page", () => {
   });
 
   it("tells a member what they have instead of selling it again", () => {
-    expect(heroMemberState(member(), ctx)).toEqual({ kind: "member", line: "monthlyRenews", date: iso(NOW + 20 * DAY) });
+    expect(heroMemberState(member(), ctx)).toEqual({ kind: "member", line: "monthlyRenews", date: iso(NOW + 20 * DAY), needsPayment: false });
     expect(heroMemberState(member({ plan: "yearly" }), ctx)).toMatchObject({ line: "yearlyRenews" });
-    expect(heroMemberState(member({ renews: false, endsAt: iso(NOW + 5 * DAY) }), ctx)).toEqual({ kind: "member", line: "ends", date: iso(NOW + 5 * DAY) });
-    expect(heroMemberState(member({ status: "past_due" }), ctx)).toEqual({ kind: "member", line: "paymentFailed", date: null });
-    expect(heroMemberState(member({ running: false, status: "past_due" }), ctx)).toMatchObject({ line: "paymentFailed" });
-    expect(heroMemberState(member({ running: false, status: "incomplete" }), ctx)).toMatchObject({ line: "processing" });
-    expect(heroMemberState(member({ provider: "app_store", manage: "app_store" }), ctx)).toMatchObject({ line: "appStore" });
+    expect(heroMemberState(member({ renews: false, endsAt: iso(NOW + 5 * DAY) }), ctx)).toEqual({ kind: "member", line: "ends", date: iso(NOW + 5 * DAY), needsPayment: false });
+    // A renewal being retried: the card, by the day the grace ends. Past it, paused.
+    expect(heroMemberState(member({ status: "past_due", renews: false, endsAt: iso(NOW + 5 * DAY) }), ctx)).toEqual({ kind: "member", line: "paymentFailed", date: iso(NOW + 5 * DAY), needsPayment: true });
+    expect(heroMemberState(member({ running: false, status: "past_due", renews: false }), ctx)).toMatchObject({ line: "paused", needsPayment: true });
+    // A first payment the bank is confirming is not a failure.
+    expect(heroMemberState(member({ running: false, status: "incomplete", renews: false }), ctx)).toMatchObject({ line: "processing", needsPayment: false });
+    expect(heroMemberState(member({ provider: "app_store", manage: "app_store" }), ctx)).toMatchObject({ line: "appStore", date: iso(NOW + 20 * DAY) });
+    // Apple's billing problem is Apple's: fixed in iOS, never "update your card" here.
+    expect(heroMemberState(member({ provider: "app_store", manage: "app_store", status: "past_due", renews: false, endsAt: iso(NOW + 3 * DAY) }), ctx)).toMatchObject({ line: "appStoreBilling", date: iso(NOW + 3 * DAY), needsPayment: true });
     expect(heroMemberState(member({ isOwner: false, manage: null }), ctx)).toEqual({ kind: "partner" });
   });
 
