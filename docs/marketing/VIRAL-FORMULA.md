@@ -991,6 +991,25 @@ object the comments can demand, and his last bubble asking for it with her name 
 There is no discount code any more (checkout takes none since the 24 September launch), so "what app"
 is answered with the name only. Older SCRIPT.md files that say "code LOVE" are out of date.
 
+### 182 to 189: the accusation opens, cheating on both sides
+
+After 176 was rewritten (the owner: "needs to be better like cheating/toxic/manipulative more"), the
+register got sharper: the FIRST bubble is her accusation (a scroll-stopper everyone has wanted to
+send), his crime is cheating-adjacent and he turns it on her ("u went through my phone", "ur jealous
+of a friendship"), and her confession is bigger and just as cheating-adjacent, so the room splits
+harder. Same shape, same rules: one demandable object, his last bubble asking for it with her name.
+
+| | Against him | Against her | The object | Last bubble |
+|---|---|---|---|---|
+| 182 | he saved her as "mike 🏋️" and blamed his mum, at 27. | he's saved as "marco 3" in her phone, and she won't say who marco 1 and 2 are. | who marco 1 and 2 are | "maya who are marco 1 and 2" |
+| 183 | "last active: today" on hinge, then it's her fault for seeing the notification. | she's had hinge since june and has been on three dates, and he knows one of them. | who she went on the dates with | "maya who did u go on the dates with" |
+| 184 | 214 photos of his ex in a hidden album, and "its not a competition". | since april she has been swapping his ex's photos in that album for photos of herself, a few a week, and he hasn't noticed. | how many are still the ex | "maya how many are still her" |
+| 185 | a 500-day snap streak with his ex that he won't end, "its just a streak". | since march she has been logging into his account every night and sending the ex her own snap right after his ceiling, and the ex has started replying. | what she has been sending the ex | "maya what have u been sending her" |
+| 186 | eight months in, he tells his best friend they're "not official" and calls asking about it weird. | her whole office has thought they're engaged since july: she wears a ring to work, and there's a date. | the wedding date | "maya when is the wedding" |
+| 187 | a year together, four car posts this month, and never her: "im just private". | she has run an 11k-follower fan account of him since february, and he follows it. | the fan account's name | "maya whats the account called" |
+| 188 | he said he was at his mum's; his location said the anchor; now her checking is the problem. | she was at the anchor too, three tables behind him all night, with someone he'd have seen if he looked up. | who she was with | "maya who were u with" |
+| 189 | chloe from work texts him goodnight at 11 every night, and she's the jealous one. | she has had a work husband since march: lunch every day, good morning every morning. | the work husband's name | "maya whats his name" |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

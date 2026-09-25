@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ur location says the anchor"
+        },
+        {
+          "from": "me",
+          "text": "u said ur mums"
+        },
+        {
+          "from": "them",
+          "text": "u check my location now?"
+        },
+        {
+          "from": "them",
+          "text": "i didnt want u to worry so i didnt say"
+        },
+        {
+          "from": "me",
+          "text": "worry about what marco"
+        },
+        {
+          "from": "them",
+          "text": "this. exactly this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this. exactly this"
+        },
+        {
+          "from": "me",
+          "text": "who were u with"
+        },
+        {
+          "from": "them",
+          "text": "the lads. and im not doing this at 1am. i made u this earlier, before u started"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (home soon)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Garden (something slow and patient, the opposite of the night at the anchor). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its lovely marco"
+        },
+        {
+          "from": "me",
+          "text": "i just want u to tell me where u are"
+        },
+        {
+          "from": "them",
+          "text": "and i want u to not check"
+        },
+        {
+          "from": "them",
+          "text": "we both want things maya"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i was at the anchor"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "3 tables behind u. all night. u didnt look up once"
+        },
+        {
+          "from": "them",
+          "text": "who were u with"
+        },
+        {
+          "from": "me",
+          "text": "u'd know if u looked up",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya who were u with"
+        }
+      ]
+    }
+  ]
+}
