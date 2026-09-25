@@ -137,24 +137,44 @@ export function useSavedLink(): SavedLink | null {
 const SAVE_AFTER_KEY = "ethos.saveAfterSignIn";
 const SAVE_AFTER_MS = 30 * 60 * 1000;
 
-export function rememberSaveAfterSignIn(what: string): void {
+/** A save waiting for the sign-in: what (`"plan"`, `"trip:<id>"`), and since when. */
+export type SaveAfterSignIn = { what: string; at: number };
+
+/** `at` is kept when a save that didn't get through is handed back, so the half hour still counts from the sign-in. */
+export function rememberSaveAfterSignIn(what: string, at = Date.now()): void {
   try {
-    window.localStorage.setItem(SAVE_AFTER_KEY, JSON.stringify({ what, at: Date.now() }));
+    window.localStorage.setItem(SAVE_AFTER_KEY, JSON.stringify({ what, at } satisfies SaveAfterSignIn));
   } catch {
     // Without storage it can't be remembered; they save by hand once they're back.
   }
 }
 
-/** What was waiting to be saved (`"plan"`, `"trip:<id>"`), taken so it happens once. */
-export function takeSaveAfterSignIn(what: (value: string) => boolean): string | null {
+/**
+ * What was waiting to be saved, taken so it happens once. A save that then doesn't get through
+ * (saving off for a moment, offline) is handed back with rememberSaveAfterSignIn(taken.what,
+ * taken.at), so it is tried again rather than lost.
+ */
+export function takeSaveAfterSignIn(what: (value: string) => boolean): SaveAfterSignIn | null {
   try {
     const raw = window.localStorage.getItem(SAVE_AFTER_KEY);
     if (!raw) return null;
     const value = JSON.parse(raw) as { what?: unknown; at?: unknown };
     if (typeof value.what !== "string" || !what(value.what)) return null;
     window.localStorage.removeItem(SAVE_AFTER_KEY);
-    return typeof value.at === "number" && Date.now() - value.at < SAVE_AFTER_MS ? value.what : null;
+    return typeof value.at === "number" && Date.now() - value.at < SAVE_AFTER_MS ? { what: value.what, at: value.at } : null;
   } catch {
     return null;
   }
 }
+
+/** Saved by hand meanwhile: nothing is waiting any more, so it can't save itself a second time later. */
+export function forgetSaveAfterSignIn(what: string): void {
+  takeSaveAfterSignIn((value) => value === what);
+}
+
+/**
+ * A save that didn't get through and is worth trying again as it was: the request never arrived,
+ * saving is off for the moment, or too many at once. Anything else is an answer (saved, the limit,
+ * signed out, a plan the server refuses) and is not repeated by itself.
+ */
+export const isPassingFailure = (error: string): boolean => error === "network" || error === "not_configured" || error === "rate_limited";

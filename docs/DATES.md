@@ -160,8 +160,12 @@ partner, who reads and edits them. Only a row's owner deletes it.
   `ethos.dates.saved.detached.v1`) until it is closed or the plan is replaced.
 - **When saving is unavailable** (0015 not applied, the database down) the website's requests carry
   `x-ethos-quiet: 1` and get `200 { unavailable: true }` instead of `503` (the app still gets the
-  503), the tab remembers it for ten minutes (`availability.ts`), and "Save to my dates" and "Save
-  trip" are not shown: no button that can only fail, and nothing in the console.
+  503), the tab remembers it (`availability.ts`: half a minute after one such answer, then two
+  minutes, then ten while they keep coming; any answer that works starts over, and the pages ask
+  again by themselves when a pause ends), and "Save to my dates" and "Save trip" are not shown: no
+  button that can only fail, and nothing in the console. A save left for after signing in waits for
+  the account's answer and is only used up by an answer: one that didn't get through (saving off,
+  offline, too many at once) is kept and saves itself once saving answers again.
 - **Members' extras**: the whole date in Google or Apple Maps (`src/lib/dates/maps-route.ts`, by
   coordinates, walked when every leg is within `WALK_KM`; free visitors see it locked), and an email
   the day before each saved date with a day (the second phase of `/api/cron/reminders`: members'

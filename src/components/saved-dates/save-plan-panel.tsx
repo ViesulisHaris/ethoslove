@@ -6,8 +6,9 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import type { Plan } from "@/lib/dates/plan";
+import { markSavingUnavailable } from "@/lib/saved-dates/availability";
 import { saveDate } from "@/lib/saved-dates/client";
-import { takeSaveAfterSignIn, writeLink, type SavedLink } from "@/lib/saved-dates/link";
+import { forgetSaveAfterSignIn, isPassingFailure, rememberSaveAfterSignIn, takeSaveAfterSignIn, writeLink, type SaveAfterSignIn, type SavedLink } from "@/lib/saved-dates/link";
 import { linkFor, type SyncStatus } from "@/lib/saved-dates/sync";
 import type { SavedDatesError, UpsellReason } from "@/lib/saved-dates/types";
 import { cn } from "@/lib/utils";
@@ -47,34 +48,44 @@ export function SavePlanPanel({
   const item = link ? list?.items.find((i) => i.id === link.id) : undefined;
   const remind = remindShown && remindShown.id === link?.id ? remindShown.remind : item?.remind;
 
-  const save = async () => {
+  /** `waiting`: the save left for after signing in, when this is it. */
+  const save = async (waiting: SaveAfterSignIn | null = null) => {
     if (account.status === "guest") return onSignIn();
     setSaving(true);
     setError(null);
     const res = await saveDate({ kind: "date", data: plan, title: defaultTitle });
     setSaving(false);
     if (res.ok) {
+      forgetSaveAfterSignIn("plan");
       writeLink(linkFor(res.savedDate));
       track("saved_date_saved", { kind: "date", member });
       account.reload();
       return;
+    }
+    if (waiting && isPassingFailure(res.error)) {
+      // It didn't get through: it waits for another go rather than being used up. Saving off for the
+      // moment hides the panel until saving answers again, and then it saves itself (the effect below).
+      rememberSaveAfterSignIn(waiting.what, waiting.at);
+      if (res.error === "not_configured") return markSavingUnavailable();
     }
     if (res.error === "limit_reached") return onUpsell("limit");
     if (res.error === "unauthenticated") return onSignIn();
     setError(res.error);
   };
 
-  // Back from signing in with the plan still to save: it saves itself, once (not while saving is off).
-  const signedIn = account.status !== "guest" && account.status !== "unavailable";
+  // Back from signing in with the plan still to save: it saves itself, once, when the account has
+  // answered (not while it is loading: an answer that saving is off, or no answer, leaves it waiting).
+  const ready = account.status === "ready";
   useEffect(() => {
-    if (!signedIn || link || plan.stops.length === 0) return;
+    if (!ready || link || plan.stops.length === 0) return;
     const timer = window.setTimeout(() => {
-      if (takeSaveAfterSignIn((what) => what === "plan")) void save();
+      const waiting = takeSaveAfterSignIn((what) => what === "plan");
+      if (waiting) void save(waiting);
     }, 0);
     return () => window.clearTimeout(timer);
-    // Only the moment a session appears: `save` is a new function every render.
+    // Only the moment the account's answer arrives: `save` is a new function every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signedIn]);
+  }, [ready]);
 
   // Saving is off right now (0015 not applied, the database down): no button that can only fail.
   if (!link && account.status === "unavailable") return null;

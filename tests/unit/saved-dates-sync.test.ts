@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Plan } from "@/lib/dates/plan";
-import { isSavingUnavailable, markSavingUnavailable, resetAvailability, subscribeAvailability, UNAVAILABLE_MS } from "@/lib/saved-dates/availability";
+import { isSavingUnavailable, markSavingAvailable, markSavingUnavailable, resetAvailability, subscribeAvailability, UNAVAILABLE_PAUSES_MS } from "@/lib/saved-dates/availability";
 import { getSavedDate, listSavedDates, patchSavedDate } from "@/lib/saved-dates/client";
-import { parseDetached, parseLink, type SavedLink } from "@/lib/saved-dates/link";
+import { forgetSaveAfterSignIn, isPassingFailure, parseDetached, parseLink, rememberSaveAfterSignIn, takeSaveAfterSignIn, type SavedLink } from "@/lib/saved-dates/link";
 import { afterRefresh, afterSave, editorName, isDirty, linkFor, planKey, saveLinkedPlan, type SaveAnswer, type SaveEnv } from "@/lib/saved-dates/sync";
 import { QUIET_HEADER, type SavedDate } from "@/lib/saved-dates/types";
 
@@ -273,15 +273,78 @@ describe("the website's requests, and saving being off", () => {
     expect(await listSavedDates()).toEqual({ ok: false, status: 502, error: "network" });
   });
 
-  it("remembers that saving is off for a while, tells every listener, and asks again later", () => {
+  it("remembers that saving is off for a while, tells every listener, and tells them again when it's worth asking", () => {
+    vi.useFakeTimers();
+    try {
+      const now = Date.UTC(2026, 8, 25, 9);
+      const [first] = UNAVAILABLE_PAUSES_MS;
+      const heard = vi.fn();
+      const stop = subscribeAvailability(heard);
+      expect(isSavingUnavailable(now)).toBe(false);
+      markSavingUnavailable(now);
+      expect(heard).toHaveBeenCalledTimes(1);
+      expect(isSavingUnavailable(now + first - 1)).toBe(true);
+      expect(isSavingUnavailable(now + first)).toBe(false);
+      // The pages learn the pause is over without waiting for something else to redraw them.
+      vi.advanceTimersByTime(first);
+      expect(heard).toHaveBeenCalledTimes(2);
+      stop();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("hides saving for half a minute after one bad answer, longer only while they keep coming, and starts over once one works", () => {
     const now = Date.UTC(2026, 8, 25, 9);
-    const heard = vi.fn();
-    const stop = subscribeAvailability(heard);
-    expect(isSavingUnavailable(now)).toBe(false);
-    markSavingUnavailable(now);
-    expect(heard).toHaveBeenCalledTimes(1);
-    expect(isSavingUnavailable(now + UNAVAILABLE_MS - 1)).toBe(true);
-    expect(isSavingUnavailable(now + UNAVAILABLE_MS)).toBe(false);
-    stop();
+    const pauses: number[] = [];
+    let at = now;
+    for (let i = 0; i < 4; i++) {
+      markSavingUnavailable(at);
+      let until = at;
+      while (isSavingUnavailable(until)) until += 1000;
+      pauses.push(until - at);
+      at = until;
+    }
+    expect(pauses).toEqual([30_000, 120_000, 600_000, 600_000]);
+    markSavingAvailable();
+    expect(isSavingUnavailable(at)).toBe(false);
+    markSavingUnavailable(at);
+    expect(isSavingUnavailable(at + 30_000)).toBe(false);
+  });
+});
+
+describe("saving itself after signing in", () => {
+  const storage = new Map<string, string>();
+  beforeEach(() => {
+    storage.clear();
+    vi.stubGlobal("window", { localStorage: { getItem: (k: string) => storage.get(k) ?? null, setItem: (k: string, v: string) => void storage.set(k, v), removeItem: (k: string) => void storage.delete(k) } });
+  });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("is taken once, and handed back when it didn't get through, so it is tried again rather than used up", () => {
+    rememberSaveAfterSignIn("plan");
+    const waiting = takeSaveAfterSignIn((what) => what === "plan");
+    expect(waiting).toMatchObject({ what: "plan" });
+    expect(takeSaveAfterSignIn((what) => what === "plan")).toBeNull();
+    // Saving was off for a moment (or offline, or too many at once): it waits for another go.
+    for (const error of ["not_configured", "network", "rate_limited"]) expect(isPassingFailure(error)).toBe(true);
+    rememberSaveAfterSignIn(waiting!.what, waiting!.at);
+    expect(takeSaveAfterSignIn((what) => what === "plan")).toEqual(waiting);
+    // An answer is not repeated by itself: saved, the limit, signed out, a plan the server refuses.
+    for (const error of ["limit_reached", "unauthenticated", "empty_plan", "invalid_input", "unknown_trip"]) expect(isPassingFailure(error)).toBe(false);
+  });
+
+  it("still lapses half an hour after the sign-in began, however often it was handed back", () => {
+    const began = Date.now() - 31 * 60 * 1000;
+    rememberSaveAfterSignIn("plan", began);
+    expect(takeSaveAfterSignIn((what) => what === "plan")).toBeNull();
+  });
+
+  it("is forgotten once the plan is saved by hand, so it can't save a second copy later", () => {
+    rememberSaveAfterSignIn("trip:lisbon-slow-weekend");
+    forgetSaveAfterSignIn("plan");
+    expect(storage.size).toBe(1);
+    forgetSaveAfterSignIn("trip:lisbon-slow-weekend");
+    expect(takeSaveAfterSignIn(() => true)).toBeNull();
   });
 });

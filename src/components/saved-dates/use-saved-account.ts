@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { isSavingUnavailable, markSavingUnavailable, subscribeAvailability } from "@/lib/saved-dates/availability";
+import { isSavingUnavailable, markSavingAvailable, markSavingUnavailable, subscribeAvailability } from "@/lib/saved-dates/availability";
 import { listSavedDates } from "@/lib/saved-dates/client";
 import type { SavedDatesList, SavedKind } from "@/lib/saved-dates/types";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
@@ -97,7 +97,8 @@ export function useSavedAccount(kind?: SavedKind): SavedAccount {
     if (!signedIn || unavailable) return;
     let live = true;
     void listSavedDates(kind).then((res) => {
-      if (!res.ok && res.error === "not_configured") markSavingUnavailable();
+      if (res.ok) markSavingAvailable();
+      else if (res.error === "not_configured") markSavingUnavailable();
       if (!live) return;
       setAnswer({ key, list: res.ok ? { items: res.items, quota: res.quota, member: res.member, partner: res.partner } : null, guest: !res.ok && res.error === "unauthenticated" });
     });

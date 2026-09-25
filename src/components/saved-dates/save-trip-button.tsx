@@ -6,8 +6,9 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/track";
 import type { Currency } from "@/lib/pricing/products";
+import { markSavingUnavailable } from "@/lib/saved-dates/availability";
 import { deleteSavedDate, saveDate } from "@/lib/saved-dates/client";
-import { rememberSaveAfterSignIn, takeSaveAfterSignIn } from "@/lib/saved-dates/link";
+import { forgetSaveAfterSignIn, isPassingFailure, rememberSaveAfterSignIn, takeSaveAfterSignIn, type SaveAfterSignIn } from "@/lib/saved-dates/link";
 import type { SavedDatesError } from "@/lib/saved-dates/types";
 import { SignInDialog } from "./sign-in-dialog";
 import { SavedDatesUpsell } from "./upsell-sheet";
@@ -44,17 +45,24 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
     setSignIn(true);
   };
 
-  const save = async () => {
+  /** `waiting`: the save left for after signing in, when this is it. */
+  const save = async (waiting: SaveAfterSignIn | null = null) => {
     if (account.status === "guest") return askToSignIn();
     setBusy(true);
     setError(null);
     const res = await saveDate({ kind: "trip", data: { v: 1, tripId } });
     setBusy(false);
     if (res.ok) {
+      forgetSaveAfterSignIn(`trip:${tripId}`);
       setDone({ id: res.savedDate.id });
       if (!res.existing) track("saved_date_saved", { kind: "trip", member });
       account.reload();
       return;
+    }
+    if (waiting && isPassingFailure(res.error)) {
+      // It didn't get through: it waits for another go rather than being used up (as on the plan).
+      rememberSaveAfterSignIn(waiting.what, waiting.at);
+      if (res.error === "not_configured") return markSavingUnavailable();
     }
     if (res.error === "limit_reached") return setUpsell(true);
     if (res.error === "unauthenticated") return askToSignIn();
@@ -81,7 +89,8 @@ export function SaveTripButton({ tripId, title, monthly, currency }: { tripId: s
   useEffect(() => {
     if (!signedIn || savedId) return;
     const timer = window.setTimeout(() => {
-      if (takeSaveAfterSignIn((what) => what === `trip:${tripId}`)) void save();
+      const waiting = takeSaveAfterSignIn((what) => what === `trip:${tripId}`);
+      if (waiting) void save(waiting);
     }, 0);
     return () => window.clearTimeout(timer);
     // Only the moment the list arrives for a session: `save` is a new function every render.
