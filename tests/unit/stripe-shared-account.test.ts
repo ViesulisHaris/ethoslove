@@ -38,6 +38,7 @@ vi.mock("@/lib/env", () => ({ env: state.env, isConfigured: {} }));
 
 const { fulfilCheckoutSession } = await import("@/lib/stripe/fulfil");
 const { handleStripeEvent } = await import("@/lib/stripe/events");
+const { recoverExpiredSession } = await import("@/lib/stripe/recovery");
 const { ethosCustomerFor, tagCheckout, tagInvoice, normaliseSubscription } = await import("@/lib/stripe/subscriptions");
 const portal = await import("@/app/api/stripe/portal/route");
 
@@ -140,6 +141,15 @@ describe("a membership's Checkout Session (R2, R3, R6, R7, R8)", () => {
   });
 });
 
+describe("R6, R8: no trial, coupon or promotion code is ever written, anywhere", () => {
+  it("appears in no Stripe parameter in src/ or scripts/", () => {
+    // allow_promotion_codes is how a session says "no codes"; nothing else about them may appear.
+    const forbidden = /\b(trial_period_days|trial_end|trial_settings|trial_from_plan|coupon|promotion_code|discounts)\s*:/;
+    const offenders = [...sourceFiles(join(process.cwd(), "src")), ...sourceFiles(join(process.cwd(), "scripts"))].filter((file) => forbidden.test(readFileSync(file, "utf8")));
+    expect(offenders).toEqual([]);
+  });
+});
+
 describe("R9: an Ethos kind is a product name, never the other business's credit packs", () => {
   const CREDIT_PACKS = "ai" + "_credits";
 
@@ -233,7 +243,7 @@ describe("R4: the webhook leaves another business's objects alone", () => {
     stripe: stripe.client,
     now: NOW,
     fulfil: fulfilCheckoutSession,
-    recover: vi.fn(async () => false),
+    recover: recoverExpiredSession,
     send: { ended: mail.sendMembershipEnded, paymentProblem: mail.sendMembershipPaymentProblem },
   });
   const event = (type: string, object: Record<string, unknown>) => ({ id: `evt_${type}`, type, data: { object } }) as unknown as Stripe.Event;
@@ -259,12 +269,17 @@ describe("R4: the webhook leaves another business's objects alone", () => {
         subscription: "sub_secuora",
         metadata: { [FORBIDDEN]: "their-user", plan: "pro" },
       }),
+      // Their abandoned checkouts: no recovery email from us, not even a look at who it was.
+      event("checkout.session.expired", { id: "cs_secuora_sub", object: "checkout.session", mode: "subscription", status: "expired", customer_details: { email: "them@x.co" }, metadata: { [FORBIDDEN]: "their-user" }, consent: { promotions: "opt_in" }, after_expiration: { recovery: { url: "https://buy.stripe.com/r/theirs" } } }),
+      event("checkout.session.expired", { id: "cs_secuora_pay", object: "checkout.session", mode: "payment", status: "expired", customer_details: { email: "them@x.co" }, metadata: { kind: "credits" }, consent: { promotions: "opt_in" }, after_expiration: { recovery: { url: "https://buy.stripe.com/r/theirs" } } }),
       event("charge.refunded", { id: "ch_secuora", object: "charge", refunded: true, payment_intent: "pi_secuora" }),
       event("charge.dispute.created", { id: "dp_secuora", object: "dispute", payment_intent: "pi_secuora" }),
       event("customer.updated", { id: "cus_secuora", object: "customer", metadata: {} }),
     ];
     for (const e of foreign) expect((await handleStripeEvent(e, deps())).status, e.type).toBe(200);
     expect(fake.calls.filter((call) => call.op !== "select")).toEqual([]);
+    // The only reads: whether a subscription or invoice id is one of ours, and whether a charge paid for one of our purchases.
+    expect([...new Set(fake.calls.map((call) => call.table))].sort()).toEqual(["couple_passes", "purchases"]);
     expect(stripe.calls).toEqual([]);
     for (const send of Object.values(mail)) expect(send).not.toHaveBeenCalled();
   });
