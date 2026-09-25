@@ -125,7 +125,10 @@ describe("the app catalogue", () => {
       { id: "xyz.secuora.ethos.template", type: "consumable", webProduct: "single", tier: "premium", eurCents: 999 },
       { id: "xyz.secuora.ethos.special", type: "consumable", webProduct: "extras", tier: "free", eurCents: 749 },
       { id: "xyz.secuora.ethos.everything", type: "nonConsumable", webProduct: "everything", eurCents: 2499 },
-      { id: "xyz.secuora.ethos.fortwo", type: "nonRenewing", webProduct: "pass", eurCents: 2900 },
+      { id: "xyz.secuora.ethos.fortwo", type: "nonRenewing", webProduct: "pass", eurCents: 2999 },
+      // Ethos for Two as App Store subscriptions: each carries its own plan's web price.
+      { id: "xyz.secuora.ethos.fortwo.monthly", type: "autoRenewable", webProduct: "membership", plan: "monthly", eurCents: 499 },
+      { id: "xyz.secuora.ethos.fortwo.yearly", type: "autoRenewable", webProduct: "membership", plan: "yearly", eurCents: 2999 },
       { id: "xyz.secuora.ethos.pack.deep", type: "nonConsumable", webProduct: "pack", packId: "deep", eurCents: 299 },
       { id: "xyz.secuora.ethos.pack.distance", type: "nonConsumable", webProduct: "pack", packId: "distance", eurCents: 299 },
       { id: "xyz.secuora.ethos.pack.spicy", type: "nonConsumable", webProduct: "pack", packId: "spicy", eurCents: 299 },

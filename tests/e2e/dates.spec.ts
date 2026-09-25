@@ -98,6 +98,10 @@ test.describe("finding a date", () => {
   test("an idea becomes real stops, another can be swapped in, and it lands in the plan", async ({ page }) => {
     await mockWorld(page);
     await page.goto(lisbonUrl);
+    // The ideas are re-sorted as the places and then the rare find arrive: a click before both are
+    // in can land on the idea that has just moved under the pointer.
+    await expect(page.getByRole("button", { name: /^Livraria do Bairro/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
     await page.getByRole("button", { name: /^Pick a book for each other/ }).click();
     const panel = page.getByRole("region", { name: "Pick a book for each other" });
     await expect(panel.getByRole("button", { name: "Open: Livraria do Bairro" })).toBeVisible();
@@ -143,6 +147,8 @@ test.describe("finding a date", () => {
   test("a place opens with its address and the hours for the day they picked", async ({ page }) => {
     await mockWorld(page);
     await page.goto(lisbonUrl);
+    // The list re-sorts when the rare find joins it: click once it has.
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
     await page.getByRole("button", { name: /^Café da Esquina/ }).click();
     const sheet = page.getByRole("dialog", { name: "Café da Esquina" });
     await expect(sheet).toContainText("Rua das Flores 12, Chiado, Lisbon");
@@ -334,6 +340,9 @@ test.describe("finding a date", () => {
     await mockWorld(page);
     await page.goto(`/es${lisbonUrl}`);
     await expect(page.getByRole("heading", { level: 1, name: "Ideas para una cita en Lisbon" })).toBeVisible();
+    // As in English: the ideas settle once the places and the rare find are in.
+    await expect(page.getByRole("button", { name: /^Livraria do Bairro/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Bowling Alvalade/ })).toBeVisible();
     await page.getByRole("button", { name: /^Elegid un libro el uno para el otro/ }).click();
     await expect(page.getByRole("button", { name: "Añadir esta cita a nuestro plan" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Arte y cultura" })).toBeVisible();

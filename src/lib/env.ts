@@ -19,6 +19,12 @@ export const env = {
   stripeSecretKey: read("STRIPE_SECRET_KEY"),
   stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
   stripePublishableKey: read("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
+  /**
+   * Ethos's own Customer Portal configuration (bpc_…), made by scripts/setup-billing-portal.mjs. The
+   * Stripe account is shared, so its default portal belongs to nobody in particular: without this the
+   * portal route refuses rather than fall back to it (docs/MEMBERSHIP.md 2.1, R5).
+   */
+  stripePortalConfiguration: read("STRIPE_PORTAL_CONFIGURATION"),
 
   /**
    * The iPhone app's In-App Purchases (lib/commerce/app-store.ts). The v1 secret key (`sk_…`) asks

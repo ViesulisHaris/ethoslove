@@ -125,12 +125,60 @@ phone starts the next question halfway down the page. Two phones are tested for 
 play again, and one phone leaving; and a drawing round where the ink has to reach the other
 browser's canvas and the right word has to end the round.
 
+## Saved dates
+
+Planning needs no account, as before; a plan can now also be **kept with one** (docs/MEMBERSHIP.md
+section 3 is the contract). One `saved_dates` row per saved date or trip (migration 0015): a date's
+`data` is the plan exactly as `readPlan` reads it, a trip's is `{ v: 1, tripId, depart?, note? }`;
+the server derives `city`, `day` and `stops_count`. Free accounts keep **3**, dates and trips
+together; members of Ethos for Two any number (500 is the database's backstop), shared with their
+partner, who reads and edits them. Only a row's owner deletes it.
+
+- **The API** (`src/app/api/saved-dates/**`, logic in `src/lib/saved-dates/server.ts` over an
+  injected store and couple, so it is tested without a database): reads through the user's own
+  client (row-level security: one's own rows, and the partner's while `couple_partner()` says so),
+  writes with the service role after the checks. The free limit is checked before the insert and
+  again after it; two saves at once are ranked by the database's `created_at` (the insert sends no
+  time of ours), and the one past the limit is deleted and refused. An edit names its `baseVersion`
+  and is written only while the row is still at it (else `409` with the current row); a new version
+  is stamped by the database (`saved_dates_touch`). The 500 cap (`23514`, "too many saved dates") is
+  `limit_reached`; any other CHECK the table refuses is `400 invalid_input`. Per user: the list and
+  one date 120 a minute, saving 30 an hour, editing 600, deleting 120.
+- **When a membership ends** nothing is deleted: sharing stops, and of one's own rows the 3 most
+  recently changed stay editable, the rest read-only (`403 read_only`) until some are deleted or
+  they join again.
+- **The plan editor** keeps its working plan where it was (`ethos.dates.plan.v1`); a saved date is
+  opened into it (`/plan#s=<id>`) and linked (`ethos.dates.saved.v1`: id, version, the plan as last
+  saved). While linked, every change is saved a moment later (`useSavedPlanSync`, on /plan and the
+  map; one save is the pure `saveLinkedPlan` in `sync.ts`). A conflict takes the version saved
+  first and says who changed it (the `409` carries the row as it is when answering, not as it was
+  read before the checks); anything typed while the losing save was out is not wiped: it is sent
+  next on the same version, and that answer's copy is the one shown. Offline keeps the change as
+  "Not saved yet" and tries again on the next change, on focus or back online; a date gone is
+  unlinked with a toast. A date that turns **read-only while being edited** is unlinked, the plan
+  stays on the device, and a banner in the membership's dusk colours says why (`DetachedBanner`,
+  `ethos.dates.saved.detached.v1`) until it is closed or the plan is replaced.
+- **When saving is unavailable** (0015 not applied, the database down) the website's requests carry
+  `x-ethos-quiet: 1` and get `200 { unavailable: true }` instead of `503` (the app still gets the
+  503), the tab remembers it (`availability.ts`: half a minute after one such answer, then two
+  minutes, then ten while they keep coming; any answer that works starts over, and the pages ask
+  again by themselves when a pause ends), and "Save to my dates" and "Save trip" are not shown: no
+  button that can only fail, and nothing in the console. A save left for after signing in waits for
+  the account's answer and is only used up by an answer: one that didn't get through (saving off,
+  offline, too many at once) is kept and saves itself once saving answers again.
+- **Members' extras**: the whole date in Google or Apple Maps (`src/lib/dates/maps-route.ts`, by
+  coordinates, walked when every leg is within `WALK_KM`; free visitors see it locked), and an email
+  the day before each saved date with a day (the second phase of `/api/cron/reminders`: members'
+  rows only, from 0015's `saved_dates_due`, claimed before sending, owner and partner each in their
+  language, the claim given back when every send failed, a signed "turn off" link).
+- `/my-dates` lists them (server-rendered first page, then the browser), and the data export
+  carries one's own rows.
+
 ## Ethos for Two
 
-`/pricing` now leads with the couples' side: Free (everything above) and "Ethos for Two", €29 a
-year per couple, **not for sale yet**: a waitlist (`waitlist` table, written by the server only,
-rate-limited, no email sent). What it will include, and why it is priced so, is in
-MONETIZATION.md. The gifts' one-time prices follow, unchanged.
+The couples' membership: €4.99 a month or €29.99 a year per couple (docs/MEMBERSHIP.md). For the
+dates it adds what is above: unlimited saved dates and trips shared with the partner, the day-before
+reminder, and the whole date in Maps. Planning and sharing one date stay free, as they always were.
 
 ## Privacy, by construction
 
@@ -139,7 +187,8 @@ MONETIZATION.md. The gifts' one-time prices follow, unchanged.
   search in a neighbourhood the same cacheable URL.
 - A "near me" search is never written into the address bar; a named town is, so it can be shared.
 - A plan lives in `localStorage` and travels in the link's `#fragment`, which browsers do not send
-  to servers. There is no plan table, and nothing new in the database at all. A shared plan's link
+  to servers. It reaches our database only when its maker saves it to their account
+  (`saved_dates`), and then only they and, while they share a membership, their partner can read it. A shared plan's link
   also carries, in its query, only what its preview shows (a Wikimedia photo, a title of public
   place names, the day); who it is for, who from, the notes and the times stay after the `#`. The
   link formats, shared with the iPhone app, are in [SHARING.md](SHARING.md).
@@ -161,3 +210,10 @@ fails if `MAPLIBRE_VERSION` in `map-vendor.ts` falls behind the installed packag
   the question decks.
 - `tests/e2e/dates.spec.ts`: the pages with the outside world mocked (places, forecast, details, the
   map style), on a phone and a laptop, in both languages.
+- Saved dates: `tests/unit/saved-dates.test.ts` (validation, the free limit and its race, members,
+  versions, read-only after a membership, the partner, owner-only delete, rate limits, outages,
+  reminders), `saved-dates-sync.test.ts` (autosave, conflicts, offline, read-only answers, the
+  quiet client), `maps-route.test.ts`, `migrations-saved-dates.test.ts` (0015 read as SQL),
+  `tests/e2e/saved-dates.spec.ts` (with /api/saved-dates answered by the test: nobody signs in), and
+  `tests/e2e/my-dates.spec.ts` (My dates drawn by the development-only
+  `/for-two/preview/my-dates?state=…`, since the real page needs a signed-in account).

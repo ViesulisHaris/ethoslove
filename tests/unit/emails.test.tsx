@@ -45,8 +45,12 @@ describe("email templates", () => {
     const noticeEs = text(await render(ReceiptEmail({ locale: "es", productLabel: "Una plantilla", amountLabel: "9,99 €", unlocks: ["Vinilo"], dashboardUrl: "https://x" })));
     expect(noticeEs).toContain("conservas el derecho de desistimiento de 14 días");
     expect(noticeEs).not.toContain("ya no se aplica");
-    // A pass renewal bought early starts later: the right goes when the pass year starts, not at payment.
-    const pass = text(await render(ReceiptEmail({ locale: "en", productLabel: "Ethos for Two", amountLabel: "€29.00", unlocks: [], dashboardUrl: "https://x", until: "23 September 2027", consent: consentSentence("pass", "en") })));
-    expect(pass).toContain("once the pass year has started, the 14-day right to cancel no longer applies");
+    // Ethos for Two's year is a service: the right to withdraw stays, paying only for the days used.
+    const pass = text(await render(ReceiptEmail({ locale: "en", productLabel: "Ethos for Two", amountLabel: "€29.99", unlocks: [], dashboardUrl: "https://x", until: "23 September 2027", consent: consentSentence("pass", "en") })));
+    expect(pass).toContain(`At checkout you ticked: “${consentSentence("pass", "en")}”`);
+    expect(pass).toContain("You can still withdraw within 14 days of buying: reply to this email, and we'll refund what's left after the days you've used.");
+    expect(pass).not.toContain("no longer applies");
+    const passNotice = text(await render(ReceiptEmail({ locale: "es", productLabel: "Ethos for Two", amountLabel: "29,99 €", unlocks: [], dashboardUrl: "https://x", until: "23 de septiembre de 2027" })));
+    expect(passNotice).toContain("te devolvemos el importe íntegro");
   });
 });

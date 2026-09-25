@@ -15,7 +15,7 @@ describe("checkout plan: prices come from the catalogue", () => {
     expect(ok(planCheckout(req({ product: "pick3", templateSlugs: ["vinyl", "bloom", "museum"] }), guest)).total).toBe(1499);
     expect(ok(planCheckout(req({ product: "everything" }), guest)).total).toBe(2499);
     expect(ok(planCheckout(req({ product: "extras", templateSlugs: ["the-letter"] }), guest)).total).toBe(749);
-    expect(ok(planCheckout(req({ product: "pass" }), guest)).total).toBe(2900);
+    expect(ok(planCheckout(req({ product: "pass" }), guest)).total).toBe(2999);
     expect(ok(planCheckout(req({ product: "pack", packId: "deep" }), guest)).total).toBe(299);
     expect(ok(planCheckout(req({ product: "giftcard" }), guest)).total).toBe(2499);
     expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], currency: "gbp" }), guest)).total).toBe(899);
@@ -99,7 +99,7 @@ describe("checkout plan: creators", () => {
     expect(plan).toMatchObject({ total: 2499, creatorCode: "MARIA" });
     const withBump = ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addEverything: true }), { ...guest, creatorCode: "MARIA" }));
     expect(withBump.total).toBe(2499);
-    expect(ok(planCheckout(req({ product: "pass" }), { ...guest, creatorCode: "MARIA" })).total).toBe(2900);
+    expect(ok(planCheckout(req({ product: "pass" }), { ...guest, creatorCode: "MARIA" })).total).toBe(2999);
   });
 });
 
@@ -128,5 +128,59 @@ describe("checkout plan: upgrade and what the buyer owns", () => {
     expect(planCheckout(req({ product: "pack", packId: "deep" }), { ...signedIn, ownedForever: ["*"] }).ok).toBe(true);
     expect(planCheckout(req({ product: "pass" }), { ...signedIn, ownedForever: ["*"] }).ok).toBe(true);
     expect(planCheckout(req({ product: "giftcard" }), { ...signedIn, ownedForever: ["*"] }).ok).toBe(true);
+  });
+});
+
+describe("checkout plan: Ethos for Two", () => {
+  const on: CheckoutContext = { ...guest, signedIn: true, subscriptions: true, membership: null };
+  const off: CheckoutContext = { ...on, subscriptions: false };
+  const member = (over: Partial<NonNullable<CheckoutContext["membership"]>> = {}): NonNullable<CheckoutContext["membership"]> => ({ running: true, isOwner: true, provider: "stripe_subscription", status: "active", ...over });
+
+  it("sells a monthly or yearly subscription while subscriptions are on, at the catalogue's price", () => {
+    const monthly = ok(planCheckout(req({ product: "membership", plan: "monthly" }), on));
+    expect(monthly).toMatchObject({ product: "membership", kind: "membership", plan: "monthly", billing: "subscription", total: 499, unlocks: [], templateSlugs: [], bump: false });
+    expect(monthly.lines).toEqual([{ key: "membership", amount: 499 }]);
+    expect(ok(planCheckout(req({ product: "membership", plan: "yearly" }), on)).total).toBe(2999);
+    expect(ok(planCheckout(req({ product: "membership", plan: "yearly", currency: "usd" }), on)).total).toBe(3499);
+    expect(ok(planCheckout(req({ product: "membership", plan: "monthly", currency: "gbp" }), on)).total).toBe(449);
+    // A creator earns on the first payment like any sale: the checkout's purchase carries the code.
+    expect(ok(planCheckout(req({ product: "membership", plan: "monthly" }), { ...on, creatorCode: "MARIA" })).creatorCode).toBe("MARIA");
+  });
+
+  it("while they are off, sells the one-time year for yearly and nothing for monthly", () => {
+    expect(ok(planCheckout(req({ product: "membership", plan: "yearly" }), off))).toMatchObject({ product: "pass", kind: "pass", plan: "yearly", billing: "one_time", total: 2999 });
+    expect(planCheckout(req({ product: "membership", plan: "monthly" }), off)).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+    // Pages from before keep buying the year while the switch is off, and can't once it's on.
+    expect(ok(planCheckout(req({ product: "pass" }), off))).toMatchObject({ product: "pass", billing: "one_time" });
+    expect(planCheckout(req({ product: "pass" }), on)).toMatchObject({ ok: false, error: "not_on_sale", status: 400 });
+  });
+
+  it("needs a plan", () => {
+    expect(planCheckout(req({ product: "membership" }), on)).toMatchObject({ ok: false, error: "invalid_input", status: 400 });
+    // The order bump rides on a single or "make it special" only.
+    expect(planCheckout(req({ product: "membership", addEverything: true, plan: "yearly" }), on)).toMatchObject({ ok: false, error: "bump_not_available" });
+  });
+
+  it("never sells a second membership while one runs", () => {
+    expect(planCheckout(req({ product: "membership", plan: "yearly" }), { ...on, membership: member() })).toMatchObject({ ok: false, error: "already_member", status: 409 });
+    expect(planCheckout(req({ product: "membership", plan: "monthly" }), { ...on, membership: member({ isOwner: false }) })).toMatchObject({ error: "already_member" });
+    expect(planCheckout(req({ product: "membership", plan: "monthly" }), { ...on, membership: member({ provider: "app_store" }) })).toMatchObject({ error: "already_member" });
+    // A running pass isn't carried over into a subscription (not in this build): it runs its year first.
+    expect(planCheckout(req({ product: "membership", plan: "yearly" }), { ...on, membership: member({ provider: "stripe_pass" }) })).toMatchObject({ error: "already_member" });
+    // A partner buying the pass is buying a second one.
+    expect(planCheckout(req({ product: "pass" }), { ...off, membership: member({ provider: "stripe_pass", isOwner: false }) })).toMatchObject({ error: "already_member" });
+  });
+
+  it("lets a pass owner renew their year while subscriptions are off, as before", () => {
+    for (const provider of ["stripe_pass", "app_store_pass"] as const) {
+      expect(ok(planCheckout(req({ product: "pass" }), { ...off, membership: member({ provider }) }))).toMatchObject({ product: "pass", total: 2999 });
+      expect(ok(planCheckout(req({ product: "membership", plan: "yearly" }), { ...off, membership: member({ provider }) }))).toMatchObject({ product: "pass" });
+    }
+  });
+
+  it("sends a buyer whose subscription Stripe is still collecting to the account page, not to a second one", () => {
+    for (const status of ["past_due", "incomplete"] as const)
+      for (const running of [true, false])
+        expect(planCheckout(req({ product: "membership", plan: "monthly" }), { ...on, membership: member({ status, running }) })).toMatchObject({ ok: false, error: "payment_issue", status: 409 });
   });
 });

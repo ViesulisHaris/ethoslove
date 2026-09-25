@@ -8,7 +8,7 @@ import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { cn } from "@/lib/utils";
 
 /**
- * Login / My gifts affordance for the (static) marketing pages.
+ * Login / My gifts (and My dates) affordance for the (static) marketing pages.
  * Resolves auth on the client so marketing routes stay fully static and cacheable.
  *
  * In the bar it is a quiet text button and the rose "Make a gift", both 44px tall; in the menu
@@ -51,6 +51,12 @@ export function AuthStatus({ onNavigate, block, tone = "light" }: { onNavigate?:
 
   return (
     <div className={cn("flex items-center gap-1", block && "flex-col items-stretch gap-2.5")}>
+      {/* In the bar only from xl: at 1024px the Spanish bar is full already. */}
+      {authed ? (
+        <Link href="/my-dates" onClick={onNavigate} className={cn(quiet, !block && "hidden xl:inline-flex")}>
+          {t("myDates")}
+        </Link>
+      ) : null}
       <Link href={authed ? "/dashboard" : "/login"} onClick={onNavigate} className={quiet}>
         {authed ? t("dashboard") : t("login")}
       </Link>

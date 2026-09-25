@@ -23,7 +23,11 @@ export type FunnelEvent =
   | "tour_step"
   | "tour_skipped"
   | "city_page_cta"
-  | "unwrap_picked";
+  | "unwrap_picked"
+  // Saved dates: which kind was saved and whether by a member, which reason opened the upsell, which maps app a whole date went to. No ids, no places.
+  | "saved_date_saved"
+  | "saved_date_upsell"
+  | "maps_opened";
 
 type Props = Record<string, string | number | boolean | null>;
 

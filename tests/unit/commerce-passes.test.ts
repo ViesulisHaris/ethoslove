@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { DAY_MS, iso } from "@/lib/commerce/db";
 import { PASS_MS, joinPass, remindRenewals, shortenRefundedPass, startPass, sweepEndedPasses, type Pass } from "@/lib/commerce/passes";
 import { foreverUnlocks, grantForever } from "@/lib/commerce/unlocks";
-import { packsFromRows, summarisePass, templatesFromRows, upgradeOffer } from "@/lib/commerce/entitlements";
+import { packsFromRows, passFromMembership, templatesFromRows, upgradeOffer } from "@/lib/commerce/entitlements";
+import { summariseMembership } from "@/lib/commerce/memberships";
 import { FakeDb } from "./helpers/fake-db";
 
 const OWNER = "owner-1";
@@ -255,12 +256,13 @@ describe("entitlements", () => {
     expect(packsFromRows(["*"])).toEqual([]);
   });
 
-  it("describes the pass as the owner and as the partner", async () => {
+  it("describes the pass as the owner and as the partner (the `pass` field the app's current build reads)", async () => {
     const fake = new FakeDb({}, START);
     const first = await started(fake, "p1");
     await started(fake, "p2");
     const passes = fake.rows("couple_passes") as Pass[];
     const invite = (code: string) => `https://x/join?code=${code}`;
+    const summarisePass = (rows: Pass[], userId: string, now: number, link: (code: string) => string) => passFromMembership(summariseMembership(rows, userId, now, { invite: link }));
     expect(summarisePass(passes, OWNER, START + DAY_MS, invite)).toEqual({
       endsAt: iso(START + 2 * PASS_MS),
       isOwner: true,

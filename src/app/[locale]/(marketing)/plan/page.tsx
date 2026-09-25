@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { localizedUrl, pageMetadata, withSharePreview } from "@/lib/seo";
 import { SITE } from "@/config/site";
 import { hasSharePreview, previewQuery, readSharePreview, shareCardPath } from "@/lib/share/links";
+import { currencyFor, subscriptionsEnabled } from "@/lib/pricing/products";
 import { PlanView } from "@/components/dates/plan-view";
 
 export async function generateMetadata({ params, searchParams }: PageProps<"/[locale]/plan">): Promise<Metadata> {
@@ -28,9 +29,10 @@ export async function generateMetadata({ params, searchParams }: PageProps<"/[lo
 export default async function PlanPage({ params }: PageProps<"/[locale]/plan">) {
   const { locale } = await params;
   setRequestLocale(locale);
+  // Read at build time (the page is static): the Ethos for Two sheet shows the monthly price only while it is sold.
   return (
     <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)]">
-      <PlanView />
+      <PlanView monthly={subscriptionsEnabled()} currency={currencyFor(locale === "es" ? "ES" : "US")} />
     </div>
   );
 }

@@ -10,6 +10,16 @@ The money playbook. Written 23 September 2026 and revised the same day after a f
 > and keeps gift cards off sale for now. `docs/LAUNCH.md` is the source of truth for what ships;
 > this file is the reasoning and the roadmap.
 
+> **24 Sept: Ethos for Two became a subscription** (the owner's decision; spec in
+> `docs/MEMBERSHIP.md`, checklist in `docs/LAUNCH.md` section 10). €4.99 a month or €29.99 a year for a
+> couple, with unlimited saved dates and trips shared between the two (free accounts keep 3), every
+> template and game pack while it runs, day-before reminders and a whole date opened in Maps. Wanderlog
+> is the model: planning stays generous and free, the subscription sells conveniences and "more". It
+> is billed on the shared Stripe account under the rules in `docs/STRIPE.md` (R1–R11), is a digital
+> service for the right of withdrawal (pro-rata within 14 days), and while `STRIPE_SUBSCRIPTIONS_ENABLED`
+> is off it is sold as the one-time €29.99 year. Where this file says the pass is €29 or that Ethos
+> sells no subscriptions, that is superseded.
+
 Every figure is marked **measured** (read-only counts from the production database and the live code, 23 Sept) or **assumption**. Commission rates, fees and competitor prices are what the programmes published in September 2026. Check each one in its dashboard before relying on it. This is not legal advice: appendix C lists four questions for a lawyer (plus one that applies only if a check turns something up), and each item says which rule keeps it legal.
 
 ## What we know (measured, 23 Sept)

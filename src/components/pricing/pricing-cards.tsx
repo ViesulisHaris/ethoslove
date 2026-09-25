@@ -34,6 +34,7 @@ export function PricingCards({
   preselect,
   openPick3 = false,
   returnTo,
+  quiet = false,
 }: {
   currency: Currency;
   manifests: TemplateManifest[];
@@ -43,6 +44,11 @@ export function PricingCards({
   /** Sent from the publish sheet's "pick any three": the picker opens with that template chosen. */
   openPick3?: boolean;
   returnTo?: string;
+  /**
+   * The lighter dress, for /pricing, where these sit under Ethos for Two: Everything keeps its
+   * "Best value" and the rose button, but not the wine block, which would compete with the hero.
+   */
+  quiet?: boolean;
 }) {
   const t = useTranslations("pricing");
   // Two branches of "money", not all of it: the pages that show these cards send only what they read.
@@ -97,7 +103,8 @@ export function PricingCards({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:items-stretch" data-authed={authed}>
         {PRODUCT_ORDER.map((id) => {
           const p = PRODUCTS[id];
-          const dominant = p.highlight;
+          const dominant = p.highlight && !quiet;
+          const picked = p.highlight && quiet;
           const upgrading = id === "everything" && all.plan === "upgrade";
           const amount = id === "everything" ? all.amount : p.amounts[currency];
           const features = t.raw(`plans.${id}.features`) as string[];
@@ -107,12 +114,13 @@ export function PricingCards({
               data-reveal
               style={{ "--reveal-delay": `${PRODUCT_ORDER.indexOf(id) * 90}ms` } as React.CSSProperties}
               className={cn(
-                "relative flex flex-col rounded-3xl border p-7 sm:p-8",
-                dominant ? "border-forest bg-forest text-paper shadow-lift" : "border-line bg-card",
+                "relative flex flex-col rounded-3xl border sm:p-8",
+                quiet ? "p-6" : "p-7",
+                dominant ? "border-forest bg-forest text-paper shadow-lift" : picked ? "border-coral/45 bg-card shadow-soft ring-1 ring-coral/25" : "border-line bg-card",
               )}
             >
-              {dominant ? (
-                <span className="absolute -top-3 left-7 rounded-full bg-blush px-3 py-1 text-eyebrow text-forest">
+              {dominant || picked ? (
+                <span className={cn("absolute -top-3 left-7 rounded-full px-3 py-1 text-eyebrow", dominant ? "bg-blush text-forest" : "bg-coral text-paper")}>
                   {t("bestValue")}
                 </span>
               ) : null}
@@ -123,13 +131,13 @@ export function PricingCards({
                 {t(`plans.${id}.blurb`)}
               </p>
               {/* The note drops under the price when a narrow phone can't hold both on one line. */}
-              <div className="mt-6 flex flex-wrap items-end gap-x-2 gap-y-1">
-                <span className="font-display text-[clamp(2.75rem,14vw,3.4rem)] leading-none tracking-tight" data-testid={`price-${id}`}>
+              <div className={cn("flex flex-wrap items-end gap-x-2 gap-y-1", quiet ? "mt-4 sm:mt-6" : "mt-6")}>
+                <span className={cn("font-display leading-none tracking-tight", quiet ? "text-[clamp(2.5rem,12vw,3.1rem)]" : "text-[clamp(2.75rem,14vw,3.4rem)]")} data-testid={`price-${id}`}>
                   {formatAmount(amount, currency, locale)}
                 </span>
                 {upgrading ? (
                   // The note below says the same in words, for a screen reader that reads no strikethrough.
-                  <s aria-hidden="true" className="mb-2 text-sm text-paper/55">{formatAmount(p.amounts[currency], currency, locale)}</s>
+                  <s aria-hidden="true" className={cn("mb-2 text-sm", dominant ? "text-paper/55" : "text-muted-foreground")}>{formatAmount(p.amounts[currency], currency, locale)}</s>
                 ) : p.compareAt ? (
                   <span className={cn("mb-2 text-sm", dominant ? "text-paper/55" : "text-muted-foreground")}>
                     {t("separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}
@@ -145,7 +153,7 @@ export function PricingCards({
                 {t("oneTime")}
               </p>
               {upgrading ? (
-                <p className="mt-1.5 text-sm font-medium text-blush" data-testid="pricing-upgrade">
+                <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")} data-testid="pricing-upgrade">
                   {tPlans("upgradeNote", { full: formatAmount(p.amounts[currency], currency, locale) })}
                 </p>
               ) : id === "everything" && premium > 0 ? (
@@ -154,7 +162,7 @@ export function PricingCards({
                   {t("perTemplate", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / premium), currency, locale) })}
                 </p>
               ) : null}
-              <ul className="mt-6 flex flex-col gap-2.5 text-sm">
+              <ul className={cn("flex flex-col text-sm", quiet ? "mt-5 mb-7 gap-2 sm:mt-6 sm:gap-2.5" : "mt-6 gap-2.5")}>
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
                     <Check
@@ -172,10 +180,14 @@ export function PricingCards({
                 onClick={() => choose(id)}
                 disabled={busy}
                 className={cn(
-                  "mt-8 flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform active:scale-[0.98]",
+                  "flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform active:scale-[0.98]",
+                  // Quiet: pinned to the card's foot, so the three buttons line up side by side.
+                  quiet ? "mt-auto" : "mt-8",
                   dominant
                     ? "bg-coral text-paper hover:bg-coral-deep"
-                    : "border border-ink bg-transparent text-ink hover:bg-ink hover:text-paper",
+                    : picked
+                      ? "btn-rose"
+                      : "border border-ink bg-transparent text-ink hover:bg-ink hover:text-paper",
                 )}
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null}

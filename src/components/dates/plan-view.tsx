@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { ArrowDown, ArrowRight, ArrowUp, Check, Copy, Gift, Lock, LogIn, MapPinned, Navigation, Share2, Sunset, Ticket, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, getPathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -9,15 +9,27 @@ import { formatDay, toYmd } from "@/lib/dates/calendar";
 import { distanceKm, formatDistance, round, WALK_KM, walkingMinutes } from "@/lib/dates/geo";
 import { ideaById } from "@/lib/dates/ideas";
 import { GROUPS, KINDS } from "@/lib/dates/kinds";
-import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, removeStop, stopName, type Plan } from "@/lib/dates/plan";
+import { decodePlan, EMPTY_PLAN, encodePlan, moveStop, readPlan, removeStop, stopName, type Plan } from "@/lib/dates/plan";
 import { planUnwrap } from "@/lib/dates/plan-gift";
 import { sellsTickets, ticketQuery } from "@/lib/dates/ticketed";
 import type { Forecast } from "@/lib/dates/weather";
 import { planShareHref } from "@/lib/share/links";
+import { FREE_SAVED_DATES, type Currency } from "@/lib/pricing/products";
+import { rememberSaveAfterSignIn, writeLink } from "@/lib/saved-dates/link";
+import type { SyncNotice } from "@/lib/saved-dates/sync";
+import type { UpsellReason } from "@/lib/saved-dates/types";
 import { tiqetsSearch } from "@/lib/trips/partners";
 import { TemplateChooser } from "@/components/gifts/template-chooser";
 import { gatherPhotos } from "@/components/gifts/unwrap-photos";
 import { Cutout } from "@/components/marketing/home/cutouts";
+import { DetachedBanner } from "@/components/saved-dates/detached-banner";
+import { MapsMenu } from "@/components/saved-dates/maps-menu";
+import { SavePlanPanel } from "@/components/saved-dates/save-plan-panel";
+import { SignInDialog } from "@/components/saved-dates/sign-in-dialog";
+import { SavedDatesUpsell } from "@/components/saved-dates/upsell-sheet";
+import { useOpenSavedDate } from "@/components/saved-dates/use-open-saved-date";
+import { useSavedAccount, useSignedInWhile } from "@/components/saved-dates/use-saved-account";
+import { useSavedPlanSync, useSyncNoticeText } from "@/components/saved-dates/use-saved-plan-sync";
 import { PartnerLink } from "@/components/trips/partner-link";
 import { TimePicker } from "@/components/pickers/time-picker";
 import { GroupIcon } from "./group-icon";
@@ -46,13 +58,23 @@ function previewTitle(plan: Plan, locale: "en" | "es"): string | null {
   return names.length > 0 ? names.join(" · ") : null;
 }
 
+/** How long a note about the saved date ("Sam changed this date") stays up. */
+const NOTICE_MS = 5000;
+
 /**
  * A date, written down. Their own plan is edited here and kept in this browser; a plan that came
  * in a link is read out of the part after the `#`, which browsers keep to themselves, so the
- * evening somebody planned never touches a server, ours included.
+ * evening somebody planned never touches a server, ours included, unless they save it to their
+ * account: then the plan is linked to that saved date and every change goes back to it
+ * (components/saved-dates). `#s=<id>` opens a saved date here.
+ *
+ * `monthly` and `currency` are for the Ethos for Two sheet: this page is static, so the server's
+ * switch comes in as a prop, read when the page was built.
  */
-export function PlanView() {
+export function PlanView({ monthly = false, currency = "eur" }: { monthly?: boolean; currency?: Currency }) {
   const t = useTranslations("plan");
+  const ts = useTranslations("savedDates");
+  const tc = useTranslations("common");
   const ta = useTranslations("affiliate");
   const locale = useLocale() === "es" ? "es" : "en";
   const isClient = useSyncExternalStore(noop, () => true, () => false);
@@ -65,14 +87,28 @@ export function PlanView() {
   const [chooser, setChooser] = useState(false);
   // Which link was kept, not just "kept": another link opened in this tab later is a new plan to keep.
   const [keptHash, setKeptHash] = useState<string | null>(null);
+  // The sheets keep what they said while they close, so the words don't change on the way out.
+  const [upsell, setUpsell] = useState<{ open: boolean; reason: UpsellReason }>({ open: false, reason: "limit" });
+  const [signIn, setSignIn] = useState<{ open: boolean; next: string; title: string; sub: string }>({ open: false, next: "/plan", title: "", sub: "" });
+  const [notice, setNotice] = useState<{ text: string; at: number } | null>(null);
+
+  const noticeText = useSyncNoticeText();
+  // A date that turned read-only says so in the banner at the top (DetachedBanner), which stays; the rest in a toast.
+  const onNotice = useCallback((n: SyncNotice) => (n.kind === "readOnly" ? undefined : setNotice({ text: noticeText(n), at: Date.now() })), [noticeText]);
+  const account = useSavedAccount();
+  const { link: savedLink, status } = useSavedPlanSync(onNotice);
+  const opened = useOpenSavedDate(hash, { confirmReplace: () => window.confirm(ts("open.replaceConfirm")), replacePlan: (next) => updateOwn(() => next) });
 
   const shared = useMemo(() => (hash.startsWith("#p=") ? decodePlan(hash.slice(3)) : null), [hash]);
+  const readOnly = opened.state === "readOnly" ? opened.saved : null;
+  const readOnlyPlan = useMemo(() => (readOnly ? readPlan(readOnly.data) : null), [readOnly]);
   const kept = keptHash === hash;
   const broken = hash.startsWith("#p=") && !shared;
-  const plan: Plan = shared ?? own;
-  const editable = !shared;
+  const plan: Plan = readOnlyPlan ?? shared ?? own;
+  const editable = !shared && !readOnlyPlan;
   const first = plan.stops[0];
   const at = first ? `${round(first.lat, 2)},${round(first.lng, 2)}` : "";
+  const member = Boolean(account.list?.member);
 
   useEffect(() => {
     if (!at || !plan.date) return;
@@ -84,6 +120,14 @@ export function PlanView() {
       .catch(() => undefined);
     return () => controller.abort();
   }, [at, plan.date]);
+
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(null), NOTICE_MS);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
+
+  useSignedInWhile(signIn.open, () => setSignIn((s) => ({ ...s, open: false })));
 
   const forecast = forecastFor?.at === at ? forecastFor.forecast : null;
   const day = forecast?.days.find((d) => d.date === plan.date);
@@ -134,8 +178,51 @@ export function PlanView() {
       // Closed the share sheet: nothing to do.
     }
   };
+  const openUpsell = (reason: UpsellReason) => setUpsell({ open: true, reason });
+  const askToSignIn = (next: string, title: string, sub: string) => setSignIn({ open: true, next, title, sub });
+  const signInToSave = () => {
+    rememberSaveAfterSignIn("plan");
+    askToSignIn("/plan", ts("save.signIn.title"), ts("save.signIn.sub"));
+  };
 
-  if (!isClient) return <div className="container-narrow py-16" aria-hidden="true"><div className="h-[520px] animate-pulse rounded-[32px] bg-white/70" /></div>;
+  const sheets = (
+    <>
+      <SavedDatesUpsell open={upsell.open} onOpenChange={(open) => setUpsell((u) => ({ ...u, open }))} reason={upsell.reason} monthly={monthly} currency={currency} />
+      <SignInDialog open={signIn.open} onOpenChange={(open) => setSignIn((s) => ({ ...s, open }))} next={signIn.next} title={signIn.title} sub={signIn.sub} />
+    </>
+  );
+
+  if (!isClient || opened.state === "opening")
+    return (
+      <div className="container-narrow py-16" aria-busy="true">
+        {opened.state === "opening" ? <p className="mb-4 text-center text-[15px] text-forest/65">{ts("open.loading")}</p> : null}
+        <div aria-hidden="true" className="h-[520px] animate-pulse rounded-[32px] bg-white/70" />
+      </div>
+    );
+
+  if (opened.state === "notFound" || opened.state === "failed" || opened.state === "signIn") {
+    const savedId = opened.state === "signIn" ? opened.id : null;
+    return (
+      <section className="container-narrow py-16 text-center sm:py-24">
+        <Cutout id="envelope-ps" className="mx-auto w-24 -rotate-6 drop-shadow-[0_14px_24px_rgba(120,50,70,0.25)]" />
+        <h1 className="mt-6 display-lg text-balance text-forest">{opened.state === "signIn" ? ts("open.signIn") : opened.state === "notFound" ? ts("open.notFound") : ts("open.failed")}</h1>
+        <div className="mt-8 flex flex-wrap justify-center gap-2.5">
+          {savedId ? (
+            <button type="button" onClick={() => askToSignIn(`/plan#s=${savedId}`, ts("open.signIn"), ts("open.signInSub"))} className="inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5">
+              <LogIn aria-hidden="true" className="size-4" />
+              {tc("login")}
+            </button>
+          ) : (
+            <Link href="/my-dates" className="inline-flex h-13 items-center gap-2 rounded-full bg-forest px-7 text-base font-semibold text-cream shadow-[0_16px_36px_-16px_rgba(42,15,31,0.7)] transition-transform hover:-translate-y-0.5">
+              {ts("save.open")}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
+          )}
+        </div>
+        {sheets}
+      </section>
+    );
+  }
 
   if (broken || plan.stops.length === 0) {
     return (
@@ -155,6 +242,19 @@ export function PlanView() {
     <section className="container-x grid gap-8 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-12">
       <article className="relative rounded-[32px] bg-card p-6 shadow-lift ring-1 ring-forest/5 sm:p-10">
         <Cutout id="bow-gingham" className="absolute -top-7 right-6 w-20 rotate-12 drop-shadow-[0_10px_16px_rgba(120,50,70,0.25)] sm:w-24" />
+        {readOnly ? (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl bg-forest/[0.04] px-4 py-3 ring-1 ring-forest/10" data-testid="saved-read-only">
+            <Lock aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-forest/60" />
+            <p className="min-w-0 flex-1 text-[14px] leading-snug text-forest/75">
+              <span className="font-semibold text-forest">{ts("readOnly.title")}</span> · {ts("readOnly.body", { limit: FREE_SAVED_DATES })}{" "}
+              <button type="button" onClick={() => openUpsell("read_only")} className="-my-2 inline-flex min-h-11 items-center font-semibold text-rose-deep underline underline-offset-4">
+                {ts("readOnly.why")}
+              </button>
+            </p>
+          </div>
+        ) : editable ? (
+          <DetachedBanner onWhy={() => openUpsell("read_only")} />
+        ) : null}
         <p className="text-[12px] font-medium tracking-[0.22em] text-rose-deep uppercase">{shared ? t("eyebrowShared") : t("eyebrow")}</p>
         <h1 className="mt-3 display-xl text-forest first-letter:uppercase">{plan.date ? formatDay(plan.date, locale) : t("someday")}</h1>
         <p className="mt-2 text-[17px] text-forest/70">{[plan.where, idea?.title[locale]].filter(Boolean).join(" · ")}</p>
@@ -272,6 +372,9 @@ export function PlanView() {
 
       <aside className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+1rem)] lg:self-start">
         <MapView center={first} zoom={14.5} places={[]} selected={null} hoveredId={null} route={route} origin={null} searching={false} labels={mapLabels} interactive={false} className="h-[300px] w-full rounded-[28px] shadow-soft ring-1 ring-forest/10 sm:h-[340px]" />
+        <MapsMenu stops={plan.stops} member={member} onLocked={() => openUpsell("maps")} />
+
+        {editable ? <SavePlanPanel plan={own} defaultTitle={(idea?.title[locale] || own.where || ts("save.defaultTitle")).slice(0, 80)} link={savedLink} status={status} account={account} onUpsell={openUpsell} onSignIn={signInToSave} /> : null}
 
         {editable ? (
           <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
@@ -289,6 +392,23 @@ export function PlanView() {
             </div>
             <p className="mt-3 text-[12px] leading-snug text-forest/65">{t("send.private")}</p>
           </div>
+        ) : readOnly ? (
+          <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
+            <p className="flex items-center gap-2 font-display text-[22px] text-forest">
+              <Lock aria-hidden="true" className="size-5 text-forest/55" />
+              {ts("readOnly.title")}
+            </p>
+            <p className="mt-1.5 text-[14.5px] leading-relaxed text-forest/65">{ts("readOnly.body", { limit: FREE_SAVED_DATES })}</p>
+            <div className="mt-4 grid gap-2">
+              <button type="button" onClick={() => openUpsell("read_only")} className="btn-star inline-flex h-12 items-center justify-center gap-2 rounded-full text-[14.5px] font-semibold">
+                {ts("upsell.cta")}
+              </button>
+              <Link href="/my-dates" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-forest/15 text-[14.5px] font-semibold text-forest hover:bg-forest/5">
+                {ts("upsell.manage")}
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
+            </div>
+          </div>
         ) : (
           <div className="rounded-[28px] bg-white p-5 shadow-soft ring-1 ring-forest/5">
             <h2 className="font-display text-[22px] text-forest">{t("received.title")}</h2>
@@ -302,6 +422,8 @@ export function PlanView() {
                   // back: ask before a link from somebody else writes over it, as "Clear" does.
                   const other = own.stops.length > 0 && encodePlan(own) !== encodePlan(plan);
                   if (other && !window.confirm(t("received.replaceConfirm"))) return;
+                  // Kept, it is a new plan of theirs, not the saved date they had open: that one stays as it was, in My dates.
+                  writeLink(null);
                   updateOwn(() => ({ ...EMPTY_PLAN, ...plan }));
                   setKeptHash(hash);
                   // Kept, it is theirs: drop the link's copy from the address, so the page shows
@@ -349,12 +471,31 @@ export function PlanView() {
             <Link href="/dates" className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[14px] font-semibold text-rose-deep underline-offset-4 hover:underline">
               {t("addMore")}
             </Link>
-            <button type="button" onClick={() => window.confirm(t("clearConfirm")) && updateOwn(() => EMPTY_PLAN)} className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-destructive hover:underline">
-              {t("clear")}
+            {/* Linked, the plan is a saved date: closing it leaves it in My dates and starts afresh here. */}
+            <button
+              type="button"
+              onClick={() => {
+                if (!window.confirm(savedLink ? ts("save.closeConfirm") : t("clearConfirm"))) return;
+                writeLink(null);
+                updateOwn(() => EMPTY_PLAN);
+              }}
+              className="-my-2.5 inline-flex min-h-11 items-center py-2.5 text-[13.5px] text-forest/65 underline-offset-4 hover:text-destructive hover:underline"
+            >
+              {savedLink ? ts("save.close") : t("clear")}
             </button>
           </div>
         ) : null}
       </aside>
+
+      {/* What the saved date had to say ("Sam changed this date"), over the page, where a thumb isn't. */}
+      <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-[70] flex justify-center px-4">
+        {notice ? (
+          <p key={notice.at} className="max-w-md animate-in rounded-2xl bg-forest px-4 py-2.5 text-center text-[13.5px] leading-snug font-semibold text-cream shadow-lift duration-300 fade-in-0 slide-in-from-bottom-2">
+            {notice.text}
+          </p>
+        ) : null}
+      </div>
+      {sheets}
     </section>
   );
 }
