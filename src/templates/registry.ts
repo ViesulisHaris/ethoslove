@@ -50,6 +50,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   sketchbook: () => import("./sketchbook"),
   "pack-your-bags": () => import("./pack-your-bags"),
   digicam: () => import("./digicam"),
+  "photo-booth": () => import("./photo-booth"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

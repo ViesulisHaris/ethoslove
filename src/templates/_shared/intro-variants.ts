@@ -87,6 +87,7 @@ const BY_SLUG: Record<string, IntroVariant> = {
   sketchbook: "paper",
   "pack-your-bags": "starlight",
   digicam: "petals",
+  "photo-booth": "curtain",
 };
 
 export function introVariantFor(slug: string, manifest?: TemplateManifest): IntroVariant {

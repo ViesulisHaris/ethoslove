@@ -211,6 +211,13 @@ SCRAPS = {
     "59.jpg": (12, {
         "bow-satin-blush": (1, None, 1, 2), "star-felt-plump": (24, None, 1, 0), "star-felt-tilted": (30, None, 1, 0),
     }),
+    # Red-and-cream love stickers (Photo Booth). Only the photographed objects: the lettering, the
+    # character and brand pieces, the drawings and the animals on this sheet stay on it.
+    "56.jpg": (10, {
+        "teddy-hug": (23, None, 6, 3), "penguins-plush": (8, [495, 117, 632, 250], 6, 3), "wax-seal-heart": (26, None, None, 0),
+        "envelopes-pair": (53, None, None, 0), "heart-puffy": (4, None, None, 0), "heart-gingham": (30, None, None, 0),
+        "tulips-wrapped": (60, None, 6, 0), "sunflowers-kraft": (12, None, None, 0),
+    }),
 }
 
 def pinks_and_greens(r, g, b):

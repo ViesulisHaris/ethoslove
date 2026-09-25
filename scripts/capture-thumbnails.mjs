@@ -380,6 +380,30 @@ const SCRIPTS = {
   coquette: async (page) => scrollCollage(page, /untie the bow/i),
   xoxo: async (page) => scrollCollage(page, /open it/i),
   keepsake: async (page) => scrollCollage(page, /break the seal/i),
+  "photo-booth": async (page) => {
+    const curtain = page.locator("[data-curtain]");
+    await curtain.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1900);
+    // The booth under its lit sign, the curtain drawn and the card with their name pinned to it.
+    const poster = await page.screenshot();
+    await curtain.click({ force: true });
+    // Four poses, each pressed the moment the button lights again, so the recording is the countdowns and flashes.
+    for (let i = 0; i < 4; i++) {
+      await page.locator("[data-booth-button][aria-disabled=false]").waitFor({ timeout: 15000 });
+      await page.locator("[data-booth-button]").click({ force: true });
+      await page.waitForTimeout(300);
+    }
+    // Long enough to watch it come out grey and come up in colour.
+    await page.locator("[data-strip][tabindex='0']").waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2800);
+    await page.locator("[data-strip]").click({ force: true });
+    const scroller = page.locator("[data-scroller]");
+    await scroller.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(2300);
+    await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.6, behavior: "smooth" }));
+    await page.waitForTimeout(1400);
+    return poster;
+  },
   "party-animals": async (page) => {
     await open(page);
     const guests = page.locator("[data-guest]");
