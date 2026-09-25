@@ -598,6 +598,11 @@ export interface Database {
       couple_partner: { Args: { p_user: string }; Returns: string | null };
       /** Whether the user holds a running membership, as owner or partner (0015). Same guard. */
       is_member: { Args: { p_user: string }; Returns: boolean };
+      /** The reminder cron's saved dates for a day (0015): members' rows only, oldest first, at most 500. Service role only. */
+      saved_dates_due: {
+        Args: { p_day: string; p_limit: number };
+        Returns: { id: string; owner_user_id: string; kind: "date" | "trip"; title: string; city: string | null; day: string | null; data: Json; stops_count: number; remind: boolean; reminded_for: string | null; version: number; last_edited_by: string | null; created_at: string; updated_at: string }[];
+      };
     };
     Enums: {
       gift_status: GiftStatus;

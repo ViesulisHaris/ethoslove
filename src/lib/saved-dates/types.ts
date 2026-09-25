@@ -56,3 +56,13 @@ export type SavedDatesError =
 
 /** Why the upsell sheet opened: the free limit, a read-only date, or a members-only button. */
 export type UpsellReason = "limit" | "read_only" | "maps" | "reminders";
+
+/**
+ * Sent by the website's own requests (lib/saved-dates/client.ts): "say an outage quietly". Without
+ * it (the iPhone app, anything else) saving being unavailable (0015 not applied, the database down,
+ * Supabase not configured) is `503 { error: "not_configured" }`, as the contract says. With it the
+ * answer is `200 { unavailable: true }`: the page hides its saving buttons, and no failed request
+ * lands in the browser's console on every signed-in view of /plan or a trip.
+ */
+export const QUIET_HEADER = "x-ethos-quiet";
+export type SavedDatesUnavailable = { unavailable: true };

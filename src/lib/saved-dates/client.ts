@@ -1,10 +1,12 @@
 import type { Plan } from "@/lib/dates/plan";
-import type { SavedDate, SavedDatesError, SavedDatesList, SavedKind, SavedTripData } from "./types";
+import { QUIET_HEADER, type SavedDate, type SavedDatesError, type SavedDatesList, type SavedKind, type SavedTripData } from "./types";
 
 /**
  * The browser's side of /api/saved-dates. Every call answers rather than throws: `network` when the
  * request never arrived (offline, a timeout), otherwise the API's own error code. The answers are
  * our own server's, so they are read for the fields the pages use and nothing more is checked.
+ * Every call asks for outages quietly (QUIET_HEADER): saving being unavailable comes back as a 200
+ * that reads here as `not_configured`, so the pages hide their buttons without a console error.
  */
 export type Failure = { ok: false; status: number; error: SavedDatesError | "network"; limit?: number; used?: number; savedDate?: SavedDate };
 export type Result<T> = ({ ok: true; status: number } & T) | Failure;
@@ -14,7 +16,7 @@ const BASE = "/api/saved-dates";
 async function call<T extends object>(path: string, init?: RequestInit): Promise<Result<T>> {
   let res: Response;
   try {
-    res = await fetch(path, { credentials: "same-origin", cache: "no-store", ...init, headers: { ...(init?.body ? { "content-type": "application/json" } : {}), ...init?.headers } });
+    res = await fetch(path, { credentials: "same-origin", cache: "no-store", ...init, headers: { [QUIET_HEADER]: "1", ...(init?.body ? { "content-type": "application/json" } : {}), ...init?.headers } });
   } catch {
     return { ok: false, status: 0, error: "network" };
   }
@@ -24,6 +26,7 @@ async function call<T extends object>(path: string, init?: RequestInit): Promise
   } catch {
     // An error page from a proxy on the way: read below as the status alone.
   }
+  if (res.ok && body.unavailable === true) return { ok: false, status: 503, error: "not_configured" };
   if (res.ok) return { ok: true, status: res.status, ...(body as T) };
   const error = typeof body.error === "string" ? (body.error as SavedDatesError) : res.status === 401 ? "unauthenticated" : res.status === 429 ? "rate_limited" : "network";
   return {

@@ -18,7 +18,11 @@ type Row = Pick<Tables<"saved_dates">, "id" | "owner_user_id" | "kind" | "title"
 type Person = { email: string; locale: "en" | "es" };
 
 export interface ReminderStore {
-  /** Rows with reminders on, for `day`, not yet claimed for it. */
+  /**
+   * Members' rows with reminders on, for `day`, not yet claimed for it, oldest first, at most
+   * `limit`. Only members': free accounts' dates (their switch stays on, and nothing is sent) must
+   * never fill the batch and leave a member without their reminder.
+   */
   due(day: string, limit: number): Promise<Row[]>;
   isMember(userId: string): Promise<boolean>;
   partnerOf(userId: string): Promise<string | null>;
@@ -42,6 +46,8 @@ export type ReminderRun = {
 };
 
 const DAY_MS = 86_400_000;
+/** Rows one run takes at most: the time budget ends a run long before (two emails a row, half a second apart). */
+export const REMINDER_BATCH = 200;
 
 /** Tomorrow in UTC, as YYYY-MM-DD: the job runs at 07:00 UTC, the morning before. */
 export const tomorrowUtc = (now: Date): string => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()) + DAY_MS).toISOString().slice(0, 10);
@@ -60,7 +66,7 @@ export function reminderContent(row: Row, locale: "en" | "es"): Pick<DateReminde
 
 export async function sendDateReminders(run: ReminderRun): Promise<{ sent: number; failed: number; deferred: number; skipped: number }> {
   const day = tomorrowUtc(run.now);
-  const rows = await run.store.due(day, run.batch ?? 200);
+  const rows = await run.store.due(day, Math.min(run.batch ?? REMINDER_BATCH, REMINDER_BATCH));
   let sent = 0;
   let failed = 0;
   let deferred = 0;
@@ -70,7 +76,7 @@ export async function sendDateReminders(run: ReminderRun): Promise<{ sent: numbe
       deferred += 1;
       continue;
     }
-    // A reminder is part of the membership: without one running, the row keeps its switch but nothing goes.
+    // Asked again at the moment of sending: a membership that ended since the query sends nothing.
     if (!(await run.store.isMember(row.owner_user_id))) {
       skipped += 1;
       continue;
@@ -102,9 +108,10 @@ export function supabaseReminderStore(db: SupabaseClient<Database>): ReminderSto
   const unclaimed = (day: string) => `reminded_for.is.null,reminded_for.neq.${day}`;
   return {
     async due(day, limit) {
-      const { data, error } = await db.from("saved_dates").select("id, owner_user_id, kind, title, day, data, reminded_for").eq("remind", true).eq("day", day).or(unclaimed(day)).order("created_at", { ascending: true }).limit(limit);
+      // 0015's saved_dates_due: the membership test is a join in the database, not a page of every account's rows.
+      const { data, error } = await db.rpc("saved_dates_due", { p_day: day, p_limit: limit });
       if (error) throw new Error(`saved-date reminders: ${error.message}`);
-      return data ?? [];
+      return (data ?? []).map(({ id, owner_user_id, kind, title, day: rowDay, data: rowData, reminded_for }) => ({ id, owner_user_id, kind, title, day: rowDay, data: rowData, reminded_for }));
     },
     async isMember(userId) {
       const { data, error } = await db.rpc("is_member", { p_user: userId });

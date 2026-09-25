@@ -1,6 +1,6 @@
 -- Saved dates and trips (docs/MEMBERSHIP.md 1.5, 1.7 and 3). Until now a plan lived only in the
 -- browser and in the link that shares it; an account can now keep some. Additive: one new table and
--- three functions; nothing the live site reads is touched. It needs only 0009 (it reads
+-- five functions; nothing the live site reads is touched. It needs only 0009 (it reads
 -- couple_passes' owner, partner, starts_at and ends_at), so it can go in with 0014 or on its own.
 --
 -- saved_dates: one row per saved date or trip, owned by one account. `data` is the plan exactly as
@@ -10,6 +10,13 @@
 -- changed", which stay editable once a membership has ended. Free accounts keep three rows, members
 -- any number: that depends on membership, so it is checked by /api/saved-dates, which makes every
 -- write with the service role. Signed-in users only read.
+--
+-- Time: `created_at` and `updated_at` are the database's, never an app server's. Two saves at once
+-- are ranked by `created_at` to decide which one was past the free limit, and two servers' clocks
+-- can disagree by more than the moments between two taps; saved_dates_touch stamps each new version.
+--
+-- Reminders: saved_dates_due() is the reminder cron's one query: members' rows only, so a morning
+-- with many free accounts' dates can't fill the batch and leave members without their reminder.
 --
 -- Sharing: while a membership with a partner runs, each of the two can read the other's rows (the
 -- policy below) and edit them (the API). couple_partner() is security definer because a partner
@@ -91,6 +98,46 @@ create policy "saved_dates: owner or partner read" on public.saved_dates
 revoke all on public.saved_dates from anon;
 revoke insert, update, delete on public.saved_dates from authenticated;
 grant select on public.saved_dates to authenticated;
+
+-- A new version of a date (an edit, not a reminder switched or claimed) is stamped with the
+-- database's own time, as an insert is by the column's default: "the three most recently changed"
+-- are ranked by one clock.
+create or replace function public.saved_dates_touch()
+returns trigger language plpgsql set search_path = public as $$
+begin
+  if new.version is distinct from old.version then
+    new.updated_at := now();
+  end if;
+  return new;
+end $$;
+
+-- Only the trigger runs it; keep it off the API.
+revoke all on function public.saved_dates_touch() from public, anon, authenticated;
+
+create or replace trigger saved_dates_touch
+  before update on public.saved_dates
+  for each row
+  execute function public.saved_dates_touch();
+
+-- The reminder cron's rows for p_day (docs/MEMBERSHIP.md 3.4): reminders on, not yet claimed for
+-- that day, and only where the owner holds a running membership (as owner or partner), the same
+-- test as is_member(). Oldest first, and never more than 500 at once. The service role's only.
+create or replace function public.saved_dates_due(p_day date, p_limit integer)
+returns setof public.saved_dates language sql stable set search_path = public as $$
+  select sd.* from public.saved_dates sd
+  where sd.remind
+    and sd.day = p_day
+    and (sd.reminded_for is null or sd.reminded_for <> p_day)
+    and exists (
+      select 1 from public.couple_passes cp
+      where (cp.owner_user_id = sd.owner_user_id or cp.partner_user_id = sd.owner_user_id)
+        and cp.starts_at <= now() and cp.ends_at > now()
+    )
+  order by sd.created_at, sd.id
+  limit greatest(least(p_limit, 500), 0)
+$$;
+revoke all on function public.saved_dates_due(date, integer) from public, anon, authenticated;
+grant execute on function public.saved_dates_due(date, integer) to service_role;
 
 -- A backstop, not the free limit: no account keeps more than 500 (the reminders_cap pattern, 0010).
 create or replace function public.saved_dates_cap()

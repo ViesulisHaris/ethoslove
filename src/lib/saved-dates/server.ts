@@ -27,6 +27,13 @@ export type SavedRow = Tables<"saved_dates">;
 export type SavedListRow = Omit<SavedRow, "data" | "reminded_for"> & { idea: string | null; trip_id: string | null; first_stops: unknown[] };
 export type OwnKey = { id: string; created_at: string; updated_at: string };
 export type Profile = { name: string | null; email: string | null };
+/**
+ * Why the database refused a write: `duplicate`, that trip is saved already (23505 on the one-row-
+ * per-trip index); `cap`, saved_dates_cap's 500 (23514, "too many saved dates"); `check`, any other
+ * CHECK in 0015 (a title, a city or a plan longer than the table takes), which is the input's fault
+ * and never "the limit".
+ */
+export type Refused = { refused: "duplicate" | "cap" | "check"; detail?: string };
 
 export interface SavedStore {
   /** Every row the signed-in user may read, as RLS decides. */
@@ -35,15 +42,21 @@ export interface SavedStore {
   /** All of an owner's rows, service role: what the free limit counts and "the three most recent" ranks. */
   ownKeys(ownerId: string): Promise<OwnKey[]>;
   findOwnTrip(ownerId: string, tripId: string): Promise<SavedRow | null>;
-  /** The new row, or the Postgres code that refused it (23505: that trip is saved already; 23514: the 500 cap). */
-  insert(row: Inserts<"saved_dates">): Promise<{ row: SavedRow } | { code: string }>;
-  /** With `version`, only while the row is still at that version: null when someone saved first (or it's gone). */
-  update(id: string, patch: Updates<"saved_dates">, version: number | null): Promise<SavedRow | null>;
+  /**
+   * The new row, or why it was refused. `created_at` and `updated_at` are the database's own
+   * (their defaults): two saves at once are ranked by one clock, not by two servers' clocks.
+   */
+  insert(row: Inserts<"saved_dates">): Promise<{ row: SavedRow } | Refused>;
+  /**
+   * With `version`, only while the row is still at that version: null when someone saved first (or
+   * it's gone). A new version gets the database's `updated_at` (0015's saved_dates_touch).
+   */
+  update(id: string, patch: Updates<"saved_dates">, version: number | null): Promise<SavedRow | null | Refused>;
   remove(id: string, ownerId: string): Promise<boolean>;
   profiles(ids: string[]): Promise<Map<string, Profile>>;
 }
 
-export type SavedDeps = { viewerId: string; store: SavedStore; couple: Couple; now: () => number };
+export type SavedDeps = { viewerId: string; store: SavedStore; couple: Couple };
 
 /** A database error: the route answers 503 and logs it, and nothing is guessed. */
 export class SavedStoreError extends Error {}
@@ -202,10 +215,11 @@ export type LimitReached = Answer<{ error: "limit_reached"; limit: number; used:
  * POST /api/saved-dates. Saving a trip that is saved already answers with the row that exists (the
  * button is a toggle, and a double tap is not two trips). The free limit is checked before the
  * insert and again after it: two saves at once that both passed the first check are ranked by when
- * they were made, and the one past the limit is deleted and refused, so a double tap can't make a
- * fourth.
+ * the database made them (its `created_at`, never this server's clock: two requests can land on two
+ * servers whose clocks disagree), and the one past the limit is deleted and refused, so a double
+ * tap can't make a fourth.
  */
-export async function createSavedDate(deps: SavedDeps, input: SaveInput): Promise<Answer<{ savedDate: SavedDate; existing?: true }> | LimitReached> {
+export async function createSavedDate(deps: SavedDeps, input: SaveInput): Promise<Answer<{ savedDate: SavedDate; existing?: true }> | LimitReached | Refusal<"invalid_input">> {
   const viewer = deps.viewerId;
   const existing = async () => {
     const found = input.kind === "trip" ? await deps.store.findOwnTrip(viewer, input.data.tripId) : null;
@@ -218,7 +232,6 @@ export async function createSavedDate(deps: SavedDeps, input: SaveInput): Promis
   const limit = member ? MAX_SAVED_DATES : FREE_SAVED_DATES;
   if (keys.length >= limit) return { status: 403, body: { error: "limit_reached", limit, used: keys.length } };
 
-  const now = new Date(deps.now()).toISOString();
   const inserted = await deps.store.insert({
     owner_user_id: viewer,
     kind: input.kind,
@@ -226,16 +239,17 @@ export async function createSavedDate(deps: SavedDeps, input: SaveInput): Promis
     ...deriveColumns(input),
     data: input.data as unknown as Json,
     last_edited_by: viewer,
-    created_at: now,
-    updated_at: now,
   });
-  if ("code" in inserted) {
-    if (inserted.code === "23505") {
+  if ("refused" in inserted) {
+    if (inserted.refused === "duplicate") {
       const again = await existing();
       if (again) return again;
+      throw new SavedStoreError("insert refused as a duplicate, and no saved trip found");
     }
-    if (inserted.code === "23514") return { status: 403, body: { error: "limit_reached", limit: MAX_SAVED_DATES, used: keys.length } };
-    throw new SavedStoreError(`insert refused: ${inserted.code}`);
+    if (inserted.refused === "cap") return { status: 403, body: { error: "limit_reached", limit: MAX_SAVED_DATES, used: keys.length } };
+    // Validation let through something the table's checks refuse: the input's fault, and ours to fix.
+    console.warn(`[saved-dates] insert refused by a check: ${inserted.detail ?? "unknown"}`);
+    return refuse(400, "invalid_input");
   }
 
   if (!member) {
@@ -272,15 +286,19 @@ export async function updateSavedDate(deps: SavedDeps, id: string, patch: PatchI
   const conflict = (current: SavedRow) => ({ status: 409, body: { error: "conflict" as const, savedDate: full(current, ctx) } });
   if (edits && patch.baseVersion !== row.version) return conflict(row);
 
-  const now = new Date(deps.now()).toISOString();
   const update: Updates<"saved_dates"> = {
     ...(saved && { data: saved.data as unknown as Json, ...deriveColumns(saved) }),
     ...(patch.title !== undefined && { title: patch.title }),
     ...(patch.remind !== undefined && { remind: patch.remind }),
-    // A reminder switched on or off is not a change to the date: it keeps its version and its place in the list.
-    ...(edits && { version: row.version + 1, updated_at: now, last_edited_by: deps.viewerId }),
+    // A reminder switched on or off is not a change to the date: it keeps its version and its place in
+    // the list. A new version is stamped by the database (saved_dates_touch), as an insert is.
+    ...(edits && { version: row.version + 1, last_edited_by: deps.viewerId }),
   };
   const written = await deps.store.update(id, update, edits ? row.version : null);
+  if (written && "refused" in written) {
+    console.warn(`[saved-dates] edit refused by a check: ${written.detail ?? "unknown"}`);
+    return refuse(400, "invalid_input");
+  }
   if (!written) {
     const current = await deps.store.getVisible(id);
     return current ? conflict(current) : refuse(404, "not_found");
@@ -310,6 +328,16 @@ const fail = (what: string, error: { message: string }): never => {
   throw new SavedStoreError(`${what}: ${error.message}`);
 };
 
+/** saved_dates_cap's words (0015): the one 23514 that is the 500 backstop rather than a CHECK. */
+const CAP_MESSAGE = "too many saved dates";
+
+/** A write the database refused for a reason of its own (not an outage), or null. */
+export function refusalOf(error: { code?: string; message: string }): Refused | null {
+  if (error.code === "23505") return { refused: "duplicate" };
+  if (error.code === "23514") return error.message.includes(CAP_MESSAGE) ? { refused: "cap" } : { refused: "check", detail: error.message };
+  return null;
+}
+
 /** `reader` is the signed-in user's own client (RLS); `writer` the service role. */
 export function supabaseStore(reader: Client, writer: Client): SavedStore {
   const table = () => writer.from("saved_dates");
@@ -336,14 +364,17 @@ export function supabaseStore(reader: Client, writer: Client): SavedStore {
     },
     async insert(row) {
       const { data, error } = await table().insert(row).select("*").single();
-      if (error) return error.code === "23505" || error.code === "23514" ? { code: error.code } : fail("insert", error);
+      if (error) return refusalOf(error) ?? fail("insert", error);
       return { row: data };
     },
     async update(id, patch, version) {
       let query = table().update(patch).eq("id", id);
       if (version !== null) query = query.eq("version", version);
       const { data, error } = await query.select("*").maybeSingle();
-      if (error) fail("update", error);
+      if (error) {
+        const refused = refusalOf(error);
+        return refused?.refused === "check" ? refused : fail("update", error);
+      }
       return data;
     },
     async remove(id, ownerId) {
@@ -367,6 +398,6 @@ export async function savedDatesSession(): Promise<{ deps: SavedDeps } | { statu
   const writer = getSupabaseAdminClient();
   if (!reader || !writer) return { status: 503, error: "not_configured" };
   if (!user) return { status: 401, error: "unauthenticated" };
-  return { deps: { viewerId: user.id, store: supabaseStore(reader, writer), couple: supabaseCouple(writer), now: Date.now } };
+  return { deps: { viewerId: user.id, store: supabaseStore(reader, writer), couple: supabaseCouple(writer) } };
 }
 
