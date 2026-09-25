@@ -37,6 +37,7 @@ import { manifest as keepsake } from "./keepsake/manifest";
 import { manifest as popupCard } from "./popup-card/manifest";
 import { manifest as sketchbook } from "./sketchbook/manifest";
 import { manifest as packYourBags } from "./pack-your-bags/manifest";
+import { manifest as musicBox } from "./music-box/manifest";
 
 /**
  * What a template is — its names, occasions, tier, poster — and nothing it runs.
@@ -48,7 +49,7 @@ import { manifest as packYourBags } from "./pack-your-bags/manifest";
  * on the homepage, pricing and the gallery, for gifts nobody had opened. Import from here unless
  * you are about to render a template.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, musicBox];
 
 export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
 

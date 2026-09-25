@@ -11,7 +11,9 @@ new sheet and an empty pick list first: it prints every blob's index and box.
 Two sets: `memes` (public/memes, the animals, with a white die-cut edge) and `scraps` (public/scraps,
 the flowers, kisses, paper and lace the collage templates are made of, mostly without one). A pick
 may also carry `edge` (the white edge in source pixels, 0 for none) and `key` (cut by colour instead
-of by flood, for lace and doilies whose holes must stay holes).
+of by flood, for lace and doilies whose holes must stay holes), and `holes`: ground trapped inside the
+cut-out in patches of at least this many source pixels is cut away too, while smaller specks stay.
+That is the eye of a satin bow's loop, where `key` would also punch through every pale highlight.
 
 Needs Pillow only. src/templates/_shared/memes/catalogue.ts and _shared/collage/scraps.ts list the
 sizes. Leave out film, game and brand characters: the three meme templates ship these
@@ -84,7 +86,7 @@ EDGE = 5   # the white die-cut edge, in source pixels
 CLOSE = 5  # how wide a leak the closing seals, in source pixels
 SCALE = 2
 
-def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=False):
+def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=False, holes=0):
     CLOSE_R = CLOSE if close is None else close
     EDGE_R = EDGE if edge is None else edge
     W, H = im.size
@@ -138,6 +140,21 @@ def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=F
         for y in range(h):
             for x in range(w):
                 if mpx[x, y] and not mask[y * w + x] and is_bg(X0 + x, Y0 + y): cpx[x, y] = (255, 255, 255, 255)
+    if holes:
+        # The page seen through a loop: a patch of ground this big is a hole, a pale highlight is not.
+        seen = bytearray(w * h)
+        for s0 in range(w * h):
+            x, y = s0 % w, s0 // w
+            if seen[s0] or not mpx[x, y] or not is_bg(X0 + x, Y0 + y): continue
+            seen[s0] = 1; q = deque([s0]); blob = []
+            while q:
+                i = q.popleft(); blob.append(i); x, y = i % w, i // w
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < w and 0 <= ny < h:
+                        j = ny * w + nx
+                        if not seen[j] and mpx[nx, ny] and is_bg(X0 + nx, Y0 + ny): seen[j] = 1; q.append(j)
+            if len(blob) >= holes:
+                for i in blob: mpx[i % w, i // w] = 0
     inner = m if key else m.filter(ImageFilter.MinFilter(3))         # drop the JPEG fringe
     edge = m.filter(ImageFilter.MaxFilter(EDGE_R * 2 + 1)) if EDGE_R else None   # the white edge
     big = (w * SCALE, h * SCALE)
@@ -202,6 +219,15 @@ SCRAPS = {
         "doily-red": (1, None, 0, 0, True), "bow-gingham": (0, None, None, 0), "tag-tofrom": (2, None, None, 0), "label-ornate": (3, None, None, 0),
         "heart-damask": (8, None, 0, 0, True), "doily-pink": (9, None, 0, 0, True), "lace-red": (7, None, 0, 0, True),
     }),
+    # The Music Box vanity: only the photographed things on these two sheets. Their painted swans,
+    # doves, ballerinas and bottles, the branded bottles and the printed slogans stay where they are.
+    "61.jpg": (10, {
+        "wax-seal-hibiscus": (15, None, None, 0), "bow-satin-pink": (17, None, None, 0, False, 50), "bow-satin-mini": (21, None, None, 0, False, 20),
+        "paper-script": (3, None, None, 0), "paper-roses": (4, None, None, 0), "paper-blossom": (12, None, None, 0),
+    }),
+    "62.jpg": (10, {
+        "wax-seal-swans": (4, None, None, 0), "fan-lace": (15, None, None, 0),
+    }),
 }
 
 CATALOGUE = SCRAPS if SET == "scraps" else MEMES
@@ -210,7 +236,7 @@ for sheet, (tol, picks) in CATALOGUE.items():
     im, label, comps, bg, is_bg = segment(f"{IMG}/{sheet}", tol)
     for name, pick in picks.items():
         k, box = pick[0], pick[1]
-        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False)
+        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False, pick[5] if len(pick) > 5 else 0)
         print(name, sizes[name])
 json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
 

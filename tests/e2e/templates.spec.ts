@@ -42,7 +42,7 @@ test.describe("template engine", () => {
 });
 
 test.describe("later batch demos", () => {
-  for (const slug of ["birthday-cinema", "jar-of-reasons", "scratch-card", "midnight-countdown", "our-timeline", "vinyl", "museum", "front-page", "fortune-cookie", "text-thread", "arcade", "passport", "bloom", "bouquet", "kawaii", "fireside", "trick-or-treat", "scrapbook", "halfway", "garden", "snow-globe", "recipe-box", "cap-toss", "paper-crane", "the-toast", "balloons", "popup-card", "sketchbook", "party-animals", "the-council", "sticker-bomb", "coquette", "xoxo", "keepsake", "pack-your-bags"]) {
+  for (const slug of ["birthday-cinema", "jar-of-reasons", "scratch-card", "midnight-countdown", "our-timeline", "vinyl", "museum", "front-page", "fortune-cookie", "text-thread", "arcade", "passport", "bloom", "bouquet", "kawaii", "fireside", "trick-or-treat", "scrapbook", "halfway", "garden", "snow-globe", "recipe-box", "cap-toss", "paper-crane", "the-toast", "balloons", "popup-card", "sketchbook", "party-animals", "the-council", "sticker-bomb", "coquette", "xoxo", "keepsake", "pack-your-bags", "music-box"]) {
     test(`${slug} demo loads past the loading screen`, async ({ page }) => {
       await page.goto(`/demo/${slug}`);
       const loading = page.getByText(/someone made this for you/i);
