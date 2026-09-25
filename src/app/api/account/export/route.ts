@@ -12,8 +12,9 @@ export async function GET() {
   const user = await getCurrentUser();
   if (!supabase || !user) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
   // Row-level security limits each of these to this person's rows: passes they own or joined, gift
-  // cards they bought, their own reminders.
-  const [profile, gifts, purchases, unlocks, reviews, passes, giftCards, reminders] = await Promise.all([
+  // cards they bought, their own reminders. Saved dates are asked for by owner: RLS would also hand
+  // over a partner's, which are theirs to export, not this person's.
+  const [profile, gifts, purchases, unlocks, reviews, passes, giftCards, reminders, savedDates] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
     supabase.from("gifts").select("*").eq("user_id", user.id),
     supabase.from("purchases").select("*").eq("user_id", user.id),
@@ -22,6 +23,7 @@ export async function GET() {
     supabase.from("couple_passes").select("*"),
     supabase.from("gift_cards").select("*").eq("buyer_user_id", user.id),
     supabase.from("reminders").select("*").eq("user_id", user.id),
+    supabase.from("saved_dates").select("*").eq("owner_user_id", user.id),
   ]);
   // The waitlist is only readable by the server (no row policies), so it is asked with the service key, by this person's email only.
   const admin = getSupabaseAdminClient();
@@ -30,6 +32,6 @@ export async function GET() {
   const [views, reactions] = giftIds.length
     ? await Promise.all([supabase.from("gift_views").select("*").in("gift_id", giftIds), supabase.from("reactions").select("*").in("gift_id", giftIds)])
     : [{ data: [] }, { data: [] }];
-  const body = JSON.stringify({ exportedAt: new Date().toISOString(), user: { id: user.id, email: user.email }, profile: profile.data, gifts: gifts.data, purchases: purchases.data, templateUnlocks: unlocks.data, giftViews: views.data, reactions: reactions.data, placeReviews: reviews.data, couplePasses: passes.data, giftCards: giftCards.data, reminders: reminders.data, waitlist: waitlist.data }, null, 2);
+  const body = JSON.stringify({ exportedAt: new Date().toISOString(), user: { id: user.id, email: user.email }, profile: profile.data, gifts: gifts.data, purchases: purchases.data, templateUnlocks: unlocks.data, giftViews: views.data, reactions: reactions.data, placeReviews: reviews.data, couplePasses: passes.data, giftCards: giftCards.data, reminders: reminders.data, savedDates: savedDates.data, waitlist: waitlist.data }, null, 2);
   return new NextResponse(body, { headers: { "content-type": "application/json", "content-disposition": `attachment; filename="ethos-export-${new Date().toISOString().slice(0, 10)}.json"` } });
 }

@@ -5,11 +5,14 @@ import {
   PRODUCTS,
   bumpAmount,
   hasUnlock,
+  membershipAmount,
   rowsCoverPack,
   unlocksFor,
   type Currency,
+  type MembershipPlan,
   type ProductId,
 } from "@/lib/pricing/products";
+import type { MembershipProvider, MembershipStatus } from "@/lib/membership/types";
 import { getManifest, isTemplateSlug } from "@/templates/manifests";
 import { upgradeAmount, type PaidPurchase } from "./pricing";
 
@@ -22,7 +25,12 @@ export type CheckoutRequest = {
   packId?: string;
   addEverything?: boolean;
   currency: Currency;
+  /** Ethos for Two: which plan. The server decides whether that is a subscription or the pass. */
+  plan?: MembershipPlan;
 };
+
+/** The buyer's own membership, as checkout needs to know it (lib/commerce/memberships.ts membershipContextOf). */
+export type MembershipContext = { running: boolean; isOwner: boolean; provider: MembershipProvider; status: MembershipStatus };
 
 /** What the server looked up about the buyer. Nothing in here comes from the client as-is. */
 export type CheckoutContext = {
@@ -38,6 +46,10 @@ export type CheckoutContext = {
   creatorCode: string | null;
   /** Gift cards are built but only sold while GIFT_CARDS_ENABLED is "true" (giftCardsOnSale). */
   giftCardsOnSale: boolean;
+  /** STRIPE_SUBSCRIPTIONS_ENABLED (subscriptionsEnabled): Ethos for Two as a subscription, or as the one-time pass. */
+  subscriptions?: boolean;
+  /** The buyer's running membership, else a subscription Stripe is still collecting; null for a guest. */
+  membership?: MembershipContext | null;
 };
 
 export type PlanLine = { key: ProductId | "bump"; amount: number };
@@ -54,8 +66,12 @@ export type CheckoutPlan = {
   total: number;
   /** The creator credited with the sale (purchases.creator_code), or null. */
   creatorCode: string | null;
-  /** The unlock rows fulfilment grants for good (a pass and a gift card have their own). */
+  /** The unlock rows fulfilment grants for good (a pass, a membership and a gift card have their own). */
   unlocks: string[];
+  /** Ethos for Two's plan (a pass is "yearly"); null for everything else. */
+  plan: MembershipPlan | null;
+  /** A subscription is only ever Ethos for Two; everything else, the pass included, is paid once. */
+  billing: "one_time" | "subscription";
 };
 
 export type PlanError = { error: string; status: number; needed?: number };
@@ -75,7 +91,31 @@ function alreadyCovered(owned: string[], unlock: string): boolean {
  * commission by us, and a reply to a paid gift is free without checkout (lib/commerce/free-reply.ts).
  */
 export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
-  const { product, currency } = req;
+  const { currency } = req;
+  if (req.product === "membership" || req.product === "pass") {
+    const membership = planMembership(req, ctx);
+    if (!membership.ok) return membership;
+    if (membership.product === "membership") {
+      if (req.addEverything) return fail("bump_not_available", 400);
+      return {
+        ok: true,
+        product: "membership",
+        kind: "membership",
+        currency,
+        templateSlugs: [],
+        packId: null,
+        bump: false,
+        lines: [{ key: "membership", amount: membershipAmount(membership.plan, currency) }],
+        total: membershipAmount(membership.plan, currency),
+        creatorCode: ctx.creatorCode,
+        // A membership has its own grant (lib/commerce/memberships.ts), like the pass.
+        unlocks: [],
+        plan: membership.plan,
+        billing: "subscription",
+      };
+    }
+  }
+  const product = req.product === "membership" ? "pass" : req.product;
   const catalogue = PRODUCTS[product];
 
   if (product === "giftcard" && !ctx.giftCardsOnSale) return fail("not_on_sale", 400);
@@ -104,6 +144,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   if (product === "upgrade" && !ctx.signedIn) return fail("sign_in_required", 401);
 
   const unlocks = product === "pass" || product === "giftcard" ? [] : unlocksFor(product, slugs, { packId: packId ?? undefined });
+  // addEverything on a pass is refused above (the bump only rides on a single or extras).
   if (bump) unlocks.push(EVERY_TEMPLATE);
   if (unlocks.length > 0 && unlocks.every((u) => alreadyCovered(ctx.ownedForever, u))) return fail("already_owned", 409);
 
@@ -123,5 +164,31 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     total: lines.reduce((sum, line) => sum + line.amount, 0),
     creatorCode: ctx.creatorCode,
     unlocks,
+    plan: product === "pass" ? "yearly" : null,
+    billing: "one_time",
   };
+}
+
+/**
+ * Ethos for Two, whichever way it is asked for: `{ product: "membership", plan }` (the pricing page
+ * from now on) or `{ product: "pass" }` (pages from before). STRIPE_SUBSCRIPTIONS_ENABLED decides what
+ * is sold: a monthly or yearly subscription, or, while it is off, the one-time year (the pass).
+ * Nobody is sold a second membership while one runs or while Stripe is still collecting one: that
+ * would charge twice for one thing. The one exception is today's pass renewal, a year added from the
+ * end of the owner's running pass.
+ */
+function planMembership(req: CheckoutRequest, ctx: CheckoutContext): { ok: true; product: "membership" | "pass"; plan: MembershipPlan } | ({ ok: false } & PlanError) {
+  if (req.product === "membership" && !req.plan) return fail("invalid_input", 400);
+  const subscriptions = ctx.subscriptions === true;
+  if (!subscriptions && req.plan === "monthly") return fail("not_on_sale", 400);
+  if (subscriptions && req.product === "pass") return fail("not_on_sale", 400);
+  const own = ctx.membership ?? null;
+  // A second subscription while Stripe still collects the first would charge twice: the account page
+  // is where the card gets updated.
+  if (own?.isOwner && own.provider === "stripe_subscription" && (own.status === "past_due" || own.status === "incomplete")) return fail("payment_issue", 409);
+  if (own?.running) {
+    const passRenewal = !subscriptions && own.isOwner && (own.provider === "stripe_pass" || own.provider === "app_store_pass");
+    if (!passRenewal) return fail("already_member", 409);
+  }
+  return subscriptions ? { ok: true, product: "membership", plan: req.plan ?? "yearly" } : { ok: true, product: "pass", plan: "yearly" };
 }

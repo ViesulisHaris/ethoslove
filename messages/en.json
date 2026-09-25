@@ -35,7 +35,8 @@
     "skipToContent": "Skip to content",
     "close": "Close",
     "notifications": "Notifications",
-    "closeNotification": "Close notification"
+    "closeNotification": "Close notification",
+    "myDates": "My dates"
   },
   "meta": {
     "defaultTitle": "Ethos — Digital gifts that open like a story",
@@ -62,7 +63,7 @@
       "gifts": "Surprises for their phone",
       "longDistance": "Meet in the middle",
       "games": "Card games for two",
-      "pricing": "Free to date, no subscriptions"
+      "pricing": "Free to date, or Ethos for Two"
     }
   },
   "home": {
@@ -287,7 +288,11 @@
     "deleteAccount": "Delete account",
     "deleteConfirm": "This removes your account, every gift, upload, image, video, voice note and reaction. Active storage is wiped first; backups expire within 30 days. Type {email} to confirm.",
     "deleteForever": "Delete forever",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "dangerSubscription": "Deleting your account also cancels your Ethos for Two subscription at once; the time left isn't refunded.",
+    "dangerAppStore": "You subscribed in the iPhone app: cancel it in your iPhone's Settings first, since deleting your account can't stop Apple's billing.",
+    "deleteFailed": "Your account couldn't be deleted. Nothing was removed; try again in a moment.",
+    "deleteSubscriptionFailed": "We couldn't cancel your Ethos for Two subscription, so nothing was deleted. Try again in a moment."
   },
   "editor": {
     "title": "Editor",
@@ -758,11 +763,11 @@
   "pricing": {
     "eyebrow": "Pricing",
     "title": "Free to date. Pay once for a gift.",
-    "subtitle": "The map, the plans and the long-distance tools are free, for good. Gift templates unlock with one payment, and nothing here is a subscription.",
+    "subtitle": "The map, the plans and the long-distance tools are free, for good. Gift templates unlock with one payment and stay yours.",
     "oneTime": "One payment. Yours for good.",
     "bestValue": "Best value",
     "priority": "Includes priority support",
-    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, or with “Make it special” on a free template.",
+    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -806,23 +811,79 @@
       "blurb": "You can change a pick until you pay.",
       "continue": "Continue ({n}/{total})"
     },
+    "faqEyebrow": "Questions",
     "faqTitle": "Questions people ask",
+    "faqHelp": "Something else? Write to <email>{address}</email> and a person answers.",
+    "faqGroups": {
+      "forTwo": "Ethos for Two",
+      "rest": "Gifts, games and paying"
+    },
     "faq": [
       {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "What is Ethos for Two?",
+        "a": "A membership for the two of you. Save as many dates and trips as you like, plan them together on both your phones, get a reminder the day before each one and open a whole date in Apple or Google Maps; and while it runs, every gift template and every game pack is yours. One of you pays, monthly or yearly; the other joins with the invite link you send."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "What is Ethos for Two?",
+        "a": "A year of everything for the two of you: as many saved dates and trips as you like, planned together on both your phones, a reminder the day before each one, a whole date opened in Apple or Google Maps, and every gift template and game pack. One of you pays once; the other joins with the invite link you send. It lasts 365 days and doesn't renew by itself."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
         "q": "Is this a subscription?",
-        "a": "No. Templates, game packs and gift cards are one-time payments, and what you unlock stays on your account for good. Ethos for Two is a pass: one payment for 365 days, for both of you. It never renews on its own; we email you two weeks before it ends, and renewing is one tap."
+        "a": "Ethos for Two is: one payment a month or a year covers both of you, and it renews until you cancel, which you can do at any time from your account page. Everything else here is paid once: templates, “Make it special” and game packs stay on your account for good."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "Is this a subscription?",
+        "a": "No. Ethos for Two is one payment for 365 days, for both of you, and it doesn't renew by itself: we email you two weeks before it ends, and renewing is one tap. Templates, “Make it special” and game packs are one-time payments too, and stay on your account for good."
+      },
+      {
+        "group": "forTwo",
+        "q": "Can my partner use it on their phone?",
+        "a": "Yes, that's the point of it. After paying you get an invite link: your partner opens it on their phone and signs in (free), and from then on you both see and edit the same saved dates, and every template and pack is on their account too. One partner only; you can remove them, or they can leave, at any time."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "How do I cancel?",
+        "a": "From your account page: Cancel membership, then confirm. It's as quick as subscribing. Nothing more is charged, and you both keep Ethos for Two until the end of the month or year you've paid for. Your saved dates stay in your account, and gifts you've published stay online."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "Can we switch between monthly and yearly?",
+        "a": "Yes, from your account page. Monthly to yearly happens at once: you pay for the year, minus what's left of your month. Yearly to monthly happens when your year ends, so you never pay twice."
+      },
+      {
+        "group": "forTwo",
+        "q": "What happens to our saved dates if we stop?",
+        "a": "Nothing is deleted. Your saved dates and trips stay in your account and stay yours; you just stop sharing them. The free plan keeps your three most recently changed ones editable and the rest readable, until you delete some or come back. Gifts you've published stay online."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "Can I change my mind after subscribing?",
+        "a": "Yes. You can withdraw within 14 days of subscribing, without giving a reason: use “Withdraw from a purchase” at the foot of every page, or reply to your welcome email. Because you asked for it to start straight away, we refund what you paid minus the days you've already used. After 14 days you can still cancel at any time; it then runs to the end of the period you've paid for."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "Can I change my mind after buying?",
+        "a": "Yes, within 14 days of buying, without giving a reason: use “Withdraw from a purchase” at the foot of every page, or reply to your receipt. Because you asked for your year to start straight away, we refund what you paid minus the days you've already used."
       },
       {
         "q": "What does the free tier actually include?",
-        "a": "Two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise. Free gifts show a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with “Make it special”, a small one-time payment for that template, or with any unlock."
+        "a": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise, with a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside, no footer, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two."
       },
       {
         "q": "Can I try a template before paying?",
         "a": "Every template has a full live demo, and the editor is free to use with a live preview. You only pay when you publish something that needs a premium feature."
-      },
-      {
-        "q": "What is Ethos for Two?",
-        "a": "A year of everything for the two of you: every gift template and every game pack, on both your accounts. One of you pays; the other joins with the invite link you send. It's one payment for 365 days, not a subscription."
       },
       {
         "id": "giftcard",
@@ -831,7 +892,7 @@
       },
       {
         "q": "What are game packs?",
-        "a": "Extra decks for the games: more questions, bolder dares. Each one is a one-time payment and yours for good, and every pack comes with Ethos for Two. The games themselves stay free."
+        "a": "Extra decks for the games: more questions, bolder dares. Each one is a one-time payment and yours for good, and every pack comes with Ethos for Two while it runs. The games themselves stay free."
       },
       {
         "q": "Can they send one back?",
@@ -851,11 +912,11 @@
       },
       {
         "q": "Which currencies and payment methods?",
-        "a": "Prices are in euros, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay and other methods, through Stripe. Prices include VAT where it applies."
+        "a": "Prices are in euros, VAT included where it applies, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay, Google Pay and other methods, through Stripe."
       },
       {
         "q": "Refunds?",
-        "a": "At checkout you ask us to unlock your purchase straight away and tick that you then lose the 14-day right to cancel. If a gift won't open or play properly on their phone and we can't fix it, tell us within 30 days and you get your money back. Gift cards are different: change your mind within 14 days, before the code is redeemed, and we refund you in full. Where the right to cancel still applies, “Withdraw from a purchase” (at the foot of every page) says how."
+        "a": "Templates, “Make it special” and game packs: at checkout you ask us to unlock your purchase straight away and tick that you then lose the 14-day right to cancel. If a gift won't open or play properly on their phone and we can't fix it, tell us within 30 days and you get your money back. Ethos for Two is different: it's a service, so you can withdraw within 14 days and we refund what you paid, less the days you've used. Gift cards: change your mind within 14 days, before the code is redeemed, and we refund you in full. “Withdraw from a purchase”, at the foot of every page, says how."
       }
     ],
     "perTemplate": "All {n} premium templates · {price} each",
@@ -1019,7 +1080,11 @@
       "tooMany": "Too many tries. Wait a minute and try again.",
       "unavailable": "Payments are off for a moment. Try again in a little while.",
       "network": "No connection. Check it and try again.",
-      "generic": "Couldn't open checkout. Please try again."
+      "generic": "Couldn't open checkout. Please try again.",
+      "alreadyMember": "You already have Ethos for Two: it's on your account page.",
+      "paymentIssue": "Your last payment didn't go through: update your card on your account page first.",
+      "notOnSale": "That isn't on sale right now. Reload the page.",
+      "toAccount": "Your account"
     },
     "recovery": {
       "optIn": "If I don't finish paying, email me one link to come back to it."
@@ -1030,26 +1095,11 @@
       "everything": "Everything",
       "extras": "Make it special",
       "pass": "Ethos for Two",
+      "membership": "Ethos for Two",
       "pack": "Game pack",
       "giftcard": "Gift card",
       "upgrade": "Upgrade to Everything",
       "withBump": "{product}, plus every template"
-    },
-    "pass": {
-      "eyebrow": "Ethos for Two",
-      "title": "A year of everything, for both of you",
-      "per": "for a year, for two",
-      "blurb": "One of you pays, both of you have it. Paid once: it never renews on its own.",
-      "features": {
-        "templates": "Every gift template, on both your accounts",
-        "packs": "Every game pack, for one sofa or two phones",
-        "extras": "Video and voice messages on every gift",
-        "invite": "Your partner joins with a link you send"
-      },
-      "cta": "Get Ethos for Two",
-      "renewCta": "Renew for another year",
-      "renewing": "Renewing adds a year from the day your pass ends, so renewing early loses nothing.",
-      "note": "One payment, no subscription. We'll email you two weeks before it ends."
     },
     "giftcard": {
       "eyebrow": "A gift card",
@@ -1102,15 +1152,6 @@
       "toGift": "Back to your gift"
     },
     "account": {
-      "passTitle": "Ethos for Two",
-      "passActive": "Active until {date}.",
-      "passPartnerJoined": "Your partner has joined: everything is on both accounts.",
-      "passWaiting": "Your partner hasn't joined yet. Send them this link:",
-      "passAsPartner": "You're in on your partner's pass, until {date}.",
-      "passEndingSoon": "It ends in {days, plural, one {# day} other {# days}}. Renewing adds a year from the day it ends.",
-      "passRenew": "Renew for {price}",
-      "passNone": "Every template and every game pack for both of you, for a year. {price}, paid once.",
-      "passSee": "See Ethos for Two",
       "upgradeTitle": "Upgrade to Everything",
       "upgradeBlurb": "What you've paid for templates counts: every template, now and future, for {price} more.",
       "upgradeCta": "Upgrade for {price}",
@@ -1136,7 +1177,7 @@
       "copied": "Copied",
       "share": "Share",
       "shareTitle": "Ethos for Two",
-      "shareText": "I got us Ethos for Two: every gift template and game pack, for both of us. Join me here:",
+      "shareText": "I got us Ethos for Two: our dates saved and shared on both our phones, and every gift template and game pack. Join me here:",
       "note": "Only one person can join, so send it to them and nobody else."
     },
     "redeem": {
@@ -1168,8 +1209,9 @@
     "join": {
       "eyebrow": "Ethos for Two",
       "title": "Your partner saved you a seat.",
-      "subtitle": "Their pass covers both of you: every gift template and every game pack, for as long as it runs. It costs you nothing.",
+      "subtitle": "Their Ethos for Two covers both of you: saved dates and trips shared on both your phones, every gift template and every game pack, for as long as it runs. It costs you nothing.",
       "features": {
+        "dates": "Your saved dates and trips, shared and editable on both phones",
         "templates": "Every gift template, on your own account",
         "packs": "Every game pack, to play together",
         "free": "Nothing to pay, no card needed"
@@ -1177,21 +1219,23 @@
       "codeLabel": "Invite link or code",
       "noCode": "This link has lost its code. Paste the link your partner sent you, or ask them for it again.",
       "signInTitle": "Sign in to join",
-      "signInBlurb": "Your side of the pass lives on your own account. Sign in or make one, free; this page will be waiting.",
-      "button": "Join the pass",
+      "signInBlurb": "Your side of Ethos for Two lives on your own account. Sign in or make one, free; this page will be waiting.",
+      "button": "Join Ethos for Two",
       "joining": "Joining…",
       "done": {
         "title": "You're in.",
-        "detail": "Every template and game pack is yours too, until {date}.",
-        "detailNoDate": "Every template and game pack is yours too, for as long as the pass runs.",
+        "detail": "Your saved dates are shared, and every template and game pack is yours too, until {date}.",
+        "detailNoDate": "Your saved dates are shared, and every template and game pack is yours too, for as long as it runs.",
+        "ctaDates": "See my dates",
         "ctaGift": "Make a gift",
         "ctaGames": "Play a game"
       },
       "errors": {
         "notFound": "That invite doesn't work. Ask your partner for a fresh link.",
-        "taken": "Someone has already joined this pass.",
-        "own": "That's your own pass: send the link to your partner.",
-        "expired": "That pass has ended.",
+        "taken": "Someone has already joined this Ethos for Two.",
+        "own": "That's your own Ethos for Two: send the link to your partner.",
+        "hasOwn": "You already have Ethos for Two. Cancel yours first, or ask your partner to join yours.",
+        "expired": "That Ethos for Two has ended.",
         "signIn": "Sign in first, then join.",
         "tooMany": "Too many tries. Wait a minute and try again.",
         "generic": "That didn't work. Try again in a moment."
@@ -1574,7 +1618,7 @@
       "share": "Share",
       "copy": "Copy link",
       "copied": "Copied",
-      "private": "The plan is kept in this browser and travels inside the link itself. It is never stored on our servers."
+      "private": "The plan is kept in this browser and travels inside the link itself. It's stored on our servers only if you save it to your account."
     },
     "received": {
       "title": "Somebody planned this for you",
@@ -1755,7 +1799,7 @@
         },
         "private": {
           "a": "Yours",
-          "b": "plans never leave your phone"
+          "b": "plans stay on your phone unless you save them"
         }
       },
       "card": {
@@ -2322,22 +2366,240 @@
     },
     "hub": {
       "title": "Game packs",
-      "sub": "More cards for the same games, {price} each and yours for good. Or every pack and every gift template for a year, for both of you, with Ethos for Two.",
+      "sub": "More cards for the same games, {price} each and yours for good. Or every pack and every gift template, for both of you, with Ethos for Two.",
       "cta": "See inside: {n} cards"
     }
   },
-  "forTwo": {
-    "free": {
-      "eyebrow": "Dates, plans, long distance",
-      "price": "Free",
-      "blurb": "The map, the ideas, the plan you send. For everyone, for good.",
-      "dates": "Date ideas on a map of any town, with the forecast and the sunset",
-      "plans": "Plans you send as a link, and the reviews couples leave",
-      "ldr": "Meet in the middle, the clocks, dates for two screens",
-      "deck": "One deck of question cards",
-      "cta": "Find a date"
+  "membership": {
+    "hero": {
+      "eyebrow": "Ethos for Two",
+      "title": "Every date you plan, <em>kept for both of you.</em>",
+      "sub": "One membership for the two of you: save every date and trip, plan them together on both your phones, and unlock every gift template and game pack.",
+      "subPass": "One year for the two of you: save every date and trip, plan them together on both your phones, and unlock every gift template and game pack.",
+      "choose": "How you pay",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save {pct}%",
+      "perMonth": "{price} a month",
+      "perYear": "{price} a year",
+      "unitMonth": "a month",
+      "unitYear": "a year",
+      "unitPass": "for a year",
+      "yearlyNote": "That's {price} a month · save {pct}% on monthly",
+      "monthlyNote": "Billed monthly · cancel any time",
+      "cta": "Get Ethos for Two",
+      "termsMonthly": "{price} today, then every month until you cancel. Cancel any time from your account.",
+      "termsYearly": "{price} today, then every year until you cancel. We'll remind you a week before each renewal.",
+      "passNote": "Paid once · it doesn't renew by itself",
+      "passCta": "Get a year of Ethos for Two",
+      "passTerms": "One payment for 365 days. We'll email you two weeks before it ends.",
+      "renewCta": "Renew for another year",
+      "renewNote": "Renewing adds a year from the day yours ends, so renewing early loses nothing.",
+      "covers": "One payment covers both of you",
+      "coversCancel": "One payment covers both of you · cancel any time",
+      "trust": {
+        "stripe": "Secure checkout by Stripe",
+        "wallets": "Card, Apple Pay or Google Pay",
+        "cancel": "Cancel in two taps",
+        "once": "No renewal, no surprise"
+      },
+      "art": {
+        "myDates": "My dates",
+        "shared": "Shared with {name}",
+        "partner": "Sam",
+        "stops": "{n, plural, one {# stop} other {# stops}}",
+        "days": "{n, plural, one {# day} other {# days}}",
+        "saturday": "Saturday",
+        "friday": "Friday",
+        "date": "Date",
+        "trip": "Trip",
+        "polaroid": "Saturday, 8 pm",
+        "templates": "Every template",
+        "packs": "Every pack",
+        "cities": {
+          "paris": "Paris",
+          "rome": "Rome"
+        }
+      }
     },
-    "giftsEyebrow": "Gifts, paid once"
+    "features": {
+      "title": "What's in it",
+      "saved": "Unlimited saved dates and trips",
+      "shared": "Planned together, shared and editable on both your phones",
+      "templates": "Every gift template, with every extra",
+      "packs": "Every game pack, for one sofa or two phones",
+      "reminders": "A reminder the day before each date",
+      "maps": "Open a whole date in Apple or Google Maps"
+    },
+    "member": {
+      "title": "You have Ethos for Two",
+      "monthlyRenews": "Monthly · renews on {date}",
+      "yearlyRenews": "Yearly · renews on {date}",
+      "ends": "Ends on {date}",
+      "passRuns": "Your year runs until {date}",
+      "appStore": "Through the App Store",
+      "paymentFailed": "Payment failed: update your card",
+      "processing": "Your payment is still being confirmed",
+      "partnerIn": "You're in on your partner's Ethos for Two",
+      "manage": "Manage"
+    },
+    "compare": {
+      "eyebrow": "Free and For Two",
+      "title": "What's free, and what For Two adds",
+      "sub": "Finding a date, planning it and sending it stays free for everyone, with no account.",
+      "feature": "What you get",
+      "free": "Free",
+      "forTwo": "Ethos for Two",
+      "included": "Included",
+      "notIncluded": "Not included",
+      "rows": {
+        "ideas": "Date ideas on a map, with the forecast and the sunset",
+        "plan": "Plan a date and send it as a link",
+        "saved": "Saved dates and trips",
+        "shared": "Shared with your partner, editable on both phones",
+        "reminders": "A reminder the day before a date",
+        "maps": "Open a whole date in Apple or Google Maps",
+        "templates": "Gift templates",
+        "packs": "Game packs",
+        "ldr": "Long-distance tools and the games",
+        "price": "Price"
+      },
+      "values": {
+        "upTo": "Up to {n}",
+        "unlimited": "Unlimited",
+        "freeTemplates": "{names}",
+        "freeTemplatesCount": "{free} of {n}",
+        "allTemplates": "All {n}, with every extra",
+        "freeDecks": "The free decks",
+        "everyPack": "Every pack",
+        "freeForGood": "Free, for good",
+        "priceSub": "{monthly} a month or {yearly} a year, for two",
+        "pricePass": "{yearly} for a year, paid once, for two"
+      },
+      "cta": "Get Ethos for Two",
+      "noAccount": "Find a date"
+    },
+    "single": {
+      "eyebrow": "Paid once",
+      "title": "Or buy a single gift",
+      "sub": "Pay once and it's yours for good. No subscription.",
+      "special": {
+        "eyebrow": "For a free template",
+        "name": "Make it special",
+        "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
+        "note": "Sold in the editor, when you publish.",
+        "cta": "Open {name}"
+      }
+    },
+    "account": {
+      "title": "Ethos for Two",
+      "monthly": "Monthly · {price} a month · renews on {date}",
+      "yearly": "Yearly · {price} a year · renews on {date}",
+      "monthlyPlan": "Monthly · {price} a month",
+      "yearlyPlan": "Yearly · {price} a year",
+      "ending": "Ends on {date}: you keep everything until then",
+      "switching": "Switches to monthly around {date}",
+      "pass": "Your year runs until {date}",
+      "passEnding": "It ends in {days, plural, one {# day} other {# days}}. Renewing adds a year from the day it ends.",
+      "passCarryOn": "It ends in {days, plural, one {# day} other {# days}}. To carry on after that, choose monthly or yearly from {date}.",
+      "passRenew": "Renew for {price}",
+      "seePlans": "See the plans",
+      "appStore": "Through the App Store · renews on {date}",
+      "appStoreEnds": "Through the App Store · ends on {date}",
+      "appStoreManage": "Manage it in your iPhone's Settings → your name → Subscriptions.",
+      "partnerOf": "You're in on {name}'s Ethos for Two",
+      "partnerOfNoName": "You're in on your partner's Ethos for Two",
+      "partnerRenews": "For as long as it runs.",
+      "partnerUntil": "Until {date}.",
+      "pastDue": "We couldn't take your last payment. Update your card by {date} to keep Ethos for Two.",
+      "paused": "Ethos for Two is paused until the payment goes through.",
+      "updateCard": "Update card",
+      "joined": "{name} has joined",
+      "joinedNoName": "Your partner has joined",
+      "remove": "Remove",
+      "leave": "Leave",
+      "manageBilling": "Manage billing",
+      "manageBillingBlurb": "Card, invoices and billing address",
+      "switchYearly": "Switch to yearly · save {pct}%",
+      "switchMonthly": "Switch to monthly",
+      "cancel": "Cancel membership",
+      "resume": "Resume",
+      "resumeHint": "It won't renew. Changed your mind?",
+      "keepYearly": "Keep yearly",
+      "none": "Unlimited saved dates, every template and game pack, for both of you. {monthly} a month or {yearly} a year.",
+      "nonePass": "Unlimited saved dates, every template and game pack, for both of you. {yearly} for a year, paid once.",
+      "see": "See Ethos for Two",
+      "inApp": "Manage your membership at tryethos.io/account",
+      "done": {
+        "cancel": "Cancelled. You both keep everything until {date}.",
+        "cancelNow": "Cancelled. Nothing more will be charged.",
+        "resume": "It renews again.",
+        "switchYearly": "You're on yearly now.",
+        "switchMonthly": "It switches to monthly around {date}.",
+        "keepPlan": "You're staying on yearly.",
+        "leave": "You've left.",
+        "removePartner": "Removed. Your invite link has changed."
+      },
+      "errors": {
+        "generic": "That didn't work. Try again in a moment.",
+        "tooMany": "Too many tries. Wait a minute and try again.",
+        "signIn": "Your session has ended. Sign in again, then try once more.",
+        "unavailable": "That can't be changed from here right now. Reload the page.",
+        "appStore": "This membership is billed by Apple: manage it in your iPhone's Settings.",
+        "notConfigured": "Billing isn't available right now. Try again later.",
+        "paymentFailed": "The payment didn't go through, so nothing has changed. Update your card and try again.",
+        "requiresAction": "Your bank wants you to confirm the payment. Opening its page…"
+      },
+      "dialogs": {
+        "cancel": {
+          "title": "Cancel Ethos for Two?",
+          "body": "You both keep everything until {date}. After that nothing more is charged, your saved dates stay in your account, and gifts you've published stay online.",
+          "bodyNow": "It ends now, and the unpaid renewal isn't charged. Your saved dates stay in your account, and gifts you've published stay online.",
+          "confirm": "Cancel membership",
+          "keep": "Keep it"
+        },
+        "yearly": {
+          "title": "Switch to yearly?",
+          "body": "You'll pay {amount} today: {yearly} for a year, minus {credit} for the rest of this month. It then renews every year on {date} until you cancel.",
+          "loading": "Working out today's amount…",
+          "confirm": "Switch and pay {amount}",
+          "confirmLoading": "Switch to yearly",
+          "keep": "Stay monthly"
+        },
+        "monthly": {
+          "title": "Switch to monthly?",
+          "body": "From around {date} you'll pay {monthly} a month instead of {yearly} a year, until you cancel. We switch a couple of days before your year ends and take off what's left of it, so nothing is lost.",
+          "confirm": "Switch to monthly",
+          "keep": "Keep yearly"
+        },
+        "leave": {
+          "title": "Leave {name}'s Ethos for Two?",
+          "titleNoName": "Leave your partner's Ethos for Two?",
+          "body": "You'll stop sharing saved dates with them, and the templates and packs it unlocks go from your account. Your own saved dates stay yours.",
+          "confirm": "Leave",
+          "keep": "Stay"
+        },
+        "remove": {
+          "title": "Remove {name}?",
+          "titleNoName": "Remove your partner?",
+          "body": "They'll stop seeing your saved dates and lose what Ethos for Two unlocks. Your invite link changes, so you can invite someone else.",
+          "confirm": "Remove",
+          "keep": "Keep them"
+        }
+      }
+    },
+    "success": {
+      "title": "Ethos for Two is on.",
+      "detail": "{plan}: renews on {date}. Send your partner the link below and it's on their phone too.",
+      "emailed": "{plan}: renews on {date}. We've emailed you the link for your partner.",
+      "noDate": "Send your partner the link below and it's on their phone too.",
+      "noDateEmailed": "We've emailed you the link for your partner, and it's on your account page too.",
+      "processing": "Your payment is being processed. Ethos for Two starts as soon as it's confirmed, and we'll email you.",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "planFirst": "Plan your first date",
+      "toAccount": "Go to your account"
+    }
   },
   "lifecycle": {
     "remind": {
@@ -2418,5 +2680,160 @@
     "extra": "The surprise inside: {price}",
     "pick": "Wrap it in {name}",
     "wrapping": "Wrapping it…"
+  },
+  "savedDates": {
+    "meta": {
+      "title": "My dates"
+    },
+    "page": {
+      "title": "My dates",
+      "sub": "Dates and trips you've saved.",
+      "subShared": "Dates and trips you've saved, shared with {name}.",
+      "quota": "{used} of {limit} free saves",
+      "upgrade": "Save as many as you like",
+      "error": "Your saved dates didn't load.",
+      "retry": "Try again",
+      "empty": {
+        "title": "No saved dates yet",
+        "sub": "Plan a date on the map and save it here, or save a trip you like.",
+        "dates": "Find a date",
+        "trips": "See the trips"
+      }
+    },
+    "card": {
+      "date": "Date",
+      "trip": "Trip",
+      "stops": "{count, plural, one {# stop} other {# stops}}",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "someday": "No day yet",
+      "from": "From {name}",
+      "readOnly": "Read-only",
+      "reminder": "Reminder on",
+      "menu": {
+        "label": "More for {title}",
+        "open": "Open",
+        "rename": "Rename",
+        "remind": "Remind us the day before",
+        "delete": "Delete",
+        "deleteConfirm": "Deleted “{title}”"
+      },
+      "renameTitle": "Rename",
+      "renameLabel": "Name",
+      "renameSave": "Save",
+      "undo": "Undo",
+      "deleteFailed": "“{title}” couldn't be deleted. Try again.",
+      "renameFailed": "The new name didn't save. Try again.",
+      "remindFailed": "The reminder didn't change. Try again.",
+      "notOwner": "Only {name} can delete this one.",
+      "editedBy": "Changed by {name}"
+    },
+    "save": {
+      "title": "Keep this date",
+      "sub": "Save it to your account and find it again on any phone you sign in on.",
+      "cta": "Save to my dates",
+      "saving": "Saving…",
+      "saved": "Saved to my dates",
+      "synced": "All changes saved",
+      "offline": "Not saved yet",
+      "open": "Open My dates",
+      "close": "Close this date",
+      "closeConfirm": "Close this date? It stays in My dates, and this device starts a new plan.",
+      "remind": "Remind us the day before",
+      "remindNeedsDay": "Pick a day for the date and we'll remind you both the day before.",
+      "defaultTitle": "A date",
+      "shared": "Shared with {name}, who can change it too.",
+      "partners": "{name}'s date, shared with you.",
+      "quota": "{used} of {limit} free saves used",
+      "signIn": {
+        "title": "Sign in to save your date",
+        "sub": "Your plan stays on this device while you sign in, and saves itself when you're back."
+      },
+      "trip": {
+        "cta": "Save trip",
+        "saved": "Saved",
+        "remove": "Remove",
+        "removeLabel": "Remove {title} from My dates",
+        "byPartner": "Saved by {name}",
+        "failed": "The trip didn't save. Try again.",
+        "signIn": {
+          "title": "Sign in to save this trip",
+          "sub": "It goes in My dates, and saves itself once you're back."
+        }
+      }
+    },
+    "upsell": {
+      "eyebrow": "Ethos for Two",
+      "limit": {
+        "title": "Your {limit} free saves are used",
+        "body": "Free accounts keep {limit} saved dates and trips. With Ethos for Two you keep as many as you like, shared with your partner and editable on both your phones."
+      },
+      "read_only": {
+        "title": "This date is read-only for now",
+        "body": "Without Ethos for Two, your {limit} most recently changed dates stay editable. The others are kept safe and readable until you delete some or come back."
+      },
+      "maps": {
+        "title": "Open the whole date in Maps",
+        "body": "With Ethos for Two, every stop opens in Apple Maps or Google Maps in one tap, in order, with the way from one to the next."
+      },
+      "reminders": {
+        "title": "A reminder the day before",
+        "body": "With Ethos for Two, we email you both the day before each saved date, with the plan inside."
+      },
+      "cta": "See Ethos for Two",
+      "manage": "Manage my dates",
+      "notNow": "Not now",
+      "perMonth": "{price} a month",
+      "perYear": "{price} a year",
+      "forYear": "{price} for a year",
+      "or": "or",
+      "forBoth": "for both of you"
+    },
+    "sync": {
+      "conflict": "{name} changed this date: you're seeing the latest",
+      "conflictHere": "This date changed somewhere else: you're seeing the latest",
+      "readOnly": "This date is read-only now, so changes here aren't saved to it.",
+      "gone": "This date isn't in My dates any more. The plan is still on this device."
+    },
+    "open": {
+      "loading": "Opening your date…",
+      "replaceConfirm": "This replaces the plan you were making on this device. It isn't saved. Open this date?",
+      "notFound": "That date isn't in your account, or it was deleted.",
+      "failed": "That date didn't open. Check your connection and try again.",
+      "signIn": "Sign in to open this date.",
+      "signInSub": "Sign in with the account it was saved to, and it opens right here."
+    },
+    "readOnly": {
+      "title": "Read-only",
+      "body": "Without Ethos for Two, only your {limit} most recently changed dates can be edited. This one stays safe in My dates.",
+      "why": "Why?"
+    },
+    "maps": {
+      "cta": "Open in Maps",
+      "label": "Open the whole date in a maps app",
+      "google": "Google Maps",
+      "apple": "Apple Maps",
+      "locked": "With Ethos for Two"
+    },
+    "remindOff": {
+      "title": "Turn off the reminder?",
+      "body": "Neither of you will be emailed the day before “{title}”.",
+      "confirm": "Turn it off",
+      "done": "The reminder is off.",
+      "doneBody": "No email the day before “{title}”. You can turn it back on in My dates."
+    },
+    "errors": {
+      "unauthenticated": "Sign in to save your dates.",
+      "invalid_input": "That couldn't be saved. Reload the page and try again.",
+      "empty_plan": "Add a stop to the plan first.",
+      "unknown_trip": "That trip isn't on Ethos any more.",
+      "limit_reached": "Your free saves are used.",
+      "read_only": "This date is read-only.",
+      "not_found": "That date isn't in your account any more.",
+      "not_owner": "Only the person who saved it can delete it.",
+      "conflict": "Someone changed it first. You're seeing the latest.",
+      "rate_limited": "That's a lot at once. Try again in a minute.",
+      "not_configured": "Saving isn't available right now.",
+      "network": "You're offline. Try again once you're connected."
+    }
   }
 }

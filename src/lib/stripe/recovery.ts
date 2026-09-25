@@ -30,6 +30,8 @@ function askedForRecovery(session: Stripe.Checkout.Session): boolean {
  */
 export function recoveryTarget(session: Stripe.Checkout.Session): RecoveryTarget | null {
   const m = session.metadata ?? {};
+  // A subscription checkout has no recovery link, and nobody is chased into a subscription.
+  if (session.mode === "subscription") return null;
   if (!m.purchase_id || !m.product || !isProductId(m.product)) return null;
   if (!askedForRecovery(session)) return null;
   const url = session.after_expiration?.recovery?.url;

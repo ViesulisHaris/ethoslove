@@ -4,7 +4,9 @@ import { isConfigured } from "@/lib/env";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
 import { dueDates, formatMonthDay, needsSending, type ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { sendReminderEmail } from "@/lib/email/notify";
+import { sendDateReminder } from "@/lib/email/saved-dates";
 import { pageUrl, siteUrl } from "@/lib/email/urls";
+import { sendDateReminders, supabaseReminderStore } from "@/lib/saved-dates/reminders";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -16,7 +18,7 @@ const BUDGET_MS = 45_000;
 /** Resend's default limit is two requests a second per team; one email at a time, spaced, stays under it. */
 const SEND_GAP_MS = 500;
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const makePath = (occasion: ReminderOccasion) => (occasion === "other" ? "/templates?ref=email-reminder" : `/occasions/${occasion}?ref=email-reminder`);
 
@@ -25,7 +27,7 @@ const makePath = (occasion: ReminderOccasion) => (occasion === "other" ? "/templ
  * days before that, for runs that were missed) get their email. 29 February is sent for on the 28th
  * in other years. Each reminder is claimed before its email goes (last_sent_year = the occasion's
  * year), so two runs at once can't both send it; if the email fails, the claim is given back and
- * the next run tries again.
+ * the next run tries again. Then, in the time left, members' saved dates that are tomorrow.
  */
 export async function GET(request: NextRequest) {
   // Fail closed: without a configured secret nobody can trigger the cron.
@@ -92,5 +94,25 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, sent, failed, deferred });
+  // Then the saved dates that are tomorrow, with whatever time is left (lib/saved-dates/reminders.ts).
+  // A failure here is logged and reported, and never takes back what the first part sent.
+  let dates: Awaited<ReturnType<typeof sendDateReminders>> | { error: string };
+  try {
+    dates = await sendDateReminders({
+      store: supabaseReminderStore(admin),
+      send: sendDateReminder,
+      links: async (row, locale) => ({
+        openUrl: row.kind === "trip" && typeof row.data === "object" && row.data && !Array.isArray(row.data) && typeof row.data.tripId === "string" ? pageUrl(locale, `/trips/${row.data.tripId}`) : `${pageUrl(locale, "/plan")}#s=${row.id}`,
+        offUrl: `${siteUrl()}/api/saved-dates/remind-off?t=${await signToken("saved-date-reminder-off", row.id, linkKey)}&l=${locale}`,
+      }),
+      now: new Date(),
+      inTime: () => Date.now() - started <= BUDGET_MS,
+      pause: () => sleep(SEND_GAP_MS),
+    });
+  } catch (error) {
+    console.error("[cron/reminders] saved dates failed", (error as Error).message);
+    dates = { error: "unavailable" };
+  }
+
+  return NextResponse.json({ ok: true, sent, failed, deferred, dates });
 }

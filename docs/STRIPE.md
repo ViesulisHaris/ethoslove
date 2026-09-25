@@ -1,13 +1,36 @@
 # Stripe setup
 
-The Stripe account is shared with other businesses (Migla.io and others), which shapes three
-rules the code follows:
+The Stripe account is shared with other businesses (secuora.net, domainscan and others), whose
+webhooks receive every event on it, Ethos's included. secuora's takes the metadata key
+`supabase_user_id` (on any session, customer, subscription or invoice) and a subscription session's
+`client_reference_id` as its own user id, ends any trialing subscription whose card it has seen, and
+pays affiliate commission on subscription invoices with a promotion code. Every product is a one-time
+payment except Ethos for Two, which is a subscription (monthly or yearly) once
+`STRIPE_SUBSCRIPTIONS_ENABLED=true`, and until then the one-time yearly pass. So every Ethos object
+follows these rules (docs/MEMBERSHIP.md 2.1, where each is tested):
 
-- **No subscriptions, ever.** Other businesses' webhooks act on subscription events. Every Ethos
-  product is a one-time payment (`mode: "payment"`); the yearly pass is paid once for 365 days.
+| # | Rule |
+| --- | --- |
+| R1 | The metadata key `supabase_user_id` is never written, anywhere. Ethos's is `ethos_user_id` (one-time sessions keep `user_id`, as before). |
+| R2 | A subscription session never sets `client_reference_id`: its purchase id is `metadata.purchase_id`. |
+| R3 | Every Ethos session, customer, subscription (`subscription_data.metadata`) and invoice carries `metadata.app = "ethos"`. Customers and invoices are tagged after checkout (Checkout can't set them). |
+| R4 | The webhook acts only on Ethos's objects: sessions with our `purchase_id` and product (and `app` on a subscription session), subscriptions and invoices with the `app` marker (on the object or in `parent.subscription_details.metadata`) or a subscription id already in `couple_passes`. Anything else is answered 200 without another read or a write. No `customer.*` events are handled. |
+| R5 | The Customer Portal always opens on Ethos's own configuration (`STRIPE_PORTAL_CONFIGURATION`). The account's default configuration is never read, changed or relied on. |
+| R6 | No coupons, promotion codes, discounts or trials, and no standing Prices: every price is inline `price_data`. The only catalogue object Ethos makes on purpose is the price-less "Ethos for Two" Product. |
+| R7 | A subscription goes on a Stripe customer only when Ethos made it for that very user (`metadata.app` and `metadata.ethos_user_id` checked); no customer is ever looked up by email. |
+| R8 | Never a trial (secuora's trial guard would end it and charge at once). |
+| R9 | `metadata.kind` is never `ai_credits` (secuora's credit packs). |
+| R10 | One-time sessions never set `customer`, `customer_creation` or `invoice_creation`. |
+| R11 | Nothing depends on an account-wide setting (the retry schedule, what happens after the last retry, Stripe's own emails): every subscription status is handled and Ethos sends its own emails. |
+
+And, as before:
+
 - **Ethos only fulfils its own sessions.** A session is Ethos's when its metadata carries a
-  `purchase_id` and one of the product ids in `src/lib/pricing/products.ts`.
-- **Every charge says `ETHOS`** on the bank statement (statement descriptor suffix).
+  `purchase_id` and one of the product ids in `src/lib/pricing/products.ts` (and, for a
+  subscription, `app = "ethos"`).
+- **Every one-time charge says `ETHOS`** on the bank statement (statement descriptor suffix). A
+  subscription has no suffix to add; with `STRIPE_PRODUCT_FORTWO` set, its charges carry that
+  Product's descriptor, `ETHOS FOR TWO` (section 9).
 
 Do everything once in **Test mode**, run the test script in `docs/LAUNCH.md`, then repeat in live
 mode. Nothing in the code changes between the two except the keys.
@@ -26,7 +49,9 @@ charged by construction, and no Stripe Price has to be kept in step with it. The
 | Everything                              | `everything` | €24.99 |
 | Make it special (free templates only)   | `extras`     | €7.49  |
 | Every other template, added at checkout | bump         | Everything minus the line it rides on: +€15.00 on a single, +€17.50 on Make it special |
-| Ethos for Two, one year for two         | `pass`       | €29.00 |
+| Ethos for Two, one year for two, paid once (while subscriptions are off) | `pass` | €29.99 |
+| Ethos for Two, monthly subscription for two (while `STRIPE_SUBSCRIPTIONS_ENABLED=true`) | `membership`, plan `monthly` | €4.99 a month |
+| Ethos for Two, yearly subscription for two (same) | `membership`, plan `yearly` | €29.99 a year |
 | Game pack                               | `pack`       | €2.99  |
 | Gift card "Give Everything"             | `giftcard`   | €24.99, only while `GIFT_CARDS_ENABLED=true` |
 | Upgrade to Everything                   | `upgrade`    | €24.99 minus what was paid, at least €4.99 |
@@ -55,6 +80,7 @@ STRIPE_PRODUCT_PACK=prod_…
 STRIPE_PRODUCT_GIFTCARD=prod_…
 STRIPE_PRODUCT_UPGRADE=prod_…
 STRIPE_PRODUCT_BUMP=prod_…
+STRIPE_PRODUCT_FORTWO=prod_…   # made by scripts/setup-billing-portal.mjs (section 9), not by hand
 ```
 
 A price on those products is never used: the amount always comes from the catalogue.
@@ -80,6 +106,8 @@ STRIPE_SECRET_KEY=sk_test_…             # server only, never NEXT_PUBLIC
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_…
 STRIPE_WEBHOOK_SECRET=whsec_…           # section 6
 STRIPE_AUTOMATIC_TAX=true               # section 5; true in production
+STRIPE_PORTAL_CONFIGURATION=bpc_…       # section 9, printed by scripts/setup-billing-portal.mjs
+STRIPE_SUBSCRIPTIONS_ENABLED=true       # Ethos for Two as a subscription; unset, the one-time pass
 ```
 
 ## 4. Statement descriptor (once per account)
@@ -111,7 +139,18 @@ Developers → Webhooks → **Add endpoint** (or edit the existing one):
   - `checkout.session.expired` (new: the abandoned-checkout email)
   - `charge.refunded`
   - `charge.dispute.created`
+  - Ethos for Two as a subscription (add them before `STRIPE_SUBSCRIPTIONS_ENABLED=true`):
+    `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid`,
+    `invoice.payment_failed`, `invoice.payment_action_required`
 - Copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`.
+
+Every subscription and invoice event is re-read from Stripe before anything but its ownership is
+read (`src/lib/stripe/events.ts`), so the endpoint's API version doesn't matter and neither does the
+order events arrive in: one function sets a membership from the subscription as it is now
+(`applySubscriptionState`, docs/MEMBERSHIP.md 2.5). Each paid invoice becomes a `purchases` row (the
+first is the checkout's own purchase), a renewal Stripe can't collect keeps the membership running
+for a week while Stripe retries and emails the owner once, and a membership that runs out emails
+them once too.
 
 Only one deployment should own this endpoint at a time: the old site's webhook also fulfils
 `single`/`pick3`/`everything` sessions and sends its own receipt, so two live endpoints would mean
@@ -154,14 +193,55 @@ the buyer closed the tab.
 - Every session is headed "Ethos" with the site's icon (`branding_settings`). If Stripe ever refuses
   it, checkout retries without it and logs it.
 
-## 8. Going live
+## 8. Refunds and withdrawals (Ethos for Two)
+
+A refund of a one-time product takes back what it unlocked, as before. For Ethos for Two:
+
+- **A dispute** on any of its payments ends the membership now, for both people, and the webhook
+  cancels the subscription at Stripe at once.
+- **A full refund** of the payment for the period it is in (the latest one; for a pass, its own
+  year) ends it the same way; refunding an older period changes nothing else.
+- **A withdrawal within 14 days** (the buyer asked for it to start straight away, so they pay for
+  the days used): for a subscription, Dashboard → the subscription → **Cancel subscription →
+  Immediately → Refund last payment: prorated**; for a pass, refund the prorated amount (price × days
+  left / 365) with the reason **Requested by customer**. The webhook ends it for both, keeps the
+  payment as paid, and puts no gift back to draft (the days used were paid for). A buyer who paid
+  without the tickbox (the fallback notice) is refunded in full.
+- Any other partial refund is a goodwill gesture and changes nothing.
+
+None of these sends the "Ethos for Two has ended" email: nobody who asked for their money back is
+told to come back.
+
+## 9. The Customer Portal and the "Ethos for Two" Product
+
+`node scripts/setup-billing-portal.mjs` (test mode first; a live key needs `--live`) makes or updates,
+idempotently, the two Stripe objects subscriptions need, found by their own metadata and never
+anything else:
+
+1. **Ethos's portal configuration**: cancel at the end of the period (no survey), update the card,
+   invoices, billing name and address; no plan switching (monthly → yearly happens on our account
+   page, with an inline price; yearly → monthly at the renewal, by the daily job). The account's
+   default configuration is left alone.
+2. **The "Ethos for Two" Product**, with no Price, the digital-services tax code and the statement
+   descriptor `ETHOS FOR TWO`.
+
+It prints `STRIPE_PORTAL_CONFIGURATION` and `STRIPE_PRODUCT_FORTWO`: put them in `.env.local` and
+Vercel Preview (test), then in Vercel Production (live). Without the first, `POST /api/stripe/portal`
+answers 503 rather than open another business's portal.
+
+## 10. Going live
 
 1. Leave Test mode. Make sure the account is activated (legal entity, bank account, identity).
 2. Developers → API keys (live): copy `sk_live_…` and `pk_live_…`.
-3. Developers → Webhooks (live mode): the endpoint and the five events above; copy its secret.
+3. Developers → Webhooks (live mode): the endpoint and the events above; copy its secret.
 4. Vercel → Environment Variables: `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`,
    `STRIPE_WEBHOOK_SECRET`, `STRIPE_AUTOMATIC_TAX=true`, and any `STRIPE_PRODUCT_*` you use. Redeploy.
 5. Buy one template with a real card, refund it in the Dashboard, and check the unlock disappears.
+6. Ethos for Two as a subscription, once docs/MEMBERSHIP.md section 7 is done (migrations 0014 and
+   0015, the test-mode run, the owners of the other businesses told): `node
+   scripts/setup-billing-portal.mjs --live`, the two variables it prints, the five subscription
+   events on the live endpoint, then `STRIPE_SUBSCRIPTIONS_ENABLED=true` and redeploy. Until then
+   the site sells the €29.99 one-time year.
 
 Keep the test keys in `.env.local`, so local development keeps using the sandbox.
 
@@ -177,16 +257,24 @@ on the success page only to the signed-in buyer, or to a guest whose account tha
 ## What the code does with all of it
 
 1. `POST /api/stripe/checkout` (contract C1): checks the request against the catalogue and the
-   buyer (`src/lib/commerce/plan.ts`), writes a pending `purchases` row for a signed-in buyer, and
-   creates the Checkout Session (`src/lib/stripe/line-items.ts`): the lines at the planned amounts,
+   buyer (`src/lib/commerce/plan.ts`: Ethos for Two, `{ product: "membership", plan }`, is a
+   subscription or the one-time year depending on `STRIPE_SUBSCRIPTIONS_ENABLED`, and never a second
+   one: `already_member`, `payment_issue`), writes a pending `purchases` row for a signed-in buyer, and
+   creates the Checkout Session (`src/lib/stripe/line-items.ts`; a subscription's is
+   `membershipSessionParams`, under the rules above): the lines at the planned amounts,
    the metadata fulfilment trusts (no gift ids, names or notes), the withdrawal tickbox, Stripe's
    default 24-hour expiry with a recovery link, no promotion codes, the "Ethos" header, the `ETHOS`
    suffix and, when `STRIPE_AUTOMATIC_TAX=true`, automatic tax (`src/lib/stripe/create-session.ts`
    steps down from the tickbox, the marketing box or the branding rather than fail a sale).
-2. `POST /api/stripe/webhook`: verifies the signature, then fulfils (`src/lib/stripe/fulfil.ts`:
-   unlock rows, the pass year, the gift card, and the withdrawal sentence the buyer ticked, stored on
-   the purchase in `terms_consent` / `terms_consent_at` (migration 0012) and quoted on the receipt),
-   revokes on refund or dispute
-   (`src/lib/commerce/revoke.ts`), or emails the recovery link for an expired session to a buyer who
-   ticked Stripe's marketing box (`src/lib/stripe/recovery.ts`).
-3. Publishing checks the unlock rows on the server. Nothing client-side is trusted.
+2. `POST /api/stripe/webhook`: verifies the signature, then (`src/lib/stripe/events.ts`) fulfils
+   (`src/lib/stripe/fulfil.ts`: unlock rows, the pass year, the membership, the gift card, and the
+   withdrawal sentence the buyer ticked, stored on the purchase in `terms_consent` /
+   `terms_consent_at` (migration 0012) and quoted on the receipt or the membership's welcome), keeps
+   a subscription's membership in step with Stripe (`src/lib/commerce/memberships.ts`), revokes on
+   refund or dispute (`src/lib/commerce/revoke.ts`), or emails the recovery link for an expired
+   session to a buyer who ticked Stripe's marketing box (`src/lib/stripe/recovery.ts`).
+3. `POST /api/membership` (cancel, resume, switch plans, leave, remove a partner) and
+   `POST /api/stripe/portal` (card, invoices, cancelling in Stripe's portal) manage a membership; the
+   daily `/api/cron/passes` re-reads subscriptions whose period has passed, makes the yearly →
+   monthly switches owners asked for, and emails a week before each yearly renewal.
+4. Publishing checks the unlock rows on the server. Nothing client-side is trusted.

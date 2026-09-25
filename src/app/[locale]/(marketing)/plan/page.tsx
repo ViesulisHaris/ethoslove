@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { currencyFor, subscriptionsEnabled } from "@/lib/pricing/products";
 import { pageMetadata } from "@/lib/seo";
 import { PlanView } from "@/components/dates/plan-view";
 
@@ -13,9 +14,10 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/pla
 export default async function PlanPage({ params }: PageProps<"/[locale]/plan">) {
   const { locale } = await params;
   setRequestLocale(locale);
+  // Read at build time (the page is static): the Ethos for Two sheet shows the monthly price only while it is sold.
   return (
     <div className="-mt-[var(--header-h)] min-h-dvh bg-blush-paper pt-[var(--header-h)]">
-      <PlanView />
+      <PlanView monthly={subscriptionsEnabled()} currency={currencyFor(locale === "es" ? "ES" : "US")} />
     </div>
   );
 }

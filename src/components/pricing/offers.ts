@@ -1,5 +1,6 @@
 import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
-import { BUMP, PRODUCTS, bumpAmount, type Currency, type ProductId } from "@/lib/pricing/products";
+import type { MembershipSummary } from "@/lib/membership/types";
+import { BUMP, PRODUCTS, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
 
 /**
  * What the paywall, the pricing page and the account page offer, worked out from the catalogue
@@ -14,6 +15,8 @@ import { BUMP, PRODUCTS, bumpAmount, type Currency, type ProductId } from "@/lib
  */
 export type CheckoutRequest = {
   product: ProductId;
+  /** Ethos for Two's plan. The server decides whether it is a subscription or the one-time year. */
+  plan?: MembershipPlan;
   templateSlugs?: string[];
   packId?: string;
   addEverything?: boolean;
@@ -28,12 +31,20 @@ export type CheckoutRequest = {
 export type CheckoutResult = { url: string } | { error: string };
 
 /** Why checkout didn't open, as a key under money.checkoutErrors. */
-export type CheckoutError = "alreadyOwned" | "signIn" | "tooMany" | "unavailable" | "network" | "generic";
+export type CheckoutError = "alreadyOwned" | "alreadyMember" | "paymentIssue" | "notOnSale" | "signIn" | "tooMany" | "unavailable" | "network" | "generic";
 
 export function checkoutErrorKey(error: string): CheckoutError {
   switch (error) {
     case "already_owned":
       return "alreadyOwned";
+    case "already_member":
+      return "alreadyMember";
+    // Stripe is still collecting their last payment: a second subscription would charge twice.
+    case "payment_issue":
+      return "paymentIssue";
+    // A page from before the switch changed (the monthly plan while subscriptions are off, the old pass while they're on).
+    case "not_on_sale":
+      return "notOnSale";
     case "sign_in_required":
     case "unauthenticated":
       return "signIn";
@@ -150,12 +161,72 @@ export function resumePath(slug: string, replyToken?: string): string {
   return `/create/${slug}?resume=publish${replyToken ? `&reply=${encodeURIComponent(replyToken)}` : ""}`;
 }
 
-/** A pricing FAQ entry (messages pricing.faq). `id` marks the ones about something that can be off sale. */
-export type FaqItem = { q: string; a: string; id?: string };
+/**
+ * A pricing FAQ entry (messages pricing.faq). `id` marks the ones that depend on what is on sale:
+ * "giftcard" while gift cards are sold, "subscriptions" while Ethos for Two is a subscription, and
+ * "pass" while it is the one-time year instead. A question answered both ways has one of each.
+ */
+export type FaqItem = { q: string; a: string; id?: string; /** "forTwo": listed under Ethos for Two on /pricing. */ group?: "forTwo" };
 
-/** The questions worth asking: none about the gift card while it isn't sold (giftCardsOnSale). */
-export function pricingFaq(faq: FaqItem[], onSale: { giftCards: boolean }): FaqItem[] {
-  return faq.filter((item) => onSale.giftCards || item.id !== "giftcard");
+/** The questions worth asking: none about the gift card while it isn't sold, and each Ethos for Two answer only for the way it is sold now. */
+export function pricingFaq(faq: FaqItem[], onSale: { giftCards: boolean; subscriptions: boolean }): FaqItem[] {
+  return faq.filter((item) => {
+    if (item.id === "giftcard") return onSale.giftCards;
+    if (item.id === "subscriptions") return onSale.subscriptions;
+    if (item.id === "pass") return !onSale.subscriptions;
+    return true;
+  });
+}
+
+/**
+ * The plan the pricing page opens on: yearly, unless the link asked for monthly and monthly is on
+ * sale. While subscriptions are off there is only the year.
+ */
+export function initialPlan(value: string | null | undefined, subscriptions: boolean): MembershipPlan {
+  return subscriptions && value === "monthly" ? "monthly" : "yearly";
+}
+
+/** The checkout body for Ethos for Two: the product and the plan, and never an amount. */
+export function membershipRequest(plan: MembershipPlan): Pick<CheckoutRequest, "product" | "plan"> {
+  return { product: "membership", plan };
+}
+
+/** Inside this many days of its end, a pass's owner is offered the renewal (while subscriptions are off). */
+export const PASS_RENEW_WITHIN_DAYS = 30;
+const DAY = 86_400_000;
+
+/**
+ * What the pricing page's Ethos for Two shows a signed-in visitor, from GET /api/entitlements'
+ * membership: the offer to buy (nobody's member, or a subscription that has ended), a pass year to
+ * renew (only while subscriptions are off, in its last 30 days or when the link asked for it: a
+ * renewal is a year from its end), or what they already have. Pure, so each case is unit tested.
+ */
+export type HeroMemberState =
+  | { kind: "buy" }
+  | { kind: "renew"; endsAt: string }
+  | { kind: "partner" }
+  | { kind: "member"; line: "monthlyRenews" | "yearlyRenews" | "ends" | "passRuns" | "appStore" | "paymentFailed" | "processing"; date: string | null };
+
+export function heroMemberState(membership: MembershipSummary | null, context: { subscriptions: boolean; renewAsked: boolean; now: number }): HeroMemberState {
+  if (!membership) return { kind: "buy" };
+  if (!membership.isOwner) return membership.running ? { kind: "partner" } : { kind: "buy" };
+  if (!membership.running) {
+    if (membership.status === "past_due") return { kind: "member", line: "paymentFailed", date: null };
+    if (membership.status === "incomplete") return { kind: "member", line: "processing", date: null };
+    return { kind: "buy" };
+  }
+  if (membership.status === "past_due") return { kind: "member", line: "paymentFailed", date: null };
+  if (membership.manage === "app_store") return { kind: "member", line: "appStore", date: membership.renews ? membership.periodEnd : membership.endsAt };
+  if (membership.provider === "stripe_pass" || membership.provider === "app_store_pass") {
+    const endsAt = membership.endsAt ?? membership.periodEnd;
+    const lastDays = Date.parse(endsAt) - context.now <= PASS_RENEW_WITHIN_DAYS * DAY;
+    // A pass bought on the web renews as a pass only while the pass is what's sold; with
+    // subscriptions on, a running pass can't be carried into one (docs/MEMBERSHIP.md 8).
+    if (membership.provider === "stripe_pass" && !context.subscriptions && (lastDays || context.renewAsked)) return { kind: "renew", endsAt };
+    return { kind: "member", line: "passRuns", date: endsAt };
+  }
+  if (!membership.renews) return { kind: "member", line: "ends", date: membership.endsAt ?? membership.periodEnd };
+  return { kind: "member", line: membership.plan === "monthly" ? "monthlyRenews" : "yearlyRenews", date: membership.periodEnd };
 }
 
 /** A partner invite from the link they were sent, pasted whole, or from the bare code. */
@@ -172,10 +243,10 @@ export function inviteCodeFrom(input: string): string | null {
 }
 
 /** What a finished checkout handed over, which is what the success page talks about. */
-export type PurchaseOutcome = "gift" | "everything" | "pass" | "giftcard" | "pack";
+export type PurchaseOutcome = "gift" | "everything" | "pass" | "membership" | "giftcard" | "pack";
 
 export function purchaseOutcome(sold: { product: ProductId; bump: boolean }): PurchaseOutcome {
-  if (sold.product === "pass" || sold.product === "giftcard" || sold.product === "pack") return sold.product;
+  if (sold.product === "pass" || sold.product === "membership" || sold.product === "giftcard" || sold.product === "pack") return sold.product;
   // The order bump and the upgrade both end in "*": the buyer now has every template.
   if (sold.product === "everything" || sold.product === "upgrade" || sold.bump) return "everything";
   return "gift";
@@ -226,7 +297,7 @@ export function redeemErrorKey(error: string | undefined, status?: number): Rede
 }
 
 /** Why joining a pass failed, as a key under money.join.errors (lib/commerce/passes.ts joinPass). */
-export type JoinError = "notFound" | "taken" | "own" | "expired" | "signIn" | "tooMany" | "generic";
+export type JoinError = "notFound" | "taken" | "own" | "hasOwn" | "expired" | "signIn" | "tooMany" | "generic";
 
 export function joinErrorKey(error: string | undefined, status?: number): JoinError {
   if (status === 401) return "signIn";
@@ -240,6 +311,9 @@ export function joinErrorKey(error: string | undefined, status?: number): JoinEr
       return "taken";
     case "own_pass":
       return "own";
+    // They have an Ethos for Two of their own running: two memberships for one person would pay twice.
+    case "has_own":
+      return "hasOwn";
     case "expired":
       return "expired";
     case "sign_in_required":

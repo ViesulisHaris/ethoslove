@@ -28,6 +28,9 @@ import { mergePlaces } from "@/lib/dates/tiles";
 import { suggestTimes } from "@/lib/dates/timing";
 import { isWet, type Forecast } from "@/lib/dates/weather";
 import { findTown } from "@/lib/dates/where";
+import { writeLink } from "@/lib/saved-dates/link";
+import type { SyncNotice } from "@/lib/saved-dates/sync";
+import { useSavedPlanSync, useSyncNoticeText } from "@/components/saved-dates/use-saved-plan-sync";
 import { GroupIcon } from "./group-icon";
 import { createHoverStore, useHoveredId, useIsHovered, type HoverStore } from "./hover-store";
 import { IdeaPanel } from "./idea-panel";
@@ -542,6 +545,10 @@ export function DatesExplorer() {
 
   const stamp = useCallback((p: Plan) => ({ ...p, date, ...(where?.name && shareable ? { where: where.name.slice(0, 80) } : {}) }), [date, where, shareable]);
   const sayAboutPlan = useCallback((text: string) => setPlanNotice({ text, at: Date.now() }), []);
+  // A plan saved to their account is saved again from here as stops go in and out (components/saved-dates).
+  const syncNoticeText = useSyncNoticeText();
+  const onSyncNotice = useCallback((notice: SyncNotice) => sayAboutPlan(syncNoticeText(notice)), [sayAboutPlan, syncNoticeText]);
+  useSavedPlanSync(onSyncNotice);
   /**
    * A place in another town is not one more stop of this date: London's plan with a café in Lisbon
    * read "24756 min walk". It starts a new plan once they have said so: true then, null when they
@@ -549,7 +556,10 @@ export function DatesExplorer() {
    */
   const startsOver = useCallback((at: LatLng): boolean | null => {
     if (!isFarFromPlan(plan, at)) return false;
-    return window.confirm(plan.where ? t("plan.newCity", { place: plan.where }) : t("plan.newCityUnnamed")) ? true : null;
+    if (!window.confirm(plan.where ? t("plan.newCity", { place: plan.where }) : t("plan.newCityUnnamed"))) return null;
+    // The new plan is not the saved date they had open: that one stays as it was, in My dates.
+    writeLink(null);
+    return true;
   }, [plan, t]);
   const togglePlan = useCallback(
     (place: Place) => {

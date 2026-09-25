@@ -1,12 +1,13 @@
 import { getTranslations } from "next-intl/server";
-import { giftCardsOnSale } from "@/lib/pricing/products";
+import { giftCardsOnSale, subscriptionsEnabled } from "@/lib/pricing/products";
 import { pricingFaq, type FaqItem } from "@/components/pricing/offers";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export async function Faq() {
   const t = await getTranslations("pricing");
-  // No question about the gift card while it isn't on sale (GIFT_CARDS_ENABLED).
-  const faq = pricingFaq(t.raw("faq") as FaqItem[], { giftCards: giftCardsOnSale() });
+  // No question about the gift card while it isn't on sale (GIFT_CARDS_ENABLED), and Ethos for Two's
+  // answers only for the way it is sold now (STRIPE_SUBSCRIPTIONS_ENABLED).
+  const faq = pricingFaq(t.raw("faq") as FaqItem[], { giftCards: giftCardsOnSale(), subscriptions: subscriptionsEnabled() });
   return (
     <section className="border-b border-line py-20 lg:py-28">
       <div className="container-x grid gap-10 lg:grid-cols-12">

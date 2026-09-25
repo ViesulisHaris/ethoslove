@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Car, Gift, Moon, Plane, Ticket } f
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
+import { currencyFor, subscriptionsEnabled } from "@/lib/pricing/products";
 import { breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { cityName, findAirport } from "@/lib/trips/airports";
 import { monthRanges } from "@/lib/trips/months";
@@ -11,6 +12,7 @@ import { tiqetsSearch, tripCarHire, tripTickets } from "@/lib/trips/partners";
 import { budgetMark, getTrip, stopName, TRIPS, type Trip } from "@/lib/trips/presets";
 import { TRIP_GIFT_SLUG, tripGiftFields, tripUnwrap } from "@/lib/trips/trip-gift";
 import { FloralFrame } from "@/components/marketing/home/cutouts";
+import { SaveTripButton } from "@/components/saved-dates/save-trip-button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FlightFinder } from "@/components/trips/flight-finder";
 import { PartnerLink } from "@/components/trips/partner-link";
@@ -127,6 +129,8 @@ export default async function TripPage({ params }: PageProps<"/[locale]/trips/[i
                   <Plane aria-hidden="true" className="size-4 text-rose-deep" />
                   {t("detail.jump.flights")}
                 </a>
+                {/* Static page: the switch is read at build time, which is when a change to it lands anyway. */}
+                <SaveTripButton tripId={trip.id} title={trip.title[l]} monthly={subscriptionsEnabled()} currency={currencyFor(l === "es" ? "ES" : "US")} />
               </div>
             </div>
           </div>

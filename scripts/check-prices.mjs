@@ -19,19 +19,22 @@ import { join, relative } from "node:path";
 // field, so Node warns that it had to detect the module syntax: true, harmless, and only noise here.
 process.removeAllListeners("warning");
 process.on("warning", (w) => w.code !== "MODULE_TYPELESS_PACKAGE_JSON" && console.warn(w));
-const { BUMP, PRODUCTS, bumpAmount } = await import("../src/lib/pricing/products.ts");
+const { BUMP, MEMBERSHIP_PLANS, PRODUCTS, bumpAmount, yearlyPerMonth } = await import("../src/lib/pricing/products.ts");
 
 const root = new URL("..", import.meta.url).pathname;
 const SYMBOLS = { "€": "eur", "£": "gbp", $: "usd" };
 
 // Every amount the site can honestly show: each product, the bump on each product it goes on (it
-// takes the order to Everything's price), a pick-three's "separately" figure.
+// takes the order to Everything's price), a pick-three's "separately" figure, Ethos for Two's monthly
+// and yearly prices, and the yearly one per month ("€2.50 a month").
 const charged = { eur: new Set([0]), usd: new Set([0]), gbp: new Set([0]) };
 for (const p of Object.values(PRODUCTS)) {
   for (const [c, minor] of Object.entries(p.amounts)) charged[c].add(minor);
   for (const [c, minor] of Object.entries(p.compareAt ?? {})) charged[c].add(minor);
 }
 for (const base of BUMP.onto) for (const c of Object.keys(charged)) charged[c].add(bumpAmount(base, c));
+for (const plan of Object.values(MEMBERSHIP_PLANS)) for (const [c, minor] of Object.entries(plan.amounts)) charged[c].add(minor);
+for (const c of Object.keys(charged)) charged[c].add(yearlyPerMonth(c));
 
 // Money written with cents, symbol first ("€9.99", "$14.99") or after ("9,99 €"). Round figures
 // ("€150 a day") describe the world, not our prices, and are left alone.

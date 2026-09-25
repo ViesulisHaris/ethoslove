@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
+import en from "../../messages/en.json";
+import es from "../../messages/es.json";
 import {
   BUMP,
+  FREE_SAVED_DATES,
+  MEMBERSHIP_PLANS,
   PRODUCTS,
   PRODUCT_ORDER,
   bumpAmount,
@@ -9,9 +13,14 @@ import {
   formatAmount,
   hasPack,
   hasUnlock,
+  isMembershipPlan,
   isProductId,
+  membershipAmount,
   rowsCoverPack,
+  subscriptionsEnabled,
   unlocksFor,
+  yearlyPerMonth,
+  yearlySavingPct,
 } from "@/lib/pricing/products";
 
 describe("pricing catalogue", () => {
@@ -22,7 +31,9 @@ describe("pricing catalogue", () => {
       pick3: [1499, 1799, 1299],
       everything: [2499, 2999, 2199],
       extras: [749, 899, 649],
-      pass: [2900, 2900, 2500],
+      // Ethos for Two: the one-time year is the yearly membership's price (membership's figure is its yearly one).
+      pass: [2999, 3499, 2599],
+      membership: [2999, 3499, 2599],
       pack: [299, 299, 249],
       giftcard: [2499, 2999, 2199],
       upgrade: [499, 499, 499],
@@ -31,6 +42,37 @@ describe("pricing catalogue", () => {
     expect([bumpAmount("single", "eur"), bumpAmount("single", "usd"), bumpAmount("single", "gbp")]).toEqual([1500, 1800, 1300]);
     expect([bumpAmount("extras", "eur"), bumpAmount("extras", "usd"), bumpAmount("extras", "gbp")]).toEqual([1750, 2100, 1550]);
     expect(BUMP.onto).toEqual(["single", "extras"]);
+  });
+  // docs/MEMBERSHIP.md 2.2: every figure /pricing, the account page and the emails show comes from here.
+  it("prices Ethos for Two per plan, and works out what yearly saves from the same figures", () => {
+    expect(MEMBERSHIP_PLANS).toEqual({
+      monthly: { interval: "month", amounts: { eur: 499, usd: 599, gbp: 449 } },
+      yearly: { interval: "year", amounts: { eur: 2999, usd: 3499, gbp: 2599 } },
+    });
+    for (const c of ["eur", "usd", "gbp"] as const) {
+      expect(membershipAmount("monthly", c)).toBe(MEMBERSHIP_PLANS.monthly.amounts[c]);
+      // The one-time year sold while subscriptions are off costs what a yearly membership does.
+      expect(PRODUCTS.pass.amounts[c]).toBe(membershipAmount("yearly", c));
+      expect(PRODUCTS.membership.amounts[c]).toBe(membershipAmount("yearly", c));
+    }
+    // "€29.99 a year: that's €2.50 a month, save 50% on monthly".
+    expect([yearlyPerMonth("eur"), yearlyPerMonth("usd"), yearlyPerMonth("gbp")]).toEqual([250, 292, 217]);
+    expect([yearlySavingPct("eur"), yearlySavingPct("usd"), yearlySavingPct("gbp")]).toEqual([50, 51, 52]);
+    expect(formatAmount(yearlyPerMonth("eur"), "eur", "en")).toBe("€2.50");
+    // Spanish puts the sign after the figure: "4,99 €".
+    expect(formatAmount(membershipAmount("monthly", "eur"), "eur", "es")).toMatch(/^4,99\s€$/);
+    expect(FREE_SAVED_DATES).toBe(3);
+    expect(isMembershipPlan("monthly") && isMembershipPlan("yearly")).toBe(true);
+    expect(isMembershipPlan("weekly") || isMembershipPlan(undefined)).toBe(false);
+  });
+  it("sells Ethos for Two as a subscription only when STRIPE_SUBSCRIPTIONS_ENABLED is exactly \"true\"", () => {
+    expect(subscriptionsEnabled({})).toBe(false);
+    expect(subscriptionsEnabled({ STRIPE_SUBSCRIPTIONS_ENABLED: "1" })).toBe(false);
+    expect(subscriptionsEnabled({ STRIPE_SUBSCRIPTIONS_ENABLED: "TRUE" })).toBe(false);
+    expect(subscriptionsEnabled({ STRIPE_SUBSCRIPTIONS_ENABLED: "true" })).toBe(true);
+  });
+  it("names no country in Ethos for Two's words", () => {
+    for (const messages of [en, es]) expect(JSON.stringify([messages.membership, messages.pricing, messages.money])).not.toMatch(/Spain|España|Madrid|Spanish city/i);
   });
   it("keeps gift cards off sale unless GIFT_CARDS_ENABLED is exactly \"true\"", () => {
     expect(giftCardsOnSale({})).toBe(false);
@@ -88,6 +130,7 @@ describe("pricing catalogue", () => {
     expect(unlocksFor("everything", [])).toEqual(["*"]);
     expect(unlocksFor("upgrade", [])).toEqual(["*"]);
     expect(unlocksFor("pass", [])).toEqual(["*", "pack:*"]);
+    expect(unlocksFor("membership", [])).toEqual(["*", "pack:*"]);
     expect(unlocksFor("giftcard", [])).toEqual([]);
     expect(unlocksFor("pack", [], { packId: "deep" })).toEqual(["pack:deep"]);
     expect(unlocksFor("single", ["the-letter"])).toEqual(["the-letter"]);

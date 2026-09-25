@@ -1,18 +1,22 @@
 /**
- * Signed links for emails that need to act without a sign-in: "remove this reminder" and "no more
- * of these emails". The link carries what it acts on plus an HMAC of it, so nobody can make one for
- * a reminder or an address that isn't theirs. Each purpose signs a different message, so a token
- * made for one can never be used for the other.
+ * Signed links for emails that need to act without a sign-in: "remove this reminder", "no more
+ * of these emails" and "turn off reminders for this date". The link carries what it acts on plus an
+ * HMAC of it, so nobody can make one for a reminder or an address that isn't theirs. Each purpose
+ * signs a different message, so a token made for one can never be used for another.
  *
  * Nothing personal goes in a link: a reminder is named by its random id, and an address by a
  * SHA-256 of it, which is also all the opt-out list stores.
  */
 
-export type TokenPurpose = "reminder-remove" | "email-optout";
+export type TokenPurpose = "reminder-remove" | "email-optout" | "saved-date-reminder-off";
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 const VALUE: Record<TokenPurpose, RegExp> = {
-  "reminder-remove": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+  "reminder-remove": UUID,
   "email-optout": /^[0-9a-f]{64}$/,
+  // "Turn off reminders for this date", in the day-before email of a saved date: its row's id.
+  "saved-date-reminder-off": UUID,
 };
 
 const encoder = new TextEncoder();

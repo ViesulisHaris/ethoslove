@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Gift, Menu, Plus, Settings, type LucideIcon } from "lucide-react";
+import { CalendarHeart, Gift, Menu, Plus, Settings, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -48,6 +48,7 @@ export function AppShell({ user, children }: { user: ShellUser | null; children:
 
   const nav: NavItem[] = [
     { href: "/dashboard", label: t("dashboard"), icon: Gift },
+    { href: "/my-dates", label: t("myDates"), icon: CalendarHeart },
     { href: "/account", label: t("account"), icon: Settings },
   ];
 

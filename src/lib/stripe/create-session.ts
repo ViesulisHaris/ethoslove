@@ -39,7 +39,9 @@ function withoutPromotions(params: Params): Params {
 
 /**
  * The same session without the withdrawal tickbox: the notice goes back above the pay button, and
- * the metadata says which the buyer saw. The marketing-consent box, if asked for, stays.
+ * the metadata says which the buyer saw. The marketing-consent box, if asked for, stays. A
+ * membership's line above the button (the price and the renewal) is replaced by a notice that
+ * repeats it (withdrawalNotice), so the renewal is still stated before paying.
  */
 export function withoutTermsConsent(params: Params, notice: string): Params {
   const consent = { ...params.consent_collection };
