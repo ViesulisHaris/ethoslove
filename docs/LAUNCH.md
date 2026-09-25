@@ -9,6 +9,9 @@ every money flow by hand in Stripe test mode.
 Section 10 is that build's checklist. Where it and the sections before it disagree (the €29 pass,
 "no subscriptions", the pass-only tickbox), section 10 is the current one.
 
+**25 Sept: migrations 0014 and 0015 are applied to production.** Section 11 is the exact order to
+switch Ethos for Two subscriptions on.
+
 ## 1. What was built
 
 **Commerce (server).** One catalogue, `src/lib/pricing/products.ts`, is the only place a price lives;
@@ -466,8 +469,9 @@ included.
 ## 10. Ethos for Two as a membership, and saved dates (24 Sept)
 
 Built on 24 Sept to docs/MEMBERSHIP.md, which has the whole spec: the shared-account rules, every
-route and state, the tests. Nothing has been deployed, no migration applied, no live Stripe call
-made and no email sent.
+route and state, the tests. Since 25 Sept migrations 0014 and 0015 are applied to production;
+nothing else has been deployed or done on the live Stripe account. Section 11 is the order to switch
+it on.
 
 ### 10.1 What was built
 
@@ -674,3 +678,80 @@ Renewals and failed renewals are covered by the unit tests (`tests/unit/membersh
 - `/legal/terms` s.6, s.7, s.9 (the three Ethos for Two tickbox sentences, exactly as Stripe shows
   them) and s.11; `/legal/privacy` s.1 and s.3; `/legal/withdraw`.
 - Every new email in a real inbox, in both languages.
+
+## 11. Switching on Ethos for Two subscriptions (25 Sept)
+
+**Where things stand.** Migrations **0014 and 0015 are already applied to production**: skip them
+(running them again is harmless, but there is nothing to do). Nothing else in this section has been
+done on the live account. On 25 Sept the branch passed lint, the typecheck, 1,752 unit tests and the
+whole Playwright suite against a production build (`next build` + `next start`, test keys, the switch
+on): 477 passed, 65 skipped (by design, or states only a development server can show), none failed.
+On that build a real test-mode monthly subscription was bought, cancelled from the account page and
+its 15 Stripe events delivered twice each (all 200, nothing written twice, one welcome email), and a
+€9.99 template was bought from the editor and published on the way back.
+
+Do these in this order. Each step says what to check before the next one.
+
+1. **Stripe live: the account's own Customer portal default must already exist.** Dashboard (live
+   mode) → Settings → Billing → Customer portal. If the page has never been saved, the account has
+   no default, and Stripe would make Ethos's configuration the default for every business on the
+   account; the setup script refuses in that case. Save the account's default the way the other
+   businesses want it (not with Ethos's wording). Leave it alone if it is already saved.
+2. **Stripe live: Ethos's portal configuration and product.** Put the live secret key in a file of
+   its own (for example `.env.live` holding one line, `STRIPE_SECRET_KEY=sk_live_…`; `.env*` is never
+   committed), then run
+   `node scripts/setup-billing-portal.mjs --live .env.live`.
+   It prints `STRIPE_PORTAL_CONFIGURATION=bpc_…` and `STRIPE_PRODUCT_FORTWO=prod_…`. Put **both** in
+   Vercel → Settings → Environment Variables → **Production** (the test-mode values in `.env.local`
+   are not these). Delete `.env.live`. Running the script again is safe: it finds its own objects.
+3. **Stripe live: five new events on the Ethos webhook endpoint** (`https://tryethos.io/api/stripe/webhook`,
+   Developers → Webhooks → the endpoint → Update details → Select events). Add:
+   - `customer.subscription.updated`
+   - `customer.subscription.deleted`
+   - `invoice.paid`
+   - `invoice.payment_failed`
+   - `invoice.payment_action_required`
+
+   The endpoint should already have the five from section 5 (`checkout.session.completed`,
+   `checkout.session.async_payment_succeeded`, `checkout.session.expired`, `charge.refunded`,
+   `charge.dispute.created`): keep them, and add any that are missing. Adding events doesn't change
+   the signing secret, so `STRIPE_WEBHOOK_SECRET` stays as it is. Keep one endpoint pointing at Ethos.
+4. **Before the switch goes on** (docs/MEMBERSHIP.md section 7): look at the account-wide settings
+   the other businesses share (whether Stripe itself emails customers about renewals and failed
+   payments, and the retry schedule; any choice works with the code), and tell the secuora and
+   domainscan owner that Ethos now creates subscriptions, all tagged `metadata.app = "ethos"`.
+5. **The switch.** Vercel → Environment Variables → Production: `STRIPE_SUBSCRIPTIONS_ENABLED` =
+   `true`. It is read by the server, so it takes effect with the next deployment.
+6. **Deploy** the `feat/subscription` code to production the usual way (a production build, so it
+   gets the Production variables; not a promoted preview built with test keys). Then open
+   `https://tryethos.io/pricing`: the Monthly/Yearly toggle is there, "€4.99 a month" and "€29.99 a
+   year". If the page still shows "€29.99 for a year · Paid once", the variable wasn't in Production
+   for that deployment: redeploy.
+7. **A first real subscription, then its refund**, with your own account and your own card:
+   - `https://tryethos.io/pricing?plan=monthly` → **Get Ethos for Two** → Stripe says "€4.99 per
+     month" and shows the monthly tickbox sentence → pay.
+   - Expect "Ethos for Two is on." with the invite link, the "Welcome to Ethos for Two" email, and
+     `/account#for-two` reading "Monthly · €4.99 a month · renews on {date}".
+   - **Manage billing** opens Stripe's portal headed "Ethos for Two" (the live configuration from
+     step 2), then brings you back to `/account#for-two`.
+   - Stripe Dashboard → the subscription: metadata `app: ethos`, `ethos_user_id` and `purchase_id`;
+     no `supabase_user_id` anywhere. Developers → Webhooks → the endpoint: every delivery answered
+     200 (`checkout.session.completed`, `customer.subscription.updated`, `invoice.paid`).
+   - Refund it: Dashboard → the subscription → **Cancel subscription → Immediately**, refunding the
+     last payment in full (€4.99). Within a minute `/account#for-two` offers Ethos for Two again
+     instead of your membership, the purchase reads refunded, and no "has ended" email is sent. The
+     deliveries (`customer.subscription.deleted`, `charge.refunded`) answered 200.
+8. **Watch** the Vercel logs for `[stripe]` errors on the first real sales, the 06:00 UTC job's
+   answer (`/api/cron/passes`), and the first renewal a month after the first subscription.
+
+**To switch it off again:** remove `STRIPE_SUBSCRIPTIONS_ENABLED` (or set it to anything but `true`)
+and redeploy. New sales go back to the €29.99 one-time year; subscriptions already running keep
+renewing and working, so leave the five webhook events on.
+
+**Test mode, for any further testing (not needed to go live).** In the test-mode account Ethos's
+portal configuration (`bpc_1UJUbRIvpX2RJdMPhm2LhL1U`) became the account's default, because the
+account had none when it was made. Dashboard (test mode) → Settings → Billing → Customer portal:
+change that default's headline, links and return URL to what the account's default should say; then
+run `node scripts/setup-billing-portal.mjs` (test key), which now leaves a default alone and makes a
+new configuration beside it, and put the new `bpc_…` in `STRIPE_PORTAL_CONFIGURATION` in `.env.local`
+and Vercel Preview.
