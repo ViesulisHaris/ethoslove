@@ -50,6 +50,7 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   digicam: () => import("./digicam/schema"),
   "photo-booth": () => import("./photo-booth/schema"),
   picnic: () => import("./picnic/schema"),
+  "music-box": () => import("./music-box/schema"),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);

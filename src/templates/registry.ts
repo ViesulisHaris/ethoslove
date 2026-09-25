@@ -52,6 +52,7 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   digicam: () => import("./digicam"),
   "photo-booth": () => import("./photo-booth"),
   picnic: () => import("./picnic"),
+  "music-box": () => import("./music-box"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

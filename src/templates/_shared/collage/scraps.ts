@@ -5,7 +5,7 @@
  * changes. No film, game, music or brand artwork is in the set.
  */
 export type ScrapKind = "pink-flower" | "blue-flower" | "kiss" | "soft" | "lace" | "pressed" | "trinket";
-export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "bow-satin-blush" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "disco-ball-silver" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "envelopes-pair" | "heart-anatomical" | "heart-damask" | "heart-gingham" | "heart-print" | "heart-print-pink" | "heart-puffy" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-couple" | "penguins-plush" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "star-felt-plump" | "star-felt-tilted" | "star-glossy" | "star-glossy-small" | "sunflowers-kraft" | "tag-tofrom" | "teddy" | "teddy-hug" | "tulips-pink" | "tulips-wrapped" | "wax-seal" | "wax-seal-heart";
+export type ScrapId = "blossom-gold" | "blossom-pale" | "blue-clematis" | "blue-cluster" | "blue-gerbera" | "blue-hibiscus" | "blue-lily" | "blue-pansy" | "blue-poppy" | "blue-rose" | "blue-spray" | "blue-velvet" | "bow-gingham" | "bow-red" | "bow-satin-blush" | "bow-satin-mini" | "bow-satin-pink" | "cats-cuddle" | "cats-kiss" | "cats-nose" | "columbine" | "disco-ball-silver" | "doily-pink" | "doily-red" | "dried-flowers" | "envelope-ps" | "envelopes-pair" | "fan-lace" | "heart-anatomical" | "heart-damask" | "heart-gingham" | "heart-print" | "heart-print-pink" | "heart-puffy" | "hibiscus-coral" | "hibiscus-pink" | "hibiscus-ruffle" | "kiss-1" | "kiss-2" | "kiss-3" | "kiss-4" | "kiss-dark" | "kiss-red" | "label-ornate" | "lace-red" | "leaf-skeleton" | "lily-blush" | "lily-pink" | "lily-stargazer" | "locket" | "paper-blossom" | "paper-couple" | "paper-roses" | "paper-script" | "penguins-plush" | "peony-kraft" | "plaid-heart" | "plaster-heart" | "plumeria-pink" | "plumeria-rose" | "roses-kraft" | "sakura" | "star-felt" | "star-felt-plump" | "star-felt-tilted" | "star-glossy" | "star-glossy-small" | "sunflowers-kraft" | "tag-tofrom" | "teddy" | "teddy-hug" | "tulips-pink" | "tulips-wrapped" | "wax-seal" | "wax-seal-heart" | "wax-seal-hibiscus" | "wax-seal-swans";
 export type ScrapInfo = { id: ScrapId; w: number; h: number; kind: ScrapKind };
 
 export const SCRAPS: Record<ScrapId, ScrapInfo> = {
@@ -24,6 +24,8 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "bow-gingham": { id: "bow-gingham", w: 506, h: 474, kind: "trinket" },
   "bow-red": { id: "bow-red", w: 146, h: 172, kind: "trinket" },
   "bow-satin-blush": { id: "bow-satin-blush", w: 232, h: 206, kind: "trinket" },
+  "bow-satin-mini": { id: "bow-satin-mini", w: 246, h: 220, kind: "trinket" },
+  "bow-satin-pink": { id: "bow-satin-pink", w: 380, h: 436, kind: "trinket" },
   "cats-cuddle": { id: "cats-cuddle", w: 526, h: 486, kind: "soft" },
   "cats-kiss": { id: "cats-kiss", w: 354, h: 602, kind: "soft" },
   "cats-nose": { id: "cats-nose", w: 412, h: 518, kind: "soft" },
@@ -34,6 +36,7 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "dried-flowers": { id: "dried-flowers", w: 340, h: 568, kind: "pressed" },
   "envelope-ps": { id: "envelope-ps", w: 356, h: 432, kind: "trinket" },
   "envelopes-pair": { id: "envelopes-pair", w: 194, h: 164, kind: "trinket" },
+  "fan-lace": { id: "fan-lace", w: 696, h: 404, kind: "trinket" },
   "heart-anatomical": { id: "heart-anatomical", w: 346, h: 456, kind: "trinket" },
   "heart-damask": { id: "heart-damask", w: 276, h: 280, kind: "lace" },
   "heart-gingham": { id: "heart-gingham", w: 154, h: 154, kind: "trinket" },
@@ -56,7 +59,10 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "lily-pink": { id: "lily-pink", w: 478, h: 492, kind: "pink-flower" },
   "lily-stargazer": { id: "lily-stargazer", w: 488, h: 488, kind: "pink-flower" },
   "locket": { id: "locket", w: 550, h: 230, kind: "trinket" },
+  "paper-blossom": { id: "paper-blossom", w: 736, h: 538, kind: "pressed" },
   "paper-couple": { id: "paper-couple", w: 348, h: 400, kind: "pressed" },
+  "paper-roses": { id: "paper-roses", w: 664, h: 478, kind: "pressed" },
+  "paper-script": { id: "paper-script", w: 622, h: 370, kind: "pressed" },
   "penguins-plush": { id: "penguins-plush", w: 290, h: 282, kind: "soft" },
   "peony-kraft": { id: "peony-kraft", w: 544, h: 432, kind: "pressed" },
   "plaid-heart": { id: "plaid-heart", w: 490, h: 458, kind: "trinket" },
@@ -78,6 +84,8 @@ export const SCRAPS: Record<ScrapId, ScrapInfo> = {
   "tulips-wrapped": { id: "tulips-wrapped", w: 184, h: 246, kind: "trinket" },
   "wax-seal": { id: "wax-seal", w: 308, h: 300, kind: "trinket" },
   "wax-seal-heart": { id: "wax-seal-heart", w: 178, h: 184, kind: "trinket" },
+  "wax-seal-hibiscus": { id: "wax-seal-hibiscus", w: 196, h: 192, kind: "trinket" },
+  "wax-seal-swans": { id: "wax-seal-swans", w: 358, h: 320, kind: "trinket" },
 };
 
 export const SCRAP_IDS = Object.keys(SCRAPS) as ScrapId[];

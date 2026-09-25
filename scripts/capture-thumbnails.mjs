@@ -497,6 +497,25 @@ const SCRIPTS = {
     await page.waitForTimeout(6500);
     return poster;
   },
+  "music-box": async (page) => {
+    const key = page.locator("[data-key]");
+    await key.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    // Wound the way a thumb does it: round and round the key, three times.
+    const box = await key.boundingBox();
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    const r = box.width * 0.38;
+    await page.mouse.move(cx + r, cy);
+    await page.mouse.down();
+    for (let i = 1; i <= 100; i++) { const a = (i / 30) * Math.PI * 2; await page.mouse.move(cx + r * Math.cos(a), cy + r * Math.sin(a)); await page.waitForTimeout(12); }
+    await page.mouse.up();
+    // The poster: the lid up, the ballerina turning in front of the first photo in the mirror.
+    await page.waitForTimeout(3800);
+    const poster = await page.screenshot();
+    await page.waitForTimeout(5600);
+    return poster;
+  },
   constellations: async (page) => {
     await page.locator("[data-star]").first().waitFor({ timeout: 15000 });
     await page.waitForTimeout(1500);
