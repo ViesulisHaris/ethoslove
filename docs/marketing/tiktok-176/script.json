@@ -6,27 +6,27 @@
       "messages": [
         {
           "from": "them",
-          "text": "can we talk now"
+          "text": "are u done being crazy now"
         },
         {
           "from": "me",
-          "text": "oh now u want to talk"
+          "text": "u havent spoken to me in 3 days"
         },
         {
           "from": "them",
-          "text": "i wasnt ignoring u"
+          "text": "i was giving u space"
         },
         {
           "from": "them",
-          "text": "i was giving u space to think about what u did"
+          "text": "to think about why u went through my phone"
         },
         {
           "from": "me",
-          "text": "for 3 days marco"
+          "text": "bc \"gym jess\" texted u \"last night was fun 🤍\" at 2am"
         },
         {
           "from": "them",
-          "text": "u needed 3 days"
+          "text": "and u couldnt just ask me like a normal person"
         }
       ]
     },
@@ -35,24 +35,24 @@
       "messages": [
         {
           "from": "them",
-          "text": "u needed 3 days"
+          "text": "and u couldnt just ask me like a normal person"
         },
         {
           "from": "me",
-          "text": "i didnt do anything"
+          "text": "ok. who is she"
         },
         {
           "from": "them",
-          "text": "thats what i needed u to think about"
+          "text": "no one. and now i cant trust u"
         },
         {
           "from": "them",
-          "text": "anyway. i made u this while i was waiting"
+          "text": "i was up til 3 making u this. read it and tell me im the bad guy"
         },
         {
           "from": "them",
           "link": {
-            "title": "for maya (i missed u the whole time)",
+            "title": "for maya (only ever u)",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
@@ -62,30 +62,30 @@
     },
     {
       "type": "gift",
-      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Scrapbook (photos on every page, it looks like days of work). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Scrapbook (their photos on every page, \"only ever u\" — it has to look like nights of work, so the room fights over whether a man who made this is cheating). Their name: Maya. Your name: Marco."
     },
     {
       "type": "chat",
       "messages": [
         {
           "from": "me",
-          "text": "this is the nicest thing anyone has ever made me"
+          "text": "this is so beautiful marco"
         },
         {
           "from": "me",
-          "text": "i hate that it works on me"
+          "text": "im sorry i went through ur phone"
         },
         {
           "from": "them",
-          "text": "its not working on u. its just true"
+          "text": "other girls wouldve just said thank u"
+        },
+        {
+          "from": "them",
+          "text": "but i forgive u. just dont ever make me feel like that again"
         },
         {
           "from": "me",
-          "text": "im sorry about saturday"
-        },
-        {
-          "from": "them",
-          "text": "i know u are. thats why i came back"
+          "text": "i wont"
         }
       ]
     },
@@ -98,7 +98,7 @@
         },
         {
           "from": "me",
-          "text": "i have a spreadsheet of every time u go quiet"
+          "text": "i messaged gym jess"
         },
         {
           "from": "them",
@@ -106,20 +106,20 @@
         },
         {
           "from": "me",
-          "text": "dates. how long. what started it. ur average is 2.6 days"
+          "text": "the first night. weve been talking for 3 days"
         },
         {
           "from": "them",
-          "text": "send it to me"
+          "text": "what did she say"
         },
         {
           "from": "me",
-          "text": "no. u'll argue with the numbers",
+          "text": "if i tell u, u'll know what to delete",
           "tapback": "haha"
         },
         {
           "from": "them",
-          "text": "send me the spreadsheet maya"
+          "text": "maya what did she tell u"
         }
       ]
     }

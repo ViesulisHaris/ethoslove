@@ -981,7 +981,7 @@ object the comments can demand, and his last bubble asking for it with her name 
 
 | | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
 |---|---|---|---|---|
-| 176 | three days of silence, called "giving u space to think about what u did" | a spreadsheet of every silent treatment since march; his average is 2.6 days | the spreadsheet | "send me the spreadsheet maya" |
+| 176 | a 2am "last night was fun" from "gym jess", turned on her: "are u done being crazy", three days of silence, "other girls wouldve just said thank u" | she messaged gym jess the first night; they've been talking for three days | what jess told her | "maya what did she tell u" |
 | 177 | "its not me whos upset. its my mum" | she and his mum have texted every day since april; the mum says he wanted the football | what his mum said | "maya what did my mum say" |
 | 178 | "its not a curfew. i just cant sleep until ur home" | she set every clock in his flat fifteen minutes fast in april | which clocks | "maya which clocks" |
 | 179 | "im not telling u what to wear. id just change" | she changed back in the uber; jess's photos are on close friends, and he isn't | the photos from the uber | "send me the photos from the uber maya" |
