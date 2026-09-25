@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "where r u"
+        },
+        {
+          "from": "me",
+          "text": "on my way. i said 12"
+        },
+        {
+          "from": "them",
+          "text": "its not a curfew maya"
+        },
+        {
+          "from": "them",
+          "text": "i just cant sleep until ur home"
+        },
+        {
+          "from": "me",
+          "text": "u could try"
+        },
+        {
+          "from": "them",
+          "text": "i do try. u know i do"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i do try. u know i do"
+        },
+        {
+          "from": "me",
+          "text": "im literally 2 minutes away"
+        },
+        {
+          "from": "them",
+          "text": "then u'll see this before u see me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (text me when ur home)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Fireside (a warm night-in scene, the home he keeps calling her back to). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i just opened it outside ur door"
+        },
+        {
+          "from": "me",
+          "text": "im not even annoyed anymore"
+        },
+        {
+          "from": "them",
+          "text": "see. i only worry bc of this"
+        },
+        {
+          "from": "them",
+          "text": "next time just leave at 11 and we wont have to do this"
+        },
+        {
+          "from": "me",
+          "text": "ok. 11"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i moved every clock in ur flat 15 minutes forward"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "in april. u havent been late for anything since"
+        },
+        {
+          "from": "them",
+          "text": "which ones"
+        },
+        {
+          "from": "me",
+          "text": "if i tell u, u'll fix them",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya which clocks"
+        }
+      ]
+    }
+  ]
+}

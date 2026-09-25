@@ -1,0 +1,127 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:52",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can we talk now"
+        },
+        {
+          "from": "me",
+          "text": "oh now u want to talk"
+        },
+        {
+          "from": "them",
+          "text": "i wasnt ignoring u"
+        },
+        {
+          "from": "them",
+          "text": "i was giving u space to think about what u did"
+        },
+        {
+          "from": "me",
+          "text": "for 3 days marco"
+        },
+        {
+          "from": "them",
+          "text": "u needed 3 days"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u needed 3 days"
+        },
+        {
+          "from": "me",
+          "text": "i didnt do anything"
+        },
+        {
+          "from": "them",
+          "text": "thats what i needed u to think about"
+        },
+        {
+          "from": "them",
+          "text": "anyway. i made u this while i was waiting"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (i missed u the whole time)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Scrapbook (photos on every page, it looks like days of work). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this is the nicest thing anyone has ever made me"
+        },
+        {
+          "from": "me",
+          "text": "i hate that it works on me"
+        },
+        {
+          "from": "them",
+          "text": "its not working on u. its just true"
+        },
+        {
+          "from": "me",
+          "text": "im sorry about saturday"
+        },
+        {
+          "from": "them",
+          "text": "i know u are. thats why i came back"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have a spreadsheet of every time u go quiet"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "dates. how long. what started it. ur average is 2.6 days"
+        },
+        {
+          "from": "them",
+          "text": "send it to me"
+        },
+        {
+          "from": "me",
+          "text": "no. u'll argue with the numbers",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "send me the spreadsheet maya"
+        }
+      ]
+    }
+  ]
+}
