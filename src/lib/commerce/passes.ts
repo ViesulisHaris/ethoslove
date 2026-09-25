@@ -1,11 +1,14 @@
 import { EVERY_PACK, EVERY_TEMPLATE, PASS_DAYS } from "@/lib/pricing/products";
 import type { Tables } from "@/lib/supabase/types";
 import { generateInviteCode } from "./codes";
-import { DAY_MS, chunks, iso, unique, type Db } from "./db";
+import { DAY_MS, MissingMigrationError, chunks, iso, membershipRows, missingMembershipColumns, unique, type Db } from "./db";
 import { revokeUnlocksOf } from "./unlocks";
 
 /**
  * "Ethos for Two": a year paid once, for the buyer and a partner who joins with the invite link.
+ * couple_passes is the membership table (lib/commerce/memberships.ts): a subscription is a row of it
+ * too, whose end moves as it renews, and what grants access is the same `starts_at <= now < ends_at`,
+ * so the grant, join, regrant and sweep below serve both.
  *
  * Each pass PURCHASE is one couple_passes row a year long. Renewing adds a row that starts where the
  * owner's running year (and any renewal already bought) ends, so years never overlap, fulfilment can
@@ -29,6 +32,11 @@ const ms = (timestamp: string) => Date.parse(timestamp);
 
 export function isRunning(pass: Pick<Pass, "starts_at" | "ends_at">, now: number): boolean {
   return ms(pass.starts_at) <= now && now < ms(pass.ends_at);
+}
+
+/** Whether a membership renews by itself: a subscription (Stripe's or Apple's) that is active and hasn't been cancelled. */
+export function renews(pass: Pick<Pass, "provider" | "status" | "cancel_at_period_end">): boolean {
+  return (pass.provider === "stripe_subscription" || pass.provider === "app_store") && pass.status === "active" && !pass.cancel_at_period_end;
 }
 
 /** Where a newly bought year starts: now, or where the owner's paid-up time runs out. */
@@ -78,7 +86,7 @@ export async function grantPassUnlocks(db: Db, pass: Pass, now: number): Promise
  */
 export async function startPass(
   db: Db,
-  args: { purchaseId: string; ownerId: string; now: number; grantAt?: number },
+  args: { purchaseId: string; ownerId: string; now: number; grantAt?: number; provider?: "stripe_pass" | "app_store_pass" },
 ): Promise<{ pass: Pass; created: boolean; paidUntil: number } | { error: string }> {
   const { purchaseId, ownerId, now } = args;
   const grantAt = args.grantAt ?? now;
@@ -89,7 +97,17 @@ export async function startPass(
     return { pass: existing.data, created: false, paidUntil: paidUntil(await ownerPasses(db, ownerId), now) ?? now };
   }
 
-  const owned = await ownerPasses(db, ownerId);
+  // A year follows the owner's other years; a subscription's end moves by itself, so it isn't one.
+  // Before migration 0014 no row says which it is, and a renewal would start now instead of after
+  // the year that runs: refused by name (lib/commerce/db.ts), so the webhook's retry sells it once 0014 is in.
+  let years: Pass[];
+  try {
+    years = membershipRows(await ownerPasses(db, ownerId), "a pass sold or renewed");
+  } catch (e) {
+    if (e instanceof MissingMigrationError) return { error: e.message };
+    throw e;
+  }
+  const owned = years.filter((pass) => pass.provider === "stripe_pass" || pass.provider === "app_store_pass");
   const ahead = owned.filter((pass) => ms(pass.ends_at) > now);
   const start = nextStart(ahead, now);
   const partner = ahead.map((pass) => pass.partner_user_id).find(Boolean) ?? null;
@@ -97,13 +115,13 @@ export async function startPass(
     const { data, error } = await db
       .from("couple_passes")
       .upsert(
-        { purchase_id: purchaseId, owner_user_id: ownerId, partner_user_id: partner, invite_code: generateInviteCode(), starts_at: iso(start), ends_at: iso(start + PASS_MS) },
+        { purchase_id: purchaseId, owner_user_id: ownerId, partner_user_id: partner, invite_code: generateInviteCode(), starts_at: iso(start), ends_at: iso(start + PASS_MS), provider: args.provider ?? "stripe_pass", plan: "yearly" },
         { onConflict: "purchase_id", ignoreDuplicates: true },
       )
       .select("*");
     // 23505 on the invite code (the purchase is the conflict target, so it can't be that): draw again.
     if (error?.code === "23505") continue;
-    if (error) return { error: error.message };
+    if (error) return { error: missingMembershipColumns(error, "a pass sold or renewed writes couple_passes.provider and plan")?.message ?? error.message };
     const created = data?.[0];
     const pass = created ?? (await db.from("couple_passes").select("*").eq("purchase_id", purchaseId).maybeSingle()).data;
     if (!pass) return { error: "pass_missing" };
@@ -115,13 +133,21 @@ export async function startPass(
 }
 
 export type JoinResult =
-  | { ok: true; pass: Pass; paidUntil: number }
-  | { ok: false; error: "not_found" | "expired" | "own_pass" | "taken" | "failed" };
+  | { ok: true; pass: Pass; paidUntil: number; renews: boolean }
+  | { ok: false; error: "not_found" | "expired" | "own_pass" | "taken" | "failed" }
+  /**
+   * What stands in the way, so the page can say what would work: a membership of their own
+   * (`owner`), which cancelling doesn't end until `endsAt` (null while it renews by itself), or
+   * another couple's they joined (`partner`), which they can leave at once.
+   */
+  | { ok: false; error: "has_own"; role: "owner" | "partner"; endsAt: number | null };
 
 /**
- * The partner joins with the owner's invite code: signed in, not the owner, while the pass runs and
- * the partner's place is empty. They join every year the owner has paid for from now on. The write
- * only fills an empty place, so of two people joining at once exactly one gets in.
+ * The partner joins with the owner's invite code: signed in, not the owner, while the membership runs
+ * and the partner's place is empty. They join every year the owner has paid for from now on (a
+ * subscription is one row, whose end moves as it renews). The write only fills an empty place, so of
+ * two people joining at once exactly one gets in. Somebody who already has Ethos for Two, their own
+ * or as another couple's partner, can't join a second one: one person, one partner to share with.
  */
 export async function joinPass(db: Db, args: { code: string; userId: string; now: number }): Promise<JoinResult> {
   const { code, userId, now } = args;
@@ -133,6 +159,14 @@ export async function joinPass(db: Db, args: { code: string; userId: string; now
   const ahead = (await ownerPasses(db, invited.owner_user_id)).filter((pass) => ms(pass.ends_at) > now);
   const running = ahead.find((pass) => isRunning(pass, now));
   if (!running) return { ok: false, error: "expired" };
+  const theirs = await passesOf(db, userId);
+  if (theirs.some((pass) => pass.owner_user_id !== invited.owner_user_id && isRunning(pass, now))) {
+    // Cancelling keeps a membership running to its period end, so "cancel yours first" isn't advice
+    // that works: the page says when theirs ends (with the years bought ahead), or that it renews.
+    const owned = theirs.filter((pass) => pass.owner_user_id === userId && ms(pass.ends_at) > now);
+    if (owned.length === 0) return { ok: false, error: "has_own", role: "partner", endsAt: null };
+    return { ok: false, error: "has_own", role: "owner", endsAt: owned.some(renews) ? null : paidUntil(owned, now) };
+  }
   if (ahead.some((pass) => pass.partner_user_id && pass.partner_user_id !== userId)) return { ok: false, error: "taken" };
 
   const { error } = await db
@@ -146,7 +180,7 @@ export async function joinPass(db: Db, args: { code: string; userId: string; now
 
   const granted = await grantPassUnlocks(db, after, now);
   if (granted.error) return { ok: false, error: "failed" };
-  return { ok: true, pass: after, paidUntil: paidUntil(ahead, now) ?? ms(after.ends_at) };
+  return { ok: true, pass: after, paidUntil: paidUntil(ahead, now) ?? ms(after.ends_at), renews: renews(after) };
 }
 
 /** Hands every running year its unlock rows again, for users who just lost some (an ended year, a refund). */
@@ -193,13 +227,19 @@ export async function remindRenewals(
   now: number,
   send: (pass: Pass) => Promise<boolean>,
 ): Promise<{ due: number; sent: number }> {
-  const { data: due } = await db
+  const { data: due, error } = await db
     .from("couple_passes")
     .select("*")
+    // A subscription renews by itself: a yearly one gets its own reminder (lib/commerce/memberships.ts).
+    .in("provider", ["stripe_pass", "app_store_pass"])
     .is("renewal_reminded_at", null)
     .gt("ends_at", iso(now))
     .lte("ends_at", iso(now + RENEWAL_NOTICE_MS))
     .limit(200);
+  // Read as "nobody is due", a failed query would skip the email for good once the day passes.
+  const missing = missingMembershipColumns(error, "the 14-day pass email filters on couple_passes.provider");
+  if (missing) throw missing;
+  if (error) throw new Error(`pass renewal reminders not read: ${error.message}`);
   let sent = 0;
   for (const pass of due ?? []) {
     // A refunded year that never started is closed to zero length: nothing to renew there.

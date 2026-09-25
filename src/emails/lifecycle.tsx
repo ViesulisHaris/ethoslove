@@ -67,20 +67,28 @@ export function PassWelcomeEmail({ locale, inviteUrl, endsAt, makeUrl, partnerJo
   );
 }
 
-/** Two weeks before the pass ends. Nothing renews on its own, so this is the whole renewal: one button. */
-export function PassRenewalEmail({ locale, endsAt, renewUrl }: { locale: L; endsAt: string; renewUrl: string }) {
+/**
+ * Two weeks before the pass ends. Nothing renews on its own, so this is the whole renewal: one
+ * button. While Ethos for Two is sold as a subscription (`subscriptions`), a year can't be bought
+ * again: the button goes to the monthly and yearly plans, to start once this year ends.
+ */
+export function PassRenewalEmail({ locale, endsAt, renewUrl, subscriptions = false }: { locale: L; endsAt: string; renewUrl: string; subscriptions?: boolean }) {
   const es = locale === "es";
   return (
     <EmailLayout
       preview={es ? `Ethos for Two termina el ${endsAt}.` : `Ethos for Two ends on ${endsAt}.`}
       heading={es ? `Vuestro año termina el ${endsAt}.` : `Your year ends on ${endsAt}.`}
-      cta={{ label: es ? "Renovar otro año" : "Renew for another year", href: renewUrl }}
+      cta={subscriptions ? { label: es ? "Ver mensual y anual" : "See monthly and yearly", href: renewUrl } : { label: es ? "Renovar otro año" : "Renew for another year", href: renewUrl }}
       footer={accountFooter[locale]}
     >
       <P>
-        {es
-          ? "Hasta entonces, todo sigue desbloqueado para los dos. Después, los regalos que ya habéis publicado siguen en línea, pero para los nuevos con plantillas de pago, y para los packs de juegos, hará falta un pase nuevo o un desbloqueo."
-          : "Until then, everything stays unlocked for both of you. After that, gifts you've already published stay online, but new ones with paid templates, and the game packs, need a new pass or an unlock."}
+        {subscriptions
+          ? es
+            ? `Hasta entonces, todo sigue desbloqueado para los dos. Para seguir después, elige mensual o anual a partir del ${endsAt}. Si no, los regalos que ya habéis publicado siguen en línea, pero para los nuevos con plantillas de pago, y para los packs de juegos, hará falta Ethos for Two o un desbloqueo.`
+            : `Until then, everything stays unlocked for both of you. To carry on after that, choose monthly or yearly from ${endsAt}. If you don't, gifts you've already published stay online, but new ones with paid templates, and the game packs, need Ethos for Two or an unlock.`
+          : es
+            ? "Hasta entonces, todo sigue desbloqueado para los dos. Después, los regalos que ya habéis publicado siguen en línea, pero para los nuevos con plantillas de pago, y para los packs de juegos, hará falta un pase nuevo o un desbloqueo."
+            : "Until then, everything stays unlocked for both of you. After that, gifts you've already published stay online, but new ones with paid templates, and the game packs, need a new pass or an unlock."}
       </P>
       <Quiet>{es ? "Si prefieres no renovarlo, no tienes que hacer nada: no se cobra nada y no volveremos a escribirte sobre esto." : "If you'd rather not renew, there's nothing to do: nothing is charged, and we won't email about it again."}</Quiet>
     </EmailLayout>

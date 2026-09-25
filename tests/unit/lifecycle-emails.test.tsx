@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { render } from "@react-email/render";
 import { CheckoutRecoveryEmail, GiftCardEmail, PassRenewalEmail, PassWelcomeEmail, ReminderEmail, reminderHeading } from "@/emails/lifecycle";
 import { GiftOpenedEmail, ReceiptEmail } from "@/emails/templates";
+import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
+import { consentSentence } from "@/lib/stripe/line-items";
 
 /** React escapes apostrophes in text; compare against what a reader sees. */
 const text = (html: string) => html.replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
@@ -48,6 +50,70 @@ describe("lifecycle emails", () => {
     expect(html).toContain("https://ethos.test/for-two?renew=1");
     expect(html).toContain("Renew for another year");
     expect(html).toContain("nothing is charged");
+  });
+
+  it("pass renewal, while Ethos for Two is a subscription, points to monthly or yearly from the end date", async () => {
+    const html = text(await render(PassRenewalEmail({ locale: "en", endsAt: "7 October 2027", renewUrl: "https://ethos.test/pricing#for-two", subscriptions: true })));
+    expect(html).toContain("To carry on after that, choose monthly or yearly from 7 October 2027.");
+    expect(html).toContain("See monthly and yearly");
+    expect(html).not.toContain("Renew for another year");
+    const es = text(await render(PassRenewalEmail({ locale: "es", endsAt: "7 de octubre de 2027", renewUrl: "https://ethos.test/es/pricing#for-two", subscriptions: true })));
+    expect(es).toContain("elige mensual o anual a partir del 7 de octubre de 2027");
+  });
+
+  it("membership welcome: what it covers, the plan and its renewal, how to cancel, the invite and the box ticked", async () => {
+    const consent = consentSentence("membership", "en", { plan: "monthly", currency: "eur" });
+    const html = text(await render(MembershipWelcomeEmail({ locale: "en", plan: "monthly", amount: "€4.99", renewsOn: "24 October 2026", inviteUrl: "https://ethos.test/for-two/join?code=abcdefghij", consent, datesUrl: "https://ethos.test/dates" })));
+    expect(html).toContain("Ethos for Two is on.");
+    expect(html).toContain("Unlimited saved dates and trips, shared between you");
+    expect(html).toContain("ethos.test/for-two/join?code=abcdefghij");
+    expect(html).toContain("Your plan: €4.99 a month, renewing on 24 October 2026 and every month after that until you cancel.");
+    expect(html).toContain("Cancel any time from your account page");
+    expect(html).toContain(`At checkout you ticked: “${consent}”`);
+    expect(html).toContain("we refund what you paid, less the days you've used");
+    expect(html).toContain("Plan a date");
+    expect(membershipSubject.welcome("en")).toBe("Welcome to Ethos for Two");
+
+    const yearly = text(await render(MembershipWelcomeEmail({ locale: "es", plan: "yearly", amount: "29,99 €", renewsOn: "24 de septiembre de 2027", consent: null, datesUrl: "https://ethos.test/es/dates" })));
+    expect(yearly).toContain("Tu suscripción: 29,99 € al año, se renueva el 24 de septiembre de 2027");
+    expect(yearly).toContain("Te escribiremos una semana antes de cada renovación.");
+    // Nothing ticked: the right to withdraw is a full refund, and no invite once the partner is in.
+    expect(yearly).toContain("te devolvemos el importe íntegro");
+    expect(yearly).not.toContain("for-two/join");
+    expect(membershipSubject.welcome("es")).toBe("Bienvenidos a Ethos for Two");
+  });
+
+  it("membership renewal reminder: the day, the amount, and that not renewing costs nothing", async () => {
+    const html = text(await render(MembershipRenewalEmail({ locale: "en", renewsOn: "1 October 2027", amount: "€29.99", manageUrl: "https://ethos.test/account#for-two" })));
+    expect(html).toContain("Your year renews on 1 October 2027.");
+    expect(html).toContain("On 1 October 2027 we'll charge €29.99 for another year of Ethos for Two, for both of you.");
+    expect(html).toContain("you keep everything until 1 October 2027, and nothing more is charged");
+    expect(html).toContain("Manage Ethos for Two");
+    const monthly = text(await render(MembershipRenewalEmail({ locale: "en", renewsOn: "1 October 2027", amount: "€29.99", monthly: "€4.99", manageUrl: "https://x" })));
+    expect(monthly).toContain("it switches to monthly, as you asked: €4.99 a month until you cancel");
+    expect(monthly).not.toContain("we'll charge €29.99");
+    expect(membershipSubject.renewal("es", "1 de octubre de 2027")).toBe("Ethos for Two se renueva el 1 de octubre de 2027");
+  });
+
+  it("membership payment problem: update the card, or confirm with the bank", async () => {
+    const failed = text(await render(MembershipPaymentEmail({ locale: "en", kind: "failed", amount: "€4.99", until: "31 October 2026", url: "https://ethos.test/account#for-two" })));
+    expect(failed).toContain("We couldn't take your payment.");
+    expect(failed).toContain("Your card didn't go through for €4.99. Ethos for Two stays on for both of you until 31 October 2026 while we try again");
+    expect(failed).toContain("Update my card");
+    const confirm = text(await render(MembershipPaymentEmail({ locale: "es", kind: "action_required", amount: "4,99 €", until: "31 de octubre de 2026", url: "https://invoice.stripe.com/i/x" })));
+    expect(confirm).toContain("Tu banco quiere que confirmes el pago de 4,99 €.");
+    expect(confirm).toContain("https://invoice.stripe.com/i/x");
+    expect(confirm).toContain("Confirmar el pago");
+  });
+
+  it("membership ended: what stays, and the way back", async () => {
+    const html = text(await render(MembershipEndedEmail({ locale: "en", pricingUrl: "https://ethos.test/pricing#for-two" })));
+    expect(html).toContain("Ethos for Two has ended.");
+    expect(html).toContain("Your saved dates and trips are still in your account");
+    expect(html).toContain("Get Ethos for Two again");
+    expect(html).toContain("https://ethos.test/pricing#for-two");
+    const es = text(await render(MembershipEndedEmail({ locale: "es", pricingUrl: "https://ethos.test/es/pricing#for-two" })));
+    expect(es).toContain("Ethos for Two ha terminado.");
   });
 
   it("gift card shows the code, how to redeem it and who it's for", async () => {

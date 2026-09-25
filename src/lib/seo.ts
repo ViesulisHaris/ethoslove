@@ -65,6 +65,21 @@ export function pageMetadata({
   };
 }
 
+/**
+ * A page's metadata with a shared link's preview on it (lib/share/links.ts): its own title and the
+ * card drawn from the link's photograph, on og and twitter alike. og:url keeps the preview's query,
+ * or Facebook and those that follow it would fetch the bare page and show its default card. The
+ * page's title, canonical and robots stay as they were: this is what a chat shows, nothing more.
+ */
+export function withSharePreview(base: Metadata, { url, title, description, image, alt }: { url: string; title: string; description: string; image: string; alt: string }): Metadata {
+  const card = { url: image, width: 1200, height: 630, type: "image/jpeg", alt };
+  return {
+    ...base,
+    openGraph: { ...base.openGraph, url, title, description, images: [card] },
+    twitter: { card: "summary_large_image", site: SITE.twitterHandle, title, description, images: [card] },
+  };
+}
+
 /** JSON-LD for a <script type="application/ld+json">. "<" is escaped so no string can close the tag. */
 export function jsonLd(nodes: Node[]): string {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": nodes }).replace(/</g, "\\u003c");

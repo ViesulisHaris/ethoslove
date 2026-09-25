@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/lib/env";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { handleRevenueCatEvent, pullAppStore } from "@/lib/commerce/app-store";
+import { sendMembershipEnded } from "@/lib/email/notify";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -18,8 +19,10 @@ function authorised(header: string | null, expected: string): boolean {
 /**
  * RevenueCat's webhook for the iPhone app's In-App Purchases (lib/commerce/app-store.ts). It must carry
  * exactly the Authorization value set in RevenueCat's dashboard (REVENUECAT_WEBHOOK_AUTH). A purchase
- * is recorded and granted, a refund takes it back; 500 on a failure so RevenueCat retries, and
- * `{ received: true }` otherwise, including for events that concern nothing we sell.
+ * is recorded and granted, a refund takes it back, and Ethos for Two's subscription events (purchase,
+ * renewal, cancellation, billing issue, expiration) drive the same membership a Stripe subscription
+ * does; 500 on a failure so RevenueCat retries, and `{ received: true }` otherwise, including for
+ * events that concern nothing we sell.
  */
 export async function POST(request: NextRequest) {
   const expected = env.revenueCatWebhookAuth;
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest) {
 
   const now = Date.now();
   const secret = env.revenueCatSecretKey;
-  const outcome = await handleRevenueCatEvent(db, event, now, { pull: secret ? (userId) => pullAppStore(db, userId, secret, now) : null });
+  const outcome = await handleRevenueCatEvent(db, event, now, { pull: secret ? (userId) => pullAppStore(db, userId, secret, now) : null, sendEnded: sendMembershipEnded });
   if (outcome.status === "failed") {
     console.error("[revenuecat] event not handled", event.id, event.type, outcome.error);
     return NextResponse.json({ error: "failed" }, { status: 500 });

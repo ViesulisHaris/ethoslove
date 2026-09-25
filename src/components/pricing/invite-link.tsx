@@ -9,10 +9,11 @@ import { cn } from "@/lib/utils";
  * The partner's way in to a pass: the link, a copy button and the phone's own share sheet. The link
  * is the whole invitation, so it is shown in full rather than behind a button.
  */
-export function InviteLink({ url, tone = "light", className }: { url: string; tone?: "light" | "dark"; className?: string }) {
+export function InviteLink({ url, tone = "light", className }: { url: string; tone?: "light" | "dark" | "dusk"; className?: string }) {
   const t = useTranslations("money.invite");
   const [copied, setCopied] = useState(false);
-  const dark = tone === "dark";
+  // "dusk": on Ethos for Two's own sky (the account section), where the accent is gold, not rose.
+  const dark = tone !== "light";
 
   const copy = async () => {
     try {
@@ -35,7 +36,7 @@ export function InviteLink({ url, tone = "light", className }: { url: string; to
 
   return (
     <div className={className} data-testid="invite-link">
-      <p className={cn("text-eyebrow", dark ? "text-blush" : "text-ink-soft")}>{t("label")}</p>
+      <p className={cn("text-eyebrow", tone === "dusk" ? "text-starlight" : dark ? "text-blush" : "text-ink-soft")}>{t("label")}</p>
       <p
         className={cn(
           "mt-2 rounded-2xl px-4 py-3 font-mono text-sm break-all select-all",
@@ -50,7 +51,7 @@ export function InviteLink({ url, tone = "light", className }: { url: string; to
           onClick={copy}
           className={cn(
             "inline-flex h-11 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-colors",
-            dark ? "bg-cream text-forest hover:bg-white" : "bg-ink text-paper hover:bg-ink/90",
+            tone === "dusk" ? "bg-cream text-dusk hover:bg-white" : dark ? "bg-cream text-forest hover:bg-white" : "bg-ink text-paper hover:bg-ink/90",
           )}
         >
           {copied ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
@@ -68,7 +69,7 @@ export function InviteLink({ url, tone = "light", className }: { url: string; to
           {t("share")}
         </button>
       </div>
-      <p className={cn("mt-3 text-[13px]", dark ? "text-cream/60" : "text-muted-foreground")}>{t("note")}</p>
+      <p className={cn("mt-3 text-[13px]", tone === "dusk" ? "text-moonlight/65" : dark ? "text-cream/60" : "text-muted-foreground")}>{t("note")}</p>
     </div>
   );
 }

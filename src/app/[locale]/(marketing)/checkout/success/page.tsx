@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Check, Clock } from "lucide-react";
+import { ArrowRight, Check, Clock } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getStripe } from "@/lib/stripe/server";
-import { accountCreatedByCheckout, fulfilCheckoutSession, readSession, type Fulfilment, type Sold } from "@/lib/stripe/fulfil";
+import { accountCreatedByCheckout, fulfilCheckoutSession, readSession, sessionUserId, type Fulfilment, type Sold } from "@/lib/stripe/fulfil";
 import { redeemUrl } from "@/lib/commerce/db";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { Button } from "@/components/ui/button";
 import { InviteLink } from "@/components/pricing/invite-link";
 import { purchaseOutcome, safeReturnPath } from "@/components/pricing/offers";
-import { AutoContinue, GiftCardCode, TrackPurchase } from "./after-payment";
+import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
+import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -28,6 +29,7 @@ export default async function CheckoutSuccessPage({
   setRequestLocale(locale);
   const t = await getTranslations("checkout");
   const tm = await getTranslations("money.success");
+  const tf = await getTranslations("membership.success");
   const user = await getCurrentUser();
   const stripe = getStripe();
   const lang = locale === "es" ? "es" : "en";
@@ -36,6 +38,9 @@ export default async function CheckoutSuccessPage({
 
   let state: "paid" | "pending" | "error" | "signin" = "error";
   let signInUrl: string | null = null;
+  // The guest's one-time sign-in, kept so each of Ethos for Two's two buttons can go through it.
+  let tokenHash: string | null = null;
+  const through = (hash: string, next: string) => `/auth/confirm?token_hash=${encodeURIComponent(hash)}&type=magiclink&next=${encodeURIComponent(next)}`;
   let sold: Sold | null = null;
   let result: Fulfilment | null = null;
   // Whether this page may show what the purchase hands over (a gift card code, a partner invite):
@@ -61,12 +66,12 @@ export default async function CheckoutSuccessPage({
             admin && fresh && (await accountCreatedByCheckout(result.userId, session.id))
               ? await admin.auth.admin.generateLink({ type: "magiclink", email: result.email })
               : { data: null };
-          const tokenHash = link?.properties?.hashed_token;
-          if (tokenHash)
-            signInUrl = `/auth/confirm?token_hash=${encodeURIComponent(tokenHash)}&type=magiclink&next=${encodeURIComponent(returnTo)}`;
+          tokenHash = link?.properties?.hashed_token ?? null;
+          if (tokenHash) signInUrl = through(tokenHash, returnTo);
           else state = "signin";
         }
-      } else if (user && session.metadata?.user_id === user.id) {
+        // A membership is bought as ethos_user_id, everything else as user_id (docs/MEMBERSHIP.md 2.1, R1).
+      } else if (user && sessionUserId(session) === user.id) {
         result = await fulfilCheckoutSession(session);
         state = result.ok ? "paid" : session.payment_status === "unpaid" ? "pending" : "error";
         mayReveal = result.ok;
@@ -91,14 +96,41 @@ export default async function CheckoutSuccessPage({
       : { data: null };
     if (data) pass = { endsAt: data.ends_at, partnerJoined: Boolean(data.partner_user_id) };
   }
+  // Ethos for Two as a subscription: the row this checkout started, read by purchase the same way,
+  // for the plan and the day it renews (components/membership/success.ts). A bank still confirming
+  // the first payment, a row not written yet and a read that failed each say something different:
+  // only the first is a payment being processed.
+  const forTwo = sold?.product === "membership";
+  let started: StartedRead | null = null;
+  if (paid && sold && outcome === "membership") {
+    const admin = getSupabaseAdminClient();
+    const purchaseId = sold.purchaseId;
+    started = admin
+      ? await readStartedMembership(() => admin.from("couple_passes").select("plan, status, current_period_end, partner_user_id").eq("purchase_id", purchaseId).maybeSingle())
+      : { kind: "unreadable" };
+  }
+  const forTwoState = forTwo && (paid || state === "pending") ? membershipSuccess(state === "pending", started) : null;
+  const membership = forTwoState?.kind === "on" ? forTwoState : null;
+  const processing = forTwoState?.kind === "processing";
   const longDate = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(iso));
 
   const giftCardCode = mayReveal ? result?.giftCardCode : undefined;
-  const invite = mayReveal && paid && outcome === "pass" && pass && !pass.partnerJoined ? result?.passInviteUrl : undefined;
+  const invite =
+    mayReveal && paid && ((outcome === "pass" && pass && !pass.partnerJoined) || (outcome === "membership" && membership && !membership.partnerJoined))
+      ? result?.passInviteUrl
+      : undefined;
 
   const copy = (() => {
+    if (processing) return { title: t("pending.title"), detail: tf("processing") };
+    if (forTwoState?.kind === "arriving") return { title: tf("arriving.title"), detail: tf("arriving.detail") };
+    if (forTwoState?.kind === "unreadable") return { title: tf("unreadable.title"), detail: tf("unreadable.detail") };
     if (!paid) return { title: t(`${state}.title`), detail: t(`${state}.detail`) };
     switch (outcome) {
+      case "membership": {
+        if (!membership?.renewsOn) return { title: tf("title"), detail: tf(invite ? "noDate" : "noDateEmailed") };
+        // "The link below" only when it is below; otherwise it went out with the welcome email.
+        return { title: tf("title"), detail: tf(invite ? "detail" : "emailed", { plan: tf(membership.plan), date: longDate(membership.renewsOn) }) };
+      }
       case "pass":
         if (!pass) return { title: tm("pass.title"), detail: tm("passLater") };
         if (pass.partnerJoined) return { title: tm("passJoined.title"), detail: tm("passJoined.detail", { date: longDate(pass.endsAt) }) };
@@ -115,18 +147,34 @@ export default async function CheckoutSuccessPage({
     }
   })();
   // Whoever bought for a gift goes straight back to it, where it publishes itself: a guest through
-  // the one-time sign-in, a signed-in buyer directly. A pass or a gift card has something to hand
-  // over here first (the invite link, the code), so that page waits for a tap.
-  const autoContinue = state === "paid" && outcome !== "pass" && outcome !== "giftcard" && (signInUrl !== null || returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo));
+  // the one-time sign-in, a signed-in buyer directly. A pass, a membership or a gift card has
+  // something to hand over here first (the invite link, the code), so that page waits for a tap.
+  const autoContinue =
+    state === "paid" && outcome !== "pass" && outcome !== "membership" && outcome !== "giftcard" && (signInUrl !== null || returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo));
   const giftCardUrl = paid && outcome === "giftcard" && giftCardCode ? new URL(redeemUrl(giftCardCode, lang)) : null;
   const continueLabel = returnTo.startsWith("/create/") ? tm("toGift") : returnTo.startsWith("/account") ? tm("toAccount") : t("continue");
+  // Ethos for Two's two ways on: the first date, or the account (where the partner's link also is).
+  const member = forTwo && (paid || state === "pending") && state !== "signin";
+  const memberHref = (next: string) => (tokenHash ? through(tokenHash, lang === "es" ? `/es${next}` : next) : next);
 
   return (
     <div className="container-narrow flex flex-col items-center py-24 text-center">
       {paid && sold && typeof session_id === "string" ? <TrackPurchase sessionId={session_id} product={sold.product} bump={sold.bump} /> : null}
-      <div className={state === "pending" ? "grid size-16 place-items-center rounded-full bg-gold/15" : "grid size-16 place-items-center rounded-full bg-moss/10"}>
-        {state === "pending" ? <Clock className="size-7 text-gold-deep" /> : <Check className="size-7 text-moss" />}
-      </div>
+      {membership ? (
+        // The membership's own colours (docs/MEMBERSHIP.md 4.1): a starlight check on the dusk.
+        <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid="membership-success">
+          <Check aria-hidden="true" className="size-7 text-starlight" strokeWidth={2.6} />
+        </div>
+      ) : forTwoState && forTwoState.kind !== "processing" ? (
+        // Paid, and on its way or on the account page: the dusk seal, with the clock of a moment's wait.
+        <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid={`membership-${forTwoState.kind}`}>
+          <Clock aria-hidden="true" className="size-7 text-starlight" strokeWidth={2.4} />
+        </div>
+      ) : (
+        <div className={state === "pending" || processing ? "grid size-16 place-items-center rounded-full bg-gold/15" : "grid size-16 place-items-center rounded-full bg-moss/10"}>
+          {state === "pending" || processing ? <Clock aria-hidden="true" className="size-7 text-gold-deep" /> : <Check aria-hidden="true" className="size-7 text-moss" />}
+        </div>
+      )}
       <h1 className="mt-6 display-lg">{copy.title}</h1>
       <p className="mt-3 max-w-md text-muted-foreground">{copy.detail}</p>
 
@@ -134,18 +182,46 @@ export default async function CheckoutSuccessPage({
         <GiftCardCode code={giftCardCode} redeemUrl={giftCardUrl.toString()} redeemAt={`${giftCardUrl.host}${giftCardUrl.pathname}`} />
       ) : null}
       {invite ? <InviteLink url={invite} className="mt-8 w-full max-w-sm text-left" /> : null}
+      {forTwoState?.kind === "arriving" ? <RefreshWhileArriving /> : null}
 
       {autoContinue ? <AutoContinue href={continueHref} /> : null}
-      <Button asChild className="mt-8 h-12 rounded-full px-6">
-        {state === "signin" ? (
-          <Link href={`/login?next=${encodeURIComponent(returnTo)}`}>{t("signIn")}</Link>
-        ) : signInUrl ? (
-          // The one-time sign-in lives outside the locale routes: a plain link, not the i18n one.
-          <a href={continueHref}>{continueLabel}</a>
-        ) : (
-          <Link href={continueHref}>{continueLabel}</Link>
-        )}
-      </Button>
+      {member ? (
+        <div className="mt-8 grid w-full max-w-sm gap-2.5">
+          {/* The one-time sign-in lives outside the locale routes: plain links, not the i18n ones. */}
+          {tokenHash ? (
+            <>
+              <a href={memberHref("/dates")} className="btn-star inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold">
+                {tf("planFirst")}
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </a>
+              <a href={memberHref("/account")} className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-[15px] font-semibold text-forest hover:bg-forest/5">
+                {tf("toAccount")}
+              </a>
+            </>
+          ) : (
+            <>
+              <Link href="/dates" className="btn-star inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold">
+                {tf("planFirst")}
+                <ArrowRight aria-hidden="true" className="size-4" />
+              </Link>
+              <Link href="/account" className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-[15px] font-semibold text-forest hover:bg-forest/5">
+                {tf("toAccount")}
+              </Link>
+            </>
+          )}
+        </div>
+      ) : (
+        <Button asChild className="mt-8 h-12 rounded-full px-6">
+          {state === "signin" ? (
+            <Link href={`/login?next=${encodeURIComponent(returnTo)}`}>{t("signIn")}</Link>
+          ) : signInUrl ? (
+            // The one-time sign-in lives outside the locale routes: a plain link, not the i18n one.
+            <a href={continueHref}>{continueLabel}</a>
+          ) : (
+            <Link href={continueHref}>{continueLabel}</Link>
+          )}
+        </Button>
+      )}
     </div>
   );
 }

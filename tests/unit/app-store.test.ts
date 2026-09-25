@@ -69,6 +69,8 @@ describe("what the App Store sells", () => {
       [P.special, "extras", true, "free", null],
       [P.everything, "everything", false, null, null],
       [P.forTwo, "pass", false, null, null],
+      ["xyz.secuora.ethos.fortwo.monthly", "membership", false, null, null],
+      ["xyz.secuora.ethos.fortwo.yearly", "membership", false, null, null],
       [P.deep, "pack", false, null, "deep"],
       ["xyz.secuora.ethos.pack.distance", "pack", false, null, "distance"],
       ["xyz.secuora.ethos.pack.spicy", "pack", false, null, "spicy"],

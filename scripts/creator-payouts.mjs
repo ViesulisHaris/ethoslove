@@ -16,7 +16,8 @@
  * on what was kept. The database keeps the VAT-inclusive amount only, so each sale's VAT and refunds
  * are read back from its Stripe Checkout Session and charge (reads, nothing is changed): the env
  * file needs STRIPE_SECRET_KEY. A creator's own purchases earn nothing: a sale whose buyer's account
- * email is the creator's contact is left out and listed. Payouts go out monthly once a creator is
+ * email is the creator's contact is left out and listed. Ethos for Two counts like any other sale,
+ * on its first payment only: a subscription's renewals carry no creator code. Payouts go out monthly once a creator is
  * owed over €20; less carries over, so the report says which. It doesn't know what was carried
  * from earlier months: add those by hand. A sale Stripe didn't work VAT out for (automatic tax off,
  * as in test mode before Stripe Tax is set up) is counted with its VAT and flagged, never guessed.
@@ -69,10 +70,21 @@ async function netOfVatAndRefunds(sale) {
   if (total <= 0) return { net: 0, known: true };
   // Without automatic tax Stripe reports no VAT at all, and the whole price would earn commission.
   const vatKnown = session.automatic_tax?.enabled === true;
-  const charge = typeof session.payment_intent === "object" ? session.payment_intent?.latest_charge : null;
+  const charge = typeof session.payment_intent === "object" && session.payment_intent ? session.payment_intent.latest_charge : await firstInvoiceCharge(sale);
   if (charge && typeof charge === "object" && charge.disputed) return { net: 0, known: true, disputed: true };
   const refunded = charge && typeof charge === "object" ? Math.min(total, charge.amount_refunded ?? 0) : 0;
   return { net: Math.round(sale.amount * ((total - tax) / total) * ((total - refunded) / total)), known: vatKnown, refunded: refunded > 0 };
+}
+
+/**
+ * A subscription's Checkout Session has no payment intent of its own: its first invoice paid it,
+ * and fulfilment recorded that payment intent on the purchase. A withdrawal (a partial refund) or a
+ * dispute shows there.
+ */
+async function firstInvoiceCharge(sale) {
+  if (!sale.stripe_payment_intent_id) return null;
+  const intent = await stripe.paymentIntents.retrieve(sale.stripe_payment_intent_id, { expand: ["latest_charge"] });
+  return intent.latest_charge;
 }
 
 const from = new Date(`${month}-01T00:00:00.000Z`);
@@ -88,7 +100,7 @@ const sales = [];
 for (let page = 0; ; page++) {
   const { data, error } = await db
     .from("purchases")
-    .select("creator_code, amount, currency, product, created_at, stripe_session_id, user_id")
+    .select("creator_code, amount, currency, product, created_at, stripe_session_id, stripe_payment_intent_id, user_id")
     .not("creator_code", "is", null)
     .eq("status", "paid")
     .gte("created_at", from.toISOString())

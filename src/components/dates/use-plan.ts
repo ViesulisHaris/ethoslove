@@ -30,9 +30,12 @@ function subscribe(onChange: () => void) {
   };
 }
 
+/** The plan as it is this moment, for code that runs later than the render that saw it (a debounced save). */
+export const currentPlan = (): Plan => read();
+
 /**
- * The date being planned. It lives in this browser and nowhere else (there is no account and no
- * row in a database), and every open tab and page sees a change at once.
+ * The date being planned. It lives in this browser (and, once they save it, in their account too:
+ * components/saved-dates/use-saved-plan-sync.ts), and every open tab and page sees a change at once.
  */
 export function usePlan(): [Plan, (update: (plan: Plan) => Plan) => void] {
   const plan = useSyncExternalStore(subscribe, read, () => EMPTY_PLAN);

@@ -27,7 +27,8 @@ test.describe("the packs shelf", () => {
     await expect(sheet.getByText("A pack of 40 cards")).toBeVisible();
     await expect(sheet.getByRole("list", { name: "Three cards from this pack" }).getByRole("listitem")).toHaveCount(3);
     await expect(sheet.getByRole("button", { name: "Get it for €2.99" })).toBeVisible();
-    await expect(sheet.getByRole("link", { name: "Get every pack with Ethos for Two" })).toHaveAttribute("href", "/pricing?renew=pass");
+    // Straight to Ethos for Two at the top of /pricing (docs/MEMBERSHIP.md 4.4), which brings its offer into view.
+    await expect(sheet.getByRole("link", { name: "Get every pack with Ethos for Two" })).toHaveAttribute("href", "/pricing?from=packs#for-two");
     // Signed out: somebody who bought it on another phone is sent to sign in, not to pay twice.
     await expect(sheet.getByRole("link", { name: "Bought it already? Sign in" })).toHaveAttribute("href", `/login?next=${encodeURIComponent("/games/deck?pack=deep")}`);
     await sheet.getByRole("button", { name: "Close" }).click();

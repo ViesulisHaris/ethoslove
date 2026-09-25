@@ -1,0 +1,180 @@
+import { useSyncExternalStore } from "react";
+
+/**
+ * Which saved date the plan on this device is, if any. The working plan stays where it always was
+ * (`ethos.dates.plan.v1`, usePlan); opening or saving a date links it here, and while it is linked
+ * every change to the plan is saved back to the account (use-saved-plan-sync). `synced` is the plan
+ * as last saved, so a change is told apart from a plan that only looks different after a reload.
+ * Every tab reads the same link, as every tab reads the same plan.
+ */
+export type SavedLink = {
+  id: string;
+  version: number;
+  /** planKey() of the plan as last saved. */
+  synced: string;
+  /** Whether the date is this person's own, or their partner's. */
+  mine: boolean;
+  /** Whose date it is, when it isn't theirs: "Sam's date". */
+  ownerName: string | null;
+};
+
+export const LINK_KEY = "ethos.dates.saved.v1";
+const EVENT = "ethos:saved-link";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** A stored link, or null when it isn't one (an older format, a hand edit, nothing). */
+export function parseLink(raw: string | null): SavedLink | null {
+  if (!raw) return null;
+  try {
+    const value = JSON.parse(raw) as Record<string, unknown>;
+    const { id, version, synced, mine, ownerName } = value ?? {};
+    if (typeof id !== "string" || !UUID.test(id) || !Number.isSafeInteger(version) || (version as number) < 1 || typeof synced !== "string" || typeof mine !== "boolean") return null;
+    return { id, version: version as number, synced, mine, ownerName: typeof ownerName === "string" ? ownerName : null };
+  } catch {
+    return null;
+  }
+}
+
+// One parse per change, and the same object back until the next one, as useSyncExternalStore needs.
+let cache: { raw: string | null; link: SavedLink | null } = { raw: null, link: null };
+
+export function readLink(): SavedLink | null {
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(LINK_KEY);
+  } catch {
+    // Storage off (private mode): the link lives for this page only, like the plan.
+    return cache.link;
+  }
+  if (raw !== cache.raw) cache = { raw, link: parseLink(raw) };
+  return cache.link;
+}
+
+/**
+ * Link the plan to a saved date, or unlink it (null). Either way the plan on this device is now
+ * something else than a date that turned read-only, so the banner about that one goes too.
+ */
+export function writeLink(link: SavedLink | null): void {
+  const raw = link ? JSON.stringify(link) : null;
+  cache = { raw, link };
+  detachedCache = { raw: null, detached: null };
+  try {
+    if (raw) window.localStorage.setItem(LINK_KEY, raw);
+    else window.localStorage.removeItem(LINK_KEY);
+    window.localStorage.removeItem(DETACHED_KEY);
+  } catch {
+    // Nowhere to keep it; it still holds for this page.
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/**
+ * The saved date this device's plan was unlinked from because it turned read-only while it was
+ * being edited (the membership ended, and it isn't one of the few most recent). The plan page says
+ * so in a banner, on this page and after a reload, until it is closed or the plan is replaced.
+ */
+export type Detached = { id: string; reason: "read_only" };
+export const DETACHED_KEY = "ethos.dates.saved.detached.v1";
+let detachedCache: { raw: string | null; detached: Detached | null } = { raw: null, detached: null };
+
+export function parseDetached(raw: string | null): Detached | null {
+  if (!raw) return null;
+  try {
+    const value = JSON.parse(raw) as Record<string, unknown> | null;
+    return value && typeof value.id === "string" && UUID.test(value.id) && value.reason === "read_only" ? { id: value.id, reason: "read_only" } : null;
+  } catch {
+    return null;
+  }
+}
+
+export function readDetached(): Detached | null {
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(DETACHED_KEY);
+  } catch {
+    return detachedCache.detached;
+  }
+  if (raw !== detachedCache.raw) detachedCache = { raw, detached: parseDetached(raw) };
+  return detachedCache.detached;
+}
+
+/** Say that the plan here was the saved date `id`, which is read-only now (null: stop saying it). */
+export function writeDetached(id: string | null): void {
+  const detached: Detached | null = id ? { id, reason: "read_only" } : null;
+  const raw = detached ? JSON.stringify(detached) : null;
+  detachedCache = { raw, detached };
+  try {
+    if (raw) window.localStorage.setItem(DETACHED_KEY, raw);
+    else window.localStorage.removeItem(DETACHED_KEY);
+  } catch {
+    // It holds for this page.
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+export function useDetached(): Detached | null {
+  return useSyncExternalStore(subscribe, readDetached, () => null);
+}
+
+function subscribe(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  window.addEventListener(EVENT, onChange);
+  return () => {
+    window.removeEventListener("storage", onChange);
+    window.removeEventListener(EVENT, onChange);
+  };
+}
+
+export function useSavedLink(): SavedLink | null {
+  return useSyncExternalStore(subscribe, readLink, () => null);
+}
+
+/**
+ * "Save it once I'm signed in": set before the sign-in dialog opens, read when the page comes back.
+ * In localStorage rather than sessionStorage, because a magic link opens a new tab, whose session
+ * storage is empty; it only counts for half an hour, so a sign-in days later saves nothing by surprise.
+ */
+const SAVE_AFTER_KEY = "ethos.saveAfterSignIn";
+const SAVE_AFTER_MS = 30 * 60 * 1000;
+
+/** A save waiting for the sign-in: what (`"plan"`, `"trip:<id>"`), and since when. */
+export type SaveAfterSignIn = { what: string; at: number };
+
+/** `at` is kept when a save that didn't get through is handed back, so the half hour still counts from the sign-in. */
+export function rememberSaveAfterSignIn(what: string, at = Date.now()): void {
+  try {
+    window.localStorage.setItem(SAVE_AFTER_KEY, JSON.stringify({ what, at } satisfies SaveAfterSignIn));
+  } catch {
+    // Without storage it can't be remembered; they save by hand once they're back.
+  }
+}
+
+/**
+ * What was waiting to be saved, taken so it happens once. A save that then doesn't get through
+ * (saving off for a moment, offline) is handed back with rememberSaveAfterSignIn(taken.what,
+ * taken.at), so it is tried again rather than lost.
+ */
+export function takeSaveAfterSignIn(what: (value: string) => boolean): SaveAfterSignIn | null {
+  try {
+    const raw = window.localStorage.getItem(SAVE_AFTER_KEY);
+    if (!raw) return null;
+    const value = JSON.parse(raw) as { what?: unknown; at?: unknown };
+    if (typeof value.what !== "string" || !what(value.what)) return null;
+    window.localStorage.removeItem(SAVE_AFTER_KEY);
+    return typeof value.at === "number" && Date.now() - value.at < SAVE_AFTER_MS ? { what: value.what, at: value.at } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Saved by hand meanwhile: nothing is waiting any more, so it can't save itself a second time later. */
+export function forgetSaveAfterSignIn(what: string): void {
+  takeSaveAfterSignIn((value) => value === what);
+}
+
+/**
+ * A save that didn't get through and is worth trying again as it was: the request never arrived,
+ * saving is off for the moment, or too many at once. Anything else is an answer (saved, the limit,
+ * signed out, a plan the server refuses) and is not repeated by itself.
+ */
+export const isPassingFailure = (error: string): boolean => error === "network" || error === "not_configured" || error === "rate_limited";

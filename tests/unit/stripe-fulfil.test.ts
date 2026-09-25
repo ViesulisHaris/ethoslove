@@ -4,6 +4,7 @@ import type Stripe from "stripe";
 import { planCheckout, type CheckoutContext, type CheckoutRequest } from "@/lib/commerce/plan";
 import { consentSentence, sessionMetadata, type SessionOptions } from "@/lib/stripe/line-items";
 import { FakeDb } from "./helpers/fake-db";
+import { FakeStripe } from "./helpers/fake-stripe";
 
 const state = vi.hoisted(() => ({ db: null as unknown, stripe: null as unknown }));
 const mail = vi.hoisted(() => ({
@@ -18,7 +19,8 @@ vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.db 
 vi.mock("@/lib/stripe/server", () => ({ getStripe: () => state.stripe }));
 vi.mock("@/lib/email/notify", () => mail);
 
-const { chargedAmount, fulfilCheckoutSession, readSession, revokePurchaseByPaymentIntent } = await import("@/lib/stripe/fulfil");
+const { chargedAmount, fulfilCheckoutSession, readSession } = await import("@/lib/stripe/fulfil");
+const { handleStripeEvent } = await import("@/lib/stripe/events");
 const { recoverExpiredSession, recoveryTarget } = await import("@/lib/stripe/recovery");
 
 const NOW = Date.parse("2026-09-23T12:00:00.000Z");
@@ -87,6 +89,7 @@ describe("reading a session back", () => {
       creatorCode: "MARIA",
       ref: "c-maria",
       locale: "en",
+      plan: null,
     });
     // Another business on the shared Stripe account, or a pack with no pack.
     expect(readSession(session({ order: "42" }))).toBeNull();
@@ -349,15 +352,55 @@ describe("fulfilment, guest", () => {
   });
 });
 
-describe("refunds by payment intent", () => {
-  it("find the purchase and take back what it granted", async () => {
+describe("refunds and disputes of one-time products, as on the live site (the webhook, lib/stripe/events.ts)", () => {
+  const event = (type: string, object: Record<string, unknown>) => ({ id: `evt_${type}`, type, data: { object } }) as unknown as Stripe.Event;
+
+  it("a full refund or a chargeback takes back what the purchase granted; a partial refund or another business's charge changes nothing", async () => {
+    useDb({
+      purchases: [
+        { id: PURCHASE, user_id: "u1", product: "single", status: "paid", amount: 999, currency: "eur", stripe_payment_intent_id: "pi_9" },
+        { id: "p-everything", user_id: "u1", product: "everything", status: "paid", amount: 2999, currency: "eur", stripe_payment_intent_id: "pi_10" },
+      ],
+    });
+    fake.tables.template_unlocks = [
+      { id: "t1", user_id: "u1", template_slug: "vinyl", purchase_id: PURCHASE },
+      { id: "t2", user_id: "u1", template_slug: "*", purchase_id: "p-everything" },
+    ];
+    fake.tables.gifts = [{ id: "g1", user_id: "u1", template_slug: "vinyl", data: {}, status: "live", watermark: false, password_hash: null, unlock_at: null }];
+    const stripe = new FakeStripe(() => NOW);
+    const deps = { db: fake.db, stripe: stripe.client, now: NOW, fulfil: fulfilCheckoutSession, recover: vi.fn(async () => false), send: { ended: vi.fn(async () => true), paymentProblem: vi.fn(async () => true) } };
+
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_x", object: "charge", refunded: true, payment_intent: "pi_other" }), deps)).toMatchObject({ status: 200, handled: "foreign" });
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_9", object: "charge", refunded: false, payment_intent: "pi_9" }), deps)).toMatchObject({ status: 200 });
+    expect(unlocks("u1")).toEqual(["*@p-everything", `vinyl@${PURCHASE}`]);
+    expect(fake.rows("purchases").map((p) => p.status)).toEqual(["paid", "paid"]);
+
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_9", object: "charge", refunded: true, payment_intent: "pi_9" }), deps)).toMatchObject({ status: 200, handled: "ours" });
+    expect(unlocks("u1")).toEqual(["*@p-everything"]);
+    // Everything still covers the gift.
+    expect(fake.rows("gifts")[0].status).toBe("live");
+
+    expect(await handleStripeEvent(event("charge.dispute.created", { id: "dp_1", object: "dispute", payment_intent: "pi_10" }), deps)).toMatchObject({ status: 200, handled: "ours" });
+    expect(unlocks("u1")).toEqual([]);
+    expect(fake.rows("purchases").map((p) => p.status)).toEqual(["refunded", "refunded"]);
+    expect(fake.rows("gifts")[0].status).toBe("draft");
+    // Twice is once: a refund and a dispute of the same payment.
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_10", object: "charge", refunded: true, payment_intent: "pi_10" }), deps)).toMatchObject({ status: 200 });
+    // Nothing of Stripe's is touched for a one-time product.
+    expect(stripe.writes()).toEqual([]);
+  });
+
+  it("asks Stripe to try again when the purchase can't be read, instead of taking the refund for somebody else's", async () => {
     useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "paid", amount: 999, currency: "eur", stripe_payment_intent_id: "pi_9" }] });
     fake.tables.template_unlocks = [{ id: "t1", user_id: "u1", template_slug: "vinyl", purchase_id: PURCHASE }];
-    await revokePurchaseByPaymentIntent("pi_other");
+    const stripe = new FakeStripe(() => NOW);
+    const deps = { db: fake.db, stripe: stripe.client, now: NOW, fulfil: fulfilCheckoutSession, recover: vi.fn(async () => false), send: { ended: vi.fn(async () => true), paymentProblem: vi.fn(async () => true) } };
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    fake.failNext("purchases", "select", "connection reset");
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_9", object: "charge", refunded: true, payment_intent: "pi_9" }), deps)).toMatchObject({ status: 500 });
     expect(unlocks("u1")).toHaveLength(1);
-    await revokePurchaseByPaymentIntent("pi_9");
+    expect(await handleStripeEvent(event("charge.refunded", { id: "ch_9", object: "charge", refunded: true, payment_intent: "pi_9" }), deps)).toMatchObject({ status: 200 });
     expect(unlocks("u1")).toEqual([]);
-    expect(fake.rows("purchases")[0].status).toBe("refunded");
   });
 });
 
