@@ -316,6 +316,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           if (!v) setResumeDismissed(true);
         }}
         manifest={manifest}
+        mod={mod}
         slug={slug}
         supabaseConfigured={supabaseConfigured}
         paymentsEnabled={paymentsEnabled}

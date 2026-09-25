@@ -477,7 +477,14 @@
         "photosMax": "Demasiadas fotos para esta plantilla",
         "uploadsPending": "Tus archivos aún se están subiendo",
         "uploadsDone": "Sube tus archivos",
-        "uploadsFailed": "Algo no se subió"
+        "uploadsFailed": "Algo no se subió",
+        "fields": {
+          "more": "{label}: añade al menos {count}",
+          "fewer": "{label}: {count} como máximo",
+          "fill": "{label}: rellénalo",
+          "emptyItem": "{label}: rellena o quita el que está vacío",
+          "fix": "{label}: revísalo"
+        }
       },
       "signInTitle": "Inicia sesión para publicar",
       "signInBlurb": "Tu borrador está guardado en este dispositivo. Inicia sesión y seguimos justo aquí.",
@@ -494,6 +501,7 @@
       "publishing": "Publicando…",
       "notConfigured": "Para publicar hace falta Supabase. Añade las claves a .env.local y reinicia.",
       "error": "No se pudo publicar: {error}",
+      "errorFields": "Aún no se puede enviar. Revisa esto primero: {fields}.",
       "featureSong": "música de otra web",
       "featureVideo": "un vídeo",
       "featureVoiceNote": "un mensaje de voz",
