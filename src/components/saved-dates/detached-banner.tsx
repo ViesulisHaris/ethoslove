@@ -19,10 +19,12 @@ export function DetachedBanner({ onWhy }: { onWhy: () => void }) {
   const detached = useDetached();
   if (!detached) return null;
   return (
-    <div role="status" className="mb-6 flex items-start gap-3 rounded-2xl bg-dusk py-3 pr-1.5 pl-4 text-cream shadow-soft ring-1 ring-white/10" data-testid="saved-detached">
+    // The close button sits on its own in the corner (the plan card's bow hangs over it), so the words
+    // and the two actions below take the whole width: on a 360px phone they keep to one line.
+    <div role="status" className="relative mb-6 flex items-start gap-3 rounded-2xl bg-dusk py-3.5 pr-3 pl-4 text-cream shadow-soft ring-1 ring-white/10" data-testid="saved-detached">
       <Lock aria-hidden="true" className="mt-1 size-4 shrink-0 text-starlight" />
       <div className="min-w-0 flex-1">
-        <p className="text-[15px] leading-snug font-semibold">{t("title")}</p>
+        <p className="pr-10 text-[15px] leading-snug font-semibold">{t("title")}</p>
         <p className="mt-1 text-[13.5px] leading-snug text-moonlight/85">{t("body", { limit: FREE_SAVED_DATES })}</p>
         <div className="mt-1 flex flex-wrap items-center gap-x-5">
           <button type="button" onClick={onWhy} className="inline-flex min-h-11 items-center text-[14px] font-semibold text-starlight underline underline-offset-4">
@@ -34,7 +36,7 @@ export function DetachedBanner({ onWhy }: { onWhy: () => void }) {
           </Link>
         </div>
       </div>
-      <button type="button" onClick={() => writeDetached(null)} aria-label={t("dismiss")} className="grid size-11 shrink-0 place-items-center rounded-full text-moonlight transition-colors hover:bg-white/10 hover:text-cream">
+      <button type="button" onClick={() => writeDetached(null)} aria-label={t("dismiss")} className="absolute top-2.5 right-1.5 grid size-11 place-items-center rounded-full text-moonlight transition-colors hover:bg-white/10 hover:text-cream">
         <X aria-hidden="true" className="size-4" />
       </button>
     </div>

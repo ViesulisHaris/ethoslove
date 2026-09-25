@@ -88,7 +88,8 @@ export function SavePlanPanel({
           {saving ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Bookmark aria-hidden="true" className="size-4" />}
           {saving ? t("save.saving") : t("save.cta")}
         </button>
-        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/60 tabular-nums">{t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
+        {/* Past the limit (a membership ended with more saved): "your free saves are used", never "4 of 3". */}
+        {list && list.quota.limit !== null ? <p className="mt-3 text-center text-[12.5px] text-forest/60 tabular-nums">{list.quota.used >= list.quota.limit ? t("errors.limit_reached") : t("save.quota", { used: list.quota.used, limit: list.quota.limit })}</p> : null}
         {error ? (
           <p role="alert" className="mt-3 text-[13px] leading-snug text-destructive">
             {t(`errors.${error}`)}

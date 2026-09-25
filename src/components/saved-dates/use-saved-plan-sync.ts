@@ -64,9 +64,10 @@ export function useSavedPlanSync(onNotice: (notice: SyncNotice) => void): { link
   }, [apply]);
 
   // A plan emptied here is a new plan, not the read-only date it was: the banner about that one goes.
+  // Read afresh, not from this render: while the page hydrates, the render sees the server's empty plan.
   const empty = plan.stops.length === 0;
   useEffect(() => {
-    if (empty && !link && readDetached()) writeDetached(null);
+    if (empty && currentPlan().stops.length === 0 && !readLink() && readDetached()) writeDetached(null);
   }, [empty, link]);
 
   // A change, then a pause: save. A save that didn't arrive waits for a reason to try again.

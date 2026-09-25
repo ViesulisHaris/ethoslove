@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -63,7 +63,7 @@ describe("mapsRouteUrl", () => {
 
 describe("MapsMenu", () => {
   const render = (member: boolean, stops = CHIADO, locale: "en" | "es" = "en") =>
-    renderToStaticMarkup(createElement(NextIntlClientProvider, { locale, messages: locale === "es" ? es : en }, createElement(MapsMenu, { stops, member, onLocked: () => undefined })));
+    renderToStaticMarkup(createElement(NextIntlClientProvider, { locale, messages: locale === "es" ? es : en } as unknown as ComponentProps<typeof NextIntlClientProvider>, createElement(MapsMenu, { stops, member, onLocked: () => undefined })));
 
   it("is locked for free visitors: the button says what it takes, and no route is in the page", () => {
     const html = render(false);
