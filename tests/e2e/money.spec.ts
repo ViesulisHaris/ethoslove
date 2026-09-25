@@ -211,6 +211,55 @@ test.describe("the paywall in the publish sheet", () => {
   });
 });
 
+test.describe("“One payment, no subscription” in the publish sheet", () => {
+  const WORDS = {
+    en: { line: "One payment, no subscription. Yours for good.", theirName: "Their name", publish: "Publish", footer: "Remove the “Made with Ethos” footer", signInInstead: "Already have an account? Sign in instead", signIn: "Sign in to publish" },
+    es: { line: "Un solo pago, sin suscripción. Tuyo para siempre.", theirName: "Su nombre", publish: "Publicar", footer: "Quitar el pie «Hecho con Ethos»", signInInstead: "¿Ya tienes cuenta? Inicia sesión", signIn: "Inicia sesión para publicar" },
+  } as const;
+
+  for (const locale of ["en", "es"] as const) {
+    const w = WORDS[locale];
+    const prefix = locale === "es" ? "/es" : "";
+    async function openSheet(page: Page, path: string, { removeFooter = false } = {}) {
+      await page.goto(`${prefix}${path}`);
+      await expect(page.getByLabel(w.theirName)).toBeVisible({ timeout: 30_000 });
+      if (removeFooter) await page.getByRole("switch", { name: w.footer }).click();
+      await page.getByRole("button", { name: w.publish, exact: true }).click();
+      const sheet = page.getByRole("dialog");
+      await expect(sheet).toBeVisible();
+      return sheet;
+    }
+
+    test(`${locale}: is said under the paywall, and under the sign-in that names its price`, async ({ page }) => {
+      const sheet = await openSheet(page, "/create/bouquet");
+      await expect(sheet.getByTestId("pay-panel")).toBeVisible();
+      await expect(sheet.getByTestId("no-subscription")).toHaveText(w.line);
+      await sheet.getByRole("button", { name: w.signInInstead }).click();
+      await expect(sheet.getByText(w.signIn)).toBeVisible();
+      await expect(sheet.getByTestId("no-subscription")).toHaveText(w.line);
+    });
+
+    test(`${locale}: is said when a free template is made special`, async ({ page }) => {
+      const sheet = await openSheet(page, "/create/the-letter", { removeFooter: true });
+      await expect(sheet.getByTestId("plan-extras")).toBeVisible();
+      await expect(sheet.getByTestId("no-subscription")).toHaveText(w.line);
+    });
+
+    test(`${locale}: is not said when sending costs nothing: a free template, a free reply`, async ({ page }) => {
+      let sheet = await openSheet(page, "/create/the-letter");
+      await expect(sheet.getByText(w.signIn)).toBeVisible();
+      await expect(sheet.getByTestId("pay-panel")).toHaveCount(0);
+      await expect(sheet.getByTestId("no-subscription")).toHaveCount(0);
+      await expect(sheet).not.toContainText(w.line);
+
+      sheet = await openSheet(page, `/create/bouquet?ref=reply&reply=${REPLY_TOKEN}`);
+      await expect(sheet.getByText(w.signIn)).toBeVisible();
+      await expect(sheet.getByTestId("pay-panel")).toHaveCount(0);
+      await expect(sheet).not.toContainText(w.line);
+    });
+  }
+});
+
 test.describe("redeeming a gift card", () => {
   test("keeps the code while the visitor signs in first", async ({ page }) => {
     await page.goto("/redeem?code=ethos-abcd-2345");

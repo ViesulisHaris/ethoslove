@@ -1,4 +1,5 @@
 import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
+import type { PublishDecision } from "@/lib/gift/publish";
 import { BUMP, PRODUCTS, bumpAmount, type Currency, type ProductId } from "@/lib/pricing/products";
 
 /**
@@ -128,6 +129,28 @@ export function paywallRequest(input: { plan: PaywallPlan; slug: string; bump: b
 /** The pricing page's pick-three picker, opened with this template already chosen, coming back to the gift afterwards. */
 export function pick3Href(slug: string, returnTo: string): string {
   return `/pricing?${new URLSearchParams({ template: slug, plan: "pick3", return: returnTo }).toString()}`;
+}
+
+/**
+ * Whether the publish sheet is asking for money, the only time it may promise "One payment, no
+ * subscription": a guest shown the paywall (or the sign-in that names the price on the way to it),
+ * or a signed-in sender whose gift needs an unlock they can pay for here (Stripe, or the App Store's
+ * sheet inside the app). A free template with nothing paid in it, a free reply, a template they
+ * already own, a gift still being filled in and a build without payments ask for nothing.
+ */
+export function publishAsksForMoney(sheet: {
+  authed: boolean;
+  supabaseConfigured: boolean;
+  inApp: boolean;
+  paymentsEnabled: boolean;
+  /** Something in the gift is paid for: a premium template that isn't a free reply, an extra, no footer. */
+  wouldNeedPayment: boolean;
+  /** lib/gift/publish.ts's rule for a signed-in sender; null until their entitlement is known. */
+  decision: PublishDecision | null;
+}): boolean {
+  // A guest pays on the website only: inside the app they sign in first, and are asked after.
+  if (!sheet.authed) return sheet.supabaseConfigured && !sheet.inApp && sheet.paymentsEnabled && sheet.wouldNeedPayment;
+  return sheet.decision !== null && !sheet.decision.ok && sheet.decision.reason === "payment_required" && (sheet.paymentsEnabled || sheet.inApp);
 }
 
 /**

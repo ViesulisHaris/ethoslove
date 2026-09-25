@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
-import { replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
+import { publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
 import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/config/site";
@@ -279,6 +279,8 @@ export function PublishSheet({
     (serialized ? premiumExtras(serialized).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // "One payment, no subscription" under a free publish read as if sending it cost something.
+  const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
 
@@ -508,9 +510,11 @@ export function PublishSheet({
                     : t("publishNow")}
               </span>
             </Button>
-            <p className="mt-3 text-center text-xs text-muted-foreground">
-              {tCommon("noSubscription")}
-            </p>
+            {asksForMoney ? (
+              <p className="mt-3 text-center text-xs text-muted-foreground" data-testid="no-subscription">
+                {tCommon("noSubscription")}
+              </p>
+            ) : null}
           </div>
         )}
       </SheetContent>

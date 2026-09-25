@@ -17,6 +17,7 @@ import {
   pick3Href,
   pick3Offered,
   pricingFaq,
+  publishAsksForMoney,
   purchaseOutcome,
   redeemErrorKey,
   replyTokenFrom,
@@ -25,6 +26,9 @@ import {
   templatePlan,
 } from "@/components/pricing/offers";
 import { parseEntitlements } from "@/components/pricing/entitlements";
+import { decidePublish } from "@/lib/gift/publish";
+import type { GiftData } from "@/lib/gift/schema";
+import { manifest as letter } from "@/templates/the-letter/manifest";
 
 describe("the paywall's offer", () => {
   it("sells a premium template as itself and a free one as its extras", () => {
@@ -101,6 +105,67 @@ describe("the paywall's offer", () => {
       const body = paywallRequest({ plan, slug: "bouquet", bump: true });
       expect(Object.keys(body).some((k) => /amount|price/i.test(k))).toBe(false);
     }
+  });
+});
+
+describe("the publish sheet's “One payment, no subscription”", () => {
+  const ready: GiftData = {
+    version: 1,
+    templateSlug: "the-letter",
+    locale: "en",
+    title: "",
+    recipientName: "Ana",
+    senderName: "Marco",
+    message: "Hi",
+    messageStyle: "typewriter",
+    photos: [{ id: "a", url: "gifts/g1/a.webp", width: 10, height: 10 }],
+    accentColor: "#B23A2E",
+    fontPairing: "editorial",
+    showReactionCta: true,
+    watermark: true,
+    fields: {},
+  };
+  const premium = { ...letter, slug: "x", tier: "premium" as const };
+  const none = { removeWatermark: false, schedule: false, password: false };
+  const web = { supabaseConfigured: true, inApp: false, paymentsEnabled: true };
+  const signedIn = (decision: ReturnType<typeof decidePublish> | null, over: Partial<typeof web> = {}) =>
+    publishAsksForMoney({ ...web, ...over, authed: true, wouldNeedPayment: false, decision });
+  const guest = (wouldNeedPayment: boolean, over: Partial<typeof web> = {}) =>
+    publishAsksForMoney({ ...web, ...over, authed: false, wouldNeedPayment, decision: null });
+
+  it("is said wherever the sheet asks for money: the paywall, make it special, the upgrade, the app's unlock", () => {
+    // A premium template (the paywall, with the upgrade row when earlier purchases count).
+    expect(signedIn(decidePublish(premium, ready, { unlocked: false }, none))).toBe(true);
+    // A free template's extras (make it special).
+    expect(signedIn(decidePublish(letter, ready, { unlocked: false }, { ...none, removeWatermark: true }))).toBe(true);
+    // A free reply that asks for an extra is back at the template's price.
+    expect(signedIn(decidePublish(premium, ready, { unlocked: false }, { ...none, schedule: true, freeReply: true }))).toBe(true);
+    // Inside the iPhone app the App Store's sheet takes the money.
+    expect(signedIn(decidePublish(premium, ready, { unlocked: false }, none), { inApp: true, paymentsEnabled: false })).toBe(true);
+    // A guest sees the paywall, or the sign-in that names its price.
+    expect(guest(true)).toBe(true);
+  });
+
+  it("is not said when sending costs nothing", () => {
+    // A free template with nothing paid in it.
+    expect(signedIn(decidePublish(letter, ready, { unlocked: false }, none))).toBe(false);
+    expect(guest(false)).toBe(false);
+    // A free reply.
+    expect(signedIn(decidePublish(premium, ready, { unlocked: false }, { ...none, freeReply: true }))).toBe(false);
+    // A template they own already, extras and all.
+    expect(signedIn(decidePublish(premium, ready, { unlocked: true }, { ...none, removeWatermark: true }))).toBe(false);
+  });
+
+  it("is not said before there is a price to show", () => {
+    // Their entitlement is still loading, or the gift is missing a name.
+    expect(signedIn(null)).toBe(false);
+    expect(signedIn(decidePublish(premium, { ...ready, recipientName: "" }, { unlocked: false }, none))).toBe(false);
+    // A build without payments says payments aren't connected instead.
+    expect(signedIn(decidePublish(premium, ready, { unlocked: false }, none), { paymentsEnabled: false })).toBe(false);
+    expect(guest(true, { paymentsEnabled: false })).toBe(false);
+    // A guest in the app signs in there first; nobody can sign in where Supabase isn't set up.
+    expect(guest(true, { inApp: true })).toBe(false);
+    expect(guest(true, { supabaseConfigured: false })).toBe(false);
   });
 });
 
