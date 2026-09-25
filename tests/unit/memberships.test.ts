@@ -707,9 +707,20 @@ describe("joining", () => {
     fake = new FakeDb({}, NOW);
     seedSubscription();
     seedSubscription({ id: "theirs", purchase_id: "p9", owner_user_id: OTHER, invite_code: "kkkkkkkkkk", stripe_subscription_id: "sub_9" });
-    expect(await joinPass(fake.db, { code: "abcdefghij", userId: OTHER, now: NOW })).toEqual({ ok: false, error: "has_own" });
+    // Theirs renews by itself: no date to name.
+    expect(await joinPass(fake.db, { code: "abcdefghij", userId: OTHER, now: NOW })).toEqual({ ok: false, error: "has_own", role: "owner", endsAt: null });
     fake.tables.couple_passes.find((r) => r.id === "theirs")!.partner_user_id = PARTNER;
-    expect(await joinPass(fake.db, { code: "abcdefghij", userId: PARTNER, now: NOW })).toEqual({ ok: false, error: "has_own" });
+    // Another couple's they joined: they can leave it at once, so no date either.
+    expect(await joinPass(fake.db, { code: "abcdefghij", userId: PARTNER, now: NOW })).toEqual({ ok: false, error: "has_own", role: "partner", endsAt: null });
+  });
+
+  it("refuses a cancelled membership of their own until it ends, and says when that is", async () => {
+    seedSubscription();
+    // Cancelling keeps it to the end of the paid period: "cancel yours first" wouldn't let them in.
+    seedSubscription({ id: "theirs", purchase_id: "p9", owner_user_id: OTHER, invite_code: "kkkkkkkkkk", stripe_subscription_id: "sub_9", cancel_at_period_end: true, ends_at: iso(NOW + 20 * DAY_MS) });
+    expect(await joinPass(fake.db, { code: "abcdefghij", userId: OTHER, now: NOW })).toEqual({ ok: false, error: "has_own", role: "owner", endsAt: NOW + 20 * DAY_MS });
+    // Once it has ended, they join.
+    expect(await joinPass(fake.db, { code: "abcdefghij", userId: OTHER, now: NOW + 20 * DAY_MS + 1 })).toMatchObject({ ok: true });
   });
 });
 
@@ -886,7 +897,10 @@ describe("the routes", () => {
     routes.user = { id: OTHER };
     const refused = await post(joinRoute, { code: "abcdefghij" });
     expect(refused.status).toBe(409);
-    expect(await refused.json()).toEqual({ error: "has_own" });
+    expect(await refused.json()).toEqual({ error: "has_own", role: "owner", endsAt: null });
+    fake.tables.couple_passes.find((r) => r.id === "theirs")!.cancel_at_period_end = true;
+    fake.tables.couple_passes.find((r) => r.id === "theirs")!.ends_at = iso(NOW + 20 * DAY_MS);
+    expect(await (await post(joinRoute, { code: "abcdefghij" })).json()).toEqual({ error: "has_own", role: "owner", endsAt: iso(NOW + 20 * DAY_MS) });
   });
 
   it("deleting an account cancels its subscription first, and keeps the account if Stripe can't be reached", async () => {

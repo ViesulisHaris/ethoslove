@@ -134,7 +134,13 @@ export async function startPass(
 
 export type JoinResult =
   | { ok: true; pass: Pass; paidUntil: number; renews: boolean }
-  | { ok: false; error: "not_found" | "expired" | "own_pass" | "has_own" | "taken" | "failed" };
+  | { ok: false; error: "not_found" | "expired" | "own_pass" | "taken" | "failed" }
+  /**
+   * What stands in the way, so the page can say what would work: a membership of their own
+   * (`owner`), which cancelling doesn't end until `endsAt` (null while it renews by itself), or
+   * another couple's they joined (`partner`), which they can leave at once.
+   */
+  | { ok: false; error: "has_own"; role: "owner" | "partner"; endsAt: number | null };
 
 /**
  * The partner joins with the owner's invite code: signed in, not the owner, while the membership runs
@@ -154,7 +160,13 @@ export async function joinPass(db: Db, args: { code: string; userId: string; now
   const running = ahead.find((pass) => isRunning(pass, now));
   if (!running) return { ok: false, error: "expired" };
   const theirs = await passesOf(db, userId);
-  if (theirs.some((pass) => pass.owner_user_id !== invited.owner_user_id && isRunning(pass, now))) return { ok: false, error: "has_own" };
+  if (theirs.some((pass) => pass.owner_user_id !== invited.owner_user_id && isRunning(pass, now))) {
+    // Cancelling keeps a membership running to its period end, so "cancel yours first" isn't advice
+    // that works: the page says when theirs ends (with the years bought ahead), or that it renews.
+    const owned = theirs.filter((pass) => pass.owner_user_id === userId && ms(pass.ends_at) > now);
+    if (owned.length === 0) return { ok: false, error: "has_own", role: "partner", endsAt: null };
+    return { ok: false, error: "has_own", role: "owner", endsAt: owned.some(renews) ? null : paidUntil(owned, now) };
+  }
   if (ahead.some((pass) => pass.partner_user_id && pass.partner_user_id !== userId)) return { ok: false, error: "taken" };
 
   const { error } = await db

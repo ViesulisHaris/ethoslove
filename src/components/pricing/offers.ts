@@ -326,6 +326,18 @@ export function redeemErrorKey(error: string | undefined, status?: number): Rede
   }
 }
 
+/**
+ * Which "you already have one" to say (POST /api/for-two/join's has_own 409): another couple's
+ * membership they joined, which they can leave; their own that ends on a date; or their own that
+ * renews by itself. Cancelling keeps a membership to its period end, so "cancel yours first" was
+ * never advice that worked. A body without the details (an older server) gets the renewing words.
+ */
+export function hasOwnMessage(body: Record<string, unknown>): { key: "hasOwn" | "hasOwnUntil" | "hasOwnPartner"; endsAt: string | null } {
+  if (body.role === "partner") return { key: "hasOwnPartner", endsAt: null };
+  const endsAt = typeof body.endsAt === "string" && !Number.isNaN(Date.parse(body.endsAt)) ? body.endsAt : null;
+  return endsAt ? { key: "hasOwnUntil", endsAt } : { key: "hasOwn", endsAt: null };
+}
+
 /** Why joining a pass failed, as a key under money.join.errors (lib/commerce/passes.ts joinPass). */
 export type JoinError = "notFound" | "taken" | "own" | "hasOwn" | "expired" | "signIn" | "tooMany" | "generic";
 

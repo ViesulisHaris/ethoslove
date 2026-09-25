@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AuthForm } from "@/components/auth/auth-form";
 import { useEntitlements } from "./entitlements";
-import { inviteCodeFrom, joinErrorKey, type JoinError } from "./offers";
+import { hasOwnMessage, inviteCodeFrom, joinErrorKey, type JoinError } from "./offers";
 import { errorOf, postJson } from "./requests";
 
 /**
@@ -25,7 +25,10 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
   const code = initialCode ?? inviteCodeFrom(typed);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<JoinError | null>(null);
+  // With "hasOwn": whose membership is in the way, and when it ends (see hasOwnMessage).
+  const [own, setOwn] = useState<ReturnType<typeof hasOwnMessage> | null>(null);
   const [joined, setJoined] = useState<{ endsAt: string | null } | null>(null);
+  const longDate = (value: string) => new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(value));
   const signedIn = Boolean(data?.signedIn);
   // Already in on somebody's membership (this one, most likely, opened again): nothing left to do.
   const member = data?.membership;
@@ -51,6 +54,7 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
     }
     const key = joinErrorKey(errorOf(result), result.status);
     setError(key);
+    setOwn(key === "hasOwn" ? hasOwnMessage(result.json) : null);
     if (key === "signIn") setVersion((v) => v + 1);
   };
 
@@ -64,7 +68,7 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
         </span>
         <h2 className="relative mt-5 font-display text-3xl">{t("done.title")}</h2>
         <p className="relative mt-2 text-[15px] text-moonlight/85">
-          {endsAt ? t("done.detail", { date: new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(endsAt)) }) : t("done.detailNoDate")}
+          {endsAt ? t("done.detail", { date: longDate(endsAt) }) : t("done.detailNoDate")}
         </p>
         <div className="relative mt-7 grid gap-2 sm:grid-cols-2">
           <Link href="/my-dates" className="btn-star inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15px] font-semibold sm:col-span-2">
@@ -107,9 +111,15 @@ export function JoinForm({ initialCode }: { initialCode: string | null }) {
       ) : null}
 
       {error ? (
-        <p role="alert" className="rounded-2xl border border-coral/40 bg-coral/5 p-4 text-sm text-ink" data-testid="join-error">
-          {t(`errors.${error}`)}
-        </p>
+        <div role="alert" className="rounded-2xl border border-coral/40 bg-coral/5 p-4 text-sm text-ink">
+          <p data-testid="join-error">{error === "hasOwn" && own ? t(`errors.${own.key}`, { date: own.endsAt ? longDate(own.endsAt) : "" }) : t(`errors.${error}`)}</p>
+          {/* Their invite link (to send the other way) and "Leave" are both on the account page. */}
+          {error === "hasOwn" ? (
+            <Link href="/account" className="mt-1 inline-flex min-h-11 items-center font-semibold text-ink underline underline-offset-4" data-testid="join-error-account">
+              {t("errors.toAccount")}
+            </Link>
+          ) : null}
+        </div>
       ) : null}
 
       {!loaded ? (

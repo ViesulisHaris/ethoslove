@@ -1132,8 +1132,13 @@ service role as it does for the pass, and checks the buyer with A's `sessionUser
 - `/for-two/join` and `JoinForm`: subtitle EN "Their Ethos for Two covers both of you: saved dates
   and trips shared on both your phones, every gift template and every game pack, for as long as it
   runs. It costs you nothing."; a features line for shared dates; "done" says "until {date}" only
-  when `renews` is false, else "for as long as it runs"; the new error `has_own` ("You already have
-  Ethos for Two. Cancel yours first, or ask your partner to join yours.").
+  when `renews` is false, else "for as long as it runs"; the new error `has_own`, whose 409 also
+  carries `role` ("owner" | "partner") and `endsAt`, because cancelling keeps a membership to its
+  period end and "cancel yours first" never let anyone in: their own that renews ("…Ask your partner
+  to join yours instead: your invite link is on your account page. If you cancel yours, you can join
+  theirs once it ends."), their own that ends ("Your own Ethos for Two runs until {date}…, or join
+  theirs once yours ends."), or another couple's ("…Leave it from your account page first, then
+  open this link again."), each with a link to the account page.
 - `src/components/games/pack-shelf.tsx`: the "every pack" link → `/pricing?from=packs#for-two`.
 - `src/app/llms.txt/route.ts`: Ethos for Two as a membership (prices from the catalogue), and the
   Dates line: plans stay in the browser unless saved to an account.

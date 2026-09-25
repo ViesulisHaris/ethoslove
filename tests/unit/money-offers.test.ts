@@ -12,6 +12,7 @@ import {
   defaultPaywallPlan,
   everythingPlan,
   giftCardTouch,
+  hasOwnMessage,
   heroMemberState,
   initialPlan,
   inviteCodeFrom,
@@ -309,6 +310,24 @@ describe("answers from the redeem and join endpoints", () => {
     expect(joinErrorKey(undefined, 401)).toBe("signIn");
     expect(joinErrorKey(undefined, 429)).toBe("tooMany");
     expect(joinErrorKey("failed")).toBe("generic");
+  });
+
+  it("says what would let somebody with their own Ethos for Two in, never \"cancel yours first\"", () => {
+    // Their own, renewing: cancelling keeps it to the period end, so there is no date yet to promise.
+    expect(hasOwnMessage({ error: "has_own", role: "owner", endsAt: null })).toEqual({ key: "hasOwn", endsAt: null });
+    // Their own, ending (cancelled, or a pass): they can join once it has.
+    expect(hasOwnMessage({ error: "has_own", role: "owner", endsAt: "2026-10-15T09:00:00.000Z" })).toEqual({ key: "hasOwnUntil", endsAt: "2026-10-15T09:00:00.000Z" });
+    // Another couple's, which they can leave now.
+    expect(hasOwnMessage({ error: "has_own", role: "partner", endsAt: null })).toEqual({ key: "hasOwnPartner", endsAt: null });
+    // An older server's bare answer, or a date that isn't one.
+    expect(hasOwnMessage({ error: "has_own" })).toEqual({ key: "hasOwn", endsAt: null });
+    expect(hasOwnMessage({ error: "has_own", role: "owner", endsAt: "soon" })).toEqual({ key: "hasOwn", endsAt: null });
+    for (const catalogue of [en, es]) {
+      const errors = (catalogue.money as { join: { errors: Record<string, string> } }).join.errors;
+      for (const key of ["hasOwn", "hasOwnUntil", "hasOwnPartner", "toAccount"]) expect(errors[key], key).toEqual(expect.any(String));
+      expect(errors.hasOwnUntil).toContain("{date}");
+      expect(Object.values(errors).join(" ")).not.toMatch(/Cancel yours first|Cancela el tuyo primero/);
+    }
   });
 });
 

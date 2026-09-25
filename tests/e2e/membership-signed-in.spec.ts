@@ -348,11 +348,29 @@ test.describe("joining a partner's Ethos for Two, signed in", () => {
     await expect(page.getByTestId("join-done")).toContainText(`until ${longDate(iso(40))}.`);
   });
 
-  test("someone with an Ethos for Two of their own is told why they can't join a second", async ({ page }) => {
+  test("someone with an Ethos for Two of their own is told why they can't join a second, and what would work", async ({ page }) => {
+    // Cancelling keeps a membership to its period end, so the page never says "cancel yours first".
     await answerEntitlements(page, null);
-    await answerJoin(page, { status: 409, body: { error: "has_own" } });
+    await answerJoin(page, { status: 409, body: { error: "has_own", role: "owner", endsAt: null } });
     await page.goto("/for-two/join?code=abcdefghij");
     await page.getByTestId("join-submit").click();
-    await expect(page.getByTestId("join-error")).toHaveText("You already have Ethos for Two. Cancel yours first, or ask your partner to join yours.");
+    await expect(page.getByTestId("join-error")).toHaveText(
+      "You already have Ethos for Two of your own, and it renews by itself. Ask your partner to join yours instead: your invite link is on your account page. If you cancel yours, you can join theirs once it ends.",
+    );
+    await expect(page.getByTestId("join-error-account")).toHaveAttribute("href", "/account");
+  });
+
+  test("one of their own that ends says when they can join; another couple's says to leave it", async ({ page }) => {
+    await answerEntitlements(page, null);
+    await answerJoin(page, { status: 409, body: { error: "has_own", role: "owner", endsAt: iso(40) } });
+    await page.goto("/for-two/join?code=abcdefghij");
+    await page.getByTestId("join-submit").click();
+    await expect(page.getByTestId("join-error")).toHaveText(
+      `Your own Ethos for Two runs until ${longDate(iso(40))}. Ask your partner to join yours instead (your invite link is on your account page), or join theirs once yours ends.`,
+    );
+    await page.unroute("**/api/for-two/join");
+    await answerJoin(page, { status: 409, body: { error: "has_own", role: "partner", endsAt: null } });
+    await page.getByTestId("join-submit").click();
+    await expect(page.getByTestId("join-error")).toHaveText("You’re already in someone else’s Ethos for Two. Leave it from your account page first, then open this link again.");
   });
 });
