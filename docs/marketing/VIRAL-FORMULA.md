@@ -1010,6 +1010,30 @@ harder. Same shape, same rules: one demandable object, his last bubble asking fo
 | 188 | he said he was at his mum's; his location said the anchor; now her checking is the problem. | she was at the anchor too, three tables behind him all night, with someone he'd have seen if he looked up. | who she was with | "maya who were u with" |
 | 189 | chloe from work texts him goodnight at 11 every night, and she's the jealous one. | she has had a work husband since march: lunch every day, good morning every morning. | the work husband's name | "maya whats his name" |
 
+### 190 to 193: shock, and who the room feels sorry for
+
+The owner, after 182 to 189: "make it shocking disgusting like whaaat… so people comment i feel sorry
+for marco or maya". These four are built on the one question the comments answer: who do you feel
+sorry for? For four slides the room is sure; the last slide moves it (193 never moves it, on purpose).
+
+- **Something disgusting on both sides**, not small against big: a fake death, an ex's ring, a secret
+  baby, a mother cut off. The shock is the hook and the reason to comment.
+- **A callback.** One of his lines from earlier becomes the punchline after the twist ("who else is
+  going to marry u", then she's already married). The comments quote it back.
+- **The caption asks for the comment you want**: "who do u feel sorry for", or a narrator who asks
+  "am i the villain" / "am i wrong" and gets answered.
+- **The pinned comment gives them someone to talk about or to**: "he doesnt know about marco either"
+  (her husband), "shes reading this" (his mum).
+- **The shock comes from lies and betrayal only.** Never violence, self-harm or anything sexual: those
+  get a post taken down, and repeated strikes take the account.
+
+| | Slides 1 to 4: sorry for | The last slide | The callback | Last bubble |
+|---|---|---|---|---|
+| 190 | Maya: he faked his nan's death to miss her birthday; the nan liked her post | she was at his brother's that weekend; he asks "which one" | "my nan would be so disappointed in u" | "maya which one" |
+| 191 | Maya: he proposed with his ex's ring, then "who else is going to marry u" | she's already married, and her husband came to their engagement party | "who else is going to marry u" | "maya who is he" |
+| 192 | Marco: she's cold, he spent two weeks on her gift | he has a six-week-old son with his ex, and doesn't know his name | "what baby", then "whats his name" | "maya whats his name" |
+| 193 | Marco, and it never flips: she blocked his mum | she's been texting his mum as him; his mum isn't coming to the wedding | "i just want u two to get on" | "maya what did u say to my mum" |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
