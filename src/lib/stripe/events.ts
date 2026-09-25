@@ -1,5 +1,5 @@
 import type Stripe from "stripe";
-import type { Db } from "@/lib/commerce/db";
+import { missingMembershipColumns, type Db } from "@/lib/commerce/db";
 import { applySubscriptionState, rowBySubscription, switchToMonthlyNow, type SendEnded } from "@/lib/commerce/memberships";
 import type { Pass } from "@/lib/commerce/passes";
 import { revokePurchase, withdrawPurchase } from "@/lib/commerce/revoke";
@@ -198,9 +198,17 @@ async function onInvoiceUnpaid(event: Stripe.Invoice, kind: "failed" | "action_r
 
 type Purchase = { id: string; user_id: string | null; product: string; membership_id: string | null };
 
+/**
+ * The purchase a charge paid for, or null when it isn't ours. A lookup that fails throws (Stripe
+ * retries the 500) rather than reading as "not ours": a 200 would lose the refund for good. Before
+ * migration 0014 there is no membership_id, and that says so by name (lib/commerce/db.ts).
+ */
 async function purchaseByPaymentIntent(db: Db, paymentIntent: string | null): Promise<Purchase | null> {
   if (!paymentIntent) return null;
-  const { data } = await db.from("purchases").select("id, user_id, product, membership_id").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
+  const { data, error } = await db.from("purchases").select("id, user_id, product, membership_id").eq("stripe_payment_intent_id", paymentIntent).maybeSingle();
+  const missing = missingMembershipColumns(error, "a refund or a dispute reads purchases.membership_id");
+  if (missing) throw missing;
+  if (error) throw new Error(`purchase lookup failed: ${error.message}`);
   return data ?? null;
 }
 

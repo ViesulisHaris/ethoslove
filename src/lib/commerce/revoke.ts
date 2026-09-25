@@ -26,9 +26,11 @@ export type RevokeOptions = {
  * period of a subscription changes nothing else: the period it is in is paid for.
  */
 export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: number, options: RevokeOptions = {}): Promise<void> {
+  // Read before anything is written: without migration 0014 this throws, and a retry once it is
+  // applied finds the purchase still paid and does the whole revoke (a caller skips refunded ones).
+  const row = purchase.product === "pass" || purchase.product === "membership" ? await membershipOfPurchase(db, purchase) : null;
   await db.from("purchases").update({ status: "refunded" }).eq("id", purchase.id);
   if (purchase.product === "pass" || purchase.product === "membership") {
-    const row = await membershipOfPurchase(db, purchase);
     if (row) {
       const ends = options.mode === "dispute" || purchase.product === "pass" || (await paysLatestPeriod(db, row, purchase.id));
       if (ends) {

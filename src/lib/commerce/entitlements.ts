@@ -2,10 +2,9 @@ import { PACK_IDS } from "@/lib/games/packs";
 import { EVERY_PACK, EVERY_TEMPLATE, FREE_SAVED_DATES, type Currency } from "@/lib/pricing/products";
 import type { MembershipSummary } from "@/lib/membership/types";
 import type { Pass } from "./passes";
-import { isRunning, paidUntil } from "./passes";
 import { currentMembership, personOf, summariseMembership, type Person } from "./memberships";
 import { UPGRADE_CREDITED, upgradeAmount, type PaidPurchase } from "./pricing";
-import { inviteUrl, iso, type Db, type Locale } from "./db";
+import { MissingMigrationError, inviteUrl, type Db, type Locale } from "./db";
 import { splitUnlocks } from "./unlocks";
 
 /** GET /api/entitlements (contract C3), plus the buyer's upgrade price when there is one to offer. */
@@ -53,23 +52,32 @@ export function packsFromRows(rows: string[]): string[] {
 }
 
 /**
- * The pass the user holds right now, as owner first, then as partner. `endsAt` counts renewals the
- * owner already bought, so it is the day access really ends. Only the owner gets the invite link,
- * and only while the partner's place is empty.
+ * Rows read before migration 0014 have none of its columns. What a user can use comes from their
+ * unlock rows, which don't depend on it, and this read serves every page: it keeps answering, with
+ * the rows as 0014's defaults will make them (every existing row is a one-time year, active), and says
+ * loudly what is missing. Everything that decides or writes on these columns refuses instead
+ * (lib/commerce/db.ts).
  */
-export function summarisePass(passes: Pass[], userId: string, now: number, invite: (code: string) => string): PassSummary | null {
-  const running = passes.filter((pass) => isRunning(pass, now));
-  const current = running.find((pass) => pass.owner_user_id === userId) ?? running.find((pass) => pass.partner_user_id === userId);
-  if (!current) return null;
-  const sameOwner = passes.filter((pass) => pass.owner_user_id === current.owner_user_id);
-  const isOwner = current.owner_user_id === userId;
-  const partnerJoined = Boolean(current.partner_user_id);
-  return {
-    endsAt: iso(paidUntil(sameOwner, now) ?? Date.parse(current.ends_at)),
-    isOwner,
-    partnerJoined,
-    ...(isOwner && !partnerJoined ? { inviteUrl: invite(current.invite_code) } : {}),
-  };
+const AFTER_0014 = {
+  provider: "stripe_pass",
+  plan: "yearly",
+  status: "active",
+  stripe_customer_id: null,
+  stripe_subscription_id: null,
+  store_original_transaction_id: null,
+  current_period_end: null,
+  cancel_at_period_end: false,
+  pending_plan: null,
+  provider_event_at: null,
+  renewal_reminded_for: null,
+  payment_failed_invoice: null,
+  ended_notified_at: null,
+} satisfies Partial<Pass>;
+
+function asAfter0014(passes: Pass[]): Pass[] {
+  if (!passes.some((pass) => pass.provider === undefined)) return passes;
+  console.error(`[db] ${new MissingMigrationError("entitlements read couple_passes without its membership columns, as one-time years").message}`);
+  return passes.map((pass) => ({ ...AFTER_0014, ...pass }));
 }
 
 /** The upgrade price to show, or null when there is nothing to upgrade from (or Everything is owned). */
@@ -95,7 +103,7 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     db.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
   ]);
   const rows = unlocks.data ?? [];
-  const passes = [...(owned.data ?? []), ...(joined.data ?? [])].filter((pass, i, all) => all.findIndex((other) => other.id === pass.id) === i);
+  const passes = asAfter0014([...(owned.data ?? []), ...(joined.data ?? [])].filter((pass, i, all) => all.findIndex((other) => other.id === pass.id) === i));
   const slugs = rows.map((row) => row.template_slug);
   const forever = splitUnlocks(rows, passes.map((pass) => pass.purchase_id)).forever;
   const current = currentMembership(passes, userId, options.now);

@@ -4,7 +4,7 @@ import { getManifest } from "@/templates/manifests";
 import { appStoreEurCents, appStoreProduct, type AppStoreProduct } from "./app-store-products";
 import { generateInviteCode } from "./codes";
 import { iso, type Db } from "./db";
-import { MEMBERSHIP_GRACE_MS, endMembershipNow, settleUnlocks, type SendEnded } from "./memberships";
+import { MEMBERSHIP_GRACE_MS, cronRead, endMembershipNow, settleUnlocks, type SendEnded } from "./memberships";
 import { startPass, type Pass } from "./passes";
 import { revokePurchase } from "./revoke";
 import { foreverUnlocks, grantForever } from "./unlocks";
@@ -563,7 +563,8 @@ export function parseSubscriberSubscriptions(json: unknown): StoreSubscription[]
  * which knows the transaction; one found here only ends the membership, quietly.
  */
 export async function reconcileAppStoreSubscriptions(db: Db, now: number, fetchJson: (userId: string) => Promise<unknown>, options: { sendEnded?: SendEnded } = {}): Promise<{ checked: number; failed: number }> {
-  const { data } = await db.from("couple_passes").select("*").eq("provider", "app_store").in("status", ["active", "past_due"]).lte("current_period_end", iso(now)).limit(100);
+  const { data, error } = await db.from("couple_passes").select("*").eq("provider", "app_store").in("status", ["active", "past_due"]).lte("current_period_end", iso(now)).limit(100);
+  cronRead(error, "App Store subscriptions to reconcile");
   let failed = 0;
   for (const row of data ?? []) {
     const json = await fetchJson(row.owner_user_id);

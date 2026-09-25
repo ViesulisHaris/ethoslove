@@ -35,34 +35,52 @@ export async function GET(request: NextRequest) {
   const stripe = getStripe();
   const billing = stripe ? stripeBilling(stripe) : null;
 
-  const reconciled = billing ? await reconcileSubscriptions(admin, now, billing, { sendEnded: sendMembershipEnded }) : null;
-  const revenueCat = env.revenueCatSecretKey;
-  const appStore = revenueCat ? await reconcileAppStoreSubscriptions(admin, now, (userId) => fetchSubscriberJson(userId, revenueCat), { sendEnded: sendMembershipEnded }) : null;
-  const switched = billing ? await applyPendingSwitches(admin, now, billing, { sendEnded: sendMembershipEnded }) : null;
-  const yearly = await remindYearlyRenewals(admin, now, async (row) => {
-    // The amount it really renews at is the subscription's own price: ask Stripe, which also says
-    // whether it still renews at all (the claim is released and tried tomorrow if it can't be asked).
-    if (!billing || !row.stripe_subscription_id) return false;
-    const sub = await billing.retrieve(row.stripe_subscription_id).catch(() => null);
-    if (!sub) return false;
-    if (sub.status !== "active" || sub.cancelAtPeriodEnd || sub.cancelAt !== null) {
-      // Cancelled (or failing) without the webhook saying so: the row learns it, which takes it off this list.
-      await applySubscriptionState(admin, row, sub, now, { sendEnded: sendMembershipEnded });
-      return false;
+  // Each step on its own: one that fails (Stripe down, a query refused, migration 0014 missing) is
+  // logged and reported, the answer is a 500 so the cron's log shows it, and the others still run:
+  // the sweep above all, which takes back what ended memberships lent.
+  const failed: string[] = [];
+  const step = async <T>(name: string, run: () => Promise<T>): Promise<T | null> => {
+    try {
+      return await run();
+    } catch (e) {
+      failed.push(name);
+      console.error("[cron] step failed", name, (e as Error).message);
+      return null;
     }
-    const currency = sub.currency === "usd" || sub.currency === "gbp" ? sub.currency : "eur";
-    return sendMembershipRenewalReminder(row, { amount: sub.unitAmount ?? membershipAmount("yearly", currency), currency });
-  });
+  };
+
+  const reconciled = billing ? await step("reconcile", () => reconcileSubscriptions(admin, now, billing, { sendEnded: sendMembershipEnded })) : null;
+  const revenueCat = env.revenueCatSecretKey;
+  const appStore = revenueCat ? await step("app_store", () => reconcileAppStoreSubscriptions(admin, now, (userId) => fetchSubscriberJson(userId, revenueCat), { sendEnded: sendMembershipEnded })) : null;
+  const switched = billing ? await step("switches", () => applyPendingSwitches(admin, now, billing, { sendEnded: sendMembershipEnded })) : null;
+  const yearly = await step("yearly_reminders", () =>
+    remindYearlyRenewals(admin, now, async (row) => {
+      // The amount it really renews at is the subscription's own price: ask Stripe, which also says
+      // whether it still renews at all (the claim is released and tried tomorrow if it can't be asked).
+      if (!billing || !row.stripe_subscription_id) return false;
+      const sub = await billing.retrieve(row.stripe_subscription_id).catch(() => null);
+      if (!sub) return false;
+      if (sub.status !== "active" || sub.cancelAtPeriodEnd || sub.cancelAt !== null) {
+        // Cancelled (or failing) without the webhook saying so: the row learns it, which takes it off this list.
+        await applySubscriptionState(admin, row, sub, now, { sendEnded: sendMembershipEnded });
+        return false;
+      }
+      const currency = sub.currency === "usd" || sub.currency === "gbp" ? sub.currency : "eur";
+      return sendMembershipRenewalReminder(row, { amount: sub.unitAmount ?? membershipAmount("yearly", currency), currency });
+    }),
+  );
   // While subscriptions are on, a pass can't be bought again: its email points to monthly or yearly instead.
   const subscriptions = subscriptionsEnabled();
-  const reminders = await remindRenewals(admin, now, async (pass) => {
-    const { data: owner } = await admin.from("profiles").select("email, locale").eq("id", pass.owner_user_id).maybeSingle();
-    if (!owner?.email) return false;
-    const locale = owner.locale === "es" ? "es" : "en";
-    return sendPassRenewalReminder({ to: owner.email, locale, endsAt: iso(Date.parse(pass.ends_at)), renewUrl: subscriptions ? pricingUrl(locale) : renewUrl(locale), subscriptions });
-  });
-  const swept = await sweepEndedPasses(admin, now);
-  await deleteGiftCardDetails(admin, { olderThan: staleGiftCardDetailsBefore(now) });
+  const reminders = await step("pass_reminders", () =>
+    remindRenewals(admin, now, async (pass) => {
+      const { data: owner } = await admin.from("profiles").select("email, locale").eq("id", pass.owner_user_id).maybeSingle();
+      if (!owner?.email) return false;
+      const locale = owner.locale === "es" ? "es" : "en";
+      return sendPassRenewalReminder({ to: owner.email, locale, endsAt: iso(Date.parse(pass.ends_at)), renewUrl: subscriptions ? pricingUrl(locale) : renewUrl(locale), subscriptions });
+    }),
+  );
+  const swept = await step("sweep", () => sweepEndedPasses(admin, now));
+  await step("gift_card_details", () => deleteGiftCardDetails(admin, { olderThan: staleGiftCardDetailsBefore(now) }));
 
-  return NextResponse.json({ ok: true, reconciled, appStore, switched, yearly, reminders, swept });
+  return NextResponse.json({ ok: failed.length === 0, reconciled, appStore, switched, yearly, reminders, swept, ...(failed.length > 0 ? { failed } : {}) }, { status: failed.length > 0 ? 500 : 200 });
 }

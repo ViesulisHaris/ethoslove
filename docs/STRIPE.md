@@ -35,6 +35,18 @@ And, as before:
 Do everything once in **Test mode**, run the test script in `docs/LAUNCH.md`, then repeat in live
 mode. Nothing in the code changes between the two except the keys.
 
+**Migration 0014 before this code is deployed, always** (with 0015: docs/MEMBERSHIP.md 7). The
+membership code reads and writes 0014's columns on `couple_passes` and `purchases` even while
+subscriptions are off: selling or renewing the pass, refunds and disputes, the account page, the
+14-day pass email. Deployed without it, those paths fail loudly rather than guess, each with a
+server error that names it (`migration 0014_membership.sql is not applied (…)`, lib/commerce/db.ts):
+the webhook answers 500 for a pass sale, a refund or a dispute, so Stripe retries it once 0014 is in;
+the account page of a pass holder errors; the daily cron answers 500 naming the steps that need it
+(`failed: [...]`) and still runs the sweep. Nothing is half-written, so the retries come out right.
+Only `GET /api/entitlements` keeps answering (a pass read as a one-time year) because what a user
+can use comes from the unlock rows. If you see that message in the logs: apply 0014, then check the
+webhook's failed deliveries in the Dashboard (Stripe retries them for three days).
+
 ## 1. Prices live in the code, not in Stripe
 
 Checkout charges the amount from the catalogue in `src/lib/pricing/products.ts` with Stripe

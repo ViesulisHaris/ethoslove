@@ -3,7 +3,7 @@ import type { Currency } from "@/lib/pricing/products";
 import type { Updates } from "@/lib/supabase/types";
 import type { MembershipContext } from "./plan";
 import { generateInviteCode } from "./codes";
-import { DAY_MS, chunks, inviteUrl, iso, unique, type Db, type Locale } from "./db";
+import { DAY_MS, chunks, inviteUrl, iso, membershipRows, missingMembershipColumns, unique, type Db, type Locale } from "./db";
 import { grantPassUnlocks, isRunning, paidUntil, regrantRunningPasses, renews, shortenRefundedPass, type Pass } from "./passes";
 import { relockGifts, revokeUnlocksOf } from "./unlocks";
 
@@ -237,7 +237,7 @@ export async function startSubscriptionMembership(
       .select("*");
     // 23505 on the invite code: draw again.
     if (error?.code === "23505") continue;
-    if (error) return { error: error.message };
+    if (error) return { error: missingMembershipColumns(error, "a subscription's membership is written")?.message ?? error.message };
     const created = data?.[0];
     const row = created ?? (await rowBySubscription(db, sub.id));
     if (!row) return { error: "membership_missing" };
@@ -253,14 +253,21 @@ export async function rowBySubscription(db: Db, subscriptionId: string): Promise
   return data ?? null;
 }
 
+/**
+ * A user's rows. A read that fails throws rather than reading as "no membership" (which would sell a
+ * member a second one, or show a pass owner nothing); before migration 0014 that is a
+ * MissingMigrationError naming it (lib/commerce/db.ts).
+ */
 async function ownedRows(db: Db, userId: string): Promise<Pass[]> {
-  const { data } = await db.from("couple_passes").select("*").eq("owner_user_id", userId);
-  return data ?? [];
+  const { data, error } = await db.from("couple_passes").select("*").eq("owner_user_id", userId);
+  if (error) throw new Error(`memberships not read: ${error.message}`);
+  return membershipRows(data, "a membership read");
 }
 
 async function rowsOf(db: Db, userId: string): Promise<Pass[]> {
   const [owned, joined] = await Promise.all([ownedRows(db, userId), db.from("couple_passes").select("*").eq("partner_user_id", userId)]);
-  const all = [...owned, ...(joined.data ?? [])];
+  if (joined.error) throw new Error(`memberships not read: ${joined.error.message}`);
+  const all = [...owned, ...membershipRows(joined.data, "a membership read")];
   return all.filter((row, i) => all.findIndex((other) => other.id === row.id) === i);
 }
 
@@ -541,13 +548,23 @@ function yearlyRefusal(row: Pass): ActionResult | null {
 }
 
 /**
+ * A cron step's read that failed stops the step (the cron reports it and goes on with the others)
+ * instead of reading as "nothing due"; before migration 0014, by name.
+ */
+export function cronRead(error: { code?: string | null; message?: string | null } | null | undefined, what: string): void {
+  const missing = missingMembershipColumns(error, what);
+  if (missing) throw missing;
+  if (error) throw new Error(`${what} not read: ${error.message}`);
+}
+
+/**
  * The cron's step for yearly → monthly switches the owner asked for: a couple of days before the
  * year ends the item moves to the monthly price, the unused days are credited, and the monthly
  * periods start. A switch whose payment doesn't go through stays pending and is tried again on the
  * next run; if the year renews first, invoice.paid switches it straight away (lib/stripe/events.ts).
  */
 export async function applyPendingSwitches(db: Db, now: number, billing: BillingPort, options: { sendEnded?: SendEnded } = {}): Promise<{ due: number; switched: number }> {
-  const { data } = await db
+  const { data, error } = await db
     .from("couple_passes")
     .select("*")
     .eq("provider", "stripe_subscription")
@@ -556,6 +573,7 @@ export async function applyPendingSwitches(db: Db, now: number, billing: Billing
     .eq("cancel_at_period_end", false)
     .lte("current_period_end", iso(now + PENDING_SWITCH_WINDOW_MS))
     .limit(CRON_BATCH);
+  cronRead(error, "pending monthly switches");
   let switched = 0;
   for (const row of data ?? []) {
     if (!row.stripe_subscription_id) continue;
@@ -594,7 +612,7 @@ export async function switchToMonthlyNow(db: Db, row: Pass, now: number, billing
  * renewals are Apple's to announce.
  */
 export async function remindYearlyRenewals(db: Db, now: number, send: (row: Pass) => Promise<boolean>): Promise<{ due: number; sent: number }> {
-  const { data } = await db
+  const { data, error } = await db
     .from("couple_passes")
     .select("*")
     .eq("provider", "stripe_subscription")
@@ -604,6 +622,7 @@ export async function remindYearlyRenewals(db: Db, now: number, send: (row: Pass
     .gt("current_period_end", iso(now))
     .lte("current_period_end", iso(now + YEARLY_REMINDER_MS))
     .limit(CRON_BATCH);
+  cronRead(error, "yearly renewal reminders");
   const due = (data ?? []).filter((row) => row.current_period_end && (!row.renewal_reminded_for || ms(row.renewal_reminded_for) !== ms(row.current_period_end)));
   let sent = 0;
   for (const row of due) {
@@ -636,6 +655,7 @@ export async function reconcileSubscriptions(db: Db, now: number, billing: Billi
       .limit(CRON_BATCH),
     db.from("couple_passes").select("*").eq("provider", "stripe_subscription").eq("status", "incomplete").lte("starts_at", iso(now - DAY_MS)).limit(CRON_BATCH),
   ]);
+  cronRead(overdue.error ?? stuck.error, "subscriptions to reconcile");
   const rows = [...(overdue.data ?? []), ...(stuck.data ?? [])].filter((row, i, all) => all.findIndex((other) => other.id === row.id) === i);
   let failed = 0;
   for (const row of rows) {
@@ -685,14 +705,18 @@ export async function endMembershipNow(
   return {};
 }
 
-/** The membership a purchase paid for: the row it links to, or the row it started. */
+/**
+ * The membership a purchase paid for: the row it links to, or the row it started. Before migration
+ * 0014 the row can't say whether it is a pass or a subscription, and ending it the wrong way can't be
+ * undone: that throws, naming the migration.
+ */
 export async function membershipOfPurchase(db: Db, purchase: { id: string; membership_id?: string | null }): Promise<Pass | null> {
   if (purchase.membership_id) {
     const { data } = await db.from("couple_passes").select("*").eq("id", purchase.membership_id).maybeSingle();
-    if (data) return data;
+    if (data) return membershipRows([data], "a refund ends a membership")[0];
   }
   const { data } = await db.from("couple_passes").select("*").eq("purchase_id", purchase.id).maybeSingle();
-  return data ?? null;
+  return data ? membershipRows([data], "a refund ends a membership")[0] : null;
 }
 
 /**

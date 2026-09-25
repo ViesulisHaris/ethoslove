@@ -1,7 +1,7 @@
 import { EVERY_PACK, EVERY_TEMPLATE, PASS_DAYS } from "@/lib/pricing/products";
 import type { Tables } from "@/lib/supabase/types";
 import { generateInviteCode } from "./codes";
-import { DAY_MS, chunks, iso, unique, type Db } from "./db";
+import { DAY_MS, MissingMigrationError, chunks, iso, membershipRows, missingMembershipColumns, unique, type Db } from "./db";
 import { revokeUnlocksOf } from "./unlocks";
 
 /**
@@ -98,7 +98,16 @@ export async function startPass(
   }
 
   // A year follows the owner's other years; a subscription's end moves by itself, so it isn't one.
-  const owned = (await ownerPasses(db, ownerId)).filter((pass) => pass.provider === "stripe_pass" || pass.provider === "app_store_pass");
+  // Before migration 0014 no row says which it is, and a renewal would start now instead of after
+  // the year that runs: refused by name (lib/commerce/db.ts), so the webhook's retry sells it once 0014 is in.
+  let years: Pass[];
+  try {
+    years = membershipRows(await ownerPasses(db, ownerId), "a pass sold or renewed");
+  } catch (e) {
+    if (e instanceof MissingMigrationError) return { error: e.message };
+    throw e;
+  }
+  const owned = years.filter((pass) => pass.provider === "stripe_pass" || pass.provider === "app_store_pass");
   const ahead = owned.filter((pass) => ms(pass.ends_at) > now);
   const start = nextStart(ahead, now);
   const partner = ahead.map((pass) => pass.partner_user_id).find(Boolean) ?? null;
@@ -112,7 +121,7 @@ export async function startPass(
       .select("*");
     // 23505 on the invite code (the purchase is the conflict target, so it can't be that): draw again.
     if (error?.code === "23505") continue;
-    if (error) return { error: error.message };
+    if (error) return { error: missingMembershipColumns(error, "a pass sold or renewed writes couple_passes.provider and plan")?.message ?? error.message };
     const created = data?.[0];
     const pass = created ?? (await db.from("couple_passes").select("*").eq("purchase_id", purchaseId).maybeSingle()).data;
     if (!pass) return { error: "pass_missing" };
@@ -206,7 +215,7 @@ export async function remindRenewals(
   now: number,
   send: (pass: Pass) => Promise<boolean>,
 ): Promise<{ due: number; sent: number }> {
-  const { data: due } = await db
+  const { data: due, error } = await db
     .from("couple_passes")
     .select("*")
     // A subscription renews by itself: a yearly one gets its own reminder (lib/commerce/memberships.ts).
@@ -215,6 +224,10 @@ export async function remindRenewals(
     .gt("ends_at", iso(now))
     .lte("ends_at", iso(now + RENEWAL_NOTICE_MS))
     .limit(200);
+  // Read as "nobody is due", a failed query would skip the email for good once the day passes.
+  const missing = missingMembershipColumns(error, "the 14-day pass email filters on couple_passes.provider");
+  if (missing) throw missing;
+  if (error) throw new Error(`pass renewal reminders not read: ${error.message}`);
   let sent = 0;
   for (const pass of due ?? []) {
     // A refunded year that never started is closed to zero length: nothing to renew there.

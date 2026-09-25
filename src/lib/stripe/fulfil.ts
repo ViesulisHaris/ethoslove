@@ -26,11 +26,10 @@ import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
-import { revokePurchase } from "@/lib/commerce/revoke";
 import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import { foreverUnlocks, grantForever } from "@/lib/commerce/unlocks";
 import { consentSentence } from "@/lib/stripe/line-items";
-import { cancelSubscriptionNow, isEthosMetadata, normaliseSubscription, paymentIntentOfInvoice, tagCheckout } from "@/lib/stripe/subscriptions";
+import { isEthosMetadata, normaliseSubscription, paymentIntentOfInvoice, tagCheckout } from "@/lib/stripe/subscriptions";
 import { getManifest } from "@/templates/manifests";
 
 export type Fulfilment = {
@@ -548,21 +547,4 @@ async function paymentReversed(session: Stripe.Checkout.Session): Promise<boolea
     console.error("[stripe] refund check failed", (e as Error).message);
     return false;
   }
-}
-
-/**
- * A refund or a chargeback takes back everything the purchase granted (lib/commerce/revoke.ts); for
- * Ethos for Two that ends the membership for both and cancels a subscription at once.
- */
-export async function revokePurchaseByPaymentIntent(paymentIntentId: string, mode: "refund" | "dispute" = "refund"): Promise<void> {
-  const admin = getSupabaseAdminClient();
-  if (!admin) return;
-  const { data: purchase } = await admin
-    .from("purchases")
-    .select("id, user_id, product, membership_id")
-    .eq("stripe_payment_intent_id", paymentIntentId)
-    .maybeSingle();
-  if (!purchase) return;
-  const stripe = getStripe();
-  await revokePurchase(admin, purchase, Date.now(), { mode, cancelSubscription: stripe ? async (id) => void (await cancelSubscriptionNow(stripe, id)) : null });
 }
