@@ -40,7 +40,14 @@ export async function POST(request: NextRequest) {
   const now = Date.now();
   const result = await runMembershipAction(db, user.id, action, { now, billing: stripe ? stripeBilling(stripe) : null, sendEnded: sendMembershipEnded });
   if (result.status !== 200 || action === "preview_yearly" || action === "leave") return reply(result.status, result.body);
-  return reply(200, { ok: true, membership: await readMembership(db, user.id, { locale, now, names: db }) });
+  try {
+    return reply(200, { ok: true, membership: await readMembership(db, user.id, { locale, now, names: db }) });
+  } catch (e) {
+    // Done, but the membership couldn't be read back: a database error, answered as the contract's
+    // `failed` (the page reloads the truth), never as an HTML error page.
+    console.error("[membership] read after the action failed", action, user.id, (e as Error).message);
+    return reply(500, { error: "failed" });
+  }
 }
 
 function reply(status: number, body: MembershipActionResponse) {

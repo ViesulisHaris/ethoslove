@@ -612,6 +612,19 @@ describe("the answers of POST /api/membership are the contract's (docs/MEMBERSHI
     const broken = await post({ action: "switch_to_monthly" });
     expect(broken.status).toBe(500);
     expect(await broken.json()).toEqual({ error: "failed" });
+    // Done, but the membership can't be read back afterwards: the contract's 500, never an HTML page.
+    fake.tables.couple_passes[0].pending_plan = "monthly";
+    let selects = 0;
+    routes.db = {
+      from: (table: string) => {
+        if (table === "couple_passes" && ++selects === 3) fake.failNext("couple_passes", "select", "connection reset");
+        return fake.db.from(table as "couple_passes");
+      },
+    };
+    const unread = await post({ action: "keep_plan" });
+    expect(unread.status).toBe(500);
+    expect(await unread.json()).toEqual({ error: "failed" });
+    expect(row().pending_plan).toBeNull();
     routes.db = null;
     const unconfigured = await post({ action: "cancel" });
     expect(unconfigured.status).toBe(503);
