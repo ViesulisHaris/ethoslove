@@ -650,9 +650,19 @@ Renewals and failed renewals are covered by the unit tests (`tests/unit/membersh
   and the FAQ.
 - `/account#for-two` in each state: not a member, monthly, yearly, cancelling, a pending switch, a
   pass, the App Store, a partner, a failed payment. Inside the iPhone app's web view: no prices and no
-  billing buttons.
+  billing buttons. On a development server `/for-two/preview?state=` shows the same section without
+  signing in (`none`, `monthly`, `yearly`, `switching`, `cancelling`, `past-due`, `paused`,
+  `processing`, `pass`, `pass-ending`, `app-store`, `app-store-billing`, `partner`, `with-partner`;
+  `&subscriptions=off` for the pass wording). It is a 404 in production; its buttons call the real
+  routes, so only click them where the route is answered (the e2e tests do that).
+- Every state reads the same on `/pricing` (signed in) and `/account`: a first payment the bank is
+  confirming is "being confirmed", never a failure; a renewal being retried names the day to fix the
+  card by; an App Store renewal Apple can't collect is fixed in the iPhone's Settings (no card
+  button); a member sees what they have, not plans and a price (`components/membership/status.ts`).
 - `/checkout/success` after a subscription, and while a bank confirms ("Your payment is being
-  processed…").
+  processed…"). If the membership row isn't written yet it says "Switching it on…" and checks again
+  every few seconds (four times); if it can't be read it says "Payment received." and points to the
+  account page. Neither says the payment is being processed.
 - `/for-two/join` signed in and out: the owner, a partner already in, someone with their own
   membership ("You already have Ethos for Two…").
 - `/my-dates`, `/plan` (Save to my dates, autosave, Maps), `/trips/<id>` (Save trip). Signed out,
