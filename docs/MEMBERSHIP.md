@@ -646,9 +646,11 @@ periodEnd: string } }`; `switch_to_yearly` may answer `402 { error: "payment_fai
 changed) or `402 { error: "requires_action", url }` (the invoice's `hosted_invoice_url`, to confirm
 with the bank). Errors: `401 unauthenticated`, `400 invalid_input`, `404 not_member`,
 `403 not_owner`, `403 not_partner`, `409 { error: "not_available", reason: "app_store" | "pass" |
-"cancelling" | "past_due" | "not_monthly" | "not_yearly" }`, `429 rate_limited`, `502
-stripe_failed`, `503 not_configured`. After every change the route applies the retrieved state
-(2.5) so the answer is already true.
+"cancelling" | "past_due" | "not_monthly" | "not_yearly" }` (or with no `reason` when none fits,
+such as a membership that ended a moment ago), `429 rate_limited`, `500 failed` (the database
+couldn't be read or written, including a change that succeeded but couldn't be read back), `502
+stripe_failed` (Stripe itself), `503 not_configured`. After every change the route applies the
+retrieved state (2.5) so the answer is already true.
 
 Monthly → yearly is ours, not the portal's, on purpose: the portal can only switch between Prices
 listed in its configuration, inline prices are archived (`active=false`) and can't be listed, and
