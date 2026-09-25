@@ -1,0 +1,164 @@
+{
+  "demo": {
+    "template": "party-animals",
+    "steps": [
+      "swap \"marco cried making this\" \"she dented ur car\"",
+      "swap \"i was told there'd be cake\" \"she ate ur cake\"",
+      "swap \"who invited the ferrets\" \"the ferrets know everything\"",
+      "swap \"Marco\" \"Maya\"",
+      "swap \"marco\" \"maya\"",
+      "swap \"Ana\" \"Marco\"",
+      "swap \"ANA\" \"MARCO\"",
+      "swap \"30\" \"26\"",
+      "swap \"Thirty\" \"Twenty-six\"",
+      "tap \"tap to open\"",
+      "wait 4200",
+      "tap \"the two puppies\"",
+      "wait 750",
+      "shot gift-1.png",
+      "tap \"the cat yelling\"",
+      "wait 330",
+      "tap \"the kitten in the green hat\"",
+      "wait 330",
+      "tap \"the hamster holding a cake\"",
+      "wait 750",
+      "shot gift-2.png",
+      "tap \"the sad hamster\"",
+      "wait 330",
+      "tap \"the cat with the heart balloon\"",
+      "wait 330",
+      "tap \"the hamster with a slice\"",
+      "wait 330",
+      "tap \"the kitten with cake and flowers\"",
+      "wait 330",
+      "tap \"the ferrets\"",
+      "wait 750",
+      "shot gift-3.png",
+      "tap \"the puppy in the blue hat\"",
+      "wait 330",
+      "wait 700",
+      "shot gift-4.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy birthday!!!"
+        },
+        {
+          "from": "me",
+          "text": "i made u something. dont be mad"
+        },
+        {
+          "from": "them",
+          "text": "why would i be mad"
+        },
+        {
+          "from": "me",
+          "text": "no reason"
+        },
+        {
+          "from": "me",
+          "text": "open it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "open it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for marco (happy birthday, sorry)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        },
+        {
+          "from": "them",
+          "text": "why is a hamster yelling at me"
+        },
+        {
+          "from": "them",
+          "text": "WHY DID THE PUPPIES SAY U DENTED MY CAR"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-4.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the puppies are liars"
+        },
+        {
+          "from": "them",
+          "text": "the hamster says the ferrets know everything"
+        },
+        {
+          "from": "me",
+          "text": "the hamster was paid"
+        },
+        {
+          "from": "them",
+          "text": "maya. the car"
+        },
+        {
+          "from": "me",
+          "text": "its a very small dent"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what do the ferrets know"
+        },
+        {
+          "from": "me",
+          "text": "everything"
+        },
+        {
+          "from": "them",
+          "text": "WHAT ELSE DO THE FERRETS KNOW"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday big baby",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "im going to check the car"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "demo": {
+    "template": "sticker-bomb",
+    "steps": [
+      "swap \"for ana. no reason.\" \"for marco. dont show ur family.\"",
+      "swap \"ana before coffee\" \"ur mum\"",
+      "swap \"certified menace\" \"ur dad\"",
+      "swap \"was right (once)\" \"ur nan\"",
+      "swap \"emotional support human\" \"u before coffee\"",
+      "swap \"Marco\" \"Maya\"",
+      "swap \"Ana\" \"Marco\"",
+      "swap \"ana\" \"marco\"",
+      "wait 1600",
+      "tap 95 125",
+      "wait 420",
+      "tap 262 185",
+      "wait 420",
+      "tap 180 300",
+      "wait 420",
+      "tap 98 395",
+      "wait 420",
+      "tap 268 430",
+      "wait 420",
+      "tap 180 105",
+      "wait 420",
+      "tap 112 250",
+      "wait 420",
+      "tap 255 318",
+      "wait 420",
+      "tap 180 470",
+      "wait 420",
+      "wait 500",
+      "shot gift-1.png",
+      "tap 100 530",
+      "wait 420",
+      "tap 262 540",
+      "wait 420",
+      "tap 180 215",
+      "wait 420",
+      "wait 900",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:26",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "did u send something to the family chat"
+        },
+        {
+          "from": "me",
+          "text": "no why"
+        },
+        {
+          "from": "them",
+          "text": "my mum just asked why shes a cat in a shark hat"
+        },
+        {
+          "from": "me",
+          "text": "oh no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "oh no"
+        },
+        {
+          "from": "me",
+          "text": "that was meant for u"
+        },
+        {
+          "from": "them",
+          "text": "theyve all opened it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for marco (dont show ur family)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my dad says his is unfair but accurate"
+        },
+        {
+          "from": "them",
+          "text": "my nan made hers her profile picture"
+        },
+        {
+          "from": "me",
+          "text": "i love ur nan"
+        },
+        {
+          "from": "them",
+          "text": "my mum wants to talk to u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "she says the shark is a bit much"
+        },
+        {
+          "from": "me",
+          "text": "tell her its a compliment"
+        },
+        {
+          "from": "them",
+          "text": "shes calling u"
+        },
+        {
+          "from": "me",
+          "text": "tell her im moving to peru",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "she says shell come to peru"
+        }
+      ]
+    }
+  ]
+}

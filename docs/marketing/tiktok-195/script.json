@@ -1,0 +1,153 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png",
+      "scroll 520",
+      "shot gift-4.png",
+      "scroll 520",
+      "shot gift-5.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:34",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are u at hers again"
+        },
+        {
+          "from": "them",
+          "text": "to see luna. its sunday"
+        },
+        {
+          "from": "me",
+          "text": "every sunday for 8 months"
+        },
+        {
+          "from": "them",
+          "text": "shes my cat too maya"
+        },
+        {
+          "from": "them",
+          "text": "u want me to just abandon her?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u want me to just abandon her?"
+        },
+        {
+          "from": "me",
+          "text": "i want u to stop going to ur exes house"
+        },
+        {
+          "from": "them",
+          "text": "ur jealous of a cat. so i made u this. the cats are us"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-4.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-5.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is so cute"
+        },
+        {
+          "from": "me",
+          "text": "can u just not go next sunday"
+        },
+        {
+          "from": "them",
+          "text": "and break a cats heart?"
+        },
+        {
+          "from": "them",
+          "text": "i thought u were better than that maya"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "luna isnt at hers"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "sophie gave her to me in june. ud know if u ever came to mine"
+        },
+        {
+          "from": "them",
+          "text": "so u two talk??"
+        },
+        {
+          "from": "me",
+          "text": "every sunday. while ur there",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya what does she tell u"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "demo": {
+    "template": "sticker-bomb",
+    "steps": [
+      "swap \"for ana. no reason.\" \"for maya. the last one.\"",
+      "swap \"ana before coffee\" \"chloe\"",
+      "swap \"certified menace\" \"jess\"",
+      "swap \"was right (once)\" \"sophie\"",
+      "swap \"emotional support human\" \"maya (last)\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"ana\" \"maya\"",
+      "wait 1600",
+      "tap 95 125",
+      "wait 420",
+      "tap 262 185",
+      "wait 420",
+      "tap 180 300",
+      "wait 420",
+      "tap 98 395",
+      "wait 420",
+      "tap 268 430",
+      "wait 420",
+      "tap 180 105",
+      "wait 420",
+      "tap 112 250",
+      "wait 420",
+      "tap 255 318",
+      "wait 420",
+      "tap 180 470",
+      "wait 420",
+      "wait 500",
+      "shot gift-1.png",
+      "tap 100 530",
+      "wait 420",
+      "tap 262 540",
+      "wait 420",
+      "tap 180 215",
+      "wait 420",
+      "wait 900",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is every cat labelled with a girls name"
+        },
+        {
+          "from": "them",
+          "text": "its a joke maya"
+        },
+        {
+          "from": "me",
+          "text": "chloe. jess. sophie."
+        },
+        {
+          "from": "them",
+          "text": "all my exes. and ur the last one"
+        },
+        {
+          "from": "them",
+          "text": "its romantic if u think about it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its romantic if u think about it"
+        },
+        {
+          "from": "me",
+          "text": "how many are there marco"
+        },
+        {
+          "from": "them",
+          "text": "doesnt matter. ur the one at the end. look"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (the last one)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok its actually kind of funny"
+        },
+        {
+          "from": "me",
+          "text": "can u take their names off tho"
+        },
+        {
+          "from": "them",
+          "text": "then its just cats and u"
+        },
+        {
+          "from": "them",
+          "text": "stop being insecure maya. u won"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i added one"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "a cat with a name on it. i printed it and put it on the fridge"
+        },
+        {
+          "from": "them",
+          "text": "whose name"
+        },
+        {
+          "from": "me",
+          "text": "youll meet him saturday",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya whose name is on the fridge"
+        }
+      ]
+    }
+  ]
+}

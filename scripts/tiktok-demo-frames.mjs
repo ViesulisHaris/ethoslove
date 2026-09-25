@@ -8,7 +8,8 @@
  *
  * Steps: `shot <file>` · `wait <ms>` · `tap` (the middle) · `tap <x> <y>` (in the 360×640 viewport)
  * · `tap "text"` (a control in the gift with that text or label) · `press "text"` / `release` (hold
- * it down, for "hold to pour") · `swipe up|down|left|right` · `swap "Ana" "Nan"` (from then on,
+ * it down, for "hold to pour") · `swipe up|down|left|right` · `scroll <px>` (the gift's own scrolling
+ * page, without a touch a collage would take for a tap) · `swap "Ana" "Nan"` (from then on,
  * every shot has that whole word replaced in the gift's text — the name on the letter, the age on
  * the cake, a caption — so the frame belongs to the story's people; the drawing is untouched).
  *
@@ -84,19 +85,32 @@ async function drag(from, to) {
   await page.mouse.up();
 }
 
-/** Whole-word replacements applied to the gift's text right before every shot. */
+/**
+ * Whole-word replacements applied to the gift's text right before every shot, in one pass and always
+ * from the text the gift itself wrote: swaps that trade names ("Marco" → "Maya", "Ana" → "Marco")
+ * would otherwise run again on the next shot and swap the name back.
+ */
 const swaps = [];
 const applySwaps = async () => {
   if (!swaps.length) return;
   await page.evaluate((pairs) => {
+    const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // Not inside another word, but a line may start or end with punctuation ("was right (once)").
+    const pattern = new RegExp(`(?<!\\w)(?:${[...pairs].sort((a, b) => b[0].length - a[0].length).map(([from]) => esc(from)).join("|")})(?!\\w)`, "g");
+    const to = new Map(pairs);
+    const seen = (window.__giftSwaps ??= new WeakMap());
     const root = document.querySelector(".gift-root") ?? document.body;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     for (const node of nodes) {
-      let text = node.nodeValue ?? "";
-      for (const [from, to] of pairs) text = text.replace(new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g"), to);
-      if (text !== node.nodeValue) node.nodeValue = text;
+      const now = node.nodeValue ?? "";
+      const known = seen.get(node);
+      // The gift's own text: what it wrote before we swapped, unless it has written something new since.
+      const original = known && known.swapped === now ? known.original : now;
+      const swapped = original.replace(pattern, (match) => to.get(match) ?? match);
+      if (swapped !== now) node.nodeValue = swapped;
+      seen.set(node, { original, swapped });
     }
   }, swaps);
   await page.waitForTimeout(120);
@@ -122,6 +136,14 @@ for (const step of script.demo.steps) {
     if (verb === "tap") await page.mouse.up();
   } else if (verb === "release") {
     await page.mouse.up();
+  } else if (verb === "scroll") {
+    // The tallest scrolling box inside the gift (a collage page), else the document.
+    await page.evaluate((dy) => {
+      const boxes = [...document.querySelectorAll(".gift-root *")].filter((el) => el.scrollHeight > el.clientHeight + 20 && /auto|scroll/.test(getComputedStyle(el).overflowY));
+      const box = boxes.sort((a, b) => b.scrollHeight - a.scrollHeight)[0] ?? document.scrollingElement;
+      box.scrollBy({ top: dy, behavior: "instant" });
+    }, Number(rest[0]) || 400);
+    await page.waitForTimeout(600);
   } else if (verb === "swipe" && SWIPES[rest[0]]) {
     await drag(...SWIPES[rest[0]]);
   } else if (verb === "swap") {

@@ -1034,6 +1034,33 @@ sorry for? For four slides the room is sure; the last slide moves it (193 never 
 | 192 | Marco: she's cold, he spent two weeks on her gift | he has a six-week-old son with his ex, and doesn't know his name | "what baby", then "whats his name" | "maya whats his name" |
 | 193 | Marco, and it never flips: she blocked his mum | she's been texting his mum as him; his mum isn't coming to the wedding | "i just want u two to get on" | "maya what did u say to my mum" |
 
+### 194 to 199: the cat templates, three toxic and three funny
+
+The owner, 25 Sept: "3 toxic and 3 funny … so i can use the cat templates". The cat templates are premium
+and convert: of the people who started one in the week to 25 Sept, 76% paid for The Council and 87% for
+XOXO, against 9% for the free Letter. So a carousel that shows a cat template is also the cheapest way
+to move people onto a paid one.
+
+- **The frames are real.** `scripts/tiktok-demo-frames.mjs` now swaps whole lines, not only names, so the
+  cats read the story's own findings and the stickers carry its labels. Swaps run in one pass from the
+  gift's own text (names that trade places, "Marco" → "Maya" with "Ana" → "Marco", no longer flip back on
+  the next frame) and match lines that end in punctuation ("was right (once)"). `scroll <px>` scrolls a
+  collage (XOXO) without the tap that would leave a kiss.
+- **Label strips cut long text** at about 16 characters: "ur mum", not "ur mum on the phone".
+- **The toxic three break one rule on purpose:** in 194 and 196 the gift is the manipulation (a cat court
+  that finds HER guilty; his exes' names on the stickers with her last). The room fights about the gift
+  itself, which is the product on screen for longer.
+- **Post them alternating:** 194, 197, 195, 198, 196, 199.
+
+| | Template | Register | The story | Last bubble |
+|---|---|---|---|---|
+| 194 | The Council | toxic | caught liking his ex's photos at 2am, he takes HER to cat court | "maya who is on the council" |
+| 195 | XOXO | toxic | he goes to his ex's every Sunday 'to see the cat' | "maya what does she tell u" |
+| 196 | Sticker Bomb | toxic | he labelled the cat memes with his exes' names and put her last, "it's romantic" | "maya whose name is on the fridge" |
+| 197 | The Council | funny | he watched three episodes of their show without her | "i want a lawyer" |
+| 198 | Party Animals | funny | she confessed denting his car through a hamster, on his birthday | "im going to check the car" |
+| 199 | Sticker Bomb | funny | she made his family into cat memes and sent it to his family group chat | "she says shell come to peru" |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

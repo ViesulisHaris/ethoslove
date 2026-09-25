@@ -1,0 +1,147 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"going through my phone\"",
+      "swap \"you said “five minutes away” from your bed\" \"you checked who i liked at 2am\"",
+      "swap \"you cried at an advert for a bank\" \"you cried about three likes\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you said you were fine. you were not fine\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why were u liking sophies photos at 2am"
+        },
+        {
+          "from": "them",
+          "text": "my thumb slipped"
+        },
+        {
+          "from": "me",
+          "text": "3 times? on photos from 2019?"
+        },
+        {
+          "from": "them",
+          "text": "why are u checking what i like"
+        },
+        {
+          "from": "them",
+          "text": "u know what. fine"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u know what. fine"
+        },
+        {
+          "from": "them",
+          "text": "if im on trial so are u"
+        },
+        {
+          "from": "them",
+          "text": "open it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the council v. maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u took ME to court??"
+        },
+        {
+          "from": "them",
+          "text": "the council reviewed the evidence"
+        },
+        {
+          "from": "them",
+          "text": "even the cats think ur crazy maya"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have my own council"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "40 girls. we vote on u every sunday. ur on probation"
+        },
+        {
+          "from": "them",
+          "text": "whos on it"
+        },
+        {
+          "from": "me",
+          "text": "uve met 6 of them",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya who is on the council"
+        }
+      ]
+    }
+  ]
+}
