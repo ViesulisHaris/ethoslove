@@ -125,8 +125,9 @@ export function SavedDateCard({ item, trip, member, actions }: { item: SavedDate
           </span>
         ) : null}
         {!item.editable ? (
-          // Above the card's own link: it explains, where the rest of the card opens the date.
-          <button type="button" onClick={actions.onReadOnly} className="absolute bottom-3 left-3 z-10 inline-flex min-h-8 items-center gap-1.5 rounded-full bg-forest/85 px-3 text-[12px] font-semibold text-cream backdrop-blur-sm transition-colors hover:bg-forest">
+          // Above the card's own link: it explains, where the rest of the card opens the date. The
+          // pill is drawn 32px tall; its ::before takes the tap target to 44px without growing it.
+          <button type="button" onClick={actions.onReadOnly} className="absolute bottom-3 left-3 z-10 inline-flex min-h-8 items-center gap-1.5 rounded-full bg-forest/85 px-3 text-[12px] font-semibold text-cream backdrop-blur-sm transition-colors before:absolute before:-inset-1.5 before:content-[''] hover:bg-forest">
             <Lock aria-hidden="true" className="size-3.5" />
             {t("card.readOnly")}
           </button>

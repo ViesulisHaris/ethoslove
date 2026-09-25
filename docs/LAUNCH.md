@@ -655,6 +655,10 @@ Renewals and failed renewals are covered by the unit tests (`tests/unit/membersh
   `processing`, `pass`, `pass-ending`, `app-store`, `app-store-billing`, `partner`, `with-partner`;
   `&subscriptions=off` for the pass wording). It is a 404 in production; its buttons call the real
   routes, so only click them where the route is answered (the e2e tests do that).
+- `/my-dates` free (1 of 3), at the limit (3 of 3, the "Save as many as you like" link), shared with
+  a partner, and after a membership ends (the oldest read-only, its badge opening the sheet). On a
+  development server `/for-two/preview/my-dates?state=empty|free|free-full|member|ended` draws the
+  grid without signing in (`tests/e2e/my-dates.spec.ts`); a 404 in production.
 - Every state reads the same on `/pricing` (signed in) and `/account`: a first payment the bank is
   confirming is "being confirmed", never a failure; a renewal being retried names the day to fix the
   card by; an App Store renewal Apple can't collect is fixed in the iPhone's Settings (no card

@@ -30,6 +30,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/for-two/layout": ["auth", "money.join"],
   // Development only: the account's Ethos for Two section in each state, for screenshots and e2e.
   "(marketing)/for-two/preview/page": ["membership.account", "money.invite"],
+  // Development only: My dates in each state (the real page needs a signed-in account).
+  "(marketing)/for-two/preview/my-dates/page": ["savedDates"],
   "(marketing)/templates/layout": ["templates", "occasions"],
   "(marketing)/occasions/layout": ["templates", "occasions"],
   "(marketing)/dates/layout": ["dates", "affiliate", "savedDates"],

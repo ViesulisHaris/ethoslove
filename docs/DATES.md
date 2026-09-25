@@ -204,5 +204,7 @@ fails if `MAPLIBRE_VERSION` in `map-vendor.ts` falls behind the installed packag
 - Saved dates: `tests/unit/saved-dates.test.ts` (validation, the free limit and its race, members,
   versions, read-only after a membership, the partner, owner-only delete, rate limits, outages,
   reminders), `saved-dates-sync.test.ts` (autosave, conflicts, offline, read-only answers, the
-  quiet client), `maps-route.test.ts`, `migrations-saved-dates.test.ts` (0015 read as SQL), and
-  `tests/e2e/saved-dates.spec.ts` (with /api/saved-dates answered by the test: nobody signs in).
+  quiet client), `maps-route.test.ts`, `migrations-saved-dates.test.ts` (0015 read as SQL),
+  `tests/e2e/saved-dates.spec.ts` (with /api/saved-dates answered by the test: nobody signs in), and
+  `tests/e2e/my-dates.spec.ts` (My dates drawn by the development-only
+  `/for-two/preview/my-dates?state=…`, since the real page needs a signed-in account).

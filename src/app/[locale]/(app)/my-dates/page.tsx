@@ -5,27 +5,14 @@ import { currencyFor, FREE_SAVED_DATES, subscriptionsEnabled } from "@/lib/prici
 import { CoupleUnavailable } from "@/lib/saved-dates/couple";
 import { listSavedDates, SavedStoreError, savedDatesSession } from "@/lib/saved-dates/server";
 import type { SavedDatesList } from "@/lib/saved-dates/types";
-import { cityName, findAirport } from "@/lib/trips/airports";
-import { TRIPS, tripImageSm, tripSrcSet } from "@/lib/trips/presets";
 import { NotConnected } from "@/components/app/not-connected";
 import { MyDatesGrid } from "@/components/saved-dates/my-dates-grid";
-import type { TripCover } from "@/components/saved-dates/saved-date-card";
+import { tripCovers } from "@/components/saved-dates/trip-covers";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/my-dates">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "savedDates.meta" });
   return { title: t("title"), robots: { index: false } };
-}
-
-/** What a trip's card shows, in the reader's language. Every trip, not only the saved ones: a list reloaded in the browser may hold one saved since. */
-function tripCovers(locale: "en" | "es"): Record<string, TripCover> {
-  return Object.fromEntries(
-    TRIPS.map((trip) => {
-      const airport = findAirport(trip.flyTo);
-      const image = trip.image ?? "";
-      return [trip.id, { title: trip.title[locale], where: airport ? cityName(airport, locale) : null, days: trip.days, src: image ? tripImageSm(image) : "", srcSet: image ? tripSrcSet(image) : "", from: trip.art.from, to: trip.art.to }];
-    }),
-  );
 }
 
 const EMPTY: SavedDatesList = { items: [], quota: { used: 0, limit: FREE_SAVED_DATES }, member: false, partner: null };
