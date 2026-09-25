@@ -5,6 +5,7 @@ import { clientIp } from "@/lib/request-ip";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { linkSecret, verifyToken } from "@/lib/lifecycle/links";
 import { linkPage } from "@/lib/email/link-page";
+import { reminderContent } from "@/lib/saved-dates/reminders";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -35,25 +36,33 @@ async function problem(state: "invalid" | "unavailable", locale: L) {
   return linkPage({ locale, title: t(`${state}Title`), body: t(`${state}Body`), home: t("home"), status: state === "invalid" ? 404 : 503 });
 }
 
-/** The title as the page quotes it, or the kind of thing it is when it was saved without one. */
-async function titleOf(title: string | null | undefined, kind: string | null | undefined, locale: L) {
-  if (title) return title;
+/** The columns reminderContent reads a row by. */
+const COLUMNS = "id, owner_user_id, kind, title, day, data, reminded_for";
+
+/**
+ * The title as the page quotes it, named the way the day-before email names it (reminderContent): the
+ * title it was saved with, or for a trip, saved without one on purpose, the trip's own name in the
+ * reader's language. Only a date saved with no name, or a trip we no longer have, says what it is.
+ */
+async function titleOf(row: Parameters<typeof reminderContent>[0] | null | undefined, locale: L) {
+  const named = row ? reminderContent(row, locale).title : null;
+  if (named) return named;
   const t = await getTranslations({ locale, namespace: "savedDates" });
-  return kind === "trip" ? t("card.trip") : t("save.defaultTitle");
+  return row?.kind === "trip" ? t("card.trip") : t("save.defaultTitle");
 }
 
 export async function GET(request: NextRequest) {
   const locale = localeOf(request.nextUrl.searchParams.get("l"));
   const found = await resolve(request);
   if (found.state !== "ok") return problem(found.state, locale);
-  const { data, error } = await found.db.from("saved_dates").select("title, kind").eq("id", found.id).maybeSingle();
+  const { data, error } = await found.db.from("saved_dates").select(COLUMNS).eq("id", found.id).maybeSingle();
   if (error) return problem("unavailable", locale);
   if (!data) return problem("invalid", locale);
   const [t, tl] = await Promise.all([getTranslations({ locale, namespace: "savedDates.remindOff" }), getTranslations({ locale, namespace: "lifecycle.link" })]);
   return linkPage({
     locale,
     title: t("title"),
-    body: t("body", { title: await titleOf(data.title, data.kind, locale) }),
+    body: t("body", { title: await titleOf(data, locale) }),
     confirm: { label: t("confirm"), action: `${request.nextUrl.pathname}${request.nextUrl.search}` },
     home: tl("home"),
   });
@@ -63,9 +72,9 @@ export async function POST(request: NextRequest) {
   const locale = localeOf(request.nextUrl.searchParams.get("l"));
   const found = await resolve(request);
   if (found.state !== "ok") return problem(found.state, locale);
-  const { data, error } = await found.db.from("saved_dates").update({ remind: false }).eq("id", found.id).select("title, kind").maybeSingle();
+  const { data, error } = await found.db.from("saved_dates").update({ remind: false }).eq("id", found.id).select(COLUMNS).maybeSingle();
   if (error) return problem("unavailable", locale);
   // A date deleted since the email went is as good as turned off: nothing more will be sent for it.
   const [t, tl] = await Promise.all([getTranslations({ locale, namespace: "savedDates.remindOff" }), getTranslations({ locale, namespace: "lifecycle.link" })]);
-  return linkPage({ locale, title: t("done"), body: t("doneBody", { title: await titleOf(data?.title, data?.kind, locale) }), home: tl("home") });
+  return linkPage({ locale, title: t("done"), body: t("doneBody", { title: await titleOf(data, locale) }), home: tl("home") });
 }
