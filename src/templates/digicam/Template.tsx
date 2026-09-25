@@ -503,7 +503,8 @@ function Backdrop({ data, s }: { data: Data; s: Copy }) {
       <Piece x={10} y={7} w={21} rotate={-14} z={14} entrance="stamp" delay={0.5}>
         <Scrap id="kiss-red" eager />
       </Piece>
-      <Piece x={89} y={4} w={17} rotate={8} z={14} entrance="drop" delay={0.3}>
+      {/* Left of the sound toggle, which owns the top-right corner, and above the title. */}
+      <Piece x={90} y={15} w={13} rotate={8} z={14} entrance="drop" delay={0.3}>
         <Scrap id="disco-ball-silver" eager />
       </Piece>
       <Piece x={6} y={32} w={11} rotate={-12} z={14} entrance="bloom" delay={0.65}>

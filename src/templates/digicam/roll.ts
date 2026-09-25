@@ -17,7 +17,7 @@ export function validDay(value: string | undefined | null): Day | null {
 
 export const localDay = (d: Date): Day => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
-/** The day the countdown ends, where it ends: a birthday at 00:00 in Madrid is that day in Madrid. */
+/** The day the countdown ends, where it ends: a birthday at 00:00 in the sender's time zone is that day there. */
 export function countdownDay(countdown: GiftCountdown | undefined): Day | null {
   if (!countdown) return null;
   const at = new Date(countdown.targetAt);
@@ -37,7 +37,7 @@ export function stampDay(chosen: string | undefined, countdown: GiftCountdown | 
 
 /**
  * How the camera prints the day in the corner: '26 09 25 in English, the way the Japanese cameras
- * shipped; 25 09 '26 in Spanish, the order they were set to in Spain.
+ * shipped; 25 09 '26 in Spanish, the order Spanish-language cameras used.
  */
 export function stampText(day: Day, locale: GiftLocale): string {
   const [y, m, d] = day.split("-");

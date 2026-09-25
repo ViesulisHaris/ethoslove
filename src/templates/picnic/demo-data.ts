@@ -32,9 +32,9 @@ export const demoData: Record<"en" | "es", GiftData<PicnicFields>> = {
       kind: "date",
       title: "A picnic in the park",
       when: "This Saturday",
-      city: "Madrid",
+      city: "Lisbon",
       stops: [
-        { name: "El Retiro, by the boating lake", time: "12:30", kind: "park", note: "bring the terrible playlist" },
+        { name: "Jardim da Estrela, by the pond", time: "12:30", kind: "park", note: "bring the terrible playlist" },
         { name: "The cherry tree on the hill", time: "13:30", kind: "picnic", note: "blanket, basket, you" },
         { name: "Ice cream on the way home", time: "18:00", kind: "dessert" },
       ],
@@ -63,9 +63,9 @@ export const demoData: Record<"en" | "es", GiftData<PicnicFields>> = {
       kind: "date",
       title: "Un pícnic en el parque",
       when: "Este sábado",
-      city: "Madrid",
+      city: "Lisboa",
       stops: [
-        { name: "El Retiro, junto al estanque", time: "12:30", kind: "park", note: "trae la lista horrorosa" },
+        { name: "Jardim da Estrela, junto al estanque", time: "12:30", kind: "park", note: "trae la lista horrorosa" },
         { name: "El cerezo de la colina", time: "13:30", kind: "picnic", note: "manta, cesta y tú" },
         { name: "Un helado de vuelta a casa", time: "18:00", kind: "dessert" },
       ],
