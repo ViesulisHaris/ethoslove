@@ -469,7 +469,8 @@ export function defaultCoverFor(slug: string): CoverId {
     case "photo-booth":
     case "picnic":
     case "music-box":
-      return "classic"; // each opens with its own envelope, book, gate, camera, booth, basket or box
+    case "party-animals":
+      return "classic"; // each opens with its own envelope, book, gate, camera, booth, basket, box or invitation
     case "kawaii":
       return "gingham";
     case "fireside":
@@ -492,8 +493,6 @@ export function defaultCoverFor(slug: string): CoverId {
     case "passport":
     case "pack-your-bags":
       return "starry";
-    case "party-animals":
-      return "party";
     case "birthday-cinema":
     case "arcade":
     case "balloons":

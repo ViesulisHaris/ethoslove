@@ -424,16 +424,40 @@ const SCRIPTS = {
     return poster;
   },
   "party-animals": async (page) => {
-    await open(page);
+    // The invitation takes a moment to arrive, so wait for it rather than checking once like open().
+    const invite = page.getByRole("button", { name: /tap to open/i }).first();
+    await invite.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await invite.click({ force: true });
+    await page.waitForTimeout(2200);
     const guests = page.locator("[data-guest]");
     await guests.first().waitFor({ timeout: 20000 });
-    await page.waitForTimeout(3000);
-    const count = await guests.count();
-    for (let i = 0; i < 3; i++) { await guests.nth(i * 3).click({ force: true }); await page.waitForTimeout(700); }
-    // The poster is the party mid-shout: the collage, the hats, one bubble.
+    await page.waitForTimeout(2600);
+    // The poster is the top of the invitation, one guest mid-shout.
+    await guests.first().click({ force: true });
+    await page.waitForTimeout(800);
     const poster = await page.screenshot();
-    for (let i = 0; i < count; i++) { await guests.nth(i).click({ force: true }); await page.waitForTimeout(420); }
-    await page.waitForTimeout(1600);
+    // The preview walks down the page as a guest would: a confetti tap, the booth strip and the song,
+    // the guest list, the candles blown out, and the letter.
+    const scroller = page.locator("[data-scroller]");
+    const glide = (selector, at) =>
+      scroller.evaluate((el, [sel, frac]) => {
+        const target = el.querySelector(sel);
+        const top = target ? target.getBoundingClientRect().top - el.getBoundingClientRect().top + el.scrollTop - el.clientHeight * frac : el.scrollTop + el.clientHeight * 0.7;
+        el.scrollTo({ top, behavior: "smooth" });
+      }, [selector, at]);
+    await page.mouse.click(200, 560);
+    await page.waitForTimeout(800);
+    await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.75, behavior: "smooth" }));
+    await page.waitForTimeout(1500);
+    await glide("[data-guestlist]", 0.2);
+    await page.waitForTimeout(1500);
+    await glide("[data-cake]", 0.3);
+    await page.waitForTimeout(1300);
+    await page.locator("[data-cake]").click({ force: true });
+    await page.waitForTimeout(2600);
+    await glide("[data-letter]", 0.08);
+    await page.waitForTimeout(2200);
     return poster;
   },
   "the-council": async (page) => {
