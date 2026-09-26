@@ -1,0 +1,145 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:02",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i sent u a whole paragraph and u said \"ok\""
+        },
+        {
+          "from": "me",
+          "text": "ok means ok"
+        },
+        {
+          "from": "them",
+          "text": "since when do u talk to me like this"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "u tell me marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u tell me marco"
+        },
+        {
+          "from": "them",
+          "text": "i didnt do anything. i made u something"
+        },
+        {
+          "from": "them",
+          "text": "every photo of us. even the ones with ur dad"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? i found every photo maya"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i found my dads watch"
+        },
+        {
+          "from": "them",
+          "text": "wait where"
+        },
+        {
+          "from": "me",
+          "text": "ebay. sold 14th june. \"old watch, no box, engraving on back\""
+        },
+        {
+          "from": "me",
+          "text": "the engraving is his name. u told my mum it got lost in the move"
+        },
+        {
+          "from": "them",
+          "text": "did u tell ur mum",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "the man who bought it posted it back. for free. he lost his dad too"
+        },
+        {
+          "from": "them",
+          "text": "maya did u tell ur mum"
+        }
+      ]
+    }
+  ]
+}

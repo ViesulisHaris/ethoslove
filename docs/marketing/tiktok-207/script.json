@@ -1,0 +1,154 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Twelve reasons (to start)\" \"100 reasons (to start)\"",
+      "swap \"12 reasons I love you\" \"100 reasons I love you\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i miss u and u just liked it"
+        },
+        {
+          "from": "them",
+          "text": "like it was an email from work"
+        },
+        {
+          "from": "me",
+          "text": "i saw it"
+        },
+        {
+          "from": "them",
+          "text": "ur so cold with me lately"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "maybe im just hard to love marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "maybe im just hard to love marco"
+        },
+        {
+          "from": "them",
+          "text": "ur not. ur the easiest person in the world to love"
+        },
+        {
+          "from": "them",
+          "text": "i wrote u 100 reasons. took me a week"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "100 reasons (to start)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "them",
+          "text": "cute? i wrote 100 reasons maya"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i know about the account"
+        },
+        {
+          "from": "them",
+          "text": "what account"
+        },
+        {
+          "from": "me",
+          "text": "the one thats messaged me every sunday since march. \"no one else would put up with u\""
+        },
+        {
+          "from": "me",
+          "text": "i pressed forgot password. the code went to ur phone. it lit up next to my plate"
+        },
+        {
+          "from": "them",
+          "text": "did u change the password",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "the easiest person in the world to love. right marco"
+        },
+        {
+          "from": "them",
+          "text": "maya did u change the password"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"Happy 2 years\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy 2 years and u said \"u too\""
+        },
+        {
+          "from": "them",
+          "text": "like i was ur dentist"
+        },
+        {
+          "from": "me",
+          "text": "i said it back didnt i"
+        },
+        {
+          "from": "them",
+          "text": "u havent been urself in weeks"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "i just have a lot on rn"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i just have a lot on rn"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something anyway. happy 2 years"
+        },
+        {
+          "from": "them",
+          "text": "didnt spend a penny. made every flower myself"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Happy 2 years",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? it took me 3 nights"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have £1,900 of klarna in my name"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "pandora. zara. a dyson airwrap. all delivered to flat 3, 14 elm road"
+        },
+        {
+          "from": "me",
+          "text": "thats ur exs flat"
+        },
+        {
+          "from": "them",
+          "text": "did u cancel the dyson",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "didnt spend a penny. u said"
+        },
+        {
+          "from": "them",
+          "text": "maya did u cancel the dyson"
+        }
+      ]
+    }
+  ]
+}

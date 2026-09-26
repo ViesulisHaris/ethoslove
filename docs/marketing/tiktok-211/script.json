@@ -1,0 +1,159 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"being the best cat mum alive\"",
+      "swap \"you said “five minutes away” from your bed\" \"you made 200 posters in one night\"",
+      "swap \"you cried at an advert for a bank\" \"you still leave the door open for her\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"biscuit is coming home\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said ill help u put the posters up again and u said \"no need\""
+        },
+        {
+          "from": "them",
+          "text": "shes ur whole world maya"
+        },
+        {
+          "from": "me",
+          "text": "i said no need"
+        },
+        {
+          "from": "them",
+          "text": "why wont u let me help"
+        },
+        {
+          "from": "them",
+          "text": "did i do something"
+        },
+        {
+          "from": "me",
+          "text": "i dont want to talk about biscuit with u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i dont want to talk about biscuit with u"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something to cheer u up. cats obviously"
+        },
+        {
+          "from": "them",
+          "text": "we'll find her. i promise"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the council has ruled",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "them",
+          "text": "cute? i made a whole cat court for u"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i found biscuit"
+        },
+        {
+          "from": "them",
+          "text": "WHAT where"
+        },
+        {
+          "from": "me",
+          "text": "a family in stockport. theyve had her since june 3rd. the day before u \"left the door open\""
+        },
+        {
+          "from": "me",
+          "text": "u put her on marketplace. \"free to good home, must go this week\""
+        },
+        {
+          "from": "them",
+          "text": "who showed u the post",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "we'll find her. u promised"
+        },
+        {
+          "from": "them",
+          "text": "maya who showed u the post"
+        }
+      ]
+    }
+  ]
+}

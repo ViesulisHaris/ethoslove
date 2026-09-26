@@ -1,0 +1,154 @@
+{
+  "demo": {
+    "template": "music-box",
+    "steps": [
+      "swap \"CLARA\" \"MAYA\"",
+      "swap \"Clara\" \"Maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "swap \"five years of us\" \"our song\"",
+      "wait 1400",
+      "shot gift-1.png",
+      "press 273 428",
+      "wait 6000",
+      "release",
+      "wait 3800",
+      "shot gift-2.png",
+      "wait 5200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:19",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said good morning beautiful and u said \"morning\""
+        },
+        {
+          "from": "them",
+          "text": "just morning. no emoji. nothing"
+        },
+        {
+          "from": "me",
+          "text": "i was half asleep"
+        },
+        {
+          "from": "them",
+          "text": "ur always half asleep with me lately"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "i just keep thinking about london"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i just keep thinking about london"
+        },
+        {
+          "from": "them",
+          "text": "they ghosted u babe. their loss. we're fine here"
+        },
+        {
+          "from": "them",
+          "text": "i made u something. so u always have our song"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our song",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? i spent days on it maya"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "london didnt ghost me"
+        },
+        {
+          "from": "them",
+          "text": "what do u mean"
+        },
+        {
+          "from": "me",
+          "text": "they offered it to me in june. someone turned it down from my email"
+        },
+        {
+          "from": "me",
+          "text": "3:12am. i was asleep. u were up"
+        },
+        {
+          "from": "them",
+          "text": "did they give it to someone else",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "we're fine here tho right"
+        },
+        {
+          "from": "them",
+          "text": "maya did they give it to someone else"
+        }
+      ]
+    }
+  ]
+}

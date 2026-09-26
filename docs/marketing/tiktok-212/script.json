@@ -1,0 +1,165 @@
+{
+  "demo": {
+    "template": "digicam",
+    "steps": [
+      "swap \"NORA\" \"MAYA\"",
+      "swap \"Nora\" \"Maya\"",
+      "swap \"nora\" \"maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "wait 1600",
+      "shot gift-1.png",
+      "tap \"turn the camera on\"",
+      "wait 2600",
+      "shot gift-2.png",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 800",
+      "tap \"take a picture\"",
+      "wait 4200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:36",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy birthday beautiful and u said \"thanks\""
+        },
+        {
+          "from": "them",
+          "text": "thanks. like i held a door for u"
+        },
+        {
+          "from": "me",
+          "text": "i said thank u didnt i"
+        },
+        {
+          "from": "them",
+          "text": "its ur birthday and ur so off with me"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "i just dont like talking in the kitchen anymore"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i just dont like talking in the kitchen anymore"
+        },
+        {
+          "from": "them",
+          "text": "thats so random. ok. happy birthday anyway"
+        },
+        {
+          "from": "them",
+          "text": "every photo of u this year. i love capturing u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday, maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? i printed the whole roll maya"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i found the account"
+        },
+        {
+          "from": "them",
+          "text": "what account"
+        },
+        {
+          "from": "me",
+          "text": "@exhaustinggf. 41 videos. my voice. our kitchen"
+        },
+        {
+          "from": "me",
+          "text": "the one where i cried about my job has 2 million views"
+        },
+        {
+          "from": "them",
+          "text": "how many followers has it got now",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "u do love capturing me"
+        },
+        {
+          "from": "them",
+          "text": "maya how many"
+        }
+      ]
+    }
+  ]
+}
