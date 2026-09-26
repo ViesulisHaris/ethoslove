@@ -24,6 +24,8 @@ export type FunnelEvent =
   | "tour_skipped"
   | "city_page_cta"
   | "unwrap_picked"
+  // A free template's gift moved into a premium one from the editor ("Same words, a bigger moment").
+  | "gift_moved"
   // Saved dates: which kind was saved and whether by a member, which reason opened the upsell, which maps app a whole date went to. No ids, no places.
   | "saved_date_saved"
   | "saved_date_upsell"

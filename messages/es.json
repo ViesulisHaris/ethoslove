@@ -677,6 +677,19 @@
         "spooky": "Halloween",
         "classic": "Clásica"
       }
+    },
+    "move": {
+      "title": "Las mismas palabras, un momento más grande",
+      "blurb": "Pásalo a una de las más vendidas. Tus nombres, tus palabras, tus fotos y tu canción van con él.",
+      "moveTo": "Pasarlo a {name}",
+      "keeps": "Se lleva tus {n} primeras fotos",
+      "price": "{price} una sola vez, al enviarlo: tuya para siempre, con todo lo que lleva.",
+      "staysFree": "{name} se queda aquí, gratis, por si cambias de idea.",
+      "moving": "Pasándolo…",
+      "failed": "No ha funcionado en este dispositivo. Tu regalo sigue aquí, tal cual.",
+      "dismiss": "Ahora no",
+      "moved": "Viene de {name}, con tus palabras, tus fotos y tu canción.",
+      "back": "Volver a {name}"
     }
   },
   "gift": {
@@ -732,13 +745,13 @@
     "sections": {
       "popular": {
         "eyebrow": "Las más populares",
-        "title": "Las que más se envían",
-        "blurb": "Ordenadas por lo que de verdad se hace y se envía, semana tras semana."
+        "title": "Las más vendidas",
+        "blurb": "Ordenadas por lo que de verdad se compra, semana tras semana."
       },
       "new": {
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
-        "blurb": "Un consejo de gatos, una fiesta invadida por hámsters, una bomba de stickers y tres collages para deslizar."
+        "blurb": "Una fiesta invadida por hámsters, una digicam, un fotomatón, una caja de música y un pícnic."
       },
       "all": {
         "eyebrow": "La colección",

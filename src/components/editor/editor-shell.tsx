@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { giftUnwrapSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
 import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
@@ -29,6 +30,7 @@ import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
 import { loadUrlSeed } from "./url-seed";
+import { MoveOffer, MovedNote } from "./move-offer";
 
 export type EditorShellProps = {
   slug: string;
@@ -204,6 +206,21 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, []);
 
+  // A phone puts the tab away the moment another app opens, and a closed tab never runs the
+  // debounced save: whatever was typed in the last moment is written now.
+  useEffect(() => {
+    const flush = () => useEditor.getState().flushLocal();
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") flush();
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   // The phone preview is a gift running full-screen; anything docked at the bottom of the page
   // (the consent banner) reads this and steps aside. On a laptop the preview is a side pane and
   // `view` never leaves "edit", so this only ever fires on a phone.
@@ -233,6 +250,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   }, [view]);
 
   const templateName = useMemo(() => manifest.name[locale], [manifest, locale]);
+  // Arrived from "Same words, a bigger moment" on a free template (?from=the-letter).
+  const from = search.get("from");
+  const movedFrom = from && from !== slug ? getManifest(from) : undefined;
 
   // Inside the iPhone app: the app's loading screen goes once the form is up, and its bar takes the name.
   useNativeReady("editor", templateName, ready && Boolean(mod));
@@ -269,6 +289,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
       <div className="flex-1 md:grid md:grid-cols-2 lg:grid-cols-[minmax(380px,460px)_minmax(0,1fr)]" data-clarity-mask="true">
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
+            {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
             {ready && mod ? (
               <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>
@@ -280,6 +301,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                   ) : null}
                 </WhoSection>
                 <WordsSection aiEnabled={aiEnabled} />
+                {manifest.tier === "free" ? <MoveOffer manifest={manifest} /> : null}
                 <UnwrapSection manifest={manifest} />
                 <PhotosSection manifest={manifest} />
                 {manifest.features.music ? <MusicSection /> : null}

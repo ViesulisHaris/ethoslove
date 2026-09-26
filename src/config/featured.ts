@@ -2,16 +2,25 @@
  * What the template gallery leads with. Two short, hand-kept lists, because both are editorial
  * decisions and neither can be derived from a manifest.
  *
- * POPULAR is the best sellers by paid purchases, most sold first (the purchases table, 30 days to
- * 2026-09-20: The Letter 115, Birthday Cinema 98, Bouquet 52, Constellations 28, then a long way
- * down to the rest). Re-run the count before changing it, and keep it to one row of four.
+ * POPULAR is the premium best sellers: the templates people pay for once they start one (26 Sept
+ * 2026, gifts started against checkouts paid: Bouquet 6 of 6 and The Council 5 of 6 in a day, XOXO
+ * 39 of 45 in a week, and Birthday Cinema the most sold premium template by count). It used to lead
+ * with the free Letter, the most made by far but paid for about one time in twenty; the Letter now
+ * offers these from its own editor, and the "Free" filter and the catalogue below still have it.
+ * Keep it to one row of four.
  *
  * NEW is the latest templates: the 26 Sept batch (Party Animals redesigned, Digicam, Photo Booth, Music Box,
  * Picnic), then the strongest of the batch before. A template leaves this list when the next batch
  * ships; a slug that no longer exists is simply skipped, and a unit test says so out loud.
  */
-export const POPULAR_SLUGS = ["the-letter", "birthday-cinema", "bouquet", "constellations"] as const;
-export const NEW_SLUGS = ["party-animals", "digicam", "photo-booth", "music-box", "picnic", "xoxo", "the-council", "coquette", "sticker-bomb"] as const;
+export const POPULAR_SLUGS = ["bouquet", "xoxo", "birthday-cinema", "the-council"] as const;
+export const NEW_SLUGS = ["party-animals", "digicam", "photo-booth", "music-box", "picnic", "coquette", "sticker-bomb"] as const;
+
+/**
+ * What a free template's editor offers to move the gift into ("Same words, a bigger moment"): best
+ * sellers that take a letter's words and photos well. All premium, which a unit test checks.
+ */
+export const MOVE_TO_SLUGS = ["bouquet", "xoxo", "birthday-cinema"] as const;
 
 export type Featured = "popular" | "new";
 export type GallerySection<T> = { id: Featured | "all"; items: T[] };
