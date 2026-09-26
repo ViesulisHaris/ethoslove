@@ -1113,41 +1113,38 @@ arguing in the same thread. It keeps the real shape and ends on her text a year 
 the comments write his answer. Picnic, new that night, is the gift: a picnic for no reason is exactly her
 complaint.
 
-### 207 to 212: more of 192 (129.5k views on 26 Sept)
+### 207 to 212: more of 192 (129.5k views on 26 Sept), shorter and colder
 
-192, "i said i love u and u said k", passed 129.5k views, and the owner asked for more like it. What it
-does that the others in its batch don't:
+192, "i said i love u and u said k", passed 129.5k views, and the owner asked for more like it. The first
+draft copied its whole machine (a secret discovered through a password reset, Klarna in her name, a job
+declined from her email) and the owner sent it back: "write them shorter more cold ... few of these dont
+make sense it needs like i want to break up, or like manipulative". What stays from 192:
 
-- **The hook is his complaint, quoting her one-word reply.** Everyone has sent a paragraph and got "k".
-  The viewer is on his side from the first bubble, and she stays cold ("not everything is about u").
-- **He is the sweet one for six slides.** A gift that took him days, "whatever it is, im here", then
-  "just tell me what i did" / "please maya". The room is fully his.
-- **The flip is one discovery, disgusting and specific**, made by her, told in two bubbles.
-- **His answer is a question that confesses.** "what baby" becomes "whats his name": he doesn't deny
-  it, he asks the one thing that shows he knew and didn't care. She hands one of his sweet lines back,
-  and his question, with her name on it, is the last bubble.
+- **The hook is his complaint, quoting her reply:** "i said happy 2 years and u said "u too"".
+- **Her lines are one word until the turn** ("k", "mhm", "ty", "cool"). The cold is the hook.
+- **He's the sweet one until the last slide**: a gift, then "its nice" and a breakup line.
+- **The turn is a breakup or a manipulation anyone gets in one read.** No mechanism to explain: his
+  real opinion of her comes out, he blurts what happened on Saturday, he makes her finding out the
+  problem, she stayed for the gift, the switch from insult to "jk" to "please".
+- **Short:** three to five bubbles a slide, most of them under six words.
 
-The six copy that skeleton exactly: 192's hook shape (his quote of her dry reply), her cold line,
-his gift, "its nice" / "i didnt ask u to", the reveal, the confessing question. Each discovery is a
-mechanism people really report, so viewers comment their own.
-
-| | Her dry reply (the hook) | Gift | What she found | His question (last bubble) |
+| | Her reply (the hook) | Gift | The turn | Last bubble |
 |---|---|---|---|---|
-| 207 | liked his "i miss u" | Jar of Reasons | the anonymous account that's told her "no one else would put up with u" every Sunday is him: the reset code lit up his phone | "maya did u change the password" |
-| 208 | "u too" to happy 2 years | Bouquet | £1,900 of Klarna in her name, a Dyson Airwrap among it, all delivered to his ex's flat | "maya did u cancel the dyson" |
-| 209 | "morning" to good morning beautiful | Music Box | London offered her the job; someone turned it down from her email at 3:12am while she slept | "maya did they give it to someone else" |
-| 210 | "ok" to a whole paragraph | XOXO | her late dad's watch, "lost in the move", sold on eBay; a stranger posted it back for free | "maya did u tell ur mum" |
-| 211 | "no need" to help with the posters | The Council | he gave Biscuit away on Marketplace the day before he "left the door open" | "maya who showed u the post" |
-| 212 | "thanks" to happy birthday | Digicam | @exhaustinggf: 41 videos of their fights, recorded in their kitchen | "maya how many" |
+| 207 | "k" to i love u | Jar of Reasons | she breaks up, he says "no one else would put up with u", she says "and thats why" | "ull be back" |
+| 208 | "u too" to happy 2 years | Bouquet | "is there someone else" / "yes" / "ask ur best mate" | "maya how long" |
+| 209 | "ok" to goodnight beautiful | Music Box | she knew nothing; "is this about saturday", "she was drunk", then the gift | "maya did u like the gift" |
+| 210 | "cool" to i miss u | XOXO | his 2am text to Jess, and he makes it about her going through his phone | "thats the real problem here maya" |
+| 211 | "mhm" to i love u | The Council | she wanted out three weeks ago and waited for the gift (the cats find her guilty of being cold) | "maya" |
+| 212 | "ty" to happy birthday | Digicam | she breaks up on her birthday; "ur not even that pretty anyway", "jk", "please" | "maya please" |
 
 The frames are real (`scripts/tiktok-demo-frames.mjs`). Music Box winds with `press 273 428` (its key)
 and a hold of six seconds; `press "wind the key"` finds the hint under the box and nothing happens.
-Digicam's demo is a birthday ("HAPPY BIRTHDAY" is set in letter tiles no swap can change), so 212 is set
-on her birthday. In 211 the cats read the story's own findings, and "you still leave the door open for
-her" lands twice.
+Digicam's demo is a birthday ("HAPPY BIRTHDAY" is set in letter tiles no swap can change), so 212 is her
+birthday. The Council's findings are the story's own: "you said “mhm” to i love u", "you left me on read
+for 4 hours", guilty of being cold to him lately.
 
-**Post order:** 212, 207, 210, 208, 211, 209, one a night at the time in each SCRIPT.md, between other
-posts. Answer as Maya for the first hour, and never answer the last bubble.
+**Post order:** 207, 211, 210, 208, 212, 209, one a night at the time in each SCRIPT.md. Answer as Maya
+for the first hour.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 

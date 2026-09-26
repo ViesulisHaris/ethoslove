@@ -2,10 +2,10 @@
   "demo": {
     "template": "the-council",
     "steps": [
-      "swap \"stealing every hoodie I own\" \"being the best cat mum alive\"",
-      "swap \"you said “five minutes away” from your bed\" \"you made 200 posters in one night\"",
-      "swap \"you cried at an advert for a bank\" \"you still leave the door open for her\"",
-      "swap \"you steal chips and claim you “weren't hungry”\" \"biscuit is coming home\"",
+      "swap \"stealing every hoodie I own\" \"being cold to me lately\"",
+      "swap \"you said “five minutes away” from your bed\" \"you said “mhm” to i love u\"",
+      "swap \"you cried at an advert for a bank\" \"you left me on read for 4 hours\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you still sleep on my side\"",
       "swap \"Ana\" \"Maya\"",
       "wait 1800",
       "tap \"all rise\"",
@@ -30,27 +30,19 @@
       "messages": [
         {
           "from": "them",
-          "text": "i said ill help u put the posters up again and u said \"no need\""
-        },
-        {
-          "from": "them",
-          "text": "shes ur whole world maya"
+          "text": "i said i love u and u said \"mhm\""
         },
         {
           "from": "me",
-          "text": "i said no need"
+          "text": "mhm"
         },
         {
           "from": "them",
-          "text": "why wont u let me help"
+          "text": "ur so cold lately"
         },
         {
           "from": "them",
           "text": "did i do something"
-        },
-        {
-          "from": "me",
-          "text": "i dont want to talk about biscuit with u"
         }
       ]
     },
@@ -59,15 +51,11 @@
       "messages": [
         {
           "from": "me",
-          "text": "i dont want to talk about biscuit with u"
+          "text": "no"
         },
         {
           "from": "them",
-          "text": "ok. i made u something to cheer u up. cats obviously"
-        },
-        {
-          "from": "them",
-          "text": "we'll find her. i promise"
+          "text": "ok. i made u something. cats obviously"
         },
         {
           "from": "them",
@@ -97,23 +85,15 @@
       "messages": [
         {
           "from": "me",
-          "text": "its cute"
+          "text": "its perfect"
         },
         {
           "from": "them",
-          "text": "cute? i made a whole cat court for u"
+          "text": "so we're ok?"
         },
         {
           "from": "me",
-          "text": "i didnt ask u to"
-        },
-        {
-          "from": "them",
-          "text": "just tell me what i did"
-        },
-        {
-          "from": "them",
-          "text": "please maya"
+          "text": "no"
         }
       ]
     },
@@ -122,36 +102,19 @@
       "messages": [
         {
           "from": "me",
-          "text": "marco"
-        },
-        {
-          "from": "me",
-          "text": "i found biscuit"
+          "text": "i wanted to break up 3 weeks ago"
         },
         {
           "from": "them",
-          "text": "WHAT where"
+          "text": "then why didnt u"
         },
         {
           "from": "me",
-          "text": "a family in stockport. theyve had her since june 3rd. the day before u \"left the door open\""
-        },
-        {
-          "from": "me",
-          "text": "u put her on marketplace. \"free to good home, must go this week\""
+          "text": "u said u were making me something"
         },
         {
           "from": "them",
-          "text": "who showed u the post",
-          "tapback": "excl"
-        },
-        {
-          "from": "me",
-          "text": "we'll find her. u promised"
-        },
-        {
-          "from": "them",
-          "text": "maya who showed u the post"
+          "text": "maya"
         }
       ]
     }

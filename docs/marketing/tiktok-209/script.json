@@ -25,27 +25,19 @@
       "messages": [
         {
           "from": "them",
-          "text": "i said good morning beautiful and u said \"morning\""
-        },
-        {
-          "from": "them",
-          "text": "just morning. no emoji. nothing"
+          "text": "i said goodnight beautiful and u said \"ok\""
         },
         {
           "from": "me",
-          "text": "i was half asleep"
+          "text": "im tired"
         },
         {
           "from": "them",
-          "text": "ur always half asleep with me lately"
-        },
-        {
-          "from": "them",
-          "text": "did i do something maya"
+          "text": "is this about saturday"
         },
         {
           "from": "me",
-          "text": "i just keep thinking about london"
+          "text": "what about saturday"
         }
       ]
     },
@@ -53,16 +45,12 @@
       "type": "chat",
       "messages": [
         {
-          "from": "me",
-          "text": "i just keep thinking about london"
+          "from": "them",
+          "text": "nothing"
         },
         {
           "from": "them",
-          "text": "they ghosted u babe. their loss. we're fine here"
-        },
-        {
-          "from": "them",
-          "text": "i made u something. so u always have our song"
+          "text": "i made u something"
         },
         {
           "from": "them",
@@ -92,23 +80,15 @@
       "messages": [
         {
           "from": "me",
-          "text": "its nice"
-        },
-        {
-          "from": "them",
-          "text": "nice? i spent days on it maya"
+          "text": "marco"
         },
         {
           "from": "me",
-          "text": "i didnt ask u to"
+          "text": "what about saturday"
         },
         {
           "from": "them",
-          "text": "just tell me what i did"
-        },
-        {
-          "from": "them",
-          "text": "please maya"
+          "text": "did u like it tho"
         }
       ]
     },
@@ -117,36 +97,23 @@
       "messages": [
         {
           "from": "me",
-          "text": "marco"
-        },
-        {
-          "from": "me",
-          "text": "london didnt ghost me"
+          "text": "what happened saturday"
         },
         {
           "from": "them",
-          "text": "what do u mean"
-        },
-        {
-          "from": "me",
-          "text": "they offered it to me in june. someone turned it down from my email"
-        },
-        {
-          "from": "me",
-          "text": "3:12am. i was asleep. u were up"
+          "text": "nothing happened"
         },
         {
           "from": "them",
-          "text": "did they give it to someone else",
-          "tapback": "excl"
+          "text": "she was drunk"
         },
         {
           "from": "me",
-          "text": "we're fine here tho right"
+          "text": "who was drunk"
         },
         {
           "from": "them",
-          "text": "maya did they give it to someone else"
+          "text": "maya did u like the gift"
         }
       ]
     }

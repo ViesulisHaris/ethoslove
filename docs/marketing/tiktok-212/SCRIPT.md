@@ -1,20 +1,15 @@
-# 212 · i love capturing u
+# 212 · jk
 
-**Template:** Digicam (premium) · **Register:** 192's engine, "i said i love u and u said k" · **Who posts:** Maya (blue). Marco made the gift (grey).
-**From a real story:** "my toxic girlfriend" accounts that post secretly recorded arguments for views, found when the partner recognises her own voice, or her own kitchen, on her For You page. The mechanism is real; the people and the twist are new.
-**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides.
+**Template:** Digicam (premium) · **Register:** 192's engine, shorter and colder: breakup, and his switch · **Who posts:** Maya (blue). Marco made the gift (grey).
+**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides. Her lines are one word until the turn.
 **Post:** 23:36 UK, and answer comments in character for the first hour.
 
-## The engine: who the room feels sorry for
+## Who the room feels sorry for
 
-- **Slides 1 to 6: Marco.** "happy birthday beautiful" gets "thanks", on her birthday, and she doesn't like talking in the kitchen any more, which makes no sense. He prints her every photo of her this year: "i love capturing u".
-- **The last slide: Maya.** @exhaustinggf: 41 videos of her crying and shouting in their kitchen, posted by him. The one about her job has 2 million views.
+- **Slides 1 to 6:** Marco: "ty" to happy birthday, then a breakup on her own birthday, after his gift.
+- **The last slide:** one "yes" and he switches: an insult, "jk", "please", in four bubbles.
 
-The flip is the comment: "i was on marcos side until the last slide". People comment to say which slide turned them.
-
-**The callback:** "i love capturing u" and the kitchen; and "what account" becomes "how many followers has it got now".
-**The object they'll demand:** the number of followers. Named, real, never handed over.
-**The last bubble:** "maya how many" — his question with her name on it; the thread ends unresolved.
+**The last bubble:** "maya please"
 
 ## The frames
 
@@ -24,21 +19,17 @@ To film your own gift instead: `/create/digicam`, their name Maya, your name Mar
 
 ## Caption
 
-he printed every photo of me from this year for my birthday and i said its nice. my comments always say im the toxic one. am i
+i broke up with him on my birthday after he made me this. harsh?
 
 ## Pinned comment (in character, never a brand)
 
-it's tryethos, the digicam one. no im not saying the number. hes checking it rn, i can see him
+it's tryethos, the digicam one. the "jk" came 4 minutes later. i timed it
 
 ## Replies to have ready
 
-- To "HOW MANY FOLLOWERS 💀": "he asked that before he asked if im ok"
-- To "wait we might have seen those videos": "some of u commented on them. i read them all"
-- To "i was on marcos side until the last slide": "so were his followers"
-- To "the kitchen line 😭": "i stopped talking in there in april. the videos stopped in april"
+- To "jk 💀": "4 minutes later"
+- To "on ur birthday??": "best present i got"
 - To "what app": "tryethos"
-
-Never settle it: the last bubble's question is never answered, and the refusal always has a reason.
 
 ## Files
 

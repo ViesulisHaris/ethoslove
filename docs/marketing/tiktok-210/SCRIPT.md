@@ -1,20 +1,15 @@
-# 210 · my dads watch
+# 210 · u went through my phone
 
-**Template:** XOXO (premium) · **Register:** 192's engine, "i said i love u and u said k" · **Who posts:** Maya (blue). Marco made the gift (grey).
-**From a real story:** a late parent's watch or ring "lost in the move" and found on eBay or at a pawn shop, often because the engraving led the buyer back to the family. The mechanism is real; the people and the twist are new.
-**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides.
+**Template:** XOXO (premium) · **Register:** 192's engine, shorter and colder: breakup, and he flips it on her · **Who posts:** Maya (blue). Marco made the gift (grey).
+**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides. Her lines are one word until the turn.
 **Post:** 23:02 UK, and answer comments in character for the first hour.
 
-## The engine: who the room feels sorry for
+## Who the room feels sorry for
 
-- **Slides 1 to 6: Marco.** a whole paragraph answered with "ok", and "u tell me marco". He put every photo of them in a collage, even the ones with her dad.
-- **The last slide: Maya.** her late dad's watch didn't get lost in the move. He sold it on eBay; the engraving is her dad's name. A stranger posted it back to her for free.
+- **Slides 1 to 6:** Marco: "cool" to i miss u, and a breakup straight after his gift.
+- **The last slide:** his 2am text to Jess, and in three bubbles he makes her the problem for finding it.
 
-The flip is the comment: "i was on marcos side until the last slide". People comment to say which slide turned them.
-
-**The callback:** "even the ones with ur dad"; and "wait where" becomes "did u tell ur mum": his first worry is his name with her family.
-**The object they'll demand:** whether her mum knows. Named, real, never handed over.
-**The last bubble:** "maya did u tell ur mum" — his question with her name on it; the thread ends unresolved.
+**The last bubble:** "thats the real problem here maya"
 
 ## The frames
 
@@ -24,21 +19,17 @@ To film your own gift instead: `/create/xoxo`, their name Maya, your name Marco.
 
 ## Caption
 
-he found every photo of me and my dad for this and i said its nice. everyone says ive been cold to him since. am i
+he made me this and i broke up with him the same night. am i the villain
 
 ## Pinned comment (in character, never a brand)
 
-it's tryethos, the xoxo one. the watch is on my wrist now. he's seen it
+it's tryethos, the xoxo one. i never touched his phone. jess sent me the screenshots herself
 
 ## Replies to have ready
 
-- To "DID U TELL UR MUM": "thats all hes asked. not how i found it. not sorry"
-- To "the stranger posted it back for free 😭": "he wouldnt even let me pay the postage"
-- To "even the ones with ur dad 💀": "he picked the one where my dads wearing it"
-- To "i was on marcos side until the last slide": "so was my mum"
+- To "thats the real problem 💀": "jess sent them to me. he still hasnt asked how i got them"
+- To ""i wish u were my gf"": "at 2am. on a tuesday"
 - To "what app": "tryethos"
-
-Never settle it: the last bubble's question is never answered, and the refusal always has a reason.
 
 ## Files
 

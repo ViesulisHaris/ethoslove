@@ -25,24 +25,16 @@
           "text": "i said happy 2 years and u said \"u too\""
         },
         {
-          "from": "them",
-          "text": "like i was ur dentist"
-        },
-        {
           "from": "me",
-          "text": "i said it back didnt i"
+          "text": "u too"
         },
         {
           "from": "them",
-          "text": "u havent been urself in weeks"
+          "text": "thats it?"
         },
         {
           "from": "them",
-          "text": "did i do something maya"
-        },
-        {
-          "from": "me",
-          "text": "i just have a lot on rn"
+          "text": "2 years maya"
         }
       ]
     },
@@ -51,15 +43,11 @@
       "messages": [
         {
           "from": "me",
-          "text": "i just have a lot on rn"
+          "text": "i know"
         },
         {
           "from": "them",
-          "text": "ok. i made u something anyway. happy 2 years"
-        },
-        {
-          "from": "them",
-          "text": "didnt spend a penny. made every flower myself"
+          "text": "ok. i made u something anyway"
         },
         {
           "from": "them",
@@ -92,20 +80,12 @@
           "text": "its nice"
         },
         {
-          "from": "them",
-          "text": "nice? it took me 3 nights"
-        },
-        {
           "from": "me",
-          "text": "i didnt ask u to"
+          "text": "we need to talk"
         },
         {
           "from": "them",
-          "text": "just tell me what i did"
-        },
-        {
-          "from": "them",
-          "text": "please maya"
+          "text": "is there someone else"
         }
       ]
     },
@@ -114,36 +94,23 @@
       "messages": [
         {
           "from": "me",
-          "text": "marco"
-        },
-        {
-          "from": "me",
-          "text": "i have £1,900 of klarna in my name"
+          "text": "yes"
         },
         {
           "from": "them",
-          "text": "what"
+          "text": "who"
         },
         {
           "from": "me",
-          "text": "pandora. zara. a dyson airwrap. all delivered to flat 3, 14 elm road"
-        },
-        {
-          "from": "me",
-          "text": "thats ur exs flat"
+          "text": "ask ur best mate"
         },
         {
           "from": "them",
-          "text": "did u cancel the dyson",
-          "tapback": "excl"
-        },
-        {
-          "from": "me",
-          "text": "didnt spend a penny. u said"
+          "text": "jake??"
         },
         {
           "from": "them",
-          "text": "maya did u cancel the dyson"
+          "text": "maya how long"
         }
       ]
     }

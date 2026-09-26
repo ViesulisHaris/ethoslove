@@ -1,20 +1,15 @@
-# 209 · london didnt ghost me
+# 209 · is this about saturday
 
-**Template:** Music Box (premium) · **Register:** 192's engine, "i said i love u and u said k" · **Who posts:** Maya (blue). Marco made the gift (grey).
-**From a real story:** a job offer turned down from the candidate's own email, found months later in the sent folder while looking for something else. The mechanism is real; the people and the twist are new.
-**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides.
+**Template:** Music Box (premium) · **Register:** 192's engine, shorter and colder: manipulation: he gives himself away, then hides behind the gift · **Who posts:** Maya (blue). Marco made the gift (grey).
+**Shape:** 149's shape — **no text typed over any slide**: two chat slides, the gift in 3 real frames, two chat slides. Her lines are one word until the turn.
 **Post:** 22:19 UK, and answer comments in character for the first hour.
 
-## The engine: who the room feels sorry for
+## Who the room feels sorry for
 
-- **Slides 1 to 6: Marco.** "good morning beautiful" gets "morning", no emoji, and she keeps thinking about the London job that ghosted her. He comforts her ("their loss. we're fine here") and makes her a music box with their song.
-- **The last slide: Maya.** London never ghosted her. They offered her the job, and someone turned it down from her email at 3:12am while she was asleep. He was up.
+- **Slides 1 to 6:** nobody yet: she's only tired, and he's the one who brings up Saturday.
+- **The last slide:** she knew nothing. He panics, blurts "she was drunk", and hides behind the gift.
 
-The flip is the comment: "i was on marcos side until the last slide". People comment to say which slide turned them.
-
-**The callback:** "we're fine here", handed back to him; and "what do u mean" becomes "did they give it to someone else".
-**The object they'll demand:** whether the job is still there. Named, real, never handed over.
-**The last bubble:** "maya did they give it to someone else" — his question with her name on it; the thread ends unresolved.
+**The last bubble:** "maya did u like the gift"
 
 ## The frames
 
@@ -24,21 +19,17 @@ To film your own gift instead: `/create/music-box`, their name Maya, your name M
 
 ## Caption
 
-he made me a music box with our song and i said its nice. my sister says im punishing him for something he didnt do. did he
+i said ok to goodnight. thats all i did 😭
 
 ## Pinned comment (in character, never a brand)
 
-it's tryethos, the music box one. not telling him if its gone. he knows where my emails are
+it's tryethos, the music box one. still dont know who was drunk. he still wants to know if i liked the gift
 
 ## Replies to have ready
 
-- To "DID THEY GIVE IT TO SOMEONE ELSE": "that was his first question. not sorry. that"
-- To "3:12am 😭": "he always says he cant sleep without me"
-- To "CHECK UR SENT FOLDERS": "i found it looking for a recipe i emailed myself"
-- To "i was on marcos side until the last slide": "i was on his side for 4 months"
+- To "SHE WAS DRUNK??": "i didnt even know there was a saturday"
+- To "did u like the gift tho 💀": "the music box was lovely. saturday wasnt"
 - To "what app": "tryethos"
-
-Never settle it: the last bubble's question is never answered, and the refusal always has a reason.
 
 ## Files
 

@@ -36,27 +36,15 @@
       "messages": [
         {
           "from": "them",
-          "text": "i said happy birthday beautiful and u said \"thanks\""
-        },
-        {
-          "from": "them",
-          "text": "thanks. like i held a door for u"
+          "text": "i said happy birthday beautiful and u said \"ty\""
         },
         {
           "from": "me",
-          "text": "i said thank u didnt i"
+          "text": "ty"
         },
         {
           "from": "them",
-          "text": "its ur birthday and ur so off with me"
-        },
-        {
-          "from": "them",
-          "text": "did i do something maya"
-        },
-        {
-          "from": "me",
-          "text": "i just dont like talking in the kitchen anymore"
+          "text": "its ur birthday and ur this cold?"
         }
       ]
     },
@@ -65,15 +53,11 @@
       "messages": [
         {
           "from": "me",
-          "text": "i just dont like talking in the kitchen anymore"
+          "text": "im fine"
         },
         {
           "from": "them",
-          "text": "thats so random. ok. happy birthday anyway"
-        },
-        {
-          "from": "them",
-          "text": "every photo of u this year. i love capturing u"
+          "text": "ok. i made u something"
         },
         {
           "from": "them",
@@ -103,23 +87,15 @@
       "messages": [
         {
           "from": "me",
-          "text": "its nice"
-        },
-        {
-          "from": "them",
-          "text": "nice? i printed the whole roll maya"
+          "text": "its cute"
         },
         {
           "from": "me",
-          "text": "i didnt ask u to"
+          "text": "i want to break up"
         },
         {
           "from": "them",
-          "text": "just tell me what i did"
-        },
-        {
-          "from": "them",
-          "text": "please maya"
+          "text": "on ur birthday??"
         }
       ]
     },
@@ -128,36 +104,23 @@
       "messages": [
         {
           "from": "me",
-          "text": "marco"
-        },
-        {
-          "from": "me",
-          "text": "i found the account"
+          "text": "yes"
         },
         {
           "from": "them",
-          "text": "what account"
-        },
-        {
-          "from": "me",
-          "text": "@exhaustinggf. 41 videos. my voice. our kitchen"
-        },
-        {
-          "from": "me",
-          "text": "the one where i cried about my job has 2 million views"
+          "text": "ok fine"
         },
         {
           "from": "them",
-          "text": "how many followers has it got now",
-          "tapback": "excl"
-        },
-        {
-          "from": "me",
-          "text": "u do love capturing me"
+          "text": "ur not even that pretty anyway"
         },
         {
           "from": "them",
-          "text": "maya how many"
+          "text": "jk"
+        },
+        {
+          "from": "them",
+          "text": "maya please"
         }
       ]
     }
