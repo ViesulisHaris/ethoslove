@@ -1104,6 +1104,15 @@ Reasons, Bouquet, Scrapbook, Museum, Birthday Cinema) in real frames from the de
 | 204 | texts popping up on the Apple TV or the car screen in front of everyone | Museum | Nat is in her phone too, as "nat 🤍", since April: Nat is seeing both of them | "maya why do u have nat" |
 | 205 | doorbell cameras (and Vinted receipts, which carry a buyer's name and address) | Birthday Cinema | she sold those heels to the girl on Vinted, has her address, and invited her to the party tonight | "maya cancel the party" |
 
+### 206: too nice (his side, from a real story)
+
+The owner sent a real post (a girlfriend ended it because he was too nice, wanted to be treated like her
+toxic ex, and asked for another chance a year later) and asked for it as a carousel. It's the first one
+told from his side, so Marco is blue: a man posting "she dumped me for being too nice" gets men and women
+arguing in the same thread. It keeps the real shape and ends on her text a year later with no reply, so
+the comments write his answer. Picnic, new that night, is the gift: a picnic for no reason is exactly her
+complaint.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
