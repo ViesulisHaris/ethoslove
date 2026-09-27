@@ -1,0 +1,115 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why do u have a 412 day streak with ur ex"
+        },
+        {
+          "from": "them",
+          "text": "its just black screens"
+        },
+        {
+          "from": "me",
+          "text": "for 412 days"
+        },
+        {
+          "from": "them",
+          "text": "ur so insecure its actually embarrassing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its a streak maya. not a relationship"
+        },
+        {
+          "from": "them",
+          "text": "made u this so u stop overthinking"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Twelve reasons (to start)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cute"
+        },
+        {
+          "from": "me",
+          "text": "sent it to her"
+        },
+        {
+          "from": "them",
+          "text": "u WHAT"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "she said the black screens were more romantic"
+        },
+        {
+          "from": "me",
+          "text": "keep the streak"
+        },
+        {
+          "from": "me",
+          "text": "lose the girlfriend 💅"
+        },
+        {
+          "from": "them",
+          "text": "maya ur being dramatic"
+        }
+      ]
+    }
+  ]
+}
