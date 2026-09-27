@@ -25,7 +25,7 @@ it's tryethos, the jar one. chloe and i are friends now btw
 ## Replies to have ready
 
 - To "WHO IS CHLOE": "his girlfriend. apparently"
-- To "his mum 😭": "she sent me their christmas card from last year"
+- To "his sister 😭": "she sent me their christmas pic. chloe was in it"
 
 ## Files
 

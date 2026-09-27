@@ -1193,6 +1193,37 @@ bubble, and most flops went up in the morning.
 
 **Post order:** 214, 213, 216, 215, 219, 217, 220, 218. One a night, in the evening.
 
+### 221 to 228: toxic, their own apps, and "as you should"
+
+The owner, 27 Sept: "more toxic manipulative ... realistic 20 year olds, nobody uses really facebook from
+gen-z its more on snapchat, ig followers ... as you should girl". (218's "ur mum added me on facebook" is now
+"ur little sister added me on snap".)
+
+- **Their apps, not ours.** Snapchat: a 412-day streak with the ex, Snap Map putting him at her flat, ghost
+  mode, "opened" at 21:04, the screenshot alert. Instagram: close friends, the number of girls he follows, a
+  like from 2019, a hand with acrylics on his story. Facebook is their parents'.
+- **His lines are the real ones:** "ur so insecure", "its glitching", "shes like a sister to me", "good
+  girl", "my thumb slipped", "stop stalking my story", "u went through my phone??", "ur nothing without me".
+- **His gift is the love-bomb:** "made u this so u stop overthinking".
+- **Her ending is his own words or his own app, in one or two bubbles.** "keep the streak / lose the
+  girlfriend 💅", "its glitching" from Jake's, "shes like a sister to me 💅". That is what makes the room type
+  "as you should". The room is against him from the first slide on purpose; the pleasure is the comeback.
+- **228 turns the product round:** she takes him to cat court, and the ruling's sentence reads "blocked, on
+  everything".
+
+| | His move | Gift | Her comeback | Last bubble |
+|---|---|---|---|---|
+| 221 | a 412-day streak with his ex, "just black screens", "ur so insecure" | Jar of Reasons | sends his gift to the ex: "keep the streak / lose the girlfriend 💅" | "maya ur being dramatic" |
+| 222 | Snap Map at her flat for 3 hours, "its glitching" | Bouquet | ghost mode off, at Jake's: "its glitching" | "maya thats not funny" |
+| 223 | "unfollow him", "good girl", follows 614 girls ("they're models") | XOXO | unfollows him, follows Jake back 💅 | "MAYA" |
+| 224 | close friends is "just the boys" and Chloe, "like a sister" | Music Box | her close friends: her and Chloe. "shes like a sister to me 💅" | (hers) |
+| 225 | liked her pic from 2019, "my thumb slipped" | Museum | her thumb slipped on his best mate's 2018 pic: "accident 💅" | (hers) |
+| 226 | a hand on his story, "my cousin", "stop stalking my story" | Picnic | he told each of them the other was his cousin; coffee tomorrow, "cousins 💅" | (hers) |
+| 227 | "never got it" against Snapchat's "opened", "ur nothing without me" | Bouquet | screenshotted, and his mum asked why they broke up 💅 | "MAYA" |
+| 228 | "u went through my phone?? thats a huge violation" | The Council (hers) | "ur right. so i took u to court": GUILTY, blocked on everything | "maya pick up" |
+
+**Post order:** 221, 224, 222, 226, 223, 228, 227, 225. Evenings only.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
