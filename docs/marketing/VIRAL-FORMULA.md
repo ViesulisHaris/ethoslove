@@ -1146,6 +1146,53 @@ for 4 hours", guilty of being cold to him lately.
 **Post order:** 207, 211, 210, 208, 212, 209, one a night at the time in each SCRIPT.md. Answer as Maya
 for the first hour.
 
+## What the account says (27 Sept): @luvierosiie, 41 posts
+
+Read from the profile on 27 Sept 2026 (views, then likes / comments / saves / shares). Every post goes up
+with no caption, only a sound.
+
+| Views | # | Opening | Shape | Likes · comments · saves · shares |
+|---|---|---|---|---|
+| 1.3M | 149 | "are u mad at me" / "u replied 'ok' to a whole paragraph" | cold → "this" → gift (the owner's own photos, XOXO) → her breakup speech | 168.7K · 778 · 15K · 5.9K |
+| 972K | 30 | "are u awake" / "stay awake 2 more mins" → 00:00 "happy birthday / first one to say it" | three chat slides, no frames | 146.7K · 184 · **25.4K** · 4.1K |
+| 344K | 138 | "u left me on delivered for 4 hours" → "ur being taken to court" | funny, The Council | 23.8K · 30 · 4.2K · 3.4K |
+| 277K | 102 | "I PASSED" / "ur the first person i told" / "i know." | friends to lovers | 15.7K · 25 · 1.1K · 178 |
+| 275K | 192 | "i said i love u and u said "k"" | cold → twist | 17.7K · 62 · 1.1K · 230 |
+| 183K | 170 | "u still at jess's" / "ur phone hasnt moved in 4 hours" | he is the problem | 4.6K · 71 · 628 · 102 |
+| 153K in 16h | 208 | "i said happy 2 years and u said "u too"" | the short, cold rewrite | 9.6K · **191** · 827 · 563 |
+| 137K | 78 | "happy anniversary" / "It's tomorrow" | milestone mix-up, counted cards | 11.5K · 54 · 771 · 209 |
+| 121K | 39 | "happy 2 month anniversary" / "2 months isnt an anniversary" | three slides, he counted the days | 12K · 21 · 1.3K · 521 |
+| 103K | 03 | "do u know what tomorrow is" / "thursday" / "bin day" | he "forgets", countdown at midnight | 5.4K · 33 · 288 · 103 |
+
+The rest sit between 1K and 25K. The flops say as much as the hits: "i paid for ur ticket. remember that" (1.1K)
+and "are u done being crazy now" (2K) open on long, accusing lines with him plainly the villain from the first
+bubble, and most flops went up in the morning.
+
+- **Evening only.** Every post over 100K went up in the evening; the recent daytime posts stopped at 1 to 5K.
+- **Two engines carry the account.** *Cold → gift → twist* (149, 192, 208) gets the comments. *Midnight or a
+  small milestone, and he counted* (30, 39, 78, 03) gets the saves, and saves are how 30 reached 972K. The cat
+  court (138) and friends-to-lovers (102) are the next two.
+- **The first slide is five short bubbles**, a moment everyone has had: a dry reply, "are u awake", "happy
+  2 month anniversary", "I PASSED".
+- **The milestone ones need no gift frames.** 30 and 39 are three chat slides; the link card is the gift and
+  the last slide says what it did.
+- **Real photos win.** 149, the biggest post, shows the owner's own photos in the gift.
+
+### 213 to 220: the top shapes, new stories
+
+| | Copies | Opening | Gift | Last bubble |
+|---|---|---|---|---|
+| 213 | 149 | "are u ignoring me" / "u left me on delivered for 5 hours" | XOXO (use your own photos) | "maya send me the list" |
+| 214 | 30 | "are u awake" → 00:00 "happy 1 year / first one to say it" | link only | "happy 1 year. go to sleep" |
+| 215 | 208 | "i said happy 6 months and u said "ok"" | Bouquet | "maya since when" |
+| 216 | 39 | "happy 100 days" / "who counts days" / "me" | link only | "happy 100 days" |
+| 217 | 102 | "I GOT THE JOB" / "ur the first person i told" / "i know." | link only | "zac" |
+| 218 | 192 | "i said i miss u and u said "same"" | Jar of Reasons | "maya let me explain" |
+| 219 | 138 | "u lasted 11 minutes into the film" → cat court | The Council | "no. ur on probation" |
+| 220 | 03 | "do u know what tomorrow is" / "saturday" / "the match" | link only | "happy anniversary" |
+
+**Post order:** 214, 213, 216, 215, 219, 217, 220, 218. One a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

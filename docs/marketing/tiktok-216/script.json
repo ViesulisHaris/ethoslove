@@ -1,0 +1,83 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:41",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 100 days"
+        },
+        {
+          "from": "me",
+          "text": "who counts days"
+        },
+        {
+          "from": "them",
+          "text": "me"
+        },
+        {
+          "from": "me",
+          "text": "wait"
+        },
+        {
+          "from": "me",
+          "text": "did u actually count"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|08:46",
+      "messages": [
+        {
+          "from": "them",
+          "text": "made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "100 days",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|09:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its been 99 days"
+        },
+        {
+          "from": "them",
+          "text": "100"
+        },
+        {
+          "from": "them",
+          "text": "i counted from the bus"
+        },
+        {
+          "from": "me",
+          "text": "what bus"
+        },
+        {
+          "from": "them",
+          "text": "u fell asleep on me. u didnt know my name yet"
+        },
+        {
+          "from": "me",
+          "text": "im crying at a bus stop"
+        },
+        {
+          "from": "them",
+          "text": "happy 100 days"
+        }
+      ]
+    }
+  ]
+}

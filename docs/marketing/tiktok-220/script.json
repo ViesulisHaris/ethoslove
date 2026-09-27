@@ -1,0 +1,113 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Fri|08:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do u know what tomorrow is 👀"
+        },
+        {
+          "from": "them",
+          "text": "saturday"
+        },
+        {
+          "from": "me",
+          "text": "yes. and"
+        },
+        {
+          "from": "them",
+          "text": "the match"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Fri|19:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my mum asked what we're doing for our anniversary"
+        },
+        {
+          "from": "them",
+          "text": "whens that"
+        },
+        {
+          "from": "me",
+          "text": "TOMORROW"
+        },
+        {
+          "from": "them",
+          "text": "oh right"
+        },
+        {
+          "from": "them",
+          "text": "cool"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Fri|23:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "goodnight i guess"
+        },
+        {
+          "from": "them",
+          "text": "wait"
+        },
+        {
+          "from": "them",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "For Maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Sat|00:00",
+      "messages": [
+        {
+          "from": "me",
+          "text": "FIREWORKS??"
+        },
+        {
+          "from": "me",
+          "text": "u knew"
+        },
+        {
+          "from": "them",
+          "text": "2 years. ofc i knew"
+        },
+        {
+          "from": "me",
+          "text": "and the match"
+        },
+        {
+          "from": "them",
+          "text": "kick off 3pm. ur 12 till 3"
+        },
+        {
+          "from": "me",
+          "text": "i hate u. i love u"
+        },
+        {
+          "from": "them",
+          "text": "happy anniversary"
+        }
+      ]
+    }
+  ]
+}
