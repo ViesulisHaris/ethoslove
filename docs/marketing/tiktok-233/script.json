@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:03",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It hit zero"
+        },
+        {
+          "from": "me",
+          "text": "what did"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "counting down to us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo we broke up in july",
+          "status": "Read 00:04"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "I never took it off my home screen"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "Today was the day you were meant to move here"
+        }
+      ]
+    }
+  ]
+}

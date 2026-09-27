@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:24",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year lily 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Lily"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Happy anniversary 🤍"
+        },
+        {
+          "from": "me",
+          "text": "why does it say lily"
+        },
+        {
+          "from": "them",
+          "text": "Typo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my name is maya"
+        },
+        {
+          "from": "them",
+          "text": "Autocorrect"
+        },
+        {
+          "from": "me",
+          "text": "we've been together 6 months",
+          "status": "Read 19:25"
+        },
+        {
+          "from": "them",
+          "text": "Maya let me explain"
+        }
+      ]
+    }
+  ]
+}

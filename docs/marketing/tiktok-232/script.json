@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are you still opening it"
+        },
+        {
+          "from": "them",
+          "text": "Opening what"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for jake 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "it says someone opened it 4 minutes ago"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Maybe it's a glitch"
+        },
+        {
+          "from": "me",
+          "text": "312 times"
+        },
+        {
+          "from": "me",
+          "text": "we broke up in march",
+          "status": "Read 23:13"
+        },
+        {
+          "from": "them",
+          "text": "It's the only place you still say you love me"
+        }
+      ]
+    }
+  ]
+}
