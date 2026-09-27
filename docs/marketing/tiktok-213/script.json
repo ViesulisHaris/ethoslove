@@ -1,0 +1,115 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u ignoring me"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "u left me on delivered for 5 hours"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "doing what"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "text": "took longer than i thought"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (not ignoring u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i made a pros and cons list about u today"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "the cons were winning"
+        },
+        {
+          "from": "them",
+          "text": "send it"
+        },
+        {
+          "from": "me",
+          "text": "no. this is so cute i hate u"
+        },
+        {
+          "from": "them",
+          "text": "maya send me the list"
+        }
+      ]
+    }
+  ]
+}
