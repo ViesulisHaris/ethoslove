@@ -1224,6 +1224,29 @@ gen-z its more on snapchat, ig followers ... as you should girl". (218's "ur mum
 
 **Post order:** 221, 224, 222, 226, 223, 228, 227, 225. Evenings only.
 
+## The new account's format: @you_sir_naim (read 27 Sept 2026)
+
+A texting-story account: 83 photo posts in three weeks, a median of 138K views, top five 3M, 2.7M, 2.4M,
+2.1M and 1.8M, bio "Not real texts". Captions are hashtags only (#ex #sad #toxic #mom #guilt #fyp
+#textstory). What every post has:
+
+- **Two slides, each a real phone screenshot cropped to the chat**: 1206px wide (an iPhone Pro at @3x),
+  560 to 1180px tall, dark mode, nothing but bubbles, "Today 15:30" and "Read 15:31". On TikTok the text
+  is huge and it reads as someone's phone. `"crop": true` in a script now renders exactly that.
+- **Three to five bubbles a slide.** Slide 1 is an innocent opener ("My girlfriend found our playlist",
+  "hey, you don't know me", "are you coming home this weekend", "mom can you come get me").
+- **The last bubble changes everything**: "I added it last week", "he asked me out in april", "I just
+  keep forgetting you don't live here anymore", "She says I'm not romantic enough".
+- **Sad, guilty or betrayed, never a joke.** Parents write in sentences with capitals; the kid doesn't.
+
+229 to 231 copy three of their top posts' shapes with the gift inside the chat as a link, and no gift frames:
+
+| | Copies | The last bubble |
+|---|---|---|
+| 229 | the 2.7M playlist post | "I still play it every night" (her voice note at the end of the gift she made her ex) |
+| 230 | the 2.4M lasagna post | "I play it at dinner so it isn't so quiet" (mum replays the birthday gift) |
+| 231 | the 1.8M "im dating Ethan" post | "he said he stayed up all night making it" (her gift, re-sent with the name changed) |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

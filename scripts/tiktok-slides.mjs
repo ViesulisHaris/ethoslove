@@ -14,6 +14,12 @@
  * style, near the top. Use it on slide 1: it is the only thing legible at thumbnail size, and a
  * carousel whose first slide says nothing dies in the test pool. "\n" breaks the line.
  *
+ * `"crop": true` makes every chat slide a phone screenshot cropped to the messages, the way the
+ * storytime accounts that do millions post them (@you_sir_naim, 27 Sept 2026: 1206px wide, 560 to
+ * 1180px tall, nothing but the bubbles, a timestamp and "Read"). 1206 is an iPhone Pro at @3x, so
+ * the type is exactly the size a real screenshot sets it. TikTok shows the picture on black, and it
+ * reads as someone's phone, not as a slide somebody made.
+ *
  * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
  * the storytime accounts that do millions actually post.
  *
@@ -508,6 +514,10 @@ function gapHtml(slide, n) {
   </style></head><body><div class="n">${String(n).padStart(2, "0")} · ${esc(slide.type)} · yours</div>${slide.note ? `<p class="note">${esc(slide.note)}</p>` : ""}</body></html>`;
 }
 
+// "crop": the same chat, laid out at a phone's width and top to bottom, then shot to the messages only.
+const CROP_WIDTH = 1206;
+const CROP_CSS = `html,body{width:${CROP_WIDTH}px!important;height:auto!important;overflow:visible!important}.stage{position:relative!important;inset:auto!important;justify-content:flex-start!important;padding:34px 48px 30px 42px!important}`;
+
 const browser = await chromium.launch(process.env.TIKTOK_CHROMIUM ? { executablePath: process.env.TIKTOK_CHROMIUM } : {});
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 // The stand-in is a data URL, so it loads after first use; a slide shot before it lands is set in the
@@ -537,10 +547,20 @@ for (const slide of script.slides) {
     }
     continue;
   }
+  const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
+  if (script.crop && slide.type === "chat" && draw === html) {
+    await page.setViewportSize({ width: CROP_WIDTH, height: 2600 });
+    await page.setContent(draw(slide).replace("</style>", `${CROP_CSS}</style>`));
+    await settle();
+    await page.waitForTimeout(150);
+    sheet.push(await page.locator(".stage").screenshot({ path: file }));
+    await page.setViewportSize({ width: 1080, height: 1920 });
+    console.log("wrote", file);
+    continue;
+  }
   await page.setContent(draw(slide));
   await settle();
   await page.waitForTimeout(150);
-  const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
   sheet.push(await page.screenshot({ path: file }));
   console.log("wrote", file);
 }
@@ -552,7 +572,7 @@ if (SHEET && sheet.length) {
   const mime = (b) => (b[0] === 0xff && b[1] === 0xd8 ? "image/jpeg" : "image/png");
   const cells = sheet.map((b) => `<img src="data:${mime(b)};base64,${b.toString("base64")}">`).join("");
   await page.setViewportSize({ width: cols * 290 + 20, height: rows * 510 + 20 });
-  await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
+  await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;object-fit:contain;background:#000;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
   const file = join(outDir, "sheet.png");
   await page.screenshot({ path: file, fullPage: true });
   console.log("wrote", file);
