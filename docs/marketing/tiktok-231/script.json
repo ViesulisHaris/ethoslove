@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:04",
+      "messages": [
+        {
+          "from": "them",
+          "text": "hi sorry this is random"
+        },
+        {
+          "from": "them",
+          "text": "my boyfriend made me this for our 3 months"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for mia 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "okay?",
+          "status": "Read 21:04"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "all the photos in it are of you"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "he just changed the name"
+        },
+        {
+          "from": "me",
+          "text": "i made that for him"
+        },
+        {
+          "from": "them",
+          "text": "he said he stayed up all night making it"
+        }
+      ]
+    }
+  ]
+}

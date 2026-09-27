@@ -1,0 +1,62 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|15:30",
+      "messages": [
+        {
+          "from": "them",
+          "text": "My girlfriend found this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year jake 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "okay?? thats from last year"
+        },
+        {
+          "from": "them",
+          "text": "She's pissed"
+        },
+        {
+          "from": "me",
+          "text": "tell her it's from when we were together"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "That's what I told her"
+        },
+        {
+          "from": "me",
+          "text": "then what's the issue"
+        },
+        {
+          "from": "them",
+          "text": "She heard the voice note at the end"
+        },
+        {
+          "from": "me",
+          "text": "??",
+          "status": "Read 15:31"
+        },
+        {
+          "from": "them",
+          "text": "I still play it every night"
+        }
+      ]
+    }
+  ]
+}

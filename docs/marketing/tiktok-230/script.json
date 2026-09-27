@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Are you coming home this weekend"
+        },
+        {
+          "from": "me",
+          "text": "probably not"
+        },
+        {
+          "from": "them",
+          "text": "Okay"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "No reason"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "mom just tell me 😭"
+        },
+        {
+          "from": "them",
+          "text": "I opened the birthday thing you made me again"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday mom 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mom"
+          }
+        },
+        {
+          "from": "me",
+          "text": "mom that was in march"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "I play it at dinner so it isn't so quiet"
+        }
+      ]
+    }
+  ]
+}
