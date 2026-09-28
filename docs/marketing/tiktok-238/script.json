@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:37",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i found this in your notes"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy birthday sophie 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Sophie"
+          }
+        },
+        {
+          "from": "them",
+          "text": "That's old"
+        },
+        {
+          "from": "me",
+          "text": "it's the same message you wrote me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's a nice message"
+        },
+        {
+          "from": "me",
+          "text": "word for word ethan",
+          "status": "Read 21:38"
+        },
+        {
+          "from": "them",
+          "text": "I meant it both times"
+        }
+      ]
+    }
+  ]
+}

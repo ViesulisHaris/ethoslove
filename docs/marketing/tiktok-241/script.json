@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why does it say we met in april"
+        },
+        {
+          "from": "them",
+          "text": "What"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy 1 year 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "we met in june",
+          "status": "Read 19:03"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Did we"
+        },
+        {
+          "from": "me",
+          "text": "yes noah"
+        },
+        {
+          "from": "them",
+          "text": "Right"
+        },
+        {
+          "from": "them",
+          "text": "April was someone else"
+        }
+      ]
+    }
+  ]
+}
