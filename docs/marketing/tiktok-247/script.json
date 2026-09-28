@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why does the thing you made me have new photos"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "us, so far 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "What do you mean"
+        },
+        {
+          "from": "me",
+          "text": "we broke up in march",
+          "status": "Read 20:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "there's one from last week"
+        },
+        {
+          "from": "them",
+          "text": "I add one every week"
+        },
+        {
+          "from": "me",
+          "text": "of what"
+        },
+        {
+          "from": "them",
+          "text": "The places we said we'd go"
+        }
+      ]
+    }
+  ]
+}

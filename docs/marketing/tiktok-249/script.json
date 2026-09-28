@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You never opened it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open before friday ✈️",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i opened it tonight"
+        },
+        {
+          "from": "me",
+          "text": "jake what is this",
+          "status": "Read 23:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It was a ticket"
+        },
+        {
+          "from": "them",
+          "text": "For you to come with me"
+        },
+        {
+          "from": "me",
+          "text": "friday was 2 weeks ago"
+        },
+        {
+          "from": "them",
+          "text": "I know. I waited at the gate"
+        }
+      ]
+    }
+  ]
+}
