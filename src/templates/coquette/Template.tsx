@@ -307,7 +307,9 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 {scatter.map((photo, i) => (
                   <Piece key={photo.id} {...spots[i]} z={4 + (i % 2)} entrance={i % 2 ? "right" : "left"} delay={(i % 2) * 0.12}>
                     <Polaroid photo={photo} lip={8} pattern={frame} onOpen={open ? () => open(photo) : undefined} still={still}>
-                      <Caption>{photo.caption}</Caption>
+                      <Caption label={look.paper} color={look.ink}>
+                        {photo.caption}
+                      </Caption>
                     </Polaroid>
                   </Piece>
                 ))}

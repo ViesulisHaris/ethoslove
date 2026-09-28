@@ -21,7 +21,7 @@ import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
 import { playUnwrap, UnwrapGift } from "../_shared/UnwrapGift";
 import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
-import { CollageContext, Lightbox, Polaroid, Scrap } from "../_shared/collage/kit";
+import { CollageContext, Lightbox, PaperLabel, Polaroid, Scrap } from "../_shared/collage/kit";
 import { Ticket } from "../_shared/collage/cards";
 import { gingham, ticketNumber, tornPolygon } from "../_shared/collage/paper";
 import type { ScrapId } from "../_shared/collage/scraps";
@@ -407,9 +407,11 @@ function PieceArt({ piece, look, data, photos, s, seed, stage, still, pulse }: {
       <Centered w={stage.polaroid}>
         <Polaroid photo={p} lip={8.4} pattern={gingham(look.check, "calc(1.1*var(--k))")} still={still}>
           {p?.caption ? (
-            <span className="line-clamp-2 max-w-full leading-[1.05]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(2.8 * var(--k))", color: "#3A2A2E" }}>
-              {p.caption}
-            </span>
+            <PaperLabel>
+              <span className="line-clamp-2 block max-w-full leading-[1.1]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(2.8 * var(--k))", color: "#3A2A2E" }}>
+                {p.caption}
+              </span>
+            </PaperLabel>
           ) : null}
         </Polaroid>
       </Centered>

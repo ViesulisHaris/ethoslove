@@ -158,13 +158,39 @@ export function Polaroid({ photo, aspect = 0.94, lip = 9, paper = "#FFFDF8", pat
   );
 }
 
-/** A caption in handwriting that fits on one line of a polaroid's lip. */
-export function Caption({ children, color = "#3A2A2E", size = 3.6 }: { children: ReactNode; color?: string; size?: number }) {
+/**
+ * The strip of paper a caption sits on when the frame under it is patterned. Handwriting straight onto
+ * gingham was hard to read, the checks running through the letters (a sender's own gift in Coquette,
+ * 28 Sept 2026). The pattern still frames the photo; the words get plain paper, like a name tag.
+ */
+export function PaperLabel({ color = "#FFFDF8", children }: { color?: string; children: ReactNode }) {
   return (
-    <span className="block max-w-full truncate leading-none" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, color }}>
+    <span
+      className="inline-block max-w-full overflow-hidden"
+      style={{
+        backgroundColor: color,
+        padding: "calc(.5*var(--p)) calc(1.5*var(--p))",
+        borderRadius: "calc(.7*var(--p))",
+        boxShadow: "0 calc(.15*var(--p)) calc(.5*var(--p)) rgba(90,40,60,.22), 0 0 0 1px rgba(90,40,60,.08)",
+      }}
+    >
       {children}
     </span>
   );
+}
+
+/**
+ * A caption in handwriting that fits on one line of a polaroid's lip. `label` (a paper colour) sets it
+ * on a PaperLabel, for a patterned frame; an empty caption gets no label at all.
+ */
+export function Caption({ children, color = "#3A2A2E", size = 3.6, label }: { children: ReactNode; color?: string; size?: number; label?: string }) {
+  const text = (
+    <span className="block max-w-full truncate" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, lineHeight: label ? 1.2 : 1, color }}>
+      {children}
+    </span>
+  );
+  const empty = children === undefined || children === null || children === "";
+  return label && !empty ? <PaperLabel color={label}>{text}</PaperLabel> : text;
 }
 
 /** Opens a photo large over everything; a tap anywhere closes it. */
