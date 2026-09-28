@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:44",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Can we try again"
+        },
+        {
+          "from": "me",
+          "text": "jake"
+        },
+        {
+          "from": "them",
+          "text": "Please"
+        },
+        {
+          "from": "me",
+          "text": "we tried twice",
+          "status": "Read 22:45"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "third time 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you always make me something"
+        },
+        {
+          "from": "them",
+          "text": "And you always come back"
+        }
+      ]
+    }
+  ]
+}

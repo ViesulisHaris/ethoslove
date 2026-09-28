@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you ever miss us"
+        },
+        {
+          "from": "them",
+          "text": "Every day"
+        },
+        {
+          "from": "me",
+          "text": "then why did you leave",
+          "status": "Read 21:06"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Because I'd hurt you again"
+        },
+        {
+          "from": "me",
+          "text": "you made me this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "forever, maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "I meant it. I just couldn't do it"
+        }
+      ]
+    }
+  ]
+}

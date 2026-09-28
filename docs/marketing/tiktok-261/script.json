@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm sorry"
+        },
+        {
+          "from": "them",
+          "text": "For what"
+        },
+        {
+          "from": "me",
+          "text": "for leaving the way i did",
+          "status": "Read 00:13"
+        },
+        {
+          "from": "them",
+          "text": "It's okay"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can you open something"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "everything i should have said 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Liam"
+          }
+        },
+        {
+          "from": "them",
+          "text": "I can't"
+        },
+        {
+          "from": "them",
+          "text": "She's asleep next to me"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:18",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you"
+        },
+        {
+          "from": "them",
+          "text": "You left"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "i'm sorry",
+          "status": "Read 22:19"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I kept this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Every day I thought you'd come back"
+        },
+        {
+          "from": "them",
+          "text": "I stopped yesterday"
+        }
+      ]
+    }
+  ]
+}

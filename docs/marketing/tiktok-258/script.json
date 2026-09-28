@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:10",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You were right"
+        },
+        {
+          "from": "me",
+          "text": "about what"
+        },
+        {
+          "from": "them",
+          "text": "About her"
+        },
+        {
+          "from": "me",
+          "text": "okay",
+          "status": "Read 23:11"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I still open the thing you made me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my favourite person 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you picked her"
+        },
+        {
+          "from": "them",
+          "text": "I picked wrong"
+        }
+      ]
+    }
+  ]
+}
