@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:01",
+      "messages": [
+        {
+          "from": "them",
+          "text": "We'd be 3 years today"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "i opened the one you made me for our first"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "one year of us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          },
+          "status": "Read 00:02"
+        },
+        {
+          "from": "them",
+          "text": "You still have it?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i open it every year"
+        },
+        {
+          "from": "me",
+          "text": "on this day"
+        },
+        {
+          "from": "them",
+          "text": "So do I"
+        }
+      ]
+    }
+  ]
+}

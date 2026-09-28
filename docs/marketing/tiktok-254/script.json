@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:08",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I finally deleted it"
+        },
+        {
+          "from": "me",
+          "text": "deleted what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my person 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "oh",
+          "status": "Read 22:09"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "that's good"
+        },
+        {
+          "from": "me",
+          "text": "i'm happy for you"
+        },
+        {
+          "from": "them",
+          "text": "I didn't"
+        },
+        {
+          "from": "them",
+          "text": "I just wanted to see if you'd care"
+        }
+      ]
+    }
+  ]
+}

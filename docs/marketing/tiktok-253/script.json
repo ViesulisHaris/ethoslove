@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:22",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i finally watched it to the end"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "everything i never said 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Took you a year"
+        },
+        {
+          "from": "me",
+          "text": "why is the last photo empty",
+          "status": "Read 23:23"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "That one was for us"
+        },
+        {
+          "from": "them",
+          "text": "I thought we'd take it together"
+        },
+        {
+          "from": "me",
+          "text": "we never did"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        }
+      ]
+    }
+  ]
+}

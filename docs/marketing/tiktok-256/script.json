@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:13",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Do you still have the link"
+        },
+        {
+          "from": "me",
+          "text": "what link"
+        },
+        {
+          "from": "them",
+          "text": "The one you made me"
+        },
+        {
+          "from": "me",
+          "text": "why",
+          "status": "Read 02:14"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I lost it when my phone broke"
+        },
+        {
+          "from": "them",
+          "text": "It was the only thing with your voice"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for jake 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "them",
+          "text": "You kept it too"
+        }
+      ]
+    }
+  ]
+}
