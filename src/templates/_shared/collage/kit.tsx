@@ -16,9 +16,14 @@ import { tornPolygon, type TornSides } from "./paper";
 type Collage = { container: RefObject<HTMLDivElement | null> | null; still: boolean; unit: number };
 export const CollageContext = createContext<Collage>({ container: null, still: true, unit: 4 });
 
-/** One cut-out. `width` is any CSS length; the height follows the picture. Decorative. */
-export function Scrap({ id, width = "100%", shadow = true, eager = false, className, style }: { id: ScrapId; width?: string; shadow?: boolean; eager?: boolean; className?: string; style?: CSSProperties }) {
+/**
+ * One cut-out. `width` is any CSS length; the height follows the picture. Decorative.
+ * `tone` recolours it (a CSS filter such as a look's tint) in front of the drop shadow; a `filter`
+ * in `style` would replace the shadow and leave the scrap flat.
+ */
+export function Scrap({ id, width = "100%", shadow = true, eager = false, tone, className, style }: { id: ScrapId; width?: string; shadow?: boolean; eager?: boolean; tone?: string; className?: string; style?: CSSProperties }) {
   const info = SCRAPS[id];
+  const filter = [tone, shadow && "drop-shadow(0 calc(.5*var(--p)) calc(.8*var(--p)) rgba(40,15,25,.26))"].filter(Boolean).join(" ") || undefined;
   return (
     <img
       src={scrapSrc(id)}
@@ -28,7 +33,7 @@ export function Scrap({ id, width = "100%", shadow = true, eager = false, classN
       loading={eager ? "eager" : "lazy"}
       decoding="async"
       className={cn("pointer-events-none block max-w-none select-none", className)}
-      style={{ width, aspectRatio: `${info.w} / ${info.h}`, filter: shadow ? "drop-shadow(0 calc(.5*var(--p)) calc(.8*var(--p)) rgba(40,15,25,.26))" : undefined, ...style }}
+      style={{ width, aspectRatio: `${info.w} / ${info.h}`, filter, ...style }}
     />
   );
 }

@@ -209,19 +209,19 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
               </Piece>
 
               <Piece x={84} y={30} w={27} rotate={12} z={6} entrance="bloom" delay={0.7}>
-                <Scrap id="bow-gingham" eager style={{ filter: look.tint }} />
+                <Scrap id="bow-gingham" eager tone={look.tint} />
               </Piece>
               <Piece x={12} y={46} w={36} rotate={-16} z={5} drift={5} sway entrance="left" delay={0.55}>
-                <Scrap id={f.spray} eager />
+                <Scrap id={f.spray} eager tone={look.bloom} />
               </Piece>
               <Piece x={7} y={70} w={24} rotate={12} z={5} entrance="bloom" delay={0.75}>
-                <Scrap id={f.small} eager />
+                <Scrap id={f.small} eager tone={look.bloom} />
               </Piece>
               <Piece x={15} y={86} w={27} rotate={-8} z={6} drift={3} entrance="bloom" delay={0.85}>
-                <Scrap id={f.gold} eager />
+                <Scrap id={f.gold} eager tone={look.bloom} />
               </Piece>
               <Piece x={88} y={107} w={40} rotate={18} z={6} drift={7} sway entrance="right" delay={0.65}>
-                <Scrap id={f.lily} eager />
+                <Scrap id={f.lily} eager tone={look.bloom} />
               </Piece>
               <Piece x={90} y={54} w={21} rotate={14} z={7} entrance="bloom" delay={1.1}>
                 <div className={cn(!still && "cl-flutter")}>
@@ -269,16 +269,16 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </div>
                 </Piece>
                 <Piece x={77} y={42} w={56} rotate={10} z={1} entrance="bloom">
-                  <Scrap id="doily-pink" shadow={false} style={{ filter: look.tint, opacity: 0.95 }} />
+                  <Scrap id="doily-pink" shadow={false} tone={look.tint} style={{ opacity: 0.95 }} />
                 </Piece>
                 <Piece x={75} y={36} w={38} rotate={-8} z={3} sway entrance="bloom" delay={0.1}>
-                  <Scrap id={f.hibiscus} />
+                  <Scrap id={f.hibiscus} tone={look.bloom} />
                 </Piece>
                 <Piece x={91} y={61} w={25} rotate={20} z={4} entrance="bloom" delay={0.2}>
-                  <Scrap id={f.plumeria} />
+                  <Scrap id={f.plumeria} tone={look.bloom} />
                 </Piece>
                 <Piece x={69} y={68} w={35} rotate={24} z={4} drift={5} entrance="right" delay={0.15}>
-                  <Scrap id={f.soft} />
+                  <Scrap id={f.soft} tone={look.bloom} />
                 </Piece>
                 <Piece x={73} y={94} w={48} rotate={-5} z={5} entrance="stick" delay={0.25}>
                   <Snippet paper={look.paper} ink={look.ink} font={SCRIPT_FONT} size={5.6} className="w-full">
@@ -291,7 +291,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </Piece>
                 ) : null}
                 <Piece x={7} y={stripHeight(strip.length) + 4} w={22} rotate={-18} z={5} entrance="bloom" delay={0.3}>
-                  <Scrap id={f.pale} />
+                  <Scrap id={f.pale} tone={look.bloom} />
                 </Piece>
               </section>
             ) : null}
@@ -314,7 +314,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </Piece>
                 ))}
                 <Piece x={50} y={9} w={20} rotate={-10} z={6} entrance="stamp">
-                  <Scrap id="heart-print-pink" style={{ filter: look.tint }} />
+                  <Scrap id="heart-print-pink" tone={look.tint} />
                 </Piece>
                 <Piece x={93} y={24} w={18} rotate={16} z={6} entrance="bloom" delay={0.2}>
                   <Scrap id="star-felt" />
@@ -327,7 +327,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                       </Snippet>
                     </Piece>
                     <Piece x={8} y={94} w={24} rotate={-20} z={6} drift={4} entrance="bloom">
-                      <Scrap id={f.coral} />
+                      <Scrap id={f.coral} tone={look.bloom} />
                     </Piece>
                   </>
                 ) : null}
@@ -337,10 +337,10 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
             {/* the letter */}
             <section className="relative mt-[calc(10*var(--p))] px-[calc(5*var(--p))]">
               <Piece x={10} y={-2} w={40} rotate={-24} z={4} drift={5} sway entrance="left">
-                <Scrap id={f.star} />
+                <Scrap id={f.star} tone={look.bloom} />
               </Piece>
               <Piece x={92} y={4} w={26} rotate={18} z={4} entrance="bloom" delay={0.15}>
-                <Scrap id={f.pale} />
+                <Scrap id={f.pale} tone={look.bloom} />
               </Piece>
               <TornPaper seed={seed + 9} sides={{ top: true, bottom: true }} color={look.paper} grain={PAPER_GRAIN} depth={1.4} className="z-[2]">
                 <article className="px-[calc(6*var(--p))] pt-[calc(15*var(--p))] pb-[calc(12*var(--p))]">
@@ -349,7 +349,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
               </TornPaper>
               <div className="absolute inset-x-0 bottom-0 h-0">
                 <Piece x={88} y={-2} w={30} rotate={12} z={4} drift={3} entrance="right">
-                  <Scrap id={f.gold} />
+                  <Scrap id={f.gold} tone={look.bloom} />
                 </Piece>
               </div>
             </section>

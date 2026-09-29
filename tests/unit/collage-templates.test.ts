@@ -4,8 +4,14 @@ import { describe, expect, it } from "vitest";
 import { ofKind, SCRAP_IDS, SCRAPS, scrapSrc } from "@/templates/_shared/collage/scraps";
 import { gingham, initials, plainWords, scriptLines, ticketNumber, tornPolygon } from "@/templates/_shared/collage/paper";
 import { scatterHeight, scatterSpots } from "@/templates/_shared/collage/layout";
-import { arrangePhotos, LOOKS as COQUETTE, stripHeight } from "@/templates/coquette/looks";
-import { addKiss, highlightPlan, kissAt, MAX_KISSES, type Kiss } from "@/templates/xoxo/looks";
+import type { FieldMeta } from "@/templates/types";
+import type { LookSwatch } from "@/templates/_shared/look-swatches";
+import { arrangePhotos, LOOKS as COQUETTE, LOOK_ORDER as COQUETTE_ORDER, stripHeight, SWATCHES as COQUETTE_SWATCHES } from "@/templates/coquette/looks";
+import { fieldsSchema as coquetteFields } from "@/templates/coquette/schema";
+import { fieldMeta as coquetteMeta } from "@/templates/coquette/field-meta";
+import { addKiss, highlightPlan, kissAt, LOOKS as XOXO, LOOK_ORDER as XOXO_ORDER, MAX_KISSES, SWATCHES as XOXO_SWATCHES, type Kiss } from "@/templates/xoxo/looks";
+import { fieldsSchema as xoxoFields } from "@/templates/xoxo/schema";
+import { fieldMeta as xoxoMeta } from "@/templates/xoxo/field-meta";
 import { PRESSED_PITCH, pressedHeight, pressedSpots } from "@/templates/keepsake/looks";
 
 describe("the scraps", () => {
@@ -28,6 +34,35 @@ describe("the scraps", () => {
       for (const id of flowers) expect(SCRAPS[id]).toBeDefined();
     }
     expect(Object.values(COQUETTE.blue.flowers).every((id) => SCRAPS[id].kind === "blue-flower")).toBe(true);
+  });
+});
+
+/** The look picker is built from these, so a look missing from one of them is a swatch with no name, or a look nobody can pick. */
+function offersEveryLook(looks: object, order: readonly string[], swatches: Record<string, LookSwatch>, options: readonly string[], meta: Record<"en" | "es", Record<string, FieldMeta>>) {
+  expect([...order].sort()).toEqual(Object.keys(looks).sort());
+  expect([...options].sort()).toEqual(Object.keys(looks).sort());
+  expect(Object.keys(swatches)).toEqual(order);
+  for (const id of order) {
+    for (const colour of Object.values(swatches[id])) expect(colour, id).toMatch(/^#[0-9A-F]{6}$/i);
+    expect(meta.en.look.options?.[id], id).toBeTruthy();
+    expect(meta.es.look.options?.[id], id).toBeTruthy();
+  }
+}
+
+describe("the looks", () => {
+  it("offers every Coquette look as a swatch, in the schema and named in both languages", () => {
+    offersEveryLook(COQUETTE, COQUETTE_ORDER, COQUETTE_SWATCHES, coquetteFields.shape.look.unwrap().options, coquetteMeta);
+  });
+
+  it("offers every XOXO look the same way", () => {
+    offersEveryLook(XOXO, XOXO_ORDER, XOXO_SWATCHES, xoxoFields.shape.look.unwrap().options, xoxoMeta);
+  });
+
+  it("recolours every Coquette look without its own flowers, and leaves the ones that have them", () => {
+    for (const [id, look] of Object.entries(COQUETTE)) {
+      const own = Object.values(look.flowers).every((f) => SCRAPS[f].kind === "blue-flower");
+      expect(!!look.bloom, id).toBe(id !== "blush" && !own);
+    }
   });
 });
 

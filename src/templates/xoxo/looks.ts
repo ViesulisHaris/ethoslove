@@ -1,7 +1,7 @@
 import { mulberry32 } from "../_shared/random";
 import { ofKind, type ScrapId } from "../_shared/collage/scraps";
 
-export type LookId = "cream" | "noir" | "blush";
+export type LookId = "cream" | "blush" | "lilac" | "blue" | "sage" | "mocha" | "noir";
 export type Look = {
   wall: string;
   ink: string;
@@ -45,6 +45,62 @@ export const LOOKS: Record<LookId, Look> = {
     tiles: ["#FFFDF8", "#D4213D", "#0B0809", "#E4DACB", "#FFFDF8", "#D4213D"],
     confetti: ["#D4213D", "#FFFFFF", "#7E0C1D", "#F7EDE6"],
     dark: true,
+  },
+  lilac: {
+    wall: "#EEE5F6",
+    ink: "#33203F",
+    soft: "rgba(51,32,63,.6)",
+    red: "#B01E4B",
+    paper: "#FFFCFF",
+    paperInk: "#33203F",
+    card: "#E4D6F1",
+    cardInk: "#271631",
+    envelope: { body: "#EBE0F5", flap: "#E1D2F0", lining: "#B01E4B" },
+    tiles: ["#271631", "#FFFCFF", "#B01E4B", "#D5C1EA", "#FFFCFF", "#271631"],
+    confetti: ["#B01E4B", "#FFFFFF", "#CDB4EA", "#6D3C8C"],
+    dark: false,
+  },
+  blue: {
+    wall: "#E3EDF8",
+    ink: "#1B2A44",
+    soft: "rgba(27,42,68,.6)",
+    red: "#B3122A",
+    paper: "#FFFFFF",
+    paperInk: "#1B2A44",
+    card: "#D3E1F3",
+    cardInk: "#141F35",
+    envelope: { body: "#DDE8F5", flap: "#D0DFF1", lining: "#B3122A" },
+    tiles: ["#141F35", "#FFFFFF", "#B3122A", "#B9CFEC", "#FFFFFF", "#141F35"],
+    confetti: ["#B3122A", "#FFFFFF", "#9FBFE6", "#3A5E9E"],
+    dark: false,
+  },
+  sage: {
+    wall: "#E5ECDF",
+    ink: "#22301D",
+    soft: "rgba(34,48,29,.6)",
+    red: "#A8172E",
+    paper: "#FFFEF9",
+    paperInk: "#22301D",
+    card: "#D3DFC9",
+    cardInk: "#1A2616",
+    envelope: { body: "#DCE5D3", flap: "#D0DBC5", lining: "#A8172E" },
+    tiles: ["#1A2616", "#FFFEF9", "#A8172E", "#BFCFB1", "#FFFEF9", "#1A2616"],
+    confetti: ["#A8172E", "#FFFFFF", "#B5C8A5", "#4B6A42"],
+    dark: false,
+  },
+  mocha: {
+    wall: "#E9DDD0",
+    ink: "#3A2A21",
+    soft: "rgba(58,42,33,.6)",
+    red: "#9C1C30",
+    paper: "#FFFBF5",
+    paperInk: "#3A2A21",
+    card: "#DAC7B4",
+    cardInk: "#2A1D16",
+    envelope: { body: "#E4D4C2", flap: "#D9C6B1", lining: "#9C1C30" },
+    tiles: ["#2A1D16", "#FFFBF5", "#9C1C30", "#CBB39A", "#FFFBF5", "#2A1D16"],
+    confetti: ["#9C1C30", "#FFFFFF", "#CBB39A", "#6B4A3A"],
+    dark: false,
   },
   blush: {
     wall: "#F9DDE3",
@@ -100,3 +156,7 @@ export function kissAt(n: number, x: number, y: number, seed: number): Kiss {
 
 /** A new kiss joins the page; past the limit the oldest one goes. */
 export const addKiss = (kisses: Kiss[], kiss: Kiss): Kiss[] => [...kisses, kiss].slice(-MAX_KISSES);
+
+/** The looks in the order the editor offers them, each as its swatch: the page, the paper, the red. */
+export const LOOK_ORDER: LookId[] = ["cream", "blush", "lilac", "blue", "sage", "mocha", "noir"];
+export const SWATCHES = Object.fromEntries(LOOK_ORDER.map((id) => [id, { page: LOOKS[id].wall, paper: LOOKS[id].paper, accent: LOOKS[id].red }])) as Record<LookId, { page: string; paper: string; accent: string }>;

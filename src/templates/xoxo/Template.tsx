@@ -23,7 +23,7 @@ import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
 import { RansomRows } from "../_shared/collage/ransom";
 import { playChime, playPaper, playSmooch } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
-import { Envelope, HeartScribble, LinesCard, MarkedLines } from "./art";
+import { CoverBits, Envelope, HeartScribble, LinesCard, MarkedLines } from "./art";
 import { addKiss, highlightPlan, kissAt, LOOKS, type Kiss, type Look, type LookId } from "./looks";
 import { fieldsSchema, type XoxoFields } from "./schema";
 
@@ -97,8 +97,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <AnimatePresence mode="wait">
         {stage !== "open" ? (
           <motion.div key={`sealed-${run}`} className="absolute inset-0 z-10 grid place-items-center" exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.35 } }}>
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(62% 40% at 50% 52%, ${look.dark ? "rgba(212,33,61,.16)" : "rgba(255,255,255,.55)"}, transparent 72%)` }} />
+            <CoverBits look={look} opening={stage === "opening"} reduce={reduce} />
             <motion.div className="w-[calc(84*var(--p))]" initial={reduce ? false : { opacity: 0, y: 30, rotate: -7 }} animate={{ opacity: 1, y: 0, rotate: -3 }} transition={{ type: "spring", stiffness: 80, damping: 14 }}>
-              <p className="mb-[calc(7*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.red }}>
+              <p className="mb-[calc(7*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.red, textShadow: `0 0 calc(1.2*var(--p)) ${look.wall}, 0 0 calc(2.6*var(--p)) ${look.wall}` }}>
                 {s.sealed}
               </p>
               <Envelope look={look} name={data.recipientName} to={s.to} opening={stage === "opening"} reduce={reduce} />

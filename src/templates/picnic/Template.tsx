@@ -593,7 +593,7 @@ function Edges({ stage, look, used }: { stage: Stage; look: Look; used: number }
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[2]">
       {decor.map((d, i) => (
         <div key={i} className="absolute" style={{ left: `calc(${d.x} * var(--k))`, top: `calc(${d.y} * var(--k))`, width: `calc(${d.w} * var(--k))`, translate: "-50% -50%", rotate: `${d.rotate}deg` }}>
-          <Scrap id={d.id} eager style={d.tint ? { filter: look.tint } : undefined} />
+          <Scrap id={d.id} eager tone={d.tint ? look.tint : undefined} />
         </div>
       ))}
     </div>

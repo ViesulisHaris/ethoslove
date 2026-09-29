@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const fieldsSchema = z.object({
-  look: z.enum(["blush", "blue"]).default("blush"),
+  look: z.enum(["blush", "cherry", "lilac", "blue", "butter", "sage"]).default("blush"),
   /** The few words on the postcard, in handwriting. */
   note: z.string().trim().max(90).optional(),
   /** The words torn out of a page, next to the photo strip. */
