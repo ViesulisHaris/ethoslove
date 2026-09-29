@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Can you send me a voice note"
+        },
+        {
+          "from": "me",
+          "text": "why",
+          "status": "Read 01:13"
+        },
+        {
+          "from": "them",
+          "text": "I deleted all of yours"
+        },
+        {
+          "from": "them",
+          "text": "Except one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "The one at the end of this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo we're over"
+        },
+        {
+          "from": "them",
+          "text": "Then say goodnight one more time"
+        }
+      ]
+    }
+  ]
+}

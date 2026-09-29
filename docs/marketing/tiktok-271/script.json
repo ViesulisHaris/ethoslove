@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:57",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Our song came on"
+        },
+        {
+          "from": "me",
+          "text": "which one"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our song 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "the one i made you",
+          "status": "Read 22:58"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I was in the car with her"
+        },
+        {
+          "from": "them",
+          "text": "I had to pull over"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "Because I still sing your part"
+        }
+      ]
+    }
+  ]
+}

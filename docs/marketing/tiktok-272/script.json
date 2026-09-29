@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|16:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Did you make this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 6 months babe 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "yes why",
+          "status": "Read 16:13"
+        },
+        {
+          "from": "them",
+          "text": "I found it on Jake's phone"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who are you"
+        },
+        {
+          "from": "them",
+          "text": "His girlfriend"
+        },
+        {
+          "from": "them",
+          "text": "Of 8 months"
+        }
+      ]
+    }
+  ]
+}

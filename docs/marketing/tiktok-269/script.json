@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "them",
+          "text": "We were 17"
+        },
+        {
+          "from": "me",
+          "text": "?"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "remember us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "where did you find these",
+          "status": "Read 23:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "My old phone"
+        },
+        {
+          "from": "them",
+          "text": "We looked so happy"
+        },
+        {
+          "from": "me",
+          "text": "we were"
+        },
+        {
+          "from": "them",
+          "text": "When did we stop"
+        }
+      ]
+    }
+  ]
+}

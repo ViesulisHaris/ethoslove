@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:03",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I said I love you and you said \"ok\""
+        },
+        {
+          "from": "me",
+          "text": "ok",
+          "status": "Read 22:04"
+        },
+        {
+          "from": "them",
+          "text": "Seriously?"
+        },
+        {
+          "from": "them",
+          "text": "What's wrong with you lately"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I made you this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i'm moving out on sunday"
+        },
+        {
+          "from": "them",
+          "text": "Since when"
+        },
+        {
+          "from": "me",
+          "text": "i told you in june. you weren't listening"
+        }
+      ]
+    }
+  ]
+}

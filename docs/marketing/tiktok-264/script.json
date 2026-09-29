@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u mad at me"
+        },
+        {
+          "from": "them",
+          "text": "No"
+        },
+        {
+          "from": "me",
+          "text": "u replied k to 3 paragraphs"
+        },
+        {
+          "from": "them",
+          "text": "I was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what",
+          "status": "Read 21:48"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "This"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (not mad) 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Took me all week"
+        },
+        {
+          "from": "me",
+          "text": "i had a breakup text typed out"
+        }
+      ]
+    }
+  ]
+}
