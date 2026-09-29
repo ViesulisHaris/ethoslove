@@ -1,0 +1,128 @@
+{
+  "demo": {
+    "template": "digicam",
+    "steps": [
+      "swap \"NORA\" \"MARCO\"",
+      "swap \"Nora\" \"Marco\"",
+      "swap \"nora\" \"marco\"",
+      "swap \"LEO\" \"MAYA\"",
+      "swap \"Leo\" \"Maya\"",
+      "wait 1600",
+      "shot gift-1.png",
+      "tap \"turn the camera on\"",
+      "wait 2600",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 800",
+      "tap \"take a picture\"",
+      "wait 4200",
+      "shot gift-2.png",
+      "tap \"Print the photos\"",
+      "wait 5600",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Tue|23:58",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u awake"
+        },
+        {
+          "from": "them",
+          "text": "maya i have work at 6"
+        },
+        {
+          "from": "me",
+          "text": "stay awake 2 more mins"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "just do it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Wed|00:00",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "first one to say it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy 24th marco",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Wed|00:06",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "it PRINTED our photos"
+        },
+        {
+          "from": "them",
+          "text": "with the dates on"
+        },
+        {
+          "from": "me",
+          "text": "the first one is our first date"
+        },
+        {
+          "from": "them",
+          "text": "i know. i was there"
+        },
+        {
+          "from": "them",
+          "text": "im not sleeping now",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
