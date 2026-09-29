@@ -1,0 +1,127 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:34",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i miss u and u said \"and?\""
+        },
+        {
+          "from": "me",
+          "text": "and?"
+        },
+        {
+          "from": "them",
+          "text": "thats it?"
+        },
+        {
+          "from": "them",
+          "text": "5 days maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "missing u (5 days)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "i have to be honest"
+        },
+        {
+          "from": "them",
+          "text": "go on"
+        },
+        {
+          "from": "me",
+          "text": "i dont miss u"
+        },
+        {
+          "from": "them",
+          "text": "since when"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "since u wore that hat"
+        },
+        {
+          "from": "them",
+          "text": "what hat"
+        },
+        {
+          "from": "me",
+          "text": "the one on ur story"
+        },
+        {
+          "from": "them",
+          "text": "its a nice hat"
+        },
+        {
+          "from": "them",
+          "text": "maya its a nice hat"
+        }
+      ]
+    }
+  ]
+}
