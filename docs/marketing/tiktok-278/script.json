@@ -1,0 +1,143 @@
+{
+  "demo": {
+    "template": "birthday-cinema",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"30\" \"21\"",
+      "swap \"3\" \"2\"",
+      "swap \"0\" \"1\"",
+      "swap \"Thirty\" \"Twenty-one\"",
+      "swap \"Everyone\" \"Marco\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap to start the show\"",
+      "wait 3200",
+      "shot gift-2.png",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "swipe up",
+      "wait 450",
+      "wait 7000",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "stay awake 2 more mins"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just do it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "first one to say it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 21st maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "my birthday is in november"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "then whose is today"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "jakes"
+        },
+        {
+          "from": "them",
+          "text": "why do u know when jakes birthday is"
+        },
+        {
+          "from": "me",
+          "text": "everyone knows when jakes birthday is"
+        },
+        {
+          "from": "them",
+          "text": "i didnt"
+        },
+        {
+          "from": "them",
+          "text": "maya why do u know"
+        }
+      ]
+    }
+  ]
+}
