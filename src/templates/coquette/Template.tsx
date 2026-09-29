@@ -6,7 +6,7 @@ import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
 import { backgroundMusic } from "@/lib/gift/music";
-import type { TemplateProps } from "../types";
+import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
@@ -109,11 +109,27 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
-/** The page still wrapped: a ribbon round it both ways, the bow where they cross, and a tag with their name. */
+/** The page still wrapped, waiting to be untied. */
 function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy; data: Data; untying: boolean; reduce: boolean; onUntie: () => void }) {
-  const slide = { duration: reduce ? 0.15 : 0.8, ease: [0.6, 0, 0.3, 1] as const };
   return (
     <motion.div className="absolute inset-0 z-10" exit={{ opacity: 0, transition: { duration: 0.35 } }}>
+      <Wrapping look={look} s={s} recipientName={data.recipientName} senderName={data.senderName} untying={untying} reduce={reduce} bow="cq-bow" />
+      <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
+      <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
+        {s.untie}
+      </motion.p>
+    </motion.div>
+  );
+}
+
+/**
+ * The ribbon round the page both ways, the bow where it crosses and a tag with their name: the
+ * first screen, and, drawn still, the Classic tile in the editor's cover picker.
+ */
+function Wrapping({ look, s, recipientName, senderName, untying, reduce, bow }: { look: Look; s: Copy; recipientName: string; senderName: string; untying: boolean; reduce: boolean; bow: string }) {
+  const slide = { duration: reduce ? 0.15 : 0.8, ease: [0.6, 0, 0.3, 1] as const };
+  return (
+    <>
       <motion.span aria-hidden="true" className="absolute inset-y-0 left-1/2 w-[calc(11*var(--p))] -translate-x-1/2" style={{ background: satinBand(look.satin, false), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { y: "105%" } : { y: 0 }} transition={slide} />
       <motion.span aria-hidden="true" className="absolute inset-x-0 top-[42%] h-[calc(11*var(--p))] -translate-y-1/2" style={{ background: satinBand(look.satin, true), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { x: "105%" } : { x: 0 }} transition={{ ...slide, delay: untying && !reduce ? 0.08 : 0 }} />
 
@@ -124,23 +140,31 @@ function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy
           <span aria-hidden="true" className="absolute top-[calc(2*var(--p))] left-1/2 block h-[calc(2.2*var(--p))] w-[calc(2.2*var(--p))] -translate-x-1/2 rounded-full" style={{ boxShadow: `inset 0 0 0 calc(.5*var(--p)) ${look.satin.mid}`, background: look.wall }} />
           <p className="text-[calc(2.6*var(--p))] font-semibold tracking-[0.34em] uppercase opacity-60">{s.for}</p>
           <p className="mt-[calc(.6*var(--p))] truncate text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT }}>
-            {data.recipientName}
+            {recipientName}
           </p>
-          <p className="mt-[calc(1.4*var(--p))] truncate text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
-            {s.from} {data.senderName}
-          </p>
+          {senderName ? (
+            <p className="mt-[calc(1.4*var(--p))] truncate text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
+              {s.from} {senderName}
+            </p>
+          ) : null}
         </div>
       </motion.div>
 
       <motion.div className="absolute top-[42%] left-1/2 z-[2] w-[calc(78*var(--p))]" style={{ x: "-50%", y: "-41.2%" }} initial={reduce ? false : { scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 120, damping: 12, delay: 0.15 }}>
-        <SatinBow id="cq-bow" satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
+        <SatinBow id={bow} satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
       </motion.div>
+    </>
+  );
+}
 
-      <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
-      <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
-        {s.untie}
-      </motion.p>
-    </motion.div>
+/** Coquette's first screen, still, in the colours the sender picked. */
+export function Opening({ fields, recipientName, senderName, locale }: OpeningProps) {
+  const parsed = fieldsSchema.safeParse(fields);
+  const look = LOOKS[parsed.success && parsed.data.look in LOOKS ? parsed.data.look : "blush"];
+  return (
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, ...gingham(look.check, "calc(6.25*var(--p))"), "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
+      <Wrapping look={look} s={S[locale] ?? S.en} recipientName={recipientName} senderName={senderName} untying={false} reduce bow="cq-bow-tile" />
+    </div>
   );
 }
 

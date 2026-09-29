@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import type { EnvelopeColors, GiftBoxColors } from "./looks";
+import { shaded, type EnvelopeColors, type GiftBoxColors } from "./looks";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -107,7 +107,7 @@ export function Envelope({ colors, opening }: { colors: EnvelopeColors; opening:
             alt=""
             draggable={false}
             className="absolute top-[94%] left-1/2 block max-w-none -translate-x-1/2 -translate-y-1/2 select-none"
-            style={{ width: `${colors.sealArt.w}%`, aspectRatio: String(colors.sealArt.cut.ratio), rotate: `${colors.sealArt.rotate ?? 0}deg`, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", filter: "drop-shadow(0 calc(.7*var(--u)) calc(1*var(--u)) rgba(60,10,20,.35))" }}
+            style={{ width: `${colors.sealArt.w}%`, aspectRatio: String(colors.sealArt.cut.ratio), rotate: `${colors.sealArt.rotate ?? 0}deg`, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", filter: shaded(colors.sealArt.cut.tone, "drop-shadow(0 calc(.7*var(--u)) calc(1*var(--u)) rgba(60,10,20,.35))") }}
           />
         ) : (
           <div
@@ -168,7 +168,7 @@ export function GiftBox({ colors, opening }: { colors: GiftBoxColors; opening: b
             alt=""
             draggable={false}
             className="absolute bottom-[6%] left-1/2 block max-w-none -translate-x-1/2 select-none"
-            style={{ width: `${colors.bowArt.w}%`, aspectRatio: String(colors.bowArt.cut.ratio), filter: "drop-shadow(0 calc(.8*var(--u)) calc(1.2*var(--u)) rgba(80,20,30,.32))" }}
+            style={{ width: `${colors.bowArt.w}%`, aspectRatio: String(colors.bowArt.cut.ratio), filter: shaded(colors.bowArt.cut.tone, "drop-shadow(0 calc(.8*var(--u)) calc(1.2*var(--u)) rgba(80,20,30,.32))") }}
           />
         ) : (
           <svg viewBox="0 0 120 70" className="absolute bottom-[78%] left-1/2 w-[46%] -translate-x-1/2" aria-hidden="true">

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEve
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
-import type { TemplateProps } from "../types";
+import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
@@ -97,14 +97,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <AnimatePresence mode="wait">
         {stage !== "open" ? (
           <motion.div key={`sealed-${run}`} className="absolute inset-0 z-10 grid place-items-center" exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.35 } }}>
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(62% 40% at 50% 52%, ${look.dark ? "rgba(212,33,61,.16)" : "rgba(255,255,255,.55)"}, transparent 72%)` }} />
-            <CoverBits look={look} opening={stage === "opening"} reduce={reduce} />
-            <motion.div className="w-[calc(84*var(--p))]" initial={reduce ? false : { opacity: 0, y: 30, rotate: -7 }} animate={{ opacity: 1, y: 0, rotate: -3 }} transition={{ type: "spring", stiffness: 80, damping: 14 }}>
-              <p className="mb-[calc(7*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.red, textShadow: `0 0 calc(1.2*var(--p)) ${look.wall}, 0 0 calc(2.6*var(--p)) ${look.wall}` }}>
-                {s.sealed}
-              </p>
-              <Envelope look={look} name={data.recipientName} to={s.to} opening={stage === "opening"} reduce={reduce} />
-            </motion.div>
+            <Sealed look={look} s={s} name={data.recipientName} opening={stage === "opening"} reduce={reduce} />
             <button type="button" onClick={open} aria-label={s.open} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: look.dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.85)", color: look.dark ? "#FFF5F0" : look.red, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(60,10,20,.2)" }} initial={{ opacity: 0 }} animate={stage === "opening" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "opening" ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
               {s.open}
@@ -117,6 +110,37 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
       <Confetti burst={burst} colors={look.confetti} count={130} origin={{ x: 0.5, y: 0.45 }} className="pointer-events-none absolute inset-0 z-[36]" />
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
+    </div>
+  );
+}
+
+/**
+ * The sealed envelope on its page, with everything stuck round it: the first screen, and, drawn
+ * still, the Classic tile in the editor's cover picker.
+ */
+function Sealed({ look, s, name, opening, reduce }: { look: Look; s: Copy; name: string; opening: boolean; reduce: boolean }) {
+  return (
+    <>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(62% 40% at 50% 52%, ${look.dark ? "rgba(212,33,61,.16)" : "rgba(255,255,255,.55)"}, transparent 72%)` }} />
+      <CoverBits look={look} opening={opening} reduce={reduce} />
+      <motion.div className="w-[calc(84*var(--p))]" initial={reduce ? false : { opacity: 0, y: 30, rotate: -7 }} animate={{ opacity: 1, y: 0, rotate: -3 }} transition={{ type: "spring", stiffness: 80, damping: 14 }}>
+        <p className="mb-[calc(7*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.red, textShadow: `0 0 calc(1.2*var(--p)) ${look.wall}, 0 0 calc(2.6*var(--p)) ${look.wall}` }}>
+          {s.sealed}
+        </p>
+        <Envelope look={look} name={name} to={s.to} opening={opening} reduce={reduce} />
+      </motion.div>
+    </>
+  );
+}
+
+/** XOXO's first screen, still, on the page colour the sender picked. */
+export function Opening({ fields, recipientName, locale }: OpeningProps) {
+  const parsed = fieldsSchema.safeParse(fields);
+  const look = LOOKS[parsed.success && parsed.data.look in LOOKS ? parsed.data.look : "cream"];
+  return (
+    <div className="absolute inset-0 grid place-items-center overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 mix-blend-multiply" style={{ backgroundImage: PAPER_GRAIN, opacity: look.dark ? 0.3 : 0.6 }} />
+      <Sealed look={look} s={S[locale] ?? S.en} name={recipientName} opening={false} reduce />
     </div>
   );
 }

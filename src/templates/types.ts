@@ -72,6 +72,9 @@ export type FieldEditorProps<T = unknown> = {
   fields?: Record<string, unknown>;
 };
 
+/** What a template's still opening is drawn from: the gift as the sender has it so far. */
+export type OpeningProps = { fields: unknown; recipientName: string; senderName: string; locale: GiftLocale };
+
 export interface TemplateModule<TFields = Record<string, unknown>> {
   manifest: TemplateManifest;
   fieldsSchema: z.ZodType<TFields>;
@@ -90,4 +93,10 @@ export interface TemplateModule<TFields = Record<string, unknown>> {
   /** One complete demo per locale; the gallery, editor and detail page use it. */
   demoData: Record<GiftLocale, GiftData<TFields>>;
   Template: ComponentType<TemplateProps<TFields>>;
+  /**
+   * A still of the template's own first screen, for one that opens on a screen of its own rather
+   * than a cover. The editor's cover picker shows it as the Classic tile, in the colours the sender
+   * picked; without it that tile is a plain card with their name.
+   */
+  opening?: ComponentType<OpeningProps>;
 }

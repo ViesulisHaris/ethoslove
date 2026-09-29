@@ -7,9 +7,13 @@ import type { StickerId } from "./stickers";
 /**
  * A photograph cut out as a sticker (public/scraps, public/memes): where the file is, and its
  * shape, so its box is reserved before it has loaded and nothing on the page moves when it does.
+ * `tone` is a CSS filter that recolours it, drawn in front of its shadow: a cover in the colour of
+ * the gift it opens turns its flowers and bows that colour (see follow.ts).
  */
-export type Cut = { src: string; ratio: number };
-const scrap = (id: ScrapId): Cut => ({ src: `/scraps/${id}.webp`, ratio: SCRAPS[id].w / SCRAPS[id].h });
+export type Cut = { src: string; ratio: number; tone?: string };
+export const scrap = (id: ScrapId): Cut => ({ src: `/scraps/${id}.webp`, ratio: SCRAPS[id].w / SCRAPS[id].h });
+/** A cut-out's own recolouring, then its shadow: the other way round, the shadow would be recoloured too. */
+export const shaded = (tone: string | undefined, shadow: string): string => (tone ? `${tone} ${shadow}` : shadow);
 const meme = (id: MemeId): Cut => ({ src: `/memes/${id}.webp`, ratio: MEMES[id].w / MEMES[id].h });
 
 export type EnvelopeColors = {
@@ -150,7 +154,7 @@ function place(set: Partial<Record<SlotId, Spot>>): Placement[] {
 }
 
 /** Gingham from two half-tinted stripe layers; the overlap gives the darker squares. */
-const gingham = (tint: string, ground: string, cell = "calc(12*var(--u))") =>
+export const gingham = (tint: string, ground: string, cell = "calc(12*var(--u))") =>
   `linear-gradient(90deg, ${tint} 50%, transparent 0) 0 0/${cell} ${cell}, linear-gradient(${tint} 50%, transparent 0) 0 0/${cell} ${cell}, ${ground}`;
 
 /** Evenly spaced dots, the polka and pearl papers. */
@@ -166,7 +170,7 @@ const TAPE = (color: string): Tape[] => [{ x: 84, y: 5, width: 28, rotate: 9, co
 
 
 /** Small gingham for the lining of an envelope. */
-const lining = (tint: string, ground: string) => gingham(tint, ground, "calc(4*var(--u))");
+export const lining = (tint: string, ground: string) => gingham(tint, ground, "calc(4*var(--u))");
 
 /**
  * The collage covers. These are composed by hand rather than on the eight slots: the art is real

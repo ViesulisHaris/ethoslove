@@ -1,26 +1,35 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { COVER_IDS, type CoverId, type GiftLocale } from "@/lib/gift/schema";
 import { Cover } from "@/templates/_shared/covers/Cover";
-import { COVER_LOOKS } from "@/templates/_shared/covers/looks";
+import { coverFor } from "@/templates/_shared/covers/follow";
 import { thumbLook } from "@/lib/covers/thumbs";
 import { cn } from "@/lib/utils";
 
 /**
  * Live thumbnails of every cover with their name in it, so the choice is made by eye. Drawn from
- * the small copies of the cut-outs (see thumbLook): a tile is a few dozen pixels across.
+ * the small copies of the cut-outs (see thumbLook): a tile is a few dozen pixels across. Each is
+ * drawn in the gift's own colours where the cover follows them (see coverFor), and the Classic
+ * tile is the template's own first screen when it has one to show (`classic`).
  */
 export function CoverPicker({
   value,
   onChange,
   recipientName,
   locale,
+  slug,
+  fields,
+  classic,
 }: {
   value: CoverId;
   onChange: (v: CoverId) => void;
   recipientName: string;
   locale: GiftLocale;
+  slug: string;
+  fields: unknown;
+  classic?: (name: string) => ReactNode;
 }) {
   const t = useTranslations("editor.covers");
   const name = recipientName.trim() || t("theirName");
@@ -48,14 +57,16 @@ export function CoverPicker({
                 active ? "border-ink ring-2 ring-ink ring-offset-2 ring-offset-paper" : "border-border group-hover:border-ink/40",
               )}
             >
-              {id === "classic" ? (
+              {id === "classic" && classic ? (
+                classic(name)
+              ) : id === "classic" ? (
                 <span className="absolute inset-0 flex flex-col items-center justify-center bg-[radial-gradient(90%_60%_at_50%_20%,#3a2617,#100a06)] px-2 text-[#f6efe3]">
                   <span className="text-[5cqw] tracking-[0.3em] uppercase opacity-60">{t("classicEyebrow")}</span>
                   <span className="font-display mt-[4cqh] text-[16cqw] leading-none italic">{name}</span>
                   <span className="mt-[5cqh] h-px w-[40cqw] bg-[var(--brand-coral)]" />
                 </span>
               ) : (
-                <Cover look={thumbLook(COVER_LOOKS[id])} recipientName={name} locale={locale} still />
+                <Cover look={thumbLook(coverFor(id, slug, fields))} recipientName={name} locale={locale} still />
               )}
             </span>
             <span className={cn("text-xs", active ? "font-semibold text-ink" : "text-muted-foreground")}>{t(`names.${id}`)}</span>

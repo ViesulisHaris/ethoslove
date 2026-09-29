@@ -11,7 +11,7 @@ import { usePreloadAssets } from "./hooks/use-preload-assets";
 import { LoadingScreen } from "./LoadingScreen";
 import { introVariantFor } from "./intro-variants";
 import { Cover } from "./covers/Cover";
-import { COVER_LOOKS } from "./covers/looks";
+import { coverFor } from "./covers/follow";
 import { Watermark } from "./Watermark";
 import { TemplateErrorBoundary } from "./ErrorBoundary";
 import { ReplyModeContext } from "./reply-mode";
@@ -98,7 +98,7 @@ export function GiftRenderer({
   );
 
   const Template = mod?.Template;
-  const coverLook = resolved?.cover && resolved.cover !== "classic" && mode !== "preview" ? COVER_LOOKS[resolved.cover] : null;
+  const coverLook = useMemo(() => (resolved?.cover && resolved.cover !== "classic" && mode !== "preview" ? coverFor(resolved.cover, slug, resolved.fields) : null), [resolved, mode, slug]);
   const coverOpen = !coverLook || openedFor === replayKey;
 
   return (
