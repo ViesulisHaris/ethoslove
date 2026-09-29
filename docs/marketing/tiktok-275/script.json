@@ -1,0 +1,138 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"sorry for whatever i did\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|07:48",
+      "messages": [
+        {
+          "from": "me",
+          "text": "dont talk to me today"
+        },
+        {
+          "from": "them",
+          "text": "what did i do"
+        },
+        {
+          "from": "me",
+          "text": "u know what u did"
+        },
+        {
+          "from": "them",
+          "text": "maya i was asleep"
+        },
+        {
+          "from": "me",
+          "text": "exactly"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "exactly"
+        },
+        {
+          "from": "them",
+          "text": "ok whatever it is im sorry"
+        },
+        {
+          "from": "them",
+          "text": "made u this last night"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (sorry for whatever i did)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is so cute"
+        },
+        {
+          "from": "them",
+          "text": "so what did i do"
+        },
+        {
+          "from": "me",
+          "text": "u cheated on me"
+        },
+        {
+          "from": "them",
+          "text": "WHEN"
+        },
+        {
+          "from": "me",
+          "text": "in my dream"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "with my cousin"
+        },
+        {
+          "from": "them",
+          "text": "im not apologising for a dream"
+        },
+        {
+          "from": "me",
+          "text": "u already did. with flowers"
+        },
+        {
+          "from": "them",
+          "text": "which cousin"
+        },
+        {
+          "from": "them",
+          "text": "maya which cousin"
+        }
+      ]
+    }
+  ]
+}
