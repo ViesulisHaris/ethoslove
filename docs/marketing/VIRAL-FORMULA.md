@@ -1224,6 +1224,62 @@ gen-z its more on snapchat, ig followers ... as you should girl". (218's "ur mum
 
 **Post order:** 221, 224, 222, 226, 223, 228, 227, 225. Evenings only.
 
+## What the comments say (29 Sept): the ten posts over 100K
+
+Read from the public comment feed of every rosie post over 100K views (no login). The views have not moved
+since 27 Sept (the account is held back: its two newest posts had 3 and 10 views), but the comments show
+what made the room type.
+
+| Views | # | Comments | The top comment (likes) | What the room does |
+|---|---|---|---|---|
+| 1.3M | 149 | **779** | "Why would u even telll him that😭" (63K) · "gurl he ignored ur paragraph just to send you 3 sentences thru an app" (36.7K, 89 replies) · "I'm leaving u for him atp" (20.5K) | two camps, and they quote her: "“It was really good too” ???" (4.8K), "both of y'all evil" (6.1K) |
+| 974K | 30 | 180 | "PLEASE TELL ME THE WEBSITE" (4.2K) | wants one: "I would genuinely cry if someone did something like that for me" (1.7K) |
+| 345K | 138 | 21 | "These comments defs dont understand the sarcasm" (3.4K) | little: a joke, not a fight |
+| 277K | 102 | 16 | "Its says the letter is from jack but you said zac?" (921) | confused by names that didn't match |
+| 277K | 192 | 43 | "you evil" (5.1K) | against her; confused by the twist ("how you even know he cheated") |
+| 183K | 170 | 54 | "Yea Marco 100% deserves better" (1.5K) | argue whether sending a location is fair |
+| 157K | 208 | **200** | "maya pass the FUCKING controller" (3.7K) · "maya are we being fr now" (3.5K) · "Posted by the girl btw" (1.5K) | talk **to Maya by name**, in the story: "Maya Ima pay his bail", "Maya imma fight you" |
+| 137K | 78 | 38 | "Why do yall like half hate eachother" (5.8K) | "why do you hate him" |
+| 121K | 39 | 17 | "The way ur texting back💔" (2.5K) | against her dry replies |
+| 103K | 03 | 25 | "u say I LOVE YOU and he said love u????? id crash out" (255) | against his dry reply |
+
+What it adds to the two engines:
+
+- **The comments come when Maya is the one in the wrong, to a sweet Marco.** 149, 208, 192, 78 and 39 all
+  have her cold, and the room defends him: "poor Marco", "I'm leaving u for him", "you evil".
+- **Maya and Marco, always.** The room talks to them by name, as if they were in the chat ("maya are we being
+  fr now"). A story with other names starts from zero; 102's mismatched names got confusion, not comments.
+- **One line of hers they can quote**, short and a little unhinged: "it was really good too".
+- **His last bubble asks her for something, with her name in it**, and the room asks with him.
+- **The sweet engine gets the purchase instead**: 30's biggest comment is "PLEASE TELL ME THE WEBSITE", and
+  its last slide says what the gift did ("i blew out the candles on my PHONE / how did it know").
+- **A twist that needs explaining costs comments to confusion** (192: "how do you even know he cheated").
+
+### 274 to 283: Maya in the wrong, and two midnights
+
+Rosie's own format: dark iMessage screenshots, three frames of the real gift (live demos, names swapped to
+Maya and Marco), then the ending. Seven comment engines and three save engines.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 274 | comments (149) | "why are u being weird" / "u left me on delivered all day" | XOXO | "the cons won by one" | "maya what was the one" |
+| 275 | comments | "dont talk to me today" / "maya i was asleep" / "exactly" | Bouquet | "u cheated on me… in my dream" / "u already did. with flowers" | "maya which cousin" |
+| 276 | comments (208) | "i said i love u and u sent a thumbs up" / 👍 | Scrapbook | "i asked him out first. he said no. so i asked u" | "maya the same night" |
+| 277 | comments (78) | "happy 7 months" / "6" / "i dont count february" | Coquette | "i know it off by heart" | "why do u still know it" |
+| 278 | both (30) | "are u awake" → 00:00 "happy birthday / first one to say it" | Birthday Cinema | "my birthday is in november" / "everyone knows when jakes birthday is" | "maya why do u know" |
+| 279 | saves (30, 39) | "look at the time in one minute" / 21:47 | Music Box | "i wound the key and its US in the mirror" | "hi" |
+| 280 | comments (208) | 'i said i miss u and u said "and?"' | Jar of Reasons | "since u wore that hat" | "maya its a nice hat" |
+| 281 | comments (149) | "u fell asleep during the office again" / "they were long episodes" | The Council | "i learned 3 lines off tiktok" | "maya what else" |
+| 282 | comments (149) | "why did u screenshot my message" / "its glitching" | Picnic | "for the slideshow at our wedding" | "maya how many screenshots" |
+| 283 | saves (30, hers) | "are u awake" / "maya i have work at 6" → 00:00, her gift for him | Digicam | "it PRINTED our photos / with the dates on" | "im not sleeping now" |
+
+A lone emoji (276's 👍) now renders the way Messages draws it: big, no bubble (`scripts/tiktok-slides.mjs`).
+Birthday Cinema's cake topper is two digits drawn separately, so a 21st needs `swap "3" "2"` and
+`swap "0" "1"` as well as `swap "30" "21"`.
+
+**Post order:** 274, 279, 276, 275, 283, 280, 278, 281, 277, 282. One a night, 19:00 to 22:00. On the 14k
+account until rosie's new posts get views again. Reply as Maya in the first hour, in character.
+
 ## The new account's format: @you_sir_naim (read 27 Sept 2026)
 
 A texting-story account: 83 photo posts in three weeks, a median of 138K views, top five 3M, 2.7M, 2.4M,

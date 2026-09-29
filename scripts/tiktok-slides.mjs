@@ -143,6 +143,9 @@ const LIGHT_CSS = `
     .tap.theirs{background:#E9E9EB}
 `;
 
+/** One to three emoji and nothing else: Messages draws those big, with no bubble, and a bubble gives a fake away. */
+const JUMBO = /^(?:\p{Extended_Pictographic}(?:\p{Emoji_Modifier}|\uFE0F|\u200D\p{Extended_Pictographic})*){1,3}$/u;
+
 function html(slide) {
   const rows = slide.messages
     .map((m, i, all) => {
@@ -164,6 +167,9 @@ function html(slide) {
         const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
         const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
         return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+      }
+      if (JUMBO.test(m.text.trim())) {
+        return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
       }
       // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
       const prev = all[i - 1];
@@ -196,6 +202,7 @@ function html(slide) {
     .sys{text-align:center;color:#8e8e93;font-size:35px;line-height:44px;margin:34px 70px;letter-spacing:-.2px}
 
     .bubble{position:relative;max-width:73%;padding:20px 38px 21px;border-radius:54px;font-size:51px;line-height:66px;letter-spacing:-.9px;word-wrap:break-word;box-sizing:border-box}
+    .jumbo{position:relative;font-size:152px;line-height:176px;padding:0 10px}
     .in{background:#262629}
     .out{background:#0B84FF}
     /* The tail: a curved spur on the last bubble of a run, cut out of the black behind it. */
