@@ -1,0 +1,127 @@
+{
+  "demo": {
+    "template": "scrapbook",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"elena\" \"maya\"",
+      "swap \"ELENA\" \"MAYA\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"open the scrapbook\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "scroll 520",
+      "wait 700",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:11",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i love u and u sent a thumbs up"
+        },
+        {
+          "from": "me",
+          "text": "👍"
+        },
+        {
+          "from": "them",
+          "text": "thats it?"
+        },
+        {
+          "from": "them",
+          "text": "2 years maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 2 years",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "can i ask u something"
+        },
+        {
+          "from": "them",
+          "text": "anything"
+        },
+        {
+          "from": "me",
+          "text": "is jake single"
+        },
+        {
+          "from": "them",
+          "text": "my brother??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i asked him out first"
+        },
+        {
+          "from": "me",
+          "text": "he said no"
+        },
+        {
+          "from": "me",
+          "text": "so i asked u"
+        },
+        {
+          "from": "them",
+          "text": "the same night??"
+        },
+        {
+          "from": "them",
+          "text": "maya the same night"
+        }
+      ]
+    }
+  ]
+}
