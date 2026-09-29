@@ -1,0 +1,117 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 2800",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "wait 900",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:52",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are u being weird"
+        },
+        {
+          "from": "them",
+          "text": "im not"
+        },
+        {
+          "from": "me",
+          "text": "u left me on delivered all day"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "doing what"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "text": "took me all week"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (not weird)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i made a pros and cons list about u today"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "the cons won by one"
+        },
+        {
+          "from": "them",
+          "text": "what was the one"
+        },
+        {
+          "from": "me",
+          "text": "doesnt matter. this made it a draw",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya what was the one"
+        }
+      ]
+    }
+  ]
+}
