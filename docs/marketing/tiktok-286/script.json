@@ -1,0 +1,127 @@
+{
+  "demo": {
+    "template": "coquette",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"elena\" \"maya\"",
+      "swap \"ELENA\" \"MAYA\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 2400",
+      "shot gift-1.png",
+      "tap \"untie the bow\"",
+      "wait 3600",
+      "shot gift-2.png",
+      "scroll 560",
+      "wait 1200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:44",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why do u still have tinder"
+        },
+        {
+          "from": "me",
+          "text": "i dont"
+        },
+        {
+          "from": "them",
+          "text": "it just popped up on ur phone"
+        },
+        {
+          "from": "me",
+          "text": "old account"
+        },
+        {
+          "from": "them",
+          "text": "it said new match"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "old match"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "whatever. made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (delete it)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco its perfect"
+        },
+        {
+          "from": "them",
+          "text": "so why tinder"
+        },
+        {
+          "from": "me",
+          "text": "i only use it to check ur not on it"
+        },
+        {
+          "from": "them",
+          "text": "every day?"
+        },
+        {
+          "from": "me",
+          "text": "twice"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "and the matches?"
+        },
+        {
+          "from": "me",
+          "text": "u have to swipe to check properly"
+        },
+        {
+          "from": "them",
+          "text": "maya how many matches"
+        }
+      ]
+    }
+  ]
+}
