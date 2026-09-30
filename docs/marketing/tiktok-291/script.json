@@ -1,0 +1,110 @@
+{
+  "demo": {
+    "template": "vinyl",
+    "steps": [
+      "swap \"Sofía\" \"Marco\"",
+      "swap \"SOFÍA\" \"MARCO\"",
+      "swap \"Lucas\" \"Maya\"",
+      "swap \"LUCAS\" \"MAYA\"",
+      "swap \"23:40\" \"3:15\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"drop the needle\"",
+      "wait 3200",
+      "shot gift-2.png",
+      "scroll 520",
+      "wait 1200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|03:09",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what time is ur break"
+        },
+        {
+          "from": "them",
+          "text": "3:15 why"
+        },
+        {
+          "from": "me",
+          "text": "open this at 3:15"
+        },
+        {
+          "from": "them",
+          "text": "maya go to sleep"
+        },
+        {
+          "from": "me",
+          "text": "3:15 marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|03:15",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy 2 years"
+        },
+        {
+          "from": "me",
+          "text": "i know ur at work"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "songs for the 3:15",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|03:22",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "it played our song in the break room"
+        },
+        {
+          "from": "them",
+          "text": "the whole kitchen knows it now"
+        },
+        {
+          "from": "me",
+          "text": "good"
+        },
+        {
+          "from": "them",
+          "text": "happy 2 years",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
