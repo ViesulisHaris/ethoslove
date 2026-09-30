@@ -1,0 +1,129 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 2800",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "wait 900",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:01",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did u text me \"hey its sophie\""
+        },
+        {
+          "from": "me",
+          "text": "wrong chat"
+        },
+        {
+          "from": "them",
+          "text": "its ur number"
+        },
+        {
+          "from": "me",
+          "text": "she had my phone"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "she replies for me sometimes"
+        },
+        {
+          "from": "them",
+          "text": "oh"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (the real one)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is so cute"
+        },
+        {
+          "from": "them",
+          "text": "does she reply for u a lot"
+        },
+        {
+          "from": "me",
+          "text": "not anymore"
+        },
+        {
+          "from": "them",
+          "text": "since when"
+        },
+        {
+          "from": "me",
+          "text": "since month 3"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "who did the first 3 months"
+        },
+        {
+          "from": "me",
+          "text": "sophie"
+        },
+        {
+          "from": "me",
+          "text": "but i read them all"
+        },
+        {
+          "from": "them",
+          "text": "maya who did i fall in love with"
+        }
+      ]
+    }
+  ]
+}
