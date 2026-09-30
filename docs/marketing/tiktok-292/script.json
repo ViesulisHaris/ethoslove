@@ -1,0 +1,122 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"6 months today\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:48",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i love u and u said \"ty\""
+        },
+        {
+          "from": "me",
+          "text": "ty"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "6 months today"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "6 months of maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "can i tell u something"
+        },
+        {
+          "from": "them",
+          "text": "anything"
+        },
+        {
+          "from": "me",
+          "text": "i said it to someone else first today"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "said what"
+        },
+        {
+          "from": "me",
+          "text": "i love u"
+        },
+        {
+          "from": "me",
+          "text": "to the barista"
+        },
+        {
+          "from": "me",
+          "text": "he said it back"
+        },
+        {
+          "from": "them",
+          "text": "maya which barista"
+        }
+      ]
+    }
+  ]
+}
