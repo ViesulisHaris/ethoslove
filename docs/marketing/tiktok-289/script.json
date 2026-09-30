@@ -1,0 +1,116 @@
+{
+  "demo": {
+    "template": "our-timeline",
+    "steps": [
+      "swap \"Ana\" \"Maya\"",
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Three years\" \"1000 days\"",
+      "swap \"June 2024\" \"January 2024\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "swap \"Until four\" \"Until day 2000\"",
+      "swap \"until four\" \"until day 2000\"",
+      "tap \"scroll to begin\"",
+      "wait 2500",
+      "shot gift-2.png",
+      "scroll 8000",
+      "wait 2500",
+      "scroll -700",
+      "wait 1500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:30",
+      "messages": [
+        {
+          "from": "them",
+          "text": "do u know what today is"
+        },
+        {
+          "from": "me",
+          "text": "wednesday"
+        },
+        {
+          "from": "them",
+          "text": "day 1000"
+        },
+        {
+          "from": "me",
+          "text": "of what"
+        },
+        {
+          "from": "them",
+          "text": "us"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who counts days"
+        },
+        {
+          "from": "them",
+          "text": "me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "1000 days, in order",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|21:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "it drew a road through all our dates"
+        },
+        {
+          "from": "me",
+          "text": "how do u remember them all"
+        },
+        {
+          "from": "them",
+          "text": "i write them down"
+        },
+        {
+          "from": "me",
+          "text": "since when"
+        },
+        {
+          "from": "them",
+          "text": "day 1",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
