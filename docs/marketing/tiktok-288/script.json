@@ -1,0 +1,132 @@
+{
+  "demo": {
+    "template": "kawaii",
+    "steps": [
+      "swap \"Mia\" \"Maya\"",
+      "swap \"mia\" \"maya\"",
+      "swap \"MIA\" \"MAYA\"",
+      "swap \"Leo\" \"Marco\"",
+      "swap \"LEO\" \"MARCO\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"tap to open\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap the box\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:52",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur mum just followed me"
+        },
+        {
+          "from": "me",
+          "text": "she likes u"
+        },
+        {
+          "from": "them",
+          "text": "she commented \"so tall\" on my pic"
+        },
+        {
+          "from": "me",
+          "text": "u are tall"
+        },
+        {
+          "from": "them",
+          "text": "maya im 5'9"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "shes meeting u sunday"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (from ur 5'9 bf)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco its so cute"
+        },
+        {
+          "from": "me",
+          "text": "about sunday"
+        },
+        {
+          "from": "them",
+          "text": "what did u tell her"
+        },
+        {
+          "from": "me",
+          "text": "ur 6'2"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "and a doctor"
+        },
+        {
+          "from": "them",
+          "text": "i work at nandos"
+        },
+        {
+          "from": "me",
+          "text": "wear the boots and dont talk"
+        },
+        {
+          "from": "them",
+          "text": "maya what kind of doctor am i"
+        }
+      ]
+    }
+  ]
+}
