@@ -1280,6 +1280,38 @@ Birthday Cinema's cake topper is two digits drawn separately, so a 21st needs `s
 **Post order:** 274, 279, 276, 275, 283, 280, 278, 281, 277, 282. One a night, 19:00 to 22:00. On the 14k
 account until rosie's new posts get views again. Reply as Maya in the first hour, in character.
 
+### 284 to 293: the same two engines, six gifts the account hasn't shown
+
+Same rules as 274 to 283. Seven posts put Maya in the wrong to a sweet Marco, with one line of hers the room
+can quote and his last bubble asking her for something, her name in it. Three are saves: a day, a midnight or a
+break someone counted. Six of the gifts have never been in a post before (Photo Booth, Keepsake, Kawaii, Our
+Timeline, Midnight Countdown, Vinyl), so the batch also tests which new template makes people ask for the link.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 284 | comments (149) | 'why did u reply "who is this"' / "new phone" | Photo Booth | "marco 2" / "ur my favourite marco tho" | "maya who is marco 1" |
+| 285 | comments (149, 281) | "were u on my phone" / "my notes app was open" | Keepsake | "we are not naming our son kevin" | "maya what did u add" |
+| 286 | comments (149, 192) | "why do u still have tinder" / "it said new match" | Coquette | "u have to swipe to check properly" | "maya how many matches" |
+| 287 | comments (208) | 'why did u text me "hey its sophie"' | XOXO | "but i read them all" | "maya who did i fall in love with" |
+| 288 | comments (281) | "ur mum just followed me" / "maya im 5'9" | Kawaii | "wear the boots and dont talk" | "maya what kind of doctor am i" |
+| 289 | saves (39, 216) | "do u know what today is" / "day 1000" | Our Timeline | "it drew a road through all our dates" | "day 1" |
+| 290 | saves (30) | "what time is it there" / "marco its 5am for u" | Midnight Countdown | "FIREWORKS at exactly 12 / my 12" | "happy 1 year maya" |
+| 291 | saves (30, hers) | "what time is ur break" / "3:15 marco" | Vinyl | "the whole kitchen knows it now" | "happy 2 years" |
+| 292 | comments (192, 208) | 'i said i love u and u said "ty"' | Bouquet | "he said it back" | "maya which barista" |
+| 293 | comments (149) | "how was family dinner" / "ur mum just posted from spain" | Jar of Reasons | "his mum loves me" | "maya how long have u been going" |
+
+Capturing the new gifts:
+- **Photo Booth** needs four presses of the button (about 5 s each) and 8 s for the strip to print. The strip
+  carries the capture day's date.
+- **Kawaii** opens from its cover: `tap "tap to open"`, then `tap "tap the box"`.
+- **Midnight Countdown's** "Skip to midnight" is reached by position (`tap 180 572`, 5 s after "tap to
+  start"), because the button's words are not inside a tappable text element.
+- **Our Timeline** ends on "…and it's only the beginning" if you scroll to the bottom and back up 700.
+  `swap "Until four" "Until day 2000"` fixes the countdown under it.
+
+**Post order:** 284, 289, 287, 286, 290, 293, 288, 291, 285, 292. One a night, 19:00 to 22:00. Rosie only once
+its newest posts get views again, the 14k account meanwhile. Reply as Maya in the first hour.
+
 ## The new account's format: @you_sir_naim (read 27 Sept 2026)
 
 A texting-story account: 83 photo posts in three weeks, a median of 138K views, top five 3M, 2.7M, 2.4M,
