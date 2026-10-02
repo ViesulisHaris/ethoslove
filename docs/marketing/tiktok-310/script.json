@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "i made this before everything"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy 21st 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "didn't know if i should still send it",
+          "status": "Delivered"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i'm glad you did"
+        },
+        {
+          "from": "them",
+          "text": "i've watched it 6 times"
+        },
+        {
+          "from": "me",
+          "text": "it's just photos"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "i deleted all of ours the day you left"
+        }
+      ]
+    }
+  ]
+}
