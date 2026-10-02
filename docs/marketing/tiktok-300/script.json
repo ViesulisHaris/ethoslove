@@ -1,0 +1,56 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it came"
+        },
+        {
+          "from": "me",
+          "text": "the birthday thing you set up in may"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya, on her 22nd 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you said you'd be here when i opened it",
+          "status": "Delivered"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|00:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "there's a voice note at the end"
+        },
+        {
+          "from": "me",
+          "text": "you say \"told you i'd be first\""
+        },
+        {
+          "from": "me",
+          "text": "you were"
+        },
+        {
+          "from": "me",
+          "text": "i still pay your phone bill so i can keep texting you",
+          "status": "Delivered"
+        }
+      ]
+    }
+  ]
+}
