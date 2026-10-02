@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "chloe left her phone at mine"
+        },
+        {
+          "from": "me",
+          "text": "why is there a gift from you on it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for my secret 🤫",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Chloe"
+          },
+          "status": "Read 19:42"
+        },
+        {
+          "from": "them",
+          "text": "That's not from me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it says made by jake"
+        },
+        {
+          "from": "me",
+          "text": "the first photo is from my birthday"
+        },
+        {
+          "from": "them",
+          "text": "Maya"
+        },
+        {
+          "from": "me",
+          "text": "you cropped me out of it"
+        }
+      ]
+    }
+  ]
+}
