@@ -1,0 +1,57 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did you order two meals on my uber"
+        },
+        {
+          "from": "them",
+          "text": "i was hungry"
+        },
+        {
+          "from": "me",
+          "text": "and two desserts?"
+        },
+        {
+          "from": "them",
+          "text": "very hungry"
+        },
+        {
+          "from": "me",
+          "text": "you're lactose intolerant"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i took a tablet"
+        },
+        {
+          "from": "me",
+          "text": "it went to chloe's address"
+        },
+        {
+          "from": "them",
+          "text": "it autofilled"
+        },
+        {
+          "from": "me",
+          "text": "why would chloe's address autofill on MY account",
+          "status": "Read 21:50"
+        },
+        {
+          "from": "them",
+          "text": "i'll send you the money"
+        }
+      ]
+    }
+  ]
+}
