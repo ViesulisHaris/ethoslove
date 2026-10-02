@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:02",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm at the bench"
+        },
+        {
+          "from": "me",
+          "text": "what bench"
+        },
+        {
+          "from": "them",
+          "text": "Ours. You said if we were both single at 25"
+        },
+        {
+          "from": "me",
+          "text": "jake that was 7 years ago",
+          "status": "Read 19:03"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I made you this for today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "25 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i'm engaged"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "I just wanted to keep my half of the promise"
+        }
+      ]
+    }
+  ]
+}
