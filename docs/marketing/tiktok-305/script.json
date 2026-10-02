@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can you delete the thing i made you"
+        },
+        {
+          "from": "me",
+          "text": "my birthday present??"
+        },
+        {
+          "from": "them",
+          "text": "i'll make you another one"
+        },
+        {
+          "from": "me",
+          "text": "why",
+          "status": "Read 20:15"
+        },
+        {
+          "from": "them",
+          "text": "chloe saw it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who's chloe"
+        },
+        {
+          "from": "them",
+          "text": "no one"
+        },
+        {
+          "from": "me",
+          "text": "then why does it matter if she saw it"
+        },
+        {
+          "from": "them",
+          "text": "she's being crazy about it"
+        },
+        {
+          "from": "me",
+          "text": "about what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the photos"
+        },
+        {
+          "from": "me",
+          "text": "they're of us"
+        },
+        {
+          "from": "them",
+          "text": "exactly"
+        },
+        {
+          "from": "me",
+          "text": "jake"
+        },
+        {
+          "from": "them",
+          "text": "can you just delete it pls"
+        }
+      ]
+    }
+  ]
+}
