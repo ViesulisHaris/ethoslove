@@ -1335,6 +1335,35 @@ A texting-story account: 83 photo posts in three weeks, a median of 138K views, 
 | 230 | the 2.4M lasagna post | "I play it at dinner so it isn't so quiet" (mum replays the birthday gift) |
 | 231 | the 1.8M "im dating Ethan" post | "he said he stayed up all night making it" (her gift, re-sent with the name changed) |
 
+### 294 to 303: toxic or sad enough to cry (2 Oct)
+
+The owner, 2 Oct: "none of the screenshots are doing well ... like how i said the toxic/manipulative cheating
+formula ... or like really sad like so people cry". Same cropped format, boyfriend and girlfriend. Each post
+has a single turn that reads in one go: no app mechanics to explain and no "i miss us" wistfulness.
+
+- **Toxic (294 to 298).** He lies with a real excuse ("I lent them to Sam", "Spam", "Sorry wrong chat"),
+  turns it on her ("Why are you always tracking me", "Why are you on my phone"), and love-bombs with the
+  gift. She already has the proof, and her last bubble is his own excuse handed back, with a 💅.
+- **Sad (299 to 303).** Grief, sacrifice, too late, forgetting. The gift is what is left of them: a gift
+  sent to a dead boyfriend's number, a birthday gift he scheduled before he died, the "for after" before
+  surgery, a promise kept alone at 25, and photos for someone who no longer remembers her.
+
+| | Kind | The turn | The last bubble |
+|---|---|---|---|
+| 294 | toxic | his AirPods are at Chloe's; "I lent them to Sam" | "sam's sat right next to me 💅" |
+| 295 | toxic | "I deleted hinge ages ago" | "you matched at 9:04 💅" (her best friend's test profile) |
+| 296 | toxic | "babe 😘" to the wrong chat; "My mum" | "did you make your mum one too 💅" |
+| 297 | toxic | "do not answer ❤️" is "Spam" | "we've been together 8 months / give her the link 💅" |
+| 298 | cheating | a gift from him on her friend's phone, "made by jake" | "you cropped me out of it" |
+| 299 | grief | an anniversary gift sent to his old number | "could you keep reading them" (a stranger has his number) |
+| 300 | grief | the birthday gift he scheduled in May arrives | "i still pay your phone bill so i can keep texting you" |
+| 301 | sacrifice | "we wanted different things"; surgery's at 7 | "which hospital" |
+| 302 | too late | "if we're both single at 25" | "I just wanted to keep my half of the promise" |
+| 303 | forgetting | after the accident he doesn't know her | "So I don't lose it again tomorrow" |
+
+**Post order:** 297, 299, 295, 303, 294, 301, 298, 302, 296, 300. One a night, in the evening, on the 14k
+account (rosie's newest post on its public grid is still from 26 Sept).
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
