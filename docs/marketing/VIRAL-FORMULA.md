@@ -1364,6 +1364,45 @@ has a single turn that reads in one go: no app mechanics to explain and no "i mi
 **Post order:** 297, 299, 295, 303, 294, 301, 298, 302, 296, 300. One a night, in the evening, on the 14k
 account (rosie's newest post on its public grid is still from 26 Sept).
 
+### What @you_sir_naim's big posts actually say (read 2 Oct), and 304 to 313
+
+The owner's reply to 294–303: "create better ones and dont please use this 💅". So I read the slides of their
+newest hits:
+
+| Views | Shape | What the chat says |
+|---|---|---|
+| 4.5M (689K likes, 1.1K comments, 24.6K saves) | 2 slides, 5 bubbles each, both in lowercase | "did you tell your mom we broke up" / "she just texted me asking what i want for christmas 😭" / "we broke up like 4 months ago" → "i haven't told her yet" / "because she still asks when you're coming over" |
+| 261K | 3 slides, the middle one their app (an AI friend) giving advice | "can u not post the pics of us from saturday" / "you literally posted the group ones" / "that's different" → "can u not make this weird" / "I'm not the one making it weird" |
+| 225K | 4 slides, 20 bubbles | "why did ur ex just send me a pic of your dog" … "She was waiting for her Uber" / "I wasn't timing her" … "then why did she caption it "missed him"" / "She meant the dog" / "and u liked it??" / "It's my dog" |
+| 206K | 6 slides, 25 bubbles | "can u delete your comment on my post" / "people from work follow me" / "they know u have a gf tho??" / "Who told you about Sophie" … "I worded it wrong" / "hello??" |
+| 131K, 197 comments | 2 slides, 4 bubbles each | "did u turn ur location off" / "Probably my battery" / "ur battery says 82%" / "why are you checking that" |
+
+What that means for ours:
+- **Something ordinary that just happened** opens every one: a Christmas text, a dog photo, a comment, the
+  location going off. Nothing needs explaining.
+- **No twist and no comeback.** The toxic ones end on his excuse ("It's my dog", "why are you checking that")
+  or on her question left on read ("hello??"). The room supplies the outrage. The sad one ends on one quiet
+  line about someone who never got over it.
+- **Lowercase on both sides**, one 😭 at most, never a 💅.
+- **Two slides, or a long argument** of four to six.
+- **The product sits in one slide at most**, and the 4.5M shows none. So 304–313 put the gift in only five of
+  the ten, as part of the story. The other five are reach posts.
+
+| | Kind | The last bubble | Gift |
+|---|---|---|---|
+| 304 | toxic | "it's the lighting" (his gift, a beach she's never been to, a blonde girl) | yes |
+| 305 | toxic | "exactly" / "can you just delete it pls" (chloe saw the birthday gift) | yes |
+| 306 | toxic | "why are you going through my bathroom" (pink toothbrush) | no |
+| 307 | toxic | "hello??" left on read (chloe on his ipad at night) | no |
+| 308 | toxic | "i'll send you the money" (two meals on her Uber to chloe's) | no |
+| 309 | sad | "her" (the dog still waits by the door at 6) | yes |
+| 310 | sad | "i deleted all of ours the day you left" | yes |
+| 311 | sad | "it doesn't matter now" (he never cancelled the anniversary table) | no |
+| 312 | sad | "to see if you still do" (the gift tells him when she opens it) | yes |
+| 313 | sad | "i don't have one where i look that happy" (lock screen) | no |
+
+**Post order:** 309, 304, 312, 307, 311, 305, 313, 308, 310, 306. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
