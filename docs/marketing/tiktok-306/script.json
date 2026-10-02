@@ -1,0 +1,57 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is there a pink toothbrush in your bathroom"
+        },
+        {
+          "from": "them",
+          "text": "it's yours"
+        },
+        {
+          "from": "me",
+          "text": "mine's blue"
+        },
+        {
+          "from": "them",
+          "text": "then it's my sister's"
+        },
+        {
+          "from": "me",
+          "text": "your sister lives in leeds"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "she visited"
+        },
+        {
+          "from": "me",
+          "text": "when"
+        },
+        {
+          "from": "them",
+          "text": "tuesday"
+        },
+        {
+          "from": "me",
+          "text": "you were \"sick\" tuesday",
+          "status": "Read 08:16"
+        },
+        {
+          "from": "them",
+          "text": "why are you going through my bathroom"
+        }
+      ]
+    }
+  ]
+}
