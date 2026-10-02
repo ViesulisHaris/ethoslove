@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Sorry, who is this?"
+        },
+        {
+          "from": "me",
+          "text": "it's maya"
+        },
+        {
+          "from": "me",
+          "text": "the doctor said photos might help"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "who we were 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          },
+          "status": "Read 21:16"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I watched it 4 times"
+        },
+        {
+          "from": "them",
+          "text": "I'm sorry. I don't remember you"
+        },
+        {
+          "from": "them",
+          "text": "But I wrote your name on my hand"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "So I don't lose it again tomorrow"
+        }
+      ]
+    }
+  ]
+}
