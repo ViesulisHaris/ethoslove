@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|03:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you opened it again"
+        },
+        {
+          "from": "me",
+          "text": "opened what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it tells me every time"
+        },
+        {
+          "from": "me",
+          "text": "oh",
+          "status": "Read 03:15"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are you up at 3am"
+        },
+        {
+          "from": "them",
+          "text": "i check it every night"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "to see if you still do"
+        }
+      ]
+    }
+  ]
+}
