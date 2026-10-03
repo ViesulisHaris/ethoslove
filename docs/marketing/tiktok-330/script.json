@@ -1,0 +1,104 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can you come over"
+        },
+        {
+          "from": "them",
+          "text": "i'm out with the boys"
+        },
+        {
+          "from": "me",
+          "text": "please"
+        },
+        {
+          "from": "me",
+          "text": "it's my grandad"
+        },
+        {
+          "from": "them",
+          "text": "oh shit",
+          "status": "Read 21:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you ok"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "i'll come first thing tomorrow"
+        },
+        {
+          "from": "me",
+          "text": "tomorrow?"
+        },
+        {
+          "from": "them",
+          "text": "it's my mate's 21st i can't just leave"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "i made this for our anniversary next week"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "1 year 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you can have it early"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why now"
+        },
+        {
+          "from": "me",
+          "text": "because i won't be there next week"
+        },
+        {
+          "from": "them",
+          "text": "what does that mean"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    }
+  ]
+}
