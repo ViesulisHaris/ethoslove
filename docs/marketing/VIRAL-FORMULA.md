@@ -1437,6 +1437,30 @@ Three sad engines, and the gift is in every one. All are boyfriend and girlfrien
 
 **Post order:** 316, 319, 314, 322, 317, 320, 321, 315, 318, 323. One a night, in the evening, on the 14k account.
 
+### 324 to 333: Maya and Leo only, three or four slides (3 Oct)
+
+The owner: "the only names are maya and leo rememebr no other names for the links. make it good virality 3-4
+slides 4-5 ... make it realistic". The rules from here on:
+- **Maya (the phone, blue) and Leo (grey), and nobody else has a name.** Not in the chat, not in a link's title,
+  not on the link card. Everyone else is "your friend", "the girl", "my mate", or an emoji contact (🍑).
+- **Three or four slides of four or five bubbles.** That is @you_sir_naim's long-argument length (225K was 4
+  slides of 5). Every post has the tryethos link inside the story, and there is no 💅.
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 324 | toxic | "what's that on your neck in your story" | "why are you zooming in on my neck" (it was "a header"; he plays defence) |
+| 325 | toxic | "why are you at the party" | "enjoy the party leo" (his gift is titled "stay in tonight") |
+| 326 | toxic | "your friend just texted me by accident" | "\"she's going to kill you\"", read 19:06 |
+| 327 | toxic | "who's 🍑 in your phone" | "why are you even on my ipad" ("u up" at 2am, "wear the black one") |
+| 328 | toxic | "why is the girl in your friend's story wearing my hoodie" | "maybe her name's maya" |
+| 329 | sad | "why is my phone bill £0 this month" | "they're the last things with both our names on them" |
+| 330 | sad | "can you come over" (her grandad) | "because i won't be there next week" / "maya" |
+| 331 | sad | "i finally finished it" | "you were the nobody" |
+| 332 | sad | "why have you opened it 214 times" | "i can't sleep until you do" |
+| 333 | sad | "your location says sydney" | "in case you did" |
+
+**Post order:** 326, 332, 328, 330, 324, 331, 325, 333, 327, 329. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
