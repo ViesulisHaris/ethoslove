@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:11",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is my phone bill £0 this month"
+        },
+        {
+          "from": "them",
+          "text": "is it"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "are you still paying it"
+        },
+        {
+          "from": "them",
+          "text": "you're still on my plan"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "we broke up in june"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "take me off it"
+        },
+        {
+          "from": "them",
+          "text": "i tried"
+        },
+        {
+          "from": "them",
+          "text": "i couldn't press it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "maya & leo 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "this and the phone bill"
+        },
+        {
+          "from": "them",
+          "text": "they're the last things with both our names on them"
+        }
+      ]
+    }
+  ]
+}
