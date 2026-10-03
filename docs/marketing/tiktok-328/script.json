@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:37",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is the girl in your friend's story wearing my hoodie"
+        },
+        {
+          "from": "them",
+          "text": "what hoodie"
+        },
+        {
+          "from": "me",
+          "text": "the one with MAYA on the back"
+        },
+        {
+          "from": "them",
+          "text": "loads of people have that hoodie",
+          "status": "Read 00:38"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's custom"
+        },
+        {
+          "from": "me",
+          "text": "you got it made for me"
+        },
+        {
+          "from": "them",
+          "text": "you're being paranoid"
+        },
+        {
+          "from": "them",
+          "text": "i made you this today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "then why is she wearing it in your bed"
+        },
+        {
+          "from": "them",
+          "text": "that's not my bed"
+        },
+        {
+          "from": "me",
+          "text": "that's your duvet leo"
+        },
+        {
+          "from": "them",
+          "text": "maybe her name's maya"
+        }
+      ]
+    }
+  ]
+}
