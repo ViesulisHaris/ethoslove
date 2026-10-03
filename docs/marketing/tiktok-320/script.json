@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can you call me"
+        },
+        {
+          "from": "them",
+          "text": "in a game rn"
+        },
+        {
+          "from": "me",
+          "text": "please i'm not okay",
+          "status": "Read 22:40"
+        },
+        {
+          "from": "them",
+          "text": "after this match"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:51",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok calling now"
+        },
+        {
+          "from": "me",
+          "text": "it's fine"
+        },
+        {
+          "from": "them",
+          "text": "?"
+        },
+        {
+          "from": "me",
+          "text": "i needed you an hour ago"
+        }
+      ]
+    }
+  ]
+}
