@@ -1,0 +1,53 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:22",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my landlord said my rent's paid till december"
+        },
+        {
+          "from": "them",
+          "text": "that's good"
+        },
+        {
+          "from": "me",
+          "text": "jake"
+        },
+        {
+          "from": "me",
+          "text": "did you do this",
+          "status": "Read 10:23"
+        },
+        {
+          "from": "them",
+          "text": "you said you were struggling"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "we broke up in august"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "why would you do that"
+        },
+        {
+          "from": "them",
+          "text": "you still had to live somewhere"
+        }
+      ]
+    }
+  ]
+}
