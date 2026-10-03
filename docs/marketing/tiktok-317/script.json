@@ -1,0 +1,57 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:10",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you okay"
+        },
+        {
+          "from": "me",
+          "text": "yeah why"
+        },
+        {
+          "from": "them",
+          "text": "you're at the hospital"
+        },
+        {
+          "from": "me",
+          "text": "how do you know that",
+          "status": "Read 23:11"
+        },
+        {
+          "from": "them",
+          "text": "you never turned off sharing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's sophie. she's fine"
+        },
+        {
+          "from": "them",
+          "text": "ok good"
+        },
+        {
+          "from": "them",
+          "text": "sorry"
+        },
+        {
+          "from": "me",
+          "text": "you still check it?"
+        },
+        {
+          "from": "them",
+          "text": "every night. to make sure you got home"
+        }
+      ]
+    }
+  ]
+}
