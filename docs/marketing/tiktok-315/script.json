@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know we don't talk anymore"
+        },
+        {
+          "from": "me",
+          "text": "happy birthday"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy 23rd 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          },
+          "status": "Read 23:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "how did you remember"
+        },
+        {
+          "from": "me",
+          "text": "i always remember"
+        },
+        {
+          "from": "me",
+          "text": "did you do anything nice"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "you're the only one who remembered"
+        }
+      ]
+    }
+  ]
+}
