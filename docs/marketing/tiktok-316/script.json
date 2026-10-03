@@ -1,0 +1,62 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|17:30",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my little brother asked if you're coming to his party"
+        },
+        {
+          "from": "them",
+          "text": "what did you say"
+        },
+        {
+          "from": "me",
+          "text": "i didn't know what to say",
+          "status": "Read 17:31"
+        },
+        {
+          "from": "them",
+          "text": "tell him i can't make it"
+        },
+        {
+          "from": "them",
+          "text": "but give him this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 8th theo 🦖",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Theo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you made him one?"
+        },
+        {
+          "from": "them",
+          "text": "i promised him in march"
+        },
+        {
+          "from": "me",
+          "text": "we broke up in may"
+        },
+        {
+          "from": "them",
+          "text": "i didn't break up with him"
+        }
+      ]
+    }
+  ]
+}
