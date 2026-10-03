@@ -46,6 +46,28 @@
           "from": "me",
           "text": "you were \"sick\" tuesday",
           "status": "Read 08:16"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i was making you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "made this for u 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "with her there?"
         },
         {
           "from": "them",

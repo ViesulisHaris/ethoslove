@@ -11,11 +11,20 @@
         },
         {
           "from": "me",
-          "text": "my birthday present??"
+          "text": "this?"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "happy 20th maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
         },
         {
           "from": "them",
-          "text": "i'll make you another one"
+          "text": "yeah. i'll make you another one"
         },
         {
           "from": "me",

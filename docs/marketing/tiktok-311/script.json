@@ -32,9 +32,27 @@
           "text": "i couldn't"
         },
         {
-          "from": "me",
-          "text": "why"
+          "from": "them",
+          "text": "i made you this for that night"
         },
+        {
+          "from": "them",
+          "link": {
+            "title": "3 years 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why does it end with a question mark"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
         {
           "from": "them",
           "text": "i was going to ask you there"

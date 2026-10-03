@@ -1,19 +1,21 @@
-# 320 · an hour ago
+# 320 · you still haven't opened it
 
 **Sad: she needed him and he said no.** Copies @you_sir_naim's 3.2M ("mom can you come get me" → "Maybe next time you'll listen to me"): she asks for help, he answers with "i told you", and the post ends on his cold line or her message left on read. The room is furious for her.
-**The turn:** "can you call me", "in a game rn", "please i'm not okay", "after this match". An hour later he calls. She needed him an hour ago.
-**The gift:** none. Their sad hits don't show a product; this one is for reach.
+**The turn:** Their first anniversary. She sends him the gift she made and asks him to call. He's in a game, "after this match". An hour later he calls. He still hasn't opened it.
+**The gift:** in the chat as a link, inside the story. No gift frames.
 **Where to post:** the 14k account, in the evening.
 
 ## Caption
 
-#boyfriend #sad #fyp
+#boyfriend #sad #anniversary #fyp
 
 Hashtags only. Never the website in the caption, and no 💅.
 
 ## Pinned comment (in character, never a brand)
 
-we broke up the next day
+he opened it the next morning
+
+If someone asks what the link is, reply "tryethos" and pin that reply.
 
 ## Files
 

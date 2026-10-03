@@ -45,6 +45,28 @@
         },
         {
           "from": "them",
+          "text": "it was meant to be our flat"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you this for the day we moved in"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "home 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
           "text": "you still had to live somewhere"
         }
       ]

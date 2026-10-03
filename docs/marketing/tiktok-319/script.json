@@ -49,6 +49,24 @@
         {
           "from": "them",
           "text": "should've thought about that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you made me this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "i'll always come get you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
         },
         {
           "from": "me",

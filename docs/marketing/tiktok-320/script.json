@@ -7,16 +7,24 @@
       "messages": [
         {
           "from": "me",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "1 year of us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
           "text": "can you call me"
         },
         {
           "from": "them",
           "text": "in a game rn"
-        },
-        {
-          "from": "me",
-          "text": "please i'm not okay",
-          "status": "Read 22:40"
         },
         {
           "from": "them",
@@ -42,7 +50,7 @@
         },
         {
           "from": "me",
-          "text": "i needed you an hour ago"
+          "text": "you still haven't opened it"
         }
       ]
     }

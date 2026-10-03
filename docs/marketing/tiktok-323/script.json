@@ -52,6 +52,32 @@
           "text": "i used to call it when i couldn't sleep"
         }
       ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you can't sleep 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "i made this the week you left"
+        },
+        {
+          "from": "me",
+          "text": "why didn't you send it"
+        },
+        {
+          "from": "them",
+          "text": "i thought you'd stopped needing me"
+        }
+      ]
     }
   ]
 }

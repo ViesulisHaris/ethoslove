@@ -1385,21 +1385,23 @@ What that means for ours:
   line about someone who never got over it.
 - **Lowercase on both sides**, one 😭 at most, never a 💅.
 - **Two slides, or a long argument** of four to six.
-- **The product sits in one slide at most**, and the 4.5M shows none. So 304–313 put the gift in only five of
-  the ten, as part of the story. The other five are reach posts.
+- **Their product sits in one slide at most**, and the 4.5M shows none. Ours always has the gift: the owner, 3 Oct,
+  "half of them dont even have the tryethos link". Every post carries the link, inside the story. In the toxic
+  ones it is his alibi or his love-bomb ("i was making you this", "babe i made you this today"). In the sad ones
+  it is the thing that holds the habit or the broken promise.
 
 | | Kind | The last bubble | Gift |
 |---|---|---|---|
 | 304 | toxic | "it's the lighting" (his gift, a beach she's never been to, a blonde girl) | yes |
 | 305 | toxic | "exactly" / "can you just delete it pls" (chloe saw the birthday gift) | yes |
-| 306 | toxic | "why are you going through my bathroom" (pink toothbrush) | no |
-| 307 | toxic | "hello??" left on read (chloe on his ipad at night) | no |
-| 308 | toxic | "i'll send you the money" (two meals on her Uber to chloe's) | no |
+| 306 | toxic | "why are you going through my bathroom" (pink toothbrush) | yes |
+| 307 | toxic | "hello??" left on read (chloe on his ipad at night) | yes |
+| 308 | toxic | "i'll send you the money" (two meals on her Uber to chloe's) | yes |
 | 309 | sad | "her" (the dog still waits by the door at 6) | yes |
 | 310 | sad | "i deleted all of ours the day you left" | yes |
-| 311 | sad | "it doesn't matter now" (he never cancelled the anniversary table) | no |
+| 311 | sad | "it doesn't matter now" (he never cancelled the anniversary table) | yes |
 | 312 | sad | "to see if you still do" (the gift tells him when she opens it) | yes |
-| 313 | sad | "i don't have one where i look that happy" (lock screen) | no |
+| 313 | sad | "i don't have one where i look that happy" (lock screen) | yes |
 
 **Post order:** 309, 304, 312, 307, 311, 305, 313, 308, 310, 306. One a night, in the evening, on the 14k account.
 
@@ -1413,7 +1415,7 @@ same day:
 | 2.8M (577K likes, 2K comments) | "are you coming home this weekend" / "probably not" / "okay" / "why" / "no reason" → "mom just tell me 😭" / "I made too much lasagna again" / "you can freeze it" / "I know" / "I just keep forgetting you don't live here anymore" |
 | 3.2M (520K likes, 3.6K comments) | "mom can you come get me" / "You told me you weren't going." / "something happened and i just wanna go home" → "Then call whoever took you there." / "im literally sitting outside by myself" / "Maybe next time you'll listen to me." / "And you said you weren't going to that party." |
 
-Three sad engines. All are boyfriend and girlfriend: a parent can be mentioned, but nobody texts their mum.
+Three sad engines, and the gift is in every one. All are boyfriend and girlfriend: a parent can be mentioned, but nobody texts their mum.
 - **The habit that outlived them** (2.8M, 4.5M). A small everyday thing, a "no reason", and one quiet line
   saying one of them never stopped.
 - **She needed him and he said no** (3.2M). She asks for help, he answers with "i told you", and the post ends
@@ -1422,16 +1424,16 @@ Three sad engines. All are boyfriend and girlfriend: a parent can be mentioned, 
 
 | | Engine | The last bubble | Gift |
 |---|---|---|---|
-| 314 | habit | "i know. i still order yours" (the café, every Saturday) | no |
+| 314 | habit | "i know. i still order yours" (the café, every Saturday) | yes |
 | 315 | habit | "you're the only one who remembered" (her birthday gift to her ex) | yes |
 | 316 | too late | "i didn't break up with him" (his gift for her little brother's 8th) | yes |
-| 317 | habit | "every night. to make sure you got home" (location still shared) | no |
-| 318 | habit | "my bathroom stopped smelling like you" (her coconut shampoo) | no |
-| 319 | cold | "please", read at 01:14 (the last train gone, 4% battery) | no |
-| 320 | cold | "i needed you an hour ago" ("after this match") | no |
-| 321 | too late | "you still had to live somewhere" (he paid her rent to December) | no |
+| 317 | habit | "every night. to make sure you got home" (location still shared) | yes |
+| 318 | habit | "my bathroom stopped smelling like you" (her coconut shampoo) | yes |
+| 319 | cold | "please", read at 01:14 (the last train gone, 4% battery) | yes |
+| 320 | cold | "you still haven't opened it" (her 1-year gift, "after this match") | yes |
+| 321 | too late | "you still had to live somewhere" (he paid her rent to December) | yes |
 | 322 | too late | "one for everything i was going to miss" ("open when you get the job") | yes |
-| 323 | habit | "i used to call it when i couldn't sleep" (his voicemail) | no |
+| 323 | habit | "i thought you'd stopped needing me" (his voicemail; the sleep gift he never sent) | yes |
 
 **Post order:** 316, 319, 314, 322, 317, 320, 321, 315, 318, 323. One a night, in the evening, on the 14k account.
 

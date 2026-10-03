@@ -46,10 +46,32 @@
         {
           "from": "them",
           "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i still have your voice in this"
         },
         {
           "from": "them",
-          "text": "my bathroom stopped smelling like you"
+          "link": {
+            "title": "for jake 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "them",
+          "text": "and your photos"
+        },
+        {
+          "from": "them",
+          "text": "but my bathroom stopped smelling like you"
         }
       ]
     }

@@ -44,6 +44,24 @@
           "text": "i tried"
         },
         {
+          "from": "them",
+          "text": "i even went through the thing you made me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for jake 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
           "from": "me",
           "text": "and"
         },

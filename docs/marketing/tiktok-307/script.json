@@ -60,12 +60,21 @@
           "text": "why are you being like this"
         },
         {
-          "from": "me",
-          "text": "who is she"
+          "from": "them",
+          "text": "i literally made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "my favourite person 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
         },
         {
           "from": "me",
-          "text": "jake"
+          "text": "who is she"
         },
         {
           "from": "me",

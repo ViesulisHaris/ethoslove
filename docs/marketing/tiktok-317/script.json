@@ -46,6 +46,24 @@
         {
           "from": "me",
           "text": "you still check it?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you made me promise"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "promise me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
         },
         {
           "from": "them",

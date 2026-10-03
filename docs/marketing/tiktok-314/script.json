@@ -15,12 +15,21 @@
         },
         {
           "from": "them",
-          "text": "no reason"
+          "text": "i was there today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "saturdays with you ☕️",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
         },
         {
           "from": "me",
-          "text": "jake",
-          "status": "Read 09:15"
+          "text": "you still open that?",
+          "status": "Read 09:16"
         }
       ]
     },
