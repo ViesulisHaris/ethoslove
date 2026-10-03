@@ -1,0 +1,53 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|09:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you still going to the café on saturdays"
+        },
+        {
+          "from": "me",
+          "text": "sometimes why"
+        },
+        {
+          "from": "them",
+          "text": "no reason"
+        },
+        {
+          "from": "me",
+          "text": "jake",
+          "status": "Read 09:15"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the barista asked where you were"
+        },
+        {
+          "from": "me",
+          "text": "what did you say"
+        },
+        {
+          "from": "them",
+          "text": "that you were running late"
+        },
+        {
+          "from": "me",
+          "text": "it's been 4 months"
+        },
+        {
+          "from": "them",
+          "text": "i know. i still order yours"
+        }
+      ]
+    }
+  ]
+}
