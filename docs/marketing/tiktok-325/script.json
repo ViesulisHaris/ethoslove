@@ -1,0 +1,103 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:18",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are you at the party"
+        },
+        {
+          "from": "them",
+          "text": "what party"
+        },
+        {
+          "from": "me",
+          "text": "the one you told me not to go to"
+        },
+        {
+          "from": "them",
+          "text": "who said i'm there"
+        },
+        {
+          "from": "me",
+          "text": "you're in 4 stories"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i'm just dropping something off"
+        },
+        {
+          "from": "me",
+          "text": "for 3 hours?"
+        },
+        {
+          "from": "them",
+          "text": "it's different for me"
+        },
+        {
+          "from": "me",
+          "text": "how"
+        },
+        {
+          "from": "them",
+          "text": "you know what guys are like there"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so why are you there"
+        },
+        {
+          "from": "them",
+          "text": "i made you this so you wouldn't be bored tonight"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "stay in tonight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "so i'd stay home"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "that's not what i said"
+        },
+        {
+          "from": "me",
+          "text": "it's literally the title"
+        },
+        {
+          "from": "them",
+          "text": "you're twisting it"
+        },
+        {
+          "from": "me",
+          "text": "enjoy the party leo"
+        }
+      ]
+    }
+  ]
+}
