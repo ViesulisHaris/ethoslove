@@ -1403,6 +1403,38 @@ What that means for ours:
 
 **Post order:** 309, 304, 312, 307, 311, 305, 313, 308, 310, 306. One a night, in the evening, on the 14k account.
 
+### 314 to 323: really sad (3 Oct)
+
+The owner: "create more imessages good that will go viral like really sad". Two more of their biggest, read the
+same day:
+
+| Views | The chat |
+|---|---|
+| 2.8M (577K likes, 2K comments) | "are you coming home this weekend" / "probably not" / "okay" / "why" / "no reason" → "mom just tell me 😭" / "I made too much lasagna again" / "you can freeze it" / "I know" / "I just keep forgetting you don't live here anymore" |
+| 3.2M (520K likes, 3.6K comments) | "mom can you come get me" / "You told me you weren't going." / "something happened and i just wanna go home" → "Then call whoever took you there." / "im literally sitting outside by myself" / "Maybe next time you'll listen to me." / "And you said you weren't going to that party." |
+
+Three sad engines. All are boyfriend and girlfriend: a parent can be mentioned, but nobody texts their mum.
+- **The habit that outlived them** (2.8M, 4.5M). A small everyday thing, a "no reason", and one quiet line
+  saying one of them never stopped.
+- **She needed him and he said no** (3.2M). She asks for help, he answers with "i told you", and the post ends
+  on his cold line or her message left on read.
+- **The quiet thing he did, found out too late.**
+
+| | Engine | The last bubble | Gift |
+|---|---|---|---|
+| 314 | habit | "i know. i still order yours" (the café, every Saturday) | no |
+| 315 | habit | "you're the only one who remembered" (her birthday gift to her ex) | yes |
+| 316 | too late | "i didn't break up with him" (his gift for her little brother's 8th) | yes |
+| 317 | habit | "every night. to make sure you got home" (location still shared) | no |
+| 318 | habit | "my bathroom stopped smelling like you" (her coconut shampoo) | no |
+| 319 | cold | "please", read at 01:14 (the last train gone, 4% battery) | no |
+| 320 | cold | "i needed you an hour ago" ("after this match") | no |
+| 321 | too late | "you still had to live somewhere" (he paid her rent to December) | no |
+| 322 | too late | "one for everything i was going to miss" ("open when you get the job") | yes |
+| 323 | habit | "i used to call it when i couldn't sleep" (his voicemail) | no |
+
+**Post order:** 316, 319, 314, 322, 317, 320, 321, 315, 318, 323. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
