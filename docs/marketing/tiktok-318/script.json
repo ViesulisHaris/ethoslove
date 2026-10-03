@@ -1,0 +1,57 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:05",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what was the shampoo you used to use"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just tell me"
+        },
+        {
+          "from": "me",
+          "text": "the coconut one",
+          "status": "Read 19:06"
+        },
+        {
+          "from": "them",
+          "text": "thanks"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why do you need it"
+        },
+        {
+          "from": "them",
+          "text": "i bought some"
+        },
+        {
+          "from": "me",
+          "text": "you hate coconut"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "my bathroom stopped smelling like you"
+        }
+      ]
+    }
+  ]
+}
