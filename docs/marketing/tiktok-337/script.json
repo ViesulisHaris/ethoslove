@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:22",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u still at your ex's"
+        },
+        {
+          "from": "them",
+          "text": "i'm at the boys'"
+        },
+        {
+          "from": "me",
+          "text": "your location's been at hers for 4 hours"
+        },
+        {
+          "from": "them",
+          "text": "she lives near the boys"
+        },
+        {
+          "from": "me",
+          "text": "in her flat?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i'm helping her move a sofa"
+        },
+        {
+          "from": "me",
+          "text": "at 1am"
+        },
+        {
+          "from": "them",
+          "text": "it's a big sofa"
+        },
+        {
+          "from": "them",
+          "text": "i made you this before i went"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "she lives on the 3rd floor"
+        },
+        {
+          "from": "them",
+          "text": "exactly"
+        },
+        {
+          "from": "them",
+          "text": "that's why it's taking 4 hours"
+        }
+      ]
+    }
+  ]
+}
