@@ -1,0 +1,86 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:05",
+      "messages": [
+        {
+          "from": "them",
+          "text": "4 months today"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "4 months of maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i need to tell u something"
+        },
+        {
+          "from": "them",
+          "text": "go on"
+        },
+        {
+          "from": "me",
+          "text": "i've already named our kids"
+        },
+        {
+          "from": "them",
+          "text": "we've been together 4 months"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "how many kids"
+        },
+        {
+          "from": "me",
+          "text": "3"
+        },
+        {
+          "from": "me",
+          "text": "and a dog"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "what are their names"
+        }
+      ]
+    }
+  ]
+}
