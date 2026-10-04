@@ -1,0 +1,103 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u mad at me"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "u replied ok to my paragraph"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "took me all week"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i need to tell u something"
+        },
+        {
+          "from": "them",
+          "text": "go on"
+        },
+        {
+          "from": "me",
+          "text": "i already told everyone we broke up"
+        },
+        {
+          "from": "them",
+          "text": "we didn't break up"
+        },
+        {
+          "from": "me",
+          "text": "i know that now"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "who's everyone"
+        },
+        {
+          "from": "me",
+          "text": "my mum. my sister. the group chat"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "un-tell them"
+        }
+      ]
+    }
+  ]
+}
