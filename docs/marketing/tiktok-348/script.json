@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:44",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is the receipt from our first date in your wallet"
+        },
+        {
+          "from": "them",
+          "text": "you went through my wallet?"
+        },
+        {
+          "from": "me",
+          "text": "it fell out"
+        },
+        {
+          "from": "them",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "leo it's from 2024"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i kept all of them"
+        },
+        {
+          "from": "me",
+          "text": "all of what"
+        },
+        {
+          "from": "them",
+          "text": "every date"
+        },
+        {
+          "from": "me",
+          "text": "how many"
+        },
+        {
+          "from": "them",
+          "text": "84"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i put them in this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "84 dates 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "for when you think i don't remember"
+        }
+      ]
+    }
+  ]
+}
