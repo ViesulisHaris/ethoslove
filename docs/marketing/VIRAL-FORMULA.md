@@ -1461,6 +1461,31 @@ slides 4-5 ... make it realistic". The rules from here on:
 
 **Post order:** 326, 332, 328, 330, 324, 331, 325, 333, 327, 329. One a night, in the evening, on the 14k account.
 
+### 334 to 343: rosie's hits, cooked with the new formulas (4 Oct)
+
+The owner: "look at my rosie acount which ones went viral etc. and like put other formulas and cook it".
+Rosie on 4 Oct: the old hits keep their views (149 1.3M, 277.7K, 183K), but the carousel posted there on 3 Oct at
+20:48 had **2 views** a day later. The account is still held back, so these are for the 14k account.
+
+Each one takes one of rosie's proven openings and gives it a turn from @you_sir_naim's formulas: the habit
+that outlived them, he is the problem with excuses that get worse, the quiet last line. Maya and Leo only,
+three or four slides, the link in every one.
+
+| | Rosie hit it cooks | Engine | The last bubble |
+|---|---|---|---|
+| 334 | 149 (cold, "this", her confession) | comments | "un-tell them" (she'd already told everyone they broke up) |
+| 335 | 30 (midnight, "first one to say it") | saves + sad | "this is the one i can still keep" (they broke up in May) |
+| 336 | 192 / 208 (her one-word reply quoted) | comments | "maya you said was" (she was going to end it tonight) |
+| 337 | 170 (his location, 4 hours) + the 225K's excuses | toxic | "that's why it's taking 4 hours" (a sofa, 3rd floor) |
+| 338 | 102 ("I PASSED", first person i told) | sad | "she wouldn't like it" |
+| 339 | 03 ("bin day") + 30's midnight | saves | "the bins are out too" |
+| 340 | the 4.5M (family who weren't told) | sad | "and she still calls you her sister" |
+| 341 | 138 (cat court) | shares | "court adjourned" (guilty on all counts, dinner on her) |
+| 342 | 149 + the comments (Maya in the wrong) | comments | "did he reply" (she sent his gift to her ex first) |
+| 343 | the sad engines | sad | "keep it anyway" (he's outside; she's not alone) |
+
+**Post order:** 334, 339, 343, 337, 335, 342, 341, 338, 336, 340. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
