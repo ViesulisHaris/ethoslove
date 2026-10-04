@@ -1,0 +1,81 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:30",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do u know what tomorrow is"
+        },
+        {
+          "from": "them",
+          "text": "thursday"
+        },
+        {
+          "from": "me",
+          "text": "and"
+        },
+        {
+          "from": "them",
+          "text": "bin day"
+        },
+        {
+          "from": "me",
+          "text": "wow",
+          "status": "Read 21:31"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:59",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "go put the bins out"
+        },
+        {
+          "from": "them",
+          "text": "look at your phone in 1 min"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Fri|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 2 years"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "730 days of maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo you said bin day"
+        },
+        {
+          "from": "them",
+          "text": "the bins are out too"
+        }
+      ]
+    }
+  ]
+}
