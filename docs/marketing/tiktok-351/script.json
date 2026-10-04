@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can you open something"
+        },
+        {
+          "from": "me",
+          "text": "leo it's late"
+        },
+        {
+          "from": "them",
+          "text": "please"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the thing i never said 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "what is this",
+          "status": "Read 23:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the voice note at the end"
+        },
+        {
+          "from": "me",
+          "text": "you said it"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "2 years i said it first"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why now"
+        },
+        {
+          "from": "them",
+          "text": "i thought i had time"
+        },
+        {
+          "from": "me",
+          "text": "you had 2 years"
+        }
+      ]
+    }
+  ]
+}
