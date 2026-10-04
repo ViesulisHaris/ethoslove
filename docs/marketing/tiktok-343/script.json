@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "look outside"
+        },
+        {
+          "from": "me",
+          "text": "leo what are you doing"
+        },
+        {
+          "from": "them",
+          "text": "i finished it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "i wanted to give it to you in person"
+        },
+        {
+          "from": "me",
+          "text": "you can't be here"
+        },
+        {
+          "from": "them",
+          "text": "5 minutes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo please go home"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "i'm not alone"
+        },
+        {
+          "from": "them",
+          "text": "oh"
+        },
+        {
+          "from": "them",
+          "text": "keep it anyway"
+        }
+      ]
+    }
+  ]
+}
