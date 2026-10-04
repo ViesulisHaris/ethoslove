@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|14:03",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I PASSED"
+        },
+        {
+          "from": "them",
+          "text": "your test??"
+        },
+        {
+          "from": "me",
+          "text": "first time"
+        },
+        {
+          "from": "them",
+          "text": "i knew you would"
+        },
+        {
+          "from": "me",
+          "text": "you're still the first person i told"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you something for this"
+        },
+        {
+          "from": "them",
+          "text": "ages ago"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you pass 🚗",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you kept it?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i couldn't delete it"
+        },
+        {
+          "from": "me",
+          "text": "come for a drive with me"
+        },
+        {
+          "from": "them",
+          "text": "i can't"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "she wouldn't like it"
+        }
+      ]
+    }
+  ]
+}
