@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|07:31",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why do you start typing every morning"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "7:30. every day. then you stop"
+        },
+        {
+          "from": "them",
+          "text": "you can see that?"
+        },
+        {
+          "from": "me",
+          "text": "for 3 months leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i type good morning"
+        },
+        {
+          "from": "them",
+          "text": "then i remember"
+        },
+        {
+          "from": "me",
+          "text": "remember what"
+        },
+        {
+          "from": "them",
+          "text": "that i can't anymore"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made 30 of these"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "good morning maya ☀️",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "one for every morning"
+        },
+        {
+          "from": "them",
+          "text": "i got to send 4"
+        }
+      ]
+    }
+  ]
+}
