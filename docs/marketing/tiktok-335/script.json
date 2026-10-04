@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "leo it's midnight"
+        },
+        {
+          "from": "them",
+          "text": "stay awake 2 more mins"
+        },
+        {
+          "from": "me",
+          "text": "we broke up in may"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "first one to say it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 22nd maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why do you still do this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i promised you i'd always be first"
+        },
+        {
+          "from": "me",
+          "text": "you also promised forever"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "this is the one i can still keep"
+        }
+      ]
+    }
+  ]
+}
