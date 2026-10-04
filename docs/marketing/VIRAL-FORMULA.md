@@ -1486,6 +1486,27 @@ three or four slides, the link in every one.
 
 **Post order:** 334, 339, 343, 337, 335, 342, 341, 338, 336, 340. One a night, in the evening, on the 14k account.
 
+### 344 to 353: ten more, same rules (4 Oct)
+
+Maya and Leo only, three or four slides, the link inside every story, no 💅. New things she notices: a
+booking.com email, a snap score, a Spotify Jam at 2am, someone typing every morning at 7:30, a receipt in his
+wallet, a bakery calling about a cake.
+
+| | Engine | The last bubble |
+|---|---|---|
+| 344 | toxic | "why are you reading my emails" (a "work trip", 2 adults, king bed; his gift is "while i'm away") |
+| 345 | comments | "what do i need for a 10" (she told her friends he was a 6) |
+| 346 | sad | "i got to send 4" (30 good-morning gifts; he still starts typing at 7:30) |
+| 347 | toxic | "you don't own a song maya" (their song, in a Jam with 🦋 at 2am) |
+| 348 | saves | "for when you think i don't remember" (84 date receipts, kept) |
+| 349 | comments | "what are their names" (4 months in, she's named their kids) |
+| 350 | toxic | "why are you watching my snap score" (+300 while "asleep") |
+| 351 | sad | "you had 2 years" (he finally says it, in a voice note, after she's gone) |
+| 352 | shares | "that's a different cookie" (a fortune cookie apology) |
+| 353 | sad | "i didn't want you to think nobody planned it" (the cake he ordered in June) |
+
+**Post order:** 346, 350, 345, 353, 347, 348, 351, 344, 349, 352. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
