@@ -1,0 +1,86 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:48",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you opened my snap 6 hours ago"
+        },
+        {
+          "from": "them",
+          "text": "i fell asleep"
+        },
+        {
+          "from": "me",
+          "text": "your snap score went up 300 since"
+        },
+        {
+          "from": "them",
+          "text": "streaks"
+        },
+        {
+          "from": "me",
+          "text": "with who"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the boys"
+        },
+        {
+          "from": "me",
+          "text": "the boys don't do streaks with you"
+        },
+        {
+          "from": "them",
+          "text": "they do now"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "i was making you this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "for 6 hours?"
+        },
+        {
+          "from": "them",
+          "text": "it's very detailed"
+        },
+        {
+          "from": "me",
+          "text": "300 snaps detailed?"
+        },
+        {
+          "from": "them",
+          "text": "why are you watching my snap score"
+        }
+      ]
+    }
+  ]
+}
