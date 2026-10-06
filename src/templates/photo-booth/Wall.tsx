@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
-import { backgroundMusic } from "@/lib/gift/music";
+import { appleMusicTrackUrl, backgroundMusic, isCatalogPreview } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { giftString, useGiftStrings } from "../_shared/i18n";
 import type { GiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -15,7 +15,7 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScriptLines, ScrollHint, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
-import { CARD_KEYFRAMES, MusicCard, Snippet, Stamp } from "../_shared/collage/cards";
+import { CARD_KEYFRAMES, MusicCard, PreviewMusicCard, Snippet, Stamp } from "../_shared/collage/cards";
 import { scriptLines } from "../_shared/collage/paper";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
 import { Badge, CurlArrow, MarkerHeart, Postmark, StampHeart, Strip } from "./art";
@@ -93,6 +93,8 @@ export function Wall({ data, fields, booth, frames, names, date, mode, still, un
   const secondFrames = second.length ? stripFrames(second) : null;
   const spots = scatterSpots(pinned.length);
   const song = backgroundMusic(data.music);
+  // A real song from Apple gets the same card, heard only on a tap, and the end screen leaves its own out.
+  const catalog = isCatalogPreview(data.music) && appleMusicTrackUrl(data.music, data.locale) ? data.music : undefined;
   const open = preview ? undefined : setActive;
   const context = useMemo(() => ({ container: scroller, still, unit }), [still, unit]);
   const line = fields.line?.trim() || w.line;
@@ -281,10 +283,14 @@ export function Wall({ data, fields, booth, frames, names, date, mode, still, un
             </section>
 
             <div className="relative z-[2] mt-[calc(6*var(--p))] flex flex-col gap-[calc(7*var(--p))] px-[calc(6*var(--p))]">
-              {song?.title ? (
+              {song?.title || catalog ? (
                 <div className="relative" style={{ rotate: "-1.5deg" }}>
                   <Tape color={booth.tape} width={16} className="-top-[calc(1.8*var(--p))] left-[40%] z-[2] rotate-2" />
-                  <MusicCard music={song} audio={audio} cover={data.photos[0]} live={!preview} labels={{ pause: w.pause, play: w.play }} colors={{ card: "#FFFDF8", ink: WALL.ink, soft: "#9A6A70", bar: WALL.red }} />
+                  {catalog ? (
+                    <PreviewMusicCard music={catalog} locale={data.locale} cover={data.photos[0]} live={!preview} colors={{ card: "#FFFDF8", ink: WALL.ink, soft: "#9A6A70", bar: WALL.red }} />
+                  ) : song ? (
+                    <MusicCard music={song} audio={audio} cover={data.photos[0]} live={!preview} labels={{ pause: w.pause, play: w.play }} colors={{ card: "#FFFDF8", ink: WALL.ink, soft: "#9A6A70", bar: WALL.red }} />
+                  ) : null}
                 </div>
               ) : null}
               {data.countdown ? (
@@ -299,7 +305,7 @@ export function Wall({ data, fields, booth, frames, names, date, mode, still, un
                 </div>
               ) : null}
               <div ref={endRef} className="rounded-[calc(2*var(--p))] px-[calc(3*var(--p))] py-[calc(6*var(--p))]" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, boxShadow: "0 14px 26px -18px rgba(0,0,0,.45)" }}>
-                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} songShown={Boolean(catalog)} />
               </div>
             </div>
           </div>

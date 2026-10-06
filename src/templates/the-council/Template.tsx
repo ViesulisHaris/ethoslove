@@ -21,6 +21,7 @@ import { PAPER_GRAIN, POSTER_FONT } from "../_shared/cover-kit";
 import { Bubble } from "../_shared/memes/Bubble";
 import { MEMES } from "../_shared/memes/catalogue";
 import { MemeSticker } from "../_shared/memes/MemeSticker";
+import { FitName } from "../_shared/FitName";
 import { buzz, playBoing, playHonk, playSqueak, playTada, playThud } from "../_shared/memes/sounds";
 import { BenchFront, COUNCIL_KEYFRAMES, COURTS, Crest, Gavel, NamePlate, Paw, RoughInk, Stamp, type BenchId, type Court } from "./art";
 import { caseNumber, exhibitLetter, findingsFor, SEATS, speakerFor, type Seat, type Verdict } from "./hearing";
@@ -196,9 +197,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
               {s.crestTop}
             </p>
             <p className="mt-[calc(2.2*var(--p))] text-[calc(2.5*var(--p))] font-bold tracking-[0.26em] uppercase opacity-70">{s.hears}</p>
-            <h1 className="mt-[calc(1*var(--p))] max-w-[92%] truncate text-[calc(13*var(--p))] leading-[1.02] font-black tracking-tight uppercase" style={{ fontFamily: POSTER_FONT }}>
+            <FitName as="h1" min={0.45} className="mt-[calc(1*var(--p))] w-full max-w-[92%] text-[calc(13*var(--p))] leading-[1.02] font-black tracking-tight uppercase" style={{ fontFamily: POSTER_FONT }}>
               {data.recipientName}
-            </h1>
+            </FitName>
             <p className="mt-[calc(1.8*var(--p))] max-w-[84%] text-[calc(4.6*var(--p))] leading-[1.15]" style={{ fontFamily: "var(--gift-font-hand)" }}>
               <span className="opacity-60">{s.charged} </span>
               {charge}
@@ -352,9 +353,9 @@ function Ruling({ s, court, name, charge, verdict, stamped, caseNo, reduce, stil
         <p className="relative mx-auto mt-[calc(3*var(--p))] max-w-[92%] text-[calc(3.5*var(--p))] leading-[1.25]" style={{ fontFamily: "var(--gift-font-display)" }}>
           {s.matter.replace("{charge}", charge)}
         </p>
-        <p className="relative mt-[calc(1.6*var(--p))] truncate text-[calc(9*var(--p))] leading-[1.05]" style={{ fontFamily: "var(--gift-font-hand)" }}>
+        <FitName as="p" className="relative mt-[calc(1.6*var(--p))] text-[calc(9*var(--p))] leading-[1.05]" style={{ fontFamily: "var(--gift-font-hand)" }}>
           {name}
-        </p>
+        </FitName>
         <div className="relative mt-[calc(1*var(--p))] grid h-[calc(21*var(--p))] place-items-center">
           <AnimatePresence>
             {stamped ? (

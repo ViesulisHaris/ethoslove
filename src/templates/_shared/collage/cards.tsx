@@ -2,9 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import type { GiftMusic, GiftPhoto } from "@/lib/gift/schema";
+import type { GiftLocale, GiftMusic, GiftPhoto } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import type { GiftAudio } from "../hooks/use-gift-audio";
+import { giftString } from "../i18n";
+import { useSongPreview } from "../SongPreview";
 
 const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 
@@ -59,6 +61,75 @@ export function MusicCard({ music, audio, cover, live, labels, colors }: { music
         </button>
         <Glyph d="M3 5v14l9-7zM13 5v14l9-7z" soft={colors.ink} />
       </div>
+    </div>
+  );
+}
+
+/** How long Apple's previews run. */
+const PREVIEW_SECONDS = 30;
+
+/**
+ * The same player card for a real song from Apple's catalogue, so a gift with one looks like the
+ * gift in the gallery. Apple's rules hold here as they do on the end screen (useSongPreview): the
+ * preview plays only when this button is tapped, once, never under the gift, and the card carries
+ * the link to the song on Apple Music and Apple's credit. A template that shows this card tells
+ * its EndScreen (`songShown`) so the song isn't offered twice.
+ */
+export function PreviewMusicCard({ music, locale, cover, live, colors }: { music: GiftMusic; locale: GiftLocale; cover?: GiftPhoto; live: boolean; colors: { card: string; ink: string; soft: string; bar: string } }) {
+  const song = useSongPreview(music, locale);
+  if (!song.trackUrl) return null;
+  const playing = song.state === "playing";
+  const elapsed = Math.round(song.progress * PREVIEW_SECONDS);
+  const art = song.artwork ?? cover?.url;
+
+  return (
+    <div className="w-full rounded-[calc(3*var(--p))] px-[calc(3.4*var(--p))] pt-[calc(3.2*var(--p))] pb-[calc(2.2*var(--p))]" style={{ background: colors.card, color: colors.ink, boxShadow: "0 calc(1.4*var(--p)) calc(3*var(--p)) rgba(60,20,40,.26), inset 0 0 0 1px rgba(255,255,255,.5)" }} data-testid="song-preview-card">
+      <div className="flex items-center gap-[calc(2.6*var(--p))]">
+        <span className="relative block h-[calc(11*var(--p))] w-[calc(11*var(--p))] shrink-0 overflow-hidden rounded-[calc(1.4*var(--p))] bg-black/10">
+          {art ? <img src={art} alt="" draggable={false} onError={song.artwork ? song.onArtError : undefined} className="h-full w-full object-cover" /> : null}
+        </span>
+        <span className="min-w-0 flex-1 text-left">
+          <span translate="no" className="block truncate text-[calc(3.5*var(--p))] leading-tight font-semibold">
+            {song.title}
+          </span>
+          <span translate="no" className="block truncate text-[calc(3*var(--p))] leading-tight" style={{ color: colors.soft }}>
+            {music.artist ?? " "}
+          </span>
+        </span>
+        <span aria-hidden="true" className="flex h-[calc(4*var(--p))] items-end gap-[calc(.5*var(--p))]">
+          {[0.5, 1, 0.7, 0.35].map((h, i) => (
+            <i key={i} className={cn("block w-[calc(.6*var(--p))] origin-bottom rounded-full", playing && "cl-eq")} style={{ height: `${h * 100}%`, background: colors.soft, animationDelay: `${i * 0.14}s` }} />
+          ))}
+        </span>
+      </div>
+      {song.playable && song.state !== "error" ? (
+        <>
+          <div className="mt-[calc(2.6*var(--p))] flex items-center gap-[calc(1.6*var(--p))] text-[calc(2.3*var(--p))] tabular-nums" style={{ color: colors.soft }}>
+            <span>{clock(elapsed)}</span>
+            <span className="relative block h-[calc(.7*var(--p))] flex-1 overflow-hidden rounded-full bg-black/10">
+              <i className="absolute inset-y-0 left-0 block rounded-full transition-[width] duration-300 ease-linear" style={{ width: `${Math.max(2, song.progress * 100)}%`, background: colors.bar }} />
+            </span>
+            <span>-{clock(PREVIEW_SECONDS - elapsed)}</span>
+          </div>
+          <div className="mt-[calc(1.2*var(--p))] flex items-center justify-center">
+            <button type="button" onClick={live ? (song.active ? song.stop : song.play) : undefined} aria-label={song.active ? giftString(locale, "songStop") : giftString(locale, "songPlay", { title: song.title })} className="grid h-[calc(8*var(--p))] w-[calc(8*var(--p))] place-items-center rounded-full outline-none focus-visible:ring-4 focus-visible:ring-black/25">
+              <svg viewBox="0 0 24 24" className="h-[calc(5.4*var(--p))] w-[calc(5.4*var(--p))]" aria-hidden="true">
+                {song.active ? <path d="M6 4h4v16H6zM14 4h4v16h-4z" fill={colors.ink} /> : <path d="M7 4l13 8-13 8z" fill={colors.ink} />}
+              </svg>
+            </button>
+          </div>
+        </>
+      ) : (
+        <p className="mt-[calc(2.4*var(--p))] text-[calc(2.6*var(--p))] leading-snug" style={{ color: colors.soft }}>
+          {song.status}
+        </p>
+      )}
+      <p className="mt-[calc(.8*var(--p))] text-center text-[calc(2.2*var(--p))] leading-snug" style={{ color: colors.soft }}>
+        <a href={song.trackUrl} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2" style={{ color: colors.ink }}>
+          {giftString(locale, "listenOn", { provider: "Apple Music" })}
+        </a>
+        <span className="block">{giftString(locale, "previewCourtesy")}</span>
+      </p>
     </div>
   );
 }

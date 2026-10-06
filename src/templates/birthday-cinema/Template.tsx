@@ -21,6 +21,7 @@ import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
 import { GiftVideo } from "../_shared/GiftVideo";
 import { Ambience } from "../_shared/Ambience";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { COVER_VARS, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { CinemaFields } from "./schema";
 import { CINEMA_KEYFRAMES, Marquee, Ticket } from "./art";
@@ -58,6 +59,8 @@ type Stage = "curtains" | "cake" | "out" | "film" | "message";
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<CinemaFields>) {
   const rootRef = useRef<HTMLDivElement>(null);
+  // The free-tier badge floats at the foot of the gift, right where "tap to start the show" sits.
+  const { watermarked } = useGiftChrome();
   const size = useContainerSize(rootRef);
   const reduce = useReducedMotion();
   const t = useGiftStrings(data.locale);
@@ -241,6 +244,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
               onClick={start}
               aria-label={s.tapStart}
               className="absolute inset-0 z-[3] flex flex-col items-center px-[calc(6*var(--k))] pt-[calc(26*var(--k))] pb-[calc(7*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-inset"
+              style={{ paddingBottom: watermarked ? "calc(7*var(--k) + 2.75rem)" : undefined }}
             >
               <motion.div initial={reduce ? false : { opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7 }}>
                 <Marquee text={marquee} hang />

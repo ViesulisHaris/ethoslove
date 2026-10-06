@@ -381,7 +381,7 @@ export function CoverArt({ theme, name, forLabel, seed }: { theme: Theme; name: 
         <text x="0" y="-2.4" textAnchor="middle" fontSize="3.6" letterSpacing=".9" fill={theme.insideInk} opacity=".65" style={{ fontFamily: POSTER_FONT }}>
           {forLabel.toUpperCase()}
         </text>
-        <text x="0" y="7" textAnchor="middle" fontSize={name.length > 12 ? 6.4 : 8.4} fill={theme.accent} style={{ fontFamily: "var(--font-script), var(--gift-font-hand), cursive" }}>
+        <text x="0" y="7" textAnchor="middle" fontSize={Math.max(4.2, Math.min(8.4, 60 / (Math.max(1, name.length) * 0.55)))} fill={theme.accent} style={{ fontFamily: "var(--font-script), var(--gift-font-hand), cursive" }}>
           {name}
         </text>
       </g>

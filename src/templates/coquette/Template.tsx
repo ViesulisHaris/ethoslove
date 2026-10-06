@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
-import { backgroundMusic } from "@/lib/gift/music";
+import { appleMusicTrackUrl, backgroundMusic, isCatalogPreview } from "@/lib/gift/music";
 import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -17,11 +17,12 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
+import { FitName } from "../_shared/FitName";
 import { Confetti } from "../_shared/Confetti";
 import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Sticker } from "../_shared/covers/stickers";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScriptLines, ScrollHint, Shot, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
-import { CARD_KEYFRAMES, MusicCard, Postcard, Snippet, Stamp, Ticket } from "../_shared/collage/cards";
+import { CARD_KEYFRAMES, MusicCard, Postcard, PreviewMusicCard, Snippet, Stamp, Ticket } from "../_shared/collage/cards";
 import { gingham, scriptLines, ticketNumber } from "../_shared/collage/paper";
 import { playChime, playRibbon } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
@@ -139,13 +140,13 @@ function Wrapping({ look, s, recipientName, senderName, untying, reduce, bow }: 
         <div className="relative rounded-[calc(1.6*var(--p))] px-[calc(4*var(--p))] pt-[calc(6*var(--p))] pb-[calc(4.4*var(--p))] text-center" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, clipPath: "polygon(22% 0, 78% 0, 100% 16%, 100% 100%, 0 100%, 0 16%)", boxShadow: "0 calc(1.2*var(--p)) calc(2.4*var(--p)) rgba(60,20,40,.3)" }}>
           <span aria-hidden="true" className="absolute top-[calc(2*var(--p))] left-1/2 block h-[calc(2.2*var(--p))] w-[calc(2.2*var(--p))] -translate-x-1/2 rounded-full" style={{ boxShadow: `inset 0 0 0 calc(.5*var(--p)) ${look.satin.mid}`, background: look.wall }} />
           <p className="text-[calc(2.6*var(--p))] font-semibold tracking-[0.34em] uppercase opacity-60">{s.for}</p>
-          <p className="mt-[calc(.6*var(--p))] truncate text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT }}>
+          <FitName as="p" className="mt-[calc(.6*var(--p))] text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT }}>
             {recipientName}
-          </p>
+          </FitName>
           {senderName ? (
-            <p className="mt-[calc(1.4*var(--p))] truncate text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
+            <FitName as="p" min={0.7} className="mt-[calc(1.4*var(--p))] text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
               {s.from} {senderName}
-            </p>
+            </FitName>
           ) : null}
         </div>
       </motion.div>
@@ -182,10 +183,13 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
   const { hero, strip, scatter } = arrangePhotos(data.photos);
   const spots = scatterSpots(scatter.length);
   const f = look.flowers;
-  // The player card is for music that plays under the gift; a real song waits on the end screen for a tap.
+  // Music that plays under the gift gets the player card. A real song from Apple gets the same card,
+  // heard only on a tap (PreviewMusicCard), and the end screen then leaves its own out.
   const song = backgroundMusic(data.music);
-  const hasSong = Boolean(song?.title);
-  const heroH = hasSong ? 188 : 158;
+  const catalog = isCatalogPreview(data.music) && appleMusicTrackUrl(data.music, data.locale) ? data.music : undefined;
+  const hasSong = Boolean(song?.title) || Boolean(catalog);
+  // An Apple song's card carries the link and Apple's credit too, so it stands a little taller.
+  const heroH = hasSong ? (catalog ? 194 : 188) : 158;
   const stripH = Math.max(stripHeight(strip.length) + 16, 124);
   const frame = { backgroundColor: look.frame, ...gingham(look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
   const open = mode === "preview" ? undefined : setActive;
@@ -218,9 +222,9 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 <TornPaper seed={seed + 5} sides={{ top: true, right: true, bottom: true, left: true }} color={look.paper} grain={PAPER_GRAIN} depth={5}>
                   <p className="px-[calc(4*var(--p))] pt-[calc(2.6*var(--p))] pb-[calc(3*var(--p))] text-center">
                     <span className="block text-[calc(2.3*var(--p))] font-semibold tracking-[0.36em] uppercase opacity-55">{s.for}</span>
-                    <span className="block truncate text-[calc(11*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
+                    <FitName className="text-[calc(11*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
                       {data.recipientName}
-                    </span>
+                    </FitName>
                   </p>
                 </TornPaper>
               </Piece>
@@ -253,13 +257,17 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </div>
               </Piece>
 
-              {hasSong && song ? (
+              {hasSong ? (
                 <Piece x={64} y={131} w={66} rotate={2} z={8} entrance="right" delay={0.2}>
-                  <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
+                  {catalog ? (
+                    <PreviewMusicCard music={catalog} locale={data.locale} cover={hero} live={mode !== "preview"} colors={look.card} />
+                  ) : song ? (
+                    <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
+                  ) : null}
                 </Piece>
               ) : null}
 
-              <Piece x={36} y={hasSong ? 163 : 132} w={66} rotate={-4} z={6} entrance="left" delay={0.3}>
+              <Piece x={36} y={hasSong ? (catalog ? 169 : 163) : 132} w={66} rotate={-4} z={6} entrance="left" delay={0.3}>
                 <Postcard
                   paper={look.paper}
                   ink={look.ink}
@@ -391,7 +399,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </div>
               ) : null}
               <div ref={endRef} className="rounded-[calc(3*var(--p))] px-[calc(3*var(--p))] py-[calc(6*var(--p))]" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, color: look.ink, boxShadow: "0 14px 26px -18px rgba(0,0,0,.45)" }}>
-                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} songShown={Boolean(catalog)} />
               </div>
             </div>
           </div>

@@ -11,21 +11,34 @@ import { cn } from "@/lib/utils";
 import { giftString } from "./i18n";
 import { claimSound, onSoundClaimed, releaseSound } from "./sound-floor";
 
-type PreviewState = "idle" | "loading" | "playing" | "ended" | "error";
+export type PreviewState = "idle" | "loading" | "playing" | "ended" | "error";
 
 /** The equaliser's resting heights; they only move while the song plays and motion is allowed. */
 const BARS = [0.45, 1, 0.7, 0.3];
 
+/** One preview's playback, shared by every card that offers it (the end screen's, a collage's player). */
+export type SongPreview = {
+  /** The song's page on Apple Music; without it there is no card at all. */
+  trackUrl: string | null;
+  playable: boolean;
+  state: PreviewState;
+  progress: number;
+  active: boolean;
+  title: string;
+  artwork: string | null;
+  onArtError: () => void;
+  status: string;
+  play: () => void;
+  stop: () => void;
+};
+
 /**
- * "A song for you": the real song the sender picked, as a card on the end screen.
- *
- * Apple lets us use its 30-second previews only to promote the track, so the preview plays only
- * when the recipient taps it here, plays once and stops (no loop, no autoplay), never under a
- * video (./sound-floor), and always sits next to the link to the song on Apple Music and the
+ * Apple lets us use its 30-second previews only to promote the track, so a preview plays only
+ * when the recipient taps its card, plays once and stops (no loop, no autoplay), never under a
+ * video (./sound-floor), and its card always carries the link to the song on Apple Music and the
  * "Preview courtesy of Apple Music" credit. The audio isn't even fetched until that tap.
  */
-export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; locale: GiftLocale; dark: boolean }) {
-  const reduce = useReducedMotion();
+export function useSongPreview(music: GiftMusic, locale: GiftLocale): SongPreview {
   const [state, setState] = useState<PreviewState>("idle");
   const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -118,9 +131,6 @@ export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; loc
     });
   };
 
-  // Neither a preview we may play nor a song to send them to (only a hand-made request gets here).
-  if (!trackUrl) return null;
-
   const status =
     state === "loading"
       ? giftString(locale, "songLoading")
@@ -131,6 +141,17 @@ export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; loc
           : state === "error" || !playable
             ? giftString(locale, "songUnavailable")
             : giftString(locale, "songTapToHear");
+
+  return { trackUrl, playable, state, progress, active, title, artwork, onArtError: () => setArtFailed(true), status, play, stop: stopHere };
+}
+
+/** "A song for you": the real song the sender picked, as a card on the end screen. */
+export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; locale: GiftLocale; dark: boolean }) {
+  const reduce = useReducedMotion();
+  const { trackUrl, playable, state, progress, active, title, artwork, onArtError, status, play, stop } = useSongPreview(music, locale);
+
+  // Neither a preview we may play nor a song to send them to (only a hand-made request gets here).
+  if (!trackUrl) return null;
 
   const ring = `conic-gradient(var(--gift-accent) ${Math.round(progress * 360)}deg, ${dark ? "rgba(255,255,255,0.16)" : "rgba(0,0,0,0.1)"} 0)`;
 
@@ -154,7 +175,7 @@ export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; loc
       <div className="mt-3 flex items-center gap-3">
         <div className="relative size-16 shrink-0 overflow-hidden rounded-[12px] shadow-[0_8px_18px_-10px_rgba(0,0,0,0.6)]" style={{ background: "var(--gift-accent-pale)" }}>
           {artwork ? (
-            <img src={artwork} alt="" loading="lazy" onError={() => setArtFailed(true)} className="h-full w-full object-cover" />
+            <img src={artwork} alt="" loading="lazy" onError={onArtError} className="h-full w-full object-cover" />
           ) : (
             <span className="grid h-full w-full place-items-center" aria-hidden="true">
               <Music2 className="size-6" style={{ color: "var(--gift-accent-deep)" }} />
@@ -190,7 +211,7 @@ export function SongPreviewCard({ music, locale, dark }: { music: GiftMusic; loc
         {playable ? (
           <button
             type="button"
-            onClick={active ? stopHere : play}
+            onClick={active ? stop : play}
             aria-label={active ? giftString(locale, "songStop") : giftString(locale, "songPlay", { title })}
             className={cn(
               "relative grid size-12 shrink-0 place-items-center rounded-full p-[3px] outline-none focus-visible:ring-4",

@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/re
 import { Mic } from "lucide-react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
-import { backgroundMusic } from "@/lib/gift/music";
+import { appleMusicTrackUrl, backgroundMusic, isCatalogPreview } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
@@ -22,7 +22,7 @@ import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
 import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScrollHint, Shot, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
-import { CARD_KEYFRAMES, MusicCard, Ticket } from "../_shared/collage/cards";
+import { CARD_KEYFRAMES, MusicCard, PreviewMusicCard, Ticket } from "../_shared/collage/cards";
 import { ticketNumber } from "../_shared/collage/paper";
 import { RansomRows } from "../_shared/collage/ransom";
 import { playChime, playPaper } from "../_shared/collage/sounds";
@@ -315,9 +315,11 @@ function Page({ look, s, data, fields, mode, still, reduce, unit, audio, onBegin
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const photos = useMemo(() => data.photos.slice(0, MAX_PHOTOS), [data.photos]);
   const plan = arrangePhotos(photos.length);
-  // The player card is for music that plays under the gift; a real song waits on the end screen for a tap.
+  // Music that plays under the gift gets the player card. A real song from Apple gets the same card,
+  // heard only on a tap (PreviewMusicCard), and the end screen then leaves its own out.
   const song = backgroundMusic(data.music);
-  const hasSong = Boolean(song?.title);
+  const catalog = isCatalogPreview(data.music) && appleMusicTrackUrl(data.music, data.locale) ? data.music : undefined;
+  const hasSong = Boolean(song?.title) || Boolean(catalog);
   const guests = useMemo(() => planGuests(photos.length, hasSong, seed), [photos.length, hasSong, seed]);
   const rows = useMemo(() => bannerRows(fields.banner?.trim() || s.banner), [fields.banner, s.banner]);
   const digits = ageDigits(fields.age);
@@ -560,10 +562,14 @@ function Page({ look, s, data, fields, mode, still, reduce, unit, audio, onBegin
             ) : null}
 
             {/* 3. the song */}
-            {hasSong && song ? (
-              <section className="relative" style={{ height: "calc(54*var(--p))" }}>
-                <Piece x={57} y={27} w={70} rotate={-2} z={5} entrance="right">
-                  <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={{ ...look.card, bar: "var(--gift-accent)" }} />
+            {hasSong ? (
+              <section className="relative" style={{ height: `calc(${catalog ? 60 : 54}*var(--p))` }}>
+                <Piece x={57} y={catalog ? 30 : 27} w={70} rotate={-2} z={5} entrance="right">
+                  {catalog ? (
+                    <PreviewMusicCard music={catalog} locale={data.locale} cover={hero} live={mode !== "preview"} colors={{ ...look.card, bar: "var(--gift-accent)" }} />
+                  ) : song ? (
+                    <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={{ ...look.card, bar: "var(--gift-accent)" }} />
+                  ) : null}
                 </Piece>
                 <Piece x={89} y={10} w={10} rotate={18} z={6} entrance="stamp" delay={0.3}>
                   <PartyHat hat={look.hats[2]} />
@@ -672,7 +678,7 @@ function Page({ look, s, data, fields, mode, still, reduce, unit, audio, onBegin
                 </div>
               ) : null}
               <div ref={endRef} className="rounded-[calc(2*var(--p))] px-[calc(3*var(--p))] py-[calc(6*var(--p))]" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, color: look.paperInk, boxShadow: "0 14px 26px -18px rgba(0,0,0,.5)" }}>
-                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} songShown={Boolean(catalog)} />
               </div>
             </div>
 

@@ -9,6 +9,7 @@ import { parseRichText } from "@/lib/gift/rich-text";
 import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { giftString, useGiftStrings } from "../_shared/i18n";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
 import { useSwipe } from "../_shared/hooks/use-swipe";
@@ -46,6 +47,8 @@ const PIECES = {
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<PopupCardFields>) {
   const reduce = !!useReducedMotion();
+  // The free-tier badge floats at the foot of the gift, where the hint pill sits; the pill goes above it.
+  const { watermarked } = useGiftChrome();
   const t = useGiftStrings(data.locale);
   const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
@@ -195,7 +198,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       {/* the one line that says what to do */}
       <AnimatePresence>
         {stage !== "read" ? (
-          <motion.div key={`pill-${stage}`} className="pointer-events-none absolute inset-x-0 z-[30] flex flex-col items-center gap-[calc(1.8*var(--k))] px-4" style={{ bottom: "max(calc(3.5*var(--k)), calc(env(safe-area-inset-bottom) + 1.2rem))" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
+          <motion.div key={`pill-${stage}`} className="pointer-events-none absolute inset-x-0 z-[30] flex flex-col items-center gap-[calc(1.8*var(--k))] px-4" style={{ bottom: `calc(max(calc(3.5*var(--k)), calc(env(safe-area-inset-bottom) + 1.2rem))${watermarked ? " + 2.75rem" : ""})` }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
             {stage === "lit" ? (
               <>
                 <p className="text-[calc(5*var(--k))] italic" style={{ fontFamily: "var(--gift-font-display)", textShadow: theme.dark ? "0 2px 12px rgba(0,0,0,.5)" : "0 1px 0 rgba(255,255,255,.7)" }}>

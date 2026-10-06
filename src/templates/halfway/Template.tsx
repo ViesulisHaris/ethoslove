@@ -19,6 +19,7 @@ import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Sticker } from "../_shared/covers/stickers";
+import { FitName } from "../_shared/FitName";
 import { ISLANDS, MapArt, PALETTES, Postmark, ROUTE, Stamp, type Palette } from "./art";
 import { glide, thrust, travel } from "./flight";
 import { arc, routeKm, track } from "./track";
@@ -237,12 +238,14 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <AnimatePresence mode="wait">
         {stage === "map" ? (
           <motion.div key={`map-${run}`} className="absolute inset-0" exit={{ opacity: 0, transition: { duration: reduce ? 0.2 : 0.5 } }}>
-            <p
-              className="absolute inset-x-0 truncate px-[calc(14*var(--k))] text-center font-semibold tracking-[0.3em] uppercase"
+            <FitName
+              as="p"
+              min={0.75}
+              className="absolute inset-x-0 px-[calc(14*var(--k))] text-center font-semibold tracking-[0.3em] uppercase"
               style={{ top: "calc(var(--top) + 2 * var(--k))", fontSize: "calc(2.9 * var(--k))", color: p.soft }}
             >
               {data.senderName} <span aria-hidden="true">→</span> {data.recipientName}
-            </p>
+            </FitName>
             <p
               className="absolute inset-x-0 text-center leading-none tabular-nums"
               style={{ top: "calc(var(--top) + 9 * var(--k))", fontSize: "calc(15 * var(--k))", fontFamily: "var(--gift-font-display)", color: p.ink }}
@@ -468,7 +471,9 @@ function Breath({
           style={{ padding: "calc(2.4 * var(--k)) calc(5 * var(--k))", fontSize: "calc(3 * var(--k))", background: "#fffdfb", color: p.tone === "dark" ? "#2c3378" : p.ink }}
         >
           <Mic className="shrink-0" style={icon} />
-          <span className="truncate">{s.blow.replace("{thing}", thing).replace("{name}", name)}</span>
+          <FitName min={0.72} className="min-w-0 flex-1">
+            {s.blow.replace("{thing}", thing).replace("{name}", name)}
+          </FitName>
         </motion.button>
       ) : listening ? (
         <div className="flex items-center gap-[calc(2.4*var(--k))] rounded-full font-semibold tracking-[0.2em] whitespace-nowrap uppercase" style={pillStyle(p)}>

@@ -5,6 +5,7 @@ import { Fragment, type ReactNode } from "react";
 import { motion } from "motion/react";
 import type { GiftMusic, GiftPhoto } from "@/lib/gift/schema";
 import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
+import { FitName } from "../_shared/FitName";
 import { Scrap } from "../_shared/collage/kit";
 import type { ScrapId } from "../_shared/collage/scraps";
 import type { Highlight, Look, Mark } from "./looks";
@@ -41,9 +42,9 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
       <span aria-hidden="true" className="absolute inset-x-[3%] top-[3%] h-[58%] rounded-[calc(.8*var(--p))]" style={{ backgroundColor: lining, backgroundImage: "radial-gradient(rgba(255,255,255,.28) 1.1px, transparent 1.4px)", backgroundSize: "calc(3*var(--p)) calc(3*var(--p))" }} />
       {/* the letter, which rises */}
       <motion.div className="absolute inset-x-[7%] top-[8%] h-[84%] rounded-[calc(.6*var(--p))] px-[8%] pt-[7%]" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, color: "#2A1A1C", boxShadow: "0 0 calc(1.4*var(--p)) rgba(0,0,0,.2)" }} animate={opening ? { y: "-58%" } : { y: 0 }} transition={{ duration: reduce ? 0.15 : 0.75, delay: opening && !reduce ? 0.32 : 0, ease }}>
-        <p className="truncate text-[calc(7*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT }}>
+        <FitName as="p" className="text-[calc(7*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
           {name},
-        </p>
+        </FitName>
         {[0, 1, 2, 3].map((i) => (
           <span key={i} className="mt-[7%] block h-px bg-current opacity-20" style={{ width: `${92 - i * 11}%` }} />
         ))}
@@ -54,9 +55,9 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
       <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full">
         <path d="M0 100 L50 52 L100 100" fill="none" stroke={look.dark ? "rgba(255,255,255,.16)" : "rgba(60,30,20,.2)"} strokeWidth="1" vectorEffect="non-scaling-stroke" />
       </svg>
-      <p className="absolute inset-x-[8%] bottom-[7%] truncate text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.ink, opacity: 0.85 }}>
+      <FitName as="p" className="absolute inset-x-[8%] bottom-[5%] text-center text-[calc(6.4*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT, color: look.ink, opacity: 0.85 }}>
         {to} {name}
-      </p>
+      </FitName>
       {/* the flap, hinged along the top */}
       <motion.div className="absolute inset-x-0 top-0 h-[62%] origin-top" style={{ transformStyle: "preserve-3d", zIndex: opening ? 0 : 3 }} animate={opening ? { rotateX: 178 } : { rotateX: 0 }} transition={{ duration: reduce ? 0.15 : 0.6, ease }}>
         <span aria-hidden="true" className="absolute inset-0 rounded-t-[calc(1.2*var(--p))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN, clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />

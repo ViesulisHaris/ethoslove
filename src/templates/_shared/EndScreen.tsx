@@ -43,6 +43,7 @@ export function EndScreen({
   onReact,
   onMakeOne,
   onReplay,
+  songShown = false,
   className,
 }: {
   data: GiftData;
@@ -50,6 +51,8 @@ export function EndScreen({
   onReact?: () => void;
   onMakeOne?: () => void;
   onReplay?: () => void;
+  /** The template already shows the song's card, with Apple's link and credit (PreviewMusicCard). */
+  songShown?: boolean;
   className?: string;
 }) {
   const reduce = useReducedMotion();
@@ -119,7 +122,7 @@ export function EndScreen({
       ) : null}
 
       {/* The real song, heard only on a tap here — including on gifts made when it looped under them. */}
-      {isCatalogPreview(data.music) ? <SongPreviewCard music={data.music} locale={locale} dark={dark} /> : null}
+      {isCatalogPreview(data.music) && !songShown ? <SongPreviewCard music={data.music} locale={locale} dark={dark} /> : null}
 
       {data.dedication ? <SongDedication dedication={data.dedication} locale={locale} dark={dark} /> : null}
 
