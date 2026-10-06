@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Hoy|22:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "creo que necesitamos un tiempo"
+        },
+        {
+          "from": "them",
+          "text": "no digas eso porfa"
+        },
+        {
+          "from": "me",
+          "text": "es que estoy cansada leo"
+        },
+        {
+          "from": "them",
+          "text": "¿te puedo mandar una cosa?"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Hoy|22:19",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "ábrelo porfa 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "them",
+          "text": "si después todavía quieres un tiempo"
+        },
+        {
+          "from": "them",
+          "text": "lo voy a entender"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Hoy|23:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "perdón"
+        },
+        {
+          "from": "me",
+          "text": "no quiero un tiempo"
+        },
+        {
+          "from": "me",
+          "text": "te amo"
+        },
+        {
+          "from": "them",
+          "text": "yo también te amo",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
