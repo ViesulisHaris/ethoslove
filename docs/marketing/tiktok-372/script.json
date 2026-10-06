@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|14:22",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm so sick"
+        },
+        {
+          "from": "me",
+          "text": "i can't even get up"
+        },
+        {
+          "from": "them",
+          "text": "i'm sorry"
+        },
+        {
+          "from": "them",
+          "text": "want me to come over"
+        },
+        {
+          "from": "me",
+          "text": "no you'll get sick too"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok then"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "get better soon 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "you're too cute"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i feel better already"
+        },
+        {
+          "from": "me",
+          "text": "you're the best"
+        },
+        {
+          "from": "them",
+          "text": "i'm still bringing soup"
+        },
+        {
+          "from": "me",
+          "text": "i love you"
+        }
+      ]
+    }
+  ]
+}
