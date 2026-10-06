@@ -1552,6 +1552,28 @@ gift fits the post. (354 had the same rule: "dont mention anything about in the 
 
 **Post order:** 368, 366, 365, 371, 374, 370, 367, 369, 373, 372. One a night, in the evening, on the 14k account.
 
+### 375 to 384: the same, in Spanish (6 Oct)
+
+Neutral Latin American Spanish ("te amo", "te extraño", "teléfono", no regional slang), with the Spanish link
+card (`"lang": "es"`: "UN REGALO PARA Maya") and Spanish iPhone timestamps ("Hoy 23:12", "Ayer 23:58"). Same
+rules: Maya and Leo only, the link in every post, and the chat never says what's inside the gift. For Spain,
+swap "te extraño" for "te echo de menos" and "te amo" for "te quiero".
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 375 | birthday at midnight | "¿estás despierta?" | "eres el mejor novio del mundo" |
+| 376 | after a fight | "perdón por lo de hace rato" | "yo más" |
+| 377 | birthday | "peor cumpleaños de mi vida" | "solo para ti" |
+| 378 | almost broke up | "creo que necesitamos un tiempo" | "yo también te amo" |
+| 379 | long distance | "te extraño muchísimo" | "34 días maya" |
+| 380 | for no reason | "¿estás en tu casa?" | "lloro de felicidad" |
+| 381 | bad day | "no pasé el examen" | "siempre maya" |
+| 382 | anniversary | "feliz 1 año" (00:00) | "te amo" |
+| 383 | sick day | "estoy súper enferma" | "te amo" |
+| 384 | grief | "no puedo dejar de llorar" | "siempre" |
+
+**Post order:** 375, 378, 377, 376, 382, 379, 381, 380, 384, 383. One a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
