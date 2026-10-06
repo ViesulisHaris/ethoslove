@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Hoy|12:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "peor cumpleaños de mi vida"
+        },
+        {
+          "from": "them",
+          "text": "¿por qué?"
+        },
+        {
+          "from": "me",
+          "text": "nadie se acordó"
+        },
+        {
+          "from": "me",
+          "text": "ni mi familia me ha escrito"
+        },
+        {
+          "from": "them",
+          "text": "yo sí me acordé"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "feliz cumpleaños maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "no puede ser"
+        },
+        {
+          "from": "me",
+          "text": "¿tú hiciste esto??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "feliz cumpleaños"
+        },
+        {
+          "from": "me",
+          "text": "estoy llorando en el trabajo"
+        },
+        {
+          "from": "me",
+          "text": "eres el mejor de verdad"
+        },
+        {
+          "from": "them",
+          "text": "solo para ti"
+        }
+      ]
+    }
+  ]
+}
