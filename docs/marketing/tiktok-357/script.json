@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy birthday!!!!"
+        },
+        {
+          "from": "me",
+          "text": "what do you want to do today"
+        },
+        {
+          "from": "them",
+          "text": "open this first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo it's YOUR birthday"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "why are you giving ME something"
+        },
+        {
+          "from": "them",
+          "text": "it's what i wanted to do today"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you did this last year too"
+        },
+        {
+          "from": "them",
+          "text": "and next year"
+        },
+        {
+          "from": "them",
+          "text": "and the one after"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying at 8am"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday to me"
+        }
+      ]
+    }
+  ]
+}
