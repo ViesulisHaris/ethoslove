@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:10",
+      "messages": [
+        {
+          "from": "me",
+          "text": "random question"
+        },
+        {
+          "from": "me",
+          "text": "how long have we been together"
+        },
+        {
+          "from": "them",
+          "text": "487 days"
+        },
+        {
+          "from": "me",
+          "text": "how do you know that so fast"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i started something on day 1"
+        },
+        {
+          "from": "them",
+          "text": "i add to it every night"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "487 days of maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "every night??"
+        },
+        {
+          "from": "them",
+          "text": "every night"
+        },
+        {
+          "from": "me",
+          "text": "even the night we broke up for 3 hours"
+        },
+        {
+          "from": "them",
+          "text": "especially that night"
+        }
+      ]
+    }
+  ]
+}
