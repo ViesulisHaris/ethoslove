@@ -4,7 +4,8 @@
  *
  *   node scripts/campaign.mjs report                  every grant: state, window, gifts published, live gifts
  *   node scripts/campaign.mjs extend <email> <days>   push the end out by <days> from now (a creator still posting)
- *   node scripts/campaign.mjs extend <email> forever  no end: a creator who has earned their first $6 on Whop
+ *   node scripts/campaign.mjs extend <email> forever  no end to the four campaign templates
+ *   node scripts/campaign.mjs everything <email>      every template, for good: a creator who has earned their first $6 on Whop
  *   node scripts/campaign.mjs revoke <email>          switch it off now (abuse); their gifts stay live
  *   node scripts/campaign.mjs restore <email>         undo a revoke
  *
@@ -92,6 +93,13 @@ if (command === "report") {
   const endsAt = amount === "forever" ? null : new Date(Date.now() + Number(amount) * DAY_MS).toISOString();
   if (amount !== "forever" && !(Number(amount) > 0)) throw new Error(`Days must be a number above 0, not "${amount}"`);
   await setGrant(await userByEmail(email), { endsAt });
+} else if (command === "everything") {
+  if (!email) throw new Error("everything <email>");
+  const user = await userByEmail(email);
+  // The same "*" unlock row a gift card or Everything purchase gives (src/lib/pricing/products.ts EVERY_TEMPLATE), with no purchase behind it.
+  const { error } = await db.from("template_unlocks").upsert({ user_id: user.id, template_slug: "*", purchase_id: null }, { onConflict: "user_id,template_slug", ignoreDuplicates: true });
+  if (error) throw error;
+  console.log(`${user.email}: every template, for good`);
 } else if (command === "revoke") {
   if (!email) throw new Error("revoke <email>");
   await setGrant(await userByEmail(email), { revokedAt: new Date().toISOString() });
@@ -99,6 +107,6 @@ if (command === "report") {
   if (!email) throw new Error("restore <email>");
   await setGrant(await userByEmail(email), { revokedAt: null });
 } else {
-  console.error(`Unknown command "${command}": report, extend, revoke or restore.`);
+  console.error(`Unknown command "${command}": report, extend, everything, revoke or restore.`);
   process.exit(1);
 }
