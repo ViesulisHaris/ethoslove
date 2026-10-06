@@ -1,0 +1,80 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Hoy|23:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "perdón por lo de hace rato"
+        },
+        {
+          "from": "them",
+          "text": "yo también"
+        },
+        {
+          "from": "me",
+          "text": "odio cuando peleamos"
+        },
+        {
+          "from": "them",
+          "text": "yo igual"
+        },
+        {
+          "from": "them",
+          "text": "¿te puedo mandar algo?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "perdóname 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "¿tú hiciste esto??"
+        },
+        {
+          "from": "them",
+          "text": "quería que lo tuvieras"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "estoy llorando"
+        },
+        {
+          "from": "me",
+          "text": "eres el mejor"
+        },
+        {
+          "from": "me",
+          "text": "te amo muchísimo"
+        },
+        {
+          "from": "them",
+          "text": "yo más",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
