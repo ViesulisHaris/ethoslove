@@ -1507,6 +1507,27 @@ wallet, a bakery calling about a cake.
 
 **Post order:** 346, 350, 345, 353, 347, 348, 351, 344, 349, 352. One a night, in the evening, on the 14k account.
 
+### 355 to 364: birthday, almost broke up, romantic (6 Oct)
+
+The owner: "like happy birthday or sad like i almost broke up with my bf but then he sent me this or something
+really romantic". Same rules: Maya and Leo only, three or four slides, the link inside every story, no 💅. These
+are sweet, so the engine is saves and "tell me the website", not arguments in the comments.
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 355 | birthday | "you really didn't say it" | "40 seconds left" (he took the last minute, not the first) |
+| 356 | birthday | "don't get me anything for my birthday" | "happy birthday maya" ("i didn't GET it. i made it") |
+| 357 | birthday | "happy birthday!!!!" (it's his) | "happy birthday to me" (he gives her the gift) |
+| 358 | almost broke up | "we need to talk tomorrow" | "i don't want to wait till tomorrow" |
+| 359 | almost broke up | "i'm done leo" | "that's 47" (a list of every time she was right) |
+| 360 | almost broke up | "i don't think i can do this anymore" | "the 212th i'm home" (one for every night shift) |
+| 361 | almost broke up | "you've been weird for 2 days" | "happy anniversary anyway" (she forgot it) |
+| 362 | romantic | "how long have we been together" | "especially that night" (487 days, added to every night) |
+| 363 | romantic | "do you ever get bored of me" | "this. right now" (everything she says at 2am) |
+| 364 | almost broke up | "we said we'd end it before i leave" | "see you friday maya" (every weekend until christmas) |
+
+**Post order:** 355, 359, 364, 361, 362, 358, 356, 360, 363, 357. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
