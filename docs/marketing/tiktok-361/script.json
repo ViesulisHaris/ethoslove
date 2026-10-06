@@ -1,0 +1,83 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:30",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you've been weird for 2 days"
+        },
+        {
+          "from": "me",
+          "text": "if you don't want this just say it"
+        },
+        {
+          "from": "me",
+          "text": "i'm not doing this again"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "give me 10 mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|18:41",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year of us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "sorry i went quiet"
+        },
+        {
+          "from": "them",
+          "text": "i didn't want to ruin it"
+        },
+        {
+          "from": "me",
+          "text": "1 year?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "it's the 14th"
+        },
+        {
+          "from": "me",
+          "text": "it's the 14th"
+        },
+        {
+          "from": "me",
+          "text": "i forgot our anniversary"
+        },
+        {
+          "from": "me",
+          "text": "and i was about to dump you"
+        },
+        {
+          "from": "them",
+          "text": "happy anniversary anyway"
+        }
+      ]
+    }
+  ]
+}
