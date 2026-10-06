@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|21:03",
+      "messages": [
+        {
+          "from": "me",
+          "text": "train's at 7"
+        },
+        {
+          "from": "me",
+          "text": "we said we'd end it before i leave"
+        },
+        {
+          "from": "them",
+          "text": "i know what we said"
+        },
+        {
+          "from": "me",
+          "text": "so this is it?"
+        },
+        {
+          "from": "them",
+          "text": "open this first"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for the train 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "you planned every weekend??"
+        },
+        {
+          "from": "them",
+          "text": "until christmas"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's 4 hours away"
+        },
+        {
+          "from": "them",
+          "text": "3 hours 52"
+        },
+        {
+          "from": "them",
+          "text": "i timed it"
+        },
+        {
+          "from": "me",
+          "text": "so we're not breaking up"
+        },
+        {
+          "from": "them",
+          "text": "see you friday maya"
+        }
+      ]
+    }
+  ]
+}
