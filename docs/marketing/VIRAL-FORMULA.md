@@ -1528,6 +1528,30 @@ are sweet, so the engine is saves and "tell me the website", not arguments in th
 
 **Post order:** 355, 359, 364, 361, 362, 358, 356, 360, 363, 357. One a night, in the evening, on the 14k account.
 
+### 365 to 374: never say what's inside the gift (6 Oct)
+
+The owner, about 363 ("you wrote down the stuff i say at 2am"): "dont write anything unnecesarry just write omg
+your the best or something ... don't make up stories like that, just sad happy etc ... without adding anything
+extra that i will say in the gifts". The rule from here on: **the chat never describes the gift.** No list, no
+notes, no plans, no "one for every night". He made it, it arrives as the link, and she reacts: "you made this??",
+"omg", "i'm crying", "you're the best", "i love you so much". The story is only the moment around it, so any real
+gift fits the post. (354 had the same rule: "dont mention anything about in the pictures".)
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 365 | after a fight | "i'm sorry about earlier" | "i love you more" |
+| 366 | birthday | "worst birthday ever" (everyone forgot) | "only for you" |
+| 367 | long distance | "i miss you so much" | "34 days maya" |
+| 368 | almost broke up | "i think we need a break" | "i love you too" |
+| 369 | for no reason | "are you home" | "happy crying" |
+| 370 | bad day | "i failed" | "always maya" |
+| 371 | anniversary | "happy 1 year" (00:00) | "i love you" |
+| 372 | sick day | "i'm so sick" | "i love you" (he's still bringing soup) |
+| 373 | grief | "i can't stop crying" | "always" |
+| 374 | long distance | "are you still coming tonight" | "i'm holding you to that" |
+
+**Post order:** 368, 366, 365, 371, 374, 370, 367, 369, 373, 372. One a night, in the evening, on the 14k account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
