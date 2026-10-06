@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you ever get bored of me"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "you'd say that anyway"
+        },
+        {
+          "from": "them",
+          "text": "fine"
+        },
+        {
+          "from": "them",
+          "text": "proof"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "proof 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "you wrote down the stuff i say at 2am??"
+        },
+        {
+          "from": "them",
+          "text": "you say the best stuff at 2am"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i don't even remember saying half of this"
+        },
+        {
+          "from": "them",
+          "text": "i do"
+        },
+        {
+          "from": "me",
+          "text": "what's the last one"
+        },
+        {
+          "from": "them",
+          "text": "this. right now"
+        }
+      ]
+    }
+  ]
+}
