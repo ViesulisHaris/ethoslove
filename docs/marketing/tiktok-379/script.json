@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Hoy|01:34",
+      "messages": [
+        {
+          "from": "me",
+          "text": "te extraño muchísimo"
+        },
+        {
+          "from": "me",
+          "text": "odio la distancia"
+        },
+        {
+          "from": "them",
+          "text": "lo sé"
+        },
+        {
+          "from": "them",
+          "text": "34 días más"
+        },
+        {
+          "from": "me",
+          "text": "es muchísimo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "te hice algo"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para cuando me extrañes 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "noooo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "estoy llorando"
+        },
+        {
+          "from": "me",
+          "text": "ahora te extraño todavía más"
+        },
+        {
+          "from": "me",
+          "text": "te amo"
+        },
+        {
+          "from": "them",
+          "text": "34 días maya"
+        }
+      ]
+    }
+  ]
+}
