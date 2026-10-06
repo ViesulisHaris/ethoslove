@@ -18,6 +18,8 @@ import { loadFieldsSchema } from "@/templates/schemas";
 import type { Json } from "@/lib/supabase/types";
 import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
+import { campaignCoversEdit, campaignCoversNewGift, campaignGiftsLeft, parseCampaignGrant } from "@/lib/commerce/campaign-rules";
+import { countCampaignGift } from "@/lib/commerce/campaign";
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string; problems?: string[] };
 
@@ -117,10 +119,12 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   if (needs) {
     const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
     if (!unlocked) {
-      // A free reply (lib/commerce/free-reply.ts) may be edited in its own template, footer on.
-      const admin = manifest.tier === "premium" ? recipientFacingWriter() : null;
+      // A free reply (lib/commerce/free-reply.ts) may be edited in its own template, footer on, and so
+      // may a creator-campaign gift while its grant runs (lib/commerce/campaign-rules.ts).
+      const campaign = campaignCoversEdit(parseCampaignGrant(ctx.user.app_metadata), row.template_slug, Date.now());
+      const admin = manifest.tier === "premium" && !campaign ? recipientFacingWriter() : null;
       const reply = admin ? await freeReplyFor(admin, { replyGiftId: input.data.giftId, templateSlug: row.template_slug, userId: ctx.user.id }) : null;
-      if (!reply?.free || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true })) return { ok: false, error: "payment_required" };
+      if (!(campaign || reply?.free) || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true })) return { ok: false, error: "payment_required" };
     }
   }
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
@@ -155,7 +159,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id")
+    .select("id, template_slug, user_id, status")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -180,11 +184,19 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
       ? await freeReplyFor(writer, { replyGiftId: gift.id, templateSlug: gift.template_slug, userId: ctx.user.id, token: input.data.replyToken })
       : null;
 
+  // A creator with a running campaign grant publishes the campaign's templates free, footer on and no
+  // extras (lib/commerce/campaign-rules.ts): a new gift needs one left of the grant's count, a gift
+  // already out under it may be published again with its changes.
+  const grant = !unlocked && manifest.tier === "premium" && reply?.free !== true ? parseCampaignGrant(ctx.user.app_metadata) : null;
+  const firstPublish = gift.status === "draft";
+  const campaign = firstPublish ? campaignCoversNewGift(grant, gift.template_slug, Date.now()) : campaignCoversEdit(grant, gift.template_slug, Date.now());
+
   const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked) }, {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),
     freeReply: reply?.free === true,
+    campaign,
   });
   // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
   if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
@@ -223,6 +235,9 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     if (claimed) await releaseFreeReply(writer, claimed, gift.id);
     return { ok: false, error: updateError.message };
   }
+
+  // Counted at publish, so a gift deleted afterwards doesn't hand its slot back.
+  if (campaign && firstPublish) await countCampaignGift(writer, ctx.user.id).catch(() => {});
 
   const { data: row } = await ctx.supabase.from("gifts").select("short_id").eq("id", gift.id).single();
   revalidatePath("/dashboard");
@@ -274,16 +289,23 @@ export async function loadGiftForEdit(giftId: string): Promise<ActionResult<{ id
   };
 }
 
-/** Does the current user own this template (or Everything)? False when signed out. */
-export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[] }> {
+export type CampaignEntitlement = { left: number; endsAt: string | null };
+
+/**
+ * Does the current user own this template (or Everything)? False when signed out. `campaign` is set
+ * when they don't, but a running creator-campaign grant lets them publish a new gift in it free.
+ */
+export async function getEntitlement(templateSlug: string): Promise<{ unlocked: boolean; owned: string[]; campaign: CampaignEntitlement | null }> {
   const ctx = await requireContext();
-  if (!ctx.ok) return { unlocked: false, owned: [] };
+  if (!ctx.ok) return { unlocked: false, owned: [], campaign: null };
   // `owned` lets the editor say which template the buyer already paid for instead of a bare paywall.
   const [{ data }, { data: unlocks }] = await Promise.all([
     ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: templateSlug }),
     ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id),
   ]);
-  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug) };
+  const grant = parseCampaignGrant(ctx.user.app_metadata);
+  const campaign = !data && campaignCoversNewGift(grant, templateSlug, Date.now()) && grant ? { left: campaignGiftsLeft(grant), endsAt: grant.endsAt } : null;
+  return { unlocked: Boolean(data), owned: (unlocks ?? []).map((u) => u.template_slug), campaign };
 }
 
 /** Dashboard: duplicate a gift as a new draft (assets are shared by reference until edited). */

@@ -553,7 +553,8 @@
         "processing": "Este dispositivo no pudo prepararlo. Quítalo o añade una copia más pequeña.",
         "network": "Se cortó la conexión. Vuelve a intentarlo o quítalo para enviar el regalo sin él.",
         "remove": "Quitar"
-      }
+      },
+      "campaign": "Gratis con la campaña de creadores: te quedan {left} de {limit} regalos gratis. El pie de Ethos se queda."
     },
     "share": {
       "title": "Ya está publicado.",
@@ -2929,6 +2930,46 @@
       "rate_limited": "Demasiados cambios a la vez. Prueba otra vez en un minuto.",
       "not_configured": "Ahora mismo no se puede guardar.",
       "network": "No tienes conexión. Prueba otra vez cuando vuelvas a tenerla."
+    }
+  },
+  "campaign": {
+    "eyebrow": "Campaña de creadores",
+    "title": "Hazlo gratis. Publícalo. Cobra.",
+    "subtitle": "Cuatro de nuestras mejores plantillas, gratis en tu cuenta durante {days} días, para los regalos que publiques en TikTok e Instagram.",
+    "signInTitle": "Primero, tu cuenta",
+    "signInBlurb": "Las plantillas gratis van a tu cuenta. Inicia sesión o crea una, gratis, y esta página te estará esperando con la contraseña.",
+    "passwordLabel": "Contraseña de la campaña",
+    "passwordPlaceholder": "La contraseña de tu guía de campaña",
+    "unlock": "Desbloquear las plantillas",
+    "unlocking": "Comprobando…",
+    "active": {
+      "title": "Ya estás dentro.",
+      "until": "Gratis hasta el {date}.",
+      "noEnd": "Gratis, sin fecha de fin.",
+      "left": "Te quedan {left} de {limit} regalos gratis.",
+      "make": "Crear este regalo",
+      "rulesTitle": "Cómo funciona",
+      "rules": {
+        "footer": "Cada regalo lleva el pequeño pie de Ethos.",
+        "extras": "Los extras no están incluidos: un vídeo, una nota de voz, más de 10 fotos, programarlo o una contraseña.",
+        "stays": "Tus regalos siguen activos cuando acaban tus días gratis, así que tus publicaciones siguen funcionando.",
+        "once": "Una sola ventana por cuenta: volver a escribir la contraseña no la reinicia."
+      }
+    },
+    "ended": {
+      "title": "Tus días gratis han terminado.",
+      "detail": "Todos los regalos que hiciste siguen activos. ¿Has ganado tus primeros 6 $ en la campaña? Escribe a {email} y mantendremos tus plantillas abiertas."
+    },
+    "revoked": {
+      "title": "Tu acceso a la campaña está desactivado.",
+      "detail": "Tus regalos siguen activos. ¿Dudas? Escribe a {email}."
+    },
+    "errors": {
+      "wrong": "Esa no es la contraseña. Revisa tu guía de campaña.",
+      "tooMany": "Demasiados intentos. Espera una hora y vuelve a intentarlo.",
+      "accounts": "Demasiadas cuentas han desbloqueado la campaña desde esta conexión esta semana.",
+      "signIn": "Inicia sesión primero y luego escribe la contraseña.",
+      "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
     }
   }
 }

@@ -20,18 +20,20 @@ export type PublishDecision =
  * removes the watermark and lifts limits. Premium templates need an unlock, except for a free reply:
  * someone who received a paid premium gift sends one back in that template for free, and it then
  * goes out like a free template, footer on, extras still paid (`freeReply` is only ever set once the
- * server has checked the reply's token, lib/commerce/free-reply.ts).
+ * server has checked the reply's token, lib/commerce/free-reply.ts). A creator-campaign gift goes out
+ * the same way (`campaign`, set by the server only for a running grant that covers the template,
+ * lib/commerce/campaign-rules.ts).
  */
 export function decidePublish(
   manifest: TemplateManifest,
   data: GiftData,
   entitlement: Entitlement,
-  options: { removeWatermark: boolean; schedule: boolean; password: boolean; freeReply?: boolean; fieldsSchema?: z.ZodType },
+  options: { removeWatermark: boolean; schedule: boolean; password: boolean; freeReply?: boolean; campaign?: boolean; fieldsSchema?: z.ZodType },
 ): PublishDecision {
   const problems = readinessProblems(manifest, data, options.fieldsSchema);
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
 
-  const premiumTemplate = manifest.tier === "premium" && !options.freeReply;
+  const premiumTemplate = manifest.tier === "premium" && !options.freeReply && !options.campaign;
   const needsUnlock = premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data).length > 0;
 
   if (needsUnlock && !entitlement.unlocked) return { ok: false, reason: "payment_required" };

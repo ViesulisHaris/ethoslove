@@ -553,7 +553,8 @@
         "processing": "This device couldn't prepare it. Remove it, or add a smaller copy.",
         "network": "The connection dropped. Try again, or remove it to send the gift without it.",
         "remove": "Remove"
-      }
+      },
+      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on."
     },
     "share": {
       "title": "It's live.",
@@ -2929,6 +2930,46 @@
       "rate_limited": "That's a lot at once. Try again in a minute.",
       "not_configured": "Saving isn't available right now.",
       "network": "You're offline. Try again once you're connected."
+    }
+  },
+  "campaign": {
+    "eyebrow": "Creator campaign",
+    "title": "Make it free. Post it. Get paid.",
+    "subtitle": "Four of our best templates, free on your account for {days} days, for the gifts you post on TikTok and Instagram.",
+    "signInTitle": "First, your account",
+    "signInBlurb": "The free templates go on your account. Sign in or make one, free, and this page will be waiting with the password box.",
+    "passwordLabel": "Campaign password",
+    "passwordPlaceholder": "The password from your campaign brief",
+    "unlock": "Unlock the templates",
+    "unlocking": "Checking…",
+    "active": {
+      "title": "You're in.",
+      "until": "Free until {date}.",
+      "noEnd": "Free, with no end date.",
+      "left": "{left} of {limit} free gifts left.",
+      "make": "Make this gift",
+      "rulesTitle": "How it works",
+      "rules": {
+        "footer": "Every gift keeps the small Ethos footer.",
+        "extras": "Extras aren't included: a video, a voice note, more than 10 photos, a schedule or a password.",
+        "stays": "Your gifts stay live after your free days end, so your posts keep working.",
+        "once": "One window per account: typing the password again doesn't restart it."
+      }
+    },
+    "ended": {
+      "title": "Your free days are over.",
+      "detail": "Every gift you made stays live. Earned your first $6 in the campaign? Write to {email} and we'll keep your templates open."
+    },
+    "revoked": {
+      "title": "Your campaign access is off.",
+      "detail": "Your gifts stay live. Questions? Write to {email}."
+    },
+    "errors": {
+      "wrong": "That's not the password. Check your campaign brief.",
+      "tooMany": "Too many tries. Wait an hour and try again.",
+      "accounts": "Too many accounts have unlocked the campaign from this connection this week.",
+      "signIn": "Sign in first, then enter the password.",
+      "generic": "That didn't work. Try again in a moment."
     }
   }
 }

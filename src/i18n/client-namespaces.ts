@@ -27,6 +27,7 @@ export const CLIENT_NAMESPACES = {
   // Ethos for Two's success page only needs its own lines in the browser (the one still switching on).
   "(marketing)/checkout/layout": ["money.success", "money.invite", "membership.success"],
   "(marketing)/redeem/layout": ["auth", "money.redeem"],
+  "(marketing)/campaign/layout": ["auth", "campaign"],
   "(marketing)/for-two/layout": ["auth", "money.join"],
   // Development only: the account's Ethos for Two section in each state, for screenshots and e2e.
   "(marketing)/for-two/preview/page": ["membership.account", "money.invite"],

@@ -8,6 +8,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
+import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
 import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
 import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
@@ -60,8 +61,8 @@ export function PublishSheet({
   const locale = useLocale() as GiftLocale;
   const state = useEditor();
   const search = useSearchParams();
-  const [fetchedEntitlement, setFetchedEntitlement] = useState<{ unlocked: boolean; owned: string[] } | null>(null);
-  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [] };
+  const [fetchedEntitlement, setFetchedEntitlement] = useState<Awaited<ReturnType<typeof getEntitlement>> | null>(null);
+  const entitlement = state.authed ? fetchedEntitlement : { unlocked: false, owned: [], campaign: null };
   const [busy, setBusy] = useState(false);
   const [upgrade, setUpgrade] = useState<UpgradeQuote | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
@@ -82,6 +83,9 @@ export function PublishSheet({
   // The server said no ("reply_used", "reply_invalid"): the gift goes back to its normal price.
   const [replyRefused, setReplyRefused] = useState<string | null>(null);
   const freeReply = Boolean(replyToken) && replyRefused === null;
+  // A running creator-campaign grant that covers this template: free, footer on, no extras
+  // (lib/commerce/campaign-rules.ts). The server checks it again at publish.
+  const campaign = state.authed && !freeReply && manifest.tier === "premium" && !fetchedEntitlement?.unlocked ? (fetchedEntitlement?.campaign ?? null) : null;
   const [published, setPublished] = useState<{
     shortId: string;
     status: "live" | "scheduled";
@@ -175,7 +179,7 @@ export function PublishSheet({
     password: state.password.length > 0,
   };
   const decision =
-    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply, fieldsSchema }) : null;
+    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }) : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -187,13 +191,13 @@ export function PublishSheet({
   );
   const premiumFeatures = [
     // A free reply's template costs nothing: what it's paying for is the rest of the list.
-    manifest.tier === "premium" && !freeReply && t("featurePremiumTemplate"),
+    manifest.tier === "premium" && !freeReply && !campaign && t("featurePremiumTemplate"),
     options.removeWatermark && t("featureNoWatermark"),
     options.schedule && t("featureSchedule"),
     options.password && t("featurePassword"),
     ...(serialized ? premiumExtras(serialized) : [])
       // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
-      .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply)
+      .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply || Boolean(campaign))
       .map(
         (extra) =>
           ({
@@ -293,7 +297,7 @@ export function PublishSheet({
   const next = resumePath(slug, freeReply ? replyToken : undefined);
   // Anything that would need an unlock at publish time, shown before sign-in as a price hint.
   const wouldNeedPayment =
-    (manifest.tier === "premium" && !freeReply) ||
+    (manifest.tier === "premium" && !freeReply && !campaign) ||
     options.removeWatermark ||
     options.schedule ||
     options.password ||
@@ -479,6 +483,11 @@ export function PublishSheet({
             {freeReply && decision?.ok && !entitlement?.unlocked ? (
               <Notice tone="info" className="mt-6">
                 {t.rich("freeReply", { name: state.data.recipientName || "…", who: keepAsWritten })}
+              </Notice>
+            ) : null}
+            {campaign && decision?.ok ? (
+              <Notice tone="info" className="mt-6">
+                {t("campaign", { left: campaign.left, limit: CAMPAIGN_GIFT_LIMIT })}
               </Notice>
             ) : null}
             {replyRefused ? (
