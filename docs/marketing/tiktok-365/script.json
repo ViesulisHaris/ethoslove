@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm sorry about earlier"
+        },
+        {
+          "from": "them",
+          "text": "me too"
+        },
+        {
+          "from": "me",
+          "text": "i hate when we fight"
+        },
+        {
+          "from": "them",
+          "text": "same"
+        },
+        {
+          "from": "them",
+          "text": "can i send you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        },
+        {
+          "from": "them",
+          "text": "i wanted you to have it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm literally crying"
+        },
+        {
+          "from": "me",
+          "text": "you're the best"
+        },
+        {
+          "from": "me",
+          "text": "i love you so much"
+        },
+        {
+          "from": "them",
+          "text": "i love you more",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
