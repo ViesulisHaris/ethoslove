@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Tue|20:16",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you home"
+        },
+        {
+          "from": "me",
+          "text": "yeah why"
+        },
+        {
+          "from": "them",
+          "text": "check your phone"
+        },
+        {
+          "from": "me",
+          "text": "i'm literally on my phone"
+        },
+        {
+          "from": "them",
+          "text": "check it again"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for no reason 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "it's not even a special day"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "that's the point"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you're actually the best boyfriend ever"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "them",
+          "text": "don't cry"
+        },
+        {
+          "from": "me",
+          "text": "happy crying"
+        }
+      ]
+    }
+  ]
+}
