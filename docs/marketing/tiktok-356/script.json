@@ -1,0 +1,105 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Wed|20:31",
+      "messages": [
+        {
+          "from": "me",
+          "text": "don't get me anything for my birthday"
+        },
+        {
+          "from": "me",
+          "text": "i mean it this year"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "promise me"
+        },
+        {
+          "from": "them",
+          "text": "promise"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Sat|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "i didn't get you anything"
+        },
+        {
+          "from": "me",
+          "text": "good"
+        },
+        {
+          "from": "me",
+          "text": "wait"
+        },
+        {
+          "from": "me",
+          "text": "nothing at all?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i promised"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "nothing, as promised 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "this is not nothing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i didn't GET it"
+        },
+        {
+          "from": "them",
+          "text": "i made it"
+        },
+        {
+          "from": "me",
+          "text": "that's a loophole"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday maya",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
