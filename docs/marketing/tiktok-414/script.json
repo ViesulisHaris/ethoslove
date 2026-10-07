@@ -1,0 +1,40 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Soy malo con las palabras"
+        },
+        {
+          "from": "them",
+          "text": "Así que mejor te hice esto"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "léelo 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "no eres malo con las palabras"
+        },
+        {
+          "from": "me",
+          "text": "eres perfecto",
+          "status": "Leído 21:21"
+        }
+      ]
+    }
+  ]
+}
