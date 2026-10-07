@@ -1,0 +1,44 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "swiped": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "you forgot didn’t you",
+          "time": "11:59 pm"
+        },
+        {
+          "from": "them",
+          "text": "Never",
+          "time": "12:00 am"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy anniversary 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          },
+          "time": "12:00 am"
+        },
+        {
+          "from": "me",
+          "text": "I’M SORRY",
+          "time": "12:00 am"
+        },
+        {
+          "from": "me",
+          "text": "i love you",
+          "status": "Read 12:01 am",
+          "time": "12:01 am"
+        }
+      ]
+    }
+  ]
+}
