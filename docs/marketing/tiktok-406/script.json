@@ -1,0 +1,41 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "cásate conmigo",
+      "messages": [
+        {
+          "from": "me",
+          "text": "estoy en mis días 😭",
+          "status": "Leído 14:16"
+        },
+        {
+          "from": "them",
+          "text": "No digas más"
+        },
+        {
+          "from": "them",
+          "text": "¿Chocolate o papitas?"
+        },
+        {
+          "from": "them",
+          "text": "Mejor las dos"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "ábrelo mientras llego 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        }
+      ]
+    }
+  ]
+}
