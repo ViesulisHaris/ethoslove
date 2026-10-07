@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "i’m crying on the bus",
+      "messages": [
+        {
+          "from": "me",
+          "text": "today was so bad",
+          "status": "Read 6:40 pm"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "Open this when you get home"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
