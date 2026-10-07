@@ -1,0 +1,40 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "silenced": "no contestar",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Holaa mi niña bonita"
+        },
+        {
+          "from": "them",
+          "text": "Te dejé un café helado en la puerta"
+        },
+        {
+          "from": "them",
+          "text": "Y esto"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "que tengas un lindo día 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Te amo"
+        }
+      ]
+    }
+  ]
+}
