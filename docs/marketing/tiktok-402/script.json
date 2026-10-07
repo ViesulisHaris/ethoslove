@@ -1,0 +1,31 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "okay i love you",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you’re so annoying",
+          "status": "Read 9:12 pm"
+        },
+        {
+          "from": "them",
+          "text": "And you’re stuck with me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "forever btw 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
