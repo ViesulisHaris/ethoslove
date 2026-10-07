@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|16:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I GOT THE JOB"
+        },
+        {
+          "from": "them",
+          "text": "I KNEW IT"
+        },
+        {
+          "from": "them",
+          "text": "i'm so proud of you"
+        },
+        {
+          "from": "me",
+          "text": "i'm shaking"
+        },
+        {
+          "from": "them",
+          "text": "i made you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "just in case"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm so proud of you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "just in case??"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what if i didn't get it"
+        },
+        {
+          "from": "them",
+          "text": "then you'd still get this"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "me",
+          "text": "you're the best"
+        }
+      ]
+    }
+  ]
+}
