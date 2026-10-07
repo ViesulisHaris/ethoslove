@@ -1574,6 +1574,26 @@ swap "te extraño" for "te echo de menos" and "te amo" for "te quiero".
 
 **Post order:** 375, 378, 377, 376, 382, 379, 381, 380, 384, 383. One a night, in the evening.
 
+### 385 to 394: ten more in English, same rules (7 Oct)
+
+The chat never says what's inside the gift; Maya and Leo only; the link in every post. 385 takes rosie's
+biggest opener (149, "are you mad at me", 1.3M) and turns it sweet.
+
+| | Kind | Opens with | The last bubble | Hook for slide 1 |
+|---|---|---|---|---|
+| 385 | sweet | "are you mad at me" | "i love you so much" | i thought he was mad at me all day |
+| 386 | sad to happy | "my ex posted his new girlfriend" | "i love you" | my ex posted his new girlfriend today |
+| 387 | first i love you | "can i tell you something" | 😭😭 | he said it first |
+| 388 | sad | "i can't believe i leave tomorrow" | "we've got this" | the night before i moved away |
+| 389 | sad to happy | "worst shift of my life" | "i love you" | crying in my car after work |
+| 390 | happy | "happy 6 months" (00:00) | "i love you" | i thought he forgot our 6 months |
+| 391 | happy | "I GOT THE JOB" | "you're the best" | i got the job |
+| 392 | romantic | "are you awake" | "i can't now. i'm too happy" | 2am and i couldn't sleep |
+| 393 | sad | "my dad's in surgery" | "ok" | the scariest night of my life |
+| 394 | exes | "i know it's been 3 months" | "yes" | 3 months after we broke up |
+
+**Post order:** 385, 394, 389, 387, 391, 386, 393, 390, 388, 392. One a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
