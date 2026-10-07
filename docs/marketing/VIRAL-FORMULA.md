@@ -1654,6 +1654,31 @@ script sets it). For Spain, swap "te amo" for "te quiero" and "papitas" for "pat
 
 **Post order:** 405, 408, 406, 410, 412, 407, 411, 413, 409, 414. One or two a night, in the evening.
 
+### 415 to 424: ten more, aimed at the share (7 Oct)
+
+The same one-image format as 395 to 404, written for the two things that make that account's posts
+travel: girls sending them to their boyfriend ("take notes"), and tagging a friend over a punchline. So
+each chat is one of three shapes, with the link as part of the punchline, not an extra:
+
+- **He's two steps ahead or watching over her** (416 the little dot, 421 lunch, 420 he lasts 29 minutes).
+- **Her drama, his calm** (415 "With who", 419 "i hate you", 423 "nobody loves me" on FaceTime).
+- **A two-second scare that flips** (417 "1", 422 the girl on his story is his mom).
+
+| | The chat | The punchline |
+|---|---|---|
+| 415 | "i think we should break up" → "With who" | "No" + the link "not happening 🤍", her draft "okay fine" |
+| 416 | "home safe" → "Watched your little dot the whole way" | the link "now go sleep 🤍" |
+| 417 | "rate me 1 to 10" → "1" → "EXCUSE ME" | the link "my only 1 🤍" |
+| 418 | saved as "NOT my boyfriend": breakfast at her door | the link "for my girl 🤍" |
+| 419 | "i hate you" | the link "i love you too 🤍", her draft "okay i don't hate you" |
+| 420 | "going to sleep early" (swiped: 9:02 → 9:34) | "i was literally still awake" |
+| 421 | "babe are you busy" → "You skipped lunch don't lie" | her draft "how did you know i skipped lunch" |
+| 422 | "who's that girl on your story" → "My mom" | "She also helped me with this" + the link |
+| 423 | "nobody loves me 😔" → "We're literally on FaceTime rn" | the link "nobody huh 🤍" |
+| 424 | "Thank you" → "For picking me / Out of everyone" | the link "thank you 🤍" |
+
+**Post order:** 415, 418, 417, 419, 422, 416, 420, 421, 423, 424. One or two a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
