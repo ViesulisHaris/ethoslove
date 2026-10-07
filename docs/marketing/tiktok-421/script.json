@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "how did you know i skipped lunch",
+      "messages": [
+        {
+          "from": "me",
+          "text": "babe are you busy",
+          "status": "Read 7:12 pm"
+        },
+        {
+          "from": "them",
+          "text": "Your food’s on the way"
+        },
+        {
+          "from": "them",
+          "text": "You skipped lunch don’t lie"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "eat first then open 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
