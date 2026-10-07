@@ -1,0 +1,44 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "swiped": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "Happy 1 year my love",
+          "time": "12:00 am"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          },
+          "time": "12:00 am"
+        },
+        {
+          "from": "them",
+          "text": "Best year of my life",
+          "time": "12:00 am"
+        },
+        {
+          "from": "me",
+          "text": "BABY",
+          "time": "12:02 am"
+        },
+        {
+          "from": "me",
+          "text": "i’m literally crying",
+          "status": "Read 12:02 am",
+          "time": "12:02 am"
+        }
+      ]
+    }
+  ]
+}
