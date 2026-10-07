@@ -1,0 +1,37 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Helloo my pretty girl"
+        },
+        {
+          "from": "them",
+          "text": "Left iced coffee at you’re front door"
+        },
+        {
+          "from": "them",
+          "text": "And made you this for your break"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "have a good day 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "I love you mylove"
+        }
+      ]
+    }
+  ]
+}
