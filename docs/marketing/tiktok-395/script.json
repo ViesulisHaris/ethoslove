@@ -1,0 +1,265 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "would you still love me if i was a worm",
+          "status": "Read 11:42 pm"
+        },
+        {
+          "from": "them",
+          "text": "I’d keep you in a little jar"
+        },
+        {
+          "from": "them",
+          "text": "With holes in the lid"
+        },
+        {
+          "from": "them",
+          "text": "And the best dirt money can buy"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m on my period 😭",
+          "status": "Read 2:16 pm"
+        },
+        {
+          "from": "them",
+          "text": "Say less"
+        },
+        {
+          "from": "them",
+          "text": "Chocolate or chips"
+        },
+        {
+          "from": "them",
+          "text": "Nvm both"
+        },
+        {
+          "from": "them",
+          "text": "Omw"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you"
+        },
+        {
+          "from": "them",
+          "text": "I’m literally in the other room"
+        },
+        {
+          "from": "me",
+          "text": "still",
+          "status": "Read 9:03 pm"
+        },
+        {
+          "from": "them",
+          "text": "Coming"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you never do anything cute for me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my pretty girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "okay i take it back",
+          "status": "Read 7:48 pm"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "rate my outfit"
+        },
+        {
+          "from": "them",
+          "text": "10"
+        },
+        {
+          "from": "me",
+          "text": "you didn’t even look",
+          "status": "Read 6:12 pm"
+        },
+        {
+          "from": "them",
+          "text": "Don’t need to"
+        },
+        {
+          "from": "them",
+          "text": "It’s you"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "do not answer",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Helloo my pretty girl"
+        },
+        {
+          "from": "them",
+          "text": "I left iced coffee at your door"
+        },
+        {
+          "from": "them",
+          "text": "Have a good day for me"
+        },
+        {
+          "from": "them",
+          "text": "I love you"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "swiped": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "Text me when you get home",
+          "time": "10:51 pm"
+        },
+        {
+          "from": "them",
+          "text": "Are you home",
+          "time": "11:24 pm"
+        },
+        {
+          "from": "them",
+          "text": "Baby",
+          "time": "11:31 pm"
+        },
+        {
+          "from": "them",
+          "text": "Answer me pls",
+          "time": "11:32 pm"
+        },
+        {
+          "from": "me",
+          "text": "sorry i fell asleep in the uber 😭",
+          "status": "Read 11:40 pm",
+          "time": "11:40 pm"
+        },
+        {
+          "from": "them",
+          "text": "Next time I’m driving you",
+          "time": "11:40 pm"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "babe what’s 7x8"
+        },
+        {
+          "from": "them",
+          "text": "56"
+        },
+        {
+          "from": "them",
+          "text": "Why"
+        },
+        {
+          "from": "me",
+          "text": "nothing i just wanted to talk to you",
+          "status": "Read 4:03 pm"
+        },
+        {
+          "from": "them",
+          "text": "Then call me silly"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "input": "a puppy",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Just got paid"
+        },
+        {
+          "from": "them",
+          "text": "What do you want"
+        },
+        {
+          "from": "me",
+          "text": "you",
+          "status": "Read 5:30 pm"
+        },
+        {
+          "from": "them",
+          "text": "You already have me"
+        },
+        {
+          "from": "them",
+          "text": "Pick something else"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Don’t open this at work"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i opened it at work"
+        },
+        {
+          "from": "me",
+          "text": "everyone’s looking at me crying",
+          "status": "Read 1:14 pm"
+        }
+      ]
+    }
+  ]
+}
