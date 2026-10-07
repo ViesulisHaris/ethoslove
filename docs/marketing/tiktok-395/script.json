@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "would you still love me if i was a worm",
+          "status": "Read 11:42 pm"
+        },
+        {
+          "from": "them",
+          "text": "I’d keep you in a little jar"
+        },
+        {
+          "from": "them",
+          "text": "With holes in the lid"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my little worm 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
