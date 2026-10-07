@@ -2,7 +2,7 @@
 
 **Kind:** sweet and funny, in Spanish: 400 rewritten so the joke lands in Spanish, not translated word for word.
 One image, one short chat: dark iMessage on iOS 26, cropped, with "mi amor tiene las notificaciones
-silenciadas" and the message bar under it. Here the thread is swiped left to show the times.
+silenciadas" and the message bar under it.
 **Spanish:** neutral Latin American ("te amo", "papitas", "bus"), 24-hour times, "Leído" receipts, the
 Spanish link card (`"lang": "es"`: "UN REGALO PARA Maya").
 **The gift:** the tryethos link is in the chat. She only reacts; nothing says what's inside it.

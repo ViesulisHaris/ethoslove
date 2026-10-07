@@ -1611,8 +1611,10 @@ with the link in a short chat, or 2–3 slides, never 8–10.)
 - **The account's three extras**, used as the punchline:
   - Her reply typed in the bar and not sent, with the caret and the blue send button (`"input"`:
     "marry me", "now i really can't sleep").
-  - The thread swiped left to show every time (`"swiped": true`, a `time` on each message): she
-    accuses him at 11:59, his link lands at 12:00.
+  - The thread swiped left to show every time (`"swiped": true`, a `time` on each message). Only for
+    plain text bubbles: on 8 Oct the owner sent back 431, where "12:00 am" sat beside the link card
+    ("that is not how imessages look the 12 am at the right"). 400, 410, 420 and 431 dropped it; the
+    "Read 12:01 am" under her last message carries the time instead.
   - He's saved as something rude ("do not answer") and sends the sweetest texts (`"silenced"`).
 - She only reacts to the link; nothing says what's inside it, as always.
 
@@ -1623,7 +1625,7 @@ with the link in a short chat, or 2–3 slides, never 8–10.)
 | 397 | "you never do anything cute for me" | "i take it all back" |
 | 398 | "Don't open this at work" | "I said don't" |
 | 399 | "today was so bad" | her draft: "i'm crying on the bus" |
-| 400 | "you forgot didn't you" (swiped, 11:59 → 12:00) | "i love you" |
+| 400 | "you forgot didn't you" → "Never" + the link | "I'M SORRY / i love you" (Read 12:01 am) |
 | 401 | "i can't sleep" (2:14 am) | her draft: "now i really can't sleep" |
 | 402 | "you're so annoying" | her draft: "okay i love you" |
 | 403 | saved as "do not answer": iced coffee at her door | "Love you" |
@@ -1646,7 +1648,7 @@ script sets it). For Spain, swap "te amo" for "te quiero" and "papitas" for "pat
 | 407 | "nunca haces nada lindo por mí" | "retiro todo lo dicho" |
 | 408 | "No lo abras en el trabajo" | "Te dije que no" |
 | 409 | "hoy fue un día horrible" | her draft: "estoy llorando en el bus" |
-| 410 | "se te olvidó verdad" (swiped, 23:59 → 0:00) | "te amo" |
+| 410 | "se te olvidó verdad" → "Nunca" + the link | "PERDÓN / te amo" (Leído 0:01) |
 | 411 | "no puedo dormir" (2:14) | her draft: "ahora sí que no voy a dormir" |
 | 412 | "eres insoportable" → "Y te toca aguantarme" | her draft: "ok te amo" |
 | 413 | saved as "no contestar": a café helado at her door | "Te amo" |
@@ -1671,7 +1673,7 @@ each chat is one of three shapes, with the link as part of the punchline, not an
 | 417 | "rate me 1 to 10" → "1" → "EXCUSE ME" | the link "my only 1 🤍" |
 | 418 | saved as "NOT my boyfriend": breakfast at her door | the link "for my girl 🤍" |
 | 419 | "i hate you" | the link "i love you too 🤍", her draft "okay i don't hate you" |
-| 420 | "going to sleep early" (swiped: 9:02 → 9:34) | "i was literally still awake" |
+| 420 | "going to sleep early" → "Are you asleep / Okay you're asleep" | "i was literally still awake" |
 | 421 | "babe are you busy" → "You skipped lunch don't lie" | her draft "how did you know i skipped lunch" |
 | 422 | "who's that girl on your story" → "My mom" | "She also helped me with this" + the link |
 | 423 | "nobody loves me 😔" → "We're literally on FaceTime rn" | the link "nobody huh 🤍" |
@@ -1705,7 +1707,7 @@ flowers and iced coffee at you're front door", "You said nap not a coma / I miss
 | 428 | a hard day | "I'm so proud of you for getting through it", her draft "i don't deserve you" |
 | 429 | a surprise date | "Be ready at 8 tonight / You'll see / Open this first" → "NO WAYYYY" |
 | 430 | sorry after a fight | "I could never stay mad at you / Come here", her draft "i love you more" |
-| 431 | 1 year, 12:00 on the dot (swiped) | "Happy 1 year my love / Best year of my life" |
+| 431 | 1 year, at midnight | "Happy 1 year my love / Best year of my life" → "it's literally 12:00 😭" |
 | 432 | nervous the night before | "You worked so hard for this / Open this before you go in" |
 | 433 | before his long shift | "Left iced coffee at you're front door / And made you this for your break" |
 | 434 | she's sick | "Soup's coming in 20 / And this so you smile a little" |

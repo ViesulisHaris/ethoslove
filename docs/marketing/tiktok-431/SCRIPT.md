@@ -1,7 +1,7 @@
 # 431 · 12:00
 
-**Kind:** in love and everyday, like the screenshots the user sent: their anniversary: the times show he sent it the second it turned midnight. One image, one short chat:
-dark iMessage on iOS 26, cropped, with "mylove has notifications silenced" and the message bar under it. Here the thread is swiped left to show the times.
+**Kind:** in love and everyday, like the screenshots the user sent: their anniversary: he sends it the second it turns midnight, and she notices. One image, one short chat:
+dark iMessage on iOS 26, cropped, with "mylove has notifications silenced" and the message bar under it.
 **The gift:** the tryethos link is in the chat as something he made her. She only reacts; nothing says what's inside it.
 **Names:** Maya on the link card only. He's saved as "mylove".
 **Where to post:** the 14k account, in the evening. A single photo post: just this one image.

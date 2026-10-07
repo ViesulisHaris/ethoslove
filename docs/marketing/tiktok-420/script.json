@@ -5,32 +5,26 @@
   "slides": [
     {
       "type": "chat",
-      "swiped": true,
       "messages": [
         {
           "from": "me",
-          "text": "going to sleep early tonight",
-          "time": "9:02 pm"
+          "text": "going to sleep early tonight"
         },
         {
           "from": "them",
-          "text": "Sleep well pretty",
-          "time": "9:02 pm"
+          "text": "Sleep well pretty"
         },
         {
           "from": "them",
-          "text": "Are you asleep",
-          "time": "9:31 pm"
+          "text": "Are you asleep"
         },
         {
           "from": "them",
-          "text": "Okay you’re asleep",
-          "time": "9:33 pm"
+          "text": "Okay you’re asleep"
         },
         {
           "from": "them",
-          "text": "I made you something for the morning",
-          "time": "9:34 pm"
+          "text": "I made you something for the morning"
         },
         {
           "from": "them",
@@ -39,14 +33,12 @@
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
-          },
-          "time": "9:34 pm"
+          }
         },
         {
           "from": "me",
           "text": "i was literally still awake",
-          "status": "Read 9:35 pm",
-          "time": "9:35 pm"
+          "status": "Read 9:35 pm"
         }
       ]
     }

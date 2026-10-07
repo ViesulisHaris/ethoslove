@@ -26,7 +26,8 @@
  * per slide to change or `false` to hide it), then the message bar with its round + and the mic.
  * A slide's `"input": "can you come see me"` is a draft typed in the bar, with the caret and the
  * blue send button. `"swiped": true` is the thread dragged left to show the times: each message
- * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put.
+ * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put. Keep it
+ * to plain text bubbles, as in the reference: a time floating beside a link card read as fake.
  *
  * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
  * the storytime accounts that do millions actually post.
@@ -298,7 +299,9 @@ const IOS26_CSS = `
     .swiped .row{display:grid;grid-template-columns:minmax(0,1fr) 190px;align-items:center}
     .swiped .row .bubble{grid-column:1;grid-row:1;justify-self:start;max-width:90%}
     .swiped .row.r .bubble{justify-self:end}
-    .swiped .row .when{grid-column:2;grid-row:1;justify-self:end;color:#8E8E93;font-size:37px;letter-spacing:-.2px;white-space:nowrap}
+    .swiped .row .when{grid-column:2;grid-row:1;justify-self:end;color:#8E8E93;font-size:31px;letter-spacing:-.1px;white-space:nowrap}
+    /* The scroll bar iOS shows while the thread is being dragged, as in the reference. */
+    .swiped .stage::after{content:"";position:absolute;right:5px;top:46%;width:7px;height:26%;border-radius:4px;background:rgba(255,255,255,.32)}
     .swiped .row .status{grid-column:1;grid-row:2}
 `;
 // Focus's moon: a full disc with a bite out of the upper right, thick at the bottom left like iOS draws it.

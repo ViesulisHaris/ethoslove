@@ -1,7 +1,7 @@
 # 400 · you forgot didn't you
 
 **Kind:** sweet and funny. One image, one short chat, the way the storytime account the user found (7 Oct) posts:
-dark iMessage on iOS 26, cropped, with "mylove has notifications silenced" and the message bar under it. Here the thread is swiped left to show the times.
+dark iMessage on iOS 26, cropped, with "mylove has notifications silenced" and the message bar under it.
 **The gift:** the tryethos link is in the chat. She only reacts; nothing says what's inside it.
 **Names:** Maya on the link card only. He's saved as "mylove".
 **Where to post:** the 14k account, in the evening. A single photo post: just this one image.

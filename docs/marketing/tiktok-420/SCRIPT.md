@@ -1,7 +1,7 @@
 # 420 · going to sleep early
 
 **Kind:** sweet and funny. One image, one short chat: dark iMessage on iOS 26, cropped, with "mylove has
-notifications silenced" and the message bar under it. Here the thread is swiped left to show the times.
+notifications silenced" and the message bar under it.
 **Why it should spread:** the times tell the joke: he lasts 29 minutes without her.
 **The gift:** the tryethos link is in the chat. She only reacts; nothing says what's inside it.
 **Names:** Maya on the link card only. He's saved as "mylove".

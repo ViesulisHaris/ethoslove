@@ -5,17 +5,14 @@
   "slides": [
     {
       "type": "chat",
-      "swiped": true,
       "messages": [
         {
           "from": "me",
-          "text": "you forgot didn’t you",
-          "time": "11:59 pm"
+          "text": "you forgot didn’t you"
         },
         {
           "from": "them",
-          "text": "Never",
-          "time": "12:00 am"
+          "text": "Never"
         },
         {
           "from": "them",
@@ -24,19 +21,16 @@
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya"
-          },
-          "time": "12:00 am"
+          }
         },
         {
           "from": "me",
-          "text": "I’M SORRY",
-          "time": "12:00 am"
+          "text": "I’M SORRY"
         },
         {
           "from": "me",
           "text": "i love you",
-          "status": "Read 12:01 am",
-          "time": "12:01 am"
+          "status": "Read 12:01 am"
         }
       ]
     }
