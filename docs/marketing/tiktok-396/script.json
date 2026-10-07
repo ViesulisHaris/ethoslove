@@ -1,0 +1,253 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i can’t sleep",
+          "status": "Read 2:14 am"
+        },
+        {
+          "from": "them",
+          "text": "Me neither"
+        },
+        {
+          "from": "them",
+          "text": "Ft?"
+        },
+        {
+          "from": "them",
+          "text": "I’ll stay on till you fall asleep"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Did you eat today"
+        },
+        {
+          "from": "them",
+          "text": "Don’t lie to me"
+        },
+        {
+          "from": "me",
+          "text": "a granola bar",
+          "status": "Read 3:20 pm"
+        },
+        {
+          "from": "them",
+          "text": "I’m bringing food"
+        },
+        {
+          "from": "them",
+          "text": "Open the door in 10"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "there’s a spider in my room",
+          "status": "Read 10:12 pm"
+        },
+        {
+          "from": "them",
+          "text": "Don’t move"
+        },
+        {
+          "from": "them",
+          "text": "I’m coming"
+        },
+        {
+          "from": "them",
+          "text": "Bringing a cup and all my bravery"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "swiped": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "walking home rn",
+          "time": "11:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "Stay on the phone with me",
+          "time": "11:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "I’m watching your location the whole way",
+          "time": "11:03 pm"
+        },
+        {
+          "from": "me",
+          "text": "home",
+          "status": "Read 11:14 pm",
+          "time": "11:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "Good",
+          "time": "11:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "Lock the door",
+          "time": "11:14 pm"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "input": "i’m crying on the bus",
+      "messages": [
+        {
+          "from": "me",
+          "text": "today was so bad",
+          "status": "Read 6:40 pm"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "Open this when you get home"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my pretty girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m cold"
+        },
+        {
+          "from": "them",
+          "text": "Check your bag"
+        },
+        {
+          "from": "me",
+          "text": "why is your hoodie in my bag",
+          "status": "Read 8:55 pm"
+        },
+        {
+          "from": "them",
+          "text": "Knew you’d need it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "red flag 🚩",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Goodmorning my pretty girl"
+        },
+        {
+          "from": "them",
+          "text": "Breakfast is at your door"
+        },
+        {
+          "from": "them",
+          "text": "Eat all of it"
+        },
+        {
+          "from": "them",
+          "text": "I’ll check"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i think i’m getting sick",
+          "status": "Read 1:30 pm"
+        },
+        {
+          "from": "them",
+          "text": "Soup’s on the way"
+        },
+        {
+          "from": "them",
+          "text": "And I’m staying over"
+        },
+        {
+          "from": "them",
+          "text": "Don’t argue"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my mom says hi",
+          "status": "Read 7:17 pm"
+        },
+        {
+          "from": "them",
+          "text": "Tell her I said hi back"
+        },
+        {
+          "from": "them",
+          "text": "And thank you for making my favorite person"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Happy 6 months"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 6 months 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you remembered??",
+          "status": "Read 12:00 am"
+        },
+        {
+          "from": "them",
+          "text": "I remember everything about you"
+        }
+      ]
+    }
+  ]
+}
