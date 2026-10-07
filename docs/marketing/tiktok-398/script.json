@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Don’t open this at work"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i opened it at work"
+        },
+        {
+          "from": "me",
+          "text": "everyone’s looking at me crying",
+          "status": "Read 1:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "I said don’t"
+        }
+      ]
+    }
+  ]
+}
