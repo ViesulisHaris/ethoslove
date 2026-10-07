@@ -1,0 +1,36 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "me seguirías queriendo si fuera un gusano",
+          "status": "Leído 23:42"
+        },
+        {
+          "from": "them",
+          "text": "Te tendría en un frasquito"
+        },
+        {
+          "from": "them",
+          "text": "Con agujeritos en la tapa"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para mi gusanito 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        }
+      ]
+    }
+  ]
+}
