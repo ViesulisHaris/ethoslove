@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you so much",
+          "status": "Read 10:41 pm"
+        },
+        {
+          "from": "them",
+          "text": "I miss you more baby"
+        },
+        {
+          "from": "them",
+          "text": "6 more days and you’re in my arms again"
+        },
+        {
+          "from": "them",
+          "text": "Open this whenever you miss me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "6 more days 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
