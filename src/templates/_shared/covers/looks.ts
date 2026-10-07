@@ -463,6 +463,8 @@ export function defaultCoverFor(slug: string): CoverId {
     case "sticker-bomb":
     case "coquette":
     case "xoxo":
+    case "spooky-season":
+    case "dark-romance":
     case "keepsake":
     case "the-letter":
     case "scrapbook":
@@ -474,7 +476,7 @@ export function defaultCoverFor(slug: string): CoverId {
     case "picnic":
     case "music-box":
     case "party-animals":
-      return "classic"; // each opens with its own envelope, book, gate, camera, booth, basket, box or invitation
+      return "classic"; // each opens with its own envelope, book, diary, gate, camera, booth, basket, box or invitation
     case "kawaii":
       return "gingham";
     case "fireside":

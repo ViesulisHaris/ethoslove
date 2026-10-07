@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("the template gallery", () => {
-  test("opens on the premium best sellers, then what is new with the cats first, then the rest", async ({ page }) => {
+  test("opens on the premium best sellers, then what is new with the Halloween pair first, then the rest", async ({ page }) => {
     await page.goto("/templates");
     const shelves = page.locator("[data-shelf]");
     await expect(shelves).toHaveCount(3);
@@ -12,9 +12,10 @@ test.describe("the template gallery", () => {
     await expect(popular.getByText("Most loved")).toHaveCount(4);
 
     const fresh = page.locator("[data-shelf=new]");
-    await expect(fresh.getByRole("heading", { level: 3 }).first()).toHaveText("Party Animals");
-    await expect(fresh.getByRole("heading", { level: 3 }).nth(1)).toHaveText("Digicam");
-    await expect(fresh.getByRole("heading", { level: 3, name: "Coquette" })).toBeVisible();
+    await expect(fresh.getByRole("heading", { level: 3 }).first()).toHaveText("Spooky Season");
+    await expect(fresh.getByRole("heading", { level: 3 }).nth(1)).toHaveText("Dark Romance");
+    await expect(fresh.getByRole("heading", { level: 3, name: "Party Animals" })).toBeVisible();
+    await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Coquette" })).toBeVisible();
 
     // Nothing is listed twice.
     const names = await page.locator("[data-shelf] h3").allTextContents();

@@ -58,7 +58,7 @@ async function namesFit(page: Page) {
 }
 
 test.describe("names are never cut short", () => {
-  for (const slug of ["coquette", "xoxo", "the-council", "birthday-cinema"]) {
+  for (const slug of ["coquette", "xoxo", "the-council", "birthday-cinema", "spooky-season", "dark-romance"]) {
     test(`${slug}: a long name fits its line whole`, async ({ page, isMobile }) => {
       test.setTimeout(90_000);
       await draft(page, slug, "Mariangela Josephine");
@@ -66,7 +66,8 @@ test.describe("names are never cut short", () => {
       // A gift cover first if it has one; Classic opens straight on the template's own first screen.
       const cover = page.getByRole("button", { name: /tap to open/i });
       if (await cover.first().isVisible({ timeout: 6_000 }).catch(() => false)) await cover.first().click({ force: true });
-      await expect.poll(async () => (await namesFit(page)).length, { timeout: 20_000 }).toBeGreaterThan(0);
+      // Wait for the long name itself: the editor's still page can have other fitted lines on it first.
+      await expect.poll(async () => (await namesFit(page)).some((n) => n.text?.includes("Mariangela")), { timeout: 20_000 }).toBe(true);
       for (const name of await namesFit(page)) {
         expect(name.fits, `${name.text} fits`).toBe(true);
         expect(name.clipped, `${name.text} is not clipped`).toBe(false);

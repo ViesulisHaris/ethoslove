@@ -265,6 +265,45 @@ SCRAPS = {
     "62.jpg": (10, {
         "wax-seal-swans": (4, None, None, 0), "fan-lace": (15, None, None, 0),
     }),
+    # The owner's Halloween collage (Spooky Season): the photographed things only. Its skeleton
+    # lovers, skull and sunglassed ghosts are drawings and stay on it; the two maple leaves touch,
+    # so they are cut by colour in COLLAGE.
+    "halloween-collage.webp": (10, {
+        "moon": (2, None, None, 0), "cat-walk": (4, None, None, 0), "candle-amber": (5, None, None, 0), "cat-pumpkin": (6, None, None, 0),
+        "book-coffee": (8, None, None, 0), "cookie-cat": (12, None, None, 0), "coffee-cup": (13, None, None, 0), "sign-pumpkins": (14, None, None, 0),
+        "pumpkins-round": (15, None, None, 0), "star-charm": (0, None, None, 0),
+    }),
+    # Dark Romance: the photographed things. The painted rose and dove, the embroidered heart and the
+    # small painted heart under the dagger stay on the sheet.
+    "dark-romance.jpg": (11, {
+        "heart-sculpture": (0, None, None, 0), "butterfly-wine": (2, None, None, 0), "letters-quill": (5, None, None, 0), "brooch-heart": (7, None, None, 0),
+        "cards-spades": (8, None, None, 0), "crow-feathers": (9, None, None, 0), "brooch-heart-silver": (10, None, None, 0), "orchid-wine": (11, [8, 822, 206, 1142], None, 0),
+        "amaryllis": (11, [204, 818, 456, 990], None, 0), "die": (12, None, None, 0), "wax-seal-flower": (13, None, None, 0), "candles-melted": (14, None, None, 0),
+    }),
+    "red-flowers.jpg": (10, {
+        "orchid-spray-wine": (0, None, None, 0), "hibiscus-wine": (1, None, None, 0), "magnolia-wine": (2, None, None, 0), "hibiscus-velvet": (3, None, None, 0),
+        "rose-oxblood": (4, None, None, 0), "ranunculus-plum": (5, [4, 488, 238, 708], None, 0), "hibiscus-ruffle-wine": (5, [236, 490, 490, 710], None, 0),
+        "sunflower-wine": (5, [486, 476, 676, 668], None, 0), "poppy-wine": (7, None, None, 0), "dahlia-wine": (6, [224, 716, 440, 932], None, 0),
+        "tulip-parrot-wine": (6, [433, 686, 676, 936], None, 0), "cosmos-chocolate": (8, None, None, 0), "carnation-picotee": (9, None, None, 0), "lily-wine": (10, None, None, 0),
+    }),
+    # The black things: not the branded polish, coffin box, shoes or the titled spell book, not the
+    # white teacup or the open book, whose white the ground would eat, and not the spider, which sits
+    # on a patch of white web.
+    "goth-black.jpg": (10, {
+        "web": (0, None, None, 0), "rose-ember": (2, None, None, 0), "heart-pillow-black": (3, None, None, 0), "vial-blood": (4, None, None, 0),
+        "rose-black": (5, None, None, 0), "coffin": (6, None, None, 0), "heart-batwing": (9, None, None, 0), "butterfly-black": (10, None, None, 0),
+        "key-skeleton": (11, None, None, 0), "key-ornate": (12, None, None, 0), "cassette": (14, None, None, 0), "rose-black-small": (15, None, None, 0),
+        "moth": (18, None, None, 0), "bat-plush": (17, None, None, 0), "skull": (19, None, None, 0), "cat-black": (20, None, None, 0),
+        "mask-lace": (22, None, None, 0, False, 12), "bow-lace-black": (25, None, None, 0), "lantern": (26, None, None, 0),
+        "apple-black": (28, None, None, 0), "crow": (29, None, None, 0), "butterfly-black-wide": (30, None, None, 0), "button-black": (33, None, None, 0),
+        "lollipop-heart": (37, None, None, 0), "rose-black-large": (38, None, None, 0), "candle-bow": (39, None, None, 0), "bow-black-small": (40, None, None, 0),
+        "key-black": (42, None, None, 0, False, 30), "chess-king": (34, None, None, 0),
+    }),
+    # The cosy autumn sheet is nearly all paintings (and a beagle, a camera brand, a campground's
+    # badge): only its real maple leaf and the engraved charm are cut.
+    "autumn-cozy.jpg": (10, {
+        "leaf-maple-gold": (1, None, None, 0), "charm-with-love": (14, None, None, 0),
+    }),
 }
 
 def pinks_and_greens(r, g, b):
@@ -273,7 +312,21 @@ def pinks_and_greens(r, g, b):
     sat = (hi - lo) / hi if hi else 0
     return (g > r + 6 and g > b + 4 and sat > 0.12) or (r - g > 45 and sat > 0.2)
 
-KEEP = {"pinks-and-greens": pinks_and_greens}
+def _hsv(r, g, b):
+    import colorsys
+    return colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+
+def crimsons(r, g, b):
+    """A red maple leaf, and not the orange one it overlaps."""
+    h, s, v = _hsv(r, g, b)
+    return s > 0.35 and v > 0.22 and (h < 0.03 or h > 0.93)
+
+def ambers(r, g, b):
+    """An orange maple leaf, its brown spots and gold veins, and not the red one on top of it."""
+    h, s, v = _hsv(r, g, b)
+    return s > 0.3 and v > 0.18 and 0.035 <= h <= 0.17
+
+KEEP = {"pinks-and-greens": pinks_and_greens, "crimsons": crimsons, "ambers": ambers}
 
 # The owner's "happy birthday" collage (Digicam): the disco ball and the tulips. Its camera is a
 # branded one and its lily is a painting, so neither is cut; the envelope runs off the page.
@@ -282,6 +335,11 @@ COLLAGE = {
     "58.jpg": {
         "disco-ball-silver": {"circle": (511.8, 235.3, 51.8), "edge": 2},
         "tulips-pink": {"box": (175, 1000, 420, 1300), "seeds": [(300, 1150), (395, 1067)], "keep": "pinks-and-greens", "avoid": [(352, 1218, 420, 1300), (352, 1000, 420, 1013)], "close": 4, "edge": 2},
+    },
+    # The two maple leaves on the Halloween collage overlap, so each is cut by its own colour.
+    "halloween-collage.webp": {
+        "leaf-maple-orange": {"box": (198, 488, 566, 808), "seeds": [(380, 660), (300, 600), (470, 700)], "keep": "ambers", "close": 4, "edge": 0},
+        "leaf-maple-red": {"box": (452, 426, 670, 606), "seeds": [(560, 500), (600, 470)], "keep": "crimsons", "close": 4, "edge": 0},
     },
 }
 

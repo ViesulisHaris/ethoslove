@@ -379,6 +379,8 @@ const SCRIPTS = {
   // The three scrolling collages open with their own gesture, then the recording is the scroll itself.
   coquette: async (page) => scrollCollage(page, /untie the bow/i),
   xoxo: async (page) => scrollCollage(page, /open it/i),
+  "spooky-season": async (page) => scrollCollage(page, /blow the leaves/i),
+  "dark-romance": async (page) => scrollCollage(page, /turn the key/i),
   keepsake: async (page) => scrollCollage(page, /break the seal/i),
   "photo-booth": async (page) => {
     const curtain = page.locator("[data-curtain]");

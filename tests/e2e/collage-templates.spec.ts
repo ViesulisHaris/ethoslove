@@ -119,3 +119,56 @@ test.describe("Keepsake", () => {
     await expect(page.getByText("Felicidad", { exact: true })).toBeAttached();
   });
 });
+
+test.describe("Spooky Season", () => {
+  test("blows the leaves away and scrolls from the film to the letter", async ({ page }) => {
+    await openPage(page, "/demo/spooky-season", /blow the leaves/i);
+    await expect(page.getByText("Maya").first()).toBeVisible();
+    await expect(page.getByText(/admit two: haunted house/i)).toBeVisible();
+    await expect(page.getByText("All Hallows").first()).toBeVisible();
+    await scrollToEnd(page);
+    await expect(page.getByText(/be my boo/i)).toBeAttached();
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/spooky-season", /soplar las hojas/i);
+    await expect(page.getByText(/pase: casa del terror/i)).toBeVisible();
+    await expect(page.getByText(/mi calabacita/i)).toBeAttached();
+  });
+});
+
+test.describe("Dark Romance", () => {
+  test("turns the key, opens the diary, and scrolls from the tarot card to the letter", async ({ page }) => {
+    await openPage(page, "/demo/dark-romance", /turn the key/i);
+    await expect(page.getByText("Slow Dance").first()).toBeVisible();
+    await expect(page.getByText(/tap anywhere to leave a rose/i)).toBeAttached();
+    await expect(page.getByText(/the lovers/i)).toBeAttached();
+    await expect(page.getByText(/i'd bet on us/i)).toBeAttached();
+    await scrollToEnd(page);
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("a tap on the page leaves a rose, a tap on a photo opens it instead", async ({ page }) => {
+    const scroller = await openPage(page, "/demo/dark-romance", /turn the key/i);
+    const box = (await scroller.boundingBox())!;
+    // Top middle of the first screen, right of the cut-out letters: lace and wall, nothing to press.
+    await page.mouse.click(box.x + box.width * 0.55, box.y + box.height * 0.12);
+    await expect(page.locator("[data-rose]")).toHaveCount(1);
+    await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.16);
+    await expect(page.locator("[data-rose]")).toHaveCount(2);
+    await page.getByRole("button", { name: /the 23:40 to you/i }).click({ force: true });
+    await expect(page.locator("figure img")).toBeVisible();
+    await expect(page.locator("[data-rose]")).toHaveCount(2);
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/dark-romance", /gira la llave/i);
+    await expect(page.getByText(/los enamorados/i)).toBeAttached();
+    await expect(page.getByText(/toca donde quieras para dejar una rosa/i)).toBeAttached();
+  });
+});

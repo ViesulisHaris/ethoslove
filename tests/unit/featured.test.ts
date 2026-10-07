@@ -17,8 +17,8 @@ describe("what the gallery leads with", () => {
     for (const slug of POPULAR_SLUGS) expect(manifests.find((m) => m.slug === slug)?.tier, slug).toBe("premium");
   });
 
-  it("puts the cats at the front of what is new", () => {
-    expect(NEW_SLUGS.slice(0, 3)).toEqual(["party-animals", "digicam", "photo-booth"]);
+  it("puts the Halloween pair at the front of what is new, then the cats", () => {
+    expect(NEW_SLUGS.slice(0, 3)).toEqual(["spooky-season", "dark-romance", "party-animals"]);
   });
 
   it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {

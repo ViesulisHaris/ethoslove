@@ -9,12 +9,13 @@
  * offers these from its own editor, and the "Free" filter and the catalogue below still have it.
  * Keep it to one row of four.
  *
- * NEW is the latest templates: the 26 Sept batch (Party Animals redesigned, Digicam, Photo Booth, Music Box,
- * Picnic), then the strongest of the batch before. A template leaves this list when the next batch
- * ships; a slug that no longer exists is simply skipped, and a unit test says so out loud.
+ * NEW is the latest templates: the October pair for Halloween (Spooky Season, Dark Romance), then the
+ * 26 Sept batch (Party Animals redesigned, Digicam, Photo Booth, Music Box, Picnic). A template
+ * leaves this list when the next batch ships; a slug that no longer exists is simply skipped, and a
+ * unit test says so out loud.
  */
 export const POPULAR_SLUGS = ["bouquet", "xoxo", "birthday-cinema", "the-council"] as const;
-export const NEW_SLUGS = ["party-animals", "digicam", "photo-booth", "music-box", "picnic", "coquette", "sticker-bomb"] as const;
+export const NEW_SLUGS = ["spooky-season", "dark-romance", "party-animals", "digicam", "photo-booth", "music-box", "picnic"] as const;
 
 /**
  * What a free template's editor offers to move the gift into ("Same words, a bigger moment"): best
