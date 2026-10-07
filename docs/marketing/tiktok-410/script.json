@@ -1,0 +1,46 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "swiped": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "se te olvidó verdad",
+          "time": "23:59"
+        },
+        {
+          "from": "them",
+          "text": "Nunca",
+          "time": "0:00"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "feliz aniversario 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          },
+          "time": "0:00"
+        },
+        {
+          "from": "me",
+          "text": "PERDÓN",
+          "time": "0:00"
+        },
+        {
+          "from": "me",
+          "text": "te amo",
+          "status": "Leído 0:01",
+          "time": "0:01"
+        }
+      ]
+    }
+  ]
+}
