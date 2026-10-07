@@ -1,0 +1,33 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "ok te amo",
+      "messages": [
+        {
+          "from": "me",
+          "text": "eres insoportable",
+          "status": "Leído 21:12"
+        },
+        {
+          "from": "them",
+          "text": "Y te toca aguantarme"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para siempre 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        }
+      ]
+    }
+  ]
+}
