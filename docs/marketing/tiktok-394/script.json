@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:38",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know it's been 3 months"
+        },
+        {
+          "from": "them",
+          "text": "but i still think about you every day"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "why are you doing this now"
+        },
+        {
+          "from": "them",
+          "text": "can i send you one thing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "you don't have to reply"
+        },
+        {
+          "from": "me",
+          "text": "i opened it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "me",
+          "text": "i missed you so much"
+        },
+        {
+          "from": "them",
+          "text": "can i see you tomorrow"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        }
+      ]
+    }
+  ]
+}
