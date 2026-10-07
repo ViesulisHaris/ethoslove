@@ -164,6 +164,7 @@ function html(slide) {
       const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
       const row = m.from === "me" ? "r" : "l";
       const status = m.status ? `<div class="status">${stamp(m.status)}</div>` : "";
+      const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
       if (m.typing) {
         return `<div class="row l"><div class="bubble in typing"><span></span><span></span><span></span><i class="t1"></i><i class="t2"></i></div></div>`;
       }
@@ -174,7 +175,7 @@ function html(slide) {
         // A rich link is a grey card on either side; only its alignment and tail change.
         const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
         const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
-        return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+        return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
       }
       if (JUMBO.test(m.text.trim())) {
         return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
@@ -183,7 +184,6 @@ function html(slide) {
       const prev = all[i - 1];
       const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
       const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
-      const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
       return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
     })
     .join("");
