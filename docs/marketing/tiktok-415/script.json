@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "okay fine",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i think we should break up"
+        },
+        {
+          "from": "them",
+          "text": "With who"
+        },
+        {
+          "from": "me",
+          "text": "you",
+          "status": "Read 9:19 pm"
+        },
+        {
+          "from": "them",
+          "text": "No"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "not happening 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
