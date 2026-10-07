@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are you mad at me"
+        },
+        {
+          "from": "them",
+          "text": "no why"
+        },
+        {
+          "from": "me",
+          "text": "you've been quiet all day"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "with what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i thought you were mad"
+        },
+        {
+          "from": "them",
+          "text": "never at you"
+        },
+        {
+          "from": "me",
+          "text": "i'm literally crying"
+        },
+        {
+          "from": "me",
+          "text": "i love you so much"
+        }
+      ]
+    }
+  ]
+}
