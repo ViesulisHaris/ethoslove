@@ -1,0 +1,75 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 6 months"
+        },
+        {
+          "from": "me",
+          "text": "you remembered"
+        },
+        {
+          "from": "them",
+          "text": "obviously"
+        },
+        {
+          "from": "them",
+          "text": "i made you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 6 months maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "no way"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "me",
+          "text": "best 6 months of my life"
+        },
+        {
+          "from": "them",
+          "text": "and many more"
+        },
+        {
+          "from": "me",
+          "text": "i love you",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
