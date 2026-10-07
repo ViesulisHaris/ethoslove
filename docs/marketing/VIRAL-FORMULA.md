@@ -1631,6 +1631,29 @@ with the link in a short chat, or 2–3 slides, never 8–10.)
 
 **Post order:** 395, 398, 396, 400, 402, 397, 401, 403, 399, 404. One or two a night, in the evening.
 
+### 405 to 414: the same, in Spanish (7 Oct)
+
+395 to 404 rewritten so each joke lands in Spanish, not translated word for word: one image a post, the
+link inside a short chat. Neutral Latin American Spanish like 375 to 384 ("te amo", "papitas", "bus"),
+24-hour times, "Leído 23:42" receipts, the Spanish link card (`"lang": "es"`). He's saved as "mi amor", so
+the line under the chat reads "mi amor tiene las notificaciones silenciadas" (`"lang": "es"` in the
+script sets it). For Spain, swap "te amo" for "te quiero" and "papitas" for "patatas".
+
+| | The chat | Ends on |
+|---|---|---|
+| 405 | "me seguirías queriendo si fuera un gusano" → "Te tendría en un frasquito" | the link, "para mi gusanito 🤍" |
+| 406 | "estoy en mis días 😭" → "Mejor las dos" | her draft: "cásate conmigo" |
+| 407 | "nunca haces nada lindo por mí" | "retiro todo lo dicho" |
+| 408 | "No lo abras en el trabajo" | "Te dije que no" |
+| 409 | "hoy fue un día horrible" | her draft: "estoy llorando en el bus" |
+| 410 | "se te olvidó verdad" (swiped, 23:59 → 0:00) | "te amo" |
+| 411 | "no puedo dormir" (2:14) | her draft: "ahora sí que no voy a dormir" |
+| 412 | "eres insoportable" → "Y te toca aguantarme" | her draft: "ok te amo" |
+| 413 | saved as "no contestar": a café helado at her door | "Te amo" |
+| 414 | "Soy malo con las palabras" | "eres perfecto" |
+
+**Post order:** 405, 408, 406, 410, 412, 407, 411, 413, 409, 414. One or two a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
