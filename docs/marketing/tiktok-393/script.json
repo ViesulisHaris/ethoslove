@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my dad's in surgery"
+        },
+        {
+          "from": "me",
+          "text": "i'm so scared"
+        },
+        {
+          "from": "them",
+          "text": "i'm coming to the hospital"
+        },
+        {
+          "from": "me",
+          "text": "you don't have to"
+        },
+        {
+          "from": "them",
+          "text": "i'm already in the car"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this while you wait"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "you're not alone 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i needed this so much"
+        },
+        {
+          "from": "me",
+          "text": "thank you"
+        },
+        {
+          "from": "them",
+          "text": "5 minutes away"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    }
+  ]
+}
