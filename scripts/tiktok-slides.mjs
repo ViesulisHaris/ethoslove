@@ -20,6 +20,14 @@
  * the type is exactly the size a real screenshot sets it. TikTok shows the picture on black, and it
  * reads as someone's phone, not as a slide somebody made.
  *
+ * `"look": "ios26"` draws the dark iMessage the way an iPhone on iOS 26 shows it, copied from a
+ * storytime account whose every post goes big (7 Oct 2026): the lighter blue, and under the last
+ * message the moon and "mylove has notifications silenced" (`"silenced": "mylove"` in the script,
+ * per slide to change or `false` to hide it), then the message bar with its round + and the mic.
+ * A slide's `"input": "can you come see me"` is a draft typed in the bar, with the caret and the
+ * blue send button. `"swiped": true` is the thread dragged left to show the times: each message
+ * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put.
+ *
  * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
  * the storytime accounts that do millions actually post.
  *
@@ -175,9 +183,11 @@ function html(slide) {
       const prev = all[i - 1];
       const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
       const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
-      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+      const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
     })
     .join("");
+  const ios26 = script.look === "ios26";
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
@@ -260,8 +270,53 @@ function html(slide) {
     ${OG_CSS}
     ${HOOK_CSS}
     ${script.theme === "light" ? LIGHT_CSS : ""}
-  </style></head><body>${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
+    ${ios26 ? IOS26_CSS : ""}
+  </style></head><body class="${ios26 ? "ios26" : ""}${slide.swiped ? " swiped" : ""}">${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}${ios26 ? focusHtml(slide) + barHtml(slide) : ""}</div></body></html>`;
 }
+
+/** iOS 26's Messages, dark: measured off the reference screenshots at @3x. */
+const IOS26_BLUE = "#1C99FC";
+const IOS26_CSS = `
+    .ios26 .out,.ios26 .out.last::before{background:${IOS26_BLUE}}
+    .ios26 .bubble:not(.link){padding:24px 42px 25px;border-radius:58px;max-width:75%}
+    .ios26 .row + .row{margin-top:14px}
+    .ios26 .row.l + .row.r,.ios26 .row.r + .row.l{margin-top:28px}
+    .ios26 .status{color:#A2A2A6;padding-right:56px}
+    .focus{display:flex;align-items:center;justify-content:center;gap:12px;color:#8388EE;font-size:34px;letter-spacing:-.25px;margin-top:46px}
+    .focus svg{width:36px;height:36px;flex:none}
+    .bar{display:flex;align-items:center;gap:32px;margin-top:58px}
+    .plus{width:118px;height:118px;border-radius:50%;background:#171717;box-shadow:inset 0 0 0 3px #2C2C2C;display:grid;place-items:center;flex:none}
+    .plus svg{width:50px;height:50px}
+    .field{flex:1;min-width:0;height:124px;border-radius:62px;background:#181818;box-shadow:inset 0 0 0 3px #2C2C2C;display:flex;align-items:center;gap:20px;padding:0 34px 0 48px;box-sizing:border-box}
+    .field .hint{flex:1;color:#727272;font-size:52px;letter-spacing:-.7px}
+    .field .mic{width:40px;height:58px;color:#7A7A7A;flex:none}
+    .field.typed{padding-right:14px}
+    .draft{flex:1;min-width:0;color:#fff;font-size:52px;letter-spacing:-.7px;white-space:nowrap;overflow:hidden}
+    .caret{display:inline-block;width:5px;height:64px;margin-left:3px;border-radius:3px;background:${IOS26_BLUE};vertical-align:-14px}
+    .send{width:98px;height:98px;border-radius:50%;background:${IOS26_BLUE};display:grid;place-items:center;flex:none}
+    .send svg{width:54px;height:54px}
+    .swiped .row{display:grid;grid-template-columns:minmax(0,1fr) 190px;align-items:center}
+    .swiped .row .bubble{grid-column:1;grid-row:1;justify-self:start;max-width:90%}
+    .swiped .row.r .bubble{justify-self:end}
+    .swiped .row .when{grid-column:2;grid-row:1;justify-self:end;color:#8E8E93;font-size:37px;letter-spacing:-.2px;white-space:nowrap}
+    .swiped .row .status{grid-column:1;grid-row:2}
+`;
+// Focus's moon: a full disc with a bite out of the upper right, thick at the bottom left like iOS draws it.
+const MOON = `<svg viewBox="0 0 24 24" aria-hidden="true"><mask id="bite"><rect width="24" height="24" fill="#fff"/><circle cx="17.6" cy="6.4" r="7.4" fill="#000"/></mask><circle cx="12" cy="12" r="9.2" fill="currentColor" mask="url(#bite)"/></svg>`;
+const silencedLine = (name) => (script.lang === "es" ? `${name} tiene las notificaciones silenciadas` : `${name} has notifications silenced`);
+/** The moon and "… has notifications silenced", under the last message, while his Focus is on. */
+const focusHtml = (slide) => {
+  const name = slide.silenced === false ? null : (slide.silenced ?? script.silenced);
+  return name ? `<div class="focus">${MOON}<span>${esc(silencedLine(name))}</span></div>` : "";
+};
+/** The message bar: the round + and the field, empty with its mic, or holding a draft and the send button. */
+const barHtml = (slide) => {
+  const plus = `<div class="plus"><svg viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg></div>`;
+  const field = slide.input
+    ? `<div class="field typed"><span class="draft">${esc(slide.input)}<i class="caret"></i></span><span class="send"><svg viewBox="0 0 24 24"><path d="M12 19.5V5.5M5.8 11.4 12 5.2l6.2 6.2" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>`
+    : `<div class="field"><span class="hint">iMessage</span><svg class="mic" viewBox="0 0 16 24"><rect x="4.4" y="1.2" width="7.2" height="13.4" rx="3.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 11.2a6.5 6.5 0 0 0 13 0M8 17.7v4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`;
+  return `<div class="bar">${plus}${field}</div>`;
+};
 
 /* Instagram DMs, dark mode, at the same @3x scale. */
 // The sent gradient is pinned to the screen as in the app, so higher bubbles are more purple.
@@ -522,7 +577,7 @@ function gapHtml(slide, n) {
 }
 
 // "crop": the same chat, laid out at a phone's width and top to bottom, then shot to the messages only.
-const CROP_WIDTH = 1206;
+const CROP_WIDTH = script.look === "ios26" ? 1170 : 1206;
 const CROP_CSS = `html,body{width:${CROP_WIDTH}px!important;height:auto!important;overflow:visible!important}.stage{position:relative!important;inset:auto!important;justify-content:flex-start!important;padding:34px 48px 30px 42px!important}`;
 
 const browser = await chromium.launch(process.env.TIKTOK_CHROMIUM ? { executablePath: process.env.TIKTOK_CHROMIUM } : {});

@@ -1594,6 +1594,40 @@ biggest opener (149, "are you mad at me", 1.3M) and turns it sweet.
 
 **Post order:** 385, 394, 389, 387, 391, 386, 393, 390, 388, 392. One a night, in the evening.
 
+### 395 to 399: "notifications silenced", ten sweet chats a post (7 Oct)
+
+Copied from a storytime account the user found on TikTok, whose posts all go big. Every slide is a
+cropped screenshot of dark iMessage on iOS 26: a short chat, then the moon and "mylove has
+notifications silenced" under it, then the empty message bar. There's no header, no date and no
+keyboard, so TikTok shows each picture centred on black and it reads as someone's phone.
+
+- **Ten chats a post, not one story.** Each slide is its own little exchange with her boyfriend,
+  saved as "mylove": a question from her, and his answer as the punchline ("would you still love me
+  if i was a worm" → "I'd keep you in a little jar / With holes in the lid").
+- **The voice.** His bubbles start with a capital (an iPhone does that) and keep his typos ("Your
+  always safe", "Comeback", "Helloo"). Hers are lowercase, stretched ("babyyy") or in caps for joy
+  ("NO WAYYYY"). "Read 8:19 pm" sits under her last message, in lowercase am/pm.
+- **Three extras the account uses, one of each per post:**
+  - Her reply typed in the bar and not sent, with the caret and the blue send button
+    (`"input"`). The draft is the punchline.
+  - The thread swiped left to show every time (`"swiped": true`, a `time` on each message).
+    The times tell the joke: he's outside 17 minutes after she can't stop crying.
+  - One slide where he's saved as something rude ("do not answer", "red flag 🚩", "backup plan")
+    and the texts are the sweetest of the post (`"silenced": "…"` on that slide).
+- **The link** is on two slides of the ten. He sends it with a line ("Don't open this at work"),
+  and she only reacts ("i opened it at work / everyone's looking at me crying"). Nothing says
+  what's inside, as always.
+
+| | Hook for slide 1 | Link on | Joke contact |
+|---|---|---|---|
+| 395 | texts from my boyfriend that live in my head rent free | 4, 10 | do not answer |
+| 396 | texts from my boyfriend that make me feel safe | 5, 10 | red flag 🚩 |
+| 397 | what my boyfriend texts me when i'm sad | 5, 10 | the annoying one |
+| 398 | proof my boyfriend is obsessed with me | 5, 10 | backup plan |
+| 399 | he says he's not romantic | 5, 10 | my problem |
+
+**Post order:** 395, 398, 399, 396, 397. One a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
