@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "now i really can’t sleep",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i can’t sleep",
+          "status": "Read 2:14 am"
+        },
+        {
+          "from": "them",
+          "text": "Me neither"
+        },
+        {
+          "from": "them",
+          "text": "So I made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodnight maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
