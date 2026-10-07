@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you never do anything cute for me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my pretty girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Take that back"
+        },
+        {
+          "from": "me",
+          "text": "i take it back"
+        },
+        {
+          "from": "me",
+          "text": "i take it all back",
+          "status": "Read 7:48 pm"
+        }
+      ]
+    }
+  ]
+}
