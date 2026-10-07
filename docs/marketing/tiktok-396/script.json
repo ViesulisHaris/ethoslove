@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "marry me",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m on my period 😭",
+          "status": "Read 2:16 pm"
+        },
+        {
+          "from": "them",
+          "text": "Say less"
+        },
+        {
+          "from": "them",
+          "text": "Chocolate or chips"
+        },
+        {
+          "from": "them",
+          "text": "Nvm both"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open this while you wait 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
