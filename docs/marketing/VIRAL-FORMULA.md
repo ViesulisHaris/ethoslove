@@ -1679,6 +1679,39 @@ each chat is one of three shapes, with the link as part of the punchline, not an
 
 **Post order:** 415, 418, 417, 419, 422, 416, 420, 421, 423, 424. One or two a night, in the evening.
 
+### 425 to 434: in love, not punchlines (7 Oct)
+
+The owner on 415 to 424: "1 is only good out of all these 10 it needs to be more like inlove realistic like
+i've sent you the screenshot". The reference account's texts aren't jokes. They're a boyfriend who is plainly in
+love, texting about an ordinary day: "Goodmorningg my pretty girl / Ft me so I can start my day", "I left
+flowers and iced coffee at you're front door", "You said nap not a coma / I miss you / Comeback". So:
+
+- **An everyday moment, not a setup**: good morning, getting home, missing each other, a hard day, a
+  nervous night before something, sick, sorry after a fight, a surprise date, the anniversary at midnight.
+- **His voice**: pet names in every chat ("baby", "my pretty girl", "my love", "mylove"), two to four
+  bubbles in a row, a real little detail ("when you fell asleep on ft"), and his typos ("Goodmorningg",
+  "Helloo", "you're front door").
+- **Her voice**: short and soft or loud with joy ("goodmorninggggg babyyy", "NO WAYYYY", "i'm literally
+  crying", the unsent "i don't deserve you").
+- **The link is something he made her**, said the way he'd say it: "I made you something last night", "Open
+  this before you go in", "Open this whenever you miss me". Never a punchline title.
+- No internet-meme lines ("With who", "rate me 1 to 10", "nobody huh"): they read as written, not lived.
+
+| | The moment | His line with the link |
+|---|---|---|
+| 425 | good morning | "I made you something last night when you fell asleep on ft" |
+| 426 | she got home | "I was watching your location the whole time / Get some sleep my love" |
+| 427 | long distance | "6 more days and you're in my arms again / Open this whenever you miss me" |
+| 428 | a hard day | "I'm so proud of you for getting through it", her draft "i don't deserve you" |
+| 429 | a surprise date | "Be ready at 8 tonight / You'll see / Open this first" → "NO WAYYYY" |
+| 430 | sorry after a fight | "I could never stay mad at you / Come here", her draft "i love you more" |
+| 431 | 1 year, 12:00 on the dot (swiped) | "Happy 1 year my love / Best year of my life" |
+| 432 | nervous the night before | "You worked so hard for this / Open this before you go in" |
+| 433 | before his long shift | "Left iced coffee at you're front door / And made you this for your break" |
+| 434 | she's sick | "Soup's coming in 20 / And this so you smile a little" |
+
+**Post order:** 426, 433, 429, 431, 425, 427, 428, 430, 432, 434. One or two a night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
