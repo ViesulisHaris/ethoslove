@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m so nervous for tomorrow",
+          "status": "Read 10:30 pm"
+        },
+        {
+          "from": "them",
+          "text": "You’re going to do amazing baby"
+        },
+        {
+          "from": "them",
+          "text": "You worked so hard for this"
+        },
+        {
+          "from": "them",
+          "text": "Open this before you go in"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "good luck my love 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
