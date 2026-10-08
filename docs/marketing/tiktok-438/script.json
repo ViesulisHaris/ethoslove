@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "come home already",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Landed baby"
+        },
+        {
+          "from": "them",
+          "text": "Already miss you"
+        },
+        {
+          "from": "them",
+          "text": "Made you something for while I’m gone"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "while i’m gone 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
