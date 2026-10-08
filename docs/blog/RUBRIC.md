@@ -122,7 +122,8 @@ The criteria are `answers`, `usable` and `trust` for the reader; `accuracy`, `vo
    Also give each new reviewer the last round's review from its own role. It checks that each of
    those fixes was made, and made correctly, then reads the whole post as round one did.
 4. Publish when all three overall scores are 10, no criterion is below 9, and there are no
-   dealbreakers.
+   dealbreakers. Publish the version they passed: polish from the final round goes in the record,
+   not into the post, because an unreviewed edit could undo a 10.
 5. At most three rounds. If round three still isn't there, don't publish that post:
    - Move it to the end of the queue with the reviewers' notes, and try the next topic once.
    - If that one fails too, publish nothing today and say why in the report.

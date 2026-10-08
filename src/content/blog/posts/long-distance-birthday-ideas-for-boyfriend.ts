@@ -21,7 +21,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Start with his time zone" },
         {
           type: "p",
-          text: "Before you choose anything, write down three times in his time zone: midnight, the time he wakes up and the hour he's free in the evening. Every idea below hangs on one of them. If you're six hours ahead, his midnight is your six in the morning; if you're behind, it falls on the day before his birthday where you are, maybe in the middle of your working day. Add his city to the world clock on your phone, convert the three times to yours now and put each one in your calendar with an alert, so there's nothing to work out on the day. If the clocks change where either of you lives before his birthday, convert them again after the change.",
+          text: "Before you choose anything, write down three times in his time zone: midnight, the time he wakes up and the hour he's free in the evening. Most of what follows hangs on one of them. If you're six hours ahead, his midnight is your six in the morning; if you're behind, it falls on the day before his birthday where you are, maybe in the middle of your working day. Add his city to the world clock on your phone, convert the three times to yours now and put each one in your calendar with an alert, so there's nothing to work out on the day. If the clocks change where either of you lives before his birthday, convert them again after each change.",
         },
         {
           type: "p",
@@ -37,7 +37,7 @@ export const post: BlogPost = {
           items: [
             "**A countdown that opens at midnight.** Send him the link in the evening: a live timer ticks down on his phone and, at zero, opens onto your photos and a message. Watching it get closer is half the fun.",
             "**A voice note for 00:00.** Thirty seconds of you singing badly beats a long paragraph. Record it the day before. If your messaging app can schedule a voice note, schedule it for his midnight converted to your time, because scheduled messages go by your clock; if not, set an alarm and send it yourself.",
-            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. Something like: 'His birthday's on Thursday and I can't be there. Could you send him the best photo you've got of him, with one line, at midnight his time, the second it turns Thursday? I'll remind you on Wednesday evening.' If he stays up late and so do they, put them all on one video call instead and send him the link at twelve.",
+            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. Something like: 'His birthday's on Thursday and I can't be there. Could you send him the best photo you've got of him, with one line, at midnight his time, the second it turns Thursday? I'll remind you on Wednesday evening.' If he stays up late and so do they, throw him a surprise party on one video call instead and send him the link at twelve.",
           ],
         },
         {
@@ -171,7 +171,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Empieza por su zona horaria" },
         {
           type: "p",
-          text: "Antes de elegir nada, apunta tres horas en su zona horaria: la medianoche, la hora a la que se despierta y la hora en la que está libre por la noche. Todas las ideas de abajo dependen de una de ellas. Si vas seis horas por delante, su medianoche son tus seis de la mañana; si vas por detrás, cae el día antes de su cumpleaños donde estás tú, quizá en mitad de tu jornada. Añade su ciudad al reloj mundial del móvil, pasa ahora las tres horas a la tuya y apunta cada una en el calendario con un aviso, para no tener que hacer cuentas ese día. Si antes de su cumpleaños hay cambio de hora donde vive alguno de los dos, vuelve a pasarlas después del cambio.",
+          text: "Antes de elegir nada, apunta tres horas en su zona horaria: la medianoche, la hora a la que se despierta y la hora en la que está libre por la noche. Casi todo lo que sigue depende de una de ellas. Si vas seis horas por delante, su medianoche son tus seis de la mañana; si vas por detrás, cae el día antes de su cumpleaños donde estás tú, quizá en mitad de tu jornada. Añade su ciudad al reloj mundial del móvil, pasa ahora las tres horas a la tuya y apunta cada una en el calendario con un aviso, para no tener que hacer cuentas ese día. Si antes de su cumpleaños hay cambio de hora donde vive alguno de los dos, vuelve a pasarlas después de cada cambio.",
         },
         {
           type: "p",
@@ -187,7 +187,7 @@ export const post: BlogPost = {
           items: [
             "**Una cuenta atrás que se abre a medianoche.** Mándale el enlace por la tarde: un temporizador va bajando en su móvil y, al llegar a cero, se abre con tus fotos y un mensaje. Ir viendo cómo se acerca la hora es la mitad de la gracia.",
             "**Una nota de voz para las 00:00.** Treinta segundos tuyos cantando fatal valen más que un párrafo largo. Grábala el día antes. Si tu app de mensajes deja programar notas de voz, prográmala para su medianoche pasada a tu hora, porque los mensajes programados usan la hora de tu móvil; si no, pon una alarma y mándala tú.",
-            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas la mejor foto que tengas de él, con una frase, a medianoche en su zona horaria, justo cuando empiece el jueves? Te lo recuerdo el miércoles por la tarde.» Si él suele trasnochar y ellos también, reúnelos a todos en una videollamada y mándale el enlace a las doce.",
+            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas la mejor foto que tengas de él, con una frase, a medianoche en su zona horaria, justo cuando empiece el jueves? Te lo recuerdo el miércoles por la tarde.» Si él suele trasnochar y ellos también, móntale una fiesta sorpresa por videollamada con todos ellos y mándale el enlace a las doce.",
           ],
         },
         {

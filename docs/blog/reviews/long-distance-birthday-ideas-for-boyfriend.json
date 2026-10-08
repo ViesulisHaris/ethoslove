@@ -201,6 +201,51 @@
       "rejected": [
         "Reader's daylight-saving line in the mistakes list: the same advice went in at the step where the times are converted, as the search reviewer suggested."
       ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is parasite pages on borrowed domains, a 50-item listicle and a wishes page; this is the only result that turns the ideas into a plan on his clock, from a countdown at his midnight to the evening call, with deadlines that still work a week out, the exact message for his friends and a schedule to copy."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every product claim holds in the code and every round-four change was made correctly but one: 'convert them again after the change' assumes one change, and London and New York change a week apart this autumn (gap 5h, 4h, then 5h), so it must say 'after each change'. Polish: 'Every idea below' overstates; 'Por un día no pasa nada'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result that turns the ideas into a plan on his clock: the times converted into your calendar, a midnight-to-bedtime schedule, the traps the lists miss (scheduled messages go by your clock, clocks change on different dates, customs) and the exact message for his friends. Polish: call the midnight video call a surprise party."
+        }
+      ],
+      "applied": [
+        "'convert them again after each change' / 'después de cada cambio'.",
+        "Polish taken: 'Most of what follows hangs on one of them' / 'Casi todo lo que sigue'; the late-night call is a surprise party on video / 'móntale una fiesta sorpresa por videollamada'."
+      ],
+      "rejected": [
+        "Editor's 'Por un día no pasa nada': 'Es un día' mirrors 'It's one day' and nothing in it is wrong, so left for the final round rather than adding another Spanish change.",
+        "Reader's polish (the link the evening before, gift-wrapping, the film mid-afternoon, a sentence order): optional, left out to keep this round's changes to the fix."
+      ]
     }
   ]
 }
