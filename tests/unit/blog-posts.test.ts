@@ -60,6 +60,20 @@ const FILLER: Record<"en" | "es", RegExp[]> = {
   es: [/en el mundo (actual|de hoy)/i, /\bsumérgete\b/i, /\bdesbloquea(r)? (el poder|los secretos)\b/i, /\ben conclusión\b/i, /\binolvidable\b/i, /\bun testimonio de\b/i],
 };
 
+/** The panel in docs/blog/RUBRIC.md: each reader and the criteria they score. */
+const PANEL: Record<string, string[]> = {
+  reader: ["answers", "usable", "trust"],
+  editor: ["accuracy", "voice", "spanish"],
+  search: ["better", "search"],
+};
+type Review = { reviewer: string; scores: Record<string, number>; overall: number; dealbreakers?: string[] };
+/**
+ * Posts published before the panel existed and reviewed after the fact. The five-round limit is a
+ * routine's budget for one day's new post, so it doesn't apply to them; the 10/10/10 bar does.
+ */
+const REVIEWED_AFTER_PUBLISHING = ["long-distance-birthday-ideas-for-boyfriend"];
+type ReviewRecord = { slug: string; keyword: string; rounds: { round: number; reviews: Review[] }[] };
+
 /** Names that look like a template's but aren't one. */
 const GHOST_NAMES = ["Snowglobe", "Time Line", "Front page", "Jar of reasons", "Birthday cinema", "Midnight countdown"];
 
@@ -181,6 +195,23 @@ describe("blog posts", () => {
       });
 
       it("is a whole post in English", () => checkContent(post, "en", post.content.en));
+
+      it("passed the review panel at 10/10/10", () => {
+        const file = path.join(__dirname, `../../docs/blog/reviews/${post.slug}.json`);
+        expect(fs.existsSync(file), `docs/blog/reviews/${post.slug}.json is missing: run the panel in docs/blog/RUBRIC.md`).toBe(true);
+        const record = JSON.parse(fs.readFileSync(file, "utf8")) as ReviewRecord;
+        expect(record.slug).toBe(post.slug);
+        expect(record.rounds.length, "rounds").toBeGreaterThanOrEqual(1);
+        if (!REVIEWED_AFTER_PUBLISHING.includes(post.slug)) expect(record.rounds.length, "at most five rounds").toBeLessThanOrEqual(5);
+        const last = record.rounds[record.rounds.length - 1];
+        for (const [name, criteria] of Object.entries(PANEL)) {
+          const review = last?.reviews.find((r) => r.reviewer === name);
+          expect(review, `the last round has no ${name} review`).toBeTruthy();
+          expect(review?.overall, `${name} overall`).toBe(10);
+          for (const c of criteria) expect(review?.scores[c], `${name}: ${c}`).toBeGreaterThanOrEqual(9);
+          expect(review?.dealbreakers ?? [], `${name} dealbreakers`).toEqual([]);
+        }
+      });
 
       if (post.content.es) {
         const es = post.content.es;

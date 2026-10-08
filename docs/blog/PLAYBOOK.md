@@ -127,14 +127,35 @@ grep -c "<slug>" .next/server/app/llms.txt.body                                 
 Last, read the English once as the person who searched for it. Does the lead answer them? Is every
 claim true? Would they be glad they clicked? Fix what isn't so.
 
-If something fails and you can't fix it in this run, don't publish. Stash the work, leave the
-queue as it is, and report what failed.
+### The review panel: nothing goes out below 10/10
+
+Then run the panel in `docs/blog/RUBRIC.md`. Three fresh reviewer subagents read the post in
+parallel, each told not to edit any file:
+- the reader who searched for it;
+- the editor and fact-checker;
+- the search competitor, who compares the post with what ranks now.
+
+Apply their fixes, then rerun the checks above. Then run a fresh panel on the new version, and give
+each new reviewer the last round's review from its role so it checks those fixes. Repeat until all
+three overall scores are 10, no criterion is under 9 and there are no dealbreakers.
+There are at most five rounds; the rubric says what to do if the post doesn't get there. Write
+every round to `docs/blog/reviews/<slug>.json`: the test fails a post without a record ending
+10/10/10.
+
+If something fails and you can't fix it in this run, don't publish. That includes a panel that
+doesn't reach 10/10 in five rounds. Stash the work, leave the queue as the rubric
+says, and report what failed.
 
 ## 6. Publish
 
-In one commit, add the post, `index.ts`, any older posts you linked from, `docs/blog/queue.json`
-with today's entry removed, and `public/blog/<slug>/` if you added images. Use the message
-`blog: <English title>`, then:
+In one commit, add:
+- the post and `index.ts`;
+- its review record `docs/blog/reviews/<slug>.json`;
+- any older posts you linked from;
+- `docs/blog/queue.json` with today's entry removed;
+- `public/blog/<slug>/`, if you added images.
+
+Use the message `blog: <English title>`, then:
 
 ```bash
 git push origin main
@@ -165,6 +186,7 @@ The final message is what the owner reads on their phone. Write only:
 - the link, https://tryethos.io/blog/<slug>;
 - the search it targets;
 - the templates it recommends;
+- the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
 - "Live and sent to IndexNow", or "Live check skipped (no network)";
 - one line if anything was skipped or failed.
 
@@ -176,5 +198,6 @@ The final message is what the owner reads on their phone. Write only:
 - Never invent facts, statistics, reviews, quotes or customers, and never claim something Ethos
   doesn't do.
 - Never copy sentences from another site.
-- Never publish twice in one day, and never publish a post that failed a check.
+- Never publish twice in one day, and never publish a post that failed a check or that the panel
+  hasn't rated 10/10.
 - Never present a made-up couple as real (the TikTok account's couple stays on TikTok).
