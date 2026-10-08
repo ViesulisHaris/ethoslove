@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Good luck on your first day my love"
+        },
+        {
+          "from": "them",
+          "text": "They’re so lucky to have you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "first day 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "baby 😭"
+        },
+        {
+          "from": "me",
+          "text": "i’m going to cry before my first day",
+          "status": "Read 7:42 am"
+        }
+      ]
+    }
+  ]
+}
