@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "you made this BEFORE??",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I PASSED",
+          "status": "Read 2:47 pm"
+        },
+        {
+          "from": "them",
+          "text": "I KNEW YOU WOULD"
+        },
+        {
+          "from": "them",
+          "text": "I’m so proud of you baby"
+        },
+        {
+          "from": "them",
+          "text": "I made this last week bc I knew"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "so proud of you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
