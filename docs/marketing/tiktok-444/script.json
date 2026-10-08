@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can you pick me up",
+          "status": "Read 1:48 am"
+        },
+        {
+          "from": "them",
+          "text": "Already in my car"
+        },
+        {
+          "from": "them",
+          "text": "Stay inside till I’m there"
+        },
+        {
+          "from": "them",
+          "text": "Open this while you wait"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "on my way 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
