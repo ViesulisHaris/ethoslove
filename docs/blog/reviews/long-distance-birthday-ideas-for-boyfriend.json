@@ -246,6 +246,50 @@
         "Editor's 'Por un día no pasa nada': 'Es un día' mirrors 'It's one day' and nothing in it is wrong, so left for the final round rather than adding another Spanish change.",
         "Reader's polish (the link the evening before, gift-wrapping, the film mid-afternoon, a sentence order): optional, left out to keep this round's changes to the fix."
       ]
+    },
+    {
+      "round": 6,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is still parasite pages on borrowed domains, a 50-plus-idea listicle and a wishes page; this is the only result that turns the ideas into a day run on his clock, with the three times converted into your calendar, what still arrives with a week to go, the exact text for his friends and a midnight-to-bedtime schedule to copy."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every product claim matches the code, including the two easiest to get wrong, and the time-zone advice holds when two clock changes fall before his birthday. One fix: in Spain Spanish the full stop goes after the closing comillas ('por la tarde». Si él suele'). Polish: 'en vez de eso' for the English 'instead'; 'llega al segundo', the idiom the template's own Spanish uses."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result that turns page one's staple ideas into a plan on his clock, with the times converted into your calendar, a midnight-to-bedtime schedule, real lead times and the traps the lists miss; no page-one result covers anything important that this post lacks."
+        }
+      ],
+      "applied": [
+        "'por la tarde». Si él suele' (the full stop after the comillas); no other quote in the post had the same mistake.",
+        "Polish that heads off a likely fix: 'en vez de eso móntale una fiesta sorpresa'; heading 'A medianoche: una sorpresa que llega al segundo'."
+      ],
+      "rejected": [
+        "Search polish (dinner delivered instead of cooked; 'gifts' and 'an hour on video' in the description) and reader polish (the guide anchor, the shared album across phones, a candle with the cake, the card check): optional, and new text the next panel would have to clear."
+      ]
     }
   ]
 }

@@ -177,7 +177,7 @@ export const post: BlogPost = {
           type: "p",
           text: "Después revisa lo aburrido mientras aún hay tiempo de arreglarlo: si lo que le mandes todavía puede llegar (un envío que cruza una frontera puede tardar fácilmente una o dos semanas), si alguien con quien vive puede recoger un paquete y esconderlo hasta el día, y si él tiene planes propios esa noche. Una sorpresa que cae en mitad de su cena de trabajo no es una sorpresa, es un problema de agenda.",
         },
-        { type: "h2", text: "A medianoche: una sorpresa que llega en el segundo exacto" },
+        { type: "h2", text: "A medianoche: una sorpresa que llega al segundo" },
         {
           type: "p",
           text: "La medianoche es el momento que se recuerda, porque es lo primero que pasa ese día. Si no puedes estar con él, lo mejor es que algo ya le esté esperando a las doce en punto, hora de allí. Si a esa hora suele estar dormido, funciona igual: será lo primero que vea al despertarse.",
@@ -187,7 +187,7 @@ export const post: BlogPost = {
           items: [
             "**Una cuenta atrás que se abre a medianoche.** Mándale el enlace por la tarde: un temporizador va bajando en su móvil y, al llegar a cero, se abre con tus fotos y un mensaje. Ir viendo cómo se acerca la hora es la mitad de la gracia.",
             "**Una nota de voz para las 00:00.** Treinta segundos tuyos cantando fatal valen más que un párrafo largo. Grábala el día antes. Si tu app de mensajes deja programar notas de voz, prográmala para su medianoche pasada a tu hora, porque los mensajes programados usan la hora de tu móvil; si no, pon una alarma y mándala tú.",
-            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas la mejor foto que tengas de él, con una frase, a medianoche en su zona horaria, justo cuando empiece el jueves? Te lo recuerdo el miércoles por la tarde.» Si él suele trasnochar y ellos también, móntale una fiesta sorpresa por videollamada con todos ellos y mándale el enlace a las doce.",
+            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas la mejor foto que tengas de él, con una frase, a medianoche en su zona horaria, justo cuando empiece el jueves? Te lo recuerdo el miércoles por la tarde». Si él suele trasnochar y ellos también, en vez de eso móntale una fiesta sorpresa por videollamada con todos ellos y mándale el enlace a las doce.",
           ],
         },
         {
