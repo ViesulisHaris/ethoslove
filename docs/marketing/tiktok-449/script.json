@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leave me alone"
+        },
+        {
+          "from": "them",
+          "text": "Why do you have an attitude"
+        },
+        {
+          "from": "me",
+          "text": "bc i miss you",
+          "status": "Read 11:42 am"
+        },
+        {
+          "from": "them",
+          "text": "Okay I’m omw rn"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "fix your attitude 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
