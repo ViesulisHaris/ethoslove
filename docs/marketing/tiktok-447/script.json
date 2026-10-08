@@ -1,0 +1,42 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Knock knock"
+        },
+        {
+          "from": "me",
+          "text": "who’s there"
+        },
+        {
+          "from": "them",
+          "text": "Check your messages"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "NO WAYYYY",
+          "status": "Read 6:50 pm"
+        },
+        {
+          "from": "them",
+          "text": "Yes way baby"
+        }
+      ]
+    }
+  ]
+}
