@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It’s raining"
+        },
+        {
+          "from": "them",
+          "text": "Your favorite weather"
+        },
+        {
+          "from": "them",
+          "text": "Bringing hot chocolate and your blanket"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for our rainy day 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you remembered i love the rain",
+          "status": "Read 4:12 pm"
+        }
+      ]
+    }
+  ]
+}
