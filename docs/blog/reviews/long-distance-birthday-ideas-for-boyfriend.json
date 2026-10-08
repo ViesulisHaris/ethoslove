@@ -7,14 +7,22 @@
       "reviews": [
         {
           "reviewer": "reader",
-          "scores": { "answers": 8, "usable": 8, "trust": 7 },
+          "scores": {
+            "answers": 8,
+            "usable": 8,
+            "trust": 7
+          },
           "overall": 8,
           "dealbreakers": [],
           "summary": "The three-moment plan answers the search, but the lead gave categories without examples, phone alarms can't ring in his time zone, scheduled messages go by the sender's clock, two of the three sample lines were about the distance, and the free option hid that it can't be scheduled."
         },
         {
           "reviewer": "editor",
-          "scores": { "accuracy": 6, "voice": 8, "spanish": 7 },
+          "scores": {
+            "accuracy": 6,
+            "voice": 8,
+            "spanish": 7
+          },
           "overall": 6,
           "dealbreakers": [
             "Told readers to schedule Midnight Countdown: a scheduled gift shows the waiting screen until it unlocks, so he would never watch the countdown; the template's own countdown (Extras, with its own time zone) does the timing.",
@@ -24,7 +32,10 @@
         },
         {
           "reviewer": "search",
-          "scores": { "better": 8, "search": 9 },
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
           "overall": 9,
           "dealbreakers": [],
           "summary": "Already better than a first page of spam, listicles and wishes pages (the schedule table, lead times and writing advice), but missing the surprise visit and a friends' video call; headings didn't use the words people search ('surprise', 'time zone', 'video call', 'gifts'); the description lacked 'long-distance' and 'boyfriend'; 'premium' had no link to prices."
@@ -43,6 +54,57 @@
       ],
       "rejected": [
         "Search reviewer's replacement for 'I want this to be the last one we spend in different time zones': kept as the one distance line the post allows, and the weather line replaced the Tuesday line instead."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The only result that plans the day hour by hour in his time zone. Asked for: say that his midnight falls on the day before his birthday when you are behind him; calendar alerts instead of alarms (a phone alarm can't be set for a date); a concrete ask of the people he lives with; one present tied to what he's into that still works a week out; and a line on choosing Birthday Cinema instead of the countdown, so three premium cards don't read as 'buy all three'."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product claim checked out in the code (countdown time zone, premium-only scheduling, The Letter's seal, Birthday Cinema's blow detector, Halfway's countdown). Asked for: the waiting screen isn't 'short' and shows the sender's name and opening time; 'a one-hour slip can move' (it can land at one too); 'doing sums' is British; Spanish agreement ('notas'), clearer 'él', 'una foto en la que salga él', 'tuyos cantando fatal', 'pasada a tu hora', 'a su medianoche' and 'el propio regalo' in place of three ambiguous 'su'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Page one is AI mirror pages, shop listicles and wishes lists; this is the only plan in his time zone with a schedule to copy. Title, description, headings and links rated 10. Missing: a cake delivered to his door for the call, which page one and the Spanish results lead with, and which gives a reader who never buys a birthday moment in the evening."
+        }
+      ],
+      "applied": [
+        "Behind his time zone: his midnight falls on the day before his birthday where you are.",
+        "The three times go in the calendar with an alert, not as alarms; 'doing sums' gone.",
+        "Ask whether anyone he lives with can take in a delivery and hide it until the day.",
+        "New item: two tickets to something in his city for him and his best friend, bought online.",
+        "Birthday Cinema introduced as the alternative to the countdown, for watching him open it on the call.",
+        "FAQ: the waiting screen shows your name and the time it opens.",
+        "'A one-hour slip can move your midnight surprise to eleven.'",
+        "Cake from a bakery near him, delivered that afternoon, and happy birthday sung at the start of the call; the schedule's evening row includes it.",
+        "Spanish: 'notas cortas', 'para que él esté en casa', 'una foto en la que salga él', 'tuyos cantando fatal', 'pasada a tu hora', description 'a su medianoche', FAQ 'el propio regalo cuenta los segundos'."
+      ],
+      "rejected": [
+        "Reader's 'take in a parcel': 'parcel' is British, so 'take in a delivery'."
       ]
     }
   ]
