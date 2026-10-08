@@ -138,12 +138,12 @@ parallel, each told not to edit any file:
 Apply their fixes, then rerun the checks above. Then run a fresh panel on the new version, and give
 each new reviewer the last round's review from its role so it checks those fixes. Repeat until all
 three overall scores are 10, no criterion is under 9 and there are no dealbreakers.
-There are at most three rounds; the rubric says what to do if the post doesn't get there. Write
+There are at most five rounds; the rubric says what to do if the post doesn't get there. Write
 every round to `docs/blog/reviews/<slug>.json`: the test fails a post without a record ending
 10/10/10.
 
 If something fails and you can't fix it in this run, don't publish. That includes a panel that
-doesn't reach 10/10 on the second topic either. Stash the work, leave the queue as the rubric
+doesn't reach 10/10 in five rounds. Stash the work, leave the queue as the rubric
 says, and report what failed.
 
 ## 6. Publish

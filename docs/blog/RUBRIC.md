@@ -111,22 +111,24 @@ The criteria are `answers`, `usable` and `trust` for the reader; `accuracy`, `vo
 ## The loop
 
 1. Start the three reviewers in parallel with the Agent tool. Tell each which reader it is (its
-   section above), not to edit any file, and to return only the JSON below. Give each:
+   section above), not to edit any file, and to return only the JSON in "What each reviewer
+   returns". Give each:
    - this file and `docs/blog/VOICE.md`;
    - the post's file;
    - the keyword;
    - the list of existing posts.
 2. Apply every fix that is right. Reject a fix only if it would introduce an error, and say why in
    the record. Take polish only where it clearly makes the post better without padding it.
+   From round two on, change only what the reviewers asked for, and take polish only where it
+   heads off a likely fix: every other edit is new text the next panel has to clear.
 3. Run the checks in step 5 again. Then start a fresh panel (new subagents) on the new version.
    Also give each new reviewer the last round's review from its own role. It checks that each of
    those fixes was made, and made correctly, then reads the whole post as round one did.
 4. Publish when all three overall scores are 10, no criterion is below 9, and there are no
    dealbreakers. Publish the version they passed: polish from the final round goes in the record,
    not into the post, because an unreviewed edit could undo a 10.
-5. At most three rounds. If round three still isn't there, don't publish that post:
-   - Move it to the end of the queue with the reviewers' notes, and try the next topic once.
-   - If that one fails too, publish nothing today and say why in the report.
+5. At most five rounds. If round five still isn't there, don't publish: move the post to the end
+   of the queue with the reviewers' notes, publish nothing today and say why in the report.
 
 ## The record
 
