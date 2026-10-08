@@ -172,3 +172,92 @@ test.describe("Dark Romance", () => {
     await expect(page.getByText(/toca donde quieras para dejar una rosa/i)).toBeAttached();
   });
 });
+
+test.describe("Favorite Person", () => {
+  test("lifts the tissue paper and scrolls from the polaroids to the letter", async ({ page }) => {
+    await openPage(page, "/demo/favorite-person", /lift the tissue paper/i);
+    await expect(page.getByText("Sunday Slowly").first()).toBeVisible();
+    await expect(page.getByText(/favorite person/i).first()).toBeAttached();
+    await expect(page.getByText(/tap anywhere to doodle a heart/i)).toBeAttached();
+    await scrollToEnd(page);
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("a tap on the page doodles a heart, a tap on a photo opens it instead", async ({ page }) => {
+    const scroller = await openPage(page, "/demo/favorite-person", /lift the tissue paper/i);
+    const box = (await scroller.boundingBox())!;
+    await page.mouse.click(box.x + box.width * 0.04, box.y + box.height * 0.5);
+    await expect(page.locator("[data-heart]")).toHaveCount(1);
+    await page.mouse.click(box.x + box.width * 0.97, box.y + box.height * 0.55);
+    await expect(page.locator("[data-heart]")).toHaveCount(2);
+    await page.getByRole("button", { name: /our first coffee/i }).first().click({ force: true });
+    await expect(page.locator("figure img")).toBeVisible();
+    await expect(page.locator("[data-heart]")).toHaveCount(2);
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/favorite-person", /levanta el papel de seda/i);
+    await expect(page.getByText(/mi persona favorita/i).first()).toBeAttached();
+    await expect(page.getByText(/toca donde quieras para dibujar un corazón/i)).toBeAttached();
+  });
+});
+
+test.describe("On Repeat", () => {
+  test("presses play and scrolls from the player and the playlist to the letter", async ({ page }) => {
+    await openPage(page, "/demo/on-repeat", /press play/i);
+    await expect(page.getByText("First Light").first()).toBeVisible();
+    await expect(page.getByText(/you're my favorite song/i)).toBeAttached();
+    await expect(page.getByText(/our playlist/i)).toBeAttached();
+    await scrollToEnd(page);
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("the song really pauses, a tap adds a sticker, and a song on the playlist opens its photo", async ({ page }) => {
+    const scroller = await openPage(page, "/demo/on-repeat", /press play/i);
+    await page.getByRole("button", { name: /pause the song/i }).click({ force: true });
+    await expect(page.getByRole("button", { name: /play the song/i })).toBeVisible();
+    const box = (await scroller.boundingBox())!;
+    await page.mouse.click(box.x + box.width * 0.04, box.y + box.height * 0.5);
+    await expect(page.locator("[data-sticker]")).toHaveCount(1);
+    await page.getByRole("button", { name: /lost in lisbon/i }).first().click({ force: true });
+    await expect(page.locator("figure img")).toBeVisible();
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/on-repeat", /dale play/i);
+    await expect(page.getByText(/eres mi canción favorita/i)).toBeAttached();
+    await expect(page.getByText(/nuestra playlist/i)).toBeAttached();
+  });
+});
+
+test.describe("Evergreen", () => {
+  test("unwraps the newspaper and scrolls from the record to the letter", async ({ page }) => {
+    await openPage(page, "/demo/evergreen", /unwrap the newspaper/i);
+    await expect(page.getByText("Home").first()).toBeVisible();
+    await expect(page.getByText(/my evergreen/i).first()).toBeAttached();
+    await expect(page.getByText(/tap anywhere to let a butterfly go/i)).toBeAttached();
+    await scrollToEnd(page);
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("a tap lets a butterfly go, a tap on a photo opens it instead", async ({ page }) => {
+    const scroller = await openPage(page, "/demo/evergreen", /unwrap the newspaper/i);
+    const box = (await scroller.boundingBox())!;
+    await page.mouse.click(box.x + box.width * 0.04, box.y + box.height * 0.5);
+    await expect(page.locator("[data-butterfly]").first()).toBeAttached();
+    await page.getByRole("button", { name: /slow july/i }).first().click({ force: true });
+    await expect(page.locator("figure img")).toBeVisible();
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/evergreen", /desenvuelve el periódico/i);
+    await expect(page.getByText(/siempre tú/i).first()).toBeAttached();
+    await expect(page.getByText(/toca donde quieras para soltar una mariposa/i)).toBeAttached();
+  });
+});

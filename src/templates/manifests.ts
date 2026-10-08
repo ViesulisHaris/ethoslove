@@ -35,6 +35,9 @@ import { manifest as coquette } from "./coquette/manifest";
 import { manifest as xoxo } from "./xoxo/manifest";
 import { manifest as spookySeason } from "./spooky-season/manifest";
 import { manifest as darkRomance } from "./dark-romance/manifest";
+import { manifest as favoritePerson } from "./favorite-person/manifest";
+import { manifest as onRepeat } from "./on-repeat/manifest";
+import { manifest as evergreen } from "./evergreen/manifest";
 import { manifest as keepsake } from "./keepsake/manifest";
 import { manifest as popupCard } from "./popup-card/manifest";
 import { manifest as sketchbook } from "./sketchbook/manifest";
@@ -54,7 +57,7 @@ import { manifest as musicBox } from "./music-box/manifest";
  * on the homepage, pricing and the gallery, for gifts nobody had opened. Import from here unless
  * you are about to render a template.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance, favoritePerson, onRepeat, evergreen];
 
 export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
 
