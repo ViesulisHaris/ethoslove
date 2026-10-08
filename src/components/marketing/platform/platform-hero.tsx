@@ -17,7 +17,7 @@ import { MapCard } from "./map-card";
  * Someone who arrived from a gift they saw (see homeHeroFor) gets the same room with the gift in
  * front instead: they came to make one, and the map made them hunt for it.
  */
-export async function PlatformHero({ variant = "dates" }: { variant?: HomeHero }) {
+export async function PlatformHero({ variant = "gift" }: { variant?: HomeHero }) {
   return (
     <section className="relative isolate -mt-[var(--header-h)] overflow-hidden bg-blush-paper pt-[var(--header-h)] text-forest">
       <FloralFrame frame="hero" ground="light" />

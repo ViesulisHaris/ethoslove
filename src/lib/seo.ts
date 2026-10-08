@@ -20,10 +20,11 @@ export function localeAlternates(locale: string, path: string): NonNullable<Meta
   return { canonical: localizedUrl(locale, path), languages };
 }
 
-/** The share card drawn by app/og.png, optionally for one template. */
-export function ogImageUrl(locale: string, templateSlug?: string): string {
+/** The share card drawn by app/og.png, optionally for one template, or the front page's gift-led card. */
+export function ogImageUrl(locale: string, templateSlug?: string, card?: "gift"): string {
   const params = new URLSearchParams({ locale });
   if (templateSlug) params.set("template", templateSlug);
+  if (card) params.set("card", card);
   return `/og.png?${params}`;
 }
 

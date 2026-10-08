@@ -39,9 +39,9 @@
     "myDates": "Mis citas"
   },
   "meta": {
-    "defaultTitle": "Ethos — Ideas para citas, escapadas y regalos en pareja",
+    "defaultTitle": "Ethos — Regalos, ideas para citas y escapadas en pareja",
     "titleTemplate": "%s · Ethos",
-    "description": "Encuentra ideas para una cita cerca de ti en un mapa, planea el día y envuélvelo en un regalo que guardará. Escapadas, juegos para dos y regalos personales. Empezar es gratis.",
+    "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis.",
     "giftsTitle": "Ethos — Regalos que se abren como una historia",
     "giftsDescription": "Crea un regalo personal que se abre como una historia: tus fotos, su canción y tus palabras, enviado con un enlace o un código QR. Empezar es gratis."
   },
@@ -1820,8 +1820,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Ideas para citas, escapadas y regalos en pareja",
-      "description": "Encuentra ideas para una cita cerca de ti en un mapa, planea el día y envuélvelo en un regalo que guardará. Escapadas, juegos para dos y regalos personales. Empezar es gratis."
+      "title": "Ethos — Regalos, ideas para citas y escapadas en pareja",
+      "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis."
     },
     "hero": {
       "eyebrow": "Para vosotros dos",

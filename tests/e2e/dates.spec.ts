@@ -475,10 +475,10 @@ test.describe("shared links", () => {
 });
 
 test.describe("the other rooms", () => {
-  test("the front page's question leads straight to that town's map", async ({ page }) => {
+  test("the front page's question on a Dates link leads straight to that town's map", async ({ page }) => {
     await mockWorld(page);
     await page.route("**/api/places*", (route) => route.fulfill({ json: { results: [{ name: "Lisbon", kind: "city", lat: 38.7139, lng: -9.1394, country: "Portugal" }] } }));
-    await page.goto("/");
+    await page.goto("/?ref=dates");
     const box = page.getByRole("combobox", { name: "Where" });
     await box.fill("Lisbon");
     await box.press("Enter");

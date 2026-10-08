@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ClientMessages } from "@/i18n/client-messages";
 import { homeHeroFor } from "@/lib/attribution/landing";
-import { organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
+import { ogImageUrl, organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";
@@ -15,16 +15,17 @@ import { PlatformHero } from "@/components/marketing/platform/platform-hero";
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "platform.meta" });
-  return pageMetadata({ locale, path: "/", title: t("title"), description: t("description"), absoluteTitle: true });
+  return pageMetadata({ locale, path: "/", title: t("title"), description: t("description"), image: ogImageUrl(locale, undefined, "gift"), absoluteTitle: true });
 }
 
 /**
- * The front door: dates on a map, gifts that open like a story, a corner for long distance and
- * a table of games. The gifts' own front page, which used to live here, is at /gifts unchanged.
+ * The front door: gifts that open like a story first, with the gallery straight after the hero,
+ * then dates on a map, a corner for long distance and a table of games. The gifts' own longer front
+ * page is at /gifts unchanged.
  *
- * Someone who came from a gift on social media, or from a gift's badge, gets the gift hero and the
- * gallery straight after it: that is who buys. Reading `ref` here makes the page render per
- * request, which is the price of choosing the hero in the HTML rather than swapping it after load.
+ * Only a link made for Dates opens on the date ideas instead (see homeHeroFor). Reading `ref` here
+ * makes the page render per request, which is the price of choosing the hero in the HTML rather
+ * than swapping it after load.
  */
 export default async function HomePage({ params, searchParams }: PageProps<"/[locale]">) {
   const { locale } = await params;

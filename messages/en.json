@@ -39,9 +39,9 @@
     "myDates": "My dates"
   },
   "meta": {
-    "defaultTitle": "Ethos — Date ideas, trips and gifts for couples",
+    "defaultTitle": "Ethos — Gifts, date ideas and trips for couples",
     "titleTemplate": "%s · Ethos",
-    "description": "Find date ideas near you on a map, plan the day together and wrap it in a gift they'll keep. Weekend trips, games for two and personal gifts. Free to start.",
+    "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start.",
     "giftsTitle": "Ethos — Gifts that open like a story",
     "giftsDescription": "Make a personal gift that opens like a story: your photos, their song and your words, sent as a link or a QR code. Free to start."
   },
@@ -1820,8 +1820,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Date ideas, trips and gifts for couples",
-      "description": "Find date ideas near you on a map, plan the day together and wrap it in a gift they'll keep. Weekend trips, games for two and personal gifts. Free to start."
+      "title": "Ethos — Gifts, date ideas and trips for couples",
+      "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start."
     },
     "hero": {
       "eyebrow": "For the two of you",

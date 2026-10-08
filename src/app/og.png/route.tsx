@@ -10,6 +10,12 @@ const COPY = {
   es: { eyebrow: "PARA VOSOTROS DOS", headline: "Encuentra la cita. Quédate con la persona.", templateEyebrow: "UN REGALO DE ETHOS", line: "Ideas para citas cerca de ti, escapadas, juegos y regalos para dos." },
 } as const;
 
+/** The front page's own card (`?card=gift`): it leads with gifts, as the page does. */
+const GIFT_COPY = {
+  en: { eyebrow: "MADE BY YOU, OPENED ON THEIR PHONE", headline: "A gift they'll open again and again.", line: "Personal gifts, date ideas near you, trips and games for two." },
+  es: { eyebrow: "HECHO POR TI, ABIERTO EN SU MÓVIL", headline: "Un regalo que abrirá una y otra vez.", line: "Regalos personales, ideas para citas cerca de ti, escapadas y juegos para dos." },
+} as const;
+
 // Same serif as the gift link card (see g/[shortId]/card.jpg).
 const serifFont = () => readFile(new URL("../../fonts/newsreader-regular.ttf", import.meta.url));
 const italicFont = () => readFile(new URL("../../fonts/newsreader-italic.ttf", import.meta.url));
@@ -23,7 +29,7 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const locale = params.get("locale") === "es" ? "es" : "en";
   const manifest = getManifest(params.get("template") ?? "");
-  const copy = COPY[locale];
+  const copy = params.get("card") === "gift" ? { ...COPY[locale], ...GIFT_COPY[locale] } : COPY[locale];
   const eyebrow = manifest ? copy.templateEyebrow : copy.eyebrow;
   const headline = manifest ? manifest.name[locale] : copy.headline;
   const line = manifest ? manifest.tagline[locale] : copy.line;
