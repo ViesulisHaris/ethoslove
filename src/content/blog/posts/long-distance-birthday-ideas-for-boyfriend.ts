@@ -30,14 +30,14 @@ export const post: BlogPost = {
         { type: "h2", text: "At midnight: a surprise that arrives on the second" },
         {
           type: "p",
-          text: "Midnight is the moment people remember, because it's the first thing that happens on the day. When you can't be there, the next best thing is something that's already waiting for him at exactly twelve, his time.",
+          text: "Midnight is the moment people remember, because it's the first thing that happens on the day. When you can't be there, the next best thing is something that's already waiting for him at exactly twelve, his time. If he's usually asleep by then, it still works: it's the first thing he sees when he wakes up.",
         },
         {
           type: "list",
           items: [
             "**A countdown that opens at midnight.** Send him the link in the evening: a live timer ticks down on his phone and, at zero, opens onto your photos and a message. Watching it get closer is half the fun.",
             "**A voice note for 00:00.** Thirty seconds of you singing badly beats a long paragraph. Record it the day before. If your messaging app can schedule a voice note, set it for his midnight in your time, because scheduled messages go by your clock; if not, set an alarm and send it yourself.",
-            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. If they're night owls, put them all on one video call instead and send him the link at twelve.",
+            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. Something like: 'His birthday's on Thursday and I can't be there. Could you send him the best photo you've got of him, with one line, at midnight? I'll remind you that evening.' If they're night owls, put them all on one video call instead and send him the link at twelve.",
           ],
         },
         {
@@ -72,25 +72,30 @@ export const post: BlogPost = {
         { type: "h2", text: "In the evening: one hour together on a video call" },
         {
           type: "p",
-          text: "The gifts are the setup; being there is the point. Have a small cake delivered from a bakery near him that afternoon, and start the call by singing happy birthday while he cuts it. Then pick one thing to do together on video and give it a start time, so it's a plan rather than a vague 'call me later':",
+          text: "The gifts are the setup; being there is the point. Have a small cake delivered from a bakery near him for just after he gets home, and start the call by singing happy birthday while he cuts it. Then pick one thing to do together on video and give it a start time, so it's a plan rather than a vague 'call me later':",
         },
         {
           type: "list",
           items: [
             "**The same dinner in two kitchens.** Agree on a recipe, buy the ingredients in both places and cook it together on the call. It gets messy, and it's the most together thing on this list.",
-            "**A film started on the count of three.** Use a watch-party feature or simply press play at the same moment. Keep the call open and talk over the bad parts.",
+            "**A film started on the count of three.** Check first that you can both stream it, because what's on each service changes from country to country. Then use a watch-party feature or simply press play at the same moment. Keep the call open and talk over the bad parts.",
             "**A game.** An online board game, a co-op video game, or a quiz you wrote about the two of you.",
             "**Plan the next visit, live.** Book the tickets on the call, or open the calendar and circle the dates. It turns 'one day' into a date he can count down to.",
           ],
         },
         {
           type: "p",
-          text: "If the time difference puts his evening in your night, take the late one. It's one night, and he'll know what it cost you. And if you can get there, the biggest surprise is you at his door: keep the call in his calendar as cover, get one of his friends in on it so he's home when you knock, and book a ticket you can change.",
+          text: "If the time difference puts his evening in your night, take the late one; if it lands in your working day, take that hour off. It's one day, and he'll know what it cost you.",
         },
         {
           type: "template",
           slug: "halfway",
-          note: "A postcard map with your home on one island and his on the other, and the real distance between you. He blows into his phone and a paper plane flies along the dotted path to his door, the path turns into a heart, and the postcard flips over to your letter and photos. If the next visit is booked, put the dates in the letter and add a countdown to the day you see each other.",
+          note: "A postcard map with your home on one island and his on the other, and the real distance between you. He blows into his phone and a paper plane flies along the dotted path to his door, the path turns into a heart, and the postcard flips over to your letter and photos. Choose it if the next visit is booked: put the dates in the letter, add a countdown to the day you see each other and send it just before he goes to sleep.",
+        },
+        { type: "h3", text: "If you can get there: a surprise visit" },
+        {
+          type: "p",
+          text: "The biggest surprise is you at his door. Keep the call in his calendar as cover, get one of his friends in on it so he's home when you knock, and book a ticket you can change.",
         },
         { type: "h2", text: "A long-distance birthday schedule you can copy" },
         {
@@ -101,7 +106,7 @@ export const post: BlogPost = {
             ["00:00", "Your voice note and his friends' messages arrive", "Recorded the day before, friends briefed"],
             ["Morning", "Breakfast arrives at his door", "Order placed and paid for the night before"],
             ["Lunch", "The first open-when note", "Three notes written in advance"],
-            ["Evening", "Cake and a song, then dinner, a film or a game on video", "Cake ordered for the afternoon, recipe agreed, ingredients bought"],
+            ["Evening", "Cake and a song, then dinner, a film or a game on video", "Cake ordered for when he's home, recipe agreed, ingredients bought"],
             ["Before bed", "The last note: what you'll do together next", "Dates or tickets for the next visit"],
           ],
         },
@@ -124,7 +129,7 @@ export const post: BlogPost = {
             "**Getting the time zone wrong.** Check daylight saving: clocks change on different dates in different countries, and a one-hour slip can move your midnight surprise to eleven.",
             "**Leaving the present to chance.** If it has to cross a border, send it at least two weeks early, or order from a shop in his country so it never crosses one and he's never asked to pay customs on his own present.",
             "**Making the day about missing him.** One line of that is lovely; a whole letter of it is heavy on his birthday.",
-            "**Planning every minute.** He may want to spend part of the day with friends where he is. Leave room: the midnight moment and one call together are enough.",
+            "**Planning every minute.** He may want to spend part of the day with friends where he is. Leave room: he doesn't need to hear from you every hour.",
           ],
         },
         {
@@ -135,7 +140,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "How do I surprise my long-distance boyfriend on his birthday?",
-          a: "Make something happen at midnight in his time zone without him having to wait for you to wake up: a countdown he watches reach zero, a voice note or messages from his friends. Then add one small thing to open during the day and an hour together on video in the evening.",
+          a: "Make something happen at midnight in his time zone without him having to wait for you to wake up: a countdown he watches reach zero, a voice note or messages from his friends. Then add one small thing to open during the day and an hour together on video in the evening. And if you can get there, the biggest surprise is you at his door, with one of his friends making sure he's home.",
         },
         {
           q: "What can I send my boyfriend for his birthday if he lives in another country?",
@@ -143,7 +148,7 @@ export const post: BlogPost = {
         },
         {
           q: "How do I make sure a gift opens at midnight in his time zone?",
-          a: "Choose the time zone, not just the time. On Ethos, [premium templates](/pricing) can be scheduled to unlock at midnight in his time zone, whatever the time where you are; until then the link shows a waiting screen with your name and the time it opens. Midnight Countdown works differently: its own countdown runs to his midnight on his screen, so send him the link in the evening.",
+          a: "Choose the time zone, not just the time. On Ethos, [premium templates](/pricing) can be scheduled to unlock at midnight in his time zone, whatever the time where you are; until then the link shows a simple waiting screen with your name, the time it opens and a timer. Midnight Countdown is different: the countdown is the gift itself, running to his midnight on his screen, so send him the link in the evening. A message or email you schedule uses your time, not his, so convert his midnight to yours first.",
         },
         {
           q: "Is a digital gift enough for a long-distance birthday?",
@@ -175,14 +180,14 @@ export const post: BlogPost = {
         { type: "h2", text: "A medianoche: una sorpresa que llega en el segundo exacto" },
         {
           type: "p",
-          text: "La medianoche es el momento que se recuerda, porque es lo primero que pasa ese día. Si no puedes estar con él, lo mejor es que algo ya le esté esperando a las doce en punto, hora de allí.",
+          text: "La medianoche es el momento que se recuerda, porque es lo primero que pasa ese día. Si no puedes estar con él, lo mejor es que algo ya le esté esperando a las doce en punto, hora de allí. Si a esa hora suele estar dormido, funciona igual: será lo primero que vea al despertarse.",
         },
         {
           type: "list",
           items: [
             "**Una cuenta atrás que se abre a medianoche.** Mándale el enlace por la tarde: un temporizador va bajando en su móvil y, al llegar a cero, se abre con tus fotos y un mensaje. Ir viendo cómo se acerca la hora es la mitad de la gracia.",
-            "**Una nota de voz para las 00:00.** Treinta segundos tuyos cantando fatal valen más que un párrafo largo. Grábala el día antes. Si tu app de mensajes deja programar notas de voz, prográmala para su medianoche pasada a tu hora, porque los mensajes programados van con tu reloj; si no, pon una alarma y mándala tú.",
-            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Si suelen trasnochar, reúnelos a todos en una videollamada y mándale el enlace a las doce.",
+            "**Una nota de voz para las 00:00.** Treinta segundos tuyos cantando fatal valen más que un párrafo largo. Grábala el día antes. Si tu app de mensajes deja programar notas de voz, prográmala para su medianoche pasada a tu hora, porque los mensajes programados usan la hora de tu móvil; si no, pon una alarma y mándala tú.",
+            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas a medianoche la mejor foto que tengas de él, con una frase? Te lo recuerdo esa tarde.» Si suelen trasnochar, reúnelos a todos en una videollamada y mándale el enlace a las doce.",
           ],
         },
         {
@@ -212,30 +217,35 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "birthday-cinema",
-          note: "Un telón rojo, su nombre en luces y una tarta con velas que apaga soplando al móvil. Después, confeti, y rueda una tira de película con tus fotos. Elígelo en lugar de la cuenta atrás si prefieres verle abrirlo: guárdalo para la videollamada, que la llamada vaya en su portátil y abra el regalo en el móvil, y le verás apagar las velas.",
+          note: "Un telón rojo, su nombre en luces y una tarta con velas que apaga soplando al móvil. Después, confeti, y rueda una tira de película con tus fotos. Elígelo en lugar de la cuenta atrás si prefieres verle abrirlo: guárdalo para la videollamada, que él se conecte desde el portátil y abra el regalo en el móvil, y le verás apagar las velas.",
         },
         { type: "h2", text: "Por la noche: una hora juntos por videollamada" },
         {
           type: "p",
-          text: "Los regalos preparan el terreno; estar es lo importante. Encarga una tarta pequeña en una pastelería cerca de su casa para que se la lleven esa tarde y empieza la llamada cantándole el cumpleaños feliz mientras la corta. Luego elige una cosa que hacer juntos por videollamada y ponle hora, para que sea un plan y no un vago «ya me llamas»:",
+          text: "Los regalos preparan el terreno; estar es lo importante. Encarga una tarta pequeña en una pastelería de su barrio para que se la lleven justo cuando vuelva a casa y empieza la llamada cantándole el cumpleaños feliz mientras la corta. Luego elige una cosa que hacer juntos por videollamada y ponle hora, para que sea un plan y no un vago «ya me llamas»:",
         },
         {
           type: "list",
           items: [
             "**La misma cena en dos cocinas.** Elegid una receta, comprad los ingredientes en los dos sitios y cocinadla juntos en la llamada. Se pone todo perdido, y es lo que más se parece a estar juntos de toda la lista.",
-            "**Una película empezada a la de tres.** Usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas.",
+            "**Una película empezada a la de tres.** Comprobad antes que podéis verla los dos, porque el catálogo de cada plataforma cambia de un país a otro. Luego usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas.",
             "**Un juego.** Un juego de mesa online, un videojuego cooperativo o un test que hayas escrito sobre vosotros dos.",
             "**Planear la próxima visita, en directo.** Comprad los billetes en la llamada o abrid el calendario y marcad las fechas. Así, «algún día» se convierte en una fecha y él ya puede contar los días.",
           ],
         },
         {
           type: "p",
-          text: "Si la diferencia horaria pone su noche en tu madrugada, trasnocha tú. Es una noche, y él sabrá lo que te ha costado. Y si puedes ir, la mayor sorpresa eres tú en su puerta: mantén la videollamada en su agenda como tapadera, mete en el plan a un amigo suyo para que él esté en casa cuando llames al timbre y compra un billete que puedas cambiar.",
+          text: "Si la diferencia horaria pone su noche en tu madrugada, trasnocha tú; si cae en tu jornada de trabajo, pide esa hora libre. Es un día, y él sabrá lo que te ha costado.",
         },
         {
           type: "template",
           slug: "halfway",
-          note: "Una postal con un mapa: tu casa en una isla, la suya en la otra y la distancia real entre vosotros. Él sopla al móvil y un avión de papel recorre el camino de puntos hasta su puerta, el camino se vuelve un corazón y la postal se da la vuelta: tu carta y tus fotos. Si la próxima visita ya tiene fecha, ponla en la carta y añade una cuenta atrás hasta el día en que os veáis.",
+          note: "Una postal con un mapa: tu casa en una isla, la suya en la otra y la distancia real entre vosotros. Él sopla al móvil y un avión de papel recorre el camino de puntos hasta su puerta, el camino se vuelve un corazón y la postal se da la vuelta: tu carta y tus fotos. Elígelo si la próxima visita ya tiene fecha: pon las fechas en la carta, añade una cuenta atrás hasta el día en que os veáis y mándaselo justo antes de que se vaya a dormir.",
+        },
+        { type: "h3", text: "Si puedes ir: una visita sorpresa" },
+        {
+          type: "p",
+          text: "La mayor sorpresa eres tú en su puerta. Mantén la videollamada en su agenda como tapadera, mete en el plan a un amigo suyo para que él esté en casa cuando llames al timbre y compra un billete que puedas cambiar.",
         },
         { type: "h2", text: "Un horario para su cumpleaños a distancia que puedes copiar" },
         {
@@ -246,7 +256,7 @@ export const post: BlogPost = {
             ["00:00", "Llegan tu nota de voz y los mensajes de sus amigos", "Grabada el día antes, amigos avisados"],
             ["Mañana", "El desayuno llega a su puerta", "Pedido hecho y pagado la noche antes"],
             ["Comida", "La primera nota para abrir", "Tres notas escritas con antelación"],
-            ["Noche", "Tarta y canción, luego cena, película o juego por videollamada", "Tarta encargada para la tarde, receta elegida, ingredientes comprados"],
+            ["Noche", "Tarta y canción, luego cena, película o juego por videollamada", "Tarta encargada para cuando esté en casa, receta elegida, ingredientes comprados"],
             ["Antes de dormir", "La última nota: lo próximo que haréis juntos", "Fechas o billetes de la próxima visita"],
           ],
         },
@@ -269,7 +279,7 @@ export const post: BlogPost = {
             "**Equivocarte de zona horaria.** Revisa el cambio de hora: los relojes cambian en fechas distintas según el país, y un desfase de una hora puede mover tu sorpresa de medianoche a las once.",
             "**Dejar el regalo al azar.** Si tiene que cruzar una frontera, envíalo al menos dos semanas antes, o pídelo en una tienda de su país para que no cruce ninguna y nadie le cobre aduanas por su propio regalo.",
             "**Convertir el día en lo mucho que le echas de menos.** Una frase de eso es preciosa; una carta entera pesa en su cumpleaños.",
-            "**Planificar cada minuto.** Puede que quiera pasar parte del día con sus amigos de allí. Deja espacio: el momento de medianoche y una llamada juntos son suficientes.",
+            "**Planificar cada minuto.** Puede que quiera pasar parte del día con sus amigos de allí. Deja espacio: no hace falta que sepa de ti cada hora.",
           ],
         },
         {
@@ -280,7 +290,7 @@ export const post: BlogPost = {
       faq: [
         {
           q: "¿Cómo sorprendo a mi novio a distancia en su cumpleaños?",
-          a: "Haz que pase algo a medianoche en su zona horaria sin que tenga que esperar a que te despiertes: una cuenta atrás que vea llegar a cero, una nota de voz o mensajes de sus amigos. Después añade algo pequeño que abrir durante el día y una hora juntos por videollamada por la noche.",
+          a: "Haz que pase algo a medianoche en su zona horaria sin que tenga que esperar a que te despiertes: una cuenta atrás que vea llegar a cero, una nota de voz o mensajes de sus amigos. Después añade algo pequeño que abrir durante el día y una hora juntos por videollamada por la noche. Y si puedes ir, la mayor sorpresa eres tú en su puerta, con un amigo suyo asegurándose de que él esté en casa.",
         },
         {
           q: "¿Qué le puedo enviar a mi novio por su cumpleaños si vive en otro país?",
@@ -288,7 +298,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Cómo me aseguro de que un regalo se abra a medianoche en su zona horaria?",
-          a: "Elige la zona horaria, no solo la hora. En Ethos, las [plantillas premium](/pricing) se pueden programar para que se desbloqueen a medianoche en su zona horaria, sea la hora que sea donde estás tú; hasta entonces, el enlace muestra una pantalla de espera con tu nombre y la hora a la que se abre. La Cuenta atrás de medianoche funciona distinto: el propio regalo cuenta los segundos hasta su medianoche, en su pantalla, así que mándale el enlace por la tarde.",
+          a: "Elige la zona horaria, no solo la hora. En Ethos, las [plantillas premium](/pricing) se pueden programar para que se desbloqueen a medianoche en su zona horaria, sea la hora que sea donde estás tú; hasta entonces, el enlace muestra una pantalla de espera sencilla con tu nombre, la hora a la que se abre y un temporizador. La Cuenta atrás de medianoche es distinta: la cuenta atrás es el propio regalo, que corre hasta su medianoche en su pantalla, así que mándale el enlace por la tarde. Un mensaje o un correo que programes usa tu hora, no la suya, así que pasa antes su medianoche a la tuya.",
         },
         {
           q: "¿Basta un regalo digital para un cumpleaños a distancia?",

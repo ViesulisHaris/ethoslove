@@ -106,6 +106,57 @@
       "rejected": [
         "Reader's 'take in a parcel': 'parcel' is British, so 'take in a delivery'."
       ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Beats page one because every idea hangs on his clock, with deadlines that still work a week out. Asked for: what if he's asleep at midnight; the message to send his friends; a cake 'that afternoon' arrives while he's at work; check the film streams in both countries; the evening call for readers who are behind him; when to choose Halfway; scheduled messages and email in the scheduling FAQ; the surprise visit in the first FAQ."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All 27 claims hold in the code and in general knowledge, the new ones included (calendar alerts, tickets, the waiting screen with the sender's name and opening time). Asked for: 'the midnight moment and one call together are enough' repeats the closing line; Spanish 'van con tu reloj' and 'la llamada vaya en su portátil' are calques, and the second makes the call the subject of 'abra'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "better 10: the only result that turns the ideas into a plan in his time zone, with a midnight-to-bedtime schedule and the logistics the lists skip, and nothing on page one missing. search 9: the surprise visit, a first-page staple in both languages, is buried mid-paragraph under the video-call heading; give it its own heading."
+        }
+      ],
+      "applied": [
+        "If he's asleep at midnight, it's the first thing he sees when he wakes up.",
+        "The message to his friends, word for word.",
+        "The cake arrives just after he gets home; the schedule's evening row says so.",
+        "Check that the film streams in both countries before the call.",
+        "Behind him: take the hour off work; 'It's one day'.",
+        "The surprise visit under its own heading, 'If you can get there: a surprise visit', in both languages, and in the first FAQ.",
+        "Halfway: choose it if the next visit is booked, and send it just before he sleeps.",
+        "Scheduling FAQ: the waiting screen is a simple one with your name, the opening time and a timer; Midnight Countdown's countdown is the gift itself; a message or email you schedule uses your time.",
+        "'Leave room: he doesn't need to hear from you every hour.'",
+        "Spanish: 'usan la hora de tu móvil', 'que él se conecte desde el portátil'."
+      ],
+      "rejected": [],
+      "note": "Round three ended at 9/9/9 with only small fixes. Every round, new reviewers found new things to add. So from round four the rubric separates fixes from optional polish, and each new reviewer checks the last round's fixes. The post went live before the panel existed, so it keeps going past three rounds until it reaches 10/10/10."
     }
   ]
 }

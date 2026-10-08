@@ -135,8 +135,9 @@ parallel, each told not to edit any file:
 - the editor and fact-checker;
 - the search competitor, who compares the post with what ranks now.
 
-Apply their fixes, then rerun the checks above. Then run a fresh panel on the new version. Repeat
-until all three overall scores are 10, no criterion is under 9 and there are no dealbreakers.
+Apply their fixes, then rerun the checks above. Then run a fresh panel on the new version, and give
+each new reviewer the last round's review from its role so it checks those fixes. Repeat until all
+three overall scores are 10, no criterion is under 9 and there are no dealbreakers.
 There are at most three rounds; the rubric says what to do if the post doesn't get there. Write
 every round to `docs/blog/reviews/<slug>.json`: the test fails a post without a record ending
 10/10/10.

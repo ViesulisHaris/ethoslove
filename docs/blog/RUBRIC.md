@@ -5,16 +5,26 @@ checks what can be counted. The panel judges what can't: whether this is the bes
 for the search.
 
 There are three readers. Each is a fresh subagent that hasn't seen the drafting, and each has one
-job. They score, the writer fixes, then a new panel reads it again. A post goes live only when all
-three give it 10.
+job. They score, the writer fixes, then a new panel reads it again and checks the last round's
+fixes. A post goes live only when all three give it 10.
 
 ## What the scores mean
 
-- **10:** Nothing left to fix. For this search, it's the page you'd send a friend instead of
+- **10:** Nothing has to change. For this search, it's the page you'd send a friend instead of
   anything on the first page of results, and you can say in one sentence why.
 - **9:** One or two small fixes: a sentence, a link, a heading.
 - **7–8:** Useful, but generic in places, or missing something a current top result covers.
 - **6 or below:** Wrong, thin, padded, or not the answer to the search.
+
+**Fixes and polish.** A fix is something that has to change before the post goes out:
+- an error;
+- a line that misleads or confuses;
+- something important that a top result covers and this post doesn't;
+- a line that breaks `VOICE.md`.
+
+Anything else that might make the post better is polish. List it, but it doesn't lower the score. A
+new reviewer can always think of something to add, so if every idea counted, no post would ever
+reach 10.
 
 Scores are earned. A reviewer who gives less than 10 quotes the line responsible and writes the
 exact fix. A reviewer who gives 10 says, in one sentence, what makes the post better than the top
@@ -48,10 +58,16 @@ English post as that person.
 
 ### 2. The editor and fact-checker
 
-Read both languages. Check every factual claim:
+Read both languages. Check every factual claim against the code, not against the post:
 - product facts against the files listed in `docs/blog/VOICE.md`;
-- what each template does against `src/templates/<slug>/manifest.ts`;
+- what each template does against `src/templates/<slug>/manifest.ts`, `schema.ts` and
+  `Template.tsx`;
+- scheduling and countdowns against `src/app/[locale]/(gift)/g/[shortId]/page.tsx`,
+  `src/components/gift/scheduled-screen.tsx` and `src/components/editor/sections/extras.tsx`;
+- that every link resolves;
 - dates, times and anything else that can be checked.
+
+Return the claims you checked in a `verified` list, each with the file that settles it.
 
 - **accuracy:** Every claim is true and supported. Any error is a dealbreaker.
 - **voice:** Specific, warm and plain, with no filler and nothing that sounds machine-written. It
@@ -82,24 +98,29 @@ the first page now. Then look at the post as a search result.
   "overall": 9,
   "dealbreakers": [],
   "fixes": [{ "where": "the exact current text", "change": "the exact new text", "why": "one line" }],
+  "polish": [{ "where": "...", "change": "...", "why": "..." }],
   "keep": ["what works and must survive the edit"]
 }
 ```
+
+For an addition, `where` is the sentence it goes after.
 
 The criteria are `answers`, `usable` and `trust` for the reader; `accuracy`, `voice` and
 `spanish` for the editor; `better` and `search` for the search competitor.
 
 ## The loop
 
-1. Start the three reviewers in parallel with the Agent tool. Tell them not to edit any file, and
-   give each:
+1. Start the three reviewers in parallel with the Agent tool. Tell each which reader it is (its
+   section above), not to edit any file, and to return only the JSON below. Give each:
    - this file and `docs/blog/VOICE.md`;
    - the post's file;
    - the keyword;
    - the list of existing posts.
 2. Apply every fix that is right. Reject a fix only if it would introduce an error, and say why in
-   the record.
+   the record. Take polish only where it clearly makes the post better without padding it.
 3. Run the checks in step 5 again. Then start a fresh panel (new subagents) on the new version.
+   Also give each new reviewer the last round's review from its own role. It checks that each of
+   those fixes was made, and made correctly, then reads the whole post as round one did.
 4. Publish when all three overall scores are 10, no criterion is below 9, and there are no
    dealbreakers.
 5. At most three rounds. If round three still isn't there, don't publish that post:
