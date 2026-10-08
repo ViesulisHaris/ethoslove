@@ -157,6 +157,50 @@
       ],
       "rejected": [],
       "note": "Round three ended at 9/9/9 with only small fixes. Every round, new reviewers found new things to add. So from round four the rubric separates fixes from optional polish, and each new reviewer checks the last round's fixes. The post went live before the panel existed, so it keeps going past three rounds until it reaches 10/10/10."
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Seven of the eight round-three fixes made correctly. One fix: the message for his friends doesn't say whose midnight, and 'that evening' can be read as Thursday evening. Polish: 'converted to your time', a midnight call only if he stays up, his ingredients delivered, re-convert after a clock change, 'costs little or nothing'."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result that plans the day in his time zone, and it gets right the part readers most easily get wrong (a scheduled gift shows a waiting screen, Midnight Countdown is the countdown itself, scheduled messages go by your clock), with every product claim matching the code in both languages. Polish: 'stay up for it', 'on the count of three', and Spanish word order in four places."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is parasite pages on borrowed domains, a 50-item listicle and wishes lists; this is the only result that plans the day in his time zone, from midnight to the evening call and a surprise visit, with a schedule to copy, real shipping lead times, the daylight-saving trap and the exact message for his friends. Polish: re-convert the times after a clock change, and a playlist in the open-when notes."
+        }
+      ],
+      "applied": [
+        "The message for his friends: 'at midnight his time, the second it turns Thursday? I'll remind you on Wednesday evening.' (both languages).",
+        "Polish taken: 'converted to your time'; 'If he stays up late and so do they'; his ingredients delivered (and the schedule row); convert the times again after a clock change; the playlist; 'Most of this costs little or nothing'; 'stay up for it'; 'on the count of three'; Spanish 'a la de tres', 'que cocináis juntos', 'el regalo es la propia cuenta atrás', 'que la distancia se note más'."
+      ],
+      "rejected": [
+        "Reader's daylight-saving line in the mistakes list: the same advice went in at the step where the times are converted, as the search reviewer suggested."
+      ]
     }
   ]
 }

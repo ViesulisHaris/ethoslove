@@ -14,14 +14,14 @@ export const post: BlogPost = {
       takeaways: [
         "Plan in his time zone, not yours: midnight is his midnight, and the call is at an hour when he's awake.",
         "Send one thing that opens on the stroke of midnight and one thing to open later, so his day has two moments instead of one.",
-        "Book an hour together on video: the same dinner in two kitchens, a film started on three, or a game.",
+        "Book an hour together on video: the same dinner in two kitchens, a film started on the count of three, or a game.",
         "Write about him and about ordinary days, not about how hard the distance is. One line of missing him is plenty.",
       ],
       body: [
         { type: "h2", text: "Start with his time zone" },
         {
           type: "p",
-          text: "Before you choose anything, write down three times in his time zone: midnight, the time he wakes up and the hour he's free in the evening. Every idea below hangs on one of them. If you're six hours ahead, his midnight is your six in the morning; if you're behind, it falls on the day before his birthday where you are, maybe in the middle of your working day. Add his city to the world clock on your phone, convert the three times to yours now and put each one in your calendar with an alert, so there's nothing to work out on the day.",
+          text: "Before you choose anything, write down three times in his time zone: midnight, the time he wakes up and the hour he's free in the evening. Every idea below hangs on one of them. If you're six hours ahead, his midnight is your six in the morning; if you're behind, it falls on the day before his birthday where you are, maybe in the middle of your working day. Add his city to the world clock on your phone, convert the three times to yours now and put each one in your calendar with an alert, so there's nothing to work out on the day. If the clocks change where either of you lives before his birthday, convert them again after the change.",
         },
         {
           type: "p",
@@ -36,8 +36,8 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**A countdown that opens at midnight.** Send him the link in the evening: a live timer ticks down on his phone and, at zero, opens onto your photos and a message. Watching it get closer is half the fun.",
-            "**A voice note for 00:00.** Thirty seconds of you singing badly beats a long paragraph. Record it the day before. If your messaging app can schedule a voice note, set it for his midnight in your time, because scheduled messages go by your clock; if not, set an alarm and send it yourself.",
-            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. Something like: 'His birthday's on Thursday and I can't be there. Could you send him the best photo you've got of him, with one line, at midnight? I'll remind you that evening.' If they're night owls, put them all on one video call instead and send him the link at twelve.",
+            "**A voice note for 00:00.** Thirty seconds of you singing badly beats a long paragraph. Record it the day before. If your messaging app can schedule a voice note, schedule it for his midnight converted to your time, because scheduled messages go by your clock; if not, set an alarm and send it yourself.",
+            "**A message from his friends.** Ask three or four of his closest friends to send one photo of him with a line each, all at midnight. You do the organising; they hit send. Something like: 'His birthday's on Thursday and I can't be there. Could you send him the best photo you've got of him, with one line, at midnight his time, the second it turns Thursday? I'll remind you on Wednesday evening.' If he stays up late and so do they, put them all on one video call instead and send him the link at twelve.",
           ],
         },
         {
@@ -60,7 +60,7 @@ export const post: BlogPost = {
             "**Breakfast at his door.** Order his usual coffee and something sweet from a place near him through a delivery app, timed for when he wakes up. Check the week before that the app delivers to his address and lets you schedule the order, and put his name and number on it so the driver calls him, not you.",
             "**One box with one thing in it.** No filler: one object that means something, like a book you've both talked about or a print of a photo from your last visit. With less than two weeks to go, order it from a shop in his country and add a gift note; with more time, send it yourself with a note inside and tell him not to open it until the day.",
             "**Something to do where he is.** Two tickets to something in his city, for him and his best friend: a band he likes, a comedy night, his team's next home game. They're bought online, so this still works with a few days to go.",
-            "**Open-when notes.** Three short messages labelled for the day: open at lunch, open when work gets boring, open before you sleep. Seal them in the box if you're sending one, or schedule each as a message so he can't read all three at breakfast.",
+            "**Open-when notes.** Three short messages labelled for the day: open at lunch, open when work gets boring (that one can be a playlist of the songs you send each other), open before you sleep. Seal them in the box if you're sending one, or schedule each as a message so he can't read all three at breakfast.",
             "**A film of his year.** Thirty seconds to a minute of photos and clips from the last twelve months, his friends' as well as yours. Start a shared album that his friends can add to from their phones, then let the photo app turn it into a short film.",
           ],
         },
@@ -77,7 +77,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**The same dinner in two kitchens.** Agree on a recipe, buy the ingredients in both places and cook it together on the call. It gets messy, and it's the most together thing on this list.",
+            "**The same dinner in two kitchens.** Agree on a recipe, buy your ingredients and have his delivered so he isn't shopping on his own birthday, then cook it together on the call. It gets messy, and it's the most together thing on this list.",
             "**A film started on the count of three.** Check first that you can both stream it, because what's on each service changes from country to country. Then use a watch-party feature or simply press play at the same moment. Keep the call open and talk over the bad parts.",
             "**A game.** An online board game, a co-op video game, or a quiz you wrote about the two of you.",
             "**Plan the next visit, live.** Book the tickets on the call, or open the calendar and circle the dates. It turns 'one day' into a date he can count down to.",
@@ -85,7 +85,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the time difference puts his evening in your night, take the late one; if it lands in your working day, take that hour off. It's one day, and he'll know what it cost you.",
+          text: "If the time difference puts his evening in your night, stay up for it; if it lands in your working day, take that hour off. It's one day, and he'll know what it cost you.",
         },
         {
           type: "template",
@@ -106,7 +106,7 @@ export const post: BlogPost = {
             ["00:00", "Your voice note and his friends' messages arrive", "Recorded the day before, friends briefed"],
             ["Morning", "Breakfast arrives at his door", "Order placed and paid for the night before"],
             ["Lunch", "The first open-when note", "Three notes written in advance"],
-            ["Evening", "Cake and a song, then dinner, a film or a game on video", "Cake ordered for when he's home, recipe agreed, ingredients bought"],
+            ["Evening", "Cake and a song, then dinner, a film or a game on video", "Cake ordered for when he's home, recipe agreed, his ingredients ordered"],
             ["Before bed", "The last note: what you'll do together next", "Dates or tickets for the next visit"],
           ],
         },
@@ -134,7 +134,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "None of this needs a big budget. What he'll remember is that the day started with you at midnight and ended with you on the call; everything in between is a bonus. For more ways to close the gap the rest of the year, see our [long-distance relationship gifts](/occasions/long-distance).",
+          text: "Most of this costs little or nothing. What he'll remember is that the day started with you at midnight and ended with you on the call; everything in between is a bonus. For more ways to close the gap the rest of the year, see our [long-distance relationship gifts](/occasions/long-distance).",
         },
       ],
       faq: [
@@ -160,18 +160,18 @@ export const post: BlogPost = {
       title: "Ideas para el cumpleaños de tu novio a distancia",
       description: "Un plan para el cumpleaños de tu novio a distancia: una sorpresa a su medianoche, cosas que abrir durante el día, una hora juntos y qué escribirle.",
       keyword: "ideas para el cumpleaños de mi novio a distancia",
-      lead: "Los mejores planes de cumpleaños a distancia hacen tres cosas: algo llega a medianoche en su zona horaria, algo le espera para abrirlo durante el día y los dos compartís al menos una hora en directo. En la práctica: una nota de voz o una cuenta atrás a su medianoche, el desayuno en su puerta y una cena cocinada juntos por videollamada. Si aciertas con esas tres, la distancia deja de ser la protagonista del día.",
+      lead: "Los mejores planes de cumpleaños a distancia hacen tres cosas: algo llega a medianoche en su zona horaria, algo le espera para abrirlo durante el día y los dos compartís al menos una hora en directo. En la práctica: una nota de voz o una cuenta atrás a su medianoche, el desayuno en su puerta y una cena que cocináis juntos por videollamada. Si aciertas con esas tres, la distancia deja de ser la protagonista del día.",
       takeaways: [
         "Planéalo en su zona horaria, no en la tuya: la medianoche es la suya y la llamada, a una hora en la que esté despierto.",
         "Envía algo que se abra justo a medianoche y algo para abrir más tarde, para que su día tenga dos momentos y no uno.",
-        "Reservad una hora juntos por videollamada: la misma cena en dos cocinas, una película empezada a la de tres o un juego.",
+        "Reservad una hora juntos por videollamada: la misma cena en dos cocinas, una película a la de tres o un juego.",
         "Escribe sobre él y sobre los días normales, no sobre lo dura que es la distancia. Con una frase de echarle de menos basta.",
       ],
       body: [
         { type: "h2", text: "Empieza por su zona horaria" },
         {
           type: "p",
-          text: "Antes de elegir nada, apunta tres horas en su zona horaria: la medianoche, la hora a la que se despierta y la hora en la que está libre por la noche. Todas las ideas de abajo dependen de una de ellas. Si vas seis horas por delante, su medianoche son tus seis de la mañana; si vas por detrás, cae el día antes de su cumpleaños donde estás tú, quizá en mitad de tu jornada. Añade su ciudad al reloj mundial del móvil, pasa ahora las tres horas a la tuya y apunta cada una en el calendario con un aviso, para no tener que hacer cuentas ese día.",
+          text: "Antes de elegir nada, apunta tres horas en su zona horaria: la medianoche, la hora a la que se despierta y la hora en la que está libre por la noche. Todas las ideas de abajo dependen de una de ellas. Si vas seis horas por delante, su medianoche son tus seis de la mañana; si vas por detrás, cae el día antes de su cumpleaños donde estás tú, quizá en mitad de tu jornada. Añade su ciudad al reloj mundial del móvil, pasa ahora las tres horas a la tuya y apunta cada una en el calendario con un aviso, para no tener que hacer cuentas ese día. Si antes de su cumpleaños hay cambio de hora donde vive alguno de los dos, vuelve a pasarlas después del cambio.",
         },
         {
           type: "p",
@@ -187,7 +187,7 @@ export const post: BlogPost = {
           items: [
             "**Una cuenta atrás que se abre a medianoche.** Mándale el enlace por la tarde: un temporizador va bajando en su móvil y, al llegar a cero, se abre con tus fotos y un mensaje. Ir viendo cómo se acerca la hora es la mitad de la gracia.",
             "**Una nota de voz para las 00:00.** Treinta segundos tuyos cantando fatal valen más que un párrafo largo. Grábala el día antes. Si tu app de mensajes deja programar notas de voz, prográmala para su medianoche pasada a tu hora, porque los mensajes programados usan la hora de tu móvil; si no, pon una alarma y mándala tú.",
-            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas a medianoche la mejor foto que tengas de él, con una frase? Te lo recuerdo esa tarde.» Si suelen trasnochar, reúnelos a todos en una videollamada y mándale el enlace a las doce.",
+            "**Un mensaje de sus amigos.** Pide a tres o cuatro de sus amigos más cercanos que le manden una foto en la que salga él, con una frase cada uno, todos a medianoche. Tú lo organizas; ellos le dan a enviar. Algo así: «Su cumpleaños es el jueves y no puedo estar. ¿Le mandas la mejor foto que tengas de él, con una frase, a medianoche en su zona horaria, justo cuando empiece el jueves? Te lo recuerdo el miércoles por la tarde.» Si él suele trasnochar y ellos también, reúnelos a todos en una videollamada y mándale el enlace a las doce.",
           ],
         },
         {
@@ -210,7 +210,7 @@ export const post: BlogPost = {
             "**El desayuno en su puerta.** Pídele su café de siempre y algo dulce en un sitio cerca de su casa con una app de reparto, para cuando se despierte. Comprueba la semana antes que la app reparte en su dirección y deja programar el pedido, y pon su nombre y su número para que el repartidor le llame a él y no a ti.",
             "**Una caja con una sola cosa dentro.** Nada de relleno: un objeto que signifique algo, como un libro del que habéis hablado o una foto impresa de vuestra última visita. Si quedan menos de dos semanas, pídelo en una tienda de su país con una nota de regalo; si hay más tiempo, envíalo tú con una nota dentro y pídele que no lo abra hasta el día.",
             "**Algo que hacer allí.** Dos entradas para algo en su ciudad, para él y su mejor amigo: un grupo que le guste, una noche de monólogos, el próximo partido de su equipo en casa. Se compran online, así que funciona aunque queden pocos días.",
-            "**Notas para abrir cuando...** Tres notas cortas con su momento: ábrela al comer, ábrela cuando el trabajo se haga eterno, ábrela antes de dormir. Mételas en la caja si le mandas una, o programa cada una como mensaje para que no las lea las tres en el desayuno.",
+            "**Notas para abrir cuando...** Tres notas cortas con su momento: ábrela al comer, ábrela cuando el trabajo se haga eterno (esa puede ser una lista con las canciones que os mandáis), ábrela antes de dormir. Mételas en la caja si le mandas una, o programa cada una como mensaje para que no las lea las tres en el desayuno.",
             "**Una película de su año.** Entre treinta segundos y un minuto de fotos y vídeos de los últimos doce meses, de sus amigos y tuyos. Crea un álbum compartido al que sus amigos puedan añadir cosas desde el móvil y deja que la app de fotos lo convierta en una película corta.",
           ],
         },
@@ -227,8 +227,8 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**La misma cena en dos cocinas.** Elegid una receta, comprad los ingredientes en los dos sitios y cocinadla juntos en la llamada. Se pone todo perdido, y es lo que más se parece a estar juntos de toda la lista.",
-            "**Una película empezada a la de tres.** Comprobad antes que podéis verla los dos, porque el catálogo de cada plataforma cambia de un país a otro. Luego usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas.",
+            "**La misma cena en dos cocinas.** Elegid una receta; compra tus ingredientes y pide que le lleven los suyos a casa para que no tenga que ir a la compra el día de su cumpleaños, y luego cocinadla juntos en la llamada. Se pone todo perdido, y es lo que más se parece a estar juntos de toda la lista.",
+            "**Una película a la de tres.** Comprobad antes que podéis verla los dos, porque el catálogo de cada plataforma cambia de un país a otro. Luego usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas.",
             "**Un juego.** Un juego de mesa online, un videojuego cooperativo o un test que hayas escrito sobre vosotros dos.",
             "**Planear la próxima visita, en directo.** Comprad los billetes en la llamada o abrid el calendario y marcad las fechas. Así, «algún día» se convierte en una fecha y él ya puede contar los días.",
           ],
@@ -256,7 +256,7 @@ export const post: BlogPost = {
             ["00:00", "Llegan tu nota de voz y los mensajes de sus amigos", "Grabada el día antes, amigos avisados"],
             ["Mañana", "El desayuno llega a su puerta", "Pedido hecho y pagado la noche antes"],
             ["Comida", "La primera nota para abrir", "Tres notas escritas con antelación"],
-            ["Noche", "Tarta y canción, luego cena, película o juego por videollamada", "Tarta encargada para cuando esté en casa, receta elegida, ingredientes comprados"],
+            ["Noche", "Tarta y canción, luego cena, película o juego por videollamada", "Tarta encargada para cuando esté en casa, receta elegida, sus ingredientes pedidos"],
             ["Antes de dormir", "La última nota: lo próximo que haréis juntos", "Fechas o billetes de la próxima visita"],
           ],
         },
@@ -272,7 +272,7 @@ export const post: BlogPost = {
           type: "p",
           text: "Luego fírmalo como firmas todo lo demás. Si aun así no te salen las palabras, nuestra página de [regalos de cumpleaños](/occasions/birthday) tiene unas cuantas ideas más y una frase para empezar.",
         },
-        { type: "h2", text: "Errores que hacen que se sienta más lejos" },
+        { type: "h2", text: "Errores que hacen que la distancia se note más" },
         {
           type: "list",
           items: [
@@ -284,7 +284,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Nada de esto necesita un gran presupuesto. Lo que recordará es que el día empezó contigo a medianoche y terminó contigo en la llamada; todo lo demás es un extra. Para más formas de acortar la distancia el resto del año, mira nuestros [regalos para relaciones a distancia](/occasions/long-distance).",
+          text: "Casi todo esto cuesta poco o nada. Lo que recordará es que el día empezó contigo a medianoche y terminó contigo en la llamada; todo lo demás es un extra. Para más formas de acortar la distancia el resto del año, mira nuestros [regalos para relaciones a distancia](/occasions/long-distance).",
         },
       ],
       faq: [
@@ -298,7 +298,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Cómo me aseguro de que un regalo se abra a medianoche en su zona horaria?",
-          a: "Elige la zona horaria, no solo la hora. En Ethos, las [plantillas premium](/pricing) se pueden programar para que se desbloqueen a medianoche en su zona horaria, sea la hora que sea donde estás tú; hasta entonces, el enlace muestra una pantalla de espera sencilla con tu nombre, la hora a la que se abre y un temporizador. La Cuenta atrás de medianoche es distinta: la cuenta atrás es el propio regalo, que corre hasta su medianoche en su pantalla, así que mándale el enlace por la tarde. Un mensaje o un correo que programes usa tu hora, no la suya, así que pasa antes su medianoche a la tuya.",
+          a: "Elige la zona horaria, no solo la hora. En Ethos, las [plantillas premium](/pricing) se pueden programar para que se desbloqueen a medianoche en su zona horaria, sea la hora que sea donde estás tú; hasta entonces, el enlace muestra una pantalla de espera sencilla con tu nombre, la hora a la que se abre y un temporizador. La Cuenta atrás de medianoche es distinta: el regalo es la propia cuenta atrás, que corre en su pantalla hasta su medianoche, así que mándale el enlace por la tarde. Un mensaje o un correo que programes usa tu hora, no la suya, así que pasa antes su medianoche a la tuya.",
         },
         {
           q: "¿Basta un regalo digital para un cumpleaños a distancia?",
