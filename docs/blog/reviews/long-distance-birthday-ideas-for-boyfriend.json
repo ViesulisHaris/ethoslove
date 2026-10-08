@@ -290,6 +290,47 @@
       "rejected": [
         "Search polish (dinner delivered instead of cooked; 'gifts' and 'an hour on video' in the description) and reader polish (the guide anchor, the shared album across phones, a candle with the cake, the card check): optional, and new text the next panel would have to clear."
       ]
+    },
+    {
+      "round": 7,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is still parasite pages on borrowed domains, a 50-plus-idea listicle and a wishes page; this is the only result that runs the whole day on his clock, with the three times in your calendar, what still arrives with a week to go, the exact text for his friends and a midnight-to-bedtime schedule, and each premium card says when to choose it, with the free option and its limit right underneath."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Where the usual pages stop at a list of ideas, this post runs the day on his clock and gets right the product details readers most often get wrong (a scheduled gift shows a waiting screen, Midnight Countdown's countdown is the gift itself, free gifts can't be scheduled, scheduled messages go by your clock), all matching the code in both languages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one in both languages is parasite pages, 40- and 50-idea lists, shop blogs and wishes pages; this is the only result that takes their usual ideas and builds a birthday on his clock, with the times converted into your calendar, a schedule of what to have ready, real lead times and the traps the lists miss."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish, not applied because the version the panel passed is the one published (RUBRIC.md, the loop, step 4): 'the evening before' and the day of the countdown; 'if you're sending it yourself'; a sentence order; three Spanish word-order changes; 'gifts' and 'video' in the descriptions; dinner delivered to both doors."
+      ]
     }
   ]
 }
