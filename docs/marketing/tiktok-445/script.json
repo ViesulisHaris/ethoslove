@@ -1,0 +1,42 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "no why would you do this"
+        },
+        {
+          "from": "me",
+          "text": "now i’m crying"
+        },
+        {
+          "from": "them",
+          "text": "Babyyy"
+        },
+        {
+          "from": "me",
+          "text": "don’t babyyy me",
+          "status": "Read 9:09 pm"
+        },
+        {
+          "from": "them",
+          "text": "Too late you’re my baby"
+        }
+      ]
+    }
+  ]
+}
