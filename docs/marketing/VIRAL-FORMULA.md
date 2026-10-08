@@ -1714,6 +1714,27 @@ flowers and iced coffee at you're front door", "You said nap not a coma / I miss
 
 **Post order:** 426, 433, 429, 431, 425, 427, 428, 430, 432, 434. One or two a night, in the evening.
 
+### 435 to 444: ten more in love (8 Oct)
+
+The same rules as 425 to 434: an everyday moment, his warm bubbles with pet names, her short reply, the
+link as something he made her. No times down the right (see 431).
+
+| | The moment | His line with the link |
+|---|---|---|
+| 435 | her birthday, at midnight | "Happy birthday my pretty girl" → "you stayed up for this??" |
+| 436 | "I PASSED" | "I made this last week bc I knew", her draft "you made this BEFORE??" |
+| 437 | rain, her favourite | "Bringing hot chocolate and your blanket" → "you remembered i love the rain" |
+| 438 | his work trip | "Landed baby / Already miss you", her draft "come home already" |
+| 439 | she feels ugly | "You're the prettiest girl I've ever seen / Read this and believe it" |
+| 440 | spooky season starts | "Your favorite time of year / So I made you something" → "BABYYY" |
+| 441 | three exams in a week | "Breathe baby / Made you something for your study breaks" |
+| 442 | her first day at a new job | "They're so lucky to have you" → "baby 😭" |
+| 443 | for no reason (saved as "hubby 🤍") | "Random but I'm so lucky to have you / Made you this on my lunch break" |
+| 444 | 2am, "can you pick me up" | "Already in my car / Stay inside till I'm there / Open this while you wait" |
+
+**Post order:** 440 first while it's October, then 436, 435, 444, 437, 439, 438, 442, 441, 443. One or two a
+night, in the evening.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
