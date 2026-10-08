@@ -144,6 +144,18 @@ If the push is rejected because `main` moved, run `git pull --rebase origin main
 first four checks, and push again. Vercel deploys `main` by itself: the post is at
 `https://tryethos.io/blog/<slug>` a few minutes later.
 
+### When the network allows it: check it's live, then ping IndexNow
+
+This box usually can't reach the live site, so try once and skip this step if it doesn't answer.
+If it does, wait for the deploy, then tell the IndexNow engines (Bing, and through it ChatGPT
+search, Copilot and DuckDuckGo):
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" --max-time 10 https://tryethos.io/     # not 200: skip
+for i in $(seq 1 20); do [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 https://tryethos.io/blog/<slug>)" = 200 ] && break; sleep 30; done
+node scripts/indexnow.mjs https://tryethos.io/blog/<slug> https://tryethos.io/es/blog/<slug>
+```
+
 ## 7. Report
 
 Send one push notification: `New on tryethos.io: <English title>`.
@@ -153,6 +165,7 @@ The final message is what the owner reads on their phone. Write only:
 - the link, https://tryethos.io/blog/<slug>;
 - the search it targets;
 - the templates it recommends;
+- "Live and sent to IndexNow", or "Live check skipped (no network)";
 - one line if anything was skipped or failed.
 
 ## Never
