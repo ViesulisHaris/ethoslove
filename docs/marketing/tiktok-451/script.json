@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "goodmorninggggg babyyy",
+          "status": "Read 10:46 am"
+        },
+        {
+          "from": "them",
+          "text": "Goodmorningg my pretty girl"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodmorning 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Open it then ft me so I can start my day"
+        }
+      ]
+    }
+  ]
+}
