@@ -1714,7 +1714,7 @@ flowers and iced coffee at you're front door", "You said nap not a coma / I miss
 
 **Post order:** 426, 433, 429, 431, 425, 427, 428, 430, 432, 434. One or two a night, in the evening.
 
-### 435 to 444: ten more in love (8 Oct)
+### 435 to 444: ten more in love (8 Oct) — rejected, don't post
 
 The same rules as 425 to 434: an everyday moment, his warm bubbles with pet names, her short reply, the
 link as something he made her. No times down the right (see 431).
@@ -1734,6 +1734,36 @@ link as something he made her. No times down the right (see 431).
 
 **Post order:** 440 first while it's October, then 436, 435, 444, 437, 439, 438, 442, 441, 443. One or two a
 night, in the evening.
+
+### 445 to 454: the reference screenshots, beat for beat (8 Oct)
+
+The owner on 435 to 444: "the new ones are pretty bad ... copy the formula and make them realistic ... dont
+say 'autumn your favourite season' no dont make that up". Those read like ads: nearly every chat said "Made
+you something for …", and they invented facts about her ("your favorite weather", "spooky season"). The
+reference posts do neither. So each of these copies one reference screenshot's beats in new words:
+
+- **Short**: 2 to 6 bubbles, often starting mid-conversation with no setup.
+- **A small real moment**: she got home, good morning, a nap, she's moody because she misses him,
+  knock-knock, "it's not good for the baby".
+- **His lines short and casual**, the twist light.
+- **The link sits in the chat the way a real one would**: often already sent at the top of the crop,
+  with her reacting under it ("no why would you do this / now i'm crying"). He never says "I made you
+  something for …".
+
+| | Follows the screenshot | The chat |
+|---|---|---|
+| 445 | "no now i'm crying / Babyyy" | link at the top → "no why would you do this / now i'm crying" → "Babyyy" → "don't babyyy me" → "Too late you're my baby" |
+| 446 | "Thank you baby / For existing" | "Thank you baby" → "wait for what" → "For being you / My life's so much better with you in it" + link |
+| 447 | "Knock knock" | "Knock knock" → "who's there" → "Check your messages" + link → "NO WAYYYY" → "Yes way baby" |
+| 448 | "baby i have a question / already in my car" | link at the top → "baby i have a question" → "Yes / I'm already in my car", her draft "can you come see me i miss you" |
+| 449 | "Why do you have an attitude / bc i miss you" | "leave me alone" → "Why do you have an attitude" → "bc i miss you" → "Okay I'm omw rn" + link "fix your attitude 🤍" |
+| 450 | "it's not good for the baby / me" | "can we please stop arguing / it's not good for the baby" → "What baby???" → "me" → link "for my baby 🤍" |
+| 451 | "goodmorningggggg babyyy / Ft me" | "goodmorninggggg babyyy" → "Goodmorningg my pretty girl" + link → "Open it then ft me so I can start my day" |
+| 452 | the nap | "okay i'm going to take a nap text me if you need me" → "Okay baby sleep well / Wait / I miss you already" + link |
+| 453 | "lmk if you need anything else / What if I need you" | link at the top → "thank you baby / lmk if you need anything" → "I just need you" |
+| 454 | "option 2" | saved as "option 2": "It's so sunny today / I'll come pick you up in an hour / We can get ice cream and walk by the water" + link |
+
+**Post order:** 450, 448, 445, 449, 447, 453, 446, 451, 452, 454. One or two a night, in the evening.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
