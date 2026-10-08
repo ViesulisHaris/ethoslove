@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "okay i’m going to take a nap text me if you need me",
+          "status": "Read 3:07 pm"
+        },
+        {
+          "from": "them",
+          "text": "Okay baby sleep well"
+        },
+        {
+          "from": "them",
+          "text": "Wait"
+        },
+        {
+          "from": "them",
+          "text": "I miss you already"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you wake up 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
