@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "can you come see me i miss you",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "baby i have a question",
+          "status": "Read 6:51 pm"
+        },
+        {
+          "from": "them",
+          "text": "Yes"
+        },
+        {
+          "from": "them",
+          "text": "I’m already in my car"
+        }
+      ]
+    }
+  ]
+}
