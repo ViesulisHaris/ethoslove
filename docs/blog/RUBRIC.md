@@ -111,8 +111,25 @@ The criteria are `answers`, `usable` and `trust` for the reader; `accuracy`, `vo
 Write `docs/blog/reviews/<slug>.json` and commit it with the post:
 
 ```json
-{ "slug": "...", "keyword": "...", "rounds": [{ "round": 1, "reviews": [ ...the three reviewers' JSON... ], "applied": ["what changed"], "rejected": ["fix and why"] }] }
+{
+  "slug": "...",
+  "keyword": "...",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 9, "usable": 10, "trust": 10 }, "overall": 9, "dealbreakers": [], "summary": "..." }
+      ],
+      "applied": ["what changed"],
+      "rejected": ["fix and why"]
+    }
+  ]
+}
 ```
+
+Copy each reviewer's `scores`, `overall` and `dealbreakers` exactly as returned. In place of the
+fixes, `summary` says in a few lines what the reviewer asked for, or, for a 10, the one sentence on
+why the post beats the top results.
 
 `tests/unit/blog-posts.test.ts` checks that every post has a record and that its last round is
 10/10/10, with no criterion below 9 and no dealbreakers.

@@ -1,0 +1,49 @@
+{
+  "slug": "long-distance-birthday-ideas-for-boyfriend",
+  "keyword": "long distance birthday ideas for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 8, "usable": 8, "trust": 7 },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The three-moment plan answers the search, but the lead gave categories without examples, phone alarms can't ring in his time zone, scheduled messages go by the sender's clock, two of the three sample lines were about the distance, and the free option hid that it can't be scheduled."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 6, "voice": 8, "spanish": 7 },
+          "overall": 6,
+          "dealbreakers": [
+            "Told readers to schedule Midnight Countdown: a scheduled gift shows the waiting screen until it unlocks, so he would never watch the countdown; the template's own countdown (Extras, with its own time zone) does the timing.",
+            "Halfway misdescribed: the plane flies along the path to his door, the path turns into a heart and the postcard flips over to the letter."
+          ],
+          "summary": "Also: British 'post', 'parcel' and 'bits'; a third product mention in the text; Spanish calques ('lo más «juntos»', 'se sienta compartido'), a missing subjunctive ('pasemos') and a feminine-only 'quédate despierta'."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 8, "search": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Already better than a first page of spam, listicles and wishes pages (the schedule table, lead times and writing advice), but missing the surprise visit and a friends' video call; headings didn't use the words people search ('surprise', 'time zone', 'video call', 'gifts'); the description lacked 'long-distance' and 'boyfriend'; 'premium' had no link to prices."
+        }
+      ],
+      "applied": [
+        "Midnight Countdown: set its countdown to his midnight and send the link that evening (note, list item, schedule row and FAQ, both languages); scheduling explained correctly in the FAQ.",
+        "Halfway described as its manifest does and moved to the evening section, tied to the next visit and a countdown to it.",
+        "Lead gives a concrete example of each of the three moments; takeaway 4 no longer contradicts the countdown pick.",
+        "World clock plus alarms converted to your time; voice notes scheduled for his midnight in your time.",
+        "Free option says it can't be scheduled and links to prices; Birthday Cinema paragraph cut (third product mention) and its call tip moved into the card.",
+        "Breakfast order: check scheduling, and his name and number on it. Box timing: under two weeks, order from a shop in his country. Open-when notes: how they reach him. Film of his year: a shared album.",
+        "Surprise visit and a friends' video call added; customs on a posted present added to the mistakes.",
+        "Two sample lines replaced with ones about him and a shared memory; one distance line kept, as the post advises.",
+        "Headings and description use the searched words; US/UK-neutral wording; Spanish calques, subjunctive and gendered verb fixed."
+      ],
+      "rejected": [
+        "Search reviewer's replacement for 'I want this to be the last one we spend in different time zones': kept as the one distance line the post allows, and the weather line replaced the Tuesday line instead."
+      ]
+    }
+  ]
+}
