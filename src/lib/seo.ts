@@ -13,10 +13,10 @@ export function localizedUrl(locale: string, path = "/"): string {
   return `${SITE.url}${prefix}${path === "/" ? "" : path}`;
 }
 
-/** Canonical and hreflang links for a page that exists in every locale. */
-export function localeAlternates(locale: string, path: string): NonNullable<Metadata["alternates"]> {
+/** Canonical and hreflang links for a page that exists in every locale, or only in `locales`. */
+export function localeAlternates(locale: string, path: string, locales: readonly string[] = routing.locales): NonNullable<Metadata["alternates"]> {
   const languages: Record<string, string> = { "x-default": localizedUrl(routing.defaultLocale, path) };
-  for (const l of routing.locales) languages[l] = localizedUrl(l, path);
+  for (const l of locales) languages[l] = localizedUrl(l, path);
   return { canonical: localizedUrl(locale, path), languages };
 }
 
@@ -38,6 +38,8 @@ export function pageMetadata({
   description,
   image,
   absoluteTitle = false,
+  locales,
+  article,
 }: {
   locale: string;
   path: string;
@@ -45,22 +47,26 @@ export function pageMetadata({
   description: string;
   image?: string;
   absoluteTitle?: boolean;
+  /** The locales the page exists in, when not all of them (a blog post not yet in Spanish). */
+  locales?: readonly string[];
+  /** An article's dates; they also make the share card an article rather than a website. */
+  article?: { publishedTime: string; modifiedTime: string };
 }): Metadata {
   const shareTitle = absoluteTitle ? title : `${title} · ${SITE.name}`;
   const card = { url: image ?? ogImageUrl(locale), width: 1200, height: 630, alt: shareTitle };
+  const share = {
+    siteName: SITE.name,
+    locale: locale === "es" ? "es_ES" : "en_US",
+    url: localizedUrl(locale, path),
+    title: shareTitle,
+    description,
+    images: [card],
+  };
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
-    alternates: localeAlternates(locale, path),
-    openGraph: {
-      type: "website",
-      siteName: SITE.name,
-      locale: locale === "es" ? "es_ES" : "en_US",
-      url: localizedUrl(locale, path),
-      title: shareTitle,
-      description,
-      images: [card],
-    },
+    alternates: localeAlternates(locale, path, locales),
+    openGraph: article ? { ...share, type: "article", ...article } : { ...share, type: "website" },
     twitter: { card: "summary_large_image", site: SITE.twitterHandle, title: shareTitle, description, images: [card.url] },
   };
 }
@@ -169,6 +175,58 @@ export function templateListNode(manifests: readonly TemplateManifest[], locale:
       name: m.name[locale],
       url: localizedUrl(locale, `/templates/${m.slug}`),
     })),
+  };
+}
+
+/** A blog post, written and published by Ethos. */
+export function blogPostingNode({
+  locale,
+  path,
+  title,
+  description,
+  keyword,
+  published,
+  modified,
+  image,
+}: {
+  locale: string;
+  path: string;
+  title: string;
+  description: string;
+  keyword: string;
+  published: string;
+  modified: string;
+  image: string;
+}): Node {
+  const url = localizedUrl(locale, path);
+  return {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    headline: title,
+    description,
+    keywords: keyword,
+    inLanguage: locale,
+    url,
+    mainEntityOfPage: url,
+    datePublished: published,
+    dateModified: modified,
+    image: image.startsWith("http") ? image : `${SITE.url}${image}`,
+    author: { "@id": ORGANIZATION_ID },
+    publisher: { "@id": ORGANIZATION_ID },
+    isPartOf: { "@id": `${localizedUrl(locale, "/blog")}#blog` },
+  };
+}
+
+/** /blog itself, with its posts. */
+export function blogNode(locale: string, name: string, posts: { title: string; path: string; published: string }[]): Node {
+  return {
+    "@type": "Blog",
+    "@id": `${localizedUrl(locale, "/blog")}#blog`,
+    name,
+    url: localizedUrl(locale, "/blog"),
+    inLanguage: locale,
+    publisher: { "@id": ORGANIZATION_ID },
+    blogPost: posts.map((p) => ({ "@type": "BlogPosting", headline: p.title, url: localizedUrl(locale, p.path), datePublished: p.published })),
   };
 }
 

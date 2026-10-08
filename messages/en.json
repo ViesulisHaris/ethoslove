@@ -691,6 +691,20 @@
     "long-distance": "Long distance",
     "just-because": "Just because"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "What to write, make and send",
+    "subtitle": "Practical guides for birthdays, anniversaries, distance and the ordinary days in between: what to say, what to make, and how to get it to them on time.",
+    "takeaways": "Key takeaways",
+    "faqTitle": "Questions people ask",
+    "minutes": "{minutes} min read",
+    "related": "Keep reading",
+    "makeThis": "Make this gift",
+    "seeIt": "See the template",
+    "templateFree": "Free template",
+    "templatePremium": "Premium template",
+    "englishOnly": "This guide is only in English for now."
+  },
   "pricing": {
     "eyebrow": "Pricing",
     "title": "Pay once. Keep it forever.",
@@ -893,6 +907,8 @@
         "description": "No occasion needed: a small digital gift with your photos, a song and a few honest words, to tell someone you're thinking of them.",
         "intro": "The best gifts don't wait for a date on the calendar. Make one in ten minutes and send it for no reason at all."
       }
-    }
+    },
+    "blogTitle": "Gift ideas and love letter guides",
+    "blogDescription": "What to write, what to make and how to send it: ideas and how-tos for birthdays, anniversaries, long distance and every day in between."
   }
 }

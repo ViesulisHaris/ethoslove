@@ -1,6 +1,7 @@
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
+import { BLOG_POSTS } from "@/content/blog";
 import { PRODUCTS, PRODUCT_ORDER, formatAmount } from "@/lib/pricing/products";
 import { localizedUrl } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
@@ -43,6 +44,10 @@ export function GET() {
     "",
     ...OCCASIONS.map((o) => `- [${en.seo.occasion[o].title}](${localizedUrl("en", `/occasions/${o}`)}): ${en.seo.occasion[o].description}`),
     "",
+    "## Blog",
+    "",
+    ...BLOG_POSTS.map((p) => `- [${p.content.en.title}](${localizedUrl("en", `/blog/${p.slug}`)}): ${p.content.en.description}`),
+    "",
     "## Pricing",
     "",
     `- Free: ${free.join(" and ")}. ${en.pricing.freeNote}`,
@@ -56,6 +61,7 @@ export function GET() {
     `- Home: ${SITE.url}`,
     `- Templates: ${localizedUrl("en", "/templates")}`,
     `- Occasions: ${localizedUrl("en", "/occasions")}`,
+    `- Blog: ${localizedUrl("en", "/blog")}`,
     `- Pricing: ${localizedUrl("en", "/pricing")}`,
     `- En español: ${localizedUrl("es")}`,
     `- Terms: ${localizedUrl("en", "/legal/terms")}`,

@@ -691,6 +691,20 @@
     "long-distance": "A distancia",
     "just-because": "Porque sí"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Qué escribir, qué hacer y qué enviar",
+    "subtitle": "Guías prácticas para cumpleaños, aniversarios, la distancia y los días normales de en medio: qué decir, qué hacer y cómo hacérselo llegar a tiempo.",
+    "takeaways": "Lo esencial",
+    "faqTitle": "Preguntas frecuentes",
+    "minutes": "{minutes} min de lectura",
+    "related": "Sigue leyendo",
+    "makeThis": "Hacer este regalo",
+    "seeIt": "Ver la plantilla",
+    "templateFree": "Plantilla gratis",
+    "templatePremium": "Plantilla premium",
+    "englishOnly": "De momento, esta guía solo está en inglés."
+  },
   "pricing": {
     "eyebrow": "Precios",
     "title": "Paga una vez. Quédatelo para siempre.",
@@ -893,6 +907,8 @@
         "description": "Sin ninguna ocasión: un pequeño regalo digital con tus fotos, una canción y unas palabras sinceras para decirle a alguien que piensas en esa persona.",
         "intro": "Los mejores regalos no esperan a una fecha en el calendario. Haz uno en diez minutos y envíalo sin ningún motivo."
       }
-    }
+    },
+    "blogTitle": "Ideas de regalos y guías para cartas de amor",
+    "blogDescription": "Qué escribir, qué hacer y cómo enviarlo: ideas y guías para cumpleaños, aniversarios, relaciones a distancia y cualquier otro día."
   }
 }
