@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it’s officially spooky season 🎃"
+        },
+        {
+          "from": "them",
+          "text": "Your favorite time of year"
+        },
+        {
+          "from": "them",
+          "text": "So I made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy spooky season 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "BABYYY",
+          "status": "Read 7:34 pm"
+        }
+      ]
+    }
+  ]
+}
