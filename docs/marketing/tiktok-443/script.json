@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "silenced": "hubby 🤍",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Random but I’m so lucky to have you"
+        },
+        {
+          "from": "them",
+          "text": "Made you this on my lunch break"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for no reason 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why are you like this 😭"
+        },
+        {
+          "from": "me",
+          "text": "i love you",
+          "status": "Read 12:36 pm"
+        }
+      ]
+    }
+  ]
+}
