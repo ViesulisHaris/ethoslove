@@ -1765,6 +1765,28 @@ reference posts do neither. So each of these copies one reference screenshot's b
 
 **Post order:** 450, 448, 445, 449, 447, 453, 446, 451, 452, 454. One or two a night, in the evening.
 
+### 455 to 464: the same formula, new small moments (9 Oct)
+
+The 445 to 454 rules, with moments the reference screenshots didn't use, so nothing reads as a
+part 2. Each is a plain everyday moment: no occasions or preferences invented for her, and he
+never says "I made you something for …".
+
+| | The moment | The chat |
+|---|---|---|
+| 455 | bored | "im bored" → "Come over" → "i'm already in bed" → "Then I'm coming to you" + link |
+| 456 | 1am | "i can't sleep" → "Me neither / Keep thinking about you" + link → "Open this and try again" |
+| 457 | bad day | "today was so bad" → "Come here baby" → "you're at work" → "Not anymore im leaving" + link |
+| 458 | her draft | link at the top → "you did this??" → "Ofc I did / Anything for my pretty girl", her draft "im gonna marry you" |
+| 459 | sick | "i feel so sick" → "Check you're front door baby / Soup and tea / And this" + link |
+| 460 | nerves | "i'm so nervous" → "Why baby" → "the interview is in 10 min" → "You're gonna be amazing / Open this before you go in" + link |
+| 461 | rude name | saved as "annoying": "Goodnight my love / Thank you for today / Im the luckiest guy in the world" + link |
+| 462 | look outside | link at the top → "why aren't you answering / hello??" → "Look outside" |
+| 463 | passed | "I PASSED / i actually passed" → "I KNEW IT / So proud of you baby" + link |
+| 464 | still mad | "i'm still mad at you" → link "i'm sorry 🤍" → "okay i'm not mad anymore" → "I know you baby" |
+
+**Post order:** 462, 458, 464, 461, 456, 459, 463, 457, 455, 460. One or two a night, in the evening
+(7 to 10 pm New York time on a US account).
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
