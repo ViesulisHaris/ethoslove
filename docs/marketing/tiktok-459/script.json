@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i feel so sick",
+          "status": "Read 11:08 am"
+        },
+        {
+          "from": "them",
+          "text": "Check you’re front door baby"
+        },
+        {
+          "from": "them",
+          "text": "Soup and tea"
+        },
+        {
+          "from": "them",
+          "text": "And this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "get better 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
