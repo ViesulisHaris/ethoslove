@@ -1,0 +1,139 @@
+{
+  "slug": "halloween-ideas-for-couples",
+  "keyword": "halloween ideas for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The lead, effort table, film tiers, running order and carving timing answer the search, but the table offers a dinner for two that the post never explains, and the film night says 4 hours while its running order runs 4½."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every product, date, film and source claim checked out. Asked for 'many places' instead of 'most places' for the porch-light custom, US/UK-neutral 'sweater' and 'plastic bag' instead of 'jumper' and 'bin bag', and 'poniendo buena cara' for a Spanish line that read translated."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Beats page one's unsorted listicles with the effort table, running order and dated carving advice, but every top result covers themed food at home and the post only names a dinner in the table; the occasion-page link promised 'more ideas for the night' when that page is about the gift."
+        }
+      ],
+      "applied": [
+        "New section 'A Halloween dinner for two' after the costumes, both languages.",
+        "Film night is 4½ hours in the table (4 horas y media).",
+        "Porch light: 'in many places, especially in North America' (ES matches).",
+        "'orange sweater', 'an opened-out plastic bag' (ES 'una bolsa de plástico abierta'); ES 'poniendo buena cara'.",
+        "Occasion-page link now says it covers what to write, what to add and when to send it.",
+        "Polish taken: 'aún le queda valor'; Scream swapped for The Sixth Sense / El sexto sentido in the in-between tier; 'book now' instead of 'this week' on a Friday; gift paragraph trimmed so it doesn't repeat the occasion page; older post's Spanish says 'el horario de la noche'."
+      ],
+      "rejected": [
+        "Polish not taken: a note on The Shining's running time, and a treat-hunt item (both add text without fixing anything)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Instead of a 40-item list it sorts a handful of ideas by effort, with a timed film-night running order, scare-graded films, a dated carving plan backed by Cornell, ten-minute costumes and lines you'd actually send."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes all made correctly and every claim verified. New text needed 'ready-made' instead of British 'shop-bought', and 'más que suficientes' to agree with 'unos brownies'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one gives 20 to 40 one-line ideas with no way to choose; this sorts them by effort, adds a timed film night with graded films, carve-by dates for Saturday 31 October 2026 with a Cornell source, ten-minute costumes and lines to send."
+        }
+      ],
+      "applied": [
+        "'ready-made brownies'; ES 'más que suficientes'.",
+        "Polish taken to head off the same US/UK fix: 'turn the overhead light off'."
+      ],
+      "rejected": [
+        "Polish not taken: 'Velma' for 'Vilma' in Spanish (round one's editor confirmed Vilma for Spain's dub and this reviewer couldn't confirm otherwise); notes on The Shining's length, 'candy' for US readers, a treat hunt and baking biscuits (added text without fixing anything)."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results list forty interchangeable ideas; this sorts them by effort and gives a dated carve plan, a film running order with scare levels and costumes you can make tonight, so a couple can pick one and do it this week."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-two fixes made correctly; every product, date, film, Spain title and source claim checks out against the code and the cited pages, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is unranked lists of 10 to 40 ideas with no dates or way to choose; this sorts by effort, sets everything to the 2026 calendar and gives a film running order and lines to send, so it's the one page you can act on tonight."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): a red skirt for Velma, 'candy' for US readers, an escape room, a treat hunt, baking together, and 'Empezad' for 'Empieza' in the Spanish opening."
+      ]
+    }
+  ]
+}

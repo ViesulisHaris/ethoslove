@@ -78,7 +78,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**The same dinner in two kitchens.** Agree on a recipe, buy your ingredients and have his delivered so he isn't shopping on his own birthday, then cook it together on the call. It gets messy, and it's the most together thing on this list.",
-            "**A film started on the count of three.** Check first that you can both stream it, because what's on each service changes from country to country. Then use a watch-party feature or simply press play at the same moment. Keep the call open and talk over the bad parts.",
+            "**A film started on the count of three.** Check first that you can both stream it, because what's on each service changes from country to country. Then use a watch-party feature or simply press play at the same moment. Keep the call open and talk over the bad parts. If his birthday is near the end of October, borrow the film list and running order from our [Halloween ideas for couples](/blog/halloween-ideas-for-couples).",
             "**A game.** An online board game, a co-op video game, or a quiz you wrote about the two of you.",
             "**Plan the next visit, live.** Book the tickets on the call, or open the calendar and circle the dates. It turns 'one day' into a date he can count down to.",
           ],
@@ -228,7 +228,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**La misma cena en dos cocinas.** Elegid una receta; compra tus ingredientes y pide que le lleven los suyos a casa para que no tenga que ir a la compra el día de su cumpleaños, y luego cocinadla juntos en la llamada. Se pone todo perdido, y es lo que más se parece a estar juntos de toda la lista.",
-            "**Una película a la de tres.** Comprobad antes que podéis verla los dos, porque el catálogo de cada plataforma cambia de un país a otro. Luego usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas.",
+            "**Una película a la de tres.** Comprobad antes que podéis verla los dos, porque el catálogo de cada plataforma cambia de un país a otro. Luego usad una función para ver juntos o simplemente dadle al play a la vez. Dejad la llamada abierta y comentad las partes malas. Si su cumpleaños cae a finales de octubre, copiad la lista de pelis y el horario de la noche de nuestras [ideas de Halloween para parejas](/blog/halloween-ideas-for-couples).",
             "**Un juego.** Un juego de mesa online, un videojuego cooperativo o un test que hayas escrito sobre vosotros dos.",
             "**Planear la próxima visita, en directo.** Comprad los billetes en la llamada o abrid el calendario y marcad las fechas. Así, «algún día» se convierte en una fecha y él ya puede contar los días.",
           ],
