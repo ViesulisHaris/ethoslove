@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "today was so bad"
+        },
+        {
+          "from": "them",
+          "text": "Come here baby"
+        },
+        {
+          "from": "me",
+          "text": "you’re at work",
+          "status": "Read 3:26 pm"
+        },
+        {
+          "from": "them",
+          "text": "Not anymore im leaving"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
