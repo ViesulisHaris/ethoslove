@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im bored"
+        },
+        {
+          "from": "them",
+          "text": "Come over"
+        },
+        {
+          "from": "me",
+          "text": "i’m already in bed",
+          "status": "Read 9:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "Then I’m coming to you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
