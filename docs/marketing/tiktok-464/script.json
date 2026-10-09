@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m still mad at you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i’m sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "okay i’m not mad anymore",
+          "status": "Read 9:31 pm"
+        },
+        {
+          "from": "them",
+          "text": "I know you baby"
+        }
+      ]
+    }
+  ]
+}
