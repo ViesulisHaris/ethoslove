@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "silenced": "annoying",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Goodnight my love"
+        },
+        {
+          "from": "them",
+          "text": "Thank you for today"
+        },
+        {
+          "from": "them",
+          "text": "Im the luckiest guy in the world"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodnight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
