@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I PASSED"
+        },
+        {
+          "from": "me",
+          "text": "i actually passed",
+          "status": "Read 2:37 pm"
+        },
+        {
+          "from": "them",
+          "text": "I KNEW IT"
+        },
+        {
+          "from": "them",
+          "text": "So proud of you baby"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "proud of you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
