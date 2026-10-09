@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i can’t sleep",
+          "status": "Read 1:12 am"
+        },
+        {
+          "from": "them",
+          "text": "Me neither"
+        },
+        {
+          "from": "them",
+          "text": "Keep thinking about you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Open this and try again"
+        }
+      ]
+    }
+  ]
+}
