@@ -594,7 +594,17 @@
       "centrePhoto": "Una foto",
       "downloadPng": "Descargar PNG",
       "downloadSvg": "Descargar SVG",
-      "printCard": "Tarjeta lista para imprimir"
+      "printCard": "Tarjeta lista para imprimir",
+      "label": "Texto bajo el código",
+      "labelPlaceholder": "para {name} ♡",
+      "labelPlaceholderPlain": "escanéame ♡",
+      "centreSize": "Tamaño",
+      "sizeSmall": "Pequeño",
+      "sizeMedium": "Mediano",
+      "sizeLarge": "Grande",
+      "adjusted": "Lo hicimos más oscuro para que los móviles puedan leerlo.",
+      "panel": "Sobre un fondo oscuro, el código va en un cuadrado claro para que los móviles puedan leerlo.",
+      "previewAlt": "Tu código QR"
     },
     "writer": {
       "title": "Ayúdame a escribirlo",

@@ -87,7 +87,7 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <section className="mt-8">
         <p className="font-display text-xl">{t("qrTitle")}</p>
         <p className="mt-1 mb-4 text-sm text-muted-foreground">{t("qrBlurb")}</p>
-        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} />
+        <QrDesigner url={url} photos={data.photos} accent={data.accentColor} giftId={giftId} recipientName={data.recipientName} />
       </section>
 
       {/* Inside the iPhone app its own screens are where the gifts are, and where another is made. */}

@@ -122,10 +122,6 @@ const binderClip = ({ x, y, w = 120, r = 0, z = 10 }) =>
 const pearl = ({ x, y, s = 26, z = 9 }) =>
   `<span style="position:absolute;left:${x}px;top:${y}px;width:${s}px;height:${s}px;transform:translate(-50%,-50%);z-index:${z};border-radius:50%;background:radial-gradient(circle at 34% 30%, #FFFFFF 0 14%, #F4EEEA 40%, #D8CCC6 100%);box-shadow:0 3px 5px rgba(80,40,50,.28)"></span>`;
 
-/** A strip of washi tape. */
-const tape = ({ x, y, w = 220, h = 62, r = 0, z = 8, fill }) =>
-  `<div style="position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;transform:translate(-50%,-50%) rotate(${r}deg);z-index:${z};${fill};opacity:.88;clip-path:polygon(2% 8%,6% 0,10% 9%,14% 1%,18% 8%,82% 2%,86% 9%,90% 0,94% 8%,98% 1%,100% 50%,98% 99%,94% 91%,90% 100%,86% 92%,82% 99%,18% 93%,14% 100%,10% 91%,6% 100%,2% 92%,0 50%);box-shadow:0 1px 2px rgba(0,0,0,.12)"></div>`;
-
 /** A few lines of old newsprint, for the scraps of newspaper under a collage. */
 const NEWS = [
   ["Local couple still holding hands", "Witnesses on the high street confirmed on Sunday that the pair were holding hands again, as they have most days since they met. Asked for a comment, one of them said only: no plans to stop. Neighbours describe the two as annoyingly happy."],
@@ -147,7 +143,6 @@ const page = (background, layers) => `<!doctype html><html lang="en"><head><meta
 
 // ── the designs ────────────────────────────────────────────────────────────────────────────────────
 
-const PINK_PAPER = "background:#F2B9C7";
 const PINK_FRAME = `background:#FCE6EC;background-image:${GRAIN}`;
 
 const DESIGNS = [

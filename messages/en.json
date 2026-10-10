@@ -594,7 +594,17 @@
       "centrePhoto": "A photo",
       "downloadPng": "Download PNG",
       "downloadSvg": "Download SVG",
-      "printCard": "Print-ready card"
+      "printCard": "Print-ready card",
+      "label": "Line under the code",
+      "labelPlaceholder": "for {name} ♡",
+      "labelPlaceholderPlain": "scan me ♡",
+      "centreSize": "Size",
+      "sizeSmall": "Small",
+      "sizeMedium": "Medium",
+      "sizeLarge": "Large",
+      "adjusted": "Made darker so phones can still scan it.",
+      "panel": "On a dark background the code sits on a light square, so phones can still scan it.",
+      "previewAlt": "Your QR code"
     },
     "writer": {
       "title": "Help me write it",
