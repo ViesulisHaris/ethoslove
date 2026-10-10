@@ -1787,6 +1787,28 @@ never says "I made you something for …".
 **Post order:** 462, 458, 464, 461, 456, 459, 463, 457, 455, 460. One or two a night, in the evening
 (7 to 10 pm New York time on a US account).
 
+### 465 to 474: more small moments, and the two engines that went biggest (10 Oct)
+
+Same rules again. 465 finally uses the one reference beat 445 to 454 left out ("I just got home baby /
+Oh I know / I've been stalking your location"), in new words. 474 is the milestone engine behind the
+972K post (he says it first), and 468 and 473 carry the draft and rude-name extras.
+
+| | The moment | The chat |
+|---|---|---|
+| 465 | home safe | "home safe" → "I know / Watched your little dot the whole way home / Sleep well my love" + link |
+| 466 | 11:11 | "11:11" → "Wished for you / Again" + link |
+| 467 | his hoodie | "it's freezing" → "Wear my hoodie / The grey one in your closet / Pretend it's me" + link |
+| 468 | tired of me | "do you ever get tired of me" → "Never / Not even on your worst day" + link, her draft "stop i'm gonna cry" |
+| 469 | boarding | "boarding now" → "Text me the second you land / I'll be up" + link "for the flight 🤍" → "Open it in your seat" |
+| 470 | his mom | "My mom asked about you again" → "what did you say" → "That I'm never letting you go" + link |
+| 471 | moody | "sorry i was moody today" → "Don't be / I love every version of you / Even the moody one" + link |
+| 472 | saturday | link "for saturday 🤍" at the top → "what is this" → "Just keep saturday free" → "for you always" |
+| 473 | rude name | saved as "do not answer": "Thinking about you / That's it / That's the text" + link |
+| 474 | said it first | "Can I tell you something" → "always" → "I love you / Been wanting to say it for weeks" + link |
+
+**Post order:** 474, 468, 465, 470, 473, 466, 472, 467, 469, 471. One or two a night, in the evening
+(7 to 10 pm New York time on a US account).
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
