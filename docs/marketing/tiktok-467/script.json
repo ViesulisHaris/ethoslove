@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's freezing",
+          "status": "Read 9:37 pm"
+        },
+        {
+          "from": "them",
+          "text": "Wear my hoodie"
+        },
+        {
+          "from": "them",
+          "text": "The grey one in your closet"
+        },
+        {
+          "from": "them",
+          "text": "Pretend it's me"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
