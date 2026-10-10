@@ -79,6 +79,10 @@ function Flourish({ color }: { color: string }) {
  * lying on it. Opening it, the key goes to the lock and turns, the lock drops, and the cover swings
  * back on its spine onto a first page with a rose pressed in it.
  */
+/** When the cover starts to swing (the key has turned, the lock has dropped) and how long the swing takes, in s. */
+export const OPEN_AT = 0.85;
+export const OPEN_FOR = 1.2;
+
 export function Diary({ look, forLabel, name, title, opening, reduce }: { look: Look; forLabel: string; name: string; title: string; opening: boolean; reduce: boolean }) {
   const d = look.diary;
   const at = (delay: number, duration: number) => ({ duration: reduce ? 0.15 : duration, delay: reduce ? 0 : delay, ease: EASE });
@@ -94,7 +98,7 @@ export function Diary({ look, forLabel, name, title, opening, reduce }: { look: 
         </span>
       </span>
 
-      <motion.div className="absolute inset-0 origin-left" style={{ transformStyle: "preserve-3d" }} animate={opening ? { rotateY: -158 } : { rotateY: 0 }} transition={at(1.05, 0.85)}>
+      <motion.div className="absolute inset-0 origin-left" style={{ transformStyle: "preserve-3d" }} animate={opening ? { rotateY: -164 } : { rotateY: 0 }} transition={{ ...at(OPEN_AT, OPEN_FOR), ease: [0.55, 0.02, 0.32, 1] }}>
         {/* the inside of the cover, which shows once it has swung past the spine */}
         <span aria-hidden="true" className="absolute inset-0 rounded-[calc(1.4*var(--p))]" style={{ ...face, transform: "rotateY(180deg)", backgroundColor: d.ribbon, backgroundImage: `radial-gradient(circle at 30% 30%, rgba(255,255,255,.08), transparent 60%), ${PAPER_GRAIN}` }} />
         <div className="absolute inset-0 rounded-[calc(1.4*var(--p))]" style={{ ...face, backgroundColor: d.leather, backgroundImage: `radial-gradient(120% 80% at 32% 18%, rgba(255,255,255,.1), transparent 62%), linear-gradient(90deg, rgba(0,0,0,.5), transparent 10%), ${PAPER_GRAIN}`, boxShadow: "0 calc(2.4*var(--p)) calc(5*var(--p)) rgba(0,0,0,.55), inset 0 0 0 calc(.35*var(--p)) rgba(255,255,255,.06)" }}>
@@ -113,15 +117,15 @@ export function Diary({ look, forLabel, name, title, opening, reduce }: { look: 
             </span>
           </div>
           {/* the strap round the opening edge, and its heart padlock */}
-          <motion.span aria-hidden="true" className="absolute top-[41%] right-[-3%] h-[18%] w-[21%] rounded-l-[calc(1*var(--p))]" style={{ backgroundColor: d.shade, backgroundImage: PAPER_GRAIN, boxShadow: "calc(-.4*var(--p)) 0 calc(1*var(--p)) rgba(0,0,0,.45)" }} animate={opening ? { opacity: 0, x: "30%" } : { opacity: 1, x: 0 }} transition={at(0.95, 0.3)} />
-          <motion.div aria-hidden="true" className="absolute top-[50%] right-[-7%] w-[25%]" style={{ y: "-50%" }} animate={opening ? { y: "40%", rotate: 28, opacity: 0 } : { y: "-50%", rotate: 0, opacity: 1 }} transition={at(0.84, 0.4)}>
+          <motion.span aria-hidden="true" className="absolute top-[41%] right-[-3%] h-[18%] w-[21%] rounded-l-[calc(1*var(--p))]" style={{ backgroundColor: d.shade, backgroundImage: PAPER_GRAIN, boxShadow: "calc(-.4*var(--p)) 0 calc(1*var(--p)) rgba(0,0,0,.45)" }} animate={opening ? { opacity: 0, x: "30%" } : { opacity: 1, x: 0 }} transition={at(0.78, 0.3)} />
+          <motion.div aria-hidden="true" className="absolute top-[50%] right-[-7%] w-[25%]" style={{ y: "-50%" }} animate={opening ? { y: "40%", rotate: 28, opacity: 0 } : { y: "-50%", rotate: 0, opacity: 1 }} transition={at(0.7, 0.4)}>
             <Scrap id="brooch-heart-silver" eager />
           </motion.div>
         </div>
       </motion.div>
 
       {/* the ribbon marking their page */}
-      <motion.span aria-hidden="true" className="absolute bottom-[-6%] left-[60%] h-[11%] w-[5.5%]" style={{ backgroundColor: d.ribbon, clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)", boxShadow: "0 calc(.4*var(--p)) calc(.8*var(--p)) rgba(0,0,0,.4)" }} animate={opening ? { opacity: 0 } : { opacity: 1 }} transition={at(1.05, 0.3)} />
+      <motion.span aria-hidden="true" className="absolute bottom-[-6%] left-[60%] h-[11%] w-[5.5%]" style={{ backgroundColor: d.ribbon, clipPath: "polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)", boxShadow: "0 calc(.4*var(--p)) calc(.8*var(--p)) rgba(0,0,0,.4)" }} animate={opening ? { opacity: 0 } : { opacity: 1 }} transition={at(OPEN_AT, 0.3)} />
 
       {/* the key: it lies on the cover, bobbing, then goes to the lock and turns */}
       <motion.div
@@ -129,7 +133,7 @@ export function Diary({ look, forLabel, name, title, opening, reduce }: { look: 
         className="absolute w-[12%]"
         style={{ ...KEY_REST, transformOrigin: KEY_PIVOT }}
         animate={opening ? { left: [KEY_REST.left, KEY_IN_LOCK.left, KEY_IN_LOCK.left, KEY_IN_LOCK.left], top: [KEY_REST.top, KEY_IN_LOCK.top, KEY_IN_LOCK.top, KEY_IN_LOCK.top], rotate: [KEY_REST.rotate, 0, 90, 90], opacity: [1, 1, 1, 0], y: 0 } : { ...KEY_REST, opacity: 1, y: reduce ? 0 : [0, -6, 0] }}
-        transition={opening ? { default: { duration: reduce ? 0.15 : 1.25, times: [0, 0.44, 0.66, 1], ease: "easeInOut" }, y: { duration: 0.2 } } : { default: { duration: 0 }, y: { duration: 2.4, repeat: Infinity, ease: "easeInOut" } }}
+        transition={opening ? { default: { duration: reduce ? 0.15 : 1.05, times: [0, 0.44, 0.66, 1], ease: "easeInOut" }, y: { duration: 0.2 } } : { default: { duration: 0 }, y: { duration: 2.4, repeat: Infinity, ease: "easeInOut" } }}
       >
         <HeartKey look={look} />
       </motion.div>

@@ -24,7 +24,7 @@ import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
 import { RansomRows } from "../_shared/collage/ransom";
 import { playChime, playClasp, playPaper, playSealCrack } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
-import { CoverBits, Diary, HeartScribble, TarotCard } from "./art";
+import { CoverBits, Diary, HeartScribble, OPEN_AT, OPEN_FOR, TarotCard } from "./art";
 import { addRose, LOOKS, roseAt, type Look, type LookId, type Rose } from "./looks";
 import { fieldsSchema, type DarkRomanceFields } from "./schema";
 
@@ -34,7 +34,7 @@ const TYPEWRITER = "'Courier New', ui-monospace, monospace";
 const LOVERS = "VI";
 
 /** How long the key, the lock and the cover take before the page shows, in ms: the open diary holds a beat. */
-const OPENS_IN = 2050;
+const OPENS_IN = 2250;
 
 /** The ink on the page's dark polaroids. */
 const ON_BLACK = "#F7EDE6";
@@ -110,9 +110,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       </div>
 
       {/* The page fades in under the diary as it goes, as if you had leant into the first page. */}
-      <AnimatePresence>
+      {/* The diary goes first, as if you leaned into its open page, and the page comes after it, so the
+          two are never seen through each other. */}
+      <AnimatePresence mode="wait">
         {stage !== "open" ? (
-          <motion.div key={`locked-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, scale: 1.12, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } }}>
+          <motion.div key={`locked-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, scale: 1.28, transition: { duration: 0.42, ease: [0.5, 0, 0.75, 0] } }}>
             <Locked look={look} s={s} name={data.recipientName} opening={stage === "opening"} reduce={reduce} />
             <button type="button" onClick={unlock} aria-label={s.turn} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: look.dark ? look.diary.foil : look.red, color: look.dark ? "#2A0E15" : "#FFF5F0", boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(20,4,8,.35)" }} initial={{ opacity: 0 }} animate={stage === "opening" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "opening" ? { duration: 0.2 } : { opacity: { delay: 1.1, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
@@ -124,7 +126,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         )}
       </AnimatePresence>
 
-      <Confetti burst={burst} colors={look.confetti} count={120} origin={{ x: 0.5, y: 0.45 }} className="pointer-events-none absolute inset-0 z-[36]" />
+      <Confetti burst={burst} colors={look.confetti} count={64} shape="petal" origin={{ x: 0.5, y: 0.45 }} className="pointer-events-none absolute inset-0 z-[36]" />
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
   );
@@ -139,7 +141,14 @@ function Locked({ look, s, name, opening, reduce }: { look: Look; s: Copy; name:
     <>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(64% 42% at 50% 50%, ${look.dark ? "rgba(214,40,70,.22)" : "rgba(255,255,255,.6)"}, transparent 74%)` }} />
       <CoverBits look={look} opening={opening} reduce={reduce} />
-      <motion.div className="relative w-[min(calc(62*var(--p)),40cqh)]" initial={reduce ? false : { opacity: 0, y: 30, rotate: -6 }} animate={{ opacity: 1, y: 0, rotate: -2 }} transition={{ type: "spring", stiffness: 80, damping: 14 }}>
+      {/* As the cover swings, the book slides right and settles back a little, so the open spread (the
+          inside of the cover and the page with the rose) sits in the middle instead of off the left edge. */}
+      <motion.div
+        className="relative w-[min(calc(62*var(--p)),40cqh)] origin-left"
+        initial={reduce ? false : { opacity: 0, y: 30, rotate: -6 }}
+        animate={{ opacity: 1, y: 0, rotate: opening && !reduce ? 0 : -2, x: opening && !reduce ? "50%" : "0%", scale: opening && !reduce ? 0.7 : 1 }}
+        transition={{ type: "spring", stiffness: 80, damping: 14, x: { delay: OPEN_AT, duration: OPEN_FOR, ease: [0.55, 0.02, 0.32, 1] }, scale: { delay: OPEN_AT, duration: OPEN_FOR, ease: [0.55, 0.02, 0.32, 1] }, rotate: opening ? { delay: OPEN_AT, duration: OPEN_FOR } : { type: "spring", stiffness: 80, damping: 14 } }}
+      >
         <motion.p className="mb-[calc(6*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.dark ? look.diary.foil : look.red, textShadow: `0 0 calc(1.2*var(--p)) ${look.wall}, 0 0 calc(2.6*var(--p)) ${look.wall}` }} animate={{ opacity: opening ? 0 : 1 }} transition={{ duration: 0.3, delay: opening && !reduce ? 0.8 : 0 }}>
           {s.secret}
         </motion.p>

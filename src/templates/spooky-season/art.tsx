@@ -81,13 +81,31 @@ export function KraftTag({ look, forLabel, name, from }: { look: Look; forLabel:
   );
 }
 
-/** One leaf of the heap on the first screen, and where the gust sends it. */
-export type Leaf = { id: ScrapId; x: number; y: number; w: number; rotate: number; z: number; away: { x: number; y: number; rotate: number }; delay: number; duration: number };
+/** One leaf of the heap on the first screen, and how the gust takes it. */
+export type Leaf = {
+  id: ScrapId;
+  x: number;
+  y: number;
+  w: number;
+  rotate: number;
+  z: number;
+  /** Where it ends up, in cq units from where it lay: always past the right edge, so it never fades out in the air. */
+  away: { x: number; y: number; rotate: number };
+  /** The first lift as the wind gets under it, in cqh, and the twitch it gives. */
+  lift: number;
+  shiver: number;
+  /** Turns end over end and side to side on the way, in degrees: what makes it read as a leaf and not a sticker sliding. */
+  flipX: number;
+  flipY: number;
+  delay: number;
+  duration: number;
+};
 
 /**
  * The heap: leaves piled over the lower half of the screen, thickest in the middle, the same heap
- * for the same two people. The gust comes from the left, so every leaf goes right and up, the
- * ones on the left first. `x`/`y` are percentages of the screen, `w` is in `--p`, `away` in cq units.
+ * for the same two people. The gust comes from the left, so the left of the heap goes first and every
+ * leaf lifts, tumbles and is carried off past the right edge. `x`/`y` are percentages of the screen,
+ * `w` is in `--p`, `away` in cq units.
  */
 export function leafPile(seed: number, kinds: ScrapId[], count = 26): Leaf[] {
   const random = mulberry32(seed);
@@ -96,18 +114,25 @@ export function leafPile(seed: number, kinds: ScrapId[], count = 26): Leaf[] {
     const reach = Math.sqrt(random());
     const x = Math.round((50 + Math.cos(angle) * reach * 54) * 10) / 10;
     const y = Math.round((70 + Math.sin(angle) * reach * 26) * 10) / 10;
-    const spin = (random() > 0.5 ? 1 : -1) * (240 + random() * 360);
+    const w = Math.round(24 + random() * 18);
+    const turn = random() > 0.5 ? 1 : -1;
     const rotate = Math.round(random() * 360);
     return {
       id: kinds[i % kinds.length],
       x,
       y,
-      w: Math.round(24 + random() * 18),
+      w,
       rotate,
       z: Math.round(random() * 20),
-      away: { x: Math.round(70 + random() * 70), y: -Math.round(35 + random() * 70), rotate: Math.round(rotate + spin) },
-      delay: Math.round(((x / 100) * 0.3 + random() * 0.08) * 1000) / 1000,
-      duration: Math.round((1 + random() * 0.4) * 100) / 100,
+      // Far enough right that even the widest leaf is gone: past 100% by half its width and some.
+      away: { x: Math.round(128 - x + random() * 40), y: -Math.round(25 + random() * 75), rotate: Math.round(rotate + turn * (300 + random() * 420)) },
+      lift: Math.round((3 + random() * 7) * 10) / 10,
+      shiver: Math.round(turn * (6 + random() * 10)),
+      flipX: Math.round(turn * (360 + random() * 540)),
+      flipY: Math.round((random() > 0.5 ? 1 : -1) * (120 + random() * 300)),
+      // Left first, the way a gust crosses the heap, and the top of the heap a moment before the bottom.
+      delay: Math.round(((x + 4) / 108) * 0.42 * 1000 + (y - 44) * 2 + random() * 70) / 1000,
+      duration: Math.round((1.05 + random() * 0.45) * 100) / 100,
     };
   });
 }
@@ -120,15 +145,70 @@ export function LeafHeap({ leaves, blowing, reduce }: { leaves: Leaf[]; blowing:
         <motion.div
           key={i}
           className="absolute"
-          style={{ left: `${leaf.x}%`, top: `${leaf.y}%`, width: `calc(${leaf.w} * var(--p))`, translate: "-50% -50%", zIndex: leaf.z }}
+          style={{ left: `${leaf.x}%`, top: `${leaf.y}%`, width: `calc(${leaf.w} * var(--p))`, translate: "-50% -50%", zIndex: leaf.z, transformPerspective: 800 }}
           initial={reduce ? false : { opacity: 0, y: "-30cqh", rotate: leaf.rotate - 60 }}
-          animate={blowing ? (reduce ? { opacity: 0 } : { opacity: 0, x: `${leaf.away.x}cqw`, y: `${leaf.away.y}cqh`, rotate: leaf.away.rotate }) : { opacity: 1, x: 0, y: 0, rotate: leaf.rotate }}
-          transition={blowing ? { duration: reduce ? 0.2 : leaf.duration, delay: reduce ? 0 : leaf.delay, ease: [0.3, 0, 0.55, 1], opacity: { duration: reduce ? 0.2 : leaf.duration * 0.9, delay: reduce ? 0 : leaf.delay + leaf.duration * 0.25 } } : { type: "spring", stiffness: 70, damping: 13, delay: (i % 9) * 0.05 }}
+          animate={
+            !blowing
+              ? { opacity: 1, x: "0cqw", y: "0cqh", rotate: leaf.rotate, rotateX: 0, rotateY: 0 }
+              : reduce
+                ? { opacity: 0 }
+                : {
+                    x: ["0cqw", `${leaf.away.x * 0.04}cqw`, `${leaf.away.x}cqw`],
+                    y: ["0cqh", `${-leaf.lift}cqh`, `${leaf.away.y}cqh`],
+                    rotate: [leaf.rotate, leaf.rotate + leaf.shiver, leaf.away.rotate],
+                    rotateX: [0, leaf.flipX * 0.08, leaf.flipX],
+                    rotateY: [0, leaf.flipY * 0.1, leaf.flipY],
+                    // Whole all the way off the screen; only a leaf that somehow hasn't left by then fades.
+                    opacity: [1, 1, 1, 0],
+                  }
+          }
+          transition={
+            !blowing
+              ? { type: "spring", stiffness: 70, damping: 13, delay: (i % 9) * 0.05 }
+              : reduce
+                ? { duration: 0.2 }
+                : {
+                    duration: leaf.duration,
+                    delay: leaf.delay,
+                    times: [0, 0.16, 1],
+                    // A quick lift as the wind gets under it, then carried off faster and faster.
+                    ease: ["easeOut", [0.45, 0, 0.8, 0.55]],
+                    opacity: { duration: leaf.duration, delay: leaf.delay, times: [0, 0.6, 0.95, 1] },
+                  }
+          }
         >
           <Scrap id={leaf.id} eager />
         </motion.div>
       ))}
     </div>
+  );
+}
+
+/** The gust itself: a few soft streaks of wind sweeping left to right across the heap as it goes. */
+export function Gust({ dark }: { dark: boolean }) {
+  const streaks = [
+    { y: 58, bend: 7, delay: 0, width: 2.4 },
+    { y: 70, bend: -5, delay: 0.09, width: 3.2 },
+    { y: 82, bend: 6, delay: 0.17, width: 2 },
+    { y: 46, bend: -4, delay: 0.24, width: 1.6 },
+  ];
+  return (
+    <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 z-[27] h-full w-full" style={{ filter: "blur(0.6px)" }}>
+      {streaks.map((s, i) => (
+        <motion.path
+          key={i}
+          d={`M -12 ${s.y} C 18 ${s.y - s.bend}, 42 ${s.y + s.bend}, 66 ${s.y - s.bend * 0.6} S 104 ${s.y - s.bend}, 118 ${s.y - s.bend * 1.4}`}
+          fill="none"
+          stroke={dark ? "rgba(255,236,214,.55)" : "rgba(255,255,255,.85)"}
+          strokeWidth={s.width}
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+          animate={{ pathLength: [0, 0.38, 0.12], pathOffset: [0, 0.32, 0.95], opacity: [0, 1, 0] }}
+          transition={{ duration: 0.85, delay: s.delay, ease: [0.3, 0, 0.5, 1] }}
+        />
+      ))}
+    </svg>
   );
 }
 

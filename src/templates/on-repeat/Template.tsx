@@ -29,7 +29,7 @@ import { addSticker, LOOKS, stickerAt, type Look, type LookId, type Stuck } from
 import { fieldsSchema, type OnRepeatFields } from "./schema";
 
 /** From pressing play to the page, in ms: the button turns, the stickers land, then the collage. */
-const OPENS_IN = 1500;
+const OPENS_IN = 1200;
 
 type Copy = { play: string; for: string; ourSong: string; tap: string; scroll: string; note: string; playlist: string; playlistLabel: string; songs: string; untitled: string; pause: string; playAria: string };
 
@@ -97,9 +97,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...vars }}>
       <style>{COLLAGE_KEYFRAMES + CARD_KEYFRAMES}</style>
 
-      <AnimatePresence>
+      {/* The cover goes first and the page comes after it, so the two are never seen through each other. */}
+      <AnimatePresence mode="wait">
         {stage !== "open" ? (
-          <motion.div key={`paused-${run}`} className="absolute inset-0 z-[11]" exit={{ opacity: 0, scale: 1.05, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } }}>
+          <motion.div key={`paused-${run}`} className="absolute inset-0 z-[11]" exit={{ opacity: 0, scale: 1.08, transition: { duration: 0.38, ease: [0.5, 0, 0.75, 0] } }}>
             <NowPlaying look={look} s={s} name={data.recipientName} title={songTitle} photo={data.photos[0]} playing={stage === "playing"} reduce={reduce} />
             <button type="button" onClick={play} aria-label={s.play} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase" style={{ background: look.playerInk, color: "#FFFFFF", boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(40,10,30,.3)" }} initial={{ opacity: 0 }} animate={stage === "playing" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "playing" ? { duration: 0.2 } : { opacity: { delay: 0.8, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>

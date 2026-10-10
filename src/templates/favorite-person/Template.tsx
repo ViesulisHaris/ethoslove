@@ -102,9 +102,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       </div>
 
       {/* The page fades in under the tissue as it comes away. */}
-      <AnimatePresence>
+      {/* The cover goes first and the page comes after it, so the two are never seen through each other. */}
+      <AnimatePresence mode="wait">
         {stage !== "open" ? (
-          <motion.div key={`covered-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, scale: 1.06, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } }}>
+          <motion.div key={`covered-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, scale: 1.08, transition: { duration: 0.38, ease: [0.5, 0, 0.75, 0] } }}>
             <Covered look={look} s={s} name={data.recipientName} photos={data.photos} lifting={stage === "lifting"} reduce={reduce} />
             <button type="button" onClick={lift} aria-label={s.lift} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-black/20 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase" style={{ background: look.accent, color: "#FFFFFF", boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(80,30,50,.25)" }} initial={{ opacity: 0 }} animate={stage === "lifting" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "lifting" ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>

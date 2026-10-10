@@ -16,7 +16,6 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
-import { Confetti } from "../_shared/Confetti";
 import { FitName } from "../_shared/FitName";
 import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScriptLines, ScrollHint, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
@@ -25,7 +24,7 @@ import { gingham, scriptLines, ticketNumber } from "../_shared/collage/paper";
 import { playChime, playPaper, playRibbon } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
-import { CoverBits, FilmFrame, FilmStrip, KraftTag, LeafHeap, leafPile, type Leaf } from "./art";
+import { CoverBits, FilmFrame, FilmStrip, Gust, KraftTag, LeafHeap, leafPile, type Leaf } from "./art";
 import { arrangePhotos, LOOKS, stripHeight, type Look, type LookId } from "./looks";
 import { fieldsSchema, type SpookySeasonFields } from "./schema";
 
@@ -36,7 +35,15 @@ const S: Record<"en" | "es", Copy> = {
   es: { blow: "toca para soplar las hojas", for: "para", from: "de", scroll: "desliza", note: "eres la única persona con la que vería pelis de miedo", label: "mi calabacita", ticket: "pase: casa del terror", loveYou: "te quiero", pause: "Pausar la canción", play: "Reproducir la canción", script: "mi estación favorita, mi persona favorita. calabazas, pelis de miedo, tu sudadera puesta, y tú, siempre tú, cada octubre" },
 };
 
-type Stage = "covered" | "blowing" | "open";
+/**
+ * covered: the heap, waiting. blowing: the gust takes the leaves. revealing: most are gone, and the
+ * page comes in under the last of them. open: the cover is gone.
+ */
+type Stage = "covered" | "blowing" | "revealing" | "open";
+
+/** From the tap: when the page starts to come in (the heap's left and middle gone), and when the cover goes. */
+const REVEAL_AT = 650;
+const OPEN_AT = 1700;
 type Data = TemplateProps<SpookySeasonFields>["data"];
 
 const ALL_SIDES = { top: true, right: true, bottom: true, left: true };
@@ -61,7 +68,6 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const leaves = useMemo(() => leafPile(seed, look.leaves), [seed, look.leaves]);
 
   const [stage, setStage] = useState<Stage>(preview ? "open" : "covered");
-  const [burst, setBurst] = useState(0);
   const [run, setRun] = useState(0);
   const eventRef = useRef(onEvent);
   useEffect(() => {
@@ -77,14 +83,16 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     buzz(14);
     eventRef.current?.({ type: "started" });
     setStage("blowing");
+    window.setTimeout(() => {
+      playChime(audio.muted);
+      setStage("revealing");
+    }, reduce ? 120 : REVEAL_AT);
     window.setTimeout(
       () => {
-        setBurst((b) => b + 1);
-        playChime(audio.muted);
         setStage("open");
         eventRef.current?.({ type: "progress", pct: 30 });
       },
-      reduce ? 250 : 1500,
+      reduce ? 250 : OPEN_AT,
     );
   };
 
@@ -104,11 +112,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <Ambience layers={look.ambience} opacity={0.75} />
       </div>
 
-      {/* The page goes in under the leaves the moment they start to blow, so it is there as they clear. */}
-      {stage !== "covered" ? <Page key={`page-${run}`} look={look} s={s} data={data} fields={fields} seed={seed} mode={mode} still={preview || reduce} unit={unit} audio={audio} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} /> : null}
-      {stage !== "open" ? <Covered key={`covered-${run}`} look={look} s={s} data={data} leaves={leaves} blowing={stage === "blowing"} reduce={reduce} onBlow={blow} /> : null}
-
-      <Confetti burst={burst} colors={look.confetti} count={110} origin={{ x: 0.5, y: 0.4 }} className="pointer-events-none absolute inset-0 z-[36]" />
+      {/* The page comes in once the gust has cleared most of the heap, so it assembles on a bare wall
+          instead of showing through half-gone leaves, and its name never sits under the departing tag. */}
+      {stage === "revealing" || stage === "open" ? <Page key={`page-${run}`} look={look} s={s} data={data} fields={fields} seed={seed} mode={mode} still={preview || reduce} unit={unit} audio={audio} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} /> : null}
+      {stage !== "open" ? <Covered key={`covered-${run}`} look={look} s={s} data={data} leaves={leaves} blowing={stage === "blowing" || stage === "revealing"} reduce={reduce} onBlow={blow} /> : null}
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
   );
@@ -136,7 +143,15 @@ function CoverScene({ look, s, name, sender, leaves, blowing, reduce }: { look: 
     <>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(70% 45% at 50% 72%, ${look.dark ? "rgba(242,140,40,.16)" : "rgba(255,255,255,.5)"}, transparent 75%)` }} />
       <CoverBits look={look} blowing={blowing} reduce={reduce} />
-      <motion.div className="absolute top-0 left-1/2 z-[25] w-[calc(46*var(--p))] origin-top" style={{ x: "-50%" }} initial={reduce ? false : { y: "-40%", opacity: 0 }} animate={blowing ? (reduce ? { opacity: 0 } : { x: "170%", y: "-30%", rotate: 38, opacity: 0 }) : { x: "-50%", y: 0, opacity: 1, rotate: reduce ? 2 : [-3, 3, -3] }} transition={blowing ? { duration: reduce ? 0.2 : 0.95, ease: [0.3, 0, 0.6, 1] } : { y: { type: "spring", stiffness: 60, damping: 10, delay: 0.3 }, opacity: { delay: 0.3, duration: 0.4 }, rotate: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}>
+      {blowing && !reduce ? <Gust dark={look.dark} /> : null}
+      {/* The tag swings hard on its string as the gust hits it, then the wind carries it up and away. */}
+      <motion.div
+        className="absolute top-0 left-1/2 z-[25] w-[calc(46*var(--p))] origin-top"
+        style={{ x: "-50%" }}
+        initial={reduce ? false : { y: "-40%", opacity: 0 }}
+        animate={blowing ? (reduce ? { opacity: 0 } : { x: ["-50%", "-48%", "-20%"], y: ["0%", "3%", "-150%"], rotate: [0, 24, 52], opacity: [1, 1, 1, 0] }) : { x: "-50%", y: 0, opacity: 1, rotate: reduce ? 2 : [-3, 3, -3] }}
+        transition={blowing ? (reduce ? { duration: 0.2 } : { duration: 0.9, delay: 0.08, times: [0, 0.38, 1], ease: ["easeOut", [0.5, 0, 0.75, 0.4]], opacity: { duration: 0.9, delay: 0.08, times: [0, 0.5, 0.92, 1] } }) : { y: { type: "spring", stiffness: 60, damping: 10, delay: 0.3 }, opacity: { delay: 0.3, duration: 0.4 }, rotate: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
+      >
         <span aria-hidden="true" className="mx-auto block w-px" style={{ height: "max(13cqh, calc(14*var(--p)))", background: look.tag.string, opacity: 0.8 }} />
         <KraftTag look={look} forLabel={s.for} name={name} from={sender ? `${s.from} ${sender}` : ""} />
       </motion.div>

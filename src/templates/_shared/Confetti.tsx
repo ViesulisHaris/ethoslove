@@ -4,6 +4,16 @@ import { useEffect, useRef } from "react";
 
 type Piece = { x: number; y: number; vx: number; vy: number; w: number; h: number; rot: number; vr: number; color: string; life: number };
 
+/** A rose petal: a soft teardrop, round at the outer edge and pinched where it left the flower. */
+function petal(ctx: CanvasRenderingContext2D, size: number) {
+  const s = size / 2;
+  ctx.beginPath();
+  ctx.moveTo(0, s);
+  ctx.bezierCurveTo(-s * 1.05, s * 0.35, -s * 0.8, -s * 0.95, 0, -s);
+  ctx.bezierCurveTo(s * 0.8, -s * 0.95, s * 1.05, s * 0.35, 0, s);
+  ctx.fill();
+}
+
 /** A small heart centred on the origin, `size` across. */
 function heart(ctx: CanvasRenderingContext2D, size: number) {
   const s = size / 2;
@@ -17,9 +27,9 @@ function heart(ctx: CanvasRenderingContext2D, size: number) {
 /**
  * Canvas confetti cannon. Mount with a `burst` counter; each increment fires once from
  * `origin` (fractions of the container). Cheap: paths only, no images. `shape="heart"` throws
- * little hearts that flip as they fall instead of paper rectangles.
+ * little hearts, and `shape="petal"` rose petals, that flip as they fall instead of paper rectangles.
  */
-export function Confetti({ burst, colors, origin = { x: 0.5, y: 0.6 }, count = 160, shape = "rect", className }: { burst: number; colors: string[]; origin?: { x: number; y: number }; count?: number; shape?: "rect" | "heart"; className?: string }) {
+export function Confetti({ burst, colors, origin = { x: 0.5, y: 0.6 }, count = 160, shape = "rect", className }: { burst: number; colors: string[]; origin?: { x: number; y: number }; count?: number; shape?: "rect" | "heart" | "petal"; className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const pieces = useRef<Piece[]>([]);
   const raf = useRef(0);
@@ -74,9 +84,10 @@ export function Confetti({ burst, colors, origin = { x: 0.5, y: 0.6 }, count = 1
         ctx.rotate(p.rot);
         ctx.globalAlpha = Math.min(1, p.life);
         ctx.fillStyle = p.color;
-        if (shape === "heart") {
+        if (shape === "heart" || shape === "petal") {
           ctx.scale(0.3 + 0.7 * Math.abs(Math.cos(p.rot * 1.3)), 1);
-          heart(ctx, p.h);
+          if (shape === "heart") heart(ctx, p.h);
+          else petal(ctx, p.h * 1.25);
         } else ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.rot * 1.7)));
         ctx.restore();
       }

@@ -98,9 +98,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <Ambience layers={look.ambience} opacity={0.55} />
       </div>
 
-      <AnimatePresence>
+      {/* The cover goes first and the page comes after it, so the two are never seen through each other. */}
+      <AnimatePresence mode="wait">
         {stage !== "open" ? (
-          <motion.div key={`wrapped-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, transition: { duration: 0.5 } }}>
+          <motion.div key={`wrapped-${run}`} className="absolute inset-0 z-[11] grid place-items-center" exit={{ opacity: 0, scale: 1.06, transition: { duration: 0.38, ease: [0.5, 0, 0.75, 0] } }}>
             <Wrapped look={look} s={s} name={data.recipientName} sender={data.senderName} locale={data.locale} photo={data.photos[0]} opening={stage === "opening"} reduce={reduce} />
             <button type="button" onClick={unwrap} aria-label={s.unwrap} className="absolute inset-0 z-[6] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase" style={{ background: look.paper, color: look.accent, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(20,30,15,.25)" }} initial={{ opacity: 0 }} animate={stage === "opening" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "opening" ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>

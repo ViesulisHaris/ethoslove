@@ -265,7 +265,7 @@ export function Parcel({ look, forLabel, name, sender, locale, photo, opening, r
   return (
     <div className="relative w-full" style={{ aspectRatio: "0.82" }}>
       {/* what the paper was wrapped round, glowing as it opens */}
-      <motion.span aria-hidden="true" className="absolute inset-[8%] block rounded-full" style={{ background: `radial-gradient(circle, ${look.news} 0%, transparent 70%)` }} initial={false} animate={{ opacity: opening ? 1 : 0, scale: opening ? 1.3 : 0.6 }} transition={at(0.3, 0.8)} />
+      <motion.span aria-hidden="true" className="absolute inset-[18%] block rounded-full" style={{ background: "radial-gradient(circle, rgba(255,252,240,.95) 0%, rgba(255,250,232,.45) 35%, transparent 70%)" }} initial={false} animate={opening && !reduce ? { opacity: [0, 0.9, 0], scale: [0.5, 1.4, 1.8] } : { opacity: 0, scale: 0.5 }} transition={{ duration: 1.1, delay: 0.35, ease: "easeOut" }} />
       {half("left")}
       {half("right")}
 
