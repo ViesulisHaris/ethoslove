@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Can I tell you something"
+        },
+        {
+          "from": "me",
+          "text": "always",
+          "status": "Read 10:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "I love you"
+        },
+        {
+          "from": "them",
+          "text": "Been wanting to say it for weeks"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
