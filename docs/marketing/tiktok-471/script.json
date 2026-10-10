@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "sorry i was moody today",
+          "status": "Read 10:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "Don't be"
+        },
+        {
+          "from": "them",
+          "text": "I love every version of you"
+        },
+        {
+          "from": "them",
+          "text": "Even the moody one"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
