@@ -1809,6 +1809,48 @@ Oh I know / I've been stalking your location"), in new words. 474 is the milesto
 **Post order:** 474, 468, 465, 470, 473, 466, 472, 467, 469, 471. One or two a night, in the evening
 (7 to 10 pm New York time on a US account).
 
+### 475 to 484: copied from the iMessage posts going viral now (11 Oct)
+
+The owner sent nine posts and @richie_prince1's profile. I read every slide (photo carousels slide by
+slide; videos from their cover frames). What is working, by size:
+
+| Post | Numbers | What it is |
+|---|---|---|
+| @richie_prince1, top 8 | 9.5M, 8.6M, 5.3M, 4.4M, 4.3M, 3.7M, 3.3M, 3.1M views | One iOS 26 screenshot ("iMessage · Encrypted · Today 7:30 PM", silenced line, sometimes the bar). 3 to 6 bubbles, a savage or twist last line. Caption: an emoji and two words ("💀 try again", "🙃 who relates") |
+| @36grm, dinosaur | 2M likes, 165K shares | "I have a huge crush on you / very big / Like a dinosaur" → "me too / my love for you is like dinosaurs, it doesn't exist"; rose iOS 26 background |
+| @36grm, party | 1.1M likes, 102K shares | Ultimatum, "okay" twice, her draft "go to the party"; colourful bokeh background |
+| @dianaa.auclair, crybaby | 941K likes, 106K saves | 13 tight crops of her crying and him comforting her, funny once ("Yeah 4 times"); "Is this corny im sorry" |
+| @user_juejue | 445K likes | She falls asleep mid-text; "aaand my baby is asleep / goodnight sleep well my sweet girl"; "reminiscing 💔" |
+| @dianaa.auclair, 8 minutes | 386K likes | Fake grief over him being 8 minutes late, his calm reveal |
+| @dianaa.auclair, rizz | 239K likes, 41K saves | Six crops: she's cold, he's smooth, inline replies |
+| @diarywithoutalockk | 197K likes | "lmk if you need anything else / What if I need you" (our 453) |
+| @a4670864 | 155K likes | "I love you more" won with a silly proof |
+
+What they share: one real-looking screenshot or a few tight crops, no hook text, a punchline or a
+two-camp argument in the last line, captions of a few words. The biggest numbers go to the savage
+ones (shares beat saves); the sweet ones win saves.
+
+How the gift fits without killing the punchline: slide 1 is the exact formula and ends on its line;
+the link comes in slide 2 as the payoff (475, 476, 483), or it *is* the punchline (477 "the proof",
+484 "Already booked it"), or it ends a sweet run (478, 480, 482). Renderer additions for these looks:
+`"encrypted"`, `"wallpaper": "rose" | "bokeh"`, `"bar": false`, and inline replies (`"quote"`).
+
+| | Copies | The chat |
+|---|---|---|
+| 475 | dinosaur (2M) | "like a unicorn" → "my love for you is like unicorns, it doesn't exist" / slide 2: link → "ok fine it exists" → "i hate you" |
+| 476 | party (1.1M) | ultimatum, "ok" twice, draft "the party obviously" / slide 2: "wait before you send that" + link, draft "ok i'm staying in" |
+| 477 | I love you more (155K) | "Impossible" → "You fall asleep at 10 and I'm up till 2 thinking about you / That's 4 extra hours of loving you every night" + link "the proof" |
+| 478 | he never makes me stay mad | three angry lines, three softer pet names, link "for my angry girl" |
+| 479 | rizz crops (239K) | four crops ending "Now or later" → "im ignoring that" → "I don't see a no", link in the last |
+| 480 | crybaby (941K) | three crops, "Yeah 3 times / I thought you were done after the second one", link → "now im crying again" |
+| 481 | 8 minutes (386K) | setup, spiral ("named my son after you / my sweet baby Leo ❤️"), "it's been 9 minutes are you serious" + link "i'm back" |
+| 482 | falling asleep (445K) | "aaand she's asleep / goodnight my sweet girl" + link, caption "reminiscing 💔" |
+| 483 | dry morning (4.4M) | "that dry ahh morning text" / slide 2: the upgrade + link → "ok this is better" |
+| 484 | take me on a date (4.3M) | "but clearly that's too much for you" → "Already booked it" + link "saturday", draft "wait i take it back" |
+
+**Post order:** 475, 484, 483, 476, 480, 481, 479, 482, 477, 478. On a new account, post the ones with
+the link on slide 2 first (475, 476, 483): slide 1 is then a clean screenshot.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
