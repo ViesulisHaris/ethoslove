@@ -1,0 +1,91 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "hiii"
+        },
+        {
+          "from": "them",
+          "text": "Hey baby"
+        },
+        {
+          "from": "them",
+          "text": "You home?"
+        },
+        {
+          "from": "me",
+          "text": "yes can we call"
+        },
+        {
+          "from": "them",
+          "text": "Yeah give me 10 minutes"
+        },
+        {
+          "from": "me",
+          "text": "okay"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "baby its been 10 minutes"
+        },
+        {
+          "from": "me",
+          "text": "where are u???"
+        },
+        {
+          "from": "me",
+          "text": "its been a year"
+        },
+        {
+          "from": "me",
+          "text": "i got married"
+        },
+        {
+          "from": "me",
+          "text": "named my son after you"
+        },
+        {
+          "from": "me",
+          "text": "my sweet baby Leo ❤️"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my sweet baby Leo ❤️",
+          "status": "Read 9:32 PM"
+        },
+        {
+          "from": "them",
+          "text": "it's been 9 minutes are you serious"
+        },
+        {
+          "from": "them",
+          "text": "Well get rid of him because I'm back",
+          "quote": "my sweet baby Leo ❤️"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm back 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
