@@ -1,0 +1,69 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:14 PM",
+      "input": "he didn't text me back all day",
+      "messages": [
+        {
+          "from": "them",
+          "text": "What's wrong"
+        },
+        {
+          "from": "me",
+          "text": "nothing",
+          "status": "Read 8:14 PM"
+        },
+        {
+          "from": "them",
+          "text": "Well don't be my girlfriend right now"
+        },
+        {
+          "from": "them",
+          "text": "Be my bestfriend.."
+        },
+        {
+          "from": "them",
+          "text": "What that man do sis?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": false,
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "me",
+          "text": "he didn't text me back all day"
+        },
+        {
+          "from": "them",
+          "text": "Girl that's crazy"
+        },
+        {
+          "from": "them",
+          "text": "He was probably busy making you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "from that man 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok tell him i love him",
+          "status": "Read 8:17 PM"
+        }
+      ]
+    }
+  ]
+}
