@@ -29,6 +29,15 @@
  * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put. Keep it
  * to plain text bubbles, as in the reference: a time floating beside a link card read as fake.
  *
+ * `"encrypted": true` (script or slide) puts iOS 26's thread header over the timestamp: "iMessage" and
+ * "🔒 Encrypted", as on the storytime accounts doing millions in Oct 2026 (@richie_prince1, @36grm).
+ * `"wallpaper": "rose"` or `"bokeh"` gives the thread one of iOS 26's chat backgrounds (a dark rose and
+ * violet wash; soft coloured lights), with the bubbles toned to sit on it as Messages does.
+ * `"bar": false` (script or slide) leaves the message bar off, for a screenshot cropped at the last message.
+ * A message's `"quote": "…"` draws it as an inline reply: the quoted message above as an outlined
+ * bubble (on the side `"quoteFrom"` says, by default the other person's), and the curved thread line
+ * leading down into the reply — what @dianaa.auclair's crops are full of.
+ *
  * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
  * the storytime accounts that do millions actually post.
  *
@@ -159,36 +168,17 @@ function html(slide) {
   const rows = slide.messages
     .map((m, i, all) => {
       if (m.ts) return `<div class="ts mid">${stamp(m.ts)}</div>`;
-      if (m.system) return `<div class="sys">${esc(m.system)}</div>`;
-      const next = all[i + 1];
-      const last = !next || next.from !== m.from || Boolean(next.ts) || Boolean(next.typing);
-      const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
-      const row = m.from === "me" ? "r" : "l";
-      const status = m.status ? `<div class="status">${stamp(m.status)}</div>` : "";
-      const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
-      if (m.typing) {
-        return `<div class="row l"><div class="bubble in typing"><span></span><span></span><span></span><i class="t1"></i><i class="t2"></i></div></div>`;
+      if (m.quote) {
+        // An inline reply: the message it answers, outlined, then the reply under the thread line.
+        const quoteMine = (m.quoteFrom ?? (m.from === "me" ? "them" : "me")) === "me";
+        const quoted = `<div class="row ${quoteMine ? "r" : "l"} quoted"><div class="quote ${quoteMine ? "q-out" : "q-in"}">${esc(m.quote)}</div></div>`;
+        return quoted + rowFor(slide, { ...m, quote: undefined, replied: true }, i, all);
       }
-      if (m.image) {
-        return `<div class="row ${row}"><div class="media">${m.tapback ? tapback(m) : ""}<div class="ph"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div></div>`;
-      }
-      if (m.link) {
-        // A rich link is a grey card on either side; only its alignment and tail change.
-        const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
-        const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
-        return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
-      }
-      if (JUMBO.test(m.text.trim())) {
-        return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
-      }
-      // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
-      const prev = all[i - 1];
-      const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
-      const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
-      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+      return rowFor(slide, m, i, all);
     })
     .join("");
   const ios26 = script.look === "ios26";
+  const wallpaper = script.wallpaper ? ` wp wp-${script.wallpaper}` : "";
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
@@ -272,8 +262,96 @@ function html(slide) {
     ${HOOK_CSS}
     ${script.theme === "light" ? LIGHT_CSS : ""}
     ${ios26 ? IOS26_CSS : ""}
-  </style></head><body class="${ios26 ? "ios26" : ""}${slide.swiped ? " swiped" : ""}">${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}${ios26 ? focusHtml(slide) + barHtml(slide) : ""}</div></body></html>`;
+    ${REPLY_CSS}
+    ${script.wallpaper ? WALLPAPER_CSS : ""}
+  </style></head><body class="${ios26 ? "ios26" : ""}${slide.swiped ? " swiped" : ""}${wallpaper}">${wallpaperHtml()}${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${encHtml(slide)}${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}${ios26 ? focusHtml(slide) + ((slide.bar ?? script.bar ?? true) ? barHtml(slide) : "") : ""}</div></body></html>`;
 }
+
+/** One message's row: a bubble, a typing indicator, a picture or a link card. */
+function rowFor(slide, m, i, all) {
+    if (m.system) return `<div class="sys">${esc(m.system)}</div>`;
+    const next = all[i + 1];
+    const last = !next || next.from !== m.from || Boolean(next.ts) || Boolean(next.typing);
+    const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
+    const row = m.from === "me" ? "r" : "l";
+    const status = m.status ? `<div class="status">${stamp(m.status)}</div>` : "";
+    const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
+    if (m.typing) {
+      return `<div class="row l"><div class="bubble in typing"><span></span><span></span><span></span><i class="t1"></i><i class="t2"></i></div></div>`;
+    }
+    if (m.image) {
+      return `<div class="row ${row}"><div class="media">${m.tapback ? tapback(m) : ""}<div class="ph"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div></div>`;
+    }
+    if (m.link) {
+      // A rich link is a grey card on either side; only its alignment and tail change.
+      const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
+      const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.replied ? " replied" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+    }
+    if (JUMBO.test(m.text.trim())) {
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+    }
+    // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
+    const prev = all[i - 1];
+    const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
+    const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
+    return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}${m.replied ? " replied" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+}
+
+/** iOS 26's header over a thread: the app's name and the lock, above the day and time. */
+const LOCK = `<svg viewBox="0 0 16 20" aria-hidden="true"><rect x="2" y="8.4" width="12" height="10" rx="2.4" fill="currentColor"/><path d="M4.8 8.6V6a3.2 3.2 0 0 1 6.4 0v2.6" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>`;
+const encHtml = (slide) => ((slide.encrypted ?? script.encrypted) ? `<div class="enc"><div class="enc-app">iMessage</div><div class="enc-lock">${LOCK}<span>${script.lang === "es" ? "Cifrado" : "Encrypted"}</span></div></div>` : "");
+
+/** Inline replies: the quoted message outlined in its sender's colour, and the thread line curving down into the answer. */
+const REPLY_CSS = `
+    .enc{text-align:center;color:#8E8E93;margin:0 0 20px;letter-spacing:-.2px}
+    .enc-app{font-size:33px;font-weight:600;line-height:42px}
+    .enc-lock{display:inline-flex;align-items:center;gap:9px;font-size:31px;line-height:40px}
+    .enc-lock svg{width:21px;height:26px}
+    .row.quoted{margin-top:30px}
+    .quote{max-width:73%;padding:13px 34px 14px;border-radius:50px;font-size:43px;line-height:55px;letter-spacing:-.6px;box-sizing:border-box;border:3px solid}
+    .q-out{border-color:#1D5FC7;color:#4C8DF6}
+    .q-in{border-color:#48484A;color:#A1A1A6}
+    .row.replied{position:relative;margin-top:62px!important}
+    .row.replied::before{content:"";position:absolute;top:-46px;width:58px;height:40px;border-top:5px solid #48484A}
+    .row.replied.l::before{left:46px;border-left:5px solid #48484A;border-top-left-radius:34px}
+    .row.replied.r::before{right:46px;border-right:5px solid #48484A;border-top-right-radius:34px}
+`;
+
+/**
+ * iOS 26's chat backgrounds. On one, Messages tones the bubbles to the picture, and the tails can't be
+ * carved out of black any more, so they are drawn as shapes of their own.
+ */
+const WALLPAPER_CSS = `
+    html,body{background:#0e0b10}
+    .wallpaper{position:absolute;inset:0;z-index:0;overflow:hidden}
+    .wp .stage{z-index:1}
+    .wp-rose .wallpaper{background:radial-gradient(85% 55% at 22% 58%, #6c2448 0%, rgba(108,36,72,0) 70%), radial-gradient(75% 55% at 88% 46%, #3d2b74 0%, rgba(61,43,116,0) 70%), linear-gradient(180deg, #140b16 0%, #2a1023 48%, #160a13 100%)}
+    .wp-bokeh .wallpaper{background:#0c0b0e}
+    .wp-bokeh .wallpaper i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.88}
+    .wp-rose .in,.wp-rose .in.last::before{background:#5B3246}
+    .wp-rose .out,.wp-rose .out.last::before{background:#7C9EF0}
+    .wp-bokeh .in,.wp-bokeh .in.last::before{background:#2C2A30}
+    .wp-bokeh .out,.wp-bokeh .out.last::before{background:#4E9EF5}
+    .wp .in.last::after,.wp .out.last::after,.wp .link.last::after{display:none}
+    .wp .in.last::before{left:-12px;width:40px;height:38px;border-radius:0;clip-path:path('M40 0 L40 38 L2 38 C 18 34, 27 22, 27 0 Z')}
+    .wp .out.last::before{right:-12px;left:auto;width:40px;height:38px;border-radius:0;clip-path:path('M0 0 L0 38 L38 38 C 22 34, 13 22, 13 0 Z')}
+    .wp .link.tail-l::before{left:-12px;width:40px;height:38px;border-radius:0;clip-path:path('M40 0 L40 38 L2 38 C 18 34, 27 22, 27 0 Z')}
+    .wp .link.tail-r::before{right:-12px;left:auto;width:40px;height:38px;border-radius:0;clip-path:path('M0 0 L0 38 L38 38 C 22 34, 13 22, 13 0 Z')}
+    .wp .field,.wp .plus{background:rgba(24,22,28,.82)}
+`;
+/** The soft lights behind a "bokeh" thread: the same few, always, so a post re-renders identically. */
+const BOKEH = [
+  ["#D23FA6", 6, 14, 520], ["#2E9E57", 68, 8, 470], ["#E38A2A", 78, 56, 500], ["#B8C43A", 4, 66, 440],
+  ["#E05B9B", 50, 82, 470], ["#7B49D9", 36, 36, 380], ["#E0C23E", 88, 26, 330], ["#2F8FC9", 18, 44, 300],
+];
+const wallpaperHtml = () =>
+  script.wallpaper === "bokeh"
+    ? `<div class="wallpaper">${BOKEH.map(([c, x, y, d]) => `<i style="background:${c};left:${x}%;top:${y}%;width:${d}px;height:${d}px;margin:-${d / 2}px 0 0 -${d / 2}px"></i>`).join("")}</div>`
+    : script.wallpaper
+      ? `<div class="wallpaper"></div>`
+      : "";
+
 
 /** iOS 26's Messages, dark: measured off the reference screenshots at @3x. */
 const IOS26_BLUE = "#1C99FC";
