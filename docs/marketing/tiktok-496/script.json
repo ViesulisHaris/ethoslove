@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|6:44 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I can actually see myself settling down with you"
+        },
+        {
+          "from": "me",
+          "text": "you said that while following 3 new girls today lol",
+          "status": "Read 6:45 PM"
+        },
+        {
+          "from": "them",
+          "text": "You notice everything except how much I care about you"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": false,
+      "messages": [
+        {
+          "from": "me",
+          "text": "then prove it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "proof 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok now unfollow them",
+          "status": "Read 6:52 PM"
+        }
+      ]
+    }
+  ]
+}
