@@ -1,0 +1,72 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:50 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how did u sleep?"
+        },
+        {
+          "from": "them",
+          "text": "how did u sleep?"
+        },
+        {
+          "from": "me",
+          "text": "what i just asked you"
+        },
+        {
+          "from": "them",
+          "text": "what i just asked you"
+        },
+        {
+          "from": "me",
+          "text": "oh so ur copying me"
+        },
+        {
+          "from": "them",
+          "text": "oh so ur copying me"
+        },
+        {
+          "from": "me",
+          "text": "i love you",
+          "status": "Read 9:50 AM"
+        },
+        {
+          "from": "them",
+          "text": "i slept fine hbu"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "me",
+          "text": "wow ok"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i love you more 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok copy that",
+          "status": "Read 9:53 AM"
+        }
+      ]
+    }
+  ]
+}
