@@ -1,0 +1,66 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im gonna cry"
+        },
+        {
+          "from": "them",
+          "text": "I know baby let it all out"
+        },
+        {
+          "from": "them",
+          "text": "You're okay"
+        },
+        {
+          "from": "them",
+          "text": "Call me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i cried so much last night my eyes are puffy"
+        },
+        {
+          "from": "them",
+          "text": "Yeah 3 times"
+        },
+        {
+          "from": "them",
+          "text": "I thought you were done after the second one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "My beautiful girl"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my crybaby 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "now im crying again",
+          "status": "Read 10:51 PM"
+        }
+      ]
+    }
+  ]
+}
