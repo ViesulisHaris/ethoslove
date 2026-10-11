@@ -1,0 +1,80 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Baby what's wrong"
+        },
+        {
+          "from": "me",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "Then why does nothing sound so loud"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You're so annoying"
+        },
+        {
+          "from": "me",
+          "text": "but u like me"
+        },
+        {
+          "from": "them",
+          "text": "I'm obsessed with you actually"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Get used to it",
+          "quote": "stop being so sweet its annoying"
+        },
+        {
+          "from": "them",
+          "text": "I'm not stopping"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Now or later",
+          "quote": "ur making me wanna marry you"
+        },
+        {
+          "from": "me",
+          "text": "im ignoring that"
+        },
+        {
+          "from": "them",
+          "text": "I don't see a no"
+        }
+      ]
+    }
+  ]
+}
