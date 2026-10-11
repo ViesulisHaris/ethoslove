@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm so mad at you"
+        },
+        {
+          "from": "them",
+          "text": "Why what did I do my love"
+        },
+        {
+          "from": "me",
+          "text": "the anger in my body is unreal"
+        },
+        {
+          "from": "them",
+          "text": "What can I do to make it better pretty girl"
+        },
+        {
+          "from": "me",
+          "text": "i am FUMING",
+          "status": "Read 8:17 PM"
+        },
+        {
+          "from": "them",
+          "text": "Tell me what happened baby"
+        },
+        {
+          "from": "them",
+          "text": "Whatever I did I'm fixing it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my angry girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
