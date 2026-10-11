@@ -1895,6 +1895,119 @@ Left out:
 **Post order:** 485, 486, 487, 489, 488, 490, 491, 492, 494, 493. All but 489 and 493 keep the link
 off slide 1.
 
+### Hashtags and search captions (research, 11 Oct), and batch 495–499
+
+The owner asked for hashtags taken from what popped off in the last month, and for captions written
+as searches ("tiktok is a search engine now ... your caption is an SEO title"): real, not salesy.
+
+**How I checked.** TikTok's own data, read in the browser without logging in:
+- the top 60 posts of 45 hashtags, each with its views, date and hashtags, keeping the last 31 days;
+- each tag's totals;
+- TikTok's search suggestions (US) for about 90 starting phrases;
+- the top search results for four gift searches.
+
+**What the texting posts that popped off this month used** (12 Sep – 11 Oct):
+
+| Post | Date | Views | Caption |
+|---|---|---|---|
+| @truth_enforcer.c, "we're done" breakup logic | 29 Sep | 8.3M, 339K shares | a full sentence, then #confused #relationships #breakup #textmessages #foryoupage |
+| @richie_prince1, his top 16 | 12 Sep – 10 Oct (15 of them after 29 Sep) | 1.6M–9.5M | emoji and two words, then #relatable #fypシ゚viral #Relationship #xyzbca |
+| @36grm | 6 Oct | 3.8M | #targetaudience |
+| @25jkngz | 2 Oct | 1.7M | #satire #funny #viral #texts #xyzbca |
+| @edias354 | 17 Sep | 1.3M | #funny #fyp #texting |
+| @midnightchat02 (a copy of richie's dad's wallet) | 22 Sep | 938K | #Relationship #textstory #chatstory #funny #uktiktok |
+| @.lostmsg | 20 Sep | 893K | #targetaudience |
+| @a4670864 | 7 Oct | 860K | #targetaudience #texts |
+| @36grm | 23 Sep | 739K | #targetaudience |
+
+Across the 89 texting posts from the last month in the sample (AI-prank ads removed), by median views:
+
+| Tag | Median views | Posts |
+|---|---|---|
+| #targetaudience | 859K | 6 |
+| #funny | 763K | 10 |
+| #relationships | 763K | 4 |
+| #relatable | 729K | 4 |
+| #xyzbca | 643K | 3 |
+| #bf | 524K | 3 |
+| #textstory | 461K | 4 |
+| #textmessage | 411K | 7 |
+| #fyp | 223K | 34 |
+| #imessage | 96K | — |
+| #text | 47K | — |
+| #texts | 37K | — |
+| #textmessages | 37K | — |
+
+The literal tags at the bottom do worst. It's a small sample, and these tags ride on posts that were
+already strong, so read it as what the winners use, not as the cause.
+
+Tag sizes, all time (posts / views):
+
+| Tag | Posts | Views |
+|---|---|---|
+| #boyfriendtexts | 1.1K | 29M |
+| #cutetexts | 5.2K | 93M |
+| #digitalgift | 5.5K | 75M |
+| #textmessages | 34K | 1.0B |
+| #imessage | 68K | 2.7B |
+| #giftforboyfriend | 76K | 1.4B |
+| #giftforgirlfriend | 110K | 1.3B |
+| #texts | 865K | 21B |
+| #ilovemybf | 3.9M | 58B |
+| #targetaudience | 5.0M | 105B |
+| #ldr | 5.5M | 61B |
+| #relationship | 24.5M | 700B |
+| #relatable | 97M | 2.5T |
+
+The small exact tags (#boyfriendtexts, #digitalgift, #cutetexts) are where a new post can sit at the
+top of the tag page.
+
+**Hashtag rule from now on.** Four tags per post:
+- one or two of the niche's winners: #targetaudience, #relationships or #relatable, #funny on a funny
+  post;
+- one format tag: #boyfriendtexts, #textmessage or #textstory;
+- one topic tag: #digitalgift, #ldr or #bf.
+
+Leave out #fyp and its variants: they're on every post, and their median is a quarter of the winners'.
+
+**Search captions.** The first line is the search, in the words a person types, taken from TikTok's
+own suggestions so it's a real query. Suggestions that fit us:
+- **Gift searches:** "my boyfriend made me a website", "he made me a website", "bf made me a
+  website", "digital gift for girlfriend", "digital gift for bf", "website gift for gf", "best gift
+  for gf", "the best gift for your gf", "long distance gift website", "long distance surprise
+  boyfriend", "surprise my long distance girlfriend", "anniversary website", "birthday website for
+  girlfriend", "qr code gift for boyfriend", "cutest gift ever", "best gift i ever got".
+- **Texts searches:** "cute text from boyfriend", "texts that made me smile", "boyfriend texts funny",
+  "cute texts for your bf", "sweet things to say to your gf", "what to say when shes mad", "games to
+  play with your boyfriend over text", "lovebombing or genuine", "he notices everything".
+
+Who ranks for them today:
+- **"my boyfriend made me a website":** weak results (17K, 2K and 138K views, mostly off-topic). That's
+  the open lane.
+- **"website gift for gf", "digital gift for girlfriend" and "long distance gift website":** sellers'
+  ads (@htm_creates 2.7M, @flowers_the_bloom 3.8M, @lovecapsule.cc, @joygram.io), all with "customize
+  yours / link in bio" captions. A chat that reads as a real girl's screenshot is the opposite of
+  those.
+
+Caption rules:
+- The first line is the search phrase turned into a real sentence ("my boyfriend made me a website to
+  prove he cares 😭").
+- Never the brand, the website or "link in bio".
+- Then the four hashtags.
+- Write half the captions for the guys who buy ("sweet things to say to your gf", "best gift for gf")
+  and half for the girls who send it to them ("my boyfriend made me a website", "cute text from
+  boyfriend").
+
+| | Copies | Caption | Hashtags |
+|---|---|---|---|
+| 495 | @truth_enforcer.c, 8.3M | sweet things to say to your gf when she's being dramatic 😭 | #relationships #boyfriendtexts #relatable #targetaudience |
+| 496 | @36grm, 3.8M | my boyfriend made me a website to prove he cares 😭 | #targetaudience #relationships #bf #digitalgift |
+| 497 | @edias354, 1.3M | games to play with your boyfriend over text 😭 he found a loophole | #funny #boyfriendtexts #textmessage #relatable |
+| 498 | @36grm, 739K | lovebombing or genuine? 😭 be honest | #targetaudience #relatable #textstory #bf |
+| 499 | @brookemonk_, 5.0M (a video) | long distance surprise from my boyfriend 🥹 he couldn't come so he made me a website | #ldr #longdistance #digitalgift #relationships |
+
+**Post order:** 495, 496, 497, 499, 498.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
