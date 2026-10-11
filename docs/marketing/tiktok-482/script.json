@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:46 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg sorry"
+        },
+        {
+          "from": "me",
+          "text": "im falling asleep ngl 😭",
+          "status": "Read 11:46 PM"
+        },
+        {
+          "from": "them",
+          "text": "same lol"
+        },
+        {
+          "from": "them",
+          "text": "wanna sleep?"
+        },
+        {
+          "from": "them",
+          "text": "orrr we could stay up all night 🤷‍♂️"
+        },
+        {
+          "from": "them",
+          "text": "aaand she's asleep"
+        },
+        {
+          "from": "them",
+          "text": "goodnight my sweet girl"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodnight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
