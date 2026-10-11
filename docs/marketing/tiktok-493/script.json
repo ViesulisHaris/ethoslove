@@ -1,0 +1,41 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|3:10 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you wanna meet up and talk?"
+        },
+        {
+          "from": "them",
+          "text": "Yes of course I miss you so much my heart hurts"
+        },
+        {
+          "from": "me",
+          "text": "lol still desperate and easy for me",
+          "status": "Read 3:11 PM"
+        },
+        {
+          "from": "them",
+          "text": "Only for you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "still yours 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
