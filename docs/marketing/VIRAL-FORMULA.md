@@ -1851,6 +1851,50 @@ the link comes in slide 2 as the payoff (475, 476, 483), or it *is* the punchlin
 **Post order:** 475, 484, 483, 476, 480, 481, 479, 482, 477, 478. On a new account, post the ones with
 the link on slide 2 first (475, 476, 483): slide 1 is then a clean screenshot.
 
+### 485 to 494: the rest of @richie_prince1's biggest posts (11 Oct)
+
+The owner asked for more. 475–484 used two of his posts; this batch copies the rest of his sixteen
+most popular (1.6M to 9.5M views), read from their cover frames. Every one is a single dark iOS 26
+screenshot: "iMessage · Encrypted", "Today 7:30 PM", two to five short messages, and the last line
+does all the work. Captions are an emoji and two words, plus #relatable #Relationship.
+
+What his biggest ones do:
+- **A test with a dumb answer:** "3000-2999+1= ??" → "3000" (9.5M).
+- **A savage line that ends it:** "lol still desperate and easy for me" (5.3M), "leave him" (3.7M),
+  "You are a category 5 hurricane" (2.1M).
+- **A threat that works instantly:** "Caleb is the guy that will come if you don't come" → "I'm on my
+  way" (3.3M); "answer me before i post us together" → "heyy / heyyyyy / hi" (2.2M).
+- **The time jump as the joke:** "I'll call you at 9", then at 9:01 PM "all a man do is lie" (2.9M);
+  "i miss you", then the next morning "That was a moment of weakness" (2.5M).
+- **A role switch:** "Be my bestfriend.. / What that man do sis?" (2.6M); "Say “We”" (1.6M).
+
+Each post keeps his slide 1 and adds the gift as slide 2, a second laugh that flips the first (485
+"marry me" again sober, 486 "leave him" to "marry him", 487 "who's jake" / "Exactly"), or makes the
+link the punchline in one image (489 "We didn't", 493 "Only for you").
+
+Left out:
+- Dad's wallet (8.6M) and "he*" (3.1M). They end on an accusation and on a reveal, and a gift can
+  only answer those with a convoluted setup.
+- "You told me you stabbed your last boyfriend" (2.3M). Too dark to carry a gift.
+- "i lowk dc you can mute yo mic … i just wanna be otp with you" (2.3M). Sweet rather than funny, so
+  it's kept for the one-image in-love format.
+
+| | Copies | The chat |
+|---|---|---|
+| 485 | 3000 (9.5M) | "babe are you drunk?" → "3000" / slide 2: link → "marry me" → "Ask me again when you're sober" → 9:12 AM "marry me" |
+| 486 | leave him (3.7M) | from the friend's phone: "leave him" → "BRUH AT LEAST HEAR ME OUT FIRST" / slide 2: the link he made after their fight → "ok i heard you out / marry him" |
+| 487 | Caleb (3.3M) | "Jake is the guy that will come if you don't come" → "I'm on my way" / slide 2: link → "who's jake" → "Exactly" |
+| 488 | what that man do sis (2.6M) | "Be my bestfriend.. / What that man do sis?", her draft "he didn't text me back all day" / slide 2: "He was probably busy making you this" + link → "ok tell him i love him" |
+| 489 | say “we” (1.6M) | "Babeee!!! We forgot our anniversary 😭" → "We didn't" + link; rose background |
+| 490 | all a man do is lie (2.9M) | 9:01 PM "all a man do is lie" / slide 2: "It's 9:01 relax" + link → "all a man do is make me cry" |
+| 491 | category 5 hurricane (2.1M) | "sunrise or a sunset?" → "You are a category 5 hurricane" / slide 2: "My favorite natural disaster though" + link |
+| 492 | moment of weakness (2.5M) | 1:09 AM "i miss you", 9:09 AM "that was a moment of weakness / fck you" / slide 2: "Too late I screenshotted it" + link |
+| 493 | desperate and easy (5.3M) | "lol still desperate and easy for me" → "Only for you" + link "still yours" |
+| 494 | post us together (2.2M) | "answer me before i post that pic of you sleeping" → "heyy / heyyyyy / hi" / slide 2: "no need for that" + link |
+
+**Post order:** 485, 486, 487, 489, 488, 490, 491, 492, 494, 493. All but 489 and 493 keep the link
+off slide 1.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
