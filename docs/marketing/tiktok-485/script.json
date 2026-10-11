@@ -1,0 +1,63 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|1:12 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "babe are you drunk?"
+        },
+        {
+          "from": "me",
+          "text": "No why??"
+        },
+        {
+          "from": "them",
+          "text": "3000-2999+1= ??"
+        },
+        {
+          "from": "me",
+          "text": "3000",
+          "status": "Read 1:12 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for my drunk girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "marry me"
+        },
+        {
+          "from": "them",
+          "text": "Ask me again when you're sober"
+        },
+        {
+          "ts": "Today|9:12 AM"
+        },
+        {
+          "from": "me",
+          "text": "marry me",
+          "status": "Read 9:12 AM"
+        }
+      ]
+    }
+  ]
+}
