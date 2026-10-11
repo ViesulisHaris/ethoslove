@@ -1,0 +1,55 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:41 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "girl i need your advice"
+        },
+        {
+          "from": "me",
+          "text": "leave him",
+          "status": "Read 12:41 AM"
+        },
+        {
+          "from": "them",
+          "text": "BRUH AT LEAST HEAR ME OUT FIRST 😭"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "he made me this after our fight"
+        },
+        {
+          "from": "me",
+          "text": "ok i heard you out"
+        },
+        {
+          "from": "me",
+          "text": "marry him",
+          "status": "Read 12:44 AM"
+        }
+      ]
+    }
+  ]
+}
