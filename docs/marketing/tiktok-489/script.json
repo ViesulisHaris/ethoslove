@@ -1,0 +1,46 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "rose",
+  "bar": false,
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "Babeee i have a problem 😭"
+        },
+        {
+          "from": "them",
+          "text": "Don't say “I”"
+        },
+        {
+          "from": "them",
+          "text": "Say “We”, Ok Baby 🥰"
+        },
+        {
+          "from": "me",
+          "text": "Babeee!!! We forgot our anniversary 😭",
+          "status": "Read 11:52 PM"
+        },
+        {
+          "from": "them",
+          "text": "We didn't"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy anniversary 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
