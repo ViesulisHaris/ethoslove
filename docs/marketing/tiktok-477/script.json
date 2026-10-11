@@ -1,0 +1,41 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:04 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i love you more"
+        },
+        {
+          "from": "them",
+          "text": "Impossible"
+        },
+        {
+          "from": "me",
+          "text": "why",
+          "status": "Read 11:04 PM"
+        },
+        {
+          "from": "them",
+          "text": "You fall asleep at 10 and I'm up till 2 thinking about you"
+        },
+        {
+          "from": "them",
+          "text": "That's 4 extra hours of loving you every night"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the proof 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
