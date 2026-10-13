@@ -15,6 +15,7 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
+import { FitName } from "../_shared/FitName";
 import { Confetti } from "../_shared/Confetti";
 import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScrollHint, useReadProgress } from "../_shared/collage/kit";
@@ -252,9 +253,9 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                 </Piece>
                 <Piece x={62} y={50} w={64} rotate={5} z={4} entrance="right">
                   <Polaroid photo={second} lip={17} paper={look.paper} onOpen={openPhoto ? () => openPhoto(second) : undefined} still={still}>
-                    <span className="block max-w-full truncate text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT, color: look.paperInk }}>
+                    <FitName className="w-full text-[calc(11*var(--p))] leading-[1.2]" style={{ fontFamily: SCRIPT_FONT, color: look.paperInk }}>
                       {fields.word?.trim() || s.word}
-                    </span>
+                    </FitName>
                   </Polaroid>
                 </Piece>
                 <Piece x={92} y={92} w={26} rotate={-16} z={6} entrance="stamp" delay={0.3}>

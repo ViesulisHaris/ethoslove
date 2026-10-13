@@ -292,11 +292,12 @@ function Dusk({
           transition={{ delay: 0.9, type: "spring", stiffness: 160, damping: 14 }}
         >
           <div
-            className="relative rounded-[calc(1*var(--k))] px-[calc(3.4*var(--k))] py-[calc(1.6*var(--k))]"
+            className="relative rounded-[calc(1*var(--k))] px-[calc(3.4*var(--k))] py-[calc(1.05*var(--k))]"
             style={{ backgroundColor: "#F4E6CC", color: "#5A3A1E", backgroundImage: GRAIN, boxShadow: "0 calc(.8*var(--k)) calc(2*var(--k)) rgba(0,0,0,.4)" }}
           >
             <span aria-hidden="true" className="absolute inset-[calc(.9*var(--k))] rounded-[calc(.6*var(--k))] border border-dashed" style={{ borderColor: "rgba(90,58,30,.45)" }} />
-            <p className="max-w-[calc(44*var(--k))] truncate text-[calc(4.4*var(--k))] leading-none" style={{ fontFamily: "var(--gift-font-hand)" }}>
+            {/* 1.25 lines, not 1: `truncate` hides what leaves the line box, and an emoji stands taller than the letters. */}
+            <p className="max-w-[calc(44*var(--k))] truncate text-[calc(4.4*var(--k))] leading-[1.25]" style={{ fontFamily: "var(--gift-font-hand)" }}>
               {tag}
             </p>
           </div>

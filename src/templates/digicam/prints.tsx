@@ -36,7 +36,7 @@ export function PrintStrip({ photos, stamp, onOpen, style }: { photos: GiftPhoto
             <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: GLOSS }} />
           </button>
           <figcaption className="flex items-center justify-between gap-[calc(2*var(--k))]" style={{ height: `calc(${PRINT.caption} * var(--k))` }}>
-            <span className="min-w-0 truncate text-[#2E2226]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.6*var(--k))", lineHeight: 1.1 }}>
+            <span className="min-w-0 truncate pr-[0.12em] text-[#2E2226]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.6*var(--k))", lineHeight: 1.3 }}>
               {photo.caption}
             </span>
             <span className="shrink-0 tracking-[0.08em] text-[#A79C99] tabular-nums" style={{ fontFamily: "ui-monospace, Menlo, monospace", fontSize: "calc(2.1*var(--k))" }}>

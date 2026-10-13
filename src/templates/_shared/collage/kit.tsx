@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { createContext, useContext, useEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
@@ -184,18 +184,98 @@ export function PaperLabel({ color = "#FFFDF8", children }: { color?: string; ch
   );
 }
 
+/** How small a caption gets on its one line before it wraps onto a second. */
+const CAPTION_MIN = 0.62;
+
 /**
- * A caption in handwriting that fits on one line of a polaroid's lip. `label` (a paper colour) sets it
- * on a PaperLabel, for a patterned frame; an empty caption gets no label at all.
+ * A caption in handwriting on a polaroid's lip. It shrinks to stay on one line, down to CAPTION_MIN of
+ * its size, and past that wraps onto two, cut with "…" only after the second (the whole caption is in
+ * the lightbox). It used to be one `truncate` line exactly 1em tall, which sliced the top and bottom
+ * off every emoji (they stand taller than the letters) and the hand face's loops: "I love your smile
+ * 💋" came out with the kiss cut flat (a sender's own gift in XOXO, 13 Oct 2026). Now the line is
+ * 1.25em and nothing is clipped while the caption fits.
+ *
+ * `label` (a paper colour) sets it on a PaperLabel, for a patterned frame; an empty caption gets no
+ * label at all. Measured against its own full-width box, never the label: a label hugs its text, so
+ * measuring it would shrink the text, shrink the label, and measure again forever. The box needs
+ * `min-w-0`: the lip is a grid, and without it the grid stretches to the caption's unwrapped length.
  */
 export function Caption({ children, color = "#3A2A2E", size = 3.6, label }: { children: ReactNode; color?: string; size?: number; label?: string }) {
+  const boxRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const empty = children === undefined || children === null || children === "";
+
+  useLayoutEffect(() => {
+    const box = boxRef.current;
+    const text = textRef.current;
+    if (!box || !text) return;
+    let alive = true;
+    let width = -1;
+
+    const fit = () => {
+      if (!alive) return;
+      const s = text.style;
+      s.fontSize = "1em";
+      s.whiteSpace = "nowrap";
+      s.display = "";
+      s.overflow = "";
+      s.maxWidth = "none";
+      s.removeProperty("-webkit-line-clamp");
+      s.removeProperty("-webkit-box-orient");
+      const paper = text.parentElement === box ? null : getComputedStyle(text.parentElement as HTMLElement);
+      const room = box.clientWidth - (paper ? parseFloat(paper.paddingLeft) + parseFloat(paper.paddingRight) : 0);
+      const need = text.offsetWidth;
+      if (room <= 0 || need <= 0) return;
+      // 3% spare when it has to shrink: emoji snap to whole pixels and don't scale exactly with the text.
+      const scale = need <= room ? 1 : (room / need) * 0.97;
+      if (scale >= CAPTION_MIN) {
+        s.fontSize = `${scale}em`;
+        return;
+      }
+      s.fontSize = `${CAPTION_MIN}em`;
+      s.whiteSpace = "normal";
+      s.maxWidth = "100%";
+      s.display = "-webkit-box";
+      s.overflow = "hidden";
+      s.setProperty("-webkit-box-orient", "vertical");
+      s.setProperty("-webkit-line-clamp", "2");
+    };
+
+    // Width only: the fit changes the height, and refitting on that would loop.
+    const resize = new ResizeObserver(() => {
+      if (box.clientWidth === width) return;
+      width = box.clientWidth;
+      fit();
+    });
+    resize.observe(box);
+    // The editor's preview retypes the caption on every keystroke.
+    const typing = new MutationObserver(fit);
+    typing.observe(text, { characterData: true, childList: true, subtree: true });
+    // The hand face arrives after the first paint, and is a different width from its fallback.
+    const fonts = typeof document !== "undefined" ? document.fonts : undefined;
+    fonts?.addEventListener("loadingdone", fit);
+    void fonts?.ready.then(fit);
+    fit();
+
+    return () => {
+      alive = false;
+      resize.disconnect();
+      typing.disconnect();
+      fonts?.removeEventListener("loadingdone", fit);
+    };
+  }, [label, empty]);
+
+  // The side padding is room for a slanted last letter or an emoji's edge, which draw past their box.
   const text = (
-    <span className="block max-w-full truncate" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, lineHeight: label ? 1.2 : 1, color }}>
+    <span ref={textRef} className="inline-block max-w-none px-[0.12em] align-top whitespace-nowrap">
       {children}
     </span>
   );
-  const empty = children === undefined || children === null || children === "";
-  return label && !empty ? <PaperLabel color={label}>{text}</PaperLabel> : text;
+  return (
+    <span ref={boxRef} className="block w-full min-w-0" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, lineHeight: 1.25, color }}>
+      {label && !empty ? <PaperLabel color={label}>{text}</PaperLabel> : text}
+    </span>
+  );
 }
 
 /** Opens a photo large over everything; a tap anywhere closes it. */
