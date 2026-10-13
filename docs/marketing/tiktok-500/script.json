@@ -1,0 +1,71 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Yesterday|6:27 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im so done i should block you"
+        },
+        {
+          "from": "them",
+          "text": "You could"
+        },
+        {
+          "from": "them",
+          "text": "But you won't"
+        },
+        {
+          "from": "me",
+          "text": "i should and i will"
+        },
+        {
+          "from": "me",
+          "text": "you are blocked."
+        },
+        {
+          "ts": "Today|10:33 PM"
+        },
+        {
+          "from": "me",
+          "text": "i miss you soo much",
+          "status": "Delivered"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "me",
+          "text": "unblocked btw"
+        },
+        {
+          "from": "them",
+          "text": "Knew it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "you're stuck with me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i hate that you were right",
+          "status": "Read 10:36 PM"
+        }
+      ]
+    }
+  ]
+}
