@@ -2008,6 +2008,39 @@ Caption rules:
 
 **Post order:** 495, 496, 497, 499, 498.
 
+### 500 to 504: this week's newest hits (13 Oct)
+
+Checked again two days later: the tag feeds (16 tags, 697 posts) and the newest posts of
+@richie_prince1 and @36grm.
+
+- **@richie_prince1** posts several times a day. His newest are "love language" (1.7M, 11 Oct), "my
+  life" (1.5M, 10 Oct), and "being honest" (1.5M) and "try again" (1.4M), both 12 Oct. The "moment of
+  weakness" post we copied in 492 is now at 7.5M.
+- **@36grm:** the party post we copied in 476 is now at 5.6M, and "3 new girls" (496) is at 4.0M. New
+  ones:
+  - "today would've been our 2 year anniversary" → "yesterday" (2.1M);
+  - "How many guys you fw?" → "none" (977K);
+  - "caller or a texter?" → "Probably ghoster" (561K).
+
+  His two biggest this week (2.8M and 1.3M) are handwritten notes, not texts.
+- **From the tags:** @veryawesomellie's "I love you more" fight (817K, 31K saves) and @factual991's
+  "no / no / ye / no" (266K).
+
+Same caption and hashtag rules as 495–499. Every caption is a TikTok search suggestion, checked on
+13 Oct. Two new topic tags: #loyaltytest (229K posts, 11B views) and #drytexter (4.8K posts, 146M).
+
+| | Copies | Caption | Hashtags |
+|---|---|---|---|
+| 500 | richie, "love language", 1.7M | when she blocks you and unblocks you the next day 😭 | #targetaudience #relatable #textmessage #bf |
+| 501 | richie, "my life", 1.5M | i did a loyalty test on my boyfriend with a fake account 😭 | #targetaudience #relationships #textstory #loyaltytest |
+| 502 | @veryawesomellie, 817K | he made me a website to win the i love you more argument 😭 | #targetaudience #relatable #boyfriendtexts #digitalgift |
+| 503 | @36grm, 977K | how to tell if she likes you over text 😭 she said none | #targetaudience #funny #textmessage #relationships |
+| 504 | @factual991, 266K | is he a dry texter or is he planning something 😭 | #funny #relatable #drytexter #textmessage |
+
+502 is drawn in light mode like its original, the first light-mode post in a while.
+
+**Post order:** 500, 501, 503, 502, 504.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
