@@ -1,0 +1,72 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:28 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's over"
+        },
+        {
+          "from": "me",
+          "text": "why?"
+        },
+        {
+          "from": "them",
+          "text": "I found someone better than you"
+        },
+        {
+          "from": "me",
+          "text": "you mean brittany?"
+        },
+        {
+          "from": "them",
+          "text": "Wait.... you know her?"
+        },
+        {
+          "from": "me",
+          "text": "yeah... that's my fake account",
+          "status": "Read 7:29 AM"
+        },
+        {
+          "from": "them",
+          "text": "Technically I chose you twice then"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "me",
+          "text": "that's not how this works"
+        },
+        {
+          "from": "them",
+          "text": "Then I'm choosing you a third time"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "third time 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok it's not over",
+          "status": "Read 7:33 AM"
+        }
+      ]
+    }
+  ]
+}
