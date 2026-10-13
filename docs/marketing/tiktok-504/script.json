@@ -1,0 +1,72 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|4:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "wanna go out tmr"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "ok well u wanna call"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "ok well have you had a good day"
+        },
+        {
+          "from": "them",
+          "text": "ye"
+        },
+        {
+          "from": "me",
+          "text": "would it have been better if i was there 👀",
+          "status": "Read 4:15 PM"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You would've seen this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "surprise 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i was about to break up with you",
+          "status": "Read 4:20 PM"
+        }
+      ]
+    }
+  ]
+}
