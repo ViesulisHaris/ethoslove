@@ -1,0 +1,75 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Mar 2|9:41 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|1:14 AM"
+        },
+        {
+          "from": "me",
+          "text": "you know you could've taken it down"
+        },
+        {
+          "from": "them",
+          "text": "taken what down"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the thing you made me"
+        },
+        {
+          "from": "me",
+          "text": "it still works"
+        },
+        {
+          "from": "them",
+          "text": "why are you still opening it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why didn't you take it down",
+          "status": "Read 1:16 AM"
+        },
+        {
+          "from": "them",
+          "text": "go to sleep maya"
+        },
+        {
+          "from": "me",
+          "text": "answer me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "because then it's actually over"
+        }
+      ]
+    }
+  ]
+}
