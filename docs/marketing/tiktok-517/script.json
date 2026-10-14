@@ -1,0 +1,84 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im outside"
+        },
+        {
+          "from": "them",
+          "text": "Coming"
+        },
+        {
+          "from": "me",
+          "text": "are you nervous??",
+          "status": "Read 6:53 PM"
+        },
+        {
+          "from": "them",
+          "text": "Yes"
+        },
+        {
+          "from": "them",
+          "text": "I can see you from the window"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:48 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Home safe?"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "me",
+          "text": "i had so much fun"
+        },
+        {
+          "from": "them",
+          "text": "Me too"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Ok this is embarrassing"
+        },
+        {
+          "from": "them",
+          "text": "I made you something before I picked you up"
+        },
+        {
+          "from": "them",
+          "text": "In case it went well"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "it went well"
+        }
+      ]
+    }
+  ]
+}
