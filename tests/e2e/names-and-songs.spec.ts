@@ -58,7 +58,7 @@ async function namesFit(page: Page) {
 }
 
 test.describe("names are never cut short", () => {
-  for (const slug of ["coquette", "xoxo", "the-council", "birthday-cinema", "spooky-season", "dark-romance", "favorite-person", "on-repeat", "evergreen"]) {
+  for (const slug of ["coquette", "xoxo", "the-council", "birthday-cinema", "spooky-season", "dark-romance", "favorite-person", "on-repeat", "evergreen", "be-my-boo", "fall-for-you", "autumn-reel"]) {
     test(`${slug}: a long name fits its line whole`, async ({ page, isMobile }) => {
       test.setTimeout(90_000);
       await draft(page, slug, "Mariangela Josephine");

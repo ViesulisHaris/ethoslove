@@ -17,8 +17,8 @@ describe("what the gallery leads with", () => {
     for (const slug of POPULAR_SLUGS) expect(manifests.find((m) => m.slug === slug)?.tier, slug).toBe("premium");
   });
 
-  it("puts the Halloween pair at the front of what is new, then the newest collages", () => {
-    expect(NEW_SLUGS.slice(0, 5)).toEqual(["spooky-season", "dark-romance", "favorite-person", "on-repeat", "evergreen"]);
+  it("puts this October's Halloween collages at the front of what is new, then the pair before them", () => {
+    expect(NEW_SLUGS.slice(0, 5)).toEqual(["be-my-boo", "fall-for-you", "autumn-reel", "spooky-season", "dark-romance"]);
   });
 
   it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {
@@ -43,7 +43,7 @@ describe("what the gallery leads with", () => {
   it("badges a card by the shelf it belongs to", () => {
     expect(featuredFor("bouquet")).toBe("popular");
     expect(featuredFor("the-council")).toBe("popular");
-    expect(featuredFor("digicam")).toBe("new");
+    expect(featuredFor("be-my-boo")).toBe("new");
     expect(featuredFor("the-letter")).toBeUndefined();
     expect(featuredFor("vinyl")).toBeUndefined();
   });

@@ -140,6 +140,68 @@ test.describe("Spooky Season", () => {
   });
 });
 
+test.describe("Be My Boo", () => {
+  test("the ghost says boo and flies off, and the collage scrolls from the polaroids to the letter", async ({ page }) => {
+    await openPage(page, "/demo/be-my-boo", /tap the ghost/i);
+    await expect(page.getByText("Maya").first()).toBeVisible();
+    await expect(page.getByText(/be my boo\?/i).first()).toBeVisible();
+    await expect(page.getByText(/our first coffee/i)).toBeVisible();
+    await expect(page.getByText(/tap anywhere for a boo/i)).toBeAttached();
+    await scrollToEnd(page);
+    await expect(page.getByText("All Hallows").first()).toBeAttached();
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/be-my-boo", /toca el fantasma/i);
+    await expect(page.getByText(/¿serás mi boo\?/i).first()).toBeVisible();
+    await expect(page.getByText(/nuestro primer café/i)).toBeVisible();
+  });
+});
+
+test.describe("Fall for You", () => {
+  test("lights the candle, spells their name in blocks, and scrolls to the letter", async ({ page }) => {
+    await openPage(page, "/demo/fall-for-you", /light the candle/i);
+    await expect(page.getByRole("img", { name: "Maya" })).toBeVisible();
+    await expect(page.getByText(/fall for you/i).first()).toBeVisible();
+    await expect(page.getByText(/lisbon in october/i)).toBeVisible();
+    await scrollToEnd(page);
+    await expect(page.getByText(/recipe for us/i)).toBeAttached();
+    await expect(page.getByText("Fireside").first()).toBeAttached();
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/fall-for-you", /encender la vela/i);
+    await expect(page.getByText(/otoño contigo/i).first()).toBeVisible();
+    await expect(page.getByText(/lisboa en octubre/i)).toBeVisible();
+  });
+});
+
+test.describe("Autumn Reel", () => {
+  test("develops the prints, and scrolls from the film and the book page to the letter", async ({ page }) => {
+    await openPage(page, "/demo/autumn-reel", /tap to develop/i);
+    await expect(page.getByText("MAYA AND LEO.")).toBeVisible();
+    await expect(page.getByText("wishes", { exact: true })).toBeVisible();
+    await scrollToEnd(page);
+    await expect(page.getByText(/admit two: autumn matinee/i)).toBeAttached();
+    await expect(page.getByText("Golden Hour").first()).toBeAttached();
+    await expect(page.getByText(/dear maya/i)).toBeAttached();
+    await expect(page.getByRole("button", { name: /send leo a reaction/i })).toBeVisible({ timeout: 20000 });
+  });
+
+  test("speaks Spanish, and works without motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openPage(page, "/es/demo/autumn-reel", /toca para revelar/i);
+    await expect(page.getByText("MAYA Y LEO.")).toBeVisible();
+    await expect(page.getByText("deseos", { exact: true })).toBeVisible();
+  });
+});
+
 test.describe("Dark Romance", () => {
   test("turns the key, opens the diary, and scrolls from the tarot card to the letter", async ({ page }) => {
     await openPage(page, "/demo/dark-romance", /turn the key/i);

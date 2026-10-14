@@ -464,6 +464,9 @@ export function defaultCoverFor(slug: string): CoverId {
     case "coquette":
     case "xoxo":
     case "spooky-season":
+    case "be-my-boo":
+    case "fall-for-you":
+    case "autumn-reel":
     case "dark-romance":
     case "favorite-person":
     case "on-repeat":
