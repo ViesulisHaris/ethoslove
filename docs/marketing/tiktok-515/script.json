@@ -1,0 +1,147 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:38 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you never say it first"
+        },
+        {
+          "from": "them",
+          "text": "Say what."
+        },
+        {
+          "from": "me",
+          "text": "you know what 🙄"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I don't."
+        },
+        {
+          "from": "me",
+          "text": "LEOOO"
+        },
+        {
+          "from": "them",
+          "text": "Maya."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its literally 3 words"
+        },
+        {
+          "from": "them",
+          "text": "Go to sleep."
+        },
+        {
+          "from": "me",
+          "text": "thats 3 words but the wrong ones 😒"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You're so dramatic."
+        },
+        {
+          "from": "me",
+          "text": "also wrong",
+          "status": "Read 11:41 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "fine. goodnight"
+        },
+        {
+          "from": "them",
+          "text": "Goodnight."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Don't make it a thing."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        },
+        {
+          "from": "them",
+          "text": "Go to sleep, sweetheart."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you STILL didnt say it 😭",
+          "status": "Read 12:03 AM"
+        },
+        {
+          "from": "them",
+          "text": "I made you a whole thing, Maya."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "say ittt"
+        },
+        {
+          "from": "them",
+          "text": "I love you. Now go to sleep."
+        }
+      ]
+    }
+  ]
+}
