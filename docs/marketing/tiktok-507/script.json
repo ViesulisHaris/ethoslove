@@ -1,0 +1,114 @@
+{
+  "demo": {
+    "template": "autumn-reel",
+    "steps": [
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"tap to develop\"",
+      "wait 1000",
+      "shot gift-2.png",
+      "wait 3600",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why dont u ever post me"
+        },
+        {
+          "from": "them",
+          "text": "i do"
+        },
+        {
+          "from": "me",
+          "text": "once. in march"
+        },
+        {
+          "from": "them",
+          "text": "ive been busy"
+        },
+        {
+          "from": "me",
+          "text": "with what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "with what"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "text": "took a bit longer than a post"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i archived all our pics today"
+        },
+        {
+          "from": "them",
+          "text": "u WHAT"
+        },
+        {
+          "from": "me",
+          "text": "all 46. it was very healing"
+        },
+        {
+          "from": "me",
+          "text": "this is cute tho",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "they stay archived till u post me"
+        },
+        {
+          "from": "them",
+          "text": "maya unarchive us"
+        }
+      ]
+    }
+  ]
+}
