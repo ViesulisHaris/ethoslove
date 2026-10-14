@@ -2093,6 +2093,55 @@ hour.
 account is being held back, not the post: rosie's post on 10 Oct had 4 views, against 100K to 1.3M for its
 September posts. Post the same carousel on a healthy account, and leave the held one alone for a week.
 
+### 510 to 519: the blueprint of the accounts doing 1M+ (14 Oct)
+
+The owner sent four more profiles (@savgilbertt, @unicornsprinklewaffles, @36grm, @unknown649382) and asked
+for convos built on their posts over 1M, for two US accounts. I read every post over about 900K, slide by slide
+for photo posts, frame by frame for videos:
+
+| Account | Views | What it is | How it's posted |
+|---|---|---|---|
+| @savgilbertt | 7.1M, 1.7M, 1.3M, 1.0M | #wrongtexttrend: a grumpy man (capitals, full stops, one to five words) and a bubbly girl (lowercase, emojis, "frankkk"). He pretends not to care and caves at the end: "Text me again and see if I do.", "Sweetheart, it's midnight. Go to sleep.", "You ever get your food?", "would you be mad if matt wasn't exactly.. real" / "What?" | photo carousel of 8 to 16 tight crops, 2 or 3 bubbles each, dark |
+| @unicornsprinklewaffles | 4.7M, 4.0M, 3.7M, 3.6M, 2.8M, 1.9M, 1.6M, 1.5M | one sincere line from him, zoomed in: "there's nobody i want more than you on either of the days", "I lack the vocabulary to describe you", "You're probably the best thing that will ever happen to me", "Aaaand she's asleep / Night baby", "are you nervous?? / A little / You're very pretty" | a 9 to 15 second **video** of one still, mostly light mode, no caption, a calm sound; 26K to 226K shares each |
+| @36grm | 10.3M, 5.8M, 5.2M, 4.1M, 3.6M, 2.2M, 1.9M, 1.7M, 1.0M | one screenshot whose last line flips it: the dinosaur (10.3M), the party draft (5.8M), "where i'm cheating at" (5.2M), "yesterday would've been our 2 year anniversary" (2.2M), "I'm insulting you" (1.9M), "none" (1.0M) | a 10 second **video** of one still, iOS 26, sometimes a photo of the phone; caption "#targetaudience" |
+| @unknown649382 | 929K | exes at 9 PM: "67 / sorry I was seeing if I was blocked" … "can we say it one more time?" / "I love you sweetheart" | 3 crops, dark, on a 973-follower account |
+
+What changes from 475 to 509:
+- **A one-image post goes up as a video, not a photo.** Every 1M+ single screenshot above is a 9 to 15
+  second still video with a sound: it loops while people read, and time watched is what gets pushed.
+  `scripts/tiktok-still-video.swift` makes the MP4 (1080×1920, the picture centred on black).
+- **A story is many tiny crops.** @savgilbertt's 7.1M is 8 crops of 2 or 3 bubbles each. One swipe, one
+  beat, and his dry line ends every crop.
+- **New lines on their shapes, never their lines.** 475 to 504 reused the jokes themselves; these keep the
+  mechanism and write it fresh.
+- **The gift is the turn of each story,** never something stuck on after the joke: the proof he remembers,
+  the draft she can't send, the thing he made instead of a paragraph, the one thing exes can't let go of, the
+  soft moment of the grumpy guy.
+
+| | Account | Blueprint | The turn |
+|---|---|---|---|
+| 510 | 1 (video) | 36grm "yesterday", 2.2M | "lose this number" … "it was yesterday" / "i still made it" + link |
+| 511 | 1 (video) | 36grm party draft, 5.8M | "oh cute" / "thank you 🙂" / "thats it?", draft: "im literally crying in the walmart parking lot" |
+| 512 | 1 (video) | 36grm "none", 1.0M | "did you even open it" / "once" / "once??" / "once an hour" |
+| 513 | 1 (video) | unicornsprinklewaffles, 4.7M / 3.6M | "i tried writing you a paragraph / deleted it like 4 times … so i made this instead" + link, typing dots |
+| 514 | 1 (video) | 36grm reversals | link sent Sep 23 … "you never do anything romantic anymore" / "scroll up" |
+| 515 | 2 (9 crops) | savgilbertt grumpy/bubbly, 7.1M / 1.7M | he won't say it first; the link, "Don't make it a thing."; "I love you. Now go to sleep." |
+| 516 | 2 (4 crops) | unknown649382 exes, 929K | "you could've taken it down" … "because then it's actually over" |
+| 517 | 2 (3 crops) | unicornsprinklewaffles "are you nervous??", 1.6M | "I made you something before I picked you up / In case it went well" |
+| 518 | 2 (6 crops) | savgilbertt "matt wasn't real", 1.0M | "a guy at work made me something" … "Better than his?" … "there was no guy" / "Unfortunately." |
+| 519 | 2 (6 crops) | savgilbertt #wrongtexttrend, 7.1M | her gift for Leo sent to a stranger: "He's lucky. Send it." / "Happy 3 months. Lose this number." |
+
+The renderer gained one thing for 511: a long draft now wraps and grows the message bar the way Messages
+does, instead of being cut off.
+
+**Sounds.** The 1M+ posts use calm, quiet tracks: "(dream)" by salvia palth, "lovers rock", "Paper Moon
+Static" by Marnie Cusk, "Dream Girl" by Crisaunt, "Indigo Glissando", "On The Square" by Mac DeMarco, or an
+"original sound" clip of one of them. Pick one that is trending in TikTok's sound picker and keep it low.
+
+**Posting.** Account 1 gets the videos: 511, 510, 514, 512, 513. Account 2 gets the carousels: 515, 519, 518,
+516, 517. Three per account on the first evening, 6 to 10 pm New York time, about 90 minutes apart; the other
+two the next evening. These accounts post daily, several times a day.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
