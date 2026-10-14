@@ -1,0 +1,102 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok be honest"
+        },
+        {
+          "from": "me",
+          "text": "is this too much for 3 months"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for leo 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Wrong number."
+        },
+        {
+          "from": "me",
+          "text": "OH MY GOD"
+        },
+        {
+          "from": "me",
+          "text": "sorry!!"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's not too much."
+        },
+        {
+          "from": "me",
+          "text": "wait really??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "He's lucky."
+        },
+        {
+          "from": "them",
+          "text": "Send it."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "sent!!"
+        },
+        {
+          "from": "me",
+          "text": "hes typing omg"
+        },
+        {
+          "from": "them",
+          "text": "Good."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "HE SAID HES CRYING 😭",
+          "status": "Read 10:02 PM"
+        },
+        {
+          "from": "them",
+          "text": "Happy 3 months. Lose this number."
+        }
+      ]
+    }
+  ]
+}
