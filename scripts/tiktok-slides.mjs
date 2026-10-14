@@ -25,7 +25,7 @@
  * message the moon and "mylove has notifications silenced" (`"silenced": "mylove"` in the script,
  * per slide to change or `false` to hide it), then the message bar with its round + and the mic.
  * A slide's `"input": "can you come see me"` is a draft typed in the bar, with the caret and the
- * blue send button. `"swiped": true` is the thread dragged left to show the times: each message
+ * blue send button; a draft too long for one line wraps and grows the bar, as Messages does. `"swiped": true` is the thread dragged left to show the times: each message
  * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put. Keep it
  * to plain text bubbles, as in the reference: a time floating beside a link card read as fake.
  *
@@ -363,15 +363,17 @@ const IOS26_CSS = `
     .ios26 .status{color:#A2A2A6;padding-right:56px}
     .focus{display:flex;align-items:center;justify-content:center;gap:12px;color:#8388EE;font-size:34px;letter-spacing:-.25px;margin-top:46px}
     .focus svg{width:36px;height:36px;flex:none}
-    .bar{display:flex;align-items:center;gap:32px;margin-top:58px}
-    .plus{width:118px;height:118px;border-radius:50%;background:#171717;box-shadow:inset 0 0 0 3px #2C2C2C;display:grid;place-items:center;flex:none}
+    /* A long draft grows the field upwards a line at a time, as Messages does, with the + and the send
+       button staying on the bottom line; one line is still the 124px capsule. */
+    .bar{display:flex;align-items:flex-end;gap:32px;margin-top:58px}
+    .plus{width:118px;height:118px;border-radius:50%;background:#171717;box-shadow:inset 0 0 0 3px #2C2C2C;display:grid;place-items:center;flex:none;margin-bottom:3px}
     .plus svg{width:50px;height:50px}
     .field{flex:1;min-width:0;height:124px;border-radius:62px;background:#181818;box-shadow:inset 0 0 0 3px #2C2C2C;display:flex;align-items:center;gap:20px;padding:0 34px 0 48px;box-sizing:border-box}
     .field .hint{flex:1;color:#727272;font-size:52px;letter-spacing:-.7px}
     .field .mic{width:40px;height:58px;color:#7A7A7A;flex:none}
-    .field.typed{padding-right:14px}
-    .draft{flex:1;min-width:0;color:#fff;font-size:52px;letter-spacing:-.7px;white-space:nowrap;overflow:hidden}
-    .caret{display:inline-block;width:5px;height:64px;margin-left:3px;border-radius:3px;background:${IOS26_BLUE};vertical-align:-14px}
+    .field.typed{height:auto;min-height:124px;align-items:flex-end;padding:13px 14px 13px 48px}
+    .draft{flex:1;min-width:0;color:#fff;font-size:52px;letter-spacing:-.7px;line-height:64px;padding:17px 0;overflow-wrap:break-word}
+    .caret{display:inline-block;width:5px;height:64px;margin-left:3px;border-radius:3px;background:${IOS26_BLUE};vertical-align:top}
     .send{width:98px;height:98px;border-radius:50%;background:${IOS26_BLUE};display:grid;place-items:center;flex:none}
     .send svg{width:54px;height:54px}
     .swiped .row{display:grid;grid-template-columns:minmax(0,1fr) 190px;align-items:center}
