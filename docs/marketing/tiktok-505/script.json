@@ -1,0 +1,106 @@
+{
+  "demo": {
+    "template": "be-my-boo",
+    "steps": [
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"tap the ghost\"",
+      "wait 250",
+      "shot gift-2.png",
+      "wait 3850",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what are we"
+        },
+        {
+          "from": "them",
+          "text": "what do u mean"
+        },
+        {
+          "from": "me",
+          "text": "its been 4 months leo"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "so what are we"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so what are we"
+        },
+        {
+          "from": "them",
+          "text": "hold on"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🎃",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i redownloaded hinge this morning"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "me",
+          "text": "i have a date friday"
+        },
+        {
+          "from": "me",
+          "text": "cancelling it. yes obviously yes",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya who is friday"
+        }
+      ]
+    }
+  ]
+}
