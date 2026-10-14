@@ -1,0 +1,42 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "bokeh",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:41 PM",
+      "input": "im literally crying in the walmart parking lot",
+      "messages": [
+        {
+          "from": "them",
+          "text": "made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "oh cute"
+        },
+        {
+          "from": "me",
+          "text": "thank you 🙂",
+          "status": "Read 8:42 PM"
+        },
+        {
+          "from": "them",
+          "text": "thats it?"
+        }
+      ]
+    }
+  ]
+}
