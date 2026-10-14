@@ -1,0 +1,40 @@
+{
+  "crop": true,
+  "theme": "light",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i tried writing you a paragraph"
+        },
+        {
+          "from": "them",
+          "text": "deleted it like 4 times"
+        },
+        {
+          "from": "them",
+          "text": "im not good at saying stuff"
+        },
+        {
+          "from": "them",
+          "text": "so i made this instead"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "typing": true
+        }
+      ]
+    }
+  ]
+}
