@@ -1,0 +1,76 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Thu|11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "yeah"
+        },
+        {
+          "from": "them",
+          "text": "dont go to sleep yet"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "2 more mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Fri|12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "wanted to be the first one"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          },
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Fri|12:05 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u never stay up past 10"
+        },
+        {
+          "from": "them",
+          "text": "set 3 alarms"
+        },
+        {
+          "from": "me",
+          "text": "leo im crying"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday maya. go to sleep"
+        }
+      ]
+    }
+  ]
+}
