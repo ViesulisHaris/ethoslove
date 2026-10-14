@@ -1,0 +1,48 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "Leo 🤍",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "today would've been 2 years"
+        },
+        {
+          "from": "them",
+          "text": "lose this number"
+        },
+        {
+          "from": "me",
+          "text": "you're right"
+        },
+        {
+          "from": "me",
+          "text": "i'm sorry",
+          "status": "Read 11:53 PM"
+        },
+        {
+          "from": "them",
+          "text": "it was yesterday"
+        },
+        {
+          "from": "them",
+          "text": "i still made it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "2 years 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}
