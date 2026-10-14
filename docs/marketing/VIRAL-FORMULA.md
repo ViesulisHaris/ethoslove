@@ -2041,6 +2041,58 @@ Same caption and hashtag rules as 495–499. Every caption is a TikTok search su
 
 **Post order:** 500, 501, 503, 502, 504.
 
+### 505 to 509: back to what this account did itself (14 Oct)
+
+The owner, on 475 to 504: they "didn't go viral at all". Those batches copied other accounts' one-image
+jokes. This account's own hits, from September, were built differently:
+
+| | The account's own hits (Sept) | 475 to 504 (Oct) |
+|---|---|---|
+| Story | ours, new | someone else's joke, already at 1.6M to 9.5M views |
+| Slides | 3 (the midnight ones) to 10 (149: two chat, seven frames of the gift being opened, one chat) | 1 or 2 |
+| Gift | the turn of the story, shown being opened, or the link card that is the whole point | a link card added after the joke |
+| Ending | his question with her name in it, so the room argues or saves | a punchline: laugh and scroll |
+| Look | full-screen dark iMessage, nothing typed over it | cropped iOS 26 screenshots |
+
+Why the copies most likely did nothing:
+- **Everyone who likes the joke has already seen it.** A copy of a 9.5M post shows people a punchline
+  they know.
+- **One image is two seconds.** A story over six slides keeps people swiping, and every swipe is time
+  spent on the post.
+- **The gift was an extra.** In 149 the gift *was* the turn, and the frames of it opening were the part
+  that sold.
+
+So 505 to 509 go back to the account's two engines, as new stories, with the rules learned since: Maya
+and Leo only, nothing in the chat says what's inside the gift, short and cold, no 💅. Three use the
+comments engine (149), each showing one of the new Halloween and autumn templates being opened. Two are
+chat only: the saves engine (30), and a comments story told on the link card alone, as a test.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 505 | comments (149) | "what are we" / "its been 4 months leo" | Be My Boo | "i have a date friday" | "maya who is friday" |
+| 506 | comments (149) | "did i do something" / 'u said "nice" to my selfie' / "it was nice" | Fall for You | "she was so happy" | "maya why was she happy" |
+| 507 | comments (149) | "why dont u ever post me" / "once. in march" | Autumn Reel | "it was very healing" | "maya unarchive us" |
+| 508 | saves (30) | 11:58 PM "are u awake" → 12:00 AM "wanted to be the first one" | link only | "set 3 alarms" | "happy birthday maya. go to sleep" |
+| 509 | comments, no frames | "are we ok" / "u havent called me in 3 days" | link only | "i said thank u" | "maya what did u tell it about me" |
+
+Captions keep the search rule. Each first line is a TikTok suggestion checked on 14 Oct: "situationship to
+relationship", "what does it mean when he says nice", "he doesnt post me", "first one to say happy
+birthday", "i asked chat gpt about you". None gives the twist away.
+
+The gift frames are the live demos, captured with `scripts/tiktok-demo-frames.mjs`. The demos already say
+Maya and Leo, so no swaps are needed:
+- **Be My Boo:** shot, `tap "tap the ghost"`, 250 ms for the "boo!", about 4 s more for the first page.
+- **Fall for You:** shot, `tap "light the candle"`, 300 ms for the flame, about 4 s more for the page.
+- **Autumn Reel:** shot, `tap "tap to develop"`, 1 s for the developed photos, about 3.5 s more for the
+  page.
+
+**Post order:** 505, 508, 506, 507, 509. One a night, 7 to 10 pm New York time. Reply as Maya in the first
+hour.
+
+**Check the account before blaming the post.** If a post has under a few hundred views after an hour, the
+account is being held back, not the post: rosie's post on 10 Oct had 4 views, against 100K to 1.3M for its
+September posts. Post the same carousel on a healthy account, and leave the held one alone for a week.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
