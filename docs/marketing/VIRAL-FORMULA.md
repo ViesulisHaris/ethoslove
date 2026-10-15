@@ -2142,6 +2142,20 @@ Static" by Marnie Cusk, "Dream Girl" by Crisaunt, "Indigo Glissando", "On The Sq
 516, 517. Three per account on the first evening, 6 to 10 pm New York time, about 90 minutes apart; the other
 two the next evening. These accounts post daily, several times a day.
 
+### 520 and 521: two with no link at all (15 Oct)
+
+The owner asked for two plain screenshots without tryethos, "just like a simple convo that will go viral".
+These are reach posts: one image each, posted as a 10-second video. Neither has a name, a product or a
+punchline someone else already used.
+
+| | Shape | The chat |
+|---|---|---|
+| 520 | @you_sir_naim's 4.5M: an ordinary detail shows one of them isn't over it | "why am i still on your spotify family" / "do you want me to remove you" / "we broke up in may" / "that's not what i asked" / "no" / "then stay" |
+| 521 | @36grm's two-camp reversals | "why were you active at 3am" / "couldn't sleep" / "for 2 hours?" / "how do you know it was 2 hours" |
+
+Captions follow the search rule: "my ex never took me off his spotify family plan 💔" and "when it says he was
+active at 3am 💀". Post one on each account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
