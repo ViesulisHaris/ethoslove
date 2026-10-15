@@ -1,0 +1,31 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why were you active at 3am"
+        },
+        {
+          "from": "them",
+          "text": "couldn't sleep"
+        },
+        {
+          "from": "me",
+          "text": "for 2 hours?",
+          "status": "Read 9:16 AM"
+        },
+        {
+          "from": "them",
+          "text": "how do you know it was 2 hours"
+        }
+      ]
+    }
+  ]
+}
