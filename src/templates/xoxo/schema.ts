@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const fieldsSchema = z.object({
-  look: z.enum(["cream", "blush", "lilac", "blue", "sage", "mocha", "noir"]).default("cream"),
+  look: z.enum(["cream", "blush", "lilac", "blue", "sage", "mocha", "noir", "rose", "gothic", "letters"]).default("cream"),
   /** What you call them, in cut-out newspaper letters. Defaults to "my person". */
   headline: z.string().trim().max(16).optional(),
   /** The lines you would underline, on the card under the first photo. */

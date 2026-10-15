@@ -35,6 +35,12 @@ export type GiftRendererProps = {
   replayKey?: number;
   /** Show this cover regardless of the gift's own choice (demo pages, `?cover=`). */
   coverOverride?: CoverId;
+  /**
+   * Show the demo in another of the template's looks (`?look=` on a demo page), so each can be seen
+   * and recorded without making a gift. The template checks it against its own looks and opens on
+   * its first for one it doesn't have.
+   */
+  lookOverride?: string;
   /** Called when the recipient opens the cover: the moment a view counts. */
   onCoverOpened?: () => void;
   className?: string;
@@ -56,6 +62,7 @@ export function GiftRenderer({
   replyMode = false,
   replayKey = 0,
   coverOverride,
+  lookOverride,
   onCoverOpened,
   className,
 }: GiftRendererProps) {
@@ -85,7 +92,11 @@ export function GiftRenderer({
   }, [mode, replayKey]);
 
   const base: GiftData | null = data ?? mod?.demoData[demoLocale] ?? mod?.demoData.en ?? null;
-  const resolved = useMemo(() => (base && coverOverride ? { ...base, cover: coverOverride } : base), [base, coverOverride]);
+  const resolved = useMemo(() => {
+    if (!base) return base;
+    const covered = coverOverride ? { ...base, cover: coverOverride } : base;
+    return lookOverride ? { ...covered, fields: { ...covered.fields, look: lookOverride } } : covered;
+  }, [base, coverOverride, lookOverride]);
   const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview");
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
 

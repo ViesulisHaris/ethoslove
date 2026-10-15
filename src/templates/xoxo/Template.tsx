@@ -21,11 +21,12 @@ import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScrollHint, useReadProgress } from "../_shared/collage/kit";
 import { Snippet } from "../_shared/collage/cards";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
+import { printed } from "../_shared/collage/paper";
 import { RansomRows } from "../_shared/collage/ransom";
 import { playChime, playPaper, playSmooch } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { CoverBits, Envelope, HeartScribble, LinesCard, MarkedLines } from "./art";
-import { addKiss, highlightPlan, kissAt, LOOKS, type Kiss, type Look, type LookId } from "./looks";
+import { addKiss, decor, highlightPlan, kissAt, LOOKS, type DecorSlot, type Kiss, type Look, type LookId } from "./looks";
 import { fieldsSchema, type XoxoFields } from "./schema";
 
 type Copy = { open: string; to: string; sealed: string; scroll: string; tap: string; headline: string; lines: string; word: string; yours: string; cardTitle: string };
@@ -36,6 +37,9 @@ const S: Record<"en" | "es", Copy> = {
 };
 
 type Stage = "sealed" | "opening" | "open";
+
+/** The page's print, for a look that has one: polka dots or pinstripes under the paper grain. */
+const printOf = (look: Look): CSSProperties => (look.print ? printed(look.print.kind, look.print.ink, "calc(5*var(--p))") : {});
 type Data = TemplateProps<XoxoFields>["data"];
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<XoxoFields>) {
@@ -88,7 +92,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const unit = size.ready ? Math.min(size.width / 100, 5.4) : 3.9;
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...vars }}>
+    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...printOf(look), ...vars }}>
       <style>{COLLAGE_KEYFRAMES}</style>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 mix-blend-multiply" style={{ backgroundImage: PAPER_GRAIN, opacity: look.dark ? 0.3 : 0.6 }} />
       <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
@@ -139,7 +143,7 @@ export function Opening({ fields, recipientName, locale }: OpeningProps) {
   const parsed = fieldsSchema.safeParse(fields);
   const look = LOOKS[parsed.success && parsed.data.look in LOOKS ? parsed.data.look : "cream"];
   return (
-    <div className="absolute inset-0 grid place-items-center overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
+    <div className="absolute inset-0 grid place-items-center overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, ...printOf(look), "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 mix-blend-multiply" style={{ backgroundImage: PAPER_GRAIN, opacity: look.dark ? 0.3 : 0.6 }} />
       <Sealed look={look} s={S[locale] ?? S.en} name={recipientName} opening={false} reduce />
     </div>
@@ -170,6 +174,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
   const preview = mode === "preview";
   const openPhoto = preview ? undefined : setActive;
   const context = useMemo(() => ({ container: scroller, still, unit }), [still, unit]);
+  const d = (slot: DecorSlot) => decor(look, slot);
 
   // A tap on the page, anywhere that isn't a photo or a button, leaves a kiss there.
   const kiss = (e: MouseEvent<HTMLDivElement>) => {
@@ -189,14 +194,14 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
           <div ref={column} className="relative mx-auto w-[calc(100*var(--p))] pt-[calc(9*var(--p))] pb-[calc(72px+env(safe-area-inset-bottom))]">
             <section className="relative h-[calc(196*var(--p))]">
               <Piece x={80} y={20} w={72} rotate={180} z={1} drift={4} entrance="none">
-                <Scrap id="lace-red" shadow={false} eager style={{ opacity: look.dark ? 0.9 : 0.8 }} />
+                <Scrap {...d("lace")} shadow={false} eager style={{ opacity: look.dark ? 0.9 : 0.8 }} />
               </Piece>
               <div className="absolute top-[calc(1*var(--p))] left-[calc(5*var(--p))] z-[5]">
                 <RansomRows rows={rows} size={letter} tiles={look.tiles} seed={seed % 83} className="!items-start" />
               </div>
 
               <Piece x={45} y={76} w={88} rotate={-8} z={2} drift={3} entrance="bloom" delay={0.1}>
-                <Scrap id="doily-red" shadow={false} eager />
+                <Scrap {...d("doily")} shadow={false} eager />
               </Piece>
               <Piece x={45} y={75} w={66} rotate={-5} z={4} entrance="drop" delay={0.3}>
                 <Polaroid photo={hero} lip={14} paper={look.paper} onOpen={openPhoto && hero ? () => openPhoto(hero) : undefined} still={still}>
@@ -211,16 +216,16 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                 </Polaroid>
               </Piece>
               <Piece x={77} y={38} w={23} rotate={16} z={7} entrance="bloom" delay={0.75}>
-                <Scrap id="bow-red" eager />
+                <Scrap {...d("bow")} eager />
               </Piece>
               <Piece x={86} y={58} w={34} rotate={18} z={6} entrance="stamp" delay={0.95}>
-                <Scrap id="kiss-red" eager />
+                <Scrap {...d("kissA")} eager />
               </Piece>
               <Piece x={8} y={121} w={26} rotate={-24} z={6} entrance="stamp" delay={1.15}>
-                <Scrap id="kiss-1" eager />
+                <Scrap {...d("kissB")} eager />
               </Piece>
               <Piece x={83} y={119} w={28} rotate={10} z={3} entrance="stamp" delay={1.3}>
-                <Scrap id="kiss-dark" eager />
+                <Scrap {...d("kissC")} eager />
               </Piece>
 
               <Piece x={57} y={158} w={78} rotate={2} z={8} entrance="right" delay={0.2}>
@@ -229,7 +234,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                 </LinesCard>
               </Piece>
               <Piece x={12} y={146} w={25} rotate={-14} z={9} entrance="stamp" delay={0.5}>
-                <Scrap id="heart-print" />
+                <Scrap {...d("heartPrint")} />
               </Piece>
             </section>
 
@@ -244,7 +249,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
             {second ? (
               <section className="relative" style={{ height: `calc(${pairH} * var(--p))` }}>
                 <Piece x={15} y={26} w={30} rotate={-10} z={5} drift={4} entrance="left">
-                  <Scrap id="heart-anatomical" />
+                  <Scrap {...d("heartBig")} />
                 </Piece>
                 <Piece x={17} y={50} w={26} rotate={-6} z={6} entrance="stick" delay={0.2}>
                   <Snippet paper={look.paper} ink={look.paperInk} font="'Courier New', ui-monospace, monospace" size={3} className="w-full tracking-[0.12em] uppercase">
@@ -259,12 +264,12 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                   </Polaroid>
                 </Piece>
                 <Piece x={92} y={92} w={26} rotate={-16} z={6} entrance="stamp" delay={0.3}>
-                  <Scrap id="kiss-2" />
+                  <Scrap {...d("kiss2")} />
                 </Piece>
                 {third ? (
                   <>
                     <Piece x={25} y={100} w={23} rotate={22} z={3} entrance="stamp" delay={0.1}>
-                      <Scrap id="kiss-3" />
+                      <Scrap {...d("kiss3")} />
                     </Piece>
                     <Piece x={37} y={140} w={60} rotate={-6} z={4} entrance="left">
                       <Polaroid photo={third} lip={9} paper="#131011" onOpen={openPhoto ? () => openPhoto(third) : undefined} still={still}>
@@ -272,13 +277,13 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                       </Polaroid>
                     </Piece>
                     <Piece x={64} y={106} w={21} rotate={-18} z={7} entrance="bloom" delay={0.25}>
-                      <Scrap id="bow-red" />
+                      <Scrap {...d("bowSmall")} />
                     </Piece>
                     <Piece x={84} y={138} w={32} rotate={5} z={5} entrance="stick" delay={0.2}>
-                      <Scrap id="cats-kiss" />
+                      <Scrap {...d("plush")} />
                     </Piece>
                     <Piece x={84} y={170} w={19} rotate={12} z={5} entrance="bloom" delay={0.3}>
-                      <Scrap id="heart-damask" shadow={false} />
+                      <Scrap {...d("damask")} shadow={false} />
                     </Piece>
                   </>
                 ) : null}
@@ -288,7 +293,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
             {rest.length ? (
               <section className="relative" style={{ height: `calc(${scatterHeight(rest.length)} * var(--p))` }}>
                 <Piece x={22} y={62} w={70} rotate={24} z={1} drift={4} entrance="none">
-                  <Scrap id="lace-red" shadow={false} style={{ opacity: look.dark ? 0.85 : 0.7 }} />
+                  <Scrap {...d("lace2")} shadow={false} style={{ opacity: look.dark ? 0.85 : 0.7 }} />
                 </Piece>
                 {rest.map((photo, i) => (
                   <Piece key={photo.id} {...spots[i]} z={4 + (i % 2)} entrance={i % 2 ? "right" : "left"} delay={(i % 2) * 0.12}>
@@ -298,14 +303,14 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
                   </Piece>
                 ))}
                 <Piece x={50} y={10} w={24} rotate={-12} z={7} entrance="stamp">
-                  <Scrap id="kiss-4" />
+                  <Scrap {...d("kiss4")} />
                 </Piece>
                 <Piece x={50} y={70} w={20} rotate={14} z={7} entrance="stamp" delay={0.2}>
-                  <Scrap id="heart-print-pink" />
+                  <Scrap {...d("heartPink")} />
                 </Piece>
                 {rest.length > 2 ? (
                   <Piece x={92} y={100} w={22} rotate={20} z={7} entrance="stamp" delay={0.1}>
-                    <Scrap id="kiss-dark" />
+                    <Scrap {...d("kissLast")} />
                   </Piece>
                 ) : null}
               </section>
@@ -314,7 +319,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
             {/* the letter, typed, with a plaster over the corner and a kiss by the name */}
             <section className="relative mt-[calc(8*var(--p))] px-[calc(5*var(--p))]">
               <Piece x={16} y={1} w={36} rotate={-14} z={4} entrance="stick">
-                <Scrap id="plaster-heart" />
+                <Scrap {...d("plaster")} />
               </Piece>
               <div className="relative z-[2] px-[calc(6*var(--p))] pt-[calc(12*var(--p))] pb-[calc(12*var(--p))]" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, color: look.paperInk, boxShadow: "0 calc(1.6*var(--p)) calc(4*var(--p)) rgba(30,5,10,.3)" }}>
                 <span aria-hidden="true" className="pointer-events-none absolute inset-[calc(2*var(--p))] border-double" style={{ borderColor: look.red, borderWidth: "calc(.9*var(--p))", opacity: 0.8 }} />
@@ -324,7 +329,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
               </div>
               <div className="absolute inset-x-0 bottom-0 h-0">
                 <Piece x={80} y={-3} w={30} rotate={-12} z={4} entrance="stamp" delay={0.3}>
-                  <Scrap id="kiss-red" />
+                  <Scrap {...d("sign")} />
                 </Piece>
               </div>
             </section>
@@ -349,7 +354,7 @@ function Page({ look, s, data, fields, mode, still, unit, muted, onEvent, onReac
             {/* the kisses they have left, where they left them */}
             {kisses.map((k) => (
               <motion.div key={k.id} data-kiss="" aria-hidden="true" className="pointer-events-none absolute z-[20]" style={{ left: `calc(${k.x} * var(--p))`, top: `calc(${k.y} * var(--p))`, width: `calc(${k.w} * var(--p))`, x: "-50%", y: "-50%" }} initial={still ? false : { scale: 2.2, opacity: 0, rotate: k.rotate + 18 }} animate={{ scale: 1, opacity: 0.95, rotate: k.rotate }} transition={{ type: "spring", stiffness: 520, damping: 24, mass: 0.7 }}>
-                <Scrap id={k.scrap} eager shadow={false} />
+                <Scrap id={k.scrap} tone={look.kissTone} eager shadow={false} />
               </motion.div>
             ))}
           </div>

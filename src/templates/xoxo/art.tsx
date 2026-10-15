@@ -7,8 +7,7 @@ import type { GiftMusic, GiftPhoto } from "@/lib/gift/schema";
 import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
 import { FitName } from "../_shared/FitName";
 import { Scrap } from "../_shared/collage/kit";
-import type { ScrapId } from "../_shared/collage/scraps";
-import type { Highlight, Look, Mark } from "./looks";
+import { decor, type DecorSlot, type Highlight, type Look, type Mark } from "./looks";
 
 /** How the cover's pieces leave when the envelope opens: slow off the mark, then gone. */
 const LEAVE = [0.5, 0, 0.75, 0] as const;
@@ -22,11 +21,11 @@ export function Envelope({ look, name, to, opening, reduce }: { look: Look; name
     <div className="relative w-full">
       {/* the doily it was left on, and a bow on its corner: both go as it opens */}
       <motion.div aria-hidden="true" className="pointer-events-none absolute top-[56%] left-[44%] w-[90%]" style={{ x: "-50%", y: "-50%", rotate: -12 }} initial={reduce ? false : { opacity: 0, scale: 0.6, rotate: -40 }} animate={opening ? { opacity: 0, scale: 1.1, rotate: -4 } : { opacity: look.dark ? 0.85 : 0.95, scale: 1, rotate: -12 }} transition={opening ? { duration: reduce ? 0.15 : 0.5, ease: LEAVE } : { type: "spring", stiffness: 70, damping: 14, delay: 0.15 }}>
-        <Scrap id="doily-red" shadow={false} eager />
+        <Scrap {...decor(look, "envelopeDoily")} shadow={false} eager />
       </motion.div>
       <EnvelopeBody look={look} name={name} to={to} opening={opening} reduce={reduce} />
       <motion.div aria-hidden="true" className="pointer-events-none absolute top-[-11%] left-[-7%] z-[5] w-[26%]" style={{ rotate: -20 }} initial={reduce ? false : { opacity: 0, scale: 0.4, rotate: -60 }} animate={opening ? { opacity: 0, x: "-80%", y: "-80%", rotate: -70 } : { opacity: 1, scale: 1, rotate: -20 }} transition={opening ? { duration: reduce ? 0.15 : 0.5, ease: LEAVE } : { type: "spring", stiffness: 260, damping: 15, delay: 1 }}>
-        <Scrap id="bow-satin-mini" eager />
+        <Scrap {...decor(look, "envelopeBow")} eager />
       </motion.div>
     </div>
   );
@@ -68,13 +67,13 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
       </motion.div>
       {/* the seal */}
       <motion.div className="absolute top-[44%] left-1/2 z-[4] w-[34%]" style={{ x: "-50%", y: "-50%", rotate: -8 }} animate={opening ? { scale: [1, 1.35, 1.2], opacity: [1, 1, 0] } : { scale: 1, opacity: 1 }} transition={{ duration: reduce ? 0.15 : 0.5, times: [0, 0.4, 1] }}>
-        <Scrap id="kiss-red" eager />
+        <Scrap {...decor(look, "seal")} eager />
       </motion.div>
     </div>
   );
 }
 
-type Bit = { id: ScrapId; x: number; y: number; w: number; rotate: number; edge: "top" | "bottom"; delay: number };
+type Bit = { slot: DecorSlot; x: number; y: number; w: number; rotate: number; edge: "top" | "bottom"; delay: number };
 
 /**
  * What is stuck round the sealed envelope: the lace and lipstick of the page it opens onto, so
@@ -84,10 +83,10 @@ type Bit = { id: ScrapId; x: number; y: number; w: number; rotate: number; edge:
  * reaches the middle band, the "open it" pill or the badge under it.
  */
 const COVER_BITS: Bit[] = [
-  { id: "lace-red", x: 78, y: 17, w: 76, rotate: 180, edge: "top", delay: 0 },
-  { id: "kiss-red", x: 18, y: 23, w: 30, rotate: -14, edge: "top", delay: 0.35 },
-  { id: "heart-print", x: 16, y: 40, w: 23, rotate: -12, edge: "bottom", delay: 0.55 },
-  { id: "kiss-1", x: 84, y: 44, w: 25, rotate: 16, edge: "bottom", delay: 0.7 },
+  { slot: "coverA", x: 78, y: 17, w: 76, rotate: 180, edge: "top", delay: 0 },
+  { slot: "coverB", x: 18, y: 23, w: 30, rotate: -14, edge: "top", delay: 0.35 },
+  { slot: "coverC", x: 16, y: 40, w: 23, rotate: -12, edge: "bottom", delay: 0.55 },
+  { slot: "coverD", x: 84, y: 44, w: 25, rotate: 16, edge: "bottom", delay: 0.7 },
 ];
 
 /**
@@ -98,17 +97,18 @@ export function CoverBits({ look, opening, reduce }: { look: Look; opening: bool
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-1/2 w-[calc(100*var(--p))] -translate-x-1/2">
       {COVER_BITS.map((b) => {
-        const lace = b.id === "lace-red";
+        // The first is the lace in the corner (or what a look lays there instead): it slides in, the rest land like stamps.
+        const lace = b.slot === "coverA";
         const away = reduce ? {} : { x: `${(b.x - 50) * 2}%`, y: b.edge === "top" ? "-60%" : "60%" };
         return (
-          <div key={b.id} className="absolute" style={{ left: `calc(${b.x} * var(--p))`, [b.edge]: `calc(${b.y} * var(--p))`, width: `calc(${b.w} * var(--p))`, translate: b.edge === "top" ? "-50% -50%" : "-50% 50%" }}>
+          <div key={b.slot} className="absolute" style={{ left: `calc(${b.x} * var(--p))`, [b.edge]: `calc(${b.y} * var(--p))`, width: `calc(${b.w} * var(--p))`, translate: b.edge === "top" ? "-50% -50%" : "-50% 50%" }}>
             <motion.div
               style={{ rotate: b.rotate }}
               initial={reduce ? false : lace ? { opacity: 0, x: "14%", y: "-14%" } : { opacity: 0, scale: 2.2, rotate: b.rotate + 16 }}
               animate={opening ? { opacity: 0, ...away } : { opacity: 1, scale: 1, x: 0, y: 0, rotate: b.rotate }}
               transition={opening ? { duration: reduce ? 0.15 : 0.55, ease: LEAVE } : lace ? { duration: 0.9, ease: [0.2, 0.8, 0.2, 1], delay: b.delay } : { type: "spring", stiffness: 520, damping: 24, mass: 0.7, delay: 0.4 + b.delay }}
             >
-              <Scrap id={b.id} eager shadow={!lace} style={lace ? { opacity: look.dark ? 0.9 : 0.8 } : undefined} />
+              <Scrap {...decor(look, b.slot)} eager shadow={!lace} style={lace ? { opacity: look.dark ? 0.9 : 0.8 } : undefined} />
             </motion.div>
           </div>
         );

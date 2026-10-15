@@ -50,6 +50,24 @@ export const gingham = (band: string, size: string) => ({
   backgroundSize: `calc(2 * ${size}) calc(2 * ${size})`,
 });
 
+/** Pinstripes: a thin line of `band` every `size`, up the page, like ticking or shirting. */
+export const stripes = (band: string, size: string) => ({
+  backgroundImage: `linear-gradient(90deg, ${band} 0 22%, transparent 22% 100%)`,
+  backgroundSize: `${size} 100%`,
+});
+
+/** Polka dots of `dot`, `size` apart, every other row set half a step over, as on printed cotton. */
+export const dots = (dot: string, size: string) => ({
+  backgroundImage: `radial-gradient(${dot} 0 18%, transparent 21%), radial-gradient(${dot} 0 18%, transparent 21%)`,
+  backgroundSize: `${size} ${size}`,
+  backgroundPosition: `0 0, calc(${size} / 2) calc(${size} / 2)`,
+});
+
+export type Print = "gingham" | "stripes" | "dots";
+
+/** A page printed in `print`, in `ink`, at `size`: one of the three cottons a collage is laid on. */
+export const printed = (print: Print, ink: string, size: string) => (print === "stripes" ? stripes(ink, size) : print === "dots" ? dots(ink, size) : gingham(ink, size));
+
 /** A six-figure number that looks stamped: the same for the same two people. */
 export const ticketNumber = (seed: number): string => String(100000 + (seed % 900000));
 

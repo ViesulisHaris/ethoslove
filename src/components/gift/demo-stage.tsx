@@ -27,6 +27,12 @@ function useCoverParam(): CoverId | undefined {
   return raw === "classic" || Object.prototype.hasOwnProperty.call(COVER_LOOKS, raw) ? (raw as CoverId) : undefined;
 }
 
+/** `?look=`, read the same way: the demo in another of the template's looks. The template checks the name. */
+function useLookParam(): string | undefined {
+  const raw = useSyncExternalStore(noSubscribe, () => new URLSearchParams(window.location.search).get("look"), () => null);
+  return raw && /^[a-z]{1,20}$/.test(raw) ? raw : undefined;
+}
+
 /**
  * Full-screen live demo. The control strip sits in its own row above the template so it
  * never covers template controls (templates assume they own the whole viewport).
@@ -37,6 +43,7 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
   const t = useTranslations("templates");
   const [replayKey, setReplayKey] = useState(0);
   const cover = useCoverParam();
+  const look = useLookParam();
   // The app titles its own bar from its catalogue: no need to load every template's name here.
   useNativeReady("demo");
 
@@ -75,6 +82,7 @@ export function DemoStage({ slug, backHref = "/templates" }: { slug: string; bac
               mode="demo"
               demoLocale={locale}
               coverOverride={cover}
+              lookOverride={look}
               replayKey={replayKey}
               onReact={() => toast(t("demoReactionToast"))}
               onMakeOne={() => router.push(`/create/${slug}`)}

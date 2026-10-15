@@ -85,6 +85,32 @@ test.describe("XOXO", () => {
   });
 });
 
+// The demo opens in any look with ?look=, so each can be seen and recorded without making a gift;
+// the last three of each template bring cut-outs the others don't use at all.
+test.describe("Looks with their own cut-outs", () => {
+  const pieces = (page: Page) => page.locator("img[src*='/scraps/']").evaluateAll((imgs) => imgs.map((img) => (img as HTMLImageElement).src));
+
+  test("XOXO's Black roses has black roses and a wax seal where the red set was", async ({ page }) => {
+    await openPage(page, "/demo/xoxo?look=gothic", /open it/i);
+    const srcs = (await pieces(page)).join(" ");
+    expect(srcs).toContain("rose-black");
+    expect(srcs).toContain("bow-lace-black");
+    expect(srcs).not.toContain("bow-red");
+  });
+
+  test("Coquette's Burgundy roses has wine flowers and no Blush lily", async ({ page }) => {
+    await openPage(page, "/demo/coquette?look=rouge", /untie the bow/i);
+    const srcs = (await pieces(page)).join(" ");
+    expect(srcs).toContain("rose-oxblood");
+    expect(srcs).not.toContain("lily-pink");
+  });
+
+  test("an unknown look opens on the template's first", async ({ page }) => {
+    await openPage(page, "/demo/xoxo?look=tartan", /open it/i);
+    expect((await pieces(page)).join(" ")).toContain("bow-red");
+  });
+});
+
 test.describe("Keepsake", () => {
   test("breaks the seal, opens the locket, and scrolls to the letter", async ({ page }) => {
     await openPage(page, "/demo/keepsake", /break the seal/i);

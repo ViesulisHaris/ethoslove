@@ -23,12 +23,12 @@ import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Sticker } from "../_shared/covers/stickers";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScriptLines, ScrollHint, Shot, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
 import { CARD_KEYFRAMES, MusicCard, Postcard, PreviewMusicCard, Snippet, Stamp, Ticket } from "../_shared/collage/cards";
-import { gingham, scriptLines, ticketNumber } from "../_shared/collage/paper";
+import { printed, scriptLines, ticketNumber } from "../_shared/collage/paper";
 import { playChime, playRibbon } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { SatinBow, satinBand } from "./art";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
-import { arrangePhotos, LOOKS, stripHeight, type Look, type LookId } from "./looks";
+import { arrangePhotos, LOOKS, stripHeight, TRINKETS, type Look, type LookId } from "./looks";
 import { fieldsSchema, type CoquetteFields } from "./schema";
 
 type Copy = { untie: string; for: string; from: string; scroll: string; note: string; label: string; ticket: string; loveYou: string; pause: string; play: string; script: string };
@@ -90,7 +90,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const unit = size.ready ? Math.min(size.width / 100, 5.4) : 3.9;
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...gingham(look.check, "calc(6.25*var(--p))"), ...vars }}>
+    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...printed(look.print ?? "gingham", look.check, "calc(6.25*var(--p))"), ...vars }}>
       <style>{COLLAGE_KEYFRAMES + CARD_KEYFRAMES}</style>
       <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
         <Ambience layers={look.ambience} opacity={0.75} />
@@ -163,7 +163,7 @@ export function Opening({ fields, recipientName, senderName, locale }: OpeningPr
   const parsed = fieldsSchema.safeParse(fields);
   const look = LOOKS[parsed.success && parsed.data.look in LOOKS ? parsed.data.look : "blush"];
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, ...gingham(look.check, "calc(6.25*var(--p))"), "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, ...printed(look.print ?? "gingham", look.check, "calc(6.25*var(--p))"), "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
       <Wrapping look={look} s={S[locale] ?? S.en} recipientName={recipientName} senderName={senderName} untying={false} reduce bow="cq-bow-tile" />
     </div>
   );
@@ -183,6 +183,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
   const { hero, strip, scatter } = arrangePhotos(data.photos);
   const spots = scatterSpots(scatter.length);
   const f = look.flowers;
+  const trinket = look.trinkets ?? TRINKETS;
   // Music that plays under the gift gets the player card. A real song from Apple gets the same card,
   // heard only on a tap (PreviewMusicCard), and the end screen then leaves its own out.
   const song = backgroundMusic(data.music);
@@ -191,7 +192,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
   // An Apple song's card carries the link and Apple's credit too, so it stands a little taller.
   const heroH = hasSong ? (catalog ? 194 : 188) : 158;
   const stripH = Math.max(stripHeight(strip.length) + 16, 124);
-  const frame = { backgroundColor: look.frame, ...gingham(look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
+  const frame = { backgroundColor: look.frame, ...printed(look.print ?? "gingham", look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
   const open = mode === "preview" ? undefined : setActive;
   const context = useMemo(() => ({ container: scroller, still, unit }), [still, unit]);
   const paper = (n: number, sides = { top: true, right: true, bottom: true, left: true }) => ({ seed: seed + n, sides, color: look.scriptPaper, grain: PAPER_GRAIN, depth: 4 });
@@ -237,7 +238,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
               </Piece>
 
               <Piece x={84} y={30} w={27} rotate={12} z={6} entrance="bloom" delay={0.7}>
-                <Scrap id="bow-gingham" eager tone={look.tint} />
+                <Scrap id={trinket.bow} eager tone={look.tint} />
               </Piece>
               <Piece x={12} y={46} w={36} rotate={-16} z={5} drift={5} sway entrance="left" delay={0.55}>
                 <Scrap id={f.spray} eager tone={look.bloom} />
@@ -301,7 +302,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </div>
                 </Piece>
                 <Piece x={77} y={42} w={56} rotate={10} z={1} entrance="bloom">
-                  <Scrap id="doily-pink" shadow={false} tone={look.tint} style={{ opacity: 0.95 }} />
+                  <Scrap id={trinket.doily} shadow={!trinket.doily.startsWith("doily")} tone={look.tint} style={{ opacity: 0.95 }} />
                 </Piece>
                 <Piece x={75} y={36} w={38} rotate={-8} z={3} sway entrance="bloom" delay={0.1}>
                   <Scrap id={f.hibiscus} tone={look.bloom} />
@@ -319,7 +320,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </Piece>
                 {strip.length >= 3 ? (
                   <Piece x={77} y={120} w={38} rotate={5} z={3} entrance="stick" delay={0.1}>
-                    <Scrap id="cats-cuddle" />
+                    <Scrap id={trinket.plush} />
                   </Piece>
                 ) : null}
                 <Piece x={7} y={stripHeight(strip.length) + 4} w={22} rotate={-18} z={5} entrance="bloom" delay={0.3}>
@@ -346,10 +347,10 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </Piece>
                 ))}
                 <Piece x={50} y={9} w={20} rotate={-10} z={6} entrance="stamp">
-                  <Scrap id="heart-print-pink" tone={look.tint} />
+                  <Scrap id={trinket.heart} tone={look.tint} />
                 </Piece>
                 <Piece x={93} y={24} w={18} rotate={16} z={6} entrance="bloom" delay={0.2}>
-                  <Scrap id="star-felt" />
+                  <Scrap id={trinket.star} />
                 </Piece>
                 {scatter.length > 2 ? (
                   <>
