@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:41 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why am i still on your spotify family"
+        },
+        {
+          "from": "them",
+          "text": "do you want me to remove you"
+        },
+        {
+          "from": "me",
+          "text": "we broke up in may"
+        },
+        {
+          "from": "them",
+          "text": "that's not what i asked"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "status": "Read 12:43 AM"
+        },
+        {
+          "from": "them",
+          "text": "then stay"
+        }
+      ]
+    }
+  ]
+}
