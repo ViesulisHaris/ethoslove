@@ -1,0 +1,68 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you awake"
+        },
+        {
+          "from": "me",
+          "text": "it's 11:58"
+        },
+        {
+          "from": "me",
+          "text": "what do you want"
+        },
+        {
+          "from": "them",
+          "text": "i made you something in march"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for your birthday 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it was set to open on your birthday"
+        },
+        {
+          "from": "them",
+          "text": "i forgot to cancel it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "you didn't forget",
+          "status": "Read 12:01 AM"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday"
+        }
+      ]
+    }
+  ]
+}
