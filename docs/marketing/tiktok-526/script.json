@@ -1,0 +1,48 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "wallpaper": "rose",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:02 PM",
+      "messages": [
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|10:31 PM"
+        },
+        {
+          "from": "them",
+          "text": "did you get my reaction"
+        },
+        {
+          "from": "me",
+          "text": "the voice note?"
+        },
+        {
+          "from": "them",
+          "text": "yeah"
+        },
+        {
+          "from": "them",
+          "text": "was it too much"
+        },
+        {
+          "from": "me",
+          "text": "i've played it 11 times",
+          "status": "Read 10:33 PM"
+        }
+      ]
+    }
+  ]
+}
