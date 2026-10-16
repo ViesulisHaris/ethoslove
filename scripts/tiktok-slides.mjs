@@ -64,6 +64,7 @@
  * "[x] " a ticked one, "# " a heading, and "" a blank line.
  */
 import { chromium } from "@playwright/test";
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 
@@ -118,10 +119,39 @@ const OG_CSS = `
     .og-name{margin-top:6px;font-family:Newsreader,Georgia,serif;font-size:82px;line-height:1;letter-spacing:-2px;white-space:nowrap}
     .og-line{margin-top:8px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:31px;color:rgba(23,19,15,.62);white-space:nowrap}
     .og-domain{position:absolute;bottom:30px;font-family:Newsreader,Georgia,serif;font-size:15px;letter-spacing:4px;color:rgba(23,19,15,.4)}
+    .og-card{display:block;width:100%;height:100%;object-fit:cover}
 `;
 
-/** The preview image iMessage pulls from a gift link: tryethos.io's og:image, drawn to match. */
-const ogImage = (name, lang) => {
+/**
+ * The preview image iMessage pulls from a gift link: the real share card, the envelope on one of its
+ * four papers, drawn by scripts/share-card.mjs from the same code as /g/<id>/card.jpg and kept in
+ * docs/marketing/cards. A link's `"card": "blush" | "rouge" | "pressed" | "noir"` picks the paper
+ * (blush by default); `"card": "classic"` draws the plain invitation the site showed before 16 Oct.
+ */
+const CARD_DIR = join(import.meta.dirname, "../docs/marketing/cards");
+const CARD_LOOKS = ["blush", "rouge", "pressed", "noir"];
+const cardImages = new Map();
+function realCard(name, lang, look) {
+  const key = `${look}-${(name ?? "Hey").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${lang === "es" ? "es" : "en"}`;
+  if (cardImages.has(key)) return cardImages.get(key);
+  const file = join(CARD_DIR, `${key}.jpg`);
+  if (!existsSync(file)) {
+    mkdirSync(CARD_DIR, { recursive: true });
+    const made = spawnSync(process.execPath, [join(import.meta.dirname, "share-card.mjs"), file, look, name ?? "Hey", lang === "es" ? "es" : "en"], { stdio: "inherit" });
+    if (made.status !== 0 || !existsSync(file)) {
+      cardImages.set(key, null);
+      return null;
+    }
+  }
+  const uri = `data:image/jpeg;base64,${readFileSync(file).toString("base64")}`;
+  cardImages.set(key, uri);
+  return uri;
+}
+
+const ogImage = (name, lang, look) => {
+  const paper = CARD_LOOKS.includes(look) ? look : look === "classic" ? null : "blush";
+  const card = paper ? realCard(name, lang, paper) : null;
+  if (card) return `<img class="og-card" src="${card}" alt="">`;
   const es = lang === "es";
   return `
   <div class="og">
@@ -285,8 +315,8 @@ function rowFor(slide, m, i, all) {
     if (m.link) {
       // A rich link is a grey card on either side; only its alignment and tail change.
       const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
-      const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
-      return `<div class="row ${row} ${status ? "has-status" : ""}${m.replied ? " replied" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+      const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang, m.link.card)}</div>` : "";
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.replied ? " replied" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang, m.link.card)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
     }
     if (JUMBO.test(m.text.trim())) {
       return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
@@ -451,7 +481,7 @@ function igHtml(slide) {
       const pos = first && last ? "solo" : first ? "first" : last ? "last" : "mid";
       const react = m.reaction ? `<span class="ig-react">${esc(m.reaction)}</span>` : "";
       const body = m.link
-        ? `<div class="ig-link">${react}<div class="ig-link-img"><div class="ig-og">${ogImage(m.link.name, m.link.lang)}</div></div><div class="ig-link-foot"><div class="ig-link-title">${esc(m.link.title)}</div><div class="ig-link-domain">${esc(m.link.domain)}</div></div></div>`
+        ? `<div class="ig-link">${react}<div class="ig-link-img"><div class="ig-og">${ogImage(m.link.name, m.link.lang, m.link.card)}</div></div><div class="ig-link-foot"><div class="ig-link-title">${esc(m.link.title)}</div><div class="ig-link-domain">${esc(m.link.domain)}</div></div></div>`
         : `<div class="ig-bubble ${side} ${pos}">${esc(m.text)}${react}</div>`;
       // Instagram shows their picture once, beside the last message of each run.
       const face = side === "in" ? `<div class="ig-face">${last ? avatar(sky) : ""}</div>` : "";
@@ -540,7 +570,7 @@ function msgHtml(slide) {
       const face = `<div class="ms-face">${faceFor(m.from)}</div>`;
       if (m.typing) return `<div class="ms-row ${side}">${side === "in" ? face : ""}<div class="ms-bubble ${side} typing"><span></span><span></span><span></span></div>${side === "out" ? face : ""}</div>`;
       const body = m.link
-        ? `<div class="ms-link"><div class="ms-link-img">${ogImage(m.link.name, m.link.lang)}</div><div class="ms-link-foot"><div class="ms-link-title">${esc(m.link.title)}</div><div class="ms-link-domain">${esc(m.link.domain)}</div></div></div>`
+        ? `<div class="ms-link"><div class="ms-link-img">${ogImage(m.link.name, m.link.lang, m.link.card)}</div><div class="ms-link-foot"><div class="ms-link-title">${esc(m.link.title)}</div><div class="ms-link-domain">${esc(m.link.domain)}</div></div></div>`
         : `<div class="ms-bubble ${side}">${esc(m.text)}</div>`;
       return `<div class="ms-row ${side}">${side === "in" ? face : ""}${body}${side === "out" ? face : ""}</div>`;
     })

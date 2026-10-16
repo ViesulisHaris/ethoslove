@@ -2213,6 +2213,13 @@ picture is a plain chat. Same iOS 26 dark look as 520.
 **Post order:** 529, 527, 528, 530, 531, one a day in the evening. 529 goes first because its first slide is
 plain text and its question is the one the most people will answer.
 
+**The link card (16 Oct).** The owner: the preview card "looks bland". The real one (/g/<id>/card.jpg) is now a
+sealed envelope with a wax seal, a bow and flowers, "for Maya" beside it, on one of four papers: blush gingham,
+burgundy pinstripes, pressed kraft or black. The paper follows the gift's template and look, so no two posts
+need show the same card, and the picture no longer prints the site's address. The slides draw the real card:
+a link's `"card"` picks the paper (`scripts/share-card.mjs` renders it into `docs/marketing/cards`). 529 and
+531 use blush, 527 black, 528 burgundy, 530 pressed.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
