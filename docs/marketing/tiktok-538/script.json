@@ -1,0 +1,31 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:16 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can i come see biscuit"
+        },
+        {
+          "from": "them",
+          "text": "he misses you"
+        },
+        {
+          "from": "me",
+          "text": "just him?",
+          "status": "Read 8:17 PM"
+        },
+        {
+          "from": "them",
+          "text": "saturday works"
+        }
+      ]
+    }
+  ]
+}
