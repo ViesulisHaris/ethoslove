@@ -23,6 +23,19 @@ async function card(request: APIRequestContext, image: string) {
   return { status: res.status(), type: res.headers()["content-type"], cache: res.headers()["cache-control"], bytes: (await res.body()).length };
 }
 
+test.describe("a gift link's card", () => {
+  // A link whose gift can't be found still gets the envelope ("for you"), as a JPEG small enough
+  // that WhatsApp, which drops previews over ~300 KB, still shows it.
+  test("is a JPEG envelope under WhatsApp's limit, cached by the CDN", async ({ request }) => {
+    const res = await card(request, "http://localhost/g/zzzzzzzz/card.jpg?v=test");
+    expect(res.status).toBe(200);
+    expect(res.type).toBe("image/jpeg");
+    expect(res.bytes).toBeGreaterThan(40_000);
+    expect(res.bytes).toBeLessThan(300_000);
+    expect(res.cache).toContain("s-maxage=86400");
+  });
+});
+
 test.describe("link previews", () => {
   test("a shared plan's preview is its photograph, its title and its day; the plan itself never reaches the server", async ({ request }) => {
     const found = await tags(request, `/plan?c=${encodeURIComponent(PHOTO)}&t=Books%20and%20dinner&d=2026-10-03`);
