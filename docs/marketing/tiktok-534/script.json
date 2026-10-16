@@ -1,0 +1,71 @@
+{
+  "demo": {
+    "template": "xoxo?look=rose",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Leo\"",
+      "wait 2600",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3600",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg i loved it 😭😭"
+        },
+        {
+          "from": "me",
+          "text": "watched the whole thing twice"
+        },
+        {
+          "from": "them",
+          "text": "twice?"
+        },
+        {
+          "from": "me",
+          "text": "twice!!",
+          "status": "Read 9:13 PM"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "ok so my phone died",
+      "messages": [
+        {
+          "from": "them",
+          "text": "it says 38%"
+        },
+        {
+          "from": "me",
+          "text": "it SAYS??"
+        },
+        {
+          "from": "me",
+          "text": "you can see that??"
+        },
+        {
+          "from": "them",
+          "text": "i made it"
+        }
+      ]
+    }
+  ],
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false
+}
