@@ -2248,6 +2248,40 @@ From now on, on the accounts that work:
 | 534 | 38% | XOXO Pink kisses: the envelope "to Maya" |
 | 535 | 11 times | Coquette Black bow: the bow "for Maya" |
 
+### TikTok confirmed it (17 Oct), and 536 to 540
+
+TikTok support looked at the 0-view tryethos post on @luvierosiie and replied that its visibility "was limited
+due to a violation of our Community Guidelines". No notice came in System notifications, and no guideline was named. The
+likely one is in TikTok's Community Guidelines (effective 24 Sept 2026), under Commercial Disclosure:
+- Content promoting your own business or product must have the content disclosure setting turned on.
+- If it doesn't, TikTok can reduce its visibility.
+- If that keeps happening, the account can be restricted for a while, or banned.
+
+So keeping the name off-screen is not enough. 532–535 still show the product, so they go up only with
+**Your brand** turned on. Posts with no product in them need no label; they carry the reach, and the brand
+sits in the bio.
+
+If an account goes quiet, check whether it is restricted, not just one post:
+- Can it still add a post to its story?
+- Does it show up when you search for it from another account?
+
+If either fails, the Reddit fix is the way back. Open a support ticket and ask for a human. The bot takes only
+the full `tiktok.com/@user/video/<id>` link, not the app's tt.site short link.
+
+536–540 are product-free one-image posts in 520's shape: exes, something everyday they still share, and a
+quiet last line that reads two ways.
+
+| | The chat | The last line | What the room argues about | Caption (search phrase) |
+|---|---|---|---|---|
+| 536 | "can i get my key back" / "it's on my keychain" / "so take it off" | "i tried" | the keyring, or her | getting my stuff back from my ex 🔑 |
+| 537 | "you finished our show" / "you can see that?" / "it's my netflix" | "i waited 6 months" | he waited for her, or he's on her netflix | my ex still uses my netflix 💔 |
+| 538 | "can i come see biscuit" / "he misses you" / "just him?" | "saturday works" | the dodge; get back together | my ex has our dog 🥺 |
+| 539 | "my phone just showed me us at the lake" / "mine too" / "i thought you deleted them" | "i thought you did" | neither deleted anything | deleting old pictures of my ex 🥲 |
+| 540 | "who's the guy on your story" / "my cousin" / "you don't have a cousin" | "you unfollowed me", read, no reply | who's worse | why your ex watches your story 👀 |
+
+**Post order:** 537 and 540 first, then 536, 538 and 539. One a day per account, in the evening. Post
+`video.mp4`, not the picture.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
