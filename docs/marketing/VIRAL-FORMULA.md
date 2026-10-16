@@ -2178,6 +2178,41 @@ the same account, the same shape, with the site's name on screen this time. If i
 while the account's other posts hold up, the site name on screen is what's being held back, and the next ones
 leave the link card out and show the gift instead.
 
+**Superseded the same day by 527–531.** The owner: "fitting all that in one is not that good … make it better
+like a story line … more slides like 1-3 screenshots … really analyze what gets the engagement going to
+comments". Don't post 522–526.
+
+### What gets people to comment (read 16 Oct), and 527 to 531
+
+I read the top comments, by likes, of the twelve biggest posts on @36grm, @unicornsprinklewaffles,
+@savgilbertt and @unknown649382 (the public comment feed, no login). What people type, and why:
+
+| What makes them type | Evidence |
+|---|---|
+| **A small detail to call out** | "double text tho 👀" is a top comment on three @36grm posts (49K, 74K, 22K likes); "he used the right youre" 56K; "i dont like the dots in the messages" 30K; "OUT OF EVERYTHING U PICK TO SAY SIX SEVEN" 3K |
+| **A two-camp argument about a rule** | The party post's 4.8K comments argue whether you can go out and stay loyal ("It's possible to enjoy yourself on a night out nd not cheat", 230 replies) |
+| **A last line they can twist** | "but it used to" (187K, on "my love for you is like dinosaurs, it doesn't exist"); "ending on good terms hurts more than ending on bad terms" (34K) |
+| **Rooting for the exes** | "get back together" (57K); "that lil correction would have my DELUSIONAL AHH thinking there's a chance" (16K) |
+| **Cynics against believers on sweet posts** | "best 2 weeks of your life" (195K) against "my boyfriend is like this" (21K) |
+| **Something to try and report back** | The 3.7M "you're my best friend too" post: thousands of "i tried it" and "this is what mine said" |
+| **A second slide that changes the first** | "Just realized that there is a second slide" (2K): people go back and read again |
+
+So 527–531 are three screenshots each: a hook, the turn, the line people will repeat. Each plants a detail to
+call out, puts the gift at the turn, and asks the room something: send it or not, get back together or not,
+creepy or romantic, toxic or fair. Where the story allows, the link card waits for slide 2, so the first
+picture is a plain chat. Same iOS 26 dark look as 520.
+
+| | Story | The detail | What the room argues about |
+|---|---|---|---|
+| 529 | "can we talk" / "give me 5 mins" → his link → "now we can talk" / "you there?", her draft "i think we should break up" | the unsent draft | send it, or don't |
+| 527 | Mar 2 gift → "i know we said no contact / but please stop opening it" → "11 times this week" / "it shows me" / "since when do you check" / "since march" | he broke no contact first, her lie | get back together; creepy or romantic |
+| 528 | 11:58 PM "i made you something in march" → "it was set to open on your birthday / i forgot to cancel it" → "you didn't forget" / "happy birthday" | the 11:58, the lie | did he forget; should she reply |
+| 530 | "watch all of it ok" → "watched the whole thing twice" / "it says 38%" → "you can see that??", draft "ok so my phone died" | the setup line, the excuse | is it toxic that he checks |
+| 531 | "open it when you're alone" → "my reaction at the end / the voice note / was it too much" → "i've played it 11 times" | "you can delete it" | real, or the first two weeks |
+
+**Post order:** 529, 527, 528, 530, 531, one a day in the evening. 529 goes first because its first slide is
+plain text and its question is the one the most people will answer.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
