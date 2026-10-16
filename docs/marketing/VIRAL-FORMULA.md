@@ -2220,6 +2220,34 @@ need show the same card, and the picture no longer prints the site's address. Th
 a link's `"card"` picks the paper (`scripts/share-card.mjs` renders it into `docs/marketing/cards`). 529 and
 531 use blush, 527 black, 528 burgundy, 530 pressed.
 
+### The site's name on screen gets a post 0 views (16 Oct), and 532 to 535
+
+The owner posted the first tryethos post (529, with the link card) on the account where 520 ("then stay",
+no link) did 70K and is still going viral: **0 views**. The same account, the same kind of story, a post of
+theirs climbing at that moment. The difference was the site's name on screen ("tryethos.io" in the link card),
+so that is the working explanation: TikTok reads text in pictures, and a post that shows a web address gets
+held back. Not yet confirmed by TikTok Studio's notice on the post.
+
+From now on, on the accounts that work:
+- **Nothing that names the site on screen.** No link card, no domain, no "tryethos" in the chat.
+- **Show the gift instead.** The story names it ("i made you something", "it shows me") and a screenshot of
+  the gift itself (a demo frame in one of the new presets, names swapped) shows it. People who want one ask
+  in the comments, which is engagement too: 30's top comment was "PLEASE TELL ME THE WEBSITE".
+- **Don't delete or repost the held post;** set it to Only me. Deleting and reposting is what got rosie held
+  in September.
+- **The name goes in once the post is safe:** test one comment reply with "tryethos" on a post that already has
+  views, and whether TikTok accepts tryethos.io as the bio link. If it refuses the link, the domain itself is
+  blocked and needs a new one.
+
+532–535 are 527, 528, 530 and 531 told this way (529 is the one that was posted, so it isn't repeated):
+
+| | Story | The gift on screen |
+|---|---|---|
+| 532 | since march | XOXO Black roses: the sealed envelope "to Maya" |
+| 533 | i forgot to cancel it | Coquette Burgundy roses: the bow "for Maya", then the page |
+| 534 | 38% | XOXO Pink kisses: the envelope "to Maya" |
+| 535 | 11 times | Coquette Black bow: the bow "for Maya" |
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
