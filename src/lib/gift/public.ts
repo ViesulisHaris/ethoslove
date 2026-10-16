@@ -52,6 +52,9 @@ export type PublicGiftMeta = {
   recipientName: string;
   senderName: string;
   title: string | null;
+  /** The template and its look, which pick the paper the link's share card is drawn on. */
+  templateSlug: string | null;
+  look: string | null;
 };
 
 /** Metadata read path: deliberately avoids signing or returning media URLs. */
@@ -66,11 +69,14 @@ export async function fetchPublicGiftMeta(shortId: string): Promise<PublicGiftMe
     .maybeSingle();
   if (error || !data) return null;
   const giftData = data.data && typeof data.data === "object" && !Array.isArray(data.data) ? (data.data as Record<string, unknown>) : {};
+  const fields = giftData.fields && typeof giftData.fields === "object" ? (giftData.fields as Record<string, unknown>) : null;
   return {
     locale: data.locale === "es" ? "es" : "en",
     recipientName: String(giftData.recipientName ?? ""),
     senderName: String(giftData.senderName ?? ""),
     title: data.password_hash ? null : typeof giftData.title === "string" ? giftData.title : null,
+    templateSlug: typeof giftData.templateSlug === "string" ? giftData.templateSlug : null,
+    look: fields && typeof fields.look === "string" ? fields.look : null,
   };
 }
 
