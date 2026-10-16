@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Mar 2|9:41 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|1:47 AM"
+        },
+        {
+          "from": "them",
+          "text": "you opened it again"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "how do you know that"
+        },
+        {
+          "from": "them",
+          "text": "it shows me"
+        },
+        {
+          "from": "me",
+          "text": "since when",
+          "status": "Read 1:48 AM"
+        },
+        {
+          "from": "them",
+          "text": "since march"
+        }
+      ]
+    }
+  ]
+}
