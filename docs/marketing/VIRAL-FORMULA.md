@@ -2282,6 +2282,20 @@ quiet last line that reads two ways.
 **Post order:** 537 and 540 first, then 536, 538 and 539. One a day per account, in the evening. Post
 `video.mp4`, not the picture.
 
+The owner wanted the five with the tryethos link in them. So 541–545 are the same stories as 3-slide carousels,
+like 527–531, with his gift link at the turn. 540's flip doesn't take a gift, so 545 is a new one. Each one is
+posted with **Your brand** turned on.
+
+| | Story | The link | The last line |
+|---|---|---|---|
+| 541 | 536, the key | "for maya 🤍", burgundy | her double text "you made this??" / "keep the key" |
+| 542 | 537, the show | "for maya", black, "made this while i waited" | "rewatch it with me" |
+| 543 | 538, the dog | "from biscuit 🐶", pressed, "he made you something" | "tell biscuit i miss him too" / his "just him?" |
+| 544 | 539, the lake | "for maya ♡", blush, "open this before you do" | "i'm not deleting them" |
+| 545 | his Mar 14 gift "for when you miss me", her 2am "how do you delete something from your home screen" | black | "i'm still holding it" |
+
+**Post order:** 541, 543, 545, 542, 544.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
