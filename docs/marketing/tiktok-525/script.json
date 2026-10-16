@@ -1,0 +1,47 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Jan 14|10:06 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|11:48 PM"
+        },
+        {
+          "from": "them",
+          "text": "who else opened it"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "it says 2 people"
+        },
+        {
+          "from": "me",
+          "text": "i showed him",
+          "status": "Read 11:49 PM"
+        },
+        {
+          "from": "them",
+          "text": "did he like it"
+        }
+      ]
+    }
+  ]
+}
