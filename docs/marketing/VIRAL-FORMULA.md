@@ -2156,6 +2156,28 @@ punchline someone else already used.
 Captions follow the search rule: "my ex never took me off his spotify family plan 💔" and "when it says he was
 active at 3am 💀". Post one on each account.
 
+### 522 to 526: five with tryethos, on 520's shape (16 Oct)
+
+520 ("then stay") did 40K on its first video, on the account that is doing well, with no link. The owner asked
+for five with tryethos for the same account, "so it needs to be good also".
+
+The link card stays, so each story is built on something only the gift can do. The link is then the reason
+the story exists, not an advert after it. Every detail is true of the product and none says what's inside a
+gift:
+
+| | Shape | The real detail | The chat |
+|---|---|---|---|
+| 522 | 520: exes at night, a two-word end | the sender is told when it's opened, and the dashboard charts every open | "you opened it again" / "how do you know that" / "it shows me" / "since when" / "since march" |
+| 523 | 520 with a midnight | a gift can be scheduled to open on a date | sent in March, "it opens on the day" … 12:00 AM "it just opened" / "we're not even together anymore" / "happy birthday" |
+| 524 | @36grm's reversal + the party draft | the dashboard shows how much was watched | "omg i loved it 😭" / "watched the whole thing twice" / "it says 38%", draft "ok so my phone died" |
+| 525 | 520, colder | the dashboard counts the people who opened it | "who else opened it" / "it says 2 people" / "i showed him" / "did he like it" |
+| 526 | @unicornsprinklewaffles' sweet line | she can send a voice message back from the gift | "was it too much" / "i've played it 11 times" |
+
+**Post order:** 522 first, at the same time of day 520 went up, then 523, 525, 524, 526. 522 is also a test:
+the same account, the same shape, with the site's name on screen this time. If it does a fraction of 520
+while the account's other posts hold up, the site name on screen is what's being held back, and the next ones
+leave the link card out and show the gift instead.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
