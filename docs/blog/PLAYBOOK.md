@@ -25,6 +25,10 @@ npm ci --no-audit --no-fund
 If a post in `src/content/blog/posts/` already has today's date (UTC) as `published`, stop: today's
 post is out. Say so in one line and end the run.
 
+If `git ls-remote --heads origin 'blog/*'` lists a branch, an earlier post is still waiting to be
+merged into the live repository (step 6), and the queue on `main` still has its topic. Stop: say
+which branch is waiting in one line and end the run.
+
 ## 1. Pick today's topic
 
 Take the first entry in `docs/blog/queue.json`. Before using it, check:
@@ -155,15 +159,41 @@ In one commit, add:
 - `docs/blog/queue.json` with today's entry removed;
 - `public/blog/<slug>/`, if you added images.
 
-Use the message `blog: <English title>`, then:
+Use the message `blog: <English title>`, and commit as the team's author: Vercel blocks the deploy
+of a commit whose author isn't on the team, and the cloud's default (`Claude`) isn't.
+
+```bash
+git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" commit -m "blog: <English title>"
+```
+
+Only one repository goes live: Vercel deploys `main` of `github.com/reasj2/ethoslove`. The public
+mirror `github.com/ViesulisHaris/ethoslove` deploys nothing, and its `main` has to stay a copy of
+the live one. Look at where this checkout pushes before you push:
+
+```bash
+git remote get-url origin
+```
+
+If that is `reasj2/ethoslove`, push:
 
 ```bash
 git push origin main
 ```
 
-If the push is rejected because `main` moved, run `git pull --rebase origin main`, repeat the
-first four checks, and push again. Vercel deploys `main` by itself: the post is at
-`https://tryethos.io/blog/<slug>` a few minutes later.
+If the push is rejected because `main` moved, run
+`git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" pull --rebase origin main`, repeat
+the first four checks, and push again. The post is at `https://tryethos.io/blog/<slug>` a few minutes
+later.
+
+If it is anything else (the mirror), the post can't go live from this run. Don't push to `main`.
+Push the commit to its own branch instead, so it waits for someone to merge it into the live
+repository:
+
+```bash
+git push origin HEAD:refs/heads/blog/<slug>
+```
+
+Skip the live check below and report it as not live (step 7).
 
 ### When the network allows it: check it's live, then ping IndexNow
 
@@ -179,7 +209,8 @@ node scripts/indexnow.mjs https://tryethos.io/blog/<slug> https://tryethos.io/es
 
 ## 7. Report
 
-Send one push notification: `New on tryethos.io: <English title>`.
+Send one push notification: `New on tryethos.io: <English title>`, or, when it went to a branch,
+`Blog post ready, not live yet: <English title>`.
 
 The final message is what the owner reads on their phone. Write only:
 - the title;
@@ -187,7 +218,8 @@ The final message is what the owner reads on their phone. Write only:
 - the search it targets;
 - the templates it recommends;
 - the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
-- "Live and sent to IndexNow", or "Live check skipped (no network)";
+- "Live and sent to IndexNow", or "Live check skipped (no network)", or "Not live: waiting on
+  branch blog/<slug> to be merged into reasj2/ethoslove";
 - one line if anything was skipped or failed.
 
 ## Never
