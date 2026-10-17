@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("the template gallery", () => {
-  test("opens on the premium best sellers, then what is new with the Halloween pair first, then the rest", async ({ page }) => {
+  test("opens on the premium best sellers, then what is new, newest batch first, then the rest", async ({ page }) => {
     await page.goto("/templates");
     const shelves = page.locator("[data-shelf]");
     await expect(shelves).toHaveCount(3);
@@ -11,10 +11,11 @@ test.describe("the template gallery", () => {
     await expect(popular.getByRole("heading", { level: 3 })).toHaveText(["Bouquet", "XOXO", "Birthday Cinema", "The Council"]);
     await expect(popular.getByText("Most loved")).toHaveCount(4);
 
+    // NEW_SLUGS in src/config/featured.ts, in its order: change both when the next batch ships.
     const fresh = page.locator("[data-shelf=new]");
-    await expect(fresh.getByRole("heading", { level: 3 }).first()).toHaveText("Spooky Season");
-    await expect(fresh.getByRole("heading", { level: 3 }).nth(1)).toHaveText("Dark Romance");
-    await expect(fresh.getByRole("heading", { level: 3, name: "Party Animals" })).toBeVisible();
+    await expect(fresh.getByRole("heading", { level: 3 })).toHaveText(["Be My Boo", "Fall for You", "Autumn Reel", "Spooky Season", "Dark Romance", "Favorite Person", "On Repeat"]);
+    // An older arrival is back in the catalogue below.
+    await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Party Animals" })).toBeVisible();
     await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Coquette" })).toBeVisible();
 
     // Nothing is listed twice.
