@@ -2,14 +2,21 @@ import { readFile } from "node:fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { BRAND } from "@/config/brand";
+import { HEART, SEAL } from "@/components/shared/logo";
 import { getManifest } from "@/templates/manifests";
 
 const COPY = {
-  en: { eyebrow: "DIGITAL GIFTS", templateEyebrow: "A DIGITAL GIFT", line: "Photos, their song and your words, sent as a link." },
-  es: { eyebrow: "REGALOS DIGITALES", templateEyebrow: "UN REGALO DIGITAL", line: "Fotos, su canción y tus palabras, enviadas con un enlace." },
+  en: { eyebrow: "FOR THE TWO OF YOU", headline: "Find the date. Keep the person.", templateEyebrow: "A GIFT BY ETHOS", line: "Date ideas near you, trips, games and gifts for two." },
+  es: { eyebrow: "PARA VOSOTROS DOS", headline: "Encuentra la cita. Quédate con la persona.", templateEyebrow: "UN REGALO DE ETHOS", line: "Ideas para citas cerca de ti, escapadas, juegos y regalos para dos." },
 } as const;
 
-// Same serif as the gift link card (see g/[shortId]/opengraph-image.tsx).
+/** The front page's own card (`?card=gift`): it leads with gifts, as the page does. */
+const GIFT_COPY = {
+  en: { eyebrow: "MADE BY YOU, OPENED ON THEIR PHONE", headline: "A gift they'll open again and again.", line: "Personal gifts, date ideas near you, trips and games for two." },
+  es: { eyebrow: "HECHO POR TI, ABIERTO EN SU MÓVIL", headline: "Un regalo que abrirá una y otra vez.", line: "Regalos personales, ideas para citas cerca de ti, escapadas y juegos para dos." },
+} as const;
+
+// Same serif as the gift link card (see g/[shortId]/card.jpg).
 const serifFont = () => readFile(new URL("../../fonts/newsreader-regular.ttf", import.meta.url));
 const italicFont = () => readFile(new URL("../../fonts/newsreader-italic.ttf", import.meta.url));
 
@@ -22,9 +29,9 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const locale = params.get("locale") === "es" ? "es" : "en";
   const manifest = getManifest(params.get("template") ?? "");
-  const copy = COPY[locale];
+  const copy = params.get("card") === "gift" ? { ...COPY[locale], ...GIFT_COPY[locale] } : COPY[locale];
   const eyebrow = manifest ? copy.templateEyebrow : copy.eyebrow;
-  const headline = manifest ? manifest.name[locale] : BRAND.tagline[locale];
+  const headline = manifest ? manifest.name[locale] : copy.headline;
   const line = manifest ? manifest.tagline[locale] : copy.line;
   const [serif, serifItalic] = await Promise.all([serifFont(), italicFont()]);
 
@@ -46,22 +53,11 @@ export async function GET(request: NextRequest) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 999,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "radial-gradient(circle at 36% 30%, #F4C7C3, #E8604C 48%, #B23A2E 100%)",
-            }}
-          >
-            <svg width="30" height="30" viewBox="0 0 24 24">
-              <path
-                d="M12 20.8s-7.2-4.4-9.2-8.8C1.4 8.6 3.1 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3.2 1.7-2.1 3.2-3.2 5.2-3.2 3.7 0 5.4 3.8 4 7.2-2 4.4-9.2 8.8-9.2 8.8Z"
-                fill="#FFF8F4"
-              />
+          <div style={{ width: 64, height: 64, display: "flex" }}>
+            {/* The site's own seal, not a stand-in: the link preview is often the first time anyone sees the mark. */}
+            <svg width="64" height="64" viewBox="0 0 32 32">
+              <path d={SEAL} fill="#d6336c" />
+              <path d={HEART} fill="#FBF6EE" opacity="0.95" />
             </svg>
           </div>
           <div style={{ marginLeft: 20, fontSize: 34, letterSpacing: 10, display: "flex" }}>{BRAND.name.toUpperCase()}</div>

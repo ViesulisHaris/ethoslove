@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:18",
+      "messages": [
+        {
+          "from": "them",
+          "text": "becca wouldve let this go"
+        },
+        {
+          "from": "me",
+          "text": "u did not just say that"
+        },
+        {
+          "from": "them",
+          "text": "im just saying. she didnt make everything a thing"
+        },
+        {
+          "from": "me",
+          "text": "becca left u marco"
+        },
+        {
+          "from": "them",
+          "text": "and look how u speak to me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "and look how u speak to me"
+        },
+        {
+          "from": "them",
+          "text": "i dont compare u. i said one sentence"
+        },
+        {
+          "from": "them",
+          "text": "and i spent my whole sunday making u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Their photos, and a long message: it has to look like a Sunday. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its beautiful. im sorry for what i said"
+        },
+        {
+          "from": "them",
+          "text": "i know u are"
+        },
+        {
+          "from": "them",
+          "text": "i just miss when u were easy going"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "dont sulk. it doesnt suit u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i messaged becca"
+        },
+        {
+          "from": "them",
+          "text": "u did WHAT"
+        },
+        {
+          "from": "me",
+          "text": "she replied in 2 minutes"
+        },
+        {
+          "from": "them",
+          "text": "what did she say"
+        },
+        {
+          "from": "me",
+          "text": "she said good luck",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what else did she say"
+        }
+      ]
+    }
+  ]
+}

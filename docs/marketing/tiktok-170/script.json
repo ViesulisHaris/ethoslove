@@ -1,0 +1,127 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:41",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u still at jess's"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "ur phone hasnt moved in 4 hours"
+        },
+        {
+          "from": "me",
+          "text": "because im sat on her sofa"
+        },
+        {
+          "from": "them",
+          "text": "send me a photo. just so i can relax"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "send me a photo. just so i can relax"
+        },
+        {
+          "from": "me",
+          "text": "im not sending u a hostage photo marco"
+        },
+        {
+          "from": "them",
+          "text": "fine. forget it"
+        },
+        {
+          "from": "them",
+          "text": "i was going to send u this tonight but whatever"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (i worry because i love u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Any template, as long as it looks like hours of work. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is unreal"
+        },
+        {
+          "from": "me",
+          "text": "u made this today?"
+        },
+        {
+          "from": "them",
+          "text": "while u were at jess's"
+        },
+        {
+          "from": "them",
+          "text": "i dont like not knowing where u are. thats all it is"
+        },
+        {
+          "from": "me",
+          "text": "i know. i get it"
+        },
+        {
+          "from": "them",
+          "text": "i only check because i care. u know that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "my phones been on her sofa since 8"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "i went out. i didnt want the 20 questions"
+        },
+        {
+          "from": "them",
+          "text": "where"
+        },
+        {
+          "from": "me",
+          "text": "nowhere bad. i promise",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "where were u maya"
+        }
+      ]
+    }
+  ]
+}

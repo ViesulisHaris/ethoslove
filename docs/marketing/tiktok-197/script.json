@@ -1,0 +1,145 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"series cheating\"",
+      "swap \"you said “five minutes away” from your bed\" \"you watched episode 4 without me\"",
+      "swap \"you cried at an advert for a bank\" \"and 5. and 6.\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you said no way 40 minutes after the twist\"",
+      "swap \"his favourite person\" \"her favourite person\"",
+      "swap \"Marco\" \"Maya\"",
+      "swap \"Ana\" \"Marco\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u watched episode 4 without me"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "netflix says continue watching episode 7"
+        },
+        {
+          "from": "them",
+          "text": "i fell asleep with it on"
+        },
+        {
+          "from": "me",
+          "text": "for 3 episodes??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i was in a very deep sleep"
+        },
+        {
+          "from": "me",
+          "text": "ur being taken to court"
+        },
+        {
+          "from": "them",
+          "text": "by who"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "the council v. marco",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "a cat in glasses is reading out my netflix history"
+        },
+        {
+          "from": "them",
+          "text": "OUT LOUD"
+        },
+        {
+          "from": "me",
+          "text": "exhibit a"
+        },
+        {
+          "from": "them",
+          "text": "who told it about the twist"
+        },
+        {
+          "from": "me",
+          "text": "u did. u said no way 40 minutes late"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "GUILTY?? its stamped??"
+        },
+        {
+          "from": "me",
+          "text": "the council has spoken"
+        },
+        {
+          "from": "them",
+          "text": "i wasnt even shocked the first time"
+        },
+        {
+          "from": "me",
+          "text": "so u admit it",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "i want a lawyer"
+        }
+      ]
+    }
+  ]
+}

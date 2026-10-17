@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:02 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "babe can we talk"
+        },
+        {
+          "from": "them",
+          "text": "Yeah what's up"
+        },
+        {
+          "from": "me",
+          "text": "if i was never born you would be dating a different girl"
+        },
+        {
+          "from": "me",
+          "text": "a girl that isn't me"
+        },
+        {
+          "from": "me",
+          "text": "we're done",
+          "status": "Read 11:02 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "If you were never born I'd still be looking for you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "found you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok we're not done",
+          "status": "Read 11:05 PM"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "nobody loves me 😔",
+          "status": "Read 10:14 pm"
+        },
+        {
+          "from": "them",
+          "text": "We’re literally on FaceTime rn"
+        },
+        {
+          "from": "them",
+          "text": "Check your messages"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "nobody huh 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

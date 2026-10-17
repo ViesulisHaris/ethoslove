@@ -5,7 +5,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { breadcrumbNode, localizedUrl, ogImageUrl, pageMetadata, templateProductNode } from "@/lib/seo";
+import {
+  breadcrumbNode,
+  localizedUrl,
+  ogImageUrl,
+  pageMetadata,
+  templateProductNode,
+} from "@/lib/seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -16,7 +22,9 @@ export function generateStaticParams() {
   return TEMPLATE_SLUGS.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/templates/[slug]">, "searchParams">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: Omit<PageProps<"/[locale]/templates/[slug]">, "searchParams">): Promise<Metadata> {
   const { locale, slug } = await params;
   const manifest = getManifest(slug);
   if (!manifest) return {};
@@ -31,7 +39,9 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/tem
   });
 }
 
-export default async function TemplateDetailPage({ params }: PageProps<"/[locale]/templates/[slug]">) {
+export default async function TemplateDetailPage({
+  params,
+}: PageProps<"/[locale]/templates/[slug]">) {
   const { locale, slug } = await params;
   const manifest = getManifest(slug);
   if (!manifest) notFound();
@@ -39,7 +49,12 @@ export default async function TemplateDetailPage({ params }: PageProps<"/[locale
   const l = locale as GiftLocale;
   const t = await getTranslations();
   const currency = currencyFor(l === "es" ? "ES" : "US");
-  const price = formatAmount(PRODUCTS.single.amounts[currency], currency, l);
+  // A premium template is bought as one; a free one only ever costs its "make it special" extras.
+  const price = formatAmount(
+    PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency],
+    currency,
+    l,
+  );
 
   const featureList: [boolean, string][] = [
     [true, t("templates.featurePhotos", { max: manifest.features.photos.max })],
@@ -62,65 +77,105 @@ export default async function TemplateDetailPage({ params }: PageProps<"/[locale
           ]),
         ]}
       />
+      {/*
+       * Below `lg` it is one column, and the phone preview alone is taller than a phone's screen:
+       * the name and "Make this gift" sat one to two screens down. So the words come first there —
+       * name, price and the buttons, then the preview, then what's included — and from `lg` the
+       * preview takes the left column again. The text column is `contents` below `lg`, which makes
+       * its two halves grid items that `order` can put either side of the preview.
+       */}
       <div className="container-x grid gap-12 pt-10 pb-24 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16 lg:pt-16">
-        <div className="min-w-0 lg:sticky lg:top-24">
-          <TemplatePhonePreview slug={manifest.slug} locale={l} />
-          <p className="mt-4 text-center text-xs text-muted-foreground">{t("templates.previewHint")}</p>
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={manifest.tier === "free" ? "text-eyebrow rounded-sm border border-ink px-2 py-1 text-ink" : "text-eyebrow rounded-sm bg-ink px-2 py-1 text-paper"}>
-              {manifest.tier === "free" ? t("common.free") : t("common.premium")}
-            </span>
-            {manifest.styles.map((s) => (
-              <span key={s} className="text-eyebrow rounded-sm border border-line px-2 py-1 text-muted-foreground">
-                {t(`templates.style.${s}`)}
+        <div className="contents lg:block">
+          <div className="order-first">
+            <div className="flex items-center gap-2">
+              <span
+                className={
+                  manifest.tier === "free"
+                    ? "rounded-sm border border-ink px-2 py-1 text-eyebrow text-ink"
+                    : "rounded-sm bg-ink px-2 py-1 text-eyebrow text-paper"
+                }
+              >
+                {manifest.tier === "free" ? t("common.free") : t("common.premium")}
               </span>
-            ))}
-          </div>
-          <h1 className="display-xl mt-6">{manifest.name[l]}</h1>
-          <p className="font-display mt-3 text-2xl text-ink-soft italic">{manifest.tagline[l]}</p>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">{manifest.description[l]}</p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg" className="h-12 rounded-full px-6 text-base">
-              <Link href={`/create/${manifest.slug}`}>
-                {t("templates.makeThis")}
-                <ArrowRight className="size-4" data-icon="inline-end" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 rounded-full px-6 text-base">
-              <Link href={`/demo/${manifest.slug}`}>
-                <Maximize2 className="size-4" data-icon="inline-start" />
-                {t("templates.fullscreenDemo")}
-              </Link>
-            </Button>
-          </div>
-          <p className="mt-3 max-w-md text-sm text-muted-foreground">{manifest.tier === "free" ? t("templates.detailPriceFree", { price }) : t("templates.detailPricePaid", { price })}</p>
-
-          <h2 className="text-eyebrow mt-12 mb-4 text-muted-foreground">{t("templates.included")}</h2>
-          <ul className="grid gap-2 sm:grid-cols-2">
-            {featureList.map(([on, label]) => (
-              <li key={label} className={on ? "flex items-center gap-2 text-sm" : "flex items-center gap-2 text-sm text-muted-foreground line-through"}>
-                <Check className={on ? "size-4 text-coral" : "size-4 opacity-30"} />
-                {label}
-              </li>
-            ))}
-          </ul>
-
-          <h2 className="text-eyebrow mt-10 mb-4 text-ink-soft">{t("templates.perfectFor")}</h2>
-          <ul className="flex flex-wrap gap-2">
-            {manifest.occasions.map((o) => (
-              <li key={o}>
-                <Link
-                  href={`/occasions/${o}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm transition-colors hover:border-ink/40"
+              {manifest.styles.map((s) => (
+                <span
+                  key={s}
+                  className="rounded-sm border border-line px-2 py-1 text-eyebrow text-muted-foreground"
                 >
-                  {t(`occasions.${o}`)}
+                  {t(`templates.style.${s}`)}
+                </span>
+              ))}
+            </div>
+            <h1 className="mt-6 display-xl">{manifest.name[l]}</h1>
+            <p className="mt-3 font-display text-2xl text-ink-soft italic">{manifest.tagline[l]}</p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
+              {manifest.description[l]}
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" className="h-12 rounded-full px-6 text-base">
+                <Link href={`/create/${manifest.slug}`}>
+                  {t("templates.makeThis")}
+                  <ArrowRight className="size-4" data-icon="inline-end" />
                 </Link>
-              </li>
-            ))}
-          </ul>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="h-12 rounded-full px-6 text-base"
+              >
+                <Link href={`/demo/${manifest.slug}`}>
+                  <Maximize2 className="size-4" data-icon="inline-start" />
+                  {t("templates.fullscreenDemo")}
+                </Link>
+              </Button>
+            </div>
+            <p className="mt-3 max-w-md text-sm text-muted-foreground">
+              {manifest.tier === "free"
+                ? t("templates.detailPriceFree", { price })
+                : t("templates.detailPricePaid", { price })}
+            </p>
+          </div>
+
+          <div className="order-last lg:mt-12">
+            <h2 className="mb-4 text-eyebrow text-muted-foreground">{t("templates.included")}</h2>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {featureList.map(([on, label]) => (
+                <li
+                  key={label}
+                  className={
+                    on
+                      ? "flex items-center gap-2 text-sm"
+                      : "flex items-center gap-2 text-sm text-muted-foreground line-through"
+                  }
+                >
+                  <Check className={on ? "size-4 text-coral" : "size-4 opacity-30"} />
+                  {label}
+                </li>
+              ))}
+            </ul>
+
+            <h2 className="mt-10 mb-4 text-eyebrow text-ink-soft">{t("templates.perfectFor")}</h2>
+            <ul className="flex flex-wrap gap-2">
+              {manifest.occasions.map((o) => (
+                <li key={o}>
+                  <Link
+                    href={`/occasions/${o}`}
+                    className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                  >
+                    {t(`occasions.${o}`)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="min-w-0 lg:sticky lg:top-24 lg:order-first">
+          <TemplatePhonePreview slug={manifest.slug} locale={l} />
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            {t("templates.previewHint")}
+          </p>
         </div>
       </div>
     </>

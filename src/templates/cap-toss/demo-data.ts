@@ -36,7 +36,7 @@ export const demoData: Record<"en" | "es", GiftData<CapTossFields>> = {
       p5: "the summer you nearly quit",
     }),
     countdown: {
-      targetAt: "2027-09-06T08:30:00+01:00",
+      targetAt: "2027-09-06T08:30:00+02:00",
       timezone: "Europe/London",
       label: "Until your first day",
     },
@@ -67,8 +67,8 @@ export const demoData: Record<"en" | "es", GiftData<CapTossFields>> = {
       p5: "el verano que casi lo dejas",
     }),
     countdown: {
-      targetAt: "2027-09-06T08:30:00+02:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2027-09-06T08:30:00+03:00",
+      timezone: "Europe/Riga",
       label: "Hasta tu primer día",
     },
     surprise: {

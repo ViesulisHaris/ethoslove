@@ -1,0 +1,121 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"falling asleep during our film\"",
+      "swap \"you said “five minutes away” from your bed\" \"you lasted 11 minutes into the film\"",
+      "swap \"you cried at an advert for a bank\" \"you said “im watching” with your eyes shut\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you stole the whole blanket\"",
+      "swap \"Ana\" \"Marco\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sat|22:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "11 minutes"
+        },
+        {
+          "from": "me",
+          "text": "u lasted 11 minutes into the film"
+        },
+        {
+          "from": "them",
+          "text": "i was resting my eyes"
+        },
+        {
+          "from": "me",
+          "text": "u were snoring"
+        },
+        {
+          "from": "them",
+          "text": "thats how i rest them"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok. ur being taken to court"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "the council v. marco",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        },
+        {
+          "from": "them",
+          "text": "why are there cats behind a desk"
+        },
+        {
+          "from": "me",
+          "text": "press all rise"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "it stamped GUILTY with my name on it"
+        },
+        {
+          "from": "them",
+          "text": "sentence: one hug. served immediately"
+        },
+        {
+          "from": "me",
+          "text": "the council has spoken"
+        },
+        {
+          "from": "them",
+          "text": "can we rewatch it"
+        },
+        {
+          "from": "me",
+          "text": "no. ur on probation"
+        }
+      ]
+    }
+  ]
+}

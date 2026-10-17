@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { LogOut, Settings } from "lucide-react";
+import { CalendarHeart, LogOut, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -44,10 +44,16 @@ export function UserMenu({ user }: { user: ShellUser }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-60">
-        <DropdownMenuLabel className="truncate font-normal text-muted-foreground">
+        <DropdownMenuLabel className="truncate text-[13px] font-normal tracking-normal normal-case">
           {user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/my-dates">
+            <CalendarHeart className="size-4" />
+            {t("myDates")}
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/account">
             <Settings className="size-4" />

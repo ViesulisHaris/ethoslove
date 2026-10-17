@@ -1,0 +1,42 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:41",
+      "messages": [
+        { "from": "me", "text": "did u see the photo" },
+        { "from": "them", "text": "ya" },
+        { "from": "me", "text": "and" },
+        { "from": "them", "text": "nice" },
+        { "from": "me", "text": "NICE" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "NICE" },
+        { "from": "them", "text": "couldnt type the full thing. was mid something" },
+        { "from": "them", "text": "the full thing" },
+        { "from": "them", "link": { "title": "for maya (better than nice)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "i sent the photo to dan" },
+        { "from": "them", "text": "why" },
+        { "from": "me", "text": "to see if HE'D say nice" },
+        { "from": "them", "text": "and" },
+        { "from": "me", "text": "he said wow. so thats the bar" },
+        { "from": "them", "text": "wow is a low bar" },
+        { "from": "me", "text": "wow is the FLOOR. this is so lovely. delete dan", "tapback": "heart" },
+        { "from": "them", "text": "maya why does dan have ur photo" }
+      ]
+    }
+  ]
+}

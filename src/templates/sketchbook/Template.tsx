@@ -1,14 +1,16 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
+import { useSwipe } from "../_shared/hooks/use-swipe";
 import { hashString } from "../_shared/random";
 import { MessageBody } from "../_shared/MessageBody";
 import { Countdown } from "../_shared/Countdown";
@@ -71,15 +73,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   };
 
   // A swipe turns the page too, either way.
-  const swipe = useRef<{ x: number; y: number } | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => (swipe.current = { x: e.clientX, y: e.clientY });
-  const onPointerUp = (e: ReactPointerEvent) => {
-    const start = swipe.current;
-    swipe.current = null;
-    if (!start) return;
-    const dx = e.clientX - start.x;
-    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(e.clientY - start.y) * 1.4) go(index + (dx < 0 ? 1 : -1));
-  };
+  const swipe = useSwipe(
+    (dir) => {
+      if (dir === "left") go(index + 1);
+      if (dir === "right") go(index - 1);
+    },
+    { distance: 60, enabled: open },
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -98,7 +98,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const page = pages[index];
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: theme.desk, color: theme.ink, fontFamily: "var(--gift-font-body)", ...vars }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div className={cn("absolute inset-0 overflow-hidden select-none", open && "touch-pan-y")} style={{ background: theme.desk, color: theme.ink, fontFamily: "var(--gift-font-body)", ...vars }} {...swipe}>
       <style>{SKETCH_KEYFRAMES}</style>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 mix-blend-multiply" style={{ backgroundImage: GRAIN, opacity: theme.dark ? 0.3 : 0.5 }} />
       <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
@@ -306,6 +306,8 @@ function Taped({ photo, theme, still, delay, className, tapeClass }: { photo: Gi
 
 /** The last page: ruled, the letter in handwriting, then everything the gift ends with. */
 function LetterPage({ data, theme, s, t, mode, blocks, onEvent, onReact, onMakeOne, onReplay }: { data: Data; theme: Theme; s: Copy; t: ReturnType<typeof useGiftStrings>; mode: TemplateProps["mode"]; blocks: ReturnType<typeof parseRichText>; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
+  // "Now playing" names only music that plays: a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
   useEffect(() => {
@@ -330,10 +332,10 @@ function LetterPage({ data, theme, s, t, mode, blocks, onEvent, onReact, onMakeO
     <div className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain rounded-[6px] scrollbar-none" style={{ backgroundImage: `repeating-linear-gradient(180deg, transparent 0 calc(5.2 * var(--p)), ${theme.ink}18 calc(5.2 * var(--p)) calc(5.3 * var(--p)))`, backgroundPosition: "0 calc(12 * var(--p))" }}>
       <div className="px-[8%] pt-[12%] pb-[10%]" style={{ color: theme.ink }}>
         <MessageBody data={data} blocks={blocks} mode={mode} tone={theme.dark ? "dark" : "light"} face="hand" accent={theme.accent} />
-        {data.music?.title ? (
+        {song?.title ? (
           <p className="mt-[calc(5*var(--p))] text-center text-[calc(2.6*var(--p))] tracking-[0.2em] uppercase opacity-55">
-            {s.playing} · {data.music.title}
-            {data.music.artist ? ` — ${data.music.artist}` : ""}
+            {s.playing} · {song.title}
+            {song.artist ? ` — ${song.artist}` : ""}
           </p>
         ) : null}
         {data.countdown ? (

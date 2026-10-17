@@ -1,0 +1,114 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"Happy 6 months\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:52",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy 6 months and u said \"ok\""
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "6 months maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Happy 6 months",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "we need to talk"
+        },
+        {
+          "from": "them",
+          "text": "is there someone else"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "who"
+        },
+        {
+          "from": "me",
+          "text": "ur ex"
+        },
+        {
+          "from": "them",
+          "text": "SOPHIE??"
+        },
+        {
+          "from": "them",
+          "text": "maya since when"
+        }
+      ]
+    }
+  ]
+}

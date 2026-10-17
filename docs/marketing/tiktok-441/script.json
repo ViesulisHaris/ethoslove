@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i have 3 exams this week i’m going to cry",
+          "status": "Read 10:05 pm"
+        },
+        {
+          "from": "them",
+          "text": "Breathe baby"
+        },
+        {
+          "from": "them",
+          "text": "You’ve got this I promise"
+        },
+        {
+          "from": "them",
+          "text": "Made you something for your study breaks"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "you’ve got this 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

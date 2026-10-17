@@ -13,5 +13,5 @@ export default async function PrivacyPage({ params }: PageProps<"/[locale]/legal
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("legal");
-  return <LegalDocument doc={LEGAL_DOCS.privacy[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} />;
+  return <LegalDocument doc={LEGAL_DOCS.privacy[locale as GiftLocale]} updatedLabel={t("lastUpdated", { date: LEGAL_UPDATED })} locale={locale === "es" ? "es" : "en"} />;
 }

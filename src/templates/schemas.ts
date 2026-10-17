@@ -43,9 +43,22 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "sticker-bomb": () => import("./sticker-bomb/schema"),
   coquette: () => import("./coquette/schema"),
   xoxo: () => import("./xoxo/schema"),
+  "spooky-season": () => import("./spooky-season/schema"),
+  "be-my-boo": () => import("./be-my-boo/schema"),
+  "fall-for-you": () => import("./fall-for-you/schema"),
+  "autumn-reel": () => import("./autumn-reel/schema"),
+  "dark-romance": () => import("./dark-romance/schema"),
+  "favorite-person": () => import("./favorite-person/schema"),
+  "on-repeat": () => import("./on-repeat/schema"),
+  evergreen: () => import("./evergreen/schema"),
   keepsake: () => import("./keepsake/schema"),
   "popup-card": () => import("./popup-card/schema"),
   sketchbook: () => import("./sketchbook/schema"),
+  "pack-your-bags": () => import("./pack-your-bags/schema"),
+  digicam: () => import("./digicam/schema"),
+  "photo-booth": () => import("./photo-booth/schema"),
+  picnic: () => import("./picnic/schema"),
+  "music-box": () => import("./music-box/schema"),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftMusic } from "@/lib/gift/schema";
+import { backgroundMusic } from "@/lib/gift/music";
 
 export type GiftAudio = {
   /** Call from a user gesture (autoplay policies). Safe to call repeatedly. */
@@ -14,8 +15,23 @@ export type GiftAudio = {
 
 const FADE_MS = 1600;
 
-/** Background music with fade-in, start offset, loop and tab-visibility pause. */
-export function useGiftAudio(music: GiftMusic | undefined, enabled = true): GiftAudio {
+/**
+ * Whether the recipient has muted this gift. The pieces every template shares (the present on the
+ * end screen) make a sound of their own and are nowhere near the template's audio, so the mute
+ * button is remembered here, where they can ask it. A new gift, or a replay, starts unmuted.
+ */
+let giftMuted = false;
+export const isGiftMuted = (): boolean => giftMuted;
+
+/**
+ * Background music with fade-in, start offset, loop and tab-visibility pause.
+ *
+ * Only a library track or the sender's own file: a real song from Apple's catalogue never plays
+ * here, on any template, however old the gift. It waits on the end screen for a tap instead
+ * (`SongPreviewCard`), and `hasMusic` is false, so nothing claims it is playing.
+ */
+export function useGiftAudio(songOrMusic: GiftMusic | undefined, enabled = true): GiftAudio {
+  const music = backgroundMusic(songOrMusic);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -23,6 +39,7 @@ export function useGiftAudio(music: GiftMusic | undefined, enabled = true): Gift
   const startAt = music?.startAt ?? 0;
 
   useEffect(() => {
+    giftMuted = false;
     if (!music || !enabled) return;
     const audio = new Audio(music.url);
     audio.loop = true;
@@ -73,6 +90,7 @@ export function useGiftAudio(music: GiftMusic | undefined, enabled = true): Gift
     const audio = audioRef.current;
     if (!audio) return;
     audio.muted = !audio.muted;
+    giftMuted = audio.muted;
     setMuted(audio.muted);
     if (!audio.muted && audio.paused) audio.play().catch(() => {});
   }, []);

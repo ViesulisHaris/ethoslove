@@ -2,12 +2,13 @@
 /* eslint-disable @next/next/no-img-element -- album artwork comes from Apple's CDN */
 
 import { useEffect, useRef, useState } from "react";
-import { AlertCircle, Loader2, Music2, Pause, Play, Search, Sparkles, Upload, X } from "lucide-react";
+import { AlertCircle, ExternalLink, Loader2, Music2, Pause, Play, Search, Upload, X } from "lucide-react";
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
 import type { CatalogSong } from "@/app/api/music/search/route";
 import { useTranslations } from "next-intl";
 import { useEditor } from "@/lib/editor/store";
+import { appleMusicTrackUrl } from "@/lib/gift/music";
 import { uploadTypeFor } from "@/lib/editor/media-types";
 import { reasonOf } from "@/lib/editor/failed-uploads";
 import { LIBRARY_TRACKS, TRACK_MOODS, type TrackMood } from "@/lib/editor/music-library";
@@ -45,6 +46,7 @@ export function MusicSection() {
   const setLibraryTrack = useEditor((s) => s.setLibraryTrack);
   const setCatalogTrack = useEditor((s) => s.setCatalogTrack);
   const locale = useLocale();
+  const storefront = locale === "es" ? "es" : "en";
   const setUploadedMusic = useEditor((s) => s.setUploadedMusic);
   const setMusicStart = useEditor((s) => s.setMusicStart);
   const clearMusic = useEditor((s) => s.clearMusic);
@@ -188,13 +190,8 @@ export function MusicSection() {
 
       {mode === "song" ? (
         <div className="mt-5">
-          <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[11px] font-semibold text-ink">
-              <Sparkles className="size-3" />
-              {t("songPremium")}
-            </span>
-            <span>{t("songHint")}</span>
-          </div>
+          {/* Free on every gift: Apple's previews may promote a song but may not be sold. */}
+          <p className="mb-3 text-xs text-muted-foreground">{t("songHint")}</p>
           {music?.source === "catalog" ? (
             <div className="mb-3 flex items-center gap-3 rounded-xl border border-coral/40 bg-accent/60 p-3">
               {music.artwork ? (
@@ -208,6 +205,7 @@ export function MusicSection() {
                   <span translate="no">{music.artist}</span> · {t("songSelected")}
                 </p>
               </div>
+              <AppleMusicLink href={appleMusicTrackUrl(music, storefront)} label={t("songListen", { title: music.title ?? "" })} />
               <button
                 type="button"
                 onClick={() => togglePreview("catalog", music.url)}
@@ -283,6 +281,7 @@ export function MusicSection() {
                           {song.album ? ` · ${song.album}` : ""}
                         </span>
                       </button>
+                      <AppleMusicLink href={appleMusicTrackUrl({ externalUrl: song.url, trackId: song.id }, storefront)} label={t("songListen", { title: song.title })} />
                       <button
                         type="button"
                         onClick={() => togglePreview(song.id, song.previewUrl)}
@@ -309,7 +308,7 @@ export function MusicSection() {
               )}
             </div>
           ) : null}
-          <p className="mt-2 text-xs text-muted-foreground">{t("songPreviewNote")}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{t("songCourtesy")}</p>
         </div>
       ) : null}
 
@@ -412,4 +411,24 @@ function formatTime(s: number) {
   const m = Math.floor(s / 60);
   const r = Math.floor(s % 60);
   return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+/**
+ * The way to the song on Apple Music, beside every preview the picker plays: Apple allows its
+ * previews only next to a link to the track. Rebuilt without the search result's query tokens.
+ */
+function AppleMusicLink({ href, label }: { href: string | null; label: string }) {
+  if (!href) return null;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      title={label}
+      className="relative grid size-8 shrink-0 place-items-center rounded-full text-muted-foreground after:absolute after:-inset-1.5 hover:bg-ink/5 hover:text-ink"
+    >
+      <ExternalLink className="size-3.5" aria-hidden="true" />
+    </a>
+  );
 }

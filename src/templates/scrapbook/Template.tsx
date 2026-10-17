@@ -5,6 +5,8 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNod
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
+import { backgroundMusic } from "@/lib/gift/music";
+import { initialOf } from "@/lib/gift/graphemes";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -273,6 +275,8 @@ function Open({
   onMakeOne?: () => void;
   onReplay?: () => void;
 }) {
+  // "Now playing" names only music that plays: a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
@@ -392,13 +396,13 @@ function Open({
               </div>
               <div className="my-[calc(4.5*var(--u))] h-px w-full bg-current opacity-20" />
               <MessageBody data={data} blocks={blocks} mode={mode} tone={theme.cardDark ? "dark" : "light"} face="type" greeting={null} ornament={false} accent={theme.accent} />
-              <WaxSeal color={theme.accent} letter={data.senderName.trim().charAt(0).toUpperCase() || "♥"} className="absolute -right-[calc(3*var(--u))] -bottom-[calc(5*var(--u))] w-[calc(18*var(--u))] drop-shadow-[0_6px_8px_rgba(0,0,0,.3)]" />
+              <WaxSeal color={theme.accent} letter={initialOf(data.senderName, "♥")} className="absolute -right-[calc(3*var(--u))] -bottom-[calc(5*var(--u))] w-[calc(18*var(--u))] drop-shadow-[0_6px_8px_rgba(0,0,0,.3)]" />
             </article>
           </Placed>
 
-          {data.music?.title ? (
+          {song?.title ? (
             <Placed rot={-1.5} still={still}>
-              <NowPlaying title={data.music.title} artist={data.music.artist} theme={theme} label={s.playing} />
+              <NowPlaying title={song.title} artist={song.artist} theme={theme} label={s.playing} />
             </Placed>
           ) : null}
 

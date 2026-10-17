@@ -6,6 +6,24 @@ The recipient opens it on their phone and gets a cinematic experience.
 
 > Working brand name: **Ethos** (`src/config/brand.ts`). Change it there and it propagates everywhere.
 
+## This repository: the couples platform
+
+`reasj2/ethoswebsite` is where Ethos grows past gifts: **date ideas on a map** (`/dates`), a plan that
+is sent as a link (`/plan`), a **long-distance** room and **games** for two. The gifts are all still
+here and unchanged, under `/gifts`, `/templates`, `/occasions` and `/pricing`.
+
+The gifts site in production is `reasj2/ethoslove`, and every push to it deploys. **This repository
+pulls from it and never pushes to it**: `upstream` is ethoslove with its push URL disabled.
+
+```bash
+git fetch upstream && git rebase upstream/main   # bring over what changed in the gifts product
+git push origin main                             # only ever to ethoswebsite
+```
+
+The Dates pages need no keys and no database; [docs/DATES.md](docs/DATES.md) explains where the map,
+the places, the hours and the forecast come from, what that data cannot do, and what to swap when
+it is outgrown.
+
 ## Stack
 
 Next.js 16 (App Router, RSC, TypeScript strict) · Tailwind v4 + shadcn/ui · Motion (Framer) + GSAP +
@@ -109,9 +127,12 @@ SMTP with host `smtp.resend.com`, port `465`, user `resend`, password = your Res
 
 Free gifts get the bundled library (`public/audio/library`, rendered by `scripts/gen-library.mjs`:
 eight loopable pieces synthesised in-house, so nothing needs licensing) and up to 10 photos, with
-the footer. Extras that need any unlock, on any template: a real song (30-second preview from
-Apple's catalogue via `/api/music/search`, credited at the end), a video clip, a voice message
-from the sender, more than 10 photos, scheduling, passwords. The rules live in
+the footer. A real song is free on every gift too: a 30-second preview from Apple's catalogue via
+`/api/music/search`, which Apple allows only to promote the track, so it never plays under the gift.
+It waits on the end screen (`src/templates/_shared/SongPreview.tsx`) and plays once per tap, never
+under a video, beside "Listen on Apple Music" and "Preview courtesy of Apple Music"; the rules are
+in `src/lib/gift/music.ts`. Extras that need any unlock, on any template: a video clip, a voice
+message from the sender, more than 10 photos, scheduling, passwords, no footer. The rules live in
 `src/lib/gift/publish.ts` (`premiumExtras`).
 
 ## Scheduled gifts

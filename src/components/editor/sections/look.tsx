@@ -16,6 +16,7 @@ export function LookSection({ manifest, mod, locale }: { manifest: TemplateManif
   const data = useEditor((s) => s.data);
   const patch = useEditor((s) => s.patch);
   const swatches = Array.from(new Set([manifest.defaultAccent, ...ACCENT_SWATCHES]));
+  const Opening = mod.opening;
 
   return (
     <section>
@@ -26,6 +27,9 @@ export function LookSection({ manifest, mod, locale }: { manifest: TemplateManif
           onChange={(cover) => patch({ cover })}
           recipientName={data.recipientName}
           locale={data.locale}
+          slug={manifest.slug}
+          fields={data.fields}
+          classic={Opening ? (name) => <Opening fields={data.fields} recipientName={name} senderName={data.senderName} locale={data.locale} /> : undefined}
         />
       </Field>
       <Field label={t("fields.accentColor")} className="mt-6">

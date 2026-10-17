@@ -1,0 +1,128 @@
+{
+  "demo": {
+    "template": "digicam",
+    "steps": [
+      "swap \"NORA\" \"MAYA\"",
+      "swap \"Nora\" \"Maya\"",
+      "swap \"nora\" \"maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "wait 1600",
+      "shot gift-1.png",
+      "tap \"turn the camera on\"",
+      "wait 2600",
+      "shot gift-2.png",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"take a picture\"",
+      "wait 1300",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 350",
+      "tap \"next photo\"",
+      "wait 800",
+      "tap \"take a picture\"",
+      "wait 4200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:36",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy birthday beautiful and u said \"ty\""
+        },
+        {
+          "from": "me",
+          "text": "ty"
+        },
+        {
+          "from": "them",
+          "text": "its ur birthday and ur this cold?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im fine"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday, maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "i want to break up"
+        },
+        {
+          "from": "them",
+          "text": "on ur birthday??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "ok fine"
+        },
+        {
+          "from": "them",
+          "text": "ur not even that pretty anyway"
+        },
+        {
+          "from": "them",
+          "text": "jk"
+        },
+        {
+          "from": "them",
+          "text": "maya please"
+        }
+      ]
+    }
+  ]
+}

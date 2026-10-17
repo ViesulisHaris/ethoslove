@@ -14,6 +14,30 @@
  * style, near the top. Use it on slide 1: it is the only thing legible at thumbnail size, and a
  * carousel whose first slide says nothing dies in the test pool. "\n" breaks the line.
  *
+ * `"crop": true` makes every chat slide a phone screenshot cropped to the messages, the way the
+ * storytime accounts that do millions post them (@you_sir_naim, 27 Sept 2026: 1206px wide, 560 to
+ * 1180px tall, nothing but the bubbles, a timestamp and "Read"). 1206 is an iPhone Pro at @3x, so
+ * the type is exactly the size a real screenshot sets it. TikTok shows the picture on black, and it
+ * reads as someone's phone, not as a slide somebody made.
+ *
+ * `"look": "ios26"` draws the dark iMessage the way an iPhone on iOS 26 shows it, copied from a
+ * storytime account whose every post goes big (7 Oct 2026): the lighter blue, and under the last
+ * message the moon and "mylove has notifications silenced" (`"silenced": "mylove"` in the script,
+ * per slide to change or `false` to hide it), then the message bar with its round + and the mic.
+ * A slide's `"input": "can you come see me"` is a draft typed in the bar, with the caret and the
+ * blue send button; a draft too long for one line wraps and grows the bar, as Messages does. `"swiped": true` is the thread dragged left to show the times: each message
+ * takes a `"time": "10:07 pm"`, sent bubbles move left with it and received ones stay put. Keep it
+ * to plain text bubbles, as in the reference: a time floating beside a link card read as fake.
+ *
+ * `"encrypted": true` (script or slide) puts iOS 26's thread header over the timestamp: "iMessage" and
+ * "🔒 Encrypted", as on the storytime accounts doing millions in Oct 2026 (@richie_prince1, @36grm).
+ * `"wallpaper": "rose"` or `"bokeh"` gives the thread one of iOS 26's chat backgrounds (a dark rose and
+ * violet wash; soft coloured lights), with the bubbles toned to sit on it as Messages does.
+ * `"bar": false` (script or slide) leaves the message bar off, for a screenshot cropped at the last message.
+ * A message's `"quote": "…"` draws it as an inline reply: the quoted message above as an outlined
+ * bubble (on the side `"quoteFrom"` says, by default the other person's), and the curved thread line
+ * leading down into the reply — what @dianaa.auclair's crops are full of.
+ *
  * `"theme": "light"` draws the same iMessage in light mode — white page, grey bubbles — which is what
  * the storytime accounts that do millions actually post.
  *
@@ -40,6 +64,7 @@
  * "[x] " a ticked one, "# " a heading, and "" a blank line.
  */
 import { chromium } from "@playwright/test";
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, isAbsolute, join } from "node:path";
 
@@ -94,10 +119,39 @@ const OG_CSS = `
     .og-name{margin-top:6px;font-family:Newsreader,Georgia,serif;font-size:82px;line-height:1;letter-spacing:-2px;white-space:nowrap}
     .og-line{margin-top:8px;font-family:Newsreader,Georgia,serif;font-style:italic;font-size:31px;color:rgba(23,19,15,.62);white-space:nowrap}
     .og-domain{position:absolute;bottom:30px;font-family:Newsreader,Georgia,serif;font-size:15px;letter-spacing:4px;color:rgba(23,19,15,.4)}
+    .og-card{display:block;width:100%;height:100%;object-fit:cover}
 `;
 
-/** The preview image iMessage pulls from a gift link: tryethos.io's og:image, drawn to match. */
-const ogImage = (name, lang) => {
+/**
+ * The preview image iMessage pulls from a gift link: the real share card, the envelope on one of its
+ * four papers, drawn by scripts/share-card.mjs from the same code as /g/<id>/card.jpg and kept in
+ * docs/marketing/cards. A link's `"card": "blush" | "rouge" | "pressed" | "noir"` picks the paper
+ * (blush by default); `"card": "classic"` draws the plain invitation the site showed before 16 Oct.
+ */
+const CARD_DIR = join(import.meta.dirname, "../docs/marketing/cards");
+const CARD_LOOKS = ["blush", "rouge", "pressed", "noir"];
+const cardImages = new Map();
+function realCard(name, lang, look) {
+  const key = `${look}-${(name ?? "Hey").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${lang === "es" ? "es" : "en"}`;
+  if (cardImages.has(key)) return cardImages.get(key);
+  const file = join(CARD_DIR, `${key}.jpg`);
+  if (!existsSync(file)) {
+    mkdirSync(CARD_DIR, { recursive: true });
+    const made = spawnSync(process.execPath, [join(import.meta.dirname, "share-card.mjs"), file, look, name ?? "Hey", lang === "es" ? "es" : "en"], { stdio: "inherit" });
+    if (made.status !== 0 || !existsSync(file)) {
+      cardImages.set(key, null);
+      return null;
+    }
+  }
+  const uri = `data:image/jpeg;base64,${readFileSync(file).toString("base64")}`;
+  cardImages.set(key, uri);
+  return uri;
+}
+
+const ogImage = (name, lang, look) => {
+  const paper = CARD_LOOKS.includes(look) ? look : look === "classic" ? null : "blush";
+  const card = paper ? realCard(name, lang, paper) : null;
+  if (card) return `<img class="og-card" src="${card}" alt="">`;
   const es = lang === "es";
   return `
   <div class="og">
@@ -137,35 +191,24 @@ const LIGHT_CSS = `
     .tap.theirs{background:#E9E9EB}
 `;
 
+/** One to three emoji and nothing else: Messages draws those big, with no bubble, and a bubble gives a fake away. */
+const JUMBO = /^(?:\p{Extended_Pictographic}(?:\p{Emoji_Modifier}|\uFE0F|\u200D\p{Extended_Pictographic})*){1,3}$/u;
+
 function html(slide) {
   const rows = slide.messages
     .map((m, i, all) => {
       if (m.ts) return `<div class="ts mid">${stamp(m.ts)}</div>`;
-      if (m.system) return `<div class="sys">${esc(m.system)}</div>`;
-      const next = all[i + 1];
-      const last = !next || next.from !== m.from || Boolean(next.ts) || Boolean(next.typing);
-      const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
-      const row = m.from === "me" ? "r" : "l";
-      const status = m.status ? `<div class="status">${stamp(m.status)}</div>` : "";
-      if (m.typing) {
-        return `<div class="row l"><div class="bubble in typing"><span></span><span></span><span></span><i class="t1"></i><i class="t2"></i></div></div>`;
+      if (m.quote) {
+        // An inline reply: the message it answers, outlined, then the reply under the thread line.
+        const quoteMine = (m.quoteFrom ?? (m.from === "me" ? "them" : "me")) === "me";
+        const quoted = `<div class="row ${quoteMine ? "r" : "l"} quoted"><div class="quote ${quoteMine ? "q-out" : "q-in"}">${esc(m.quote)}</div></div>`;
+        return quoted + rowFor(slide, { ...m, quote: undefined, replied: true }, i, all);
       }
-      if (m.image) {
-        return `<div class="row ${row}"><div class="media">${m.tapback ? tapback(m) : ""}<div class="ph"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div></div>`;
-      }
-      if (m.link) {
-        // A rich link is a grey card on either side; only its alignment and tail change.
-        const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
-        const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang)}</div>` : "";
-        return `<div class="row ${row} ${status ? "has-status" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
-      }
-      // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
-      const prev = all[i - 1];
-      const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
-      const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
-      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+      return rowFor(slide, m, i, all);
     })
     .join("");
+  const ios26 = script.look === "ios26";
+  const wallpaper = script.wallpaper ? ` wp wp-${script.wallpaper}` : "";
 
   return `<!doctype html><html><head><meta charset="utf-8"><style>${STAND_IN_FACE}
     @font-face{font-family:Newsreader;src:url(data:font/ttf;base64,${SERIF}) format("truetype");font-style:normal}
@@ -190,6 +233,7 @@ function html(slide) {
     .sys{text-align:center;color:#8e8e93;font-size:35px;line-height:44px;margin:34px 70px;letter-spacing:-.2px}
 
     .bubble{position:relative;max-width:73%;padding:20px 38px 21px;border-radius:54px;font-size:51px;line-height:66px;letter-spacing:-.9px;word-wrap:break-word;box-sizing:border-box}
+    .jumbo{position:relative;font-size:152px;line-height:176px;padding:0 10px}
     .in{background:#262629}
     .out{background:#0B84FF}
     /* The tail: a curved spur on the last bubble of a run, cut out of the black behind it. */
@@ -247,8 +291,145 @@ function html(slide) {
     ${OG_CSS}
     ${HOOK_CSS}
     ${script.theme === "light" ? LIGHT_CSS : ""}
-  </style></head><body>${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}</div></body></html>`;
+    ${ios26 ? IOS26_CSS : ""}
+    ${REPLY_CSS}
+    ${script.wallpaper ? WALLPAPER_CSS : ""}
+  </style></head><body class="${ios26 ? "ios26" : ""}${slide.swiped ? " swiped" : ""}${wallpaper}">${wallpaperHtml()}${hookHtml(slide)}<div class="stage${slide.hook ? " has-hook" : ""}">${encHtml(slide)}${slide.timestamp ? `<div class="ts">${stamp(slide.timestamp)}</div>` : ""}${rows}${ios26 ? focusHtml(slide) + ((slide.bar ?? script.bar ?? true) ? barHtml(slide) : "") : ""}</div></body></html>`;
 }
+
+/** One message's row: a bubble, a typing indicator, a picture or a link card. */
+function rowFor(slide, m, i, all) {
+    if (m.system) return `<div class="sys">${esc(m.system)}</div>`;
+    const next = all[i + 1];
+    const last = !next || next.from !== m.from || Boolean(next.ts) || Boolean(next.typing);
+    const cls = `${m.from === "me" ? "out" : "in"}${last ? " last" : ""}`;
+    const row = m.from === "me" ? "r" : "l";
+    const status = m.status ? `<div class="status">${stamp(m.status)}</div>` : "";
+    const when = slide.swiped && m.time ? `<div class="when">${esc(m.time)}</div>` : "";
+    if (m.typing) {
+      return `<div class="row l"><div class="bubble in typing"><span></span><span></span><span></span><i class="t1"></i><i class="t2"></i></div></div>`;
+    }
+    if (m.image) {
+      return `<div class="row ${row}"><div class="media">${m.tapback ? tapback(m) : ""}<div class="ph"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div></div>`;
+    }
+    if (m.link) {
+      // A rich link is a grey card on either side; only its alignment and tail change.
+      const tail = last ? ` last ${m.from === "me" ? "tail-r" : "tail-l"}` : "";
+      const img = m.link.image === "og" ? `<div class="lk-img">${ogImage(m.link.name, m.link.lang, m.link.card)}</div>` : "";
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.replied ? " replied" : ""}"><div class="bubble link${tail}${img ? " big" : ""}">${img}<div class="lk-foot"><div class="lk-text"><div class="lk-title">${esc(m.link.title)}</div><div class="lk-domain">${esc(m.link.domain)}</div></div>${img ? "" : `<div class="lk-thumb">${ogImage(m.link.name, m.link.lang, m.link.card)}</div>`}</div>${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+    }
+    if (JUMBO.test(m.text.trim())) {
+      return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}"><div class="jumbo">${esc(m.text.trim())}${m.tapback ? tapback(m) : ""}</div>${status}</div>`;
+    }
+    // In a group, the name over the first bubble of a run from someone new, as Messages sets it.
+    const prev = all[i - 1];
+    const named = m.from !== "me" && m.name && (!prev || prev.from === "me" || prev.name !== m.name || Boolean(prev.ts));
+    const name = named ? `<div class="who">${esc(m.name)}</div>` : "";
+    return `<div class="row ${row} ${status ? "has-status" : ""}${m.tapback ? " has-tap" : ""}${name ? " named" : ""}${m.replied ? " replied" : ""}">${name}<div class="bubble ${cls}">${esc(m.text)}${m.tapback ? tapback(m) : ""}</div>${when}${status}</div>`;
+}
+
+/** iOS 26's header over a thread: the app's name and the lock, above the day and time. */
+const LOCK = `<svg viewBox="0 0 16 20" aria-hidden="true"><rect x="2" y="8.4" width="12" height="10" rx="2.4" fill="currentColor"/><path d="M4.8 8.6V6a3.2 3.2 0 0 1 6.4 0v2.6" fill="none" stroke="currentColor" stroke-width="1.9"/></svg>`;
+const encHtml = (slide) => ((slide.encrypted ?? script.encrypted) ? `<div class="enc"><div class="enc-app">iMessage</div><div class="enc-lock">${LOCK}<span>${script.lang === "es" ? "Cifrado" : "Encrypted"}</span></div></div>` : "");
+
+/** Inline replies: the quoted message outlined in its sender's colour, and the thread line curving down into the answer. */
+const REPLY_CSS = `
+    .enc{text-align:center;color:#8E8E93;margin:0 0 20px;letter-spacing:-.2px}
+    .enc-app{font-size:33px;font-weight:600;line-height:42px}
+    .enc-lock{display:inline-flex;align-items:center;gap:9px;font-size:31px;line-height:40px}
+    .enc-lock svg{width:21px;height:26px}
+    .row.quoted{margin-top:30px}
+    .quote{max-width:73%;padding:13px 34px 14px;border-radius:50px;font-size:43px;line-height:55px;letter-spacing:-.6px;box-sizing:border-box;border:3px solid}
+    .q-out{border-color:#1D5FC7;color:#4C8DF6}
+    .q-in{border-color:#48484A;color:#A1A1A6}
+    .row.replied{position:relative;margin-top:62px!important}
+    .row.replied::before{content:"";position:absolute;top:-46px;width:58px;height:40px;border-top:5px solid #48484A}
+    .row.replied.l::before{left:46px;border-left:5px solid #48484A;border-top-left-radius:34px}
+    .row.replied.r::before{right:46px;border-right:5px solid #48484A;border-top-right-radius:34px}
+`;
+
+/**
+ * iOS 26's chat backgrounds. On one, Messages tones the bubbles to the picture, and the tails can't be
+ * carved out of black any more, so they are drawn as shapes of their own.
+ */
+const WALLPAPER_CSS = `
+    html,body{background:#0e0b10}
+    .wallpaper{position:absolute;inset:0;z-index:0;overflow:hidden}
+    .wp .stage{z-index:1}
+    .wp-rose .wallpaper{background:radial-gradient(85% 55% at 22% 58%, #6c2448 0%, rgba(108,36,72,0) 70%), radial-gradient(75% 55% at 88% 46%, #3d2b74 0%, rgba(61,43,116,0) 70%), linear-gradient(180deg, #140b16 0%, #2a1023 48%, #160a13 100%)}
+    .wp-bokeh .wallpaper{background:#0c0b0e}
+    .wp-bokeh .wallpaper i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.88}
+    .wp-rose .in,.wp-rose .in.last::before{background:#5B3246}
+    .wp-rose .out,.wp-rose .out.last::before{background:#7C9EF0}
+    .wp-bokeh .in,.wp-bokeh .in.last::before{background:#2C2A30}
+    .wp-bokeh .out,.wp-bokeh .out.last::before{background:#4E9EF5}
+    .wp .in.last::after,.wp .out.last::after,.wp .link.last::after{display:none}
+    .wp .in.last::before{left:-12px;width:40px;height:38px;border-radius:0;clip-path:path('M40 0 L40 38 L2 38 C 18 34, 27 22, 27 0 Z')}
+    .wp .out.last::before{right:-12px;left:auto;width:40px;height:38px;border-radius:0;clip-path:path('M0 0 L0 38 L38 38 C 22 34, 13 22, 13 0 Z')}
+    .wp .link.tail-l::before{left:-12px;width:40px;height:38px;border-radius:0;clip-path:path('M40 0 L40 38 L2 38 C 18 34, 27 22, 27 0 Z')}
+    .wp .link.tail-r::before{right:-12px;left:auto;width:40px;height:38px;border-radius:0;clip-path:path('M0 0 L0 38 L38 38 C 22 34, 13 22, 13 0 Z')}
+    .wp .field,.wp .plus{background:rgba(24,22,28,.82)}
+`;
+/** The soft lights behind a "bokeh" thread: the same few, always, so a post re-renders identically. */
+const BOKEH = [
+  ["#D23FA6", 6, 14, 520], ["#2E9E57", 68, 8, 470], ["#E38A2A", 78, 56, 500], ["#B8C43A", 4, 66, 440],
+  ["#E05B9B", 50, 82, 470], ["#7B49D9", 36, 36, 380], ["#E0C23E", 88, 26, 330], ["#2F8FC9", 18, 44, 300],
+];
+const wallpaperHtml = () =>
+  script.wallpaper === "bokeh"
+    ? `<div class="wallpaper">${BOKEH.map(([c, x, y, d]) => `<i style="background:${c};left:${x}%;top:${y}%;width:${d}px;height:${d}px;margin:-${d / 2}px 0 0 -${d / 2}px"></i>`).join("")}</div>`
+    : script.wallpaper
+      ? `<div class="wallpaper"></div>`
+      : "";
+
+
+/** iOS 26's Messages, dark: measured off the reference screenshots at @3x. */
+const IOS26_BLUE = "#1C99FC";
+const IOS26_CSS = `
+    .ios26 .out,.ios26 .out.last::before{background:${IOS26_BLUE}}
+    .ios26 .bubble:not(.link){padding:24px 42px 25px;border-radius:58px;max-width:75%}
+    .ios26 .row + .row{margin-top:14px}
+    .ios26 .row.l + .row.r,.ios26 .row.r + .row.l{margin-top:28px}
+    .ios26 .status{color:#A2A2A6;padding-right:56px}
+    .focus{display:flex;align-items:center;justify-content:center;gap:12px;color:#8388EE;font-size:34px;letter-spacing:-.25px;margin-top:46px}
+    .focus svg{width:36px;height:36px;flex:none}
+    /* A long draft grows the field upwards a line at a time, as Messages does, with the + and the send
+       button staying on the bottom line; one line is still the 124px capsule. */
+    .bar{display:flex;align-items:flex-end;gap:32px;margin-top:58px}
+    .plus{width:118px;height:118px;border-radius:50%;background:#171717;box-shadow:inset 0 0 0 3px #2C2C2C;display:grid;place-items:center;flex:none;margin-bottom:3px}
+    .plus svg{width:50px;height:50px}
+    .field{flex:1;min-width:0;height:124px;border-radius:62px;background:#181818;box-shadow:inset 0 0 0 3px #2C2C2C;display:flex;align-items:center;gap:20px;padding:0 34px 0 48px;box-sizing:border-box}
+    .field .hint{flex:1;color:#727272;font-size:52px;letter-spacing:-.7px}
+    .field .mic{width:40px;height:58px;color:#7A7A7A;flex:none}
+    .field.typed{height:auto;min-height:124px;align-items:flex-end;padding:13px 14px 13px 48px}
+    .draft{flex:1;min-width:0;color:#fff;font-size:52px;letter-spacing:-.7px;line-height:64px;padding:17px 0;overflow-wrap:break-word}
+    .caret{display:inline-block;width:5px;height:64px;margin-left:3px;border-radius:3px;background:${IOS26_BLUE};vertical-align:top}
+    .send{width:98px;height:98px;border-radius:50%;background:${IOS26_BLUE};display:grid;place-items:center;flex:none}
+    .send svg{width:54px;height:54px}
+    .swiped .row{display:grid;grid-template-columns:minmax(0,1fr) 190px;align-items:center}
+    .swiped .row .bubble{grid-column:1;grid-row:1;justify-self:start;max-width:90%}
+    .swiped .row.r .bubble{justify-self:end}
+    .swiped .row .when{grid-column:2;grid-row:1;justify-self:end;color:#8E8E93;font-size:31px;letter-spacing:-.1px;white-space:nowrap}
+    /* The scroll bar iOS shows while the thread is being dragged, as in the reference. */
+    .swiped .stage::after{content:"";position:absolute;right:5px;top:46%;width:7px;height:26%;border-radius:4px;background:rgba(255,255,255,.32)}
+    .swiped .row .status{grid-column:1;grid-row:2}
+`;
+// Focus's moon: a full disc with a bite out of the upper right, thick at the bottom left like iOS draws it.
+const MOON = `<svg viewBox="0 0 24 24" aria-hidden="true"><mask id="bite"><rect width="24" height="24" fill="#fff"/><circle cx="17.6" cy="6.4" r="7.4" fill="#000"/></mask><circle cx="12" cy="12" r="9.2" fill="currentColor" mask="url(#bite)"/></svg>`;
+const silencedLine = (name) => (script.lang === "es" ? `${name} tiene las notificaciones silenciadas` : `${name} has notifications silenced`);
+/** The moon and "… has notifications silenced", under the last message, while his Focus is on. */
+const focusHtml = (slide) => {
+  const name = slide.silenced === false ? null : (slide.silenced ?? script.silenced);
+  return name ? `<div class="focus">${MOON}<span>${esc(silencedLine(name))}</span></div>` : "";
+};
+/** The message bar: the round + and the field, empty with its mic, or holding a draft and the send button. */
+const barHtml = (slide) => {
+  const plus = `<div class="plus"><svg viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/></svg></div>`;
+  const field = slide.input
+    ? `<div class="field typed"><span class="draft">${esc(slide.input)}<i class="caret"></i></span><span class="send"><svg viewBox="0 0 24 24"><path d="M12 19.5V5.5M5.8 11.4 12 5.2l6.2 6.2" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>`
+    : `<div class="field"><span class="hint">iMessage</span><svg class="mic" viewBox="0 0 16 24"><rect x="4.4" y="1.2" width="7.2" height="13.4" rx="3.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 11.2a6.5 6.5 0 0 0 13 0M8 17.7v4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>`;
+  return `<div class="bar">${plus}${field}</div>`;
+};
 
 /* Instagram DMs, dark mode, at the same @3x scale. */
 // The sent gradient is pinned to the screen as in the app, so higher bubbles are more purple.
@@ -300,7 +481,7 @@ function igHtml(slide) {
       const pos = first && last ? "solo" : first ? "first" : last ? "last" : "mid";
       const react = m.reaction ? `<span class="ig-react">${esc(m.reaction)}</span>` : "";
       const body = m.link
-        ? `<div class="ig-link">${react}<div class="ig-link-img"><div class="ig-og">${ogImage(m.link.name, m.link.lang)}</div></div><div class="ig-link-foot"><div class="ig-link-title">${esc(m.link.title)}</div><div class="ig-link-domain">${esc(m.link.domain)}</div></div></div>`
+        ? `<div class="ig-link">${react}<div class="ig-link-img"><div class="ig-og">${ogImage(m.link.name, m.link.lang, m.link.card)}</div></div><div class="ig-link-foot"><div class="ig-link-title">${esc(m.link.title)}</div><div class="ig-link-domain">${esc(m.link.domain)}</div></div></div>`
         : `<div class="ig-bubble ${side} ${pos}">${esc(m.text)}${react}</div>`;
       // Instagram shows their picture once, beside the last message of each run.
       const face = side === "in" ? `<div class="ig-face">${last ? avatar(sky) : ""}</div>` : "";
@@ -389,7 +570,7 @@ function msgHtml(slide) {
       const face = `<div class="ms-face">${faceFor(m.from)}</div>`;
       if (m.typing) return `<div class="ms-row ${side}">${side === "in" ? face : ""}<div class="ms-bubble ${side} typing"><span></span><span></span><span></span></div>${side === "out" ? face : ""}</div>`;
       const body = m.link
-        ? `<div class="ms-link"><div class="ms-link-img">${ogImage(m.link.name, m.link.lang)}</div><div class="ms-link-foot"><div class="ms-link-title">${esc(m.link.title)}</div><div class="ms-link-domain">${esc(m.link.domain)}</div></div></div>`
+        ? `<div class="ms-link"><div class="ms-link-img">${ogImage(m.link.name, m.link.lang, m.link.card)}</div><div class="ms-link-foot"><div class="ms-link-title">${esc(m.link.title)}</div><div class="ms-link-domain">${esc(m.link.domain)}</div></div></div>`
         : `<div class="ms-bubble ${side}">${esc(m.text)}</div>`;
       return `<div class="ms-row ${side}">${side === "in" ? face : ""}${body}${side === "out" ? face : ""}</div>`;
     })
@@ -508,6 +689,10 @@ function gapHtml(slide, n) {
   </style></head><body><div class="n">${String(n).padStart(2, "0")} · ${esc(slide.type)} · yours</div>${slide.note ? `<p class="note">${esc(slide.note)}</p>` : ""}</body></html>`;
 }
 
+// "crop": the same chat, laid out at a phone's width and top to bottom, then shot to the messages only.
+const CROP_WIDTH = script.look === "ios26" ? 1170 : 1206;
+const CROP_CSS = `html,body{width:${CROP_WIDTH}px!important;height:auto!important;overflow:visible!important}.stage{position:relative!important;inset:auto!important;justify-content:flex-start!important;padding:34px 48px 30px 42px!important}`;
+
 const browser = await chromium.launch(process.env.TIKTOK_CHROMIUM ? { executablePath: process.env.TIKTOK_CHROMIUM } : {});
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
 // The stand-in is a data URL, so it loads after first use; a slide shot before it lands is set in the
@@ -537,10 +722,20 @@ for (const slide of script.slides) {
     }
     continue;
   }
+  const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
+  if (script.crop && slide.type === "chat" && draw === html) {
+    await page.setViewportSize({ width: CROP_WIDTH, height: 2600 });
+    await page.setContent(draw(slide).replace("</style>", `${CROP_CSS}</style>`));
+    await settle();
+    await page.waitForTimeout(150);
+    sheet.push(await page.locator(".stage").screenshot({ path: file }));
+    await page.setViewportSize({ width: 1080, height: 1920 });
+    console.log("wrote", file);
+    continue;
+  }
   await page.setContent(draw(slide));
   await settle();
   await page.waitForTimeout(150);
-  const file = join(outDir, `slide-${String(n).padStart(2, "0")}.png`);
   sheet.push(await page.screenshot({ path: file }));
   console.log("wrote", file);
 }
@@ -552,7 +747,7 @@ if (SHEET && sheet.length) {
   const mime = (b) => (b[0] === 0xff && b[1] === 0xd8 ? "image/jpeg" : "image/png");
   const cells = sheet.map((b) => `<img src="data:${mime(b)};base64,${b.toString("base64")}">`).join("");
   await page.setViewportSize({ width: cols * 290 + 20, height: rows * 510 + 20 });
-  await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
+  await page.setContent(`<style>body{margin:0;padding:10px;background:#000;display:grid;grid-template-columns:repeat(${cols},270px);gap:20px}img{width:270px;height:480px;object-fit:contain;background:#000;border-radius:14px;outline:2px solid #2c2c33;outline-offset:-1px}</style>${cells}`);
   const file = join(outDir, "sheet.png");
   await page.screenshot({ path: file, fullPage: true });
   console.log("wrote", file);

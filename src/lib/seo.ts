@@ -20,10 +20,11 @@ export function localeAlternates(locale: string, path: string, locales: readonly
   return { canonical: localizedUrl(locale, path), languages };
 }
 
-/** The share card drawn by app/og.png, optionally for one template. */
-export function ogImageUrl(locale: string, templateSlug?: string): string {
+/** The share card drawn by app/og.png, optionally for one template, or the front page's gift-led card. */
+export function ogImageUrl(locale: string, templateSlug?: string, card?: "gift"): string {
   const params = new URLSearchParams({ locale });
   if (templateSlug) params.set("template", templateSlug);
+  if (card) params.set("card", card);
   return `/og.png?${params}`;
 }
 
@@ -68,6 +69,21 @@ export function pageMetadata({
     alternates: localeAlternates(locale, path, locales),
     openGraph: article ? { ...share, type: "article", ...article } : { ...share, type: "website" },
     twitter: { card: "summary_large_image", site: SITE.twitterHandle, title: shareTitle, description, images: [card.url] },
+  };
+}
+
+/**
+ * A page's metadata with a shared link's preview on it (lib/share/links.ts): its own title and the
+ * card drawn from the link's photograph, on og and twitter alike. og:url keeps the preview's query,
+ * or Facebook and those that follow it would fetch the bare page and show its default card. The
+ * page's title, canonical and robots stay as they were: this is what a chat shows, nothing more.
+ */
+export function withSharePreview(base: Metadata, { url, title, description, image, alt }: { url: string; title: string; description: string; image: string; alt: string }): Metadata {
+  const card = { url: image, width: 1200, height: 630, type: "image/jpeg", alt };
+  return {
+    ...base,
+    openGraph: { ...base.openGraph, url, title, description, images: [card] },
+    twitter: { card: "summary_large_image", site: SITE.twitterHandle, title, description, images: [card] },
   };
 }
 

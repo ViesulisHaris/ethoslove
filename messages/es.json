@@ -18,6 +18,10 @@
     "save": "Guardar",
     "loading": "Cargando…",
     "comingSoon": "Muy pronto",
+    "appSoon": {
+      "title": "Ethos para iPhone",
+      "sub": "Muy pronto en la App Store"
+    },
     "free": "Gratis",
     "premium": "Premium",
     "noSubscription": "Un solo pago, sin suscripción. Tuyo para siempre.",
@@ -28,23 +32,44 @@
     "themeSystem": "Sistema",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
-    "skipToContent": "Ir al contenido"
+    "skipToContent": "Ir al contenido",
+    "close": "Cerrar",
+    "notifications": "Notificaciones",
+    "closeNotification": "Cerrar notificación",
+    "myDates": "Mis citas"
   },
   "meta": {
-    "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
+    "defaultTitle": "Ethos — Regalos, ideas para citas y escapadas en pareja",
     "titleTemplate": "%s · Ethos",
-    "description": "Crea un regalo digital personalizado y animado para alguien que quieres. Fotos, su canción, tus palabras. Compártelo con un enlace o un código QR. Empezar es gratis."
+    "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis.",
+    "giftsTitle": "Ethos — Regalos que se abren como una historia",
+    "giftsDescription": "Crea un regalo personal que se abre como una historia: tus fotos, su canción y tus palabras, enviado con un enlace o un código QR. Empezar es gratis."
   },
   "nav": {
     "templates": "Plantillas",
     "occasions": "Ocasiones",
     "pricing": "Precios",
     "howItWorks": "Cómo funciona",
-    "seeReactions": "Reacciones"
+    "seeReactions": "Reacciones",
+    "dates": "Citas",
+    "trips": "Viajes",
+    "gifts": "Regalos",
+    "longDistance": "A distancia",
+    "games": "Juegos",
+    "mainLabel": "Principal",
+    "menuLabel": "Menú",
+    "blurb": {
+      "dates": "Sitios reales cerca de ti",
+      "trips": "Viajes para dos, día a día",
+      "gifts": "Sorpresas para su móvil",
+      "longDistance": "Quedad a medio camino",
+      "games": "Juegos de cartas para dos",
+      "pricing": "Citas gratis, o Ethos for Two"
+    }
   },
   "home": {
     "hero": {
-      "eyebrow": "Regalos digitales. Diez minutos para hacerlo, años para guardarlo.",
+      "eyebrow": "Regalos personales. Diez minutos para hacerlo, años para guardarlo.",
       "h1a": "Regálale un momento que",
       "h1b": "abrirá una",
       "h1c": "y otra vez.",
@@ -161,9 +186,11 @@
     "legal": "Legal",
     "terms": "Términos",
     "privacy": "Privacidad",
+    "withdraw": "Desistir de una compra",
     "contact": "Contacto",
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
-    "madeWith": "Hecho en Riga y Madrid."
+    "madeWith": "Hecho en Riga.",
+    "explore": "Explorar"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -262,7 +289,11 @@
     "deleteAccount": "Eliminar cuenta",
     "deleteConfirm": "Esto elimina tu cuenta y todos los regalos, archivos, imágenes, vídeos, notas de voz y reacciones. El almacenamiento activo se borra primero; las copias de seguridad caducan en 30 días. Escribe {email} para confirmar.",
     "deleteForever": "Eliminar para siempre",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "dangerSubscription": "Al eliminar tu cuenta también se cancela de inmediato tu suscripción a Ethos for Two; el tiempo que quede no se reembolsa.",
+    "dangerAppStore": "Te suscribiste desde la app del iPhone: cancélala primero en los Ajustes de tu iPhone, porque eliminar la cuenta no detiene los cobros de Apple.",
+    "deleteFailed": "No se ha podido eliminar tu cuenta. No se ha borrado nada; inténtalo de nuevo en un momento.",
+    "deleteSubscriptionFailed": "No hemos podido cancelar tu suscripción a Ethos for Two, así que no se ha borrado nada. Inténtalo de nuevo en un momento."
   },
   "editor": {
     "title": "Editor",
@@ -296,7 +327,7 @@
       "music": {
         "n": "04",
         "title": "Música",
-        "blurb": "Su canción, o algo de nuestra biblioteca. Empieza cuando lo abran."
+        "blurb": "Algo de nuestra biblioteca o tu propio archivo suena al abrirlo. Una canción de verdad la escucha con un toque, cuando quiera."
       },
       "look": {
         "n": "05",
@@ -317,6 +348,11 @@
         "n": "04c",
         "title": "Tu voz",
         "blurb": "Dilo en voz alta. Hasta un minuto, al final del todo. Premium."
+      },
+      "unwrap": {
+        "n": "02b",
+        "title": "Una sorpresa dentro",
+        "blurb": "Una cita o un viaje, envuelto como un regalo bajo tus últimas palabras. Lo abre con un toque."
       }
     },
     "fields": {
@@ -334,7 +370,6 @@
       "italic": "Cursiva",
       "emoji": "Emoji",
       "helpWrite": "Ayúdame a escribirlo",
-      "helpWriteSoon": "El asistente de escritura necesita una clave de API. Ya está conectado y se activará en cuanto la añadas.",
       "charsLeft": "Quedan {n} caracteres",
       "accentColor": "Color de acento",
       "customColor": "Personalizado",
@@ -405,12 +440,12 @@
       },
       "licenseNote": "Las pistas de la biblioteca tienen licencia para usarse en regalos.",
       "song": "Una canción de verdad",
-      "songPremium": "Premium",
       "songSearch": "Busca una canción o artista",
-      "songHint": "Reproduce en bucle un fragmento de 30 segundos de la grabación original, con el crédito al final.",
+      "songHint": "Gratis en todas las plantillas. Al final del regalo le basta un toque para escuchar 30 segundos, junto a un enlace a la canción completa en Apple Music.",
       "songNone": "No hay resultados. Prueba con el nombre del artista.",
-      "songSelected": "Sonando en el regalo",
-      "songPreviewNote": "Los fragmentos vienen del catálogo de Apple Music y pueden usarse con crédito."
+      "songSelected": "Al final del regalo",
+      "songListen": "Escuchar «{title}» en Apple Music",
+      "songCourtesy": "Avances por cortesía de Apple Music."
     },
     "extras": {
       "countdown": "Cuenta atrás",
@@ -446,7 +481,15 @@
         "photosMin": "Añade {min, plural, one {una foto} other {al menos # fotos}}",
         "photosMax": "Demasiadas fotos para esta plantilla",
         "uploadsPending": "Tus archivos aún se están subiendo",
-        "uploadsFailed": "Algo no se subió"
+        "uploadsDone": "Sube tus archivos",
+        "uploadsFailed": "Algo no se subió",
+        "fields": {
+          "more": "{label}: añade al menos {count}",
+          "fewer": "{label}: {count} como máximo",
+          "fill": "{label}: rellénalo",
+          "emptyItem": "{label}: rellena o quita el que está vacío",
+          "fix": "{label}: revísalo"
+        }
       },
       "signInTitle": "Inicia sesión para publicar",
       "signInBlurb": "Tu borrador está guardado en este dispositivo. Inicia sesión y seguimos justo aquí.",
@@ -463,21 +506,31 @@
       "publishing": "Publicando…",
       "notConfigured": "Para publicar hace falta Supabase. Añade las claves a .env.local y reinicia.",
       "error": "No se pudo publicar: {error}",
-      "featureSong": "una canción real",
+      "errorFields": "Aún no se puede enviar. Revisa esto primero: {fields}.",
+      "featureSong": "música de otra web",
       "featureVideo": "un vídeo",
       "featureVoiceNote": "un mensaje de voz",
       "featureMorePhotos": "más de 10 fotos",
+      "featureUnwrap": "una sorpresa dentro",
       "payTitle": "Un pago y se envía",
       "payBlurb": "Este regalo usa {features}. Pagas una vez y esta plantilla es tuya para siempre, con todo lo que lleva.",
       "payButton": "Pagar {price} y enviar",
+      "appUnlock": "Desbloquear y enviar",
+      "appUnlockNote": "A través del App Store: a continuación verás las opciones y los precios.",
+      "appUnlockFailed": "No se ha completado. Vuelve a intentarlo o retómalo más tarde: tu borrador está guardado.",
+      "appSignIn": "Inicia sesión para continuar",
       "planLabel": "Qué desbloquear",
       "planSingle": "Esta plantilla",
       "planSingleBlurb": "Tuya para siempre, con todo lo que lleva",
       "planEverything": "Todas las plantillas",
       "planEverythingBlurb": "Las {n} plantillas, y cada una que añadamos",
-      "payNote": "Sin suscripción. Tarjeta, Apple Pay o Google Pay.",
+      "payNote": "Sin suscripción. Tarjeta, Apple Pay y más al pagar.",
       "paying": "Abriendo el pago seguro…",
       "signInBlurbPaid": "Tu borrador está guardado en este dispositivo. Inicia sesión, paga {price} una vez y se envía.",
+      "signInBlurbFreeReply": "Devolver este es gratis. Inicia sesión y se envía, con el pie «Hecho con Ethos».",
+      "freeReply": "<who>{name}</who> te invita a responder: es gratis y va con el pequeño pie «Hecho con Ethos».",
+      "freeReplyUsed": "La respuesta gratis de este regalo ya se ha enviado, así que esta cuesta el precio normal de la plantilla.",
+      "freeReplyInvalid": "Este enlace ya no hace gratis la respuesta, así que cuesta el precio normal de la plantilla.",
       "payGuestBlurb": "Este regalo usa {features}. Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
       "signInInstead": "¿Ya tienes cuenta? Inicia sesión",
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
@@ -500,7 +553,8 @@
         "processing": "Este dispositivo no pudo prepararlo. Quítalo o añade una copia más pequeña.",
         "network": "Se cortó la conexión. Vuelve a intentarlo o quítalo para enviar el regalo sin él.",
         "remove": "Quitar"
-      }
+      },
+      "campaign": "Gratis con la campaña de creadores: te quedan {left} de {limit} regalos gratis. El pie de Ethos se queda."
     },
     "share": {
       "title": "Ya está publicado.",
@@ -540,7 +594,17 @@
       "centrePhoto": "Una foto",
       "downloadPng": "Descargar PNG",
       "downloadSvg": "Descargar SVG",
-      "printCard": "Tarjeta lista para imprimir"
+      "printCard": "Tarjeta lista para imprimir",
+      "label": "Texto bajo el código",
+      "labelPlaceholder": "para {name} ♡",
+      "labelPlaceholderPlain": "escanéame ♡",
+      "centreSize": "Tamaño",
+      "sizeSmall": "Pequeño",
+      "sizeMedium": "Mediano",
+      "sizeLarge": "Grande",
+      "adjusted": "Lo hicimos más oscuro para que los móviles puedan leerlo.",
+      "panel": "Sobre un fondo oscuro, el código va en un cuadrado claro para que los móviles puedan leerlo.",
+      "previewAlt": "Tu código QR"
     },
     "writer": {
       "title": "Ayúdame a escribirlo",
@@ -575,6 +639,29 @@
       "premium": "Premium",
       "hint": "Mejor en un sitio tranquilo. Lo escucharán después de la última pantalla."
     },
+    "unwrap": {
+      "included": "Incluida",
+      "special": "Hazlo especial",
+      "specialNote": "En esta plantilla viene con «Hazlo especial», un solo pago al enviarlo.",
+      "addPlan": "Añadir tu plan de cita",
+      "addPlanHelp": "El plan del mapa de citas, con una foto de cada parada.",
+      "noPlan": "Primero planea una cita en el mapa y luego vuelve aquí.",
+      "planLink": "Planear una cita",
+      "addTrip": "Añadir un viaje",
+      "addTripHelp": "Uno de nuestros doce viajes en pareja.",
+      "pickTrip": "¿Qué viaje?",
+      "date": "Noche de cita",
+      "trip": "Viaje",
+      "stops": "{count, plural, one {# parada} other {# paradas}}",
+      "nights": "{count, plural, one {# noche} other {# noches}}",
+      "noDay": "Sin día todavía",
+      "day": "El día",
+      "depart": "Ida",
+      "back": "Vuelta",
+      "remove": "Quitar",
+      "wrapping": "Envolviéndolo…",
+      "cancel": "Cancelar"
+    },
     "covers": {
       "label": "Portada",
       "help": "La primera pantalla que ven. La tocan para abrir el regalo.",
@@ -601,6 +688,19 @@
         "spooky": "Halloween",
         "classic": "Clásica"
       }
+    },
+    "move": {
+      "title": "Las mismas palabras, un momento más grande",
+      "blurb": "Pásalo a una de las más vendidas. Tus nombres, tus palabras, tus fotos y tu canción van con él.",
+      "moveTo": "Pasarlo a {name}",
+      "keeps": "Se lleva tus {n} primeras fotos",
+      "price": "{price} una sola vez, al enviarlo: tuya para siempre, con todo lo que lleva.",
+      "staysFree": "{name} se queda aquí, gratis, por si cambias de idea.",
+      "moving": "Pasándolo…",
+      "failed": "No ha funcionado en este dispositivo. Tu regalo sigue aquí, tal cual.",
+      "dismiss": "Ahora no",
+      "moved": "Viene de {name}, con tus palabras, tus fotos y tu canción.",
+      "back": "Volver a {name}"
     }
   },
   "gift": {
@@ -634,6 +734,8 @@
     "demoReactionToast": "En un regalo real, esto le envía tu reacción al remitente. Llega en la fase 4.",
     "tryDemo": "Probar la demo en vivo",
     "none": "Todavía no hay plantillas con ese filtro.",
+    "noneFree": "Ninguna plantilla de esta ocasión es gratis todavía. Estas son gratis y sirven para cualquier día.",
+    "showAll": "Ver las {count}",
     "previewHint": "Esta es la plantilla real con datos de ejemplo. Toca, desliza y explora.",
     "fullscreenDemo": "Abrir demo a pantalla completa",
     "included": "Qué incluye",
@@ -646,21 +748,21 @@
       "retro": "Retro",
       "3d": "3D"
     },
-    "makeThis": "Hacer este regalo",
+    "makeThis": "Crear regalo",
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
-    "detailPriceFree": "Gratis, para siempre. Añade una canción real, un vídeo o un mensaje de voz por {price}, pagado una vez.",
+    "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
     "sections": {
       "popular": {
         "eyebrow": "Las más populares",
-        "title": "Las que más se envían",
-        "blurb": "Ordenadas por lo que de verdad se hace y se envía, semana tras semana."
+        "title": "Las más vendidas",
+        "blurb": "Ordenadas por lo que de verdad se compra, semana tras semana."
       },
       "new": {
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
-        "blurb": "Un consejo de gatos, una fiesta invadida por hámsters, una bomba de stickers y tres collages para deslizar."
+        "blurb": "Una fiesta invadida por hámsters, una digicam, un fotomatón, una caja de música y un pícnic."
       },
       "all": {
         "eyebrow": "La colección",
@@ -691,30 +793,15 @@
     "long-distance": "A distancia",
     "just-because": "Porque sí"
   },
-  "blog": {
-    "eyebrow": "Blog",
-    "title": "Qué escribir, qué hacer y qué enviar",
-    "subtitle": "Guías prácticas para cumpleaños, aniversarios, la distancia y los días normales de en medio: qué decir, qué hacer y cómo hacérselo llegar a tiempo.",
-    "takeaways": "Lo esencial",
-    "faqTitle": "Preguntas frecuentes",
-    "minutes": "{minutes} min de lectura",
-    "related": "Sigue leyendo",
-    "makeThis": "Hacer este regalo",
-    "seeIt": "Ver la plantilla",
-    "templateFree": "Plantilla gratis",
-    "templatePremium": "Plantilla premium",
-    "englishOnly": "De momento, esta guía solo está en inglés."
-  },
   "pricing": {
     "eyebrow": "Precios",
-    "title": "Paga una vez. Quédatelo para siempre.",
-    "subtitle": "Dos plantillas son gratis, con un pequeño pie. Las canciones reales, el vídeo, los mensajes de voz y el resto de plantillas se desbloquean con un solo pago: sin suscripción, sin renovaciones, sin sorpresas.",
+    "title": "Las citas, gratis. Los regalos, un solo pago.",
+    "subtitle": "El mapa, los planes y las herramientas a distancia son gratis, para siempre. Las plantillas de regalo se desbloquean con un solo pago y se quedan contigo.",
     "oneTime": "Un solo pago. Tuyo para siempre.",
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
-    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical y el pie «Hecho con Ethos». Canciones reales, vídeos, mensajes de voz, programación y contraseñas vienen con cualquier desbloqueo.",
+    "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
-    "checkoutError": "No se pudo iniciar el pago. Inténtalo de nuevo.",
     "plans": {
       "single": {
         "name": "Una plantilla",
@@ -723,7 +810,7 @@
         "features": [
           "Una plantilla premium, para siempre",
           "Regalos ilimitados con ella",
-          "Canciones reales, vídeo y mensajes de voz",
+          "Vídeo y mensajes de voz",
           "Sin pie, 20 fotos",
           "Programación y contraseña"
         ]
@@ -746,7 +833,7 @@
         "features": [
           "Todas las plantillas, actuales y futuras",
           "Regalos ilimitados, para siempre",
-          "Canciones reales, vídeo y mensajes de voz",
+          "Vídeo y mensajes de voz",
           "Sin pie, 20 fotos, programación, contraseñas",
           "Acceso anticipado a plantillas nuevas"
         ]
@@ -757,19 +844,96 @@
       "blurb": "Puedes cambiar tu elección hasta que pagues.",
       "continue": "Continuar ({n}/{total})"
     },
+    "faqEyebrow": "Preguntas",
     "faqTitle": "Preguntas frecuentes",
+    "faqHelp": "¿Otra cosa? Escríbenos a <email>{address}</email> y te responde una persona.",
+    "faqGroups": {
+      "forTwo": "Ethos for Two",
+      "rest": "Regalos, juegos y pagos"
+    },
     "faq": [
       {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Qué es Ethos for Two?",
+        "a": "Una suscripción para los dos. Guardad todas las citas y viajes que queráis, planeadlos juntos desde vuestros dos móviles, recibid un aviso el día antes de cada una y abrid una cita entera en Apple Maps o Google Maps; y mientras esté activa, todas las plantillas de regalo y todos los packs de juegos son vuestros. Paga uno, al mes o al año; el otro se une con el enlace de invitación que le envías."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Qué es Ethos for Two?",
+        "a": "Un año de todo para los dos: todas las citas y viajes guardados que queráis, planeados juntos desde vuestros dos móviles, un aviso el día antes de cada una, una cita entera abierta en Apple Maps o Google Maps, y todas las plantillas de regalo y los packs de juegos. Paga uno, una sola vez; el otro se une con el enlace de invitación que le envías. Dura 365 días y no se renueva solo."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
         "q": "¿Es una suscripción?",
-        "a": "No. Todos los precios son pagos únicos. Lo que desbloqueas se queda en tu cuenta mientras exista."
+        "a": "Ethos for Two sí: un pago al mes o al año os cubre a los dos, y se renueva hasta que lo canceles, algo que puedes hacer cuando quieras desde tu cuenta. Todo lo demás se paga una sola vez: las plantillas, «Hazlo especial» y los packs de juegos se quedan en tu cuenta para siempre."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Es una suscripción?",
+        "a": "No. Ethos for Two es un solo pago por 365 días, para los dos, y no se renueva solo: te escribimos dos semanas antes de que termine, y para renovarlo basta un toque. Las plantillas, «Hazlo especial» y los packs de juegos también son pagos únicos y se quedan en tu cuenta para siempre."
+      },
+      {
+        "group": "forTwo",
+        "q": "¿Puede usarlo mi pareja en su móvil?",
+        "a": "Sí, para eso está. Al pagar recibes un enlace de invitación: tu pareja lo abre en su móvil e inicia sesión (gratis), y desde ese momento los dos veis y editáis las mismas citas guardadas, y todas las plantillas y los packs también están en su cuenta. Solo puede unirse una persona; puedes quitarla, o puede salir, cuando queráis."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Cómo cancelo?",
+        "a": "Desde tu cuenta: «Cancelar la suscripción» y confirmas. Es tan rápido como suscribirse. No se cobra nada más, y los dos conserváis Ethos for Two hasta el final del mes o del año que ya habéis pagado. Vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Podemos cambiar entre mensual y anual?",
+        "a": "Sí, desde tu cuenta. De mensual a anual es inmediato: pagas el año, menos lo que te queda del mes. De anual a mensual se hace cuando termina tu año, así que nunca pagas dos veces."
+      },
+      {
+        "group": "forTwo",
+        "q": "¿Qué pasa con nuestras citas guardadas si lo dejamos?",
+        "a": "No se borra nada. Vuestras citas y viajes guardados siguen en vuestra cuenta y siguen siendo vuestros; solo dejáis de compartirlos. Con el plan gratis, las tres que hayáis cambiado más recientemente siguen siendo editables y el resto se pueden leer, hasta que borréis alguna o volváis. Los regalos publicados siguen en línea."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "¿Puedo cambiar de opinión después de suscribirme?",
+        "a": "Sí. Puedes desistir en un plazo de 14 días desde que te suscribes, sin dar explicaciones: usa «Desistir de una compra», al pie de cada página, o responde al email de bienvenida. Como pediste que empezara de inmediato, te devolvemos lo que pagaste menos los días que ya habéis disfrutado. Pasados los 14 días puedes cancelar cuando quieras; seguirá activa hasta el final del periodo pagado."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "¿Puedo cambiar de opinión después de comprarlo?",
+        "a": "Sí, en un plazo de 14 días desde la compra, sin dar explicaciones: usa «Desistir de una compra», al pie de cada página, o responde al recibo. Como pediste que tu año empezara de inmediato, te devolvemos lo que pagaste menos los días que ya habéis disfrutado."
       },
       {
         "q": "¿Qué incluye exactamente el plan gratis?",
-        "a": "Dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, una cuenta atrás y una sorpresa final oculta. Los regalos gratis muestran un pequeño pie «Hecho con Ethos». Las canciones reales, los vídeos y los mensajes de voz son extras premium."
+        "a": "Buscar una cita, planearla y enviarla como enlace, con el tiempo y la puesta de sol; las herramientas a distancia; y los juegos. Sin cuenta, y con una cuenta gratis guardas hasta tres citas o viajes. Para regalos: dos plantillas completas (La carta y Constelaciones), regalos ilimitados, hasta 10 fotos por regalo, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, una cuenta atrás y una sorpresa final oculta, con un pequeño pie «Hecho con Ethos». Los vídeos, los mensajes de voz, hasta 20 fotos, una sorpresa dentro, quitar el pie, la programación y la contraseña vienen con «Hazlo especial», con cualquier desbloqueo o con Ethos for Two."
       },
       {
         "q": "¿Puedo probar una plantilla antes de pagar?",
         "a": "Todas las plantillas tienen una demo completa en vivo, y el editor es gratis con vista previa en directo. Solo pagas cuando publicas algo que necesita una función premium."
+      },
+      {
+        "id": "giftcard",
+        "q": "¿Cómo funcionan las tarjetas regalo?",
+        "a": "Compra «Regálalo todo» y te enviamos un código por email (también aparece en la página de confirmación). Dáselo como quieras: quien lo canjee tendrá todas las plantillas, para siempre, en su propia cuenta. Los códigos se pueden canjear durante dos años."
+      },
+      {
+        "q": "¿Qué son los packs de juegos?",
+        "a": "Barajas extra para los juegos: más preguntas, retos más atrevidos. Cada uno es un pago único y tuyo para siempre, y todos vienen con Ethos for Two mientras esté activo. Los juegos en sí siguen siendo gratis."
+      },
+      {
+        "q": "¿Pueden devolverme uno?",
+        "a": "Sí. Quien recibe un regalo que has pagado puede devolverte uno con la misma plantilla, gratis, con el pequeño pie «Hecho con Ethos». Si quiere extras o quitar el pie, paga el precio normal."
+      },
+      {
+        "q": "¿Hay algún código de descuento?",
+        "a": "No. El precio de esta página es el mismo para todo el mundo y no tenemos códigos de descuento. A los creadores que comparten Ethos les pagamos una comisión a través de su propio enlace; nunca cambia lo que pagas tú."
       },
       {
         "q": "¿Caducan los enlaces?",
@@ -781,13 +945,16 @@
       },
       {
         "q": "¿Qué monedas y métodos de pago?",
-        "a": "USD, EUR y GBP, con tarjeta, Apple Pay y Google Pay a través de Stripe. Los precios incluyen IVA cuando corresponde."
+        "a": "Los precios están en euros, con el IVA incluido cuando corresponde, y Stripe muestra el importe final en tu moneda antes de pagar. Tarjeta, Apple Pay, Google Pay y otros métodos, a través de Stripe."
       },
       {
         "q": "¿Reembolsos?",
-        "a": "Los desbloqueos son digitales y se entregan al instante, así que no podemos reembolsar un cambio de opinión; pero si algo no funciona como se describe, escríbenos y lo arreglaremos."
+        "a": "Plantillas, «Hazlo especial» y packs de juegos: al pagar nos pides que desbloqueemos tu compra de inmediato y marcas que así pierdes el derecho de desistimiento de 14 días. Si un regalo no se abre o no se reproduce bien en su móvil y no podemos arreglarlo, avísanos en un plazo de 30 días y te devolvemos el dinero. Ethos for Two es distinto: es un servicio, así que puedes desistir en un plazo de 14 días y te devolvemos lo que pagaste, menos los días ya disfrutados. Tarjetas regalo: si cambias de opinión en un plazo de 14 días y el código no se ha canjeado, te devolvemos el importe íntegro. «Desistir de una compra», al pie de cada página, explica cómo."
       }
-    ]
+    ],
+    "perTemplate": "Las {n} plantillas premium · {price} cada una",
+    "checkoutNote": "El pago muestra el importe final, en tu moneda · Pago seguro con Stripe",
+    "separately": "{price} por separado"
   },
   "legal": {
     "terms": "Términos del servicio",
@@ -803,6 +970,91 @@
     "turnOn": "Aceptar cookies",
     "turnOff": "Quitar cookies"
   },
+  "tour": {
+    "open": "Cómo funciona",
+    "step": "{n} de {total}",
+    "next": "Siguiente",
+    "back": "Atrás",
+    "skip": "Saltar",
+    "skipLabel": "Saltar la guía",
+    "done": "Entendido",
+    "dates": {
+      "where": {
+        "title": "Elige tu ciudad",
+        "body": "Escribe una ciudad o un barrio, o toca «Cerca de mí». Cada idea de abajo está hecha con sitios reales de allí."
+      },
+      "when": {
+        "title": "Elige un día",
+        "body": "La previsión aparece en el propio calendario, así que el día de sol se ve enseguida."
+      },
+      "mood": {
+        "title": "¿Qué os apetece?",
+        "body": "Acogedor, divertido, de gala… Cada opción cambia las ideas y los sitios que aparecen."
+      },
+      "place": {
+        "title": "Échale un vistazo",
+        "body": "Toca una tarjeta, o un pin del mapa, para abrir un sitio: cuándo abre, cómo llegar y qué opinaron otras parejas."
+      },
+      "add": {
+        "title": "Añádelo a vuestro plan",
+        "body": "Toca + en los sitios que os gusten. El orden lo podéis cambiar después."
+      },
+      "plan": {
+        "title": "Mándaselo a tu pareja",
+        "body": "En cuanto añadáis un sitio, aparece «Nuestro plan» abajo del todo. Ábrelo y comparte el enlace: el plan entero va dentro, así que no hay nada que instalar."
+      }
+    },
+    "editor": {
+      "template": {
+        "title": "Tu plantilla",
+        "body": "Es la que has elegido. ¿Te apetece otra? Desde aquí vuelves a verlas todas."
+      },
+      "names": {
+        "title": "Los nombres y tu mensaje",
+        "body": "Escribe su nombre y el tuyo, y justo debajo tu mensaje. Se guarda solo mientras escribes."
+      },
+      "media": {
+        "title": "Fotos y música",
+        "body": "Sube aquí tus fotos y, más abajo, una canción si tu plantilla lleva música."
+      },
+      "preview": {
+        "title": "Mira cómo queda",
+        "body": "Es exactamente lo que verá en su móvil. Dale al play para verlo desde el principio."
+      },
+      "publish": {
+        "title": "Publica y comparte",
+        "body": "Cuando esté listo, publícalo y tendrás un enlace privado. Lo abre en su móvil, sin instalar nada."
+      }
+    },
+    "games": {
+      "phones": {
+        "title": "Un móvil o dos",
+        "body": "Hay juegos para pasaros un móvil en el sofá y otros para jugar cada uno con el suyo, aunque estéis lejos."
+      },
+      "room": {
+        "title": "Con dos móviles",
+        "body": "Abre un juego para dos móviles y tendrás una sala. Manda el enlace o dile el código de cuatro letras, y listo."
+      },
+      "packs": {
+        "title": "Elige un pack",
+        "body": "Cada pack es una baraja nueva para un tipo de noche distinto."
+      }
+    },
+    "trips": {
+      "flights": {
+        "title": "Busca vuelos para dos",
+        "body": "Elige los dos aeropuertos y las fechas, y la búsqueda se abre ya hecha en los grandes buscadores de vuelos."
+      },
+      "trip": {
+        "title": "Abre un viaje",
+        "body": "Cada uno viene planeado día a día, con las paradas, los mejores meses para ir y un presupuesto aproximado."
+      },
+      "surprise": {
+        "title": "Que sea una sorpresa",
+        "body": "Convierte el viaje en un regalo: una tarjeta de embarque que se abre en su móvil, con una lista de equipaje hecha de pistas."
+      }
+    }
+  },
   "notFound": {
     "title": "Esta página se perdió",
     "detail": "Puede que el enlace esté roto o que la página se haya movido.",
@@ -812,7 +1064,10 @@
     "title": "Algo falló de nuestro lado",
     "detail": "Ya lo sabemos. Inténtalo de nuevo en un momento.",
     "retry": "Reintentar",
-    "code": "Código de error {code}"
+    "code": "Código de error {code}",
+    "connectionTitle": "Esta página no terminó de cargar",
+    "connectionDetail": "Casi siempre es que se cortó la señal un momento. Recarga cuando vuelvas a tener conexión.",
+    "reload": "Recargar"
   },
   "checkout": {
     "paid": {
@@ -834,9 +1089,194 @@
     "continue": "Continuar",
     "signIn": "Iniciar sesión"
   },
-  "promo": {
-    "line": "20% de descuento con el código",
-    "code": "LOVE"
+  "money": {
+    "paywall": {
+      "extras": "Hazlo especial",
+      "extrasBlurb": "Vídeo, voz, 20 fotos, una sorpresa dentro, sin pie, programación y contraseña, en esta plantilla para siempre",
+      "extrasIntro": "Este regalo usa {features}. Hazlo especial una vez y esta plantilla los conserva para siempre.",
+      "extrasGuestIntro": "Este regalo usa {features}. Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
+      "upgrade": "Todo por la diferencia",
+      "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se descuenta de {full}.",
+      "pick3": "O elige las tres que quieras por {price}",
+      "bump": "Añade todas las demás plantillas, para siempre",
+      "bumpBlurb": "Todas las que tenemos y todas las que añadamos",
+      "bumpPrice": "+{price}",
+      "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
+      "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
+    },
+    "plans": {
+      "upgradeNote": "En lugar de {full}: lo que ya has pagado por plantillas se descuenta."
+    },
+    "checkoutErrors": {
+      "alreadyOwned": "Ya lo tienes en tu cuenta. No hay nada que pagar.",
+      "signIn": "Inicia sesión primero: este precio depende de lo que ya has comprado.",
+      "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+      "unavailable": "Los pagos no están disponibles ahora mismo. Vuelve a probar en un rato.",
+      "network": "Sin conexión. Compruébala y vuelve a intentarlo.",
+      "generic": "No se ha podido abrir el pago. Inténtalo de nuevo.",
+      "alreadyMember": "Ya tienes Ethos for Two: está en tu cuenta.",
+      "paymentIssue": "Tu último pago no se completó: actualiza primero tu tarjeta en tu cuenta.",
+      "notOnSale": "Eso no está a la venta ahora mismo. Recarga la página.",
+      "toAccount": "Tu cuenta"
+    },
+    "recovery": {
+      "optIn": "Si no termino de pagar, enviadme un solo enlace para volver."
+    },
+    "product": {
+      "single": "Una plantilla",
+      "pick3": "Elige tres",
+      "everything": "Todo",
+      "extras": "Hazlo especial",
+      "pass": "Ethos for Two",
+      "membership": "Ethos for Two",
+      "pack": "Pack de juegos",
+      "giftcard": "Tarjeta regalo",
+      "upgrade": "Pasar a Todo",
+      "withBump": "{product}, más todas las plantillas"
+    },
+    "giftcard": {
+      "eyebrow": "Tarjeta regalo",
+      "title": "Regálalo todo",
+      "blurb": "Todas las plantillas, para siempre, para otra persona. Recibes un código para dárselo, y lo canjea en su propia cuenta.",
+      "features": {
+        "templates": "Todas las plantillas, actuales y futuras",
+        "forever": "Suyas para siempre, sin suscripción",
+        "valid": "Canjeable durante {months} meses"
+      },
+      "cta": "Comprar una tarjeta regalo",
+      "note": "Te enviamos el código por email en cuanto pagas.",
+      "redeem": "¿Tienes un código? Canjéalo",
+      "personalise": "Añade su nombre y una nota",
+      "nameLabel": "Para quién es",
+      "noteLabel": "Una nota para acompañarla",
+      "notePlaceholder": "Feliz cumpleaños. Hazme algo bonito.",
+      "noteHelp": "Va junto al código en el email que te enviamos, lista para reenviar."
+    },
+    "success": {
+      "pass": {
+        "title": "Ethos for Two ya ha empezado.",
+        "detail": "Dura hasta el {date}. Envía a tu pareja el enlace de abajo y también lo tendrá en su cuenta."
+      },
+      "passJoined": {
+        "title": "Otro año más, para los dos.",
+        "detail": "Ethos for Two dura ahora hasta el {date}, en vuestras dos cuentas."
+      },
+      "passLater": "El enlace de invitación para tu pareja está en tu cuenta.",
+      "passEmailed": "Dura hasta el {date}. Te hemos enviado por email el enlace para tu pareja, y también lo tienes en tu cuenta.",
+      "giftcard": {
+        "title": "Tu tarjeta regalo está lista.",
+        "detail": "También te hemos enviado el código por email. Quien lo canjee tendrá todas las plantillas, para siempre."
+      },
+      "giftcardWaiting": "Tu código está de camino a tu email.",
+      "codeLabel": "El código",
+      "redeemAt": "Se canjea en {url}",
+      "copyCode": "Copiar código",
+      "copied": "Copiado",
+      "everything": {
+        "title": "Todo es tuyo.",
+        "detail": "Todas las plantillas, actuales y futuras, están en tu cuenta para siempre."
+      },
+      "pack": {
+        "title": "El pack es tuyo.",
+        "detail": "Está en tu cuenta para siempre. Reparte la primera carta."
+      },
+      "redirecting": "Volviendo a tu regalo…",
+      "toAccount": "Ir a tu cuenta",
+      "toGift": "Volver a tu regalo"
+    },
+    "account": {
+      "upgradeTitle": "Pasa a Todo",
+      "upgradeBlurb": "Lo que has pagado por plantillas cuenta: todas las plantillas, actuales y futuras, por {price} más.",
+      "upgradeCta": "Pasar a Todo por {price}",
+      "packs": "Packs de juegos",
+      "everyPack": "Todos los packs de juegos",
+      "everythingWithPass": "Todas las plantillas, mientras dure Ethos for Two",
+      "more": "Más",
+      "reminders": "Avisos de cumpleaños y aniversarios",
+      "remindersBlurb": "Un email nueve días antes, con tiempo para hacer algo.",
+      "redeem": "Canjear una tarjeta regalo",
+      "redeemBlurb": "¿Te han regalado un código? Va aquí.",
+      "withdraw": "Desistir de una compra",
+      "withdrawBlurb": "Cómo usar el derecho de desistimiento de 14 días, donde se aplica.",
+      "giftCards": "Tarjetas regalo que has comprado",
+      "giftCardFor": "para {name}",
+      "giftCardRedeemed": "Canjeada",
+      "giftCardOpen": "Sin canjear · válida hasta el {date}",
+      "giftCardOpenNoDate": "Sin canjear"
+    },
+    "invite": {
+      "label": "El enlace de invitación para tu pareja",
+      "copy": "Copiar enlace",
+      "copied": "Copiado",
+      "share": "Compartir",
+      "shareTitle": "Ethos for Two",
+      "shareText": "Tengo Ethos for Two para los dos: nuestras citas guardadas y compartidas en los dos móviles, y todas las plantillas de regalo y los packs de juegos. Únete aquí:",
+      "note": "Solo puede unirse una persona, así que envíaselo a tu pareja y a nadie más."
+    },
+    "redeem": {
+      "eyebrow": "Tarjeta regalo",
+      "title": "Alguien te ha regalado todo.",
+      "subtitle": "Canjea tu código y todas las plantillas, actuales y futuras, serán tuyas para siempre.",
+      "label": "Código de la tarjeta regalo",
+      "placeholder": "Tu código",
+      "button": "Canjear",
+      "redeeming": "Canjeando…",
+      "signInTitle": "Primero, tu cuenta",
+      "signInBlurb": "Las plantillas van a tu cuenta, así que inicia sesión o crea una, gratis. Tu código te esperará aquí.",
+      "done": {
+        "title": "Todo es tuyo.",
+        "detail": "Todas las plantillas, actuales y futuras, están en tu cuenta para siempre.",
+        "cta": "Crear un regalo"
+      },
+      "errors": {
+        "notFound": "No conocemos ese código. Revisa si hay alguna errata, o pregunta a quien te lo dio.",
+        "used": "Ese código ya se ha canjeado.",
+        "expired": "Ese código ha caducado.",
+        "signIn": "Inicia sesión primero y luego canjéalo.",
+        "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+        "voided": "Ese código ya no funciona. Pregunta a quien te lo dio.",
+        "owned": "Tu cuenta ya tiene todas las plantillas. Regálale el código a otra persona.",
+        "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
+      }
+    },
+    "join": {
+      "eyebrow": "Ethos for Two",
+      "title": "Tu pareja te ha guardado un sitio.",
+      "subtitle": "Su Ethos for Two os cubre a los dos: citas y viajes guardados y compartidos en vuestros dos móviles, todas las plantillas de regalo y todos los packs de juegos, mientras siga activo. A ti no te cuesta nada.",
+      "features": {
+        "dates": "Vuestras citas y viajes guardados, compartidos y editables en los dos móviles",
+        "templates": "Todas las plantillas de regalo, en tu propia cuenta",
+        "packs": "Todos los packs de juegos, para jugar juntos",
+        "free": "Nada que pagar, sin tarjeta"
+      },
+      "codeLabel": "Enlace o código de invitación",
+      "noCode": "Este enlace ha perdido su código. Pega el enlace que te envió tu pareja, o pídeselo otra vez.",
+      "signInTitle": "Inicia sesión para unirte",
+      "signInBlurb": "Tu parte de Ethos for Two va en tu propia cuenta. Inicia sesión o crea una, gratis; esta página te esperará.",
+      "button": "Unirme a Ethos for Two",
+      "joining": "Uniéndote…",
+      "done": {
+        "title": "Ya estás dentro.",
+        "detail": "Vuestras citas guardadas están compartidas, y todas las plantillas y los packs de juegos también son tuyos, hasta el {date}.",
+        "detailNoDate": "Vuestras citas guardadas están compartidas, y todas las plantillas y los packs de juegos también son tuyos, mientras siga activo.",
+        "ctaDates": "Ver mis citas",
+        "ctaGift": "Crear un regalo",
+        "ctaGames": "Jugar"
+      },
+      "errors": {
+        "notFound": "Esa invitación no funciona. Pide a tu pareja un enlace nuevo.",
+        "taken": "Alguien ya se ha unido a este Ethos for Two.",
+        "own": "Es tu propio Ethos for Two: envíale el enlace a tu pareja.",
+        "hasOwn": "Ya tienes tu propio Ethos for Two y se renueva solo. Pide a tu pareja que se una al tuyo: tu enlace de invitación está en tu cuenta. Si cancelas el tuyo, podrás unirte al suyo cuando termine.",
+        "hasOwnUntil": "Tu propio Ethos for Two sigue activo hasta el {date}. Pide a tu pareja que se una al tuyo (tu enlace de invitación está en tu cuenta) o únete al suyo cuando termine el tuyo.",
+        "hasOwnPartner": "Ya estás en el Ethos for Two de otra persona. Sal de él desde tu cuenta y vuelve a abrir este enlace.",
+        "toAccount": "Ir a mi cuenta",
+        "expired": "Ese Ethos for Two ha terminado.",
+        "signIn": "Inicia sesión primero y luego únete.",
+        "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+        "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
+      }
+    }
   },
   "seo": {
     "templatesTitle": "Plantillas de regalos digitales",
@@ -875,7 +1315,7 @@
       "christmas": {
         "title": "Regalos digitales de Navidad",
         "description": "Un regalo de Navidad que no se pierde en el correo: un regalo animado con tus fotos, una canción navideña y tu mensaje, programado para abrirse la mañana de Navidad.",
-        "intro": "Para quienes no verás este año, y para quienes sí: un regalo que se abre la mañana de Navidad estén donde estén, sin plazos de envío que se te pasen. Cuenta atrás de medianoche termina en fuegos artificiales justo a tiempo."
+        "intro": "Para quienes no verás este año, y para quienes sí: un regalo que se abre la mañana de Navidad estén donde estén, sin plazos de envío que se te pasen. Agita tus fotos en la nieve con Bola de nieve, o deja una carta a la luz de una vela con Junto al fuego."
       },
       "mothers-day": {
         "title": "Regalos digitales para el Día de la Madre",
@@ -900,7 +1340,7 @@
       "halloween": {
         "title": "Regalos digitales de Halloween",
         "description": "Un regalo de Halloween que se abre con un toque: un timbre, una calabaza iluminada, un fantasmita con tus fotos y tus palabras, y una canción en la oscuridad. Gratis para empezar.",
-        "intro": "Mejor que una bolsa de caramelos. Llama al timbre en Truco o trato, enciende la calabaza y deja que un fantasmita entregue tus fotos, tu mensaje y su canción. O hazlo acogedor: una vela, una manta y una carta junto al fuego en Junto al fuego."
+        "intro": "Mejor que una bolsa de caramelos. Llama al timbre en Truco o trato, enciende la calabaza y deja que un fantasmita entregue tus fotos, tu mensaje y tu canción."
       },
       "just-because": {
         "title": "Regalos porque sí",
@@ -910,5 +1350,1652 @@
     },
     "blogTitle": "Ideas de regalos y guías para cartas de amor",
     "blogDescription": "Qué escribir, qué hacer y cómo enviarlo: ideas y guías para cumpleaños, aniversarios, relaciones a distancia y cualquier otro día."
+  },
+  "cities": {
+    "meta": {
+      "title": "Ideas para una cita en {city}: {ideas} planes y {places, plural, =0 {un mapa con sitios reales} one {# sitio real} other {# sitios reales}}",
+      "description": "{ideas} ideas para una cita pensadas para cómo es {city} de verdad, con cafeterías, parques y museos reales cerca del centro en un mapa gratis. Sin cuenta."
+    },
+    "eyebrow": "Ideas para una cita por ciudad",
+    "title": "Ideas para una cita en {city}",
+    "back": "Todas las ideas",
+    "lead": "{ideas} citas para {city}, en el orden que se merece la ciudad, con sitios reales cerca del centro para cada parada.",
+    "leadNoPlaces": "{ideas} citas para {city}, en el orden que se merece la ciudad. Abre cualquiera en el mapa y te buscará los sitios.",
+    "cta": {
+      "map": "Abrir el mapa de {city}",
+      "gift": "Hazle un regalo",
+      "plan": "Planear una cita"
+    },
+    "ideas": {
+      "eyebrow": "Las ideas",
+      "title": "{count, plural, one {# cita} other {# citas}} para {city}",
+      "inCity": "En {city}, probad",
+      "onMap": "Verla en el mapa",
+      "pick": "Aquí brilla"
+    },
+    "traits": {
+      "coastal": "{city} está junto al agua, así que las ideas de playa y de barca van arriba.",
+      "rainy": "En {city} la lluvia nunca anda lejos, así que las ideas bajo techo van entre las primeras.",
+      "sunny": "{city} tiene más días secos y soleados que la mayoría, así que las ideas al aire libre tienen su oportunidad.",
+      "hot": "En {city} el mediodía aprieta buena parte del año, así que mandan las mañanas, las noches y los planes a cubierto.",
+      "winter": "Los inviernos en {city} son fríos de verdad, y para eso están las pistas de hielo y el chocolate caliente.",
+      "museums": "{city} tiene museos y galerías grandes que merecen una tarde, así que los planes culturales suben en la lista.",
+      "nightlife": "{city} se acuesta tarde, así que las ideas de noche tienen más sitio de lo habitual.",
+      "parks": "Cerca del centro de {city} hay parques y jardines grandes, así que no faltan los pícnics ni los paseos sin prisa.",
+      "views": "{city} tiene colinas y miradores, así que un amanecer o una hora dorada merecen la subida."
+    },
+    "notes": {
+      "london": "La mayoría de los grandes museos de Londres son gratis, así que la cita del museo solo cuesta la copa de después. Y con el West End tan cerca, una noche de teatro es un sí fácil.",
+      "manchester": "El centro es compacto: una cena, una peli y un postre tardío casi nunca necesitan más que un paseo entre uno y otro.",
+      "edinburgh": "Calton Hill está a un paseo de Princes Street y no cuesta nada, así que madrugar para ver amanecer se vende solo.",
+      "dublin": "La National Gallery y el National Museum son gratis, justo lo que pide una tarde de lluvia.",
+      "new-york": "Elegid dos paradas en el mismo barrio y caminad de una a otra: en Nueva York, las calles son media cita.",
+      "los-angeles": "Aquí las distancias son largas, así que elegid un barrio y quedaos en él. La playa al atardecer sí merece el trayecto.",
+      "chicago": "La orilla del lago tiene playas de arena a poca distancia del Loop, así que la cita en la playa está más cerca de lo que parece.",
+      "san-francisco": "Casi todos los barrios tienen un parque en lo alto de una cuesta, y son los mejores asientos de la ciudad para la hora dorada.",
+      "miami": "El calor del mediodía va en serio buena parte del año, así que primero van las ideas para primera hora y para la noche.",
+      "boston": "El centro es pequeño y se recorre a pie, y el Public Garden, con su estanque, está justo en medio.",
+      "toronto": "Las islas están a un trayecto corto en ferri desde el centro, con playas, caminos y vistas de los rascacielos.",
+      "vancouver": "Stanley Park y el paseo marítimo empiezan donde acaba el centro, así que una cita al aire libre no necesita coche.",
+      "montreal": "Los inviernos son largos y fríos, así que las pistas de hielo y el chocolate caliente no son una novedad: son la temporada. Para las vistas, subid al monte Royal.",
+      "sydney": "Las playas, la bahía y sus ferris son parte de la ciudad, así que las ideas junto al agua van primero.",
+      "melbourne": "Callejones, galerías y cocinas que cierran tarde: es una ciudad para noches que duran más de lo previsto.",
+      "auckland": "Aquí el tiempo puede cambiar en una tarde, así que llevad una idea a cubierto en el bolsillo por si acaso.",
+      "paris": "Un pícnic junto al río es costumbre local, y algunos de los grandes museos abren hasta tarde una noche a la semana.",
+      "amsterdam": "Llueve bastante, y la ciudad está llena de galerías pequeñas y museos grandes justo para esos días.",
+      "berlin": "Aquí trasnochar es lo normal, así que las ideas de noche pueden empezar más tarde que en cualquier otro sitio.",
+      "munich": "El Jardín Inglés, uno de los parques urbanos más grandes del mundo, está a un paseo del centro.",
+      "vienna": "Los cafés vieneses están hechos para quedarse: nadie os meterá prisa en una mesa para dos.",
+      "prague": "El casco antiguo está más tranquilo a primera hora, que es cuando los puentes son solo vuestros.",
+      "copenhagen": "Alquilar una barquita para los canales y el puerto es costumbre de verano, y nadie espera que sepáis navegar.",
+      "stockholm": "La ciudad está construida sobre islas, así que ir de una parada a otra suele ser un paseo junto al agua.",
+      "oslo": "El fiordo empieza donde acaba el centro, y al tejado de la ópera se puede subir gratis a ver las vistas.",
+      "lisbon": "Los miradouros, las terrazas-mirador de la ciudad, son gratis y están hechos para la hora dorada.",
+      "rome": "Un helado y un paseo lento por el centro: una cita que la ciudad lleva mucho tiempo perfeccionando.",
+      "riga": "El casco antiguo se cruza en un cuarto de hora, y los parques del canal van justo a su lado.",
+      "tallinn": "El casco antiguo tiene miradores sobre los tejados, a una subida corta de la plaza principal.",
+      "singapore": "El calor no afloja y los chaparrones de tarde son habituales, así que las ideas a cubierto y de noche van arriba: cenad tarde y pasead cuando refresque.",
+      "dubai": "Buena parte del año hace demasiado calor para salir a mediodía, así que primero van las noches y los planes a cubierto, pista de hielo incluida. Para las estrellas, al desierto."
+    },
+    "places": {
+      "eyebrow": "Sitios reales",
+      "title": "Cerca del centro de {city}",
+      "sub": "Los sitios mejor situados a menos de {km} km del centro, ordenados como los ordena el mapa de citas. Toca uno para verlo en el mapa.",
+      "counts": "Lo que conoce el mapa a menos de {km} km",
+      "fromCentre": "a {distance} del centro",
+      "none": "Ahora mismo no hemos podido leer el mapa de {city}. Las ideas de arriba siguen valiendo: abre el mapa y te buscará sitios para ellas."
+    },
+    "map": {
+      "title": "Planea el día en {city}",
+      "sub": "Elige un día, mira el tiempo y la puesta de sol, y deja que el mapa llene cada idea con sitios a un paseo unos de otros. Guárdalo como plan y envíaselo."
+    },
+    "tickets": {
+      "title": "Entradas en {city}",
+      "sub": "Museos, visitas y lo que conviene reservar con antelación, con nuestro socio Tiqets.",
+      "cta": "Entradas en {city}",
+      "disclosure": "Enlace de afiliado: si reservas a través de él, puede que ganemos una comisión. A ti no te cuesta nada más."
+    },
+    "gift": {
+      "eyebrow": "Antes de la cita",
+      "title": "Pídele una cita como se merece.",
+      "sub": "Elige una de estas ideas y mándale el plan en una pequeña página que abrirá en su móvil: una carta, una cuenta atrás, una entrada para dos.",
+      "note": "Abre las plantillas de regalo. Empezar es gratis."
+    },
+    "nearby": "Ideas para una cita en otras ciudades"
+  },
+  "dates": {
+    "meta": {
+      "title": "Ideas para una cita cerca de ti, en un mapa",
+      "description": "Elige un día, mira el tiempo y la puesta de sol, y recibe ideas de citas hechas con sitios reales cerca de ti: café, vistas, cena, algo a lo que jugar. Guárdalo como plan y envíaselo.",
+      "shared": "Un sitio para una cita, en el mapa de Ethos: ábrelo para ver dónde está, cuándo abre y con qué combinarlo."
+    },
+    "eyebrow": "Citas",
+    "titleIn": "Ideas para una cita en {place}",
+    "titleNear": "Ideas para una cita cerca de ti",
+    "empty": {
+      "title": "¿Dónde estáis?",
+      "sub": "Una ciudad, un barrio o donde estés ahora mismo. Encontramos las citas que esconde.",
+      "or": "O empieza por aquí",
+      "note": "elige una calle, la que sea"
+    },
+    "where": {
+      "label": "Dónde",
+      "placeholder": "Ciudad o barrio",
+      "nearMe": "Cerca de mí",
+      "searching": "Buscando…",
+      "nothing": "No hay ningún sitio con ese nombre. Prueba con la ciudad más cercana.",
+      "failed": "La búsqueda de ciudades va lenta ahora mismo. Vuelve a intentarlo en un momento.",
+      "nearYou": "Cerca de ti",
+      "mapArea": "Esta zona",
+      "noGeo": "Este navegador no puede compartir la ubicación. Escribe una ciudad.",
+      "denied": "No hemos podido obtener tu ubicación. Escribe una ciudad."
+    },
+    "when": {
+      "label": "Cuándo",
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "weekend": "Este finde",
+      "previous": "Mes anterior",
+      "next": "Mes siguiente",
+      "forecastNote": "La previsión llega a dieciséis días. Más allá, planead para todo."
+    },
+    "weather": {
+      "wet": "Probable lluvia ({chance} %). Las ideas bajo techo van primero.",
+      "warm": "Seco y cálido. Hecho para estar fuera.",
+      "cold": "Hace frío. Un sitio calentito y luego un paseo corto.",
+      "mild": "Seco. Con una chaqueta, a cualquier parte.",
+      "tooFar": "Demasiado lejos para una previsión. Planead para todo.",
+      "loading": "Mirando el tiempo…",
+      "unavailable": "Ahora mismo no hay previsión. Planead para todo.",
+      "sunset": "Puesta de sol"
+    },
+    "ideas": {
+      "title": "Ideas para ese día",
+      "sub": "Toca una. Nosotros buscamos los sitios.",
+      "vibes": "Ambiente",
+      "previous": "Ideas anteriores",
+      "next": "Más ideas",
+      "hours": "{hours} h",
+      "budget": {
+        "0": "Gratis",
+        "1": "Calderilla",
+        "2": "Lo de una cena",
+        "3": "Un capricho"
+      },
+      "notNearby": "No por aquí",
+      "noneForVibe": "Nada de ese ambiente encaja con el tiempo. Prueba otro.",
+      "twist": "El giro:",
+      "another": "Otro",
+      "nothingFor": "No hemos encontrado ningún sitio así ({kind}) por aquí. Mueve el mapa y busca otra vez.",
+      "add": "Añadir esta cita a nuestro plan",
+      "added": "En vuestro plan",
+      "close": "Cerrar esta idea"
+    },
+    "places": {
+      "title": "Sitios para una cita",
+      "count": "{count, plural, =0 {ningún sitio} one {# sitio} other {# sitios}}",
+      "filter": "Tipo de sitio",
+      "all": "Todos",
+      "error": "Ahora mismo no hemos podido cargar los sitios.",
+      "retry": "Probar otra vez",
+      "none": "El mapa no conoce ningún sitio para una cita justo aquí. Arrástralo hacia la ciudad más cercana y busca en esa zona.",
+      "noneInFilter": "Nada de ese tipo por aquí cerca. Elige otro, o mueve el mapa y busca en una zona más amplia.",
+      "more": "Ver {count} más",
+      "credit": "Sitios y datos del mapa © colaboradores de OpenStreetMap. Cualquiera puede añadir lo que falte en openstreetmap.org.",
+      "cost": "Precio"
+    },
+    "place": {
+      "open": "Abrir",
+      "add": "Añadir a nuestro plan",
+      "remove": "En vuestro plan · quitar",
+      "close": "Cerrar",
+      "directions": "Cómo llegar",
+      "website": "Web",
+      "call": "Llamar",
+      "walk": "{minutes} min a pie",
+      "walkBetween": "{minutes} min a pie",
+      "openOn": "Abre el {day} {hours}",
+      "closedOn": "Cerrado el {day}",
+      "hoursUnknown": "No figura el horario. Compruébalo antes de ir.",
+      "hoursUnclear": "El horario cambia según la temporada. Compruébalo antes de ir.",
+      "terrace": "Terraza",
+      "vegetarian": "Opciones vegetarianas",
+      "stepFree": "Sin escalones",
+      "landmark": "Un lugar emblemático",
+      "free": "Entrada libre",
+      "source": "De OpenStreetMap, tal como lo cartografía la gente del lugar. Los horarios cambian: comprobarlo antes de ir salva una noche.",
+      "photo": "Foto real",
+      "photoBy": "Foto: {author}",
+      "photoFrom": "Wikimedia Commons",
+      "readMore": "Leer más en Wikipedia",
+      "reviewsLink": "Fotos y reseñas",
+      "rank": "N.º {n} de {of} en {group}",
+      "pairs": "Que sea una cita",
+      "elsewhere": "En otras webs",
+      "share": "Compartir",
+      "shareCopied": "Enlace copiado",
+      "shareText": "Un sitio para una cita:"
+    },
+    "map": {
+      "label": "Mapa de sitios para una cita",
+      "show": "Mapa",
+      "list": "Lista",
+      "loading": "Cargando…",
+      "unavailable": "El mapa no ha podido cargarse aquí. La lista de al lado sigue funcionando.",
+      "unavailablePhone": "El mapa no ha podido cargarse aquí. Toca Lista para ver los sitios.",
+      "retry": "Probar otra vez",
+      "credits": "Créditos del mapa",
+      "nothingHere": "Aquí el mapa no tiene ningún sitio para una cita. Escribe una ciudad en la casilla de arriba o empieza por una de estas:",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "zoomToSee": "Acércate para ver sitios aquí"
+    },
+    "a11y": {
+      "address": "Dirección",
+      "hours": "Horario"
+    },
+    "plan": {
+      "open": "Nuestro plan",
+      "full": "Un plan admite {max} paradas. Quita una primero.",
+      "ideaFull": "Esta cita no cabe: un plan admite {max} paradas. Quita una primero.",
+      "newCity": "Tenéis un plan en {place}. ¿Empezar uno nuevo aquí? El de {place} se sustituirá.",
+      "newCityUnnamed": "Tenéis un plan en otro sitio. ¿Empezar uno nuevo aquí? El anterior se sustituirá."
+    },
+    "picks": {
+      "title": "Lo mejor de {place}",
+      "here": "esta zona",
+      "sub": "Las mejores apuestas por aquí, en orden. Primero las que tienen foto real.",
+      "previous": "Sitios anteriores",
+      "next": "Más sitios"
+    },
+    "unusual": {
+      "title": "Algo diferente en {place}",
+      "sub": "Bares escondidos, azoteas, sótanos y otros sitios con historia.",
+      "chip": "Algo diferente",
+      "previous": "Hallazgos anteriores",
+      "next": "Más hallazgos"
+    },
+    "sort": {
+      "label": "Ordenar por",
+      "best": "Mejor para una cita",
+      "rated": "Mejor valorados",
+      "nearest": "Más cerca",
+      "cheapest": "Más baratos",
+      "bestSub": "Nuestro ranking para parejas",
+      "ratedSub": "Con más estrellas de parejas",
+      "nearestSub": "Lo más cerca de tu búsqueda",
+      "cheapestSub": "Gratis y económicos primero"
+    },
+    "reviews": {
+      "title": "Las parejas dicen",
+      "count": "{n, plural, one {# reseña} other {# reseñas}}",
+      "summary": "{stars} de {n, plural, one {# reseña} other {# reseñas}}",
+      "none": "Aún no hay reseñas. Sed la primera pareja en valorarlo.",
+      "noneShort": "Sin valorar",
+      "rate": "Valorar",
+      "edit": "Editar la tuya",
+      "yourStars": "Tus estrellas",
+      "star1": "Nunca más",
+      "star2": "No es para nosotros",
+      "star3": "Bien",
+      "star4": "Precioso",
+      "star5": "Cita perfecta",
+      "cost": "Lo que costó para dos",
+      "wentAs": "Fuisteis por",
+      "body": "Una línea para la siguiente pareja",
+      "bodyPlaceholder": "Pedid la mesa de la ventana.",
+      "send": "Publicar",
+      "sending": "Publicando…",
+      "cancel": "Cancelar",
+      "remove": "Borrar mi reseña",
+      "signIn": "Iniciar sesión",
+      "signInBlurb": "Las reseñas necesitan cuenta, para que nadie valore un sitio cincuenta veces. Es gratis y se hace en un momento.",
+      "failed": "No se ha enviado. Prueba otra vez en un momento.",
+      "thanks": "Publicada. Gracias, de parte de la siguiente pareja.",
+      "publicNote": "Las reseñas son públicas, con tu nombre de pila.",
+      "report": "Denunciar"
+    }
+  },
+  "plan": {
+    "meta": {
+      "title": "Nuestro plan para la cita",
+      "description": "Una cita, planeada: el día, las paradas en orden, una nota. Hecha en Ethos y enviada como enlace.",
+      "shared": "Una cita, planeada en Ethos: el día, las paradas en orden y una nota. Ábrelo para ver la noche entera."
+    },
+    "eyebrow": "Nuestro plan",
+    "eyebrowShared": "Tienes una invitación",
+    "someday": "Un día por decidir",
+    "to": "¿Para quién es?",
+    "toPlaceholder": "Su nombre",
+    "from": "De",
+    "fromPlaceholder": "Tu nombre",
+    "forFrom": "Para {to}, de {from}",
+    "forOnly": "Para {to}",
+    "fromOnly": "De {from}",
+    "rain": "{chance} % de probabilidad de lluvia",
+    "sunset": "Puesta de sol {time}",
+    "past": "Esta ya ha pasado. Ojalá fuera de las buenas.",
+    "walk": "{minutes} min a pie",
+    "timeFor": "Hora en {name}",
+    "noteFor": "Una nota para {name}",
+    "stopNotePlaceholder": "Nota: «la mesa del rincón»",
+    "directions": "Cómo llegar",
+    "moveUp": "Mover {name} antes",
+    "moveDown": "Mover {name} después",
+    "removeStop": "Quitar {name} del plan",
+    "note": "Unas palabras para esa persona",
+    "notePlaceholder": "Ponte algo con lo que puedas andar. No te digo más.",
+    "twist": "El giro:",
+    "send": {
+      "title": "Envíaselo",
+      "sub": "Un enlace con toda la noche dentro. Lo abre en el móvil: sin app y sin cuenta.",
+      "share": "Compartir",
+      "copy": "Copiar enlace",
+      "copied": "Copiado",
+      "private": "El plan se guarda en este navegador y viaja dentro del propio enlace. Solo se almacena en nuestros servidores si lo guardas en tu cuenta."
+    },
+    "received": {
+      "title": "Alguien ha planeado esto para ti",
+      "sub": "Guárdalo en este móvil o planea una de vuelta.",
+      "keep": "Guardar este plan",
+      "kept": "Guardado en este dispositivo",
+      "own": "Planear una por tu cuenta",
+      "replaceConfirm": "Esto sustituye el plan que estabas preparando en este dispositivo. ¿Guardar este en su lugar?"
+    },
+    "gift": {
+      "title": "Envuélvelo en un regalo",
+      "sub": "Elige el regalo que quieras. El plan va dentro, envuelto, con una foto de cada parada."
+    },
+    "addMore": "Añadir otra parada",
+    "clear": "Borrar el plan",
+    "clearConfirm": "¿Borrar todo el plan? No se puede deshacer.",
+    "copyFallback": "Copia este enlace:",
+    "shareTitle": "Una cita, planeada",
+    "shareText": "He planeado una cita para los dos.",
+    "shareTextTo": "{name}, he planeado una cita para los dos.",
+    "mapLabel": "Mapa de las paradas del plan",
+    "mapLoading": "Cargando…",
+    "mapUnavailable": "El mapa no ha podido cargarse aquí.",
+    "mapCredits": "Créditos del mapa",
+    "mapRetry": "Probar otra vez",
+    "empty": {
+      "title": "Todavía no hay nada planeado",
+      "sub": "Elige un día, toca una idea, añade una parada o dos. Te estará esperando aquí.",
+      "cta": "Buscar una cita"
+    },
+    "broken": {
+      "title": "Ese enlace no ha sobrevivido al viaje",
+      "sub": "Se ha cortado una parte por el camino. Pídele que lo envíe otra vez, o planea una por tu cuenta."
+    }
+  },
+  "growth": {
+    "hero": {
+      "eyebrow": "Hecho por ti, abierto en su móvil",
+      "h1a": "Hazle un regalo",
+      "h1b": "que abrirá una y otra vez.",
+      "sub": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Diez minutos para hacerlo; se envía como enlace o código QR.",
+      "cta": "Crear un regalo",
+      "demo": "Ver cómo se abre",
+      "note": "Empezar es gratis. Sin cuenta hasta que publicas.",
+      "facts": {
+        "free": {
+          "a": "Gratis",
+          "b": "para empezar, sin cuenta"
+        },
+        "time": {
+          "a": "10 min",
+          "b": "de la primera foto al enlace"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps que tenga que descargar"
+        }
+      },
+      "orDate": "o mejor busca una idea para una cita",
+      "card": {
+        "eyebrow": "Alguien hizo esto para ti",
+        "names": "para Ana, de Marco",
+        "opened": "Abierto 3 veces"
+      }
+    },
+    "creators": {
+      "meta": {
+        "title": "Programa de creadores: el {commission}% de cada venta",
+        "description": "Comparte tu propio enlace de Ethos y gana el {commission}% de cada venta que traiga, calculado sin IVA y descontando reembolsos. Pagos mensuales. Sin códigos, sin descuentos, sin cookies."
+      },
+      "eyebrow": "Programa de creadores",
+      "h1a": "Comparte Ethos.",
+      "h1b": "Quédate el {commission}%.",
+      "sub": "Publica los regalos y las citas que haces con Ethos. Cada venta que llega por tu enlace personal te deja el {commission}%, calculado sin IVA y descontando reembolsos.",
+      "apply": "Solicitar por correo",
+      "applyNote": "Son dos minutos: tu usuario, dónde publicas y un vídeo tuyo que te encante.",
+      "deal": {
+        "commission": {
+          "a": "{commission}%",
+          "b": "de cada venta que trae tu enlace, sin IVA"
+        },
+        "link": {
+          "a": "1 enlace",
+          "b": "solo tuyo: sin códigos y el mismo precio para todos"
+        },
+        "payout": {
+          "a": "Mensual",
+          "b": "cobras en cuanto pasas de {min} €"
+        }
+      },
+      "ticket": {
+        "label": "Tu enlace",
+        "you": "de la venta, para ti",
+        "paid": "y se paga cada mes"
+      },
+      "how": {
+        "eyebrow": "Cómo funciona",
+        "title": "Tú publicas. Ellos llegan por tu enlace. Nosotros te pagamos.",
+        "steps": {
+          "apply": {
+            "title": "Apúntate y recibe tu enlace",
+            "body": "Escríbenos un correo. Cuando entres, tendrás un enlace personal, como {link}: ponlo en tu bio o en el texto de tus vídeos."
+          },
+          "post": {
+            "title": "Publica lo que haces",
+            "body": "Enseña un regalo que hayas hecho, una cita que encontraste en el mapa o un juego al que jugasteis juntos, y manda a la gente al enlace de tu bio."
+          },
+          "checkout": {
+            "title": "Compran por tu enlace",
+            "body": "Cuando alguien que llegó por tu enlace compra, la venta es tuya: el {commission}% de lo que paga, sin contar el IVA. Paga el precio normal: no hay código que escribir ni descuento."
+          },
+          "paid": {
+            "title": "Cobra cada mes",
+            "body": "A principios de cada mes te pagamos lo que ganaste el mes anterior, por transferencia bancaria o PayPal, en cuanto pasa de {min} €. Si no llega, se acumula para el mes siguiente."
+          }
+        }
+      },
+      "count": {
+        "eyebrow": "Cómo contamos",
+        "title": "Tu enlace es lo único que cuenta. Sin cookies ni códigos.",
+        "link": "Una venta es tuya cuando quien compra llegó por tu enlace y pagó en esa misma visita. Es lo único que miramos: ni un código escrito al pagar, ni una cookie que caduca a los 30 días.",
+        "browsers": "No se guarda nada en su móvil, así que funciona en los navegadores integrados de TikTok e Instagram y nadie tiene que aceptar un aviso de cookies para que tú cobres.",
+        "forget": "La otra cara: si alguien cierra la página y vuelve más tarde por otro camino, no podemos saber que la venta era tuya. Pon el enlace fácil de encontrar.",
+        "own": "Tus propias compras no cuentan, ni siquiera por tu enlace: la comisión es por la gente que traes.",
+        "base": "Tu {commission}% se calcula sobre lo que paga quien compra, sin contar el IVA. Si una venta se reembolsa o se disputa, se anula su comisión."
+      },
+      "rules": {
+        "eyebrow": "Las reglas",
+        "title": "Cuatro reglas, y la primera es la ley.",
+        "disclose": {
+          "title": "Di que es publicidad",
+          "body": "En TikTok, activa la opción de divulgación de contenido para que el vídeo lleve la etiqueta «Colaboración pagada», y pon #publi en el texto. En Instagram, usa la etiqueta de colaboración pagada. Lo exigen la UE, el Reino Unido y EE. UU., y un enlace en tu bio por sí solo no cuenta como aviso."
+        },
+        "honest": {
+          "title": "Solo reacciones reales",
+          "body": "Enseña regalos que hayas hecho de verdad y reacciones que hayan pasado de verdad. Nada de reseñas falsas, testimonios inventados ni fingir que no te pagan."
+        },
+        "spam": {
+          "title": "Nada de spam",
+          "body": "No dejes tu enlace en comentarios de otras personas, no se lo mandes por mensaje a desconocidos ni lo publiques en webs de cupones. Compártelo con quienes te siguen."
+        },
+        "adult": {
+          "title": "Mayor de 18",
+          "body": "Para unirte tienes que tener 18 años o más y poder recibir pagos a tu nombre."
+        },
+        "close": "Si se rompe una regla, podemos cerrar tu enlace."
+      },
+      "final": {
+        "title": "¿Te apuntas?",
+        "body": "Mándanos tu usuario, dónde publicas y el enlace a un vídeo tuyo que te encante."
+      },
+      "mail": {
+        "subject": "Solicitud para el programa de creadores",
+        "body": "Hola, equipo de Ethos:\n\nMi usuario: \nDónde publico (TikTok, Instagram, YouTube…): \nSeguidores, más o menos: \nUn vídeo mío que me encanta: \n\n"
+      }
+    }
+  },
+  "platform": {
+    "meta": {
+      "title": "Ethos — Regalos, ideas para citas y escapadas en pareja",
+      "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis."
+    },
+    "hero": {
+      "eyebrow": "Para vosotros dos",
+      "h1a": "Encuentra la cita.",
+      "h1b": "Quédate con la persona.",
+      "sub": "Ideas para una cita hechas con sitios reales cerca de ti, en un mapa, para el día que elijas. Planéala, envíala como invitación y envuélvela en un regalo que guardará.",
+      "nearMe": "Ver ideas cerca de mí",
+      "orGift": "o mejor crea un regalo",
+      "facts": {
+        "free": {
+          "a": "Gratis",
+          "b": "buscar y planear una cita"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps o cuentas necesarias"
+        },
+        "private": {
+          "a": "Tuyo",
+          "b": "los planes se quedan en tu móvil salvo que los guardes"
+        }
+      },
+      "card": {
+        "meta": "2 h · Calderilla",
+        "invited": "Tienes una invitación",
+        "day": "Sábado, a la hora dorada",
+        "names": "Para Maya, de Marco",
+        "stop1": "Algo dulce",
+        "stop2": "La mejor vista de la ciudad"
+      }
+    },
+    "doors": {
+      "eyebrow": "Una casa, cuatro habitaciones",
+      "title": "Seáis la pareja que seáis esta semana.",
+      "dates": {
+        "title": "Citas",
+        "blurb": "Ideas hechas con sitios reales en un mapa de tu ciudad, según el tiempo y la puesta de sol.",
+        "cta": "Buscar una cita"
+      },
+      "gifts": {
+        "title": "Regalos",
+        "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
+        "cta": "Crear un regalo"
+      },
+      "ldr": {
+        "title": "A distancia",
+        "blurb": "Quedad a medio camino, tened citas entre husos horarios y enviad algo que acorte la distancia.",
+        "cta": "Acortar la distancia"
+      },
+      "games": {
+        "title": "Juegos",
+        "blurb": "Siete juegos de cartas para dos: en un móvil en el sofá o en dos móviles a un continente de distancia.",
+        "cta": "Jugar"
+      }
+    },
+    "ideas": {
+      "eyebrow": "Ideas para citas",
+      "title": "Una noche con forma.",
+      "blurb": "Cada idea es una pequeña receta: un par de paradas y un giro. Elige una y la llenamos de sitios reales cerca de ti.",
+      "all": "Las {count} ideas, en el mapa",
+      "hours": "{hours} h"
+    },
+    "ldr": {
+      "eyebrow": "A distancia",
+      "titleA": "Estar separados no es",
+      "titleB": "estar lejos.",
+      "blurb": "Encontrad la ciudad a medio camino, planead la cita para cuando aterricéis y mantened el día a día con cosas para hacer en dos pantallas.",
+      "cta": "Abrir la habitación a distancia",
+      "halfway": "a medio camino",
+      "cityA": "Riga",
+      "cityB": "Londres"
+    },
+    "games": {
+      "eyebrow": "Juegos · siete para jugar ya",
+      "title": "Jugaos quién friega los platos.",
+      "blurb": "Juegos de cartas para dos personas que se gustan: adivinad las respuestas del otro, encontrad las parejas, girad la ruleta de los platos. Sin descargas ni cuentas.",
+      "cta": "Reparte"
+    },
+    "closing": {
+      "title": "El sábado no se va a planear solo.",
+      "blurb": "Dos minutos ahora y el finde ya tiene forma.",
+      "dates": "Buscar una cita",
+      "gifts": "Crear un regalo"
+    }
+  },
+  "ldr": {
+    "meta": {
+      "title": "A distancia: quedad a medio camino, citas entre husos horarios",
+      "description": "Encuentra la ciudad a medio camino entre los dos, mira a qué horas estáis ambos despiertos y descubre ideas de citas para dos pantallas. Herramientas gratis para parejas a distancia."
+    },
+    "eyebrow": "A distancia",
+    "h1a": "Estar separados no es",
+    "h1b": "estar lejos.",
+    "sub": "Unas cuantas herramientas pequeñas para los meses entre visita y visita: dónde quedar, cuándo estáis los dos despiertos y qué hacer en una llamada además de repasar el día.",
+    "meet": {
+      "title": "Quedad a medio camino",
+      "sub": "Entran dos ciudades. Sale cuánto os separa, la ciudad a medio camino y las horas del día en que estáis los dos despiertos.",
+      "you": "Dónde estás tú",
+      "them": "Dónde está la otra persona",
+      "hint": "Elige las dos ciudades y hacemos las cuentas.",
+      "apart": "Distancia",
+      "miles": "{miles} millas, en línea de vuelo",
+      "halfway": "A medio camino",
+      "halfwayExact": "Casi exactamente a medio camino entre los dos.",
+      "halfwayNear": "La ciudad más cercana a vuestro punto medio, a {km} km de él.",
+      "datesThere": "Ideas para una cita en {city}",
+      "nowhere": "Mar abierto, más o menos",
+      "nowhereSub": "A medio camino entre los dos no hay donde aterrizar. A uno le toca coger un avión.",
+      "clocks": "Relojes",
+      "sameTime": "La misma hora en los dos lados",
+      "ahead": "{name} va {hours} h por delante",
+      "behind": "{name} va {hours} h por detrás",
+      "bothAwake": "Estáis los dos despiertos de {windows}, en tu hora.",
+      "range": "{from} a {to}",
+      "and": "y de",
+      "neverAwake": "Vuestras horas despiertos no coinciden nunca. A alguien le toca poner el despertador.",
+      "clocksUnavailable": "Ahora mismo no podemos saber la hora de cada sitio. El resto de las cuentas sigue valiendo.",
+      "flightsTo": "Vuelos a {city}",
+      "flightsBetween": "Vuelos entre vosotros",
+      "eachWay": "{km} km cada uno",
+      "eachWaySub": "Lo que tendría que recorrer cada uno para veros justo a medio camino."
+    },
+    "virtual": {
+      "eyebrow": "Citas para dos pantallas",
+      "title": "Algo que hacer durante la llamada.",
+      "twist": "El giro:"
+    },
+    "gifts": {
+      "eyebrow": "Regalos para la distancia",
+      "title": "Algo que abrir mientras esperáis.",
+      "all": "Todos los regalos a distancia"
+    },
+    "polaroid": "por fin."
+  },
+  "affiliate": {
+    "searchOn": "Buscar en {site}",
+    "newTab": "se abre en otra pestaña",
+    "disclosure": "Puede que ganemos una comisión si reservas a través de alguno de estos enlaces. A ti no te cuesta nada más.",
+    "disclosureBoth": "Puede que ganemos una comisión si reserváis a través de alguno de estos enlaces. A vosotros no os cuesta nada más.",
+    "tickets": {
+      "button": "Entradas",
+      "label": "Entradas para {name} en Tiqets (se abre en otra pestaña)",
+      "via": "Entradas en Tiqets.",
+      "eyebrow": "Reservad con antelación",
+      "title": "Entradas para este viaje",
+      "sub": "Lo que conviene reservar antes en este plan: una hora de entrada, un sitio en el barco, un pase. Reservad antes de ir y os ahorráis la taquilla."
+    },
+    "car": {
+      "title": "Alquilar un coche",
+      "sub": "Para un viaje por carretera hace falta coche. Comparad empresas de alquiler para vuestras fechas.",
+      "cta": "Comparar coches en Auto Europe",
+      "via": "Alquiler de coches en Auto Europe."
+    },
+    "meet": {
+      "via": "Cada vuelo se abre en Aviasales; Google Flights está ahí para comparar."
+    }
+  },
+  "trips": {
+    "meta": {
+      "title": "Viajes en pareja: itinerarios hechos y buscador de vuelos gratis",
+      "description": "Doce viajes en pareja, planeados día a día: en coche, escapadas urbanas, islas y en tren. Y un buscador de vuelos gratis que abre Aviasales, Google Flights, Skyscanner y Kayak con todo ya puesto."
+    },
+    "eyebrow": "Viajes para dos",
+    "h1a": "Escapaos",
+    "h1b": "juntos.",
+    "sub": "Doce viajes que haríamos nosotros, planeados día a día, y un buscador que abre los precios en las webs que ya usáis. Sin gastos de gestión y sin cuenta.",
+    "finder": {
+      "title": "Buscar vuelos",
+      "sub": "Para dos, en las fechas que queráis. Nosotros abrimos la búsqueda; reserváis con ellos."
+    },
+    "filter": {
+      "label": "Tipo de viaje",
+      "all": "Todos",
+      "road": "En coche",
+      "city": "Ciudades",
+      "islands": "Islas",
+      "train": "En tren"
+    },
+    "grid": {
+      "eyebrow": "Viajes ya pensados",
+      "title": "Elegid uno y hacedlo vuestro."
+    },
+    "kind": {
+      "road": "En coche",
+      "city": "Escapada urbana",
+      "islands": "Islas",
+      "train": "En tren"
+    },
+    "days": "{count, plural, one {# día} other {# días}}",
+    "stops": "{count, plural, one {# parada} other {# paradas}}",
+    "best": "Mejor en {months}",
+    "budget": {
+      "low": "Unos 150 € al día para dos, o menos",
+      "mid": "Unos 150–300 € al día para dos",
+      "high": "Más de 300 € al día para dos",
+      "note": "Lo que gastáis allí, sin contar los vuelos."
+    },
+    "gift": {
+      "eyebrow": "O que sea un secreto",
+      "title": "Que el viaje sea el regalo.",
+      "sub": "Una tarjeta de embarque que se abre en el móvil: adónde vais, cuándo y una lista de equipaje hecha de pistas. Lista en un par de minutos.",
+      "cta": "Hacer el regalo"
+    },
+    "detail": {
+      "back": "Todos los viajes",
+      "facts": {
+        "days": "Duración",
+        "budget": "Presupuesto",
+        "best": "Mejores meses",
+        "kind": "Tipo"
+      },
+      "jump": {
+        "flights": "Buscar vuelos"
+      },
+      "route": {
+        "eyebrow": "La ruta",
+        "title": "Por dónde vais",
+        "map": "Mapa de la ruta",
+        "loading": "Cargando el mapa…",
+        "unavailable": "El mapa no ha podido cargarse aquí. Tenéis todas las paradas en la lista.",
+        "nights": "{count, plural, =0 {De paso} one {# noche} other {# noches}}",
+        "datesHere": "Sitios para una cita aquí",
+        "gestureMobile": "Usa dos dedos para mover el mapa",
+        "gestureWindows": "Mantén Ctrl y usa la rueda para hacer zoom",
+        "gestureMac": "Mantén ⌘ y usa la rueda para hacer zoom",
+        "zoomIn": "Acercar",
+        "zoomOut": "Alejar",
+        "credits": "Créditos del mapa"
+      },
+      "plan": {
+        "eyebrow": "Día a día",
+        "title": "El plan",
+        "day": "Día {n}"
+      },
+      "flights": {
+        "eyebrow": "Cómo llegar",
+        "title": "Vuelos a {city}",
+        "sub": "Donde empieza este viaje. Poned desde dónde voláis, cambiad las fechas si queréis y elegid una web."
+      },
+      "surprise": {
+        "eyebrow": "Una sorpresa",
+        "title": "No le digas adónde.",
+        "sub": "Convierte este viaje en un regalo: un billete que abrirá en su móvil, con {city} ya puesto y la lista de equipaje convertida en pistas. Tú decides cuándo se entera.",
+        "cta": "Que sea una sorpresa",
+        "note": "Abre el editor del regalo. Empezar es gratis.",
+        "anyGift": "…o escóndelo dentro de cualquier regalo"
+      }
+    },
+    "flights": {
+      "from": "Origen",
+      "to": "Destino",
+      "placeholder": "Ciudad o aeropuerto",
+      "swap": "Intercambiar origen y destino",
+      "depart": "Ida",
+      "return": "Vuelta",
+      "optional": "opcional",
+      "travellers": "{count, plural, one {# viajero} other {# viajeros}}",
+      "fewer": "Un viajero menos",
+      "more": "Un viajero más",
+      "nothing": "No encontramos ese aeropuerto. Probad con la ciudad o su código de tres letras.",
+      "pick": "Elegid los dos aeropuertos y aquí aparecerán las búsquedas.",
+      "same": "Es el mismo aeropuerto en los dos extremos.",
+      "newTab": "se abre en otra pestaña",
+      "distance": "{km} km",
+      "airTime": "alrededor de {time} de vuelo",
+      "train": "Menos de 600 km: quizá os compense más el tren.",
+      "smallPrint": "Estos botones abren la búsqueda en cada web, y los precios son los suyos. Puede que ganemos una comisión si reserváis a través de alguno de estos enlaces. A vosotros no os cuesta nada más.",
+      "picker": {
+        "title": "Elegid las fechas",
+        "add": "Añadir fecha",
+        "roundTrip": "Ida y vuelta",
+        "oneWay": "Solo ida",
+        "tripType": "Ida y vuelta o solo ida",
+        "quick": "Atajos",
+        "thisWeekend": "Este fin de semana",
+        "nextWeekend": "El finde que viene",
+        "weekAway": "Una semana",
+        "nights": "{count, plural, =0 {En el día} one {# noche} other {# noches}}",
+        "pickStart": "Elegid el día de ida",
+        "pickEnd": "ahora, la vuelta",
+        "clear": "Borrar",
+        "done": "Listo",
+        "close": "Cerrar",
+        "previous": "Mes anterior",
+        "next": "Mes siguiente",
+        "today": "Hoy"
+      }
+    }
+  },
+  "games": {
+    "meta": {
+      "title": "Juegos para dos",
+      "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Dibuja y adivina, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
+    },
+    "h1a": "Juegos para",
+    "h1b": "exactamente dos.",
+    "deck": {
+      "playable": "A este ya se puede jugar",
+      "choose": "Elige una baraja",
+      "count": "Carta {n} de {total}",
+      "next": "Siguiente carta",
+      "done": "Se acabó la baraja. Habláis un montón.",
+      "doneEyebrow": "Fin",
+      "again": "Barajar y otra vez",
+      "how": "Quien tenga el móvil la lee en voz alta y luego respondéis.",
+      "title": "Cartas de preguntas",
+      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded."
+    },
+    "lobby": {
+      "one": {
+        "title": "Un móvil",
+        "blurb": "Pasáoslo en el sofá.",
+        "who": "¿Quién juega?"
+      },
+      "two": {
+        "title": "Dos móviles",
+        "blurb": "Crea una sala, envía el enlace y jugad desde donde sea.",
+        "yourName": "Tu nombre",
+        "joining": "Entrando en la sala {code}",
+        "join": "Entrar",
+        "create": "Crear una sala",
+        "room": "Sala",
+        "codeLabel": "Código de sala {code}",
+        "sendIt": "Envíale el enlace o léele el código. Funciona desde cualquier sitio.",
+        "share": "Compartir el enlace",
+        "copy": "Copiar enlace",
+        "copied": "Copiado",
+        "connecting": "Conectando…",
+        "waiting": "Esperando a que abra el enlace…",
+        "here": "{name} está aquí",
+        "hostStarts": "{name} empieza la partida desde su móvil.",
+        "failed": "No se ha podido abrir la sala. Comprueba la conexión y prueba otra vez.",
+        "full": "Esta sala ya está completa. Pide un enlace nuevo.",
+        "waitingHost": "Esperando a quien creó la sala…",
+        "noHost": "Ahora mismo no hay nadie en esta sala. Puede que se haya cerrado.",
+        "makeOwn": "Crear tu propia sala",
+        "leave": "Salir de la sala",
+        "cancel": "Cerrar la sala"
+      },
+      "you": "Tu nombre",
+      "them": "Su nombre",
+      "someone": "Alguien",
+      "start": "Empezar",
+      "back": "Atrás",
+      "shareText": "{name} quiere jugar contigo",
+      "copyFallback": "Copia este enlace:",
+      "privacy": "No guardamos nada. La sala existe mientras estáis dentro y desaparece al salir.",
+      "change": "Cambiar quién juega",
+      "left": "{name} ha salido de la sala. Esperando a que vuelva…",
+      "closed": "{name} ha terminado la partida.",
+      "closedCta": "Crear una sala nueva"
+    },
+    "know": {
+      "title": "¿Cuánto me conoces?",
+      "blurb": "Ocho preguntas. Cada cual responde sobre sí y adivina qué dirá la otra persona. Puntúan los aciertos. En un móvil o en dos.",
+      "round": "Pregunta {n} de {total}",
+      "yourAnswer": "Tu respuesta",
+      "theirAnswer": "¿Qué dirá {name}?",
+      "lockIn": "Confirmar",
+      "handTo": "Pásale el móvil a {name}",
+      "noPeeking": "Sin mirar las últimas respuestas.",
+      "imHere": "Soy {name}, vamos",
+      "waitingFor": "Esperando a {name}…",
+      "waitingHost": "Esperando a que empiece quien creó la sala…",
+      "reveal": {
+        "said": "{name} dijo",
+        "right": "{name} lo acertó",
+        "wrong": "{name} pensaba «{answer}»"
+      },
+      "score": "{a} {sa} · {b} {sb}",
+      "next": "Siguiente pregunta",
+      "results": "Ver los resultados",
+      "end": {
+        "eyebrow": "Puntuación final",
+        "great": "Sois básicamente una sola persona.",
+        "good": "Os conocéis bien. Sospechosamente bien.",
+        "ok": "Queda mucho por aprender. Bien.",
+        "sub": "Puntúan los aciertos sobre la otra persona, no las respuestas propias. Quien tenga más puntos escucha mejor. O miente.",
+        "again": "Jugar otra vez"
+      }
+    },
+    "rather": {
+      "title": "¿Qué prefieres?",
+      "blurb": "Diez dilemas. Elegís en secreto y luego veis si coincidís. En un móvil o en dos.",
+      "round": "{n} de {total}",
+      "prompt": "¿Qué prefieres…",
+      "handTo": "Pásale el móvil a {name}",
+      "imHere": "Soy {name}, vamos",
+      "waitingFor": "Esperando a {name}…",
+      "waitingHost": "Esperando a que empiece quien creó la sala…",
+      "reveal": {
+        "match": "¡Igual!",
+        "clash": "No coincidís."
+      },
+      "sofar": "De acuerdo en {same} de {total} por ahora",
+      "next": "Siguiente",
+      "results": "Ver los resultados",
+      "end": {
+        "eyebrow": "El veredicto",
+        "twins": "Sois la misma persona.",
+        "balanced": "Lo bastante diferentes para ser interesantes.",
+        "opposites": "Polos opuestos. Es todo un género.",
+        "sub": "Coincidisteis en {same} de {total}. Los demás son la conversación.",
+        "again": "Jugar otra vez",
+        "date": "Planear una cita"
+      },
+      "or": "o"
+    },
+    "roulette": {
+      "title": "La ruleta de los platos",
+      "blurb": "Una ruleta con vuestros nombres. Cada giro decide una tarea. Lo que diga la ruleta va a misa.",
+      "eyebrow": "Gira para decidir quién",
+      "question": "¿Quién {chore}?",
+      "spin": "Girar",
+      "spinning": "Girando…",
+      "binding": "El resultado es vinculante. Todo el mundo lo aceptó al pulsar girar.",
+      "finish": "Ya está todo decidido",
+      "end": {
+        "eyebrow": "La ruleta ha hablado",
+        "title": "Decidido. Sin apelaciones.",
+        "again": "Girar un poco más"
+      }
+    },
+    "dare": {
+      "title": "Verdad o reto, versión suave",
+      "blurb": "Nada de lo que arrepentirse por la mañana. Sobre todo piropos y bailar mal. Un móvil, por turnos.",
+      "turn": "Turno de {name}",
+      "pick": "{name}, ¿verdad o reto?",
+      "truth": "Verdad",
+      "dare": "Reto",
+      "for": "Para {name}",
+      "done": "Hecho. Turno de {name}",
+      "soft": "Doce de cada, en un orden nuevo cada vez.",
+      "softPack": "{name}: {n} de cada, en un orden nuevo cada vez.",
+      "left": "Quedan {n}",
+      "finish": "Por hoy ya está",
+      "end": {
+        "eyebrow": "Fin de la partida",
+        "title": "Balance de la noche: {truths, plural, one {# verdad} other {# verdades}} y {dares, plural, one {# reto} other {# retos}}.",
+        "sub": "Lo que se dice en esta mesa se queda en esta mesa.",
+        "again": "Barajar y jugar otra vez"
+      }
+    },
+    "play": {
+      "one": "1 móvil",
+      "two": "1 o 2 móviles",
+      "cta": "Jugar"
+    },
+    "hub": {
+      "eyebrow": "Noche de juegos para dos",
+      "sub": "Siete juegos de cartas pequeños para el sofá, la bañera o una videollamada con un océano de por medio. Sin descargas ni cuentas: abres uno y repartes.",
+      "one": "Pasaos un móvil",
+      "two": "O dos móviles, un enlace",
+      "deal": "Reparte",
+      "pickTitle": "Elige un juego",
+      "pickSub": "Todos son rápidos y todos acaban con algo de lo que hablar.",
+      "minutes": "{n} min"
+    },
+    "memory": {
+      "title": "Memory",
+      "blurb": "El juego de parejas para dos. Da la vuelta a dos cartas; si son pareja son tuyas y repites. Con nuestras pegatinas o con vuestras fotos.",
+      "turn": "Turno de {name}",
+      "pair": "¡Pareja! {name} repite",
+      "miss": "No son pareja. Turno de {name}",
+      "winner": "Gana {name}",
+      "tie": "Empate. Cómo no.",
+      "again": "Repartir otra vez",
+      "photos": "Usar vuestras fotos",
+      "photosAgain": "Cambiar fotos",
+      "photo": "foto {n}",
+      "cardDown": "Carta {n}, boca abajo",
+      "cardUp": "Carta {n}: {face}",
+      "rules": "Las fotos se quedan en este móvil. No se sube nada.",
+      "faces": {
+        "heart": "un corazón",
+        "cherries": "cerezas",
+        "strawberry": "una fresa",
+        "bow": "un lazo",
+        "daisy": "una margarita",
+        "kiss": "un beso",
+        "butterfly": "una mariposa",
+        "cake": "una tarta"
+      }
+    },
+    "draw": {
+      "title": "Dibuja y adivina",
+      "blurb": "Seis palabras. Una persona las dibuja con el dedo y la otra adivina. Con dos móviles el dibujo aparece en la otra pantalla en directo, aunque haya un océano de por medio.",
+      "waitingHost": "Esperando a que empiece la sala…",
+      "round": "Ronda {n} de {total}",
+      "gotLabel": "Acertadas",
+      "youDraw": "Dibujas tú",
+      "theyDraw": "Dibuja {name}",
+      "passTo": "Pásale el móvil a {name}",
+      "passNote": "{name} dibuja. Tú adivinas en voz alta.",
+      "peekEyebrow": "{name}, tu palabra",
+      "peekNote": "No la enseñes. {name} no debería ver esta parte.",
+      "peekGo": "Vale, escóndela",
+      "boardDraw": "Dibuja aquí con el dedo",
+      "boardWatch": "El dibujo, en directo",
+      "inkLabel": "Elige un color",
+      "ink": {
+        "ink": "Tinta",
+        "rose": "Rosa",
+        "violet": "Violeta",
+        "blue": "Azul",
+        "gold": "Dorado"
+      },
+      "undo": "Deshacer",
+      "clear": "Borrar",
+      "guessLabel": "Tu respuesta",
+      "guessPlaceholder": "¿Qué es?",
+      "guessSend": "Adivinar",
+      "guessesLabel": "Intentos hasta ahora",
+      "got": "{name} lo ha adivinado",
+      "pass": "Rendirse con esta",
+      "gotIt": "¡Adivinada!",
+      "missed": "Esa no la ha adivinado nadie.",
+      "wordWas": "Era {word}",
+      "next": "Siguiente ronda",
+      "results": "Ver qué tal",
+      "end": {
+        "eyebrow": "Seis palabras después",
+        "great": "Pensáis igual.",
+        "good": "Nada mal.",
+        "ok": "El arte nunca fue el objetivo.",
+        "sub": "Habéis acertado {n} de {total} en equipo. Las falladas son las que seguiréis recordando.",
+        "again": "Jugar otra vez"
+      },
+      "imHere": "Soy {name}, vamos"
+    },
+    "end": {
+      "label": "¿Y ahora qué?",
+      "gift": "Hazle un regalo",
+      "giftBlurb": "Una carta, vuestras fotos, vuestra canción: algo que se abre en su móvil.",
+      "another": "Jugar a otro juego",
+      "anotherBlurb": "Hay siete en la mesa. Ninguno dura más de un cuarto de hora.",
+      "host": {
+        "title": "Te toca repartir",
+        "blurb": "Crea tu propia sala y manda el enlace a quien quieras.",
+        "cta": "Crear una sala"
+      }
+    }
+  },
+  "packs": {
+    "title": "Packs",
+    "classic": "Clásico",
+    "free": "Gratis",
+    "owned": "Tuyo",
+    "included": "Incluido en Ethos for Two",
+    "locked": "Bloqueado:",
+    "appLocked": "Bloqueado",
+    "opening": "Abriendo…",
+    "hostOnly": "Solo necesita el pack el móvil que crea la sala.",
+    "openError": "No se ha podido abrir el pack. Prueba otra vez en un momento.",
+    "games": {
+      "deck": "Cartas de preguntas",
+      "know": "¿Cuánto me conoces?",
+      "rather": "¿Qué prefieres?",
+      "dare": "Verdad o reto",
+      "draw": "Dibuja y adivina",
+      "memory": "Memory",
+      "roulette": "La ruleta de los platos"
+    },
+    "sheet": {
+      "eyebrow": "Un pack de {n} cartas",
+      "plays": "Se juega en {games}",
+      "samples": "Tres cartas de este pack",
+      "buy": "Consíguelo por {price}",
+      "appBuy": "Desbloquear este pack",
+      "appOnce": "Tuyo para siempre, en cualquier móvil en el que inicies sesión.",
+      "appFailed": "No se ha completado. Vuelve a intentarlo cuando quieras.",
+      "pass": "Todos los packs con Ethos for Two",
+      "once": "Pagas una vez y es tuyo para siempre, en cualquier móvil en el que inicies sesión. ¿Aún no tienes cuenta? Se crea con tu correo al pagar.",
+      "signIn": "¿Ya lo has comprado? Inicia sesión",
+      "close": "Cerrar"
+    },
+    "adult": {
+      "title": "Solo para mayores de 18",
+      "body": "{name} es un pack coqueto y un poco atrevido, nunca explícito. Es para dos personas adultas con ganas de jugar.",
+      "guest": "{name} ha elegido el pack «{pack}»: coqueto y un poco atrevido, nunca explícito. Es para personas adultas.",
+      "yes": "Tengo 18 años o más",
+      "no": "Ahora no",
+      "leave": "Salir de la sala"
+    },
+    "hub": {
+      "title": "Packs de juegos",
+      "sub": "Más cartas para los mismos juegos, a {price} cada uno y tuyos para siempre. O todos los packs y todas las plantillas de regalo, para los dos, con Ethos for Two.",
+      "cta": "Ver qué trae: {n} cartas"
+    }
+  },
+  "membership": {
+    "hero": {
+      "eyebrow": "Ethos for Two",
+      "title": "Cada cita que planeáis, <em>guardada para los dos.</em>",
+      "sub": "Una sola suscripción para los dos: guardad todas vuestras citas y viajes, planeadlos juntos desde vuestros dos móviles y desbloquead todas las plantillas de regalo y los packs de juegos.",
+      "subPass": "Un año para los dos: guardad todas vuestras citas y viajes, planeadlos juntos desde vuestros dos móviles y desbloquead todas las plantillas de regalo y los packs de juegos.",
+      "choose": "Cómo pagáis",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "save": "Ahorra un {pct} %",
+      "perMonth": "{price} al mes",
+      "perYear": "{price} al año",
+      "unitMonth": "al mes",
+      "unitYear": "al año",
+      "unitPass": "por un año",
+      "yearlyNote": "Salen a {price} al mes · ahorras un {pct} % frente al plan mensual",
+      "monthlyNote": "Se cobra cada mes · cancela cuando quieras",
+      "cta": "Conseguir Ethos for Two",
+      "termsMonthly": "{price} hoy y después cada mes hasta que canceles. Cancela cuando quieras desde tu cuenta.",
+      "termsYearly": "{price} hoy y después cada año hasta que canceles. Te avisamos una semana antes de cada renovación.",
+      "passNote": "Se paga una vez · no se renueva solo",
+      "passCta": "Conseguir un año para los dos",
+      "passTerms": "Un solo pago por 365 días. Te escribiremos dos semanas antes de que termine.",
+      "renewCta": "Renovar otro año",
+      "renewNote": "Al renovar se suma un año desde el día en que termina el tuyo, así que renovar antes no te hace perder nada.",
+      "covers": "Un solo pago os cubre a los dos",
+      "coversCancel": "Un solo pago os cubre a los dos · cancela cuando quieras",
+      "trust": {
+        "stripe": "Pago seguro con Stripe",
+        "wallets": "Tarjeta, Apple Pay o Google Pay",
+        "cancel": "Cancela en dos toques",
+        "once": "Sin renovaciones ni sorpresas"
+      },
+      "art": {
+        "myDates": "Mis citas",
+        "shared": "Compartidas con {name}",
+        "partner": "Sam",
+        "stops": "{n, plural, one {# parada} other {# paradas}}",
+        "days": "{n, plural, one {# día} other {# días}}",
+        "saturday": "Sábado",
+        "friday": "Viernes",
+        "date": "Cita",
+        "trip": "Viaje",
+        "polaroid": "Sábado, 20:00",
+        "templates": "Todas las plantillas",
+        "packs": "Todos los packs",
+        "cities": {
+          "paris": "París",
+          "rome": "Roma"
+        }
+      }
+    },
+    "features": {
+      "title": "Qué incluye",
+      "saved": "Citas y viajes guardados, sin límite",
+      "shared": "Planeados juntos, compartidos y editables desde vuestros dos móviles",
+      "templates": "Todas las plantillas de regalo, con todos los extras",
+      "packs": "Todos los packs de juegos, para un sofá o dos móviles",
+      "reminders": "Un aviso el día antes de cada cita",
+      "maps": "Una cita entera, abierta en Apple Maps o Google Maps"
+    },
+    "member": {
+      "title": "Tienes Ethos for Two",
+      "monthlyRenews": "Mensual · se renueva el {date}",
+      "yearlyRenews": "Anual · se renueva el {date}",
+      "ends": "Termina el {date}",
+      "passRuns": "Tu año dura hasta el {date}",
+      "appStore": "A través de la App Store · se renueva el {date}",
+      "appStoreEnds": "A través de la App Store · termina el {date}",
+      "appStoreBilling": "Apple no ha podido cobrar tu último pago: actualízalo en los Ajustes de tu iPhone antes del {date}",
+      "paymentFailed": "El pago ha fallado: actualiza tu tarjeta antes del {date}",
+      "paused": "En pausa: tu último pago no se ha completado",
+      "processing": "Tu primer pago aún se está confirmando",
+      "partnerIn": "Estás dentro del Ethos for Two de tu pareja",
+      "manage": "Gestionar",
+      "fix": "Actualizar la tarjeta"
+    },
+    "compare": {
+      "eyebrow": "Gratis y For Two",
+      "title": "Lo que es gratis y lo que añade For Two",
+      "sub": "Buscar una cita, planearla y enviarla sigue siendo gratis para todo el mundo, sin cuenta.",
+      "feature": "Qué incluye",
+      "free": "Gratis",
+      "forTwo": "Ethos for Two",
+      "included": "Incluido",
+      "notIncluded": "No incluido",
+      "rows": {
+        "ideas": "Ideas para citas en un mapa, con el tiempo y la puesta de sol",
+        "plan": "Planear una cita y enviarla como enlace",
+        "saved": "Citas y viajes guardados",
+        "shared": "Compartidos con tu pareja, editables en los dos móviles",
+        "reminders": "Un aviso el día antes de una cita",
+        "maps": "Abrir una cita entera en Apple Maps o Google Maps",
+        "templates": "Plantillas de regalo",
+        "packs": "Packs de juegos",
+        "ldr": "Herramientas a distancia y los juegos",
+        "price": "Precio"
+      },
+      "values": {
+        "upTo": "Hasta {n}",
+        "unlimited": "Sin límite",
+        "freeTemplates": "{names}",
+        "freeTemplatesCount": "{free} de {n}",
+        "allTemplates": "Las {n}, con todos los extras",
+        "freeDecks": "Las barajas gratis",
+        "everyPack": "Todos los packs",
+        "freeForGood": "Gratis, para siempre",
+        "priceSub": "{monthly} al mes o {yearly} al año, para dos",
+        "pricePass": "{yearly} por un año, un solo pago, para dos"
+      },
+      "cta": "Conseguir Ethos for Two",
+      "noAccount": "Buscar una cita"
+    },
+    "single": {
+      "eyebrow": "Un solo pago",
+      "title": "O compra un regalo suelto",
+      "sub": "Pagas una vez y es tuyo para siempre. Sin suscripción.",
+      "special": {
+        "eyebrow": "Para una plantilla gratis",
+        "name": "Hazlo especial",
+        "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin pie, en esa plantilla para siempre.",
+        "note": "Se compra en el editor, al publicar.",
+        "cta": "Abrir {name}"
+      }
+    },
+    "account": {
+      "title": "Ethos for Two",
+      "monthly": "Mensual · {price} al mes · se renueva el {date}",
+      "yearly": "Anual · {price} al año · se renueva el {date}",
+      "monthlyPlan": "Mensual · {price} al mes",
+      "yearlyPlan": "Anual · {price} al año",
+      "ending": "Termina el {date}: lo conserváis todo hasta entonces",
+      "switching": "Pasa a mensual hacia el {date}",
+      "pass": "Tu año dura hasta el {date}",
+      "passEnding": "Termina en {days, plural, one {# día} other {# días}}. Al renovar se suma un año desde el día en que termina.",
+      "passCarryOn": "Termina en {days, plural, one {# día} other {# días}}. Para seguir después, elige mensual o anual a partir del {date}.",
+      "passRenew": "Renovar por {price}",
+      "seePlans": "Ver los planes",
+      "appStore": "A través de la App Store · se renueva el {date}",
+      "appStoreEnds": "A través de la App Store · termina el {date}",
+      "appStoreManage": "Gestiónalo en los Ajustes de tu iPhone → tu nombre → Suscripciones.",
+      "appStoreOnly": "A través de la App Store",
+      "appStoreBilling": "Apple no ha podido cobrar tu último pago. Actualiza tu método de pago en los Ajustes de tu iPhone → tu nombre → Suscripciones antes del {date} para conservar Ethos for Two.",
+      "processing": "Tu primer pago se está confirmando",
+      "processingNote": "Ethos for Two empieza en cuanto tu banco lo confirme, y te escribiremos. No tienes que hacer nada.",
+      "partnerOf": "Estás dentro del Ethos for Two de {name}",
+      "partnerOfNoName": "Estás dentro del Ethos for Two de tu pareja",
+      "partnerRenews": "Mientras siga activo.",
+      "partnerUntil": "Hasta el {date}.",
+      "pastDue": "No hemos podido cobrar tu último pago. Actualiza tu tarjeta antes del {date} para conservar Ethos for Two.",
+      "paused": "Ethos for Two está en pausa hasta que se complete el pago.",
+      "updateCard": "Actualizar tarjeta",
+      "joined": "{name} ya se ha unido",
+      "joinedNoName": "Tu pareja ya se ha unido",
+      "remove": "Quitar",
+      "leave": "Salir",
+      "manageBilling": "Gestionar la facturación",
+      "manageBillingBlurb": "Tarjeta, facturas y dirección de facturación",
+      "switchYearly": "Pasar a anual · ahorra un {pct} %",
+      "switchMonthly": "Pasar a mensual",
+      "cancel": "Cancelar la suscripción",
+      "resume": "Reactivar",
+      "resumeHint": "No se renovará. ¿Has cambiado de idea?",
+      "keepYearly": "Mantener anual",
+      "none": "Citas guardadas sin límite, todas las plantillas y los packs de juegos, para los dos. {monthly} al mes o {yearly} al año.",
+      "nonePass": "Citas guardadas sin límite, todas las plantillas y los packs de juegos, para los dos. {yearly} por un año, un solo pago.",
+      "see": "Ver Ethos for Two",
+      "inApp": "Gestiona tu suscripción en tryethos.io/account",
+      "done": {
+        "cancel": "Cancelada. Los dos lo conserváis todo hasta el {date}.",
+        "cancelNow": "Cancelada. No se cobrará nada más.",
+        "resume": "Vuelve a renovarse.",
+        "switchYearly": "Ya estás en el plan anual.",
+        "switchMonthly": "Pasará a mensual hacia el {date}.",
+        "keepPlan": "Sigues en el plan anual.",
+        "leave": "Has salido.",
+        "removePartner": "Hecho. Tu enlace de invitación ha cambiado."
+      },
+      "errors": {
+        "generic": "No ha funcionado. Inténtalo de nuevo en un momento.",
+        "tooMany": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+        "signIn": "Tu sesión ha caducado. Vuelve a iniciar sesión e inténtalo otra vez.",
+        "unavailable": "Eso no se puede cambiar desde aquí ahora mismo. Recarga la página.",
+        "appStore": "Esta suscripción la cobra Apple: gestiónala en los Ajustes de tu iPhone.",
+        "notConfigured": "La facturación no está disponible ahora mismo. Vuelve a probar más tarde.",
+        "paymentFailed": "El pago no se ha completado, así que no ha cambiado nada. Actualiza tu tarjeta y vuelve a intentarlo.",
+        "requiresAction": "Tu banco quiere que confirmes el pago. Abriendo su página…"
+      },
+      "dialogs": {
+        "cancel": {
+          "title": "¿Cancelar Ethos for Two?",
+          "body": "Los dos lo conserváis todo hasta el {date}. Después no se cobra nada más, vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea.",
+          "bodyNow": "Termina ahora y la renovación pendiente no se cobra. Vuestras citas guardadas siguen en vuestra cuenta y los regalos publicados siguen en línea.",
+          "confirm": "Cancelar la suscripción",
+          "keep": "Mantenerla"
+        },
+        "yearly": {
+          "title": "¿Pasar a anual?",
+          "body": "Hoy pagarás {amount}: {yearly} por un año, menos {credit} por lo que queda de este mes. Después se renueva cada año el {date} hasta que canceles.",
+          "loading": "Calculando el importe de hoy…",
+          "confirm": "Cambiar y pagar {amount}",
+          "confirmLoading": "Pasar a anual",
+          "keep": "Seguir en mensual"
+        },
+        "monthly": {
+          "title": "¿Pasar a mensual?",
+          "body": "Hacia el {date} empezarás a pagar {monthly} al mes en lugar de {yearly} al año, hasta que canceles. Hacemos el cambio un par de días antes de que termine tu año y descontamos lo que quede, así que no pierdes nada.",
+          "confirm": "Pasar a mensual",
+          "keep": "Mantener anual"
+        },
+        "leave": {
+          "title": "¿Salir del Ethos for Two de {name}?",
+          "titleNoName": "¿Salir del Ethos for Two de tu pareja?",
+          "body": "Dejaréis de compartir las citas guardadas, y las plantillas y los packs que desbloquea desaparecerán de tu cuenta. Tus propias citas guardadas siguen siendo tuyas.",
+          "confirm": "Salir",
+          "keep": "Quedarme"
+        },
+        "remove": {
+          "title": "¿Quitar a {name}?",
+          "titleNoName": "¿Quitar a tu pareja?",
+          "body": "Dejará de ver tus citas guardadas y perderá lo que desbloquea Ethos for Two. Tu enlace de invitación cambia, así que puedes invitar a otra persona.",
+          "confirm": "Quitar",
+          "keep": "Mantener"
+        }
+      }
+    },
+    "success": {
+      "title": "Ethos for Two ya está activo.",
+      "detail": "{plan}: se renueva el {date}. Envía a tu pareja el enlace de abajo y también lo tendrá en su móvil.",
+      "emailed": "{plan}: se renueva el {date}. Te hemos enviado por email el enlace para tu pareja.",
+      "noDate": "Envía a tu pareja el enlace de abajo y también lo tendrá en su móvil.",
+      "noDateEmailed": "Te hemos enviado por email el enlace para tu pareja, y también lo tienes en tu cuenta.",
+      "processing": "Tu pago se está procesando. Ethos for Two empieza en cuanto se confirme, y te escribiremos.",
+      "arriving": {
+        "title": "Activándolo…",
+        "detail": "Tu pago se ha completado. Estamos activando Ethos for Two para los dos: tarda unos segundos.",
+        "wait": "Volvemos a comprobarlo en un momento…",
+        "late": "Está tardando más de lo normal. En unos minutos lo verás en tu cuenta, y te escribiremos."
+      },
+      "unreadable": {
+        "title": "Pago recibido.",
+        "detail": "Ahora mismo no podemos mostrarte aquí tu suscripción. En tu cuenta lo tienes todo, y también en el email que te hemos enviado."
+      },
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "planFirst": "Planea vuestra primera cita",
+      "toAccount": "Ir a tu cuenta"
+    }
+  },
+  "lifecycle": {
+    "remind": {
+      "title": "Recuérdamelo el año que viene",
+      "blurb": "Te escribiremos nueve días antes, para que tengas tiempo de hacerle algo a {name}.",
+      "save": "Recuérdamelo",
+      "saving": "Guardando…",
+      "saved": "Guardado. Te escribiremos nueve días antes del {date}.",
+      "failed": "No se ha guardado. Prueba otra vez en un momento.",
+      "tooMany": "Ya tienes {max} recordatorios. Quita alguno en la página de tu cuenta para añadir este.",
+      "edit": "Cambiar los datos",
+      "name": "Para quién",
+      "occasion": "Ocasión",
+      "date": "Fecha",
+      "manage": "Todos tus recordatorios",
+      "occasions": {
+        "birthday": "Cumpleaños",
+        "anniversary": "Aniversario",
+        "valentines": "San Valentín",
+        "other": "Otra fecha"
+      }
+    },
+    "trip": {
+      "title": "Reserva el viaje",
+      "blurb": "La sorpresa ya está lista. Ahora, los billetes de verdad.",
+      "flights": "Vuelos a {city}",
+      "tickets": "Qué hacer en {city}",
+      "car": "Alquilar un coche",
+      "disclosure": "Enlaces de afiliado: si reservas a través de ellos, puede que ganemos una comisión. A ti no te cuesta nada más. La reserva la haces con cada web, según sus condiciones."
+    },
+    "page": {
+      "title": "Recordatorios",
+      "subtitle": "Cumpleaños, aniversarios y otros días de los que te avisaremos por correo, nueve días antes. Una vez al año cada uno, nada más.",
+      "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
+      "remove": "Quitar",
+      "removeLabel": "Quitar el recordatorio de {name}",
+      "failed": "No se ha podido quitar. Prueba otra vez en un momento.",
+      "back": "Cuenta",
+      "makeGift": "Hacer un regalo"
+    },
+    "remove": {
+      "title": "¿Quitar este recordatorio?",
+      "body": "Dejarás de recibir el correo anual sobre {name}.",
+      "confirm": "Quitarlo",
+      "doneTitle": "Recordatorio quitado.",
+      "doneBody": "Ese recordatorio ya no existe. Puedes crear otro cuando hagas un regalo."
+    },
+    "unsubscribe": {
+      "title": "¿Darte de baja?",
+      "body": "Dejaremos de enviarte el aviso de un pago que no terminaste y quitaremos las ofertas de nuestros demás correos. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando, porque los necesitas.",
+      "confirm": "Darme de baja",
+      "doneTitle": "Te has dado de baja.",
+      "doneBody": "Se acabaron los avisos de pagos y las ofertas. Los recibos, los correos para iniciar sesión y las novedades de tus regalos seguirán llegando."
+    },
+    "link": {
+      "invalidTitle": "Este enlace no funciona.",
+      "invalidBody": "Puede que esté incompleto o que lo que enlazaba ya no exista.",
+      "unavailableTitle": "Algo ha fallado.",
+      "unavailableBody": "Vuelve a probar el enlace dentro de unos minutos.",
+      "home": "Ir a Ethos"
+    }
+  },
+  "giftChooser": {
+    "titleDate": "Envuelve tu cita en un regalo",
+    "titleTrip": "Envuelve tu viaje en un regalo",
+    "sub": "Elige el regalo que quieras. Tu plan irá dentro, envuelto, esperando al final.",
+    "subTrip": "Elige el regalo que quieras. El viaje irá dentro, envuelto, esperando al final.",
+    "filterLabel": "Mostrar",
+    "filter": {
+      "all": "Todos",
+      "loved": "Los favoritos",
+      "free": "Gratis"
+    },
+    "free": "Gratis",
+    "price": "{price} una vez",
+    "included": "Sorpresa incluida",
+    "extra": "La sorpresa dentro: {price}",
+    "pick": "Envolverlo en {name}",
+    "wrapping": "Envolviéndolo…"
+  },
+  "pickers": {
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "today": "Hoy",
+    "clear": "Borrar",
+    "done": "Listo",
+    "close": "Cerrar",
+    "addDate": "Añadir fecha",
+    "addTime": "Añadir hora",
+    "hour": "Hora",
+    "minutes": "Minutos",
+    "month": "Mes",
+    "day": "Día",
+    "time": "Hora",
+    "range": {
+      "title": "Elegid las fechas",
+      "add": "Añadir fecha",
+      "roundTrip": "Ida y vuelta",
+      "oneWay": "Solo ida",
+      "tripType": "Ida y vuelta o solo ida",
+      "quick": "Atajos",
+      "thisWeekend": "Este fin de semana",
+      "nextWeekend": "El finde que viene",
+      "weekAway": "Una semana",
+      "nights": "{count, plural, =0 {En el día} one {# noche} other {# noches}}",
+      "pickStart": "Elegid el día de salida",
+      "pickEnd": "ahora, el día de vuelta",
+      "close": "Cerrar"
+    }
+  },
+  "savedDates": {
+    "meta": {
+      "title": "Mis citas"
+    },
+    "page": {
+      "title": "Mis citas",
+      "sub": "Las citas y los viajes que has guardado.",
+      "subShared": "Las citas y los viajes que has guardado, compartidos con {name}.",
+      "quota": "{used} de {limit} guardados gratis",
+      "upgrade": "Guarda todos los que quieras",
+      "error": "Tus citas guardadas no se han podido cargar.",
+      "retry": "Probar otra vez",
+      "empty": {
+        "title": "Aún no has guardado ninguna cita",
+        "sub": "Planea una cita en el mapa y guárdala aquí, o guarda un viaje que te guste.",
+        "dates": "Buscar una cita",
+        "trips": "Ver los viajes"
+      }
+    },
+    "card": {
+      "date": "Cita",
+      "trip": "Viaje",
+      "stops": "{count, plural, one {# parada} other {# paradas}}",
+      "days": "{count, plural, one {# día} other {# días}}",
+      "someday": "Sin día todavía",
+      "from": "De {name}",
+      "readOnly": "Solo lectura",
+      "reminder": "Aviso activado",
+      "menu": {
+        "label": "Más opciones de {title}",
+        "open": "Abrir",
+        "rename": "Cambiar el nombre",
+        "remind": "Avisarnos el día antes",
+        "delete": "Borrar",
+        "deleteConfirm": "Has borrado «{title}»"
+      },
+      "renameTitle": "Cambiar el nombre",
+      "renameLabel": "Nombre",
+      "renameSave": "Guardar",
+      "undo": "Deshacer",
+      "deleteFailed": "No se ha podido borrar «{title}». Prueba otra vez.",
+      "renameFailed": "El nombre nuevo no se ha guardado. Prueba otra vez.",
+      "remindFailed": "El aviso no ha cambiado. Prueba otra vez.",
+      "notOwner": "Solo {name} puede borrarla.",
+      "editedBy": "Último cambio de {name}"
+    },
+    "save": {
+      "title": "Guarda esta cita",
+      "sub": "Guárdala en tu cuenta y encuéntrala en cualquier móvil en el que inicies sesión.",
+      "cta": "Guardar en mis citas",
+      "saving": "Guardando…",
+      "saved": "Guardada en mis citas",
+      "synced": "Todos los cambios guardados",
+      "offline": "Aún sin guardar",
+      "open": "Ver mis citas",
+      "close": "Cerrar esta cita",
+      "closeConfirm": "¿Cerrar esta cita? Sigue en Mis citas, y en este dispositivo empiezas un plan nuevo.",
+      "remind": "Avisarnos el día antes",
+      "remindNeedsDay": "Elige un día para la cita y os avisaremos a los dos el día antes.",
+      "defaultTitle": "Una cita",
+      "shared": "Compartida con {name}, que también puede cambiarla.",
+      "partners": "La cita de {name}, compartida contigo.",
+      "quota": "{used} de {limit} guardados gratis usados",
+      "signIn": {
+        "title": "Inicia sesión para guardar tu cita",
+        "sub": "Tu plan se queda en este dispositivo mientras inicias sesión y se guarda solo cuando vuelvas."
+      },
+      "trip": {
+        "cta": "Guardar viaje",
+        "saved": "Guardado",
+        "remove": "Quitar",
+        "removeLabel": "Quitar {title} de Mis citas",
+        "byPartner": "Guardado por {name}",
+        "failed": "El viaje no se ha guardado. Prueba otra vez.",
+        "signIn": {
+          "title": "Inicia sesión para guardar este viaje",
+          "sub": "Irá a Mis citas y se guardará solo cuando vuelvas."
+        }
+      }
+    },
+    "upsell": {
+      "eyebrow": "Ethos for Two",
+      "limit": {
+        "title": "Has usado tus {limit} guardados gratis",
+        "body": "Las cuentas gratuitas guardan {limit} citas y viajes. Con Ethos for Two guardáis todos los que queráis, compartidos con tu pareja y editables desde vuestros dos móviles."
+      },
+      "read_only": {
+        "title": "Por ahora, esta cita es de solo lectura",
+        "body": "Sin Ethos for Two, tus {limit} citas cambiadas más recientemente siguen siendo editables. Las demás se conservan y puedes leerlas hasta que borres alguna o vuelvas."
+      },
+      "maps": {
+        "title": "Abre la cita entera en Mapas",
+        "body": "Con Ethos for Two, todas las paradas se abren en Apple Maps o Google Maps con un toque, en orden y con el camino de una a la siguiente."
+      },
+      "reminders": {
+        "title": "Un aviso el día antes",
+        "body": "Con Ethos for Two, os escribimos a los dos el día antes de cada cita guardada, con el plan dentro."
+      },
+      "cta": "Ver Ethos for Two",
+      "manage": "Gestionar mis citas",
+      "notNow": "Ahora no",
+      "perMonth": "{price} al mes",
+      "perYear": "{price} al año",
+      "forYear": "{price} por un año",
+      "or": "o",
+      "forBoth": "para los dos"
+    },
+    "sync": {
+      "conflict": "{name} ha cambiado esta cita: estás viendo la última versión",
+      "conflictHere": "Esta cita ha cambiado en otro sitio: estás viendo la última versión",
+      "readOnly": "Ahora esta cita es de solo lectura, así que los cambios de aquí no se guardan en ella.",
+      "gone": "Esta cita ya no está en Mis citas. El plan sigue en este dispositivo."
+    },
+    "detached": {
+      "title": "Ahora esta cita es de solo lectura",
+      "body": "Lo que cambies aquí se queda en este dispositivo y no se guarda en Mis citas. Sin Ethos for Two, solo se pueden editar tus {limit} citas cambiadas más recientemente.",
+      "why": "¿Por qué?",
+      "manage": "Gestionar mis citas",
+      "dismiss": "Cerrar este aviso"
+    },
+    "open": {
+      "loading": "Abriendo tu cita…",
+      "replaceConfirm": "Esto sustituye el plan que estabas preparando en este dispositivo, que no está guardado. ¿Abrir esta cita?",
+      "notFound": "Esa cita no está en tu cuenta o se ha borrado.",
+      "failed": "La cita no se ha abierto. Revisa tu conexión y prueba otra vez.",
+      "signIn": "Inicia sesión para abrir esta cita.",
+      "signInSub": "Inicia sesión con la cuenta en la que se guardó y se abrirá aquí mismo."
+    },
+    "readOnly": {
+      "title": "Solo lectura",
+      "body": "Sin Ethos for Two, solo se pueden editar tus {limit} citas cambiadas más recientemente. Esta sigue a salvo en Mis citas.",
+      "why": "¿Por qué?"
+    },
+    "maps": {
+      "cta": "Abrir en Mapas",
+      "label": "Abrir la cita entera en una app de mapas",
+      "google": "Google Maps",
+      "apple": "Apple Maps",
+      "locked": "Con Ethos for Two"
+    },
+    "remindOff": {
+      "title": "¿Quitar el aviso?",
+      "body": "Ninguno de los dos recibirá un correo el día antes de «{title}».",
+      "confirm": "Quitar el aviso",
+      "done": "Aviso quitado.",
+      "doneBody": "No habrá correo el día antes de «{title}». Puedes volver a activarlo en Mis citas."
+    },
+    "errors": {
+      "unauthenticated": "Inicia sesión para guardar tus citas.",
+      "invalid_input": "No se ha podido guardar. Recarga la página y prueba otra vez.",
+      "empty_plan": "Añade antes una parada al plan.",
+      "unknown_trip": "Ese viaje ya no está en Ethos.",
+      "limit_reached": "Has usado tus guardados gratis.",
+      "read_only": "Esta cita es de solo lectura.",
+      "not_found": "Esa cita ya no está en tu cuenta.",
+      "not_owner": "Solo quien la guardó puede borrarla.",
+      "conflict": "Alguien la ha cambiado antes. Estás viendo la última versión.",
+      "rate_limited": "Demasiados cambios a la vez. Prueba otra vez en un minuto.",
+      "not_configured": "Ahora mismo no se puede guardar.",
+      "network": "No tienes conexión. Prueba otra vez cuando vuelvas a tenerla."
+    }
+  },
+  "campaign": {
+    "eyebrow": "Campaña de creadores",
+    "title": "Hazlo gratis. Publícalo. Cobra.",
+    "subtitle": "Cuatro de nuestras mejores plantillas, gratis en tu cuenta durante {days} días, para los regalos que publiques en TikTok e Instagram.",
+    "signInTitle": "Primero, tu cuenta",
+    "signInBlurb": "Las plantillas gratis van a tu cuenta. Inicia sesión o crea una, gratis, y esta página te estará esperando con la contraseña.",
+    "passwordLabel": "Contraseña de la campaña",
+    "passwordPlaceholder": "La contraseña de tu guía de campaña",
+    "unlock": "Desbloquear las plantillas",
+    "unlocking": "Comprobando…",
+    "active": {
+      "title": "Ya estás dentro.",
+      "until": "Gratis hasta el {date}.",
+      "noEnd": "Gratis, sin fecha de fin.",
+      "left": "Te quedan {left} de {limit} regalos gratis.",
+      "make": "Crear este regalo",
+      "rulesTitle": "Cómo funciona",
+      "rules": {
+        "footer": "Cada regalo lleva el pequeño pie de Ethos.",
+        "extras": "Los extras no están incluidos: un vídeo, una nota de voz, más de 10 fotos, programarlo o una contraseña.",
+        "stays": "Tus regalos siguen activos cuando acaban tus días gratis, así que tus publicaciones siguen funcionando.",
+        "once": "Una sola ventana por cuenta: volver a escribir la contraseña no la reinicia."
+      }
+    },
+    "ended": {
+      "title": "Tus días gratis han terminado.",
+      "detail": "Todos los regalos que hiciste siguen activos. ¿Has ganado tus primeros 6 $ en la campaña? Escribe a {email} y mantendremos tus plantillas abiertas."
+    },
+    "revoked": {
+      "title": "Tu acceso a la campaña está desactivado.",
+      "detail": "Tus regalos siguen activos. ¿Dudas? Escribe a {email}."
+    },
+    "errors": {
+      "wrong": "Esa no es la contraseña. Revisa tu guía de campaña.",
+      "tooMany": "Demasiados intentos. Espera una hora y vuelve a intentarlo.",
+      "accounts": "Demasiadas cuentas han desbloqueado la campaña desde esta conexión esta semana.",
+      "signIn": "Inicia sesión primero y luego escribe la contraseña.",
+      "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
+    }
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Qué escribir, qué hacer y qué enviar",
+    "subtitle": "Guías prácticas para cumpleaños, aniversarios, la distancia y los días normales de en medio: qué decir, qué hacer y cómo hacérselo llegar a tiempo.",
+    "takeaways": "Lo esencial",
+    "faqTitle": "Preguntas frecuentes",
+    "minutes": "{minutes} min de lectura",
+    "related": "Sigue leyendo",
+    "makeThis": "Hacer este regalo",
+    "seeIt": "Ver la plantilla",
+    "templateFree": "Plantilla gratis",
+    "templatePremium": "Plantilla premium",
+    "englishOnly": "De momento, esta guía solo está en inglés."
   }
 }

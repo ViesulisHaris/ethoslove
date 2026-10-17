@@ -7,6 +7,7 @@
  */
 import { useId } from "react";
 import { POSTER_FONT } from "../_shared/cover-kit";
+import { FitName } from "../_shared/FitName";
 
 /** Bulbs per edge of the marquee. */
 const BULBS = 13;
@@ -113,9 +114,9 @@ export function Ticket({ admit, forLabel, name, seat, stub }: { admit: string; f
         <p className="text-[calc(1.7*var(--k))] leading-none tracking-[0.3em] uppercase opacity-70" style={{ fontFamily: POSTER_FONT }}>
           {forLabel}
         </p>
-        <p className="mt-[calc(.4*var(--k))] line-clamp-2 text-[calc(5.6*var(--k))] leading-[1.05] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", color: "#3A2206" }}>
+        <FitName as="p" min={0.5} className="mt-[calc(.4*var(--k))] w-full text-[calc(5.6*var(--k))] leading-[1.05] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", color: "#3A2206" }}>
           {name}
-        </p>
+        </FitName>
         <p className="mt-[calc(1*var(--k))] text-[calc(1.5*var(--k))] leading-none tracking-[0.22em] uppercase opacity-60">{seat}</p>
       </div>
 

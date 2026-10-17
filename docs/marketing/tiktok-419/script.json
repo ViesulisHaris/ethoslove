@@ -1,0 +1,27 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "okay i don’t hate you",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i hate you",
+          "status": "Read 10:02 pm"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i love you too 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
  * Closed, the whole card is one button ("open the card"). Each candle is a button ("Light candle").
  * The flames go out on a breath (the fake microphone) and "Read the letter" turns the lid.
  */
-export async function film({ page, live, spec, breathe, inGift, now }) {
+export async function film({ page, live, breathe, inGift, now }) {
   const marks = {};
   const says = (text) => new RegExp(text, "i").test(document.querySelector('[data-mode="live"]')?.innerText ?? "");
 

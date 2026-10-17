@@ -19,7 +19,7 @@ function unprefixedPathname(pathname: string): string {
 
 function needsServerSession(pathname: string): boolean {
   const path = unprefixedPathname(pathname);
-  return path.startsWith("/account") || path.startsWith("/dashboard") || path.startsWith("/create") || path.startsWith("/checkout");
+  return path.startsWith("/account") || path.startsWith("/dashboard") || path.startsWith("/my-dates") || path.startsWith("/create") || path.startsWith("/checkout");
 }
 
 export async function proxy(request: NextRequest) {

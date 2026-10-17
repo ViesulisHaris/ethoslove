@@ -1,0 +1,87 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:36",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can you not text me after 10"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just don't pls"
+        },
+        {
+          "from": "me",
+          "text": "since when"
+        },
+        {
+          "from": "them",
+          "text": "chloe goes on my ipad at night"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who's chloe"
+        },
+        {
+          "from": "them",
+          "text": "my cousin"
+        },
+        {
+          "from": "me",
+          "text": "your cousin is on your ipad at night?"
+        },
+        {
+          "from": "them",
+          "text": "she stays over sometimes"
+        },
+        {
+          "from": "me",
+          "text": "in your room?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why are you being like this"
+        },
+        {
+          "from": "them",
+          "text": "i literally made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "my favourite person 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "who is she"
+        },
+        {
+          "from": "me",
+          "text": "hello??",
+          "status": "Read 22:41"
+        }
+      ]
+    }
+  ]
+}

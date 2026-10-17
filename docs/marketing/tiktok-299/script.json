@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:58",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy 3 years"
+        },
+        {
+          "from": "me",
+          "text": "i made you another one"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "3 years, still yours 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i know you can't open it",
+          "status": "Delivered"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Hi. I'm so sorry for your loss"
+        },
+        {
+          "from": "them",
+          "text": "I got this number in March"
+        },
+        {
+          "from": "them",
+          "text": "I've read every message since"
+        },
+        {
+          "from": "me",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "could you keep reading them"
+        }
+      ]
+    }
+  ]
+}

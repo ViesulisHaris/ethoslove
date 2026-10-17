@@ -1,0 +1,142 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did someone weigh 54kg on our scale at 3am"
+        },
+        {
+          "from": "them",
+          "text": "its glitching"
+        },
+        {
+          "from": "me",
+          "text": "it did it twice. 54.3"
+        },
+        {
+          "from": "them",
+          "text": "dan crashed here after the pub"
+        },
+        {
+          "from": "me",
+          "text": "dan is 90kg marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "dan is 90kg marco"
+        },
+        {
+          "from": "them",
+          "text": "ur tracking me through a scale now?"
+        },
+        {
+          "from": "them",
+          "text": "this is insane. i got u these to calm u down"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (just because)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "theyre beautiful"
+        },
+        {
+          "from": "me",
+          "text": "i just want to know who was here"
+        },
+        {
+          "from": "them",
+          "text": "no one was here maya. its a scale"
+        },
+        {
+          "from": "them",
+          "text": "delete that app. its making u crazy"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "that was me on the scale"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "i came home at 3 to surprise u. dan wasnt here. neither were u"
+        },
+        {
+          "from": "them",
+          "text": "i can explain"
+        },
+        {
+          "from": "me",
+          "text": "54.3 is my weight btw",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya delete the scale app"
+        }
+      ]
+    }
+  ]
+}

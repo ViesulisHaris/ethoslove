@@ -103,28 +103,22 @@ export function LoadingScreen({
         style={{ background: "linear-gradient(180deg, transparent, rgba(0,0,0,0.45))" }}
       />
 
+      {/* The mark and the eyebrow come in on CSS animations, not motion's: a demo page has this
+          screen in its server HTML, and those start with the page instead of waiting seconds for
+          the scripts, so a phone sees them at once. */}
       <div className="relative flex h-full flex-col items-center justify-center px-10 pb-[14cqh] text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.86 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div className="animate-in duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-both fade-in zoom-in-86 motion-reduce:animate-none">
           <motion.div
             animate={{ scale: [1, 1.06, 1] }}
             transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
           >
             <LogoMark className="size-9 opacity-90" />
           </motion.div>
-        </motion.div>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 0.62, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-7 text-[0.68rem] font-medium tracking-[0.32em] uppercase"
-        >
+        <p className="mt-7 animate-in text-[0.68rem] font-medium tracking-[0.32em] uppercase opacity-62 delay-350 duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-both fade-in slide-in-from-bottom-2.5 motion-reduce:animate-none">
           {giftString(locale, "introEyebrow")}
-        </motion.p>
+        </p>
 
         {recipientName ? (
           <motion.p

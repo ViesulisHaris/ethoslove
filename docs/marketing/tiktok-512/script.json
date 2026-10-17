@@ -1,0 +1,44 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "rose",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:03 AM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "just because 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|6:22 PM"
+        },
+        {
+          "from": "them",
+          "text": "did you even open it"
+        },
+        {
+          "from": "me",
+          "text": "once"
+        },
+        {
+          "from": "them",
+          "text": "once??"
+        },
+        {
+          "from": "me",
+          "text": "once an hour",
+          "status": "Read 6:23 PM"
+        }
+      ]
+    }
+  ]
+}

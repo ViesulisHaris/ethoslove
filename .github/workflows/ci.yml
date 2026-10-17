@@ -1,9 +1,22 @@
 name: CI
 
+# Every push and PR gets the fast checks (lint, types, unit, build: about 4 minutes). The Playwright
+# suite takes over half an hour on a runner and needs the real keys the repo doesn't hold, so it only
+# runs when started by hand (Actions → CI → Run workflow → tick "e2e"): pushes are checked with it
+# locally before they go out. Docs and the TikTok filming scripts don't touch the site, so pushes that
+# only change those run nothing. Free private repos get 2,000 Actions minutes a month.
 on:
   push:
     branches: [main]
+    paths-ignore: ["docs/**", "**/*.md", "scripts/lib/choreo/**", "scripts/tiktok-*.mjs"]
   pull_request:
+    paths-ignore: ["docs/**", "**/*.md", "scripts/lib/choreo/**", "scripts/tiktok-*.mjs"]
+  workflow_dispatch:
+    inputs:
+      e2e:
+        description: Also run the Playwright suite (30+ minutes)
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -16,6 +29,7 @@ jobs:
   verify:
     name: Lint · Typecheck · Unit · Build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,6 +46,8 @@ jobs:
     name: Playwright smoke
     runs-on: ubuntu-latest
     needs: verify
+    if: github.event_name == 'workflow_dispatch' && inputs.e2e
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

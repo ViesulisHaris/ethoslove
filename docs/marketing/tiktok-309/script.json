@@ -1,0 +1,66 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can i ask you something weird"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "can you send luna a voice note"
+        },
+        {
+          "from": "me",
+          "text": "why",
+          "status": "Read 22:48"
+        },
+        {
+          "from": "them",
+          "text": "she still waits by the door at 6"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "that's when i used to get home"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "i've been playing her the end of this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my two favourites 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "does it help"
+        },
+        {
+          "from": "them",
+          "text": "her"
+        }
+      ]
+    }
+  ]
+}

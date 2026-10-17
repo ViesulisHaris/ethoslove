@@ -1,0 +1,122 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"being cold to me lately\"",
+      "swap \"you said “five minutes away” from your bed\" \"you said “mhm” to i love u\"",
+      "swap \"you cried at an advert for a bank\" \"you left me on read for 4 hours\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you still sleep on my side\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i love u and u said \"mhm\""
+        },
+        {
+          "from": "me",
+          "text": "mhm"
+        },
+        {
+          "from": "them",
+          "text": "ur so cold lately"
+        },
+        {
+          "from": "them",
+          "text": "did i do something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something. cats obviously"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the council has ruled",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its perfect"
+        },
+        {
+          "from": "them",
+          "text": "so we're ok?"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i wanted to break up 3 weeks ago"
+        },
+        {
+          "from": "them",
+          "text": "then why didnt u"
+        },
+        {
+          "from": "me",
+          "text": "u said u were making me something"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    }
+  ]
+}

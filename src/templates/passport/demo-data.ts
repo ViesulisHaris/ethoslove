@@ -21,8 +21,8 @@ const shared = {
   },
   video: undefined,
   countdown: {
-    targetAt: "2026-12-20T18:30:00+01:00",
-    timezone: "Europe/Madrid",
+    targetAt: "2026-12-20T18:30:00+02:00",
+    timezone: "Europe/Riga",
     label: "Until I land",
   },
   surprise: {
@@ -46,7 +46,7 @@ export const demoData: Record<"en" | "es", GiftData<PassportFields>> = {
     }),
     fields: {
       fromCity: "Berlin",
-      toCity: "Madrid",
+      toCity: "Riga",
       stops: ["Lisbon"],
       nationality: "Citizen of wherever you are",
       cover: "navy",
@@ -66,7 +66,7 @@ export const demoData: Record<"en" | "es", GiftData<PassportFields>> = {
     }),
     fields: {
       fromCity: "Berlín",
-      toCity: "Madrid",
+      toCity: "Riga",
       stops: ["Lisboa"],
       nationality: "Ciudadana de donde estés tú",
       cover: "navy",

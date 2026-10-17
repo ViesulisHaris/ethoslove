@@ -1,0 +1,99 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u left me on delivered for 4 hours"
+        },
+        {
+          "from": "me",
+          "text": "i was busy"
+        },
+        {
+          "from": "them",
+          "text": "doing what"
+        },
+        {
+          "from": "me",
+          "text": "stuff"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur being taken to court"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the court will now hear maya ⚖️",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo what is this"
+        },
+        {
+          "from": "them",
+          "text": "open it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are there 5 cats"
+        },
+        {
+          "from": "them",
+          "text": "the jury"
+        },
+        {
+          "from": "me",
+          "text": "they found me guilty??"
+        },
+        {
+          "from": "them",
+          "text": "on all counts"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what's my sentence"
+        },
+        {
+          "from": "them",
+          "text": "dinner. tonight. you're paying"
+        },
+        {
+          "from": "me",
+          "text": "fine"
+        },
+        {
+          "from": "them",
+          "text": "court adjourned"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:30",
+      "messages": [
+        {
+          "from": "me",
+          "text": "is it true"
+        },
+        {
+          "from": "them",
+          "text": "Is what true"
+        },
+        {
+          "from": "me",
+          "text": "that you're seeing someone",
+          "status": "Read 21:31"
+        },
+        {
+          "from": "them",
+          "text": "Yeah"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "okay"
+        },
+        {
+          "from": "me",
+          "text": "can i still keep this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for my forever 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "It was always yours"
+        }
+      ]
+    }
+  ]
+}

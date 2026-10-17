@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { ClientMessages } from "@/i18n/client-messages";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { DemoStage } from "@/components/gift/demo-stage";
 
@@ -21,8 +22,10 @@ export default async function DemoPage({ params }: PageProps<"/[locale]/demo/[sl
   if (!getManifest(slug)) notFound();
   setRequestLocale(locale);
   return (
-    <Suspense fallback={<div className="h-dvh w-full bg-night" />}>
-      <DemoStage slug={slug} backHref={`/templates/${slug}`} />
-    </Suspense>
+    <ClientMessages scope="(gift)/demo/[slug]/page" locale={locale}>
+      <Suspense fallback={<div className="h-dvh w-full bg-night" />}>
+        <DemoStage slug={slug} backHref={`/templates/${slug}`} />
+      </Suspense>
+    </ClientMessages>
   );
 }

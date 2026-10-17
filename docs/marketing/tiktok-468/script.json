@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "stop i'm gonna cry",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you ever get tired of me",
+          "status": "Read 10:48 pm"
+        },
+        {
+          "from": "them",
+          "text": "Never"
+        },
+        {
+          "from": "them",
+          "text": "Not even on your worst day"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

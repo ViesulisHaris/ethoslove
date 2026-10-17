@@ -3,7 +3,11 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { COVER_IDS } from "@/lib/gift/schema";
 import { COVER_LOOKS, defaultCoverFor, type CoverLook, type Cut } from "@/templates/_shared/covers/looks";
+import { coverFor } from "@/templates/_shared/covers/follow";
+import { thumbLook } from "@/lib/covers/thumbs";
 import { listManifests } from "@/templates/manifests";
+import { LOOK_ORDER as COQUETTE_LOOKS, LOOKS as COQUETTE } from "@/templates/coquette/looks";
+import { LOOK_ORDER as XOXO_LOOKS, LOOKS as XOXO } from "@/templates/xoxo/looks";
 
 const looks = Object.values(COVER_LOOKS);
 const COLLAGE = ["lilies", "kisses", "cats", "party", "bluebell", "pressed"] as const;
@@ -93,7 +97,74 @@ describe("gift covers", () => {
 
   it("starts every template on a cover that exists", () => {
     for (const m of listManifests()) expect(COVER_IDS as readonly string[], m.slug).toContain(defaultCoverFor(m.slug));
-    expect(defaultCoverFor("party-animals")).toBe("party");
+    expect(defaultCoverFor("party-animals")).toBe("classic");
+    expect(defaultCoverFor("kawaii")).toBe("gingham");
     expect(defaultCoverFor("no-such-template")).toBe("gingham");
+  });
+});
+
+describe("covers in the gift's own colours", () => {
+  const kissesIn = (look: string) => coverFor("kisses", "xoxo", { look });
+  const liliesIn = (look: string) => coverFor("lilies", "coquette", { look });
+
+  it("leaves every other cover, and every other template, as it is", () => {
+    for (const id of COVER_IDS) {
+      if (id === "classic") continue;
+      expect(coverFor(id, "bouquet", { look: "lilac" }), id).toBe(COVER_LOOKS[id]);
+      if (id !== "kisses") expect(coverFor(id, "xoxo", { look: "lilac" }), id).toBe(COVER_LOOKS[id]);
+      if (id !== "lilies") expect(coverFor(id, "coquette", { look: "butter" }), id).toBe(COVER_LOOKS[id]);
+    }
+  });
+
+  it("draws the first colour, or an unknown one, exactly as the cover was made", () => {
+    expect(kissesIn("cream")).toBe(COVER_LOOKS.kisses);
+    expect(liliesIn("blush")).toBe(COVER_LOOKS.lilies);
+    expect(coverFor("kisses", "xoxo", undefined)).toBe(COVER_LOOKS.kisses);
+    expect(coverFor("lilies", "coquette", { look: "tartan" })).toBe(COVER_LOOKS.lilies);
+  });
+
+  it("puts Kisses on each XOXO page, with the lace and the lipstick still red", () => {
+    for (const id of XOXO_LOOKS.filter((l) => l !== "cream")) {
+      const look = kissesIn(id);
+      expect(look.id).toBe("kisses");
+      expect(look.background, id).toContain(XOXO[id].wall);
+      expect(look.script, id).toBe(XOXO[id].red);
+      expect(look.tone, id).toBe(XOXO[id].dark ? "dark" : "light");
+      expect(look.piece.kind === "envelope" && look.piece.colors.body, id).toBe(XOXO[id].envelope.body);
+      expect(look.stickers, id).toEqual(COVER_LOOKS.kisses.stickers);
+      expect(cutsOf(look).every((cut) => !cut.tone), id).toBe(true);
+    }
+  });
+
+  it("turns Lilies each Coquette colour: its gingham, its satin, its flowers, its bow and its wax", () => {
+    for (const id of COQUETTE_LOOKS.filter((l) => l !== "blush" && l !== "blue")) {
+      const look = liliesIn(id);
+      const own = COQUETTE[id];
+      expect(look.id).toBe("lilies");
+      expect(look.background, id).toContain(own.wall);
+      expect(look.stickers.filter((st) => st.cut).every((st) => st.cut?.tone === own.bloom), id).toBe(true);
+      expect(look.attach?.every((a) => a.cut.tone === own.tint), id).toBe(true);
+      expect(look.piece.kind === "envelope" && look.piece.colors.sealArt?.cut.tone, id).toBe(own.tint);
+      expect(look.confetti, id).toEqual(own.confetti);
+    }
+  });
+
+  it("uses the real blue flowers of Something blue for Coquette's blue", () => {
+    const look = liliesIn("blue");
+    expect(look.id).toBe("lilies");
+    expect(look.stickers).toEqual(COVER_LOOKS.bluebell.stickers);
+    expect(look.background).toBe(COVER_LOOKS.bluebell.background);
+  });
+
+  it("keeps a recoloured cover to the same page, and to small copies that exist", () => {
+    const followed = [...XOXO_LOOKS.map(kissesIn), ...COQUETTE_LOOKS.map(liliesIn)];
+    for (const look of followed) {
+      for (const s of look.stickers) {
+        if (s.pin || s.y <= 27 || s.y >= 72) continue;
+        const inner = s.x < 50 ? s.x + s.size / 2 : s.x - s.size / 2;
+        expect(s.x < 50 ? inner <= 22 : inner >= 78, `${look.id} at ${s.x},${s.y}`).toBe(true);
+      }
+      for (const cut of cutsOf(thumbLook(look))) expect(existsSync(join("public", cut.src)), cut.src).toBe(true);
+    }
   });
 });

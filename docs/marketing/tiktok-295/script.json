@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:58",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you still have hinge",
+          "status": "Read 21:58"
+        },
+        {
+          "from": "them",
+          "text": "No?? I deleted it ages ago"
+        },
+        {
+          "from": "them",
+          "text": "Why would I need hinge. I made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "only you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "then who just matched with \"sofia, 21\""
+        },
+        {
+          "from": "them",
+          "text": "No idea"
+        },
+        {
+          "from": "me",
+          "text": "my best friend"
+        },
+        {
+          "from": "me",
+          "text": "we made the profile at 9"
+        },
+        {
+          "from": "me",
+          "text": "you matched at 9:04 💅"
+        }
+      ]
+    }
+  ]
+}

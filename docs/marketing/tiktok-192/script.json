@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:03",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i love u and u said \"k\""
+        },
+        {
+          "from": "me",
+          "text": "i was busy"
+        },
+        {
+          "from": "them",
+          "text": "ur always busy now"
+        },
+        {
+          "from": "them",
+          "text": "did i do something maya"
+        },
+        {
+          "from": "me",
+          "text": "not everything is about u marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "not everything is about u marco"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u this anyway. took me 2 weeks"
+        },
+        {
+          "from": "them",
+          "text": "whatever it is, im here"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (always, whatever happens)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Museum (a quiet gallery of the two of them, every room a year). It has to look like two weeks of work, so the room falls for him before the last slide. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? i spent 2 weeks on it"
+        },
+        {
+          "from": "me",
+          "text": "i didnt ask u to"
+        },
+        {
+          "from": "them",
+          "text": "just tell me what i did"
+        },
+        {
+          "from": "them",
+          "text": "please maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i know about the baby"
+        },
+        {
+          "from": "them",
+          "text": "what baby"
+        },
+        {
+          "from": "me",
+          "text": "sophies. hes 6 weeks. hes got ur nose"
+        },
+        {
+          "from": "them",
+          "text": "whats his name",
+          "tapback": "excl"
+        },
+        {
+          "from": "me",
+          "text": "ask his mum"
+        },
+        {
+          "from": "them",
+          "text": "maya whats his name"
+        }
+      ]
+    }
+  ]
+}

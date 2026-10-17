@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "mar|20:16",
+      "messages": [
+        {
+          "from": "them",
+          "text": "¿estás en tu casa?"
+        },
+        {
+          "from": "me",
+          "text": "sí ¿por?"
+        },
+        {
+          "from": "them",
+          "text": "revisa tu teléfono"
+        },
+        {
+          "from": "me",
+          "text": "literal estoy en el teléfono"
+        },
+        {
+          "from": "them",
+          "text": "revísalo otra vez"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "porque sí 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ni siquiera es un día especial"
+        },
+        {
+          "from": "them",
+          "text": "ya sé"
+        },
+        {
+          "from": "them",
+          "text": "por eso"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "eres literal el mejor novio del mundo"
+        },
+        {
+          "from": "me",
+          "text": "estoy llorando"
+        },
+        {
+          "from": "them",
+          "text": "no llores"
+        },
+        {
+          "from": "me",
+          "text": "lloro de felicidad"
+        }
+      ]
+    }
+  ]
+}

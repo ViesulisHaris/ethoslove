@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Can I keep it"
+        },
+        {
+          "from": "me",
+          "text": "keep what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my forever 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Liam"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why are you asking me now",
+          "status": "Read 22:15"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm getting married in june"
+        },
+        {
+          "from": "them",
+          "text": "She wants me to delete it"
+        },
+        {
+          "from": "me",
+          "text": "then delete it"
+        },
+        {
+          "from": "them",
+          "text": "I can't"
+        }
+      ]
+    }
+  ]
+}

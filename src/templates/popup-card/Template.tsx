@@ -1,15 +1,18 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useTransform, type MotionValue } from "motion/react";
 import { Mic, Wind } from "lucide-react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
+import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
-import { useGiftStrings } from "../_shared/i18n";
+import { giftString, useGiftStrings } from "../_shared/i18n";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
+import { useSwipe } from "../_shared/hooks/use-swipe";
 import { hashString } from "../_shared/random";
 import { MessageBody } from "../_shared/MessageBody";
 import { Countdown } from "../_shared/Countdown";
@@ -44,6 +47,8 @@ const PIECES = {
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<PopupCardFields>) {
   const reduce = !!useReducedMotion();
+  // The free-tier badge floats at the foot of the gift, where the hint pill sits; the pill goes above it.
+  const { watermarked } = useGiftChrome();
   const t = useGiftStrings(data.locale);
   const s = S[data.locale] ?? S.en;
   const audio = useGiftAudio(data.music, mode !== "preview");
@@ -103,12 +108,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const blow = useBlowDetector({ enabled: stage === "lit" && data.fields.flames === "auto", onBlow: blowOut });
 
-  const swipeStart = useRef<number | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => (swipeStart.current = e.clientY);
-  const onPointerUp = (e: ReactPointerEvent) => {
-    if (swipeStart.current !== null && swipeStart.current - e.clientY > 80) blowOut();
-    swipeStart.current = null;
-  };
+  const swipe = useSwipe((dir) => dir === "up" && blowOut(), { distance: 70, enabled: stage === "lit" });
 
   const replay = () => {
     open.set(0);
@@ -127,7 +127,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const flat = useTransform(open, (v) => Math.min(1, Math.max(0, v * 1.4)));
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ background: theme.room, color: theme.ink, fontFamily: "var(--gift-font-body)", ...vars }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div className={`absolute inset-0 overflow-hidden select-none ${stage === "lit" ? "touch-none" : ""}`} style={{ background: theme.room, color: theme.ink, fontFamily: "var(--gift-font-body)", ...vars }} {...swipe}>
       <style>{CARD_KEYFRAMES}</style>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 mix-blend-multiply" style={{ backgroundImage: PAPER_GRAIN, opacity: theme.dark ? 0.3 : 0.55 }} />
       <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
@@ -198,7 +198,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       {/* the one line that says what to do */}
       <AnimatePresence>
         {stage !== "read" ? (
-          <motion.div key={`pill-${stage}`} className="pointer-events-none absolute inset-x-0 z-[30] flex flex-col items-center gap-[calc(1.8*var(--k))] px-4" style={{ bottom: "max(calc(3.5*var(--k)), calc(env(safe-area-inset-bottom) + 1.2rem))" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
+          <motion.div key={`pill-${stage}`} className="pointer-events-none absolute inset-x-0 z-[30] flex flex-col items-center gap-[calc(1.8*var(--k))] px-4" style={{ bottom: `calc(max(calc(3.5*var(--k)), calc(env(safe-area-inset-bottom) + 1.2rem))${watermarked ? " + 2.75rem" : ""})` }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.2 } }}>
             {stage === "lit" ? (
               <>
                 <p className="text-[calc(5*var(--k))] italic" style={{ fontFamily: "var(--gift-font-display)", textShadow: theme.dark ? "0 2px 12px rgba(0,0,0,.5)" : "0 1px 0 rgba(255,255,255,.7)" }}>
@@ -291,7 +291,7 @@ function Piece({ open, spec, children }: { open: MotionValue<number>; spec: { x:
 
 /** What is written inside the lid: the greeting, the first lines in handwriting, and a way to read the rest. */
 function Inside({ data, theme, s, blocks, banner, seed, onRead }: { data: TemplateProps<PopupCardFields>["data"]; theme: Theme; s: Copy; blocks: ReturnType<typeof parseRichText>; banner: string; seed: number; onRead?: () => void }) {
-  const greeting = data.locale === "es" ? `Querida ${data.recipientName},` : `Dear ${data.recipientName},`;
+  const greeting = giftString(data.locale, "dear", { name: data.recipientName });
   const excerpt = blocks[0]?.map((r) => r.text).join("") ?? "";
   return (
     <div className="absolute inset-[8%] flex flex-col" style={{ color: theme.insideInk }}>
@@ -317,6 +317,8 @@ function Inside({ data, theme, s, blocks, banner, seed, onRead }: { data: Templa
 }
 
 function Letter({ data, mode, blocks, photos, theme, s, t, reduce, onEvent, onReact, onMakeOne, onReplay, onOpen, onClose }: { data: TemplateProps<PopupCardFields>["data"]; mode: TemplateProps["mode"]; blocks: ReturnType<typeof parseRichText>; photos: GiftPhoto[]; theme: Theme; s: Copy; t: ReturnType<typeof useGiftStrings>; reduce: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void; onOpen: (i: number) => void; onClose: () => void }) {
+  // "Now playing" names only music that plays: a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
 
@@ -378,10 +380,10 @@ function Letter({ data, mode, blocks, photos, theme, s, t, reduce, onEvent, onRe
             <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face="hand" accent={theme.accent} />
           </article>
 
-          {data.music?.title ? (
+          {song?.title ? (
             <p className="mt-[calc(6*var(--k))] text-center text-[calc(2.6*var(--k))] tracking-[0.2em] uppercase opacity-55">
-              {s.playing} · {data.music.title}
-              {data.music.artist ? ` — ${data.music.artist}` : ""}
+              {s.playing} · {song.title}
+              {song.artist ? ` — ${song.artist}` : ""}
             </p>
           ) : null}
 

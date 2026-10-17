@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:22",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u told them i cried about a menu"
+        },
+        {
+          "from": "them",
+          "text": "it was funny"
+        },
+        {
+          "from": "me",
+          "text": "dan was filming it marco"
+        },
+        {
+          "from": "them",
+          "text": "ur so sensitive"
+        },
+        {
+          "from": "me",
+          "text": "they were all laughing at me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "they were all laughing at me"
+        },
+        {
+          "from": "them",
+          "text": "WITH u. theres a difference"
+        },
+        {
+          "from": "them",
+          "text": "u cant take a joke and thats not my fault"
+        },
+        {
+          "from": "them",
+          "text": "i was giving u this in the car btw"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my favourite person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. The soppiest frame you have. The softer it is, the better the joke about the menu goes down. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its lovely. i do mean that"
+        },
+        {
+          "from": "them",
+          "text": "see. i do love u"
+        },
+        {
+          "from": "them",
+          "text": "i just take the mick. thats how we are"
+        },
+        {
+          "from": "me",
+          "text": "i know. im sorry i went quiet"
+        },
+        {
+          "from": "them",
+          "text": "its fine. u were tired"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i told dan u still sleep with gerald"
+        },
+        {
+          "from": "them",
+          "text": "u WHAT"
+        },
+        {
+          "from": "me",
+          "text": "its in the group chat now"
+        },
+        {
+          "from": "them",
+          "text": "delete it. now"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "maya who else did u tell"
+        }
+      ]
+    }
+  ]
+}

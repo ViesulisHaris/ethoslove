@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:27",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so ur not going to say anything"
+        },
+        {
+          "from": "them",
+          "text": "about what"
+        },
+        {
+          "from": "me",
+          "text": "u know what"
+        },
+        {
+          "from": "them",
+          "text": "the parking ticket?"
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok ok"
+        },
+        {
+          "from": "them",
+          "text": "open this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "crack it open 🥠",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "a fortune cookie??"
+        },
+        {
+          "from": "them",
+          "text": "just crack it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it says \"he's sorry. dinner's on him\""
+        },
+        {
+          "from": "them",
+          "text": "suspiciously accurate"
+        },
+        {
+          "from": "me",
+          "text": "and the parking ticket"
+        },
+        {
+          "from": "them",
+          "text": "that's a different cookie"
+        }
+      ]
+    }
+  ]
+}

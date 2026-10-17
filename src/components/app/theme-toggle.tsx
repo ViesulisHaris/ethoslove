@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -27,22 +29,23 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {(
-          [
-            ["light", Sun, t("themeLight")],
-            ["dark", Moon, t("themeDark")],
-            ["system", Laptop, t("themeSystem")],
-          ] as const
-        ).map(([value, ItemIcon, label]) => (
-          <DropdownMenuItem
-            key={value}
-            onSelect={() => setTheme(value)}
-            className={theme === value ? "text-coral" : undefined}
-          >
-            <ItemIcon className="size-4" />
-            {label}
-          </DropdownMenuItem>
-        ))}
+        <DropdownMenuLabel>{t("theme")}</DropdownMenuLabel>
+        {/* Radio items: the theme in use is checked (and says so to a screen reader), not only coloured. */}
+        {/* "" until mounted: the server can't know the stored theme, and the group stays controlled throughout. */}
+        <DropdownMenuRadioGroup value={mounted ? (theme ?? "system") : ""} onValueChange={setTheme}>
+          {(
+            [
+              ["light", Sun, t("themeLight")],
+              ["dark", Moon, t("themeDark")],
+              ["system", Laptop, t("themeSystem")],
+            ] as const
+          ).map(([value, ItemIcon, label]) => (
+            <DropdownMenuRadioItem key={value} value={value}>
+              <ItemIcon />
+              {label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

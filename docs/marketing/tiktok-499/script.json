@@ -1,0 +1,53 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "rose",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:30 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm here"
+        },
+        {
+          "from": "me",
+          "text": "WHAT"
+        },
+        {
+          "from": "me",
+          "text": "you're 4 hours away??",
+          "status": "Read 8:30 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Not like that yet"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm here 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i'm crying",
+          "status": "Read 8:34 PM"
+        }
+      ]
+    }
+  ]
+}

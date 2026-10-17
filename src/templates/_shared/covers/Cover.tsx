@@ -9,7 +9,7 @@ import { Ambience } from "../Ambience";
 import { Confetti } from "../Confetti";
 import { playChime, playPaper, playRibbon } from "../collage/sounds";
 import { buzz, prime } from "../synth";
-import type { Attachment, CoverLook, Placement } from "./looks";
+import { shaded, type Attachment, type CoverLook, type Placement } from "./looks";
 import { Envelope, GiftBox } from "./Centerpieces";
 import { Sticker } from "./stickers";
 
@@ -95,7 +95,7 @@ function PageArt({ item, index, still, opening }: { item: Placement; index: numb
         transition={opening ? { duration: 0.62, ease: FLICK, delay: (index % 4) * 0.025 } : { type: "spring", stiffness: 95, damping: 13, mass: 0.9, delay: 0.12 + index * 0.06 }}
       >
         <div className={still ? undefined : "cv-sway"} style={{ "--cv-pace": `${4 + (index % 5) * 0.55}s`, animationDelay: `${-index * 0.7}s` } as CSSProperties}>
-          {item.cut ? <img src={item.cut.src} alt="" draggable={false} loading={still ? "lazy" : "eager"} decoding="async" className="block w-full max-w-none select-none" style={{ aspectRatio: String(item.cut.ratio), filter: CUT_SHADOW }} /> : <Sticker id={item.id} />}
+          {item.cut ? <img src={item.cut.src} alt="" draggable={false} loading={still ? "lazy" : "eager"} decoding="async" className="block w-full max-w-none select-none" style={{ aspectRatio: String(item.cut.ratio), filter: shaded(item.cut.tone, CUT_SHADOW) }} /> : <Sticker id={item.id} />}
         </div>
       </motion.div>
     </div>
@@ -119,7 +119,7 @@ function Attached({ item, index, still, opening }: { item: Attachment; index: nu
         animate={opening ? gone : ready ? placed : hidden}
         transition={opening ? { duration: 0.5, ease: FLICK } : { type: "spring", stiffness: 190, damping: 13, delay: 0.85 + index * 0.12 }}
       >
-        <img src={item.cut.src} alt="" draggable={false} loading={still ? "lazy" : "eager"} decoding="async" className="block w-full max-w-none select-none" style={{ aspectRatio: String(item.cut.ratio), filter: CUT_SHADOW }} />
+        <img src={item.cut.src} alt="" draggable={false} loading={still ? "lazy" : "eager"} decoding="async" className="block w-full max-w-none select-none" style={{ aspectRatio: String(item.cut.ratio), filter: shaded(item.cut.tone, CUT_SHADOW) }} />
       </motion.div>
     </div>
   );

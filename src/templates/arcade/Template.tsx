@@ -474,7 +474,7 @@ function MessagePanel({
       </p>
       <div className="rounded-[6px] border-2 border-[#2a2f45] bg-[#12162a] p-6 sm:p-8">
         <h2
-          className="font-mono text-[clamp(1.1rem,5cqw,1.4rem)] font-bold tracking-wider"
+          className="font-mono text-[clamp(1.1rem,5cqw,1.4rem)] font-bold tracking-wider [overflow-wrap:anywhere]"
           style={{ color: "var(--gift-accent)" }}
         >
           {t("dear", { name: data.recipientName }).toUpperCase()}

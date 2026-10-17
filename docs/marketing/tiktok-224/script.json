@@ -1,0 +1,117 @@
+{
+  "demo": {
+    "template": "music-box",
+    "steps": [
+      "swap \"CLARA\" \"MAYA\"",
+      "swap \"Clara\" \"Maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "swap \"five years of us\" \"our song\"",
+      "wait 1400",
+      "shot gift-1.png",
+      "press 273 428",
+      "wait 6000",
+      "release",
+      "wait 3800",
+      "shot gift-2.png",
+      "wait 5200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:08",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why am i not on ur close friends"
+        },
+        {
+          "from": "them",
+          "text": "its just the boys"
+        },
+        {
+          "from": "me",
+          "text": "and chloe"
+        },
+        {
+          "from": "them",
+          "text": "chloe is like a sister to me"
+        },
+        {
+          "from": "them",
+          "text": "ur so insecure its exhausting"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "made u this. bc i love u. not her"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our song",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "made my own close friends today"
+        },
+        {
+          "from": "them",
+          "text": "ok?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its just me and chloe"
+        },
+        {
+          "from": "me",
+          "text": "she showed me everything u sent her"
+        },
+        {
+          "from": "them",
+          "text": "maya let me explain"
+        },
+        {
+          "from": "me",
+          "text": "shes like a sister to me 💅"
+        }
+      ]
+    }
+  ]
+}

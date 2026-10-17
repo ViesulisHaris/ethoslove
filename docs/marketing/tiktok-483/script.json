@@ -1,0 +1,63 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:44 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Morning"
+        },
+        {
+          "from": "me",
+          "text": "you can keep that"
+        },
+        {
+          "from": "them",
+          "text": "What did I do"
+        },
+        {
+          "from": "me",
+          "text": "that dry ahh morning text"
+        },
+        {
+          "from": "me",
+          "text": "if the morning ain't good don't text me about it",
+          "status": "Read 7:44 AM"
+        }
+      ],
+      "encrypted": true
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Good morning my beautiful girl"
+        },
+        {
+          "from": "them",
+          "text": "Hope your coffee is perfect today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "good morning 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok this is better",
+          "status": "Read 7:46 AM"
+        }
+      ]
+    }
+  ]
+}

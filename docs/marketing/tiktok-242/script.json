@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "What's the password"
+        },
+        {
+          "from": "me",
+          "text": "to what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open on our anniversary 🔒",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "jake we broke up in may",
+          "status": "Read 23:59"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I tried the day we met"
+        },
+        {
+          "from": "them",
+          "text": "And the day I said I love you"
+        },
+        {
+          "from": "me",
+          "text": "i changed it after you left"
+        },
+        {
+          "from": "them",
+          "text": "To what"
+        }
+      ]
+    }
+  ]
+}

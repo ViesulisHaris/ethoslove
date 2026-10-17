@@ -354,7 +354,7 @@ function EndingSection({ data, mode, blocks, reduce, ending, paper, onEvent, onR
         </motion.div>
       ) : null}
       <div className="mt-8 w-full max-w-md rounded-2xl p-6 shadow-soft" style={{ background: paper }}>
-        <h2 className="text-[clamp(1.4rem,6.5cqw,1.8rem)] italic" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
+        <h2 className="text-[clamp(1.4rem,6.5cqw,1.8rem)] italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-display)" }}>{t("dear", { name: data.recipientName })}</h2>
         <div className="mt-3 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed opacity-90 [&_p+p]:mt-4 [&_strong]:font-semibold [&_em]:text-[var(--gift-accent)]">
           {inView ? (instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={36} onDone={() => setDone(true)} />) : null}
         </div>

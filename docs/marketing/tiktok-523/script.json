@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Mar 9|8:12 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for your birthday 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it opens on the day"
+        },
+        {
+          "ts": "Today|12:00 AM"
+        },
+        {
+          "from": "me",
+          "text": "it just opened"
+        },
+        {
+          "from": "me",
+          "text": "you made this in march"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "we're not even together anymore",
+          "status": "Read 12:01 AM"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday"
+        }
+      ]
+    }
+  ]
+}

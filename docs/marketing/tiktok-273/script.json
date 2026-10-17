@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:20",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Why are you being so distant"
+        },
+        {
+          "from": "me",
+          "text": "i'm not"
+        },
+        {
+          "from": "them",
+          "text": "You haven't said it back in a week"
+        },
+        {
+          "from": "me",
+          "text": "said what",
+          "status": "Read 21:21"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I love you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "still yours 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i can't say it back"
+        },
+        {
+          "from": "them",
+          "text": "Since when"
+        },
+        {
+          "from": "me",
+          "text": "since i saw your texts with her"
+        }
+      ]
+    }
+  ]
+}

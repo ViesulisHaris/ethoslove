@@ -1,0 +1,105 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "we need to talk tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "about us?"
+        },
+        {
+          "from": "me",
+          "text": "yeah"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "can i send you something first"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|22:53",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "before tomorrow 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "you don't have to change your mind"
+        },
+        {
+          "from": "them",
+          "text": "i just wanted you to have it"
+        },
+        {
+          "from": "them",
+          "text": "either way"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did you never say any of this"
+        },
+        {
+          "from": "them",
+          "text": "i'm bad at saying things"
+        },
+        {
+          "from": "them",
+          "text": "so i made it"
+        },
+        {
+          "from": "me",
+          "text": "i was going to end it tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "come over"
+        },
+        {
+          "from": "them",
+          "text": "now?"
+        },
+        {
+          "from": "me",
+          "text": "now"
+        },
+        {
+          "from": "me",
+          "text": "i don't want to wait till tomorrow"
+        }
+      ]
+    }
+  ]
+}

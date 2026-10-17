@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import { useId, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { motion } from "motion/react";
 import type { FontPairing } from "@/lib/gift/schema";
 import type { StickerId } from "../_shared/covers/stickers";
@@ -186,10 +186,13 @@ function House({ at, island, p, glow }: { at: Pt; island: Island; p: Palette; gl
   );
 }
 
-function Name({ x, y, island, lettering, children }: { x: number; y: number; island: Island; lettering: FontPairing; children: ReactNode }) {
+/** A name sits on its island whole: a long one gets smaller type (about 92 units wide at most), never "…". */
+const nameSize = (name: string) => Math.max(8, Math.min(15, 92 / (Math.max(1, name.length) * 0.52)));
+
+function Name({ x, y, island, lettering, name }: { x: number; y: number; island: Island; lettering: FontPairing; name: string }) {
   return (
-    <text x={x} y={y} textAnchor="middle" fontSize="15" fill={island.ink} stroke="#ffffff" strokeWidth="3.5" strokeLinejoin="round" paintOrder="stroke" style={NAME_FONT[lettering] ?? NAME_FONT.editorial}>
-      {children}
+    <text x={x} y={y} textAnchor="middle" fontSize={nameSize(name)} fill={island.ink} stroke="#ffffff" strokeWidth="3.5" strokeLinejoin="round" paintOrder="stroke" style={NAME_FONT[lettering] ?? NAME_FONT.editorial}>
+      {name}
     </text>
   );
 }
@@ -323,12 +326,8 @@ export function MapArt({ p, trk, progress, markers, arrived, people, cities, isl
         ))}
         <House at={HOMES.from} island={islands.from} p={p} glow={arrived} />
         <House at={HOMES.to} island={islands.to} p={p} glow={arrived} />
-        <Name x={HOMES.from.x} y={HOMES.from.y + 24} island={islands.from} lettering={lettering}>
-          {short(people.from)}
-        </Name>
-        <Name x={HOMES.to.x} y={HOMES.to.y + 24} island={islands.to} lettering={lettering}>
-          {short(people.to)}
-        </Name>
+        <Name x={HOMES.from.x} y={HOMES.from.y + 24} island={islands.from} lettering={lettering} name={people.from} />
+        <Name x={HOMES.to.x} y={HOMES.to.y + 24} island={islands.to} lettering={lettering} name={people.to} />
         <Ribbon x={67} y={264} island={islands.from} label={cities.from} />
         <Ribbon x={232} y={260} island={islands.to} label={cities.to} />
 

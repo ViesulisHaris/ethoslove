@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:46",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are your airpods at chloe's",
+          "status": "Read 23:46"
+        },
+        {
+          "from": "them",
+          "text": "I lent them to Sam"
+        },
+        {
+          "from": "them",
+          "text": "Why are you always tracking me"
+        },
+        {
+          "from": "them",
+          "text": "I spent all day making you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's cute"
+        },
+        {
+          "from": "me",
+          "text": "one problem"
+        },
+        {
+          "from": "me",
+          "text": "sam's sat right next to me 💅"
+        }
+      ]
+    }
+  ]
+}

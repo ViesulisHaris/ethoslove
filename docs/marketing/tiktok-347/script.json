@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:06",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are you in a spotify jam at 2am"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "with 🦋"
+        },
+        {
+          "from": "them",
+          "text": "a mate"
+        },
+        {
+          "from": "me",
+          "text": "listening to our song"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "it's a good song"
+        },
+        {
+          "from": "me",
+          "text": "it's OUR song"
+        },
+        {
+          "from": "them",
+          "text": "it's literally in the thing i made you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our song 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "and now it's in her jam"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you're overreacting"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "you don't own a song maya"
+        }
+      ]
+    }
+  ]
+}

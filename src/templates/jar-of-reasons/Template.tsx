@@ -356,7 +356,7 @@ function LetterBody({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, o
   return (
     <div className="mx-auto flex w-[min(88cqw,560px)] flex-col gap-6 pt-[max(8cqh,48px)] pb-[calc(3.5rem+env(safe-area-inset-bottom))] text-ink">
       <div>
-        <h2 className="text-[clamp(1.7rem,7cqw,2.2rem)]" style={{ fontFamily: "var(--gift-font-hand)" }}>{t("dear", { name: data.recipientName })}</h2>
+        <h2 className="text-[clamp(1.7rem,7cqw,2.2rem)] [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)" }}>{t("dear", { name: data.recipientName })}</h2>
         <div className={cn("mt-4 text-[clamp(1.25rem,5.2cqw,1.5rem)] leading-[1.45] text-ink [&_p+p]:mt-4 [&_strong]:font-bold [&_em]:text-[var(--gift-accent)]")} style={{ fontFamily: "var(--gift-font-hand)" }}>
           {instant ? <RichMessage blocks={blocks} stagger={mode === "preview" ? 0 : 0.5} onDone={() => setDone(true)} /> : <Typewriter blocks={blocks} active speed={30} onDone={() => setDone(true)} />}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "motion/react";
 import { BouquetArt, timingFor } from "@/templates/bouquet/Bouquet";
 import { arrange } from "@/templates/bouquet/arrange";
 import { DEFAULT_STEMS } from "@/templates/bouquet/catalogue";
@@ -35,16 +35,24 @@ export function HeroBouquet({ cardText }: { cardText: string }) {
     return () => cancelAnimationFrame(id);
   }, [reduce]);
   const total = useMemo(() => timingFor(arrange(FIELDS.stems, FIELDS.seed)).card + CARD_DROP_S, []);
+  // Only loops while it can be seen. Every frame of an assembly restyles, lays out and repaints the
+  // whole SVG (hundreds of paths; SVG child transforms can't be composited), so a loop left running
+  // below the fold on a phone, or after scrolling past, kept a mid-range phone's main thread busy
+  // for 5 s in every 5 and /gifts scrolled at 35–45 fps. Out of view, the assembly under way
+  // finishes, the art sits whole, and the next one starts a hold after it is back on screen.
+  const box = useRef<HTMLDivElement>(null);
+  const inView = useInView(box);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !inView) return;
     // Remounting with a new key restarts the assembly from the paper.
     const id = window.setTimeout(() => setRun((r) => r + 1), (total + HOLD_S) * 1000);
     return () => window.clearTimeout(id);
-  }, [run, reduce, total]);
+  }, [run, reduce, total, inView]);
 
   return (
     <div
+      ref={box}
       className="absolute inset-0 flex items-center justify-center px-[6%] pt-[13%] pb-[9%]"
       style={{ background: "radial-gradient(120% 80% at 50% 30%,#F8F2E9 0%,#E9DDCA 100%)" }}
     >

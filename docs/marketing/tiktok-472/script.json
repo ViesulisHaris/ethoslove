@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for saturday 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "what is this"
+        },
+        {
+          "from": "them",
+          "text": "Just keep saturday free"
+        },
+        {
+          "from": "me",
+          "text": "for you always",
+          "status": "Read 4:43 pm"
+        }
+      ]
+    }
+  ]
+}

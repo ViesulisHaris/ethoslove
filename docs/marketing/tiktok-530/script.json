@@ -1,0 +1,77 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:40 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "pressed"
+          }
+        },
+        {
+          "from": "them",
+          "text": "watch all of it ok"
+        },
+        {
+          "ts": "Today|9:12 PM"
+        },
+        {
+          "from": "me",
+          "text": "omg i loved it 😭😭"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "watched the whole thing twice",
+          "status": "Read 9:12 PM"
+        },
+        {
+          "from": "them",
+          "text": "twice?"
+        },
+        {
+          "from": "me",
+          "text": "twice!!"
+        },
+        {
+          "from": "them",
+          "text": "it says 38%"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "ok so my phone died",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it SAYS??"
+        },
+        {
+          "from": "me",
+          "text": "you can see that??"
+        },
+        {
+          "from": "them",
+          "text": "i made it"
+        }
+      ]
+    }
+  ]
+}

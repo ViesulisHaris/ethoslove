@@ -12,11 +12,11 @@ const shared = {
   fontPairing: "editorial" as const,
   showReactionCta: true,
   watermark: true,
-  music: { source: "library" as const, url: "/demo/audio/quiet-hours.wav", trackId: "quiet-hours", title: "Quiet Hours", startAt: 0 },
+  music: { source: "library" as const, url: "/audio/library/quiet-hours.mp3", trackId: "quiet-hours", title: "Quiet Hours", startAt: 0 },
   video: undefined,
   countdown: {
-    targetAt: "2026-12-20T18:30:00+01:00",
-    timezone: "Europe/Madrid",
+    targetAt: "2026-12-20T18:30:00+02:00",
+    timezone: "Europe/Riga",
   },
 };
 

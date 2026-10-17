@@ -1,0 +1,87 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:43",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what's that on your neck in your story"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "the purple thing"
+        },
+        {
+          "from": "them",
+          "text": "a bruise"
+        },
+        {
+          "from": "me",
+          "text": "from what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "football"
+        },
+        {
+          "from": "me",
+          "text": "on your neck?"
+        },
+        {
+          "from": "them",
+          "text": "it was a header"
+        },
+        {
+          "from": "me",
+          "text": "leo you play defence"
+        },
+        {
+          "from": "them",
+          "text": "i headed it away"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can you stop"
+        },
+        {
+          "from": "them",
+          "text": "i spent all day making you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "spent all day where",
+          "status": "Read 10:47"
+        },
+        {
+          "from": "them",
+          "text": "why are you zooming in on my neck"
+        }
+      ]
+    }
+  ]
+}

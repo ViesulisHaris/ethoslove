@@ -151,3 +151,27 @@ interface TemplateProps<TFields> {
 
 The editor builds its form from the base schema plus the template's `schema.ts`; the recipient page
 and gallery demo use the same `GiftRenderer`. Nothing else needs to change.
+
+## The iPhone app
+
+The app (`~/Developer/Ethos`, SwiftUI) is native for Explore, Trips, the gallery, Profile and
+purchases, and opens this site in a web view for the editor, the demos, the games, a sent gift and a
+gift's stats. Its contract with the site is that repo's `docs/ARCHITECTURE.md` (§2.6 endpoints, §2.8
+the web view, §3.4 purchases; §2.6.11 records how it was built here). On this side:
+
+- **Auth.** Every route that asks `getCurrentUser()` / `getSupabaseServerClient()` also accepts the
+  app's `Authorization: Bearer <Supabase access token>` (`src/lib/auth/bearer.ts`); a browser's
+  cookie session works as before. `POST /api/app/web-session` gives the web view a session of its own.
+- **`/api/app/*`.** `catalog` (everything the app draws from, both languages, `src/lib/app/catalog.ts`),
+  `places` / `place` / `flights` (the Dates and Trips logic run once on the server: `src/lib/app/`,
+  with the outside lookups shared with `/api/dates/*` in `src/lib/dates/sources.ts`), `gifts`,
+  `web-session`, `account/delete`, `purchases/sync`, `credits/apply`.
+- **Purchases.** In-App Purchases arrive through RevenueCat (`POST /api/revenuecat/webhook`) and land
+  as ordinary `purchases` rows with `store = 'app_store'` and the same unlock rows as Stripe
+  (`src/lib/commerce/app-store.ts`, migration 0013). Template credits are spent with `credits/apply`.
+- **App mode.** Inside the app `window.EthosNative` exists and `<html data-app="ios">` is set before
+  the page draws (`src/lib/app/bridge.ts`, hooks in `use-bridge.ts`). `[data-app-hide]` hides the
+  site's chrome and anything that sells outside the App Store (globals.css); the editor's paywall,
+  sign-in, publishing and sharing, and the games' packs, talk to the app instead. Nothing is
+  measured inside the app. Outside it nothing changes.
+- **Universal links.** `public/.well-known/apple-app-site-association`.

@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|03:04",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know we don't talk anymore"
+        },
+        {
+          "from": "me",
+          "text": "but i opened it again"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "just us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          },
+          "status": "Read 03:05"
+        },
+        {
+          "from": "them",
+          "text": "Why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss us"
+        },
+        {
+          "from": "them",
+          "text": "Me too"
+        },
+        {
+          "from": "them",
+          "text": "I just can't be us again"
+        }
+      ]
+    }
+  ]
+}

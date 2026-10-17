@@ -1,0 +1,95 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:11",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy 1 year and u said \"same\""
+        },
+        {
+          "from": "me",
+          "text": "same"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "1 year"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year of maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i have to tell u something"
+        },
+        {
+          "from": "them",
+          "text": "go on"
+        },
+        {
+          "from": "me",
+          "text": "i was going to end it tonight"
+        },
+        {
+          "from": "them",
+          "text": "was?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the voice note at the end"
+        },
+        {
+          "from": "me",
+          "text": "where u say u'll still be here when we're 80"
+        },
+        {
+          "from": "them",
+          "text": "i will"
+        },
+        {
+          "from": "them",
+          "text": "maya you said was"
+        }
+      ]
+    }
+  ]
+}

@@ -22,9 +22,14 @@ export type CatalogSong = {
 
 /**
  * Song search for the "real song" music option. Proxies the public iTunes Search API, which
- * needs no key and returns 30-second previews that may be embedded with attribution.
- * Streaming full tracks from Spotify/Apple in a third-party player isn't possible without the
- * listener signing in, so previews are the ceiling for any gift product.
+ * needs no key and returns 30-second previews.
+ *
+ * Apple's terms allow those previews only to promote the song in the store: not as entertainment,
+ * not synchronised with video, not to sell something else. So a real song is free on every gift
+ * (never a paid extra), and a gift plays its preview only when the recipient taps it on its own
+ * card, once, beside the link to the song on Apple Music and "Preview courtesy of Apple Music"
+ * (`SongPreviewCard`, `src/lib/gift/music.ts`). `url` is stored as the gift's link to the track;
+ * gifts rebuild it without any query token before showing it.
  */
 export async function GET(request: NextRequest) {
   const q = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 80);

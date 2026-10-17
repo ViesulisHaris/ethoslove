@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why aren’t you answering"
+        },
+        {
+          "from": "me",
+          "text": "hello??",
+          "status": "Read 8:47 pm"
+        },
+        {
+          "from": "them",
+          "text": "Look outside"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "demo": {
+    "template": "music-box",
+    "steps": [
+      "swap \"CLARA\" \"MAYA\"",
+      "swap \"Clara\" \"Maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "swap \"five years of us\" \"one year since hi\"",
+      "wait 1400",
+      "shot gift-1.png",
+      "press 273 428",
+      "wait 6000",
+      "release",
+      "wait 3800",
+      "shot gift-2.png",
+      "wait 5200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:46",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what are u doing at 21:47"
+        },
+        {
+          "from": "me",
+          "text": "nothing why"
+        },
+        {
+          "from": "them",
+          "text": "look at the time in one minute"
+        },
+        {
+          "from": "me",
+          "text": "marco its 21:46"
+        },
+        {
+          "from": "me",
+          "text": "ok its 21:47"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "one year ago right now u said hi to me in the queue"
+        },
+        {
+          "from": "them",
+          "text": "made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "one year since hi",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|21:58",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i wound the key and its US in the mirror"
+        },
+        {
+          "from": "me",
+          "text": "how did u do that"
+        },
+        {
+          "from": "them",
+          "text": "magic"
+        },
+        {
+          "from": "me",
+          "text": "marco im crying in the uber"
+        },
+        {
+          "from": "them",
+          "text": "happy one year since hi",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "hi"
+        }
+      ]
+    }
+  ]
+}

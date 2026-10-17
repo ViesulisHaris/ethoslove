@@ -2,7 +2,8 @@
  * "Send one back": the names on the gift a recipient just watched travel to the editor, swapped,
  * so their reply opens with "To" and "From" already filled in. The gift's own template fields ride
  * along for templates that keep something in a reply (Halfway swaps its two places). Kept in
- * sessionStorage rather than the URL, and read once.
+ * sessionStorage rather than the URL, and read once. The gift's id never goes in the link: a paid
+ * premium gift's reply is free, and what proves it is a sealed token (replyEditorHref).
  */
 const KEY = "ethos:reply";
 const MAX_AGE_MS = 60 * 60 * 1000;
@@ -45,4 +46,17 @@ export function takeReplySeed(slug: string): ReplySeed | null {
   } catch {
     return null;
   }
+}
+
+/** Sales that start from a reply are counted under this ref (scripts/revenue-by-ref.mjs). */
+export const REPLY_REF = "reply";
+
+/**
+ * The editor link for "send one back". When the gift answered is a paid premium one, the gift page
+ * hands over the token that makes the reply free (lib/commerce/free-reply.ts), and it rides on the
+ * end; without one the reply still opens, at the normal price. The gift's id never goes in the link.
+ */
+export function replyEditorHref(templateSlug: string, locale: "en" | "es", replyToken?: string | null): string {
+  const href = `${locale === "es" ? "/es" : ""}/create/${templateSlug}?ref=${REPLY_REF}`;
+  return replyToken ? `${href}&reply=${encodeURIComponent(replyToken)}` : href;
 }

@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "rose",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:42 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i have a huge crush on you"
+        },
+        {
+          "from": "me",
+          "text": "like huge"
+        },
+        {
+          "from": "me",
+          "text": "like a unicorn",
+          "status": "Read 9:42 PM"
+        },
+        {
+          "from": "them",
+          "text": "me too"
+        },
+        {
+          "from": "them",
+          "text": "my love for you is like unicorns, it doesn't exist"
+        }
+      ],
+      "encrypted": true
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for my unicorn 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "ok fine it exists"
+        },
+        {
+          "from": "me",
+          "text": "i hate you",
+          "status": "Read 9:44 PM"
+        }
+      ]
+    }
+  ]
+}

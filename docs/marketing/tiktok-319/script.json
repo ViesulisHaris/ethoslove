@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can you come get me"
+        },
+        {
+          "from": "them",
+          "text": "where are you"
+        },
+        {
+          "from": "me",
+          "text": "the station. i missed the last train"
+        },
+        {
+          "from": "them",
+          "text": "i told you to leave at 11"
+        },
+        {
+          "from": "me",
+          "text": "i know im sorry"
+        },
+        {
+          "from": "me",
+          "text": "my phone's on 4%"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "get an uber"
+        },
+        {
+          "from": "me",
+          "text": "i don't have enough for one"
+        },
+        {
+          "from": "me",
+          "text": "there's a guy staring at me"
+        },
+        {
+          "from": "them",
+          "text": "should've thought about that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you made me this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "i'll always come get you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "please",
+          "status": "Read 01:14"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png",
+      "scroll 520",
+      "shot gift-4.png",
+      "scroll 520",
+      "shot gift-5.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:18",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the first letters of ur gym playlist spell sophie"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "sunflower. out of time. photograph. heather. iris. electric love"
+        },
+        {
+          "from": "them",
+          "text": "i literally just add songs i like"
+        },
+        {
+          "from": "them",
+          "text": "ur hunting for drama maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur hunting for drama maya"
+        },
+        {
+          "from": "me",
+          "text": "HEATHER marco??"
+        },
+        {
+          "from": "them",
+          "text": "go take a nap. ur spiralling. i made u this, the songs on it are about u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (every song is about u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-4.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-5.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok the song card made me cry"
+        },
+        {
+          "from": "me",
+          "text": "can u just change the order of the playlist"
+        },
+        {
+          "from": "them",
+          "text": "no. then ur insecurity wins"
+        },
+        {
+          "from": "them",
+          "text": "this is why i dont tell u things maya"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "read the first letters of the playlist i made u for christmas"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "just read them"
+        },
+        {
+          "from": "them",
+          "text": "who is jake"
+        },
+        {
+          "from": "me",
+          "text": "u sang every word",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya who is jake"
+        }
+      ]
+    }
+  ]
+}

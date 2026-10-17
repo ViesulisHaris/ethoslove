@@ -1,0 +1,79 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "stay awake 2 more mins"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just trust me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "them",
+          "text": "first one to say it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "one year, maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:06",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why does it have the receipt from our first date"
+        },
+        {
+          "from": "them",
+          "text": "u paid"
+        },
+        {
+          "from": "them",
+          "text": "i wanted proof"
+        },
+        {
+          "from": "me",
+          "text": "im crying"
+        },
+        {
+          "from": "them",
+          "text": "happy 1 year. go to sleep"
+        }
+      ]
+    }
+  ]
+}

@@ -35,7 +35,7 @@ export const demoData: Record<"en" | "es", GiftData<SnowGlobeFields>> = {
       p8: "your list of everything we'd do in the snow",
     }),
     countdown: {
-      targetAt: "2026-12-23T18:20:00+01:00",
+      targetAt: "2026-12-23T18:20:00+02:00",
       timezone: "Europe/Paris",
       label: "Until I'm at your door",
     },
@@ -65,8 +65,8 @@ export const demoData: Record<"en" | "es", GiftData<SnowGlobeFields>> = {
       p8: "tu lista de todo lo que haríamos con nieve",
     }),
     countdown: {
-      targetAt: "2026-12-23T19:20:00+01:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2026-12-23T19:20:00+02:00",
+      timezone: "Europe/Riga",
       label: "Hasta que llame a tu puerta",
     },
     surprise: {

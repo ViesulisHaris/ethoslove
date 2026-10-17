@@ -1,0 +1,122 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"sorry for earlier\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:26",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u went out without telling me?"
+        },
+        {
+          "from": "me",
+          "text": "i told u yesterday"
+        },
+        {
+          "from": "them",
+          "text": "u didnt"
+        },
+        {
+          "from": "me",
+          "text": "u opened my snap at 21:04"
+        },
+        {
+          "from": "them",
+          "text": "never got it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u always do this"
+        },
+        {
+          "from": "them",
+          "text": "made u something anyway. so u stop being weird"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry for earlier",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "thanks"
+        },
+        {
+          "from": "me",
+          "text": "im done marco"
+        },
+        {
+          "from": "them",
+          "text": "u'll never find anyone like me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "thats the point"
+        },
+        {
+          "from": "them",
+          "text": "ur nothing without me"
+        },
+        {
+          "from": "me",
+          "text": "screenshotted"
+        },
+        {
+          "from": "me",
+          "text": "ur mum wanted to know why we broke up 💅"
+        },
+        {
+          "from": "them",
+          "text": "MAYA"
+        }
+      ]
+    }
+  ]
+}

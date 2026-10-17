@@ -82,9 +82,22 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "sticker-bomb": "paper",
   coquette: "petals",
   xoxo: "paper",
+  "spooky-season": "paper",
+  "be-my-boo": "paper",
+  "fall-for-you": "paper",
+  "autumn-reel": "curtain",
+  "dark-romance": "curtain",
+  "favorite-person": "petals",
+  "on-repeat": "starlight",
+  evergreen: "paper",
   keepsake: "paper",
   "popup-card": "paper",
   sketchbook: "paper",
+  "pack-your-bags": "starlight",
+  digicam: "petals",
+  "photo-booth": "curtain",
+  picnic: "petals",
+  "music-box": "petals",
 };
 
 export function introVariantFor(slug: string, manifest?: TemplateManifest): IntroVariant {

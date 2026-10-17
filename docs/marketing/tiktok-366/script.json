@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|12:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "worst birthday ever"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "everyone forgot"
+        },
+        {
+          "from": "me",
+          "text": "even my mum hasn't texted"
+        },
+        {
+          "from": "them",
+          "text": "i didn't forget"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "omg"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying at work"
+        },
+        {
+          "from": "me",
+          "text": "you're actually the best"
+        },
+        {
+          "from": "them",
+          "text": "only for you"
+        }
+      ]
+    }
+  ]
+}

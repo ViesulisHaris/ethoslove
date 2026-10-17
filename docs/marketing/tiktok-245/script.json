@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:44",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Did you ever open the last one"
+        },
+        {
+          "from": "me",
+          "text": "the last what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "one more thing 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i never opened it",
+          "status": "Read 21:45"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "jake why is there a ring in it"
+        },
+        {
+          "from": "them",
+          "text": "Look at the date on it"
+        },
+        {
+          "from": "me",
+          "text": "that's the day i left"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        }
+      ]
+    }
+  ]
+}

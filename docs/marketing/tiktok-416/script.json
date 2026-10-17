@@ -1,0 +1,34 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "home safe",
+          "status": "Read 11:48 pm"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "Watched your little dot the whole way"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "now go sleep 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

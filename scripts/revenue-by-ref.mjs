@@ -24,13 +24,16 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
 // src/lib/pricing/products.ts. The Stripe account is shared, so only sessions carrying one of
 // these and a purchase_id are Ethos's.
-const PRODUCTS = new Set(["single", "pick3", "everything"]);
-// A gift's short id: what the "make your own" button at the end of every gift sends.
+const PRODUCTS = new Set(["single", "pick3", "everything", "extras", "pass", "pack", "giftcard", "upgrade"]);
+// A gift's short id: what the "send one back" button sent before it carried a sealed token instead
+// (checkout now drops a ref shaped like one; older sessions may still have it). "reply" is the new
+// ref for the same button, and "c-<code>" a creator's personal link.
 const GIFT_ID = /^[2-9a-hjkmnp-z]{9}$/;
-const label = (ref) => (!ref ? "(none)" : GIFT_ID.test(ref) ? "from a gift" : ref);
+const label = (ref) => (!ref ? "(none)" : ref !== "watermark" && GIFT_ID.test(ref) ? "from a gift" : ref.startsWith("c-") ? `creator ${ref.slice(2).toUpperCase()}` : ref);
 
 const byRef = new Map();
 const byDay = new Map();
+const byKind = new Map();
 const count = (map, key, session) => {
   const row = map.get(key) ?? { started: 0, paid: 0, revenue: {} };
   row.started += 1;
@@ -47,6 +50,8 @@ for await (const session of stripe.checkout.sessions.list({ created: { gte: sinc
   if (!metadata?.purchase_id || !PRODUCTS.has(metadata.product)) continue;
   count(byRef, label(metadata.ref), session);
   count(byDay, new Date(session.created * 1000).toISOString().slice(0, 10), session);
+  // "bump" is a single or "make it special" with every other template added at checkout.
+  count(byKind, metadata.kind || metadata.product, session);
 }
 
 const money = (revenue) =>
@@ -63,5 +68,6 @@ console.log(`Ethos checkouts, last ${days} days (${mode})`);
 if (!byRef.size) console.log("\nNone yet.");
 else {
   print("By ref", [...byRef].sort((a, b) => b[1].paid - a[1].paid || b[1].started - a[1].started));
+  print("By product", [...byKind].sort((a, b) => b[1].paid - a[1].paid || b[1].started - a[1].started));
   print("By day", [...byDay].sort((a, b) => a[0].localeCompare(b[0])));
 }

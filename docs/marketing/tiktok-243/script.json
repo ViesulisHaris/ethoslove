@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "made you something"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "read this alone 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Omg is it for our anniversary 🥺"
+        },
+        {
+          "from": "me",
+          "text": "just open it",
+          "status": "Read 20:12"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Maya"
+        },
+        {
+          "from": "them",
+          "text": "Why is it all pics of me and Chloe"
+        },
+        {
+          "from": "me",
+          "text": "her boyfriend sent me them"
+        },
+        {
+          "from": "me",
+          "text": "happy anniversary"
+        }
+      ]
+    }
+  ]
+}

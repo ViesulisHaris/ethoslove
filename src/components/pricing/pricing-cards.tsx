@@ -5,16 +5,19 @@ import { Check, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { currentRef } from "@/lib/attribution/ref";
+import { track } from "@/lib/analytics/track";
 import {
   PRODUCTS,
   PRODUCT_ORDER,
   formatAmount,
   type Currency,
-  type ProductId,
+  type PlanId,
 } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 import { cn } from "@/lib/utils";
+import { startCheckout, useCheckoutError } from "./checkout";
+import { everythingPlan } from "./offers";
+import { useUpgradeQuote } from "./upgrade-quote";
 import {
   Dialog,
   DialogContent,
@@ -29,64 +32,95 @@ export function PricingCards({
   authed,
   paymentsEnabled,
   preselect,
+  openPick3 = false,
   returnTo,
+  quiet = false,
 }: {
   currency: Currency;
   manifests: TemplateManifest[];
   authed: boolean;
   paymentsEnabled: boolean;
   preselect?: string;
+  /** Sent from the publish sheet's "pick any three": the picker opens with that template chosen. */
+  openPick3?: boolean;
   returnTo?: string;
+  /**
+   * The lighter dress, for /pricing, where these sit under Ethos for Two: Everything keeps its
+   * "Best value" and the rose button, but not the wine block, which would compete with the hero.
+   */
+  quiet?: boolean;
 }) {
   const t = useTranslations("pricing");
+  // Two branches of "money", not all of it: the pages that show these cards send only what they read.
+  const tPlans = useTranslations("money.plans");
+  const tAccount = useTranslations("money.account");
+  const tCommon = useTranslations("common");
   const locale = useLocale() as GiftLocale;
-  const [picking, setPicking] = useState<ProductId | null>(null);
+  const [picking, setPicking] = useState<PlanId | null>(openPick3 && paymentsEnabled ? "pick3" : null);
   const [chosen, setChosen] = useState<string[]>(preselect ? [preselect] : []);
   const [busy, setBusy] = useState(false);
+  // One answer for this set of cards: shown under Everything's button and under the picker's, the
+  // two places a checkout starts from here.
+  const showCheckoutError = useCheckoutError();
+  // Someone who already bought templates is never asked for Everything's full price, here or in the
+  // home page's teaser: the card becomes the upgrade, the price the owner set for them.
+  const upgrade = useUpgradeQuote(currency, paymentsEnabled);
+  const all = everythingPlan(currency, upgrade);
 
-  const start = async (product: ProductId, slugs: string[]) => {
+  const start = async (product: PlanId | "upgrade", slugs: string[]) => {
     // Guests pay first; the account is created from the email Stripe collects.
     setBusy(true);
-    const res = await fetch("/api/stripe/checkout", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ product, templateSlugs: slugs, currency, returnTo, locale, ref: currentRef() }),
-    });
-    const json = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+    track("pay_clicked", { product, source: "pricing" });
+    const result = await startCheckout({ product, templateSlugs: slugs, currency, returnTo, locale });
+    if ("url" in result) return void window.location.assign(result.url);
     setBusy(false);
-    if (json.url) window.location.assign(json.url);
-    else toast.error(t("checkoutError"));
+    showCheckoutError(result.error);
   };
 
-  const choose = (product: ProductId) => {
+  // "One template" is a premium one: a free template's unlock is "Make it special", sold in its
+  // editor at its own, lower price (checkout refuses a single for one). Three may mix both.
+  const pickable = (product: PlanId | null) => (product === "single" ? manifests.filter((m) => m.tier === "premium") : manifests);
+  const choose = (product: PlanId) => {
     if (!paymentsEnabled) {
       toast(t("comingSoon"));
       return;
     }
-    if (product === "everything") return void start(product, []);
-    setChosen(preselect ? [preselect] : []);
+    if (product === "everything") return void start(all.plan, []);
+    setChosen(preselect && pickable(product).some((m) => m.slug === preselect) ? [preselect] : []);
     setPicking(product);
   };
 
   const needed = picking ? PRODUCTS[picking].picks : 0;
+  const premium = manifests.filter((m) => m.tier === "premium").length;
 
   return (
     <>
-      <div className="grid gap-5 lg:grid-cols-3 lg:items-stretch" data-authed={authed}>
+      {/*
+       * One column of minmax(0, 1fr) below lg, not the implicit auto track: that one grows to the
+       * widest card's unbreakable content (the price and its "separately" note), which pushed the
+       * cards 26px past a 320px screen in Spanish and let the page scroll sideways.
+       */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:items-stretch" data-authed={authed}>
         {PRODUCT_ORDER.map((id) => {
           const p = PRODUCTS[id];
-          const dominant = p.highlight;
+          const dominant = p.highlight && !quiet;
+          const picked = p.highlight && quiet;
+          const upgrading = id === "everything" && all.plan === "upgrade";
+          const amount = id === "everything" ? all.amount : p.amounts[currency];
           const features = t.raw(`plans.${id}.features`) as string[];
           return (
             <article
               key={id}
+              data-reveal
+              style={{ "--reveal-delay": `${PRODUCT_ORDER.indexOf(id) * 90}ms` } as React.CSSProperties}
               className={cn(
-                "relative flex flex-col rounded-3xl border p-7 sm:p-8",
-                dominant ? "border-forest bg-forest text-paper shadow-lift" : "border-line bg-card",
+                "relative flex flex-col rounded-3xl border sm:p-8",
+                quiet ? "p-6" : "p-7",
+                dominant ? "border-forest bg-forest text-paper shadow-lift" : picked ? "border-coral/45 bg-card shadow-soft ring-1 ring-coral/25" : "border-line bg-card",
               )}
             >
-              {dominant ? (
-                <span className="absolute -top-3 left-7 rounded-full bg-blush px-3 py-1 text-eyebrow text-forest">
+              {dominant || picked ? (
+                <span className={cn("absolute -top-3 left-7 rounded-full px-3 py-1 text-eyebrow", dominant ? "bg-blush text-forest" : "bg-coral text-paper")}>
                   {t("bestValue")}
                 </span>
               ) : null}
@@ -96,18 +130,17 @@ export function PricingCards({
               >
                 {t(`plans.${id}.blurb`)}
               </p>
-              <div className="mt-6 flex items-end gap-2">
-                <span className="font-display text-[3.4rem] leading-none tracking-tight">
-                  {formatAmount(p.amounts[currency], currency, locale)}
+              {/* The note drops under the price when a narrow phone can't hold both on one line. */}
+              <div className={cn("flex flex-wrap items-end gap-x-2 gap-y-1", quiet ? "mt-4 sm:mt-6" : "mt-6")}>
+                <span className={cn("font-display leading-none tracking-tight", quiet ? "text-[clamp(2.5rem,12vw,3.1rem)]" : "text-[clamp(2.75rem,14vw,3.4rem)]")} data-testid={`price-${id}`}>
+                  {formatAmount(amount, currency, locale)}
                 </span>
-                {p.compareAt ? (
-                  <span
-                    className={cn(
-                      "mb-2 text-sm line-through",
-                      dominant ? "text-paper/45" : "text-muted-foreground",
-                    )}
-                  >
-                    {formatAmount(p.compareAt[currency], currency, locale)}
+                {upgrading ? (
+                  // The note below says the same in words, for a screen reader that reads no strikethrough.
+                  <s aria-hidden="true" className={cn("mb-2 text-sm", dominant ? "text-paper/55" : "text-muted-foreground")}>{formatAmount(p.amounts[currency], currency, locale)}</s>
+                ) : p.compareAt ? (
+                  <span className={cn("mb-2 text-sm", dominant ? "text-paper/55" : "text-muted-foreground")}>
+                    {t("separately", { price: formatAmount(p.compareAt[currency], currency, locale) })}
                   </span>
                 ) : null}
               </div>
@@ -119,7 +152,17 @@ export function PricingCards({
               >
                 {t("oneTime")}
               </p>
-              <ul className="mt-6 flex flex-col gap-2.5 text-sm">
+              {upgrading ? (
+                <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")} data-testid="pricing-upgrade">
+                  {tPlans("upgradeNote", { full: formatAmount(p.amounts[currency], currency, locale) })}
+                </p>
+              ) : id === "everything" && premium > 0 ? (
+                // What "everything" means, in the unit people compare it to: one gift.
+                <p className={cn("mt-1.5 text-sm font-medium", dominant ? "text-blush" : "text-coral")}>
+                  {t("perTemplate", { n: premium, price: formatAmount(Math.round(p.amounts[currency] / premium), currency, locale) })}
+                </p>
+              ) : null}
+              <ul className={cn("flex flex-col text-sm", quiet ? "mt-5 mb-7 gap-2 sm:mt-6 sm:gap-2.5" : "mt-6 gap-2.5")}>
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
                     <Check
@@ -137,14 +180,18 @@ export function PricingCards({
                 onClick={() => choose(id)}
                 disabled={busy}
                 className={cn(
-                  "mt-8 flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform active:scale-[0.98]",
+                  "flex h-12 items-center justify-center gap-2 rounded-full text-[15px] font-semibold transition-transform active:scale-[0.98]",
+                  // Quiet: pinned to the card's foot, so the three buttons line up side by side.
+                  quiet ? "mt-auto" : "mt-8",
                   dominant
                     ? "bg-coral text-paper hover:bg-coral-deep"
-                    : "border border-ink bg-transparent text-ink hover:bg-ink hover:text-paper",
+                    : picked
+                      ? "btn-rose"
+                      : "border border-ink bg-transparent text-ink hover:bg-ink hover:text-paper",
                 )}
               >
                 {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-                <span>{t(`plans.${id}.cta`)}</span>
+                <span>{upgrading ? tAccount("upgradeCta", { price: formatAmount(amount, currency, locale) }) : t(`plans.${id}.cta`)}</span>
               </button>
               {dominant ? (
                 <p className="mt-3 text-center text-xs text-paper/55">{t("priority")}</p>
@@ -153,9 +200,10 @@ export function PricingCards({
           );
         })}
       </div>
+      <p className="mt-5 text-center text-[13px] text-muted-foreground">{t("checkoutNote")}</p>
 
       <Dialog open={picking !== null} onOpenChange={(v) => !v && setPicking(null)}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent closeLabel={tCommon("close")} className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl">
               {t("pick.title", { n: needed })}
@@ -163,7 +211,7 @@ export function PricingCards({
             <DialogDescription>{t("pick.blurb")}</DialogDescription>
           </DialogHeader>
           <ul className="grid max-h-[50dvh] gap-2 overflow-y-auto">
-            {manifests.map((m) => {
+            {pickable(picking).map((m) => {
               const on = chosen.includes(m.slug);
               return (
                 <li key={m.slug}>

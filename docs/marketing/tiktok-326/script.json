@@ -1,0 +1,87 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "your friend just texted me by accident"
+        },
+        {
+          "from": "them",
+          "text": "what did he say"
+        },
+        {
+          "from": "me",
+          "text": "\"did u tell her yet??\""
+        },
+        {
+          "from": "them",
+          "text": "ignore him"
+        },
+        {
+          "from": "me",
+          "text": "tell me what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "nothing"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "it was meant to be a surprise"
+        },
+        {
+          "from": "them",
+          "text": "i made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "surprise 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "that's what he meant?"
+        },
+        {
+          "from": "them",
+          "text": "yeah"
+        },
+        {
+          "from": "me",
+          "text": "then why did he send another one"
+        },
+        {
+          "from": "them",
+          "text": "what did it say"
+        },
+        {
+          "from": "me",
+          "text": "\"she's going to kill you\"",
+          "status": "Read 19:06"
+        }
+      ]
+    }
+  ]
+}

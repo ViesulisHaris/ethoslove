@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Mic, Wind } from "lucide-react";
 import { parseRichText } from "@/lib/gift/rich-text";
@@ -12,6 +12,7 @@ import { hashString } from "../_shared/random";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
 import { useBlowDetector } from "../_shared/hooks/use-blow-detector";
+import { useSwipe } from "../_shared/hooks/use-swipe";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
@@ -20,6 +21,7 @@ import { SoundToggle } from "../_shared/SoundToggle";
 import { Confetti } from "../_shared/Confetti";
 import { GiftVideo } from "../_shared/GiftVideo";
 import { Ambience } from "../_shared/Ambience";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { COVER_VARS, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { CinemaFields } from "./schema";
 import { CINEMA_KEYFRAMES, Marquee, Ticket } from "./art";
@@ -57,6 +59,8 @@ type Stage = "curtains" | "cake" | "out" | "film" | "message";
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<CinemaFields>) {
   const rootRef = useRef<HTMLDivElement>(null);
+  // The free-tier badge floats at the foot of the gift, right where "tap to start the show" sits.
+  const { watermarked } = useGiftChrome();
   const size = useContainerSize(rootRef);
   const reduce = useReducedMotion();
   const t = useGiftStrings(data.locale);
@@ -132,13 +136,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     setStage("cake");
   };
 
-  const swipeStart = useRef<number | null>(null);
-  const onPointerDown = (e: ReactPointerEvent) => (swipeStart.current = e.clientY);
-  const onPointerUp = (e: ReactPointerEvent) => {
-    if (stage !== "cake" || swipeStart.current === null) return;
-    if (swipeStart.current - e.clientY > 90) blowOne();
-    swipeStart.current = null;
-  };
+  const swipe = useSwipe((dir) => dir === "up" && blowOne(), { distance: 70, enabled: stage === "cake" });
 
   const replay = () => {
     setLit(Array(candleCount).fill("lit"));
@@ -150,7 +148,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const open = stage !== "curtains";
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none" style={{ ...COVER_VARS, ...vars, fontFamily: "var(--gift-font-body)" }} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div ref={rootRef} className={cn("absolute inset-0 overflow-hidden bg-[#0d0a0a] text-paper select-none", stage === "cake" && "touch-none")} style={{ ...COVER_VARS, ...vars, fontFamily: "var(--gift-font-body)" }} {...swipe}>
       <style>{CINEMA_KEYFRAMES}</style>
       {/* Stage floor + spotlight */}
       <div className="absolute inset-0 bg-[radial-gradient(70%_50%_at_50%_62%,rgba(255,200,120,0.14),transparent_70%)]" />
@@ -246,6 +244,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
               onClick={start}
               aria-label={s.tapStart}
               className="absolute inset-0 z-[3] flex flex-col items-center px-[calc(6*var(--k))] pt-[calc(26*var(--k))] pb-[calc(7*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-inset"
+              style={{ paddingBottom: watermarked ? "calc(7*var(--k) + 2.75rem)" : undefined }}
             >
               <motion.div initial={reduce ? false : { opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7 }}>
                 <Marquee text={marquee} hang />

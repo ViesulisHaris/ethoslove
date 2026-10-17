@@ -8,35 +8,36 @@
 /* Brand tokens — the only place raw colours live.                     */
 /* ------------------------------------------------------------------ */
 :root {
-  /* Paper, ink, one wax-red accent. Everything else is a tint of these. */
-  --brand-paper: #f6f1e8;
-  --brand-paper-deep: #ece5d8;
-  --brand-ink: #17130f;
-  --brand-ink-soft: #4a423b;
-  --brand-coral: #c63d22;
-  --brand-coral-deep: #a3301a;
-  --brand-rose: #efd9cf;
-  --brand-rose-soft: #f7ece5;
-  --brand-gold: #b8903f;
-  --brand-gold-deep: #94722f;
+  /* Warm paper, plum ink, one rose accent. Everything else is a tint of these.
+     (The accent keeps its old name, "coral"; it is a raspberry rose now, 4.6:1 under white type.) */
+  --brand-paper: #fdf7f3;
+  --brand-paper-deep: #f7ebe5;
+  --brand-ink: #24121b;
+  --brand-ink-soft: #5d4652;
+  --brand-coral: #d6336c;
+  --brand-coral-deep: #b0245a;
+  --brand-rose: #f9d5de;
+  --brand-rose-soft: #fdeef2;
+  --brand-gold: #c9923a;
+  --brand-gold-deep: #a27428;
   --brand-moss: #2e6b4e;
   --brand-night: #14110e;
   --brand-night-raised: #1e1a16;
-  --brand-line: #d9cfbf;
+  --brand-line: #ecdcd6;
 
   /* shadcn semantic tokens mapped onto the brand */
   --background: var(--brand-paper);
   --foreground: var(--brand-ink);
-  --card: #fbf8f2;
+  --card: #fffaf7;
   --card-foreground: var(--brand-ink);
-  --popover: #fbf8f2;
+  --popover: #fffaf7;
   --popover-foreground: var(--brand-ink);
   --primary: var(--brand-coral);
   --primary-foreground: #fbf6ee;
   --secondary: var(--brand-paper-deep);
   --secondary-foreground: var(--brand-ink);
-  --muted: #ede6d9;
-  --muted-foreground: #6b625a;
+  --muted: #f6eae5;
+  --muted-foreground: #6e5963;
   --accent: var(--brand-rose-soft);
   --accent-foreground: var(--brand-ink);
   --destructive: #b5341c;
@@ -49,11 +50,11 @@
   --chart-4: var(--brand-moss);
   --chart-5: var(--brand-ink-soft);
   --radius: 0.625rem;
-  --sidebar: #f1ebe0;
+  --sidebar: #f9efea;
   --sidebar-foreground: var(--brand-ink);
   --sidebar-primary: var(--brand-coral);
   --sidebar-primary-foreground: #fbf6ee;
-  --sidebar-accent: #e6dfd2;
+  --sidebar-accent: #f3e3dd;
   --sidebar-accent-foreground: var(--brand-ink);
   --sidebar-border: var(--brand-line);
   --sidebar-ring: var(--brand-ink);
@@ -174,9 +175,9 @@
   --ease-out-expo: var(--ease-out-expo);
   --ease-in-out-quart: var(--ease-in-out-quart);
 
-  --shadow-soft: 0 1px 1px rgba(23, 19, 15, 0.04), 0 6px 18px -10px rgba(23, 19, 15, 0.16);
-  --shadow-lift: 0 1px 2px rgba(23, 19, 15, 0.05), 0 20px 40px -18px rgba(23, 19, 15, 0.3);
-  --shadow-glow: 0 10px 26px -12px rgba(198, 61, 34, 0.5);
+  --shadow-soft: 0 1px 1px rgba(60, 20, 40, 0.04), 0 6px 18px -10px rgba(90, 30, 60, 0.18);
+  --shadow-lift: 0 1px 2px rgba(60, 20, 40, 0.05), 0 22px 44px -20px rgba(110, 30, 70, 0.34);
+  --shadow-glow: 0 10px 26px -12px rgba(214, 51, 108, 0.5);
 }
 
 @layer base {
@@ -230,13 +231,20 @@
     outline-offset: 3px;
     border-radius: 4px;
   }
+  /* Reduced motion: nothing moves, and nothing waits its turn. Transitions are off (0s), not merely
+     short: every element transitions `all` by default, so a 0.01ms transition still ran for one
+     frame on every class change, and a frame in which a card's `flex-grow` was on its way from 0 to 1
+     laid the Dates weather card out 259px tall and shoved the page down by 187px. Animations keep
+     their 0.01ms, so the libraries that wait for `animationend` (Radix) still hear it. */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
       scroll-behavior: auto !important;
     }
   }
@@ -340,14 +348,15 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* The night garden: the site's dark botanical sections.               */
+/* The dark sections. They were a forest green when the site only sold gifts; for a site about    */
+/* couples they are a deep wine. The names stay ("forest", "cream") so nothing else has to change. */
 /* ------------------------------------------------------------------ */
 :root {
-  --brand-forest: #0f2219;
-  --brand-forest-raised: #17301f;
-  --brand-cream: #f4ede0;
-  --brand-blush: #f0c8c2;
-  --brand-sage: #a8bea4;
+  --brand-forest: #2a0f1f;
+  --brand-forest-raised: #3a1830;
+  --brand-cream: #fff6f0;
+  --brand-blush: #f9cdd8;
+  --brand-sage: #d9b8c6;
 }
 
 @theme inline {
@@ -356,19 +365,327 @@
   --color-cream: var(--brand-cream);
   --color-blush: var(--brand-blush);
   --color-sage: var(--brand-sage);
+
+  /* The couples' side: one rose in five weights, the amber of a star, and the greens and lilac
+     the rooms use. Components use these names, never a hex, so the palette is one block here. */
+  --color-rose: #d6336c;
+  --color-rose-deep: #b0245a;
+  --color-rose-ink: #8f1f47;
+  --color-rose-soft: #ffe8ef;
+  --color-rose-tint: #ffd6e2;
+  --color-rose-mist: #fff0f4;
+  --color-blush-paper: #fff5f2;
+  --color-star: #e0962a;
+  --color-star-empty: #e9c0cb;
+  --color-moss-soft: #dcebdf;
+  --color-lilac: #4b3f9a;
+  --color-lilac-soft: #e6e0f8;
 }
 
+/* ------------------------------------------------------------------ */
+/* Dusk: Ethos for Two's own colours (docs/MEMBERSHIP.md 4.1). The rest */
+/* of the site is paper, rose and wine; the membership is the sky after */
+/* the date: deep indigo, a peach horizon, gold starlight. It matches   */
+/* the planetarium photograph and the gold felt star in the scraps.     */
+/* Gold is the membership's call to action wherever it appears; rose    */
+/* stays everyone else's. Text on dusk is cream, secondary moonlight.   */
+/* ------------------------------------------------------------------ */
+:root {
+  --brand-dusk: #171a3f; /* the section */
+  --brand-dusk-deep: #0e1030; /* top of the sky */
+  --brand-dusk-raised: #242a5e; /* cards on it */
+  --brand-moonlight: #e4e7ff; /* secondary text on dusk (≈14:1) */
+  --brand-horizon: #f4a58f; /* the glow at the bottom edge (≈8.7:1 on dusk) */
+  --brand-starlight: #f5cf6b; /* the membership's buttons and accents (≈11:1 on dusk) */
+  --brand-starlight-deep: #e3b54c;
+  --brand-starlight-soft: #fbe39c; /* the lit edge of the gold */
+  --brand-dusk-glow: #6258be; /* the violet the sky keeps in its top corner */
+  --brand-dusk-night: #05061a; /* what things laid on the sky cast: the night, never black */
+  --brand-photo-paper: #fffdf8; /* a polaroid's white under the stars */
+}
+
+@theme inline {
+  --color-dusk: var(--brand-dusk);
+  --color-dusk-deep: var(--brand-dusk-deep);
+  --color-dusk-raised: var(--brand-dusk-raised);
+  --color-dusk-night: var(--brand-dusk-night);
+  --color-moonlight: var(--brand-moonlight);
+  --color-horizon: var(--brand-horizon);
+  --color-starlight: var(--brand-starlight);
+  --color-starlight-deep: var(--brand-starlight-deep);
+  --color-photo-paper: var(--brand-photo-paper);
+
+  /* Shadows on the dusk, tinted with the night so a card lifts off the sky instead of greying it.
+     The collage's are sized in its own width (cqw), so they scale with it from a phone to a desk. */
+  --shadow-dusk-photo: 0 4cqw 7cqw -3cqw color-mix(in oklab, var(--brand-dusk-night) 75%, transparent);
+  --shadow-dusk-poster: 0 3cqw 5cqw -2cqw color-mix(in oklab, var(--brand-dusk-night) 80%, transparent);
+  --shadow-dusk-label: 0 1cqw 3cqw -1cqw color-mix(in oklab, var(--brand-dusk-night) 60%, transparent);
+  --shadow-dusk-thumb: 0 10px 24px -12px color-mix(in oklab, var(--brand-dusk-night) 90%, transparent);
+  --shadow-dusk-seal: 0 12px 30px -14px color-mix(in oklab, var(--brand-dusk) 90%, transparent);
+  --shadow-starlight-badge: 0 6px 14px -6px color-mix(in oklab, var(--brand-starlight) 80%, transparent);
+  /* The offer a link sent someone to: a soft gold halo outside its ring. */
+  --shadow-starlight-halo: 0 0 0 6px color-mix(in oklab, var(--brand-starlight) 12%, transparent);
+  --drop-shadow-dusk-scrap: 0 1cqw 1.5cqw color-mix(in oklab, var(--brand-dusk-night) 55%, transparent);
+  --drop-shadow-dusk-tag: 0 1.5cqw 2cqw color-mix(in oklab, var(--brand-dusk-night) 60%, transparent);
+}
+
+/* The sky: indigo from the top and a soft horizon rising from the bottom edge. No stars in it: a
+   dot beside a word reads as a full stop, so the stars are a layer of their own (dusk-stars) that a
+   component lays where no text sits. */
+@utility bg-dusk-sky {
+  background-color: var(--brand-dusk);
+  background-image:
+    radial-gradient(
+      75% 42% at 50% 112%,
+      color-mix(in oklab, var(--brand-horizon) 50%, transparent) 0%,
+      color-mix(in oklab, var(--brand-horizon) 16%, transparent) 48%,
+      transparent 78%
+    ),
+    radial-gradient(60% 50% at 88% -6%, color-mix(in oklab, var(--brand-dusk-glow) 34%, transparent) 0%, transparent 72%),
+    linear-gradient(180deg, var(--brand-dusk-deep) 0%, var(--brand-dusk) 58%, var(--brand-dusk-raised) 100%);
+}
+/* Faint stars: one tile of dots, drawn once (no image to fetch), for an absolutely placed layer. */
+@utility dusk-stars {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='560' height='460'><g fill='%23fff'><circle cx='254' cy='257' r='1.25' fill-opacity='0.42'/><circle cx='284' cy='269' r='0.65' fill-opacity='0.53'/><circle cx='267' cy='281' r='0.65' fill-opacity='0.29'/><circle cx='172' cy='47' r='1.25' fill-opacity='0.56'/><circle cx='354' cy='273' r='0.85' fill-opacity='0.59'/><circle cx='364' cy='282' r='0.65' fill-opacity='0.47'/><circle cx='462' cy='34' r='0.55' fill-opacity='0.32'/><circle cx='139' cy='19' r='0.85' fill-opacity='0.37'/><circle cx='330' cy='94' r='0.65' fill-opacity='0.48'/><circle cx='280' cy='303' r='0.85' fill-opacity='0.48'/><circle cx='229' cy='253' r='1.25' fill-opacity='0.29'/><circle cx='145' cy='346' r='0.95' fill-opacity='0.36'/><circle cx='44' cy='349' r='0.85' fill-opacity='0.3'/><circle cx='165' cy='36' r='0.55' fill-opacity='0.55'/><circle cx='6' cy='100' r='0.55' fill-opacity='0.42'/><circle cx='543' cy='184' r='0.55' fill-opacity='0.45'/><circle cx='115' cy='308' r='0.75' fill-opacity='0.29'/><circle cx='188' cy='438' r='1.25' fill-opacity='0.57'/><circle cx='80' cy='323' r='0.55' fill-opacity='0.28'/><circle cx='443' cy='86' r='0.95' fill-opacity='0.32'/><circle cx='285' cy='447' r='1.25' fill-opacity='0.3'/><circle cx='359' cy='58' r='0.85' fill-opacity='0.6'/><circle cx='6' cy='393' r='1.25' fill-opacity='0.46'/><circle cx='553' cy='15' r='0.65' fill-opacity='0.39'/><circle cx='474' cy='294' r='0.55' fill-opacity='0.27'/><circle cx='86' cy='204' r='0.55' fill-opacity='0.52'/></g></svg>");
+}
+/* The membership's one button: starlight, with dusk type (≈12:1). Moves like btn-rose (below). */
+@utility btn-star {
+  background-image: linear-gradient(135deg, var(--brand-starlight-soft) 0%, var(--brand-starlight) 42%, var(--brand-starlight-deep) 100%);
+  color: var(--brand-dusk-deep);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--brand-photo-paper) 60%, transparent) inset,
+    0 16px 34px -16px color-mix(in oklab, var(--brand-starlight) 70%, transparent);
+}
+
+/* The -webkit- line goes first in every glass utility: Lightning CSS (Tailwind's minifier) treats
+   the pair as one property and keeps only the last, so with the prefixed one last, Chrome and
+   Firefox got no blur at all and text scrolled under the header stayed sharp. */
 @utility glass-forest {
   background: color-mix(in oklab, var(--brand-forest) 88%, transparent);
-  border: 1px solid rgba(244, 237, 224, 0.12);
-  backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid rgba(255, 246, 240, 0.12);
   -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  backdrop-filter: blur(18px) saturate(1.25);
+}
+/* The navbar: frosted white with a breath of rose, light enough to sit on paper and on wine alike. */
+@utility glass-petal {
+  background: color-mix(in oklab, #ffffff 84%, transparent);
+  border: 1px solid rgba(214, 51, 108, 0.16);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 14px 40px -20px rgba(176, 36, 90, 0.4);
+}
+/* The one button that matters on a page. */
+@utility btn-rose {
+  background-image: linear-gradient(135deg, #e8447a 0%, #c42a63 55%, #a61e52 100%);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.28) inset, 0 14px 30px -14px rgba(176, 36, 90, 0.75);
 }
 @utility glass-cream {
   background: rgba(244, 237, 224, 0.1);
   border: 1px solid rgba(244, 237, 224, 0.2);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion for the site's chrome: the navbar, its menu, the route bar,  */
+/* images, and the feel of a press. Transform and opacity only, bar    */
+/* one height noted below. Under reduced motion the base rule above    */
+/* makes every transition instant; what would still move is off here.  */
+/* ------------------------------------------------------------------ */
+
+/* Every rose button moves the same way: a pixel up under a mouse, a little give under a press. In
+   the utilities layer and after Tailwind's own, so it outranks a call site's `transition-[filter]`
+   (which would make the lift snap) or its own `hover:-translate-y-0.5`. */
+@layer utilities {
+  .btn-rose,
+  .btn-star {
+    transition-property: translate, scale, filter, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: var(--ease-out-quint);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-rose:not(:disabled, [aria-disabled="true"]):hover,
+    .btn-star:not(:disabled, [aria-disabled="true"]):hover {
+      translate: 0 -1px;
+      filter: brightness(1.07) saturate(1.04);
+    }
+  }
+  .btn-rose:not(:disabled, [aria-disabled="true"]):active,
+  .btn-star:not(:disabled, [aria-disabled="true"]):active {
+    translate: 0 0;
+    scale: 0.98;
+    filter: brightness(0.96);
+    transition-duration: 0.08s;
+  }
+}
+
+/* The navbar (components/marketing/header). It floats 12px down; past 24px of scroll it tightens
+   from 56 to 50px and rises 4px, and scrolling down slides it away until scrolling up brings it back.
+   `data-hidden` is never set while its menu is open.
+   The tightening moves nothing's layout: the bar stays 56px and only its glass (the two layers
+   behind the content) is scaled to 50px about its middle, while the whole float rises 7px, so the
+   glass's top edge lands 4px higher and everything in it stays centred on the glass. */
+.site-header-float {
+  transition: translate 0.34s var(--ease-out-quint);
+}
+.site-header[data-compact] .site-header-float {
+  translate: 0 -7px;
+}
+.site-header[data-hidden] .site-header-float {
+  /* Past its own height and the shadow under it. */
+  translate: 0 calc(-100% - 64px);
+  transition-duration: 0.28s;
+}
+/* It stays while a keyboard user is in it (a Tab brings it back) and while a mouse points at it.
+   Not plain :focus-within or :hover: on a phone the menu hands focus back to its button when it
+   closes, and a tap leaves :hover behind, and either would pin the bar for the rest of the page. */
+.site-header[data-hidden]:has(:focus-visible) .site-header-float {
+  translate: 0 -7px;
+  transition-duration: 0.34s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-header[data-hidden]:hover .site-header-float {
+    translate: 0 -7px;
+    transition-duration: 0.34s;
+  }
+}
+/* 50/56: the glass of the tightened bar. Its round ends go a hair oval (25px tall, 28px wide), which
+   no eye catches at this size, where animating the bar's height relaid it out every frame. */
+.site-header-glass {
+  transition:
+    scale 0.3s var(--ease-out-quint),
+    opacity 0.3s var(--ease-out-quint);
+}
+.site-header[data-compact] .site-header-glass {
+  scale: 1 0.893;
+}
+/* The denser glass and the deeper shadow of the tightened bar, faded in over the airy one. */
+.site-header-frost {
+  opacity: 0;
+}
+.site-header[data-compact] .site-header-frost {
+  opacity: 1;
+}
+/* Reduced motion: the bar never slides away. */
+@media (prefers-reduced-motion: reduce) {
+  .site-header[data-hidden] .site-header-float {
+    translate: 0 -7px;
+  }
+}
+
+/* The rose pill under the navbar's rooms: shows the room you are in, follows the pointer, glides
+   back when it leaves. Drawn in three pieces — two round ends that only move and a middle that only
+   stretches — so it can change width with `translate` and `scale` alone and its ends stay round
+   (one stretched pill would squash them). Positions come from the header as --x, --w and --sx. */
+.nav-lit {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 36px;
+  width: 0;
+  margin-top: -18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease-out-quint);
+}
+.nav-lit[data-on] {
+  opacity: 1;
+}
+/* Before the script has placed the pill, the room you are in carries the rose itself. */
+.nav-rooms:not([data-armed]) a[aria-current="page"] {
+  background: var(--color-rose-soft);
+}
+.nav-lit > i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--color-rose-soft);
+  transition:
+    translate 0.3s var(--ease-out-quint),
+    scale 0.3s var(--ease-out-quint);
+}
+.nav-lit[data-snap] > i {
+  transition: none;
+}
+.nav-lit > i:nth-child(1) {
+  width: 18px;
+  border-radius: 18px 0 0 18px;
+  translate: var(--x, 0px) 0;
+}
+.nav-lit > i:nth-child(2) {
+  width: 100px;
+  transform-origin: 0 50%;
+  /* A pixel into each end, so no seam shows between the pieces. */
+  translate: calc(var(--x, 0px) + 17px) 0;
+  scale: var(--sx, 0) 1;
+}
+.nav-lit > i:nth-child(3) {
+  width: 18px;
+  border-radius: 0 18px 18px 0;
+  translate: calc(var(--x, 0px) + var(--w, 36px) - 18px) 0;
+}
+
+/* The menu's rooms deal in after the sheet, one after another. */
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    translate: 16px 0;
+  }
+}
+/* Quick about it: the last of seven lands 0.6s after the tap, where 0.8s felt like waiting for it. */
+.menu-item-in {
+  animation: menu-item-in 0.38s var(--ease-out-quint) backwards;
+  animation-delay: calc(60ms + var(--i, 0) * 28ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-item-in {
+    animation: none;
+  }
+}
+
+/* The route progress bar (components/motion/site-motion). The script moves it; this is its look. */
+.route-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 70;
+  height: 2.5px;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #f0719c, var(--color-rose) 45%, var(--color-rose-deep));
+  box-shadow: 0 0 10px rgba(214, 51, 108, 0.45);
+}
+
+/* A grey placeholder only appears if the wait is long enough to notice, and then fades in. */
+@keyframes skeleton-in {
+  from {
+    opacity: 0;
+  }
+}
+/* What replaces a placeholder fades in over it rather than cutting. */
+@utility animate-content-in {
+  animation: skeleton-in 0.32s var(--ease-out-quint) backwards;
+}
+
+@layer base {
+  /* Pictures that load late (every lazy one) fade in once they have, instead of painting in bands.
+     Armed by the script (site-motion), which marks what was already there `data-img="shown"`, so
+     nothing waits on JavaScript that never runs and nothing on screen blinks when it arms; eager
+     pictures, the hero's among them, are never touched, so the largest paint is never held back.
+     :where() keeps this under any opacity or animation a component gives its own images. */
+  :where(.img-fade-ready img[loading="lazy"]:not([data-img])) {
+    opacity: 0;
+  }
+  :where(.img-fade-ready img[loading="lazy"][data-img="in"]) {
+    animation: skeleton-in 0.45s var(--ease-out-quint);
+  }
+  /* An in-page link lands its target clear of the floating header. */
+  :where(#main [id]) {
+    scroll-margin-top: calc(var(--header-h, 0px) + 12px);
+  }
 }
 
 /* A gift fills the screen on every device; the demo page keeps its control strip on top. */
@@ -399,4 +716,431 @@
  */
 .gift-root {
   --u: min(1cqw, calc(1cqh * 0.6));
+}
+
+/* ------------------------------------------------------------------ */
+/* The Dates map: markers MapLibre positions as plain DOM elements.    */
+/* ------------------------------------------------------------------ */
+/* A place on the map: a white pill with the kind's colour and glyph, its name and its price, and a
+   caption over it saying what it is and how far once it is pointed at. MapLibre writes `transform`
+   and `opacity` on a marker's root (.ethos-pin-root) as the map moves, so every move of our own —
+   arriving, leaving, the lift when pointed at — is on the pill inside it, and is transform and
+   opacity only: nothing a pill does ever changes its size or moves a neighbour. */
+.ethos-pin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 250px;
+  padding: 4px 12px 4px 4px;
+  border: 0;
+  border-radius: 999px;
+  background: #fffdfb;
+  color: var(--color-forest);
+  font: 600 13px/1.2 var(--font-sans);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(90, 40, 60, 0.08),
+    0 8px 18px -8px rgba(80, 25, 50, 0.45);
+  /* It grows from the point it stands on, not from its middle. */
+  transform-origin: 50% 100%;
+  /* `--d` is its turn in an arriving batch (map-pins.ts); the lift on hover never waits for it. */
+  transition:
+    transform 0.22s var(--ease-out-quint),
+    scale 0.22s var(--ease-out-quint) var(--d, 0ms),
+    opacity 0.22s var(--ease-out-quint) var(--d, 0ms),
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+/* Arriving: a short scale and fade from where it will stand. */
+@starting-style {
+  .ethos-pin {
+    opacity: 0;
+    scale: 0.85;
+  }
+  .ethos-pin.is-swap-in {
+    scale: 0.96;
+  }
+}
+/* The pill is 36px tall (34 when it is only an icon); a finger needs 44. The target reaches a few
+   pixels past the pill, which stays the size it is. */
+.ethos-pin::before {
+  content: "";
+  position: absolute;
+  inset: -5px -3px;
+}
+/* The deeper shadow and the rose edge of a pill pointed at, faded in rather than repainted. */
+.ethos-pin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1.5px rgba(214, 51, 108, 0.55),
+    0 16px 30px -12px rgba(80, 25, 50, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s var(--ease-out-quint);
+}
+.ethos-pin-ico {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--pin, var(--color-rose));
+  transition: background-color 0.2s ease;
+}
+.ethos-pin-ico svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ethos-pin-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+/* What it is, its stars and how far: over the pill, so showing it moves nothing. */
+.ethos-pin-sub {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 7px);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 999px;
+  background: var(--color-forest);
+  padding: 4px 10px;
+  color: #fff;
+  font: 600 11.5px/1.3 var(--font-sans);
+  box-shadow: 0 8px 18px -8px rgba(42, 15, 31, 0.6);
+  pointer-events: none;
+  opacity: 0;
+  translate: -50% 4px;
+  transition:
+    opacity 0.18s var(--ease-out-quint),
+    translate 0.22s var(--ease-out-quint);
+}
+/* What it costs, always on the pill: € to €€€, or Free in green. */
+.ethos-pin-price {
+  flex: none;
+  margin-left: 2px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-forest) 7%, transparent);
+  padding: 2px 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: color-mix(in oklab, var(--color-forest) 72%, transparent);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.ethos-pin-price.is-free {
+  background: var(--color-moss-soft);
+  color: var(--color-moss);
+}
+.ethos-pin.is-on .ethos-pin-price {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+/* Pointed at, here or at its card in the list: it lifts, takes a rose edge and shows its caption.
+   Only a mouse points: a tap leaves :hover stuck on whatever it touched, and on a phone the pill that
+   had been opened kept its lift and its caption over the map after its sheet was put away. */
+.ethos-pin.is-near {
+  transform: translateY(-3px) scale(1.06);
+}
+.ethos-pin.is-near::after,
+.ethos-pin.is-on::after {
+  opacity: 1;
+}
+.ethos-pin.is-near .ethos-pin-text {
+  color: var(--color-rose-deep);
+}
+.ethos-pin.is-near .ethos-pin-sub {
+  opacity: 1;
+  translate: -50% 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ethos-pin:hover {
+    transform: translateY(-3px) scale(1.06);
+  }
+  .ethos-pin:hover::after {
+    opacity: 1;
+  }
+  .ethos-pin:hover .ethos-pin-text {
+    color: var(--color-rose-deep);
+  }
+  .ethos-pin:hover .ethos-pin-sub {
+    opacity: 1;
+    translate: -50% 0;
+  }
+}
+/* The chosen one needs no caption: its sheet is open and says all of it. With one, a chosen pill and
+   a pointed-at one wore two dark labels at once, each over the pill above it. */
+.ethos-pin.is-on .ethos-pin-sub {
+  opacity: 0;
+  translate: -50% 4px;
+}
+/* Chosen: the pill takes the rose, and keeps it while the sheet is open. */
+.ethos-pin.is-on {
+  background: var(--color-rose);
+  color: #fff;
+  transform: translateY(-3px) scale(1.08);
+}
+.ethos-pin.is-on::after {
+  box-shadow:
+    0 0 0 1px rgba(214, 51, 108, 0.5),
+    0 18px 34px -12px rgba(120, 20, 60, 0.7);
+}
+.ethos-pin.is-on .ethos-pin-text {
+  color: #fff;
+}
+.ethos-pin.is-on .ethos-pin-ico {
+  background: rgba(255, 255, 255, 0.22);
+}
+/* Far out, a pill is its icon alone: the names would be a hedge of text. */
+.ethos-pin.is-compact {
+  max-width: none;
+  padding: 3px;
+  gap: 0;
+}
+.ethos-pin.is-compact .ethos-pin-text,
+.ethos-pin.is-compact .ethos-pin-price {
+  display: none;
+}
+/* Leaving (the search moved on, or there is no room for it now): the arrival in reverse, from
+   wherever it has got to, so one pushed out mid-arrival never jumps to full size first. */
+.ethos-pin.is-out,
+.ethos-pin.is-swap-out {
+  opacity: 0;
+  scale: 0.85;
+  pointer-events: none;
+  transition-delay: 0s;
+  transition-duration: 0.18s;
+}
+/* The form a pill has just traded away, laid over the new one where it stands while it fades. */
+.ethos-pin.is-swap-out {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: max-content;
+  translate: -50% 0;
+  scale: 0.96;
+}
+/* Reduced motion makes every transition instant (the base layer), but a stagger's delays would
+   still deal pins, stops and cards in one by one: they all arrive at once instead. */
+@media (prefers-reduced-motion: reduce) {
+  .ethos-pin,
+  .ethos-stop-pin,
+  .ethos-you-pin {
+    transition-delay: 0s !important;
+  }
+  .place-card-in {
+    animation-delay: 0s !important;
+  }
+}
+
+/* A numbered stop of a date or a trip. The pills' roots carry an inline z-index (1, or 3 hovered and
+   4 chosen: map-pins.ts), and a stop with none sat under every one of them, its "1" hidden under its
+   own place's pill. 2 puts the stops over the pills, and the one being pointed at or chosen over them.
+   The root is MapLibre's to move; the disc inside it pops in, in order (`--d`), or waits (is-waiting)
+   until the line being drawn reaches it. */
+.ethos-stop-root {
+  z-index: 2;
+}
+.ethos-stop-pin {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: var(--color-rose);
+  color: #fff;
+  font: 700 13px/1 var(--font-sans);
+  box-shadow: 0 6px 14px -4px rgba(90, 20, 45, 0.55);
+  /* A marker on the map, not a control: it may pop a touch past full size as it lands. */
+  transition:
+    opacity 0.2s var(--ease-out-quint) var(--d, 0ms),
+    scale 0.34s cubic-bezier(0.34, 1.4, 0.64, 1) var(--d, 0ms);
+}
+@starting-style {
+  .ethos-stop-pin {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+.ethos-stop-pin.is-waiting,
+.ethos-stop-pin.is-out {
+  opacity: 0;
+  scale: 0.4;
+  transition-delay: 0s;
+  transition-timing-function: var(--ease-out-quint);
+}
+/* Where they are, when they pressed "Near me": a blue dot that fades in where it stands. */
+.ethos-you-pin {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  background: #2f7fa8;
+  box-shadow: 0 0 0 7px rgba(47, 127, 168, 0.2), 0 4px 10px -3px rgba(20, 60, 90, 0.6);
+  transition:
+    opacity 0.3s var(--ease-out-quint),
+    scale 0.3s var(--ease-out-quint);
+}
+@starting-style {
+  .ethos-you-pin {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
+/* MapLibre draws its credits on half-transparent white, so whatever passes under them (a green or
+   gold pin, a park) shows through, and the 11px text measured 2.9:1. Near-solid paper and the
+   site's ink keep them readable over anything. Scoped under the map to outrank MapLibre's own sheet,
+   which loads after this one. */
+.maplibregl-map .maplibregl-ctrl.maplibregl-ctrl-attrib {
+  background-color: rgb(255 255 255 / 0.92);
+  color: var(--color-forest);
+}
+.maplibregl-map .maplibregl-ctrl-attrib a {
+  color: var(--color-forest);
+}
+/* The phone's full-screen map runs under the home indicator (the layout is viewport-fit=cover), so
+   the credits' (i) is lifted clear of it, the way the dock is. */
+.ethos-map-full .maplibregl-ctrl-bottom-left,
+.ethos-map-full .maplibregl-ctrl-bottom-right {
+  bottom: env(safe-area-inset-bottom);
+}
+/* A map's canvas fades in over the paper behind it (the same colour as the style's land) once its
+   first tiles are drawn, instead of the streets popping in square by square (map-motion.ts). */
+.ethos-map-canvas .maplibregl-canvas {
+  transition: opacity 0.45s var(--ease-out-quint);
+}
+.ethos-map-canvas[data-drawn="false"] .maplibregl-canvas {
+  opacity: 0;
+}
+/* A phone's map is a screen of its own over the list: it slides up from the Map button at the
+   bottom when opened and back down when put away, and is out of the page (display: none) between.
+   The slide is transform only; `display` flips at the end of the way out (allow-discrete), and
+   @starting-style gives the way in its first frame. Browsers without either just show and hide it. */
+@media (width < 64rem) {
+  .ethos-phone-map {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    translate: 0 100%;
+    transition:
+      translate 0.34s var(--ease-out-quint),
+      display 0.34s allow-discrete;
+  }
+  .ethos-phone-map.is-open {
+    display: block;
+    translate: 0 0;
+  }
+  @starting-style {
+    .ethos-phone-map.is-open {
+      translate: 0 100%;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Games: a card turns over in 3D. The face sets the size; the back    */
+/* lies over it, turned away. Reduced motion makes the turn instant.   */
+/* ------------------------------------------------------------------ */
+.card-3d {
+  perspective: 1400px;
+}
+.card-3d > .card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.7s var(--ease-out-quint);
+}
+.card-3d.is-flipped > .card-inner {
+  transform: rotateY(180deg);
+}
+.card-3d .card-face,
+.card-3d .card-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-3d .card-back {
+  transform: rotateY(180deg);
+}
+
+/* A card dealt onto the table. */
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    translate: 0 -28px;
+    rotate: -4deg;
+  }
+}
+.deal-in {
+  animation: deal-in 0.55s var(--ease-out-quint) backwards;
+}
+
+/* ------------------------------------------------------------------ */
+/* Sections that fade up into view (components/motion/reveal-root).    */
+/* Armed only once the observer has run, so nothing is ever hidden     */
+/* without the script that shows it; reduced motion only fades.        */
+/* ------------------------------------------------------------------ */
+.reveal-ready [data-reveal]:not(.is-in) {
+  opacity: 0;
+  translate: 0 22px;
+}
+.reveal-ready [data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out-quint),
+    translate 0.8s var(--ease-out-quint);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready [data-reveal]:not(.is-in) {
+    translate: none;
+  }
+}
+
+/* A place card arriving in the Dates list: a short rise and fade, staggered by its place in the
+   list. Keyed cards that survive a re-sort or a filter keep their element and don't replay it. */
+@keyframes place-card-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.place-card-in {
+  /* backwards, not both: once it has played, the card's own hover lift owns `translate` again. */
+  animation: place-card-in 0.42s var(--ease-out-quint) backwards;
+}
+/* The set of cards on its way out while the next fades in under it (dates-explorer, motion's
+   popLayout lifts it out of the flow where it stood): seen, never clicked. */
+.ethos-place-list > [data-motion-pop-id] {
+  pointer-events: none;
+}
+
+/* Inside the iPhone app (lib/app/bridge.ts): the app's script marks <html data-app="ios"> before
+   the page draws, and the app's own bar, tabs and sheets stand in for the site's chrome. Marked
+   elements never show there, from the first paint on: the marketing header and footer, the sticky
+   call to action, the tour, the consent strip, links back to the site, and anything that would sell
+   outside the App Store. Nothing changes for a browser, which never has the attribute. */
+html[data-app] [data-app-hide] {
+  display: none !important;
+}
+/* The floating header's room at the top of a page (the marketing layout's --header-h), gone with it. */
+html[data-app] [data-header-offset] {
+  --header-h: 0px !important;
 }

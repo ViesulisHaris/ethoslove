@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:36",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why do u have a 500 day streak with ur ex"
+        },
+        {
+          "from": "them",
+          "text": "its just a streak maya"
+        },
+        {
+          "from": "them",
+          "text": "if i stop she'll think it means something"
+        },
+        {
+          "from": "me",
+          "text": "it means something that it doesnt stop"
+        },
+        {
+          "from": "them",
+          "text": "ur overthinking a snapchat"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur overthinking a snapchat"
+        },
+        {
+          "from": "me",
+          "text": "every day for 500 days"
+        },
+        {
+          "from": "them",
+          "text": "i send her a picture of my ceiling. thats it. i made u an actual thing"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (ur the only one i make things for)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Sticker Bomb (loud, playful, covered in their inside jokes). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is cute"
+        },
+        {
+          "from": "me",
+          "text": "can u end the streak tho"
+        },
+        {
+          "from": "them",
+          "text": "if i end it now she'll ask why"
+        },
+        {
+          "from": "them",
+          "text": "and then i have to talk to her. u want that?"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "ive been sending her snaps too"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "from ur account. every night since march. right after ur ceiling"
+        },
+        {
+          "from": "them",
+          "text": "what have u been sending her"
+        },
+        {
+          "from": "me",
+          "text": "she replied last night",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what have u been sending her"
+        }
+      ]
+    }
+  ]
+}

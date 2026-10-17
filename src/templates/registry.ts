@@ -45,9 +45,22 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "sticker-bomb": () => import("./sticker-bomb"),
   coquette: () => import("./coquette"),
   xoxo: () => import("./xoxo"),
+  "spooky-season": () => import("./spooky-season"),
+  "be-my-boo": () => import("./be-my-boo"),
+  "fall-for-you": () => import("./fall-for-you"),
+  "autumn-reel": () => import("./autumn-reel"),
+  "dark-romance": () => import("./dark-romance"),
+  "favorite-person": () => import("./favorite-person"),
+  "on-repeat": () => import("./on-repeat"),
+  evergreen: () => import("./evergreen"),
   keepsake: () => import("./keepsake"),
   "popup-card": () => import("./popup-card"),
   sketchbook: () => import("./sketchbook"),
+  "pack-your-bags": () => import("./pack-your-bags"),
+  digicam: () => import("./digicam"),
+  "photo-booth": () => import("./photo-booth"),
+  picnic: () => import("./picnic"),
+  "music-box": () => import("./music-box"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

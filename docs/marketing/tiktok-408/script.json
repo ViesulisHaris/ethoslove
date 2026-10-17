@@ -1,0 +1,40 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "No lo abras en el trabajo"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "ábreme 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "lo abrí en el trabajo"
+        },
+        {
+          "from": "me",
+          "text": "todos me están viendo llorar",
+          "status": "Leído 13:14"
+        },
+        {
+          "from": "them",
+          "text": "Te dije que no"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "a guy at work made me something today"
+        },
+        {
+          "from": "them",
+          "text": "What guy."
+        },
+        {
+          "from": "me",
+          "text": "just a guy 🙂"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Made you what."
+        },
+        {
+          "from": "me",
+          "text": "doesnt matter. it was really sweet"
+        },
+        {
+          "from": "them",
+          "text": "Ok."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:51 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Better than his?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "ok so"
+        },
+        {
+          "from": "me",
+          "text": "there was no guy 😭"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "What."
+        },
+        {
+          "from": "me",
+          "text": "i just really wanted one 🥹"
+        },
+        {
+          "from": "them",
+          "text": "You're unbelievable."
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you love me tho",
+          "status": "Read 11:54 PM"
+        },
+        {
+          "from": "them",
+          "text": "Unfortunately."
+        }
+      ]
+    }
+  ]
+}

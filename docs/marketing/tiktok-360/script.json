@@ -1,0 +1,84 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i don't think i can do this anymore"
+        },
+        {
+          "from": "me",
+          "text": "i never see you"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "i'm sorry"
+        },
+        {
+          "from": "me",
+          "text": "sorry doesn't fix it leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|01:40",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for every night i'm away 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "i can't change my shifts"
+        },
+        {
+          "from": "them",
+          "text": "but you won't fall asleep alone anymore"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|02:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "there's one for every night?"
+        },
+        {
+          "from": "them",
+          "text": "every night until june"
+        },
+        {
+          "from": "me",
+          "text": "leo that's like 200"
+        },
+        {
+          "from": "them",
+          "text": "211"
+        },
+        {
+          "from": "them",
+          "text": "the 212th i'm home"
+        }
+      ]
+    }
+  ]
+}

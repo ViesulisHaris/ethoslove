@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:06",
+      "messages": [
+        { "from": "me", "text": "u called me pathetic in front of everyone" },
+        { "from": "them", "text": "u embarrassed me" },
+        { "from": "me", "text": "i asked u to slow down on the drinks" },
+        { "from": "them", "text": "in front of my friends" },
+        { "from": "me", "text": "i whispered it marco" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "them", "text": "i dont want to fight. i made u this instead" },
+        { "from": "them", "text": "lets not tell ur sister about last night" },
+        { "from": "them", "link": { "title": "for maya (lets not do this again)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. The most beautiful frame you have. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "its beautiful" },
+        { "from": "me", "text": "i just wish u could say sorry" },
+        { "from": "them", "text": "i made u a whole thing maya. what more do u want" },
+        { "from": "me", "text": "no ur right. im sorry. i shouldnt have said it in front of them" },
+        { "from": "them", "text": "see. we're good" },
+        { "from": "them", "text": "delete this thread. dont want ur sister seeing it" }
+      ]
+    }
+  ]
+}

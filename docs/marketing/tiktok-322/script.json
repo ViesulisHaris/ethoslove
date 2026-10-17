@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i got the job"
+        },
+        {
+          "from": "them",
+          "text": "i knew you would"
+        },
+        {
+          "from": "me",
+          "text": "you didn't even know i applied",
+          "status": "Read 18:41"
+        },
+        {
+          "from": "them",
+          "text": "open this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open when you get the job 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "when did you make this"
+        },
+        {
+          "from": "them",
+          "text": "before i left"
+        },
+        {
+          "from": "me",
+          "text": "how many did you make"
+        },
+        {
+          "from": "them",
+          "text": "one for everything i was going to miss"
+        }
+      ]
+    }
+  ]
+}

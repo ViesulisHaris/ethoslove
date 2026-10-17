@@ -562,7 +562,7 @@ function Finale({
           style={{ background: "var(--gift-accent)" }}
         />
         <h2
-          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic"
+          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic [overflow-wrap:anywhere]"
           style={{ fontFamily: "var(--gift-font-display)" }}
         >
           {t("dear", { name: data.recipientName })}

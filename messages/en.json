@@ -18,6 +18,10 @@
     "save": "Save",
     "loading": "Loading…",
     "comingSoon": "Coming soon",
+    "appSoon": {
+      "title": "Ethos for iPhone",
+      "sub": "Coming soon to the App Store"
+    },
     "free": "Free",
     "premium": "Premium",
     "noSubscription": "One payment, no subscription. Yours for good.",
@@ -28,23 +32,44 @@
     "themeSystem": "System",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "close": "Close",
+    "notifications": "Notifications",
+    "closeNotification": "Close notification",
+    "myDates": "My dates"
   },
   "meta": {
-    "defaultTitle": "Ethos — Digital gifts that open like a story",
+    "defaultTitle": "Ethos — Gifts, date ideas and trips for couples",
     "titleTemplate": "%s · Ethos",
-    "description": "Create a personalised, animated digital gift for someone you love. Photos, their song, your words. Share with a link or QR code. Free to start."
+    "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start.",
+    "giftsTitle": "Ethos — Gifts that open like a story",
+    "giftsDescription": "Make a personal gift that opens like a story: your photos, their song and your words, sent as a link or a QR code. Free to start."
   },
   "nav": {
     "templates": "Templates",
     "occasions": "Occasions",
     "pricing": "Pricing",
     "howItWorks": "How it works",
-    "seeReactions": "Reactions"
+    "seeReactions": "Reactions",
+    "dates": "Dates",
+    "trips": "Trips",
+    "gifts": "Gifts",
+    "longDistance": "Long distance",
+    "games": "Games",
+    "mainLabel": "Main",
+    "menuLabel": "Menu",
+    "blurb": {
+      "dates": "Real places near you",
+      "trips": "Trips for two, day by day",
+      "gifts": "Surprises for their phone",
+      "longDistance": "Meet in the middle",
+      "games": "Card games for two",
+      "pricing": "Free to date, or Ethos for Two"
+    }
   },
   "home": {
     "hero": {
-      "eyebrow": "Digital gifts. Ten minutes to make, years to keep.",
+      "eyebrow": "Personal gifts. Ten minutes to make, years to keep.",
       "h1a": "Give them a moment they'll",
       "h1b": "open again",
       "h1c": "and again.",
@@ -161,9 +186,11 @@
     "legal": "Legal",
     "terms": "Terms",
     "privacy": "Privacy",
+    "withdraw": "Withdraw from a purchase",
     "contact": "Contact",
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
-    "madeWith": "Made in Riga and Madrid."
+    "madeWith": "Made in Riga.",
+    "explore": "Explore"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -262,7 +289,11 @@
     "deleteAccount": "Delete account",
     "deleteConfirm": "This removes your account, every gift, upload, image, video, voice note and reaction. Active storage is wiped first; backups expire within 30 days. Type {email} to confirm.",
     "deleteForever": "Delete forever",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "dangerSubscription": "Deleting your account also cancels your Ethos for Two subscription at once; the time left isn't refunded.",
+    "dangerAppStore": "You subscribed in the iPhone app: cancel it in your iPhone's Settings first, since deleting your account can't stop Apple's billing.",
+    "deleteFailed": "Your account couldn't be deleted. Nothing was removed; try again in a moment.",
+    "deleteSubscriptionFailed": "We couldn't cancel your Ethos for Two subscription, so nothing was deleted. Try again in a moment."
   },
   "editor": {
     "title": "Editor",
@@ -296,7 +327,7 @@
       "music": {
         "n": "04",
         "title": "Music",
-        "blurb": "Their song, or something from our library. Starts when they open it."
+        "blurb": "Something from our library or your own file plays as they open it. A real song plays when they tap it."
       },
       "look": {
         "n": "05",
@@ -317,6 +348,11 @@
         "n": "04c",
         "title": "Your voice",
         "blurb": "Say it out loud. Up to a minute, played at the very end. Premium."
+      },
+      "unwrap": {
+        "n": "02b",
+        "title": "A surprise inside",
+        "blurb": "A date or a trip, wrapped as a present under your last words. They tap it to open it."
       }
     },
     "fields": {
@@ -334,7 +370,6 @@
       "italic": "Italic",
       "emoji": "Emoji",
       "helpWrite": "Help me write it",
-      "helpWriteSoon": "The writing helper needs an API key. It's wired and will light up as soon as one is added.",
       "charsLeft": "{n} characters left",
       "accentColor": "Accent colour",
       "customColor": "Custom",
@@ -405,12 +440,12 @@
       },
       "licenseNote": "Library tracks are cleared for use in gifts.",
       "song": "A real song",
-      "songPremium": "Premium",
       "songSearch": "Search a song or artist",
-      "songHint": "Plays a 30-second preview of the real recording, on loop, with the song credited at the end.",
+      "songHint": "Free on every template. At the end of the gift they tap it to hear 30 seconds, with a link to the full song on Apple Music.",
       "songNone": "No songs found. Try the artist's name.",
-      "songSelected": "Playing in the gift",
-      "songPreviewNote": "Previews come from Apple Music's catalogue and are cleared for embedding with credit."
+      "songSelected": "At the end of the gift",
+      "songListen": "Listen to “{title}” on Apple Music",
+      "songCourtesy": "Previews courtesy of Apple Music."
     },
     "extras": {
       "countdown": "Countdown",
@@ -446,7 +481,15 @@
         "photosMin": "Add {min, plural, one {a photo} other {at least # photos}}",
         "photosMax": "Too many photos for this template",
         "uploadsPending": "Your files are still uploading",
-        "uploadsFailed": "Something didn’t upload"
+        "uploadsDone": "Upload your files",
+        "uploadsFailed": "Something didn’t upload",
+        "fields": {
+          "more": "{label}: add at least {count}",
+          "fewer": "{label}: {count} at most",
+          "fill": "{label}: fill this in",
+          "emptyItem": "{label}: fill in or remove the empty one",
+          "fix": "{label}: check this"
+        }
       },
       "signInTitle": "Sign in to publish",
       "signInBlurb": "Your draft is saved on this device. Sign in and we'll pick up right here.",
@@ -463,21 +506,31 @@
       "publishing": "Publishing…",
       "notConfigured": "Publishing needs Supabase. Add the keys to .env.local and restart.",
       "error": "Publishing failed: {error}",
-      "featureSong": "a real song",
+      "errorFields": "It can’t go yet. Check these first: {fields}.",
+      "featureSong": "music from another site",
       "featureVideo": "a video clip",
       "featureVoiceNote": "a voice message",
       "featureMorePhotos": "more than 10 photos",
+      "featureUnwrap": "a surprise inside",
       "payTitle": "One payment, then it's sent",
       "payBlurb": "This gift uses {features}. Pay once and this template is yours for good, with everything in it.",
       "payButton": "Pay {price} and send",
+      "appUnlock": "Unlock and send",
+      "appUnlockNote": "Through the App Store: you'll see the options and prices next.",
+      "appUnlockFailed": "That didn't go through. Try again, or come back to it later: your draft is saved.",
+      "appSignIn": "Sign in to continue",
       "planLabel": "What to unlock",
       "planSingle": "This template",
       "planSingleBlurb": "Yours for good, with everything in it",
       "planEverything": "Every template",
       "planEverythingBlurb": "All {n} templates, and every one we add",
-      "payNote": "No subscription. Card, Apple Pay or Google Pay.",
+      "payNote": "No subscription. Card, Apple Pay and more at checkout.",
       "paying": "Opening secure checkout…",
       "signInBlurbPaid": "Your draft is saved on this device. Sign in, pay {price} once, and it's sent.",
+      "signInBlurbFreeReply": "Sending this one back is free. Sign in and it's sent, with the “Made with Ethos” footer.",
+      "freeReply": "<who>{name}</who> covered your reply: it's free, and it goes with the small “Made with Ethos” footer.",
+      "freeReplyUsed": "This gift's free reply has already been sent, so this one is the template's normal price.",
+      "freeReplyInvalid": "This link can't make the reply free any more, so it's the template's normal price.",
       "payGuestBlurb": "This gift uses {features}. Pay once and it's sent. Your account is created from the email you give at checkout, no password needed.",
       "signInInstead": "Already have an account? Sign in instead",
       "uploadsAfterPay": "Photos upload right after payment.",
@@ -500,7 +553,8 @@
         "processing": "This device couldn't prepare it. Remove it, or add a smaller copy.",
         "network": "The connection dropped. Try again, or remove it to send the gift without it.",
         "remove": "Remove"
-      }
+      },
+      "campaign": "Free with the creator campaign: {left} of {limit} free gifts left. The Ethos footer stays on."
     },
     "share": {
       "title": "It's live.",
@@ -540,7 +594,17 @@
       "centrePhoto": "A photo",
       "downloadPng": "Download PNG",
       "downloadSvg": "Download SVG",
-      "printCard": "Print-ready card"
+      "printCard": "Print-ready card",
+      "label": "Line under the code",
+      "labelPlaceholder": "for {name} ♡",
+      "labelPlaceholderPlain": "scan me ♡",
+      "centreSize": "Size",
+      "sizeSmall": "Small",
+      "sizeMedium": "Medium",
+      "sizeLarge": "Large",
+      "adjusted": "Made darker so phones can still scan it.",
+      "panel": "On a dark background the code sits on a light square, so phones can still scan it.",
+      "previewAlt": "Your QR code"
     },
     "writer": {
       "title": "Help me write it",
@@ -575,6 +639,29 @@
       "premium": "Premium",
       "hint": "Works best somewhere quiet. Recipients hear it after the last screen."
     },
+    "unwrap": {
+      "included": "Included",
+      "special": "Make it special",
+      "specialNote": "On this template it comes with “Make it special”, paid once when you send it.",
+      "addPlan": "Add your date plan",
+      "addPlanHelp": "The plan from the dates map, with a photo of every stop.",
+      "noPlan": "Plan a date on the map first, then come back for it.",
+      "planLink": "Plan a date",
+      "addTrip": "Add a trip",
+      "addTripHelp": "One of our twelve trips for two.",
+      "pickTrip": "Which trip?",
+      "date": "Date night",
+      "trip": "Trip",
+      "stops": "{count, plural, one {# stop} other {# stops}}",
+      "nights": "{count, plural, one {# night} other {# nights}}",
+      "noDay": "No day yet",
+      "day": "The day",
+      "depart": "Leaving",
+      "back": "Coming back",
+      "remove": "Remove",
+      "wrapping": "Wrapping it…",
+      "cancel": "Cancel"
+    },
     "covers": {
       "label": "Cover",
       "help": "The first screen they see. They tap it to open the gift.",
@@ -601,6 +688,19 @@
         "spooky": "Spooky",
         "classic": "Classic"
       }
+    },
+    "move": {
+      "title": "Same words, a bigger moment",
+      "blurb": "Move it into one of our best sellers. Your names, words, photos and song go with it.",
+      "moveTo": "Move it to {name}",
+      "keeps": "Takes your first {n} photos",
+      "price": "{price} once, when you send it: yours for good, with everything in it.",
+      "staysFree": "{name} stays here, free, if you change your mind.",
+      "moving": "Moving it…",
+      "failed": "That didn't work on this device. Your gift is still here, as it was.",
+      "dismiss": "Not now",
+      "moved": "Moved over from {name}, with your words, photos and song.",
+      "back": "Back to {name}"
     }
   },
   "gift": {
@@ -634,6 +734,8 @@
     "demoReactionToast": "In a real gift, this sends the sender your reaction. Coming in Phase 4.",
     "tryDemo": "Try the live demo",
     "none": "No templates match that filter yet.",
+    "noneFree": "None of this occasion's templates are free yet. These free ones work for any day.",
+    "showAll": "Show all {count}",
     "previewHint": "This is the real template with sample data. Tap, scroll and explore.",
     "fullscreenDemo": "Open full-screen demo",
     "included": "What's included",
@@ -649,18 +751,18 @@
     "makeThis": "Make this gift",
     "priceOnce": "{price} once",
     "priceFree": "Free",
-    "detailPriceFree": "Free, forever. Add a real song, a video or a voice message for {price}, paid once.",
+    "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
     "sections": {
       "popular": {
         "eyebrow": "Most popular",
-        "title": "The ones people send most",
-        "blurb": "Ranked by what actually gets made and sent, week after week."
+        "title": "The best sellers",
+        "blurb": "Ranked by what people actually buy, week after week."
       },
       "new": {
         "eyebrow": "New",
         "title": "Just arrived",
-        "blurb": "A council of cats, a party crashed by hamsters, a sticker bomb, and three collages you scroll."
+        "blurb": "A party crashed by hamsters, a digicam, a photo booth, a music box and a picnic."
       },
       "all": {
         "eyebrow": "The collection",
@@ -691,30 +793,15 @@
     "long-distance": "Long distance",
     "just-because": "Just because"
   },
-  "blog": {
-    "eyebrow": "Blog",
-    "title": "What to write, make and send",
-    "subtitle": "Practical guides for birthdays, anniversaries, distance and the ordinary days in between: what to say, what to make, and how to get it to them on time.",
-    "takeaways": "Key takeaways",
-    "faqTitle": "Questions people ask",
-    "minutes": "{minutes} min read",
-    "related": "Keep reading",
-    "makeThis": "Make this gift",
-    "seeIt": "See the template",
-    "templateFree": "Free template",
-    "templatePremium": "Premium template",
-    "englishOnly": "This guide is only in English for now."
-  },
   "pricing": {
     "eyebrow": "Pricing",
-    "title": "Pay once. Keep it forever.",
-    "subtitle": "Two templates are free, with a small footer. Real songs, video, voice messages and the other templates unlock with one payment. No subscription, no renewals.",
+    "title": "Free to date. Pay once for a gift.",
+    "subtitle": "The map, the plans and the long-distance tools are free, for good. Gift templates unlock with one payment and stay yours.",
     "oneTime": "One payment. Yours for good.",
     "bestValue": "Best value",
     "priority": "Includes priority support",
-    "freeNote": "Free gifts include 10 photos, our music library and the “Made with Ethos” footer. Real songs, video clips, voice messages, scheduling and passwords come with any unlock.",
+    "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
     "comingSoon": "Payments open soon. Free templates publish today.",
-    "checkoutError": "Couldn't start checkout. Please try again.",
     "plans": {
       "single": {
         "name": "One template",
@@ -723,7 +810,7 @@
         "features": [
           "One premium template, forever",
           "Unlimited gifts with it",
-          "Real songs, video and voice messages",
+          "Video and voice messages",
           "No footer, 20 photos",
           "Scheduling and password"
         ]
@@ -746,7 +833,7 @@
         "features": [
           "All templates, now and future",
           "Unlimited gifts, forever",
-          "Real songs, video and voice messages",
+          "Video and voice messages",
           "No footer, 20 photos, scheduling, passwords",
           "First access to new templates"
         ]
@@ -757,19 +844,96 @@
       "blurb": "You can change a pick until you pay.",
       "continue": "Continue ({n}/{total})"
     },
+    "faqEyebrow": "Questions",
     "faqTitle": "Questions people ask",
+    "faqHelp": "Something else? Write to <email>{address}</email> and a person answers.",
+    "faqGroups": {
+      "forTwo": "Ethos for Two",
+      "rest": "Gifts, games and paying"
+    },
     "faq": [
       {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "What is Ethos for Two?",
+        "a": "A membership for the two of you. Save as many dates and trips as you like, plan them together on both your phones, get a reminder the day before each one and open a whole date in Apple or Google Maps; and while it runs, every gift template and every game pack is yours. One of you pays, monthly or yearly; the other joins with the invite link you send."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "What is Ethos for Two?",
+        "a": "A year of everything for the two of you: as many saved dates and trips as you like, planned together on both your phones, a reminder the day before each one, a whole date opened in Apple or Google Maps, and every gift template and game pack. One of you pays once; the other joins with the invite link you send. It lasts 365 days and doesn't renew by itself."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
         "q": "Is this a subscription?",
-        "a": "No. Every price is a one-time payment. What you unlock stays on your account for as long as it exists."
+        "a": "Ethos for Two is: one payment a month or a year covers both of you, and it renews until you cancel, which you can do at any time from your account page. Everything else here is paid once: templates, “Make it special” and game packs stay on your account for good."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "Is this a subscription?",
+        "a": "No. Ethos for Two is one payment for 365 days, for both of you, and it doesn't renew by itself: we email you two weeks before it ends, and renewing is one tap. Templates, “Make it special” and game packs are one-time payments too, and stay on your account for good."
+      },
+      {
+        "group": "forTwo",
+        "q": "Can my partner use it on their phone?",
+        "a": "Yes, that's the point of it. After paying you get an invite link: your partner opens it on their phone and signs in (free), and from then on you both see and edit the same saved dates, and every template and pack is on their account too. One partner only; you can remove them, or they can leave, at any time."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "How do I cancel?",
+        "a": "From your account page: Cancel membership, then confirm. It's as quick as subscribing. Nothing more is charged, and you both keep Ethos for Two until the end of the month or year you've paid for. Your saved dates stay in your account, and gifts you've published stay online."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "Can we switch between monthly and yearly?",
+        "a": "Yes, from your account page. Monthly to yearly happens at once: you pay for the year, minus what's left of your month. Yearly to monthly happens when your year ends, so you never pay twice."
+      },
+      {
+        "group": "forTwo",
+        "q": "What happens to our saved dates if we stop?",
+        "a": "Nothing is deleted. Your saved dates and trips stay in your account and stay yours; you just stop sharing them. The free plan keeps your three most recently changed ones editable and the rest readable, until you delete some or come back. Gifts you've published stay online."
+      },
+      {
+        "id": "subscriptions",
+        "group": "forTwo",
+        "q": "Can I change my mind after subscribing?",
+        "a": "Yes. You can withdraw within 14 days of subscribing, without giving a reason: use “Withdraw from a purchase” at the foot of every page, or reply to your welcome email. Because you asked for it to start straight away, we refund what you paid minus the days you've already used. After 14 days you can still cancel at any time; it then runs to the end of the period you've paid for."
+      },
+      {
+        "id": "pass",
+        "group": "forTwo",
+        "q": "Can I change my mind after buying?",
+        "a": "Yes, within 14 days of buying, without giving a reason: use “Withdraw from a purchase” at the foot of every page, or reply to your receipt. Because you asked for your year to start straight away, we refund what you paid minus the days you've already used."
       },
       {
         "q": "What does the free tier actually include?",
-        "a": "Two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a countdown and a hidden final surprise. Free gifts show a small “Made with Ethos” footer. Real songs, video clips and voice messages are premium extras."
+        "a": "Finding a date, planning it and sending it as a link, with the forecast and the sunset; the long-distance tools; and the games. No account needed, and a free account keeps up to three saved dates or trips. For gifts: two full templates (The Letter and Constellations), unlimited gifts, up to 10 photos per gift, our music library, a 30-second preview of a real song they can tap to hear, a countdown and a hidden final surprise, with a small “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside, no footer, scheduling and a password come with “Make it special”, with any unlock, or with Ethos for Two."
       },
       {
         "q": "Can I try a template before paying?",
         "a": "Every template has a full live demo, and the editor is free to use with a live preview. You only pay when you publish something that needs a premium feature."
+      },
+      {
+        "id": "giftcard",
+        "q": "How do gift cards work?",
+        "a": "Buy “Give Everything” and we email you a code (it's on the confirmation page too). Pass it on however you like: whoever redeems it gets every template, forever, on their own account. A code can be redeemed for two years."
+      },
+      {
+        "q": "What are game packs?",
+        "a": "Extra decks for the games: more questions, bolder dares. Each one is a one-time payment and yours for good, and every pack comes with Ethos for Two while it runs. The games themselves stay free."
+      },
+      {
+        "q": "Can they send one back?",
+        "a": "Yes. Whoever receives a gift you paid for can send you one back in the same template, free, with the small “Made with Ethos” footer. If they want extras or no footer on it, they pay the normal price."
+      },
+      {
+        "q": "Is there a discount code?",
+        "a": "No. The price on this page is the price for everyone, and we don't run discount codes. Creators who share Ethos are paid a commission by us through their own link; it never changes what you pay."
       },
       {
         "q": "Do gift links expire?",
@@ -781,13 +945,16 @@
       },
       {
         "q": "Which currencies and payment methods?",
-        "a": "USD, EUR and GBP, with cards, Apple Pay and Google Pay via Stripe. Prices include VAT where it applies."
+        "a": "Prices are in euros, VAT included where it applies, and Stripe Checkout shows the final amount in your currency before you pay. Card, Apple Pay, Google Pay and other methods, through Stripe."
       },
       {
         "q": "Refunds?",
-        "a": "Unlocks are digital and delivered instantly, so we can't refund a change of heart. If something doesn't work as described, write to us and we'll make it right."
+        "a": "Templates, “Make it special” and game packs: at checkout you ask us to unlock your purchase straight away and tick that you then lose the 14-day right to cancel. If a gift won't open or play properly on their phone and we can't fix it, tell us within 30 days and you get your money back. Ethos for Two is different: it's a service, so you can withdraw within 14 days and we refund what you paid, less the days you've used. Gift cards: change your mind within 14 days, before the code is redeemed, and we refund you in full. “Withdraw from a purchase”, at the foot of every page, says how."
       }
-    ]
+    ],
+    "perTemplate": "All {n} premium templates · {price} each",
+    "checkoutNote": "Checkout shows the final amount, in your currency · Secure payment by Stripe",
+    "separately": "{price} separately"
   },
   "legal": {
     "terms": "Terms of Service",
@@ -803,6 +970,91 @@
     "turnOn": "Allow cookies",
     "turnOff": "Stop cookies"
   },
+  "tour": {
+    "open": "How it works",
+    "step": "{n} of {total}",
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip",
+    "skipLabel": "Skip the tour",
+    "done": "Got it",
+    "dates": {
+      "where": {
+        "title": "Pick your town",
+        "body": "Type a town or a neighbourhood, or tap “Near me”. Every idea below is made of real places there."
+      },
+      "when": {
+        "title": "Pick a day",
+        "body": "The forecast is drawn right on the calendar, so the sunny day is easy to spot."
+      },
+      "mood": {
+        "title": "Pick a mood",
+        "body": "Cozy, playful, dressed up… Each one changes the ideas and the places you see."
+      },
+      "place": {
+        "title": "Have a look",
+        "body": "Tap a card, or a pin on the map, to open a place: when it's open, how to get there and what other couples thought."
+      },
+      "add": {
+        "title": "Add it to your plan",
+        "body": "Tap + on the places you like. You can change the order later."
+      },
+      "plan": {
+        "title": "Send it to your person",
+        "body": "Once a place is in, “Our plan” appears at the bottom of the screen. Open it and share the link: the whole plan travels inside it, so there's nothing to install."
+      }
+    },
+    "editor": {
+      "template": {
+        "title": "Your template",
+        "body": "This is the one you picked. Fancy a different one? This takes you back to all of them."
+      },
+      "names": {
+        "title": "Names and your message",
+        "body": "Write their name and yours, then your message just below. It saves as you go."
+      },
+      "media": {
+        "title": "Photos and music",
+        "body": "Add your photos here, and a song further down if your template plays one."
+      },
+      "preview": {
+        "title": "Preview it",
+        "body": "See exactly what they'll see on their phone, and play it from the start."
+      },
+      "publish": {
+        "title": "Publish and share",
+        "body": "When it's ready, publish it and you get a private link. They open it on their phone, no app needed."
+      }
+    },
+    "games": {
+      "phones": {
+        "title": "One phone or two",
+        "body": "Some games pass one phone back and forth on the sofa. Others give you a phone each, even miles apart."
+      },
+      "room": {
+        "title": "Playing on two phones",
+        "body": "Open a two-phone game and you get a room. Send the link, or read out the four-letter code, and they're in."
+      },
+      "packs": {
+        "title": "Pick a pack",
+        "body": "Each pack is a new set of cards for a different kind of night."
+      }
+    },
+    "trips": {
+      "flights": {
+        "title": "Search flights for two",
+        "body": "Pick both airports and your dates, and the search opens ready-made on the big flight sites."
+      },
+      "trip": {
+        "title": "Open a trip",
+        "body": "Each one is planned day by day, with the stops, the best months to go and a rough budget."
+      },
+      "surprise": {
+        "title": "Make it a surprise",
+        "body": "Turn the trip into a gift: a boarding pass they open on their phone, with a packing list of clues."
+      }
+    }
+  },
   "notFound": {
     "title": "This page wandered off",
     "detail": "The link may be broken, or the page may have moved.",
@@ -812,7 +1064,10 @@
     "title": "Something broke on our side",
     "detail": "We've been notified. Try again in a moment.",
     "retry": "Try again",
-    "code": "Error code {code}"
+    "code": "Error code {code}",
+    "connectionTitle": "This page didn't finish loading",
+    "connectionDetail": "Usually the signal dropped for a moment. Reload once you're connected.",
+    "reload": "Reload"
   },
   "checkout": {
     "paid": {
@@ -834,9 +1089,194 @@
     "continue": "Continue",
     "signIn": "Sign in"
   },
-  "promo": {
-    "line": "20% off every gift with code",
-    "code": "LOVE"
+  "money": {
+    "paywall": {
+      "extras": "Make it special",
+      "extrasBlurb": "Video, voice, 20 photos, a surprise inside, no footer, scheduling and a password, on this template for good",
+      "extrasIntro": "This gift uses {features}. Make it special once and this template keeps them for good.",
+      "extrasGuestIntro": "This gift uses {features}. Make it special once and it's sent. Your account is made from the email you give at checkout, no password needed.",
+      "upgrade": "Everything for the difference",
+      "upgradeBlurb": "Every template, forever. What you've paid already comes off {full}.",
+      "pick3": "Or pick any three for {price}",
+      "bump": "Add every other template, forever",
+      "bumpBlurb": "Every template we have, and every one we add",
+      "bumpPrice": "+{price}",
+      "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
+      "guarantee": "If it doesn't open on their phone, you get your money back."
+    },
+    "plans": {
+      "upgradeNote": "Instead of {full}: what you've already paid for templates comes off."
+    },
+    "checkoutErrors": {
+      "alreadyOwned": "That's already on your account. Nothing to pay.",
+      "signIn": "Sign in first: this price depends on what you've already bought.",
+      "tooMany": "Too many tries. Wait a minute and try again.",
+      "unavailable": "Payments are off for a moment. Try again in a little while.",
+      "network": "No connection. Check it and try again.",
+      "generic": "Couldn't open checkout. Please try again.",
+      "alreadyMember": "You already have Ethos for Two: it's on your account page.",
+      "paymentIssue": "Your last payment didn't go through: update your card on your account page first.",
+      "notOnSale": "That isn't on sale right now. Reload the page.",
+      "toAccount": "Your account"
+    },
+    "recovery": {
+      "optIn": "If I don't finish paying, email me one link to come back to it."
+    },
+    "product": {
+      "single": "One template",
+      "pick3": "Pick three",
+      "everything": "Everything",
+      "extras": "Make it special",
+      "pass": "Ethos for Two",
+      "membership": "Ethos for Two",
+      "pack": "Game pack",
+      "giftcard": "Gift card",
+      "upgrade": "Upgrade to Everything",
+      "withBump": "{product}, plus every template"
+    },
+    "giftcard": {
+      "eyebrow": "A gift card",
+      "title": "Give Everything",
+      "blurb": "Every template, forever, for someone else. You get a code to pass on; they redeem it on their own account.",
+      "features": {
+        "templates": "Every template, now and future",
+        "forever": "Theirs for good, no subscription",
+        "valid": "Redeem within {months} months"
+      },
+      "cta": "Buy a gift card",
+      "note": "We email you the code as soon as you've paid.",
+      "redeem": "Got a code? Redeem it",
+      "personalise": "Add their name and a note",
+      "nameLabel": "Who it's for",
+      "noteLabel": "A note to go with it",
+      "notePlaceholder": "Happy birthday. Make me something.",
+      "noteHelp": "Printed with the code in the email we send you, ready to forward."
+    },
+    "success": {
+      "pass": {
+        "title": "Ethos for Two has started.",
+        "detail": "It runs until {date}. Send your partner the link below and it's on their account too."
+      },
+      "passJoined": {
+        "title": "Another year, for both of you.",
+        "detail": "Ethos for Two now runs until {date}, on both your accounts."
+      },
+      "passLater": "Your partner's invite link is on your account page.",
+      "passEmailed": "It runs until {date}. We've emailed you the link to send your partner, and it's on your account page too.",
+      "giftcard": {
+        "title": "Your gift card is ready.",
+        "detail": "We've emailed you the code too. Whoever redeems it gets every template, forever."
+      },
+      "giftcardWaiting": "Your code is on its way to your email.",
+      "codeLabel": "The code",
+      "redeemAt": "They redeem it at {url}",
+      "copyCode": "Copy code",
+      "copied": "Copied",
+      "everything": {
+        "title": "Everything is yours.",
+        "detail": "Every template, now and future, is on your account for good."
+      },
+      "pack": {
+        "title": "The pack is yours.",
+        "detail": "It's on your account for good. Deal the first card."
+      },
+      "redirecting": "Taking you back to your gift…",
+      "toAccount": "Go to your account",
+      "toGift": "Back to your gift"
+    },
+    "account": {
+      "upgradeTitle": "Upgrade to Everything",
+      "upgradeBlurb": "What you've paid for templates counts: every template, now and future, for {price} more.",
+      "upgradeCta": "Upgrade for {price}",
+      "packs": "Game packs",
+      "everyPack": "Every game pack",
+      "everythingWithPass": "Every template, while Ethos for Two runs",
+      "more": "More",
+      "reminders": "Birthday and anniversary reminders",
+      "remindersBlurb": "An email nine days before, with time to make something.",
+      "redeem": "Redeem a gift card",
+      "redeemBlurb": "Someone gave you a code? It goes here.",
+      "withdraw": "Withdraw from a purchase",
+      "withdrawBlurb": "Where the 14-day right to cancel applies, how to use it.",
+      "giftCards": "Gift cards you bought",
+      "giftCardFor": "for {name}",
+      "giftCardRedeemed": "Redeemed",
+      "giftCardOpen": "Not redeemed yet · valid until {date}",
+      "giftCardOpenNoDate": "Not redeemed yet"
+    },
+    "invite": {
+      "label": "Your partner's invite link",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "share": "Share",
+      "shareTitle": "Ethos for Two",
+      "shareText": "I got us Ethos for Two: our dates saved and shared on both our phones, and every gift template and game pack. Join me here:",
+      "note": "Only one person can join, so send it to them and nobody else."
+    },
+    "redeem": {
+      "eyebrow": "Gift card",
+      "title": "Someone gave you everything.",
+      "subtitle": "Redeem your code and every template, now and future, is on your account for good.",
+      "label": "Gift card code",
+      "placeholder": "Your code",
+      "button": "Redeem",
+      "redeeming": "Redeeming…",
+      "signInTitle": "First, your account",
+      "signInBlurb": "The templates go on your account, so sign in or make one, free. Your code will be waiting here.",
+      "done": {
+        "title": "Everything is yours.",
+        "detail": "Every template, now and future, is on your account for good.",
+        "cta": "Make a gift"
+      },
+      "errors": {
+        "notFound": "We don't know that code. Check it for typos, or ask whoever gave it to you.",
+        "used": "That code has already been redeemed.",
+        "expired": "That code has expired.",
+        "signIn": "Sign in first, then redeem.",
+        "tooMany": "Too many tries. Wait a minute and try again.",
+        "voided": "That code no longer works. Ask whoever gave it to you.",
+        "owned": "Your account already has every template. Pass the code on to someone else.",
+        "generic": "That didn't work. Try again in a moment."
+      }
+    },
+    "join": {
+      "eyebrow": "Ethos for Two",
+      "title": "Your partner saved you a seat.",
+      "subtitle": "Their Ethos for Two covers both of you: saved dates and trips shared on both your phones, every gift template and every game pack, for as long as it runs. It costs you nothing.",
+      "features": {
+        "dates": "Your saved dates and trips, shared and editable on both phones",
+        "templates": "Every gift template, on your own account",
+        "packs": "Every game pack, to play together",
+        "free": "Nothing to pay, no card needed"
+      },
+      "codeLabel": "Invite link or code",
+      "noCode": "This link has lost its code. Paste the link your partner sent you, or ask them for it again.",
+      "signInTitle": "Sign in to join",
+      "signInBlurb": "Your side of Ethos for Two lives on your own account. Sign in or make one, free; this page will be waiting.",
+      "button": "Join Ethos for Two",
+      "joining": "Joining…",
+      "done": {
+        "title": "You're in.",
+        "detail": "Your saved dates are shared, and every template and game pack is yours too, until {date}.",
+        "detailNoDate": "Your saved dates are shared, and every template and game pack is yours too, for as long as it runs.",
+        "ctaDates": "See my dates",
+        "ctaGift": "Make a gift",
+        "ctaGames": "Play a game"
+      },
+      "errors": {
+        "notFound": "That invite doesn't work. Ask your partner for a fresh link.",
+        "taken": "Someone has already joined this Ethos for Two.",
+        "own": "That's your own Ethos for Two: send the link to your partner.",
+        "hasOwn": "You already have Ethos for Two of your own, and it renews by itself. Ask your partner to join yours instead: your invite link is on your account page. If you cancel yours, you can join theirs once it ends.",
+        "hasOwnUntil": "Your own Ethos for Two runs until {date}. Ask your partner to join yours instead (your invite link is on your account page), or join theirs once yours ends.",
+        "hasOwnPartner": "You’re already in someone else’s Ethos for Two. Leave it from your account page first, then open this link again.",
+        "toAccount": "Go to my account",
+        "expired": "That Ethos for Two has ended.",
+        "signIn": "Sign in first, then join.",
+        "tooMany": "Too many tries. Wait a minute and try again.",
+        "generic": "That didn't work. Try again in a moment."
+      }
+    }
   },
   "seo": {
     "templatesTitle": "Digital gift templates",
@@ -875,7 +1315,7 @@
       "christmas": {
         "title": "Digital Christmas gifts",
         "description": "A Christmas gift that can't get lost in the post: an animated gift with your photos, a festive song and your message, timed to open on Christmas morning.",
-        "intro": "For the people you won't see this year, and the ones you will: a gift that opens on Christmas morning wherever they are, with no shipping deadline to miss. Midnight Countdown ends in fireworks right on time."
+        "intro": "For the people you won't see this year, and the ones you will: a gift that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
       },
       "mothers-day": {
         "title": "Digital Mother's Day gifts",
@@ -900,7 +1340,7 @@
       "halloween": {
         "title": "Digital Halloween gifts",
         "description": "A Halloween gift they open with a tap: a doorbell, a jack-o'-lantern, a small ghost with your photos and your words, and a song in the dark. Free to start.",
-        "intro": "Better than a bag of sweets. Ring the bell in Trick or Treat, light the pumpkin and let a small ghost hand over your photos, your message and your song. Or make it cozy instead: a candle, a blanket and a letter by the fire in Fireside."
+        "intro": "Better than a bag of sweets. Ring the bell in Trick or Treat, light the pumpkin and let a small ghost hand over your photos, your message and your song."
       },
       "just-because": {
         "title": "Just because gifts",
@@ -910,5 +1350,1652 @@
     },
     "blogTitle": "Gift ideas and love letter guides",
     "blogDescription": "What to write, what to make and how to send it: ideas and how-tos for birthdays, anniversaries, long distance and every day in between."
+  },
+  "cities": {
+    "meta": {
+      "title": "Date ideas in {city}: {ideas} ideas and {places, plural, =0 {a map of real places} one {# real place} other {# real places}}",
+      "description": "{ideas} date ideas picked for what {city} is really like, with real cafés, parks and museums near the centre on a free map. No account needed."
+    },
+    "eyebrow": "Date ideas by city",
+    "title": "Date ideas in {city}",
+    "back": "All date ideas",
+    "lead": "{ideas} dates for {city}, in the order the city deserves, with real places near the centre for the stops.",
+    "leadNoPlaces": "{ideas} dates for {city}, in the order the city deserves. Open any of them on the map and it finds the places.",
+    "cta": {
+      "map": "Open the map in {city}",
+      "gift": "Make them a gift",
+      "plan": "Plan a date"
+    },
+    "ideas": {
+      "eyebrow": "The ideas",
+      "title": "{count, plural, one {# date} other {# dates}} for {city}",
+      "inCity": "In {city}, try",
+      "onMap": "See it on the map",
+      "pick": "Especially good here"
+    },
+    "traits": {
+      "coastal": "{city} is on the water, so the beach and boat ideas are near the top.",
+      "rainy": "Rain is never far away in {city}, so the ideas that work under a roof come early.",
+      "sunny": "{city} gets more dry, bright days than most, so the outdoor ideas get their chance.",
+      "hot": "Midday in {city} is hot for much of the year, so mornings, evenings and indoor ideas lead.",
+      "winter": "Winters in {city} are properly cold, which is what ice rinks and hot chocolate are for.",
+      "museums": "{city} has big museums and galleries worth an afternoon, so the culture ideas sit high.",
+      "nightlife": "{city} stays up late, so the evening ideas get more room than usual.",
+      "parks": "There are big parks and gardens near the centre of {city}, so picnics and slow walks feature.",
+      "views": "{city} has hills and lookouts, so a sunrise or a golden hour is worth the climb."
+    },
+    "notes": {
+      "london": "Most of London's big museums are free, so the museum date costs only the glass of something after. And with the West End so close, a night at the theatre is an easy yes.",
+      "manchester": "The centre is compact, so dinner, a film and a late dessert rarely need more than a walk between them.",
+      "edinburgh": "Calton Hill is a short walk from Princes Street and costs nothing, which makes getting up for the sunrise an easy sell.",
+      "dublin": "The National Gallery and the National Museum are free to walk into, which is exactly what a wet afternoon needs.",
+      "new-york": "Pick two stops in the same neighbourhood and walk between them: in New York, the streets are half the date.",
+      "los-angeles": "Distances are long here, so choose one neighbourhood and keep the date in it. The beach at sunset is worth the drive.",
+      "chicago": "The lakefront has sandy beaches a short ride from the Loop, so the beach date is closer than you'd think.",
+      "san-francisco": "Most neighbourhoods have a hilltop park within a steep walk, and they are the best seats in town for the golden hour.",
+      "miami": "Midday heat is serious for much of the year, so the ideas for early mornings and evenings come first.",
+      "boston": "The centre is small and walkable, and the Public Garden, with its lagoon, sits right in the middle of it.",
+      "toronto": "The islands are a short ferry ride from downtown, with beaches, paths and a view of the skyline back.",
+      "vancouver": "Stanley Park and the seawall start at the edge of downtown, so an outdoor date needs no car.",
+      "montreal": "Winters are long and cold, so ice rinks and hot chocolate aren't a novelty here: they're the season. For the view, walk up Mount Royal.",
+      "sydney": "The beaches, the harbour and its ferries are all part of the city, so the ideas by the water come first.",
+      "melbourne": "Laneways, galleries and kitchens that stay open late: this is a city for an evening that runs longer than planned.",
+      "auckland": "The weather can change in an afternoon here, so keep an indoor idea in your pocket for when it turns.",
+      "paris": "A picnic by the river is a local habit, and some of the big museums stay open late one evening a week.",
+      "amsterdam": "It rains a fair bit, and the city is full of small galleries and big museums for exactly those days.",
+      "berlin": "Late nights are normal here, so the evening ideas can start later than you'd plan anywhere else.",
+      "munich": "The English Garden, one of the largest city parks anywhere, is a short walk from the centre.",
+      "vienna": "The coffee houses are made for staying: nobody will hurry you away from a table for two.",
+      "prague": "The old centre is at its quietest early in the morning, which is when the bridges belong to the two of you.",
+      "copenhagen": "Hiring a small boat for the canals and the harbour is a summer habit here, and nobody expects you to know how to sail.",
+      "stockholm": "The city is built on islands, so walking between two stops usually means walking along the water.",
+      "oslo": "The fjord starts at the edge of the centre, and the opera house roof is free to walk up for the view.",
+      "lisbon": "The miradouros, the city's lookout terraces, are free and made for the golden hour.",
+      "rome": "Gelato and a slow walk through the centre: a date the city has had a long time to perfect.",
+      "riga": "The Old Town is small enough to cross in a quarter of an hour, and the canal parks run right alongside it.",
+      "tallinn": "The Old Town has viewing platforms over its rooftops, a short climb from the main square.",
+      "singapore": "The heat is steady and afternoon downpours are common, so indoor and evening ideas sit near the top: eat late, then walk once the air cools.",
+      "dubai": "For much of the year it's too hot to be out at midday, so evenings and indoor ideas come first, an ice rink included. For the stars, head to the desert."
+    },
+    "places": {
+      "eyebrow": "Real places",
+      "title": "Near the centre of {city}",
+      "sub": "The best-placed spots within {km} km of the centre, ranked the way the dates map ranks them. Tap one to see it on the map.",
+      "counts": "What the map knows within {km} km",
+      "fromCentre": "{distance} from the centre",
+      "none": "We couldn't read the map for {city} just now. The ideas above still stand: open the map and it will find places for them."
+    },
+    "map": {
+      "title": "Plan the day in {city}",
+      "sub": "Pick a day, see the forecast and the sunset, and let the map fill each idea with places a short walk apart. Save it as a plan and send it to them."
+    },
+    "tickets": {
+      "title": "Tickets in {city}",
+      "sub": "Museums, tours and the things worth booking ahead, through our partner Tiqets.",
+      "cta": "Tickets in {city}",
+      "disclosure": "Partner link: if you book through it, we may earn a commission. It costs you nothing extra."
+    },
+    "gift": {
+      "eyebrow": "Before the date",
+      "title": "Ask them out properly.",
+      "sub": "Pick one of these ideas, then send the plan as a little page they open on their phone: a letter, a countdown, a ticket for two.",
+      "note": "Opens the gift templates. Free to start."
+    },
+    "nearby": "Date ideas in other cities"
+  },
+  "dates": {
+    "meta": {
+      "title": "Date ideas near you, on a map",
+      "description": "Pick a day, see the forecast and the sunset, and get date ideas built from real places near you: coffee, views, dinner, something to play. Save it as a plan and send it to them.",
+      "shared": "A place for a date, on the map at Ethos: open it to see where it is, when it is open, and what to pair it with."
+    },
+    "eyebrow": "Dates",
+    "titleIn": "Date ideas in {place}",
+    "titleNear": "Date ideas near you",
+    "empty": {
+      "title": "Where are you two?",
+      "sub": "A town, a neighbourhood, or just where you are now. We'll find the dates hiding in it.",
+      "or": "Or start somewhere",
+      "note": "pick a street, any street"
+    },
+    "where": {
+      "label": "Where",
+      "placeholder": "City or neighbourhood",
+      "nearMe": "Near me",
+      "searching": "Looking…",
+      "nothing": "No town by that name. Try the nearest city.",
+      "failed": "The town search is slow right now. Try again in a moment.",
+      "nearYou": "Near you",
+      "mapArea": "This area",
+      "noGeo": "This browser can't share a location. Type a town instead.",
+      "denied": "We couldn't get your location. Type a town instead."
+    },
+    "when": {
+      "label": "When",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "weekend": "This weekend",
+      "previous": "Previous month",
+      "next": "Next month",
+      "forecastNote": "The forecast reaches sixteen days ahead. After that, plan for either."
+    },
+    "weather": {
+      "wet": "Rain likely ({chance}%). The indoor ideas come first.",
+      "warm": "Dry and warm. Made for being outside.",
+      "cold": "Cold out. Somewhere warm, then a short walk.",
+      "mild": "Dry. A jacket and you're fine anywhere.",
+      "tooFar": "Too far ahead for a forecast. Plan for either.",
+      "loading": "Checking the forecast…",
+      "unavailable": "No forecast just now. Plan for either.",
+      "sunset": "Sunset"
+    },
+    "ideas": {
+      "title": "Ideas for that day",
+      "sub": "Tap one. We'll find the places.",
+      "vibes": "Mood",
+      "previous": "Earlier ideas",
+      "next": "More ideas",
+      "hours": "{hours} h",
+      "budget": {
+        "0": "Free",
+        "1": "Pocket change",
+        "2": "Dinner money",
+        "3": "A treat"
+      },
+      "notNearby": "Not around here",
+      "noneForVibe": "Nothing in that mood suits the forecast. Try another.",
+      "twist": "The twist:",
+      "another": "Another",
+      "nothingFor": "We couldn't find anywhere like that near here ({kind}). Drag the map and search again.",
+      "add": "Add this date to our plan",
+      "added": "In your plan",
+      "close": "Close this idea"
+    },
+    "places": {
+      "title": "Places for a date",
+      "count": "{count, plural, =0 {no places} one {# place} other {# places}}",
+      "filter": "Kind of place",
+      "all": "All",
+      "error": "We couldn't load the places just now.",
+      "retry": "Try again",
+      "none": "The map doesn't know anywhere for a date right here. Drag it towards the nearest town and search that area.",
+      "noneInFilter": "Nothing of that kind close by. Pick another, or drag the map and search a wider area.",
+      "more": "Show {count} more",
+      "credit": "Places and map data © OpenStreetMap contributors. Anyone can add what is missing at openstreetmap.org.",
+      "cost": "Cost"
+    },
+    "place": {
+      "open": "Open",
+      "add": "Add to our plan",
+      "remove": "In your plan · remove",
+      "close": "Close",
+      "directions": "Directions",
+      "website": "Website",
+      "call": "Call",
+      "walk": "{minutes} min walk",
+      "walkBetween": "{minutes} min walk",
+      "openOn": "Open {day} {hours}",
+      "closedOn": "Closed on {day}",
+      "hoursUnknown": "Hours aren't listed. Check before you go.",
+      "hoursUnclear": "Hours vary by season. Check before you go.",
+      "terrace": "Terrace",
+      "vegetarian": "Vegetarian options",
+      "stepFree": "Step-free",
+      "landmark": "A local landmark",
+      "free": "Free to visit",
+      "source": "From OpenStreetMap, as mapped by locals. Hours change: a quick check before you go saves an evening.",
+      "photo": "Real photo",
+      "photoBy": "Photo: {author}",
+      "photoFrom": "Wikimedia Commons",
+      "readMore": "Read more on Wikipedia",
+      "reviewsLink": "Photos & reviews",
+      "rank": "#{n} of {of} in {group}",
+      "pairs": "Make it a date",
+      "elsewhere": "On other sites",
+      "share": "Share",
+      "shareCopied": "Link copied",
+      "shareText": "A place for a date:"
+    },
+    "map": {
+      "label": "Map of places for a date",
+      "show": "Map",
+      "list": "List",
+      "loading": "Loading…",
+      "unavailable": "The map couldn't load here. The list beside it still works.",
+      "unavailablePhone": "The map couldn't load here. Tap List to see the places.",
+      "retry": "Try again",
+      "credits": "Map credits",
+      "nothingHere": "Nothing is mapped for a date right here. Type a town in the box above, or start in one of these:",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "zoomToSee": "Zoom in to see date spots here"
+    },
+    "a11y": {
+      "address": "Address",
+      "hours": "Opening hours"
+    },
+    "plan": {
+      "open": "Our plan",
+      "full": "A plan holds {max} stops. Take one out first.",
+      "ideaFull": "No room for this date: a plan holds {max} stops. Take one out first.",
+      "newCity": "Your plan is in {place}. Start a new plan here instead? The one in {place} will be replaced.",
+      "newCityUnnamed": "Your plan is somewhere else. Start a new plan here instead? The old one will be replaced."
+    },
+    "picks": {
+      "title": "Top picks in {place}",
+      "here": "this area",
+      "sub": "The best bets near here, ranked. Real photos first.",
+      "previous": "Earlier picks",
+      "next": "More picks"
+    },
+    "unusual": {
+      "title": "Something different in {place}",
+      "sub": "Hidden bars, rooftops, cellars and other places with a story.",
+      "chip": "Something different",
+      "previous": "Earlier finds",
+      "next": "More finds"
+    },
+    "sort": {
+      "label": "Sort by",
+      "best": "Best for a date",
+      "rated": "Top rated",
+      "nearest": "Nearest",
+      "cheapest": "Cheapest",
+      "bestSub": "Our ranking for couples",
+      "ratedSub": "Most stars from couples",
+      "nearestSub": "Closest to your search",
+      "cheapestSub": "Free and low-cost first"
+    },
+    "reviews": {
+      "title": "Couples say",
+      "count": "{n, plural, one {# review} other {# reviews}}",
+      "summary": "{stars} from {n, plural, one {# review} other {# reviews}}",
+      "none": "No reviews yet. Be the first couple to rate it.",
+      "noneShort": "Not rated yet",
+      "rate": "Rate it",
+      "edit": "Edit yours",
+      "yourStars": "Your stars",
+      "star1": "Never again",
+      "star2": "Not for us",
+      "star3": "Fine",
+      "star4": "Lovely",
+      "star5": "Perfect date",
+      "cost": "What it cost for two",
+      "wentAs": "You went as",
+      "body": "A line for the next couple",
+      "bodyPlaceholder": "Ask for the table by the window.",
+      "send": "Post it",
+      "sending": "Posting…",
+      "cancel": "Cancel",
+      "remove": "Delete my review",
+      "signIn": "Sign in",
+      "signInBlurb": "Reviews need an account, so nobody can rate a place fifty times. It's free and takes a moment.",
+      "failed": "That didn't go through. Try again in a moment.",
+      "thanks": "Posted. Thank you, on behalf of the next couple.",
+      "publicNote": "Reviews are public, under your first name.",
+      "report": "Report"
+    }
+  },
+  "plan": {
+    "meta": {
+      "title": "Our date plan",
+      "description": "A date, planned: the day, the stops in order, a note. Made on Ethos and sent as a link.",
+      "shared": "A date, planned on Ethos: the day, the stops in order and a note. Open it to see the whole evening."
+    },
+    "eyebrow": "Our plan",
+    "eyebrowShared": "You're invited",
+    "someday": "A day to be decided",
+    "to": "Who is it for?",
+    "toPlaceholder": "Their name",
+    "from": "From",
+    "fromPlaceholder": "Your name",
+    "forFrom": "For {to}, from {from}",
+    "forOnly": "For {to}",
+    "fromOnly": "From {from}",
+    "rain": "{chance}% chance of rain",
+    "sunset": "Sunset {time}",
+    "past": "This one has already happened. We hope it was a good one.",
+    "walk": "{minutes} min walk",
+    "timeFor": "Time at {name}",
+    "noteFor": "A note for {name}",
+    "stopNotePlaceholder": "A note: “corner table”",
+    "directions": "Directions",
+    "moveUp": "Move {name} earlier",
+    "moveDown": "Move {name} later",
+    "removeStop": "Take {name} out of the plan",
+    "note": "A line for them",
+    "notePlaceholder": "Wear something you can walk in. That's all you're getting.",
+    "twist": "The twist:",
+    "send": {
+      "title": "Send it to them",
+      "sub": "One link, with the whole evening inside it. They open it on their phone: no app, no account.",
+      "share": "Share",
+      "copy": "Copy link",
+      "copied": "Copied",
+      "private": "The plan is kept in this browser and travels inside the link itself. It's stored on our servers only if you save it to your account."
+    },
+    "received": {
+      "title": "Somebody planned this for you",
+      "sub": "Keep it on this phone, or plan one back.",
+      "keep": "Keep this plan",
+      "kept": "Kept on this device",
+      "own": "Plan one of your own",
+      "replaceConfirm": "This replaces the plan you were making on this device. Keep this one instead?"
+    },
+    "gift": {
+      "title": "Wrap it in a gift",
+      "sub": "Pick any gift. The plan goes inside it, wrapped, with a photo of every stop."
+    },
+    "addMore": "Add another stop",
+    "clear": "Clear the plan",
+    "clearConfirm": "Clear the whole plan? This can't be undone.",
+    "copyFallback": "Copy this link:",
+    "shareTitle": "A date, planned",
+    "shareText": "I planned us a date.",
+    "shareTextTo": "{name}, I planned us a date.",
+    "mapLabel": "Map of the plan's stops",
+    "mapLoading": "Loading…",
+    "mapUnavailable": "The map couldn't load here.",
+    "mapCredits": "Map credits",
+    "mapRetry": "Try again",
+    "empty": {
+      "title": "Nothing planned yet",
+      "sub": "Pick a day, tap an idea, add a stop or two. It will be waiting here.",
+      "cta": "Find a date"
+    },
+    "broken": {
+      "title": "That link didn't survive the trip",
+      "sub": "Part of it got cut off on the way. Ask them to send it again, or plan one of your own."
+    }
+  },
+  "growth": {
+    "hero": {
+      "eyebrow": "Made by you, opened on their phone",
+      "h1a": "Make them a gift",
+      "h1b": "they'll open again and again.",
+      "sub": "Your photos, your words and their song, turned into a gift that opens like a story. Ten minutes to make, sent as a link or a QR code.",
+      "cta": "Make a gift",
+      "demo": "Watch one open",
+      "note": "Free to start. No account until you publish.",
+      "facts": {
+        "free": {
+          "a": "Free",
+          "b": "to start, no account needed"
+        },
+        "time": {
+          "a": "10 min",
+          "b": "from the first photo to the link"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps for them to download"
+        }
+      },
+      "orDate": "or find a date idea instead",
+      "card": {
+        "eyebrow": "Someone made this for you",
+        "names": "for Ana, from Marco",
+        "opened": "Opened 3 times"
+      }
+    },
+    "creators": {
+      "meta": {
+        "title": "Creator programme: {commission}% of every sale",
+        "description": "Share your own Ethos link and earn {commission}% of every sale it brings, worked out after VAT and refunds. Paid monthly. No codes, no discounts, no cookies."
+      },
+      "eyebrow": "Creator programme",
+      "h1a": "Share Ethos.",
+      "h1b": "Keep {commission}%.",
+      "sub": "Post the gifts and dates you make with Ethos. Every sale that comes through your personal link earns you {commission}% of it, worked out after VAT and refunds.",
+      "apply": "Apply by email",
+      "applyNote": "It takes two minutes: your handle, where you post and a video of yours you love.",
+      "deal": {
+        "commission": {
+          "a": "{commission}%",
+          "b": "of every sale your link brings, after VAT"
+        },
+        "link": {
+          "a": "1 link",
+          "b": "yours alone: no codes, and the same price for everyone"
+        },
+        "payout": {
+          "a": "Monthly",
+          "b": "payouts once you're over €{min}"
+        }
+      },
+      "ticket": {
+        "label": "Your link",
+        "you": "of the sale, for you",
+        "paid": "and it's paid out every month"
+      },
+      "how": {
+        "eyebrow": "How it works",
+        "title": "You post. They come through your link. We pay you.",
+        "steps": {
+          "apply": {
+            "title": "Apply and get your link",
+            "body": "Send us an email. Once you're in, you get a personal link of your own, like {link}: put it in your bio or your caption."
+          },
+          "post": {
+            "title": "Post what you make",
+            "body": "Show a gift you made, a date you found on the map or a game you played together, and point people to the link in your bio."
+          },
+          "checkout": {
+            "title": "They buy through your link",
+            "body": "When someone who came through your link buys, the sale is yours: {commission}% of what they pay, not counting VAT. They pay the normal price. There's no code to type and no discount."
+          },
+          "paid": {
+            "title": "Get paid every month",
+            "body": "Early each month we pay what you earned the month before, by bank transfer or PayPal, once it's over €{min}. Until then, it carries over to the next month."
+          }
+        }
+      },
+      "count": {
+        "eyebrow": "How we count",
+        "title": "Your link is the whole count. No cookies, no codes.",
+        "link": "A sale is yours when the buyer arrived through your link and paid in that same visit. That's all we look at: not a code typed at checkout, and not a cookie that runs out after 30 days.",
+        "browsers": "Nothing is stored on their phone, so it works in TikTok's and Instagram's in-app browsers and nobody has to accept a cookie banner for you to get paid.",
+        "forget": "The flip side: if someone closes the page and comes back another way later, we can't tell the sale was yours. Keep the link easy to find.",
+        "own": "Your own purchases don't count, even through your own link: the commission is for people you bring.",
+        "base": "Your {commission}% is worked out on what the buyer paid, not counting VAT. If a sale is refunded or disputed, its commission goes with it."
+      },
+      "rules": {
+        "eyebrow": "The rules",
+        "title": "Four rules, and the first one is the law.",
+        "disclose": {
+          "title": "Say it's an ad",
+          "body": "On TikTok, turn on the content disclosure setting so the video carries the “Paid partnership” label, and put #ad in the caption. On Instagram, use the paid partnership label. The EU, the UK and the US all require it, and a link in your bio on its own doesn't count as saying so."
+        },
+        "honest": {
+          "title": "Only real reactions",
+          "body": "Show gifts you really made and reactions that really happened. No fake reviews, no made-up testimonials, and no pretending you're not being paid."
+        },
+        "spam": {
+          "title": "No spam",
+          "body": "Don't drop your link in other people's comments, send it to strangers in DMs or post it on coupon sites. Share it with the people who follow you."
+        },
+        "adult": {
+          "title": "18 or over",
+          "body": "You need to be 18 or over to join, and able to receive payments in your own name."
+        },
+        "close": "If a rule is broken, we may close your link."
+      },
+      "final": {
+        "title": "Want in?",
+        "body": "Send us your handle, where you post and a link to a video of yours you love."
+      },
+      "mail": {
+        "subject": "Creator programme application",
+        "body": "Hi Ethos,\n\nMy handle: \nWhere I post (TikTok, Instagram, YouTube…): \nFollowers, roughly: \nA video of mine I love: \n\n"
+      }
+    }
+  },
+  "platform": {
+    "meta": {
+      "title": "Ethos — Gifts, date ideas and trips for couples",
+      "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start."
+    },
+    "hero": {
+      "eyebrow": "For the two of you",
+      "h1a": "Find the date.",
+      "h1b": "Keep the person.",
+      "sub": "Date ideas made from real places near you, on a map, for the day you pick. Plan it, send it as an invitation, and wrap it in a gift they'll keep.",
+      "nearMe": "See ideas near me",
+      "orGift": "or make a gift instead",
+      "facts": {
+        "free": {
+          "a": "Free",
+          "b": "to find and plan a date"
+        },
+        "noApp": {
+          "a": "0",
+          "b": "apps or accounts needed"
+        },
+        "private": {
+          "a": "Yours",
+          "b": "plans stay on your phone unless you save them"
+        }
+      },
+      "card": {
+        "meta": "2 h · Pocket change",
+        "invited": "You're invited",
+        "day": "Saturday, golden hour",
+        "names": "For Maya, from Marco",
+        "stop1": "Something sweet",
+        "stop2": "The best view in town"
+      }
+    },
+    "doors": {
+      "eyebrow": "One house, four rooms",
+      "title": "Whatever kind of couple you are this week.",
+      "dates": {
+        "title": "Dates",
+        "blurb": "Ideas built from real places on a map of your town, matched to the weather and the sunset.",
+        "cta": "Find a date"
+      },
+      "gifts": {
+        "title": "Gifts",
+        "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
+        "cta": "Make a gift"
+      },
+      "ldr": {
+        "title": "Long distance",
+        "blurb": "Meet in the middle, date across time zones, and send something that closes the gap.",
+        "cta": "Close the distance"
+      },
+      "games": {
+        "title": "Games",
+        "blurb": "Seven card games for two: on one phone on the sofa, or on two phones a continent apart.",
+        "cta": "Play a game"
+      }
+    },
+    "ideas": {
+      "eyebrow": "Date ideas",
+      "title": "An evening with a shape to it.",
+      "blurb": "Every idea is a small recipe: a couple of stops and a twist. Pick one and we fill it with real places near you.",
+      "all": "All {count} ideas, on the map",
+      "hours": "{hours} h"
+    },
+    "ldr": {
+      "eyebrow": "Long distance",
+      "titleA": "Apart is not",
+      "titleB": "the same as far.",
+      "blurb": "Find the city halfway between you, plan the date for when you land, and keep the everyday going with things you can do on two screens.",
+      "cta": "Open the long-distance room",
+      "halfway": "halfway",
+      "cityA": "Riga",
+      "cityB": "London"
+    },
+    "games": {
+      "eyebrow": "Games · seven to play now",
+      "title": "Play for who does the dishes.",
+      "blurb": "Card games made for two people who like each other: guess each other's answers, find the pairs, spin for the dishes. No downloads, no accounts.",
+      "cta": "Deal me in"
+    },
+    "closing": {
+      "title": "Saturday isn't going to plan itself.",
+      "blurb": "Two minutes now, and the weekend has a shape.",
+      "dates": "Find a date",
+      "gifts": "Make a gift"
+    }
+  },
+  "ldr": {
+    "meta": {
+      "title": "Long distance: meet halfway, date across time zones",
+      "description": "Find the city halfway between you, see the hours you're both awake, and get date ideas for two screens. Free tools for long-distance couples."
+    },
+    "eyebrow": "Long distance",
+    "h1a": "Apart is not",
+    "h1b": "the same as far.",
+    "sub": "A few small tools for the months between visits: where to meet, when you're both awake, and what to do on a call besides recap your day.",
+    "meet": {
+      "title": "Meet in the middle",
+      "sub": "Two towns in. How far apart you are, the city halfway between you, and the hours of the day you're both awake.",
+      "you": "Where you are",
+      "them": "Where they are",
+      "hint": "Pick both towns and we'll do the maths.",
+      "apart": "Apart",
+      "miles": "{miles} miles, as the plane flies",
+      "halfway": "Halfway",
+      "halfwayExact": "Almost exactly halfway between you.",
+      "halfwayNear": "The nearest city to your halfway point, {km} km from it.",
+      "datesThere": "Date ideas in {city}",
+      "nowhere": "Open water, more or less",
+      "nowhereSub": "Halfway between you is nowhere to land. One of you is getting on a plane.",
+      "clocks": "Clocks",
+      "sameTime": "Same time, both ends",
+      "ahead": "{name} is {hours} h ahead",
+      "behind": "{name} is {hours} h behind",
+      "bothAwake": "You're both awake {windows}, your time.",
+      "range": "{from}–{to}",
+      "and": "and",
+      "neverAwake": "Your waking hours never overlap. Somebody is setting an alarm.",
+      "clocksUnavailable": "We couldn't get the local times just now. The rest still adds up.",
+      "flightsTo": "Flights to {city}",
+      "flightsBetween": "Flights between you",
+      "eachWay": "{km} km each",
+      "eachWaySub": "How far each of you would travel to meet exactly halfway."
+    },
+    "virtual": {
+      "eyebrow": "Dates for two screens",
+      "title": "Something to do on the call.",
+      "twist": "The twist:"
+    },
+    "gifts": {
+      "eyebrow": "Gifts for the distance",
+      "title": "Something to open while you wait.",
+      "all": "All long-distance gifts"
+    },
+    "polaroid": "finally."
+  },
+  "affiliate": {
+    "searchOn": "Search on {site}",
+    "newTab": "opens in a new tab",
+    "disclosure": "We may earn a commission if you book through some of these links. It costs you nothing extra.",
+    "disclosureBoth": "We may earn a commission if you book through some of these links. It costs you nothing extra.",
+    "tickets": {
+      "button": "Tickets",
+      "label": "Tickets for {name} on Tiqets (opens in a new tab)",
+      "via": "Tickets through Tiqets.",
+      "eyebrow": "Book ahead",
+      "title": "Tickets for this trip",
+      "sub": "The things on this plan worth booking ahead: a time slot, a seat on a boat, a pass. Book before you go and skip the ticket desk."
+    },
+    "car": {
+      "title": "Hire a car",
+      "sub": "A road trip needs a car. Compare hire companies for the dates you're going.",
+      "cta": "Compare cars on Auto Europe",
+      "via": "Car hire through Auto Europe."
+    },
+    "meet": {
+      "via": "Each flight opens on Aviasales; Google Flights is there to compare."
+    }
+  },
+  "trips": {
+    "meta": {
+      "title": "Trips for two: ready-made itineraries and a free flight search",
+      "description": "Twelve trips for couples, planned day by day: road trips, city breaks, islands and trains. Plus a free flight search that opens Aviasales, Google Flights, Skyscanner and Kayak already filled in."
+    },
+    "eyebrow": "Trips for two",
+    "h1a": "Go somewhere",
+    "h1b": "together.",
+    "sub": "Twelve trips we'd take ourselves, planned day by day, and a flight search that opens the fares on the sites you already use. No booking fees, no account.",
+    "finder": {
+      "title": "Find flights",
+      "sub": "For two, on any dates. We open the search; you book with them."
+    },
+    "filter": {
+      "label": "Kind of trip",
+      "all": "All",
+      "road": "Road trips",
+      "city": "City breaks",
+      "islands": "Islands",
+      "train": "By train"
+    },
+    "grid": {
+      "eyebrow": "Ready-made trips",
+      "title": "Pick one, then make it yours."
+    },
+    "kind": {
+      "road": "Road trip",
+      "city": "City break",
+      "islands": "Islands",
+      "train": "By train"
+    },
+    "days": "{count, plural, one {# day} other {# days}}",
+    "stops": "{count, plural, one {# stop} other {# stops}}",
+    "best": "Best {months}",
+    "budget": {
+      "low": "About €150 a day for two, or less",
+      "mid": "About €150–300 a day for two",
+      "high": "Over €300 a day for two",
+      "note": "What you spend there, not the flights."
+    },
+    "gift": {
+      "eyebrow": "Or keep it a secret",
+      "title": "Make the trip the gift.",
+      "sub": "A boarding pass they open on their phone: where you're going, when, and a packing list of clues. Made in a couple of minutes.",
+      "cta": "Make the gift"
+    },
+    "detail": {
+      "back": "All trips",
+      "facts": {
+        "days": "Length",
+        "budget": "Budget",
+        "best": "Best months",
+        "kind": "Kind"
+      },
+      "jump": {
+        "flights": "Find flights"
+      },
+      "route": {
+        "eyebrow": "The route",
+        "title": "Where you'll go",
+        "map": "Map of the route",
+        "loading": "Loading the map…",
+        "unavailable": "The map couldn't load here. Every stop is in the list.",
+        "nights": "{count, plural, =0 {On the way} one {# night} other {# nights}}",
+        "datesHere": "Date spots here",
+        "gestureMobile": "Use two fingers to move the map",
+        "gestureWindows": "Hold Ctrl and scroll to zoom the map",
+        "gestureMac": "Hold ⌘ and scroll to zoom the map",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "credits": "Map credits"
+      },
+      "plan": {
+        "eyebrow": "Day by day",
+        "title": "The plan",
+        "day": "Day {n}"
+      },
+      "flights": {
+        "eyebrow": "Getting there",
+        "title": "Flights to {city}",
+        "sub": "Where this trip starts. Add where you're flying from, change the dates if you like, then pick a site."
+      },
+      "surprise": {
+        "eyebrow": "Make it a surprise",
+        "title": "Don't tell them where.",
+        "sub": "Turn this trip into a gift: a ticket they open on their phone, with {city} already on it and the packing list as clues. You choose when they find out.",
+        "cta": "Make it a surprise",
+        "note": "Opens the gift editor. Free to start.",
+        "anyGift": "…or put it inside any gift"
+      }
+    },
+    "flights": {
+      "from": "From",
+      "to": "To",
+      "placeholder": "City or airport",
+      "swap": "Swap from and to",
+      "depart": "Depart",
+      "return": "Return",
+      "optional": "optional",
+      "travellers": "{count, plural, one {# traveller} other {# travellers}}",
+      "fewer": "One fewer traveller",
+      "more": "One more traveller",
+      "nothing": "No airport by that name. Try the city, or its three-letter code.",
+      "pick": "Pick both airports and the searches appear here.",
+      "same": "That's the same airport at both ends.",
+      "newTab": "opens in a new tab",
+      "distance": "{km} km",
+      "airTime": "about {time} in the air",
+      "train": "Under 600 km: a train might be nicer.",
+      "smallPrint": "These open the search on each site, and the fares are theirs. We may earn a commission if you book through some of these links. It costs you nothing extra.",
+      "picker": {
+        "title": "Choose your dates",
+        "add": "Add date",
+        "roundTrip": "Return trip",
+        "oneWay": "One-way",
+        "tripType": "Return trip or one-way",
+        "quick": "Quick picks",
+        "thisWeekend": "This weekend",
+        "nextWeekend": "Next weekend",
+        "weekAway": "A week away",
+        "nights": "{count, plural, =0 {Same day} one {# night} other {# nights}}",
+        "pickStart": "Pick the day you fly out",
+        "pickEnd": "now pick your return",
+        "clear": "Clear",
+        "done": "Done",
+        "close": "Close",
+        "previous": "Previous month",
+        "next": "Next month",
+        "today": "Today"
+      }
+    }
+  },
+  "games": {
+    "meta": {
+      "title": "Games for two",
+      "description": "Card games for couples: How well do you know me, Would you rather, Draw it guess it, Memory with your photos, question cards, truth or dare and a roulette for the chores. One phone or two, no downloads."
+    },
+    "h1a": "Games for",
+    "h1b": "exactly two.",
+    "deck": {
+      "playable": "Play this one now",
+      "choose": "Choose a deck",
+      "count": "Card {n} of {total}",
+      "next": "Next card",
+      "done": "That's the whole deck. You two talk a lot.",
+      "doneEyebrow": "The end",
+      "again": "Shuffle and go again",
+      "how": "Whoever is holding the phone reads it out. You both answer.",
+      "title": "Question cards",
+      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer."
+    },
+    "lobby": {
+      "one": {
+        "title": "One phone",
+        "blurb": "Pass it back and forth on the sofa.",
+        "who": "Who's playing?"
+      },
+      "two": {
+        "title": "Two phones",
+        "blurb": "Make a room, send the link, play from anywhere.",
+        "yourName": "Your name",
+        "joining": "Joining room {code}",
+        "join": "Join",
+        "create": "Make a room",
+        "room": "Room",
+        "codeLabel": "Room code {code}",
+        "sendIt": "Send them the link, or read out the code. It works from anywhere.",
+        "share": "Share the link",
+        "copy": "Copy link",
+        "copied": "Copied",
+        "connecting": "Connecting…",
+        "waiting": "Waiting for them to open the link…",
+        "here": "{name} is here",
+        "hostStarts": "{name} starts the game from their phone.",
+        "failed": "The room couldn't open. Check the connection and try again.",
+        "full": "This room already has two players. Ask for a new link.",
+        "waitingHost": "Waiting for the person who made the room…",
+        "noHost": "Nobody's in this room right now. It may have closed.",
+        "makeOwn": "Make your own room",
+        "leave": "Leave the room",
+        "cancel": "Close the room"
+      },
+      "you": "Your name",
+      "them": "Their name",
+      "someone": "Somebody",
+      "start": "Start",
+      "back": "Back",
+      "shareText": "{name} wants to play a game with you",
+      "copyFallback": "Copy this link:",
+      "privacy": "Nothing is stored on our side. A room lives while you're both in it and is gone when you leave.",
+      "change": "Change players",
+      "left": "{name} left the room. Waiting for them to come back…",
+      "closed": "{name} ended the game.",
+      "closedCta": "Start a new room"
+    },
+    "know": {
+      "title": "How well do you know me?",
+      "blurb": "Eight questions. You each answer about yourself and guess the other. The guesses score. Play on one phone, or from two.",
+      "round": "Question {n} of {total}",
+      "yourAnswer": "Your answer",
+      "theirAnswer": "What will {name} say?",
+      "lockIn": "Lock it in",
+      "handTo": "Hand the phone to {name}",
+      "noPeeking": "No peeking at the last answers.",
+      "imHere": "I'm {name}, go",
+      "waitingFor": "Waiting for {name}…",
+      "waitingHost": "Waiting for the host to start…",
+      "reveal": {
+        "said": "{name} said",
+        "right": "{name} got it",
+        "wrong": "{name} guessed “{answer}”"
+      },
+      "score": "{a} {sa} · {b} {sb}",
+      "next": "Next question",
+      "results": "See the results",
+      "end": {
+        "eyebrow": "Final score",
+        "great": "You two are basically one person.",
+        "good": "You know each other well. Suspiciously well.",
+        "ok": "There is more to learn. Good.",
+        "sub": "Guesses about the other person, not answers about yourself. The one with more points listens better. Or is lying.",
+        "again": "Play again"
+      }
+    },
+    "rather": {
+      "title": "Would you rather?",
+      "blurb": "Ten of them. You both pick in secret, then see whether you agree. Play on one phone, or from two.",
+      "round": "{n} of {total}",
+      "prompt": "Would you rather…",
+      "handTo": "Hand the phone to {name}",
+      "imHere": "I'm {name}, go",
+      "waitingFor": "Waiting for {name}…",
+      "waitingHost": "Waiting for the host to start…",
+      "reveal": {
+        "match": "Same!",
+        "clash": "Not the same."
+      },
+      "sofar": "Agreed on {same} of {total} so far",
+      "next": "Next one",
+      "results": "See the results",
+      "end": {
+        "eyebrow": "The verdict",
+        "twins": "You are the same person.",
+        "balanced": "Different enough to be interesting.",
+        "opposites": "Opposites. It's a whole genre.",
+        "sub": "You agreed on {same} of {total}. The other ones are the conversation.",
+        "again": "Play again",
+        "date": "Plan a date"
+      },
+      "or": "or"
+    },
+    "roulette": {
+      "title": "Dishes roulette",
+      "blurb": "A wheel of the two of you. Every spin settles one chore. The wheel's word is final.",
+      "eyebrow": "Spin to decide who",
+      "question": "Who {chore}?",
+      "spin": "Spin",
+      "spinning": "Spinning…",
+      "binding": "Results are binding. Everyone agreed to that by pressing spin.",
+      "finish": "That's everything settled",
+      "end": {
+        "eyebrow": "The wheel has spoken",
+        "title": "Settled. No appeals.",
+        "again": "Spin some more"
+      }
+    },
+    "dare": {
+      "title": "Truth or dare, soft edition",
+      "blurb": "Nothing you'd regret in the morning. Mostly compliments and bad dancing. One phone, going round.",
+      "turn": "{name}'s turn",
+      "pick": "{name}, truth or dare?",
+      "truth": "Truth",
+      "dare": "Dare",
+      "for": "For {name}",
+      "done": "Done. {name}'s turn",
+      "soft": "Twelve of each, in a fresh order every time.",
+      "softPack": "{name}: {n} of each, in a fresh order every time.",
+      "left": "{n} left",
+      "finish": "We're done for tonight",
+      "end": {
+        "eyebrow": "Game over",
+        "title": "{truths, plural, one {# truth} other {# truths}} and {dares, plural, one {# dare} other {# dares}} later.",
+        "sub": "What's said at this table stays at this table.",
+        "again": "Shuffle and play again"
+      }
+    },
+    "play": {
+      "one": "1 phone",
+      "two": "1 or 2 phones",
+      "cta": "Play"
+    },
+    "hub": {
+      "eyebrow": "Game night for two",
+      "sub": "Seven little card games for the sofa, the bath or a video call across an ocean. No downloads, no accounts: open one and deal.",
+      "one": "Pass one phone",
+      "two": "Or two phones, one link",
+      "deal": "Deal me in",
+      "pickTitle": "Pick a game",
+      "pickSub": "Every one is quick, and every one ends with something to talk about.",
+      "minutes": "{n} min"
+    },
+    "memory": {
+      "title": "Memory",
+      "blurb": "The pairs game for two. Turn two cards over; a pair is yours and you go again. Dealt from our stickers, or from your own photos.",
+      "turn": "{name}'s turn",
+      "pair": "A pair! {name} goes again",
+      "miss": "Not a pair. {name}'s turn",
+      "winner": "{name} wins",
+      "tie": "A draw. Obviously.",
+      "again": "Deal again",
+      "photos": "Use your photos",
+      "photosAgain": "Change photos",
+      "photo": "photo {n}",
+      "cardDown": "Card {n}, face down",
+      "cardUp": "Card {n}: {face}",
+      "rules": "Photos stay on this phone. Nothing is uploaded.",
+      "faces": {
+        "heart": "a heart",
+        "cherries": "cherries",
+        "strawberry": "a strawberry",
+        "bow": "a bow",
+        "daisy": "a daisy",
+        "kiss": "a kiss",
+        "butterfly": "a butterfly",
+        "cake": "a cake"
+      }
+    },
+    "draw": {
+      "title": "Draw it, guess it",
+      "blurb": "Six words. One of you draws them with a finger, the other guesses. On two phones the drawing appears live on the other screen, an ocean away.",
+      "waitingHost": "Waiting for the room to start…",
+      "round": "Round {n} of {total}",
+      "gotLabel": "Got",
+      "youDraw": "You're drawing",
+      "theyDraw": "{name} is drawing",
+      "passTo": "Pass the phone to {name}",
+      "passNote": "{name} draws. You guess out loud.",
+      "peekEyebrow": "{name}, your word",
+      "peekNote": "Keep it to yourself. {name} shouldn't see this bit.",
+      "peekGo": "Got it, hide it",
+      "boardDraw": "Draw here with your finger",
+      "boardWatch": "The drawing, as it happens",
+      "inkLabel": "Pick an ink",
+      "ink": {
+        "ink": "Ink",
+        "rose": "Rose",
+        "violet": "Violet",
+        "blue": "Blue",
+        "gold": "Gold"
+      },
+      "undo": "Undo",
+      "clear": "Clear",
+      "guessLabel": "Your guess",
+      "guessPlaceholder": "What is it?",
+      "guessSend": "Guess",
+      "guessesLabel": "Guesses so far",
+      "got": "{name} got it",
+      "pass": "Give up on this one",
+      "gotIt": "Got it.",
+      "missed": "Nobody got that one.",
+      "wordWas": "It was {word}",
+      "next": "Next round",
+      "results": "See how you did",
+      "end": {
+        "eyebrow": "Six words later",
+        "great": "You two think alike.",
+        "good": "Not bad at all.",
+        "ok": "Art was never the point.",
+        "sub": "You got {n} of {total} between you. The misses are the ones you'll keep quoting.",
+        "again": "Play again"
+      },
+      "imHere": "I'm {name}, go"
+    },
+    "end": {
+      "label": "What next",
+      "gift": "Make them a gift",
+      "giftBlurb": "A letter, your photos, your song: something they open on their phone.",
+      "another": "Play another game",
+      "anotherBlurb": "Seven on the table. None takes more than a quarter of an hour.",
+      "host": {
+        "title": "Your turn to deal",
+        "blurb": "Start your own room and send the link to anyone.",
+        "cta": "Start a room"
+      }
+    }
+  },
+  "packs": {
+    "title": "Packs",
+    "classic": "Classic",
+    "free": "Free",
+    "owned": "Yours",
+    "included": "Included in Ethos for Two",
+    "locked": "Locked:",
+    "appLocked": "Locked",
+    "opening": "Opening…",
+    "hostOnly": "Only the phone that makes the room needs the pack.",
+    "openError": "That pack wouldn't open. Try again in a moment.",
+    "games": {
+      "deck": "Question cards",
+      "know": "How well do you know me?",
+      "rather": "Would you rather?",
+      "dare": "Truth or dare",
+      "draw": "Draw it, guess it",
+      "memory": "Memory",
+      "roulette": "Dishes roulette"
+    },
+    "sheet": {
+      "eyebrow": "A pack of {n} cards",
+      "plays": "Plays in {games}",
+      "samples": "Three cards from this pack",
+      "buy": "Get it for {price}",
+      "appBuy": "Unlock this pack",
+      "appOnce": "Yours for good, on any phone you sign in on.",
+      "appFailed": "That didn't go through. Try again when you're ready.",
+      "pass": "Get every pack with Ethos for Two",
+      "once": "Paid once, yours for good on any phone you sign in on. No account yet? Checkout makes one from your email.",
+      "signIn": "Bought it already? Sign in",
+      "close": "Close"
+    },
+    "adult": {
+      "title": "For adults",
+      "body": "{name} is flirty and a little bold, never explicit. It's for two adults who both want to play.",
+      "guest": "{name} picked the {pack} pack: flirty and a little bold, never explicit. It's for adults.",
+      "yes": "I'm 18 or over",
+      "no": "Not now",
+      "leave": "Leave the room"
+    },
+    "hub": {
+      "title": "Game packs",
+      "sub": "More cards for the same games, {price} each and yours for good. Or every pack and every gift template, for both of you, with Ethos for Two.",
+      "cta": "See inside: {n} cards"
+    }
+  },
+  "membership": {
+    "hero": {
+      "eyebrow": "Ethos for Two",
+      "title": "Every date you plan, <em>kept for both of you.</em>",
+      "sub": "One membership for the two of you: save every date and trip, plan them together on both your phones, and unlock every gift template and game pack.",
+      "subPass": "One year for the two of you: save every date and trip, plan them together on both your phones, and unlock every gift template and game pack.",
+      "choose": "How you pay",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save {pct}%",
+      "perMonth": "{price} a month",
+      "perYear": "{price} a year",
+      "unitMonth": "a month",
+      "unitYear": "a year",
+      "unitPass": "for a year",
+      "yearlyNote": "That's {price} a month · save {pct}% on monthly",
+      "monthlyNote": "Billed monthly · cancel any time",
+      "cta": "Get Ethos for Two",
+      "termsMonthly": "{price} today, then every month until you cancel. Cancel any time from your account.",
+      "termsYearly": "{price} today, then every year until you cancel. We'll remind you a week before each renewal.",
+      "passNote": "Paid once · it doesn't renew by itself",
+      "passCta": "Get a year of Ethos for Two",
+      "passTerms": "One payment for 365 days. We'll email you two weeks before it ends.",
+      "renewCta": "Renew for another year",
+      "renewNote": "Renewing adds a year from the day yours ends, so renewing early loses nothing.",
+      "covers": "One payment covers both of you",
+      "coversCancel": "One payment covers both of you · cancel any time",
+      "trust": {
+        "stripe": "Secure checkout by Stripe",
+        "wallets": "Card, Apple Pay or Google Pay",
+        "cancel": "Cancel in two taps",
+        "once": "No renewal, no surprise"
+      },
+      "art": {
+        "myDates": "My dates",
+        "shared": "Shared with {name}",
+        "partner": "Sam",
+        "stops": "{n, plural, one {# stop} other {# stops}}",
+        "days": "{n, plural, one {# day} other {# days}}",
+        "saturday": "Saturday",
+        "friday": "Friday",
+        "date": "Date",
+        "trip": "Trip",
+        "polaroid": "Saturday, 8 pm",
+        "templates": "Every template",
+        "packs": "Every pack",
+        "cities": {
+          "paris": "Paris",
+          "rome": "Rome"
+        }
+      }
+    },
+    "features": {
+      "title": "What's in it",
+      "saved": "Unlimited saved dates and trips",
+      "shared": "Planned together, shared and editable on both your phones",
+      "templates": "Every gift template, with every extra",
+      "packs": "Every game pack, for one sofa or two phones",
+      "reminders": "A reminder the day before each date",
+      "maps": "Open a whole date in Apple or Google Maps"
+    },
+    "member": {
+      "title": "You have Ethos for Two",
+      "monthlyRenews": "Monthly · renews on {date}",
+      "yearlyRenews": "Yearly · renews on {date}",
+      "ends": "Ends on {date}",
+      "passRuns": "Your year runs until {date}",
+      "appStore": "Through the App Store · renews on {date}",
+      "appStoreEnds": "Through the App Store · ends on {date}",
+      "appStoreBilling": "Apple couldn't take your last payment: update it in your iPhone's Settings by {date}",
+      "paymentFailed": "Payment failed: update your card by {date}",
+      "paused": "Paused: your last payment didn't go through",
+      "processing": "Your first payment is still being confirmed",
+      "partnerIn": "You're in on your partner's Ethos for Two",
+      "manage": "Manage",
+      "fix": "Update your card"
+    },
+    "compare": {
+      "eyebrow": "Free and For Two",
+      "title": "What's free, and what For Two adds",
+      "sub": "Finding a date, planning it and sending it stays free for everyone, with no account.",
+      "feature": "What you get",
+      "free": "Free",
+      "forTwo": "Ethos for Two",
+      "included": "Included",
+      "notIncluded": "Not included",
+      "rows": {
+        "ideas": "Date ideas on a map, with the forecast and the sunset",
+        "plan": "Plan a date and send it as a link",
+        "saved": "Saved dates and trips",
+        "shared": "Shared with your partner, editable on both phones",
+        "reminders": "A reminder the day before a date",
+        "maps": "Open a whole date in Apple or Google Maps",
+        "templates": "Gift templates",
+        "packs": "Game packs",
+        "ldr": "Long-distance tools and the games",
+        "price": "Price"
+      },
+      "values": {
+        "upTo": "Up to {n}",
+        "unlimited": "Unlimited",
+        "freeTemplates": "{names}",
+        "freeTemplatesCount": "{free} of {n}",
+        "allTemplates": "All {n}, with every extra",
+        "freeDecks": "The free decks",
+        "everyPack": "Every pack",
+        "freeForGood": "Free, for good",
+        "priceSub": "{monthly} a month or {yearly} a year, for two",
+        "pricePass": "{yearly} for a year, paid once, for two"
+      },
+      "cta": "Get Ethos for Two",
+      "noAccount": "Find a date"
+    },
+    "single": {
+      "eyebrow": "Paid once",
+      "title": "Or buy a single gift",
+      "sub": "Pay once and it's yours for good. No subscription.",
+      "special": {
+        "eyebrow": "For a free template",
+        "name": "Make it special",
+        "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
+        "note": "Sold in the editor, when you publish.",
+        "cta": "Open {name}"
+      }
+    },
+    "account": {
+      "title": "Ethos for Two",
+      "monthly": "Monthly · {price} a month · renews on {date}",
+      "yearly": "Yearly · {price} a year · renews on {date}",
+      "monthlyPlan": "Monthly · {price} a month",
+      "yearlyPlan": "Yearly · {price} a year",
+      "ending": "Ends on {date}: you keep everything until then",
+      "switching": "Switches to monthly around {date}",
+      "pass": "Your year runs until {date}",
+      "passEnding": "It ends in {days, plural, one {# day} other {# days}}. Renewing adds a year from the day it ends.",
+      "passCarryOn": "It ends in {days, plural, one {# day} other {# days}}. To carry on after that, choose monthly or yearly from {date}.",
+      "passRenew": "Renew for {price}",
+      "seePlans": "See the plans",
+      "appStore": "Through the App Store · renews on {date}",
+      "appStoreEnds": "Through the App Store · ends on {date}",
+      "appStoreManage": "Manage it in your iPhone's Settings → your name → Subscriptions.",
+      "appStoreOnly": "Through the App Store",
+      "appStoreBilling": "Apple couldn't take your last payment. Update your payment method in your iPhone's Settings → your name → Subscriptions by {date} to keep Ethos for Two.",
+      "processing": "Your first payment is being confirmed",
+      "processingNote": "Ethos for Two starts as soon as your bank confirms it, and we'll email you. There's nothing you need to do.",
+      "partnerOf": "You're in on {name}'s Ethos for Two",
+      "partnerOfNoName": "You're in on your partner's Ethos for Two",
+      "partnerRenews": "For as long as it runs.",
+      "partnerUntil": "Until {date}.",
+      "pastDue": "We couldn't take your last payment. Update your card by {date} to keep Ethos for Two.",
+      "paused": "Ethos for Two is paused until the payment goes through.",
+      "updateCard": "Update card",
+      "joined": "{name} has joined",
+      "joinedNoName": "Your partner has joined",
+      "remove": "Remove",
+      "leave": "Leave",
+      "manageBilling": "Manage billing",
+      "manageBillingBlurb": "Card, invoices and billing address",
+      "switchYearly": "Switch to yearly · save {pct}%",
+      "switchMonthly": "Switch to monthly",
+      "cancel": "Cancel membership",
+      "resume": "Resume",
+      "resumeHint": "It won't renew. Changed your mind?",
+      "keepYearly": "Keep yearly",
+      "none": "Unlimited saved dates, every template and game pack, for both of you. {monthly} a month or {yearly} a year.",
+      "nonePass": "Unlimited saved dates, every template and game pack, for both of you. {yearly} for a year, paid once.",
+      "see": "See Ethos for Two",
+      "inApp": "Manage your membership at tryethos.io/account",
+      "done": {
+        "cancel": "Cancelled. You both keep everything until {date}.",
+        "cancelNow": "Cancelled. Nothing more will be charged.",
+        "resume": "It renews again.",
+        "switchYearly": "You're on yearly now.",
+        "switchMonthly": "It switches to monthly around {date}.",
+        "keepPlan": "You're staying on yearly.",
+        "leave": "You've left.",
+        "removePartner": "Removed. Your invite link has changed."
+      },
+      "errors": {
+        "generic": "That didn't work. Try again in a moment.",
+        "tooMany": "Too many tries. Wait a minute and try again.",
+        "signIn": "Your session has ended. Sign in again, then try once more.",
+        "unavailable": "That can't be changed from here right now. Reload the page.",
+        "appStore": "This membership is billed by Apple: manage it in your iPhone's Settings.",
+        "notConfigured": "Billing isn't available right now. Try again later.",
+        "paymentFailed": "The payment didn't go through, so nothing has changed. Update your card and try again.",
+        "requiresAction": "Your bank wants you to confirm the payment. Opening its page…"
+      },
+      "dialogs": {
+        "cancel": {
+          "title": "Cancel Ethos for Two?",
+          "body": "You both keep everything until {date}. After that nothing more is charged, your saved dates stay in your account, and gifts you've published stay online.",
+          "bodyNow": "It ends now, and the unpaid renewal isn't charged. Your saved dates stay in your account, and gifts you've published stay online.",
+          "confirm": "Cancel membership",
+          "keep": "Keep it"
+        },
+        "yearly": {
+          "title": "Switch to yearly?",
+          "body": "You'll pay {amount} today: {yearly} for a year, minus {credit} for the rest of this month. It then renews every year on {date} until you cancel.",
+          "loading": "Working out today's amount…",
+          "confirm": "Switch and pay {amount}",
+          "confirmLoading": "Switch to yearly",
+          "keep": "Stay monthly"
+        },
+        "monthly": {
+          "title": "Switch to monthly?",
+          "body": "From around {date} you'll pay {monthly} a month instead of {yearly} a year, until you cancel. We switch a couple of days before your year ends and take off what's left of it, so nothing is lost.",
+          "confirm": "Switch to monthly",
+          "keep": "Keep yearly"
+        },
+        "leave": {
+          "title": "Leave {name}'s Ethos for Two?",
+          "titleNoName": "Leave your partner's Ethos for Two?",
+          "body": "You'll stop sharing saved dates with them, and the templates and packs it unlocks go from your account. Your own saved dates stay yours.",
+          "confirm": "Leave",
+          "keep": "Stay"
+        },
+        "remove": {
+          "title": "Remove {name}?",
+          "titleNoName": "Remove your partner?",
+          "body": "They'll stop seeing your saved dates and lose what Ethos for Two unlocks. Your invite link changes, so you can invite someone else.",
+          "confirm": "Remove",
+          "keep": "Keep them"
+        }
+      }
+    },
+    "success": {
+      "title": "Ethos for Two is on.",
+      "detail": "{plan}: renews on {date}. Send your partner the link below and it's on their phone too.",
+      "emailed": "{plan}: renews on {date}. We've emailed you the link for your partner.",
+      "noDate": "Send your partner the link below and it's on their phone too.",
+      "noDateEmailed": "We've emailed you the link for your partner, and it's on your account page too.",
+      "processing": "Your payment is being processed. Ethos for Two starts as soon as it's confirmed, and we'll email you.",
+      "arriving": {
+        "title": "Switching it on…",
+        "detail": "Your payment went through. We're switching Ethos for Two on for you both: it takes a few seconds.",
+        "wait": "Checking again in a moment…",
+        "late": "It's taking longer than usual. It'll be on your account page in a few minutes, and we'll email you."
+      },
+      "unreadable": {
+        "title": "Payment received.",
+        "detail": "We couldn't show your membership here just now. Your account page has everything, and so does the email we've sent you."
+      },
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "planFirst": "Plan your first date",
+      "toAccount": "Go to your account"
+    }
+  },
+  "lifecycle": {
+    "remind": {
+      "title": "Remind me next year",
+      "blurb": "We'll email you nine days before, so there's time to make {name} something.",
+      "save": "Remind me",
+      "saving": "Saving…",
+      "saved": "Saved. We'll email you nine days before {date}.",
+      "failed": "That didn't save. Try again in a moment.",
+      "tooMany": "You already have {max} reminders. Remove one on your account page to add this one.",
+      "edit": "Change the details",
+      "name": "Who it's for",
+      "occasion": "Occasion",
+      "date": "Date",
+      "manage": "All your reminders",
+      "occasions": {
+        "birthday": "Birthday",
+        "anniversary": "Anniversary",
+        "valentines": "Valentine's Day",
+        "other": "Something else"
+      }
+    },
+    "trip": {
+      "title": "Book the trip",
+      "blurb": "The surprise is ready. Now the real tickets.",
+      "flights": "Flights to {city}",
+      "tickets": "Things to do in {city}",
+      "car": "Hire a car",
+      "disclosure": "Partner links: if you book, we may earn a commission, at no extra cost to you. The booking is with the partner, under its terms."
+    },
+    "page": {
+      "title": "Reminders",
+      "subtitle": "Birthdays, anniversaries and other days we'll email you about, nine days before. Once a year each, nothing else.",
+      "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
+      "remove": "Remove",
+      "removeLabel": "Remove the reminder for {name}",
+      "failed": "Couldn't remove it. Try again in a moment.",
+      "back": "Account",
+      "makeGift": "Make a gift"
+    },
+    "remove": {
+      "title": "Remove this reminder?",
+      "body": "You won't get the yearly email about {name} any more.",
+      "confirm": "Remove it",
+      "doneTitle": "Removed.",
+      "doneBody": "That reminder is gone. You can set a new one whenever you make a gift."
+    },
+    "unsubscribe": {
+      "title": "Unsubscribe?",
+      "body": "We'll stop sending you the note about a checkout you didn't finish, and leave the offers out of our other emails. Receipts, sign-in emails and news about your gifts still come, because you need them.",
+      "confirm": "Unsubscribe",
+      "doneTitle": "You're unsubscribed.",
+      "doneBody": "No more checkout notes or offers. Receipts, sign-in emails and news about your gifts still come."
+    },
+    "link": {
+      "invalidTitle": "This link doesn't work.",
+      "invalidBody": "It may be incomplete, or what it pointed to is already gone.",
+      "unavailableTitle": "Something went wrong.",
+      "unavailableBody": "Try the link again in a few minutes.",
+      "home": "Go to Ethos"
+    }
+  },
+  "giftChooser": {
+    "titleDate": "Wrap your date in a gift",
+    "titleTrip": "Wrap your trip in a gift",
+    "sub": "Pick any gift. Your plan waits inside it, wrapped, at the end.",
+    "subTrip": "Pick any gift. The trip waits inside it, wrapped, at the end.",
+    "filterLabel": "Show",
+    "filter": {
+      "all": "All",
+      "loved": "Most loved",
+      "free": "Free"
+    },
+    "free": "Free",
+    "price": "{price} once",
+    "included": "Surprise included",
+    "extra": "The surprise inside: {price}",
+    "pick": "Wrap it in {name}",
+    "wrapping": "Wrapping it…"
+  },
+  "pickers": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "clear": "Clear",
+    "done": "Done",
+    "close": "Close",
+    "addDate": "Add a date",
+    "addTime": "Add a time",
+    "hour": "Hour",
+    "minutes": "Minutes",
+    "month": "Month",
+    "day": "Day",
+    "time": "Time",
+    "range": {
+      "title": "Choose the dates",
+      "add": "Add date",
+      "roundTrip": "Return trip",
+      "oneWay": "One-way",
+      "tripType": "Return trip or one-way",
+      "quick": "Quick picks",
+      "thisWeekend": "This weekend",
+      "nextWeekend": "Next weekend",
+      "weekAway": "A week away",
+      "nights": "{count, plural, =0 {Same day} one {# night} other {# nights}}",
+      "pickStart": "Pick the day you leave",
+      "pickEnd": "now pick the day you come back",
+      "close": "Close"
+    }
+  },
+  "savedDates": {
+    "meta": {
+      "title": "My dates"
+    },
+    "page": {
+      "title": "My dates",
+      "sub": "Dates and trips you've saved.",
+      "subShared": "Dates and trips you've saved, shared with {name}.",
+      "quota": "{used} of {limit} free saves",
+      "upgrade": "Save as many as you like",
+      "error": "Your saved dates didn't load.",
+      "retry": "Try again",
+      "empty": {
+        "title": "No saved dates yet",
+        "sub": "Plan a date on the map and save it here, or save a trip you like.",
+        "dates": "Find a date",
+        "trips": "See the trips"
+      }
+    },
+    "card": {
+      "date": "Date",
+      "trip": "Trip",
+      "stops": "{count, plural, one {# stop} other {# stops}}",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "someday": "No day yet",
+      "from": "From {name}",
+      "readOnly": "Read-only",
+      "reminder": "Reminder on",
+      "menu": {
+        "label": "More for {title}",
+        "open": "Open",
+        "rename": "Rename",
+        "remind": "Remind us the day before",
+        "delete": "Delete",
+        "deleteConfirm": "Deleted “{title}”"
+      },
+      "renameTitle": "Rename",
+      "renameLabel": "Name",
+      "renameSave": "Save",
+      "undo": "Undo",
+      "deleteFailed": "“{title}” couldn't be deleted. Try again.",
+      "renameFailed": "The new name didn't save. Try again.",
+      "remindFailed": "The reminder didn't change. Try again.",
+      "notOwner": "Only {name} can delete this one.",
+      "editedBy": "Changed by {name}"
+    },
+    "save": {
+      "title": "Keep this date",
+      "sub": "Save it to your account and find it again on any phone you sign in on.",
+      "cta": "Save to my dates",
+      "saving": "Saving…",
+      "saved": "Saved to my dates",
+      "synced": "All changes saved",
+      "offline": "Not saved yet",
+      "open": "Open My dates",
+      "close": "Close this date",
+      "closeConfirm": "Close this date? It stays in My dates, and this device starts a new plan.",
+      "remind": "Remind us the day before",
+      "remindNeedsDay": "Pick a day for the date and we'll remind you both the day before.",
+      "defaultTitle": "A date",
+      "shared": "Shared with {name}, who can change it too.",
+      "partners": "{name}'s date, shared with you.",
+      "quota": "{used} of {limit} free saves used",
+      "signIn": {
+        "title": "Sign in to save your date",
+        "sub": "Your plan stays on this device while you sign in, and saves itself when you're back."
+      },
+      "trip": {
+        "cta": "Save trip",
+        "saved": "Saved",
+        "remove": "Remove",
+        "removeLabel": "Remove {title} from My dates",
+        "byPartner": "Saved by {name}",
+        "failed": "The trip didn't save. Try again.",
+        "signIn": {
+          "title": "Sign in to save this trip",
+          "sub": "It goes in My dates, and saves itself once you're back."
+        }
+      }
+    },
+    "upsell": {
+      "eyebrow": "Ethos for Two",
+      "limit": {
+        "title": "Your {limit} free saves are used",
+        "body": "Free accounts keep {limit} saved dates and trips. With Ethos for Two you keep as many as you like, shared with your partner and editable on both your phones."
+      },
+      "read_only": {
+        "title": "This date is read-only for now",
+        "body": "Without Ethos for Two, your {limit} most recently changed dates stay editable. The others are kept safe and readable until you delete some or come back."
+      },
+      "maps": {
+        "title": "Open the whole date in Maps",
+        "body": "With Ethos for Two, every stop opens in Apple Maps or Google Maps in one tap, in order, with the way from one to the next."
+      },
+      "reminders": {
+        "title": "A reminder the day before",
+        "body": "With Ethos for Two, we email you both the day before each saved date, with the plan inside."
+      },
+      "cta": "See Ethos for Two",
+      "manage": "Manage my dates",
+      "notNow": "Not now",
+      "perMonth": "{price} a month",
+      "perYear": "{price} a year",
+      "forYear": "{price} for a year",
+      "or": "or",
+      "forBoth": "for both of you"
+    },
+    "sync": {
+      "conflict": "{name} changed this date: you're seeing the latest",
+      "conflictHere": "This date changed somewhere else: you're seeing the latest",
+      "readOnly": "This date is read-only now, so changes here aren't saved to it.",
+      "gone": "This date isn't in My dates any more. The plan is still on this device."
+    },
+    "detached": {
+      "title": "This date is read-only now",
+      "body": "What you change here stays on this device and isn't saved to My dates. Without Ethos for Two, only your {limit} most recently changed dates can be edited.",
+      "why": "Why?",
+      "manage": "Manage my dates",
+      "dismiss": "Dismiss this note"
+    },
+    "open": {
+      "loading": "Opening your date…",
+      "replaceConfirm": "This replaces the plan you were making on this device. It isn't saved. Open this date?",
+      "notFound": "That date isn't in your account, or it was deleted.",
+      "failed": "That date didn't open. Check your connection and try again.",
+      "signIn": "Sign in to open this date.",
+      "signInSub": "Sign in with the account it was saved to, and it opens right here."
+    },
+    "readOnly": {
+      "title": "Read-only",
+      "body": "Without Ethos for Two, only your {limit} most recently changed dates can be edited. This one stays safe in My dates.",
+      "why": "Why?"
+    },
+    "maps": {
+      "cta": "Open in Maps",
+      "label": "Open the whole date in a maps app",
+      "google": "Google Maps",
+      "apple": "Apple Maps",
+      "locked": "With Ethos for Two"
+    },
+    "remindOff": {
+      "title": "Turn off the reminder?",
+      "body": "Neither of you will be emailed the day before “{title}”.",
+      "confirm": "Turn it off",
+      "done": "The reminder is off.",
+      "doneBody": "No email the day before “{title}”. You can turn it back on in My dates."
+    },
+    "errors": {
+      "unauthenticated": "Sign in to save your dates.",
+      "invalid_input": "That couldn't be saved. Reload the page and try again.",
+      "empty_plan": "Add a stop to the plan first.",
+      "unknown_trip": "That trip isn't on Ethos any more.",
+      "limit_reached": "Your free saves are used.",
+      "read_only": "This date is read-only.",
+      "not_found": "That date isn't in your account any more.",
+      "not_owner": "Only the person who saved it can delete it.",
+      "conflict": "Someone changed it first. You're seeing the latest.",
+      "rate_limited": "That's a lot at once. Try again in a minute.",
+      "not_configured": "Saving isn't available right now.",
+      "network": "You're offline. Try again once you're connected."
+    }
+  },
+  "campaign": {
+    "eyebrow": "Creator campaign",
+    "title": "Make it free. Post it. Get paid.",
+    "subtitle": "Four of our best templates, free on your account for {days} days, for the gifts you post on TikTok and Instagram.",
+    "signInTitle": "First, your account",
+    "signInBlurb": "The free templates go on your account. Sign in or make one, free, and this page will be waiting with the password box.",
+    "passwordLabel": "Campaign password",
+    "passwordPlaceholder": "The password from your campaign brief",
+    "unlock": "Unlock the templates",
+    "unlocking": "Checking…",
+    "active": {
+      "title": "You're in.",
+      "until": "Free until {date}.",
+      "noEnd": "Free, with no end date.",
+      "left": "{left} of {limit} free gifts left.",
+      "make": "Make this gift",
+      "rulesTitle": "How it works",
+      "rules": {
+        "footer": "Every gift keeps the small Ethos footer.",
+        "extras": "Extras aren't included: a video, a voice note, more than 10 photos, a schedule or a password.",
+        "stays": "Your gifts stay live after your free days end, so your posts keep working.",
+        "once": "One window per account: typing the password again doesn't restart it."
+      }
+    },
+    "ended": {
+      "title": "Your free days are over.",
+      "detail": "Every gift you made stays live. Earned your first $6 in the campaign? Write to {email} and we'll keep your templates open."
+    },
+    "revoked": {
+      "title": "Your campaign access is off.",
+      "detail": "Your gifts stay live. Questions? Write to {email}."
+    },
+    "errors": {
+      "wrong": "That's not the password. Check your campaign brief.",
+      "tooMany": "Too many tries. Wait an hour and try again.",
+      "accounts": "Too many accounts have unlocked the campaign from this connection this week.",
+      "signIn": "Sign in first, then enter the password.",
+      "generic": "That didn't work. Try again in a moment."
+    }
+  },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "What to write, make and send",
+    "subtitle": "Practical guides for birthdays, anniversaries, distance and the ordinary days in between: what to say, what to make, and how to get it to them on time.",
+    "takeaways": "Key takeaways",
+    "faqTitle": "Questions people ask",
+    "minutes": "{minutes} min read",
+    "related": "Keep reading",
+    "makeThis": "Make this gift",
+    "seeIt": "See the template",
+    "templateFree": "Free template",
+    "templatePremium": "Premium template",
+    "englishOnly": "This guide is only in English for now."
   }
 }

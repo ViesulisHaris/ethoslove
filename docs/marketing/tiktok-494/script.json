@@ -1,0 +1,56 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:08 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "answer me before i post that pic of you sleeping",
+          "status": "Read 7:08 PM"
+        },
+        {
+          "from": "them",
+          "text": "heyy"
+        },
+        {
+          "from": "them",
+          "text": "heyyyyy"
+        },
+        {
+          "from": "them",
+          "text": "hi"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "no need for that"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok you're safe for today",
+          "status": "Read 7:10 PM"
+        }
+      ]
+    }
+  ]
+}

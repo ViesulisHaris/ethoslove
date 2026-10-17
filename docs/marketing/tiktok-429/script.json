@@ -1,0 +1,42 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Be ready at 8 tonight"
+        },
+        {
+          "from": "me",
+          "text": "why what’s happening"
+        },
+        {
+          "from": "them",
+          "text": "You’ll see"
+        },
+        {
+          "from": "them",
+          "text": "Open this first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for tonight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "NO WAYYYY",
+          "status": "Read 6:52 pm"
+        }
+      ]
+    }
+  ]
+}

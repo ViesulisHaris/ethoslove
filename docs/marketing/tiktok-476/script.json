@@ -1,0 +1,55 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "bokeh",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:03 PM",
+      "input": "the party obviously",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you're not going to that party"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "or you can go and be single"
+        },
+        {
+          "from": "me",
+          "text": "ok",
+          "status": "Delivered"
+        },
+        {
+          "from": "them",
+          "text": "so which one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "input": "ok i'm staying in",
+      "messages": [
+        {
+          "from": "them",
+          "text": "wait before you send that"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open it first 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

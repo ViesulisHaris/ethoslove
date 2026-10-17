@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:09",
+      "messages": [
+        {
+          "from": "me",
+          "text": "random but did you ever open it"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for our 1 year 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Ethan"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Open what"
+        },
+        {
+          "from": "me",
+          "text": "the thing i made you before we broke up"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "No"
+        },
+        {
+          "from": "them",
+          "text": "I couldn't"
+        },
+        {
+          "from": "me",
+          "text": "it says it was opened last night",
+          "status": "Read 21:11"
+        },
+        {
+          "from": "them",
+          "text": "That was her"
+        }
+      ]
+    }
+  ]
+}

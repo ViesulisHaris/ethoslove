@@ -1,0 +1,41 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        { "from": "me", "text": "do u even still like me", "tapback": "heart" },
+        { "from": "me", "text": "marco u cannot heart react that" },
+        { "from": "them", "text": "why" },
+        { "from": "me", "text": "ITS A QUESTION" },
+        { "from": "them", "text": "give me 2 mins" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "its been 9" },
+        { "from": "them", "text": "sorry. finishing the answer" },
+        { "from": "them", "text": "started it tuesday" },
+        { "from": "them", "link": { "title": "for maya (yes. obviously)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco" },
+        { "from": "me", "text": "i have to tell u something" },
+        { "from": "me", "text": "i asked the group chat if i should dump u" },
+        { "from": "them", "text": "and" },
+        { "from": "me", "text": "4 to 1" },
+        { "from": "them", "text": "who was the 1" },
+        { "from": "me", "text": "me", "tapback": "heart" },
+        { "from": "them", "text": "who were the 4 maya" }
+      ]
+    }
+  ]
+}

@@ -6,13 +6,19 @@ import { cn } from "@/lib/utils";
 /**
  * Free-tier footer. Deliberately small and tasteful — it is the viral hook, not an ad.
  *
+ * It opens the page of the template this gift was made with, not the front page: whoever taps it
+ * has just watched that very gift and wants one like it. Gifts carry no app context, so the
+ * language prefix is the gift's own, the same as its "send one back".
+ *
  * It floats at the foot of the gift, except on the end screen, which carries it in its own flow
  * (`inline`) so it never lands on top of the buttons there.
  */
-export function Watermark({ locale, inline = false, className }: { locale: GiftLocale; inline?: boolean; className?: string }) {
+export function Watermark({ locale, slug, inline = false, className }: { locale: GiftLocale; slug?: string; inline?: boolean; className?: string }) {
+  const prefix = locale === "es" ? "/es" : "";
+  const href = slug ? `${prefix}/templates/${encodeURIComponent(slug)}?ref=watermark` : `${prefix}/templates?ref=watermark`;
   return (
     <a
-      href="/?ref=watermark"
+      href={href}
       target="_blank"
       rel="noopener"
       className={cn(

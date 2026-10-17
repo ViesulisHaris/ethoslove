@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:55",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who's 🍑 in your phone"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "your ipad's synced. who's 🍑"
+        },
+        {
+          "from": "them",
+          "text": "a mate"
+        },
+        {
+          "from": "me",
+          "text": "you texted a mate \"u up\" at 2am"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "for fifa"
+        },
+        {
+          "from": "me",
+          "text": "and \"wear the black one\"?"
+        },
+        {
+          "from": "them",
+          "text": "it's a fifa kit"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "you're actually crazy"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i literally made you this yesterday"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "did you make 🍑 one too"
+        },
+        {
+          "from": "them",
+          "text": "why are you even on my ipad"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:41",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why does ur calculator have 4 hours of screen time this week"
+        },
+        {
+          "from": "them",
+          "text": "im doing my taxes"
+        },
+        {
+          "from": "me",
+          "text": "u dont do ur taxes. ur mum does ur taxes"
+        },
+        {
+          "from": "them",
+          "text": "so now im stupid as well"
+        },
+        {
+          "from": "them",
+          "text": "u see what u do? u make everything weird"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u see what u do? u make everything weird"
+        },
+        {
+          "from": "me",
+          "text": "open it then"
+        },
+        {
+          "from": "them",
+          "text": "no. i dont have to prove anything to u. i made u this instead"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (12 reasons)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok the jar is cute"
+        },
+        {
+          "from": "me",
+          "text": "but whats in the calculator marco"
+        },
+        {
+          "from": "them",
+          "text": "numbers maya. its a calculator"
+        },
+        {
+          "from": "them",
+          "text": "work on ur trust issues, not my phone"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "check mine"
+        },
+        {
+          "from": "them",
+          "text": "why would i"
+        },
+        {
+          "from": "me",
+          "text": "11 hours",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya whats in ur calculator"
+        }
+      ]
+    }
+  ]
+}

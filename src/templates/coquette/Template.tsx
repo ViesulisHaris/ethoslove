@@ -5,7 +5,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
-import type { TemplateProps } from "../types";
+import { appleMusicTrackUrl, backgroundMusic, isCatalogPreview } from "@/lib/gift/music";
+import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { useContainerSize } from "../_shared/hooks/use-container-size";
@@ -16,17 +17,18 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
+import { FitName } from "../_shared/FitName";
 import { Confetti } from "../_shared/Confetti";
 import { PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT } from "../_shared/cover-kit";
 import { Sticker } from "../_shared/covers/stickers";
 import { Caption, COLLAGE_KEYFRAMES, CollageContext, Lightbox, Piece, Polaroid, Scrap, ScriptLines, ScrollHint, Shot, Tape, TornPaper, useReadProgress } from "../_shared/collage/kit";
-import { CARD_KEYFRAMES, MusicCard, Postcard, Snippet, Stamp, Ticket } from "../_shared/collage/cards";
-import { gingham, scriptLines, ticketNumber } from "../_shared/collage/paper";
+import { CARD_KEYFRAMES, MusicCard, Postcard, PreviewMusicCard, Snippet, Stamp, Ticket } from "../_shared/collage/cards";
+import { printed, scriptLines, ticketNumber } from "../_shared/collage/paper";
 import { playChime, playRibbon } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { SatinBow, satinBand } from "./art";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
-import { arrangePhotos, LOOKS, stripHeight, type Look, type LookId } from "./looks";
+import { arrangePhotos, LOOKS, stripHeight, TRINKETS, type Look, type LookId } from "./looks";
 import { fieldsSchema, type CoquetteFields } from "./schema";
 
 type Copy = { untie: string; for: string; from: string; scroll: string; note: string; label: string; ticket: string; loveYou: string; pause: string; play: string; script: string };
@@ -88,7 +90,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const unit = size.ready ? Math.min(size.width / 100, 5.4) : 3.9;
 
   return (
-    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...gingham(look.check, "calc(6.25*var(--p))"), ...vars }}>
+    <div ref={rootRef} className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, fontFamily: "var(--gift-font-body)", ...printed(look.print ?? "gingham", look.check, "calc(6.25*var(--p))"), ...vars }}>
       <style>{COLLAGE_KEYFRAMES + CARD_KEYFRAMES}</style>
       <div className="pointer-events-none absolute inset-0 z-[3]" aria-hidden="true">
         <Ambience layers={look.ambience} opacity={0.75} />
@@ -108,11 +110,27 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   );
 }
 
-/** The page still wrapped: a ribbon round it both ways, the bow where they cross, and a tag with their name. */
+/** The page still wrapped, waiting to be untied. */
 function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy; data: Data; untying: boolean; reduce: boolean; onUntie: () => void }) {
-  const slide = { duration: reduce ? 0.15 : 0.8, ease: [0.6, 0, 0.3, 1] as const };
   return (
     <motion.div className="absolute inset-0 z-10" exit={{ opacity: 0, transition: { duration: 0.35 } }}>
+      <Wrapping look={look} s={s} recipientName={data.recipientName} senderName={data.senderName} untying={untying} reduce={reduce} bow="cq-bow" />
+      <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
+      <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
+        {s.untie}
+      </motion.p>
+    </motion.div>
+  );
+}
+
+/**
+ * The ribbon round the page both ways, the bow where it crosses and a tag with their name: the
+ * first screen, and, drawn still, the Classic tile in the editor's cover picker.
+ */
+function Wrapping({ look, s, recipientName, senderName, untying, reduce, bow }: { look: Look; s: Copy; recipientName: string; senderName: string; untying: boolean; reduce: boolean; bow: string }) {
+  const slide = { duration: reduce ? 0.15 : 0.8, ease: [0.6, 0, 0.3, 1] as const };
+  return (
+    <>
       <motion.span aria-hidden="true" className="absolute inset-y-0 left-1/2 w-[calc(11*var(--p))] -translate-x-1/2" style={{ background: satinBand(look.satin, false), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { y: "105%" } : { y: 0 }} transition={slide} />
       <motion.span aria-hidden="true" className="absolute inset-x-0 top-[42%] h-[calc(11*var(--p))] -translate-y-1/2" style={{ background: satinBand(look.satin, true), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { x: "105%" } : { x: 0 }} transition={{ ...slide, delay: untying && !reduce ? 0.08 : 0 }} />
 
@@ -122,24 +140,32 @@ function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy
         <div className="relative rounded-[calc(1.6*var(--p))] px-[calc(4*var(--p))] pt-[calc(6*var(--p))] pb-[calc(4.4*var(--p))] text-center" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, clipPath: "polygon(22% 0, 78% 0, 100% 16%, 100% 100%, 0 100%, 0 16%)", boxShadow: "0 calc(1.2*var(--p)) calc(2.4*var(--p)) rgba(60,20,40,.3)" }}>
           <span aria-hidden="true" className="absolute top-[calc(2*var(--p))] left-1/2 block h-[calc(2.2*var(--p))] w-[calc(2.2*var(--p))] -translate-x-1/2 rounded-full" style={{ boxShadow: `inset 0 0 0 calc(.5*var(--p)) ${look.satin.mid}`, background: look.wall }} />
           <p className="text-[calc(2.6*var(--p))] font-semibold tracking-[0.34em] uppercase opacity-60">{s.for}</p>
-          <p className="mt-[calc(.6*var(--p))] truncate text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT }}>
-            {data.recipientName}
-          </p>
-          <p className="mt-[calc(1.4*var(--p))] truncate text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
-            {s.from} {data.senderName}
-          </p>
+          <FitName as="p" className="mt-[calc(.6*var(--p))] text-[calc(11*var(--p))] leading-[1.05]" style={{ fontFamily: SCRIPT_FONT }}>
+            {recipientName}
+          </FitName>
+          {senderName ? (
+            <FitName as="p" min={0.7} className="mt-[calc(1.4*var(--p))] text-[calc(3.2*var(--p))] opacity-70" style={{ fontFamily: "var(--gift-font-hand)" }}>
+              {s.from} {senderName}
+            </FitName>
+          ) : null}
         </div>
       </motion.div>
 
       <motion.div className="absolute top-[42%] left-1/2 z-[2] w-[calc(78*var(--p))]" style={{ x: "-50%", y: "-41.2%" }} initial={reduce ? false : { scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 120, damping: 12, delay: 0.15 }}>
-        <SatinBow id="cq-bow" satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
+        <SatinBow id={bow} satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
       </motion.div>
+    </>
+  );
+}
 
-      <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
-      <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
-        {s.untie}
-      </motion.p>
-    </motion.div>
+/** Coquette's first screen, still, in the colours the sender picked. */
+export function Opening({ fields, recipientName, senderName, locale }: OpeningProps) {
+  const parsed = fieldsSchema.safeParse(fields);
+  const look = LOOKS[parsed.success && parsed.data.look in LOOKS ? parsed.data.look : "blush"];
+  return (
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ backgroundColor: look.wall, color: look.ink, ...printed(look.print ?? "gingham", look.check, "calc(6.25*var(--p))"), "--p": "min(1cqw, 5.4px)" } as CSSProperties}>
+      <Wrapping look={look} s={S[locale] ?? S.en} recipientName={recipientName} senderName={senderName} untying={false} reduce bow="cq-bow-tile" />
+    </div>
   );
 }
 
@@ -157,10 +183,16 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
   const { hero, strip, scatter } = arrangePhotos(data.photos);
   const spots = scatterSpots(scatter.length);
   const f = look.flowers;
-  const hasSong = Boolean(data.music?.title);
-  const heroH = hasSong ? 188 : 158;
+  const trinket = look.trinkets ?? TRINKETS;
+  // Music that plays under the gift gets the player card. A real song from Apple gets the same card,
+  // heard only on a tap (PreviewMusicCard), and the end screen then leaves its own out.
+  const song = backgroundMusic(data.music);
+  const catalog = isCatalogPreview(data.music) && appleMusicTrackUrl(data.music, data.locale) ? data.music : undefined;
+  const hasSong = Boolean(song?.title) || Boolean(catalog);
+  // An Apple song's card carries the link and Apple's credit too, so it stands a little taller.
+  const heroH = hasSong ? (catalog ? 194 : 188) : 158;
   const stripH = Math.max(stripHeight(strip.length) + 16, 124);
-  const frame = { backgroundColor: look.frame, ...gingham(look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
+  const frame = { backgroundColor: look.frame, ...printed(look.print ?? "gingham", look.frameCheck, "calc(1.3*var(--p))") } as CSSProperties;
   const open = mode === "preview" ? undefined : setActive;
   const context = useMemo(() => ({ container: scroller, still, unit }), [still, unit]);
   const paper = (n: number, sides = { top: true, right: true, bottom: true, left: true }) => ({ seed: seed + n, sides, color: look.scriptPaper, grain: PAPER_GRAIN, depth: 4 });
@@ -191,9 +223,9 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 <TornPaper seed={seed + 5} sides={{ top: true, right: true, bottom: true, left: true }} color={look.paper} grain={PAPER_GRAIN} depth={5}>
                   <p className="px-[calc(4*var(--p))] pt-[calc(2.6*var(--p))] pb-[calc(3*var(--p))] text-center">
                     <span className="block text-[calc(2.3*var(--p))] font-semibold tracking-[0.36em] uppercase opacity-55">{s.for}</span>
-                    <span className="block truncate text-[calc(11*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
+                    <FitName className="text-[calc(11*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
                       {data.recipientName}
-                    </span>
+                    </FitName>
                   </p>
                 </TornPaper>
               </Piece>
@@ -206,19 +238,19 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
               </Piece>
 
               <Piece x={84} y={30} w={27} rotate={12} z={6} entrance="bloom" delay={0.7}>
-                <Scrap id="bow-gingham" eager style={{ filter: look.tint }} />
+                <Scrap id={trinket.bow} eager tone={look.tint} />
               </Piece>
               <Piece x={12} y={46} w={36} rotate={-16} z={5} drift={5} sway entrance="left" delay={0.55}>
-                <Scrap id={f.spray} eager />
+                <Scrap id={f.spray} eager tone={look.bloom} />
               </Piece>
               <Piece x={7} y={70} w={24} rotate={12} z={5} entrance="bloom" delay={0.75}>
-                <Scrap id={f.small} eager />
+                <Scrap id={f.small} eager tone={look.bloom} />
               </Piece>
               <Piece x={15} y={86} w={27} rotate={-8} z={6} drift={3} entrance="bloom" delay={0.85}>
-                <Scrap id={f.gold} eager />
+                <Scrap id={f.gold} eager tone={look.bloom} />
               </Piece>
               <Piece x={88} y={107} w={40} rotate={18} z={6} drift={7} sway entrance="right" delay={0.65}>
-                <Scrap id={f.lily} eager />
+                <Scrap id={f.lily} eager tone={look.bloom} />
               </Piece>
               <Piece x={90} y={54} w={21} rotate={14} z={7} entrance="bloom" delay={1.1}>
                 <div className={cn(!still && "cl-flutter")}>
@@ -226,13 +258,17 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </div>
               </Piece>
 
-              {hasSong && data.music ? (
+              {hasSong ? (
                 <Piece x={64} y={131} w={66} rotate={2} z={8} entrance="right" delay={0.2}>
-                  <MusicCard music={data.music} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
+                  {catalog ? (
+                    <PreviewMusicCard music={catalog} locale={data.locale} cover={hero} live={mode !== "preview"} colors={look.card} />
+                  ) : song ? (
+                    <MusicCard music={song} audio={audio} cover={hero} live={mode !== "preview"} labels={{ pause: s.pause, play: s.play }} colors={look.card} />
+                  ) : null}
                 </Piece>
               ) : null}
 
-              <Piece x={36} y={hasSong ? 163 : 132} w={66} rotate={-4} z={6} entrance="left" delay={0.3}>
+              <Piece x={36} y={hasSong ? (catalog ? 169 : 163) : 132} w={66} rotate={-4} z={6} entrance="left" delay={0.3}>
                 <Postcard
                   paper={look.paper}
                   ink={look.ink}
@@ -266,16 +302,16 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                   </div>
                 </Piece>
                 <Piece x={77} y={42} w={56} rotate={10} z={1} entrance="bloom">
-                  <Scrap id="doily-pink" shadow={false} style={{ filter: look.tint, opacity: 0.95 }} />
+                  <Scrap id={trinket.doily} shadow={!trinket.doily.startsWith("doily")} tone={look.tint} style={{ opacity: 0.95 }} />
                 </Piece>
                 <Piece x={75} y={36} w={38} rotate={-8} z={3} sway entrance="bloom" delay={0.1}>
-                  <Scrap id={f.hibiscus} />
+                  <Scrap id={f.hibiscus} tone={look.bloom} />
                 </Piece>
                 <Piece x={91} y={61} w={25} rotate={20} z={4} entrance="bloom" delay={0.2}>
-                  <Scrap id={f.plumeria} />
+                  <Scrap id={f.plumeria} tone={look.bloom} />
                 </Piece>
                 <Piece x={69} y={68} w={35} rotate={24} z={4} drift={5} entrance="right" delay={0.15}>
-                  <Scrap id={f.soft} />
+                  <Scrap id={f.soft} tone={look.bloom} />
                 </Piece>
                 <Piece x={73} y={94} w={48} rotate={-5} z={5} entrance="stick" delay={0.25}>
                   <Snippet paper={look.paper} ink={look.ink} font={SCRIPT_FONT} size={5.6} className="w-full">
@@ -284,11 +320,11 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </Piece>
                 {strip.length >= 3 ? (
                   <Piece x={77} y={120} w={38} rotate={5} z={3} entrance="stick" delay={0.1}>
-                    <Scrap id="cats-cuddle" />
+                    <Scrap id={trinket.plush} />
                   </Piece>
                 ) : null}
                 <Piece x={7} y={stripHeight(strip.length) + 4} w={22} rotate={-18} z={5} entrance="bloom" delay={0.3}>
-                  <Scrap id={f.pale} />
+                  <Scrap id={f.pale} tone={look.bloom} />
                 </Piece>
               </section>
             ) : null}
@@ -304,15 +340,17 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 {scatter.map((photo, i) => (
                   <Piece key={photo.id} {...spots[i]} z={4 + (i % 2)} entrance={i % 2 ? "right" : "left"} delay={(i % 2) * 0.12}>
                     <Polaroid photo={photo} lip={8} pattern={frame} onOpen={open ? () => open(photo) : undefined} still={still}>
-                      <Caption>{photo.caption}</Caption>
+                      <Caption label={look.paper} color={look.ink}>
+                        {photo.caption}
+                      </Caption>
                     </Polaroid>
                   </Piece>
                 ))}
                 <Piece x={50} y={9} w={20} rotate={-10} z={6} entrance="stamp">
-                  <Scrap id="heart-print-pink" style={{ filter: look.tint }} />
+                  <Scrap id={trinket.heart} tone={look.tint} />
                 </Piece>
                 <Piece x={93} y={24} w={18} rotate={16} z={6} entrance="bloom" delay={0.2}>
-                  <Scrap id="star-felt" />
+                  <Scrap id={trinket.star} />
                 </Piece>
                 {scatter.length > 2 ? (
                   <>
@@ -322,7 +360,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                       </Snippet>
                     </Piece>
                     <Piece x={8} y={94} w={24} rotate={-20} z={6} drift={4} entrance="bloom">
-                      <Scrap id={f.coral} />
+                      <Scrap id={f.coral} tone={look.bloom} />
                     </Piece>
                   </>
                 ) : null}
@@ -332,10 +370,10 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
             {/* the letter */}
             <section className="relative mt-[calc(10*var(--p))] px-[calc(5*var(--p))]">
               <Piece x={10} y={-2} w={40} rotate={-24} z={4} drift={5} sway entrance="left">
-                <Scrap id={f.star} />
+                <Scrap id={f.star} tone={look.bloom} />
               </Piece>
               <Piece x={92} y={4} w={26} rotate={18} z={4} entrance="bloom" delay={0.15}>
-                <Scrap id={f.pale} />
+                <Scrap id={f.pale} tone={look.bloom} />
               </Piece>
               <TornPaper seed={seed + 9} sides={{ top: true, bottom: true }} color={look.paper} grain={PAPER_GRAIN} depth={1.4} className="z-[2]">
                 <article className="px-[calc(6*var(--p))] pt-[calc(15*var(--p))] pb-[calc(12*var(--p))]">
@@ -344,7 +382,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
               </TornPaper>
               <div className="absolute inset-x-0 bottom-0 h-0">
                 <Piece x={88} y={-2} w={30} rotate={12} z={4} drift={3} entrance="right">
-                  <Scrap id={f.gold} />
+                  <Scrap id={f.gold} tone={look.bloom} />
                 </Piece>
               </div>
             </section>
@@ -362,7 +400,7 @@ function Page({ look, s, data, fields, mode, still, unit, audio, onEvent, onReac
                 </div>
               ) : null}
               <div ref={endRef} className="rounded-[calc(3*var(--p))] px-[calc(3*var(--p))] py-[calc(6*var(--p))]" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, color: look.ink, boxShadow: "0 14px 26px -18px rgba(0,0,0,.45)" }}>
-                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} songShown={Boolean(catalog)} />
               </div>
             </div>
           </div>

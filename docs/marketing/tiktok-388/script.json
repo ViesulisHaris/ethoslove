@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|22:30",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i can't believe i leave tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "don't"
+        },
+        {
+          "from": "me",
+          "text": "i'm going to miss you so much"
+        },
+        {
+          "from": "them",
+          "text": "me more"
+        },
+        {
+          "from": "them",
+          "text": "i made you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "before you go 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "you're going to make me cry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "me",
+          "text": "i don't want to go anymore"
+        },
+        {
+          "from": "them",
+          "text": "it's 3 months"
+        },
+        {
+          "from": "them",
+          "text": "we've got this"
+        }
+      ]
+    }
+  ]
+}

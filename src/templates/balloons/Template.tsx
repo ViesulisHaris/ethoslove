@@ -6,6 +6,7 @@ import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/re
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { backgroundMusic } from "@/lib/gift/music";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -289,6 +290,8 @@ function FallenPolaroid({ photo, from, to, paper, order, reduce, onOpen }: { pho
 }
 
 function Letter({ data, mode, blocks, photos, palette: p, s, t, reduce, onEvent, onReact, onMakeOne, onReplay, onOpen }: { data: TemplateProps<BalloonsFields>["data"]; mode: TemplateProps["mode"]; blocks: ReturnType<typeof parseRichText>; photos: GiftPhoto[]; palette: Palette; s: Copy; t: ReturnType<typeof useGiftStrings>; reduce: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void; onOpen: (i: number) => void }) {
+  // "Now playing" names only music that plays: a real song waits on the end screen for a tap.
+  const song = backgroundMusic(data.music);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
 
@@ -351,10 +354,10 @@ function Letter({ data, mode, blocks, photos, palette: p, s, t, reduce, onEvent,
             <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face="hand" accent={p.accent} />
           </article>
 
-          {data.music?.title ? (
+          {song?.title ? (
             <p className="mt-[calc(6*var(--k))] text-center text-[calc(2.6*var(--k))] tracking-[0.2em] uppercase opacity-55">
-              {s.playing} · {data.music.title}
-              {data.music.artist ? ` — ${data.music.artist}` : ""}
+              {s.playing} · {song.title}
+              {song.artist ? ` — ${song.artist}` : ""}
             </p>
           ) : null}
 

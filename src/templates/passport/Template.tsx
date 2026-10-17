@@ -535,12 +535,12 @@ function Pages({
       >
         <p className="text-[9px] tracking-[0.35em] uppercase opacity-60">{s.visa}</p>
         <h2
-          className="mt-3 text-[clamp(1.5rem,6.5cqw,1.9rem)] italic"
+          className="mt-3 text-[clamp(1.5rem,6.5cqw,1.9rem)] italic [overflow-wrap:anywhere]"
           style={{ fontFamily: "var(--gift-font-display)" }}
         >
           {data.title || t("dear", { name: data.recipientName })}
         </h2>
-        <div className="mt-4 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed [&_em]:text-[var(--gift-accent-deep)] [&_p+p]:mt-4 [&_strong]:font-semibold">
+        <div className="mt-4 text-[clamp(1rem,4.4cqw,1.1rem)] leading-relaxed [overflow-wrap:anywhere] [&_em]:text-[var(--gift-accent-deep)] [&_p+p]:mt-4 [&_strong]:font-semibold">
           {instant ? (
             <RichMessage
               blocks={blocks}

@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my ex posted his new girlfriend"
+        },
+        {
+          "from": "me",
+          "text": "and i feel so stupid for caring"
+        },
+        {
+          "from": "them",
+          "text": "you're not stupid"
+        },
+        {
+          "from": "me",
+          "text": "i just feel ugly today"
+        },
+        {
+          "from": "them",
+          "text": "can i send you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "only you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "stop"
+        },
+        {
+          "from": "me",
+          "text": "you made this for me??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i needed this so bad"
+        },
+        {
+          "from": "me",
+          "text": "you're the best thing that ever happened to me"
+        },
+        {
+          "from": "them",
+          "text": "you're everything maya"
+        },
+        {
+          "from": "me",
+          "text": "i love you"
+        }
+      ]
+    }
+  ]
+}

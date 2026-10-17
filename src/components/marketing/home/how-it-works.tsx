@@ -60,7 +60,7 @@ function WriteIllustration() {
     <div className="flex h-full flex-col justify-center gap-3 rounded-md border border-line bg-paper p-4 shadow-soft">
       <div className="flex gap-2">
         {[0, 1, 2].map((i) => (
-          <motion.div key={i} initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ ...spring, delay: 0.1 + i * 0.1 }} className="size-9 rounded-sm bg-rose" />
+          <motion.div key={i} initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ ...spring, delay: 0.1 + i * 0.1 }} className="size-9 rounded-sm bg-rose-tint" />
         ))}
       </div>
       {lines.map((w, i) => (

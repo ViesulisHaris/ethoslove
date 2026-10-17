@@ -68,8 +68,8 @@ export const demoData: Record<"en" | "es", GiftData<HalfwayFields>> = {
       p8: "tú dejas notas. yo las guardo todas",
     }),
     countdown: {
-      targetAt: "2027-03-14T18:40:00+01:00",
-      timezone: "Europe/Madrid",
+      targetAt: "2027-03-14T18:40:00-05:00",
+      timezone: "America/Lima",
       label: "Hasta que aterrice",
     },
     surprise: {
@@ -77,10 +77,10 @@ export const demoData: Record<"en" | "es", GiftData<HalfwayFields>> = {
       reveal: "tap" as const,
     },
     fields: {
-      from: { name: "Madrid", lat: 40.4168, lng: -3.7038 },
-      to: { name: "Buenos Aires", lat: -34.6037, lng: -58.3816 },
-      stops: [{ name: "Las Palmas", lat: 28.1235, lng: -15.4363 }],
-      halfwayNote: "¡Las Palmas! Ninguno de los dos voló más que el otro.",
+      from: { name: "Lima", lat: -12.0464, lng: -77.0428 },
+      to: { name: "Ciudad de México", lat: 19.4326, lng: -99.1332 },
+      stops: [{ name: "Ciudad de Panamá", lat: 8.9824, lng: -79.5199 }],
+      halfwayNote: "¡Panamá! Ninguno de los dos voló más que el otro.",
       vehicle: "plane",
       yourIsland: "pink",
       theirIsland: "peach",

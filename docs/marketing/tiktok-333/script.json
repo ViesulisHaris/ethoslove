@@ -1,0 +1,83 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:26",
+      "messages": [
+        {
+          "from": "me",
+          "text": "your location says sydney"
+        },
+        {
+          "from": "them",
+          "text": "yeah"
+        },
+        {
+          "from": "me",
+          "text": "since when"
+        },
+        {
+          "from": "them",
+          "text": "tuesday"
+        },
+        {
+          "from": "me",
+          "text": "you moved to australia??",
+          "status": "Read 20:27"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i got the job"
+        },
+        {
+          "from": "me",
+          "text": "the one you wanted since uni?"
+        },
+        {
+          "from": "them",
+          "text": "yeah"
+        },
+        {
+          "from": "me",
+          "text": "why didn't you tell me"
+        },
+        {
+          "from": "them",
+          "text": "i didn't know if you'd care"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you this before i left"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "in case 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "in case what"
+        },
+        {
+          "from": "them",
+          "text": "in case you did"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "demo": {
+    "template": "picnic",
+    "steps": [
+      "swap \"TEO\" \"MARCO\"",
+      "swap \"Teo\" \"Marco\"",
+      "swap \"LOLA\" \"MAYA\"",
+      "swap \"Lola\" \"Maya\"",
+      "swap \"lola\" \"maya\"",
+      "wait 1800",
+      "shot gift-1.png",
+      "tap \"tap the basket\"",
+      "wait 1600",
+      "tap 60 330",
+      "wait 1300",
+      "tap 60 330",
+      "wait 1500",
+      "shot gift-2.png",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 2400",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "whose hand is on ur story"
+        },
+        {
+          "from": "them",
+          "text": "my cousins"
+        },
+        {
+          "from": "me",
+          "text": "ur cousins nails say C"
+        },
+        {
+          "from": "them",
+          "text": "ur actually crazy"
+        },
+        {
+          "from": "them",
+          "text": "stop stalking my story"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur lucky i put up with this"
+        },
+        {
+          "from": "them",
+          "text": "made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (no reason, just a picnic)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cute"
+        },
+        {
+          "from": "me",
+          "text": "i messaged ur cousin"
+        },
+        {
+          "from": "them",
+          "text": "why would u do that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "she said u told her im ur cousin"
+        },
+        {
+          "from": "them",
+          "text": "maya delete that"
+        },
+        {
+          "from": "me",
+          "text": "we're getting coffee tomorrow. cousins 💅"
+        }
+      ]
+    }
+  ]
+}

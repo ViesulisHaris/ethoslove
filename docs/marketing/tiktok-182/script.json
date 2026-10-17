@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why am i saved as mike in ur phone"
+        },
+        {
+          "from": "them",
+          "text": "why are u looking at my phone"
+        },
+        {
+          "from": "me",
+          "text": "it lit up. \"mike 🏋️: miss u\""
+        },
+        {
+          "from": "them",
+          "text": "its a joke maya"
+        },
+        {
+          "from": "them",
+          "text": "my mum goes through my phone. u know what shes like"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my mum goes through my phone. u know what shes like"
+        },
+        {
+          "from": "me",
+          "text": "ur 27"
+        },
+        {
+          "from": "them",
+          "text": "and ur making a joke into a whole thing"
+        },
+        {
+          "from": "them",
+          "text": "i made u this before u went through my phone btw"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (not mike)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Vinyl (their songs, side A and side B, a record only for her). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is really cute"
+        },
+        {
+          "from": "me",
+          "text": "im still mike tho arent i"
+        },
+        {
+          "from": "them",
+          "text": "ur the only mike i love"
+        },
+        {
+          "from": "them",
+          "text": "and ur the only person who'd make this weird"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "ur saved as marco 3 in mine"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since january"
+        },
+        {
+          "from": "them",
+          "text": "who are marco 1 and 2"
+        },
+        {
+          "from": "me",
+          "text": "u dont want to know that",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya who are marco 1 and 2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:05",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i paid for ur ticket. remember that"
+        },
+        {
+          "from": "me",
+          "text": "i know u did"
+        },
+        {
+          "from": "them",
+          "text": "u talk like i never do anything for u"
+        },
+        {
+          "from": "me",
+          "text": "i said id pay u back"
+        },
+        {
+          "from": "them",
+          "text": "i dont want ur money. thats not the point"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i dont want ur money. thats not the point"
+        },
+        {
+          "from": "them",
+          "text": "i just want u to remember it"
+        },
+        {
+          "from": "them",
+          "text": "and i was making u this all afternoon. for free"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (everything i do for u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Something that clearly cost him hours and not money: the letter, or their photos. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its gorgeous marco"
+        },
+        {
+          "from": "them",
+          "text": "see. i do things for u constantly"
+        },
+        {
+          "from": "me",
+          "text": "i know. thank u"
+        },
+        {
+          "from": "them",
+          "text": "and then u tell people im tight"
+        },
+        {
+          "from": "me",
+          "text": "i never said that"
+        },
+        {
+          "from": "them",
+          "text": "u implied it at dans"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "check ur bank"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "ive sent u £20 every week since june"
+        },
+        {
+          "from": "them",
+          "text": "the reference says ticket 4 of 8"
+        },
+        {
+          "from": "me",
+          "text": "yep",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what do the other ones say"
+        }
+      ]
+    }
+  ]
+}

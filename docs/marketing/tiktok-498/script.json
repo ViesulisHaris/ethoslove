@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|2:07 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Every time I talk to you I feel confused"
+        },
+        {
+          "from": "them",
+          "text": "I've never met anyone like u"
+        },
+        {
+          "from": "me",
+          "text": "stop lovebombing me",
+          "status": "Read 2:08 PM"
+        },
+        {
+          "from": "them",
+          "text": "It's not a compliment"
+        },
+        {
+          "from": "them",
+          "text": "You scare me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "In the best way"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my scary girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok now you're lovebombing me",
+          "status": "Read 2:11 PM"
+        }
+      ]
+    }
+  ]
+}

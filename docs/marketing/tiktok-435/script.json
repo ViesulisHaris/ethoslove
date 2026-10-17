@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Happy birthday my pretty girl"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "I can’t wait to spend the whole day with you"
+        },
+        {
+          "from": "me",
+          "text": "BABY"
+        },
+        {
+          "from": "me",
+          "text": "you stayed up for this??",
+          "status": "Read 12:01 am"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You opened it"
+        },
+        {
+          "from": "me",
+          "text": "opened what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "im sorry for everything 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "3 weeks ago",
+          "status": "Read 01:13"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "And you never replied"
+        },
+        {
+          "from": "me",
+          "text": "you said sorry for everything"
+        },
+        {
+          "from": "me",
+          "text": "except her"
+        }
+      ]
+    }
+  ]
+}

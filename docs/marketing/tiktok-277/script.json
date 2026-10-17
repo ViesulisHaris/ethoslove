@@ -1,0 +1,127 @@
+{
+  "demo": {
+    "template": "coquette",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"elena\" \"maya\"",
+      "swap \"ELENA\" \"MAYA\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 2400",
+      "shot gift-1.png",
+      "tap \"untie the bow\"",
+      "wait 3600",
+      "shot gift-2.png",
+      "scroll 560",
+      "wait 1200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:03",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 7 months"
+        },
+        {
+          "from": "me",
+          "text": "6"
+        },
+        {
+          "from": "them",
+          "text": "its 7 maya"
+        },
+        {
+          "from": "me",
+          "text": "i dont count february"
+        },
+        {
+          "from": "them",
+          "text": "why not"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why not"
+        },
+        {
+          "from": "me",
+          "text": "i just dont"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 7 months (6 for u)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco im obsessed"
+        },
+        {
+          "from": "them",
+          "text": "so why dont u count feb"
+        },
+        {
+          "from": "me",
+          "text": "i was still talking to someone in feb"
+        },
+        {
+          "from": "them",
+          "text": "u said u deleted his number"
+        },
+        {
+          "from": "me",
+          "text": "i did"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know it off by heart"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "why do u still know it"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did chloe get the same gift"
+        },
+        {
+          "from": "them",
+          "text": "What gift"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for my one and only 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "she posted it",
+          "status": "Read 21:13"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "She's lying"
+        },
+        {
+          "from": "me",
+          "text": "so is jess"
+        },
+        {
+          "from": "me",
+          "text": "and emma"
+        },
+        {
+          "from": "them",
+          "text": "Who told you"
+        }
+      ]
+    }
+  ]
+}

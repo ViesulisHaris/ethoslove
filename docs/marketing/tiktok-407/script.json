@@ -1,0 +1,40 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "nunca haces nada lindo por mí"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para mi niña bonita 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Retira lo que dijiste"
+        },
+        {
+          "from": "me",
+          "text": "retiro lo dicho"
+        },
+        {
+          "from": "me",
+          "text": "retiro todo lo dicho",
+          "status": "Leído 19:48"
+        }
+      ]
+    }
+  ]
+}

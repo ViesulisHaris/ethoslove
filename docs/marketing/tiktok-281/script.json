@@ -1,0 +1,135 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"you said “five minutes away” from your bed\" \"you fell asleep during the office. 4 times.\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u fell asleep during the office again"
+        },
+        {
+          "from": "me",
+          "text": "i was resting my eyes"
+        },
+        {
+          "from": "them",
+          "text": "for 4 episodes"
+        },
+        {
+          "from": "me",
+          "text": "they were long episodes"
+        },
+        {
+          "from": "them",
+          "text": "u used to love it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u used to love it"
+        },
+        {
+          "from": "me",
+          "text": "i still love it"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u this. its not the office i promise"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the court will now hear maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have to tell u something"
+        },
+        {
+          "from": "me",
+          "text": "ive never liked the office"
+        },
+        {
+          "from": "them",
+          "text": "u quoted it on our first date"
+        },
+        {
+          "from": "me",
+          "text": "i learned 3 lines off tiktok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya its been a year"
+        },
+        {
+          "from": "me",
+          "text": "long year"
+        },
+        {
+          "from": "them",
+          "text": "what else have u pretended to like"
+        },
+        {
+          "from": "them",
+          "text": "maya what else"
+        }
+      ]
+    }
+  ]
+}

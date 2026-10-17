@@ -1,0 +1,123 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:19",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can i be honest"
+        },
+        {
+          "from": "me",
+          "text": "about what"
+        },
+        {
+          "from": "them",
+          "text": "the lasagne was dry"
+        },
+        {
+          "from": "me",
+          "text": "i was cooking for 3 hours marco"
+        },
+        {
+          "from": "them",
+          "text": "im not being mean. im being honest"
+        },
+        {
+          "from": "them",
+          "text": "u want me to be honest right"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u want me to be honest right"
+        },
+        {
+          "from": "me",
+          "text": "not about the lasagne"
+        },
+        {
+          "from": "them",
+          "text": "ok. honestly? i love u. i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (the best cook i know)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Fortune Cookie (a food gift, which is the joke, and a slip for every thing he loves about her). It has to look like real work: their photos, a long message. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this made me cry a bit"
+        },
+        {
+          "from": "me",
+          "text": "ill make it again on sunday"
+        },
+        {
+          "from": "them",
+          "text": "maybe try less time in the oven"
+        },
+        {
+          "from": "them",
+          "text": "im only saying it bc everything else u make is perfect"
+        },
+        {
+          "from": "me",
+          "text": "thank u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "everything else i make is from the italian on gorse road"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since march. i put it in my own dishes. the lasagne was the only one i actually made"
+        },
+        {
+          "from": "them",
+          "text": "how many"
+        },
+        {
+          "from": "me",
+          "text": "i kept the receipts",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya how many were from the restaurant"
+        }
+      ]
+    }
+  ]
+}

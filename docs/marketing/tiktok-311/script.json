@@ -1,0 +1,71 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the restaurant called"
+        },
+        {
+          "from": "me",
+          "text": "what restaurant"
+        },
+        {
+          "from": "them",
+          "text": "they wanted to confirm saturday"
+        },
+        {
+          "from": "me",
+          "text": "you never cancelled it?",
+          "status": "Read 19:59"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i couldn't"
+        },
+        {
+          "from": "them",
+          "text": "i made you this for that night"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "3 years 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why does it end with a question mark"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i was going to ask you there"
+        },
+        {
+          "from": "me",
+          "text": "ask me what"
+        },
+        {
+          "from": "them",
+          "text": "it doesn't matter now"
+        }
+      ]
+    }
+  ]
+}

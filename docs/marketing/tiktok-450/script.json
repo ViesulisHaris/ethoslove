@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can we please stop arguing"
+        },
+        {
+          "from": "me",
+          "text": "it’s not good for the baby"
+        },
+        {
+          "from": "them",
+          "text": "What baby???"
+        },
+        {
+          "from": "me",
+          "text": "me",
+          "status": "Read 2:52 pm"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my baby 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

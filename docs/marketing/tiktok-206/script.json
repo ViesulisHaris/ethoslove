@@ -1,0 +1,174 @@
+{
+  "demo": {
+    "template": "picnic",
+    "steps": [
+      "swap \"TEO\" \"MARCO\"",
+      "swap \"Teo\" \"Marco\"",
+      "swap \"LOLA\" \"MAYA\"",
+      "swap \"Lola\" \"Maya\"",
+      "swap \"lola\" \"maya\"",
+      "wait 1800",
+      "shot gift-1.png",
+      "tap \"tap the basket\"",
+      "wait 1600",
+      "tap 60 330",
+      "wait 1300",
+      "tap 60 330",
+      "wait 1500",
+      "shot gift-2.png",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 2400",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:42",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can we talk"
+        },
+        {
+          "from": "me",
+          "text": "always. whats wrong"
+        },
+        {
+          "from": "them",
+          "text": "ur too nice to me marco"
+        },
+        {
+          "from": "me",
+          "text": "is that a bad thing?"
+        },
+        {
+          "from": "them",
+          "text": "its like dating a golden retriever"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its like dating a golden retriever"
+        },
+        {
+          "from": "me",
+          "text": "i was going to send u this on saturday"
+        },
+        {
+          "from": "me",
+          "text": "no reason. i just like u"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya (no reason, just a picnic)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "see. this is what i mean"
+        },
+        {
+          "from": "them",
+          "text": "jake never made me anything"
+        },
+        {
+          "from": "me",
+          "text": "jake cheated on u twice"
+        },
+        {
+          "from": "them",
+          "text": "at least i felt something"
+        },
+        {
+          "from": "me",
+          "text": "so u want me to treat u like he did?"
+        },
+        {
+          "from": "them",
+          "text": "yes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "then i cant give u that"
+        },
+        {
+          "from": "them",
+          "text": "then i think we should end it"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "ill drop ur hoodie back tomorrow. i washed it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Sat, 26 Sep 2027|23:48",
+      "messages": [
+        {
+          "from": "them",
+          "text": "hey stranger"
+        },
+        {
+          "from": "them",
+          "text": "i know its been a year"
+        },
+        {
+          "from": "them",
+          "text": "i was wrong about u"
+        },
+        {
+          "from": "them",
+          "text": "can i have another chance?"
+        }
+      ]
+    }
+  ]
+}

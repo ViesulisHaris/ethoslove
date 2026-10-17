@@ -1,0 +1,146 @@
+{
+  "demo": {
+    "template": "picnic",
+    "steps": [
+      "swap \"TEO\" \"MARCO\"",
+      "swap \"Teo\" \"Marco\"",
+      "swap \"LOLA\" \"MAYA\"",
+      "swap \"Lola\" \"Maya\"",
+      "swap \"lola\" \"maya\"",
+      "wait 1800",
+      "shot gift-1.png",
+      "tap \"tap the basket\"",
+      "wait 1600",
+      "tap 60 330",
+      "wait 1300",
+      "tap 60 330",
+      "wait 1500",
+      "shot gift-2.png",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 1100",
+      "tap 60 330",
+      "wait 2400",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did u screenshot my message"
+        },
+        {
+          "from": "me",
+          "text": "i didnt"
+        },
+        {
+          "from": "them",
+          "text": "snapchat literally told me"
+        },
+        {
+          "from": "me",
+          "text": "its glitching"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "whatever. made u this"
+        },
+        {
+          "from": "them",
+          "text": "3 months today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "3 months of us",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco i love it"
+        },
+        {
+          "from": "them",
+          "text": "so why the screenshot"
+        },
+        {
+          "from": "me",
+          "text": "i screenshot all of them"
+        },
+        {
+          "from": "them",
+          "text": "all of what"
+        },
+        {
+          "from": "me",
+          "text": "ur texts. since the first one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why"
+        },
+        {
+          "from": "me",
+          "text": "for the slideshow at our wedding"
+        },
+        {
+          "from": "them",
+          "text": "maya we've been together 3 months"
+        },
+        {
+          "from": "me",
+          "text": "and?"
+        },
+        {
+          "from": "them",
+          "text": "maya how many screenshots"
+        }
+      ]
+    }
+  ]
+}

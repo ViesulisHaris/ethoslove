@@ -1,0 +1,129 @@
+{
+  "demo": {
+    "template": "museum",
+    "steps": [
+      "swap \"Thirty Candles\" \"Twenty Candles\"",
+      "swap \"MAMÁ\" \"MAYA\"",
+      "swap \"Mamá\" \"Maya\"",
+      "swap \"DANI\" \"MARCO\"",
+      "swap \"Dani\" \"Marco\"",
+      "swap \"1996–2026\" \"2024–2026\"",
+      "swap \"Thirty years of small, unpaid, unphotographed work.\" \"Two years of us, most of it never photographed.\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"enter\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"Next room\"",
+      "wait 2600",
+      "shot gift-3.png",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 2200",
+      "tap \"Next room\"",
+      "wait 3000",
+      "shot gift-4.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:04",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u liked her pic from 2019"
+        },
+        {
+          "from": "them",
+          "text": "accident"
+        },
+        {
+          "from": "me",
+          "text": "u scrolled 5 years to accidentally like it"
+        },
+        {
+          "from": "them",
+          "text": "my thumb slipped"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur honestly so dramatic"
+        },
+        {
+          "from": "them",
+          "text": "made u this so u calm down"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (a retrospective)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cute"
+        },
+        {
+          "from": "me",
+          "text": "my thumb slipped too btw"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "on ur best mates pic"
+        },
+        {
+          "from": "me",
+          "text": "from 2018"
+        },
+        {
+          "from": "them",
+          "text": "MAYA"
+        },
+        {
+          "from": "me",
+          "text": "accident 💅"
+        }
+      ]
+    }
+  ]
+}

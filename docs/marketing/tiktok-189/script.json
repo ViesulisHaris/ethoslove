@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:36",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why does chloe from work text u goodnight every night"
+        },
+        {
+          "from": "them",
+          "text": "shes like a sister to me"
+        },
+        {
+          "from": "me",
+          "text": "u dont text ur actual sister goodnight"
+        },
+        {
+          "from": "them",
+          "text": "because my sister isnt going through a hard time"
+        },
+        {
+          "from": "them",
+          "text": "ur jealous of a friendship maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur jealous of a friendship maya"
+        },
+        {
+          "from": "me",
+          "text": "every night at 11"
+        },
+        {
+          "from": "them",
+          "text": "and then i text u. at 11:01. i made u this. chloe didnt get one"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (only u get one)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Paper Crane (folded by hand, a wish for her and nobody else). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is really nice"
+        },
+        {
+          "from": "me",
+          "text": "can u just stop the goodnights"
+        },
+        {
+          "from": "them",
+          "text": "she'd be hurt. i cant do that to her right now"
+        },
+        {
+          "from": "them",
+          "text": "u of all people should get that"
+        },
+        {
+          "from": "me",
+          "text": "i do"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have a work husband"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since march. we get lunch every day. he texts me good morning"
+        },
+        {
+          "from": "them",
+          "text": "whats his name"
+        },
+        {
+          "from": "me",
+          "text": "u'll laugh",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya whats his name"
+        }
+      ]
+    }
+  ]
+}

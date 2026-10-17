@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i feel so sick 😭",
+          "status": "Read 9:05 am"
+        },
+        {
+          "from": "them",
+          "text": "Stay in bed baby"
+        },
+        {
+          "from": "them",
+          "text": "Soup’s coming in 20"
+        },
+        {
+          "from": "them",
+          "text": "And this so you smile a little"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "get better my love 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

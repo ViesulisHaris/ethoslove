@@ -1,0 +1,89 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:08 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are we ok"
+        },
+        {
+          "from": "them",
+          "text": "yeah why"
+        },
+        {
+          "from": "me",
+          "text": "u havent called me in 3 days"
+        },
+        {
+          "from": "them",
+          "text": "ive had stuff on"
+        },
+        {
+          "from": "me",
+          "text": "what stuff"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what stuff"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "text": "dont laugh"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (we're ok)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i asked chatgpt if i should break up with u"
+        },
+        {
+          "from": "them",
+          "text": "excuse me"
+        },
+        {
+          "from": "me",
+          "text": "it said yes"
+        },
+        {
+          "from": "me",
+          "text": "i said thank u"
+        },
+        {
+          "from": "me",
+          "text": "showing it this now. it'll change its mind"
+        },
+        {
+          "from": "them",
+          "text": "maya what did u tell it about me"
+        }
+      ]
+    }
+  ]
+}

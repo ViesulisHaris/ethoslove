@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can i tell you something"
+        },
+        {
+          "from": "me",
+          "text": "you're scaring me"
+        },
+        {
+          "from": "them",
+          "text": "it's not bad"
+        },
+        {
+          "from": "them",
+          "text": "i love you"
+        },
+        {
+          "from": "me",
+          "text": "wait"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "omg"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i love you too"
+        },
+        {
+          "from": "me",
+          "text": "i've wanted to say it for weeks"
+        },
+        {
+          "from": "them",
+          "text": "same",
+          "tapback": "heart"
+        },
+        {
+          "from": "me",
+          "text": "😭😭"
+        }
+      ]
+    }
+  ]
+}

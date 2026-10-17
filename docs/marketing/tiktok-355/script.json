@@ -1,0 +1,109 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you really didn't say it"
+        },
+        {
+          "from": "them",
+          "text": "say what"
+        },
+        {
+          "from": "me",
+          "text": "wow"
+        },
+        {
+          "from": "me",
+          "text": "my mum said it. my friends said it. my dentist said it"
+        },
+        {
+          "from": "them",
+          "text": "your dentist??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you awake"
+        },
+        {
+          "from": "me",
+          "text": "unfortunately"
+        },
+        {
+          "from": "them",
+          "text": "look at the time"
+        },
+        {
+          "from": "me",
+          "text": "it's 23:58 leo"
+        },
+        {
+          "from": "them",
+          "text": "exactly"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:59",
+      "messages": [
+        {
+          "from": "them",
+          "text": "everyone wanted to be first"
+        },
+        {
+          "from": "them",
+          "text": "i wanted to be the last one"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday maya"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "the last minute 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i hate you"
+        },
+        {
+          "from": "me",
+          "text": "i was sad all day"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "them",
+          "text": "open it before midnight"
+        },
+        {
+          "from": "them",
+          "text": "40 seconds left"
+        }
+      ]
+    }
+  ]
+}

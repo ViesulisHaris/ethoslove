@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|18:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did booking.com just email me"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "you used my account. 2 adults. king bed"
+        },
+        {
+          "from": "them",
+          "text": "it's a work trip"
+        },
+        {
+          "from": "me",
+          "text": "with who"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my manager"
+        },
+        {
+          "from": "me",
+          "text": "in a king bed?"
+        },
+        {
+          "from": "them",
+          "text": "they only had one room"
+        },
+        {
+          "from": "me",
+          "text": "you booked it in august"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you this to open while i'm away"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "while i'm away 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "how long is the work trip"
+        },
+        {
+          "from": "them",
+          "text": "why are you reading my emails"
+        }
+      ]
+    }
+  ]
+}

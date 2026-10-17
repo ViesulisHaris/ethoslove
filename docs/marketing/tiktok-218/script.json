@@ -1,0 +1,115 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:36",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i miss u and u said \"same\""
+        },
+        {
+          "from": "me",
+          "text": "same"
+        },
+        {
+          "from": "them",
+          "text": "wow"
+        },
+        {
+          "from": "them",
+          "text": "whats wrong with u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Twelve reasons (to start)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "i want to break up"
+        },
+        {
+          "from": "them",
+          "text": "over WHAT"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ur little sister added me on snap"
+        },
+        {
+          "from": "them",
+          "text": "so?"
+        },
+        {
+          "from": "me",
+          "text": "she thinks ur girlfriends called chloe"
+        },
+        {
+          "from": "them",
+          "text": "maya let me explain"
+        }
+      ]
+    }
+  ]
+}

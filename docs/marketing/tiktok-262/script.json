@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|03:33",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I listened to it again"
+        },
+        {
+          "from": "me",
+          "text": "listened to what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday leo 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "me",
+          "text": "that was 2 birthdays ago",
+          "status": "Read 03:34"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "You said you'd be there for the next one"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "It's today"
+        }
+      ]
+    }
+  ]
+}

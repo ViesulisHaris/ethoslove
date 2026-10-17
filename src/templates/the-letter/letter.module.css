@@ -108,17 +108,23 @@
 }
 
 /* ---------- envelope ---------- */
+/*
+ * Flat, and stacked in the order written: the open flap's inside, the letter, the front, the closed
+ * flap. The flap was a 3D flip in a preserve-3d box, where a browser sorts layers by depth rather
+ * than z-index, and Safari put the open flap over the letter as it slid out.
+ */
 .envelope {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 2;
-  perspective: calc(210 * var(--k));
-  transform-style: preserve-3d;
+  /* Its layers' z-indexes stay inside it: the shadow under it still falls over its bottom edge. */
+  isolation: isolate;
 }
 .envBack,
 .envInner,
 .envFront,
-.envFlap {
+.envFlap,
+.envFlapOpen {
   position: absolute;
   border-radius: 8px;
 }
@@ -141,6 +147,7 @@
   background: var(--tl-paper);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   overflow: hidden;
+  z-index: 2;
 }
 .letterLines {
   position: absolute;
@@ -156,6 +163,7 @@
 }
 .envFront {
   inset: 0;
+  z-index: 3;
   background: var(--tl-env);
   clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
@@ -167,14 +175,27 @@
   clip-path: inherit;
   background: linear-gradient(115deg, rgba(0, 0, 0, 0.09), transparent 42%, transparent 58%, rgba(0, 0, 0, 0.1));
 }
+/* The closed flap: it folds up to its hinge as the envelope opens. */
 .envFlap {
   left: 0;
   right: 0;
   top: 0;
   height: 56%;
+  z-index: 4;
   background: color-mix(in srgb, var(--tl-env) 90%, black);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: 50% 0%;
+}
+/* Its inside, once open: it unfolds upwards from the hinge, behind the letter, a shade darker by the fold. */
+.envFlapOpen {
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 56%;
+  z-index: 1;
+  background: linear-gradient(0deg, color-mix(in srgb, var(--tl-env) 84%, black), color-mix(in srgb, var(--tl-env) 93%, black) 70%);
+  clip-path: polygon(0 100%, 100% 100%, 50% 0);
+  transform-origin: 50% 100%;
 }
 /* The name, the stamp and the twine are stuck to the front, so they sit over the paper inside. */
 .envName {
@@ -354,6 +375,8 @@
   font-size: clamp(2.1rem, 9cqw, 2.7rem);
   line-height: 1.08;
   color: var(--tl-ink);
+  /* A 40-letter name with no space in it ran off the paper. */
+  overflow-wrap: anywhere;
 }
 .body {
   margin-top: 16px;
@@ -361,6 +384,7 @@
   font-size: clamp(1.5rem, 6.4cqw, 1.85rem);
   line-height: 1.45;
   color: var(--tl-ink);
+  overflow-wrap: anywhere;
 }
 .body p + p {
   margin-top: 0.85em;
@@ -374,16 +398,21 @@
 }
 .signature {
   margin-top: 28px;
+  /* The wax seal (.stamp) sits in the paper's bottom-left corner: a long name stops short of it
+     instead of running underneath. */
+  padding-left: 52px;
   font-family: var(--gift-font-hand);
   font-size: clamp(1.4rem, 5.6cqw, 1.6rem);
   line-height: 1.3;
   text-align: right;
+  overflow-wrap: anywhere;
 }
 .signName {
   font-size: clamp(2.3rem, 9cqw, 2.9rem);
   color: var(--gift-accent);
   transform: rotate(-3deg);
   display: inline-block;
+  max-width: 100%;
   margin-top: 4px;
 }
 .stamp {
@@ -493,8 +522,9 @@
   display: grid;
   place-items: center;
   background: rgba(20, 12, 8, 0.72);
-  backdrop-filter: blur(6px);
+  /* Prefixed first: in the other order Lightning CSS (the minifier) drops one, and Safari loses the blur. */
   -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 /* ---------- cards ---------- */

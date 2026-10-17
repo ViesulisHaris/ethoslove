@@ -1,0 +1,75 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Hoy|18:47",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no pasé el examen"
+        },
+        {
+          "from": "me",
+          "text": "estudié muchísimo"
+        },
+        {
+          "from": "them",
+          "text": "lo siento mucho amor"
+        },
+        {
+          "from": "them",
+          "text": "la próxima lo pasas"
+        },
+        {
+          "from": "me",
+          "text": "solo quiero llorar"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "te hice algo"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para mi persona favorita 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "estaba teniendo el peor día"
+        },
+        {
+          "from": "me",
+          "text": "y tú haces esto"
+        },
+        {
+          "from": "me",
+          "text": "te amo muchísimo"
+        },
+        {
+          "from": "them",
+          "text": "siempre maya"
+        }
+      ]
+    }
+  ]
+}

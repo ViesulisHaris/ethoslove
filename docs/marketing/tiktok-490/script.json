@@ -1,0 +1,59 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|4:29 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "babe I'll call you at 9"
+        },
+        {
+          "from": "me",
+          "text": "okay 🥰"
+        },
+        {
+          "ts": "Today|9:01 PM"
+        },
+        {
+          "from": "me",
+          "text": "all a man do is lie",
+          "status": "Read 9:01 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "It's 9:01 relax"
+        },
+        {
+          "from": "them",
+          "text": "I was finishing this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry i'm late 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "all a man do is make me cry",
+          "status": "Read 9:04 PM"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "lang": "es",
+  "silenced": "mi amor",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "estoy llorando en el bus",
+      "messages": [
+        {
+          "from": "me",
+          "text": "hoy fue un día horrible",
+          "status": "Leído 18:40"
+        },
+        {
+          "from": "them",
+          "text": "Ya sé"
+        },
+        {
+          "from": "them",
+          "text": "Ábrelo cuando llegues a casa"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "para ti 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "lang": "es"
+          }
+        }
+      ]
+    }
+  ]
+}

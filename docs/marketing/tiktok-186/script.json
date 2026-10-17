@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:52",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u told dan we're \"not official\"??"
+        },
+        {
+          "from": "them",
+          "text": "we never actually said it maya"
+        },
+        {
+          "from": "me",
+          "text": "its been 8 months"
+        },
+        {
+          "from": "them",
+          "text": "labels ruin things. u know that"
+        },
+        {
+          "from": "them",
+          "text": "why does it matter what dan thinks"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why does it matter what dan thinks"
+        },
+        {
+          "from": "me",
+          "text": "bc apparently we're not official"
+        },
+        {
+          "from": "them",
+          "text": "does this look not official to u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (official enough?)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: XOXO (a love letter that says everything he won't say to dan). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok thats actually so sweet"
+        },
+        {
+          "from": "me",
+          "text": "so are we official or not"
+        },
+        {
+          "from": "them",
+          "text": "we're us. isnt that better"
+        },
+        {
+          "from": "them",
+          "text": "dont make it weird by asking again"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "everyone at my work thinks we're engaged"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since july. i wear a ring to work. theres a date"
+        },
+        {
+          "from": "them",
+          "text": "when"
+        },
+        {
+          "from": "me",
+          "text": "u'll find out when everyone else does",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya when is the wedding"
+        }
+      ]
+    }
+  ]
+}

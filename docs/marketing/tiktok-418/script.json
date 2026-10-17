@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "silenced": "NOT my boyfriend",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Goodmorning pretty"
+        },
+        {
+          "from": "them",
+          "text": "Breakfast is outside your door"
+        },
+        {
+          "from": "them",
+          "text": "And this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Have a good day baby"
+        }
+      ]
+    }
+  ]
+}

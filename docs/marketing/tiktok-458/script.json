@@ -1,0 +1,35 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "im gonna marry you",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you did this??",
+          "status": "Read 7:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "Ofc I did"
+        },
+        {
+          "from": "them",
+          "text": "Anything for my pretty girl"
+        }
+      ]
+    }
+  ]
+}

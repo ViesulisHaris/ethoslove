@@ -1,0 +1,62 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:44",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Who told you"
+        },
+        {
+          "from": "me",
+          "text": "your girlfriend"
+        },
+        {
+          "from": "them",
+          "text": "I don't have a girlfriend"
+        },
+        {
+          "from": "me",
+          "text": "she sent me this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for my girlfriend 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Chloe"
+          },
+          "status": "Read 19:45"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Maya I can explain"
+        },
+        {
+          "from": "me",
+          "text": "no need"
+        },
+        {
+          "from": "me",
+          "text": "we're getting drinks friday"
+        },
+        {
+          "from": "them",
+          "text": "Who is"
+        },
+        {
+          "from": "me",
+          "text": "me and chloe 💅"
+        }
+      ]
+    }
+  ]
+}

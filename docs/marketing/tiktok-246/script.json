@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy birthday maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Happy birthday"
+        },
+        {
+          "from": "me",
+          "text": "we haven't spoken in 8 months",
+          "status": "Read 00:01"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "I made it last year and set it for tonight"
+        },
+        {
+          "from": "me",
+          "text": "you could have cancelled it"
+        },
+        {
+          "from": "them",
+          "text": "I didn't want to"
+        }
+      ]
+    }
+  ]
+}

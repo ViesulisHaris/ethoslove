@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Thank you baby"
+        },
+        {
+          "from": "me",
+          "text": "wait for what",
+          "status": "Read 1:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "For being you"
+        },
+        {
+          "from": "them",
+          "text": "My life’s so much better with you in it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

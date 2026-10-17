@@ -1,0 +1,75 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "me",
+          "text": "omg it's midnight"
+        },
+        {
+          "from": "me",
+          "text": "happy 1 year baby"
+        },
+        {
+          "from": "them",
+          "text": "i made you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "no way"
+        },
+        {
+          "from": "me",
+          "text": "you made this??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm actually crying"
+        },
+        {
+          "from": "me",
+          "text": "best year of my life"
+        },
+        {
+          "from": "them",
+          "text": "first of many"
+        },
+        {
+          "from": "me",
+          "text": "i love you",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

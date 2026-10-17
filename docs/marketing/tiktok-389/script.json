@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:51",
+      "messages": [
+        {
+          "from": "me",
+          "text": "worst shift of my life"
+        },
+        {
+          "from": "me",
+          "text": "my manager yelled at me in front of everyone"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "are you ok"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this when you're home"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i can't wait that long"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm sitting in my car crying"
+        },
+        {
+          "from": "me",
+          "text": "you're the best"
+        },
+        {
+          "from": "them",
+          "text": "you deserve so much better"
+        },
+        {
+          "from": "me",
+          "text": "i love you"
+        }
+      ]
+    }
+  ]
+}

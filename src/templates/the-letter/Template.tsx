@@ -7,6 +7,7 @@ import { ChevronDown } from "lucide-react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { parseRichText } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
+import { initialOf } from "@/lib/gift/graphemes";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -101,6 +102,9 @@ const S = {
 type Stage = "sealed" | "opening" | "unfolding" | "reading";
 
 const SPRING = { type: "spring", stiffness: 120, damping: 18 } as const;
+/** The envelope's flap: its outside folds up to the hinge, then its inside unfolds above it. */
+const FLAP_AT = 0.45;
+const FLAP_UP_S = 0.2;
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<LetterFields>) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -116,7 +120,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const fields = data.fields;
   const palette = PAPER[fields.paper] ?? PAPER.cream;
-  const sealInitial = (fields.sealInitial || data.senderName.charAt(0) || "♥").toUpperCase();
+  const sealInitial = fields.sealInitial ? fields.sealInitial.toUpperCase() : initialOf(data.senderName, "♥");
   const greeting = fields.greeting || t("dear", { name: data.recipientName });
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const s = S[data.locale] ?? S.en;
@@ -320,6 +324,12 @@ function Cover({
                 <div className={styles.envBack} />
                 <div className={styles.envInner} />
                 <motion.div
+                  className={styles.envFlapOpen}
+                  initial={false}
+                  animate={opening ? { scaleY: 1, scaleX: 1 } : { scaleY: 0, scaleX: 1.04 }}
+                  transition={opening ? { delay: FLAP_AT + FLAP_UP_S, duration: 0.6, ease: [0.22, 1, 0.36, 1] } : { duration: 0 }}
+                />
+                <motion.div
                   className={styles.envLetter}
                   animate={opening ? { y: "-72%" } : { y: 0 }}
                   transition={{ delay: 1.15, type: "spring", stiffness: 70, damping: 14 }}
@@ -329,9 +339,9 @@ function Cover({
                 <div className={styles.envFront} />
                 <motion.div
                   className={styles.envFlap}
-                  style={{ zIndex: opening ? 1 : 5 }}
-                  animate={opening ? { rotateX: -176 } : { rotateX: 0 }}
-                  transition={{ delay: 0.45, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                  initial={false}
+                  animate={opening ? { scaleY: 0, scaleX: 1.04 } : { scaleY: 1, scaleX: 1 }}
+                  transition={opening ? { delay: FLAP_AT, duration: FLAP_UP_S, ease: [0.42, 0, 1, 1] } : { duration: 0 }}
                 />
                 <p className={styles.envName} style={{ fontSize: nameSize }}>
                   {s.for} {name}

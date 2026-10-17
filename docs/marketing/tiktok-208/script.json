@@ -1,0 +1,118 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Just because\" \"Happy 2 years\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said happy 2 years and u said \"u too\""
+        },
+        {
+          "from": "me",
+          "text": "u too"
+        },
+        {
+          "from": "them",
+          "text": "thats it?"
+        },
+        {
+          "from": "them",
+          "text": "2 years maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "ok. i made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Happy 2 years",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "we need to talk"
+        },
+        {
+          "from": "them",
+          "text": "is there someone else"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "who"
+        },
+        {
+          "from": "me",
+          "text": "ask ur best mate"
+        },
+        {
+          "from": "them",
+          "text": "jake??"
+        },
+        {
+          "from": "them",
+          "text": "maya how long"
+        }
+      ]
+    }
+  ]
+}

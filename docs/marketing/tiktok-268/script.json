@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:31",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm sorry I was like that"
+        },
+        {
+          "from": "me",
+          "text": "like what"
+        },
+        {
+          "from": "them",
+          "text": "Checking your phone. The jealousy"
+        },
+        {
+          "from": "me",
+          "text": "it's been a year",
+          "status": "Read 20:32"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm in therapy now"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i'm sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i'm proud of you"
+        },
+        {
+          "from": "them",
+          "text": "I just wish you got this version"
+        }
+      ]
+    }
+  ]
+}

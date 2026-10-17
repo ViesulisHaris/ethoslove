@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:31",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Please just open it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "im sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "a link doesn't fix this"
+        },
+        {
+          "from": "me",
+          "text": "who is chloe",
+          "status": "Read 22:32"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Open it and you'll understand"
+        },
+        {
+          "from": "me",
+          "text": "understand what"
+        },
+        {
+          "from": "them",
+          "text": "She's just a friend"
+        },
+        {
+          "from": "them",
+          "text": "She helped me make it"
+        }
+      ]
+    }
+  ]
+}

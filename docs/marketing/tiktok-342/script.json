@@ -1,0 +1,91 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:31",
+      "messages": [
+        {
+          "from": "them",
+          "text": "did u like it"
+        },
+        {
+          "from": "me",
+          "text": "like what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "oh yeah it's cute"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "cute?"
+        },
+        {
+          "from": "them",
+          "text": "it took me 2 weeks"
+        },
+        {
+          "from": "me",
+          "text": "it's really cute"
+        },
+        {
+          "from": "them",
+          "text": "why did ur ex just follow me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "idk"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "me",
+          "text": "i might have sent it to him"
+        },
+        {
+          "from": "them",
+          "text": "why would u send it to him"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so he'd see someone finally made me something"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "did he reply"
+        }
+      ]
+    }
+  ]
+}

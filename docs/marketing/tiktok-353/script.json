@@ -1,0 +1,82 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|16:20",
+      "messages": [
+        {
+          "from": "me",
+          "text": "a bakery just called me"
+        },
+        {
+          "from": "them",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "they said my birthday cake's ready"
+        },
+        {
+          "from": "them",
+          "text": "i forgot to cancel it"
+        },
+        {
+          "from": "me",
+          "text": "you ordered it in june?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you always said nobody plans your birthday"
+        },
+        {
+          "from": "me",
+          "text": "leo we broke up in august"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "there's this too"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 21st maya 🎂",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you scheduled it?"
+        },
+        {
+          "from": "them",
+          "text": "for midnight"
+        },
+        {
+          "from": "me",
+          "text": "why didn't you cancel it"
+        },
+        {
+          "from": "them",
+          "text": "i didn't want you to think nobody planned it"
+        }
+      ]
+    }
+  ]
+}

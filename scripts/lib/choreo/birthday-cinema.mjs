@@ -8,7 +8,6 @@
  */
 export async function film({ page, live, spec, breathe, inGift, now }) {
   const marks = {};
-  const text = () => document.querySelector('[data-mode="live"]')?.innerText ?? "";
   const says = (s) => new RegExp(s, "i").test(document.querySelector('[data-mode="live"]')?.innerText ?? "");
 
   const start = live.getByRole("button", { name: /tap to start the show/i });

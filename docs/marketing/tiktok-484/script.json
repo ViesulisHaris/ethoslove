@@ -1,0 +1,41 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "encrypted": true,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:16 AM",
+      "input": "wait i take it back",
+      "messages": [
+        {
+          "from": "them",
+          "text": "When can we hang?"
+        },
+        {
+          "from": "me",
+          "text": "when you wanna take me on a date?"
+        },
+        {
+          "from": "me",
+          "text": "but clearly that's too much for you",
+          "status": "Read 10:16 AM"
+        },
+        {
+          "from": "them",
+          "text": "Already booked it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "saturday 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i recorded it"
+        },
+        {
+          "from": "me",
+          "text": "recorded what"
+        },
+        {
+          "from": "them",
+          "text": "last night. so u can hear how u sound"
+        },
+        {
+          "from": "me",
+          "text": "u recorded me crying?"
+        },
+        {
+          "from": "them",
+          "text": "u werent crying. thats my point"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u werent crying. thats my point"
+        },
+        {
+          "from": "me",
+          "text": "delete it marco"
+        },
+        {
+          "from": "them",
+          "text": "im not sending it anywhere. its for u"
+        },
+        {
+          "from": "them",
+          "text": "and im not doing this at 1am. i made u this earlier"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (i love u even then)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. The kindest thing in the catalogue. The gap between it and the recording is the post. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this is so beautiful"
+        },
+        {
+          "from": "me",
+          "text": "it doesnt make the recording ok"
+        },
+        {
+          "from": "them",
+          "text": "i did it so u could see it from my side"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "u always remember it different to me"
+        },
+        {
+          "from": "me",
+          "text": "maybe i do"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "ive got one from tuesday"
+        },
+        {
+          "from": "them",
+          "text": "one what"
+        },
+        {
+          "from": "me",
+          "text": "a recording. tuesday. 9 minutes"
+        },
+        {
+          "from": "them",
+          "text": "why would u do that"
+        },
+        {
+          "from": "me",
+          "text": "same reason as u",
+          "tapback": "heart"
+        },
+        {
+          "from": "them",
+          "text": "send me the one from tuesday maya"
+        }
+      ]
+    }
+  ]
+}

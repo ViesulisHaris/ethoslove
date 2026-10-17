@@ -1,0 +1,149 @@
+{
+  "demo": {
+    "template": "scrapbook",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"elena\" \"maya\"",
+      "swap \"ELENA\" \"MAYA\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"open the scrapbook\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png",
+      "scroll 700",
+      "shot gift-4.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why was ur heart rate 160 at 2am saturday"
+        },
+        {
+          "from": "them",
+          "text": "i had a nightmare"
+        },
+        {
+          "from": "me",
+          "text": "for 40 minutes?"
+        },
+        {
+          "from": "them",
+          "text": "i was doing press ups. i couldnt sleep"
+        },
+        {
+          "from": "them",
+          "text": "ur monitoring my HEART now maya?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur monitoring my HEART now maya?"
+        },
+        {
+          "from": "me",
+          "text": "we share the health app marco"
+        },
+        {
+          "from": "them",
+          "text": "and u use it to spy on me. i made u this so u see how much i love u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (every little thing)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-4.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is beautiful"
+        },
+        {
+          "from": "me",
+          "text": "i just want to know why"
+        },
+        {
+          "from": "them",
+          "text": "because i was stressed. about us. about ur trust issues"
+        },
+        {
+          "from": "them",
+          "text": "u did this to my heart rate maya"
+        },
+        {
+          "from": "me",
+          "text": "sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "mine was 160 too"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "saturday. 2am. 40 minutes"
+        },
+        {
+          "from": "them",
+          "text": "we werent together saturday"
+        },
+        {
+          "from": "me",
+          "text": "i know",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya who were u with at 2am"
+        }
+      ]
+    }
+  ]
+}

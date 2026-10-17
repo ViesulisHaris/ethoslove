@@ -1,0 +1,83 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:20",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm done leo"
+        },
+        {
+          "from": "me",
+          "text": "i mean it this time"
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "ok?? that's all you have to say"
+        },
+        {
+          "from": "them",
+          "text": "give me 1 hour"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|20:24",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "every time you were right 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "what is this"
+        },
+        {
+          "from": "them",
+          "text": "a list"
+        },
+        {
+          "from": "them",
+          "text": "it's long"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "there's 46"
+        },
+        {
+          "from": "them",
+          "text": "i stopped at 46"
+        },
+        {
+          "from": "me",
+          "text": "you're wrong about tonight too"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "that's 47"
+        }
+      ]
+    }
+  ]
+}

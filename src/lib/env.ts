@@ -19,6 +19,20 @@ export const env = {
   stripeSecretKey: read("STRIPE_SECRET_KEY"),
   stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
   stripePublishableKey: read("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
+  /**
+   * Ethos's own Customer Portal configuration (bpc_…), made by scripts/setup-billing-portal.mjs. The
+   * Stripe account is shared, so its default portal belongs to nobody in particular: without this the
+   * portal route refuses rather than fall back to it (docs/MEMBERSHIP.md 2.1, R5).
+   */
+  stripePortalConfiguration: read("STRIPE_PORTAL_CONFIGURATION"),
+
+  /**
+   * The iPhone app's In-App Purchases (lib/commerce/app-store.ts). The v1 secret key (`sk_…`) asks
+   * RevenueCat what a user bought; the webhook's Authorization value is whatever the RevenueCat
+   * dashboard sends with each event (e.g. `Bearer <random>`), compared exactly.
+   */
+  revenueCatSecretKey: read("REVENUECAT_SECRET_API_KEY"),
+  revenueCatWebhookAuth: read("REVENUECAT_WEBHOOK_AUTH"),
 
   resendApiKey: read("RESEND_API_KEY"),
   emailFrom: read("EMAIL_FROM") ?? "Ethos <hello@tryethos.io>",
@@ -52,6 +66,14 @@ export const env = {
    * proved by DNS instead.
    */
   googleSiteVerification: read("GOOGLE_SITE_VERIFICATION"),
+
+  /**
+   * Ratings from the rest of the web, each behind its owner's key. With neither set, a place still
+   * gets its links out (dates/elsewhere.ts); with one set, its score is shown beside ours, with
+   * their name and a link back, which is what their terms require.
+   */
+  tripadvisorKey: read("TRIPADVISOR_API_KEY"),
+  googlePlacesKey: read("GOOGLE_PLACES_API_KEY"),
   bingSiteVerification: read("BING_SITE_VERIFICATION"),
 
   /** Apple Sign-In is hidden until the provider is configured in Supabase. */
@@ -65,6 +87,7 @@ export const isConfigured = {
   // The webhook secret is checked by the webhook route itself; the success page fulfils
   // purchases without it, so checkout only needs the secret key.
   stripe: Boolean(env.stripeSecretKey),
+  revenueCat: Boolean(env.revenueCatSecretKey),
   resend: Boolean(env.resendApiKey),
   posthog: Boolean(env.posthogKey),
   clarity: Boolean(env.clarityId),

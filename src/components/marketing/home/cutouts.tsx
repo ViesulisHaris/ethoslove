@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
+import { EagerImg } from "@/components/shared/eager-img";
 
 /**
  * The real flowers, bows and kisses the collage templates are made of (public/scraps), used on the
@@ -22,14 +22,23 @@ const CUTOUTS = {
   "kiss-1": [214, 192],
   "kiss-red": [404, 262],
   "envelope-ps": [356, 432],
+  // Ethos for Two's night sky on /pricing: the gold felt star, the gift tag and the paper couple.
+  "star-felt": [176, 178],
+  "tag-tofrom": [536, 280],
+  "paper-couple": [348, 400],
 } as const;
 
 export type CutoutId = keyof typeof CUTOUTS;
 
-/** One cut-out. Decorative: never announced, never clickable, never the thing the page waits for. */
+/**
+ * One cut-out. Decorative: never announced, never clickable, never the thing the page waits for.
+ * An eager one is drawn through EagerImg, so the homepage's hero lilies stop being preloaded by
+ * every page that merely links to the homepage (see eager-img.tsx); a lazy one needs no such care.
+ */
 export function Cutout({ id, eager = false, className, style }: { id: CutoutId; eager?: boolean; className?: string; style?: CSSProperties }) {
   const [width, height] = CUTOUTS[id];
-  return <img src={`/scraps/${id}.webp`} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
+  const Img = eager ? EagerImg : "img";
+  return <Img src={`/scraps/${id}.webp`} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
 }
 
 /**
@@ -80,8 +89,8 @@ const FRAMES = { hero: HERO, closing: CLOSING, band: BAND } as const;
 export function FloralFrame({ frame, ground, className }: { frame: keyof typeof FRAMES; ground: "light" | "dark" | "bare"; className?: string }) {
   return (
     <div aria-hidden="true" className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}>
-      {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 80% 46%, rgba(243,185,196,.5) 0%, rgba(243,185,196,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(248,214,208,.9) 0%, rgba(248,214,208,0) 72%), linear-gradient(180deg, #FCF5F0 0%, #F9E8E4 100%)" }} /> : null}
-      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #21402f 0%, #0f2219 55%, #09150f 100%)" }} /> : null}
+      {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
+      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => (
         <Cutout
           key={i}
@@ -99,7 +108,7 @@ export function FloralFrame({ frame, ground, className }: { frame: keyof typeof 
         />
       ))}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
-      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(6,14,10,0.55) 100%)" }} /> : null}
+      {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}
     </div>
   );
 }

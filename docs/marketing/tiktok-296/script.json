@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|17:22",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Can't wait to see you tonight babe 😘"
+        },
+        {
+          "from": "me",
+          "text": "i'm working tonight"
+        },
+        {
+          "from": "them",
+          "text": "Sorry wrong chat"
+        },
+        {
+          "from": "me",
+          "text": "who was it for",
+          "status": "Read 17:23"
+        },
+        {
+          "from": "them",
+          "text": "My mum"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you call your mum babe"
+        },
+        {
+          "from": "them",
+          "text": "Don't be weird. I literally made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "did you make your mum one too 💅"
+        }
+      ]
+    }
+  ]
+}

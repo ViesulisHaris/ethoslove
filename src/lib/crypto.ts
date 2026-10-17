@@ -35,6 +35,10 @@ export async function unseal(token: string | undefined): Promise<string | null> 
 /** Anonymous, rotating viewer identity: never stores the IP itself. */
 export async function viewerHash(ip: string, userAgent: string, shortId: string): Promise<string> {
   const day = new Date().toISOString().slice(0, 10);
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${ip}|${userAgent}|${shortId}|${day}`));
+  // Keyed with a server secret: a plain hash of an IPv4 address can be reversed by hashing all four
+  // billion of them. VIEWER_HASH_SECRET if set, else the service key, which is server-only already.
+  const secret = process.env.VIEWER_HASH_SECRET ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "ethos-viewer";
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const digest = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(`${ip}|${userAgent}|${shortId}|${day}`));
   return Buffer.from(digest).toString("hex").slice(0, 32);
 }

@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you awake"
+        },
+        {
+          "from": "me",
+          "text": "can't sleep"
+        },
+        {
+          "from": "them",
+          "text": "me neither"
+        },
+        {
+          "from": "me",
+          "text": "i miss you"
+        },
+        {
+          "from": "them",
+          "text": "i miss you too"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you can't sleep 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how are you real"
+        },
+        {
+          "from": "me",
+          "text": "i love you so much"
+        },
+        {
+          "from": "them",
+          "text": "go to sleep maya"
+        },
+        {
+          "from": "me",
+          "text": "i can't now. i'm too happy"
+        }
+      ]
+    }
+  ]
+}

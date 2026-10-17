@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|17:44",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did your little sister send me this"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for my big sister 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "she made it herself"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "did you not tell her"
+        },
+        {
+          "from": "them",
+          "text": "not yet"
+        },
+        {
+          "from": "me",
+          "text": "it's been 3 months"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why not"
+        },
+        {
+          "from": "them",
+          "text": "she'd ask why"
+        },
+        {
+          "from": "me",
+          "text": "and?"
+        },
+        {
+          "from": "them",
+          "text": "and she still calls you her sister"
+        }
+      ]
+    }
+  ]
+}

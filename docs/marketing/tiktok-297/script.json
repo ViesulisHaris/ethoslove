@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:03",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who is \"do not answer ❤️\""
+        },
+        {
+          "from": "them",
+          "text": "Spam"
+        },
+        {
+          "from": "me",
+          "text": "spam has a heart now?",
+          "status": "Read 01:04"
+        },
+        {
+          "from": "them",
+          "text": "Why are you on my phone. I made you this and you're doing this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i answered it"
+        },
+        {
+          "from": "me",
+          "text": "she says happy 1 year"
+        },
+        {
+          "from": "me",
+          "text": "we've been together 8 months"
+        },
+        {
+          "from": "me",
+          "text": "give her the link 💅"
+        }
+      ]
+    }
+  ]
+}

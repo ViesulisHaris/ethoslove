@@ -1,0 +1,50 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:47",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I'm sorry"
+        },
+        {
+          "from": "me",
+          "text": "for what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "im sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "jake it's been a year",
+          "status": "Read 01:48"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I made it the night you left"
+        },
+        {
+          "from": "them",
+          "text": "I was too scared to send it"
+        },
+        {
+          "from": "me",
+          "text": "i would have stayed"
+        }
+      ]
+    }
+  ]
+}

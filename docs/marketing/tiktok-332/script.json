@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:56",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why have you opened it 214 times"
+        },
+        {
+          "from": "them",
+          "text": "opened what"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "for leo, when i'm not there 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Leo"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it tells you that?"
+        },
+        {
+          "from": "me",
+          "text": "yeah"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "leo it's been 5 months"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "so why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "there's a voice note at the end"
+        },
+        {
+          "from": "them",
+          "text": "you say goodnight"
+        },
+        {
+          "from": "me",
+          "text": "and"
+        },
+        {
+          "from": "them",
+          "text": "i can't sleep until you do"
+        }
+      ]
+    }
+  ]
+}

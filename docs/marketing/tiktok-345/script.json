@@ -1,0 +1,103 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|20:18",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did your friends laugh when i walked in"
+        },
+        {
+          "from": "me",
+          "text": "they didn't"
+        },
+        {
+          "from": "them",
+          "text": "one spat her drink out"
+        },
+        {
+          "from": "me",
+          "text": "she was choking"
+        },
+        {
+          "from": "them",
+          "text": "on what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "when we met i told them you were a 6"
+        },
+        {
+          "from": "them",
+          "text": "a 6??"
+        },
+        {
+          "from": "me",
+          "text": "you went up after the first date"
+        },
+        {
+          "from": "them",
+          "text": "to what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "7"
+        },
+        {
+          "from": "them",
+          "text": "and now"
+        },
+        {
+          "from": "me",
+          "text": "8 and a half"
+        },
+        {
+          "from": "them",
+          "text": "i made you this last week"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok that got you to a 9"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "what do i need for a 10"
+        }
+      ]
+    }
+  ]
+}

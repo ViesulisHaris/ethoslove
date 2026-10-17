@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:57",
+      "messages": [
+        {
+          "from": "them",
+          "text": "hi sorry this is random"
+        },
+        {
+          "from": "them",
+          "text": "did you make this?"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my favourite girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Mia"
+          }
+        },
+        {
+          "from": "me",
+          "text": "yeah why",
+          "status": "Read 19:58"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my boyfriend sent it to me"
+        },
+        {
+          "from": "them",
+          "text": "he said he made it"
+        },
+        {
+          "from": "me",
+          "text": "he asked me to make it for his sister"
+        },
+        {
+          "from": "them",
+          "text": "he doesn't have a sister"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:31",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "did you open it"
+        },
+        {
+          "from": "me",
+          "text": "yeah"
+        },
+        {
+          "from": "me",
+          "text": "who's in photo 4",
+          "status": "Read 22:33"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "us?"
+        },
+        {
+          "from": "me",
+          "text": "i've never been to that beach"
+        },
+        {
+          "from": "them",
+          "text": "yes you have"
+        },
+        {
+          "from": "me",
+          "text": "she's blonde jake"
+        },
+        {
+          "from": "them",
+          "text": "it's the lighting"
+        }
+      ]
+    }
+  ]
+}

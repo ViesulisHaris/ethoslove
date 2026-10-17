@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i feel so ugly today",
+          "status": "Read 8:20 pm"
+        },
+        {
+          "from": "them",
+          "text": "Stop that"
+        },
+        {
+          "from": "them",
+          "text": "You’re the prettiest girl I’ve ever seen"
+        },
+        {
+          "from": "them",
+          "text": "Read this and believe it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "read this pretty girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

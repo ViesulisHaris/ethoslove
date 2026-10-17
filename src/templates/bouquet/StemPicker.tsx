@@ -44,40 +44,47 @@ export function StemPicker({ id, label, help, value, onChange, locale }: FieldEd
         {stems.map((s, i) => {
           const colors = Object.keys(FLOWERS[s.flower].colors);
           return (
-            <li key={`${s.flower}-${i}`} className="flex items-center gap-3 px-3 py-2.5" data-testid="stem-row">
-              <Icon id={s.flower} color={s.color} size={40} />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{FLOWERS[s.flower].name[locale]}</p>
-                {colors.length > 1 ? (
-                  <div className="mt-1.5 flex flex-wrap gap-1.5" role="radiogroup" aria-label={FLOWERS[s.flower].name[locale]}>
-                    {colors.map((c) => (
-                      <button
-                        key={c}
-                        type="button"
-                        role="radio"
-                        aria-checked={s.color === c}
-                        aria-label={COLOR_NAMES[c]?.[locale] ?? c}
-                        title={COLOR_NAMES[c]?.[locale] ?? c}
-                        onClick={() => set(i, { color: c })}
-                        className={cn("size-5 rounded-full border border-black/10", s.color === c && "ring-2 ring-ink ring-offset-2 ring-offset-card")}
-                        style={{ background: FLOWERS[s.flower].colors[c].mid }}
-                      />
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-              <div className="flex items-center gap-1">
-                <button type="button" aria-label={t.fewer} disabled={s.count <= 1} onClick={() => set(i, { count: s.count - 1 })} className="grid size-8 place-items-center rounded-full border border-border disabled:opacity-30">
-                  <Minus className="size-3.5" />
-                </button>
-                <span className="w-5 text-center text-sm tabular-nums">{s.count}</span>
-                <button type="button" aria-label={t.more} disabled={full || s.count >= 12} onClick={() => set(i, { count: s.count + 1 })} className="grid size-8 place-items-center rounded-full border border-border disabled:opacity-30">
-                  <Plus className="size-3.5" />
+            // Two rows so every control can be a full 44px touch target on a phone: the flower and
+            // its count on top, its colours underneath (they were 20px dots 6px apart).
+            <li key={`${s.flower}-${i}`} className="flex flex-col gap-0.5 px-3 py-2" data-testid="stem-row">
+              <div className="flex items-center gap-2">
+                <Icon id={s.flower} color={s.color} size={40} />
+                <p className="min-w-0 flex-1 truncate pl-1 text-sm font-medium">{FLOWERS[s.flower].name[locale]}</p>
+                <div className="flex items-center">
+                  <button type="button" aria-label={t.fewer} disabled={s.count <= 1} onClick={() => set(i, { count: s.count - 1 })} className="grid size-11 place-items-center rounded-full disabled:opacity-30">
+                    <span className="grid size-8 place-items-center rounded-full border border-border">
+                      <Minus className="size-3.5" />
+                    </span>
+                  </button>
+                  <span className="w-5 text-center text-sm tabular-nums">{s.count}</span>
+                  <button type="button" aria-label={t.more} disabled={full || s.count >= 12} onClick={() => set(i, { count: s.count + 1 })} className="grid size-11 place-items-center rounded-full disabled:opacity-30">
+                    <span className="grid size-8 place-items-center rounded-full border border-border">
+                      <Plus className="size-3.5" />
+                    </span>
+                  </button>
+                </div>
+                <button type="button" aria-label={t.remove} disabled={stems.length <= 1} onClick={() => onChange(stems.filter((_, k) => k !== i))} className="-mr-1.5 grid size-11 place-items-center rounded-full text-muted-foreground hover:text-ink disabled:opacity-30">
+                  <X className="size-4" />
                 </button>
               </div>
-              <button type="button" aria-label={t.remove} disabled={stems.length <= 1} onClick={() => onChange(stems.filter((_, k) => k !== i))} className="grid size-8 place-items-center rounded-full text-muted-foreground hover:text-ink disabled:opacity-30">
-                <X className="size-4" />
-              </button>
+              {colors.length > 1 ? (
+                <div className="ml-[42px] flex flex-wrap" role="radiogroup" aria-label={FLOWERS[s.flower].name[locale]}>
+                  {colors.map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      role="radio"
+                      aria-checked={s.color === c}
+                      aria-label={COLOR_NAMES[c]?.[locale] ?? c}
+                      title={COLOR_NAMES[c]?.[locale] ?? c}
+                      onClick={() => set(i, { color: c })}
+                      className="grid size-11 place-items-center rounded-full"
+                    >
+                      <span className={cn("size-6 rounded-full border border-black/10", s.color === c && "ring-2 ring-ink ring-offset-2 ring-offset-card")} style={{ background: FLOWERS[s.flower].colors[c].mid }} />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </li>
           );
         })}

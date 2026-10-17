@@ -25,11 +25,11 @@ const phoneEs = {
 };
 const costEn = {
   q: "Does it cost anything?",
-  a: "Two templates are free, with up to ten photos and our music library, and they publish with a small “Made with Ethos” footer. Premium templates are a one-time payment for that template, forever — no subscription — and add real songs, video, voice messages, scheduling and a password.",
+  a: "Two templates are free, with up to ten photos, our music library and a real song they tap to hear, and they publish with a small “Made with Ethos” footer. Premium templates are a one-time payment for that template, forever — no subscription — and add video, voice messages, twenty photos, scheduling and a password.",
 };
 const costEs = {
   q: "¿Cuesta algo?",
-  a: "Dos plantillas son gratis, con hasta diez fotos y nuestra biblioteca de música, y se publican con un pequeño pie que dice “Hecho con Ethos”. Las premium son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden canciones reales, vídeo, mensajes de voz, programación y contraseña.",
+  a: "Dos plantillas son gratis, con hasta diez fotos, nuestra biblioteca de música y una canción de verdad que se escucha con un toque, y se publican con un pequeño pie que dice “Hecho con Ethos”. Las premium son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, veinte fotos, programación y contraseña.",
 };
 const keepEn = {
   q: "Will it still be there next year?",
@@ -52,7 +52,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Pick photos with a story, not the best-lit ones: the terrible haircut year, the trip where it rained. Add a song from the library, or, on a premium template, a thirty-second preview of the one they always put on, a short video, or a voice message, which is the closest thing to being in the room. Birthday Cinema has them blow out the candles; Balloons and Party Animals are for the ones who'd rather laugh.",
+          body: "Pick photos with a story, not the best-lit ones: the terrible haircut year, the trip where it rained. Add a song from the library to play as it opens, or the real one they always put on: thirty seconds of it wait at the end, a tap away, on any template. A premium template adds a short video or a voice message, which is the closest thing to being in the room. Birthday Cinema has them blow out the candles; Balloons and Party Animals are for the ones who'd rather laugh.",
         },
         {
           heading: "When to send it",
@@ -78,7 +78,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Elige fotos con historia, no las mejor iluminadas: el año del corte de pelo terrible, el viaje en el que llovió. Pon una canción de la biblioteca o, en una plantilla premium, una muestra de treinta segundos de la que siempre elige, un vídeo corto o un mensaje de voz, lo más parecido a estar allí. En Birthday Cinema sopla las velas; Balloons y Party Animals son para quien prefiere reírse.",
+          body: "Elige fotos con historia, no las mejor iluminadas: el año del corte de pelo terrible, el viaje en el que llovió. Pon una canción de la biblioteca para que suene al abrirlo, o la de verdad que siempre elige: treinta segundos esperan al final, a un toque, en cualquier plantilla. Una premium añade un vídeo corto o un mensaje de voz, lo más parecido a estar allí. En Birthday Cinema sopla las velas; Balloons y Party Animals son para quien prefiere reírse.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -107,7 +107,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Photos from across the years, in order, so the story reads as a story — up to ten on a free template, twenty on premium. The song from your wedding, your first road trip, or the one you argue about: a premium template plays a thirty-second preview of the real recording, and carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl puts the song at the centre.",
+          body: "Photos from across the years, in order, so the story reads as a story — up to ten on a free template, twenty on premium. The song from your wedding, your first road trip, or the one you argue about: any template can end on thirty seconds of the real recording, a tap away, and a premium one carries a video clip and a voice message too. Museum hangs the photos in rooms; Vinyl builds the whole gift around a record.",
         },
         {
           heading: "When to send it",
@@ -136,7 +136,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: una plantilla premium reproduce una muestra de treinta segundos de la grabación real, y lleva además un vídeo y un mensaje de voz. Museum cuelga las fotos en salas; Vinyl pone la canción en el centro.",
+          body: "Fotos de todos esos años, en orden, para que la historia se lea como una historia: hasta diez en una plantilla gratis, veinte en una premium. La canción de la boda, del primer viaje o la que siempre discutís: cualquier plantilla puede terminar con treinta segundos de la grabación real, a un toque, y una premium lleva además un vídeo y un mensaje de voz. Museum cuelga las fotos en salas; Vinyl construye todo el regalo alrededor de un disco.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -168,7 +168,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Two or three photos are enough here — the first one you took together and the most recent. Bouquet lets you choose the flowers yourself and never wilts; Bloom opens a single flower while they hold the screen. Add a song from the library, or, on a premium template, a thirty-second preview of yours. A voice message at the end, also premium, lands harder than any line of text.",
+          body: "Two or three photos are enough here — the first one you took together and the most recent. Bouquet lets you choose the flowers yourself and never wilts; Bloom opens a single flower while they hold the screen. Add a song from the library, or thirty seconds of yours, the real recording, waiting at the end for a tap. A voice message at the end, a paid extra, lands harder than any line of text.",
         },
         {
           heading: "When to send it",
@@ -194,7 +194,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Con dos o tres fotos basta: la primera que os hicisteis y la más reciente. En Bouquet eliges tú las flores y nunca se marchitan; en Bloom se abre una sola flor mientras mantiene pulsada la pantalla. Añade una canción de la biblioteca o, en una plantilla premium, una muestra de treinta segundos de la vuestra. Un mensaje de voz al final, también premium, llega más hondo que cualquier línea escrita.",
+          body: "Con dos o tres fotos basta: la primera que os hicisteis y la más reciente. En Bouquet eliges tú las flores y nunca se marchitan; en Bloom se abre una sola flor mientras mantiene pulsada la pantalla. Añade una canción de la biblioteca, o treinta segundos de la vuestra, la grabación real, esperando al final a un toque. Un mensaje de voz al final, un extra de pago, llega más hondo que cualquier línea escrita.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -223,7 +223,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Photos from before they met and from the years since — Our Timeline sets them along a road, Museum hangs them in rooms. The song from the first dance if you know it; both templates are premium, so it plays a thirty-second preview of the real recording. For a gift to your partner, a voice message is the thing they'll keep coming back to.",
+          body: "Photos from before they met and from the years since — Our Timeline sets them along a road, Museum hangs them in rooms. The song from the first dance if you know it: thirty seconds of the real recording wait at the end, a tap away. For a gift to your partner, a voice message is the thing they'll keep coming back to.",
         },
         {
           heading: "When to send it",
@@ -252,7 +252,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de antes de conocerse y de los años desde entonces: Our Timeline las coloca a lo largo de un camino, Museum las cuelga en salas. La canción del primer baile si la sabes; las dos plantillas son premium, así que suena una muestra de treinta segundos de la grabación real. En un regalo para tu pareja, un mensaje de voz es a lo que volverá una y otra vez.",
+          body: "Fotos de antes de conocerse y de los años desde entonces: Our Timeline las coloca a lo largo de un camino, Museum las cuelga en salas. La canción del primer baile si la sabes: treinta segundos de la grabación real esperan al final, a un toque. En un regalo para tu pareja, un mensaje de voz es a lo que volverá una y otra vez.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -284,7 +284,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "The first-day photo, the awkward middle years, and this month — Our Timeline lays them along the road that got them there. Add the song they studied to, or the one from the car on the way to school; these templates are premium, so a thirty-second preview of the real one plays. Cap Toss is the one for the day itself: they cheer into the phone and the cap goes up.",
+          body: "The first-day photo, the awkward middle years, and this month — Our Timeline lays them along the road that got them there. Add the song they studied to, or the one from the car on the way to school: the real one waits at the end, thirty seconds of it a tap away. Cap Toss is the one for the day itself: they cheer into the phone and the cap goes up.",
         },
         {
           heading: "When to send it",
@@ -310,7 +310,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "La foto del primer día, los años torpes del medio y este mes: Our Timeline las coloca a lo largo del camino que le trajo hasta aquí. Añade la canción con la que estudiaba, o la del coche de camino al colegio; estas plantillas son premium, así que suena una muestra de treinta segundos de la de verdad. Cap Toss es la del día en sí: anima al móvil a gritos y el birrete sale volando.",
+          body: "La foto del primer día, los años torpes del medio y este mes: Our Timeline las coloca a lo largo del camino que le trajo hasta aquí. Añade la canción con la que estudiaba, o la del coche de camino al colegio: la de verdad espera al final, con treinta segundos a un toque. Cap Toss es la del día en sí: anima al móvil a gritos y el birrete sale volando.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -339,7 +339,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "The photos from this year, and one old Christmas photo for the ones who'll recognise it — twenty fit, but eight good ones beat twenty. Both templates are premium, so add a thirty-second preview of the real song, and if you're apart, a voice message: the closest you'll get to being there.",
+          body: "The photos from this year, and one old Christmas photo for the ones who'll recognise it — twenty fit, but eight good ones beat twenty. End on the real song, thirty seconds of it a tap away, and if you're apart, add a voice message: the closest you'll get to being there.",
         },
         {
           heading: "When to send it",
@@ -368,7 +368,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Las fotos de este año y una Navidad antigua para quien vaya a reconocerla. Las dos plantillas son premium, así que añade una muestra de treinta segundos de la canción de verdad y, si estáis lejos, un mensaje de voz: lo más cerca que vas a estar.",
+          body: "Las fotos de este año y una Navidad antigua para quien vaya a reconocerla: caben veinte, pero ocho buenas ganan a veinte. Termina con la canción de verdad, treinta segundos a un toque, y, si estáis lejos, añade un mensaje de voz: lo más cerca que vas a estar.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -400,7 +400,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Photos from past Halloweens, the worse the costume the better. A song for the dark, from the library or a thirty-second preview of the one you're both thinking of. A short video is worth it here: a jump scare works better moving. The template is premium, so all three come with it.",
+          body: "Photos from past Halloweens, the worse the costume the better. A song for the dark, from the library, or the real one you're both thinking of, waiting at the end for a tap. A short video is worth it here: a jump scare works better moving. The template is premium, so the video comes with it.",
         },
         {
           heading: "When to send it",
@@ -426,7 +426,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Fotos de Halloweens pasados, cuanto peor el disfraz, mejor. Una canción para la oscuridad, de la biblioteca o una muestra de treinta segundos de la que tenéis en la cabeza. Un vídeo corto aquí compensa: un susto funciona mejor en movimiento. La plantilla es premium, así que las tres cosas van incluidas.",
+          body: "Fotos de Halloweens pasados, cuanto peor el disfraz, mejor. Una canción para la oscuridad, de la biblioteca, o la de verdad que tenéis en la cabeza, esperando al final a un toque. Un vídeo corto aquí compensa: un susto funciona mejor en movimiento. La plantilla es premium, así que el vídeo va incluido.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -455,7 +455,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "Find the photos she's in, not the ones she took — there are always fewer of those. Add her song: something from the library, or, on a premium template, a thirty-second preview of the real one. Bouquet never wilts and you pick every stem; Recipe Box writes the recipe for her, one ingredient at a time.",
+          body: "Find the photos she's in, not the ones she took — there are always fewer of those. Add her song: something from the library, or the real one, thirty seconds of it waiting at the end for a tap. Bouquet never wilts and you pick every stem; Recipe Box writes the recipe for her, one ingredient at a time.",
         },
         {
           heading: "When to send it",
@@ -481,7 +481,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Busca las fotos en las que sale ella, no las que hizo ella; siempre hay menos. Añade su canción: algo de la biblioteca o, en una plantilla premium, una muestra de treinta segundos de la de verdad. Bouquet nunca se marchita y eliges cada tallo; Recipe Box escribe la receta de ella, ingrediente a ingrediente.",
+          body: "Busca las fotos en las que sale ella, no las que hizo ella; siempre hay menos. Añade su canción: algo de la biblioteca, o la de verdad, con treinta segundos esperando al final a un toque. Bouquet nunca se marchita y eliges cada tallo; Recipe Box escribe la receta de ella, ingrediente a ingrediente.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -510,7 +510,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "The photo where he's carrying you, the one where you're the same height, and one from this year. The song from the car, or the one he plays too loud in the kitchen: these templates are premium, so a thirty-second preview of the real one plays. A short video of the grandchildren, if there are any.",
+          body: "The photo where he's carrying you, the one where you're the same height, and one from this year. The song from the car, or the one he plays too loud in the kitchen: the real one waits at the end, thirty seconds of it a tap away. A short video of the grandchildren, if there are any.",
         },
         {
           heading: "When to send it",
@@ -536,7 +536,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "La foto en la que te lleva en brazos, la de cuando ya medís lo mismo y una de este año. La canción del coche, o la que pone demasiado alta en la cocina: estas plantillas son premium, así que suena una muestra de treinta segundos de la de verdad. Un vídeo corto de los nietos, si los hay.",
+          body: "La foto en la que te lleva en brazos, la de cuando ya medís lo mismo y una de este año. La canción del coche, o la que pone demasiado alta en la cocina: la de verdad espera al final, con treinta segundos a un toque. Un vídeo corto de los nietos, si los hay.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -626,7 +626,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "The last photo you took together and the first one from this stretch apart. The song you send each other: both templates are premium, so a thirty-second preview of the real one plays. Record a voice message — hearing you is what they're short of — and set a countdown to the day you land.",
+          body: "The last photo you took together and the first one from this stretch apart. The song you send each other: the real one waits at the end, thirty seconds of it a tap away. Record a voice message — hearing you is what they're short of — and set a countdown to the day you land.",
         },
         {
           heading: "When to send it",
@@ -655,7 +655,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "La última foto que os hicisteis juntos y la primera de esta temporada separados. La canción que os mandáis: las dos plantillas son premium, así que suena una muestra de treinta segundos de la de verdad. Graba un mensaje de voz, oírte es lo que le falta, y pon una cuenta atrás hasta el día en que aterrizas.",
+          body: "La última foto que os hicisteis juntos y la primera de esta temporada separados. La canción que os mandáis: la de verdad espera al final, con treinta segundos a un toque. Graba un mensaje de voz, oírte es lo que le falta, y pon una cuenta atrás hasta el día en que aterrizas.",
         },
         {
           heading: "Cuándo enviarlo",
@@ -687,7 +687,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "What to add",
-          body: "A photo from your camera roll they haven't seen, and one they'd forgotten. A song from the library, or, on a premium template, a thirty-second preview of the one that's playing right now. Nothing else needed. The Letter is free if you want it plain; Kawaii and Balloons if you want it light.",
+          body: "A photo from your camera roll they haven't seen, and one they'd forgotten. A song from the library, or the real one that's playing right now, waiting at the end for a tap. Nothing else needed. The Letter is free if you want it plain; Kawaii and Balloons if you want it light.",
         },
         {
           heading: "When to send it",
@@ -713,7 +713,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
         {
           heading: "Qué añadir",
-          body: "Una foto del carrete que no ha visto y otra que había olvidado. Una canción de la biblioteca o, en una plantilla premium, una muestra de treinta segundos de la que suena ahora mismo. No hace falta más. The Letter es gratis si lo quieres sencillo; Kawaii y Balloons si lo quieres ligero.",
+          body: "Una foto del carrete que no ha visto y otra que había olvidado. Una canción de la biblioteca, o la de verdad que suena ahora mismo, esperando al final a un toque. No hace falta más. The Letter es gratis si lo quieres sencillo; Kawaii y Balloons si lo quieres ligero.",
         },
         {
           heading: "Cuándo enviarlo",

@@ -93,6 +93,8 @@ export type EditorState = {
   /** The same, for anything the gift still points at on this device, however it got stuck. */
   dropStuckUploads: (only?: FailedGroup) => Promise<void>;
   syncNow: () => Promise<boolean>;
+  /** Write a local save still waiting on its debounce now (the page is going away). */
+  flushLocal: () => void;
   serializedForServer: () => GiftData;
   markPublished: (shortId: string, status: "live" | "scheduled") => void;
 };
@@ -164,35 +166,53 @@ export const useEditor = create<EditorState>((set, get) => {
   // The local-draft key this editing session opened: the template's own page, or a gift from the dashboard.
   let sessionKey: string | null = null;
 
+  const saveLocal = () => {
+    localTimer = undefined;
+    const s = get();
+    if (!s.hydrated) return;
+    const refs = localRefs(s.assets);
+    const draft: EditorDraft = {
+      version: 1,
+      slug: s.slug,
+      data: s.data,
+      giftId: s.giftId,
+      shortId: s.shortId,
+      status: s.status,
+      schedule: s.schedule,
+      password: s.password,
+      removeWatermark: s.removeWatermark,
+      updatedAt: Date.now(),
+      uploaded: refs.uploaded,
+    };
+    const serialized = serializeForLocal(draft, refs.byId, refs.byUrl);
+    // Saved where the session opened, so coming back to the same page finds the same gift. It used
+    // to be left at the moment before the draft row existed, and every visit made a new row and
+    // uploaded every photo again. The gift's own key keeps the dashboard's copy current too.
+    const own = draftScope(s.slug, s.giftId);
+    // Never under another template's key: while the next editor's init() is still loading, the
+    // store holds the old gift and `sessionKey` already names the new one.
+    const key = sessionKey && (sessionKey === s.slug || sessionKey.startsWith(`${s.slug}:`)) ? sessionKey : own;
+    writeLocalDraft(key, serialized);
+    if (s.giftId && key !== own) writeLocalDraft(own, serialized);
+    if (!s.authed || !s.giftId)
+      set({ save: s.authed ? "saving" : "offline", savedAt: Date.now() });
+  };
+
   const persistLocal = () => {
     window.clearTimeout(localTimer);
-    localTimer = window.setTimeout(() => {
-      const s = get();
-      if (!s.hydrated) return;
-      const refs = localRefs(s.assets);
-      const draft: EditorDraft = {
-        version: 1,
-        slug: s.slug,
-        data: s.data,
-        giftId: s.giftId,
-        shortId: s.shortId,
-        status: s.status,
-        schedule: s.schedule,
-        password: s.password,
-        removeWatermark: s.removeWatermark,
-        updatedAt: Date.now(),
-        uploaded: refs.uploaded,
-      };
-      const serialized = serializeForLocal(draft, refs.byId, refs.byUrl);
-      // Saved where the session opened, so coming back to the same page finds the same gift. It used
-      // to be left at the moment before the draft row existed, and every visit made a new row and
-      // uploaded every photo again. The gift's own key keeps the dashboard's copy current too.
-      const own = draftScope(s.slug, s.giftId);
-      writeLocalDraft(sessionKey ?? own, serialized);
-      if (s.giftId && sessionKey !== own) writeLocalDraft(own, serialized);
-      if (!s.authed || !s.giftId)
-        set({ save: s.authed ? "saving" : "offline", savedAt: Date.now() });
-    }, LOCAL_DEBOUNCE);
+    localTimer = window.setTimeout(saveLocal, LOCAL_DEBOUNCE);
+  };
+
+  /**
+   * A save still waiting out the debounce, written now. Leaving a gift within 350ms of the last
+   * keystroke lost that keystroke's save, and worse: the store outlives the page, so the timer went
+   * off after the next editor's init() had moved `sessionKey` on, and wrote the old gift under the
+   * new one's key. Moving a letter into a Bouquet right after typing did exactly that.
+   */
+  const flushLocal = () => {
+    if (localTimer === undefined) return;
+    window.clearTimeout(localTimer);
+    saveLocal();
   };
 
   const persistRemote = () => {
@@ -308,6 +328,8 @@ export const useEditor = create<EditorState>((set, get) => {
     dirty: false,
 
     async init({ slug, manifest, initial, authed, userId, remote }) {
+      // The gift this editor had open is saved under its own key before the key moves on.
+      flushLocal();
       sessionKey = draftScope(slug, remote?.id ?? null);
       const timezone = defaultTimezone();
       let data = initial;
@@ -928,6 +950,8 @@ export const useEditor = create<EditorState>((set, get) => {
       return result.ok;
     },
 
+    flushLocal,
+
     serializedForServer() {
       const s = get();
       if (!s.data) return s.data;
@@ -1088,12 +1112,16 @@ async function rehydrate(local: EditorDraft, existing: Record<string, AssetRecor
   return { data: { ...local.data, photos, music, video, voiceNote }, assets };
 }
 
-/** Preview data: whatever the store has, with a non-empty recipient so templates render. */
-export function previewData(data: GiftData, fallbackName: string): GiftData {
+/**
+ * Preview data: whatever the store has, with sample names until the real ones are typed, so
+ * templates render. A sample name rather than a dash, which made the preview read "Made by — for
+ * Ana" and "Send — a reaction".
+ */
+export function previewData(data: GiftData, fallbackRecipient: string, fallbackSender: string): GiftData {
   return {
     ...data,
-    recipientName: data.recipientName || fallbackName,
-    senderName: data.senderName || "—",
+    recipientName: data.recipientName || fallbackRecipient,
+    senderName: data.senderName || fallbackSender,
   };
 }
 

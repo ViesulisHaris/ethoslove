@@ -82,7 +82,13 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
 
   return (
     <div className={compact ? "w-full" : "w-full max-w-md rounded-3xl border border-border bg-card p-7 shadow-lift sm:p-9"}>
-      <h1 className={compact ? "font-display text-xl" : "display-md"}>{mode === "login" ? t("loginTitle") : t("signupTitle")}</h1>
+      {/* Compact, the form sits inside another page (the publish sheet, /redeem, /for-two/join) under
+          that page's own h1 and a "Sign in to…" h2, so its title is a step below rather than a second h1. */}
+      {compact ? (
+        <h3 className="font-display text-xl">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h3>
+      ) : (
+        <h1 className="display-md">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h1>
+      )}
       <p className="mt-2 text-sm text-muted-foreground">
         {mode === "login" ? t("loginSubtitle") : t("signupSubtitle")}
       </p>
@@ -217,7 +223,7 @@ export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: 
 
       <p className="mt-7 text-center text-sm text-muted-foreground">
         {mode === "login" ? t("noAccount") : t("haveAccount")}{" "}
-        <Link href={mode === "login" ? "/signup" : "/login"} className="font-medium text-coral">
+        <Link href={mode === "login" ? "/signup" : "/login"} className="inline-block py-2 font-medium text-coral">
           {mode === "login" ? t("signupTitle") : t("loginTitle")}
         </Link>
       </p>

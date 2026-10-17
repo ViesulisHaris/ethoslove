@@ -4,8 +4,10 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { parseRichText } from "@/lib/gift/rich-text";
+import { cn } from "@/lib/utils";
 import type { TemplateProps } from "../types";
 import { useGiftStrings } from "../_shared/i18n";
+import { FitName } from "../_shared/FitName";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
@@ -156,14 +158,20 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         >
           {data.senderName} → {data.recipientName}
         </motion.p>
+        {/* The poster serif is the Editorial look; the other type pairings set the title in their own face, or picking one changed nothing on the cover. */}
         <motion.h1
-          className="mx-auto mt-[calc(1.6*var(--k))] max-w-[calc(80*var(--k))] text-[calc(8*var(--k))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]"
-          style={{ fontFamily: POSTER_FONT }}
+          className={cn(
+            "mx-auto mt-[calc(1.6*var(--k))] leading-[1.05] text-balance [overflow-wrap:anywhere]",
+            // Their name shrinks onto one line between the stickers; a title the sender wrote still wraps.
+            data.title ? "max-w-[calc(80*var(--k))]" : "w-[calc(62*var(--k))] max-w-full",
+            data.fontPairing === "modern" ? "text-[calc(7.4*var(--k))] font-semibold tracking-[-0.02em]" : data.fontPairing === "handwritten" ? "text-[calc(9.4*var(--k))]" : "text-[calc(8*var(--k))] italic",
+          )}
+          style={{ fontFamily: data.fontPairing === "modern" || data.fontPairing === "handwritten" ? "var(--gift-font-display)" : POSTER_FONT }}
           initial={reduce ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.18, duration: 0.8 }}
         >
-          {data.title || data.recipientName}
+          {data.title || <FitName min={0.6}>{data.recipientName}</FitName>}
         </motion.h1>
       </div>
 

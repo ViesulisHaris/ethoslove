@@ -15,6 +15,7 @@ import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience, type AmbienceKind } from "../_shared/Ambience";
+import { useGiftChrome } from "../_shared/gift-chrome";
 import { COVER_VARS, CoverPage, POSTER_FONT, StickerScatter, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import { BLOOM_KEYFRAMES, Pot, PotTag, StemTag, Windowsill, type PotColors, type SillColors } from "./art";
 import { Flower, type BloomState } from "./Flower";
@@ -156,6 +157,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   }, [data.fields]);
   const [webgl] = useState(() => (typeof window === "undefined" ? true : hasWebGL()));
   const [bloomed, setBloomed] = useState(mode === "preview" || !webgl);
+  // The free-tier badge floats at the foot of the gift, where the buttons below sit; they go above it.
+  const { watermarked } = useGiftChrome();
   const [holding, setHolding] = useState(false);
   const [started, setStarted] = useState(mode === "preview");
   const [note, setNote] = useState(false);
@@ -346,7 +349,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         className="pointer-events-none absolute inset-x-0 z-30 flex flex-col items-center gap-[calc(2.4*var(--k))] px-[calc(6*var(--k))] text-center"
         // On the face of the ledge, under its lip (24k): at 10k a 48px button on a short screen rode up over the
         // lip and the foot of the pot.
-        style={{ bottom: `max(calc(6*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))` }}
+        style={{ bottom: `calc(max(calc(6*var(--k)), calc(env(safe-area-inset-bottom) + 2*var(--k)))${watermarked ? " + 2.75rem" : ""})` }}
       >
         {!bloomed ? (
           <motion.div
@@ -548,7 +551,7 @@ function Note({
       </button>
       <div className="rounded-[18px] bg-[#fffdf8] px-7 py-8 text-[#1A1614] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.5)]">
         <h2
-          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic"
+          className="text-[clamp(1.5rem,6.5cqw,1.9rem)] italic [overflow-wrap:anywhere]"
           style={{ fontFamily: "var(--gift-font-display)" }}
         >
           {t("dear", { name: data.recipientName })}

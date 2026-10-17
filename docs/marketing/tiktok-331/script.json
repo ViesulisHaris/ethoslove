@@ -1,0 +1,79 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i finally finished it"
+        },
+        {
+          "from": "me",
+          "text": "finished what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya, finally 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo it's been 3 months",
+          "status": "Read 23:13"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "you asked me for one for a year"
+        },
+        {
+          "from": "me",
+          "text": "i asked you to show up"
+        },
+        {
+          "from": "them",
+          "text": "this is me showing up"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it's too late"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "so why now"
+        },
+        {
+          "from": "them",
+          "text": "you said nobody ever made you anything"
+        },
+        {
+          "from": "me",
+          "text": "you were the nobody"
+        }
+      ]
+    }
+  ]
+}

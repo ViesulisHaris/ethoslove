@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { createContext, useContext, useEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import type { GiftPhoto } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
@@ -16,9 +16,14 @@ import { tornPolygon, type TornSides } from "./paper";
 type Collage = { container: RefObject<HTMLDivElement | null> | null; still: boolean; unit: number };
 export const CollageContext = createContext<Collage>({ container: null, still: true, unit: 4 });
 
-/** One cut-out. `width` is any CSS length; the height follows the picture. Decorative. */
-export function Scrap({ id, width = "100%", shadow = true, eager = false, className, style }: { id: ScrapId; width?: string; shadow?: boolean; eager?: boolean; className?: string; style?: CSSProperties }) {
+/**
+ * One cut-out. `width` is any CSS length; the height follows the picture. Decorative.
+ * `tone` recolours it (a CSS filter such as a look's tint) in front of the drop shadow; a `filter`
+ * in `style` would replace the shadow and leave the scrap flat.
+ */
+export function Scrap({ id, width = "100%", shadow = true, eager = false, tone, className, style }: { id: ScrapId; width?: string; shadow?: boolean; eager?: boolean; tone?: string; className?: string; style?: CSSProperties }) {
   const info = SCRAPS[id];
+  const filter = [tone, shadow && "drop-shadow(0 calc(.5*var(--p)) calc(.8*var(--p)) rgba(40,15,25,.26))"].filter(Boolean).join(" ") || undefined;
   return (
     <img
       src={scrapSrc(id)}
@@ -28,7 +33,7 @@ export function Scrap({ id, width = "100%", shadow = true, eager = false, classN
       loading={eager ? "eager" : "lazy"}
       decoding="async"
       className={cn("pointer-events-none block max-w-none select-none", className)}
-      style={{ width, aspectRatio: `${info.w} / ${info.h}`, filter: shadow ? "drop-shadow(0 calc(.5*var(--p)) calc(.8*var(--p)) rgba(40,15,25,.26))" : undefined, ...style }}
+      style={{ width, aspectRatio: `${info.w} / ${info.h}`, filter, ...style }}
     />
   );
 }
@@ -158,11 +163,117 @@ export function Polaroid({ photo, aspect = 0.94, lip = 9, paper = "#FFFDF8", pat
   );
 }
 
-/** A caption in handwriting that fits on one line of a polaroid's lip. */
-export function Caption({ children, color = "#3A2A2E", size = 3.6 }: { children: ReactNode; color?: string; size?: number }) {
+/**
+ * The strip of paper a caption sits on when the frame under it is patterned. Handwriting straight onto
+ * gingham was hard to read, the checks running through the letters (a sender's own gift in Coquette,
+ * 28 Sept 2026). The pattern still frames the photo; the words get plain paper, like a name tag.
+ */
+export function PaperLabel({ color = "#FFFDF8", children }: { color?: string; children: ReactNode }) {
   return (
-    <span className="block max-w-full truncate leading-none" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, color }}>
+    <span
+      className="inline-block max-w-full overflow-hidden"
+      style={{
+        backgroundColor: color,
+        padding: "calc(.5*var(--p)) calc(1.5*var(--p))",
+        borderRadius: "calc(.7*var(--p))",
+        boxShadow: "0 calc(.15*var(--p)) calc(.5*var(--p)) rgba(90,40,60,.22), 0 0 0 1px rgba(90,40,60,.08)",
+      }}
+    >
       {children}
+    </span>
+  );
+}
+
+/** How small a caption gets on its one line before it wraps onto a second. */
+const CAPTION_MIN = 0.62;
+
+/**
+ * A caption in handwriting on a polaroid's lip. It shrinks to stay on one line, down to CAPTION_MIN of
+ * its size, and past that wraps onto two, cut with "…" only after the second (the whole caption is in
+ * the lightbox). It used to be one `truncate` line exactly 1em tall, which sliced the top and bottom
+ * off every emoji (they stand taller than the letters) and the hand face's loops: "I love your smile
+ * 💋" came out with the kiss cut flat (a sender's own gift in XOXO, 13 Oct 2026). Now the line is
+ * 1.25em and nothing is clipped while the caption fits.
+ *
+ * `label` (a paper colour) sets it on a PaperLabel, for a patterned frame; an empty caption gets no
+ * label at all. Measured against its own full-width box, never the label: a label hugs its text, so
+ * measuring it would shrink the text, shrink the label, and measure again forever. The box needs
+ * `min-w-0`: the lip is a grid, and without it the grid stretches to the caption's unwrapped length.
+ */
+export function Caption({ children, color = "#3A2A2E", size = 3.6, label }: { children: ReactNode; color?: string; size?: number; label?: string }) {
+  const boxRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const empty = children === undefined || children === null || children === "";
+
+  useLayoutEffect(() => {
+    const box = boxRef.current;
+    const text = textRef.current;
+    if (!box || !text) return;
+    let alive = true;
+    let width = -1;
+
+    const fit = () => {
+      if (!alive) return;
+      const s = text.style;
+      s.fontSize = "1em";
+      s.whiteSpace = "nowrap";
+      s.display = "";
+      s.overflow = "";
+      s.maxWidth = "none";
+      s.removeProperty("-webkit-line-clamp");
+      s.removeProperty("-webkit-box-orient");
+      const paper = text.parentElement === box ? null : getComputedStyle(text.parentElement as HTMLElement);
+      const room = box.clientWidth - (paper ? parseFloat(paper.paddingLeft) + parseFloat(paper.paddingRight) : 0);
+      const need = text.offsetWidth;
+      if (room <= 0 || need <= 0) return;
+      // 3% spare when it has to shrink: emoji snap to whole pixels and don't scale exactly with the text.
+      const scale = need <= room ? 1 : (room / need) * 0.97;
+      if (scale >= CAPTION_MIN) {
+        s.fontSize = `${scale}em`;
+        return;
+      }
+      s.fontSize = `${CAPTION_MIN}em`;
+      s.whiteSpace = "normal";
+      s.maxWidth = "100%";
+      s.display = "-webkit-box";
+      s.overflow = "hidden";
+      s.setProperty("-webkit-box-orient", "vertical");
+      s.setProperty("-webkit-line-clamp", "2");
+    };
+
+    // Width only: the fit changes the height, and refitting on that would loop.
+    const resize = new ResizeObserver(() => {
+      if (box.clientWidth === width) return;
+      width = box.clientWidth;
+      fit();
+    });
+    resize.observe(box);
+    // The editor's preview retypes the caption on every keystroke.
+    const typing = new MutationObserver(fit);
+    typing.observe(text, { characterData: true, childList: true, subtree: true });
+    // The hand face arrives after the first paint, and is a different width from its fallback.
+    const fonts = typeof document !== "undefined" ? document.fonts : undefined;
+    fonts?.addEventListener("loadingdone", fit);
+    void fonts?.ready.then(fit);
+    fit();
+
+    return () => {
+      alive = false;
+      resize.disconnect();
+      typing.disconnect();
+      fonts?.removeEventListener("loadingdone", fit);
+    };
+  }, [label, empty]);
+
+  // The side padding is room for a slanted last letter or an emoji's edge, which draw past their box.
+  const text = (
+    <span ref={textRef} className="inline-block max-w-none px-[0.12em] align-top whitespace-nowrap">
+      {children}
+    </span>
+  );
+  return (
+    <span ref={boxRef} className="block w-full min-w-0" style={{ fontFamily: "var(--gift-font-hand)", fontSize: `calc(${size} * var(--p))`, lineHeight: 1.25, color }}>
+      {label && !empty ? <PaperLabel color={label}>{text}</PaperLabel> : text}
     </span>
   );
 }

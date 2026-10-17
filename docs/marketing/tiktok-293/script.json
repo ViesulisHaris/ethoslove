@@ -1,0 +1,123 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:33",
+      "messages": [
+        {
+          "from": "them",
+          "text": "how was family dinner"
+        },
+        {
+          "from": "me",
+          "text": "good"
+        },
+        {
+          "from": "them",
+          "text": "u didnt reply for 4 hours"
+        },
+        {
+          "from": "me",
+          "text": "family dinner"
+        },
+        {
+          "from": "them",
+          "text": "ur mum just posted from spain"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "different family"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "whatever. made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (and her family)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is so cute"
+        },
+        {
+          "from": "them",
+          "text": "so which family"
+        },
+        {
+          "from": "me",
+          "text": "jakes"
+        },
+        {
+          "from": "them",
+          "text": "ur ex??"
+        },
+        {
+          "from": "me",
+          "text": "his mum loves me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i cant just stop going"
+        },
+        {
+          "from": "them",
+          "text": "maya how long have u been going"
+        }
+      ]
+    }
+  ]
+}

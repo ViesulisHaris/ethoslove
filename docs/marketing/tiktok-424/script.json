@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Thank you"
+        },
+        {
+          "from": "me",
+          "text": "for what",
+          "status": "Read 11:20 pm"
+        },
+        {
+          "from": "them",
+          "text": "For picking me"
+        },
+        {
+          "from": "them",
+          "text": "Out of everyone"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "thank you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

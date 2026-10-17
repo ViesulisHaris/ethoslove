@@ -11,11 +11,12 @@ import { usePreloadAssets } from "./hooks/use-preload-assets";
 import { LoadingScreen } from "./LoadingScreen";
 import { introVariantFor } from "./intro-variants";
 import { Cover } from "./covers/Cover";
-import { COVER_LOOKS } from "./covers/looks";
+import { coverFor } from "./covers/follow";
 import { Watermark } from "./Watermark";
 import { TemplateErrorBoundary } from "./ErrorBoundary";
 import { ReplyModeContext } from "./reply-mode";
 import { GiftChromeContext } from "./gift-chrome";
+import { UnwrapPeek } from "./UnwrapGift";
 
 const MIN_LOADING_MS = 1600;
 
@@ -34,6 +35,12 @@ export type GiftRendererProps = {
   replayKey?: number;
   /** Show this cover regardless of the gift's own choice (demo pages, `?cover=`). */
   coverOverride?: CoverId;
+  /**
+   * Show the demo in another of the template's looks (`?look=` on a demo page), so each can be seen
+   * and recorded without making a gift. The template checks it against its own looks and opens on
+   * its first for one it doesn't have.
+   */
+  lookOverride?: string;
   /** Called when the recipient opens the cover: the moment a view counts. */
   onCoverOpened?: () => void;
   className?: string;
@@ -55,6 +62,7 @@ export function GiftRenderer({
   replyMode = false,
   replayKey = 0,
   coverOverride,
+  lookOverride,
   onCoverOpened,
   className,
 }: GiftRendererProps) {
@@ -84,7 +92,11 @@ export function GiftRenderer({
   }, [mode, replayKey]);
 
   const base: GiftData | null = data ?? mod?.demoData[demoLocale] ?? mod?.demoData.en ?? null;
-  const resolved = useMemo(() => (base && coverOverride ? { ...base, cover: coverOverride } : base), [base, coverOverride]);
+  const resolved = useMemo(() => {
+    if (!base) return base;
+    const covered = coverOverride ? { ...base, cover: coverOverride } : base;
+    return lookOverride ? { ...covered, fields: { ...covered.fields, look: lookOverride } } : covered;
+  }, [base, coverOverride, lookOverride]);
   const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview");
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
 
@@ -97,7 +109,7 @@ export function GiftRenderer({
   );
 
   const Template = mod?.Template;
-  const coverLook = resolved?.cover && resolved.cover !== "classic" && mode !== "preview" ? COVER_LOOKS[resolved.cover] : null;
+  const coverLook = useMemo(() => (resolved?.cover && resolved.cover !== "classic" && mode !== "preview" ? coverFor(resolved.cover, slug, resolved.fields) : null), [resolved, mode, slug]);
   const coverOpen = !coverLook || openedFor === replayKey;
 
   return (
@@ -159,8 +171,10 @@ export function GiftRenderer({
             <p className="font-display text-xl">Unknown template “{slug}”.</p>
           </div>
         ) : null}
+        {/* The still frame rarely shows the end screen, where a surprise inside waits: it peeks in instead, until the real one is in view. */}
+        {mode === "preview" && ready && resolved?.unwrap && !endScreen ? <UnwrapPeek data={resolved} /> : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
-        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} /> : null}
+        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} /> : null}
       </div>
     </MotionConfig>
   );

@@ -4,12 +4,17 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { defaultCoverFor } from "@/templates/_shared/covers/looks";
 import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import type { GiftData, GiftLocale } from "@/lib/gift/schema";
+import { giftUnwrapSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import { loadTemplate } from "@/templates/registry";
+import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
 import { takeReplySeed } from "@/lib/editor/reply-seed";
+import { mergeSeedFields, seedUnwrap, takeGiftSeed } from "@/lib/editor/gift-seed";
+import { withoutUrlSeed } from "@/lib/editor/url-seed";
+import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
+import { track } from "@/lib/analytics/track";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
 import { WhoSection } from "./sections/who";
@@ -20,9 +25,12 @@ import { VideoSection } from "./sections/video";
 import { VoiceSection } from "./sections/voice";
 import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
+import { UnwrapSection } from "./sections/unwrap";
 import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
+import { loadUrlSeed } from "./url-seed";
+import { MoveOffer, MovedNote } from "./move-offer";
 
 export type EditorShellProps = {
   slug: string;
@@ -78,10 +86,16 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   // template's data (and anything touched in that moment saved under this template's key).
   const ready = hydrated && storeSlug === slug && (!remote || storeGiftId === remote.id);
 
-  // Load the template module (schema + field meta), then hydrate the store.
+  useEffect(() => {
+    track("editor_opened", { template: slug });
+  }, [slug]);
+
+  // Load the template module (schema + field meta), then hydrate the store. A seed in the address
+  // (?seed=trip:…, ?unwrap=…: the iPhone app, or a link) is read alongside it.
   useEffect(() => {
     let active = true;
-    loadTemplate(slug).then((m) => {
+    const fromUrl = remote ? Promise.resolve(null) : loadUrlSeed(slug, locale === "es" ? "es" : "en").catch(() => null);
+    void Promise.all([loadTemplate(slug), fromUrl]).then(([m, url]) => {
       if (!active || !m) return;
       setMod(m);
       const initial = blankGift(manifest, locale, m);
@@ -98,14 +112,49 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           if (merged.success) initial.fields = merged.data as Record<string, unknown>;
         }
       }
-      void useEditor.getState().init({
-        slug,
-        manifest,
-        initial,
-        authed: Boolean(user),
-        userId: user?.id ?? null,
-        remote,
-      });
+      // Arrived from a page that already knew part of this gift, like a preset trip: those fields
+      // start filled in. Whatever doesn't validate stays at the template's defaults. The address's
+      // seed wins over one another page left in this tab, and leaves the address once it is read.
+      const stored = remote ? null : takeGiftSeed(slug);
+      const seed = url?.seed ?? stored;
+      if (url) window.history.replaceState(window.history.state, "", withoutUrlSeed(window.location.href));
+      const seeded = seed ? mergeSeedFields(m.fieldsSchema, initial.fields as Record<string, unknown>, seed.fields) : null;
+      if (seeded) initial.fields = seeded;
+      // A date or a trip chosen to go inside this gift ("Wrap it in a gift" on /plan, a trip's page).
+      const unwrap = seed?.unwrap ? seedUnwrap(giftUnwrapSchema, seed.unwrap) : null;
+      if (unwrap) initial.unwrap = unwrap;
+      void useEditor
+        .getState()
+        .init({
+          slug,
+          manifest,
+          initial,
+          authed: Boolean(user),
+          userId: user?.id ?? null,
+          remote,
+        })
+        .then(() => {
+          // init() puts a draft left in this browser in place of `initial`. They have just asked
+          // for this (a trip, say), so the seed goes on top of the old draft, not under it.
+          const editor = useEditor.getState();
+          if (!active || !seed || editor.slug !== slug) return;
+          if (seeded) {
+            const current = editor.data.fields as Record<string, unknown>;
+            const merged = mergeSeedFields(m.fieldsSchema, current, seed.fields);
+            if (merged && JSON.stringify(merged) !== JSON.stringify(current)) editor.patchFields(merged);
+          }
+          // The surprise too: the one they just wrapped, not one an old draft was carrying.
+          if (unwrap && JSON.stringify(editor.data.unwrap) !== JSON.stringify(unwrap)) editor.patch({ unwrap });
+          // A surprise from the address gets its stops' photographs when they come, if it is still
+          // the one that was built (nobody has taken it off or changed it in the meantime).
+          if (url && unwrap)
+            void url.photographed().then((photographed) => {
+              const now = useEditor.getState();
+              if (!active || !photographed || now.slug !== slug || JSON.stringify(now.data.unwrap) !== JSON.stringify(unwrap)) return;
+              const checked = seedUnwrap(giftUnwrapSchema, photographed);
+              if (checked) now.patch({ unwrap: checked });
+            });
+        });
     });
     return () => {
       active = false;
@@ -157,6 +206,21 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
     return () => window.removeEventListener("beforeunload", onBeforeUnload);
   }, []);
 
+  // A phone puts the tab away the moment another app opens, and a closed tab never runs the
+  // debounced save: whatever was typed in the last moment is written now.
+  useEffect(() => {
+    const flush = () => useEditor.getState().flushLocal();
+    const onVisibility = () => {
+      if (document.visibilityState === "hidden") flush();
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
+
   // The phone preview is a gift running full-screen; anything docked at the bottom of the page
   // (the consent banner) reads this and steps aside. On a laptop the preview is a side pane and
   // `view` never leaves "edit", so this only ever fires on a phone.
@@ -186,6 +250,23 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   }, [view]);
 
   const templateName = useMemo(() => manifest.name[locale], [manifest, locale]);
+  // Arrived from "Same words, a bigger moment" on a free template (?from=the-letter).
+  const from = search.get("from");
+  const movedFrom = from && from !== slug ? getManifest(from) : undefined;
+
+  // Inside the iPhone app: the app's loading screen goes once the form is up, and its bar takes the name.
+  useNativeReady("editor", templateName, ready && Boolean(mod));
+  // The app signed in or out while this page was open (it hands the page a session of its own): the
+  // editor re-reads it from the cookies, as it does for a sign-in made in another tab.
+  useNativeEvents((event) => {
+    if (event.type !== "session") return;
+    void import("@/lib/supabase/client").then(async ({ getSupabaseBrowserClient }) => {
+      const supabase = getSupabaseBrowserClient();
+      if (!supabase) return;
+      const { data } = await supabase.auth.getSession();
+      useEditor.getState().setAuth(Boolean(data.session?.user), data.session?.user?.id ?? null);
+    });
+  });
 
   return (
     <div className="flex min-h-dvh flex-col bg-paper">
@@ -200,11 +281,17 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
        * A block is as wide as the screen, whatever is inside it; `min-w-0` does the same job in
        * the desktop grid, and `overflow-x-clip` means one wide control can never widen the page.
        */}
-      <div className="flex-1 md:grid md:grid-cols-[minmax(380px,460px)_1fr]">
+      {/*
+       * The editor is the funnel, so session recordings (Clarity, with consent) keep watching it —
+       * but what people type and upload is somebody's private message, names and photos. Both
+       * columns are masked: the recording keeps the clicks and the scrolling and loses the words.
+       */}
+      <div className="flex-1 md:grid md:grid-cols-2 lg:grid-cols-[minmax(380px,460px)_minmax(0,1fr)]" data-clarity-mask="true">
         <div className={view === "edit" ? "block min-w-0 overflow-x-clip" : "hidden min-w-0 md:block"}>
           <div className="mx-auto max-w-[520px] px-5 pt-8 pb-32 sm:px-7 md:pb-16">
+            {ready && movedFrom ? <MovedNote from={movedFrom} /> : null}
             {ready && mod ? (
-              <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0">
+              <div className="flex flex-col divide-y divide-border [&>section]:py-9 [&>section:first-child]:pt-0" data-tour="form">
                 <WhoSection>
                   {mod.leadFields ? (
                     <div className="mt-7 border-t border-dashed border-border pt-6">
@@ -214,6 +301,8 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                   ) : null}
                 </WhoSection>
                 <WordsSection aiEnabled={aiEnabled} />
+                {manifest.tier === "free" ? <MoveOffer manifest={manifest} /> : null}
+                <UnwrapSection manifest={manifest} />
                 <PhotosSection manifest={manifest} />
                 {manifest.features.music ? <MusicSection /> : null}
                 {manifest.features.video ? <VideoSection /> : null}
@@ -226,9 +315,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
             )}
           </div>
         </div>
-        <div className={view === "preview" ? "block" : "hidden md:block"}>
+        <div className={view === "preview" ? "block min-w-0" : "hidden min-w-0 md:block"}>
           <div className="md:sticky md:top-14 md:h-[calc(100dvh-3.5rem)]">
-            <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-8 md:flex">
+            <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-4 md:flex lg:p-8" data-tour="preview">
               <PreviewPane slug={slug} />
             </div>
             {/*
@@ -249,6 +338,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
           if (!v) setResumeDismissed(true);
         }}
         manifest={manifest}
+        mod={mod}
         slug={slug}
         supabaseConfigured={supabaseConfigured}
         paymentsEnabled={paymentsEnabled}

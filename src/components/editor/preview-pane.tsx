@@ -17,7 +17,7 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
   const [replayKey, setReplayKey] = useState(0);
   if (!hydrated) return null;
 
-  const preview = previewData(data, "Ana");
+  const preview = previewData(data, "Ana", "Leo");
   const renderer = (
     <GiftRenderer
       slug={slug}
@@ -61,7 +61,7 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
   }
 
   return (
-    <div className={cn("flex flex-col items-center gap-5", className)}>
+    <div className={cn("flex min-w-0 max-w-full flex-col items-center gap-5", className)}>
       {/* On a short laptop screen the frame shrinks so the play button underneath stays reachable. */}
       <PhoneFrame width="min(330px, calc((100dvh - 11.25rem) * 390 / 844))" className="max-w-full">
         {renderer}

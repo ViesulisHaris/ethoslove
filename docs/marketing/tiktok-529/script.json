@@ -1,0 +1,66 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can we talk"
+        },
+        {
+          "from": "them",
+          "text": "about what"
+        },
+        {
+          "from": "me",
+          "text": "us",
+          "status": "Read 10:14 PM"
+        },
+        {
+          "from": "them",
+          "text": "give me 5 mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "now we can talk"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "i think we should break up",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you there?"
+        }
+      ]
+    }
+  ]
+}

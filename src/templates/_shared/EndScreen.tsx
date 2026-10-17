@@ -1,15 +1,41 @@
 "use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { Heart, Mic, Music2, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
+import { Heart, Mic, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import type { GiftData } from "@/lib/gift/schema";
+import type { GiftData, GiftLocale } from "@/lib/gift/schema";
+import { isCatalogPreview } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
+import { getManifest } from "../manifests";
 import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
 import { ReplyModeContext } from "./reply-mode";
 import { SongDedication } from "./SongDedication";
+import { SongPreviewCard } from "./SongPreview";
+import { claimSound, onSoundClaimed } from "./sound-floor";
+import { UnwrapGift } from "./UnwrapGift";
 import { Watermark } from "./Watermark";
+
+/**
+ * The reply offer, in the gift's own language like every other line here. Only this screen says
+ * these, so they live with it rather than in ./i18n. "The first": a gift has one free reply, and a
+ * page can't know it's been sent without asking, so the line stays true after it has (a "free"
+ * that turns out not to be is a banned claim; once it's used the editor opens at the normal price).
+ */
+const REPLY_OFFER = {
+  en: { free: "The first reply is free", someoneElse: "Make one for someone else" },
+  es: { free: "La primera respuesta es gratis", someoneElse: "Hazle uno a otra persona" },
+} as const satisfies Record<GiftLocale, Record<string, string>>;
+
+/**
+ * A paid premium gift (a premium template, sent without the footer) comes with one free reply in the
+ * same template (lib/commerce/free-reply.ts). A free template costs nothing to send back anyway, and
+ * a gift that was itself a free reply passes nothing on, so neither says it.
+ */
+function freeReplyLine(locale: GiftLocale, templateSlug: string, watermarked: boolean): string | null {
+  if (watermarked || getManifest(templateSlug)?.tier !== "premium") return null;
+  return (REPLY_OFFER[locale] ?? REPLY_OFFER.en).free;
+}
 
 export function EndScreen({
   data,
@@ -17,6 +43,7 @@ export function EndScreen({
   onReact,
   onMakeOne,
   onReplay,
+  songShown = false,
   className,
 }: {
   data: GiftData;
@@ -24,6 +51,8 @@ export function EndScreen({
   onReact?: () => void;
   onMakeOne?: () => void;
   onReplay?: () => void;
+  /** The template already shows the song's card, with Apple's link and credit (PreviewMusicCard). */
+  songShown?: boolean;
   className?: string;
 }) {
   const reduce = useReducedMotion();
@@ -35,6 +64,7 @@ export function EndScreen({
   // (Being mounted isn't enough — half the templates keep the end screen at the bottom of a long
   // scroll, where it sits unseen for most of the gift.)
   const chrome = useGiftChrome();
+  const replyFree = reply && onMakeOne ? freeReplyLine(locale, data.templateSlug, chrome.watermarked) : null;
   const onScreen = useRef<HTMLDivElement>(null);
   const tell = chrome.onEndScreen;
   useEffect(() => {
@@ -75,9 +105,12 @@ export function EndScreen({
       >
         {giftString(locale, "theEnd")}
       </p>
-      <p className={cn("mt-2 text-sm", dark ? "text-white/60" : "text-black/50")}>
+      <p className={cn("mt-2 max-w-full text-sm [overflow-wrap:anywhere]", dark ? "text-white/60" : "text-black/50")}>
         {giftString(locale, "madeBy", { sender: data.senderName, recipient: data.recipientName })}
       </p>
+
+      {/* The P.S. of the whole gift: under its last words and before anything asks them to act. */}
+      {data.unwrap ? <UnwrapGift unwrap={data.unwrap} locale={locale} sender={data.senderName} accent={data.accentColor} dark={dark} className="mt-10" /> : null}
 
       {data.voiceNote ? (
         <VoiceNotePlayer
@@ -87,6 +120,9 @@ export function EndScreen({
           dark={dark}
         />
       ) : null}
+
+      {/* The real song, heard only on a tap here — including on gifts made when it looped under them. */}
+      {isCatalogPreview(data.music) && !songShown ? <SongPreviewCard music={data.music} locale={locale} dark={dark} /> : null}
 
       {data.dedication ? <SongDedication dedication={data.dedication} locale={locale} dark={dark} /> : null}
 
@@ -104,21 +140,40 @@ export function EndScreen({
           </motion.button>
         ) : null}
         {onMakeOne ? (
-          <button
-            type="button"
-            onClick={onMakeOne}
+          <div className="flex flex-col gap-1.5">
+            <button
+              type="button"
+              onClick={onMakeOne}
+              className={cn(
+                "flex min-h-12 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center text-[15px] leading-snug font-medium",
+                dark
+                  ? "border-white/20 text-white hover:bg-white/10"
+                  : "border-black/15 text-current hover:bg-black/5",
+              )}
+            >
+              <Sparkles className="size-4 shrink-0" />
+              <span className="min-w-0 [overflow-wrap:anywhere]">
+                {reply ? giftString(locale, "sendOneBack", { sender: data.senderName }) : giftString(locale, "makeOne")}
+              </span>
+            </button>
+            {replyFree ? (
+              <p className={cn("text-xs font-medium", dark ? "text-white/70" : "text-black/60")}>{replyFree}</p>
+            ) : null}
+          </div>
+        ) : null}
+        {/* Not everyone who liked the gift wants to answer its sender: the gallery, for anyone else.
+            Not inside the iPhone app, where the gifts are a tab of their own. */}
+        {reply && onMakeOne ? (
+          <a
+            data-app-hide
+            href={`${locale === "es" ? "/es" : ""}/templates?ref=gift-end`}
             className={cn(
-              "flex min-h-12 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-center text-[15px] leading-snug font-medium",
-              dark
-                ? "border-white/20 text-white hover:bg-white/10"
-                : "border-black/15 text-current hover:bg-black/5",
+              "flex min-h-11 items-center justify-center text-sm underline-offset-4 hover:underline",
+              dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
             )}
           >
-            <Sparkles className="size-4 shrink-0" />
-            <span className="min-w-0 [overflow-wrap:anywhere]">
-              {reply ? giftString(locale, "sendOneBack", { sender: data.senderName }) : giftString(locale, "makeOne")}
-            </span>
-          </button>
+            {(REPLY_OFFER[locale] ?? REPLY_OFFER.en).someoneElse}
+          </a>
         ) : null}
         {onReplay ? (
           <button
@@ -135,25 +190,7 @@ export function EndScreen({
         ) : null}
       </div>
 
-      {data.music?.source === "catalog" && data.music.title ? (
-        <a
-          href={data.music.externalUrl || undefined}
-          target="_blank"
-          rel="noreferrer"
-          className={cn(
-            "mt-6 flex max-w-full items-center gap-2 text-xs",
-            dark ? "text-white/50 hover:text-white/80" : "text-black/45 hover:text-black/70",
-          )}
-        >
-          <Music2 className="size-3.5 shrink-0" />
-          <span className="min-w-0 truncate">
-            {giftString(locale, "musicCredit")} {data.music.title}
-            {data.music.artist ? ` — ${data.music.artist}` : ""}
-          </span>
-        </a>
-      ) : null}
-
-      {chrome.watermarked ? <Watermark locale={locale} inline className="mt-8" /> : null}
+      {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline className="mt-8" /> : null}
     </div>
   );
 }
@@ -185,7 +222,14 @@ function VoiceNotePlayer({
     };
     audio.addEventListener("timeupdate", onTime);
     audio.addEventListener("ended", onEnd);
+    // The song preview starting stops the voice message: one voice at a time (./sound-floor).
+    const off = onSoundClaimed((kind) => {
+      if (kind !== "songPreview") return;
+      audio.pause();
+      setPlaying(false);
+    });
     return () => {
+      off();
       audio.removeEventListener("timeupdate", onTime);
       audio.removeEventListener("ended", onEnd);
       audio.pause();
@@ -200,6 +244,7 @@ function VoiceNotePlayer({
       audio.pause();
       setPlaying(false);
     } else {
+      claimSound("voiceNote", audio);
       audio
         .play()
         .then(() => setPlaying(true))

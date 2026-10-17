@@ -1,0 +1,62 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|23:58",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u awake"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "stay awake 2 more mins"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just do it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:00",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        },
+        {
+          "from": "them",
+          "text": "first one to say it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 20th maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why is our first date napkin in it"
+        },
+        {
+          "from": "them",
+          "text": "You left it on the table. I kept it"
+        }
+      ]
+    }
+  ]
+}

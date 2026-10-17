@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|17:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are you still coming tonight"
+        },
+        {
+          "from": "them",
+          "text": "my train got cancelled"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "i was so excited"
+        },
+        {
+          "from": "them",
+          "text": "i know i'm sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "but i made you this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "until i'm there 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how are you this cute"
+        },
+        {
+          "from": "me",
+          "text": "i love you so much"
+        },
+        {
+          "from": "them",
+          "text": "tomorrow. i promise"
+        },
+        {
+          "from": "me",
+          "text": "i'm holding you to that"
+        }
+      ]
+    }
+  ]
+}

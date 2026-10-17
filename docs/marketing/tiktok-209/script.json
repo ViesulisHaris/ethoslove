@@ -1,0 +1,121 @@
+{
+  "demo": {
+    "template": "music-box",
+    "steps": [
+      "swap \"CLARA\" \"MAYA\"",
+      "swap \"Clara\" \"Maya\"",
+      "swap \"LEO\" \"MARCO\"",
+      "swap \"Leo\" \"Marco\"",
+      "swap \"five years of us\" \"our song\"",
+      "wait 1400",
+      "shot gift-1.png",
+      "press 273 428",
+      "wait 6000",
+      "release",
+      "wait 3800",
+      "shot gift-2.png",
+      "wait 5200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:19",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said goodnight beautiful and u said \"ok\""
+        },
+        {
+          "from": "me",
+          "text": "im tired"
+        },
+        {
+          "from": "them",
+          "text": "is this about saturday"
+        },
+        {
+          "from": "me",
+          "text": "what about saturday"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "i made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our song",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "what about saturday"
+        },
+        {
+          "from": "them",
+          "text": "did u like it tho"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what happened saturday"
+        },
+        {
+          "from": "them",
+          "text": "nothing happened"
+        },
+        {
+          "from": "them",
+          "text": "she was drunk"
+        },
+        {
+          "from": "me",
+          "text": "who was drunk"
+        },
+        {
+          "from": "them",
+          "text": "maya did u like the gift"
+        }
+      ]
+    }
+  ]
+}

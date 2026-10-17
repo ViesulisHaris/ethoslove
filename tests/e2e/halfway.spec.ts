@@ -172,14 +172,15 @@ test.describe("Halfway: the recipient", () => {
   test("the Spanish demo speaks Spanish, with its own towns and distance", async ({ page }) => {
     const noErrors = watchErrors(page);
     await openDemo(page, "/es/demo/halfway");
-    await expect(page.getByText("10.045", { exact: true })).toBeVisible();
+    // Lima to Mexico City through Panamá: 2,354 km and 2,409 km, which is why neither flew more.
+    await expect(page.getByText(/^4\.?763$/)).toBeVisible();
     await expect(page.getByText("km entre vosotros", { exact: true })).toBeVisible();
-    await expect(page.getByText("MADRID", { exact: true })).toBeVisible();
-    await expect(page.getByText("BUENOS AIRES", { exact: true })).toBeVisible();
+    await expect(page.getByText("LIMA", { exact: true })).toBeVisible();
+    await expect(page.getByText("CIUDAD DE MÉXICO", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "sopla el avión hasta Clara" })).toBeVisible();
     await page.getByRole("button", { name: "Volar hasta Clara" }).click({ force: true });
     await expect(page.getByText("una postal de Iván", { exact: true })).toBeVisible({ timeout: 12_000 });
-    await expect(page.getByRole("heading", { name: "Querida Clara," })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Hola, Clara:" })).toBeVisible();
     noErrors();
   });
 });

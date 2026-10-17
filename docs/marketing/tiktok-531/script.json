@@ -1,0 +1,72 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:02 PM",
+      "messages": [
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "open it when you're alone"
+        },
+        {
+          "ts": "Today|10:31 PM"
+        },
+        {
+          "from": "them",
+          "text": "did you get it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "get what"
+        },
+        {
+          "from": "them",
+          "text": "my reaction at the end"
+        },
+        {
+          "from": "them",
+          "text": "the voice note"
+        },
+        {
+          "from": "them",
+          "text": "was it too much"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "you can delete it"
+        },
+        {
+          "from": "me",
+          "text": "i've played it 11 times",
+          "status": "Read 10:34 PM"
+        }
+      ]
+    }
+  ]
+}

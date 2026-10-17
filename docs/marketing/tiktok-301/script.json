@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:48",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did you really end it"
+        },
+        {
+          "from": "them",
+          "text": "I told you. We wanted different things"
+        },
+        {
+          "from": "me",
+          "text": "liar",
+          "status": "Read 23:49"
+        },
+        {
+          "from": "them",
+          "text": "I made you this. Open it after tomorrow"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for after 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why after tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "Surgery's at 7"
+        },
+        {
+          "from": "them",
+          "text": "I didn't want you in a waiting room for me"
+        },
+        {
+          "from": "me",
+          "text": "which hospital"
+        }
+      ]
+    }
+  ]
+}

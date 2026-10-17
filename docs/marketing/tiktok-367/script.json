@@ -1,0 +1,78 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:34",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you so much"
+        },
+        {
+          "from": "me",
+          "text": "i hate this distance"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "34 more days"
+        },
+        {
+          "from": "me",
+          "text": "that's so long"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you miss me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "stop"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "me",
+          "text": "now i miss you even more"
+        },
+        {
+          "from": "me",
+          "text": "i love you"
+        },
+        {
+          "from": "them",
+          "text": "34 days maya"
+        }
+      ]
+    }
+  ]
+}

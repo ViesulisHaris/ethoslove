@@ -1,0 +1,40 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|19:12",
+      "messages": [
+        { "from": "me", "text": "do u know what today is" },
+        { "from": "them", "text": "tuesday" },
+        { "from": "me", "text": "what else" },
+        { "from": "them", "text": "bin day" },
+        { "from": "me", "text": "BIN DAY" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "BIN DAY" },
+        { "from": "them", "text": "and this" },
+        { "from": "them", "text": "been making it since sunday" },
+        { "from": "them", "link": { "title": "for maya (not bin day)", "domain": "tryethos.io", "image": "og", "name": "Maya" } }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Your screenshot of the gift goes here. Any template. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "marco i already posted a story" },
+        { "from": "them", "text": "saying what" },
+        { "from": "me", "text": "happy anniversary to me i guess" },
+        { "from": "them", "text": "delete it" },
+        { "from": "me", "text": "ur sister already replied 'oh no'" },
+        { "from": "me", "text": "this is so beautiful i feel sick", "tapback": "heart" },
+        { "from": "them", "text": "maya delete the story" }
+      ]
+    }
+  ]
+}

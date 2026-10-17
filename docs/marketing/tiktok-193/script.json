@@ -1,0 +1,115 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:08",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why is my mum blocked on my phone"
+        },
+        {
+          "from": "me",
+          "text": "idk. maybe u did it"
+        },
+        {
+          "from": "them",
+          "text": "my dad says shes been calling for 3 weeks"
+        },
+        {
+          "from": "me",
+          "text": "and u believe them over me?"
+        },
+        {
+          "from": "me",
+          "text": "shes never liked me marco"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "shes never liked me marco"
+        },
+        {
+          "from": "them",
+          "text": "i dont want to fight. i made u this for ur birthday"
+        },
+        {
+          "from": "them",
+          "text": "i just want u two to get on"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my favourite person)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Bloom (hold the screen and it opens: her birthday, from the one person being nice in this story). It has to look like pure love, so \"its cute\" lands as cold as it is. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "but if u unblock her we're done"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "ok. i wont"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i didnt just block her"
+        },
+        {
+          "from": "them",
+          "text": "what did u do"
+        },
+        {
+          "from": "me",
+          "text": "ive been texting her from ur ipad. as u"
+        },
+        {
+          "from": "them",
+          "text": "saying what"
+        },
+        {
+          "from": "me",
+          "text": "enough that shes not coming to the wedding",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what did u say to my mum"
+        }
+      ]
+    }
+  ]
+}

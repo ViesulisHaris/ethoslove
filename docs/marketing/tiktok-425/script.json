@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "goodmorninggggg babyyy",
+          "status": "Read 8:46 am"
+        },
+        {
+          "from": "them",
+          "text": "Goodmorningg my pretty girl"
+        },
+        {
+          "from": "them",
+          "text": "I made you something last night when you fell asleep on ft"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodmorning my love 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Ft me after you open it"
+        }
+      ]
+    }
+  ]
+}

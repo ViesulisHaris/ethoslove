@@ -1,0 +1,77 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:05",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i think we need a break"
+        },
+        {
+          "from": "them",
+          "text": "please don't say that"
+        },
+        {
+          "from": "me",
+          "text": "i'm just tired leo"
+        },
+        {
+          "from": "them",
+          "text": "can i send you one thing"
+        },
+        {
+          "from": "me",
+          "text": "fine"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|22:19",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "please open this 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "if you still want a break after"
+        },
+        {
+          "from": "them",
+          "text": "i'll understand"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:02",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm sorry"
+        },
+        {
+          "from": "me",
+          "text": "i don't want a break"
+        },
+        {
+          "from": "me",
+          "text": "i love you"
+        },
+        {
+          "from": "them",
+          "text": "i love you too",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|09:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you still going to the café on saturdays"
+        },
+        {
+          "from": "me",
+          "text": "sometimes why"
+        },
+        {
+          "from": "them",
+          "text": "i was there today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "saturdays with you ☕️",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you still open that?",
+          "status": "Read 09:16"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the barista asked where you were"
+        },
+        {
+          "from": "me",
+          "text": "what did you say"
+        },
+        {
+          "from": "them",
+          "text": "that you were running late"
+        },
+        {
+          "from": "me",
+          "text": "it's been 4 months"
+        },
+        {
+          "from": "them",
+          "text": "i know. i still order yours"
+        }
+      ]
+    }
+  ]
+}

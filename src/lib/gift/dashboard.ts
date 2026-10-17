@@ -76,11 +76,18 @@ export async function getGiftDetail(userId: string, giftId: string) {
   };
 }
 
+/**
+ * The account page's purchases list is what was paid, and what was refunded since (docs/MEMBERSHIP.md
+ * 4.2: each paid invoice is a line). A checkout left without paying stays a pending row for good,
+ * since nothing marks it expired, and listed it read as a second charge waiting under the paid one.
+ */
+const LISTED_PURCHASES = ["paid", "refunded"] as const;
+
 export async function listMyPurchases(userId: string) {
   const supabase = await getSupabaseServerClient();
   if (!supabase) return { purchases: [], unlocks: [] };
   const [{ data: purchases }, { data: unlocks }] = await Promise.all([
-    supabase.from("purchases").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
+    supabase.from("purchases").select("*").eq("user_id", userId).in("status", [...LISTED_PURCHASES]).order("created_at", { ascending: false }),
     supabase.from("template_unlocks").select("*").eq("user_id", userId),
   ]);
   return { purchases: purchases ?? [], unlocks: unlocks ?? [] };

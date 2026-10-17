@@ -1,0 +1,57 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "wallpaper": "rose",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:06 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "How many guys you fw?"
+        },
+        {
+          "from": "me",
+          "text": "including you?"
+        },
+        {
+          "from": "them",
+          "text": "yeah"
+        },
+        {
+          "from": "me",
+          "text": "none",
+          "status": "Read 12:07 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Fair"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "changing that 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok one",
+          "status": "Read 12:10 PM"
+        }
+      ]
+    }
+  ]
+}

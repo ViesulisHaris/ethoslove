@@ -1,0 +1,48 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you think i'm a sunrise or a sunset?",
+          "status": "Read 7:12 PM"
+        },
+        {
+          "from": "them",
+          "text": "You are a category 5 hurricane"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "My favorite natural disaster though"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my hurricane 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok i'll allow it",
+          "status": "Read 7:14 PM"
+        }
+      ]
+    }
+  ]
+}

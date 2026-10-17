@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:18",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did hinge just send u a notification"
+        },
+        {
+          "from": "them",
+          "text": "i forgot to delete it"
+        },
+        {
+          "from": "me",
+          "text": "it says ur \"last active: today\""
+        },
+        {
+          "from": "them",
+          "text": "i open it to delete it and then i forget"
+        },
+        {
+          "from": "them",
+          "text": "u went through my phone again maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u went through my phone again maya"
+        },
+        {
+          "from": "me",
+          "text": "it was on ur lock screen"
+        },
+        {
+          "from": "them",
+          "text": "i dont even use it. i made u this last week. does that look like someone who uses hinge"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (deleted it for real)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Pop-up Card (a card that opens into their whole year, the opposite of a dating app). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok. its beautiful"
+        },
+        {
+          "from": "me",
+          "text": "delete it now tho. while im here"
+        },
+        {
+          "from": "them",
+          "text": "done. happy?"
+        },
+        {
+          "from": "them",
+          "text": "u really need to work on trusting me"
+        },
+        {
+          "from": "me",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i have hinge too"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since june. ive been on 3 dates"
+        },
+        {
+          "from": "them",
+          "text": "with who"
+        },
+        {
+          "from": "me",
+          "text": "u know one of them",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya who did u go on the dates with"
+        }
+      ]
+    }
+  ]
+}

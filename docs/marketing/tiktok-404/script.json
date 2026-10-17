@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I’m bad with words"
+        },
+        {
+          "from": "them",
+          "text": "So I made this instead"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "read this 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you’re not bad with words"
+        },
+        {
+          "from": "me",
+          "text": "you’re perfect",
+          "status": "Read 9:21 pm"
+        }
+      ]
+    }
+  ]
+}

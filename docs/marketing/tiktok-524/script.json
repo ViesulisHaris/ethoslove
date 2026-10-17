@@ -1,0 +1,45 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "wallpaper": "bokeh",
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:40 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "made you something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|9:12 PM"
+        },
+        {
+          "from": "me",
+          "text": "omg i loved it 😭"
+        },
+        {
+          "from": "me",
+          "text": "watched the whole thing twice",
+          "status": "Read 9:12 PM"
+        },
+        {
+          "from": "them",
+          "text": "it says 38%"
+        }
+      ],
+      "input": "ok so my phone died"
+    }
+  ]
+}

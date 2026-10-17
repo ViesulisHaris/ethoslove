@@ -1,0 +1,132 @@
+{
+  "demo": {
+    "template": "keepsake",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"ELENA\" \"MAYA\"",
+      "swap \"elena\" \"maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "swap \"SAM\" \"MARCO\"",
+      "swap \"sam\" \"marco\"",
+      "swap \"E + S\" \"M + M\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"break the seal\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "scroll 500",
+      "wait 900",
+      "tap \"open the locket\"",
+      "wait 2200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:19",
+      "messages": [
+        {
+          "from": "them",
+          "text": "were u on my phone"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "my notes app was open"
+        },
+        {
+          "from": "me",
+          "text": "i was checking the time"
+        },
+        {
+          "from": "them",
+          "text": "on my phone?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "mine was dead"
+        },
+        {
+          "from": "them",
+          "text": "ok. made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "things i kept (for maya)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco this is so cute"
+        },
+        {
+          "from": "me",
+          "text": "one thing"
+        },
+        {
+          "from": "them",
+          "text": "go on"
+        },
+        {
+          "from": "me",
+          "text": "we are not naming our son kevin"
+        },
+        {
+          "from": "them",
+          "text": "u read the list"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i crossed some out"
+        },
+        {
+          "from": "me",
+          "text": "and added one"
+        },
+        {
+          "from": "them",
+          "text": "maya that list was private"
+        },
+        {
+          "from": "them",
+          "text": "maya what did u add"
+        }
+      ]
+    }
+  ]
+}

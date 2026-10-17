@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Sep 23|9:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "ts": "Today|10:02 PM"
+        },
+        {
+          "from": "them",
+          "text": "you never do anything romantic anymore"
+        },
+        {
+          "from": "them",
+          "text": "like ever"
+        },
+        {
+          "from": "me",
+          "text": "scroll up",
+          "status": "Read 10:03 PM"
+        }
+      ]
+    }
+  ]
+}

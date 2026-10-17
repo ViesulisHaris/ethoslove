@@ -1,0 +1,121 @@
+{
+  "demo": {
+    "template": "bouquet",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "wait 900",
+      "shot gift-1.png",
+      "wait 2600",
+      "shot gift-2.png",
+      "wait 5000",
+      "tap \"open the card\"",
+      "wait 3200",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why r u being off"
+        },
+        {
+          "from": "me",
+          "text": "ur snap map"
+        },
+        {
+          "from": "them",
+          "text": "what about it"
+        },
+        {
+          "from": "me",
+          "text": "ur at her flat"
+        },
+        {
+          "from": "them",
+          "text": "its glitching"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "for 3 hours?"
+        },
+        {
+          "from": "them",
+          "text": "ur honestly obsessed with me. its scary"
+        },
+        {
+          "from": "them",
+          "text": "was gonna give u this tonight but whatever"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "Just because",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cute"
+        },
+        {
+          "from": "me",
+          "text": "turned my ghost mode off btw"
+        },
+        {
+          "from": "them",
+          "text": "why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "check where i am"
+        },
+        {
+          "from": "them",
+          "text": "why r u at jakes"
+        },
+        {
+          "from": "me",
+          "text": "its glitching"
+        },
+        {
+          "from": "them",
+          "text": "maya thats not funny"
+        }
+      ]
+    }
+  ]
+}

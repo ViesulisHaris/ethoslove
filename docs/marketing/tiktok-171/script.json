@@ -1,0 +1,127 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|08:12",
+      "messages": [
+        {
+          "from": "them",
+          "text": "whos 'the committee'"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "the group chat. with jess and priya"
+        },
+        {
+          "from": "me",
+          "text": "how do u know what my group chats are called"
+        },
+        {
+          "from": "them",
+          "text": "u were asleep. ur phone was right there"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u were asleep. ur phone was right there"
+        },
+        {
+          "from": "me",
+          "text": "u used my face marco"
+        },
+        {
+          "from": "them",
+          "text": "if u had nothing to hide it wouldnt matter"
+        },
+        {
+          "from": "them",
+          "text": "i made u this last night. before any of this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my whole world)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Photos of the two of them, or the long letter: it has to look like he means every word. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "this is beautiful"
+        },
+        {
+          "from": "me",
+          "text": "u still went through my phone"
+        },
+        {
+          "from": "them",
+          "text": "i wanted to know why u've been off with me"
+        },
+        {
+          "from": "them",
+          "text": "and now i know. ur mates are in ur ear"
+        },
+        {
+          "from": "me",
+          "text": "theyre not. theyre just my friends"
+        },
+        {
+          "from": "them",
+          "text": "they hate me maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "the chat is called the red flag committee"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "they rate u out of 10. after every argument"
+        },
+        {
+          "from": "them",
+          "text": "what did they rate me"
+        },
+        {
+          "from": "me",
+          "text": "im not telling u that",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya what did they rate me"
+        }
+      ]
+    }
+  ]
+}

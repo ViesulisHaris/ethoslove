@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|02:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I opened it"
+        },
+        {
+          "from": "me",
+          "text": "opened what"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "open when you miss me 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Sam"
+          }
+        },
+        {
+          "from": "me",
+          "text": "sam that was 2 years ago",
+          "status": "Read 02:15"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "I never needed it before"
+        },
+        {
+          "from": "me",
+          "text": "and now?"
+        },
+        {
+          "from": "them",
+          "text": "I miss you"
+        }
+      ]
+    }
+  ]
+}

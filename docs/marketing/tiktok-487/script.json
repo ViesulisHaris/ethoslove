@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:30 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "Are you still coming?"
+        },
+        {
+          "from": "me",
+          "text": "Or should I go to bed?"
+        },
+        {
+          "from": "them",
+          "text": "No, i'm not coming until you tell me who is Jake i saw you texting the other day"
+        },
+        {
+          "from": "me",
+          "text": "Jake is the guy that will come if you don't come",
+          "status": "Read 10:31 PM"
+        },
+        {
+          "from": "them",
+          "text": "I'm on my way"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "Open this before I get there"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "jake could never 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "who's jake",
+          "status": "Read 10:38 PM"
+        },
+        {
+          "from": "them",
+          "text": "Exactly"
+        }
+      ]
+    }
+  ]
+}

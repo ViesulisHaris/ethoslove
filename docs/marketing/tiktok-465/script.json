@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "home safe",
+          "status": "Read 11:52 pm"
+        },
+        {
+          "from": "them",
+          "text": "I know"
+        },
+        {
+          "from": "them",
+          "text": "Watched your little dot the whole way home"
+        },
+        {
+          "from": "them",
+          "text": "Sleep well my love"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodnight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

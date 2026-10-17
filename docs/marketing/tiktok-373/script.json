@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i can't stop crying"
+        },
+        {
+          "from": "me",
+          "text": "i miss her so much"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "i'm so sorry maya"
+        },
+        {
+          "from": "me",
+          "text": "i can't sleep"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made this for you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i needed this so much"
+        },
+        {
+          "from": "me",
+          "text": "thank you"
+        },
+        {
+          "from": "them",
+          "text": "i'm here"
+        },
+        {
+          "from": "them",
+          "text": "always"
+        }
+      ]
+    }
+  ]
+}

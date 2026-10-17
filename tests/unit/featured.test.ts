@@ -11,13 +11,14 @@ describe("what the gallery leads with", () => {
     expect(new Set([...POPULAR_SLUGS, ...NEW_SLUGS]).size).toBe(POPULAR_SLUGS.length + NEW_SLUGS.length);
   });
 
-  it("keeps the best sellers to one row of four, most sold first", () => {
+  it("keeps the best sellers to one row of four, all of them premium", () => {
     expect(POPULAR_SLUGS).toHaveLength(4);
-    expect(POPULAR_SLUGS[0]).toBe("the-letter");
+    expect(POPULAR_SLUGS[0]).toBe("bouquet");
+    for (const slug of POPULAR_SLUGS) expect(manifests.find((m) => m.slug === slug)?.tier, slug).toBe("premium");
   });
 
-  it("puts the cats at the front of what is new", () => {
-    expect(NEW_SLUGS.slice(0, 3)).toEqual(["party-animals", "the-council", "sticker-bomb"]);
+  it("puts this October's Halloween collages at the front of what is new, then the pair before them", () => {
+    expect(NEW_SLUGS.slice(0, 5)).toEqual(["be-my-boo", "fall-for-you", "autumn-reel", "spooky-season", "dark-romance"]);
   });
 
   it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {
@@ -34,14 +35,16 @@ describe("what the gallery leads with", () => {
 
   it("drops a shelf a filter has emptied, heading and all", () => {
     const free = sectionTemplates(manifests.filter((m) => m.tier === "free"));
-    expect(free.map((s) => s.id)).toEqual(["popular"]);
+    expect(free.map((s) => s.id)).toEqual(["all"]);
     expect(sectionTemplates([])).toEqual([]);
     expect(sectionTemplates([{ slug: "not-a-template" }]).map((s) => s.id)).toEqual(["all"]);
   });
 
   it("badges a card by the shelf it belongs to", () => {
     expect(featuredFor("bouquet")).toBe("popular");
-    expect(featuredFor("the-council")).toBe("new");
+    expect(featuredFor("the-council")).toBe("popular");
+    expect(featuredFor("be-my-boo")).toBe("new");
+    expect(featuredFor("the-letter")).toBeUndefined();
     expect(featuredFor("vinyl")).toBeUndefined();
   });
 });

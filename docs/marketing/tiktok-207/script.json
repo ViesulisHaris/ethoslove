@@ -1,0 +1,121 @@
+{
+  "demo": {
+    "template": "jar-of-reasons",
+    "steps": [
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Ana\" \"Maya\"",
+      "swap \"Twelve reasons (to start)\" \"100 reasons (to start)\"",
+      "swap \"12 reasons I love you\" \"100 reasons I love you\"",
+      "wait 1200",
+      "shot gift-1.png",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-2.png",
+      "tap \"tap to fold it back\"",
+      "wait 1500",
+      "tap \"tap the jar\"",
+      "wait 3500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:14",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i love u and u said \"k\""
+        },
+        {
+          "from": "me",
+          "text": "k"
+        },
+        {
+          "from": "them",
+          "text": "wow"
+        },
+        {
+          "from": "them",
+          "text": "whats ur problem lately"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "ok. i wrote u 100 reasons anyway"
+        },
+        {
+          "from": "them",
+          "text": "bc i actually love u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "100 reasons (to start)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "them",
+          "text": "nice? it took me a week"
+        },
+        {
+          "from": "me",
+          "text": "i want to break up"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "after everything i do for u?"
+        },
+        {
+          "from": "them",
+          "text": "no one else would put up with u maya"
+        },
+        {
+          "from": "me",
+          "text": "and thats why"
+        },
+        {
+          "from": "them",
+          "text": "ull be back"
+        }
+      ]
+    }
+  ]
+}

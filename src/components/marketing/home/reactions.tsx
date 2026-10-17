@@ -17,7 +17,7 @@ export function Reactions() {
         <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="relative lg:col-span-7">
             <p className="text-eyebrow text-ink-soft">{t("eyebrow")}</p>
-            <h2 className="display-xl mt-4 max-w-[14ch]">{t("title")}</h2>
+            <h2 className="display-xl mt-4 max-w-[8.4em]">{t("title")}</h2>
             {/* what comes back, more often than not */}
             <Cutout id="kiss-red" className="absolute right-2 bottom-1 w-[84px] rotate-[14deg] opacity-95 drop-shadow-[0_8px_12px_rgba(120,20,40,0.22)] sm:right-16 sm:w-[112px]" />
           </div>

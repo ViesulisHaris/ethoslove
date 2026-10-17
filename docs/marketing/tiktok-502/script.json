@@ -1,0 +1,52 @@
+{
+  "crop": true,
+  "theme": "light",
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:14 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "I love you"
+        },
+        {
+          "from": "me",
+          "text": "i love you more"
+        },
+        {
+          "from": "them",
+          "text": "NO I LOVE YOU MORE GOD DAMMIT"
+        },
+        {
+          "from": "me",
+          "text": "I WOULD STEP ON LEGO FOR YOU",
+          "status": "Read 11:15 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "I LOVE YOU MORE 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "BEAT THAT"
+        },
+        {
+          "from": "me",
+          "text": "holy shit marry me",
+          "status": "Read 11:21 PM"
+        }
+      ]
+    }
+  ]
+}

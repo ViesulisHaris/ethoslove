@@ -1,0 +1,55 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "bar": false,
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|1:09 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i miss you"
+        },
+        {
+          "ts": "Today|9:09 AM"
+        },
+        {
+          "from": "me",
+          "text": "that was a moment of weakness"
+        },
+        {
+          "from": "me",
+          "text": "fck you",
+          "status": "Read 9:09 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "silenced": "mylove",
+      "messages": [
+        {
+          "from": "them",
+          "text": "Too late I screenshotted it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i miss you too 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "ok i miss you again",
+          "status": "Read 9:12 AM"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|01:03",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is there a hidden album called \"old\" on ur phone"
+        },
+        {
+          "from": "them",
+          "text": "why are u in my photos"
+        },
+        {
+          "from": "me",
+          "text": "its 214 photos of her marco"
+        },
+        {
+          "from": "them",
+          "text": "its memories. u have memories too"
+        },
+        {
+          "from": "them",
+          "text": "i dont go through urs"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i dont go through urs"
+        },
+        {
+          "from": "me",
+          "text": "u kept 214"
+        },
+        {
+          "from": "them",
+          "text": "and ive never opened it. i made this album instead. look"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (the only album i open)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Keepsake (a box of their own memories, the album he should have kept). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this made me cry"
+        },
+        {
+          "from": "me",
+          "text": "can u just delete the old one"
+        },
+        {
+          "from": "them",
+          "text": "i will. when im ready"
+        },
+        {
+          "from": "them",
+          "text": "dont rush me maya. its not a competition"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "ive been swapping them"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "the ones of her. for ones of me. a few every week since april"
+        },
+        {
+          "from": "them",
+          "text": "how many are still her"
+        },
+        {
+          "from": "me",
+          "text": "open it and see",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya how many are still her"
+        }
+      ]
+    }
+  ]
+}

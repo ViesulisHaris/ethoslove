@@ -1,0 +1,39 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "input": "i love you more",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i’m sorry for earlier baby",
+          "status": "Read 11:02 pm"
+        },
+        {
+          "from": "them",
+          "text": "Don’t be sorry"
+        },
+        {
+          "from": "them",
+          "text": "I could never stay mad at you"
+        },
+        {
+          "from": "them",
+          "text": "Come here"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "i love you 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

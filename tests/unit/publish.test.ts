@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
+import { decidePublish, fieldMustHaves, fieldProblems, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
 import { manifest as letter } from "@/templates/the-letter/manifest";
+import { fieldsSchema as letterSchema } from "@/templates/the-letter/schema";
+import { fieldsSchema as cookieSchema } from "@/templates/fortune-cookie/schema";
+import { fieldsSchema as threadSchema } from "@/templates/text-thread/schema";
+import { SCHEMA_SLUGS, loadFieldsSchema } from "@/templates/schemas";
 import type { GiftData } from "@/lib/gift/schema";
 
 const photo = (url: string) => ({ id: url, url, width: 10, height: 10 });
@@ -43,11 +47,15 @@ describe("publish rules", () => {
     const many = { ...base, photos: Array.from({ length: 11 }, (_, i) => photo(`gifts/g/${i}.webp`)) };
     expect(decidePublish(letter, many, { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
   });
-  it("a real song, a video clip or a voice note is a premium extra on any template", () => {
-    const song = { ...base, music: { source: "catalog" as const, url: "https://audio.example/p.m4a", title: "Perfect", artist: "Ed", startAt: 0 } };
-    expect(premiumExtras(song)).toEqual(["song"]);
-    expect(decidePublish(letter, song, { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
-    expect(decidePublish(letter, song, { unlocked: true }, none)).toEqual({ ok: true, watermark: false, isPremium: false });
+  it("a real song is free on every gift: Apple's previews may not be sold", () => {
+    const preview = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview/p.m4a";
+    const song = { ...base, music: { source: "catalog" as const, url: preview, title: "Perfect", artist: "Ed", provider: "itunes" as const, startAt: 0 } };
+    expect(premiumExtras(song)).toEqual([]);
+    expect(decidePublish(letter, song, { unlocked: false }, none)).toEqual({ ok: true, watermark: true, isPremium: false });
+    // A live gift that already has one can be edited without an unlock too.
+    expect(liveEditNeedsUnlock(letter, song, { hasSchedule: false, hasPassword: false, watermark: true })).toBe(false);
+  });
+  it("a video clip or a voice note is a premium extra on any template", () => {
     const clip = { ...base, video: { url: "gifts/g1/v.webm" } };
     expect(premiumExtras(clip)).toEqual(["video"]);
     const voice = { ...base, voiceNote: { url: "gifts/g1/vn.webm", duration: 12 } };
@@ -57,12 +65,18 @@ describe("publish rules", () => {
     expect(premiumExtras(lib)).toEqual([]);
     expect(readinessProblems(letter, { ...base, voiceNote: { url: "blob:x" } })).toContain("uploadsPending");
   });
-  it("only our own library and the sender's upload count as free music", () => {
+  it("music from anywhere but our library, the sender's upload or Apple's catalogue still takes an unlock", () => {
     const preview = "https://audio-ssl.itunes.apple.com/itunes-assets/p.m4a";
-    expect(premiumExtras({ ...base, music: { source: "library" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
-    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: preview, startAt: 0 } })).toEqual(["song"]);
+    // A preview is a preview whatever the label says: free, and (see music.test) never looped.
+    expect(premiumExtras({ ...base, music: { source: "library" as const, url: preview, startAt: 0 } })).toEqual([]);
+    expect(premiumExtras({ ...base, music: { source: "upload" as const, url: preview, startAt: 0 } })).toEqual([]);
     expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "gifts/g1/song.mp3", startAt: 0 } })).toEqual([]);
     expect(premiumExtras({ ...base, music: { source: "upload" as const, url: "idb:song", startAt: 0 } })).toEqual([]);
+    // Someone else's audio, however it is labelled, is not ours to host behind a free gift.
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "https://audio.example/p.m4a", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "library" as const, url: "https://audio.example/p.mp3", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "http://audio-ssl.itunes.apple.com/p.m4a", startAt: 0 } })).toEqual(["song"]);
+    expect(premiumExtras({ ...base, music: { source: "catalog" as const, url: "https://itunes.apple.com.evil.example/p.m4a", startAt: 0 } })).toEqual(["song"]);
   });
   it("edits to a live gift are held to the publish rules", () => {
     const plain = { hasSchedule: false, hasPassword: false, watermark: true };
@@ -78,5 +92,45 @@ describe("publish rules", () => {
     expect(readinessProblems(letter, { ...base, message: "  " })).toContain("message");
     expect(readinessProblems(letter, { ...base, photos: [] })).toContain("photosMin");
     expect(decidePublish(letter, { ...base, photos: [] }, { unlocked: true }, none)).toMatchObject({ ok: false, reason: "not_ready" });
+  });
+});
+
+describe("a template's own fields", () => {
+  // Fortune Cookie was paid for with no fortunes, then refused at publish (fortunes: 3 to 20).
+  const cookie = { ...letter, slug: "fortune-cookie", tier: "premium" as const };
+  const withFortunes = (fortunes: string[]) => ({ ...base, templateSlug: "fortune-cookie", fields: { fortunes, table: "red" } });
+
+  it("counts as not ready, before any payment, until the schema publishing uses accepts them", () => {
+    const empty = withFortunes([]);
+    expect(readinessProblems(cookie, empty, cookieSchema)).toEqual(["fields.fortunes"]);
+    expect(decidePublish(cookie, empty, { unlocked: false }, { ...none, fieldsSchema: cookieSchema })).toEqual({ ok: false, reason: "not_ready", problems: ["fields.fortunes"] });
+    expect(decidePublish(cookie, withFortunes(["a", "b", "c"]), { unlocked: false }, { ...none, fieldsSchema: cookieSchema })).toEqual({ ok: false, reason: "payment_required" });
+    expect(decidePublish(cookie, withFortunes(["a", "b", "c"]), { unlocked: true }, { ...none, fieldsSchema: cookieSchema })).toMatchObject({ ok: true });
+    // The server parses the whole gift itself first, so it leaves the schema out.
+    expect(readinessProblems(cookie, empty)).toEqual([]);
+  });
+
+  it("says what each field still needs", () => {
+    expect(fieldProblems(cookieSchema, { fortunes: [] })).toEqual([{ key: "fortunes", need: "more", count: 3 }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "  ", "c"] })).toEqual([{ key: "fortunes", need: "emptyItem" }]);
+    expect(fieldProblems(cookieSchema, { fortunes: Array.from({ length: 21 }, (_, i) => `f${i}`) })).toEqual([{ key: "fortunes", need: "fewer", count: 20 }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "b", "c"], table: "gold" })).toEqual([{ key: "table", need: "fix" }]);
+    expect(fieldProblems(cookieSchema, { fortunes: ["a", "b", "c"] })).toEqual([]);
+  });
+
+  it("lists a new gift's must-haves: the defaults a template starts with aren't always enough", () => {
+    expect(fieldMustHaves(cookieSchema)).toEqual([{ key: "fortunes", need: "more", count: 3 }]);
+    expect(fieldMustHaves(threadSchema)).toEqual([{ key: "lines", need: "more", count: 2 }]);
+    expect(fieldMustHaves(letterSchema)).toEqual([]);
+  });
+
+  it("covers every premium template whose new gift couldn't be sent as it starts", async () => {
+    const blocked: string[] = [];
+    for (const slug of SCHEMA_SLUGS) {
+      const schema = await loadFieldsSchema(slug);
+      if (schema && fieldMustHaves(schema).length > 0) blocked.push(slug);
+    }
+    // Each of these now shows its must-have in the checklist and can't be paid for until it's met.
+    expect(blocked.sort()).toEqual(["fortune-cookie", "jar-of-reasons", "paper-crane", "picnic", "text-thread"]);
   });
 });

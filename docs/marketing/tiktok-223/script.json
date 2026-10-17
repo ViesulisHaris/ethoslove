@@ -1,0 +1,129 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|21:33",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did jake like ur pic"
+        },
+        {
+          "from": "me",
+          "text": "hes my friend??"
+        },
+        {
+          "from": "them",
+          "text": "unfollow him"
+        },
+        {
+          "from": "them",
+          "text": "i mean it maya"
+        },
+        {
+          "from": "me",
+          "text": "fine"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|21:58",
+      "messages": [
+        {
+          "from": "me",
+          "text": "done"
+        },
+        {
+          "from": "them",
+          "text": "good girl"
+        },
+        {
+          "from": "them",
+          "text": "made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cute"
+        },
+        {
+          "from": "me",
+          "text": "quick question"
+        },
+        {
+          "from": "me",
+          "text": "why do u follow 614 girls"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "thats different"
+        },
+        {
+          "from": "me",
+          "text": "how"
+        },
+        {
+          "from": "them",
+          "text": "they're models"
+        },
+        {
+          "from": "me",
+          "text": "unfollowed u"
+        },
+        {
+          "from": "me",
+          "text": "followed jake back 💅"
+        },
+        {
+          "from": "them",
+          "text": "MAYA"
+        }
+      ]
+    }
+  ]
+}

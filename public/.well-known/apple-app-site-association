@@ -1,0 +1,22 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["6STLVMDPXB.xyz.secuora.ethos"],
+        "components": [
+          { "/": "/plan" },
+          { "/": "/es/plan" },
+          { "/": "/for-two/join", "?": { "code": "?*" } },
+          { "/": "/es/for-two/join", "?": { "code": "?*" } },
+          { "/": "/trips/*" },
+          { "/": "/es/trips/*" },
+          { "/": "/templates/*" },
+          { "/": "/es/templates/*" }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["6STLVMDPXB.xyz.secuora.ethos"]
+  }
+}

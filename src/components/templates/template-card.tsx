@@ -39,7 +39,9 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
 
   const play = () => {
     const v = videoRef.current;
-    if (!v || live) return;
+    // A phone fires mouseenter on tap too, and the looping preview then played on, off screen,
+    // after the page had scrolled on; the preview is for a pointer resting on a card.
+    if (!v || live || !window.matchMedia("(hover: hover)").matches) return;
     v.currentTime = 0;
     v.play().catch(() => {});
   };
@@ -129,7 +131,8 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
         >
           {manifest.tier === "free" ? t("common.free") : t("common.premium")}
         </span>
-        {badge ? (
+        {/* Off once the live demo runs: it sits where every template draws its mute button. */}
+        {badge && !live ? (
           <span className={cn("pointer-events-none absolute top-3 right-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-blush text-forest" : "bg-[#B23A5E] text-white")}>
             {badge === "popular" ? (
               <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true">
@@ -154,7 +157,8 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
             {t("templates.makeThis")}
             <ArrowRight className="size-3.5" />
           </Link>
-          <Link href={`/templates/${manifest.slug}`} className="-my-1.5 inline-flex shrink-0 items-center gap-1 py-1.5 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
+          {/* 44px to a thumb, pulled back into the 40px row by its negative margin, so nothing moves. */}
+          <Link href={`/templates/${manifest.slug}`} className="-my-2.5 inline-flex min-h-11 shrink-0 items-center gap-1 py-2.5 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
             {t("templates.details")}
             <ArrowUpRight className="size-3.5" />
           </Link>

@@ -839,6 +839,1409 @@ Nothing in the texts says what the gift looks like; slide 3 is a gap for a scree
 template. 154 is built on "open when" letters, which people already search for and make by hand,
 and it makes the case for a bundle without saying so: there is one for every bad night.
 
+## Two crimes and a confession: what 149's comments said, and 156 to 163
+
+149 ("are u mad at me") is the first of the four-slide batch to break out, and its comment
+section says why more exactly than the view count does. It is two camps shouting past each other:
+
+- against him: *"gurl he ignored ur paragraph just to send you 3 sentences thru app"*, *"break up"*
+- against her: *"that reply was the devil herself"*, *"now what possessed you to say that to him"*
+
+So the engine is not "a cute surprise". It is that **both of them commit a crime, and the viewer
+has to pick one**:
+
+- **His is small and universally hated**: an "ok" to a whole paragraph. Everybody has received it,
+  so everybody arrives already angry on her behalf.
+- **Hers is bigger, funnier, and she confesses it**: a breakup speech, in her Notes app, and it was
+  "really good too". The confession is what gets quoted; a crime somebody else discovers would
+  not be.
+- **The gift sits between the two** as the turn, and says nothing for itself.
+- **The loop stays open**, and the last bubble is him still asking: "send me the speech maya".
+
+A thread where one of them is simply right gives the comments nothing to do. 156 to 163 are that
+engine eight more times, each a new story with nothing carried over from 149 but the shape:
+
+| | His crime | Her confession | Still open |
+|---|---|---|---|
+| 156 | hearted "do u even still like me" | asked the group chat whether to dump him. 4 to 1. The 1 was her | "who were the 4 maya" |
+| 157 | "we need to talk", then offline for three hours | told her manager her grandad died ("the one who died in 2019"); compassionate leave until Thursday | "so ur free tomorrow" |
+| 158 | online, seen, not answering | changed the Netflix password out of spite and cannot remember it | "maya im on the last episode" |
+| 159 | "thanks" to "love u", then eleven minutes of "one sec" | told her mum: he is uninvited from Sunday lunch and the dog is getting his roast potatoes | "maya tell her i said it back" |
+| 160 | "do u know what today is" / "tuesday" / "bin day" (it is their anniversary) | already posted a story, "happy anniversary to me i guess"; his sister replied "oh no" | "maya delete the story" |
+| 161 | "hbd" at 00:00, on her birthday | at 00:01 cancelled their dinner and booked one with the girls, out of spite | "maya uncancel the dinner" |
+| 162 | liked an ex's photo from 2019 ("my thumb slipped") | liked 47 of the ex's photos "so it looks like a glitch", and messaged her that his phone got hacked | "maya what exactly did u send her" |
+| 163 | "nice", to a photo | sent the photo to his best friend to see if he would say nice; he said "wow" | "maya why does dan have ur photo" |
+
+160 and 161 are the ones with an occasion in them, on purpose. The others travel further; these give
+somebody with an anniversary or a birthday inside the month a reason to buy today, and "views are not sales".
+
+Two rules that come out of it:
+
+- **The gift frame has to look like work.** "3 sentences thru app" is a viewer seeing a short
+  message on slide 3 and scoring it against the whole paragraph she wrote him. Use a frame with photos, or the
+  template's big moment. It arms the side defending him, and it is the only slide that sells.
+- **Reply to "break up" in character, every time.** It is the cheapest comment to write, so there
+  are hundreds, and each reply is another notification pulling somebody back to the post.
+
+## The other engine: he is the problem (164, 167 to 175)
+
+156 to 163 are two silly crimes and a happy mess. 164 is the story the app argues about most:
+**he did something wrong, and the gift is how he gets out of it.** He followed a girl at 1:47am
+and liked three of her four posts; the gift arrives with "ur going through my likes now?", "i was
+up til 3 making u this", "i love spoiling u", "ungrateful", "other girls would be in tears", "say
+it back". She answers "idk", and under it: Read 00:12. She never decides. The caption asks the
+viewer to, and the comments do.
+
+167 to 169 are the same register, one tactic each, and in each she explains it away in the
+caption and starts to hear the comments in the pinned comment:
+
+| | The tactic | His line for it | Hers, taking the blame | Last words |
+|---|---|---|---|---|
+| 167 | isolation: a breakup threat for a friend's birthday | "u always have a choice maya" | "i wont go next friday. i'll tell jess" | his |
+| 168 | control by jealousy: a colleague liked a story | "delete him. if its nothing then its nothing" / "i forgive u" | "im sorry i made u feel that way" | "show me ur phone when u get in" |
+| 169 | the gift instead of the apology | "i made u a whole thing maya. what more do u want" | "no ur right. im sorry" | "delete this thread" |
+
+Rules for this register, because it cuts both ways:
+
+- **The narrator is not sold.** The account stays on the viewer's side; the post is her doubting.
+- **The pinned comment does not cheer and does not carry the code.** It answers "what app" and
+  stays in character. The code goes in one reply, in the line that turns it: "use it on someone
+  who deserves it".
+- **The gift frame has to look like real love** (their photos, a long letter). If it looks thin
+  the story is "a like and a text" and dies; if it looks real, the comments have something to
+  fight about.
+- **She explains the red flag away in the caption** ("he was right tho… right"), and **the pinned
+  comment is where she starts to hear the comments** ("i'm going to ring jess back", "i didn't
+  delete it"). The account is never on his side, and never lectures either: the viewers do that.
+- **One at a time.** It is a reach post: the most comments of the batch and the fewest sales.
+  It brings people to the account, where the next post sells. Never two in a row, and never let it
+  become the account's voice.
+
+### What 149 actually looked like when it did 1.1M, and 170 to 175
+
+The posted version of 149 is **ten slides**, and the script in this folder is only the words:
+
+1. Chat, with the timestamp. Ends on "doing what".
+2. Chat, opening on "doing what" again — the way a real person screenshots a thread they are
+   scrolling — then his two lines and the link card at the bottom.
+3 to 9. **The gift, being opened, frame by frame.** Seven slides of it. This is most of the
+   carousel, it is the only part that sells, and it is why people bought from a post about a
+   text message.
+10. Chat: the confession, in the rhythm the comments quoted — "marco" / "i wrote a breakup speech
+   in my notes app" / "u what" / "it was really good too" / "send it" / her refusing with a heart
+   Tapback on it / **"send me the speech maya"**.
+
+**No text is typed over any of it.** Not one slide. A hook drawn over the picture is what the
+lighter carousels need; this register is a screenshot somebody is not supposed to be seeing, and a
+caption printed on it breaks that in half.
+
+**Why the comments went to war, which is the whole point.** They are not arguing with the post,
+they are arguing with each other: *break up* · *why did you write the breakup speech* · *SEND THE
+SPEECH* · *who is in the wrong here*. Three things cause that, and every carousel from 170 on is
+built to cause it on purpose:
+
+- **Both of them are in the wrong.** His is small and universally hated. Hers is bigger, weirder
+  and she confesses it herself, so the room splits and neither half is wrong.
+- **There is one object the comments can demand.** The speech. It exists, it is named, it is never
+  handed over, and hundreds of people will type the same three words asking for it. A demand is the
+  cheapest comment on the app and every one of them is another notification pulling somebody back.
+- **The last bubble is him asking for it, with her name on it.** The thread ends unresolved, and
+  the argument moves into the comments, where it costs us nothing and earns everything.
+
+170 to 175 are that, six times, with the toxic register from 164 underneath. Each is 10 or 11
+slides: two chat, five to seven gift frames, two chat. His tactic is always small enough for half
+the room to defend; her crime is bigger, funnier and confessed by her.
+
+| | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
+|---|---|---|---|---|
+| 170 | checks her location, calls it worry, asks for a photo "so i can relax" | left her phone at her friend's and went out untracked | where she actually was | "where were u maya" |
+| 171 | opened her phone with her face while she was asleep | her group chat is called the red flag committee and rates him out of 10 after every argument | the rating | "maya what did they rate me" |
+| 172 | made her the joke in front of his mates, on camera: "u cant take a joke" | told his mate he still sleeps with a teddy called Gerald | who else she told | "maya who else did u tell" |
+| 173 | brings up the ticket he paid for in every argument: "i dont want ur money, i want u to remember it" | has been repaying him £20 a week with pointed bank references | what the other references say | "maya what do the other ones say" |
+| 174 | "becca wouldve let it go" | messaged the ex, who replied in two minutes | what else the ex said | "maya what else did she say" |
+| 175 | recorded the argument "so u can hear how u sound" | has been recording him too | her recording from Tuesday | "send me the one from tuesday maya" |
+
+Rules that come out of it:
+
+- **Never resolve it in the caption.** The caption asks the room ("whos in the wrong here", "am i
+  the problem", "what would u do"), and the pinned comment refuses the object.
+- **The refusal has to be believable.** She doesn't send the list because he'd see it; she can't
+  repeat what his sister said because his sister would know. A refusal with a reason gets argued
+  with; a coy one reads as a bit.
+- **His crime stays small enough to defend.** A vague "next year", a quiet three days, a crop. The
+  moment he is a monster, everybody agrees, and agreement is silence.
+- **No props.** A flat viewing, a gym story, a christening photo, a draft email. This is what killed
+  the ring-and-box version: a viewer working out what object is being described has stopped reading.
+
+### 176 to 181: the same engine, six new tactics
+
+Standalone stories, not sequels. Same cast, same 10–11 slide shape, and the same rules as 170 to 175:
+his tactic small enough for half the room to defend, her crime bigger and confessed by her, one
+object the comments can demand, and his last bubble asking for it with her name on it.
+
+| | His tactic | Her crime, confessed | The object they'll demand | Last bubble |
+|---|---|---|---|---|
+| 176 | a 2am "last night was fun" from "gym jess", turned on her: "are u done being crazy", three days of silence, "other girls wouldve just said thank u" | she messaged gym jess the first night; they've been talking for three days | what jess told her | "maya what did she tell u" |
+| 177 | "its not me whos upset. its my mum" | she and his mum have texted every day since april; the mum says he wanted the football | what his mum said | "maya what did my mum say" |
+| 178 | "its not a curfew. i just cant sleep until ur home" | she set every clock in his flat fifteen minutes fast in april | which clocks | "maya which clocks" |
+| 179 | "im not telling u what to wear. id just change" | she changed back in the uber; jess's photos are on close friends, and he isn't | the photos from the uber | "send me the photos from the uber maya" |
+| 180 | got his best friend to message her at 7pm to see if she'd reply | the best friend told her that night and has reported everything since june | what dan told her | "maya what has dan told u" |
+| 181 | "the lasagne was dry. im not being mean, im being honest" | every other meal came from the italian on gorse road, in her own dishes | how many were from the restaurant | "maya how many were from the restaurant" |
+
+There is no discount code any more (checkout takes none since the 24 September launch), so "what app"
+is answered with the name only. Older SCRIPT.md files that say "code LOVE" are out of date.
+
+### 182 to 189: the accusation opens, cheating on both sides
+
+After 176 was rewritten (the owner: "needs to be better like cheating/toxic/manipulative more"), the
+register got sharper: the FIRST bubble is her accusation (a scroll-stopper everyone has wanted to
+send), his crime is cheating-adjacent and he turns it on her ("u went through my phone", "ur jealous
+of a friendship"), and her confession is bigger and just as cheating-adjacent, so the room splits
+harder. Same shape, same rules: one demandable object, his last bubble asking for it with her name.
+
+| | Against him | Against her | The object | Last bubble |
+|---|---|---|---|---|
+| 182 | he saved her as "mike 🏋️" and blamed his mum, at 27. | he's saved as "marco 3" in her phone, and she won't say who marco 1 and 2 are. | who marco 1 and 2 are | "maya who are marco 1 and 2" |
+| 183 | "last active: today" on hinge, then it's her fault for seeing the notification. | she's had hinge since june and has been on three dates, and he knows one of them. | who she went on the dates with | "maya who did u go on the dates with" |
+| 184 | 214 photos of his ex in a hidden album, and "its not a competition". | since april she has been swapping his ex's photos in that album for photos of herself, a few a week, and he hasn't noticed. | how many are still the ex | "maya how many are still her" |
+| 185 | a 500-day snap streak with his ex that he won't end, "its just a streak". | since march she has been logging into his account every night and sending the ex her own snap right after his ceiling, and the ex has started replying. | what she has been sending the ex | "maya what have u been sending her" |
+| 186 | eight months in, he tells his best friend they're "not official" and calls asking about it weird. | her whole office has thought they're engaged since july: she wears a ring to work, and there's a date. | the wedding date | "maya when is the wedding" |
+| 187 | a year together, four car posts this month, and never her: "im just private". | she has run an 11k-follower fan account of him since february, and he follows it. | the fan account's name | "maya whats the account called" |
+| 188 | he said he was at his mum's; his location said the anchor; now her checking is the problem. | she was at the anchor too, three tables behind him all night, with someone he'd have seen if he looked up. | who she was with | "maya who were u with" |
+| 189 | chloe from work texts him goodnight at 11 every night, and she's the jealous one. | she has had a work husband since march: lunch every day, good morning every morning. | the work husband's name | "maya whats his name" |
+
+### 190 to 193: shock, and who the room feels sorry for
+
+The owner, after 182 to 189: "make it shocking disgusting like whaaat… so people comment i feel sorry
+for marco or maya". These four are built on the one question the comments answer: who do you feel
+sorry for? For four slides the room is sure; the last slide moves it (193 never moves it, on purpose).
+
+- **Something disgusting on both sides**, not small against big: a fake death, an ex's ring, a secret
+  baby, a mother cut off. The shock is the hook and the reason to comment.
+- **A callback.** One of his lines from earlier becomes the punchline after the twist ("who else is
+  going to marry u", then she's already married). The comments quote it back.
+- **The caption asks for the comment you want**: "who do u feel sorry for", or a narrator who asks
+  "am i the villain" / "am i wrong" and gets answered.
+- **The pinned comment gives them someone to talk about or to**: "he doesnt know about marco either"
+  (her husband), "shes reading this" (his mum).
+- **The shock comes from lies and betrayal only.** Never violence, self-harm or anything sexual: those
+  get a post taken down, and repeated strikes take the account.
+
+| | Slides 1 to 4: sorry for | The last slide | The callback | Last bubble |
+|---|---|---|---|---|
+| 190 | Maya: he faked his nan's death to miss her birthday; the nan liked her post | she was at his brother's that weekend; he asks "which one" | "my nan would be so disappointed in u" | "maya which one" |
+| 191 | Maya: he proposed with his ex's ring, then "who else is going to marry u" | she's already married, and her husband came to their engagement party | "who else is going to marry u" | "maya who is he" |
+| 192 | Marco: she's cold, he spent two weeks on her gift | he has a six-week-old son with his ex, and doesn't know his name | "what baby", then "whats his name" | "maya whats his name" |
+| 193 | Marco, and it never flips: she blocked his mum | she's been texting his mum as him; his mum isn't coming to the wedding | "i just want u two to get on" | "maya what did u say to my mum" |
+
+### 194 to 199: the cat templates, three toxic and three funny
+
+The owner, 25 Sept: "3 toxic and 3 funny … so i can use the cat templates". The cat templates are premium
+and convert: of the people who started one in the week to 25 Sept, 76% paid for The Council and 87% for
+XOXO, against 9% for the free Letter. So a carousel that shows a cat template is also the cheapest way
+to move people onto a paid one.
+
+- **The frames are real.** `scripts/tiktok-demo-frames.mjs` now swaps whole lines, not only names, so the
+  cats read the story's own findings and the stickers carry its labels. Swaps run in one pass from the
+  gift's own text (names that trade places, "Marco" → "Maya" with "Ana" → "Marco", no longer flip back on
+  the next frame) and match lines that end in punctuation ("was right (once)"). `scroll <px>` scrolls a
+  collage (XOXO) without the tap that would leave a kiss.
+- **Label strips cut long text** at about 16 characters: "ur mum", not "ur mum on the phone".
+- **The toxic three break one rule on purpose:** in 194 and 196 the gift is the manipulation (a cat court
+  that finds HER guilty; his exes' names on the stickers with her last). The room fights about the gift
+  itself, which is the product on screen for longer.
+- **Post them alternating:** 194, 197, 195, 198, 196, 199.
+
+| | Template | Register | The story | Last bubble |
+|---|---|---|---|---|
+| 194 | The Council | toxic | caught liking his ex's photos at 2am, he takes HER to cat court | "maya who is on the council" |
+| 195 | XOXO | toxic | he goes to his ex's every Sunday 'to see the cat' | "maya what does she tell u" |
+| 196 | Sticker Bomb | toxic | he labelled the cat memes with his exes' names and put her last, "it's romantic" | "maya whose name is on the fridge" |
+| 197 | The Council | funny | he watched three episodes of their show without her | "i want a lawyer" |
+| 198 | Party Animals | funny | she confessed denting his car through a hamster, on his birthday | "im going to check the car" |
+| 199 | Sticker Bomb | funny | she made his family into cat memes and sent it to his family group chat | "she says shell come to peru" |
+
+### Real stories first (25 Sept)
+
+The owner: "go online on reddit … read those stories … like my ex did this". The comments are strongest
+when a viewer recognises her own story and types it underneath. So every new toxic carousel starts from
+something people really report, then gets new people and a new twist. Never copy a post: take the
+mechanism and the line, write everything else.
+
+**How they found out** (Reddit threads collected by AOL, BuzzFeed and Bored Panda, read 25 Sept 2026):
+a smart scale logging a stranger at 3am · a smart mattress scoring sleep on the absent partner's side ·
+a watch showing a 2am heart rate · Alexa's history in someone else's voice · a shared playlist with songs
+added at 2am · a gym playlist whose first letters spell the ex's name · texts popping up on the car
+stereo or the Apple TV · photos syncing to the shared iPad · a Tinder subscription found while setting up
+the TV · a "calculator" vault app with hours of screen time · a contact saved under a man's name · the
+joint card paying for dinner for two at 11pm · a delivery app sending food for two to another address ·
+location sharing at the same house every Friday · Find My showing the car at 4am · his mum mentioning
+"the girlfriend" at Sunday lunch · a neighbour's text: go home now.
+
+**What they say when they're caught** (the same threads, and the standard manipulation lists):
+"ur hunting for drama" · "go take a nap, ur spiralling" · "this is why i dont tell u things" · "u went
+through my phone, thats the real problem" · "ur tracking me through a scale now?" · "after everything
+ive done for u" · "no one else would put up with this" · "ur so insecure" · "shes like a sister" / "my
+cousin" · "its a joke" · "thats not what happened" · "if u loved me u wouldnt ask".
+
+**The detail is the hook.** The more specific and technical the discovery (54 kg at 3:12am), the more
+viewers comment their own ("my scale did this"), save it, and tag the partner. Pair one real mechanism
+with one real line, then the twist.
+
+### 200 to 205: six real discoveries
+
+The first batch written from "Real stories first": the owner asked for the ones most likely to go viral,
+so these are the six strongest of twelve candidates. Each pairs one discovery people really report with
+the lines manipulators really use, then a twist of our own. The gifts are the best sellers (XOXO, Jar of
+Reasons, Bouquet, Scrapbook, Museum, Birthday Cinema) in real frames from the demos.
+
+| | The real discovery | Gift | Her twist | Last bubble |
+|---|---|---|---|---|
+| 200 | a Reddit post: his gym playlist's first letters spelled his ex's name, and he told her to take a nap | XOXO | the Christmas playlist she made him spells JAKE, and he's sung every word since | "maya who is jake" |
+| 201 | "calculator" vault apps that hide photos behind a working calculator, given away by their screen time | Jar of Reasons | her calculator has eleven hours | "maya whats in ur calculator" |
+| 202 | a smart scale that logged a stranger's weight at 3am (the story went viral in 2025) | Bouquet | it was her: she came home at 3 to surprise him, and he wasn't there | "maya delete the scale app" |
+| 203 | fitness watches and health apps showing a partner's heart rate at 2am | Scrapbook | hers was 160 at 2am too, the same night, and they weren't together | "maya who were u with at 2am" |
+| 204 | texts popping up on the Apple TV or the car screen in front of everyone | Museum | Nat is in her phone too, as "nat 🤍", since April: Nat is seeing both of them | "maya why do u have nat" |
+| 205 | doorbell cameras (and Vinted receipts, which carry a buyer's name and address) | Birthday Cinema | she sold those heels to the girl on Vinted, has her address, and invited her to the party tonight | "maya cancel the party" |
+
+### 206: too nice (his side, from a real story)
+
+The owner sent a real post (a girlfriend ended it because he was too nice, wanted to be treated like her
+toxic ex, and asked for another chance a year later) and asked for it as a carousel. It's the first one
+told from his side, so Marco is blue: a man posting "she dumped me for being too nice" gets men and women
+arguing in the same thread. It keeps the real shape and ends on her text a year later with no reply, so
+the comments write his answer. Picnic, new that night, is the gift: a picnic for no reason is exactly her
+complaint.
+
+### 207 to 212: more of 192 (129.5k views on 26 Sept), shorter and colder
+
+192, "i said i love u and u said k", passed 129.5k views, and the owner asked for more like it. The first
+draft copied its whole machine (a secret discovered through a password reset, Klarna in her name, a job
+declined from her email) and the owner sent it back: "write them shorter more cold ... few of these dont
+make sense it needs like i want to break up, or like manipulative". What stays from 192:
+
+- **The hook is his complaint, quoting her reply:** "i said happy 2 years and u said "u too"".
+- **Her lines are one word until the turn** ("k", "mhm", "ty", "cool"). The cold is the hook.
+- **He's the sweet one until the last slide**: a gift, then "its nice" and a breakup line.
+- **The turn is a breakup or a manipulation anyone gets in one read.** No mechanism to explain: his
+  real opinion of her comes out, he blurts what happened on Saturday, he makes her finding out the
+  problem, she stayed for the gift, the switch from insult to "jk" to "please".
+- **Short:** three to five bubbles a slide, most of them under six words.
+
+| | Her reply (the hook) | Gift | The turn | Last bubble |
+|---|---|---|---|---|
+| 207 | "k" to i love u | Jar of Reasons | she breaks up, he says "no one else would put up with u", she says "and thats why" | "ull be back" |
+| 208 | "u too" to happy 2 years | Bouquet | "is there someone else" / "yes" / "ask ur best mate" | "maya how long" |
+| 209 | "ok" to goodnight beautiful | Music Box | she knew nothing; "is this about saturday", "she was drunk", then the gift | "maya did u like the gift" |
+| 210 | "cool" to i miss u | XOXO | his 2am text to Jess, and he makes it about her going through his phone | "thats the real problem here maya" |
+| 211 | "mhm" to i love u | The Council | she wanted out three weeks ago and waited for the gift (the cats find her guilty of being cold) | "maya" |
+| 212 | "ty" to happy birthday | Digicam | she breaks up on her birthday; "ur not even that pretty anyway", "jk", "please" | "maya please" |
+
+The frames are real (`scripts/tiktok-demo-frames.mjs`). Music Box winds with `press 273 428` (its key)
+and a hold of six seconds; `press "wind the key"` finds the hint under the box and nothing happens.
+Digicam's demo is a birthday ("HAPPY BIRTHDAY" is set in letter tiles no swap can change), so 212 is her
+birthday. The Council's findings are the story's own: "you said “mhm” to i love u", "you left me on read
+for 4 hours", guilty of being cold to him lately.
+
+**Post order:** 207, 211, 210, 208, 212, 209, one a night at the time in each SCRIPT.md. Answer as Maya
+for the first hour.
+
+## What the account says (27 Sept): @luvierosiie, 41 posts
+
+Read from the profile on 27 Sept 2026 (views, then likes / comments / saves / shares). Every post goes up
+with no caption, only a sound.
+
+| Views | # | Opening | Shape | Likes · comments · saves · shares |
+|---|---|---|---|---|
+| 1.3M | 149 | "are u mad at me" / "u replied 'ok' to a whole paragraph" | cold → "this" → gift (the owner's own photos, XOXO) → her breakup speech | 168.7K · 778 · 15K · 5.9K |
+| 972K | 30 | "are u awake" / "stay awake 2 more mins" → 00:00 "happy birthday / first one to say it" | three chat slides, no frames | 146.7K · 184 · **25.4K** · 4.1K |
+| 344K | 138 | "u left me on delivered for 4 hours" → "ur being taken to court" | funny, The Council | 23.8K · 30 · 4.2K · 3.4K |
+| 277K | 102 | "I PASSED" / "ur the first person i told" / "i know." | friends to lovers | 15.7K · 25 · 1.1K · 178 |
+| 275K | 192 | "i said i love u and u said "k"" | cold → twist | 17.7K · 62 · 1.1K · 230 |
+| 183K | 170 | "u still at jess's" / "ur phone hasnt moved in 4 hours" | he is the problem | 4.6K · 71 · 628 · 102 |
+| 153K in 16h | 208 | "i said happy 2 years and u said "u too"" | the short, cold rewrite | 9.6K · **191** · 827 · 563 |
+| 137K | 78 | "happy anniversary" / "It's tomorrow" | milestone mix-up, counted cards | 11.5K · 54 · 771 · 209 |
+| 121K | 39 | "happy 2 month anniversary" / "2 months isnt an anniversary" | three slides, he counted the days | 12K · 21 · 1.3K · 521 |
+| 103K | 03 | "do u know what tomorrow is" / "thursday" / "bin day" | he "forgets", countdown at midnight | 5.4K · 33 · 288 · 103 |
+
+The rest sit between 1K and 25K. The flops say as much as the hits: "i paid for ur ticket. remember that" (1.1K)
+and "are u done being crazy now" (2K) open on long, accusing lines with him plainly the villain from the first
+bubble, and most flops went up in the morning.
+
+- **Evening only.** Every post over 100K went up in the evening; the recent daytime posts stopped at 1 to 5K.
+- **Two engines carry the account.** *Cold → gift → twist* (149, 192, 208) gets the comments. *Midnight or a
+  small milestone, and he counted* (30, 39, 78, 03) gets the saves, and saves are how 30 reached 972K. The cat
+  court (138) and friends-to-lovers (102) are the next two.
+- **The first slide is five short bubbles**, a moment everyone has had: a dry reply, "are u awake", "happy
+  2 month anniversary", "I PASSED".
+- **The milestone ones need no gift frames.** 30 and 39 are three chat slides; the link card is the gift and
+  the last slide says what it did.
+- **Real photos win.** 149, the biggest post, shows the owner's own photos in the gift.
+
+### 213 to 220: the top shapes, new stories
+
+| | Copies | Opening | Gift | Last bubble |
+|---|---|---|---|---|
+| 213 | 149 | "are u ignoring me" / "u left me on delivered for 5 hours" | XOXO (use your own photos) | "maya send me the list" |
+| 214 | 30 | "are u awake" → 00:00 "happy 1 year / first one to say it" | link only | "happy 1 year. go to sleep" |
+| 215 | 208 | "i said happy 6 months and u said "ok"" | Bouquet | "maya since when" |
+| 216 | 39 | "happy 100 days" / "who counts days" / "me" | link only | "happy 100 days" |
+| 217 | 102 | "I GOT THE JOB" / "ur the first person i told" / "i know." | link only | "zac" |
+| 218 | 192 | "i said i miss u and u said "same"" | Jar of Reasons | "maya let me explain" |
+| 219 | 138 | "u lasted 11 minutes into the film" → cat court | The Council | "no. ur on probation" |
+| 220 | 03 | "do u know what tomorrow is" / "saturday" / "the match" | link only | "happy anniversary" |
+
+**Post order:** 214, 213, 216, 215, 219, 217, 220, 218. One a night, in the evening.
+
+### 221 to 228: toxic, their own apps, and "as you should"
+
+The owner, 27 Sept: "more toxic manipulative ... realistic 20 year olds, nobody uses really facebook from
+gen-z its more on snapchat, ig followers ... as you should girl". (218's "ur mum added me on facebook" is now
+"ur little sister added me on snap".)
+
+- **Their apps, not ours.** Snapchat: a 412-day streak with the ex, Snap Map putting him at her flat, ghost
+  mode, "opened" at 21:04, the screenshot alert. Instagram: close friends, the number of girls he follows, a
+  like from 2019, a hand with acrylics on his story. Facebook is their parents'.
+- **His lines are the real ones:** "ur so insecure", "its glitching", "shes like a sister to me", "good
+  girl", "my thumb slipped", "stop stalking my story", "u went through my phone??", "ur nothing without me".
+- **His gift is the love-bomb:** "made u this so u stop overthinking".
+- **Her ending is his own words or his own app, in one or two bubbles.** "keep the streak / lose the
+  girlfriend 💅", "its glitching" from Jake's, "shes like a sister to me 💅". That is what makes the room type
+  "as you should". The room is against him from the first slide on purpose; the pleasure is the comeback.
+- **228 turns the product round:** she takes him to cat court, and the ruling's sentence reads "blocked, on
+  everything".
+
+| | His move | Gift | Her comeback | Last bubble |
+|---|---|---|---|---|
+| 221 | a 412-day streak with his ex, "just black screens", "ur so insecure" | Jar of Reasons | sends his gift to the ex: "keep the streak / lose the girlfriend 💅" | "maya ur being dramatic" |
+| 222 | Snap Map at her flat for 3 hours, "its glitching" | Bouquet | ghost mode off, at Jake's: "its glitching" | "maya thats not funny" |
+| 223 | "unfollow him", "good girl", follows 614 girls ("they're models") | XOXO | unfollows him, follows Jake back 💅 | "MAYA" |
+| 224 | close friends is "just the boys" and Chloe, "like a sister" | Music Box | her close friends: her and Chloe. "shes like a sister to me 💅" | (hers) |
+| 225 | liked her pic from 2019, "my thumb slipped" | Museum | her thumb slipped on his best mate's 2018 pic: "accident 💅" | (hers) |
+| 226 | a hand on his story, "my cousin", "stop stalking my story" | Picnic | he told each of them the other was his cousin; coffee tomorrow, "cousins 💅" | (hers) |
+| 227 | "never got it" against Snapchat's "opened", "ur nothing without me" | Bouquet | screenshotted, and his mum asked why they broke up 💅 | "MAYA" |
+| 228 | "u went through my phone?? thats a huge violation" | The Council (hers) | "ur right. so i took u to court": GUILTY, blocked on everything | "maya pick up" |
+
+**Post order:** 221, 224, 222, 226, 223, 228, 227, 225. Evenings only.
+
+## What the comments say (29 Sept): the ten posts over 100K
+
+Read from the public comment feed of every rosie post over 100K views (no login). The views have not moved
+since 27 Sept (the account is held back: its two newest posts had 3 and 10 views), but the comments show
+what made the room type.
+
+| Views | # | Comments | The top comment (likes) | What the room does |
+|---|---|---|---|---|
+| 1.3M | 149 | **779** | "Why would u even telll him that😭" (63K) · "gurl he ignored ur paragraph just to send you 3 sentences thru an app" (36.7K, 89 replies) · "I'm leaving u for him atp" (20.5K) | two camps, and they quote her: "“It was really good too” ???" (4.8K), "both of y'all evil" (6.1K) |
+| 974K | 30 | 180 | "PLEASE TELL ME THE WEBSITE" (4.2K) | wants one: "I would genuinely cry if someone did something like that for me" (1.7K) |
+| 345K | 138 | 21 | "These comments defs dont understand the sarcasm" (3.4K) | little: a joke, not a fight |
+| 277K | 102 | 16 | "Its says the letter is from jack but you said zac?" (921) | confused by names that didn't match |
+| 277K | 192 | 43 | "you evil" (5.1K) | against her; confused by the twist ("how you even know he cheated") |
+| 183K | 170 | 54 | "Yea Marco 100% deserves better" (1.5K) | argue whether sending a location is fair |
+| 157K | 208 | **200** | "maya pass the FUCKING controller" (3.7K) · "maya are we being fr now" (3.5K) · "Posted by the girl btw" (1.5K) | talk **to Maya by name**, in the story: "Maya Ima pay his bail", "Maya imma fight you" |
+| 137K | 78 | 38 | "Why do yall like half hate eachother" (5.8K) | "why do you hate him" |
+| 121K | 39 | 17 | "The way ur texting back💔" (2.5K) | against her dry replies |
+| 103K | 03 | 25 | "u say I LOVE YOU and he said love u????? id crash out" (255) | against his dry reply |
+
+What it adds to the two engines:
+
+- **The comments come when Maya is the one in the wrong, to a sweet Marco.** 149, 208, 192, 78 and 39 all
+  have her cold, and the room defends him: "poor Marco", "I'm leaving u for him", "you evil".
+- **Maya and Marco, always.** The room talks to them by name, as if they were in the chat ("maya are we being
+  fr now"). A story with other names starts from zero; 102's mismatched names got confusion, not comments.
+- **One line of hers they can quote**, short and a little unhinged: "it was really good too".
+- **His last bubble asks her for something, with her name in it**, and the room asks with him.
+- **The sweet engine gets the purchase instead**: 30's biggest comment is "PLEASE TELL ME THE WEBSITE", and
+  its last slide says what the gift did ("i blew out the candles on my PHONE / how did it know").
+- **A twist that needs explaining costs comments to confusion** (192: "how do you even know he cheated").
+
+### 274 to 283: Maya in the wrong, and two midnights
+
+Rosie's own format: dark iMessage screenshots, three frames of the real gift (live demos, names swapped to
+Maya and Marco), then the ending. Seven comment engines and three save engines.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 274 | comments (149) | "why are u being weird" / "u left me on delivered all day" | XOXO | "the cons won by one" | "maya what was the one" |
+| 275 | comments | "dont talk to me today" / "maya i was asleep" / "exactly" | Bouquet | "u cheated on me… in my dream" / "u already did. with flowers" | "maya which cousin" |
+| 276 | comments (208) | "i said i love u and u sent a thumbs up" / 👍 | Scrapbook | "i asked him out first. he said no. so i asked u" | "maya the same night" |
+| 277 | comments (78) | "happy 7 months" / "6" / "i dont count february" | Coquette | "i know it off by heart" | "why do u still know it" |
+| 278 | both (30) | "are u awake" → 00:00 "happy birthday / first one to say it" | Birthday Cinema | "my birthday is in november" / "everyone knows when jakes birthday is" | "maya why do u know" |
+| 279 | saves (30, 39) | "look at the time in one minute" / 21:47 | Music Box | "i wound the key and its US in the mirror" | "hi" |
+| 280 | comments (208) | 'i said i miss u and u said "and?"' | Jar of Reasons | "since u wore that hat" | "maya its a nice hat" |
+| 281 | comments (149) | "u fell asleep during the office again" / "they were long episodes" | The Council | "i learned 3 lines off tiktok" | "maya what else" |
+| 282 | comments (149) | "why did u screenshot my message" / "its glitching" | Picnic | "for the slideshow at our wedding" | "maya how many screenshots" |
+| 283 | saves (30, hers) | "are u awake" / "maya i have work at 6" → 00:00, her gift for him | Digicam | "it PRINTED our photos / with the dates on" | "im not sleeping now" |
+
+A lone emoji (276's 👍) now renders the way Messages draws it: big, no bubble (`scripts/tiktok-slides.mjs`).
+Birthday Cinema's cake topper is two digits drawn separately, so a 21st needs `swap "3" "2"` and
+`swap "0" "1"` as well as `swap "30" "21"`.
+
+**Post order:** 274, 279, 276, 275, 283, 280, 278, 281, 277, 282. One a night, 19:00 to 22:00. On the 14k
+account until rosie's new posts get views again. Reply as Maya in the first hour, in character.
+
+### 284 to 293: the same two engines, six gifts the account hasn't shown
+
+Same rules as 274 to 283. Seven posts put Maya in the wrong to a sweet Marco, with one line of hers the room
+can quote and his last bubble asking her for something, her name in it. Three are saves: a day, a midnight or a
+break someone counted. Six of the gifts have never been in a post before (Photo Booth, Keepsake, Kawaii, Our
+Timeline, Midnight Countdown, Vinyl), so the batch also tests which new template makes people ask for the link.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 284 | comments (149) | 'why did u reply "who is this"' / "new phone" | Photo Booth | "marco 2" / "ur my favourite marco tho" | "maya who is marco 1" |
+| 285 | comments (149, 281) | "were u on my phone" / "my notes app was open" | Keepsake | "we are not naming our son kevin" | "maya what did u add" |
+| 286 | comments (149, 192) | "why do u still have tinder" / "it said new match" | Coquette | "u have to swipe to check properly" | "maya how many matches" |
+| 287 | comments (208) | 'why did u text me "hey its sophie"' | XOXO | "but i read them all" | "maya who did i fall in love with" |
+| 288 | comments (281) | "ur mum just followed me" / "maya im 5'9" | Kawaii | "wear the boots and dont talk" | "maya what kind of doctor am i" |
+| 289 | saves (39, 216) | "do u know what today is" / "day 1000" | Our Timeline | "it drew a road through all our dates" | "day 1" |
+| 290 | saves (30) | "what time is it there" / "marco its 5am for u" | Midnight Countdown | "FIREWORKS at exactly 12 / my 12" | "happy 1 year maya" |
+| 291 | saves (30, hers) | "what time is ur break" / "3:15 marco" | Vinyl | "the whole kitchen knows it now" | "happy 2 years" |
+| 292 | comments (192, 208) | 'i said i love u and u said "ty"' | Bouquet | "he said it back" | "maya which barista" |
+| 293 | comments (149) | "how was family dinner" / "ur mum just posted from spain" | Jar of Reasons | "his mum loves me" | "maya how long have u been going" |
+
+Capturing the new gifts:
+- **Photo Booth** needs four presses of the button (about 5 s each) and 8 s for the strip to print. The strip
+  carries the capture day's date.
+- **Kawaii** opens from its cover: `tap "tap to open"`, then `tap "tap the box"`.
+- **Midnight Countdown's** "Skip to midnight" is reached by position (`tap 180 572`, 5 s after "tap to
+  start"), because the button's words are not inside a tappable text element.
+- **Our Timeline** ends on "…and it's only the beginning" if you scroll to the bottom and back up 700.
+  `swap "Until four" "Until day 2000"` fixes the countdown under it.
+
+**Post order:** 284, 289, 287, 286, 290, 293, 288, 291, 285, 292. One a night, 19:00 to 22:00. Rosie only once
+its newest posts get views again, the 14k account meanwhile. Reply as Maya in the first hour.
+
+## The new account's format: @you_sir_naim (read 27 Sept 2026)
+
+A texting-story account: 83 photo posts in three weeks, a median of 138K views, top five 3M, 2.7M, 2.4M,
+2.1M and 1.8M, bio "Not real texts". Captions are hashtags only (#ex #sad #toxic #mom #guilt #fyp
+#textstory). What every post has:
+
+- **Two slides, each a real phone screenshot cropped to the chat**: 1206px wide (an iPhone Pro at @3x),
+  560 to 1180px tall, dark mode, nothing but bubbles, "Today 15:30" and "Read 15:31". On TikTok the text
+  is huge and it reads as someone's phone. `"crop": true` in a script now renders exactly that.
+- **Three to five bubbles a slide.** Slide 1 is an innocent opener ("My girlfriend found our playlist",
+  "hey, you don't know me", "are you coming home this weekend", "mom can you come get me").
+- **The last bubble changes everything**: "I added it last week", "he asked me out in april", "I just
+  keep forgetting you don't live here anymore", "She says I'm not romantic enough".
+- **Sad, guilty or betrayed, never a joke.** Parents write in sentences with capitals; the kid doesn't.
+
+229 to 231 copy three of their top posts' shapes with the gift inside the chat as a link, and no gift frames:
+
+| | Copies | The last bubble |
+|---|---|---|
+| 229 | the 2.7M playlist post | "I still play it every night" (her voice note at the end of the gift she made her ex) |
+| 230 | the 2.4M lasagna post | "I play it at dinner so it isn't so quiet" (mum replays the birthday gift) |
+| 231 | the 1.8M "im dating Ethan" post | "he said he stayed up all night making it" (her gift, re-sent with the name changed) |
+
+### 294 to 303: toxic or sad enough to cry (2 Oct)
+
+The owner, 2 Oct: "none of the screenshots are doing well ... like how i said the toxic/manipulative cheating
+formula ... or like really sad like so people cry". Same cropped format, boyfriend and girlfriend. Each post
+has a single turn that reads in one go: no app mechanics to explain and no "i miss us" wistfulness.
+
+- **Toxic (294 to 298).** He lies with a real excuse ("I lent them to Sam", "Spam", "Sorry wrong chat"),
+  turns it on her ("Why are you always tracking me", "Why are you on my phone"), and love-bombs with the
+  gift. She already has the proof, and her last bubble is his own excuse handed back, with a 💅.
+- **Sad (299 to 303).** Grief, sacrifice, too late, forgetting. The gift is what is left of them: a gift
+  sent to a dead boyfriend's number, a birthday gift he scheduled before he died, the "for after" before
+  surgery, a promise kept alone at 25, and photos for someone who no longer remembers her.
+
+| | Kind | The turn | The last bubble |
+|---|---|---|---|
+| 294 | toxic | his AirPods are at Chloe's; "I lent them to Sam" | "sam's sat right next to me 💅" |
+| 295 | toxic | "I deleted hinge ages ago" | "you matched at 9:04 💅" (her best friend's test profile) |
+| 296 | toxic | "babe 😘" to the wrong chat; "My mum" | "did you make your mum one too 💅" |
+| 297 | toxic | "do not answer ❤️" is "Spam" | "we've been together 8 months / give her the link 💅" |
+| 298 | cheating | a gift from him on her friend's phone, "made by jake" | "you cropped me out of it" |
+| 299 | grief | an anniversary gift sent to his old number | "could you keep reading them" (a stranger has his number) |
+| 300 | grief | the birthday gift he scheduled in May arrives | "i still pay your phone bill so i can keep texting you" |
+| 301 | sacrifice | "we wanted different things"; surgery's at 7 | "which hospital" |
+| 302 | too late | "if we're both single at 25" | "I just wanted to keep my half of the promise" |
+| 303 | forgetting | after the accident he doesn't know her | "So I don't lose it again tomorrow" |
+
+**Post order:** 297, 299, 295, 303, 294, 301, 298, 302, 296, 300. One a night, in the evening, on the 14k
+account (rosie's newest post on its public grid is still from 26 Sept).
+
+### What @you_sir_naim's big posts actually say (read 2 Oct), and 304 to 313
+
+The owner's reply to 294–303: "create better ones and dont please use this 💅". So I read the slides of their
+newest hits:
+
+| Views | Shape | What the chat says |
+|---|---|---|
+| 4.5M (689K likes, 1.1K comments, 24.6K saves) | 2 slides, 5 bubbles each, both in lowercase | "did you tell your mom we broke up" / "she just texted me asking what i want for christmas 😭" / "we broke up like 4 months ago" → "i haven't told her yet" / "because she still asks when you're coming over" |
+| 261K | 3 slides, the middle one their app (an AI friend) giving advice | "can u not post the pics of us from saturday" / "you literally posted the group ones" / "that's different" → "can u not make this weird" / "I'm not the one making it weird" |
+| 225K | 4 slides, 20 bubbles | "why did ur ex just send me a pic of your dog" … "She was waiting for her Uber" / "I wasn't timing her" … "then why did she caption it "missed him"" / "She meant the dog" / "and u liked it??" / "It's my dog" |
+| 206K | 6 slides, 25 bubbles | "can u delete your comment on my post" / "people from work follow me" / "they know u have a gf tho??" / "Who told you about Sophie" … "I worded it wrong" / "hello??" |
+| 131K, 197 comments | 2 slides, 4 bubbles each | "did u turn ur location off" / "Probably my battery" / "ur battery says 82%" / "why are you checking that" |
+
+What that means for ours:
+- **Something ordinary that just happened** opens every one: a Christmas text, a dog photo, a comment, the
+  location going off. Nothing needs explaining.
+- **No twist and no comeback.** The toxic ones end on his excuse ("It's my dog", "why are you checking that")
+  or on her question left on read ("hello??"). The room supplies the outrage. The sad one ends on one quiet
+  line about someone who never got over it.
+- **Lowercase on both sides**, one 😭 at most, never a 💅.
+- **Two slides, or a long argument** of four to six.
+- **Their product sits in one slide at most**, and the 4.5M shows none. Ours always has the gift: the owner, 3 Oct,
+  "half of them dont even have the tryethos link". Every post carries the link, inside the story. In the toxic
+  ones it is his alibi or his love-bomb ("i was making you this", "babe i made you this today"). In the sad ones
+  it is the thing that holds the habit or the broken promise.
+
+| | Kind | The last bubble | Gift |
+|---|---|---|---|
+| 304 | toxic | "it's the lighting" (his gift, a beach she's never been to, a blonde girl) | yes |
+| 305 | toxic | "exactly" / "can you just delete it pls" (chloe saw the birthday gift) | yes |
+| 306 | toxic | "why are you going through my bathroom" (pink toothbrush) | yes |
+| 307 | toxic | "hello??" left on read (chloe on his ipad at night) | yes |
+| 308 | toxic | "i'll send you the money" (two meals on her Uber to chloe's) | yes |
+| 309 | sad | "her" (the dog still waits by the door at 6) | yes |
+| 310 | sad | "i deleted all of ours the day you left" | yes |
+| 311 | sad | "it doesn't matter now" (he never cancelled the anniversary table) | yes |
+| 312 | sad | "to see if you still do" (the gift tells him when she opens it) | yes |
+| 313 | sad | "i don't have one where i look that happy" (lock screen) | yes |
+
+**Post order:** 309, 304, 312, 307, 311, 305, 313, 308, 310, 306. One a night, in the evening, on the 14k account.
+
+### 314 to 323: really sad (3 Oct)
+
+The owner: "create more imessages good that will go viral like really sad". Two more of their biggest, read the
+same day:
+
+| Views | The chat |
+|---|---|
+| 2.8M (577K likes, 2K comments) | "are you coming home this weekend" / "probably not" / "okay" / "why" / "no reason" → "mom just tell me 😭" / "I made too much lasagna again" / "you can freeze it" / "I know" / "I just keep forgetting you don't live here anymore" |
+| 3.2M (520K likes, 3.6K comments) | "mom can you come get me" / "You told me you weren't going." / "something happened and i just wanna go home" → "Then call whoever took you there." / "im literally sitting outside by myself" / "Maybe next time you'll listen to me." / "And you said you weren't going to that party." |
+
+Three sad engines, and the gift is in every one. All are boyfriend and girlfriend: a parent can be mentioned, but nobody texts their mum.
+- **The habit that outlived them** (2.8M, 4.5M). A small everyday thing, a "no reason", and one quiet line
+  saying one of them never stopped.
+- **She needed him and he said no** (3.2M). She asks for help, he answers with "i told you", and the post ends
+  on his cold line or her message left on read.
+- **The quiet thing he did, found out too late.**
+
+| | Engine | The last bubble | Gift |
+|---|---|---|---|
+| 314 | habit | "i know. i still order yours" (the café, every Saturday) | yes |
+| 315 | habit | "you're the only one who remembered" (her birthday gift to her ex) | yes |
+| 316 | too late | "i didn't break up with him" (his gift for her little brother's 8th) | yes |
+| 317 | habit | "every night. to make sure you got home" (location still shared) | yes |
+| 318 | habit | "my bathroom stopped smelling like you" (her coconut shampoo) | yes |
+| 319 | cold | "please", read at 01:14 (the last train gone, 4% battery) | yes |
+| 320 | cold | "you still haven't opened it" (her 1-year gift, "after this match") | yes |
+| 321 | too late | "you still had to live somewhere" (he paid her rent to December) | yes |
+| 322 | too late | "one for everything i was going to miss" ("open when you get the job") | yes |
+| 323 | habit | "i thought you'd stopped needing me" (his voicemail; the sleep gift he never sent) | yes |
+
+**Post order:** 316, 319, 314, 322, 317, 320, 321, 315, 318, 323. One a night, in the evening, on the 14k account.
+
+### 324 to 333: Maya and Leo only, three or four slides (3 Oct)
+
+The owner: "the only names are maya and leo rememebr no other names for the links. make it good virality 3-4
+slides 4-5 ... make it realistic". The rules from here on:
+- **Maya (the phone, blue) and Leo (grey), and nobody else has a name.** Not in the chat, not in a link's title,
+  not on the link card. Everyone else is "your friend", "the girl", "my mate", or an emoji contact (🍑).
+- **Three or four slides of four or five bubbles.** That is @you_sir_naim's long-argument length (225K was 4
+  slides of 5). Every post has the tryethos link inside the story, and there is no 💅.
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 324 | toxic | "what's that on your neck in your story" | "why are you zooming in on my neck" (it was "a header"; he plays defence) |
+| 325 | toxic | "why are you at the party" | "enjoy the party leo" (his gift is titled "stay in tonight") |
+| 326 | toxic | "your friend just texted me by accident" | "\"she's going to kill you\"", read 19:06 |
+| 327 | toxic | "who's 🍑 in your phone" | "why are you even on my ipad" ("u up" at 2am, "wear the black one") |
+| 328 | toxic | "why is the girl in your friend's story wearing my hoodie" | "maybe her name's maya" |
+| 329 | sad | "why is my phone bill £0 this month" | "they're the last things with both our names on them" |
+| 330 | sad | "can you come over" (her grandad) | "because i won't be there next week" / "maya" |
+| 331 | sad | "i finally finished it" | "you were the nobody" |
+| 332 | sad | "why have you opened it 214 times" | "i can't sleep until you do" |
+| 333 | sad | "your location says sydney" | "in case you did" |
+
+**Post order:** 326, 332, 328, 330, 324, 331, 325, 333, 327, 329. One a night, in the evening, on the 14k account.
+
+### 334 to 343: rosie's hits, cooked with the new formulas (4 Oct)
+
+The owner: "look at my rosie acount which ones went viral etc. and like put other formulas and cook it".
+Rosie on 4 Oct: the old hits keep their views (149 1.3M, 277.7K, 183K), but the carousel posted there on 3 Oct at
+20:48 had **2 views** a day later. The account is still held back, so these are for the 14k account.
+
+Each one takes one of rosie's proven openings and gives it a turn from @you_sir_naim's formulas: the habit
+that outlived them, he is the problem with excuses that get worse, the quiet last line. Maya and Leo only,
+three or four slides, the link in every one.
+
+| | Rosie hit it cooks | Engine | The last bubble |
+|---|---|---|---|
+| 334 | 149 (cold, "this", her confession) | comments | "un-tell them" (she'd already told everyone they broke up) |
+| 335 | 30 (midnight, "first one to say it") | saves + sad | "this is the one i can still keep" (they broke up in May) |
+| 336 | 192 / 208 (her one-word reply quoted) | comments | "maya you said was" (she was going to end it tonight) |
+| 337 | 170 (his location, 4 hours) + the 225K's excuses | toxic | "that's why it's taking 4 hours" (a sofa, 3rd floor) |
+| 338 | 102 ("I PASSED", first person i told) | sad | "she wouldn't like it" |
+| 339 | 03 ("bin day") + 30's midnight | saves | "the bins are out too" |
+| 340 | the 4.5M (family who weren't told) | sad | "and she still calls you her sister" |
+| 341 | 138 (cat court) | shares | "court adjourned" (guilty on all counts, dinner on her) |
+| 342 | 149 + the comments (Maya in the wrong) | comments | "did he reply" (she sent his gift to her ex first) |
+| 343 | the sad engines | sad | "keep it anyway" (he's outside; she's not alone) |
+
+**Post order:** 334, 339, 343, 337, 335, 342, 341, 338, 336, 340. One a night, in the evening, on the 14k account.
+
+### 344 to 353: ten more, same rules (4 Oct)
+
+Maya and Leo only, three or four slides, the link inside every story, no 💅. New things she notices: a
+booking.com email, a snap score, a Spotify Jam at 2am, someone typing every morning at 7:30, a receipt in his
+wallet, a bakery calling about a cake.
+
+| | Engine | The last bubble |
+|---|---|---|
+| 344 | toxic | "why are you reading my emails" (a "work trip", 2 adults, king bed; his gift is "while i'm away") |
+| 345 | comments | "what do i need for a 10" (she told her friends he was a 6) |
+| 346 | sad | "i got to send 4" (30 good-morning gifts; he still starts typing at 7:30) |
+| 347 | toxic | "you don't own a song maya" (their song, in a Jam with 🦋 at 2am) |
+| 348 | saves | "for when you think i don't remember" (84 date receipts, kept) |
+| 349 | comments | "what are their names" (4 months in, she's named their kids) |
+| 350 | toxic | "why are you watching my snap score" (+300 while "asleep") |
+| 351 | sad | "you had 2 years" (he finally says it, in a voice note, after she's gone) |
+| 352 | shares | "that's a different cookie" (a fortune cookie apology) |
+| 353 | sad | "i didn't want you to think nobody planned it" (the cake he ordered in June) |
+
+**Post order:** 346, 350, 345, 353, 347, 348, 351, 344, 349, 352. One a night, in the evening, on the 14k account.
+
+### 355 to 364: birthday, almost broke up, romantic (6 Oct)
+
+The owner: "like happy birthday or sad like i almost broke up with my bf but then he sent me this or something
+really romantic". Same rules: Maya and Leo only, three or four slides, the link inside every story, no 💅. These
+are sweet, so the engine is saves and "tell me the website", not arguments in the comments.
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 355 | birthday | "you really didn't say it" | "40 seconds left" (he took the last minute, not the first) |
+| 356 | birthday | "don't get me anything for my birthday" | "happy birthday maya" ("i didn't GET it. i made it") |
+| 357 | birthday | "happy birthday!!!!" (it's his) | "happy birthday to me" (he gives her the gift) |
+| 358 | almost broke up | "we need to talk tomorrow" | "i don't want to wait till tomorrow" |
+| 359 | almost broke up | "i'm done leo" | "that's 47" (a list of every time she was right) |
+| 360 | almost broke up | "i don't think i can do this anymore" | "the 212th i'm home" (one for every night shift) |
+| 361 | almost broke up | "you've been weird for 2 days" | "happy anniversary anyway" (she forgot it) |
+| 362 | romantic | "how long have we been together" | "especially that night" (487 days, added to every night) |
+| 363 | romantic | "do you ever get bored of me" | "this. right now" (everything she says at 2am) |
+| 364 | almost broke up | "we said we'd end it before i leave" | "see you friday maya" (every weekend until christmas) |
+
+**Post order:** 355, 359, 364, 361, 362, 358, 356, 360, 363, 357. One a night, in the evening, on the 14k account.
+
+### 365 to 374: never say what's inside the gift (6 Oct)
+
+The owner, about 363 ("you wrote down the stuff i say at 2am"): "dont write anything unnecesarry just write omg
+your the best or something ... don't make up stories like that, just sad happy etc ... without adding anything
+extra that i will say in the gifts". The rule from here on: **the chat never describes the gift.** No list, no
+notes, no plans, no "one for every night". He made it, it arrives as the link, and she reacts: "you made this??",
+"omg", "i'm crying", "you're the best", "i love you so much". The story is only the moment around it, so any real
+gift fits the post. (354 had the same rule: "dont mention anything about in the pictures".)
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 365 | after a fight | "i'm sorry about earlier" | "i love you more" |
+| 366 | birthday | "worst birthday ever" (everyone forgot) | "only for you" |
+| 367 | long distance | "i miss you so much" | "34 days maya" |
+| 368 | almost broke up | "i think we need a break" | "i love you too" |
+| 369 | for no reason | "are you home" | "happy crying" |
+| 370 | bad day | "i failed" | "always maya" |
+| 371 | anniversary | "happy 1 year" (00:00) | "i love you" |
+| 372 | sick day | "i'm so sick" | "i love you" (he's still bringing soup) |
+| 373 | grief | "i can't stop crying" | "always" |
+| 374 | long distance | "are you still coming tonight" | "i'm holding you to that" |
+
+**Post order:** 368, 366, 365, 371, 374, 370, 367, 369, 373, 372. One a night, in the evening, on the 14k account.
+
+### 375 to 384: the same, in Spanish (6 Oct)
+
+Neutral Latin American Spanish ("te amo", "te extraño", "teléfono", no regional slang), with the Spanish link
+card (`"lang": "es"`: "UN REGALO PARA Maya") and Spanish iPhone timestamps ("Hoy 23:12", "Ayer 23:58"). Same
+rules: Maya and Leo only, the link in every post, and the chat never says what's inside the gift. For Spain,
+swap "te extraño" for "te echo de menos" and "te amo" for "te quiero".
+
+| | Kind | Opens with | The last bubble |
+|---|---|---|---|
+| 375 | birthday at midnight | "¿estás despierta?" | "eres el mejor novio del mundo" |
+| 376 | after a fight | "perdón por lo de hace rato" | "yo más" |
+| 377 | birthday | "peor cumpleaños de mi vida" | "solo para ti" |
+| 378 | almost broke up | "creo que necesitamos un tiempo" | "yo también te amo" |
+| 379 | long distance | "te extraño muchísimo" | "34 días maya" |
+| 380 | for no reason | "¿estás en tu casa?" | "lloro de felicidad" |
+| 381 | bad day | "no pasé el examen" | "siempre maya" |
+| 382 | anniversary | "feliz 1 año" (00:00) | "te amo" |
+| 383 | sick day | "estoy súper enferma" | "te amo" |
+| 384 | grief | "no puedo dejar de llorar" | "siempre" |
+
+**Post order:** 375, 378, 377, 376, 382, 379, 381, 380, 384, 383. One a night, in the evening.
+
+### 385 to 394: ten more in English, same rules (7 Oct)
+
+The chat never says what's inside the gift; Maya and Leo only; the link in every post. 385 takes rosie's
+biggest opener (149, "are you mad at me", 1.3M) and turns it sweet.
+
+| | Kind | Opens with | The last bubble | Hook for slide 1 |
+|---|---|---|---|---|
+| 385 | sweet | "are you mad at me" | "i love you so much" | i thought he was mad at me all day |
+| 386 | sad to happy | "my ex posted his new girlfriend" | "i love you" | my ex posted his new girlfriend today |
+| 387 | first i love you | "can i tell you something" | 😭😭 | he said it first |
+| 388 | sad | "i can't believe i leave tomorrow" | "we've got this" | the night before i moved away |
+| 389 | sad to happy | "worst shift of my life" | "i love you" | crying in my car after work |
+| 390 | happy | "happy 6 months" (00:00) | "i love you" | i thought he forgot our 6 months |
+| 391 | happy | "I GOT THE JOB" | "you're the best" | i got the job |
+| 392 | romantic | "are you awake" | "i can't now. i'm too happy" | 2am and i couldn't sleep |
+| 393 | sad | "my dad's in surgery" | "ok" | the scariest night of my life |
+| 394 | exes | "i know it's been 3 months" | "yes" | 3 months after we broke up |
+
+**Post order:** 385, 394, 389, 387, 391, 386, 393, 390, 388, 392. One a night, in the evening.
+
+### 395 to 404: "notifications silenced", one image a post (7 Oct)
+
+Copied from a storytime account the user found on TikTok, whose posts all go big. **Each post is a
+single image**: one cropped screenshot of dark iMessage on iOS 26, with a short chat, then the moon and
+"mylove has notifications silenced" under it, then the message bar. There's no header, no date and no
+keyboard, so TikTok shows the picture centred on black and it reads as someone's phone. (The first
+draft made ten chats a post; the user: "all those images i sent were just one post", either one image
+with the link in a short chat, or 2–3 slides, never 8–10.)
+
+- **One short chat, the link inside it.** She says something in lowercase, he answers with the
+  punchline, and the tryethos link is part of the joke ("would you still love me if i was a worm" →
+  "I'd keep you in a little jar / With holes in the lid" → the link, "for my little worm 🤍").
+- **The voice.** His bubbles start with a capital (an iPhone does that) and keep his typos. Hers are
+  lowercase, stretched or in caps for joy. "Read 8:19 pm" sits under her last message, lowercase am/pm.
+- **The account's three extras**, used as the punchline:
+  - Her reply typed in the bar and not sent, with the caret and the blue send button (`"input"`:
+    "marry me", "now i really can't sleep").
+  - The thread swiped left to show every time (`"swiped": true`, a `time` on each message). Only for
+    plain text bubbles: on 8 Oct the owner sent back 431, where "12:00 am" sat beside the link card
+    ("that is not how imessages look the 12 am at the right"). 400, 410, 420 and 431 dropped it; the
+    "Read 12:01 am" under her last message carries the time instead.
+  - He's saved as something rude ("do not answer") and sends the sweetest texts (`"silenced"`).
+- She only reacts to the link; nothing says what's inside it, as always.
+
+| | The chat | Ends on |
+|---|---|---|
+| 395 | the worm question | the link, "for my little worm 🤍" |
+| 396 | "i'm on my period" → "Nvm both" | her draft: "marry me" |
+| 397 | "you never do anything cute for me" | "i take it all back" |
+| 398 | "Don't open this at work" | "I said don't" |
+| 399 | "today was so bad" | her draft: "i'm crying on the bus" |
+| 400 | "you forgot didn't you" → "Never" + the link | "I'M SORRY / i love you" (Read 12:01 am) |
+| 401 | "i can't sleep" (2:14 am) | her draft: "now i really can't sleep" |
+| 402 | "you're so annoying" | her draft: "okay i love you" |
+| 403 | saved as "do not answer": iced coffee at her door | "Love you" |
+| 404 | "I'm bad with words" | "you're perfect" |
+
+**Post order:** 395, 398, 396, 400, 402, 397, 401, 403, 399, 404. One or two a night, in the evening.
+
+### 405 to 414: the same, in Spanish (7 Oct)
+
+395 to 404 rewritten so each joke lands in Spanish, not translated word for word: one image a post, the
+link inside a short chat. Neutral Latin American Spanish like 375 to 384 ("te amo", "papitas", "bus"),
+24-hour times, "Leído 23:42" receipts, the Spanish link card (`"lang": "es"`). He's saved as "mi amor", so
+the line under the chat reads "mi amor tiene las notificaciones silenciadas" (`"lang": "es"` in the
+script sets it). For Spain, swap "te amo" for "te quiero" and "papitas" for "patatas".
+
+| | The chat | Ends on |
+|---|---|---|
+| 405 | "me seguirías queriendo si fuera un gusano" → "Te tendría en un frasquito" | the link, "para mi gusanito 🤍" |
+| 406 | "estoy en mis días 😭" → "Mejor las dos" | her draft: "cásate conmigo" |
+| 407 | "nunca haces nada lindo por mí" | "retiro todo lo dicho" |
+| 408 | "No lo abras en el trabajo" | "Te dije que no" |
+| 409 | "hoy fue un día horrible" | her draft: "estoy llorando en el bus" |
+| 410 | "se te olvidó verdad" → "Nunca" + the link | "PERDÓN / te amo" (Leído 0:01) |
+| 411 | "no puedo dormir" (2:14) | her draft: "ahora sí que no voy a dormir" |
+| 412 | "eres insoportable" → "Y te toca aguantarme" | her draft: "ok te amo" |
+| 413 | saved as "no contestar": a café helado at her door | "Te amo" |
+| 414 | "Soy malo con las palabras" | "eres perfecto" |
+
+**Post order:** 405, 408, 406, 410, 412, 407, 411, 413, 409, 414. One or two a night, in the evening.
+
+### 415 to 424: ten more, aimed at the share (7 Oct)
+
+The same one-image format as 395 to 404, written for the two things that make that account's posts
+travel: girls sending them to their boyfriend ("take notes"), and tagging a friend over a punchline. So
+each chat is one of three shapes, with the link as part of the punchline, not an extra:
+
+- **He's two steps ahead or watching over her** (416 the little dot, 421 lunch, 420 he lasts 29 minutes).
+- **Her drama, his calm** (415 "With who", 419 "i hate you", 423 "nobody loves me" on FaceTime).
+- **A two-second scare that flips** (417 "1", 422 the girl on his story is his mom).
+
+| | The chat | The punchline |
+|---|---|---|
+| 415 | "i think we should break up" → "With who" | "No" + the link "not happening 🤍", her draft "okay fine" |
+| 416 | "home safe" → "Watched your little dot the whole way" | the link "now go sleep 🤍" |
+| 417 | "rate me 1 to 10" → "1" → "EXCUSE ME" | the link "my only 1 🤍" |
+| 418 | saved as "NOT my boyfriend": breakfast at her door | the link "for my girl 🤍" |
+| 419 | "i hate you" | the link "i love you too 🤍", her draft "okay i don't hate you" |
+| 420 | "going to sleep early" → "Are you asleep / Okay you're asleep" | "i was literally still awake" |
+| 421 | "babe are you busy" → "You skipped lunch don't lie" | her draft "how did you know i skipped lunch" |
+| 422 | "who's that girl on your story" → "My mom" | "She also helped me with this" + the link |
+| 423 | "nobody loves me 😔" → "We're literally on FaceTime rn" | the link "nobody huh 🤍" |
+| 424 | "Thank you" → "For picking me / Out of everyone" | the link "thank you 🤍" |
+
+**Post order:** 415, 418, 417, 419, 422, 416, 420, 421, 423, 424. One or two a night, in the evening.
+
+### 425 to 434: in love, not punchlines (7 Oct)
+
+The owner on 415 to 424: "1 is only good out of all these 10 it needs to be more like inlove realistic like
+i've sent you the screenshot". The reference account's texts aren't jokes. They're a boyfriend who is plainly in
+love, texting about an ordinary day: "Goodmorningg my pretty girl / Ft me so I can start my day", "I left
+flowers and iced coffee at you're front door", "You said nap not a coma / I miss you / Comeback". So:
+
+- **An everyday moment, not a setup**: good morning, getting home, missing each other, a hard day, a
+  nervous night before something, sick, sorry after a fight, a surprise date, the anniversary at midnight.
+- **His voice**: pet names in every chat ("baby", "my pretty girl", "my love", "mylove"), two to four
+  bubbles in a row, a real little detail ("when you fell asleep on ft"), and his typos ("Goodmorningg",
+  "Helloo", "you're front door").
+- **Her voice**: short and soft or loud with joy ("goodmorninggggg babyyy", "NO WAYYYY", "i'm literally
+  crying", the unsent "i don't deserve you").
+- **The link is something he made her**, said the way he'd say it: "I made you something last night", "Open
+  this before you go in", "Open this whenever you miss me". Never a punchline title.
+- No internet-meme lines ("With who", "rate me 1 to 10", "nobody huh"): they read as written, not lived.
+
+| | The moment | His line with the link |
+|---|---|---|
+| 425 | good morning | "I made you something last night when you fell asleep on ft" |
+| 426 | she got home | "I was watching your location the whole time / Get some sleep my love" |
+| 427 | long distance | "6 more days and you're in my arms again / Open this whenever you miss me" |
+| 428 | a hard day | "I'm so proud of you for getting through it", her draft "i don't deserve you" |
+| 429 | a surprise date | "Be ready at 8 tonight / You'll see / Open this first" → "NO WAYYYY" |
+| 430 | sorry after a fight | "I could never stay mad at you / Come here", her draft "i love you more" |
+| 431 | 1 year, at midnight | "Happy 1 year my love / Best year of my life" → "it's literally 12:00 😭" |
+| 432 | nervous the night before | "You worked so hard for this / Open this before you go in" |
+| 433 | before his long shift | "Left iced coffee at you're front door / And made you this for your break" |
+| 434 | she's sick | "Soup's coming in 20 / And this so you smile a little" |
+
+**Post order:** 426, 433, 429, 431, 425, 427, 428, 430, 432, 434. One or two a night, in the evening.
+
+### 435 to 444: ten more in love (8 Oct) — rejected, don't post
+
+The same rules as 425 to 434: an everyday moment, his warm bubbles with pet names, her short reply, the
+link as something he made her. No times down the right (see 431).
+
+| | The moment | His line with the link |
+|---|---|---|
+| 435 | her birthday, at midnight | "Happy birthday my pretty girl" → "you stayed up for this??" |
+| 436 | "I PASSED" | "I made this last week bc I knew", her draft "you made this BEFORE??" |
+| 437 | rain, her favourite | "Bringing hot chocolate and your blanket" → "you remembered i love the rain" |
+| 438 | his work trip | "Landed baby / Already miss you", her draft "come home already" |
+| 439 | she feels ugly | "You're the prettiest girl I've ever seen / Read this and believe it" |
+| 440 | spooky season starts | "Your favorite time of year / So I made you something" → "BABYYY" |
+| 441 | three exams in a week | "Breathe baby / Made you something for your study breaks" |
+| 442 | her first day at a new job | "They're so lucky to have you" → "baby 😭" |
+| 443 | for no reason (saved as "hubby 🤍") | "Random but I'm so lucky to have you / Made you this on my lunch break" |
+| 444 | 2am, "can you pick me up" | "Already in my car / Stay inside till I'm there / Open this while you wait" |
+
+**Post order:** 440 first while it's October, then 436, 435, 444, 437, 439, 438, 442, 441, 443. One or two a
+night, in the evening.
+
+### 445 to 454: the reference screenshots, beat for beat (8 Oct)
+
+The owner on 435 to 444: "the new ones are pretty bad ... copy the formula and make them realistic ... dont
+say 'autumn your favourite season' no dont make that up". Those read like ads: nearly every chat said "Made
+you something for …", and they invented facts about her ("your favorite weather", "spooky season"). The
+reference posts do neither. So each of these copies one reference screenshot's beats in new words:
+
+- **Short**: 2 to 6 bubbles, often starting mid-conversation with no setup.
+- **A small real moment**: she got home, good morning, a nap, she's moody because she misses him,
+  knock-knock, "it's not good for the baby".
+- **His lines short and casual**, the twist light.
+- **The link sits in the chat the way a real one would**: often already sent at the top of the crop,
+  with her reacting under it ("no why would you do this / now i'm crying"). He never says "I made you
+  something for …".
+
+| | Follows the screenshot | The chat |
+|---|---|---|
+| 445 | "no now i'm crying / Babyyy" | link at the top → "no why would you do this / now i'm crying" → "Babyyy" → "don't babyyy me" → "Too late you're my baby" |
+| 446 | "Thank you baby / For existing" | "Thank you baby" → "wait for what" → "For being you / My life's so much better with you in it" + link |
+| 447 | "Knock knock" | "Knock knock" → "who's there" → "Check your messages" + link → "NO WAYYYY" → "Yes way baby" |
+| 448 | "baby i have a question / already in my car" | link at the top → "baby i have a question" → "Yes / I'm already in my car", her draft "can you come see me i miss you" |
+| 449 | "Why do you have an attitude / bc i miss you" | "leave me alone" → "Why do you have an attitude" → "bc i miss you" → "Okay I'm omw rn" + link "fix your attitude 🤍" |
+| 450 | "it's not good for the baby / me" | "can we please stop arguing / it's not good for the baby" → "What baby???" → "me" → link "for my baby 🤍" |
+| 451 | "goodmorningggggg babyyy / Ft me" | "goodmorninggggg babyyy" → "Goodmorningg my pretty girl" + link → "Open it then ft me so I can start my day" |
+| 452 | the nap | "okay i'm going to take a nap text me if you need me" → "Okay baby sleep well / Wait / I miss you already" + link |
+| 453 | "lmk if you need anything else / What if I need you" | link at the top → "thank you baby / lmk if you need anything" → "I just need you" |
+| 454 | "option 2" | saved as "option 2": "It's so sunny today / I'll come pick you up in an hour / We can get ice cream and walk by the water" + link |
+
+**Post order:** 450, 448, 445, 449, 447, 453, 446, 451, 452, 454. One or two a night, in the evening.
+
+### 455 to 464: the same formula, new small moments (9 Oct)
+
+The 445 to 454 rules, with moments the reference screenshots didn't use, so nothing reads as a
+part 2. Each is a plain everyday moment: no occasions or preferences invented for her, and he
+never says "I made you something for …".
+
+| | The moment | The chat |
+|---|---|---|
+| 455 | bored | "im bored" → "Come over" → "i'm already in bed" → "Then I'm coming to you" + link |
+| 456 | 1am | "i can't sleep" → "Me neither / Keep thinking about you" + link → "Open this and try again" |
+| 457 | bad day | "today was so bad" → "Come here baby" → "you're at work" → "Not anymore im leaving" + link |
+| 458 | her draft | link at the top → "you did this??" → "Ofc I did / Anything for my pretty girl", her draft "im gonna marry you" |
+| 459 | sick | "i feel so sick" → "Check you're front door baby / Soup and tea / And this" + link |
+| 460 | nerves | "i'm so nervous" → "Why baby" → "the interview is in 10 min" → "You're gonna be amazing / Open this before you go in" + link |
+| 461 | rude name | saved as "annoying": "Goodnight my love / Thank you for today / Im the luckiest guy in the world" + link |
+| 462 | look outside | link at the top → "why aren't you answering / hello??" → "Look outside" |
+| 463 | passed | "I PASSED / i actually passed" → "I KNEW IT / So proud of you baby" + link |
+| 464 | still mad | "i'm still mad at you" → link "i'm sorry 🤍" → "okay i'm not mad anymore" → "I know you baby" |
+
+**Post order:** 462, 458, 464, 461, 456, 459, 463, 457, 455, 460. One or two a night, in the evening
+(7 to 10 pm New York time on a US account).
+
+### 465 to 474: more small moments, and the two engines that went biggest (10 Oct)
+
+Same rules again. 465 finally uses the one reference beat 445 to 454 left out ("I just got home baby /
+Oh I know / I've been stalking your location"), in new words. 474 is the milestone engine behind the
+972K post (he says it first), and 468 and 473 carry the draft and rude-name extras.
+
+| | The moment | The chat |
+|---|---|---|
+| 465 | home safe | "home safe" → "I know / Watched your little dot the whole way home / Sleep well my love" + link |
+| 466 | 11:11 | "11:11" → "Wished for you / Again" + link |
+| 467 | his hoodie | "it's freezing" → "Wear my hoodie / The grey one in your closet / Pretend it's me" + link |
+| 468 | tired of me | "do you ever get tired of me" → "Never / Not even on your worst day" + link, her draft "stop i'm gonna cry" |
+| 469 | boarding | "boarding now" → "Text me the second you land / I'll be up" + link "for the flight 🤍" → "Open it in your seat" |
+| 470 | his mom | "My mom asked about you again" → "what did you say" → "That I'm never letting you go" + link |
+| 471 | moody | "sorry i was moody today" → "Don't be / I love every version of you / Even the moody one" + link |
+| 472 | saturday | link "for saturday 🤍" at the top → "what is this" → "Just keep saturday free" → "for you always" |
+| 473 | rude name | saved as "do not answer": "Thinking about you / That's it / That's the text" + link |
+| 474 | said it first | "Can I tell you something" → "always" → "I love you / Been wanting to say it for weeks" + link |
+
+**Post order:** 474, 468, 465, 470, 473, 466, 472, 467, 469, 471. One or two a night, in the evening
+(7 to 10 pm New York time on a US account).
+
+### 475 to 484: copied from the iMessage posts going viral now (11 Oct)
+
+The owner sent nine posts and @richie_prince1's profile. I read every slide (photo carousels slide by
+slide; videos from their cover frames). What is working, by size:
+
+| Post | Numbers | What it is |
+|---|---|---|
+| @richie_prince1, top 8 | 9.5M, 8.6M, 5.3M, 4.4M, 4.3M, 3.7M, 3.3M, 3.1M views | One iOS 26 screenshot ("iMessage · Encrypted · Today 7:30 PM", silenced line, sometimes the bar). 3 to 6 bubbles, a savage or twist last line. Caption: an emoji and two words ("💀 try again", "🙃 who relates") |
+| @36grm, dinosaur | 2M likes, 165K shares | "I have a huge crush on you / very big / Like a dinosaur" → "me too / my love for you is like dinosaurs, it doesn't exist"; rose iOS 26 background |
+| @36grm, party | 1.1M likes, 102K shares | Ultimatum, "okay" twice, her draft "go to the party"; colourful bokeh background |
+| @dianaa.auclair, crybaby | 941K likes, 106K saves | 13 tight crops of her crying and him comforting her, funny once ("Yeah 4 times"); "Is this corny im sorry" |
+| @user_juejue | 445K likes | She falls asleep mid-text; "aaand my baby is asleep / goodnight sleep well my sweet girl"; "reminiscing 💔" |
+| @dianaa.auclair, 8 minutes | 386K likes | Fake grief over him being 8 minutes late, his calm reveal |
+| @dianaa.auclair, rizz | 239K likes, 41K saves | Six crops: she's cold, he's smooth, inline replies |
+| @diarywithoutalockk | 197K likes | "lmk if you need anything else / What if I need you" (our 453) |
+| @a4670864 | 155K likes | "I love you more" won with a silly proof |
+
+What they share: one real-looking screenshot or a few tight crops, no hook text, a punchline or a
+two-camp argument in the last line, captions of a few words. The biggest numbers go to the savage
+ones (shares beat saves); the sweet ones win saves.
+
+How the gift fits without killing the punchline: slide 1 is the exact formula and ends on its line;
+the link comes in slide 2 as the payoff (475, 476, 483), or it *is* the punchline (477 "the proof",
+484 "Already booked it"), or it ends a sweet run (478, 480, 482). Renderer additions for these looks:
+`"encrypted"`, `"wallpaper": "rose" | "bokeh"`, `"bar": false`, and inline replies (`"quote"`).
+
+| | Copies | The chat |
+|---|---|---|
+| 475 | dinosaur (2M) | "like a unicorn" → "my love for you is like unicorns, it doesn't exist" / slide 2: link → "ok fine it exists" → "i hate you" |
+| 476 | party (1.1M) | ultimatum, "ok" twice, draft "the party obviously" / slide 2: "wait before you send that" + link, draft "ok i'm staying in" |
+| 477 | I love you more (155K) | "Impossible" → "You fall asleep at 10 and I'm up till 2 thinking about you / That's 4 extra hours of loving you every night" + link "the proof" |
+| 478 | he never makes me stay mad | three angry lines, three softer pet names, link "for my angry girl" |
+| 479 | rizz crops (239K) | four crops ending "Now or later" → "im ignoring that" → "I don't see a no", link in the last |
+| 480 | crybaby (941K) | three crops, "Yeah 3 times / I thought you were done after the second one", link → "now im crying again" |
+| 481 | 8 minutes (386K) | setup, spiral ("named my son after you / my sweet baby Leo ❤️"), "it's been 9 minutes are you serious" + link "i'm back" |
+| 482 | falling asleep (445K) | "aaand she's asleep / goodnight my sweet girl" + link, caption "reminiscing 💔" |
+| 483 | dry morning (4.4M) | "that dry ahh morning text" / slide 2: the upgrade + link → "ok this is better" |
+| 484 | take me on a date (4.3M) | "but clearly that's too much for you" → "Already booked it" + link "saturday", draft "wait i take it back" |
+
+**Post order:** 475, 484, 483, 476, 480, 481, 479, 482, 477, 478. On a new account, post the ones with
+the link on slide 2 first (475, 476, 483): slide 1 is then a clean screenshot.
+
+### 485 to 494: the rest of @richie_prince1's biggest posts (11 Oct)
+
+The owner asked for more. 475–484 used two of his posts; this batch copies the rest of his sixteen
+most popular (1.6M to 9.5M views), read from their cover frames. Every one is a single dark iOS 26
+screenshot: "iMessage · Encrypted", "Today 7:30 PM", two to five short messages, and the last line
+does all the work. Captions are an emoji and two words, plus #relatable #Relationship.
+
+What his biggest ones do:
+- **A test with a dumb answer:** "3000-2999+1= ??" → "3000" (9.5M).
+- **A savage line that ends it:** "lol still desperate and easy for me" (5.3M), "leave him" (3.7M),
+  "You are a category 5 hurricane" (2.1M).
+- **A threat that works instantly:** "Caleb is the guy that will come if you don't come" → "I'm on my
+  way" (3.3M); "answer me before i post us together" → "heyy / heyyyyy / hi" (2.2M).
+- **The time jump as the joke:** "I'll call you at 9", then at 9:01 PM "all a man do is lie" (2.9M);
+  "i miss you", then the next morning "That was a moment of weakness" (2.5M).
+- **A role switch:** "Be my bestfriend.. / What that man do sis?" (2.6M); "Say “We”" (1.6M).
+
+Each post keeps his slide 1 and adds the gift as slide 2, a second laugh that flips the first (485
+"marry me" again sober, 486 "leave him" to "marry him", 487 "who's jake" / "Exactly"), or makes the
+link the punchline in one image (489 "We didn't", 493 "Only for you").
+
+Left out:
+- Dad's wallet (8.6M) and "he*" (3.1M). They end on an accusation and on a reveal, and a gift can
+  only answer those with a convoluted setup.
+- "You told me you stabbed your last boyfriend" (2.3M). Too dark to carry a gift.
+- "i lowk dc you can mute yo mic … i just wanna be otp with you" (2.3M). Sweet rather than funny, so
+  it's kept for the one-image in-love format.
+
+| | Copies | The chat |
+|---|---|---|
+| 485 | 3000 (9.5M) | "babe are you drunk?" → "3000" / slide 2: link → "marry me" → "Ask me again when you're sober" → 9:12 AM "marry me" |
+| 486 | leave him (3.7M) | from the friend's phone: "leave him" → "BRUH AT LEAST HEAR ME OUT FIRST" / slide 2: the link he made after their fight → "ok i heard you out / marry him" |
+| 487 | Caleb (3.3M) | "Jake is the guy that will come if you don't come" → "I'm on my way" / slide 2: link → "who's jake" → "Exactly" |
+| 488 | what that man do sis (2.6M) | "Be my bestfriend.. / What that man do sis?", her draft "he didn't text me back all day" / slide 2: "He was probably busy making you this" + link → "ok tell him i love him" |
+| 489 | say “we” (1.6M) | "Babeee!!! We forgot our anniversary 😭" → "We didn't" + link; rose background |
+| 490 | all a man do is lie (2.9M) | 9:01 PM "all a man do is lie" / slide 2: "It's 9:01 relax" + link → "all a man do is make me cry" |
+| 491 | category 5 hurricane (2.1M) | "sunrise or a sunset?" → "You are a category 5 hurricane" / slide 2: "My favorite natural disaster though" + link |
+| 492 | moment of weakness (2.5M) | 1:09 AM "i miss you", 9:09 AM "that was a moment of weakness / fck you" / slide 2: "Too late I screenshotted it" + link |
+| 493 | desperate and easy (5.3M) | "lol still desperate and easy for me" → "Only for you" + link "still yours" |
+| 494 | post us together (2.2M) | "answer me before i post that pic of you sleeping" → "heyy / heyyyyy / hi" / slide 2: "no need for that" + link |
+
+**Post order:** 485, 486, 487, 489, 488, 490, 491, 492, 494, 493. All but 489 and 493 keep the link
+off slide 1.
+
+### Hashtags and search captions (research, 11 Oct), and batch 495–499
+
+The owner asked for hashtags taken from what popped off in the last month, and for captions written
+as searches ("tiktok is a search engine now ... your caption is an SEO title"): real, not salesy.
+
+**How I checked.** TikTok's own data, read in the browser without logging in:
+- the top 60 posts of 45 hashtags, each with its views, date and hashtags, keeping the last 31 days;
+- each tag's totals;
+- TikTok's search suggestions (US) for about 90 starting phrases;
+- the top search results for four gift searches.
+
+**What the texting posts that popped off this month used** (12 Sep – 11 Oct):
+
+| Post | Date | Views | Caption |
+|---|---|---|---|
+| @truth_enforcer.c, "we're done" breakup logic | 29 Sep | 8.3M, 339K shares | a full sentence, then #confused #relationships #breakup #textmessages #foryoupage |
+| @richie_prince1, his top 16 | 12 Sep – 10 Oct (15 of them after 29 Sep) | 1.6M–9.5M | emoji and two words, then #relatable #fypシ゚viral #Relationship #xyzbca |
+| @36grm | 6 Oct | 3.8M | #targetaudience |
+| @25jkngz | 2 Oct | 1.7M | #satire #funny #viral #texts #xyzbca |
+| @edias354 | 17 Sep | 1.3M | #funny #fyp #texting |
+| @midnightchat02 (a copy of richie's dad's wallet) | 22 Sep | 938K | #Relationship #textstory #chatstory #funny #uktiktok |
+| @.lostmsg | 20 Sep | 893K | #targetaudience |
+| @a4670864 | 7 Oct | 860K | #targetaudience #texts |
+| @36grm | 23 Sep | 739K | #targetaudience |
+
+Across the 89 texting posts from the last month in the sample (AI-prank ads removed), by median views:
+
+| Tag | Median views | Posts |
+|---|---|---|
+| #targetaudience | 859K | 6 |
+| #funny | 763K | 10 |
+| #relationships | 763K | 4 |
+| #relatable | 729K | 4 |
+| #xyzbca | 643K | 3 |
+| #bf | 524K | 3 |
+| #textstory | 461K | 4 |
+| #textmessage | 411K | 7 |
+| #fyp | 223K | 34 |
+| #imessage | 96K | — |
+| #text | 47K | — |
+| #texts | 37K | — |
+| #textmessages | 37K | — |
+
+The literal tags at the bottom do worst. It's a small sample, and these tags ride on posts that were
+already strong, so read it as what the winners use, not as the cause.
+
+Tag sizes, all time (posts / views):
+
+| Tag | Posts | Views |
+|---|---|---|
+| #boyfriendtexts | 1.1K | 29M |
+| #cutetexts | 5.2K | 93M |
+| #digitalgift | 5.5K | 75M |
+| #textmessages | 34K | 1.0B |
+| #imessage | 68K | 2.7B |
+| #giftforboyfriend | 76K | 1.4B |
+| #giftforgirlfriend | 110K | 1.3B |
+| #texts | 865K | 21B |
+| #ilovemybf | 3.9M | 58B |
+| #targetaudience | 5.0M | 105B |
+| #ldr | 5.5M | 61B |
+| #relationship | 24.5M | 700B |
+| #relatable | 97M | 2.5T |
+
+The small exact tags (#boyfriendtexts, #digitalgift, #cutetexts) are where a new post can sit at the
+top of the tag page.
+
+**Hashtag rule from now on.** Four tags per post:
+- one or two of the niche's winners: #targetaudience, #relationships or #relatable, #funny on a funny
+  post;
+- one format tag: #boyfriendtexts, #textmessage or #textstory;
+- one topic tag: #digitalgift, #ldr or #bf.
+
+Leave out #fyp and its variants: they're on every post, and their median is a quarter of the winners'.
+
+**Search captions.** The first line is the search, in the words a person types, taken from TikTok's
+own suggestions so it's a real query. Suggestions that fit us:
+- **Gift searches:** "my boyfriend made me a website", "he made me a website", "bf made me a
+  website", "digital gift for girlfriend", "digital gift for bf", "website gift for gf", "best gift
+  for gf", "the best gift for your gf", "long distance gift website", "long distance surprise
+  boyfriend", "surprise my long distance girlfriend", "anniversary website", "birthday website for
+  girlfriend", "qr code gift for boyfriend", "cutest gift ever", "best gift i ever got".
+- **Texts searches:** "cute text from boyfriend", "texts that made me smile", "boyfriend texts funny",
+  "cute texts for your bf", "sweet things to say to your gf", "what to say when shes mad", "games to
+  play with your boyfriend over text", "lovebombing or genuine", "he notices everything".
+
+Who ranks for them today:
+- **"my boyfriend made me a website":** weak results (17K, 2K and 138K views, mostly off-topic). That's
+  the open lane.
+- **"website gift for gf", "digital gift for girlfriend" and "long distance gift website":** sellers'
+  ads (@htm_creates 2.7M, @flowers_the_bloom 3.8M, @lovecapsule.cc, @joygram.io), all with "customize
+  yours / link in bio" captions. A chat that reads as a real girl's screenshot is the opposite of
+  those.
+
+Caption rules:
+- The first line is the search phrase turned into a real sentence ("my boyfriend made me a website to
+  prove he cares 😭").
+- Never the brand, the website or "link in bio".
+- Then the four hashtags.
+- Write half the captions for the guys who buy ("sweet things to say to your gf", "best gift for gf")
+  and half for the girls who send it to them ("my boyfriend made me a website", "cute text from
+  boyfriend").
+
+| | Copies | Caption | Hashtags |
+|---|---|---|---|
+| 495 | @truth_enforcer.c, 8.3M | sweet things to say to your gf when she's being dramatic 😭 | #relationships #boyfriendtexts #relatable #targetaudience |
+| 496 | @36grm, 3.8M | my boyfriend made me a website to prove he cares 😭 | #targetaudience #relationships #bf #digitalgift |
+| 497 | @edias354, 1.3M | games to play with your boyfriend over text 😭 he found a loophole | #funny #boyfriendtexts #textmessage #relatable |
+| 498 | @36grm, 739K | lovebombing or genuine? 😭 be honest | #targetaudience #relatable #textstory #bf |
+| 499 | @brookemonk_, 5.0M (a video) | long distance surprise from my boyfriend 🥹 he couldn't come so he made me a website | #ldr #longdistance #digitalgift #relationships |
+
+**Post order:** 495, 496, 497, 499, 498.
+
+### 500 to 504: this week's newest hits (13 Oct)
+
+Checked again two days later: the tag feeds (16 tags, 697 posts) and the newest posts of
+@richie_prince1 and @36grm.
+
+- **@richie_prince1** posts several times a day. His newest are "love language" (1.7M, 11 Oct), "my
+  life" (1.5M, 10 Oct), and "being honest" (1.5M) and "try again" (1.4M), both 12 Oct. The "moment of
+  weakness" post we copied in 492 is now at 7.5M.
+- **@36grm:** the party post we copied in 476 is now at 5.6M, and "3 new girls" (496) is at 4.0M. New
+  ones:
+  - "today would've been our 2 year anniversary" → "yesterday" (2.1M);
+  - "How many guys you fw?" → "none" (977K);
+  - "caller or a texter?" → "Probably ghoster" (561K).
+
+  His two biggest this week (2.8M and 1.3M) are handwritten notes, not texts.
+- **From the tags:** @veryawesomellie's "I love you more" fight (817K, 31K saves) and @factual991's
+  "no / no / ye / no" (266K).
+
+Same caption and hashtag rules as 495–499. Every caption is a TikTok search suggestion, checked on
+13 Oct. Two new topic tags: #loyaltytest (229K posts, 11B views) and #drytexter (4.8K posts, 146M).
+
+| | Copies | Caption | Hashtags |
+|---|---|---|---|
+| 500 | richie, "love language", 1.7M | when she blocks you and unblocks you the next day 😭 | #targetaudience #relatable #textmessage #bf |
+| 501 | richie, "my life", 1.5M | i did a loyalty test on my boyfriend with a fake account 😭 | #targetaudience #relationships #textstory #loyaltytest |
+| 502 | @veryawesomellie, 817K | he made me a website to win the i love you more argument 😭 | #targetaudience #relatable #boyfriendtexts #digitalgift |
+| 503 | @36grm, 977K | how to tell if she likes you over text 😭 she said none | #targetaudience #funny #textmessage #relationships |
+| 504 | @factual991, 266K | is he a dry texter or is he planning something 😭 | #funny #relatable #drytexter #textmessage |
+
+502 is drawn in light mode like its original, the first light-mode post in a while.
+
+**Post order:** 500, 501, 503, 502, 504.
+
+### 505 to 509: back to what this account did itself (14 Oct)
+
+The owner, on 475 to 504: they "didn't go viral at all". Those batches copied other accounts' one-image
+jokes. This account's own hits, from September, were built differently:
+
+| | The account's own hits (Sept) | 475 to 504 (Oct) |
+|---|---|---|
+| Story | ours, new | someone else's joke, already at 1.6M to 9.5M views |
+| Slides | 3 (the midnight ones) to 10 (149: two chat, seven frames of the gift being opened, one chat) | 1 or 2 |
+| Gift | the turn of the story, shown being opened, or the link card that is the whole point | a link card added after the joke |
+| Ending | his question with her name in it, so the room argues or saves | a punchline: laugh and scroll |
+| Look | full-screen dark iMessage, nothing typed over it | cropped iOS 26 screenshots |
+
+Why the copies most likely did nothing:
+- **Everyone who likes the joke has already seen it.** A copy of a 9.5M post shows people a punchline
+  they know.
+- **One image is two seconds.** A story over six slides keeps people swiping, and every swipe is time
+  spent on the post.
+- **The gift was an extra.** In 149 the gift *was* the turn, and the frames of it opening were the part
+  that sold.
+
+So 505 to 509 go back to the account's two engines, as new stories, with the rules learned since: Maya
+and Leo only, nothing in the chat says what's inside the gift, short and cold, no 💅. Three use the
+comments engine (149), each showing one of the new Halloween and autumn templates being opened. Two are
+chat only: the saves engine (30), and a comments story told on the link card alone, as a test.
+
+| | Engine | Opening | Gift | Her line they'll quote | Last bubble |
+|---|---|---|---|---|---|
+| 505 | comments (149) | "what are we" / "its been 4 months leo" | Be My Boo | "i have a date friday" | "maya who is friday" |
+| 506 | comments (149) | "did i do something" / 'u said "nice" to my selfie' / "it was nice" | Fall for You | "she was so happy" | "maya why was she happy" |
+| 507 | comments (149) | "why dont u ever post me" / "once. in march" | Autumn Reel | "it was very healing" | "maya unarchive us" |
+| 508 | saves (30) | 11:58 PM "are u awake" → 12:00 AM "wanted to be the first one" | link only | "set 3 alarms" | "happy birthday maya. go to sleep" |
+| 509 | comments, no frames | "are we ok" / "u havent called me in 3 days" | link only | "i said thank u" | "maya what did u tell it about me" |
+
+Captions keep the search rule. Each first line is a TikTok suggestion checked on 14 Oct: "situationship to
+relationship", "what does it mean when he says nice", "he doesnt post me", "first one to say happy
+birthday", "i asked chat gpt about you". None gives the twist away.
+
+The gift frames are the live demos, captured with `scripts/tiktok-demo-frames.mjs`. The demos already say
+Maya and Leo, so no swaps are needed:
+- **Be My Boo:** shot, `tap "tap the ghost"`, 250 ms for the "boo!", about 4 s more for the first page.
+- **Fall for You:** shot, `tap "light the candle"`, 300 ms for the flame, about 4 s more for the page.
+- **Autumn Reel:** shot, `tap "tap to develop"`, 1 s for the developed photos, about 3.5 s more for the
+  page.
+
+**Post order:** 505, 508, 506, 507, 509. One a night, 7 to 10 pm New York time. Reply as Maya in the first
+hour.
+
+**Check the account before blaming the post.** If a post has under a few hundred views after an hour, the
+account is being held back, not the post: rosie's post on 10 Oct had 4 views, against 100K to 1.3M for its
+September posts. Post the same carousel on a healthy account, and leave the held one alone for a week.
+
+### 510 to 519: the blueprint of the accounts doing 1M+ (14 Oct)
+
+The owner sent four more profiles (@savgilbertt, @unicornsprinklewaffles, @36grm, @unknown649382) and asked
+for convos built on their posts over 1M, for two US accounts. I read every post over about 900K, slide by slide
+for photo posts, frame by frame for videos:
+
+| Account | Views | What it is | How it's posted |
+|---|---|---|---|
+| @savgilbertt | 7.1M, 1.7M, 1.3M, 1.0M | #wrongtexttrend: a grumpy man (capitals, full stops, one to five words) and a bubbly girl (lowercase, emojis, "frankkk"). He pretends not to care and caves at the end: "Text me again and see if I do.", "Sweetheart, it's midnight. Go to sleep.", "You ever get your food?", "would you be mad if matt wasn't exactly.. real" / "What?" | photo carousel of 8 to 16 tight crops, 2 or 3 bubbles each, dark |
+| @unicornsprinklewaffles | 4.7M, 4.0M, 3.7M, 3.6M, 2.8M, 1.9M, 1.6M, 1.5M | one sincere line from him, zoomed in: "there's nobody i want more than you on either of the days", "I lack the vocabulary to describe you", "You're probably the best thing that will ever happen to me", "Aaaand she's asleep / Night baby", "are you nervous?? / A little / You're very pretty" | a 9 to 15 second **video** of one still, mostly light mode, no caption, a calm sound; 26K to 226K shares each |
+| @36grm | 10.3M, 5.8M, 5.2M, 4.1M, 3.6M, 2.2M, 1.9M, 1.7M, 1.0M | one screenshot whose last line flips it: the dinosaur (10.3M), the party draft (5.8M), "where i'm cheating at" (5.2M), "yesterday would've been our 2 year anniversary" (2.2M), "I'm insulting you" (1.9M), "none" (1.0M) | a 10 second **video** of one still, iOS 26, sometimes a photo of the phone; caption "#targetaudience" |
+| @unknown649382 | 929K | exes at 9 PM: "67 / sorry I was seeing if I was blocked" … "can we say it one more time?" / "I love you sweetheart" | 3 crops, dark, on a 973-follower account |
+
+What changes from 475 to 509:
+- **A one-image post goes up as a video, not a photo.** Every 1M+ single screenshot above is a 9 to 15
+  second still video with a sound: it loops while people read, and time watched is what gets pushed.
+  `scripts/tiktok-still-video.swift` makes the MP4 (1080×1920, the picture centred on black).
+- **A story is many tiny crops.** @savgilbertt's 7.1M is 8 crops of 2 or 3 bubbles each. One swipe, one
+  beat, and his dry line ends every crop.
+- **New lines on their shapes, never their lines.** 475 to 504 reused the jokes themselves; these keep the
+  mechanism and write it fresh.
+- **The gift is the turn of each story,** never something stuck on after the joke: the proof he remembers,
+  the draft she can't send, the thing he made instead of a paragraph, the one thing exes can't let go of, the
+  soft moment of the grumpy guy.
+
+| | Account | Blueprint | The turn |
+|---|---|---|---|
+| 510 | 1 (video) | 36grm "yesterday", 2.2M | "lose this number" … "it was yesterday" / "i still made it" + link |
+| 511 | 1 (video) | 36grm party draft, 5.8M | "oh cute" / "thank you 🙂" / "thats it?", draft: "im literally crying in the walmart parking lot" |
+| 512 | 1 (video) | 36grm "none", 1.0M | "did you even open it" / "once" / "once??" / "once an hour" |
+| 513 | 1 (video) | unicornsprinklewaffles, 4.7M / 3.6M | "i tried writing you a paragraph / deleted it like 4 times … so i made this instead" + link, typing dots |
+| 514 | 1 (video) | 36grm reversals | link sent Sep 23 … "you never do anything romantic anymore" / "scroll up" |
+| 515 | 2 (9 crops) | savgilbertt grumpy/bubbly, 7.1M / 1.7M | he won't say it first; the link, "Don't make it a thing."; "I love you. Now go to sleep." |
+| 516 | 2 (4 crops) | unknown649382 exes, 929K | "you could've taken it down" … "because then it's actually over" |
+| 517 | 2 (3 crops) | unicornsprinklewaffles "are you nervous??", 1.6M | "I made you something before I picked you up / In case it went well" |
+| 518 | 2 (6 crops) | savgilbertt "matt wasn't real", 1.0M | "a guy at work made me something" … "Better than his?" … "there was no guy" / "Unfortunately." |
+| 519 | 2 (6 crops) | savgilbertt #wrongtexttrend, 7.1M | her gift for Leo sent to a stranger: "He's lucky. Send it." / "Happy 3 months. Lose this number." |
+
+The renderer gained one thing for 511: a long draft now wraps and grows the message bar the way Messages
+does, instead of being cut off.
+
+**Sounds.** The 1M+ posts use calm, quiet tracks: "(dream)" by salvia palth, "lovers rock", "Paper Moon
+Static" by Marnie Cusk, "Dream Girl" by Crisaunt, "Indigo Glissando", "On The Square" by Mac DeMarco, or an
+"original sound" clip of one of them. Pick one that is trending in TikTok's sound picker and keep it low.
+
+**Posting.** Account 1 gets the videos: 511, 510, 514, 512, 513. Account 2 gets the carousels: 515, 519, 518,
+516, 517. Three per account on the first evening, 6 to 10 pm New York time, about 90 minutes apart; the other
+two the next evening. These accounts post daily, several times a day.
+
+### 520 and 521: two with no link at all (15 Oct)
+
+The owner asked for two plain screenshots without tryethos, "just like a simple convo that will go viral".
+These are reach posts: one image each, posted as a 10-second video. Neither has a name, a product or a
+punchline someone else already used.
+
+| | Shape | The chat |
+|---|---|---|
+| 520 | @you_sir_naim's 4.5M: an ordinary detail shows one of them isn't over it | "why am i still on your spotify family" / "do you want me to remove you" / "we broke up in may" / "that's not what i asked" / "no" / "then stay" |
+| 521 | @36grm's two-camp reversals | "why were you active at 3am" / "couldn't sleep" / "for 2 hours?" / "how do you know it was 2 hours" |
+
+Captions follow the search rule: "my ex never took me off his spotify family plan 💔" and "when it says he was
+active at 3am 💀". Post one on each account.
+
+### 522 to 526: five with tryethos, on 520's shape (16 Oct)
+
+520 ("then stay") did 40K on its first video, on the account that is doing well, with no link. The owner asked
+for five with tryethos for the same account, "so it needs to be good also".
+
+The link card stays, so each story is built on something only the gift can do. The link is then the reason
+the story exists, not an advert after it. Every detail is true of the product and none says what's inside a
+gift:
+
+| | Shape | The real detail | The chat |
+|---|---|---|---|
+| 522 | 520: exes at night, a two-word end | the sender is told when it's opened, and the dashboard charts every open | "you opened it again" / "how do you know that" / "it shows me" / "since when" / "since march" |
+| 523 | 520 with a midnight | a gift can be scheduled to open on a date | sent in March, "it opens on the day" … 12:00 AM "it just opened" / "we're not even together anymore" / "happy birthday" |
+| 524 | @36grm's reversal + the party draft | the dashboard shows how much was watched | "omg i loved it 😭" / "watched the whole thing twice" / "it says 38%", draft "ok so my phone died" |
+| 525 | 520, colder | the dashboard counts the people who opened it | "who else opened it" / "it says 2 people" / "i showed him" / "did he like it" |
+| 526 | @unicornsprinklewaffles' sweet line | she can send a voice message back from the gift | "was it too much" / "i've played it 11 times" |
+
+**Post order:** 522 first, at the same time of day 520 went up, then 523, 525, 524, 526. 522 is also a test:
+the same account, the same shape, with the site's name on screen this time. If it does a fraction of 520
+while the account's other posts hold up, the site name on screen is what's being held back, and the next ones
+leave the link card out and show the gift instead.
+
+**Superseded the same day by 527–531.** The owner: "fitting all that in one is not that good … make it better
+like a story line … more slides like 1-3 screenshots … really analyze what gets the engagement going to
+comments". Don't post 522–526.
+
+### What gets people to comment (read 16 Oct), and 527 to 531
+
+I read the top comments, by likes, of the twelve biggest posts on @36grm, @unicornsprinklewaffles,
+@savgilbertt and @unknown649382 (the public comment feed, no login). What people type, and why:
+
+| What makes them type | Evidence |
+|---|---|
+| **A small detail to call out** | "double text tho 👀" is a top comment on three @36grm posts (49K, 74K, 22K likes); "he used the right youre" 56K; "i dont like the dots in the messages" 30K; "OUT OF EVERYTHING U PICK TO SAY SIX SEVEN" 3K |
+| **A two-camp argument about a rule** | The party post's 4.8K comments argue whether you can go out and stay loyal ("It's possible to enjoy yourself on a night out nd not cheat", 230 replies) |
+| **A last line they can twist** | "but it used to" (187K, on "my love for you is like dinosaurs, it doesn't exist"); "ending on good terms hurts more than ending on bad terms" (34K) |
+| **Rooting for the exes** | "get back together" (57K); "that lil correction would have my DELUSIONAL AHH thinking there's a chance" (16K) |
+| **Cynics against believers on sweet posts** | "best 2 weeks of your life" (195K) against "my boyfriend is like this" (21K) |
+| **Something to try and report back** | The 3.7M "you're my best friend too" post: thousands of "i tried it" and "this is what mine said" |
+| **A second slide that changes the first** | "Just realized that there is a second slide" (2K): people go back and read again |
+
+So 527–531 are three screenshots each: a hook, the turn, the line people will repeat. Each plants a detail to
+call out, puts the gift at the turn, and asks the room something: send it or not, get back together or not,
+creepy or romantic, toxic or fair. Where the story allows, the link card waits for slide 2, so the first
+picture is a plain chat. Same iOS 26 dark look as 520.
+
+| | Story | The detail | What the room argues about |
+|---|---|---|---|
+| 529 | "can we talk" / "give me 5 mins" → his link → "now we can talk" / "you there?", her draft "i think we should break up" | the unsent draft | send it, or don't |
+| 527 | Mar 2 gift → "i know we said no contact / but please stop opening it" → "11 times this week" / "it shows me" / "since when do you check" / "since march" | he broke no contact first, her lie | get back together; creepy or romantic |
+| 528 | 11:58 PM "i made you something in march" → "it was set to open on your birthday / i forgot to cancel it" → "you didn't forget" / "happy birthday" | the 11:58, the lie | did he forget; should she reply |
+| 530 | "watch all of it ok" → "watched the whole thing twice" / "it says 38%" → "you can see that??", draft "ok so my phone died" | the setup line, the excuse | is it toxic that he checks |
+| 531 | "open it when you're alone" → "my reaction at the end / the voice note / was it too much" → "i've played it 11 times" | "you can delete it" | real, or the first two weeks |
+
+**Post order:** 529, 527, 528, 530, 531, one a day in the evening. 529 goes first because its first slide is
+plain text and its question is the one the most people will answer.
+
+**The link card (16 Oct).** The owner: the preview card "looks bland". The real one (/g/<id>/card.jpg) is now a
+sealed envelope with a wax seal, a bow and flowers, "for Maya" beside it, on one of four papers: blush gingham,
+burgundy pinstripes, pressed kraft or black. The paper follows the gift's template and look, so no two posts
+need show the same card, and the picture no longer prints the site's address. The slides draw the real card:
+a link's `"card"` picks the paper (`scripts/share-card.mjs` renders it into `docs/marketing/cards`). 529 and
+531 use blush, 527 black, 528 burgundy, 530 pressed.
+
+## Shockers: the sentence that means something else after the gift (165 and 166)
+
+Two posts built on one move: the first bubble is the worst text a person can receive, and the
+gift is what turns it into the best one. The reader believes the bad version for a whole slide,
+and the comment section is people telling each other they nearly threw their phone.
+
+| | The bad version | What it was | Still open |
+|---|---|---|---|
+| 165 | "i think we should break up" | with the flat: he found them a house, with a garden; her mum is already on her way with wine and a speech | "maya does she still have the speech" |
+| 166 | "im not coming tomorrow" (booked in March) | the gift is a countdown to six minutes from now; he has been in an Airbnb round the corner since Tuesday and FaceTimed her from it ("the airbnb has a similar lamp") | "maya its raining out here" |
+
+Rules for the shocker, because it is a bigger lever and it cuts:
+
+- **The reveal is the gift, never the text.** "with the flat" is two words; the house is on
+  slide 3. If the screenshot is thin, the post is a man being cruel by text and then explaining.
+- **He has to have known the cost.** The lamp, the four days, the box: the twist works because he
+  went to trouble, not because he was careless with a sentence. The comments forgive trouble.
+- **She still commits her crime** (rang her mum, will not open the door, read it twice). It keeps
+  the two-camp engine from 149 running under the shock.
+- **Never two shockers in a row.** The lever only works while "i think we should break up" still
+  reads as real for a slide. The fourth one in a month reads as a bit.
+
 ## The screenshots have to pass for real
 
 People can tell a fake iMessage in half a second, and the moment they can, nobody comments.
@@ -1132,5 +2535,19 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 153 | it was the finale | four slides; an apology | any (yours) | yours |
 | 154 | open when u cant sleep | four slides; long distance | any (yours) | yours |
 | 155 | what do girls like | four slides; his girlfriend's birthday, in three days | any (yours) | yours |
+| 156 | u cannot heart react that | four slides; no occasion; 149's two crimes and a confession | any (yours) | yours |
+| 157 | we need to talk | four slides; no occasion; 149's engine, his crime turned up | any (yours) | yours |
+| 158 | u were active 4 minutes ago | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
+| 159 | u said thanks to love u | four slides; no occasion; 149's engine | any (yours) | yours |
+| 160 | bin day | four slides; an anniversary; 149's engine with a reason to buy | any (yours), photos suit it | yours |
+| 161 | hbd | four slides; her birthday; 149's engine with a reason to buy | a birthday one | yours |
+| 162 | u liked her photo | four slides; no occasion; 149's engine, the ex | one with their photos | yours |
+| 163 | nice | four slides; no occasion; 149's engine, lightest | any (yours) | yours |
+| 164 | who is she | four slides; no occasion; the other engine: he is the problem, she ends on idk | the most romantic frame | yours |
+| 165 | i think we should break up | four slides; a move; shocker: with the flat | one with their photos | yours |
+| 166 | im not coming tomorrow | four slides; long distance; shocker: he is at the door, since Tuesday | a countdown | yours |
+| 167 | i think we should break up (the real one) | four slides; he is the problem: isolation | the most romantic frame | yours |
+| 168 | who is dan | four slides; he is the problem: control by jealousy | their photos, or the letter | yours |
+| 169 | u called me pathetic | four slides; he is the problem: the gift instead of the apology | the most beautiful frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.

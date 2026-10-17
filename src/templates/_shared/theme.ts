@@ -35,8 +35,25 @@ export function rgba(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+const ratio = (a: string, b: string) => {
+  const la = luminance(a);
+  const lb = luminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+};
+
+/** `hex`, stepped toward `to` until it reads at 4.5:1 on `ground`: a pale accent still makes readable words. */
+function readableOn(hex: string, to: string, ground: string): string {
+  for (let t = 0; t <= 1.0001; t += 0.05) {
+    const c = mix(hex, to, t);
+    if (ratio(c, ground) >= 4.5) return c;
+  }
+  return to;
+}
+
 /** CSS variables every template can rely on. Spread onto the template root. */
-export function giftThemeVars(accent: string, fontPairing: FontPairing): CSSProperties {
+export function giftThemeVars(rawAccent: string, fontPairing: FontPairing): CSSProperties {
+  // An old draft can carry something that isn't a colour; every derived shade would come out NaN.
+  const accent = /^#([0-9a-f]{3}){1,2}$/i.test(rawAccent?.trim() ?? "") ? rawAccent.trim() : "#D6336C";
   // WCAG contrast against ink vs. paper; whichever reads better wins.
   const l = luminance(accent);
   const onAccent = (l + 0.05) / (0.011 + 0.05) >= (1.0 + 0.05) / (l + 0.05) ? "#1A1614" : "#FFF8F4";
@@ -47,9 +64,11 @@ export function giftThemeVars(accent: string, fontPairing: FontPairing): CSSProp
   };
   return {
     "--gift-accent": accent,
-    "--gift-accent-soft": mix(accent, "#FFFFFF", 0.35),
+    // Soft is for words on dark pages and deep for words on light ones (MessageBody's emphasis among
+    // them), so each is pushed far enough from its page to read whatever accent was picked.
+    "--gift-accent-soft": readableOn(mix(accent, "#FFFFFF", 0.35), "#FFFFFF", "#1A1614"),
     "--gift-accent-pale": mix(accent, "#FFFFFF", 0.82),
-    "--gift-accent-deep": mix(accent, "#000000", 0.25),
+    "--gift-accent-deep": readableOn(mix(accent, "#000000", 0.25), "#000000", "#FAF7F2"),
     "--gift-accent-rgb": (() => {
       const { r, g, b } = hexToRgb(accent);
       return `${r}, ${g}, ${b}`;

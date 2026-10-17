@@ -1,6 +1,6 @@
 """Cut meme stickers out of sticker sheets as die-cut WebPs: transparent ground, white edge, 2x.
 
-    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder> [memes|scraps]
+    python3 scripts/cut-meme-stickers.py <folder with the sheets> <out folder> [memes|scraps] [sheet ...]
 
 A sheet is a flat-coloured page of cut-outs (the kind people post on Pinterest). The ground is
 flooded in from the borders, what is left is labelled blob by blob, and CATALOGUE below says which
@@ -11,11 +11,22 @@ new sheet and an empty pick list first: it prints every blob's index and box.
 Two sets: `memes` (public/memes, the animals, with a white die-cut edge) and `scraps` (public/scraps,
 the flowers, kisses, paper and lace the collage templates are made of, mostly without one). A pick
 may also carry `edge` (the white edge in source pixels, 0 for none) and `key` (cut by colour instead
-of by flood, for lace and doilies whose holes must stay holes).
+of by flood, for lace and doilies whose holes must stay holes), and `holes`: ground trapped inside the
+cut-out in patches of at least this many source pixels is cut away too, while smaller specks stay.
+That is the eye of a satin bow's loop, where `key` would also punch through every pale highlight.
 
 Needs Pillow only. src/templates/_shared/memes/catalogue.ts and _shared/collage/scraps.ts list the
 sizes. Leave out film, game and brand characters: the three meme templates ship these
 files to paying customers.
+
+A sheet that is itself a finished collage (every sticker laid over torn paper, no flat ground to
+flood) goes in COLLAGE instead: a round thing is cut by its `circle` (centre and radius), anything
+else by colour, `keep` naming which pixels belong to it and `seeds` where it is. Sheets missing
+from the folder are skipped, so one new sheet can be cut without the rest to hand.
+
+A sticker laid on a busy collage has no flat ground to flood in from, so RINGED cuts it from the
+inside instead: a flood from a point in the middle of it that stops at its own white die-cut edge,
+then the usual sealing and a fresh white edge. Name sheets after the set to cut only those.
 """
 import sys, json, os
 from collections import deque
@@ -24,6 +35,7 @@ from PIL import Image, ImageFilter, ImageChops, ImageDraw
 IMG = sys.argv[1]
 OUT = sys.argv[2]
 SET = sys.argv[3] if len(sys.argv) > 3 else "memes"
+ONLY = set(sys.argv[4:])
 os.makedirs(OUT, exist_ok=True)
 
 def segment(path, tol):
@@ -63,6 +75,22 @@ def segment(path, tol):
     big = [c for c in comps if c["area"] > 1500]
     return im, label, big, bg, is_bg
 
+def inside(im, seed, box, pale=222):
+    """The region round `seed`, inside `box`, that stops at near-white: a sticker's own white edge."""
+    W, H = im.size; px = im.load(); x0, y0, x1, y1 = box
+    def white(x, y):
+        r, g, b = px[x, y]
+        return min(r, g, b) > pale and max(r, g, b) - min(r, g, b) < 26
+    label = bytearray(W * H); q = deque([seed]); label[seed[1] * W + seed[0]] = 1
+    minx = maxx = seed[0]; miny = maxy = seed[1]; area = 0
+    while q:
+        x, y = q.popleft(); area += 1
+        minx = min(minx, x); maxx = max(maxx, x); miny = min(miny, y); maxy = max(maxy, y)
+        for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if x0 <= nx < x1 and y0 <= ny < y1 and not label[ny * W + nx] and not white(nx, ny):
+                label[ny * W + nx] = 1; q.append((nx, ny))
+    return label, {"id": 1, "box": [minx, miny, maxx + 1, maxy + 1], "area": area}
+
 def largest(mask, w, h):
     """Keep the biggest 8-connected blob of a 0/1 bytearray mask."""
     seen = bytearray(w * h); best = []; q = deque()
@@ -84,7 +112,7 @@ EDGE = 5   # the white die-cut edge, in source pixels
 CLOSE = 5  # how wide a leak the closing seals, in source pixels
 SCALE = 2
 
-def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=False):
+def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=False, holes=0):
     CLOSE_R = CLOSE if close is None else close
     EDGE_R = EDGE if edge is None else edge
     W, H = im.size
@@ -138,6 +166,21 @@ def cut(im, label, comp, bg, is_bg, name, box=None, close=None, edge=None, key=F
         for y in range(h):
             for x in range(w):
                 if mpx[x, y] and not mask[y * w + x] and is_bg(X0 + x, Y0 + y): cpx[x, y] = (255, 255, 255, 255)
+    if holes:
+        # The page seen through a loop: a patch of ground this big is a hole, a pale highlight is not.
+        seen = bytearray(w * h)
+        for s0 in range(w * h):
+            x, y = s0 % w, s0 // w
+            if seen[s0] or not mpx[x, y] or not is_bg(X0 + x, Y0 + y): continue
+            seen[s0] = 1; q = deque([s0]); blob = []
+            while q:
+                i = q.popleft(); blob.append(i); x, y = i % w, i // w
+                for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if 0 <= nx < w and 0 <= ny < h:
+                        j = ny * w + nx
+                        if not seen[j] and mpx[nx, ny] and is_bg(X0 + nx, Y0 + ny): seen[j] = 1; q.append(j)
+            if len(blob) >= holes:
+                for i in blob: mpx[i % w, i // w] = 0
     inner = m if key else m.filter(ImageFilter.MinFilter(3))         # drop the JPEG fringe
     edge = m.filter(ImageFilter.MaxFilter(EDGE_R * 2 + 1)) if EDGE_R else None   # the white edge
     big = (w * SCALE, h * SCALE)
@@ -202,15 +245,166 @@ SCRAPS = {
         "doily-red": (1, None, 0, 0, True), "bow-gingham": (0, None, None, 0), "tag-tofrom": (2, None, None, 0), "label-ornate": (3, None, None, 0),
         "heart-damask": (8, None, 0, 0, True), "doily-pink": (9, None, 0, 0, True), "lace-red": (7, None, 0, 0, True),
     }),
+    # The owner's "love stickers" sheet: only the plain objects on it (a satin bow, two felt stars).
+    "59.jpg": (12, {
+        "bow-satin-blush": (1, None, 1, 2), "star-felt-plump": (24, None, 1, 0), "star-felt-tilted": (30, None, 1, 0),
+    }),
+    # Red-and-cream love stickers (Photo Booth). Only the photographed objects: the lettering, the
+    # character and brand pieces, the drawings and the animals on this sheet stay on it.
+    "56.jpg": (10, {
+        "teddy-hug": (23, None, 6, 3), "penguins-plush": (8, [495, 117, 632, 250], 6, 3), "wax-seal-heart": (26, None, None, 0),
+        "envelopes-pair": (53, None, None, 0), "heart-puffy": (4, None, None, 0), "heart-gingham": (30, None, None, 0),
+        "tulips-wrapped": (60, None, 6, 0), "sunflowers-kraft": (12, None, None, 0),
+    }),
+    # The Music Box vanity: only the photographed things on these two sheets. Their painted swans,
+    # doves, ballerinas and bottles, the branded bottles and the printed slogans stay where they are.
+    "61.jpg": (10, {
+        "wax-seal-hibiscus": (15, None, None, 0), "bow-satin-pink": (17, None, None, 0, False, 50), "bow-satin-mini": (21, None, None, 0, False, 20),
+        "paper-script": (3, None, None, 0), "paper-roses": (4, None, None, 0), "paper-blossom": (12, None, None, 0),
+    }),
+    "62.jpg": (10, {
+        "wax-seal-swans": (4, None, None, 0), "fan-lace": (15, None, None, 0),
+    }),
+    # The owner's Halloween collage (Spooky Season): the photographed things only. Its skeleton
+    # lovers, skull and sunglassed ghosts are drawings and stay on it; the two maple leaves touch,
+    # so they are cut by colour in COLLAGE.
+    "halloween-collage.webp": (10, {
+        "moon": (2, None, None, 0), "cat-walk": (4, None, None, 0), "candle-amber": (5, None, None, 0), "cat-pumpkin": (6, None, None, 0),
+        "book-coffee": (8, None, None, 0), "cookie-cat": (12, None, None, 0), "coffee-cup": (13, None, None, 0), "sign-pumpkins": (14, None, None, 0),
+        "pumpkins-round": (15, None, None, 0), "star-charm": (0, None, None, 0),
+    }),
+    # Dark Romance: the photographed things. The painted rose and dove, the embroidered heart and the
+    # small painted heart under the dagger stay on the sheet.
+    "dark-romance.jpg": (11, {
+        "heart-sculpture": (0, None, None, 0), "butterfly-wine": (2, None, None, 0), "letters-quill": (5, None, None, 0), "brooch-heart": (7, None, None, 0),
+        "cards-spades": (8, None, None, 0), "crow-feathers": (9, None, None, 0), "brooch-heart-silver": (10, None, None, 0), "orchid-wine": (11, [8, 822, 206, 1142], None, 0),
+        "amaryllis": (11, [204, 818, 456, 990], None, 0), "die": (12, None, None, 0), "wax-seal-flower": (13, None, None, 0), "candles-melted": (14, None, None, 0),
+    }),
+    "red-flowers.jpg": (10, {
+        "orchid-spray-wine": (0, None, None, 0), "hibiscus-wine": (1, None, None, 0), "magnolia-wine": (2, None, None, 0), "hibiscus-velvet": (3, None, None, 0),
+        "rose-oxblood": (4, None, None, 0), "ranunculus-plum": (5, [4, 488, 238, 708], None, 0), "hibiscus-ruffle-wine": (5, [236, 490, 490, 710], None, 0),
+        "sunflower-wine": (5, [486, 476, 676, 668], None, 0), "poppy-wine": (7, None, None, 0), "dahlia-wine": (6, [224, 716, 440, 932], None, 0),
+        "tulip-parrot-wine": (6, [433, 686, 676, 936], None, 0), "cosmos-chocolate": (8, None, None, 0), "carnation-picotee": (9, None, None, 0), "lily-wine": (10, None, None, 0),
+    }),
+    # The black things: not the branded polish, coffin box, shoes or the titled spell book, not the
+    # white teacup or the open book, whose white the ground would eat, and not the spider, which sits
+    # on a patch of white web.
+    "goth-black.jpg": (10, {
+        "web": (0, None, None, 0), "rose-ember": (2, None, None, 0), "heart-pillow-black": (3, None, None, 0), "vial-blood": (4, None, None, 0),
+        "rose-black": (5, None, None, 0), "coffin": (6, None, None, 0), "heart-batwing": (9, None, None, 0), "butterfly-black": (10, None, None, 0),
+        "key-skeleton": (11, None, None, 0), "key-ornate": (12, None, None, 0), "cassette": (14, None, None, 0), "rose-black-small": (15, None, None, 0),
+        "moth": (18, None, None, 0), "bat-plush": (17, None, None, 0), "skull": (19, None, None, 0), "cat-black": (20, None, None, 0),
+        "mask-lace": (22, None, None, 0, False, 12), "bow-lace-black": (25, None, None, 0), "lantern": (26, None, None, 0),
+        "apple-black": (28, None, None, 0), "crow": (29, None, None, 0), "butterfly-black-wide": (30, None, None, 0), "button-black": (33, None, None, 0),
+        "lollipop-heart": (37, None, None, 0), "rose-black-large": (38, None, None, 0), "candle-bow": (39, None, None, 0), "bow-black-small": (40, None, None, 0),
+        "key-black": (42, None, None, 0, False, 30), "chess-king": (34, None, None, 0),
+    }),
+    # The cosy autumn sheet is nearly all paintings (and a beagle, a camera brand, a campground's
+    # badge): only its real maple leaf and the engraved charm are cut.
+    "autumn-cozy.jpg": (10, {
+        "leaf-maple-gold": (1, None, None, 0), "charm-with-love": (14, None, None, 0),
+    }),
 }
+
+def pinks_and_greens(r, g, b):
+    """Pink petals and green leaves, and not the pale pink paper they are stuck on."""
+    hi, lo = max(r, g, b), min(r, g, b)
+    sat = (hi - lo) / hi if hi else 0
+    return (g > r + 6 and g > b + 4 and sat > 0.12) or (r - g > 45 and sat > 0.2)
+
+def _hsv(r, g, b):
+    import colorsys
+    return colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+
+def crimsons(r, g, b):
+    """A red maple leaf, and not the orange one it overlaps."""
+    h, s, v = _hsv(r, g, b)
+    return s > 0.35 and v > 0.22 and (h < 0.03 or h > 0.93)
+
+def ambers(r, g, b):
+    """An orange maple leaf, its brown spots and gold veins, and not the red one on top of it."""
+    h, s, v = _hsv(r, g, b)
+    return s > 0.3 and v > 0.18 and 0.035 <= h <= 0.17
+
+KEEP = {"pinks-and-greens": pinks_and_greens, "crimsons": crimsons, "ambers": ambers}
+
+# The owner's "happy birthday" collage (Digicam): the disco ball and the tulips. Its camera is a
+# branded one and its lily is a painting, so neither is cut; the envelope runs off the page.
+# `avoid`: corners of the box where the pink paper is as pink as a petal.
+COLLAGE = {
+    "58.jpg": {
+        "disco-ball-silver": {"circle": (511.8, 235.3, 51.8), "edge": 2},
+        "tulips-pink": {"box": (175, 1000, 420, 1300), "seeds": [(300, 1150), (395, 1067)], "keep": "pinks-and-greens", "avoid": [(352, 1218, 420, 1300), (352, 1000, 420, 1013)], "close": 4, "edge": 2},
+    },
+    # The two maple leaves on the Halloween collage overlap, so each is cut by its own colour.
+    "halloween-collage.webp": {
+        "leaf-maple-orange": {"box": (198, 488, 566, 808), "seeds": [(380, 660), (300, 600), (470, 700)], "keep": "ambers", "close": 4, "edge": 0},
+        "leaf-maple-red": {"box": (452, 426, 670, 606), "seeds": [(560, 500), (600, 470)], "keep": "crimsons", "close": 4, "edge": 0},
+    },
+}
+
+# Stickers on a busy collage, cut from the inside: (a point inside it, a box round it, the white edge).
+RINGED = {
+    # 54.webp: the two glossy resin stars on the blue gingham, for Picnic.
+    "54.webp": {"star-glossy": ((335, 760), (230, 660, 440, 850), 5), "star-glossy-small": ((462, 845), (385, 760, 540, 920), 5)},
+}
+
+def collage_segment(path, pick):
+    """The one sticker `pick` names, as a labelled mask `cut` can take: blob 1, on no ground."""
+    im = Image.open(path).convert("RGB"); W, H = im.size; px = im.load()
+    label = [0] * (W * H)
+    if "circle" in pick:
+        cx, cy, r = pick["circle"]
+        box = [int(cx - r) - 1, int(cy - r) - 1, int(cx + r) + 2, int(cy + r) + 2]
+        for y in range(box[1], box[3]):
+            for x in range(box[0], box[2]):
+                if (x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r: label[y * W + x] = 1
+    else:
+        box = list(pick["box"]); keep = KEEP[pick["keep"]]; avoid = pick.get("avoid", [])
+        x0, y0, x1, y1 = box; w = x1 - x0; h = y1 - y0
+        m = Image.new("L", (w, h), 0); mp = m.load()
+        for y in range(h):
+            for x in range(w):
+                X, Y = x0 + x, y0 + y
+                if keep(*px[X, Y]) and not any(a <= X < c and b <= Y < d for a, b, c, d in avoid): mp[x, y] = 255
+        # Seal the petal edges a highlight broke before choosing what is joined to the seeds.
+        c = pick.get("close", 3)
+        m = m.filter(ImageFilter.MaxFilter(c * 2 + 1)).filter(ImageFilter.MinFilter(c * 2 + 1)); mp = m.load()
+        seen = bytearray(w * h); q = deque()
+        for sx, sy in pick["seeds"]:
+            i = (sy - y0) * w + (sx - x0); seen[i] = 1; q.append((sx - x0, sy - y0))
+        while q:
+            x, y = q.popleft(); label[(y + y0) * W + x + x0] = 1
+            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if 0 <= nx < w and 0 <= ny < h and not seen[ny * w + nx] and mp[nx, ny] > 127:
+                    seen[ny * w + nx] = 1; q.append((nx, ny))
+    return im, label, {"id": 1, "box": box}, (255, 255, 255), lambda x, y: False
 
 CATALOGUE = SCRAPS if SET == "scraps" else MEMES
 sizes = {}
 for sheet, (tol, picks) in CATALOGUE.items():
+    if ONLY and sheet not in ONLY: continue
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
     im, label, comps, bg, is_bg = segment(f"{IMG}/{sheet}", tol)
     for name, pick in picks.items():
         k, box = pick[0], pick[1]
-        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False)
+        sizes[name] = cut(im, label, comps[k], bg, is_bg, name, box, pick[2] if len(pick) > 2 else None, pick[3] if len(pick) > 3 else None, bool(pick[4]) if len(pick) > 4 else False, pick[5] if len(pick) > 5 else 0)
+        print(name, sizes[name])
+for sheet, picks in (COLLAGE if SET == "scraps" else {}).items():
+    if ONLY and sheet not in ONLY: continue
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
+    for name, pick in picks.items():
+        im, label, comp, bg, is_bg = collage_segment(f"{IMG}/{sheet}", pick)
+        sizes[name] = cut(im, label, comp, bg, is_bg, name, None, 0 if "circle" in pick else 2, pick.get("edge"))
+        print(name, sizes[name])
+json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
+for sheet, picks in (RINGED if SET == "scraps" else {}).items():
+    if ONLY and sheet not in ONLY: continue
+    if not os.path.exists(f"{IMG}/{sheet}"): print("no sheet", sheet); continue
+    im = Image.open(f"{IMG}/{sheet}").convert("RGB")
+    for name, (seed, box, edge) in picks.items():
+        label, comp = inside(im, seed, box)
+        sizes[name] = cut(im, label, comp, (255, 255, 255), lambda x, y: False, name, None, 2, edge)
         print(name, sizes[name])
 json.dump(sizes, open(f"{OUT}/sizes.json", "w"), indent=1)
 

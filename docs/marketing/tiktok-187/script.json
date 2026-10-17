@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:12",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u posted ur car 4 times this month"
+        },
+        {
+          "from": "me",
+          "text": "never me. not once in a year"
+        },
+        {
+          "from": "them",
+          "text": "im just private maya"
+        },
+        {
+          "from": "me",
+          "text": "ur car isnt private?"
+        },
+        {
+          "from": "them",
+          "text": "why do u need the internet to know we're together"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why do u need the internet to know we're together"
+        },
+        {
+          "from": "me",
+          "text": "its not the internet. its u"
+        },
+        {
+          "from": "them",
+          "text": "u know how i feel. i made u this instead of a post"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (better than a post)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Birthday Cinema (a whole premiere, just for her, since he won't post her). It has to look like real love: their photos, a long message — so the room fights about him. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok this is better than a post"
+        },
+        {
+          "from": "me",
+          "text": "can u post this tho"
+        },
+        {
+          "from": "them",
+          "text": "its not for them. its for u"
+        },
+        {
+          "from": "them",
+          "text": "stop needing everyone to see things"
+        },
+        {
+          "from": "me",
+          "text": "fine"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i run a fan account of u"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "11k followers. since february. ur very popular"
+        },
+        {
+          "from": "them",
+          "text": "whats it called"
+        },
+        {
+          "from": "me",
+          "text": "u follow it",
+          "tapback": "haha"
+        },
+        {
+          "from": "them",
+          "text": "maya whats the account called"
+        }
+      ]
+    }
+  ]
+}

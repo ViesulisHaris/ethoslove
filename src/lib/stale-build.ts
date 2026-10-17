@@ -30,3 +30,52 @@ export function shouldAutoReload(error: { name?: string; message?: string } | nu
   // A clock set back since then can't be measured against; treat it as long ago.
   return now < lastReloadAt || now - lastReloadAt > RELOAD_LOOP_MS;
 }
+
+/**
+ * A chunk also fails to load when the connection drops mid-download (a lift, a tunnel), and that
+ * is not ours to apologise for: the screen says the connection dropped, not that something broke.
+ */
+export function isConnectionError(error: { name?: string; message?: string } | null | undefined, online: boolean): boolean {
+  return !online || isStaleBuild(error);
+}
+
+/**
+ * What "Try again" does. React keeps a rejected chunk import cached by file name, so re-rendering
+ * (`reset`) throws the same error at once without asking the network again; only a reload fetches
+ * the chunk anew. Any other error gets the gentler re-render, which keeps what's on the page.
+ */
+export function retryAction(error: { name?: string; message?: string } | null | undefined): "reload" | "reset" {
+  return isStaleBuild(error) ? "reload" : "reset";
+}
+
+/** Where the tab remembers when it last reloaded itself, so both error screens share one loop guard. */
+export const RELOADED_AT = "ethos:stale-chunk-reload";
+
+/** When this tab last reloaded itself; null if never, undefined if there is no storage to ask. */
+export function lastAutoReload(): number | null | undefined {
+  try {
+    const value = sessionStorage.getItem(RELOADED_AT);
+    return value === null ? null : Number(value);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Remember this reload. Only called once storage has answered, so a failure here is not expected. */
+export function markAutoReload(now = Date.now()): void {
+  try {
+    sessionStorage.setItem(RELOADED_AT, String(now));
+  } catch {
+    // Without storage the next error simply won't auto-reload: see lastAutoReload's `undefined`.
+  }
+}
+
+/** For useSyncExternalStore: `navigator.onLine`, which the error screens word themselves by. */
+export function subscribeOnline(callback: () => void): () => void {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}

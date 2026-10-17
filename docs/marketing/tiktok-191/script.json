@@ -1,0 +1,119 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:14",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is sophie wearing my ring"
+        },
+        {
+          "from": "them",
+          "text": "what are u talking about"
+        },
+        {
+          "from": "me",
+          "text": "her insta. 2021. its the same ring marco"
+        },
+        {
+          "from": "them",
+          "text": "its my grandmas ring. its meant to be worn"
+        },
+        {
+          "from": "them",
+          "text": "so yes. someone wore it before u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "so yes. someone wore it before u"
+        },
+        {
+          "from": "me",
+          "text": "u proposed to me with ur exes ring"
+        },
+        {
+          "from": "them",
+          "text": "u said yes to me. not the ring. i made u this so u'd remember that"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya (my future wife)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "gift",
+      "note": "Five to seven frames of the gift being opened go here, in order, the way 149 was posted. Suggested template: Our Timeline (a road that draws itself from their first date to the proposal, ending on the ring). It has to look like a real proposal, so half the room forgives him the ring. Their name: Maya. Your name: Marco."
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its lovely"
+        },
+        {
+          "from": "me",
+          "text": "can we just get a different ring"
+        },
+        {
+          "from": "them",
+          "text": "we're not wasting money bc ur insecure"
+        },
+        {
+          "from": "them",
+          "text": "be grateful maya. who else is going to marry u"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "i cant marry u. im already married"
+        },
+        {
+          "from": "them",
+          "text": "u what"
+        },
+        {
+          "from": "me",
+          "text": "since 2020. we never got divorced"
+        },
+        {
+          "from": "them",
+          "text": "who is he"
+        },
+        {
+          "from": "me",
+          "text": "he came to our engagement party",
+          "tapback": "excl"
+        },
+        {
+          "from": "them",
+          "text": "maya who is he"
+        }
+      ]
+    }
+  ]
+}

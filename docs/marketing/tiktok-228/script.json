@@ -1,0 +1,106 @@
+{
+  "demo": {
+    "template": "the-council",
+    "steps": [
+      "swap \"stealing every hoodie I own\" \"lying to me for 3 months\"",
+      "swap \"you said “five minutes away” from your bed\" \"you said she was like a sister\"",
+      "swap \"you cried at an advert for a bank\" \"you had a 200 day streak with her\"",
+      "swap \"you steal chips and claim you “weren't hungry”\" \"you called me crazy for asking\"",
+      "swap \"as charged. sentence: one (1) hug, to be served immediately.\" \"as charged. sentence: blocked, on everything.\"",
+      "swap \"Ana\" \"Marco\"",
+      "wait 1800",
+      "tap \"all rise\"",
+      "wait 2000",
+      "shot gift-1.png",
+      "tap \"next finding\"",
+      "wait 1400",
+      "shot gift-2.png",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"next finding\"",
+      "wait 1100",
+      "tap \"hear the verdict\"",
+      "wait 4300",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:15",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why did u leave me on opened"
+        },
+        {
+          "from": "me",
+          "text": "i was reading ur dms with her"
+        },
+        {
+          "from": "them",
+          "text": "u went through my phone??"
+        },
+        {
+          "from": "them",
+          "text": "thats a huge violation maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ur right"
+        },
+        {
+          "from": "me",
+          "text": "so i took u to court"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "maya v. marco",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Marco"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "GUILTY??"
+        },
+        {
+          "from": "them",
+          "text": "why is a cat reading my dms"
+        },
+        {
+          "from": "me",
+          "text": "the council has ruled"
+        },
+        {
+          "from": "them",
+          "text": "maya pick up"
+        }
+      ]
+    }
+  ]
+}

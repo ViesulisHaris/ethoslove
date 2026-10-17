@@ -1,0 +1,42 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who’s that girl on your story"
+        },
+        {
+          "from": "them",
+          "text": "My mom"
+        },
+        {
+          "from": "me",
+          "text": "oh",
+          "status": "Read 3:44 pm"
+        },
+        {
+          "from": "them",
+          "text": "She says hi"
+        },
+        {
+          "from": "them",
+          "text": "She also helped me with this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    }
+  ]
+}

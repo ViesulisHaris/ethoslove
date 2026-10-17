@@ -1,0 +1,113 @@
+{
+  "demo": {
+    "template": "midnight-countdown",
+    "steps": [
+      "swap \"Ana\" \"Maya\"",
+      "swap \"ANA\" \"MAYA\"",
+      "swap \"Happy birthday\" \"Happy 1 year\"",
+      "swap \"Until you're 30\" \"Until 1 year\"",
+      "tap \"tap to start\"",
+      "wait 5000",
+      "tap 180 572",
+      "wait 800",
+      "shot gift-1.png",
+      "wait 2000",
+      "shot gift-2.png",
+      "wait 6000",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Wed|23:57",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what time is it there"
+        },
+        {
+          "from": "me",
+          "text": "23:57 why"
+        },
+        {
+          "from": "them",
+          "text": "dont go to sleep"
+        },
+        {
+          "from": "me",
+          "text": "marco its 5am for u"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this"
+        },
+        {
+          "from": "them",
+          "text": "dont skip it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year (ur midnight)",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "timestamp": "Thu|00:01",
+      "messages": [
+        {
+          "from": "me",
+          "text": "marco"
+        },
+        {
+          "from": "me",
+          "text": "FIREWORKS at exactly 12"
+        },
+        {
+          "from": "me",
+          "text": "my 12"
+        },
+        {
+          "from": "them",
+          "text": "i did the maths"
+        },
+        {
+          "from": "me",
+          "text": "its 5am for u"
+        },
+        {
+          "from": "them",
+          "text": "happy 1 year maya",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

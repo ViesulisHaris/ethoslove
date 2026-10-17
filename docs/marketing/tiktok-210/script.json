@@ -1,0 +1,116 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Marco\"",
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3800",
+      "shot gift-2.png",
+      "scroll 520",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|23:02",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i said i miss u and u said \"cool\""
+        },
+        {
+          "from": "me",
+          "text": "cool"
+        },
+        {
+          "from": "them",
+          "text": "??"
+        },
+        {
+          "from": "them",
+          "text": "did i do something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u tell me"
+        },
+        {
+          "from": "them",
+          "text": "i didnt do anything. i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "i want to break up"
+        },
+        {
+          "from": "them",
+          "text": "over WHAT"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "\"i wish u were my gf\". to jess. at 2am"
+        },
+        {
+          "from": "them",
+          "text": "thats a joke"
+        },
+        {
+          "from": "them",
+          "text": "wait"
+        },
+        {
+          "from": "them",
+          "text": "u went through my phone??"
+        },
+        {
+          "from": "them",
+          "text": "thats the real problem here maya"
+        }
+      ]
+    }
+  ]
+}

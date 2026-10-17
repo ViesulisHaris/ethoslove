@@ -241,6 +241,24 @@ const SCRIPTS = {
     await page.waitForTimeout(8000);
     return poster;
   },
+  "pack-your-bags": async (page) => {
+    // Pack every tag, open the board, and shoot it the moment the destination has landed; then
+    // the recording carries on to the boarding pass and tears the stub off.
+    const clues = page.getByTestId("pyb-clue");
+    await clues.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    const count = await clues.count();
+    for (let i = 0; i < count; i++) { await clues.nth(i).click({ force: true }); await page.waitForTimeout(700); }
+    await page.getByTestId("pyb-where").click({ force: true, timeout: 12000 });
+    await page.locator('[data-testid="pyb-board"][data-resolved="true"]').waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1100);
+    const poster = await page.screenshot();
+    await page.getByTestId("pyb-to-ticket").click({ force: true, timeout: 8000 });
+    await page.waitForTimeout(2600);
+    await page.getByTestId("pyb-stub").click({ force: true });
+    await page.waitForTimeout(3500);
+    return poster;
+  },
   scrapbook: async (page) => {
     const book = page.getByRole("button", { name: /open the scrapbook/i });
     await book.waitFor({ timeout: 20000 });
@@ -361,18 +379,93 @@ const SCRIPTS = {
   // The three scrolling collages open with their own gesture, then the recording is the scroll itself.
   coquette: async (page) => scrollCollage(page, /untie the bow/i),
   xoxo: async (page) => scrollCollage(page, /open it/i),
+  "spooky-season": async (page) => scrollCollage(page, /blow the leaves/i),
+  "be-my-boo": async (page) => scrollCollage(page, /tap the ghost/i),
+  "fall-for-you": async (page) => scrollCollage(page, /light the candle/i),
+  "autumn-reel": async (page) => scrollCollage(page, /tap to develop/i),
+  "dark-romance": async (page) => scrollCollage(page, /turn the key/i),
+  "favorite-person": async (page) => scrollCollage(page, /lift the tissue paper/i),
+  "on-repeat": async (page) => scrollCollage(page, /press play/i),
+  evergreen: async (page) => scrollCollage(page, /unwrap the newspaper/i),
   keepsake: async (page) => scrollCollage(page, /break the seal/i),
+  "photo-booth": async (page) => {
+    const curtain = page.locator("[data-curtain]");
+    await curtain.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1900);
+    // The booth under its lit sign, the curtain drawn and the card with their name pinned to it.
+    const poster = await page.screenshot();
+    await curtain.click({ force: true });
+    // Four poses, each pressed the moment the button lights again, so the recording is the countdowns and flashes.
+    for (let i = 0; i < 4; i++) {
+      await page.locator("[data-booth-button][aria-disabled=false]").waitFor({ timeout: 15000 });
+      await page.locator("[data-booth-button]").click({ force: true });
+      await page.waitForTimeout(300);
+    }
+    // Long enough to watch it come out grey and come up in colour.
+    await page.locator("[data-strip][tabindex='0']").waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2800);
+    await page.locator("[data-strip]").click({ force: true });
+    const scroller = page.locator("[data-scroller]");
+    await scroller.waitFor({ timeout: 15000 });
+    await page.waitForTimeout(2300);
+    await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.6, behavior: "smooth" }));
+    await page.waitForTimeout(1400);
+    return poster;
+  },
+  picnic: async (page) => {
+    const scene = page.getByTestId("picnic-scene");
+    await scene.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    const tap = () => scene.click({ force: true, position: { x: 30, y: 120 } });
+    // The lid, then everything in the basket but the date and the note, one tap at a time.
+    await tap();
+    await page.waitForTimeout(1300);
+    for (let i = 0; i < 9; i++) { await tap(); await page.waitForTimeout(950); }
+    await page.waitForTimeout(2400);
+    // The poster is the picnic laid out: every tag, the photos, the basket open.
+    const poster = await page.screenshot();
+    // Then the parcel comes out and the date inside it is unwrapped.
+    await tap();
+    await page.waitForTimeout(2200);
+    await tap();
+    await page.waitForTimeout(2800);
+    return poster;
+  },
   "party-animals": async (page) => {
-    await open(page);
+    // The invitation takes a moment to arrive, so wait for it rather than checking once like open().
+    const invite = page.getByRole("button", { name: /tap to open/i }).first();
+    await invite.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await invite.click({ force: true });
+    await page.waitForTimeout(2200);
     const guests = page.locator("[data-guest]");
     await guests.first().waitFor({ timeout: 20000 });
-    await page.waitForTimeout(3000);
-    const count = await guests.count();
-    for (let i = 0; i < 3; i++) { await guests.nth(i * 3).click({ force: true }); await page.waitForTimeout(700); }
-    // The poster is the party mid-shout: the collage, the hats, one bubble.
+    await page.waitForTimeout(2600);
+    // The poster is the top of the invitation, one guest mid-shout.
+    await guests.first().click({ force: true });
+    await page.waitForTimeout(800);
     const poster = await page.screenshot();
-    for (let i = 0; i < count; i++) { await guests.nth(i).click({ force: true }); await page.waitForTimeout(420); }
-    await page.waitForTimeout(1600);
+    // The preview walks down the page as a guest would: a confetti tap, the booth strip and the song,
+    // the guest list, the candles blown out, and the letter.
+    const scroller = page.locator("[data-scroller]");
+    const glide = (selector, at) =>
+      scroller.evaluate((el, [sel, frac]) => {
+        const target = el.querySelector(sel);
+        const top = target ? target.getBoundingClientRect().top - el.getBoundingClientRect().top + el.scrollTop - el.clientHeight * frac : el.scrollTop + el.clientHeight * 0.7;
+        el.scrollTo({ top, behavior: "smooth" });
+      }, [selector, at]);
+    await page.mouse.click(200, 560);
+    await page.waitForTimeout(800);
+    await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.75, behavior: "smooth" }));
+    await page.waitForTimeout(1500);
+    await glide("[data-guestlist]", 0.2);
+    await page.waitForTimeout(1500);
+    await glide("[data-cake]", 0.3);
+    await page.waitForTimeout(1300);
+    await page.locator("[data-cake]").click({ force: true });
+    await page.waitForTimeout(2600);
+    await glide("[data-letter]", 0.08);
+    await page.waitForTimeout(2200);
     return poster;
   },
   "the-council": async (page) => {
@@ -410,12 +503,49 @@ const SCRIPTS = {
     for (let i = 0; i < 3; i++) { await page.locator("[data-turn=next]").click({ force: true }).catch(() => {}); await page.waitForTimeout(2600); }
     return poster;
   },
+  digicam: async (page) => {
+    // The poster is the camera switched on, the first photo on its screen with the date in the
+    // corner; then the recording takes two pictures, skips to the last and prints the roll.
+    const power = page.getByRole("button", { name: /turn the camera on/i });
+    await power.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await power.click({ force: true });
+    await page.waitForFunction(() => [...document.querySelectorAll("button[aria-label^='Photo 1 of']")].some((b) => !b.disabled), null, { timeout: 20000 });
+    await page.waitForTimeout(700);
+    const poster = await page.screenshot();
+    const shutter = page.getByRole("button", { name: /take a picture/i });
+    for (let i = 0; i < 2; i++) { await shutter.click({ force: true }); await page.waitForTimeout(1300); }
+    for (let i = 0; i < 4; i++) { await page.getByRole("button", { name: /next photo/i }).click({ force: true }); await page.waitForTimeout(350); }
+    await page.waitForTimeout(500);
+    await shutter.click({ force: true });
+    await page.waitForTimeout(4200);
+    return poster;
+  },
   "the-letter": async (page) => {
     await page.getByRole("button", { name: /tap the seal/i }).waitFor({ timeout: 15000 });
     await page.waitForTimeout(1400);
     const poster = await page.screenshot();
     await page.getByRole("button", { name: /tap the seal/i }).click({ force: true });
     await page.waitForTimeout(6500);
+    return poster;
+  },
+  "music-box": async (page) => {
+    const key = page.locator("[data-key]");
+    await key.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    // Wound the way a thumb does it: round and round the key, three times.
+    const box = await key.boundingBox();
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+    const r = box.width * 0.38;
+    await page.mouse.move(cx + r, cy);
+    await page.mouse.down();
+    for (let i = 1; i <= 100; i++) { const a = (i / 30) * Math.PI * 2; await page.mouse.move(cx + r * Math.cos(a), cy + r * Math.sin(a)); await page.waitForTimeout(12); }
+    await page.mouse.up();
+    // The poster: the lid up, the ballerina turning in front of the first photo in the mirror.
+    await page.waitForTimeout(3800);
+    const poster = await page.screenshot();
+    await page.waitForTimeout(5600);
     return poster;
   },
   constellations: async (page) => {
@@ -446,12 +576,24 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     locale: "en-US",
     recordVideo: { dir: videoDir, size: { width: W, height: H } },
   });
+  // Page chrome and the dev indicator do not belong in marketing assets. Hidden from the first paint,
+  // not after the page settles: the recording starts with the page, and the gallery plays it from 0,
+  // so a style added after load left the demo bar and the dev badge on the preview's opening second.
+  // Into <head> as soon as there is one; React 19 hydrates past an extra tag there.
+  await context.addInitScript((css) => {
+    const add = () => {
+      if (!document.head) return false;
+      const style = document.createElement("style");
+      style.textContent = css;
+      document.head.appendChild(style);
+      return true;
+    };
+    if (add()) return;
+    const watch = new MutationObserver(() => add() && watch.disconnect());
+    watch.observe(document, { childList: true, subtree: true });
+  }, '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }');
   const page = await context.newPage();
   await page.goto(`${base}/demo/${slug}`, { waitUntil: "networkidle" });
-  // Page chrome and the dev indicator do not belong in marketing assets.
-  await page.addStyleTag({
-    content: '[data-demo-chrome], a[href*="/templates/"], a[href="/?ref=watermark"], nextjs-portal { display: none !important; }',
-  });
   let poster;
   try {
     poster = await run(page);

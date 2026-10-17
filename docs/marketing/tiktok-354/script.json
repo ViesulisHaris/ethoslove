@@ -1,0 +1,47 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Sun|23:58",
+      "messages": [
+        { "from": "them", "text": "are u awake" },
+        { "from": "me", "text": "no" },
+        { "from": "them", "text": "stay awake 2 more mins" },
+        { "from": "me", "text": "why" },
+        { "from": "them", "text": "just do it" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:00",
+      "messages": [
+        { "from": "them", "text": "happy birthday" },
+        { "from": "them", "text": "first one to say it" },
+        { "from": "them", "link": { "title": "happy 21st maya 🤍", "domain": "tryethos.io", "image": "og", "name": "Maya" } },
+        { "from": "me", "text": "LEO" }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Mon|00:03",
+      "messages": [
+        { "from": "me", "text": "omg" },
+        { "from": "me", "text": "you made this??" },
+        { "from": "them", "text": "all for you" },
+        { "from": "me", "text": "i'm actually crying" },
+        { "from": "me", "text": "i love you so much" }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        { "from": "me", "text": "you're the best boyfriend ever" },
+        { "from": "me", "text": "like actually" },
+        { "from": "them", "text": "happy birthday maya", "tapback": "heart" },
+        { "from": "them", "text": "go back to sleep now" },
+        { "from": "me", "text": "i can't. i'm too happy" }
+      ]
+    }
+  ]
+}

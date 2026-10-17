@@ -1,0 +1,58 @@
+{
+  "crop": true,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|22:40",
+      "messages": [
+        {
+          "from": "me",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "me",
+          "link": {
+            "title": "1 year of us 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Jake"
+          }
+        },
+        {
+          "from": "me",
+          "text": "can you call me"
+        },
+        {
+          "from": "them",
+          "text": "in a game rn"
+        },
+        {
+          "from": "them",
+          "text": "after this match"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|23:51",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok calling now"
+        },
+        {
+          "from": "me",
+          "text": "it's fine"
+        },
+        {
+          "from": "them",
+          "text": "?"
+        },
+        {
+          "from": "me",
+          "text": "you still haven't opened it"
+        }
+      ]
+    }
+  ]
+}

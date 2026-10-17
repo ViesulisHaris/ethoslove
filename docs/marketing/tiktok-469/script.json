@@ -1,0 +1,38 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "boarding now",
+          "status": "Read 6:05 am"
+        },
+        {
+          "from": "them",
+          "text": "Text me the second you land"
+        },
+        {
+          "from": "them",
+          "text": "I'll be up"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for the flight 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "them",
+          "text": "Open it in your seat"
+        }
+      ]
+    }
+  ]
+}

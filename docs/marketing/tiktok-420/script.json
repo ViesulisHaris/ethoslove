@@ -1,0 +1,46 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": "mylove",
+  "slides": [
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "going to sleep early tonight"
+        },
+        {
+          "from": "them",
+          "text": "Sleep well pretty"
+        },
+        {
+          "from": "them",
+          "text": "Are you asleep"
+        },
+        {
+          "from": "them",
+          "text": "Okay you’re asleep"
+        },
+        {
+          "from": "them",
+          "text": "I made you something for the morning"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "goodmorning maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya"
+          }
+        },
+        {
+          "from": "me",
+          "text": "i was literally still awake",
+          "status": "Read 9:35 pm"
+        }
+      ]
+    }
+  ]
+}
