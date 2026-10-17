@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type Stripe from "stripe";
 import { DAY_MS, iso, type Db } from "@/lib/commerce/db";
 import {
@@ -507,6 +507,14 @@ describe("the answers of POST /api/membership are the contract's (docs/MEMBERSHI
 
   beforeEach(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
+    // The route test below reads the real clock against a membership seeded around NOW; it would
+    // have read it as over a few weeks after NOW.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   /** The database, with the nth update of couple_passes failing (the ones before it go through). */
@@ -874,6 +882,14 @@ describe("the routes", () => {
     routes.user = null;
     routes.db = fake.db;
     routes.stripe = stripe.client;
+    // The routes read the real clock and the memberships are seeded around NOW: without this they
+    // passed until real time overtook the seeded period (14 Oct 2026), then read every one as over.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it("POST /api/membership: signed in, an action from the list, and the membership as it is after", async () => {
