@@ -25,9 +25,19 @@ npm ci --no-audit --no-fund
 If a post in `src/content/blog/posts/` already has today's date (UTC) as `published`, stop: today's
 post is out. Say so in one line and end the run.
 
-If `git ls-remote --heads origin 'blog/*'` lists a branch, an earlier post is still waiting to be
-merged into the live repository (step 6), and the queue on `main` still has its topic. Stop: say
-which branch is waiting in one line and end the run.
+Then look for an earlier post still waiting to be merged into the live repository (step 6). Until it
+is, the queue on `main` still has its topic:
+
+```bash
+git fetch origin '+refs/heads/blog/*:refs/remotes/origin/blog/*'
+for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/blog/); do
+  [ -n "$(git rev-list origin/main..$b)" ] && echo "waiting: $b"
+done
+```
+
+If that prints a branch, stop: say which one is waiting in one line and end the run. A branch whose
+commits are all on `main` is merged and doesn't count; whoever merges it can delete it
+(`git push <mirror> --delete blog/<slug>`).
 
 ## 1. Pick today's topic
 
