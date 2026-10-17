@@ -1,6 +1,7 @@
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
+import { BLOG_POSTS } from "@/content/blog";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { CREATOR_COMMISSION_PCT } from "@/lib/commerce/creators";
 import {
@@ -75,6 +76,10 @@ export function GET() {
     "",
     ...OCCASIONS.map((o) => `- [${en.seo.occasion[o].title}](${localizedUrl("en", `/occasions/${o}`)}): ${en.seo.occasion[o].description}`),
     "",
+    "## Blog",
+    "",
+    ...BLOG_POSTS.map((p) => `- [${p.content.en.title}](${localizedUrl("en", `/blog/${p.slug}`)}): ${p.content.en.description}`),
+    "",
     "## Pricing",
     "",
     `- Free: ${free.join(" and ")}. ${en.pricing.freeNote}`,
@@ -101,6 +106,7 @@ export function GET() {
     `- Gifts: ${localizedUrl("en", "/gifts")}`,
     `- Templates: ${localizedUrl("en", "/templates")}`,
     `- Occasions: ${localizedUrl("en", "/occasions")}`,
+    `- Blog: ${localizedUrl("en", "/blog")}`,
     `- Pricing: ${localizedUrl("en", "/pricing")}`,
     `- Creators: ${localizedUrl("en", "/creators")}`,
     `- En español: ${localizedUrl("es")}`,

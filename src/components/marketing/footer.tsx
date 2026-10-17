@@ -32,6 +32,7 @@ export async function MarketingFooter() {
           <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
           <FooterLink href="/games">{t("nav.games")}</FooterLink>
           <FooterLink href="/pricing">{t("nav.pricing")}</FooterLink>
+          <FooterLink href="/blog">{t("common.blog")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("nav.occasions")}>
           {OCCASIONS.slice(0, 6).map((o) => (
