@@ -793,6 +793,20 @@
     "long-distance": "Long distance",
     "just-because": "Just because"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "What to write, make and send",
+    "subtitle": "Practical guides for birthdays, anniversaries, distance and the ordinary days in between: what to say, what to make, and how to get it to them on time.",
+    "takeaways": "Key takeaways",
+    "faqTitle": "Questions people ask",
+    "minutes": "{minutes} min read",
+    "related": "Keep reading",
+    "makeThis": "Make this gift",
+    "seeIt": "See the template",
+    "templateFree": "Free template",
+    "templatePremium": "Premium template",
+    "englishOnly": "This guide is only in English for now."
+  },
   "pricing": {
     "eyebrow": "Pricing",
     "title": "Free to date. Pay once for a gift.",

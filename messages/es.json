@@ -793,6 +793,20 @@
     "long-distance": "A distancia",
     "just-because": "Porque sí"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Qué escribir, qué hacer y qué enviar",
+    "subtitle": "Guías prácticas para cumpleaños, aniversarios, la distancia y los días normales de en medio: qué decir, qué hacer y cómo hacérselo llegar a tiempo.",
+    "takeaways": "Lo esencial",
+    "faqTitle": "Preguntas frecuentes",
+    "minutes": "{minutes} min de lectura",
+    "related": "Sigue leyendo",
+    "makeThis": "Hacer este regalo",
+    "seeIt": "Ver la plantilla",
+    "templateFree": "Plantilla gratis",
+    "templatePremium": "Plantilla premium",
+    "englishOnly": "De momento, esta guía solo está en inglés."
+  },
   "pricing": {
     "eyebrow": "Precios",
     "title": "Las citas, gratis. Los regalos, un solo pago.",
