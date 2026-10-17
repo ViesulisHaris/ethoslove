@@ -2,7 +2,7 @@ import type { BlogPost } from "../types";
 
 export const post: BlogPost = {
   slug: "halloween-ideas-for-couples",
-  published: "2026-10-09",
+  published: "2026-10-17",
   occasion: "halloween",
   templates: ["trick-or-treat"],
   content: {
@@ -145,7 +145,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "It's a [premium template](/pricing), so you can schedule it to open at a set time, such as the moment it gets dark where they are, and pick a real song. What to write, what to add and when to send it are on the [Halloween gifts page](/occasions/halloween). If you're apart this year, the film night works on a video call too: press play on the count of three, the way our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) does it.",
+          text: "It's a [premium template](/pricing), so you can schedule it to open at a set time, such as the moment it gets dark where they are. What to write, what to add and when to send it are on the [Halloween gifts page](/occasions/halloween). If you're apart this year, the film night works on a video call too: press play on the count of three, the way our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) does it.",
         },
       ],
       faq: [
@@ -306,7 +306,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Es una [plantilla premium](/pricing), así que puedes programarla para que se abra a una hora concreta, como el momento en que anochece donde está, y elegir una canción de verdad. Qué escribir, qué añadir y cuándo enviarlo, en la [página de regalos de Halloween](/occasions/halloween). Si este año estáis lejos, la noche de pelis también funciona por videollamada: dadle al play a la de tres, como en nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend).",
+          text: "Es una [plantilla premium](/pricing), así que puedes programarla para que se abra a una hora concreta, como el momento en que anochece donde está. Qué escribir, qué añadir y cuándo enviarlo, en la [página de regalos de Halloween](/occasions/halloween). Si este año estáis lejos, la noche de pelis también funciona por videollamada: dadle al play a la de tres, como en nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend).",
         },
       ],
       faq: [

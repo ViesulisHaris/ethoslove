@@ -66,8 +66,10 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
             const manifest = getManifest(block.slug);
             if (!manifest) return null;
             return (
-              <aside key={i} className="mt-9 flex gap-5 rounded-[26px] border border-line bg-card p-4 shadow-soft sm:gap-6 sm:p-5">
-                <Link href={`/templates/${manifest.slug}`} className="relative aspect-[390/600] w-24 shrink-0 overflow-hidden rounded-2xl bg-ink/10 sm:w-32">
+              // Under 360 px the text beside the poster had 132 px: there the poster goes on top.
+              <aside key={i} className="mt-9 flex gap-5 rounded-[26px] border border-line bg-card p-4 shadow-soft max-[360px]:flex-col max-[360px]:gap-4 sm:gap-6 sm:p-5">
+                {/* self-start: stretched to the row's height, the poster lost its shape and showed a sliver. */}
+                <Link href={`/templates/${manifest.slug}`} data-testid="blog-template-poster" className="relative aspect-[390/600] w-24 shrink-0 self-start overflow-hidden rounded-2xl bg-ink/10 sm:w-32">
                   <Image src={manifest.thumbnail.poster} alt={manifest.tagline[locale]} fill sizes="128px" quality={75} className="object-cover" />
                 </Link>
                 <div className="flex min-w-0 flex-col justify-center">
@@ -81,7 +83,7 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
                       {t("makeThis")}
                       <ArrowRight className="size-3.5" />
                     </Link>
-                    <Link href={`/templates/${manifest.slug}`} className="inline-flex items-center gap-1 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
+                    <Link href={`/templates/${manifest.slug}`} className="inline-flex min-h-10 items-center gap-1 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
                       {t("seeIt")}
                       <ArrowUpRight className="size-3.5" />
                     </Link>
@@ -97,24 +99,34 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
                 {block.caption ? <figcaption className="mt-2.5 text-sm text-ink-soft">{block.caption}</figcaption> : null}
               </figure>
             );
-          case "table":
+          case "table": {
+            // Three columns or more don't fit a phone: the last one was cut off, with nothing to say
+            // the table scrolls. There each row is a card instead, every cell under its column's
+            // name. The roles keep it a table for screen readers, which drop a table's meaning once
+            // its rows are restyled as blocks.
+            const cards = block.head.length > 2;
             return (
-              <div key={i} className="mt-8 overflow-x-auto rounded-2xl border border-line">
-                <table className="w-full border-collapse text-left text-[15px]">
-                  <thead className="bg-cream/70">
-                    <tr>
+              <div key={i} className={`mt-8 overflow-x-auto rounded-2xl border border-line ${cards ? "max-sm:overflow-visible max-sm:rounded-none max-sm:border-0" : ""}`}>
+                <table role="table" className="w-full border-collapse text-left text-[15px]">
+                  <thead role="rowgroup" className={`bg-cream/70 ${cards ? "max-sm:sr-only" : ""}`}>
+                    <tr role="row">
                       {block.head.map((h, j) => (
-                        <th key={j} scope="col" className="px-4 py-3 font-semibold text-ink">
+                        <th key={j} role="columnheader" scope="col" className="px-4 py-3 font-semibold text-ink">
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody role="rowgroup" className={cards ? "max-sm:flex max-sm:flex-col max-sm:gap-3" : ""}>
                     {block.rows.map((row, j) => (
-                      <tr key={j} className="border-t border-line align-top">
+                      <tr key={j} role="row" className={`border-t border-line align-top ${cards ? "max-sm:block max-sm:rounded-2xl max-sm:border max-sm:bg-card max-sm:px-4 max-sm:py-2" : ""}`}>
                         {row.map((cell, k) => (
-                          <td key={k} className="px-4 py-3 leading-relaxed text-ink-soft">
+                          <td
+                            key={k}
+                            role="cell"
+                            data-label={block.head[k]}
+                            className={`px-4 py-3 leading-relaxed text-ink-soft ${cards ? "max-sm:block max-sm:px-0 max-sm:py-1.5 max-sm:before:mb-0.5 max-sm:before:block max-sm:before:text-eyebrow max-sm:before:text-ink max-sm:before:content-[attr(data-label)]" : ""}`}
+                          >
                             <RichText text={cell} />
                           </td>
                         ))}
@@ -124,6 +136,7 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
                 </table>
               </div>
             );
+          }
         }
       })}
     </div>

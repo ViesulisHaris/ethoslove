@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SITE } from "@/config/site";
 import { BLOG_POSTS, postContent } from "@/content/blog";
-import { blogNode, breadcrumbNode, localizedUrl, pageMetadata } from "@/lib/seo";
+import { blogNode, breadcrumbNode, localizedUrl, organizationNode, pageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/shared/json-ld";
 import { PageHeader } from "@/components/shared/page-header";
 import { PostCard } from "@/components/blog/post-card";
@@ -22,6 +22,8 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]/blo
     <>
       <JsonLd
         nodes={[
+          // The Blog node's publisher points at this one by @id.
+          organizationNode(),
           blogNode(
             locale,
             t("seo.blogTitle"),
@@ -37,7 +39,7 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]/blo
       <section className="container-x pb-24" aria-label={t("blog.eyebrow")}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {BLOG_POSTS.map((post) => (
-            <PostCard key={post.slug} post={post} locale={locale} />
+            <PostCard key={post.slug} post={post} locale={locale} heading="h2" />
           ))}
         </div>
       </section>

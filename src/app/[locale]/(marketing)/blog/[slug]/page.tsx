@@ -75,14 +75,18 @@ export default async function BlogPostPage({ params }: PageProps<"/[locale]/blog
       <article lang={contentLocale === locale ? undefined : contentLocale}>
         <header className="container-x grid gap-10 pt-10 pb-12 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end lg:gap-16">
           <div className="min-w-0">
-            <p className="text-eyebrow text-ink-soft">
+            {/* Each part stays whole and each dot stays with the part before it (a no-break space), so
+                the line breaks only after a " · ", greedily rather than in the balanced way of p's. */}
+            <p className="text-eyebrow text-wrap text-ink-soft">
               <Link href="/blog" className="hover:text-ink">
                 {t("blog.eyebrow")}
               </Link>
-              <span aria-hidden="true"> · </span>
-              <time dateTime={post.published}>{format.dateTime(new Date(`${post.published}T12:00:00Z`), { dateStyle: "long" })}</time>
-              <span aria-hidden="true"> · </span>
-              {t("blog.minutes", { minutes: readingMinutes(content) })}
+              <span aria-hidden="true">{" · "}</span>
+              <time dateTime={post.published} className="whitespace-nowrap">
+                {format.dateTime(new Date(`${post.published}T12:00:00Z`), { dateStyle: "long" })}
+              </time>
+              <span aria-hidden="true">{" · "}</span>
+              <span className="whitespace-nowrap">{t("blog.minutes", { minutes: readingMinutes(content) })}</span>
             </p>
             <h1 className="display-xl mt-5 max-w-3xl">{content.title}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-soft sm:text-xl">
@@ -96,7 +100,7 @@ export default async function BlogPostPage({ params }: PageProps<"/[locale]/blog
           </div>
           {lead ? (
             <Link href={`/templates/${lead.slug}`} className="group relative mx-auto block aspect-[390/600] w-52 overflow-hidden rounded-[30px] bg-ink/10 shadow-lift ring-1 ring-black/5 sm:w-60 lg:w-full">
-              <Image src={lead.thumbnail.poster} alt={lead.tagline[contentLocale]} fill priority sizes="(min-width: 1024px) 280px, 240px" quality={75} className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+              <Image src={lead.thumbnail.poster} alt={lead.tagline[contentLocale]} fill loading="eager" fetchPriority="high" sizes="(min-width: 1024px) 280px, 240px" quality={75} className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
             </Link>
           ) : null}
         </header>

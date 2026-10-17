@@ -2,7 +2,7 @@ import type { BlogPost } from "../types";
 
 export const post: BlogPost = {
   slug: "long-distance-birthday-ideas-for-boyfriend",
-  published: "2026-10-08",
+  published: "2026-10-17",
   occasion: "long-distance",
   templates: ["midnight-countdown", "birthday-cinema", "halfway"],
   content: {
