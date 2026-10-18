@@ -2296,6 +2296,26 @@ posted with **Your brand** turned on.
 
 **Post order:** 541, 543, 545, 542, 544.
 
+### Back to the account's own hits, on the pink card (18 Oct): 546 to 550
+
+The owner: "5 more … with the tryethos, but make it good again", with the blush card as "the banner for each".
+So this batch goes back to the two engines behind the account's biggest gift posts: 149 (1.3M, Maya in the
+wrong to a sweet guy) and 30 (972K, a clock, and "PLEASE TELL ME THE WEBSITE"). Every link uses
+`"card": "blush"`. Each post is 3 slides with **Your brand** turned on.
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 546 | comments (149) | "lol" to her 4-minute voice note, but "i listened to it 3 times", then the link | "i already told my mom we broke up / she said finally" | "maya why did she say finally" |
+| 547 | saves and sales (30) | 9:14 PM link, "don't open it till midnight", asleep for an early shift | 11:58 PM "it says 2 minutes" → 12:00 "IT OPENED" | 6:12 AM "happy birthday maya / was i first" |
+| 548 | comments (149) | 5 hours to reply, "i was busy" / "doing what" → link, "this" | "i rated you a 6 in the group chat" | "maya out of what" |
+| 549 | saves (102) | "open it before you go in", before her driving test | "I PASSED / i opened it 6 times in the waiting room" | "only 6?" |
+| 550 | comments (208) | "are you home" / "no reason" → link "1 year 🤍" | "wait / that's today??" | "maya come home" |
+
+Timestamps from before midnight read "Yesterday" once the chat runs past 12:00 (547). The US accounts get US
+words: "parking lot", "mom".
+
+**Post order:** 547, 546, 549, 548, 550.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
