@@ -1,0 +1,69 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i sent you a 4 minute voice note"
+        },
+        {
+          "from": "me",
+          "text": "and you said lol"
+        },
+        {
+          "from": "them",
+          "text": "i listened to it 3 times"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "then i made this"
+        },
+        {
+          "from": "me",
+          "text": "oh",
+          "status": "Read 10:44 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already told my mom we broke up"
+        },
+        {
+          "from": "me",
+          "text": "she said finally"
+        },
+        {
+          "from": "them",
+          "text": "maya why did she say finally"
+        }
+      ]
+    }
+  ]
+}
