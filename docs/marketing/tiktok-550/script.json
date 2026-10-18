@@ -1,0 +1,73 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you home"
+        },
+        {
+          "from": "me",
+          "text": "no im out with the girls why"
+        },
+        {
+          "from": "them",
+          "text": "no reason"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "happy 1 year"
+        },
+        {
+          "from": "me",
+          "text": "wait"
+        },
+        {
+          "from": "me",
+          "text": "that's today??",
+          "status": "Read 8:01 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm so sorry"
+        },
+        {
+          "from": "me",
+          "text": "the girls said you're a keeper"
+        },
+        {
+          "from": "them",
+          "text": "maya come home"
+        }
+      ]
+    }
+  ]
+}
