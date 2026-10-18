@@ -1,0 +1,77 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Yesterday|9:14 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "don't open it till midnight"
+        },
+        {
+          "from": "me",
+          "text": "you're going to sleep??"
+        },
+        {
+          "from": "them",
+          "text": "early shift"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "ts": "Yesterday|11:58 PM"
+        },
+        {
+          "from": "me",
+          "text": "it says 2 minutes"
+        },
+        {
+          "ts": "Today|12:00 AM"
+        },
+        {
+          "from": "me",
+          "text": "IT OPENED"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "ts": "Today|6:12 AM"
+        },
+        {
+          "from": "them",
+          "text": "happy birthday maya"
+        },
+        {
+          "from": "them",
+          "text": "was i first"
+        }
+      ]
+    }
+  ]
+}
