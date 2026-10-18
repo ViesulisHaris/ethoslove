@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|4:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you broke our streak"
+        },
+        {
+          "from": "me",
+          "text": "412 days"
+        },
+        {
+          "from": "them",
+          "text": "my phone died"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya ♡",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it died making this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already started one with your brother"
+        },
+        {
+          "from": "them",
+          "text": "maya how many days"
+        }
+      ]
+    }
+  ]
+}
