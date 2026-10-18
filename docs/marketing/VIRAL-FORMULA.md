@@ -2316,6 +2316,21 @@ words: "parking lot", "mom".
 
 **Post order:** 547, 546, 549, 548, 550.
 
+551–555 (18 Oct) are five more of the same: pink card, 3 slides, **Your brand** turned on.
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 551 | saves and sales (30) | "stay on it for 3 mins", then the link "9:41 🤍" | "you remember the MINUTE??" | hers, after "2 years ago you said hi / at 9:41" |
+| 552 | comments (208) | "why is my phone on 3%" / "it was 80 when i fell asleep", then the link "for friday 🤍" | "ok i went through it" / "i've already opened it 6 times" | "maya act surprised on friday" |
+| 553 | comments (149) | broke a 412-day streak, "it died making this" | "i already started one with your brother" | "maya how many days" |
+| 554 | saves (102) | "for your lunch break 🤍", "not before lunch" | "now my whole team is crying" | "maya it was for you" |
+| 555 | comments (149) | typed for 10 minutes and sent "ok", then "made this instead" | "i already sent your ok to my sister / she's driving over" | "maya tell her to turn around" |
+
+iMessage only prints a new time after a real gap. Don't put a second timestamp a few minutes after the first. The
+exception is midnight in 547, where the clock is the story.
+
+**Post order:** 551, 555, 554, 553, 552.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
