@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|6:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you laughed when i tripped"
+        },
+        {
+          "from": "me",
+          "text": "in front of everyone"
+        },
+        {
+          "from": "them",
+          "text": "it was a small laugh"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for the girl who tripped 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "i'm sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already posted the video of you falling at the gym"
+        },
+        {
+          "from": "me",
+          "text": "it has 40k views"
+        },
+        {
+          "from": "them",
+          "text": "maya take it down"
+        }
+      ]
+    }
+  ]
+}
