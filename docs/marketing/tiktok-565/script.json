@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:05 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are we still fighting"
+        },
+        {
+          "from": "them",
+          "text": "i think so"
+        },
+        {
+          "from": "me",
+          "text": "what was it about"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "no idea"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry about whatever it was 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i accept"
+        },
+        {
+          "from": "me",
+          "text": "still don't remember"
+        },
+        {
+          "from": "them",
+          "text": "me neither"
+        }
+      ]
+    }
+  ]
+}
