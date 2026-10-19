@@ -18,5 +18,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/cauldron/poster.jpg", webm: "/templates/cauldron/preview.webm" },
   defaultAccent: "#2F9E57",
   heavy: false,
-  sortOrder: 53,
+  sortOrder: 9,
 };

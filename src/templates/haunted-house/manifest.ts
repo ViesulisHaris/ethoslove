@@ -18,5 +18,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/haunted-house/poster.jpg", webm: "/templates/haunted-house/preview.webm" },
   defaultAccent: "#FFA83A",
   heavy: false,
-  sortOrder: 56,
+  sortOrder: 9,
 };

@@ -13,7 +13,7 @@ test.describe("the template gallery", () => {
 
     // NEW_SLUGS in src/config/featured.ts, in its order: change both when the next batch ships.
     const fresh = page.locator("[data-shelf=new]");
-    await expect(fresh.getByRole("heading", { level: 3 })).toHaveText(["Be My Boo", "Fall for You", "Autumn Reel", "Spooky Season", "Dark Romance", "Favorite Person", "On Repeat"]);
+    await expect(fresh.getByRole("heading", { level: 3 })).toHaveText(["The Séance", "Bat Swarm", "Witch's Brew", "Jack-o'-Lantern", "Haunted House", "Be My Boo", "Fall for You", "Autumn Reel"]);
     // An older arrival is back in the catalogue below.
     await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Party Animals" })).toBeVisible();
     await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Coquette" })).toBeVisible();

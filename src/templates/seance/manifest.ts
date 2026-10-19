@@ -18,5 +18,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/seance/poster.jpg", webm: "/templates/seance/preview.webm" },
   defaultAccent: "#FFAE3D",
   heavy: false,
-  sortOrder: 51,
+  sortOrder: 9,
 };

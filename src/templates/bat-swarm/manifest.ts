@@ -18,5 +18,5 @@ export const manifest: TemplateManifest = {
   thumbnail: { poster: "/templates/bat-swarm/poster.jpg", webm: "/templates/bat-swarm/preview.webm" },
   defaultAccent: "#CDB9FF",
   heavy: false,
-  sortOrder: 52,
+  sortOrder: 9,
 };
