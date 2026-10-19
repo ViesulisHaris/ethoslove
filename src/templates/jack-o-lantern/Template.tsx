@@ -15,7 +15,8 @@ import { playCarve, playIgnite, playSparkle, playThunk, playWhoosh } from "../_s
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { CandyCorn, Knife, Match, Matchbox, Pumpkin } from "./art";
-import { FACES, NAME_BAND, normalizeCarving, planCarve, progressBetween, type FaceId } from "./design";
+import { MUSIC_CEILING, RENDER_LAG_S } from "../_shared/night/sound-math";
+import { FACES, MATCH_ARRIVES_MS, MATCH_AT, MATCH_FLIGHT_S, NAME_BAND, normalizeCarving, PIECE_FALL_S, PIECE_LANDS_S, planCarve, progressBetween, type FaceId } from "./design";
 import { LOOKS, type Look, type LookId } from "./looks";
 import { fieldsSchema, type JackOLanternFields } from "./schema";
 
@@ -28,7 +29,7 @@ type Copy = (typeof S)["en"];
 const KEYFRAMES = `
 .jl-flicker{animation:jl-fl 1.9s ease-in-out infinite}
 @keyframes jl-fl{0%{opacity:.93}8%{opacity:1}16%{opacity:.87}27%{opacity:.98}41%{opacity:.9}56%{opacity:1}71%{opacity:.85}84%{opacity:.97}100%{opacity:.92}}
-.jl-piece{animation:jl-pc .95s cubic-bezier(.45,0,.9,.55) forwards;transform-box:fill-box;transform-origin:center}
+.jl-piece{animation:jl-pc ${PIECE_FALL_S}s cubic-bezier(.45,0,.9,.55) forwards;transform-box:fill-box;transform-origin:center}
 @keyframes jl-pc{0%{transform:translate(0,0) rotate(0);opacity:1}18%{transform:translate(0,-1px) rotate(calc(var(--rot)*.2));opacity:1}100%{transform:translate(var(--dx),38px) rotate(var(--rot));opacity:0}}
 .jl-match{transform-box:fill-box;transform-origin:50% 100%;animation:jl-mf .35s ease-in-out infinite alternate}
 @keyframes jl-mf{from{transform:scale(1,1) skewX(-2deg)}to{transform:scale(.92,1.1) skewX(3deg)}}
@@ -62,7 +63,7 @@ const ease = (n: number) => (n < 0.5 ? 4 * n * n * n : 1 - Math.pow(-2 * n + 2, 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<JackOLanternFields>) {
   const reduce = !!useReducedMotion();
   const s = S[data.locale] ?? S.en;
-  const audio = useGiftAudio(data.music, mode !== "preview");
+  const audio = useGiftAudio(data.music, mode !== "preview", MUSIC_CEILING);
   const preview = mode === "preview";
   const look = LOOKS[readLook(data.fields)];
   const face = readFace(data.fields);
@@ -150,12 +151,15 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           at = line.getPointAtLength(p * lengths[step.index]);
           if (!cutHeard[step.index]) {
             cutHeard[step.index] = true;
-            playCarve(mutedRef.current, (step.end - step.start) * 1000);
+            // Skipping runs every cut at once; a dozen blades and a dozen pieces at one instant is not a sound anyone wants.
+            if (!skipped.current) playCarve(mutedRef.current, (step.end - step.start) * 1000);
           }
           if (p >= 1 && !cutDone[step.index]) {
             cutDone[step.index] = true;
             setDoneCuts((n) => Math.max(n, step.index + 1));
-            playThunk(mutedRef.current);
+            // The piece falls for most of a second before it reaches the table: that is when it makes its noise. Its
+            // fall starts when React has drawn it, a frame or two from now.
+            if (!skipped.current) playThunk(mutedRef.current, { delay: PIECE_LANDS_S + RENDER_LAG_S });
           }
         }
         last = starts[step.index];
@@ -170,7 +174,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           nameLine?.style.setProperty("opacity", "0.95");
           if (nameHeard < 3 && t >= plan.nameStart + nameHeard * 0.42) {
             nameHeard += 1;
-            playCarve(mutedRef.current, 400);
+            if (!skipped.current) playCarve(mutedRef.current, 400);
           }
         }
       }
@@ -203,13 +207,15 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const lightCandle = () => {
     if (phase !== "carved") return;
     buzz(10);
-    playWhoosh(mutedRef.current);
+    // The match is quickest in its first half second; the whoosh goes with it, not ahead of it.
+    playWhoosh(mutedRef.current, { delay: 0.12, ms: 800, peak: 0.55 });
     setPhase("match");
-    const strike = reduce ? 100 : 950;
+    // It strikes when the match reaches the pumpkin's mouth.
+    const strike = reduce ? 100 : MATCH_ARRIVES_MS;
     after(strike, () => {
       setLit(true);
       playIgnite(mutedRef.current);
-      after(500, () => playSparkle(mutedRef.current));
+      playSparkle(mutedRef.current, { delay: 0.5, ms: 900 });
       setPhase("lit");
       after(2200, () => setCanRead(true));
       after(7000, openPage);
@@ -402,7 +408,7 @@ function LitMatch({ reduce }: { reduce: boolean }) {
       style={{ width: pct(8.4, 100), height: pct(31, 170), transformOrigin: "50% 0%" }}
       initial={reduce ? false : { left: "112%", top: pct(143, 170), rotate: -20, opacity: 1 }}
       animate={reduce ? { left: pct(48, 100), top: pct(88, 170), rotate: -52, opacity: 0 } : { left: ["112%", "76%", pct(48, 100), pct(48, 100)], top: [pct(143, 170), pct(112, 170), pct(88, 170), pct(88, 170)], rotate: [-20, -38, -52, -52], opacity: [1, 1, 1, 0] }}
-      transition={{ duration: reduce ? 0.2 : 1.35, ease: "easeInOut", times: [0, 0.5, 0.78, 1] }}
+      transition={{ duration: reduce ? 0.2 : MATCH_FLIGHT_S, ease: "easeInOut", times: [0, 0.5, MATCH_AT, 1] }}
     >
       <Match burning />
     </motion.div>

@@ -12,11 +12,12 @@ import { SoundToggle } from "../_shared/SoundToggle";
 import { COVER_VARS, PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT, TapPill } from "../_shared/cover-kit";
 import { buzz, prime } from "../_shared/synth";
 import { NightPage, type NightTheme, type PhotoSlot } from "../_shared/night/NightPage";
-import { playBubble, playChime, playCork, playSparkle, playSplash, playWhoosh } from "../_shared/night/sfx";
+import { playBoil, playBubble, playChime, playCork, playGlow, playSparkle, playSplash, playWhoosh } from "../_shared/night/sfx";
+import { MUSIC_CEILING, RENDER_LAG_S } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { Bottle, Cork, Essence, Fire, Herbs, ICONS, Jar, PotBack, PotFront, STEAM_HEART, WindowArt, type IconId } from "./art";
-import { BOIL, bubbleSpecs, bubblesFor, FLY_MS, ingredientsFor, potionColor, WORDS_MS } from "./brew";
+import { BOIL, BOTTLE_ARRIVES_MS, BOTTLE_SPRING, bubbleSpecs, bubblesFor, CHURN_MS, FLY_MS, HEART_DRAW_MS, HEART_DRAW_S, ingredientsFor, potionColor, RUSH, WORDS_MS } from "./brew";
 import { LOOKS, type Look, type LookId } from "./looks";
 import { fieldsSchema, type CauldronFields } from "./schema";
 
@@ -109,7 +110,7 @@ const readFields = (fields: unknown, locale: "en" | "es") => {
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<CauldronFields>) {
   const reduce = !!useReducedMotion();
   const s = S[data.locale] ?? S.en;
-  const audio = useGiftAudio(data.music, mode !== "preview");
+  const audio = useGiftAudio(data.music, mode !== "preview", MUSIC_CEILING);
   const preview = mode === "preview";
   const look = LOOKS[readLook(data.fields)];
   const { ingredients, potion } = useMemo(() => readFields(data.fields, data.locale), [data.fields, data.locale]);
@@ -147,15 +148,20 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const boil = () => {
     setPhase("boil");
     const muted = mutedRef.current;
-    playWhoosh(muted);
+    // The brew comes to the boil the whole way to the bottle, and the first rush of it is a short whoosh.
+    playWhoosh(muted, { ms: 650, peak: 0.6 });
+    playBoil(muted, { ms: BOIL.bottle });
     buzz(24);
     after(BOIL.heart, () => {
       setHeart(true);
-      playSparkle(mutedRef.current);
+      // Glints for as long as the steam is drawing itself into a heart.
+      playSparkle(mutedRef.current, { delay: 0.1 + RENDER_LAG_S, ms: HEART_DRAW_MS - 100 });
     });
     after(BOIL.bottle, () => {
       setPhase("bottle");
-      playChime(mutedRef.current);
+      // The bottle springs in; its bell is struck as it reaches its place, with a soft chord that swells under it.
+      playChime(mutedRef.current, 0, BOTTLE_ARRIVES_MS / 1000 + RENDER_LAG_S);
+      playGlow(mutedRef.current, { delay: BOTTLE_ARRIVES_MS / 1000 + RENDER_LAG_S - 0.05, ms: 2200 });
     });
   };
 
@@ -172,7 +178,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     const text = ingredients[i];
     setPhase("brewing");
     setFlying({ i, id });
-    playWhoosh(mutedRef.current);
+    // The jar speeds up all the way to the pot, so the rush builds to the landing and stops on it.
+    playWhoosh(mutedRef.current, { delay: RUSH.delay / 1000, ms: RUSH.ms, peak: RUSH.peak });
     const land = () => {
       setFlying(null);
       setTaken((t) => {
@@ -183,8 +190,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       setDrops((d) => d + 1);
       setLine({ id, text, icon: ICONS[i % ICONS.length] });
       playSplash(mutedRef.current);
-      after(180, () => playBubble(mutedRef.current));
-      after(360, () => playBubble(mutedRef.current));
+      for (const ms of CHURN_MS) after(ms, () => playBubble(mutedRef.current));
       after(WORDS_MS, () => setLine((l) => (l?.id === id ? null : l)));
       if (count.current >= total) after(900, boil);
     };
@@ -196,7 +202,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     if (phase !== "bottle") return;
     setPhase("pop");
     playCork(mutedRef.current);
-    after(120, () => playSparkle(mutedRef.current));
+    playSparkle(mutedRef.current, { delay: 0.12, ms: 900 });
     buzz(30);
     setBurst((b) => b + 1);
     after(reduce ? 400 : 1500, openPage);
@@ -415,7 +421,7 @@ function Scene({ look, s, seed, title, potion, to, ingredients, taken, level, ph
               initial={reduce ? false : { top: pct(98, 170), scale: 0.3, opacity: 0, rotate: -12 }}
               animate={{ top: pct(30, 170), scale: 1, opacity: 1, rotate: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ type: "spring", stiffness: 90, damping: 13 }}
+              transition={{ type: "spring", ...BOTTLE_SPRING }}
             >
               <motion.span className="block h-full w-full" animate={reduce || phase === "pop" ? undefined : { y: [0, -5, 0], rotate: [-1.5, 1.5, -1.5] }} transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}>
                 <Bottle color={colour} corked={false} />
@@ -473,8 +479,8 @@ function SteamHeart({ colour, reduce, fading }: { colour: string; reduce: boolea
           <feGaussianBlur stdDeviation="3.2" />
         </filter>
       </defs>
-      <motion.path d={STEAM_HEART} fill="none" stroke={colour} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" opacity=".55" filter="url(#cb-heart-blur)" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.3, ease: "easeInOut" }} />
-      <motion.path d={STEAM_HEART} fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" opacity=".9" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.3, ease: "easeInOut" }} />
+      <motion.path d={STEAM_HEART} fill="none" stroke={colour} strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" opacity=".55" filter="url(#cb-heart-blur)" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: HEART_DRAW_S, ease: "easeInOut" }} />
+      <motion.path d={STEAM_HEART} fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" opacity=".9" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: HEART_DRAW_S, ease: "easeInOut" }} />
     </motion.svg>
   );
 }

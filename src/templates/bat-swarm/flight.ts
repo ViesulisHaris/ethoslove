@@ -60,6 +60,39 @@ export type Step =
 
 export type Script = { steps: Step[]; total: number };
 
+/** A sound that belongs to a step of the flight, and where in the step it goes: `delay` seconds in, over `ms`, loudest `peak` of the way through. */
+export type Cue = { sound: "flutter" | "whoosh" | "chime" | "sparkle"; delay: number; ms?: number; peak?: number; soft?: boolean; note?: number };
+
+/**
+ * The sounds of a step, timed to what the bats are doing and not to the moment the step begins. Each
+ * bat leaves the moon at its own moment in the first 0.8 s and eases out, so the pour is thickest at
+ * about 0.8 s; each flies to its letter with an ease in and out that is quickest about 0.75 s into the
+ * 1.55 s; and they scatter faster the further they have gone, so they are streaming off the screen (the
+ * busiest it gets) about 0.35 s in. A sound that starts with the step is over
+ * before any of that has happened, which is why the whoosh used to land on nothing. `heart` is the index
+ * of the last shape, which a shimmer is for and a bell is not.
+ */
+export function cuesFor(step: Step, heart: number): Cue[] {
+  switch (step.kind) {
+    case "emerge":
+      return [
+        { sound: "flutter", delay: 0.05, ms: 1500, peak: 0.45 },
+        { sound: "whoosh", delay: 0.4, ms: 900, peak: 0.55 },
+      ];
+    case "orbit":
+      return [{ sound: "flutter", delay: 0, ms: Math.round((step.t1 - step.t0) * 1000), peak: 0.5, soft: true }];
+    case "form":
+      return [{ sound: "whoosh", delay: 0.3, ms: 950, peak: 0.5 }];
+    case "hold":
+      return step.word === heart ? [{ sound: "sparkle", delay: 0.05, ms: 1100 }] : [{ sound: "chime", delay: 0.05, note: step.word }];
+    case "scatter":
+      return [
+        { sound: "flutter", delay: 0.08, ms: 1200, peak: 0.25 },
+        { sound: "whoosh", delay: 0.1, ms: 850, peak: 0.3 },
+      ];
+  }
+}
+
 export const TIMING = { emerge: 1.6, orbit: 1.7, gather: 1.55, hold: 1.9, holdLast: 1.5, scatter: 1.5 } as const;
 
 /** `words` is how many shapes the bats make, the heart included: a name, perhaps a line, then the heart. */

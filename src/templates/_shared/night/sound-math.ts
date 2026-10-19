@@ -6,6 +6,21 @@
 
 export type Rnd = () => number;
 
+/**
+ * React draws a state change a frame or two after the handler that made it (measured: about 40 ms from the
+ * call that schedules a sound to the `animationstart` of the animation the same change starts). A sound timed
+ * against such an animation (a piece landing, a bottle arriving) has to wait that long as well, or it is early.
+ */
+export const RENDER_LAG_S = 0.04;
+
+/**
+ * How loud the song under a night gift may get (a share of full volume). The library songs peak at 0 dBFS
+ * (one decodes to +0.3), and the loudest effect is held to `LOUDEST_EFFECT_DB`, so a song at this ceiling plus
+ * the loudest effect cannot add up past full scale: 0.7 + 0.28 is 0.98.
+ */
+export const MUSIC_CEILING = 0.7;
+export const LOUDEST_EFFECT_DB = -11;
+
 /** The quietest level an exponential ramp may reach: -80 dB, which nobody hears and WebAudio will accept. */
 export const FLOOR = 1e-4;
 
@@ -42,8 +57,11 @@ export function glassHz(step: number, mode: "walk" | "rise" = "walk") {
 /** The bell's pitch: the fifth degree and up from A3, so the first is A4 and the fifth is G5. */
 export const bellHz = (step = 0) => scaleHz(57, 5 + (Math.max(0, Math.floor(step)) % 5));
 
-/** The notes of a shower of sparks, from C6 upward: bright, never shrill. */
-export const sparkHz = (degree: number) => scaleHz(84, clamp(degree, 0, 9));
+/**
+ * The notes of a shower of sparks, from C6 up to A7: bright, never shrill, and from the same scale as the
+ * glass and the bells, so a bell ringing under a shower of sparks is a chord and not a clash.
+ */
+export const sparkHz = (degree: number) => scaleHz(81, 1 + clamp(Math.floor(degree), 0, 9));
 
 /* ------------------------------------------------------------- partials */
 

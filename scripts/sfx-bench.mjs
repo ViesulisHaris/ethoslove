@@ -34,11 +34,18 @@ const SCENES = {
   "tink-word": [10, [0, 1, 2, 3, 4, 5, 6, 7].map((i) => [i * 0.85, "tink", [i, "walk"]])],
   scrape: [3, [[0, "scrape", [450]]]],
   chime: [9, [0, 1, 2, 3].map((i) => [i * 1.4, "chime", [i]])],
-  flutter: [4, [[0, "flutter", []]]],
+  "flutter-emerge": [4, [[0, "flutter", [{ delay: 0.05, ms: 1500, peak: 0.45 }]]]],
+  "flutter-orbit": [4, [[0, "flutter", [{ ms: 1700, peak: 0.5, soft: true }]]]],
+  "flutter-scatter": [4, [[0, "flutter", [{ delay: 0.1, ms: 1300, peak: 0.35 }]]]],
   whoosh: [3, [[0, "whoosh", []]]],
+  "whoosh-form": [3, [[0, "whoosh", [{ delay: 0.3, ms: 950, peak: 0.5 }]]]],
+  "whoosh-rush": [3, [[0, "whoosh", [{ delay: 0.12, ms: 700, peak: 0.92 }]]]],
   sparkle: [4, [[0, "sparkle", []]]],
-  "splash-only": [3, [[0, "splash", []]]],
+  "sparkle-heart": [4, [[0, "sparkle", [{ delay: 0.1, ms: 1200 }]]]],
+  "splash-only": [3.5, [[0, "splash", []]]],
   bubbles: [4.5, [[0, "bubbles", []], [1.2, "bubbles", []], [2.4, "bubbles", []]]],
+  boil: [5, [[0, "boil", [{ ms: 2300 }]]]],
+  glow: [5, [[0, "glow", [{ ms: 2200 }]]]],
   "cork-only": [3, [[0, "cork", []]]],
   carve: [3.5, [[0, "carve", [450]], [0.8, "carve", [800]]]],
   thunk: [3, [[0, "thunk", []], [0.5, "thunk", []], [1, "thunk", []]]],
@@ -50,23 +57,29 @@ const SCENES = {
   "tink-windows": [5, [0, 1, 2, 3, 4, 5].map((i) => [i * 0.42, "tink", [i, "rise"]])],
 };
 
-/** The MIX entry each scene calibrates, and the loudest peak (dBFS, worst of the seeds) it should reach. */
+/**
+ * The MIX entry each scene calibrates, and the loudest peak (dBFS, worst of the seeds) it should reach. The
+ * song under a gift peaks at about -3 dBFS, so a sound that can land on one of its peaks has to stay near
+ * -11 or the two add up past full scale: that is what clipping in the speaker is.
+ */
 const TARGETS = {
-  thunder: ["thunder-near", -6],
-  creak: ["creak", -14],
-  scrape: ["scrape", -21],
-  tink: ["tink-word", -15],
-  whoosh: ["whoosh", -16],
-  flutter: ["flutter", -17],
-  bubbles: ["bubbles", -18],
-  splash: ["splash-only", -12],
-  cork: ["cork-only", -7],
+  thunder: ["thunder-near", -12],
+  creak: ["creak", -15],
+  scrape: ["scrape", -22],
+  tink: ["tink-word", -16],
+  whoosh: ["whoosh", -17],
+  flutter: ["flutter-emerge", -18],
+  bubbles: ["bubbles", -19],
+  splash: ["splash-only", -14],
+  boil: ["boil", -19],
+  cork: ["cork-only", -11],
   sparkle: ["sparkle", -17],
-  ignite: ["ignite-only", -11],
-  carve: ["carve", -19],
-  thunk: ["thunk", -14],
-  chime: ["chime", -12],
-  knock: ["knock", -6],
+  glow: ["glow", -18],
+  ignite: ["ignite-only", -13],
+  carve: ["carve", -20],
+  thunk: ["thunk", -16],
+  chime: ["chime", -14],
+  knock: ["knock", -11],
 };
 
 /* ------------------------------------------------------------------ bundle the effects for the page */
@@ -107,7 +120,7 @@ async function render(scene, seed) {
       const errors = [];
       for (const [offset, name, a] of events) {
         try {
-          B.EFFECTS[name]({ c, t: 0.05 + offset, bus: B.busFor(c), rnd }, ...a);
+          B.EFFECTS[name]({ c, t: 0.05 + offset + seed * 0.0000047, bus: B.busFor(c), rnd }, ...a);
         } catch (e) {
           errors.push(`${name}: ${e.message}`);
         }
@@ -184,6 +197,20 @@ function phoneOf(mono) {
   return out;
 }
 
+/** Clicks: single-sample jumps (at least -45 dBFS) a dozen times bigger than the movement of the sound around them. */
+function clicksIn(mono) {
+  const W = Math.floor(SR * 0.002);
+  const found = [];
+  for (let i = W + 1; i < mono.length - W; i++) {
+    const d = Math.abs(mono[i] - mono[i - 1]);
+    if (d < 0.0056) continue;
+    let e = 0;
+    for (let k = -W; k <= W; k++) if (k !== 0 && k !== -1 && k !== 1) e += (mono[i + k] - mono[i + k - 1]) ** 2;
+    if (d / (Math.sqrt(e / (2 * W - 2)) + 1e-6) > 12 && (!found.length || i / SR - found[found.length - 1] > 0.004)) found.push(i / SR);
+  }
+  return found;
+}
+
 function analyse(l, r) {
   const n = l.length;
   const mono = new Float32Array(n);
@@ -199,7 +226,7 @@ function analyse(l, r) {
       last = i;
     }
   }
-  if (first < 0) return { peakDb: -Infinity, rmsDb: -Infinity, active: 0, centroid: 0, bands: [], phoneKeepDb: -Infinity };
+  if (first < 0) return { peakDb: -Infinity, rmsDb: -Infinity, active: 0, centroid: 0, bands: [], phoneKeepDb: -Infinity, clicks: [] };
   const phone = phoneOf(mono);
   let sum = 0;
   let phoneSum = 0;
@@ -234,6 +261,7 @@ function analyse(l, r) {
     centroid: weighted / (total || 1),
     bands: bandEnergy.map((e) => Math.round((100 * e) / (total || 1))),
     phoneKeepDb: db(Math.sqrt(phoneSum / span)) - db(Math.sqrt(sum / span)),
+    clicks: clicksIn(mono),
   };
 }
 
@@ -264,7 +292,8 @@ function writeWav(path, l, r) {
 if (wavDir) mkdirSync(wavDir, { recursive: true });
 const wanted = Object.keys(SCENES).filter((scene) => !asked.length || asked.some((a) => scene === a || scene.startsWith(`${a}-`)));
 const worst = {};
-console.log("scene          peak dBFS   rms   active  centroid  phone keeps   energy <150 / 600 / 2k / 5k / above");
+console.log("scene          peak dBFS   rms   active  centroid  phone keeps   energy <150 / 600 / 2k / 5k / above   clicks");
+const clicked = [];
 for (const scene of wanted) {
   const peaks = [];
   let shown;
@@ -273,6 +302,7 @@ for (const scene of wanted) {
     if (errors.length) console.log(`  !! ${scene}, seed ${seed}: ${errors.join("; ")}`);
     const a = analyse(l, r);
     peaks.push(a.peakDb);
+    if (a.clicks.length) clicked.push(`${scene} (seed ${seed}) at ${a.clicks.slice(0, 3).map((t) => t.toFixed(3) + "s").join(", ")}`);
     if (seed === 1) {
       shown = a;
       if (wavDir) writeWav(join(wavDir, `${scene}.wav`), l, r);
@@ -280,11 +310,12 @@ for (const scene of wanted) {
   }
   worst[scene] = Math.max(...peaks);
   console.log(
-    `${scene.padEnd(14)} ${worst[scene].toFixed(1).padStart(8)}  ${shown.rmsDb.toFixed(1).padStart(6)}  ${shown.active.toFixed(2).padStart(5)}s  ${String(Math.round(shown.centroid)).padStart(6)} Hz  ${shown.phoneKeepDb.toFixed(1).padStart(8)} dB   ${shown.bands.join(" / ")}`,
+    `${scene.padEnd(14)} ${worst[scene].toFixed(1).padStart(8)}  ${shown.rmsDb.toFixed(1).padStart(6)}  ${shown.active.toFixed(2).padStart(5)}s  ${String(Math.round(shown.centroid)).padStart(6)} Hz  ${shown.phoneKeepDb.toFixed(1).padStart(8)} dB   ${shown.bands.join(" / ")}   ${shown.clicks.length}`,
   );
 }
 await browser.close();
 rmSync(tmp, { recursive: true, force: true });
+console.log(clicked.length ? `\nCLICKS in: ${clicked.join("; ")}` : "\nno clicks in any scene or seed");
 
 if (flag("calibrate")) {
   let src = readFileSync(sfxPath, "utf8");

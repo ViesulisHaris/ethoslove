@@ -41,8 +41,12 @@ export function busFor(c: BaseAudioContext): Bus {
   ceiling.curve = softClipCurve() as Float32Array<ArrayBuffer>;
   ceiling.oversample = "2x";
   ceiling.connect(c.destination);
+  // Nothing a phone or a laptop can play lives below about 85 Hz, and it is the sub-bass that overdrives a small
+  // speaker (it sounds like clipping) and eats the headroom the song needs. Everything is high-passed before the ceiling.
+  const floor = filter(c, "highpass", 85, 0.707);
+  floor.connect(ceiling);
   const dry = c.createGain();
-  dry.connect(ceiling);
+  dry.connect(floor);
   const wet = c.createGain();
   const room = c.createConvolver();
   const [l, r] = roomImpulse(c.sampleRate, 2.1, mulberry32(7));
@@ -53,7 +57,7 @@ export function busFor(c: BaseAudioContext): Bus {
   const level = c.createGain();
   level.gain.value = ROOM_LEVEL;
   // The room keeps out of the way of the low end and the hiss: the tail is a wash, not a second sound.
-  wet.connect(room).connect(filter(c, "highpass", 190)).connect(filter(c, "lowpass", 6800)).connect(level).connect(ceiling);
+  wet.connect(room).connect(filter(c, "highpass", 190)).connect(filter(c, "lowpass", 6800)).connect(level).connect(floor);
   const bus = { dry, wet };
   buses.set(c, bus);
   return bus;
@@ -111,6 +115,7 @@ export function sweepPan(v: Voice, node: AudioNode, at: number, over: number, fr
 
 /** A level that never settles: it wanders between `lo` and `hi` about `rate` times a second, under the arch of `shape`. */
 export function wobble(p: AudioParam, at: number, length: number, rate: number, lo: number, hi: number, shape: (x: number) => number, rnd: Rnd) {
+  p.value = 0;
   p.setValueAtTime(0, at);
   let x = 0;
   while (x < length) {
@@ -120,8 +125,15 @@ export function wobble(p: AudioParam, at: number, length: number, rate: number, 
   p.linearRampToValueAtTime(0, at + length);
 }
 
+/**
+ * Every envelope below starts from 0, in the parameter's own value as well as in its first event. A gain that
+ * has not been told what to do yet is 1, and a source that begins a sample before its envelope does (a start time
+ * that is not on a sample boundary will do it, in some browsers) plays that one sample at full volume: a tick.
+ */
+
 /** A strike: up in `attack` seconds, then away exponentially over `decay`. */
 export function hit(p: AudioParam, at: number, peak: number, attack: number, decay: number) {
+  p.value = 0;
   p.setValueAtTime(0, at);
   p.linearRampToValueAtTime(peak, at + attack);
   p.exponentialRampToValueAtTime(FLOOR, at + attack + decay);
@@ -129,6 +141,7 @@ export function hit(p: AudioParam, at: number, peak: number, attack: number, dec
 
 /** A swell: up over `attack`, held for `hold`, then away over `release`. */
 export function swell(p: AudioParam, at: number, peak: number, attack: number, hold: number, release: number) {
+  p.value = 0;
   p.setValueAtTime(0, at);
   p.linearRampToValueAtTime(peak, at + attack);
   if (hold > 0) p.setValueAtTime(peak, at + attack + hold);
@@ -154,6 +167,7 @@ export function sine(v: Voice, at: number, length: number, hz: number | [number,
 
 /** Plays a grain texture on a gain (and, where a grain carries a pitch, on a filter): every one a short breath of the noise. */
 export function sprinkle(level: AudioParam, tone: AudioParam | null, at: number, list: readonly Grain[], attack = 0.003) {
+  level.value = 0;
   level.setValueAtTime(0, at);
   list.forEach((g, i) => {
     const start = at + g.at;
@@ -223,5 +237,10 @@ export function bubble(v: Voice, at: number, b: { hz: number; rise: number; ring
   const overtone = v.c.createGain();
   hit(overtone.gain, at, o.level * b.level * 0.2, 0.001, b.ring * 1.5);
   sine(v, at, length, [b.hz * 2.7, b.hz * 2.7 * b.rise]).connect(overtone).connect(mix);
+  // The skin of the bubble going: a speck of noise at the start, the edge a pure sine does not have.
+  const skin = noiseSource(v, "white", at, 0.03);
+  const edge = v.c.createGain();
+  hit(edge.gain, at, o.level * b.level * 0.18, 0.0003, 0.006);
+  skin.connect(filter(v.c, "bandpass", b.hz * 2.2, 1.4)).connect(edge).connect(mix);
   send(v, mix, { dry: 1, wet: o.wet ?? 0.25, pan: o.pan });
 }

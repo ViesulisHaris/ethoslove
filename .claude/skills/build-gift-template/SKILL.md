@@ -101,6 +101,23 @@ something and not like a synth patch.
   it wakes the lowest mode of a knock and not the wood's other notes. Make the click 2 ms.
 - **Resonators are quiet.** A narrow band of noise carries a tenth of the amplitude of a sine, so a knock made of
   both needs its bands turned up ten times to be heard over the sine, not the other way round.
+- **Put a sound where the movement is, not where its step starts.** A sound that fires with the step is over before
+  a movement that eases in or out has done anything (the bats' whoosh was over 0.5 s before they were quickest; the
+  jar's rush fired as it lifted though it speeds up all the way to the pot; the pumpkin's thunk played as the knife
+  let go though the piece fell for most of a second). Timed effects take `delay`, `ms` and `peak` (how far through
+  they are loudest). Derive the cue from the function or constant the picture is drawn from, export it (`cuesFor`,
+  `RUSH`, `PIECE_LANDS_S`), and test it against that: `tests/unit/bat-swarm-sync.test.ts` measures when the swarm
+  is busiest from `positionAt` and holds each cue to it.
+- **A state change is drawn a frame or two after the handler that made it** (about 40 ms, `RENDER_LAG_S`). A sound
+  timed against an animation that the change starts has to wait that long as well.
+- **A gain that has not been told what to do yet is 1, not 0.** A source that starts before its envelope plays at full
+  volume until the envelope arrives: the cork's puff of air did for 10 ms at -10 dBFS whatever the mix said, and a start
+  time that is not on a sample boundary does it for one sample, as a tick. Every envelope helper sets the value to 0
+  first, and the recording stand-in's gains start at 1 so the test fails if one is missed.
+- **The songs peak at 0 dBFS** (one decodes to +0.3), so any effect on top can add up past full scale and clip in the
+  speaker. The five night gifts pass `MUSIC_CEILING` to `useGiftAudio`, and no effect peaks above `LOUDEST_EFFECT_DB`
+  (-11 dBFS). Check a new effect against the song it plays over, not against silence. An iPhone ignores an audio
+  element's volume, so the ceiling does not reach it.
 - **Give the shared bus the level, not the voice.** `send` takes the options of a send; passing it a voice's own
   `level` applies the level twice (every bell was 20 dB too quiet until the bench showed it).
 

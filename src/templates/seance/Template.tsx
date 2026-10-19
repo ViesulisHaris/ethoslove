@@ -11,6 +11,7 @@ import { COVER_VARS, PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT, TapPill } from "../_
 import { buzz, prime } from "../_shared/synth";
 import { NightPage, type NightTheme, type PhotoSlot } from "../_shared/night/NightPage";
 import { playChime, playScrape, playTink, playWhoosh } from "../_shared/night/sfx";
+import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { Board, Candle, Planchette } from "./art";
@@ -54,7 +55,7 @@ const readSpell = (fields: unknown, fallback: string) => {
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<SeanceFields>) {
   const reduce = !!useReducedMotion();
   const s = S[data.locale] ?? S.en;
-  const audio = useGiftAudio(data.music, mode !== "preview");
+  const audio = useGiftAudio(data.music, mode !== "preview", MUSIC_CEILING);
   const preview = mode === "preview";
   const lookId = readLook(data.fields);
   const look = LOOKS[lookId];

@@ -45,6 +45,20 @@ export function normalizeCarving(raw: string | undefined | null, fallback: strin
   return /[\p{L}\p{N}]/u.test(text) ? text : fallback.toLocaleUpperCase().slice(0, max);
 }
 
+/**
+ * The piece that comes out of a cut falls for this long (the CSS animation of the same name), easing in so it is
+ * slow to leave and quick at the end, and fading as it goes: three quarters of the way down it is nearly gone,
+ * 0.88 s in, which is when it reaches the table and makes its noise. The sound used to play the moment the
+ * knife let go, most of a second early.
+ */
+export const PIECE_FALL_S = 0.95;
+export const PIECE_LANDS_S = 0.88;
+
+/** The lit match's flight, in seconds, and the fraction of it at which it reaches the pumpkin's mouth, where it strikes. */
+export const MATCH_FLIGHT_S = 1.35;
+export const MATCH_AT = 0.78;
+export const MATCH_ARRIVES_MS = Math.round(MATCH_FLIGHT_S * MATCH_AT * 1000);
+
 export const TRAVEL = 0.22;
 export const GAP = 0.06;
 export const NAME_SECONDS = 1.0;

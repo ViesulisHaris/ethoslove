@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { busFor, type Voice } from "@/templates/_shared/night/foley";
 import { mulberry32 } from "@/templates/_shared/random";
@@ -9,10 +10,13 @@ import {
   DOOR_MODES,
   FLOOR,
   GLASS,
+  LOUDEST_EFFECT_DB,
+  MUSIC_CEILING,
   RIND_MODES,
   bellHz,
   bubbleSpec,
   creakPitch,
+  dB,
   creakSlips,
   fillNoise,
   glassHz,
@@ -26,6 +30,22 @@ import {
 
 const semitones = (a: number, b: number) => Math.abs(12 * Math.log2(a / b));
 const mean = (xs: number[]) => xs.reduce((s, x) => s + x, 0) / xs.length;
+
+describe("the headroom the song is given", () => {
+  it("is enough that the loudest effect on the loudest moment of the loudest song cannot pass full scale", () => {
+    // The library songs peak at 0 dBFS (one decodes to +0.3), so the share of it that is left to the effects is what the song gives up.
+    expect(MUSIC_CEILING + dB(LOUDEST_EFFECT_DB)).toBeLessThanOrEqual(1);
+    expect(MUSIC_CEILING).toBeGreaterThan(0.5);
+    expect(LOUDEST_EFFECT_DB).toBeLessThan(-8);
+  });
+
+  it("is applied by every one of the five gifts, to the song they start", () => {
+    for (const slug of ["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house"]) {
+      const source = readFileSync(`src/templates/${slug}/Template.tsx`, "utf8");
+      expect(source, slug).toMatch(/useGiftAudio\(data\.music, mode !== "preview", MUSIC_CEILING\)/);
+    }
+  });
+});
 
 describe("the pitches", () => {
   it("counts a minor pentatonic up from its root, an octave every five notes", () => {
@@ -63,6 +83,8 @@ describe("the pitches", () => {
 
   it("keeps the sparks high but never shrill, however far up the shower climbs", () => {
     expect(sparkHz(0)).toBeGreaterThan(1000);
+    expect(sparkHz(0)).toBeCloseTo(1046.5, 0);
+    expect(sparkHz(9)).toBeCloseTo(3520, 0);
     expect(sparkHz(9)).toBeLessThan(4200);
     expect(sparkHz(99)).toBe(sparkHz(9));
     expect(sparkHz(-3)).toBe(sparkHz(0));
@@ -265,8 +287,12 @@ describe("the room", () => {
 type Event = { kind: string; time: number; value?: number };
 
 class Param {
-  value = 0;
+  /** What a fresh parameter holds before anything is scheduled on it: 1 for a gain, which is the whole trap. */
+  value: number;
   events: Event[] = [];
+  constructor(initial = 0) {
+    this.value = initial;
+  }
   private add(kind: string, time: number, value?: number) {
     expect(Number.isFinite(time), `${kind} time`).toBe(true);
     expect(time, `${kind} time`).toBeGreaterThanOrEqual(0);
@@ -318,10 +344,10 @@ function valueAt(p: Param, time: number): number {
 }
 
 class Node {
-  gain = new Param();
-  frequency = new Param();
-  Q = new Param();
-  pan = new Param();
+  gain = new Param(1);
+  frequency = new Param(440);
+  Q = new Param(1);
+  pan = new Param(0);
   type = "";
   loop = false;
   oversample = "none";
@@ -367,9 +393,22 @@ class Fake {
 
 /** How long each effect may run, from the moment it starts, before it has to be over: the sound plus its room. */
 const MOST_SECONDS: Record<keyof typeof EFFECTS, number> = {
-  thunder: 5, creak: 1.6, scrape: 1.4, tink: 1.5, whoosh: 0.7, flutter: 1.2, bubbles: 0.9, splash: 0.9, cork: 0.5, sparkle: 1.5, ignite: 2, carve: 1.3, thunk: 0.7, chime: 3.8, knock: 0.9,
+  thunder: 5, creak: 1.6, scrape: 1.4, tink: 1.5, whoosh: 1.7, flutter: 2, bubbles: 0.9, splash: 1.4, boil: 3, cork: 0.5, sparkle: 2, glow: 2.6, ignite: 2, carve: 1.3, thunk: 1.4, chime: 4, knock: 0.9,
 };
-const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = { thunder: [0.8], scrape: [450], carve: [450], tink: [3, "rise"], chime: [2] };
+/** How each is played by the gifts that play it with a timing. */
+const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = {
+  thunder: [0.8],
+  scrape: [450],
+  carve: [450],
+  tink: [3, "rise"],
+  chime: [2, 0.3],
+  whoosh: [{ delay: 0.3, ms: 950, peak: 0.5 }],
+  flutter: [{ delay: 0.05, ms: 1500, peak: 0.45 }],
+  sparkle: [{ delay: 0.1, ms: 1200 }],
+  thunk: [{ delay: 0.85 }],
+  boil: [{ ms: 2300 }],
+  glow: [{ ms: 2200 }],
+};
 
 describe("every night sound, built against a recording stand-in", () => {
   for (const [name, effect] of Object.entries(EFFECTS) as [keyof typeof EFFECTS, (v: Voice, ...args: never[]) => void][]) {
@@ -411,6 +450,12 @@ describe("every night sound, built against a recording stand-in", () => {
           };
           walk(n);
           expect(shapers.length, `${name}: a ${n.kind} with no envelope`).toBeGreaterThan(0);
+          // And an envelope that is silent until it speaks. A gain that has not been told what to do yet is 1, so a
+          // source that starts before its envelope plays at full volume until the envelope arrives (the cork's puff of
+          // air did, for ten milliseconds, at -10 dBFS whatever the mix was set to; and a start time that is not on a
+          // sample boundary does it for one sample, as a tick). The envelope's own value has to be 0 from the start.
+          const silent = shapers.some((g) => g.gain.value === 0);
+          expect(silent, `${name}: a ${n.kind} that no envelope holds silent before it speaks`).toBe(true);
           const quiet = shapers.some((g) => valueAt(g.gain, n.stopped!) <= 0.002);
           expect(quiet, `${name}: a ${n.kind} stopped while still audible`).toBe(true);
         }

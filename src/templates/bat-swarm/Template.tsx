@@ -13,13 +13,14 @@ import { COVER_VARS, POSTER_FONT, SCRIPT_FONT, TapPill } from "../_shared/cover-
 import { buzz, prime } from "../_shared/synth";
 import { NightPage, type NightTheme, type PhotoSlot } from "../_shared/night/NightPage";
 import { playChime, playFlutter, playSparkle, playWhoosh } from "../_shared/night/sfx";
+import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { BatSvg, Clouds, MoonDisc, Skyline } from "./art";
 import { LOOKS, type Look, type LookId } from "./looks";
 import { fieldsSchema, type BatSwarmFields } from "./schema";
 import { Swarm } from "./Swarm";
-import { moonFor, type Moon, type Step } from "./flight";
+import { cuesFor, moonFor, type Moon, type Step } from "./flight";
 
 const S = {
   en: { tap: "tap the moon", skip: "skip", title: "look up", gallery: "by the light of the moon", note: "a note from {name}" },
@@ -63,7 +64,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const size = useContainerSize(rootRef);
   const reduce = !!useReducedMotion();
   const s = S[data.locale] ?? S.en;
-  const audio = useGiftAudio(data.music, mode !== "preview");
+  const audio = useGiftAudio(data.music, mode !== "preview", MUSIC_CEILING);
   const preview = mode === "preview";
   const look = LOOKS[readLook(data.fields)];
   const line = readLine(data.fields);
@@ -111,20 +112,16 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     after(1400, () => setSceneGone(true));
   };
 
-  // The sounds follow the flight: wings as they pour out, air as they gather, a bell when the name can be read.
+  // The sounds follow the flight: wings as they pour out and circle, air as they gather (loudest while they are
+  // quickest, not as the step begins), a bell when the name can be read, a shimmer for the heart.
   const onStep = (step: Step) => {
     const muted = mutedRef.current;
-    if (step.kind === "emerge") {
-      playFlutter(muted);
-      playWhoosh(muted);
-    } else if (step.kind === "form") {
-      playWhoosh(muted);
-    } else if (step.kind === "hold") {
-      // The last shape is the heart: a shimmer for that, a bell for the words.
-      if (step.word === words.length) playSparkle(muted);
-      else playChime(muted, step.word);
-    } else if (step.kind === "scatter") {
-      playFlutter(muted);
+    for (const cue of cuesFor(step, words.length)) {
+      const at = { delay: cue.delay, ms: cue.ms, peak: cue.peak };
+      if (cue.sound === "flutter") playFlutter(muted, { ...at, soft: cue.soft });
+      else if (cue.sound === "whoosh") playWhoosh(muted, at);
+      else if (cue.sound === "chime") playChime(muted, cue.note, cue.delay);
+      else playSparkle(muted, { delay: cue.delay, ms: cue.ms });
     }
   };
 
