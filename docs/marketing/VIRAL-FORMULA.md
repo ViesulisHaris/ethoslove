@@ -2331,6 +2331,18 @@ exception is midnight in 547, where the clock is the story.
 
 **Post order:** 551, 555, 554, 553, 552.
 
+556–560 (19 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 556 | saves (he counted) | "that's 212" / "times you've said i'm fine this year", then the link "for number 213 🤍" | "ok i'm not fine / i'm crying" | "that's better" |
+| 557 | comments (149) | "calm down" in front of his friends, then the link "sorry 🤍" | "i already told your friends about mr bear" | "maya they were never supposed to know" |
+| 558 | saves and sales | "for when you land 🤍", "it opens when you land" | "it has a countdown??" → "the guy next to me cried too" | "maya you showed him??" |
+| 559 | comments (149) | fell asleep on FaceTime, "you were telling the long story", then the link "for the long story 🤍" | "i recorded you snoring / it's my ringtone now" | "maya change it" |
+| 560 | comments (149) | a TikTok instead of goodnight, then the link "goodnight maya 🤍", "ok this is the real one" | "i already made a finsta to check your likes" | "maya what's it called" |
+
+**Post order:** 558, 557, 556, 559, 560.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
