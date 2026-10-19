@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:48 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you told me to calm down"
+        },
+        {
+          "from": "me",
+          "text": "in front of your friends"
+        },
+        {
+          "from": "them",
+          "text": "i said it nicely"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you made this??",
+          "status": "Read 11:52 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already told your friends about mr bear"
+        },
+        {
+          "from": "them",
+          "text": "maya they were never supposed to know"
+        }
+      ]
+    }
+  ]
+}
