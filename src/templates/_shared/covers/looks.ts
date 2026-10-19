@@ -482,6 +482,11 @@ export function defaultCoverFor(slug: string): CoverId {
     case "picnic":
     case "music-box":
     case "party-animals":
+    case "seance":
+    case "bat-swarm":
+    case "cauldron":
+    case "jack-o-lantern":
+    case "haunted-house":
       return "classic"; // each opens with its own envelope, book, diary, gate, camera, booth, basket, box or invitation
     case "kawaii":
       return "gingham";

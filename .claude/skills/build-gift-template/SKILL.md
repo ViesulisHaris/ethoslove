@@ -65,6 +65,11 @@ These are what make seventeen templates feel like one product. Match them before
 `Ambience` (petals, sparkles, hearts, bokeh, dust, snow, leaves, embers, bats), `Sticker` (die-cut
 stickers), `useBlowDetector` (microphone), `useContainerSize`, `places.ts` (offline cities, haversine).
 
+`_shared/night/` is what the Halloween gifts of October 2026 share: `NightPage` (the scrolling letter every one of
+them hands over to: message, photos by render prop, countdown, surprise, end screen, progress events,
+lightbox), `sfx.ts` (thunder, creak, scrape, splash, cork… synthesized, muted with the song) and
+`useTimers` (timeouts that die with the gift). Reach for them before writing a page of your own.
+
 If a template needs a stage the kit lacks, add it to the template first. Move it to `_shared` only
 when a second template wants it.
 
@@ -118,6 +123,9 @@ npx playwright install chromium                       # once per machine (a ~150
 node scripts/capture-thumbnails.mjs http://localhost:3000 <slug>
 ```
 
+Hide the skip link and the mute button before the poster (see `hideControls` in the script): they are controls,
+not part of the picture, and they show in every frame otherwise.
+
 The routine should screenshot the frame that sells it (usually just before the big interaction) and
 then drive the interaction so the recording has movement. Elements that pulse forever are never
 "stable" for Playwright — click those with `{ force: true }`.
@@ -151,6 +159,24 @@ Pure logic — geometry, physics, time — belongs in its own module with unit t
 - **The editor preview plays from the gift's cover**, so a test or script that presses "Play from the
   start" has to tap the cover before the template's own controls exist.
 - **Demo photos must fit `features.photos`** min and max, or the template unit test fails.
+- **Demo data that fails its own schema fails quietly.** The template parses `data.fields` and falls back to
+  the defaults, so the gift just shows the wrong thing (the Witch's Brew's Spanish demo showed its default
+  ingredients because one line was 32 characters against a `.max(30)`). `tests/unit/templates.test.ts` catches it:
+  leave room, since Spanish runs longer than English.
+- **An `opening` is drawn outside the gift, and that breaks two things.** The cover picker puts it inside a
+  button tile that is not a `.gift-root`. (1) A button in it is a button in a button, which React reports as a
+  hydration error (the dev overlay says "2 issues"): give the scene an `inert` mode with nothing to press.
+  (2) `--u` is only defined by `.gift-root`, so a scene that sizes from it collapses to giant clipped text
+  in the tile: set `TILE_VARS` (`_shared/night/tile.ts`) on the opening's root. Look at the Classic tile in
+  the editor's cover picker; the e2e specs check both.
+- **A layer stacked over another swallows its clicks.** A stage box holding the gate, title and pill, placed
+  after the camera layer that holds the windows and the door, caught every tap meant for them. Make a layer that
+  is only there to look at `pointer-events-none`, and let `tests/e2e/halloween-gifts.spec.ts` tap the real thing.
+- **Wide screens are real screens.** A recipient opens the link on a laptop. A scene drawn in a centred stage
+  box (`--k`) needs its ground, table or wall to run edge to edge, or the house floats on a dark slab.
+  Check 1280 × 720 and 844 × 390 as well as 390 × 844.
+- **Never decide a template's look from the idle frame alone.** Play it through in every look: the glow, the
+  moon and the window light are where a palette fails.
 - **Adding a template conflicts with anyone else adding one**, always in the same files: the
   manifests, the registry and schema loaders, `defaultCoverFor`, the capture script and the demo
   test list. Keep both sides.

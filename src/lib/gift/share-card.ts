@@ -54,6 +54,11 @@ export function cardLookFor(templateSlug: string | null | undefined, look: unkno
     "spooky-season": "noir",
     "midnight-countdown": "noir",
     constellations: "noir",
+    seance: "noir",
+    "bat-swarm": "noir",
+    cauldron: "noir",
+    "jack-o-lantern": "noir",
+    "haunted-house": "noir",
   };
   if (templateSlug && bySlug[templateSlug]) return bySlug[templateSlug];
   // FNV-1a: a plain ×31 hash leaves its low bits in step, so ids alike in shape all got one paper.

@@ -98,6 +98,11 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "photo-booth": "curtain",
   picnic: "petals",
   "music-box": "petals",
+  seance: "starlight",
+  "bat-swarm": "starlight",
+  cauldron: "paper",
+  "jack-o-lantern": "paper",
+  "haunted-house": "starlight",
 };
 
 export function introVariantFor(slug: string, manifest?: TemplateManifest): IntroVariant {
