@@ -1,0 +1,71 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Yesterday|11:40 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "boarding now"
+        },
+        {
+          "from": "me",
+          "text": "see you in 9 hours"
+        },
+        {
+          "from": "them",
+          "text": "airplane mode first"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you land 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it opens when you land"
+        },
+        {
+          "from": "me",
+          "text": "it has a countdown??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "ts": "Today|8:53 AM"
+        },
+        {
+          "from": "me",
+          "text": "LANDED"
+        },
+        {
+          "from": "me",
+          "text": "the guy next to me cried too"
+        },
+        {
+          "from": "them",
+          "text": "maya you showed him??"
+        }
+      ]
+    }
+  ]
+}
