@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you said my pasta was interesting"
+        },
+        {
+          "from": "them",
+          "text": "interesting is a compliment"
+        },
+        {
+          "from": "me",
+          "text": "it's not",
+          "status": "Read 9:48 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry chef 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "you cooked for 3 hours. i owed you"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i ordered it"
+        },
+        {
+          "from": "me",
+          "text": "from olive garden"
+        },
+        {
+          "from": "them",
+          "text": "maya i watched you stir it"
+        }
+      ]
+    }
+  ]
+}
