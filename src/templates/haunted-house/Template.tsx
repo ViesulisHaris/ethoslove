@@ -101,7 +101,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     const id = strikes.current;
     setStrike({ id, bolt: makeBolt(seed + id * 31, 100, 64) });
     after(720, () => setStrike((cur) => (cur?.id === id ? null : cur)));
-    if (started.current) after(thunderDelayMs(Math.random) * (big ? 0.5 : 1), () => playThunder(mutedRef.current));
+    if (started.current) {
+      // The sooner the thunder follows the flash, the nearer the strike: a short wait is a crack, a long one a dull roll.
+      const delay = thunderDelayMs(Math.random) * (big ? 0.5 : 1);
+      after(delay, () => playThunder(mutedRef.current, Math.max(0.1, 1 - delay / 1300)));
+    }
   };
   const lightningRef = useRef(lightning);
   useEffect(() => {
@@ -148,7 +152,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     for (let i = 0; i < n; i++) {
       after(reduce ? 0 : i * LIGHT_EVERY_MS, () => {
         setLitCount(i + 1);
-        playTink(mutedRef.current, i);
+        playTink(mutedRef.current, i, "rise");
       });
     }
     after(reduce ? 50 : n * LIGHT_EVERY_MS + 500, () => {

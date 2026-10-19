@@ -122,7 +122,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     } else if (step.kind === "hold") {
       // The last shape is the heart: a shimmer for that, a bell for the words.
       if (step.word === words.length) playSparkle(muted);
-      else playChime(muted);
+      else playChime(muted, step.word);
     } else if (step.kind === "scatter") {
       playFlutter(muted);
     }

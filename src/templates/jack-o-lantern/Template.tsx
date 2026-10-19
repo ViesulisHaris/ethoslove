@@ -150,7 +150,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           at = line.getPointAtLength(p * lengths[step.index]);
           if (!cutHeard[step.index]) {
             cutHeard[step.index] = true;
-            playCarve(mutedRef.current);
+            playCarve(mutedRef.current, (step.end - step.start) * 1000);
           }
           if (p >= 1 && !cutDone[step.index]) {
             cutDone[step.index] = true;
@@ -170,7 +170,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           nameLine?.style.setProperty("opacity", "0.95");
           if (nameHeard < 3 && t >= plan.nameStart + nameHeard * 0.42) {
             nameHeard += 1;
-            playCarve(mutedRef.current);
+            playCarve(mutedRef.current, 400);
           }
         }
       }

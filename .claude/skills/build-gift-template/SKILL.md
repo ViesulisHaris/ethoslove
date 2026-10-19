@@ -67,11 +67,42 @@ stickers), `useBlowDetector` (microphone), `useContainerSize`, `places.ts` (offl
 
 `_shared/night/` is what the Halloween gifts of October 2026 share: `NightPage` (the scrolling letter every one of
 them hands over to: message, photos by render prop, countdown, surprise, end screen, progress events,
-lightbox), `sfx.ts` (thunder, creak, scrape, splash, cork… synthesized, muted with the song) and
-`useTimers` (timeouts that die with the gift). Reach for them before writing a page of your own.
+lightbox), `sfx.ts` (thunder, creak, scrape, splash, cork… synthesized, muted with the song; see "Sound"
+below) and `useTimers` (timeouts that die with the gift). Reach for them before writing a page of your own.
 
 If a template needs a stage the kit lacks, add it to the template first. Move it to `_shared` only
 when a second template wants it.
+
+## Sound
+
+Nothing is downloaded: effects are synthesized in WebAudio. The night kit shows how to do it so it sounds like
+something and not like a synth patch.
+
+- **`_shared/night/sound-math.ts`** holds every number a sound is made of (pitches, a bell's partials, the shape of a
+  rumble, when a hinge sticks, the room's impulse response), with the random function passed in so a test can
+  seed it. **`foley.ts`** holds the graph tools (`ring`, `tap`, `bubble`, `hit`, `swell`, `sprinkle`) and the bus every
+  voice ends in: a stereo room and a soft ceiling. **`sfx.ts`** is the designs, one function per sound, and `MIX`,
+  where each sits in the mix in dB.
+- **A sound is layers, not an oscillator.** A click that starts it, a body that rings (partials for a bell, resonant
+  bands excited by a click for wood, a sine that climbs for a bubble), air around it, all through the room.
+  A bare sine or a noise burst sounds like a synth patch; a hinge made of square waves sounds like a broken toy.
+- **Test it without a speaker.** `tests/unit/night-sounds.test.ts` builds every effect against a stand-in for the
+  audio context that records what it is asked to do. The effects run inside a `try/catch` (an audio device is
+  optional), so a broken sound is silent and nobody notices: the test catches a non-finite time, an exponential ramp
+  to zero, a source that never stops, a source stopped while still audible (a click), a runaway node count.
+- **Measure it.** `node scripts/sfx-bench.mjs` renders each effect offline and prints its peak, how bright it is and
+  how much of it a phone's speaker would play. `--calibrate --apply` sets `MIX` so each hits its target peak.
+  Run it again after any change to a design: a design change moves the level.
+- **A phone plays nothing below about 400 Hz.** The first knock, thunk and thunder were built from low sines and
+  low modes, and on a phone (where most recipients are) they were a faint tick. Put the weight of a sound
+  between 300 Hz and 4 kHz; a low note under it is a bonus for headphones. The bench's "phone keeps" column
+  is how much of the sound survives a high-pass at 420 Hz: keep it above about -8 dB.
+- **A resonator rings only as high as it is hit.** A click that fades out over 7 ms has almost nothing above 200 Hz, so
+  it wakes the lowest mode of a knock and not the wood's other notes. Make the click 2 ms.
+- **Resonators are quiet.** A narrow band of noise carries a tenth of the amplitude of a sine, so a knock made of
+  both needs its bands turned up ten times to be heard over the sine, not the other way round.
+- **Give the shared bus the level, not the voice.** `send` takes the options of a send; passing it a voice's own
+  `level` applies the level twice (every bell was 20 dB too quiet until the bench showed it).
 
 ## Registering it
 

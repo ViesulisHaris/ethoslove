@@ -136,7 +136,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       place(at.x, at.y, at.tilt);
       if (at.leg !== prevLeg || at.phase !== prevPhase) {
         const leg = at.leg >= 0 ? [...tour.legs, tour.goodbye][at.leg] : undefined;
-        if (at.phase === "move" && leg && leg.char !== " ") playScrape(mutedRef.current);
+        if (at.phase === "move" && leg && leg.char !== " ") playScrape(mutedRef.current, leg.move);
         if (at.phase === "dwell" && leg) {
           if (leg === tour.goodbye) {
             if (!chimed) playChime(mutedRef.current);
