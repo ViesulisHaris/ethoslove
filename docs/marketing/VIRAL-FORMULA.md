@@ -2343,6 +2343,18 @@ exception is midnight in 547, where the clock is the story.
 
 **Post order:** 558, 557, 556, 559, 560.
 
+561–565 (19 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 561 | comments (149) | "interesting is a compliment", then the link "sorry chef 🤍", "you cooked for 3 hours. i owed you" | "i ordered it / from olive garden" | "maya i watched you stir it" |
+| 562 | comments (149) | "you're in slide 9", then the link "for slide 1 🤍" | "slide 9 is a blurry arm" / "i already archived all our pics" | "maya unarchive them" |
+| 563 | comments (149) | "it was a small laugh", then the link "for the girl who tripped 🤍" | "i already posted the video of you falling at the gym / it has 40k views" | "maya take it down" |
+| 564 | saves and sales | "are you alone" / "wait till she leaves", then the link | "too late / she saw it / she's crying / she wants your number" | "maya is that good or bad" |
+| 565 | saves (send-to-partner) | "no idea", then the link "sorry about whatever it was 🤍" | "i accept / still don't remember" | "me neither" |
+
+**Post order:** 564, 561, 565, 562, 563.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
