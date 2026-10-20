@@ -1,0 +1,111 @@
+{
+  "demo": {
+    "template": "xoxo",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Leo\"",
+      "swap \"sam\" \"leo\"",
+      "wait 2600",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3600",
+      "shot gift-2.png",
+      "scroll 700",
+      "wait 1500",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u watched my story"
+        },
+        {
+          "from": "me",
+          "text": "6 hours ago"
+        },
+        {
+          "from": "me",
+          "text": "and didnt answer my text"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i already told the girls we're on a break"
+        },
+        {
+          "from": "them",
+          "text": "a what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "they planned my whole single era"
+        },
+        {
+          "from": "me",
+          "text": "theres a group chat"
+        },
+        {
+          "from": "them",
+          "text": "maya cancel the single era"
+        }
+      ]
+    }
+  ]
+}
