@@ -1,0 +1,103 @@
+{
+  "demo": {
+    "template": "be-my-boo",
+    "steps": [
+      "wait 1500",
+      "shot gift-1.png",
+      "tap \"tap the ghost\"",
+      "wait 250",
+      "shot gift-2.png",
+      "wait 3850",
+      "shot gift-3.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:13 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "what are we going as for halloween"
+        },
+        {
+          "from": "me",
+          "text": "idk"
+        },
+        {
+          "from": "them",
+          "text": "couples costume?"
+        },
+        {
+          "from": "me",
+          "text": "maybe"
+        },
+        {
+          "from": "them",
+          "text": "maybe??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok hold on"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 👻",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-2.png"
+    },
+    {
+      "type": "photo",
+      "src": "gift-3.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok its cute"
+        },
+        {
+          "from": "me",
+          "text": "but i already have a couples costume"
+        },
+        {
+          "from": "them",
+          "text": "with who"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my cat"
+        },
+        {
+          "from": "them",
+          "text": "maya the cat doesnt even like u"
+        }
+      ]
+    }
+  ]
+}
