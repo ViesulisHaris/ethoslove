@@ -1,0 +1,74 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:02 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "at the start line"
+        },
+        {
+          "from": "me",
+          "text": "42k what was i thinking"
+        },
+        {
+          "from": "them",
+          "text": "open this at 30k"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for 30k 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "ts": "Today|9:48 AM"
+        },
+        {
+          "from": "me",
+          "text": "30k"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying and running"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "ts": "Today|11:14 AM"
+        },
+        {
+          "from": "me",
+          "text": "I FINISHED"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "look left"
+        }
+      ]
+    }
+  ]
+}
