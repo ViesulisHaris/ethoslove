@@ -1,0 +1,73 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|1:58 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u awake"
+        },
+        {
+          "from": "me",
+          "text": "yes why"
+        },
+        {
+          "from": "them",
+          "text": "watch ur clock"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        },
+        {
+          "from": "them",
+          "text": "just watch it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|1:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "we get this hour twice"
+        },
+        {
+          "from": "them",
+          "text": "so i made u something for it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "our extra hour 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|1:04 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "the time went BACK"
+        },
+        {
+          "from": "me",
+          "text": "im crying at 1am for the second time"
+        },
+        {
+          "from": "them",
+          "text": "happy extra hour maya",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
