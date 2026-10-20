@@ -2355,6 +2355,18 @@ exception is midnight in 547, where the clock is the story.
 
 **Post order:** 564, 561, 565, 562, 563.
 
+566–570 (20 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 566 | comments (149) | 2 hours of Fortnite, then the link "gg 🤍", "made you this between games" | "i've been playing on your account / i lost 23 games" | "maya that's why i'm bronze" |
+| 567 | comments (149) | forgot to pick her up, "my phone was on silent", then the link | "i got an uber / on your card" | "maya it says $86" |
+| 568 | comments (149, an ex) | wifi still called "emma's wifi", then the link, "changing it tonight" | "i already did / it's maya's wifi now" | "maya what's the password" |
+| 569 | saves and sales (102) | "open this at 30k", then the link "for 30k 🤍" | "i'm crying and running" / "I FINISHED" | "i know / look left" |
+| 570 | saves (he remembered) | "on your break?" / "3am every thursday", then the link "for your 3am 🤍" | "you set an alarm for my break??" | "open it first" |
+
+**Post order:** 569, 566, 570, 568, 567.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
