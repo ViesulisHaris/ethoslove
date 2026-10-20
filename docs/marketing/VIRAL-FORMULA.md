@@ -2367,6 +2367,41 @@ exception is midnight in 547, where the clock is the story.
 
 **Post order:** 569, 566, 570, 568, 567.
 
+## rosie is back (21 Oct), and 571 to 575
+
+TikTok told the owner that @luvierosiie's hold was a false bot detection, and lifted it. The public profile
+(read 21 Oct, no login) has 44 posts, the newest from 26 Sept, 303 followers and 420.8K likes. The October
+posts are not public. The top ten, with the September numbers updated:
+
+| Views | Likes | Comments | Shares | Saves | Slides | Post |
+|---|---|---|---|---|---|---|
+| 1.3M | 168.7K | 777 | 5,948 | 14.7K | 10 | 149 "are u mad at me" |
+| 984.8K | 146.7K | 181 | 4,177 | 24.9K | 9 | 30 "first one to say it" |
+| 347.1K | 23.8K | 30 | 3,378 | 4,103 | 12 | 138 cat court |
+| 278.2K | 17.8K | 61 | 232 | 1,089 | 10 | 192 "u said k" |
+| 277.8K | 15.7K | 25 | 178 | 1,053 | 11 | 102 "I PASSED" |
+| 183.2K | 4,610 | 73 | 102 | 610 | 11 | 170 "u still at jess's" |
+| 157.8K | 9,814 | 200 | 600 | 807 | 12 | 208 "u too" |
+| 137.7K | 11.5K | 54 | 209 | 762 | 12 | 78 |
+| 121.4K | 12.0K | 21 | 526 | 1,250 | 7 | 39 |
+| 103.2K | 5,377 | 33 | 103 | 286 | 14 | 03 |
+
+Every hit is rosie's own format: 7–14 full-screen slides, the chat, the link, then frames of the gift itself.
+None is a 3-slide crop or a single image. So rosie's posts stay in that format (no `crop`, no `look`, US times),
+with the gift frames from the live demos (`scripts/tiktok-demo-frames.mjs`). The chat never describes the
+gift; the frames show it. Maya and Leo, the pink card, and **Your brand** turned on.
+
+| | Engine | The story | Gift frames | Last bubble |
+|---|---|---|---|---|
+| 571 | comments (149) | story watched, text ignored, "i was busy" / "doing what" → "this" | XOXO | "maya cancel the single era" |
+| 572 | comments (208) | she forgot his birthday; "i made u something anyway" | Coquette, Burgundy roses | "maya its 11:58" |
+| 573 | saves (30) | 1:58 AM → 1:00 AM, the night the clocks go back: "we get this hour twice" | none, link only | "happy extra hour maya" |
+| 574 | comments (192) | "couples costume?" / "maybe" | Be My Boo | "maya the cat doesnt even like u" |
+| 575 | saves (30) | "cant sleep" at 3 AM | none, link only | "goodnight maya" |
+
+**Post plan:** 572 tonight, then 571, 574 (before Halloween), 575. 573 goes up on Saturday 31 Oct in the evening,
+because the US clocks go back that night (1 Nov, 2 AM → 1 AM). One a night, 7–10 PM. Reply as Maya in the first hour.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
