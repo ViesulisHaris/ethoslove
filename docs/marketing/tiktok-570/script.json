@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|2:59 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "on your break?"
+        },
+        {
+          "from": "me",
+          "text": "how do you know my break"
+        },
+        {
+          "from": "them",
+          "text": "3am every thursday"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for your 3am 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "you set an alarm for my break??"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "go back to sleep"
+        },
+        {
+          "from": "them",
+          "text": "open it first"
+        }
+      ]
+    }
+  ]
+}
