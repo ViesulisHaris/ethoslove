@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:18 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you saw my text"
+        },
+        {
+          "from": "me",
+          "text": "and played fortnite for 2 hours"
+        },
+        {
+          "from": "them",
+          "text": "i was getting a win for you"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "gg 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "made you this between games"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i've been playing on your account"
+        },
+        {
+          "from": "me",
+          "text": "i lost 23 games"
+        },
+        {
+          "from": "them",
+          "text": "maya that's why i'm bronze"
+        }
+      ]
+    }
+  ]
+}
