@@ -1,6 +1,6 @@
 # Approved future posts
 
-Posts the owner has signed off, waiting to be made and published. Text only: no images, so each file stays readable and diffable. Slides, screenshots and renders are made from these when the post goes out.
+Posts the owner has signed off, waiting to be made and published. The text is the source of truth. A post may also have a folder of example slides beside its file (same name, no `.md`), as a visual reference.
 
 **Rule:** a post lives here only when the owner has approved it. Drafts and ideas stay in the conversation, or in the "not approved" files marked below, until approved.
 
