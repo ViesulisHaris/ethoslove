@@ -2449,6 +2449,21 @@ stays; one last line gives the room something to ask, argue or quote:
 
 Love posts get their comments from a line like this. Every SCRIPT.md has a reply ready for the obvious question.
 
+### Lovely, three slides max (21 Oct): 586 to 590
+
+The owner: "make 5 ones more like lovely like 3 slides max". These are ordinary days rather than anniversaries,
+each with one detail to comment on, in three chat slides with the link card:
+
+| | The day | The detail people comment on | Last bubble |
+|---|---|---|---|
+| 586 | she's sick, he's at work | "soup is on its way / and this" | "im not / i just really like u" |
+| 587 | quiet at dinner | "u twist ur ring when ur sad" | his |
+| 588 | her job interview | "she asked why i was smiling so much" | "what did u tell her" / "the truth" |
+| 589 | can't sleep without him | "its too quiet without ur snoring" | "ill snore extra loud" |
+| 590 | a Tuesday, no reason | "who does this on a tuesday" | "someone whos obsessed with u" |
+
+**Post order:** 590, 587, 586, 589, 588.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
