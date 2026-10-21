@@ -1,0 +1,79 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u watched the next episode"
+        },
+        {
+          "from": "me",
+          "text": "without me"
+        },
+        {
+          "from": "them",
+          "text": "it was one episode"
+        },
+        {
+          "from": "me",
+          "text": "it was the FINALE"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "so i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "i have to tell u something"
+        },
+        {
+          "from": "me",
+          "text": "ive watched the whole season twice"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i was waiting for u to catch up"
+        },
+        {
+          "from": "them",
+          "text": "maya u made me wait 3 weeks"
+        }
+      ]
+    }
+  ]
+}
