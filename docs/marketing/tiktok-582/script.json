@@ -1,0 +1,68 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:58 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "good morning beautiful"
+        },
+        {
+          "from": "them",
+          "text": "its 1am here but i wanted to be first"
+        },
+        {
+          "from": "them",
+          "text": "happy 6 months"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 6 months my love 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|7:16 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "i just woke up to this"
+        },
+        {
+          "from": "me",
+          "text": "im crying before coffee"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "6 months down"
+        },
+        {
+          "from": "them",
+          "text": "forever to go"
+        },
+        {
+          "from": "me",
+          "text": "come home",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
