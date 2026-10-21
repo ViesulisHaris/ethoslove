@@ -2402,6 +2402,22 @@ gift; the frames show it. Maya and Leo, the pink card, and **Your brand** turned
 **Post plan:** 572 tonight, then 571, 574 (before Halloween), 575. 573 goes up on Saturday 31 Oct in the evening,
 because the US clocks go back that night (1 Nov, 2 AM → 1 AM). One a night, 7–10 PM. Reply as Maya in the first hour.
 
+**The same day, the owner: "just create them without the slides in them just the imessages".** So the demo
+frames are gone. 571, 572 and 574 are now 4 chat slides, and the owner adds their own screenshots of the gift
+after slide 2, the way 149's were made. 573 and 575 had none. From now on these batches are the chats only.
+
+576–580 are five more like that, for every account:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 576 | comments (149) | watched the finale without her, then the link "sorry 🤍" | "ive watched the whole season twice" | "maya u made me wait 3 weeks" |
+| 577 | comments (149) | 45 minutes late, "i can explain" → "this" + the link | "but i only got there a minute before u" | "so u were 44 minutes late / maya" |
+| 578 | comments (149) | told his friends she's chill, then the link "for my not chill girl 🤍" | "im not chill / im insane" / "i already texted all ur friends" | "maya why is my group chat on fire" |
+| 579 | saves (30) | the link "for our first night home 🤍" from the other room | "why are u texting me from the other room" | "turn around" |
+| 580 | saves | "ok then open this", the link "for the worst day 🤍" | "ok its not the worst day anymore" | "good / now come over" |
+
+**Post order:** 577, 580, 576, 579, 578, alongside 571–575, one a night per account.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
