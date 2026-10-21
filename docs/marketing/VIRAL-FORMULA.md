@@ -2418,6 +2418,24 @@ after slide 2, the way 149's were made. 573 and 575 had none. From now on these 
 
 **Post order:** 577, 580, 576, 579, 578, alongside 571–575, one a night per account.
 
+### Anniversaries people send to their boyfriends (21 Oct): 581 to 585
+
+The owner: "really love love, so people get jealous and send to their bf about anniversary". So all five are the
+saves-and-sends engine: a boyfriend plainly in love on an anniversary, three chat slides, the link card only,
+chats only. The detail is always something he did that viewers' boyfriends don't: stayed up, counted, set a
+reminder, woke at 1am.
+
+| | Occasion | His line people send | Last bubble |
+|---|---|---|---|
+| 581 | 1 year, at midnight ("stay up 2 more minutes") | "365 days and id pick u every single one" | his |
+| 582 | 6 months, long distance ("its 1am here but i wanted to be first") | "6 months down / forever to go" | "come home" |
+| 583 | 2 years, "day 730" | "i counted every single one" | "the luckiest guy alive does" |
+| 584 | she has to work on their anniversary | "open this on ur break" | "tell them its our anniversary" |
+| 585 | 14 months, never missed one | "i set a reminder the day u said yes" / "i smile like an idiot" | "im keeping u forever" |
+
+**Post order:** 581, 585, 582, 584, 583. One a night per account, with a soft sound. 581's caption asks
+viewers to "send this to your boyfriend".
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
