@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:30 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do u know what today is"
+        },
+        {
+          "from": "them",
+          "text": "day 730"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "730 days since u said yes"
+        },
+        {
+          "from": "them",
+          "text": "i counted every single one"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "730 days of u 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who counts days"
+        },
+        {
+          "from": "me",
+          "text": "im crying"
+        },
+        {
+          "from": "them",
+          "text": "the luckiest guy alive does",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
