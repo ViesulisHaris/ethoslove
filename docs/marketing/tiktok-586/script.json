@@ -1,0 +1,68 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i feel so sick"
+        },
+        {
+          "from": "me",
+          "text": "and u have work all day"
+        },
+        {
+          "from": "them",
+          "text": "stay in bed my love"
+        },
+        {
+          "from": "them",
+          "text": "im handling it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|10:31 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "soup is on its way"
+        },
+        {
+          "from": "them",
+          "text": "and this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my sick girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how are u this perfect"
+        },
+        {
+          "from": "them",
+          "text": "im not"
+        },
+        {
+          "from": "them",
+          "text": "i just really like u",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
