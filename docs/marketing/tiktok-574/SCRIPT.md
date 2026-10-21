@@ -2,17 +2,17 @@
 
 **For:** @luvierosiie, back on 21 Oct. Post: before Halloween, 23 Oct.
 **Engine:** comments, 192's engine: cold, then the gift, then a turn.
-**Format:** rosie's own: 7 full-screen slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
-**Gift:** Be My Boo (Halloween, live demo, already Maya and Leo): the ghost "for Maya", "boo!", the collage with the black cat.
+**Format:** rosie's own: 4 iMessage slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
+**Gift:** yours. Add your own screenshots or screen recording of the gift (made for Maya, from Leo) straight after slide 2. The chat never says what's in it, so any template works.
 **Before posting:** More options → Disclose post content → **Your brand** (TikTok's rule for posts that promote your own product).
 
 ## The story, slide by slide
 
 1. 8:13 PM, he: "what are we going as for halloween" / She: "idk" / He: "couples costume?" / She: "maybe" / He: "maybe??"
 2. He: "ok hold on" and the link "for maya 👻" (pink card)
-3. Gift frames 1–3
-4. She: "ok its cute" / "but i already have a couples costume" / He: "with who"
-5. She: "my cat" / He: "maya the cat doesnt even like u"
+   ← your gift screenshots go here
+3. She: "ok its cute" / "but i already have a couples costume" / He: "with who"
+4. She: "my cat" / He: "maya the cat doesnt even like u"
 
 **Real:** the chat never says what's inside the gift.
 
@@ -40,5 +40,4 @@ Reply as Maya, in character. If someone asks what the site is, reply "tryethos" 
 
 ## Files
 
-`node scripts/tiktok-demo-frames.mjs docs/marketing/tiktok-574`
-`node scripts/tiktok-slides.mjs docs/marketing/tiktok-574/script.json docs/marketing/tiktok-574 --sheet`
+`node scripts/tiktok-slides.mjs docs/marketing/tiktok-574/script.json docs/marketing/tiktok-574`

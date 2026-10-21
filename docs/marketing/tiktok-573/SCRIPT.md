@@ -2,7 +2,7 @@
 
 **For:** @luvierosiie, back on 21 Oct. Post: Saturday 31 Oct, evening (US clocks go back that night).
 **Engine:** saves and sales, 30's engine (984.8K): an instruction with no reason and a clock.
-**Format:** rosie's own: 3 full-screen slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
+**Format:** rosie's own: 3 iMessage slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
 **Gift:** none: the link card only, as 30 had.
 **Before posting:** More options → Disclose post content → **Your brand** (TikTok's rule for posts that promote your own product).
 
@@ -38,4 +38,4 @@ Reply as Maya, in character. If someone asks what the site is, reply "tryethos" 
 
 ## Files
 
-`node scripts/tiktok-slides.mjs docs/marketing/tiktok-573/script.json docs/marketing/tiktok-573 --sheet`
+`node scripts/tiktok-slides.mjs docs/marketing/tiktok-573/script.json docs/marketing/tiktok-573`

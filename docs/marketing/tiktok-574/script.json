@@ -1,16 +1,4 @@
 {
-  "demo": {
-    "template": "be-my-boo",
-    "steps": [
-      "wait 1500",
-      "shot gift-1.png",
-      "tap \"tap the ghost\"",
-      "wait 250",
-      "shot gift-2.png",
-      "wait 3850",
-      "shot gift-3.png"
-    ]
-  },
   "slides": [
     {
       "type": "chat",
@@ -56,18 +44,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "photo",
-      "src": "gift-1.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-2.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-3.png"
     },
     {
       "type": "chat",

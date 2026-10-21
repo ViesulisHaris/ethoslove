@@ -1,20 +1,4 @@
 {
-  "demo": {
-    "template": "coquette?look=rouge",
-    "steps": [
-      "swap \"Elena\" \"Maya\"",
-      "swap \"elena\" \"maya\"",
-      "swap \"Sam\" \"Leo\"",
-      "wait 2600",
-      "shot gift-1.png",
-      "tap \"untie the bow\"",
-      "wait 3600",
-      "shot gift-2.png",
-      "scroll 700",
-      "wait 1500",
-      "shot gift-3.png"
-    ]
-  },
   "slides": [
     {
       "type": "chat",
@@ -64,18 +48,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "photo",
-      "src": "gift-1.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-2.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-3.png"
     },
     {
       "type": "chat",

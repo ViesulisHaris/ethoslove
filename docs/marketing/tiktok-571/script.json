@@ -1,20 +1,4 @@
 {
-  "demo": {
-    "template": "xoxo",
-    "steps": [
-      "swap \"Dani\" \"Maya\"",
-      "swap \"Sam\" \"Leo\"",
-      "swap \"sam\" \"leo\"",
-      "wait 2600",
-      "shot gift-1.png",
-      "tap \"open it\"",
-      "wait 3600",
-      "shot gift-2.png",
-      "scroll 700",
-      "wait 1500",
-      "shot gift-3.png"
-    ]
-  },
   "slides": [
     {
       "type": "chat",
@@ -60,18 +44,6 @@
           }
         }
       ]
-    },
-    {
-      "type": "photo",
-      "src": "gift-1.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-2.png"
-    },
-    {
-      "type": "photo",
-      "src": "gift-3.png"
     },
     {
       "type": "chat",

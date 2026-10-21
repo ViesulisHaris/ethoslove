@@ -2,17 +2,17 @@
 
 **For:** @luvierosiie, back on 21 Oct. Post: tonight, the first post back.
 **Engine:** comments, 208's engine: Maya in the wrong to a sweet Leo, and the room talks to her by name.
-**Format:** rosie's own: 7 full-screen slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
-**Gift:** Coquette, Burgundy roses (live demo): the bow "for Maya, from Leo", the collage, "my favourite person".
+**Format:** rosie's own: 4 iMessage slides (1080×1920, dark iMessage, no crop, no look), posted as a photo carousel in this order, with a quiet trending sound. Maya and Leo. The pink card (`"card": "blush"`).
+**Gift:** yours. Add your own screenshots or screen recording of the gift (made for Maya, from Leo) straight after slide 2. The chat never says what's in it, so any template works.
 **Before posting:** More options → Disclose post content → **Your brand** (TikTok's rule for posts that promote your own product).
 
 ## The story, slide by slide
 
 1. 11:41 PM, he: "do u know what today is" / She: "tuesday?" / He: "its my birthday maya" / She: "WAIT" / "leo im so sorry"
 2. He: "its ok" / "i made u something anyway" and the link "for maya 🤍" (pink card)
-3. Gift frames 1–3
-4. She: "why are u giving ME something on UR birthday" / He: "u looked stressed this week"
-5. She: "im coming over with a cake" / He: "maya its 11:58"
+   ← your gift screenshots go here
+3. She: "why are u giving ME something on UR birthday" / He: "u looked stressed this week"
+4. She: "im coming over with a cake" / He: "maya its 11:58"
 
 **Real:** the chat never says what's inside the gift.
 
@@ -40,5 +40,4 @@ Reply as Maya, in character. If someone asks what the site is, reply "tryethos" 
 
 ## Files
 
-`node scripts/tiktok-demo-frames.mjs docs/marketing/tiktok-572`
-`node scripts/tiktok-slides.mjs docs/marketing/tiktok-572/script.json docs/marketing/tiktok-572 --sheet`
+`node scripts/tiktok-slides.mjs docs/marketing/tiktok-572/script.json docs/marketing/tiktok-572`
