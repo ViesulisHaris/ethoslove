@@ -51,6 +51,23 @@
           "tapback": "heart"
         }
       ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i did"
+        },
+        {
+          "from": "me",
+          "text": "now my manager wants to know if u have a brother"
+        },
+        {
+          "from": "them",
+          "text": "maya i have 3"
+        }
+      ]
     }
   ]
 }

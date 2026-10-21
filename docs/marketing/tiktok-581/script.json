@@ -64,6 +64,19 @@
           "tapback": "heart"
         }
       ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "even the day i threw ur phone in the lake?"
+        },
+        {
+          "from": "them",
+          "text": "especially that day"
+        }
+      ]
     }
   ]
 }

@@ -2436,6 +2436,19 @@ reminder, woke at 1am.
 **Post order:** 581, 585, 582, 584, 583. One a night per account, with a soft sound. 581's caption asks
 viewers to "send this to your boyfriend".
 
+**Then the owner: "add a twist or something so people comment".** Each one now has a fourth slide. The love
+stays; one last line gives the room something to ask, argue or quote:
+
+| | The twist (slide 4) | What people comment |
+|---|---|---|
+| 581 | "even the day i threw ur phone in the lake?" / "especially that day" | why the lake |
+| 582 | "check ur front door" / "u said it was 1am there" / "i lied" | slide 1 was a lie; they reread it |
+| 583 | "its 731 for me" / "how" / "i liked u a day before i said yes" | who fell first |
+| 584 | "now my manager wants to know if u have a brother" / "maya i have 3" | tagging single friends |
+| 585 | "whats the reminder called" / "dont lose her" | the line they send |
+
+Love posts get their comments from a line like this. Every SCRIPT.md has a reply ready for the obvious question.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the

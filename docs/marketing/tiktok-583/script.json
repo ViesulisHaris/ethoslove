@@ -58,6 +58,23 @@
           "tapback": "heart"
         }
       ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its 731 for me"
+        },
+        {
+          "from": "them",
+          "text": "how"
+        },
+        {
+          "from": "me",
+          "text": "i liked u a day before i said yes"
+        }
+      ]
     }
   ]
 }

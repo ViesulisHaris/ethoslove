@@ -59,7 +59,24 @@
         },
         {
           "from": "me",
-          "text": "come home",
+          "text": "come home"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "check ur front door"
+        },
+        {
+          "from": "me",
+          "text": "u said it was 1am there"
+        },
+        {
+          "from": "them",
+          "text": "i lied",
           "tapback": "heart"
         }
       ]

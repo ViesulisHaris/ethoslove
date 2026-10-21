@@ -51,6 +51,19 @@
           "tapback": "heart"
         }
       ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "whats the reminder called"
+        },
+        {
+          "from": "them",
+          "text": "dont lose her"
+        }
+      ]
     }
   ]
 }
