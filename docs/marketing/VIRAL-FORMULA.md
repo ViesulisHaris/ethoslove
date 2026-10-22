@@ -2510,6 +2510,18 @@ one-screenshot flip with the gift inside it.
 
 **The owner: "make better like not in one slide but like 2-3 slides".** So 599 and 600 are now three slides each, and no post in the batch is a single image. 600 is in rosie's look: "no" alone on slide 1, "oh / ok" read on slide 2, "way more" and the link on slide 3. 599 is three iOS 26 crops, because only that look draws the reply typed in her box: "are u still mad" / "no", then the link, then "did u open it" over her unsent "i was going to break up with u tonight".
 
+**The owner: "make more of these, these were good".** 601–605 keep the shape: three slides, each ending on a beat that makes people swipe.
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 601 | warm flip | "i dont think i can do this anymore" | "go a whole day without telling u i love u" / "i tried. lasted til 10:58" + link |
+| 602 | rosie 149 | "for 3 hours?" (he didn't hold her hand) | her playlist "he doesnt deserve me", 47 songs / "maya send me the playlist" |
+| 603 | saves | "i set mine for 6:58" | "every morning from now on" |
+| 604 | trend + warm flip | "would u still love me if i was a worm" / "what kind of worm" | "id carry u everywhere in a little jar / with air holes" + link |
+| 605 | 599's draft, sweet | "i have something for u" | "did u like it" over her unsent "i think im going to marry u one day" |
+
+**Post order:** 601, 604, 605, 602, 603.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
