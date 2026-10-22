@@ -1,0 +1,59 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:08 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "we need to talk"
+        },
+        {
+          "from": "me",
+          "text": "about what"
+        },
+        {
+          "from": "them",
+          "text": "us"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "im listening",
+          "status": "Read 9:09 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i think we should move in together"
+        },
+        {
+          "from": "them",
+          "text": "open this before u answer"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}
