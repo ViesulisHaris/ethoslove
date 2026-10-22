@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|2:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I GRADUATED"
+        },
+        {
+          "from": "me",
+          "text": "wish u were here"
+        },
+        {
+          "from": "them",
+          "text": "send me a pic in ur gown"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "actually wait"
+        },
+        {
+          "from": "them",
+          "text": "open this first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "congrats graduate 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im crying in my gown"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "im 4 rows behind u",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
