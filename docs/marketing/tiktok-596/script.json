@@ -1,0 +1,62 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i asked if ud come to my cousins wedding"
+        },
+        {
+          "from": "me",
+          "text": "and u said \"we'll see\""
+        },
+        {
+          "from": "them",
+          "text": "i was in the middle of something"
+        },
+        {
+          "from": "me",
+          "text": "of what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im not mad anymore"
+        },
+        {
+          "from": "me",
+          "text": "but i already told my family ur giving a speech"
+        },
+        {
+          "from": "them",
+          "text": "maya im giving a WHAT"
+        }
+      ]
+    }
+  ]
+}
