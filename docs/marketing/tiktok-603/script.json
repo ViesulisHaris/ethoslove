@@ -1,0 +1,60 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:58 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur alarm goes off in 2 mins"
+        },
+        {
+          "from": "me",
+          "text": "how do u know that"
+        },
+        {
+          "from": "them",
+          "text": "i set mine for 6:58"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "so i could be the first thing u see"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "good morning 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|7:04 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its 7am and im crying"
+        },
+        {
+          "from": "them",
+          "text": "get used to it"
+        },
+        {
+          "from": "them",
+          "text": "every morning from now on",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
