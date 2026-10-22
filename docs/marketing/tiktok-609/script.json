@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:42 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "do u know what u said a year ago"
+        },
+        {
+          "from": "them",
+          "text": "at exactly this minute"
+        },
+        {
+          "from": "me",
+          "text": "no?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i love u"
+        },
+        {
+          "from": "them",
+          "text": "u said it first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "1 year since u said it 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i was so scared"
+        },
+        {
+          "from": "me",
+          "text": "u took forever to answer"
+        },
+        {
+          "from": "them",
+          "text": "4 seconds"
+        },
+        {
+          "from": "them",
+          "text": "i counted",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
