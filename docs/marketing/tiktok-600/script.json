@@ -1,0 +1,36 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do u love me as much as u did at the start"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "way more"
+        }
+      ]
+    }
+  ]
+}
