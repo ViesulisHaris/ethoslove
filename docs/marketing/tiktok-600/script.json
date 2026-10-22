@@ -1,11 +1,7 @@
 {
-  "crop": true,
-  "look": "ios26",
-  "silenced": false,
   "slides": [
     {
       "type": "chat",
-      "encrypted": true,
       "timestamp": "Today|12:14 AM",
       "messages": [
         {
@@ -15,6 +11,33 @@
         {
           "from": "them",
           "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "ok",
+          "status": "Read 12:15 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "way more"
+        },
+        {
+          "from": "them",
+          "text": "i love u way more now"
         },
         {
           "from": "them",
@@ -25,10 +48,6 @@
             "name": "Maya",
             "card": "blush"
           }
-        },
-        {
-          "from": "them",
-          "text": "way more"
         }
       ]
     }

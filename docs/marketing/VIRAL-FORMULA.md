@@ -2506,7 +2506,9 @@ one-screenshot flip with the gift inside it.
 | 599 | @36grm, 1 image | "open this before u decide anything" + the link, her unsent "i was going to break up with u tonight" | the draft |
 | 600 | @36grm, 1 image | "do u love me as much as u did at the start" / "no" / the link / "way more" | "way more" |
 
-**Post order:** 600, 596, 599, 598, 597. 599 and 600 go up as `video.mp4`.
+**Post order:** 600, 596, 599, 598, 597.
+
+**The owner: "make better like not in one slide but like 2-3 slides".** So 599 and 600 are now three slides each, and no post in the batch is a single image. 600 is in rosie's look: "no" alone on slide 1, "oh / ok" read on slide 2, "way more" and the link on slide 3. 599 is three iOS 26 crops, because only that look draws the reply typed in her box: "are u still mad" / "no", then the link, then "did u open it" over her unsent "i was going to break up with u tonight".
 
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
