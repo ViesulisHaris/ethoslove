@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:18 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u called me bro"
+        },
+        {
+          "from": "me",
+          "text": "in front of ur friends"
+        },
+        {
+          "from": "them",
+          "text": "it slipped"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "let me make it up to u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girlfriend not my bro 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok fine"
+        },
+        {
+          "from": "me",
+          "text": "but ur saved in my phone as bro now"
+        },
+        {
+          "from": "them",
+          "text": "maya change it back"
+        }
+      ]
+    }
+  ]
+}
