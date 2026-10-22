@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:31 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why are u being so dry today"
+        },
+        {
+          "from": "me",
+          "text": "im not"
+        },
+        {
+          "from": "them",
+          "text": "u said k 4 times"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok then"
+        },
+        {
+          "from": "them",
+          "text": "maybe this helps"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "wait"
+        },
+        {
+          "from": "me",
+          "text": "i left my phone at home today"
+        },
+        {
+          "from": "me",
+          "text": "my little brother was answering"
+        },
+        {
+          "from": "them",
+          "text": "so the k's were him"
+        }
+      ]
+    }
+  ]
+}
