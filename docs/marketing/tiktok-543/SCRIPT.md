@@ -6,9 +6,9 @@
 
 ## The story, slide by slide
 
-1. She: "can i come see biscuit" / He: "he misses you" / She: "just him?" (Read)
-2. He: "saturday works", the link "from biscuit 🐶" (pressed card), "he made you something"
-3. She: "tell biscuit i miss him too" / He: "just him?"
+1. She: "can i come see the dog" / He: "he misses you" / She: "just him?" (Read)
+2. He: "saturday works", the link "from the dog 🐶" (pressed card), "he made you something"
+3. She: "tell the dog i miss him too" / He: "just him?"
 
 **Real:** the chat never says what's inside the gift.
 
@@ -28,7 +28,7 @@ Never the website in the caption, and no 💅.
 
 ## Pinned comment (in character, never a brand)
 
-biscuit's idea apparently
+the dog's idea apparently
 
 ## In the first hour
 

@@ -8,13 +8,13 @@
 
 1. She: "you told me to calm down" / "in front of your friends" / He: "i said it nicely"
 2. His link "sorry 🤍" (blush card) / She: "you made this??" (Read)
-3. She: "i already told your friends about mr bear" / He: "maya they were never supposed to know"
+3. She: "i already told your friends about your teddy" / He: "maya they were never supposed to know"
 
 **Real:** the chat never says what's inside the gift.
 
 ## Why it will get comments
 
-"Calm down" is the phrase everyone hates being told. Then he apologises properly, and her revenge is worse: the room argues about who's worse and asks about mr bear.
+"Calm down" is the phrase everyone hates being told. Then he apologises properly, and her revenge is worse: the room argues about who's worse and asks about your teddy.
 
 ## Caption (written as a search)
 
@@ -28,7 +28,7 @@ Never the website in the caption, and no 💅.
 
 ## Pinned comment (in character, never a brand)
 
-mr bear is fine btw
+the teddy is fine btw
 
 ## In the first hour
 

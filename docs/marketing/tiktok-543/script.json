@@ -11,7 +11,7 @@
       "messages": [
         {
           "from": "me",
-          "text": "can i come see biscuit"
+          "text": "can i come see the dog"
         },
         {
           "from": "them",
@@ -34,7 +34,7 @@
         {
           "from": "them",
           "link": {
-            "title": "from biscuit 🐶",
+            "title": "from the dog 🐶",
             "domain": "tryethos.io",
             "image": "og",
             "name": "Maya",
@@ -53,7 +53,7 @@
       "messages": [
         {
           "from": "me",
-          "text": "tell biscuit i miss him too"
+          "text": "tell the dog i miss him too"
         },
         {
           "from": "them",

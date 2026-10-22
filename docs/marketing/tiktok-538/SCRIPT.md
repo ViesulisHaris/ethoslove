@@ -2,7 +2,7 @@
 
 **For:** any account. One image, posted as a video. No product and no link, so it needs no "Your brand" label (17 Oct: TikTok limited a tryethos post for a guideline violation).
 **Blueprint:** 520: exes, something they still share (the dog), and he answers without answering.
-**The formula:** "can i come see biscuit" / "he misses you" / "just him?" / "saturday works".
+**The formula:** "can i come see the dog" / "he misses you" / "just him?" / "saturday works".
 **Format:** 1 image (`video.mp4`, 10 seconds). iOS 26 dark. No names, no link, no product.
 
 Post `video.mp4`, not the picture, and add a quiet trending sound in TikTok.

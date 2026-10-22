@@ -6,7 +6,7 @@
 
 ## The story, slide by slide
 
-1. She: "why is your wifi still called emma's wifi" / He: "i never changed it"
+1. She: "why is your wifi still named after your ex" / He: "i never changed it"
 2. His link "for maya 🤍" (blush card), "changing it tonight"
 3. She: "i already did" / "it's maya's wifi now" / He: "maya what's the password"
 
