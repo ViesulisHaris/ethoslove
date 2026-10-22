@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u didnt hold my hand in front of ur friends"
+        },
+        {
+          "from": "them",
+          "text": "my hands were in my pockets"
+        },
+        {
+          "from": "me",
+          "text": "for 3 hours?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im not mad anymore"
+        },
+        {
+          "from": "me",
+          "text": "but i already made a playlist"
+        },
+        {
+          "from": "me",
+          "text": "its called \"he doesnt deserve me\""
+        },
+        {
+          "from": "me",
+          "text": "47 songs"
+        },
+        {
+          "from": "them",
+          "text": "maya send me the playlist"
+        }
+      ]
+    }
+  ]
+}
