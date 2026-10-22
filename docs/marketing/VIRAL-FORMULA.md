@@ -2522,6 +2522,18 @@ one-screenshot flip with the gift inside it.
 
 **Post order:** 601, 604, 605, 602, 603.
 
+606–610, five more:
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 606 | warm flip | "we need to talk" / "us" | "i think we should move in together" + link |
+| 607 | rosie 149 | "they were PINK" (he missed her nails) | "i painted ur toenails while u were asleep / theyre pink too" / "maya i have a game tomorrow" |
+| 608 | trend (the bird test) | "what kind" | "ok tell me everything about the bird" + link |
+| 609 | saves | "at exactly this minute" / "no?" | "u took forever to answer" / "4 seconds / i counted" |
+| 610 | 192, funny | "u said k 4 times" | "my little brother was answering" / "so the k's were him" |
+
+**Post order:** 606, 608, 607, 609, 610.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
