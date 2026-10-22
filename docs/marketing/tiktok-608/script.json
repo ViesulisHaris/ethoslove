@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|2:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i saw a cute bird today"
+        },
+        {
+          "from": "them",
+          "text": "what kind"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "idk a small brown one"
+        },
+        {
+          "from": "them",
+          "text": "send a pic"
+        },
+        {
+          "from": "me",
+          "text": "it flew away"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok tell me everything about the bird"
+        },
+        {
+          "from": "them",
+          "text": "and open this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🐦",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}
