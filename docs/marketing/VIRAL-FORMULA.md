@@ -2275,7 +2275,7 @@ quiet last line that reads two ways.
 |---|---|---|---|---|
 | 536 | "can i get my key back" / "it's on my keychain" / "so take it off" | "i tried" | the keyring, or her | getting my stuff back from my ex 🔑 |
 | 537 | "you finished our show" / "you can see that?" / "it's my netflix" | "i waited 6 months" | he waited for her, or he's on her netflix | my ex still uses my netflix 💔 |
-| 538 | "can i come see biscuit" / "he misses you" / "just him?" | "saturday works" | the dodge; get back together | my ex has our dog 🥺 |
+| 538 | "can i come see the dog" / "he misses you" / "just him?" | "saturday works" | the dodge; get back together | my ex has our dog 🥺 |
 | 539 | "my phone just showed me us at the lake" / "mine too" / "i thought you deleted them" | "i thought you did" | neither deleted anything | deleting old pictures of my ex 🥲 |
 | 540 | "who's the guy on your story" / "my cousin" / "you don't have a cousin" | "you unfollowed me", read, no reply | who's worse | why your ex watches your story 👀 |
 
@@ -2290,7 +2290,7 @@ posted with **Your brand** turned on.
 |---|---|---|---|
 | 541 | 536, the key | "for maya 🤍", burgundy | her double text "you made this??" / "keep the key" |
 | 542 | 537, the show | "for maya", black, "made this while i waited" | "rewatch it with me" |
-| 543 | 538, the dog | "from biscuit 🐶", pressed, "he made you something" | "tell biscuit i miss him too" / his "just him?" |
+| 543 | 538, the dog | "from the dog 🐶", pressed, "he made you something" | "tell the dog i miss him too" / his "just him?" |
 | 544 | 539, the lake | "for maya ♡", blush, "open this before you do" | "i'm not deleting them" |
 | 545 | his Mar 14 gift "for when you miss me", her 2am "how do you delete something from your home screen" | black | "i'm still holding it" |
 
@@ -2336,7 +2336,7 @@ exception is midnight in 547, where the clock is the story.
 | | Engine | His side | Her line they'll quote | Last bubble |
 |---|---|---|---|---|
 | 556 | saves (he counted) | "that's 212" / "times you've said i'm fine this year", then the link "for number 213 🤍" | "ok i'm not fine / i'm crying" | "that's better" |
-| 557 | comments (149) | "calm down" in front of his friends, then the link "sorry 🤍" | "i already told your friends about mr bear" | "maya they were never supposed to know" |
+| 557 | comments (149) | "calm down" in front of his friends, then the link "sorry 🤍" | "i already told your friends about your teddy" | "maya they were never supposed to know" |
 | 558 | saves and sales | "for when you land 🤍", "it opens when you land" | "it has a countdown??" → "the guy next to me cried too" | "maya you showed him??" |
 | 559 | comments (149) | fell asleep on FaceTime, "you were telling the long story", then the link "for the long story 🤍" | "i recorded you snoring / it's my ringtone now" | "maya change it" |
 | 560 | comments (149) | a TikTok instead of goodnight, then the link "goodnight maya 🤍", "ok this is the real one" | "i already made a finsta to check your likes" | "maya what's it called" |
@@ -2361,7 +2361,7 @@ exception is midnight in 547, where the clock is the story.
 |---|---|---|---|---|
 | 566 | comments (149) | 2 hours of Fortnite, then the link "gg 🤍", "made you this between games" | "i've been playing on your account / i lost 23 games" | "maya that's why i'm bronze" |
 | 567 | comments (149) | forgot to pick her up, "my phone was on silent", then the link | "i got an uber / on your card" | "maya it says $86" |
-| 568 | comments (149, an ex) | wifi still called "emma's wifi", then the link, "changing it tonight" | "i already did / it's maya's wifi now" | "maya what's the password" |
+| 568 | comments (149, an ex) | wifi still named after his ex, then the link, "changing it tonight" | "i already did / it's maya's wifi now" | "maya what's the password" |
 | 569 | saves and sales (102) | "open this at 30k", then the link "for 30k 🤍" | "i'm crying and running" / "I FINISHED" | "i know / look left" |
 | 570 | saves (he remembered) | "on your break?" / "3am every thursday", then the link "for your 3am 🤍" | "you set an alarm for my break??" | "open it first" |
 
@@ -2463,6 +2463,23 @@ each with one detail to comment on, in three chat slides with the link card:
 | 590 | a Tuesday, no reason | "who does this on a tuesday" | "someone whos obsessed with u" |
 
 **Post order:** 590, 587, 586, 589, 588.
+
+591–595 (22 Oct) are five more of the same:
+
+| | The day | The line people send | Last bubble |
+|---|---|---|---|
+| 591 | she hates her haircut | "u havent even seen it" | "i dont need to" |
+| 592 | phone on 1%, at her friend's | "it died the second i opened it" | "now she wants one" |
+| 593 | cramps | "u dont even know what chocolate i want" | "i do / i always do" |
+| 594 | her graduation, "wish u were here" | "open this first" | "i know / im 4 rows behind u" |
+| 595 | his mum calls her "future daughter in law" | "i might have told her some things" | "shes hugging me" |
+
+**Post order:** 594, 591, 595, 593, 592.
+
+**Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
+named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
+teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
+video was made again.
 
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
