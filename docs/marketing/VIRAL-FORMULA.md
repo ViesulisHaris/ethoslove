@@ -2476,6 +2476,38 @@ each with one detail to comment on, in three chat slides with the link card:
 
 **Post order:** 594, 591, 595, 593, 592.
 
+## What's working now (read 22 Oct), and 596 to 600
+
+The owner: "create them better so it goes really viral", looking at rosie and the accounts sent earlier.
+Read live the same day, no login:
+
+- **@36grm is the biggest thing in the niche right now.**
+  - Posts: 11.1M (2 Oct), 6.5M (8 Oct), 5.7M, 4.8M, 4.3M, 3.4M, 2.7M.
+  - Every one is a single screenshot posted as a 10-second still video. The caption is "#targetaudience" and nothing else.
+  - The shapes:
+    - a confession flipped cold in the last line ("my love for you is like dinosaurs, it doesn't exist", 11.1M, 195.9K shares);
+    - an ultimatum with the answer typed in her message box and not sent ("go to the party", 6.5M);
+    - a dark reveal (sharing location "so u can see when and where i'm cheating at", 5.7M);
+    - an ex correcting the date of an anniversary that would have been (2.7M);
+    - a photo of a real phone screen instead of a screenshot (4.8M, 2.7M).
+  - It also posts some 60-second videos now (1.1M each).
+- **@unicornsprinklewaffles:** 4.9M down to 1.5M, all still videos, the last on 12 Oct.
+- **@savgilbertt:** nothing big since August.
+- **rosie:** her hits are still 149 (1.3M, comments) and 30 (985K, saves).
+
+So the batch mixes the two that are proven: rosie's two engines in her own 3-slide chats, and @36grm's
+one-screenshot flip with the gift inside it.
+
+| | Shape | The story | Last line |
+|---|---|---|---|
+| 596 | rosie 149, 3 slides | "we'll see" to her cousin's wedding → "this" | "maya im giving a WHAT" |
+| 597 | rosie 149, 3 slides | he called her "bro" → "for my girlfriend not my bro 🤍" | "maya change it back" |
+| 598 | rosie 30, 3 slides | "look at the time in 2 mins" → 11:11 "make a wish" / "mine already came true" | "u did" |
+| 599 | @36grm, 1 image | "open this before u decide anything" + the link, her unsent "i was going to break up with u tonight" | the draft |
+| 600 | @36grm, 1 image | "do u love me as much as u did at the start" / "no" / the link / "way more" | "way more" |
+
+**Post order:** 600, 596, 599, 598, 597. 599 and 600 go up as `video.mp4`.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
