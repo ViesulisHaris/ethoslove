@@ -31,6 +31,8 @@ export type GiftRendererProps = {
   onMakeOne?: () => void;
   /** On a real gift page: the make-one button offers to send one back to the sender. */
   replyMode?: boolean;
+  /** On a real gift page: where the end screen's "Keep this gift" goes. */
+  keepHref?: string;
   /** Change to remount the template (replay). */
   replayKey?: number;
   /** Show this cover regardless of the gift's own choice (demo pages, `?cover=`). */
@@ -60,6 +62,7 @@ export function GiftRenderer({
   onReact,
   onMakeOne,
   replyMode = false,
+  keepHref,
   replayKey = 0,
   coverOverride,
   lookOverride,
@@ -101,7 +104,7 @@ export function GiftRenderer({
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
 
   const watermarked = ready && !!resolved?.watermark && mode !== "preview";
-  const chrome = useMemo(() => ({ watermarked, onEndScreen: setEndScreen }), [watermarked]);
+  const chrome = useMemo(() => ({ watermarked, onEndScreen: setEndScreen, keepHref }), [watermarked, keepHref]);
 
   const theme = useMemo(
     () => (resolved ? giftThemeVars(resolved.accentColor, resolved.fontPairing) : undefined),

@@ -128,23 +128,35 @@ describe("lifecycle emails", () => {
     expect(es).toContain("no se puede canjear por dinero");
   });
 
-  it("reminder names the person and the day, and links to make and remove", async () => {
-    const html = text(await render(ReminderEmail({ locale: "en", recipientName: "Ana", occasion: "birthday", date: "3 October", makeUrl: "https://ethos.test/occasions/birthday?ref=email-reminder", removeUrl: "https://ethos.test/api/reminders/remove?t=x" })));
+  it("reminder names the person and the day, suggests one template, and links to make it and to remove", async () => {
+    const idea = { name: "Birthday Cinema", tagline: "Curtains, candles, confetti.", url: "https://ethos.test/create/birthday-cinema?ref=email-reminder", poster: "https://ethos.test/templates/birthday-cinema/poster.jpg" };
+    const html = text(await render(ReminderEmail({ locale: "en", recipientName: "Ana", occasion: "birthday", date: "3 October", idea, moreUrl: "https://ethos.test/occasions/birthday?ref=email-reminder", removeUrl: "https://ethos.test/api/reminders/remove?t=x" })));
     expect(html).toContain("Ana's birthday is on 3 October.");
-    expect(html).toContain("Make Ana something");
+    expect(html).toContain("Make it for Ana");
+    expect(html).toContain("Birthday Cinema");
+    expect(html).toContain("Curtains, candles, confetti.");
+    expect(html).toContain("https://ethos.test/create/birthday-cinema?ref=email-reminder");
+    expect(html).toContain("https://ethos.test/templates/birthday-cinema/poster.jpg");
     expect(html).toContain("https://ethos.test/occasions/birthday?ref=email-reminder");
     expect(html).toContain("Remove this reminder");
     expect(html).toContain("https://ethos.test/api/reminders/remove?t=x");
+    // Nothing claims a gift was made: a reminder can be for someone no gift was ever made for.
+    expect(html).not.toContain("when you made");
     expect(reminderHeading("anniversary", "es", "Ana", "3 de octubre")).toBe("Tu aniversario con Ana es el 3 de octubre.");
     expect(reminderHeading("valentines", "en", "Ana", "14 February")).toBe("Valentine's Day is on 14 February.");
-    const es = text(await render(ReminderEmail({ locale: "es", recipientName: "Ana", occasion: "other", date: "3 de octubre", makeUrl: "https://x", removeUrl: "https://y" })));
+    const es = text(await render(ReminderEmail({ locale: "es", recipientName: "Ana", occasion: "other", date: "3 de octubre", idea: { ...idea, name: "La carta" }, moreUrl: "https://x", removeUrl: "https://y" })));
     expect(es).toContain("Un día para Ana: el 3 de octubre.");
+    expect(es).toContain("Hacerlo para Ana");
+    expect(es).toContain("La carta");
     expect(es).toContain("Quitar este recordatorio");
   });
 
   it("receipt offers Everything for the difference, and says until when for a pass", async () => {
     const single = text(await render(ReceiptEmail({ locale: "en", productLabel: "One template", amountLabel: "€9.99", unlocks: ["Pack Your Bags"], dashboardUrl: "https://x", upgrade: { url: "https://ethos.test/pricing?upgrade=1", amountLabel: "€15.00" } })));
-    expect(single).toContain("For you, Everything is now €15.00");
+    // Credit, never a new price: "for €15.00 more", with what they've paid counting.
+    expect(single).toContain("What you've already paid counts:");
+    expect(single).toContain("every template, forever, for €15.00 more");
+    expect(single).not.toMatch(/is now|discount|save/i);
     expect(single).toContain("https://ethos.test/pricing?upgrade=1");
     expect(single).toContain("It's yours, forever.");
     const pass = text(await render(ReceiptEmail({ locale: "es", productLabel: "Ethos for Two", amountLabel: "29,00 €", unlocks: [], dashboardUrl: "https://x", until: "23 de septiembre de 2027" })));
@@ -166,11 +178,13 @@ describe("lifecycle emails", () => {
     expect(single).toContain("the 14-day right to cancel no longer applies");
   });
 
-  it("first open offers the next gift", async () => {
-    const html = text(await render(GiftOpenedEmail({ locale: "en", recipientName: "Ana", dashboardUrl: "https://x", nextUrl: "https://ethos.test/templates?ref=email-opened" })));
-    expect(html).toContain("Start the next gift");
-    expect(html).toContain("https://ethos.test/templates?ref=email-opened");
+  it("first open asks whose day is next, with one template, never the templates page", async () => {
+    const html = text(await render(GiftOpenedEmail({ locale: "en", recipientName: "Ana", dashboardUrl: "https://x", next: { name: "Bouquet", url: "https://ethos.test/create/bouquet?ref=email-opened" } })));
+    expect(html).toContain("Whose day is next? Try");
+    expect(html).toContain("Bouquet");
+    expect(html).toContain("https://ethos.test/create/bouquet?ref=email-opened");
+    expect(html).not.toContain("/templates?");
     const without = text(await render(GiftOpenedEmail({ locale: "es", recipientName: "Ana", dashboardUrl: "https://x" })));
-    expect(without).not.toContain("siguiente regalo");
+    expect(without).not.toContain("próximo día");
   });
 });

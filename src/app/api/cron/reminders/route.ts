@@ -2,11 +2,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { isConfigured } from "@/lib/env";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
-import { dueDates, formatMonthDay, needsSending, type ReminderOccasion } from "@/lib/lifecycle/reminders";
-import { sendReminderEmail } from "@/lib/email/notify";
+import { dueDates, formatMonthDay, needsSending } from "@/lib/lifecycle/reminders";
+import { sendMonthsaries, supabaseMonthsaryStore } from "@/lib/lifecycle/monthsary-job";
+import { sendMonthsaryCheckIn, sendMonthsaryReminder, sendReminderEmail } from "@/lib/email/notify";
 import { sendDateReminder } from "@/lib/email/saved-dates";
 import { pageUrl, siteUrl } from "@/lib/email/urls";
 import { sendDateReminders, supabaseReminderStore } from "@/lib/saved-dates/reminders";
+import { sendKeptReminders } from "@/lib/keep/reminder-job";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -20,14 +22,15 @@ const SEND_GAP_MS = 500;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-const makePath = (occasion: ReminderOccasion) => (occasion === "other" ? "/templates?ref=email-reminder" : `/occasions/${occasion}?ref=email-reminder`);
-
 /**
  * "Remind me next year": every morning, the reminders whose day is nine days away (and the two
  * days before that, for runs that were missed) get their email. 29 February is sent for on the 28th
  * in other years. Each reminder is claimed before its email goes (last_sent_year = the occasion's
  * year), so two runs at once can't both send it; if the email fails, the claim is given back and
- * the next run tries again. Then, in the time left, members' saved dates that are tomorrow.
+ * the next run tries again. Then the monthsaries (the day-before check-ins, and the reminders that
+ * got a yes: lib/lifecycle/monthsary-job.ts), the days recipients who kept a gift asked about (and
+ * the deletion of keeps never confirmed: lib/keep/reminder-job.ts), and, in the time left, members'
+ * saved dates that are tomorrow.
  */
 export async function GET(request: NextRequest) {
   // Fail closed: without a configured secret nobody can trigger the cron.
@@ -47,7 +50,7 @@ export async function GET(request: NextRequest) {
   for (const due of dueDates(new Date())) {
     const { data: rows, error } = await admin
       .from("reminders")
-      .select("id, user_id, recipient_name, occasion, locale, last_sent_year")
+      .select("id, user_id, recipient_name, occasion, locale, template_slug, last_sent_year")
       .eq("month", due.month)
       .in("day", due.days)
       .or(`last_sent_year.is.null,last_sent_year.lt.${due.year}`)
@@ -82,7 +85,8 @@ export async function GET(request: NextRequest) {
         occasion: r.occasion,
         // The day it falls on this year: the 28th for a 29 February birthday in a common year.
         date: formatMonthDay({ month: due.date.getUTCMonth() + 1, day: due.date.getUTCDate() }, locale),
-        makeUrl: pageUrl(locale, makePath(r.occasion)),
+        // The template the reminder was saved with is only skipped: the suggestion is a new one.
+        avoid: r.template_slug,
         removeUrl: `${siteUrl()}/api/reminders/remove?t=${token}&l=${locale}`,
       });
       if (ok) sent += 1;
@@ -92,6 +96,43 @@ export async function GET(request: NextRequest) {
       }
       await sleep(SEND_GAP_MS);
     }
+  }
+
+  // Then the monthsaries. Like the saved dates below, a failure is logged and reported, and never
+  // takes back what the yearly reminders sent.
+  let monthly: Awaited<ReturnType<typeof sendMonthsaries>> | { error: string };
+  try {
+    monthly = await sendMonthsaries({
+      store: supabaseMonthsaryStore(admin),
+      checkIn: sendMonthsaryCheckIn,
+      remind: sendMonthsaryReminder,
+      links: async (row, date) => ({
+        yesUrl: `${siteUrl()}/api/monthsaries/yes?t=${encodeURIComponent(await signToken("monthsary-yes", `${row.user_id}:${date}`, linkKey))}&l=${row.locale}`,
+        stopUrl: `${siteUrl()}/api/monthsaries/stop?t=${await signToken("monthsary-stop", row.user_id, linkKey)}&l=${row.locale}`,
+      }),
+      now: new Date(),
+      inTime: () => Date.now() - started <= BUDGET_MS,
+      pause: () => sleep(SEND_GAP_MS),
+    });
+  } catch (error) {
+    console.error("[cron/reminders] monthsaries failed", (error as Error).message);
+    monthly = { error: "unavailable" };
+  }
+
+  // Then the recipients who kept a gift. A failure is logged and reported here too.
+  let kept: Awaited<ReturnType<typeof sendKeptReminders>> | { error: string };
+  try {
+    kept = await sendKeptReminders({
+      admin,
+      now: new Date(),
+      send: sendReminderEmail,
+      removeUrl: async (id, locale) => `${siteUrl()}/api/keep/reminder-off?t=${await signToken("keep-reminder-off", id, linkKey)}&l=${locale}`,
+      inTime: () => Date.now() - started <= BUDGET_MS,
+      pause: () => sleep(SEND_GAP_MS),
+    });
+  } catch (error) {
+    console.error("[cron/reminders] kept gifts failed", (error as Error).message);
+    kept = { error: "unavailable" };
   }
 
   // Then the saved dates that are tomorrow, with whatever time is left (lib/saved-dates/reminders.ts).
@@ -114,5 +155,5 @@ export async function GET(request: NextRequest) {
     dates = { error: "unavailable" };
   }
 
-  return NextResponse.json({ ok: true, sent, failed, deferred, dates });
+  return NextResponse.json({ ok: true, sent, failed, deferred, monthly, kept, dates });
 }

@@ -58,8 +58,18 @@ export type SessionOptions = {
   productIds: Record<string, string | undefined>;
 };
 
+/**
+ * What Stripe's page says under the upgrade, so its price is read as what it is: credit for what the
+ * buyer has paid, never a discount (a buyer who upgrades has paid Everything's price in all).
+ */
+export function upgradeLineDescription(currency: Currency, locale: Locale): string {
+  const full = formatAmount(PRODUCTS.everything.amounts[currency], currency, locale);
+  return locale === "es" ? `Todas las plantillas cuestan ${full}, y lo que ya has pagado se resta.` : `Every template is ${full}, and what you've already paid counts towards it.`;
+}
+
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
   if (line.key === "bump") return undefined;
+  if (line.key === "upgrade") return upgradeLineDescription(plan.currency, locale);
   if (plan.packId) return PACK_NAMES[plan.packId][locale];
   const names = plan.templateSlugs.map((slug) => getManifest(slug)?.name[locale] ?? slug);
   return names.length > 0 ? names.join(", ") : undefined;
@@ -227,15 +237,24 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
 /**
  * Where Stripe sends the buyer. returnTo is a path without the locale (the app's Links add it);
  * Stripe sends the buyer to a bare URL, so a Spanish buyer is sent back under /es rather than left
- * to the language redirect.
+ * to the language redirect. A cancel brings the link they came through back with it (?ref=): the
+ * site keeps it nowhere but the address (lib/attribution/ref.ts), so trying again is still
+ * credited to it.
  */
-function returnUrls(options: Pick<SessionOptions, "locale" | "origin" | "returnTo">): { success_url: string; cancel_url: string } {
+function returnUrls(options: Pick<SessionOptions, "locale" | "origin" | "returnTo" | "ref">): { success_url: string; cancel_url: string } {
   const prefix = options.locale === "es" ? "/es" : "";
   const back = options.returnTo;
   const cancel = prefix && back === "/" ? prefix : `${prefix}${back}`;
+  const ref = metadataRef(options.ref);
+  let cancelUrl = `${options.origin}${cancel}`;
+  if (ref) {
+    const url = new URL(cancelUrl);
+    if (!url.searchParams.has("ref")) url.searchParams.set("ref", ref);
+    cancelUrl = url.toString();
+  }
   return {
     success_url: `${options.origin}${prefix}/checkout/success?session_id={CHECKOUT_SESSION_ID}&return=${encodeURIComponent(back)}`,
-    cancel_url: `${options.origin}${cancel}`,
+    cancel_url: cancelUrl,
   };
 }
 

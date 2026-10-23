@@ -12,11 +12,14 @@ import { useQuietFocus } from "./quiet-focus";
 import { CELL, FIELD_CHEVRON, FIELD_TRIGGER, GROUP_LABEL } from "./styles";
 
 type Props = {
-  value: MonthDay;
+  /** Null: nothing chosen yet. The field then says `placeholder`, and a month is picked before its day. */
+  value: MonthDay | null;
   onChange: (value: MonthDay) => void;
   /** The field's name, followed by the day chosen: "Date: 14 February". */
   label: string;
   locale: "en" | "es";
+  /** What the field says before a day is chosen ("Pick the day"). */
+  placeholder?: string;
   id?: string;
   className?: string;
 };
@@ -29,25 +32,33 @@ const DAY_COLUMNS = 7;
  * A day that comes round every year ("14 February"), picked without a year: a month from the twelve,
  * then its day, which closes the card. One field where there were a day's select and a month's. The
  * days are counted in a leap year, so 29 February is there; a month too short for the day chosen
- * takes its own last day instead (lib/pickers/month-day).
+ * takes its own last day instead (lib/pickers/month-day). It can also start empty, for a day only
+ * the person knows (their birthday): then nothing is chosen until they choose it, never today by
+ * default, and the day is picked after its month.
  */
-export function MonthDayPicker({ value, onChange, label, locale, id, className }: Props) {
+export function MonthDayPicker({ value, onChange, label, locale, placeholder, id, className }: Props) {
   const t = useTranslations("pickers");
   const uid = useId();
   const [open, setOpen] = useState(false);
+  // An empty field's month, chosen and waiting for its day: only then is there a value to send.
+  const [pendingMonth, setPendingMonth] = useState<number | null>(null);
   const { trigger, triggerProps, contentProps } = useQuietFocus();
   const monthsRef = useRef<HTMLDivElement>(null);
   const daysRef = useRef<HTMLDivElement>(null);
   const shortNames = monthNames(locale);
   const longNames = monthNames(locale, "long");
-  const days = Array.from({ length: daysFor(value.month) }, (_, i) => i + 1);
-  const shown = formatMonthDay(value, locale);
+  const month = value?.month ?? pendingMonth;
+  const days = Array.from({ length: daysFor(month ?? 1) }, (_, i) => i + 1);
+  const shown = value ? formatMonthDay(value, locale) : (placeholder ?? "");
 
-  const pickMonth = (month: number) => {
-    if (month !== value.month) onChange(withMonth(value, month));
+  const pickMonth = (next: number) => {
+    if (!value) return setPendingMonth(next);
+    if (next !== value.month) onChange(withMonth(value, next));
   };
   const pickDay = (day: number) => {
-    if (day !== value.day) onChange(withDay(value, day));
+    if (value) {
+      if (day !== value.day) onChange(withDay(value, day));
+    } else if (month !== null) onChange(withDay({ month, day }, day));
   };
   /** Arrows in a radio group move the focus and the choice together. */
   const onRadioKey = (
@@ -75,9 +86,10 @@ export function MonthDayPicker({ value, onChange, label, locale, id, className }
       width="w-[340px]"
       contentProps={contentProps}
       onOpenAutoFocus={(e) => {
-        // Onto the day: the month is usually right already (it came from the gift).
+        // Onto the day: the month is usually right already (it came from the gift). An empty field
+        // starts at the months.
         e.preventDefault();
-        daysRef.current
+        (month === null ? monthsRef : daysRef).current
           ?.querySelector<HTMLElement>('[tabindex="0"]')
           ?.focus({ preventScroll: true });
       }}
@@ -87,11 +99,11 @@ export function MonthDayPicker({ value, onChange, label, locale, id, className }
           ref={trigger}
           id={id}
           {...triggerProps}
-          aria-label={`${label}: ${shown}`}
+          aria-label={value ? `${label}: ${shown}` : label}
           className={cn(FIELD_TRIGGER, className)}
         >
           <CalendarHeart aria-hidden="true" className="size-[18px] shrink-0 text-rose-deep" />
-          <span className="min-w-0 truncate">{shown}</span>
+          <span className={cn("min-w-0 truncate", !value && "text-muted-foreground")}>{shown}</span>
           <ChevronDown aria-hidden="true" className={FIELD_CHEVRON} />
         </button>
       }
@@ -106,22 +118,23 @@ export function MonthDayPicker({ value, onChange, label, locale, id, className }
         onKeyDown={(e) => onRadioKey(e, monthsRef.current, MONTH_COLUMNS, MONTHS, pickMonth)}
         className="grid grid-cols-6 gap-1"
       >
-        {MONTHS.map((month) => {
-          const chosen = month === value.month;
+        {MONTHS.map((m) => {
+          const chosen = m === month;
           return (
             <button
-              key={month}
+              key={m}
               type="button"
               role="radio"
               aria-checked={chosen}
-              aria-label={longNames[month - 1]}
+              aria-label={longNames[m - 1]}
               data-chosen={chosen || undefined}
-              data-n={month}
-              tabIndex={chosen ? 0 : -1}
-              onClick={() => pickMonth(month)}
+              data-n={m}
+              // With nothing chosen, the first month takes the Tab key, so the group can be reached.
+              tabIndex={chosen || (month === null && m === 1) ? 0 : -1}
+              onClick={() => pickMonth(m)}
               className={cn(CELL, "w-full min-w-0 rounded-xl px-0 text-[14.5px]")}
             >
-              {shortNames[month - 1]}
+              {shortNames[m - 1]}
             </button>
           );
         })}
@@ -137,7 +150,7 @@ export function MonthDayPicker({ value, onChange, label, locale, id, className }
         className="grid grid-cols-7 gap-y-0.5"
       >
         {days.map((day) => {
-          const chosen = day === value.day;
+          const chosen = day === value?.day;
           return (
             <button
               key={day}
@@ -146,12 +159,14 @@ export function MonthDayPicker({ value, onChange, label, locale, id, className }
               aria-checked={chosen}
               data-chosen={chosen || undefined}
               data-n={day}
-              tabIndex={chosen ? 0 : -1}
+              // An empty field's days wait for a month.
+              disabled={month === null}
+              tabIndex={chosen || (!value && month !== null && day === 1) ? 0 : -1}
               onClick={() => {
                 pickDay(day);
                 setOpen(false);
               }}
-              className={cn(CELL, "mx-auto size-11")}
+              className={cn(CELL, "mx-auto size-11 disabled:opacity-35")}
             >
               {day}
             </button>

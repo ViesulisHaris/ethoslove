@@ -10,15 +10,12 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { Button } from "@/components/ui/button";
 import { InviteLink } from "@/components/pricing/invite-link";
 import { purchaseOutcome, safeReturnPath } from "@/components/pricing/offers";
+import { BackToGift, UpgradeAfterPurchase } from "@/components/pricing/upgrade-after-purchase";
 import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
+import { isFresh, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
 
 export const metadata: Metadata = { robots: { index: false } };
-
-/** A guest's session may sign that browser in only this soon after it was created. */
-const GUEST_SIGN_IN_WINDOW_S = 30 * 60;
-
-const isFresh = (createdAtSeconds: number) => Date.now() / 1000 - createdAtSeconds < GUEST_SIGN_IN_WINDOW_S;
 
 export default async function CheckoutSuccessPage({
   params,
@@ -47,6 +44,9 @@ export default async function CheckoutSuccessPage({
   // both work for whoever holds them. The signed-in buyer, always; a guest's session id only while
   // it may also sign this browser in. After that the email that went with it carries them.
   let mayReveal = false;
+  // "Every template for the difference", for a buyer this browser is (or is about to be signed in
+  // as): never on a page that asks them to sign in first.
+  let upgrade: UpgradeAfter | null = null;
   if (stripe && typeof session_id === "string") {
     try {
       const session = await stripe.checkout.sessions.retrieve(session_id);
@@ -76,6 +76,8 @@ export default async function CheckoutSuccessPage({
         state = result.ok ? "paid" : session.payment_status === "unpaid" ? "pending" : "error";
         mayReveal = result.ok;
       }
+      const buyerHere = result?.userId && (user?.id === result.userId || signInUrl !== null) ? result.userId : null;
+      if (state === "paid" && sold && buyerHere) upgrade = await upgradeAfterCheckout(session, sold, buyerHere);
     } catch {
       state = "error";
     }
@@ -148,9 +150,15 @@ export default async function CheckoutSuccessPage({
   })();
   // Whoever bought for a gift goes straight back to it, where it publishes itself: a guest through
   // the one-time sign-in, a signed-in buyer directly. A pass, a membership or a gift card has
-  // something to hand over here first (the invite link, the code), so that page waits for a tap.
+  // something to hand over here first (the invite link, the code), and the upgrade has something to
+  // say, so those pages wait for a tap, with the way back to the gift first.
   const autoContinue =
-    state === "paid" && outcome !== "pass" && outcome !== "membership" && outcome !== "giftcard" && (signInUrl !== null || returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo));
+    state === "paid" &&
+    !upgrade &&
+    outcome !== "pass" &&
+    outcome !== "membership" &&
+    outcome !== "giftcard" &&
+    (signInUrl !== null || returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo));
   const giftCardUrl = paid && outcome === "giftcard" && giftCardCode ? new URL(redeemUrl(giftCardCode, lang)) : null;
   const continueLabel = returnTo.startsWith("/create/") ? tm("toGift") : returnTo.startsWith("/account") ? tm("toAccount") : t("continue");
   // Ethos for Two's two ways on: the first date, or the account (where the partner's link also is).
@@ -210,6 +218,9 @@ export default async function CheckoutSuccessPage({
             </>
           )}
         </div>
+      ) : upgrade && signInUrl && typeof session_id === "string" ? (
+        // A guest with the card: signed in when they tap, not by the page's own link (BackToGift).
+        <BackToGift sessionId={session_id} returnTo={returnTo} label={continueLabel} />
       ) : (
         <Button asChild className="mt-8 h-12 rounded-full px-6">
           {state === "signin" ? (
@@ -222,6 +233,13 @@ export default async function CheckoutSuccessPage({
           )}
         </Button>
       )}
+      {upgrade && typeof session_id === "string" ? (
+        <UpgradeAfterPurchase
+          sessionId={session_id}
+          returnTo={returnTo}
+          upgrade={{ ...upgrade.offer, full: upgrade.full, paid: upgrade.paid, earlier: upgrade.earlier, sorted: upgrade.sorted, ahead: upgrade.ahead }}
+        />
+      ) : null}
     </div>
   );
 }

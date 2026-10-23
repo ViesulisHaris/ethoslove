@@ -13,7 +13,12 @@ const EMOJI = new Set(["❤️", "😭", "🥹", "😂", "😮"]);
 const MAX_AUDIO_BYTES = 3 * 1024 * 1024;
 const AUDIO_TYPES = new Set(["audio/webm", "audio/mp4", "audio/mpeg", "audio/ogg", "audio/wav", "audio/aac", "audio/x-m4a"]);
 
-/** Recipient reaction: emoji + optional text + optional ≤20s voice note (multipart). */
+/**
+ * Recipient reaction: emoji + optional text + optional ≤20s voice note (multipart), and `share=1`
+ * when its writer ticked "Ethos may show this reaction on its site, without your name". That is kept
+ * with the moment they did, and with the gift's language, so a page shows only reactions written in
+ * its own; nothing is shown until the owner approves it, and the sender is told and can say no (lib/proof).
+ */
 export async function POST(request: NextRequest, ctx: RouteContext<"/api/gift/[shortId]/react">) {
   const { shortId } = await ctx.params;
   if (!isShortId(shortId)) return NextResponse.json({ ok: false }, { status: 404 });
@@ -29,11 +34,13 @@ export async function POST(request: NextRequest, ctx: RouteContext<"/api/gift/[s
   const emoji = String(form.get("emoji") ?? "");
   const text = String(form.get("text") ?? "").slice(0, 1000).trim();
   const audio = form.get("audio");
+  const share = form.get("share") === "1";
   if (!EMOJI.has(emoji)) return NextResponse.json({ ok: false, error: "bad_emoji" }, { status: 400 });
 
   // Find the gift id through the public RPC so we never touch gifts directly with recipient input.
   const { data: pub } = await admin.rpc("get_public_gift", { p_short_id: shortId, p_password: null });
   const giftId = pub && typeof pub === "object" ? String((pub as Record<string, unknown>).id) : null;
+  const locale = pub && typeof pub === "object" && (pub as Record<string, unknown>).locale === "es" ? "es" : "en";
   if (!giftId) return NextResponse.json({ ok: false }, { status: 404 });
 
   let audioPath: string | null = null;
@@ -49,6 +56,13 @@ export async function POST(request: NextRequest, ctx: RouteContext<"/api/gift/[s
 
   const { data, error } = await admin.rpc("add_reaction", { p_short_id: shortId, p_emoji: emoji, p_text: text || null, p_audio_path: audioPath });
   if (error) return NextResponse.json({ ok: false, error: "failed" }, { status: 500 });
-  void notifyReaction(giftId, emoji, text || null, Boolean(audioPath)).catch(() => {});
+  const reactionId = typeof data === "string" ? data : null;
+  // Only words can ever be shown, so a box ticked on an emoji alone is kept but means nothing yet.
+  let shared = false;
+  if (share && reactionId) {
+    const { error: shareError } = await admin.from("reactions").update({ share_consent: true, share_consent_at: new Date().toISOString(), locale }).eq("id", reactionId);
+    shared = !shareError && Boolean(text);
+  }
+  void notifyReaction(giftId, emoji, text || null, Boolean(audioPath), shared ? reactionId : null).catch(() => {});
   return NextResponse.json({ ok: true, id: data });
 }

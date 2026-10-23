@@ -9,6 +9,7 @@ import { getManifest } from "@/templates/manifests";
 import { loadGiftForEdit } from "@/app/actions/gift";
 import { EditorShell } from "@/components/editor/editor-shell";
 import type { RemoteGift } from "@/lib/editor/store";
+import { shownReactions } from "@/lib/proof/proof";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/create/[templateSlug]">, "searchParams">): Promise<Metadata> {
   const { locale, templateSlug } = await params;
@@ -24,7 +25,9 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
   if (!manifest) notFound();
   setRequestLocale(locale);
 
-  const user = await getCurrentUser();
+  // The newest approved real reaction in this page's language, for the pay panel's first line: read
+  // through a cache, not per visit. None in this language: the panel opens with its outcome line.
+  const [user, [reaction]] = await Promise.all([getCurrentUser(), shownReactions(1, locale === "es" ? "es" : "en")]);
   let remote: RemoteGift | null = null;
   if (user && typeof gift === "string") {
     const result = await loadGiftForEdit(gift);
@@ -51,6 +54,7 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
         supabaseConfigured={isConfigured.supabase}
         aiEnabled={isConfigured.ai}
         paymentsEnabled={isConfigured.stripe}
+        reaction={reaction ?? null}
       />
     </Suspense>
   );

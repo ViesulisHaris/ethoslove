@@ -27,7 +27,11 @@ import { cn } from "@/lib/utils";
  * Gallery card. Poster at rest, the captured preview video plays on hover,
  * and "Try the live demo" mounts the real template inside the card.
  */
-export function TemplateCard({ manifest, index = 0, badge }: { manifest: TemplateManifest; index?: number; badge?: Featured }) {
+/**
+ * `linkQuery` rides on the card's two links (`?ref=watermark`), so where a visitor came from is in
+ * the address of the editor they open, and survives a reload there on its way to checkout.
+ */
+export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marker }: { manifest: TemplateManifest; index?: number; badge?: Featured; linkQuery?: string; marker?: string }) {
   const locale = useLocale() as GiftLocale;
   const t = useTranslations();
   const [live, setLive] = useState(false);
@@ -131,8 +135,12 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
         >
           {manifest.tier === "free" ? t("common.free") : t("common.premium")}
         </span>
+        {/* A word in the badge's place (the footer page's "The one you got"); off once the demo runs, like the badge. */}
+        {marker && !live ? (
+          <span className="pointer-events-none absolute top-3 right-3 rounded-full bg-coral px-2.5 py-1 text-[11px] font-semibold tracking-wide text-paper shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]">{marker}</span>
+        ) : null}
         {/* Off once the live demo runs: it sits where every template draws its mute button. */}
-        {badge && !live ? (
+        {badge && !marker && !live ? (
           <span className={cn("pointer-events-none absolute top-3 right-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide shadow-[0_6px_16px_-8px_rgba(0,0,0,0.5)]", badge === "popular" ? "bg-blush text-forest" : "bg-[#B23A5E] text-white")}>
             {badge === "popular" ? (
               <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true">
@@ -153,12 +161,12 @@ export function TemplateCard({ manifest, index = 0, badge }: { manifest: Templat
         </div>
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{manifest.tagline[locale]}</p>
         <div className="mt-3 flex items-center gap-4">
-          <Link href={`/create/${manifest.slug}`} className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-forest px-4 text-sm font-medium text-cream transition-colors hover:bg-forest-raised sm:flex-none">
+          <Link href={`/create/${manifest.slug}${linkQuery}`} className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-forest px-4 text-sm font-medium text-cream transition-colors hover:bg-forest-raised sm:flex-none">
             {t("templates.makeThis")}
             <ArrowRight className="size-3.5" />
           </Link>
           {/* 44px to a thumb, pulled back into the 40px row by its negative margin, so nothing moves. */}
-          <Link href={`/templates/${manifest.slug}`} className="-my-2.5 inline-flex min-h-11 shrink-0 items-center gap-1 py-2.5 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
+          <Link href={`/templates/${manifest.slug}${linkQuery}`} className="-my-2.5 inline-flex min-h-11 shrink-0 items-center gap-1 py-2.5 text-sm font-medium text-ink-soft underline-offset-4 hover:text-ink hover:underline">
             {t("templates.details")}
             <ArrowUpRight className="size-3.5" />
           </Link>

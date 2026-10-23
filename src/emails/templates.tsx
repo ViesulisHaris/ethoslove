@@ -26,29 +26,70 @@ export function GiftPublishedEmail({ locale, recipientName, url, scheduledFor }:
   );
 }
 
-/** `nextUrl` offers the next gift: the moment it lands is when making another one sounds best. */
-export function GiftOpenedEmail({ locale, recipientName, dashboardUrl, nextUrl }: { locale: L; recipientName: string; dashboardUrl: string; nextUrl?: string }) {
+/**
+ * "Whose day is next?": one template, by name, a tap from its editor, under the news that a gift
+ * landed, which is when making another sounds best. No price and no offer, and it is left out for
+ * anyone on the unsubscribe list (the caller passes nothing then).
+ */
+export type NextIdea = { name: string; url: string };
+
+function WhoseDayIsNext({ es, next }: { es: boolean; next: NextIdea }) {
+  return (
+    <Quiet>
+      {es ? "¿Para quién es el próximo regalo? Prueba con " : "Whose day is next? Try "}
+      <InlineLink href={next.url}>{next.name}</InlineLink>.
+    </Quiet>
+  );
+}
+
+export function GiftOpenedEmail({ locale, recipientName, dashboardUrl, next }: { locale: L; recipientName: string; dashboardUrl: string; next?: NextIdea }) {
   const es = locale === "es";
   return (
-    <EmailLayout preview={es ? `${recipientName} acaba de abrir tu regalo.` : `${recipientName} just opened your gift.`} heading={es ? `${recipientName} lo ha abierto.` : `${recipientName} opened it.`} cta={{ label: es ? "Ver estadísticas" : "See the stats", href: dashboardUrl }} footer={footer[locale]}>
+    <EmailLayout lang={locale} preview={es ? `${recipientName} acaba de abrir tu regalo.` : `${recipientName} just opened your gift.`} heading={es ? `${recipientName} lo ha abierto.` : `${recipientName} opened it.`} cta={{ label: es ? "Ver estadísticas" : "See the stats", href: dashboardUrl }} footer={footer[locale]}>
       <P>{es ? "Ahora mismo. Con el sonido activado, esperamos." : "Just now. Sound on, we hope."}</P>
       <Quiet>{es ? "Solo te avisamos de la primera apertura. El resto está en tu panel." : "We only email about the first open. The rest is on your dashboard."}</Quiet>
-      {nextUrl ? (
-        <Quiet>
-          {es ? "¿Ya piensas en la próxima ocasión? " : "Already thinking about the next occasion? "}
-          <InlineLink href={nextUrl}>{es ? "Empieza el siguiente regalo" : "Start the next gift"}</InlineLink>.
-        </Quiet>
-      ) : null}
+      {next ? <WhoseDayIsNext es={es} next={next} /> : null}
     </EmailLayout>
   );
 }
 
-export function ReactionEmail({ locale, recipientName, emoji, text, hasAudio, dashboardUrl }: { locale: L; recipientName: string; emoji: string; text: string | null; hasAudio: boolean; dashboardUrl: string }) {
+/**
+ * `privateUrl` when the recipient agreed that Ethos may show the reaction (emoji and words, no names):
+ * the sender is told, and one link says no for them (api/reactions/private).
+ */
+export function ReactionEmail({
+  locale,
+  recipientName,
+  emoji,
+  text,
+  hasAudio,
+  dashboardUrl,
+  next,
+  privateUrl,
+}: {
+  locale: L;
+  recipientName: string;
+  emoji: string;
+  text: string | null;
+  hasAudio: boolean;
+  dashboardUrl: string;
+  next?: NextIdea;
+  privateUrl?: string;
+}) {
   const es = locale === "es";
   return (
-    <EmailLayout preview={es ? `${recipientName} te ha enviado ${emoji}` : `${recipientName} sent you ${emoji}`} heading={`${emoji}  ${es ? `De ${recipientName}` : `From ${recipientName}`}`} cta={{ label: hasAudio ? (es ? "Escuchar la nota de voz" : "Listen to the voice note") : es ? "Ver la reacción" : "See the reaction", href: dashboardUrl }} footer={footer[locale]}>
+    <EmailLayout lang={locale} preview={es ? `${recipientName} te ha enviado ${emoji}` : `${recipientName} sent you ${emoji}`} heading={`${emoji}  ${es ? `De ${recipientName}` : `From ${recipientName}`}`} cta={{ label: hasAudio ? (es ? "Escuchar la nota de voz" : "Listen to the voice note") : es ? "Ver la reacción" : "See the reaction", href: dashboardUrl }} footer={footer[locale]}>
       {text ? <P>“{text}”</P> : null}
       {hasAudio ? <Quiet>{es ? "También te dejó una nota de voz. Está en tu panel." : "They also left a voice note. It's waiting on your dashboard."}</Quiet> : null}
+      {privateUrl ? (
+        <Quiet>
+          {es
+            ? `${recipientName} ha dicho que Ethos puede mostrar esta reacción en la web de Ethos: solo el emoji y sus palabras, sin nombres. Si prefieres que no, `
+            : `${recipientName} said Ethos may show this reaction on its site: only the emoji and their words, with no names. If you'd rather it didn't, `}
+          <InlineLink href={privateUrl}>{es ? "mantenla privada" : "keep it private"}</InlineLink>.
+        </Quiet>
+      ) : null}
+      {next ? <WhoseDayIsNext es={es} next={next} /> : null}
     </EmailLayout>
   );
 }
@@ -122,7 +163,7 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
         ? "Gracias. Es tuyo para siempre."
         : "Thank you. It's yours, forever.";
   return (
-    <EmailLayout preview={es ? `Recibo: ${productLabel}` : `Receipt: ${productLabel}`} heading={heading} cta={{ label: es ? "Ir a mis regalos" : "Go to my gifts", href: dashboardUrl }} footer={footer[locale]}>
+    <EmailLayout lang={locale} preview={es ? `Recibo: ${productLabel}` : `Receipt: ${productLabel}`} heading={heading} cta={{ label: es ? "Ir a mis regalos" : "Go to my gifts", href: dashboardUrl }} footer={footer[locale]}>
       <P>
         <strong>{productLabel}</strong> · {amountLabel}
       </P>
@@ -133,9 +174,8 @@ export function ReceiptEmail({ locale, productLabel, amountLabel, unlocks, dashb
       ) : null}
       {upgrade ? (
         <Quiet>
-          {es ? "¿Quieres todas las plantillas? " : "Want every template? "}
-          <InlineLink href={upgrade.url}>{es ? `Para ti, «Todo» cuesta ahora ${upgrade.amountLabel}` : `For you, Everything is now ${upgrade.amountLabel}`}</InlineLink>
-          {es ? ": lo que ya has pagado cuenta." : ": what you've paid already counts."}
+          {es ? "¿Quieres todas las plantillas? Lo que ya has pagado se resta: " : "Want every template? What you've already paid counts: "}
+          <InlineLink href={upgrade.url}>{es ? `todas, para siempre, por ${upgrade.amountLabel} más` : `every template, forever, for ${upgrade.amountLabel} more`}</InlineLink>.
         </Quiet>
       ) : null}
       <Quiet>{es ? "Pago único, sin renovaciones. Stripe te envía la factura por separado." : "One-time payment, no renewals. Stripe sends the invoice separately."}</Quiet>

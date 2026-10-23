@@ -142,7 +142,11 @@
           "time": "09:58"
         }
       ],
-      "placeholderNote": "Sample reactions. Real ones replace these as they come in."
+      "placeholderNote": "Sample reactions. Real ones replace these as they come in.",
+      "realNote": "Real reactions, shared by the people who got the gifts. Names left out.",
+      "realLabel": "A real reaction",
+      "opened": "{count} Ethos gifts opened so far.",
+      "openedEach": "{count} Ethos gifts opened so far, {times} times each on average."
     },
     "how": {
       "eyebrow": "How it works",
@@ -512,8 +516,19 @@
       "featureVoiceNote": "a voice message",
       "featureMorePhotos": "more than 10 photos",
       "featureUnwrap": "a surprise inside",
-      "payTitle": "One payment, then it's sent",
-      "payBlurb": "This gift uses {features}. Pay once and this template is yours for good, with everything in it.",
+      "benefitPremiumTemplate": "No Ethos footer, all from you",
+      "benefitNoWatermark": "No Ethos footer, all from you",
+      "benefitSchedule": "Opens at the minute you chose",
+      "benefitPassword": "Only they can open it",
+      "benefitPhotos": "Every photo you added, up to 20",
+      "benefitSong": "Your song playing",
+      "benefitVideo": "Your video in it",
+      "benefitVoiceNote": "Your voice saying it",
+      "benefitUnwrap": "A surprise at the end",
+      "payTitle": "Picture their face when it opens",
+      "realReaction": "a real reaction to an Ethos gift",
+      "payIncludes": "In this gift: {features}",
+      "payBlurb": "Pay once and this template is yours for good.",
       "payButton": "Pay {price} and send",
       "appUnlock": "Unlock and send",
       "appUnlockNote": "Through the App Store: you'll see the options and prices next.",
@@ -531,7 +546,7 @@
       "freeReply": "<who>{name}</who> covered your reply: it's free, and it goes with the small “Made with Ethos” footer.",
       "freeReplyUsed": "This gift's free reply has already been sent, so this one is the template's normal price.",
       "freeReplyInvalid": "This link can't make the reply free any more, so it's the template's normal price.",
-      "payGuestBlurb": "This gift uses {features}. Pay once and it's sent. Your account is created from the email you give at checkout, no password needed.",
+      "payGuestBlurb": "Pay once and it's sent. Your account is created from the email you give at checkout: nothing to sign up for.",
       "signInInstead": "Already have an account? Sign in instead",
       "uploadsAfterPay": "Photos upload right after payment.",
       "ownedElsewhere": "Your purchase covers {templates}. This is a different template.",
@@ -819,19 +834,20 @@
     "plans": {
       "single": {
         "name": "One template",
-        "blurb": "The one you can't stop thinking about.",
+        "blurb": "One gift they'll open again and again.",
         "cta": "Unlock one",
         "features": [
-          "One premium template, forever",
-          "Unlimited gifts with it",
-          "Video and voice messages",
-          "No footer, 20 photos",
-          "Scheduling and password"
+          "One premium template, yours for good",
+          "Make it as often as you like",
+          "Your voice saying it, or your video",
+          "Up to 20 photos, and no footer",
+          "Opens at midnight on their day",
+          "Only they can open it"
         ]
       },
       "pick3": {
         "name": "Pick three",
-        "blurb": "Birthday, anniversary, and the one for your mum.",
+        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mum.",
         "cta": "Pick three",
         "features": [
           "Any three templates, forever",
@@ -842,13 +858,14 @@
       },
       "everything": {
         "name": "Everything",
-        "blurb": "Every template we've made, and every one we'll make.",
+        "blurb": "A gift for every day that matters, now and later.",
         "cta": "Unlock everything",
         "features": [
           "All templates, now and future",
-          "Unlimited gifts, forever",
-          "Video and voice messages",
-          "No footer, 20 photos, scheduling, passwords",
+          "Make as many gifts as you like, forever",
+          "Your voice saying it, or your video",
+          "Up to 20 photos, and no footer",
+          "Opens at midnight on their day, and only they can open it",
           "First access to new templates"
         ]
       }
@@ -1107,10 +1124,10 @@
     "paywall": {
       "extras": "Make it special",
       "extrasBlurb": "Video, voice, 20 photos, a surprise inside, no footer, scheduling and a password, on this template for good",
-      "extrasIntro": "This gift uses {features}. Make it special once and this template keeps them for good.",
-      "extrasGuestIntro": "This gift uses {features}. Make it special once and it's sent. Your account is made from the email you give at checkout, no password needed.",
+      "extrasIntro": "Make it special once and this template keeps them for good.",
+      "extrasGuestIntro": "Make it special once and it's sent. Your account is created from the email you give at checkout: nothing to sign up for.",
       "upgrade": "Everything for the difference",
-      "upgradeBlurb": "Every template, forever. What you've paid already comes off {full}.",
+      "upgradeBlurb": "Every template, forever. What you've already paid counts towards {full}.",
       "pick3": "Or pick any three for {price}",
       "bump": "Add every other template, forever",
       "bumpBlurb": "Every template we have, and every one we add",
@@ -1119,7 +1136,7 @@
       "guarantee": "If it doesn't open on their phone, you get your money back."
     },
     "plans": {
-      "upgradeNote": "Instead of {full}: what you've already paid for templates comes off."
+      "upgradeNote": "Instead of {full}: what you've already paid counts towards it."
     },
     "checkoutErrors": {
       "alreadyOwned": "That's already on your account. Nothing to pay.",
@@ -1198,9 +1215,32 @@
       "toAccount": "Go to your account",
       "toGift": "Back to your gift"
     },
+    "after": {
+      "eyebrow": "Every template, forever",
+      "sorted": {
+        "one": "That's one occasion sorted.",
+        "birthday": "Their birthday's sorted.",
+        "anniversary": "Your anniversary's sorted.",
+        "valentines": "Valentine's is sorted.",
+        "christmas": "Christmas is sorted.",
+        "halloween": "Halloween's sorted."
+      },
+      "ahead": {
+        "birthday": "their birthday",
+        "anniversary": "your anniversary",
+        "valentines": "Valentine's",
+        "christmas": "Christmas"
+      },
+      "next": "And {occasions} too: every template, forever, for {price} more.",
+      "credit": "You've already paid {paid} of the {full}.",
+      "creditEarlier": "What you've paid so far counts towards the {full}.",
+      "creditUntil": "You've already paid {paid} of the {full}, and that counts until {date}.",
+      "cta": "Add every template for {price} more",
+      "note": "One payment. No subscription."
+    },
     "account": {
       "upgradeTitle": "Upgrade to Everything",
-      "upgradeBlurb": "What you've paid for templates counts: every template, now and future, for {price} more.",
+      "upgradeBlurb": "What you've already paid counts: every template, now and future, for {price} more.",
       "upgradeCta": "Upgrade for {price}",
       "packs": "Game packs",
       "everyPack": "Every game pack",
@@ -2689,24 +2729,111 @@
   },
   "lifecycle": {
     "remind": {
-      "title": "Remind me next year",
-      "blurb": "We'll email you nine days before, so there's time to make {name} something.",
+      "title": "Want a nudge before the next one?",
+      "blurb": "One email nine days before each day you add; for the monthly one, a check the day before. Nothing else.",
       "save": "Remind me",
       "saving": "Saving…",
-      "saved": "Saved. We'll email you nine days before {date}.",
       "failed": "That didn't save. Try again in a moment.",
       "tooMany": "You already have {max} reminders. Remove one on your account page to add this one.",
-      "edit": "Change the details",
+      "edit": "Change",
+      "done": "Done",
       "name": "Who it's for",
       "occasion": "Occasion",
       "date": "Date",
       "manage": "All your reminders",
+      "nextYear": "next year",
+      "add": "Add",
+      "cancel": "Cancel",
+      "addLabel": "Remind me: {what}",
+      "added": "Added",
+      "saveDay": "Save",
+      "pickDay": "Pick the day",
+      "rows": {
+        "birthday": "{name}'s birthday",
+        "birthdayNoName": "Their birthday",
+        "anniversary": "Your anniversary",
+        "other": "A day for {name}",
+        "otherNoName": "Another day",
+        "monthly": "Every month too",
+        "someone": "Someone else",
+        "someoneMore": "Someone else too"
+      },
+      "monthlySub": "We ask the day before. Nothing is sent to {name}.",
+      "monthlySaved": "Day {day} of each month, with a check the day before",
+      "since": "Together since",
+      "year": "Year",
+      "monthlyNote": "The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to {name}.",
+      "sinceFuture": "That day hasn't come yet.",
+      "monthlySave": "Remind me every month",
+      "someoneSub": "Mum, a best friend…",
+      "someonePlaceholder": "Mum",
+      "othersLabel": "Added",
       "occasions": {
         "birthday": "Birthday",
         "anniversary": "Anniversary",
         "valentines": "Valentine's Day",
         "other": "Something else"
       }
+    },
+    "monthly": {
+      "yesTitle": "Confirm your yes",
+      "yesBody": "Tomorrow morning we'll send you one email, with a small idea for {name}.",
+      "yesTodayTitle": "Want the idea now?",
+      "yesTodayBody": "Say yes and we'll show you a small idea for {name}, right here.",
+      "yesConfirm": "Confirm",
+      "yesTodayConfirm": "Show me the idea",
+      "yesDoneTitle": "Done.",
+      "yesDoneBody": "Tomorrow morning: one email, with a small idea for {name}.",
+      "todayTitle": "Here's a small idea.",
+      "todayBody": "{template}: a few minutes to make, for {name} to open on the day.",
+      "todayCta": "Make {template}",
+      "passedTitle": "That day has passed.",
+      "passedBody": "Nothing to do. We'll ask again before the next one.",
+      "stoppedTitle": "These emails are stopped.",
+      "stoppedBody": "You stopped the monthly emails, so this link does nothing now. You can turn them on again when you make a gift.",
+      "staleTitle": "That was an earlier question.",
+      "staleBody": "Nothing to do: we'll ask again before the next one.",
+      "stopTitle": "Stop the monthly emails?",
+      "stopBody": "No more check-ins or reminders about your monthsaries with {name}. Your yearly reminders stay as they are.",
+      "stopConfirm": "Stop them",
+      "stopDoneTitle": "Stopped.",
+      "stopDoneBody": "You won't get these again. If you ever want them back, you can turn them on when you make a gift.",
+      "manage": "See your reminders"
+    },
+    "keep": {
+      "confirmTitle": "Email you the gift's link?",
+      "confirmBody": "We'll send it to this address now, so you can open the gift again any time.",
+      "confirmBodyDays": "We'll send it to this address now, so you can open the gift again any time, and remind you nine days before {days}.",
+      "confirmButton": "Yes, email me the link",
+      "doneTitle": "It's on its way.",
+      "doneBody": "The gift's link will be in your inbox in a moment. You can open the gift from here too.",
+      "doneDays": "The gift's link will be in your inbox in a moment, and we'll remind you nine days before {days}. You can open the gift from here too.",
+      "open": "Open the gift",
+      "goneTitle": "This link has expired.",
+      "goneBody": "Nothing was kept, and nothing more will come. To keep the gift, open it again and tap “Keep this gift”.",
+      "stopTitle": "Unsubscribe?",
+      "stopBody": "We'll forget this address for this gift: no more reminders, and nothing else about it.",
+      "stopConfirm": "Unsubscribe",
+      "stopDoneTitle": "You're unsubscribed.",
+      "stopDoneBody": "Nothing more will come about this gift. Its link still opens it, wherever you saved it.",
+      "neverTitle": "Never email this address?",
+      "neverBody": "Nobody will be able to ask us to email it about a gift again, and it won't get offers from us either.",
+      "neverConfirm": "Never email me",
+      "neverDoneTitle": "Done.",
+      "neverDoneBody": "This address won't hear from us about kept gifts again, whoever types it in.",
+      "reminderOffTitle": "Remove this reminder?",
+      "reminderOffBody": "We won't email you before {day} again. Any other day you asked for stays.",
+      "reminderOffConfirm": "Remove it",
+      "reminderOffDoneTitle": "Removed.",
+      "reminderOffDoneBody": "No more emails before {day}.",
+      "reminderOffGoneBody": "That reminder was already removed."
+    },
+    "reactionPrivate": {
+      "title": "Keep this reaction private?",
+      "body": "It won't be shown on Ethos's site, even without names. It stays yours, on your dashboard.",
+      "confirm": "Keep it private",
+      "doneTitle": "It's private.",
+      "doneBody": "This reaction won't be shown on Ethos's site. It stays on your dashboard, as it was."
     },
     "trip": {
       "title": "Book the trip",
@@ -2718,10 +2845,13 @@
     },
     "page": {
       "title": "Reminders",
-      "subtitle": "Birthdays, anniversaries and other days we'll email you about, nine days before. Once a year each, nothing else.",
+      "subtitle": "The days you asked us to remember: we email you nine days before, once a year. And the day before your monthsary, if you asked for it.",
       "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
       "remove": "Remove",
-      "removeLabel": "Remove the reminder for {name}",
+      "removeLabel": "Remove the reminder: {what}",
+      "monthly": "Every month on day {day}, with a check the day before",
+      "monthlyRemove": "Stop",
+      "monthlyRemoveLabel": "Stop the monthly reminders about {name}",
       "failed": "Couldn't remove it. Try again in a moment.",
       "back": "Account",
       "makeGift": "Make a gift"
@@ -2996,6 +3126,24 @@
       "accounts": "Too many accounts have unlocked the campaign from this connection this week.",
       "signIn": "Sign in first, then enter the password.",
       "generic": "That didn't work. Try again in a moment."
+    }
+  },
+  "madeWith": {
+    "metaTitle": "Make one back",
+    "metaDescription": "Someone made you an Ethos gift. Make one back: two templates are free, and every other one is free to try.",
+    "eyebrow": "Made with Ethos",
+    "title": "Someone made you one of these.",
+    "subtitle": "Make one back — free to start.",
+    "yours": "The one you got",
+    "free": {
+      "eyebrow": "Free",
+      "title": "Free to make and send",
+      "blurb": "No payment, and no account until you send it. These carry the small “Made with Ethos” footer, like the one you got."
+    },
+    "premium": {
+      "eyebrow": "Premium",
+      "title": "Free to try, pay once to send",
+      "blurb": "Make the whole gift first, for free. If you send it, you pay once, and it goes without the footer."
     }
   }
 }

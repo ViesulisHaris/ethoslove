@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 /**
  * Free-tier footer. Deliberately small and tasteful — it is the viral hook, not an ad.
  *
- * It opens the page of the template this gift was made with, not the front page: whoever taps it
- * has just watched that very gift and wants one like it. Gifts carry no app context, so the
+ * It opens a page made for whoever taps it (/made-with-ethos): they have just been given one and are
+ * curious, not ready to pay, so it starts with making one back for free, the gift's own template
+ * first among its kind, and never goes straight to a checkout. Gifts carry no app context, so the
  * language prefix is the gift's own, the same as its "send one back".
  *
  * It floats at the foot of the gift, except on the end screen, which carries it in its own flow
@@ -15,7 +16,7 @@ import { cn } from "@/lib/utils";
  */
 export function Watermark({ locale, slug, inline = false, className }: { locale: GiftLocale; slug?: string; inline?: boolean; className?: string }) {
   const prefix = locale === "es" ? "/es" : "";
-  const href = slug ? `${prefix}/templates/${encodeURIComponent(slug)}?ref=watermark` : `${prefix}/templates?ref=watermark`;
+  const href = `${prefix}/made-with-ethos?ref=watermark${slug ? `&template=${encodeURIComponent(slug)}` : ""}`;
   return (
     <a
       href={href}

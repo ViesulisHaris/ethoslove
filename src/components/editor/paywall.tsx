@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Gift, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
+import type { ShownReaction } from "@/lib/proof/numbers";
 import { track } from "@/lib/analytics/track";
 import { PRODUCTS, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
@@ -27,9 +28,10 @@ import {
 import { cn } from "@/lib/utils";
 
 /**
- * The paywall inside the publish sheet, for guests and signed-in senders alike. Two rows to choose
- * between (this template, or every template), the bump below them, unticked, and the pay button
- * with the guarantee right beside it. Under the button, also unticked, the one email a buyer can ask
+ * The paywall inside the publish sheet, for guests and signed-in senders alike. It opens with what
+ * the gift is for (their face when it opens, or a real reaction to one when the site has one it may
+ * show), then what each paid part does for them. Two rows to choose between (this template, or every
+ * template), the bump below them, unticked, and the pay button with the guarantee right beside it. Under the button, also unticked, the one email a buyer can ask
  * for if they leave checkout unpaid. Every amount comes from the catalogue, and is what checkout
  * charges: there are no codes or discounts to apply on the way.
  */
@@ -46,12 +48,13 @@ export function Paywall({
   ownedElsewhere = [],
   onSignInInstead,
   onAppUnlock,
+  reaction = null,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
   locale: GiftLocale;
   guest: boolean;
-  /** What in this gift needs paying for, already in words. */
+  /** What each paid part of this gift does for them, already in words ("Your voice saying it"). */
   features: string[];
   returnTo: string;
   /** A free reply that asks for more than a free reply gives (an extra, no footer): it says why there's a price. */
@@ -66,6 +69,8 @@ export function Paywall({
    * the app has answered; on "unlocked" the publish sheet re-checks and sends the gift.
    */
   onAppUnlock?: () => Promise<"unlocked" | "cancelled" | "failed">;
+  /** A real reaction to an Ethos gift, shown with its writer's agreement and nothing else of theirs. */
+  reaction?: ShownReaction | null;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -78,6 +83,8 @@ export function Paywall({
   const chosen: PaywallPlan = plan === null ? defaultPaywallPlan(forTemplate, all, currency) : plan === forTemplate ? forTemplate : all.plan;
   const [bump, setBump] = useState(false);
   const [paying, setPaying] = useState(false);
+  // Taps that land together are one checkout, not one each.
+  const going = useRef(false);
   const showCheckoutError = useCheckoutError();
   const money = (minor: number) => formatAmount(minor, currency, locale);
 
@@ -97,6 +104,8 @@ export function Paywall({
     return <AppUnlock manifest={manifest} locale={locale} features={features} freeReply={freeReply} ownedElsewhere={ownedElsewhere} blocked={blocked} onUnlock={onAppUnlock} />;
 
   const pay = async () => {
+    if (going.current) return;
+    going.current = true;
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest });
     const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale });
@@ -104,6 +113,7 @@ export function Paywall({
       window.location.assign(result.url);
       return;
     }
+    going.current = false;
     setPaying(false);
     showCheckoutError(result.error);
   };
@@ -125,14 +135,21 @@ export function Paywall({
 
   return (
     <section className="mt-7 rounded-xl border border-ink bg-card p-4 sm:p-5" data-testid="pay-panel">
-      <p className="flex items-center gap-2 font-display text-xl">
-        <Lock aria-hidden="true" className="size-4 text-coral" />
-        {t("payTitle")}
-      </p>
+      {reaction ? (
+        <p className="font-display text-xl leading-snug" data-testid="pay-reaction">
+          “{reaction.text}” <span aria-hidden="true">{reaction.emoji}</span>{" "}
+          <span className="font-sans text-xs whitespace-nowrap text-muted-foreground">· {t("realReaction")}</span>
+        </p>
+      ) : (
+        <p className="font-display text-xl leading-snug">{t("payTitle")}</p>
+      )}
+      {features.length ? (
+        <p className="mt-1.5 text-sm font-medium text-ink" data-testid="pay-benefits">
+          {t("payIncludes", { features: features.join(" · ") })}
+        </p>
+      ) : null}
       <p className="mt-1 text-sm text-ink-soft">
-        {manifest.tier === "free"
-          ? tm(guest ? "extrasGuestIntro" : "extrasIntro", { features: features.join(", ") })
-          : t(guest ? "payGuestBlurb" : "payBlurb", { features: features.join(", ") })}
+        {manifest.tier === "free" ? tm(guest ? "extrasGuestIntro" : "extrasIntro") : t(guest ? "payGuestBlurb" : "payBlurb")}
       </p>
       {freeReply ? (
         <p className="mt-3 flex items-start gap-2 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink" data-testid="free-reply-extras">
@@ -297,7 +314,8 @@ function AppUnlock({
         <Lock aria-hidden="true" className="size-4 text-coral" />
         {t("payTitle")}
       </p>
-      <p className="mt-1 text-sm text-ink-soft">{manifest.tier === "free" ? tm("extrasIntro", { features: features.join(", ") }) : t("payBlurb", { features: features.join(", ") })}</p>
+      {features.length ? <p className="mt-1.5 text-sm font-medium text-ink">{t("payIncludes", { features: features.join(" · ") })}</p> : null}
+      <p className="mt-1 text-sm text-ink-soft">{manifest.tier === "free" ? tm("extrasIntro") : t("payBlurb")}</p>
       {freeReply ? (
         <p className="mt-3 flex items-start gap-2 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink">
           <Gift aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-coral" />

@@ -142,7 +142,11 @@
           "time": "09:58"
         }
       ],
-      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan."
+      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan.",
+      "realNote": "Reacciones reales, compartidas por quienes recibieron los regalos. Sin nombres.",
+      "realLabel": "Una reacción real",
+      "opened": "{count} regalos de Ethos abiertos hasta ahora.",
+      "openedEach": "{count} regalos de Ethos abiertos hasta ahora, {times} veces cada uno de media."
     },
     "how": {
       "eyebrow": "Cómo funciona",
@@ -512,8 +516,19 @@
       "featureVoiceNote": "un mensaje de voz",
       "featureMorePhotos": "más de 10 fotos",
       "featureUnwrap": "una sorpresa dentro",
-      "payTitle": "Un pago y se envía",
-      "payBlurb": "Este regalo usa {features}. Pagas una vez y esta plantilla es tuya para siempre, con todo lo que lleva.",
+      "benefitPremiumTemplate": "Sin la marca de Ethos, todo de tu parte",
+      "benefitNoWatermark": "Sin la marca de Ethos, todo de tu parte",
+      "benefitSchedule": "Se abre al minuto que elegiste",
+      "benefitPassword": "Solo esa persona puede abrirlo",
+      "benefitPhotos": "Todas tus fotos, hasta 20",
+      "benefitSong": "Vuestra canción sonando",
+      "benefitVideo": "Tu vídeo dentro",
+      "benefitVoiceNote": "Tu voz diciéndolo",
+      "benefitUnwrap": "Una sorpresa al final",
+      "payTitle": "Imagina su cara cuando lo abra",
+      "realReaction": "una reacción real a un regalo de Ethos",
+      "payIncludes": "En este regalo: {features}",
+      "payBlurb": "Pagas una vez y esta plantilla es tuya para siempre.",
       "payButton": "Pagar {price} y enviar",
       "appUnlock": "Desbloquear y enviar",
       "appUnlockNote": "A través del App Store: a continuación verás las opciones y los precios.",
@@ -531,7 +546,7 @@
       "freeReply": "<who>{name}</who> te invita a responder: es gratis y va con el pequeño pie «Hecho con Ethos».",
       "freeReplyUsed": "La respuesta gratis de este regalo ya se ha enviado, así que esta cuesta el precio normal de la plantilla.",
       "freeReplyInvalid": "Este enlace ya no hace gratis la respuesta, así que cuesta el precio normal de la plantilla.",
-      "payGuestBlurb": "Este regalo usa {features}. Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
+      "payGuestBlurb": "Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar: no hace falta registrarse.",
       "signInInstead": "¿Ya tienes cuenta? Inicia sesión",
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
       "ownedElsewhere": "Tu compra incluye {templates}. Esta es otra plantilla.",
@@ -819,19 +834,20 @@
     "plans": {
       "single": {
         "name": "Una plantilla",
-        "blurb": "La que no te quitas de la cabeza.",
+        "blurb": "Un regalo que abrirá una y otra vez.",
         "cta": "Desbloquear una",
         "features": [
-          "Una plantilla premium, para siempre",
-          "Regalos ilimitados con ella",
-          "Vídeo y mensajes de voz",
-          "Sin pie, 20 fotos",
-          "Programación y contraseña"
+          "Una plantilla premium, tuya para siempre",
+          "Hazlo tantas veces como quieras",
+          "Tu voz diciéndolo, o tu vídeo",
+          "Hasta 20 fotos, y sin la marca de Ethos",
+          "Se abre a medianoche en su día",
+          "Solo esa persona puede abrirlo"
         ]
       },
       "pick3": {
         "name": "Elige tres",
-        "blurb": "Cumpleaños, aniversario y la de tu madre.",
+        "blurb": "Tres días que recordarán: su cumpleaños, vuestro aniversario y uno para tu madre.",
         "cta": "Elegir tres",
         "features": [
           "Tres plantillas cualesquiera, para siempre",
@@ -842,13 +858,14 @@
       },
       "everything": {
         "name": "Todo",
-        "blurb": "Cada plantilla que hemos hecho, y cada una que haremos.",
+        "blurb": "Un regalo para cada día que importa, ahora y más adelante.",
         "cta": "Desbloquear todo",
         "features": [
           "Todas las plantillas, actuales y futuras",
-          "Regalos ilimitados, para siempre",
-          "Vídeo y mensajes de voz",
-          "Sin pie, 20 fotos, programación, contraseñas",
+          "Haz tantos regalos como quieras, para siempre",
+          "Tu voz diciéndolo, o tu vídeo",
+          "Hasta 20 fotos, y sin la marca de Ethos",
+          "Se abre a medianoche en su día, y solo esa persona puede abrirlo",
           "Acceso anticipado a plantillas nuevas"
         ]
       }
@@ -1107,10 +1124,10 @@
     "paywall": {
       "extras": "Hazlo especial",
       "extrasBlurb": "Vídeo, voz, 20 fotos, una sorpresa dentro, sin pie, programación y contraseña, en esta plantilla para siempre",
-      "extrasIntro": "Este regalo usa {features}. Hazlo especial una vez y esta plantilla los conserva para siempre.",
-      "extrasGuestIntro": "Este regalo usa {features}. Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
+      "extrasIntro": "Hazlo especial una vez y esta plantilla los conserva para siempre.",
+      "extrasGuestIntro": "Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar: no hace falta registrarse.",
       "upgrade": "Todo por la diferencia",
-      "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se descuenta de {full}.",
+      "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se resta de los {full}.",
       "pick3": "O elige las tres que quieras por {price}",
       "bump": "Añade todas las demás plantillas, para siempre",
       "bumpBlurb": "Todas las que tenemos y todas las que añadamos",
@@ -1119,7 +1136,7 @@
       "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
     },
     "plans": {
-      "upgradeNote": "En lugar de {full}: lo que ya has pagado por plantillas se descuenta."
+      "upgradeNote": "En lugar de {full}: lo que ya has pagado se resta."
     },
     "checkoutErrors": {
       "alreadyOwned": "Ya lo tienes en tu cuenta. No hay nada que pagar.",
@@ -1198,9 +1215,32 @@
       "toAccount": "Ir a tu cuenta",
       "toGift": "Volver a tu regalo"
     },
+    "after": {
+      "eyebrow": "Todas las plantillas, para siempre",
+      "sorted": {
+        "one": "Ya tienes un regalo listo.",
+        "birthday": "Su cumpleaños ya está listo.",
+        "anniversary": "Vuestro aniversario ya está listo.",
+        "valentines": "San Valentín ya está listo.",
+        "christmas": "La Navidad ya está lista.",
+        "halloween": "Halloween ya está listo."
+      },
+      "ahead": {
+        "birthday": "su cumpleaños",
+        "anniversary": "vuestro aniversario",
+        "valentines": "San Valentín",
+        "christmas": "Navidad"
+      },
+      "next": "Para {occasions}, añade todas las plantillas, para siempre, por {price} más.",
+      "credit": "Ya has pagado {paid} de los {full}.",
+      "creditEarlier": "Lo que has pagado hasta ahora se resta de los {full}.",
+      "creditUntil": "Ya has pagado {paid} de los {full}, y cuenta hasta el {date}.",
+      "cta": "Añadir todas por {price} más",
+      "note": "Un solo pago. Sin suscripción."
+    },
     "account": {
       "upgradeTitle": "Pasa a Todo",
-      "upgradeBlurb": "Lo que has pagado por plantillas cuenta: todas las plantillas, actuales y futuras, por {price} más.",
+      "upgradeBlurb": "Lo que ya has pagado se resta: todas las plantillas, actuales y futuras, por {price} más.",
       "upgradeCta": "Pasar a Todo por {price}",
       "packs": "Packs de juegos",
       "everyPack": "Todos los packs de juegos",
@@ -2689,24 +2729,111 @@
   },
   "lifecycle": {
     "remind": {
-      "title": "Recuérdamelo el año que viene",
-      "blurb": "Te escribiremos nueve días antes, para que tengas tiempo de hacerle algo a {name}.",
+      "title": "¿Te avisamos antes de la próxima fecha?",
+      "blurb": "Un correo nueve días antes de cada fecha que añadas; para la de cada mes, una pregunta el día antes. Nada más.",
       "save": "Recuérdamelo",
       "saving": "Guardando…",
-      "saved": "Guardado. Te escribiremos nueve días antes del {date}.",
       "failed": "No se ha guardado. Prueba otra vez en un momento.",
       "tooMany": "Ya tienes {max} recordatorios. Quita alguno en la página de tu cuenta para añadir este.",
-      "edit": "Cambiar los datos",
+      "edit": "Cambiar",
+      "done": "Listo",
       "name": "Para quién",
       "occasion": "Ocasión",
       "date": "Fecha",
       "manage": "Todos tus recordatorios",
+      "nextYear": "el año que viene",
+      "add": "Añadir",
+      "cancel": "Cancelar",
+      "addLabel": "Recuérdamelo: {what}",
+      "added": "Añadido",
+      "saveDay": "Guardar",
+      "pickDay": "Elige la fecha",
+      "rows": {
+        "birthday": "El cumpleaños de {name}",
+        "birthdayNoName": "Su cumpleaños",
+        "anniversary": "Vuestro aniversario",
+        "other": "Un día para {name}",
+        "otherNoName": "Otra fecha",
+        "monthly": "Y cada mes",
+        "someone": "Otra persona",
+        "someoneMore": "Alguien más"
+      },
+      "monthlySub": "Te preguntamos el día antes. A {name} no le enviamos nada.",
+      "monthlySaved": "El día {day} de cada mes, con una pregunta el día antes",
+      "since": "Juntos desde",
+      "year": "Año",
+      "monthlyNote": "El día antes de cada uno te preguntamos si sigue en pie, y solo te lo recordamos si dices que sí. A {name} nunca le enviamos nada.",
+      "sinceFuture": "Ese día aún no ha llegado.",
+      "monthlySave": "Recuérdamelo cada mes",
+      "someoneSub": "Tu madre, un amigo…",
+      "someonePlaceholder": "Mamá",
+      "othersLabel": "Añadidos",
       "occasions": {
         "birthday": "Cumpleaños",
         "anniversary": "Aniversario",
         "valentines": "San Valentín",
         "other": "Otra fecha"
       }
+    },
+    "monthly": {
+      "yesTitle": "Confirma tu sí",
+      "yesBody": "Mañana por la mañana te escribimos con una idea pequeña para {name}.",
+      "yesTodayTitle": "¿Quieres la idea ya?",
+      "yesTodayBody": "Di que sí y te enseñamos aquí mismo una idea pequeña para {name}.",
+      "yesConfirm": "Confirmar",
+      "yesTodayConfirm": "Enséñame la idea",
+      "yesDoneTitle": "Hecho.",
+      "yesDoneBody": "Mañana por la mañana te escribimos con una idea pequeña para {name}.",
+      "todayTitle": "Una idea pequeña.",
+      "todayBody": "{template}: unos minutos para hacerlo, y que {name} lo abra ese día.",
+      "todayCta": "Hacer {template}",
+      "passedTitle": "Ese día ya pasó.",
+      "passedBody": "No hace falta hacer nada. Te preguntaremos antes del próximo.",
+      "stoppedTitle": "Estos correos están desactivados.",
+      "stoppedBody": "Desactivaste los correos de cada mes, así que este enlace ya no hace nada. Puedes volver a activarlos al hacer un regalo.",
+      "staleTitle": "Era una pregunta anterior.",
+      "staleBody": "No hace falta hacer nada: te preguntaremos antes del próximo.",
+      "stopTitle": "¿Dejar de recibir los correos de cada mes?",
+      "stopBody": "No más preguntas ni recordatorios de cada mes sobre {name}. Tus recordatorios anuales siguen igual.",
+      "stopConfirm": "Sí, dejar de recibirlos",
+      "stopDoneTitle": "Hecho.",
+      "stopDoneBody": "No volverás a recibirlos. Si algún día los quieres, puedes activarlos al hacer un regalo.",
+      "manage": "Ver tus recordatorios"
+    },
+    "keep": {
+      "confirmTitle": "¿Te enviamos el enlace del regalo?",
+      "confirmBody": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras.",
+      "confirmBodyDays": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras, y te avisamos nueve días antes de {days}.",
+      "confirmButton": "Sí, envíame el enlace",
+      "doneTitle": "Ya va de camino.",
+      "doneBody": "El enlace del regalo llegará a tu correo en un momento. También puedes abrirlo desde aquí.",
+      "doneDays": "El enlace del regalo llegará a tu correo en un momento, y te avisaremos nueve días antes de {days}. También puedes abrirlo desde aquí.",
+      "open": "Abrir el regalo",
+      "goneTitle": "Este enlace ha caducado.",
+      "goneBody": "No se ha guardado nada y no te llegará nada más. Para guardar el regalo, vuelve a abrirlo y toca «Guardar este regalo».",
+      "stopTitle": "¿Darte de baja?",
+      "stopBody": "Olvidaremos esta dirección para este regalo: ni recordatorios ni nada más sobre él.",
+      "stopConfirm": "Darme de baja",
+      "stopDoneTitle": "Te has dado de baja.",
+      "stopDoneBody": "No te llegará nada más sobre este regalo. Su enlace lo sigue abriendo, allá donde lo guardaras.",
+      "neverTitle": "¿No escribir nunca más a esta dirección?",
+      "neverBody": "Nadie podrá volver a pedirnos que le escribamos sobre un regalo, y tampoco le llegarán ofertas nuestras.",
+      "neverConfirm": "No escribirme nunca más",
+      "neverDoneTitle": "Hecho.",
+      "neverDoneBody": "Esta dirección no volverá a recibir correos sobre regalos guardados, aunque alguien la vuelva a escribir.",
+      "reminderOffTitle": "¿Quitar este recordatorio?",
+      "reminderOffBody": "No volveremos a escribirte antes de {day}. Las demás fechas que pediste se quedan.",
+      "reminderOffConfirm": "Quitarlo",
+      "reminderOffDoneTitle": "Quitado.",
+      "reminderOffDoneBody": "No más correos antes de {day}.",
+      "reminderOffGoneBody": "Ese recordatorio ya estaba quitado."
+    },
+    "reactionPrivate": {
+      "title": "¿Mantener esta reacción en privado?",
+      "body": "No se mostrará en la web de Ethos, ni siquiera sin nombres. Sigue siendo tuya, en tu panel.",
+      "confirm": "Mantenerla privada",
+      "doneTitle": "Es privada.",
+      "doneBody": "Esta reacción no se mostrará en la web de Ethos. Sigue en tu panel, como estaba."
     },
     "trip": {
       "title": "Reserva el viaje",
@@ -2718,10 +2845,13 @@
     },
     "page": {
       "title": "Recordatorios",
-      "subtitle": "Cumpleaños, aniversarios y otros días de los que te avisaremos por correo, nueve días antes. Una vez al año cada uno, nada más.",
+      "subtitle": "Las fechas que nos has pedido recordar: te escribimos nueve días antes, una vez al año. Y el día antes de vuestro mesiversario, si lo has pedido.",
       "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
       "remove": "Quitar",
-      "removeLabel": "Quitar el recordatorio de {name}",
+      "removeLabel": "Quitar el recordatorio: {what}",
+      "monthly": "Cada mes, el día {day}, con una pregunta el día antes",
+      "monthlyRemove": "Quitar",
+      "monthlyRemoveLabel": "Quitar los recordatorios de cada mes sobre {name}",
       "failed": "No se ha podido quitar. Prueba otra vez en un momento.",
       "back": "Cuenta",
       "makeGift": "Hacer un regalo"
@@ -2996,6 +3126,24 @@
       "accounts": "Demasiadas cuentas han desbloqueado la campaña desde esta conexión esta semana.",
       "signIn": "Inicia sesión primero y luego escribe la contraseña.",
       "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
+    }
+  },
+  "madeWith": {
+    "metaTitle": "Hazle uno tú también",
+    "metaDescription": "Alguien te ha hecho un regalo de Ethos. Hazle uno de vuelta: dos plantillas son gratis, y todas las demás se prueban gratis.",
+    "eyebrow": "Hecho con Ethos",
+    "title": "Alguien te ha hecho uno de estos.",
+    "subtitle": "Hazle uno tú también: empezar es gratis.",
+    "yours": "El que te llegó",
+    "free": {
+      "eyebrow": "Gratis",
+      "title": "Gratis para hacer y enviar",
+      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan la pequeña marca «Hecho con Ethos», como el que te llegó."
+    },
+    "premium": {
+      "eyebrow": "Premium",
+      "title": "Pruébalas gratis, paga una vez al enviar",
+      "blurb": "Haz el regalo entero primero, gratis. Si lo envías, pagas una vez y va sin la marca."
     }
   }
 }
