@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do you want your hoodie back"
+        },
+        {
+          "from": "them",
+          "text": "keep it"
+        },
+        {
+          "from": "me",
+          "text": "we broke up 4 months ago"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "me",
+          "text": "so why do you want me to keep it",
+          "status": "Read 9:49 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "so you have a reason to text me"
+        }
+      ]
+    }
+  ]
+}
