@@ -1,0 +1,54 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|1:26 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is our spotify blend still a thing"
+        },
+        {
+          "from": "them",
+          "text": "do you want me to delete it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "me",
+          "text": "its just"
+        },
+        {
+          "from": "me",
+          "text": "its all sad songs now"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "i noticed"
+        },
+        {
+          "from": "them",
+          "text": "half of them are mine"
+        }
+      ]
+    }
+  ]
+}
