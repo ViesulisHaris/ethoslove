@@ -2546,6 +2546,22 @@ one-screenshot flip with the gift inside it.
 
 **Post order:** 612 before Halloween, 613, 611, 614; 615 on the night of 31 Oct.
 
+### The US account is back (23 Oct): 616 to 620
+
+The owner's US account was unblocked too. Read the same day, @mayiiloveu shows one public post, the tryethos one from 16 Oct (12 views). 520, its 64.7K hit, is no longer public. What worked there was 520's shape: exes, an ordinary thing one of them won't let go of, a quiet last line, no link, in the iOS 26 look.
+
+So three of these are pure reach in that shape, no product, which the bio turns into visits. Two carry the gift and use the three-slide swipers the owner liked (599, 600). All five are three iOS 26 crops.
+
+| | Link | The thing | Last line |
+|---|---|---|---|
+| 616 | no | his hoodie, "keep it" | "so you have a reason to text me" |
+| 617 | no | still her emergency contact after 5 months | "are you ok" / "i am now" |
+| 618 | no | the Spotify Blend nobody deletes, "all sad songs now" | "i noticed / half of them are mine" |
+| 619 | yes | "i lied to you last night" | "i wasnt at the gym / i was making this" + link |
+| 620 | yes | "i know you said you needed space" + link | "you dont have to answer" over her unsent "i miss you so much it hurts" |
+
+**Post order on the US account:** 616, 618, 619, 617, 620, one a night, 7–10 PM. The reach posts go first, so the account has views again before the link posts.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
