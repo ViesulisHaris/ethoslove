@@ -1,0 +1,51 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|3:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can u peel me an orange"
+        },
+        {
+          "from": "them",
+          "text": "ur literally in the next room"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok and",
+          "status": "Read 3:27 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "check the kitchen"
+        },
+        {
+          "from": "them",
+          "text": "peeled. no white bits"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🍊",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}
