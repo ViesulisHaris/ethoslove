@@ -2534,6 +2534,18 @@ one-screenshot flip with the gift inside it.
 
 **Post order:** 606, 608, 607, 609, 610.
 
+611–615 (23 Oct), with the season in two of them:
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 611 | warm flip | "something i cant take back" | "told my grandma ur coming for thanksgiving / she already set ur seat" + link |
+| 612 | rosie 149, Halloween | "we were supposed to match" | "ur the back half of the horse" / "maya whos the front half" |
+| 613 | trend (orange peel theory) | "ur literally in the next room" | "check the kitchen / peeled. no white bits" + link |
+| 614 | saves | "why didnt u hang up" | "6 hours / u said my name twice" |
+| 615 | 30 at midnight, 1 Nov | "2 mins" | "its christmas season now / i dont make the rules" |
+
+**Post order:** 612 before Halloween, 613, 611, 614; 615 on the night of 31 Oct.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
