@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:02 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u said ur too old to dress up"
+        },
+        {
+          "from": "them",
+          "text": "i am"
+        },
+        {
+          "from": "me",
+          "text": "we were supposed to match"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok fine"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🎃",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok i forgive u"
+        },
+        {
+          "from": "me",
+          "text": "but i already bought our costume"
+        },
+        {
+          "from": "me",
+          "text": "ur the back half of the horse"
+        },
+        {
+          "from": "them",
+          "text": "maya whos the front half"
+        }
+      ]
+    }
+  ]
+}
