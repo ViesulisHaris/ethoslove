@@ -1,0 +1,83 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u havent texted me all day"
+        },
+        {
+          "from": "me",
+          "text": "like at all"
+        },
+        {
+          "from": "them",
+          "text": "been busy"
+        },
+        {
+          "from": "me",
+          "text": "busy doing what leo",
+          "status": "Read 8:43 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "finishing this"
+        },
+        {
+          "from": "them",
+          "text": "sorry i went quiet"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "oh no"
+        },
+        {
+          "from": "them",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "i told my mom we broke up"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "me",
+          "text": "she took it really well"
+        },
+        {
+          "from": "me",
+          "text": "like suspiciously well"
+        },
+        {
+          "from": "them",
+          "text": "call her back rn"
+        }
+      ]
+    }
+  ]
+}
