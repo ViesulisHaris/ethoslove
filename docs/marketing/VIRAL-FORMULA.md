@@ -2562,6 +2562,18 @@ So three of these are pure reach in that shape, no product, which the bio turns 
 
 **Post order on the US account:** 616, 618, 619, 617, 620, one a night, 7–10 PM. The reach posts go first, so the account has views again before the link posts.
 
+621–625 (24 Oct), the same mix:
+
+| | Link | The thing | Last line |
+|---|---|---|---|
+| 621 | no | each kept one of the other's AirPods | "should we swap back" / "or we could meet halfway" |
+| 622 | no | her phone still joins his wifi "when i drive past your street" | "why didnt you change your password" |
+| 623 | no | 12:00 "happy birthday" from her ex | "i set a reminder when we were together / never turned it off" |
+| 624 | yes | "i cant stop thinking about someone" | "you / 3 years and its still you" + link |
+| 625 | yes | he liked her ex's post | "i followed your ex / were getting coffee tuesday" / "maya why" |
+
+**Post order:** 621, 623, 624, 622, 625.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
