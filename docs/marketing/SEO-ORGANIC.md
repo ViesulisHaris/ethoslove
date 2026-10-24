@@ -191,6 +191,14 @@ everything to be done here instead. Directories are dropped; the work went where
 - **Long titles**: the six Spanish city date pages whose titles ran past 70 characters ("Ideas para
   una cita en San Francisco: 16 planes y 24 sitios reales · Ethos") now drop " · Ethos" instead
   of their end. Any page does the same if its title would not fit.
+- **The Christmas page** (/occasions/christmas, which owns "digital Christmas gifts"): it showed two
+  templates and about 500 words, while Christmas searches start climbing in November and a page
+  needs weeks to be ranked. It now has 12 digital Christmas gift ideas, each a template that fits
+  the day (a letter by the fire, the year as a newspaper front page, a trip revealed on a
+  departures board, news under a scratch card, a countdown to midnight, the distance if you're
+  apart), and seven questions (opening by itself on Christmas morning, too late on Christmas Eve,
+  a long-distance partner). Any occasion page can take the same list (`ideas` in
+  `src/content/occasions.ts`); Valentine's Day should be next, by early December.
 - **Pitches are on hold** (the owner's call). Nothing is sent from the owner's address.
 
 ## What's next, ranked

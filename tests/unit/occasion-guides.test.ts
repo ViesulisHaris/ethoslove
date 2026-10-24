@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { OCCASIONS } from "@/config/occasions";
 import { GIFT_LOCALES } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
-import { listManifests } from "@/templates/manifests";
+import { getManifest, listManifests } from "@/templates/manifests";
 
 const words = (s: string) => s.trim().split(/\s+/).length;
 
@@ -20,7 +20,7 @@ describe("occasion guides", () => {
           expect(words(s.heading)).toBeGreaterThanOrEqual(2);
           expect(words(s.body), s.heading).toBeGreaterThanOrEqual(45);
         }
-        expect(guide.faq).toHaveLength(3);
+        expect(guide.faq.length).toBeGreaterThanOrEqual(3);
         for (const f of guide.faq) {
           expect(f.q.trim().endsWith("?"), f.q).toBe(true);
           expect(words(f.a), f.q).toBeGreaterThanOrEqual(20);
@@ -30,6 +30,23 @@ describe("occasion guides", () => {
         expect(total, "total words").toBeGreaterThanOrEqual(300);
         expect(new Set(guide.sections.map((s) => s.heading)).size).toBe(3);
       });
+
+      if (guide?.ideas) {
+        const ideas = guide.ideas;
+        it(`${occasion} (${locale}) lists ideas that can be made`, () => {
+          // The same gifts in both languages and in the same order, each one a template that exists.
+          const other = OCCASION_GUIDES[occasion][locale === "en" ? "es" : "en"].ideas;
+          expect(other?.items.map((i) => i.template)).toEqual(ideas.items.map((i) => i.template));
+          expect(new Set(ideas.items.map((i) => i.template)).size).toBe(ideas.items.length);
+          for (const idea of ideas.items) {
+            expect(getManifest(idea.template), idea.template).not.toBeNull();
+            expect(words(idea.heading), idea.template).toBeGreaterThanOrEqual(3);
+            expect(words(idea.body), idea.template).toBeGreaterThanOrEqual(25);
+          }
+          // The number in the heading is the number of ideas under it.
+          expect(ideas.title).toContain(String(ideas.items.length));
+        });
+      }
 
       it(`${occasion} (${locale}) only names templates that exist`, () => {
         // A template named in a guide must be a real one, so the advice can be followed.

@@ -11,6 +11,11 @@ import type { GiftLocale } from "@/lib/gift/schema";
 export type OccasionGuide = {
   title: string;
   lead: string;
+  /**
+   * A numbered list of gifts for the day, under the templates: the occasion's own and others that
+   * fit it, each said the way that day needs it. Every one is a template, so it can be made.
+   */
+  ideas?: { title: string; items: { template: string; heading: string; body: string }[] };
   sections: { heading: string; body: string }[];
   faq: { q: string; a: string }[];
 };
@@ -332,6 +337,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A Christmas gift that can't get lost in the post",
       lead: "For the people you won't see this year and the ones you will. Nothing to ship, no deadline to miss: it opens on Christmas morning wherever they are, with your photos, a song for the day and the message you'd say if you were in the room.",
+      ideas: {
+        title: "12 digital Christmas gift ideas",
+        items: [
+          {
+            template: "snow-globe",
+            heading: "A snow globe with the two of you inside",
+            body: "They shake the phone and it snows, harder for a wilder storm. Each time the snow settles there is something new in the globe: one of your lines, or a photo hanging like an ornament. After the last one the brass plaque is engraved and your letter opens. A button shakes it on a phone without a motion sensor.",
+          },
+          {
+            template: "fireside",
+            heading: "A letter by the fire",
+            body: "A cabin at dusk, with snow falling past the window. They light the candle, the room turns gold and your letter unfolds from the blanket, with your photos pegged on a string and their song playing low. The one for the quiet hour after dinner.",
+          },
+          {
+            template: "the-letter",
+            heading: "A Christmas letter, sealed with wax",
+            body: "The free one. They break the seal, the letter slides out and unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Write them the year: what you'll remember about it, and what you want for them in the next one.",
+          },
+          {
+            template: "evergreen",
+            heading: "A parcel they actually unwrap",
+            body: "Wrapped in old newspaper and tied with twine, with their name on the tag. They tear it open and butterflies fly out over a collage of your photos on polaroids, a record with your words on the label, your song on a little player and your letter at the end.",
+          },
+          {
+            template: "our-timeline",
+            heading: "Your year, as a road that draws itself",
+            body: "Every month that mattered, pinned to a winding road with a photo and a date, drawn as they scroll. It ends on a countdown to whatever comes next: the trip, the move, the new year.",
+          },
+          {
+            template: "front-page",
+            heading: "The year's front page, with them on it",
+            body: "A newspaper with their name on the masthead: your headline, a lead photo, your message set in columns, classified ads you write and a horoscope that is suspiciously accurate. A good one for a parent, or for the friend who made your year.",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "A trip, revealed on a departures board",
+            body: "If the present is a trip, let them find out properly. They pack a suitcase with your clues, a departures board clatters to where you're going, and a boarding pass, train ticket or road-trip map slides up with both your names on it. Your letter is under the stub.",
+          },
+          {
+            template: "scratch-card",
+            heading: "News under the foil",
+            body: "For the Christmas you have something to tell them: a stack of scratch cards, each with a photo and a line, and the last one holding the news. A move, a baby, a puppy, a question. They rub the foil away with a finger.",
+          },
+          {
+            template: "recipe-box",
+            heading: "The recipe for the one who makes Christmas dinner",
+            body: "A recipe card on the kitchen counter, written about them. They tilt the phone to pour in each ingredient (two cups of patience, a whole Sunday of their time), shake it to stir, and the card turns over into your letter. There are buttons for a phone that can't feel a tilt.",
+          },
+          {
+            template: "midnight-countdown",
+            heading: "A countdown to midnight",
+            body: "A live countdown to the minute you choose: midnight on Christmas Eve, or the turn of the year. The sky darkens from dusk to night as it gets close, and at zero fireworks fill the screen and the gift opens, with your photos and your words.",
+          },
+          {
+            template: "halfway",
+            heading: "If you're apart this Christmas",
+            body: "A postcard map, your home on one island and theirs on the other, with the real distance between you in big numbers. They blow into the phone and a paper plane rides their breath along the path, until it turns into a heart and the postcard flips over to your letter. Without a microphone, a tap flies it.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "A jar of reasons to open by the tree",
+            body: "A glass jar of folded notes, one reason on each. They shake the phone, or tap the jar, and a note tumbles out and unfolds, some with a photo, until the jar is empty and your letter is waiting underneath.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "What to write",
@@ -355,12 +425,90 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           q: "Will it open on an older phone?",
           a: "It runs in the phone's browser, with nothing to install, on any iPhone or Android from the last several years. On a slow connection it takes a moment longer to load.",
         },
+        {
+          q: "Can it open by itself on Christmas morning?",
+          a: "On a premium template, yes: schedule it and it unlocks by itself at the time you pick, in their time zone. On a free template, send the link at the moment you want them to open it, or tell them to wait for the morning.",
+        },
+        {
+          q: "Is it too late if it's already Christmas Eve?",
+          a: "No. It arrives the moment you press send: publish it, copy the link and put it in WhatsApp, iMessage, an email or a card. There is nothing to ship and no last posting date to miss.",
+        },
+        {
+          q: "What can I give a long-distance partner for Christmas?",
+          a: "Something that closes the distance for a minute. Halfway shows the real distance between you and lets them fly a paper plane home, Passport draws the route from your city to theirs, and on any premium template a voice message is the nearest thing to being in the room.",
+        },
         costEn,
+        keepEn,
       ],
     },
     es: {
       title: "Un regalo de Navidad que no se pierde en el correo",
       lead: "Para los que no verás este año y para los que sí. Nada que enviar por correo, ninguna fecha límite: se abre la mañana de Navidad estén donde estén, con tus fotos, una canción para el día y el mensaje que dirías si estuvieras allí.",
+      ideas: {
+        title: "12 ideas de regalos digitales de Navidad",
+        items: [
+          {
+            template: "snow-globe",
+            heading: "Una bola de nieve con vuestra historia dentro",
+            body: "Al agitar el móvil, nieva; cuanto más fuerte, más tormenta. Cada vez que la nieve se posa aparece algo nuevo en la bola: una de tus frases o una foto colgada como un adorno. Tras la última se graba la placa de latón y se abre tu carta. En un móvil sin sensor de movimiento, un botón la agita.",
+          },
+          {
+            template: "fireside",
+            heading: "Una carta junto al fuego",
+            body: "Una cabaña al atardecer y la nieve cayendo tras la ventana. Al encender la vela, la habitación se vuelve dorada y tu carta se despliega desde la manta, con tus fotos colgadas de un cordel con pinzas y su canción sonando bajito. Para la hora tranquila después de la cena.",
+          },
+          {
+            template: "the-letter",
+            heading: "Una carta de Navidad con sello de lacre",
+            body: "La gratuita. Al romper el sello, la carta sale del sobre y se despliega en un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Escribe el año: lo que vas a recordar de él y lo que le deseas para el siguiente.",
+          },
+          {
+            template: "evergreen",
+            heading: "Un paquete que se desenvuelve de verdad",
+            body: "Envuelto en papel de periódico y atado con cordel, con su nombre en la etiqueta. Al abrirlo salen volando mariposas sobre un collage con tus fotos en polaroids, un disco con tus palabras en la etiqueta, tu canción en un pequeño reproductor y tu carta al final.",
+          },
+          {
+            template: "our-timeline",
+            heading: "Vuestro año, como un camino que se dibuja solo",
+            body: "Cada mes que importó, clavado en un camino sinuoso con una foto y una fecha, que se dibuja al bajar por la página. Termina con una cuenta atrás hacia lo que venga: el viaje, la mudanza, el año nuevo.",
+          },
+          {
+            template: "front-page",
+            heading: "Su año, en primera plana",
+            body: "Un periódico con su nombre en la cabecera: tu titular, una foto principal, tu mensaje en columnas, anuncios clasificados que escribes tú y un horóscopo sospechosamente acertado. Va bien para un padre o una madre, o para quien te ha alegrado el año.",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "Un viaje que se descubre en un panel de salidas",
+            body: "Si el regalo es un viaje, que se descubra como se merece. Se llena una maleta con tus pistas, un panel de salidas gira letra a letra hasta el destino y aparece una tarjeta de embarque, un billete de tren o un mapa de carretera con vuestros nombres. Tu carta está debajo de la matriz.",
+          },
+          {
+            template: "scratch-card",
+            heading: "Una noticia bajo el rasca",
+            body: "Para la Navidad en la que tienes algo que contar: un montón de rascas, cada uno con una foto y una frase, y el último con la noticia. Una mudanza, un bebé, un perro, una pregunta. La capa se quita con el dedo.",
+          },
+          {
+            template: "recipe-box",
+            heading: "La receta de quien cocina en Navidad",
+            body: "Una ficha de receta en la encimera, escrita sobre esa persona. Al inclinar el móvil se vierte cada ingrediente en el bol (dos tazas de paciencia, un domingo entero de su tiempo), al agitarlo se remueve y la ficha se da la vuelta con tu carta. Hay botones para los móviles que no notan la inclinación.",
+          },
+          {
+            template: "midnight-countdown",
+            heading: "Una cuenta atrás hasta medianoche",
+            body: "Una cuenta atrás en directo hasta el minuto que elijas: la medianoche de Nochebuena o la del fin de año. El cielo pasa del atardecer a la noche a medida que se acerca y, al llegar a cero, los fuegos artificiales llenan la pantalla y se abre el regalo, con tus fotos y tus palabras.",
+          },
+          {
+            template: "halfway",
+            heading: "Si este año pasáis la Navidad lejos",
+            body: "Un mapa en forma de postal, con tu casa en una isla y la suya en la otra, y en números grandes la distancia real que os separa. Al soplar al móvil, un avión de papel vuela con ese aliento por el camino hasta que se convierte en un corazón y la postal se da la vuelta con tu carta. Sin micrófono, basta un toque.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "Un frasco de razones para abrir junto al árbol",
+            body: "Un frasco de cristal lleno de notas dobladas, una razón en cada una. Al agitar el móvil, o tocar el frasco, cae una nota y se despliega, algunas con foto, hasta que el frasco se vacía y debajo espera tu carta.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "Qué escribir",
@@ -384,7 +532,20 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
           q: "¿Se abre en un móvil viejo?",
           a: "Funciona en el navegador del móvil, sin instalar nada, en cualquier iPhone o Android de los últimos años. Con mala conexión tarda un poco más en cargar.",
         },
+        {
+          q: "¿Puede abrirse sola la mañana de Navidad?",
+          a: "En una plantilla premium, sí: prográmala y se desbloquea sola a la hora que elijas, en su zona horaria. En una gratuita, manda el enlace en el momento en que quieras que se abra, o pide que espere a la mañana.",
+        },
+        {
+          q: "¿Llego tarde si ya es Nochebuena?",
+          a: "No. Llega en el momento en que pulsas enviar: publícalo, copia el enlace y pégalo en WhatsApp, iMessage, un correo o una tarjeta. No hay nada que mandar por correo ni último día de envío que se te pase.",
+        },
+        {
+          q: "¿Qué le regalo en Navidad a mi pareja a distancia?",
+          a: "Algo que acorte la distancia un momento. A medio camino muestra la distancia real que os separa y deja volar un avión de papel hasta casa, Pasaporte dibuja la ruta de tu ciudad a la suya y, en cualquier plantilla premium, un mensaje de voz es lo más parecido a estar allí.",
+        },
         costEs,
+        keepEs,
       ],
     },
   },
