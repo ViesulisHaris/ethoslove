@@ -178,19 +178,32 @@ everything to be done here instead. Directories are dropped; the work went where
   Google discounts. The editorial lists that matter (iDrop News' best digital gifts, SELF and CNN's
   long-distance gifts) take a pitch from a person, so they need the owner's yes and address.
 
+## Fifth round, 24 Oct: "No pitches for now. Keep going with the content."
+
+- **Truth or dare and "how well do you know me"**: 50 truths and 50 dares (from 12 and 12) and 40
+  know-me questions (from 10), free, playable and listed in full on /games/dare and /games/know in
+  both languages. A free game deals twelve of each from the whole pile, fresh every game, so a
+  sitting still ends at the gift screen; a pack plays all its cards.
+- **Four more of the biggest searches in the blog queue**: good morning messages for her and for him,
+  paragraphs for your girlfriend, cute things to say to your girlfriend. They sit 7th to 10th, so
+  they are written in the first week. The queue holds 29 topics (two weeks at two a day), and the
+  routine refills it to 30 whenever it drops below 10, and every Monday.
+- **Pitches are on hold** (the owner's call). Nothing is sent from the owner's address.
+
 ## What's next, ranked
 
 ### Needs the owner
 
 1. **Sign up on AlternativeTo, Product Hunt, PeerPush and SaaSHub** (Google sign-in), then say so:
    the listings are written and Claude submits them (`LINK-KIT.md`).
-2. **Pitches**: say yes to each gift-guide email in `LINK-KIT.md` before it goes out from your address.
+2. **Pitches** (on hold since 24 Oct): say yes to each gift-guide email in `LINK-KIT.md` before it
+   goes out from your address.
 3. **Pinterest**: an Ethos business account, or a yes to pin from the personal one.
 
 ### Can be done in the repo next
 
-4. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
-   your partner. Those searches are answered by lists of that length.
+4. ~~Longer free question lists~~: done (150 would-you-rather, 96 deck questions, 100 truth or
+   dare, 40 know-me).
 5. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
    the editor's writing help as a page of its own. It costs API money per use and needs rate limits,
    so it needs the owner's yes.
