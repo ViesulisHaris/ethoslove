@@ -25,20 +25,9 @@ npm ci --no-audit --no-fund
 If a post in `src/content/blog/posts/` already has today's date (UTC) as `published`, stop: today's
 post is out. Say so in one line and end the run.
 
-Then look for an earlier post still waiting to be merged into the live repository (step 6). Until it
-is, the queue on `main` still has its topic:
-
-```bash
-git fetch origin '+refs/heads/blog/*:refs/remotes/origin/blog/*'
-for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/blog/); do
-  [ -n "$(git rev-list origin/main..$b)" ] && echo "waiting: $b"
-done
-```
-
-If that prints a branch, stop: say which one is waiting in one line and end the run. The Publish
-blog workflow deletes a branch once its post is live, so a waiting branch means its run failed:
-the Actions tab on the mirror says why (most often `LIVE_REPO_TOKEN` isn't set; see step 6). A branch
-whose commits are all on `main` is merged and doesn't count.
+On the mirror, earlier posts may still be waiting for the live repository's next publish run
+(step 6). That's fine: they are on `main`, so the queue already lost their topics, and today's post
+goes on top of them.
 
 ## 1. Pick today's topic
 
@@ -178,8 +167,9 @@ git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" commit -m "blog:
 ```
 
 Only one repository goes live: Vercel deploys `main` of `github.com/reasj2/ethoslove`. The public
-mirror `github.com/ViesulisHaris/ethoslove` deploys nothing, and its `main` has to stay a copy of
-the live one. Look at where this checkout pushes before you push:
+mirror `github.com/ViesulisHaris/ethoslove` deploys nothing; its `main` is a copy of the live one,
+ahead of it only by blog posts waiting to be published. Look at where this checkout pushes before
+you push:
 
 ```bash
 git remote get-url origin
@@ -196,36 +186,23 @@ If the push is rejected because `main` moved, run
 the first four checks, and push again. The post is at `https://tryethos.io/blog/<slug>` a few minutes
 later.
 
-If it is anything else (the mirror), don't push to `main`. Push the commit to its own branch:
+If it is anything else (the mirror), push the commit to the mirror's `main`:
 
 ```bash
-git push origin HEAD:refs/heads/blog/<slug>
+git push origin HEAD:main
 ```
 
-The mirror's **Publish blog** workflow (`.github/workflows/publish-blog.yml`) takes it from there,
-usually within ten minutes: it checks the branch with `scripts/blog-guard.mjs` (only files under
-`src/content/blog/`, `public/blog/` and `docs/blog/`; a post file must be plain data; the team's
-author), puts the commit on top of the live `main`, runs the blog tests and the type check, pushes
-it to `reasj2/ethoslove`, moves the mirror's `main` to the same commit, deletes the branch, waits for
-the post on tryethos.io and tells IndexNow. So keep everything inside those three folders: a branch
-that touches anything else is refused and waits. Skip the live check below (the workflow does it)
-and report it as sent (step 7).
+If that is rejected because `main` moved, pull with `--rebase` as above, repeat the first four
+checks, and push again. Never force-push.
 
-### How a post goes live (set up once)
-
-The workflow needs one secret on the mirror, `LIVE_REPO_TOKEN`, a token that can push to
-`reasj2/ethoslove`. The routine never sees it. Without it, the workflow checks the post and stops,
-the branch waits, and step 0 holds every later run until it's published. To set it up:
-
-1. A token: either Adrian makes a fine-grained token for `reasj2/ethoslove` alone with *Contents:
-   read and write* (the narrowest), or the owner makes a classic token with the `repo` scope
-   (GitHub → Settings → Developer settings → Personal access tokens).
-2. On `github.com/ViesulisHaris/ethoslove`: Settings → Secrets and variables → Actions → New
-   repository secret, name `LIVE_REPO_TOKEN`, the token as the value.
-3. For a branch already waiting: Actions → Publish blog → Run workflow, with the branch name.
-
-Recommended: a ruleset on the mirror's `main` that lets only the owner (and GitHub Actions) update
-it, so nothing but the owner can change the workflow or the guard.
+The live repository's **Publish blog** workflow (`.github/workflows/publish-blog.yml`) reads the
+mirror at 10:00 and 16:00 UTC, with no key, since the mirror is public. It checks the new commits
+with `scripts/blog-guard.mjs` (only files under `src/content/blog/`, `public/blog/` and
+`docs/blog/`; a post file must be plain data; the team's author), moves the live `main` to them,
+runs the blog tests and the type check, pushes (Vercel deploys it), waits for the post on
+tryethos.io and tells IndexNow. Keep everything inside those three folders: a commit that touches
+anything else stops every post behind it until someone fixes the mirror. Skip the live check below
+(the workflow does it) and report it as queued (step 7).
 
 ### When the network allows it: check it's live, then ping IndexNow
 
@@ -242,7 +219,7 @@ node scripts/indexnow.mjs https://tryethos.io/blog/<slug> https://tryethos.io/es
 ## 7. Report
 
 Send one push notification: `New on tryethos.io: <English title>`, or, when it went to a branch,
-`Blog post sent to publish: <English title>`.
+`Blog post queued, live by 16:00 UTC: <English title>`.
 
 The final message is what the owner reads on their phone. Write only:
 - the title;
@@ -250,8 +227,8 @@ The final message is what the owner reads on their phone. Write only:
 - the search it targets;
 - the templates it recommends;
 - the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
-- "Live and sent to IndexNow", or "Live check skipped (no network)", or "Sent to publish: branch
-  blog/<slug> on the mirror; the Publish blog workflow takes it live";
+- "Live and sent to IndexNow", or "Live check skipped (no network)", or "Queued on the mirror's
+  main; the live repository publishes it at 10:00 or 16:00 UTC";
 - one line if anything was skipped or failed.
 
 ## Never

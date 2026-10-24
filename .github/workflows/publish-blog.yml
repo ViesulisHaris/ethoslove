@@ -1,34 +1,27 @@
-# Takes a blog post from the public mirror to the live site, with nobody at a computer.
+# The daily blog post, from the public mirror to the live site, with nobody at a computer.
 #
-# The daily blog routine (docs/blog/PLAYBOOK.md) runs in the cloud and can push only to the mirror,
-# github.com/ViesulisHaris/ethoslove. Vercel deploys github.com/reasj2/ethoslove. This workflow
-# runs on the mirror, where Actions are free, and for each blog/<slug> branch:
-#   1. checks it with scripts/blog-guard.mjs from main: only blog files, posts that are plain
-#      data, the team's author;
-#   2. applies it on top of the live main as one commit, then runs the blog tests and the type
-#      check;
-#   3. pushes that commit to the live main (Vercel deploys it), makes the mirror's main the same
-#      commit, and deletes the branch;
-#   4. waits for the post to answer on tryethos.io and tells IndexNow.
+# The blog routine (docs/blog/PLAYBOOK.md) runs in the cloud and can push only to the mirror,
+# github.com/ViesulisHaris/ethoslove: it commits each post to the mirror's main. This runs on the
+# live repository, the one Vercel deploys, at 10:00 and 16:00 UTC. The mirror is public, so it is
+# read without any key. When the mirror's main has commits this main hasn't, it:
+#   1. checks them with scripts/blog-guard.mjs from this main: only blog files, posts that are
+#      plain data, the team's author;
+#   2. moves main forward to them, or merges them as the team's author if main has moved on;
+#   3. runs the blog tests and the type check on the result, and only then pushes, which Vercel
+#      deploys;
+#   4. waits for each new post on tryethos.io and tells IndexNow.
 #
-# It needs one repository secret on the mirror: LIVE_REPO_TOKEN, a token that can push to
-# reasj2/ethoslove (docs/blog/PLAYBOOK.md, "How a post goes live"). Without it, steps 1 and 2 run and
-# the run fails before publishing, so the branch waits and nothing goes out.
-#
-# It never runs code from the branch: the guard, the tests and the build tools all come from main,
-# and the branch contributes only data files the guard has read. Run it by hand for a waiting
-# branch from the Actions tab (Publish blog, Run workflow, the branch name).
+# Nothing from the mirror runs here: the guard runs from this main before anything is merged, and
+# the guard refuses any change outside src/content/blog/, public/blog/ and docs/blog/, so the tests
+# and tools that run afterwards are this repository's own. It holds no secrets and pushes with the
+# workflow's own token. On the mirror it never runs. Run it by hand (Actions, Publish blog, Run
+# workflow) to publish a waiting post now.
 name: Publish blog
 
 on:
-  workflow_run:
-    workflows: ["Blog branch"]
-    types: [completed]
+  schedule:
+    - cron: "0 10,16 * * *"
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "The waiting branch, blog/<slug>"
-        required: true
 
 permissions:
   contents: write
@@ -39,76 +32,73 @@ concurrency:
 
 jobs:
   publish:
-    if: github.repository == 'ViesulisHaris/ethoslove' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    if: github.repository == 'reasj2/ethoslove'
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-    env:
-      BRANCH: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || github.event.workflow_run.head_branch }}
-      LIVE_REPO_TOKEN: ${{ secrets.LIVE_REPO_TOKEN }}
-      MIRROR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    timeout-minutes: 30
     steps:
-      - name: A blog branch
-        run: |
-          [[ "$BRANCH" =~ ^blog/[a-z0-9-]+$ ]] || { echo "::error::Not a blog branch: $BRANCH"; exit 1; }
-
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
           filter: blob:none
-          persist-credentials: false
 
-      - name: Fetch the post and the live main
+      - name: Anything new on the mirror?
+        id: new
         run: |
-          git fetch -q origin "refs/heads/$BRANCH:refs/remotes/post"
-          if [ -n "$LIVE_REPO_TOKEN" ]; then
-            git fetch -q "https://x-access-token:${LIVE_REPO_TOKEN}@github.com/reasj2/ethoslove.git" "refs/heads/main:refs/remotes/live"
-          else
-            echo "::warning::LIVE_REPO_TOKEN isn't set: checking against the mirror's main, and nothing will be published."
-            git update-ref refs/remotes/live origin/main
-          fi
-          echo "BASE=$(git merge-base refs/remotes/live refs/remotes/post)" >> "$GITHUB_ENV"
+          git fetch -q --filter=blob:none https://github.com/ViesulisHaris/ethoslove.git "refs/heads/main:refs/remotes/mirror"
+          ahead=$(git rev-list --count HEAD..refs/remotes/mirror)
+          echo "ahead=$ahead" >> "$GITHUB_OUTPUT"
+          echo "BASE=$(git merge-base HEAD refs/remotes/mirror)" >> "$GITHUB_ENV"
+          if [ "$ahead" -gt 0 ]; then git log --format='%h %an <%ae> %s' HEAD..refs/remotes/mirror; else echo "Nothing new on the mirror."; fi
 
       - name: Only blog files, plain data, the team's author
-        run: node scripts/blog-guard.mjs "$BASE" refs/remotes/post
+        if: steps.new.outputs.ahead != '0'
+        run: node scripts/blog-guard.mjs "$BASE" refs/remotes/mirror
 
-      - name: Put the post on top of the live main
+      - name: Bring them onto main
+        if: steps.new.outputs.ahead != '0'
         run: |
-          git checkout -q -B publish refs/remotes/live
-          git diff --binary "$BASE" refs/remotes/post > "$RUNNER_TEMP/post.patch"
-          git apply --3way --index "$RUNNER_TEMP/post.patch"
-          git log -1 --format=%B refs/remotes/post > "$RUNNER_TEMP/message"
-          git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" commit -q -F "$RUNNER_TEMP/message"
-          git log -1 --stat --format='%h %an <%ae> %s'
+          git diff --name-only --diff-filter=A "$BASE" refs/remotes/mirror -- 'src/content/blog/posts/*.ts' | sed 's#.*/##; s#\.ts$##' > "$RUNNER_TEMP/new-posts"
+          if git merge-base --is-ancestor HEAD refs/remotes/mirror; then
+            git merge -q --ff-only refs/remotes/mirror
+          else
+            git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" merge -q --no-ff refs/remotes/mirror -m "Merge the blog from the mirror"
+          fi
+          git log -1 --format='%h %an <%ae> %s'
 
       - uses: actions/setup-node@v4
+        if: steps.new.outputs.ahead != '0'
         with:
           node-version: 24
           cache: npm
 
       - name: Blog tests and type check
+        if: steps.new.outputs.ahead != '0'
         run: |
           npm ci --no-audit --no-fund
           npx vitest run tests/unit/blog-posts.test.ts tests/unit/messages.test.ts tests/unit/blog-guard.test.ts
           npm run typecheck
 
       - name: Publish
-        run: |
-          [ -n "$LIVE_REPO_TOKEN" ] || { echo "::error::The post passed every check, but LIVE_REPO_TOKEN isn't set, so it wasn't published. Add the secret, then run this workflow again for $BRANCH."; exit 1; }
-          git push -q "https://x-access-token:${LIVE_REPO_TOKEN}@github.com/reasj2/ethoslove.git" publish:main
-          echo "Live repository: $(git rev-parse --short HEAD)"
-          git push -q "https://x-access-token:${MIRROR_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" publish:main \
-            || echo "::warning::The mirror's main couldn't move to the live main (it has commits the live one hasn't). Push main to both remotes by hand."
-          git push -q "https://x-access-token:${MIRROR_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" --delete "$BRANCH"
+        if: steps.new.outputs.ahead != '0'
+        run: git push -q origin HEAD:main
 
-      - name: Wait for it on tryethos.io, then tell IndexNow
+      - name: Wait for the new posts on tryethos.io, then tell IndexNow
+        if: steps.new.outputs.ahead != '0'
         run: |
-          slug="${BRANCH#blog/}"
-          for i in $(seq 1 30); do
-            [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")" = 200 ] && break
-            sleep 30
-          done
-          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")
-          [ "$code" = 200 ] || { echo "::warning::https://tryethos.io/blog/$slug still answers $code after 15 minutes. Check the Vercel deploy."; exit 0; }
-          node scripts/indexnow.mjs "https://tryethos.io/blog/$slug" "https://tryethos.io/es/blog/$slug"
-          echo "Live: https://tryethos.io/blog/$slug"
+          [ -s "$RUNNER_TEMP/new-posts" ] || { echo "No new post in this batch."; exit 0; }
+          urls=()
+          while read -r slug; do
+            for i in $(seq 1 30); do
+              [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")" = 200 ] && break
+              sleep 30
+            done
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")
+            if [ "$code" = 200 ]; then
+              echo "Live: https://tryethos.io/blog/$slug"
+              urls+=("https://tryethos.io/blog/$slug" "https://tryethos.io/es/blog/$slug")
+            else
+              echo "::warning::https://tryethos.io/blog/$slug still answers $code after 15 minutes. Check the Vercel deploy."
+            fi
+          done < "$RUNNER_TEMP/new-posts"
+          [ ${#urls[@]} -eq 0 ] || node scripts/indexnow.mjs "${urls[@]}"

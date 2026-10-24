@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * The gate between the daily blog routine and the live site. The routine pushes a blog/<slug>
- * branch to the public mirror; the "Publish blog" workflow runs this before anything of that
- * branch reaches github.com/reasj2/ethoslove, which Vercel deploys. Nobody reads a post before it
- * goes out, and the routine reads the open web while it researches, so this checks what the
- * branch changes, not what it says it changes:
+ * The gate between the daily blog routine and the live site. The routine commits each post to the
+ * public mirror's main; the live repository's "Publish blog" workflow runs this, from its own main,
+ * before any of the mirror's new commits reach github.com/reasj2/ethoslove, which Vercel deploys.
+ * Nobody reads a post before it goes out, and the routine reads the open web while it researches,
+ * so this checks what the commits change, not what they say they change:
  *
  *   - only the blog's own files: src/content/blog/, public/blog/ and docs/blog/;
  *   - a post file is data and nothing else: one `import type { BlogPost }`, one
