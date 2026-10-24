@@ -1,0 +1,75 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:48 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "he broke up with me"
+        },
+        {
+          "from": "me",
+          "text": "over text"
+        },
+        {
+          "from": "them",
+          "text": "are u ok"
+        },
+        {
+          "from": "me",
+          "text": "no",
+          "status": "Read 11:49 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok dont laugh"
+        },
+        {
+          "from": "them",
+          "text": "i made this a while ago"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "how long ago"
+        },
+        {
+          "from": "them",
+          "text": "a year"
+        },
+        {
+          "from": "me",
+          "text": "a YEAR??"
+        },
+        {
+          "from": "them",
+          "text": "i was waiting for him to mess up"
+        }
+      ]
+    }
+  ]
+}
