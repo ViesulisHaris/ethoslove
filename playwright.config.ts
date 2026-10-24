@@ -18,7 +18,7 @@ export default defineConfig({
     // the banner. A test about the banner itself clears this key first.
     storageState: {
       cookies: [],
-      origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "ethos-analytics-consent", value: "denied" }] }],
+      origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }],
     },
   },
   projects: [

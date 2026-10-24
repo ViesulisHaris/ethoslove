@@ -10,7 +10,7 @@ test.describe("games on two phones", () => {
 
   async function phone(browser: Browser, baseURL: string | undefined): Promise<Page> {
     const origin = new URL(baseURL ?? "http://localhost:3000").origin;
-    const context = await browser.newContext({ baseURL: origin, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-analytics-consent", value: "denied" }] }] } });
+    const context = await browser.newContext({ baseURL: origin, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
     return context.newPage();
   }
 

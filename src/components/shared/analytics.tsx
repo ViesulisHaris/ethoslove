@@ -6,6 +6,7 @@ import { isInApp } from "@/lib/app/bridge";
 import { Clarity } from "./clarity";
 import { CookieConsent } from "./cookie-consent";
 import { ErrorReporter } from "./error-reporter";
+import { MetaPixel } from "./meta-pixel";
 
 const KEPT_PARAMS = /^(ref|utm_[a-z]+)$/;
 
@@ -31,8 +32,9 @@ function redact<T extends { url: string }>(event: T): T | null {
 
 /**
  * Vercel Web Analytics and Speed Insights are cookieless, so they run on every page with no
- * consent needed. Clarity sets cookies and records sessions, so it waits behind the banner and
- * never runs on a gift page at all. The error reporter sets nothing and sends only our own code's
+ * consent needed. Clarity sets cookies and records sessions, and the Meta pixel sets cookies and
+ * reports visits and sales to Meta's ads, so both wait behind the banner and never run on a gift
+ * page at all. The error reporter sets nothing and sends only our own code's
  * errors to our own server, so it runs everywhere — a gift that breaks is the one to hear about.
  */
 export function SiteAnalytics() {
@@ -41,6 +43,7 @@ export function SiteAnalytics() {
       <Analytics beforeSend={redact} />
       <SpeedInsights beforeSend={redact} />
       <Clarity />
+      <MetaPixel />
       <CookieConsent />
       <ErrorReporter />
     </>

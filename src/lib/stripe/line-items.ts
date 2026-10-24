@@ -53,6 +53,11 @@ export type SessionOptions = {
   /** A same-site path to come back to. */
   returnTo: string;
   ref?: string;
+  /**
+   * Only for a buyer who said yes to advertising cookies: what the webhook needs to report the sale
+   * to Meta (lib/meta/capi.ts). Its presence is that yes. Absent, Meta is never told.
+   */
+  meta?: { fbc?: string; fbp?: string; ua?: string };
   automaticTax: boolean;
   /** STRIPE_PRODUCT_* values from the environment, by variable name. */
   productIds: Record<string, string | undefined>;
@@ -199,10 +204,26 @@ export function metadataRef(ref: string | undefined): string | undefined {
 }
 
 /**
+ * A consented buyer's Meta fields, as metadata (lib/meta/capi.ts reads them back). Stripe caps a value
+ * at 500 characters, which a user agent can pass.
+ */
+export function metaMetadata(meta: SessionOptions["meta"]): Record<string, string> {
+  if (!meta) return {};
+  return {
+    meta_consent: "1",
+    ...(meta.fbc ? { meta_fbc: meta.fbc } : {}),
+    ...(meta.fbp ? { meta_fbp: meta.fbp } : {}),
+    ...(meta.ua ? { meta_ua: meta.ua.slice(0, 500) } : {}),
+  };
+}
+
+/**
  * Everything fulfilment needs, in the session's metadata: it is the only thing both the webhook and
  * the success page can trust (Stripe signed it, and only this server wrote it). The Stripe account
  * is shared with other businesses, so it names nothing about a person or a gift: no gift ids, no
- * names, no notes. A gift card's name and note wait in gift_card_details instead.
+ * names, no notes. A gift card's name and note wait in gift_card_details instead. A buyer who allowed
+ * advertising cookies adds Meta's ids for their click and browser and the browser's user agent
+ * (`metaMetadata`), which name a browser, not a person.
  */
 export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Record<string, string> {
   const ref = metadataRef(options.ref);
@@ -221,6 +242,7 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
+    ...metaMetadata(options.meta),
   };
 }
 
@@ -316,6 +338,7 @@ export function membershipMetadata(plan: CheckoutPlan, options: SessionOptions):
     withdrawal_notice: "tickbox",
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
+    ...metaMetadata(options.meta),
   };
 }
 

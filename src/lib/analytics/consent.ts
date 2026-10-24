@@ -1,14 +1,20 @@
 /**
- * Whether the visitor has agreed to analytics that set cookies.
+ * Whether the visitor has agreed to the cookies the banner asks about: analytics (Microsoft
+ * Clarity) and advertising (the Meta pixel).
  *
- * The privacy policy promises analytics cookies are set only after consent and that the choice
+ * The privacy policy promises these cookies are set only after consent and that the choice
  * can be changed from the footer, so nothing that sets one may load until this reads "granted".
  * The answer lives in localStorage rather than a cookie: someone who declines should not be
  * given a cookie for having declined.
  */
 export type Consent = "granted" | "denied";
 
-const KEY = "ethos-analytics-consent";
+export const CONSENT_KEY = "ethos-consent";
+/**
+ * The answer as it was asked until 17 Oct 2026, about analytics only. A "no" still stands: nothing
+ * has been asked since. A "yes" was never a yes to advertising, so that visitor is asked again.
+ */
+export const LEGACY_CONSENT_KEY = "ethos-analytics-consent";
 const EVENT = "ethos:analytics-consent";
 
 /** `undefined` means "not read yet"; the snapshot has to be stable between renders. */
@@ -16,8 +22,9 @@ let cached: Consent | null | undefined;
 
 function read(): Consent | null {
   try {
-    const v = localStorage.getItem(KEY);
-    return v === "granted" || v === "denied" ? v : null;
+    const v = localStorage.getItem(CONSENT_KEY);
+    if (v === "granted" || v === "denied") return v;
+    return localStorage.getItem(LEGACY_CONSENT_KEY) === "denied" ? "denied" : null;
   } catch {
     // Private windows and blocked site data throw. Treat it as "not asked yet": the banner
     // shows, nothing loads, and the choice simply won't persist.
@@ -33,7 +40,8 @@ export function getConsent(): Consent | null {
 export function setConsent(value: Consent): void {
   cached = value;
   try {
-    localStorage.setItem(KEY, value);
+    localStorage.setItem(CONSENT_KEY, value);
+    localStorage.removeItem(LEGACY_CONSENT_KEY);
   } catch {
     // Unpersisted is fine; the event below still switches the current page over.
   }
@@ -44,7 +52,7 @@ export function setConsent(value: Consent): void {
 export function subscribeToConsent(onChange: () => void): () => void {
   const local = () => onChange();
   const remote = (e: StorageEvent) => {
-    if (e.key === KEY) {
+    if (e.key === CONSENT_KEY || e.key === LEGACY_CONSENT_KEY) {
       cached = undefined;
       onChange();
     }
@@ -77,12 +85,26 @@ export function serverConsent(): Consent | null {
 const OFF_LIMITS = ["/g", "/checkout", "/dashboard", "/account"];
 
 /** Takes the path with or without a locale prefix, since callers get it from either router. */
-const bare = (pathname: string) => pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
+export const withoutLocale = (pathname: string) => pathname.replace(/^\/(?:en|es)(?=\/|$)/, "");
+const bare = withoutLocale;
 const under = (path: string, roots: readonly string[]) =>
   roots.some((p) => path === p || path.startsWith(`${p}/`));
 
 export function isPrivatePath(pathname: string): boolean {
   return under(bare(pathname), OFF_LIMITS);
+}
+
+/**
+ * Where the Meta pixel stays off on top of the private paths. Every pixel event carries the whole
+ * address, query string included, and these addresses can carry something that opens a thing for
+ * whoever holds it: a gift card's code (`/redeem?code=`), a For Two invite (`/for-two/join`), a
+ * shared plan (`/plan#p=…`) or trip (`/trips/<id>`), a member's saved dates, and sign-in, whose
+ * `?next=` can name a gift and whose way back carries a code. Clarity's rule is left as it is.
+ */
+const NO_AD_TRACKING = ["/redeem", "/for-two/join", "/plan", "/trips", "/my-dates", "/login", "/signup"];
+
+export function isAdTrackingOff(pathname: string): boolean {
+  return isPrivatePath(pathname) || under(bare(pathname), NO_AD_TRACKING);
 }
 
 /**

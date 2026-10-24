@@ -12,6 +12,9 @@ import { InviteLink } from "@/components/pricing/invite-link";
 import { purchaseOutcome, safeReturnPath } from "@/components/pricing/offers";
 import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
+import { HoldMetaPurchase } from "@/components/shared/meta-pixel";
+import { metaPurchaseOf } from "@/lib/meta/capi";
+import type { MetaPurchase } from "@/lib/analytics/meta";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -47,10 +50,13 @@ export default async function CheckoutSuccessPage({
   // both work for whoever holds them. The signed-in buyer, always; a guest's session id only while
   // it may also sign this browser in. After that the email that went with it carries them.
   let mayReveal = false;
+  // The sale for Meta's pixel, handed to the next page (lib/analytics/meta.ts, holdPurchase).
+  let metaPurchase: MetaPurchase | null = null;
   if (stripe && typeof session_id === "string") {
     try {
       const session = await stripe.checkout.sessions.retrieve(session_id);
       sold = readSession(session);
+      metaPurchase = metaPurchaseOf(session);
       if (session.metadata?.guest === "1") {
         // Guest checkout: fulfil, then sign this browser in as the buyer. The session id only
         // ever reaches the buyer's browser (Stripe redirects there), and the window is short.
@@ -160,6 +166,7 @@ export default async function CheckoutSuccessPage({
   return (
     <div className="container-narrow flex flex-col items-center py-24 text-center">
       {paid && sold && typeof session_id === "string" ? <TrackPurchase sessionId={session_id} product={sold.product} bump={sold.bump} /> : null}
+      {paid && metaPurchase ? <HoldMetaPurchase purchase={metaPurchase} /> : null}
       {membership ? (
         // The membership's own colours (docs/MEMBERSHIP.md 4.1): a starlight check on the dusk.
         <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid="membership-success">

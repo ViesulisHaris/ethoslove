@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { env } from "@/lib/env";
+import { isConfigured } from "@/lib/env";
 import { useConsent } from "@/lib/analytics/use-consent";
 import { useScrolledPast } from "@/hooks/use-scrolled-past";
 
@@ -39,7 +39,7 @@ export function StickyCta() {
   // The consent banner docks in exactly this spot and sits above it (z-50 against this z-40),
   // so while it is up the button is present but unclickable — every tap aimed at it lands on
   // the banner instead. One dock at a time: this waits until the question has been answered.
-  const asking = Boolean(env.clarityId) && consent === null;
+  const asking = isConfigured.cookieConsent && consent === null;
   const visible = scrolled && wanted && !asking && !atFooter;
 
   return (

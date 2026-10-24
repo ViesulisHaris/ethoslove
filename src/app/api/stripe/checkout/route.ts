@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
+import { META_FBC, META_FBP } from "@/lib/meta/capi";
 import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, isProductId, subscriptionsEnabled, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
@@ -39,6 +40,13 @@ const input = z.object({
   // until fulfilment, never sent to Stripe.
   giftCard: z
     .object({ recipientName: z.string().trim().max(60).optional(), note: z.string().trim().max(300).optional() })
+    .optional()
+    .catch(undefined),
+  // Sent only by a browser whose visitor allowed advertising cookies (lib/analytics/meta.ts): its
+  // presence is that consent, and the webhook reports the sale to Meta only then. A malformed id is
+  // dropped, never an error.
+  meta: z
+    .object({ fbc: z.string().regex(META_FBC).optional().catch(undefined), fbp: z.string().regex(META_FBP).optional().catch(undefined) })
     .optional()
     .catch(undefined),
 });
@@ -139,6 +147,8 @@ export async function POST(request: NextRequest) {
     origin,
     returnTo: body.returnTo ?? "/dashboard",
     ref: body.ref,
+    // Meta needs the buyer's browser for a website sale; the webhook only has Stripe's.
+    meta: body.meta ? { ...body.meta, ua: request.headers.get("user-agent") ?? undefined } : undefined,
     automaticTax: process.env.STRIPE_AUTOMATIC_TAX === "true",
     productIds: stripeProductIds(),
   };

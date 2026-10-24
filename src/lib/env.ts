@@ -51,6 +51,17 @@ export const env = {
    */
   clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || undefined,
 
+  /**
+   * Meta (Facebook and Instagram) pixel id, for telling Meta's ads which visits ended in a sale.
+   * Written out literally for the same reason as `clarityId`: the browser decides with it whether the
+   * banner asks and whether the pixel loads. Unset, nothing of Meta's loads and nothing is sent.
+   */
+  metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || undefined,
+  /** The Conversions API's access token (server only): the webhook reports each consented sale with it. */
+  metaCapiToken: read("META_CAPI_TOKEN"),
+  /** Events Manager → Test events: while set, server events show up there instead of counting. */
+  metaTestEventCode: read("META_TEST_EVENT_CODE"),
+
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
   anthropicApiKey: read("ANTHROPIC_API_KEY"),
@@ -91,6 +102,9 @@ export const isConfigured = {
   resend: Boolean(env.resendApiKey),
   posthog: Boolean(env.posthogKey),
   clarity: Boolean(env.clarityId),
+  metaPixel: Boolean(env.metaPixelId),
+  /** Whether anything on the site waits for the cookie banner's answer, so whether it asks at all. */
+  cookieConsent: Boolean(env.clarityId || env.metaPixelId),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
   upstash: Boolean(env.upstashRedisUrl && env.upstashRedisToken),
