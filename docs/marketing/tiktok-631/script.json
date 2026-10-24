@@ -1,0 +1,75 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:12 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u didnt reply to my good morning"
+        },
+        {
+          "from": "me",
+          "text": "i was asleep"
+        },
+        {
+          "from": "them",
+          "text": "its 6pm maya"
+        },
+        {
+          "from": "me",
+          "text": "and??",
+          "status": "Read 6:12 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "i made u this anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg"
+        },
+        {
+          "from": "me",
+          "text": "whats this for"
+        },
+        {
+          "from": "them",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "its my birthday"
+        },
+        {
+          "from": "them",
+          "text": "just wanted u to have something today too"
+        }
+      ]
+    }
+  ]
+}
