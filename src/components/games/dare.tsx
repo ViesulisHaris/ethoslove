@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, RotateCcw, Users } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { DARES, TRUTHS } from "@/lib/games/content";
+import { DARE_ROUND, DARES, TRUTHS } from "@/lib/games/content";
 import { PACKS, type PackId } from "@/lib/games/packs";
 import { shuffle } from "@/lib/games/play";
 import { readSaved, reviveDare, savedKey, tabStorage, writeSaved, type DareTable } from "@/lib/games/saved";
@@ -78,9 +78,11 @@ function Cards({ names, decks, onChangePlayers }: { names: [string, string]; dec
   useEffect(() => writeSaved(tabStorage(), SAVED, { pack, seed, turn, used, card, stopped } satisfies DareTable), [pack, seed, turn, used, card, stopped]);
   const allTruths = decks?.truths ?? TRUTHS;
   const allDares = decks?.dares ?? DARES;
-  const truths = shuffle(allTruths, seed);
-  const dares = shuffle(allDares, seed + 1);
-  const over = stopped || (used.truth >= allTruths.length && used.dare >= allDares.length);
+  // A pack plays all its cards; the free decks deal twelve of each from the whole pile, fresh every game.
+  const deal = (cards: L[], s: number) => (decks ? shuffle(cards, s) : shuffle(cards, s).slice(0, DARE_ROUND));
+  const truths = deal(allTruths, seed);
+  const dares = deal(allDares, seed + 1);
+  const over = stopped || (used.truth >= truths.length && used.dare >= dares.length);
   const cardText = card ? (card.kind === "truth" ? truths : dares)[(card.n - 1) % (card.kind === "truth" ? truths : dares).length][locale] : "";
 
   const draw = (kind: "truth" | "dare") => {
@@ -89,7 +91,7 @@ function Cards({ names, decks, onChangePlayers }: { names: [string, string]; dec
     setUsed({ ...used, [kind]: n + 1 });
   };
   const left = (kind: "truth" | "dare") => {
-    const size = kind === "truth" ? allTruths.length : allDares.length;
+    const size = kind === "truth" ? truths.length : dares.length;
     return t("left", { n: size - (used[kind] % size) });
   };
   const again = () => {

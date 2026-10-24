@@ -48,6 +48,38 @@
     "angle": "50 open-when prompts grouped by moment (bad days, good news, can't sleep, missing me), what to put in each, and how to send them so they arrive at the right time instead of all at once."
   },
   {
+    "slug": "good-morning-messages-for-her",
+    "keyword": "good morning messages for her",
+    "keyword_es": "mensajes de buenos días para mi novia",
+    "occasion": "just-because",
+    "templates": ["text-thread", "the-letter"],
+    "angle": "Forty good morning texts sorted by mood (sweet, funny, far away, the morning after a fight), each short enough to send before coffee, plus how to turn one morning into a real surprise with a message that arrives bubble by bubble."
+  },
+  {
+    "slug": "paragraphs-for-your-girlfriend",
+    "keyword": "paragraphs for your girlfriend",
+    "keyword_es": "textos largos para mi novia",
+    "occasion": "just-because",
+    "templates": ["the-letter", "text-thread"],
+    "angle": "Long paragraphs for a girlfriend that read like you wrote them: one for when you miss her, after a fight, on her bad day and for no reason, each with the one real memory you swap in so it stops sounding copied."
+  },
+  {
+    "slug": "cute-things-to-say-to-your-girlfriend",
+    "keyword": "cute things to say to your girlfriend",
+    "keyword_es": "cosas bonitas para decirle a tu novia",
+    "occasion": "just-because",
+    "templates": ["jar-of-reasons", "text-thread"],
+    "angle": "Sixty cute things to say to a girlfriend, sorted by when to say them (good morning, across the room, over text, when she is low), and why the specific ones land better than the poster ones, with a way to keep them all in one jar."
+  },
+  {
+    "slug": "good-morning-messages-for-him",
+    "keyword": "good morning messages for him",
+    "keyword_es": "mensajes de buenos días para mi novio",
+    "occasion": "just-because",
+    "templates": ["text-thread", "fortune-cookie"],
+    "angle": "Forty good morning texts for a boyfriend, from the two-word ones to the long ones, sorted for before work, far away and the day of something big, and how to make one morning stand out with a fortune he cracks open."
+  },
+  {
     "slug": "what-to-write-in-boyfriends-birthday-card",
     "keyword": "what to write in your boyfriend's birthday card",
     "keyword_es": "qué escribir en la tarjeta de cumpleaños de mi novio",

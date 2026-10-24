@@ -2357,7 +2357,7 @@
       "dare": "Reto",
       "for": "Para {name}",
       "done": "Hecho. Turno de {name}",
-      "soft": "Doce de cada, en un orden nuevo cada vez.",
+      "soft": "Doce de cada, nuevas de toda la baraja cada vez.",
       "softPack": "{name}: {n} de cada, en un orden nuevo cada vez.",
       "left": "Quedan {n}",
       "finish": "Por hoy ya está",

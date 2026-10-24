@@ -2357,7 +2357,7 @@
       "dare": "Dare",
       "for": "For {name}",
       "done": "Done. {name}'s turn",
-      "soft": "Twelve of each, in a fresh order every time.",
+      "soft": "Twelve of each, fresh from the whole pile every time.",
       "softPack": "{name}: {n} of each, in a fresh order every time.",
       "left": "{n} left",
       "finish": "We're done for tonight",
