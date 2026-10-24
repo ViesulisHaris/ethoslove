@@ -2952,8 +2952,10 @@ So 631 to 635 go back to the engines that made the hits, written as new stories:
 |---|---|---|---|
 | 631 | 208, Maya the villain | "its 6pm maya" / "and??" | "its my birthday" / "just wanted u to have something today too" |
 | 632 | 149, what she shouldn't say | "busy doing what leo" | "i told my mom we broke up" / "she took it really well" / "like suspiciously well" |
-| 633 | cold reply, gut punch | her 👍 on "i love u" | "i signed a lease today" / "for us??" / "for one" |
+| 633 | cold reply, gut punch | her 👍 on "i love u" | "i got back with my ex" / "when" / "tuesday" |
 | 634 | 192, he's the villain | "why does gym bro call u baby" | "send it to gym bro" |
 | 635 | 102, friends to lovers | "he broke up with me" / "over text" | "a year" / "i was waiting for him to mess up" |
 
 **Post order:** 631, 633, 634, 632, 635, one a day. Pin 208, 149 and 30 to the profile.
+
+**Maya and Leo are 19–20.** The owner sent back 633's first ending ("i signed a lease today" / "for one"): "they are like 19 20 years old no leases no nothing like that". So their world is classes, dorms or their parents' place, part-time jobs, parties, exes, mums and friends. Never leases, moving in, mortgages, weddings, babies or careers.
