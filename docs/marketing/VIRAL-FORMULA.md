@@ -2574,6 +2574,18 @@ So three of these are pure reach in that shape, no product, which the bio turns 
 
 **Post order:** 621, 623, 624, 622, 625.
 
+**The owner on 621–625: "these are bad i need them good good so they go viral".** Read against what they liked (596–600): those had a hook that hits on slide 1 ("no", "i was going to break up with u tonight"), a detail people call out, and a twist people quote. 616–625 were quiet ex stories that only end on a line that means two things. So 626–630 go back to clear mechanics people already search: the wrong-text trend, a loyalty test, "hes a 10 but", rosie's own "are u mad at me", and a two-camp draft.
+
+| | Mechanic | Slide 1 hook | The twist |
+|---|---|---|---|
+| 626 | wrong-text trend | "should i tell him i love him…" / "WAIT" / "that was for my best friend" | "too late" → "i love u too / i was waiting for u to say it first" + link |
+| 627 | loyalty test | "so the girl who dmed me last night / that was u right" | "the profile pic was ur cat" → "my girlfriend has the same cat" + link |
+| 628 | "hes a 10 but" | "ur a 10 but" / "but what" | "u never surprise me" → the link → "still a 10 but?" / "ur an 11" |
+| 629 | rosie's opener | "are u mad at me" / "yes" | "u made me fall in love with u in 2 weeks / who does that" + link |
+| 630 | two-camp draft | "promise u wont laugh" | her unsent "my ex never did anything like this" |
+
+**Post order:** 626, 627, 629, 630, 628.
+
 **Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
 named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
 teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
