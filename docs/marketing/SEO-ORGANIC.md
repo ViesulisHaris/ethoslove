@@ -138,14 +138,12 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
 - **Merchant listings**: every template offer, and the Organization, now say returns aren't
   permitted and delivery is instant and free. The two warnings on all 41 listings should clear as
   Google recrawls them.
-- **The blog publishes from the cloud** (commit 8ba13da). The daily routine (06:17 UTC, re-enabled,
-  first run 25 Oct) writes the post and pushes a `blog/<slug>` branch to the public mirror. The
-  mirror's Publish blog workflow checks it with `scripts/blog-guard.mjs` (only the blog's files, posts
-  that are plain data, the team's author), runs the blog tests and the type check, pushes it to the
-  live repository, syncs the mirror and tells IndexNow. Tested end to end on 24 Oct with a dummy
-  branch: every check passed and it stopped where it should, at the missing token. **It needs one
-  secret, `LIVE_REPO_TOKEN`, which only the owner or Adrian can create** (docs/blog/PLAYBOOK.md,
-  "How a post goes live"). Until then each post is checked and waits.
+- **The blog publishes from the cloud, with no key to set up.** The daily routine (06:17 UTC,
+  re-enabled, first run 25 Oct) writes the post and commits it to the public mirror's main. The live
+  repository's Publish blog workflow reads the mirror at 10:00 and 16:00 UTC (it's public, so no key),
+  checks the new commits with `scripts/blog-guard.mjs` (only the blog's files, posts that are plain
+  data, the team's author), runs the blog tests and the type check, pushes with its own token
+  (Vercel deploys it) and tells IndexNow. The routine never gets access to the live repository.
 - **Links**: everything is in `docs/marketing/LINK-KIT.md`. Claude can't create accounts, and Reddit
   is blocked for it, so the directories wait on a ten-minute sign-up by the owner; after that Claude
   fills them in. The Pinterest signed in on Brave is the owner's personal account, so nothing was
@@ -157,25 +155,21 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
 
 ### Needs the owner
 
-1. **Add `LIVE_REPO_TOKEN`** to the mirror (two minutes, steps in docs/blog/PLAYBOOK.md). Then a
-   bilingual post goes live every day with nobody at a computer.
-2. **Sign up on AlternativeTo, Product Hunt, PeerPush and SaaSHub** (Google sign-in), then say so:
+1. **Sign up on AlternativeTo, Product Hunt, PeerPush and SaaSHub** (Google sign-in), then say so:
    the listings are written and Claude submits them (`LINK-KIT.md`).
-3. **Pitches**: say yes to each gift-guide email in `LINK-KIT.md` before it goes out from your address.
-4. **Pinterest**: an Ethos business account, or a yes to pin from the personal one.
-5. **Search Console**: request indexing for /gifts, /gifts/for-girlfriend and /gifts/for-boyfriend
-   (URL Inspection → Request indexing).
+2. **Pitches**: say yes to each gift-guide email in `LINK-KIT.md` before it goes out from your address.
+3. **Pinterest**: an Ethos business account, or a yes to pin from the personal one.
 
 ### Can be done in the repo next
 
-6. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
+4. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
    your partner. Those searches are answered by lists of that length.
-7. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
+5. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
    the editor's writing help as a page of its own. It costs API money per use and needs rate limits,
    so it needs the owner's yes.
-8. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
+6. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
    related templates so crawlers reach them sooner. Links from outside matter more.
-9. **Six Spanish date and trip titles** over 70 characters: shorten them.
+7. **Six Spanish date and trip titles** over 70 characters: shorten them.
 
 ### On "first for digital gift"
 
