@@ -150,6 +150,13 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
   pinned.
 - **Bing** still shows its sign-in screen in Brave (Microsoft, Google or Facebook); signing in is the
   owner's click.
+- **Tested end to end on the live site, 24 Oct:** a harmless commit (`docs/blog/how-posts-go-live.md`)
+  went onto the mirror's main only; Publish blog found it, passed the guard, fast-forwarded the live
+  main to the same commit (4630d37), ran 21 tests and the type check, pushed, and Vercel deployed it.
+- **Indexing requested** in Search Console for /gifts, /gifts/for-girlfriend, /gifts/for-boyfriend,
+  /, /templates/the-letter, /templates/bouquet, /es/gifts, /games/rather, /es/templates/the-letter
+  and /es/gifts/for-girlfriend (about the daily limit), and the sitemap resubmitted: Google's count
+  of discovered pages went from 264 to 275 at once. IndexNow has all 278 URLs.
 
 ## What's next, ranked
 
