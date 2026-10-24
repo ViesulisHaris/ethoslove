@@ -1,0 +1,73 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:26 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i love u",
+          "tapback": "like"
+        },
+        {
+          "from": "them",
+          "text": "a thumbs up"
+        },
+        {
+          "from": "them",
+          "text": "really"
+        },
+        {
+          "from": "me",
+          "text": "what do u want me to say",
+          "status": "Read 10:27 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "i finished this today"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i signed a lease today"
+        },
+        {
+          "from": "them",
+          "text": "for us??"
+        },
+        {
+          "from": "me",
+          "text": "for one",
+          "status": "Read 10:52 PM"
+        }
+      ]
+    }
+  ]
+}
