@@ -201,6 +201,41 @@ everything to be done here instead. Directories are dropped; the work went where
   `src/content/occasions.ts`); Valentine's Day should be next, by early December.
 - **Pitches are on hold** (the owner's call). Nothing is sent from the owner's address.
 
+## Sixth round, 24 Oct: "make sure the contents aren't AI slop, but actually interesting"
+
+- **Idea lists you can use, on four occasion pages**: Christmas (rewritten), Valentine's Day,
+  birthday and anniversary, 12 ideas each in English and Spanish. The first Christmas list mostly
+  re-described each template. Now every idea says what to put where, with a line to borrow and the
+  character limit it has to fit: the brass plaque on Snow Globe, the classified ads on Front
+  Page, the five packing clues in Pack Your Bags, the lucky numbers in Fortune Cookie. Facts were
+  checked against each template's `schema.ts`, and two were verified outside: Margery Brews'
+  "my right well-beloved Valentine" letter of February 1477 (British Library), and paper as the
+  traditional first-anniversary gift. The Spanish lists are adapted rather than translated:
+  thirteen reasons from Christmas to Reyes, "bodas de papel", Sant Jordi, "un christmas".
+- **The game cards that every list has were replaced**: 13 truths ("What did you google about me
+  before our first date?"), 6 dares that weren't about the two of you, the superpower
+  would-you-rathers, 5 know-me questions with bland answers, and 5 light-deck questions. One draft
+  turned out to repeat a paid pack's card almost word for word; the test that keeps free and paid
+  cards apart caught it.
+- **A filler check on the whole site**: `tests/unit/filler.ts` lists about 70 phrases that mark
+  machine-written or greeting-card copy ("heartfelt", "create lasting memories", "nothing says…
+  like"), and `tests/unit/site-copy.test.ts` runs it over every occasion, gift-idea and template
+  page, the games, the packs and both message files. The blog test reads the same list, so the
+  daily posts are held to it too. The site had two hits; one was real and is rewritten.
+- **The blog's bar is now "interesting", not only "clean"**: `VOICE.md` asks for something in every
+  section the reader couldn't have guessed, and the review panel (`RUBRIC.md`) caps a post at 7
+  when every line could sit on another site.
+- **An outside read before it went live**: a separate reviewer, told to be harsh, judged the new
+  lists "interesting, not slop, with a handful of real faults". It checked about 35 claims against
+  the templates' code; five were wrong and are fixed (Balloons has confetti-only balloons, Fireside
+  has a candle and no fire, the Museum plaque shows caption, years and room, a countdown gift can
+  be opened before zero, and one sample was the template's own default). It also replaced three
+  dares and a truth that broke the soft deck's promise (opening private chats, a parent's thread),
+  fixed Spanish calques ("nota de rescate", "cursilada", "conclusiones" as the editor calls them),
+  and cut the character counts that made the lists read like a spec sheet (from about 60 of the 96
+  ideas to 26). One of its points was wrong: Recipe Box's Spanish "guardadas en la caja con ella"
+  means "with it", the recipe, so the template stays as it is.
+
 ## What's next, ranked
 
 ### Needs the owner
