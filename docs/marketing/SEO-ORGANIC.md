@@ -122,54 +122,68 @@ numbers from Google Ads' Keyword Planner (free with an Ads account) or an Ahrefs
 Together that reaches 2–4K a day **only with authority**. Without links, expect the long tail to bring
 a few hundred a day at most. Links are the constraint, not the pages.
 
+## Second round, 24 Oct: the owner's decisions
+
+The owner: "we need to be under digital gift on the top"; links are Claude's to do; no trust work;
+the blog must run from the cloud by itself; a digital product has no returns; Bing is signed in.
+
+- **/gifts is now the page for "digital gift"** (live, commit 16682b5). Its title is "Digital Gifts:
+  Make a Free, Personal One Online" (Spanish: "Regalos digitales: crea uno gratis y personal online"),
+  "Digital gifts" opens its heading, and after the occasions it says what a digital gift is (the
+  answer Google can quote), lists 30 digital gift ideas in five groups with the search phrase of
+  each as the link, and links the gift-idea pages by person. Five digital-gift questions lead its
+  FAQ. The homepage's gifts door, the footer and the gift-idea pages' breadcrumb now link to it as
+  "Digital gifts". The two pages that hold that search today are a "free digital gift, create it
+  online" page and a "send free virtual gifts" homepage; this is both, with real templates behind it.
+- **Merchant listings**: every template offer, and the Organization, now say returns aren't
+  permitted and delivery is instant and free. The two warnings on all 41 listings should clear as
+  Google recrawls them.
+- **The blog publishes from the cloud** (commit 8ba13da). The daily routine (06:17 UTC, re-enabled,
+  first run 25 Oct) writes the post and pushes a `blog/<slug>` branch to the public mirror. The
+  mirror's Publish blog workflow checks it with `scripts/blog-guard.mjs` (only the blog's files, posts
+  that are plain data, the team's author), runs the blog tests and the type check, pushes it to the
+  live repository, syncs the mirror and tells IndexNow. Tested end to end on 24 Oct with a dummy
+  branch: every check passed and it stopped where it should, at the missing token. **It needs one
+  secret, `LIVE_REPO_TOKEN`, which only the owner or Adrian can create** (docs/blog/PLAYBOOK.md,
+  "How a post goes live"). Until then each post is checked and waits.
+- **Links**: everything is in `docs/marketing/LINK-KIT.md`. Claude can't create accounts, and Reddit
+  is blocked for it, so the directories wait on a ten-minute sign-up by the owner; after that Claude
+  fills them in. The Pinterest signed in on Brave is the owner's personal account, so nothing was
+  pinned.
+- **Bing** still shows its sign-in screen in Brave (Microsoft, Google or Facebook); signing in is the
+  owner's click.
+
 ## What's next, ranked
 
-### Needs the owner (off-site)
+### Needs the owner
 
-1. **Get real sites to link to Ethos.** This is the one thing that moves every number above.
-   - **List it where these searches already look**: Product Hunt (a launch day brings links and a
-     ranking page), AlternativeTo (as an alternative to Canva for gift pages, to gifft.me and the rest),
-     SaaSHub, Indie Hackers, BetaList.
-   - **Answer the Reddit threads that rank** for these searches (r/Gifts "digital gift ideas",
-     r/LongDistance "gift ideas for an online gf", r/LDR's digital bouquet thread). Answer as the
-     maker, openly, with a link to the matching page.
-   - **Christmas gift guides are being written now**, and Valentine's guides from December. Pitch
-     "digital gifts for long-distance couples" to the sites that rank for it (CNN Underscored, The
-     Knot, Good Housekeeping's "best digital gifts", endlessdistances.com, couples blogs).
-   - **Pinterest**: idea pins of the template previews linking to each template page. Pinterest
-     already ranks for "digital gift ideas" and "virtual gift ideas for boyfriend".
-   - **YouTube** (@tryethos exists): a short per template, with the template page in the description.
-   - Note: the "Made with Ethos" link on free gifts doesn't help search, because gift pages are
-     private and blocked from crawlers. That is right for privacy; don't change it.
-2. **Trust.** A Trustpilot page and a short review request after purchase; an About page naming
-   SIA MIGLAI, Riga, and how payment and refunds work. Both answer "is this website safe" and stand
-   against the scam-checker pages.
-3. **A blog cadence that publishes.** The daily blog routine is off because cloud runs can only push
-   to the mirror. If Adrian gives the Claude GitHub app access to reasj2/ethoslove, a routine can
-   publish 3–5 posts a week targeting the searches the pages can't hold: "100 reasons why I love you"
-   (with the jar), "open when letters ideas", "love letter for boyfriend examples", "what to write in
-   an anniversary card", "long distance birthday ideas", each in Spanish too.
-4. **Decide the Merchant listings markup.** Google reads the 41 template product pages as merchant
-   listings and asks for a return policy and shipping details. Unlocks lose the 14-day withdrawal
-   once delivered (with consent at checkout), and the 30-day guarantee only covers a gift that won't
-   open. Marking that up honestly means "returns not permitted" plus a defect policy, which Google may
-   show to shoppers. That is a commercial choice, so it was left out. Leaving it is only a warning.
-5. **Bing Webmaster Tools** isn't signed in on Brave; sign in once so its data can be read. ChatGPT
-   search and Copilot use Bing.
-6. **Search Console**: once the new pages are live, use URL Inspection → Request indexing for
-   /gifts/for-girlfriend, /gifts/for-boyfriend, /templates/the-letter and /templates/bouquet. This
-   wasn't done without asking.
+1. **Add `LIVE_REPO_TOKEN`** to the mirror (two minutes, steps in docs/blog/PLAYBOOK.md). Then a
+   bilingual post goes live every day with nobody at a computer.
+2. **Sign up on AlternativeTo, Product Hunt, PeerPush and SaaSHub** (Google sign-in), then say so:
+   the listings are written and Claude submits them (`LINK-KIT.md`).
+3. **Pitches**: say yes to each gift-guide email in `LINK-KIT.md` before it goes out from your address.
+4. **Pinterest**: an Ethos business account, or a yes to pin from the personal one.
+5. **Search Console**: request indexing for /gifts, /gifts/for-girlfriend and /gifts/for-boyfriend
+   (URL Inspection → Request indexing).
 
 ### Can be done in the repo next
 
-7. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
+6. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
    your partner. Those searches are answered by lists of that length.
-8. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
+7. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
    the editor's writing help as a page of its own. It costs API money per use and needs rate limits,
    so it needs the owner's yes.
-9. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
+8. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
    related templates so crawlers reach them sooner. Links from outside matter more.
-10. **Six Spanish date and trip titles** over 70 characters: shorten them.
+9. **Six Spanish date and trip titles** over 70 characters: shorten them.
+
+### On "first for digital gift"
+
+The page is now the best answer on the site, and every internal link points at it with those words.
+Position 1 for a two-word search whose results are Amazon and Visa gift cards also takes authority:
+links from other sites, which is what step 2 and the kit are for, and time (Google re-ranks a page
+over weeks, not days). Expect movement on the long phrases first ("digital bouquet maker", "carta de
+amor digital"), then on "digital gift ideas", then on "digital gift".
 
 ## How to tell if it's working
 
