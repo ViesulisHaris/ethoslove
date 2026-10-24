@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:07 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "so the girl who dmed me last night"
+        },
+        {
+          "from": "them",
+          "text": "that was u right"
+        },
+        {
+          "from": "me",
+          "text": "what girl",
+          "status": "Read 10:08 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "the profile pic was ur cat"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok and"
+        },
+        {
+          "from": "me",
+          "text": "what did u reply"
+        },
+        {
+          "from": "them",
+          "text": "\"my girlfriend has the same cat\""
+        },
+        {
+          "from": "them",
+          "text": "and made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}
