@@ -1,5 +1,5 @@
 import type { AdEvent } from "./ads";
-import { isAdTrackingOffHere } from "./consent";
+import { getConsent, isAdTrackingOffHere } from "./consent";
 
 /**
  * The TikTok pixel's wiring: loading it, and turning our events into its calls. Whether it may run,
@@ -35,13 +35,13 @@ const METHODS = ["page", "track", "identify", "instances", "debug", "on", "off",
 const SCRIPT = "https://analytics.tiktok.com/i18n/pixel/events.js";
 
 /**
- * The last line on a page the pixel must not see. TikTok's script can also report on its own: taps,
- * forms and page details, switched on per pixel in TikTok's Events Manager rather than in code, and it
- * reports them with the address of the page they happened on. The app moves onto a gift without
- * reloading, so a pixel loaded on the editor is still there. Its uploads go out by beacon, and while
- * the address bar shows a page `isAdTrackingOffHere` covers (a hash carrying a shared plan included),
- * they are dropped on the way out (answered as sent, so it doesn't retry). Every other beacon passes
- * straight through.
+ * The last line. TikTok's script can also report on its own (taps, forms, page details: plugins its
+ * Events Manager switches on per pixel, which `loadTikTok` asks it not to run), with the address of
+ * the page they happened on. The app moves onto a gift without reloading, so a pixel loaded on the
+ * editor is still there. Its uploads go out by beacon, and while the address bar shows a page
+ * `isAdTrackingOffHere` covers (a hash carrying a shared plan included), or once the visitor has taken
+ * their yes back, they are dropped on the way out (answered as sent, so it doesn't retry). Every other
+ * beacon passes straight through.
  */
 let gated = false;
 function gateUploads() {
@@ -51,13 +51,14 @@ function gateUploads() {
   if (!beacon) return;
   const toTikTok = (url: unknown) => /^https:\/\/analytics\.tiktok\.com\/api\//.test(String(url));
   navigator.sendBeacon = ((url: string | URL, data?: BodyInit | null) =>
-    toTikTok(url) && isAdTrackingOffHere(window.location) ? true : beacon(url, data)) as typeof navigator.sendBeacon;
+    toTikTok(url) && (isAdTrackingOffHere(window.location) || getConsent() !== "granted") ? true : beacon(url, data)) as typeof navigator.sendBeacon;
 }
 
 /**
- * The standard pixel snippet, with the history observer off: by default the pixel reports a page view
- * on every history change, and the app moves between pages with pushState, gifts included. Page views
- * are ours, sent from a page the rules allowed.
+ * The standard pixel snippet, with three of its defaults off. The history observer reports a page view
+ * on every history change, and the app moves between pages with pushState, gifts included; auto config
+ * and its listener report taps and form fields by themselves. Every event is ours, sent from a page the
+ * rules allowed.
  */
 export function loadTikTok(pixelId: string): void {
   if (window.ttq) return;
@@ -92,7 +93,7 @@ export function loadTikTok(pixelId: string): void {
   };
   window.ttq = ttq;
   gateUploads();
-  ttq.load(pixelId, { historyObserver: false });
+  ttq.load(pixelId, { historyObserver: false, autoConfig: false, autoConfigListener: false });
 }
 
 /** TikTok's call for one of our events. Exported for the tests. */
