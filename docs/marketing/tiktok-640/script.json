@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "settle this"
+        },
+        {
+          "from": "me",
+          "text": "8 ÷ 2(2+2)"
+        },
+        {
+          "from": "them",
+          "text": "1"
+        },
+        {
+          "from": "me",
+          "text": "my roommate says 16",
+          "status": "Read 11:13 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ur roommate is wrong"
+        },
+        {
+          "from": "them",
+          "text": "unrelated but i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo this is so cute"
+        },
+        {
+          "from": "me",
+          "text": "its 16 tho"
+        },
+        {
+          "from": "them",
+          "text": "im taking it back"
+        }
+      ]
+    }
+  ]
+}
