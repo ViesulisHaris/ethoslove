@@ -42,8 +42,8 @@
     "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
     "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two.",
-    "giftsTitle": "Ethos — Virtual gifts that open like a story",
-    "giftsDescription": "Send a virtual gift that opens like a story: your photos, their song and your words in an animated card, sent as a link or a QR code. Free to start, nothing to install."
+    "giftsTitle": "Digital Gifts: Make a Free, Personal One Online · Ethos",
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, a bouquet, a scrapbook or a small game from your photos, your words and their song, sent as a link. 30 ideas, two free."
   },
   "nav": {
     "templates": "Templates",
@@ -69,7 +69,7 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Personal gifts. Ten minutes to make, years to keep.",
+      "eyebrow": "Digital gifts. Ten minutes to make, years to keep.",
       "h1a": "Give them a moment they'll",
       "h1b": "open again",
       "h1c": "and again.",
@@ -194,7 +194,8 @@
     "contact": "Contact",
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
     "madeWith": "Made in Riga.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "digitalGifts": "Digital gifts"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -1950,7 +1951,7 @@
         "cta": "Find a date"
       },
       "gifts": {
-        "title": "Gifts",
+        "title": "Digital gifts",
         "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
         "cta": "Make a gift"
       },
@@ -3194,7 +3195,7 @@
   },
   "recipients": {
     "eyebrow": "Gift ideas",
-    "breadcrumb": "Gifts",
+    "breadcrumb": "Digital gifts",
     "free": "Free",
     "make": "Make this gift",
     "guideTitle": "How to make it land",

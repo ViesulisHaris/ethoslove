@@ -42,8 +42,8 @@
     "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
     "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos.",
-    "giftsTitle": "Ethos — Regalos virtuales que se abren como una historia",
-    "giftsDescription": "Envía un regalo virtual que se abre como una historia: tus fotos, su canción y tus palabras en una tarjeta animada, con un enlace o un QR. Empezar es gratis, sin instalar nada."
+    "giftsTitle": "Regalos digitales: crea uno gratis y personal online · Ethos",
+    "giftsDescription": "Crea un regalo digital en diez minutos: una carta de amor, un ramo, un álbum o un pequeño juego con vuestras fotos, tus palabras y su canción, en un enlace. 30 ideas, dos gratis."
   },
   "nav": {
     "templates": "Plantillas",
@@ -69,7 +69,7 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Regalos personales. Diez minutos para hacerlo, años para guardarlo.",
+      "eyebrow": "Regalos digitales. Diez minutos para hacerlo, años para guardarlo.",
       "h1a": "Regálale un momento que",
       "h1b": "abrirá una",
       "h1c": "y otra vez.",
@@ -194,7 +194,8 @@
     "contact": "Contacto",
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
     "madeWith": "Hecho en Riga.",
-    "explore": "Explorar"
+    "explore": "Explorar",
+    "digitalGifts": "Regalos digitales"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -1950,7 +1951,7 @@
         "cta": "Buscar una cita"
       },
       "gifts": {
-        "title": "Regalos",
+        "title": "Regalos digitales",
         "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
         "cta": "Crear un regalo"
       },
@@ -3194,7 +3195,7 @@
   },
   "recipients": {
     "eyebrow": "Ideas de regalo",
-    "breadcrumb": "Regalos",
+    "breadcrumb": "Regalos digitales",
     "free": "Gratis",
     "make": "Hacer este regalo",
     "guideTitle": "Cómo acertar",

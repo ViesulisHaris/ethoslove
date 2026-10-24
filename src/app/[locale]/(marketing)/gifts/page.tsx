@@ -3,9 +3,12 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { ClientMessages } from "@/i18n/client-messages";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { appNode, organizationNode, pageMetadata } from "@/lib/seo";
+import { appNode, faqNode, localizedUrl, organizationNode, pageMetadata } from "@/lib/seo";
+import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
+import { templateSeo } from "@/content/template-seo";
 import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
+import { DigitalGiftGuideSection } from "@/components/marketing/digital-gift-guide";
 import { Hero } from "@/components/marketing/home/hero";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";
 import { Openings } from "@/components/marketing/home/openings";
@@ -27,7 +30,10 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/gif
   return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t("giftsDescription"), absoluteTitle: true });
 }
 
-/** Gifts: what was the whole site's front page before Dates arrived, kept as it was. */
+/**
+ * Gifts: what was the whole site's front page before Dates arrived, and the page meant to be found
+ * for "digital gift": after the occasions it says what a digital gift is and lists thirty ideas.
+ */
 export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -41,9 +47,26 @@ export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">
     pick3: t("pricing.plans.pick3.name"),
     everything: t("pricing.plans.everything.name"),
   };
+  const guide = DIGITAL_GIFT_GUIDE[locale as GiftLocale];
   return (
     <ClientMessages scope="(marketing)/gifts/page" locale={locale}>
-      <JsonLd nodes={[organizationNode(), appNode(locale as Locale, t("meta.description"), plans)]} />
+      <JsonLd
+        nodes={[
+          organizationNode(),
+          appNode(locale as Locale, t("meta.description"), plans),
+          {
+            "@type": "ItemList",
+            name: guide.ideasTitle,
+            itemListElement: DIGITAL_GIFT_IDEAS.map((slug, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: templateSeo(slug, locale as GiftLocale)?.keyword ?? slug,
+              url: localizedUrl(locale, `/templates/${slug}`),
+            })),
+          },
+          faqNode(guide.faq),
+        ]}
+      />
       <Hero />
       <TornEdge from="var(--brand-forest)" to="var(--brand-paper)" />
       <TemplateStrip manifests={listManifests()} />
@@ -51,8 +74,9 @@ export default async function GiftsPage({ params }: PageProps<"/[locale]/gifts">
       <Reactions real={reactions.length >= 3 ? reactions : null} numbers={numbers} />
       <HowItWorks />
       <OccasionsIndex />
+      <DigitalGiftGuideSection locale={locale as GiftLocale} />
       <PricingTeaser locale={locale} />
-      <Faq />
+      <Faq lead={guide.faq} />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <FinalCta />
     </ClientMessages>

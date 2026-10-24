@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug } from "@/content/recipients";
 import { getManifest } from "@/templates/manifests";
@@ -29,6 +30,20 @@ describe("template search entries", () => {
       const titles = Object.values(TEMPLATE_SEO).map((e) => e[l].title.toLowerCase());
       expect(new Set(titles).size, l).toBe(titles.length);
     }
+  });
+});
+
+describe("the digital gift guide on /gifts", () => {
+  it("lists real templates, once each, the same in both languages", () => {
+    expect(new Set(DIGITAL_GIFT_IDEAS).size).toBe(DIGITAL_GIFT_IDEAS.length);
+    for (const slug of DIGITAL_GIFT_IDEAS) expect(getManifest(slug), slug).not.toBeNull();
+    const [en, es] = LOCALES.map((l) => DIGITAL_GIFT_GUIDE[l]);
+    expect(es.groups.map((g) => g.templates)).toEqual(en.groups.map((g) => g.templates));
+    expect(es.faq.length).toBe(en.faq.length);
+  });
+
+  it("says how many ideas it has, and has that many", () => {
+    for (const l of LOCALES) expect(DIGITAL_GIFT_GUIDE[l].ideasTitle).toContain(String(DIGITAL_GIFT_IDEAS.length));
   });
 });
 

@@ -95,6 +95,35 @@ export function jsonLd(nodes: Node[]): string {
 const ORGANIZATION_ID = `${SITE.url}/#organization`;
 const price = (minor: number) => (minor / 100).toFixed(2);
 
+/**
+ * The countries a merchant listing names for delivery and returns. Ethos sells wherever a card
+ * works; Google wants countries listed (up to 50), so these are the markets search traffic comes
+ * from (Search Console, Oct 2026) and the ones the site's two languages serve.
+ */
+const SELLING_COUNTRIES = ["US", "GB", "CA", "AU", "NZ", "IE", "IN", "PH", "SG", "ZA", "DE", "FR", "ES", "IT", "NL", "BE", "AT", "CH", "PT", "SE", "DK", "NO", "FI", "PL", "RO", "LV", "LT", "EE", "MX", "AR", "CO", "CL", "PE"];
+
+/**
+ * A template is digital content, supplied the moment it is paid for and kept for good: no returns
+ * (the buyer agrees at checkout that supply starts at once, Terms §9). Faults are still refunded
+ * under §10; that is a guarantee, not a return.
+ */
+const NO_RETURNS: Node = {
+  "@type": "MerchantReturnPolicy",
+  applicableCountry: SELLING_COUNTRIES,
+  returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+};
+
+/** Nothing ships: it arrives on the buyer's account at once, at no cost. */
+function instantDelivery(currency: string): Node {
+  const days = { "@type": "QuantitativeValue", minValue: 0, maxValue: 0, unitCode: "DAY" };
+  return {
+    "@type": "OfferShippingDetails",
+    shippingRate: { "@type": "MonetaryAmount", value: 0, currency },
+    shippingDestination: SELLING_COUNTRIES.map((country) => ({ "@type": "DefinedRegion", addressCountry: country })),
+    deliveryTime: { "@type": "ShippingDeliveryTime", handlingTime: days, transitTime: days },
+  };
+}
+
 /** The currency a locale's pages show prices in. */
 export function displayCurrency(locale: string): Currency {
   return currencyFor(locale === "es" ? "ES" : "US");
@@ -110,6 +139,7 @@ export function organizationNode(): Node {
     logo: `${SITE.url}/icons/icon-512.png`,
     email: BRAND.supportEmail,
     sameAs: Object.values(BRAND.socials),
+    hasMerchantReturnPolicy: NO_RETURNS,
   };
 }
 
@@ -170,6 +200,8 @@ export function templateProductNode(manifest: TemplateManifest, locale: Locale, 
       priceCurrency: currency.toUpperCase(),
       availability: "https://schema.org/InStock",
       url,
+      shippingDetails: instantDelivery(currency.toUpperCase()),
+      hasMerchantReturnPolicy: NO_RETURNS,
     },
   };
 }

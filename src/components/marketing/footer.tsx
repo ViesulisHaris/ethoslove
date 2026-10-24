@@ -29,7 +29,7 @@ export async function MarketingFooter() {
         <FooterColumn title={t("footer.explore")}>
           <FooterLink href="/dates">{t("nav.dates")}</FooterLink>
           <FooterLink href="/trips">{t("nav.trips")}</FooterLink>
-          <FooterLink href="/gifts">{t("nav.gifts")}</FooterLink>
+          <FooterLink href="/gifts">{t("footer.digitalGifts")}</FooterLink>
           <FooterLink href="/templates">{t("nav.templates")}</FooterLink>
           <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
           <FooterLink href="/games">{t("nav.games")}</FooterLink>
