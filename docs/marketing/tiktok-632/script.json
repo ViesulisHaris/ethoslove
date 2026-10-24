@@ -2,24 +2,24 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|8:41 PM",
+      "timestamp": "Today|9:14 PM",
       "messages": [
         {
-          "from": "me",
-          "text": "u havent texted me all day"
+          "from": "them",
+          "text": "my mom wants to know if ur coming for thanksgiving"
         },
         {
           "from": "me",
-          "text": "like at all"
+          "text": "i cant"
         },
         {
           "from": "them",
-          "text": "been busy"
+          "text": "why not"
         },
         {
           "from": "me",
-          "text": "busy doing what leo",
-          "status": "Read 8:43 PM"
+          "text": "its complicated",
+          "status": "Read 9:15 PM"
         }
       ]
     },
@@ -28,11 +28,11 @@
       "messages": [
         {
           "from": "them",
-          "text": "finishing this"
+          "text": "please come"
         },
         {
           "from": "them",
-          "text": "sorry i went quiet"
+          "text": "i made u this"
         },
         {
           "from": "them",
@@ -51,31 +51,20 @@
       "messages": [
         {
           "from": "me",
-          "text": "oh no"
-        },
-        {
-          "from": "them",
-          "text": "what"
+          "text": "leo"
         },
         {
           "from": "me",
-          "text": "i told my mom we broke up"
+          "text": "ur brother is my ex"
         },
         {
           "from": "them",
-          "text": "maya"
+          "text": "WHAT"
         },
         {
           "from": "me",
-          "text": "she took it really well"
-        },
-        {
-          "from": "me",
-          "text": "like suspiciously well"
-        },
-        {
-          "from": "them",
-          "text": "call her back rn"
+          "text": "the one i told u about",
+          "status": "Read 9:40 PM"
         }
       ]
     }

@@ -2,24 +2,19 @@
   "slides": [
     {
       "type": "chat",
-      "timestamp": "Today|11:48 PM",
+      "timestamp": "Today|11:21 PM",
       "messages": [
         {
-          "from": "me",
-          "text": "he broke up with me"
+          "from": "them",
+          "text": "my ex just texted me"
         },
         {
           "from": "me",
-          "text": "over text"
+          "text": "what did she want"
         },
         {
           "from": "them",
-          "text": "are u ok"
-        },
-        {
-          "from": "me",
-          "text": "no",
-          "status": "Read 11:49 PM"
+          "text": "she said ask u what u did"
         }
       ]
     },
@@ -27,12 +22,16 @@
       "type": "chat",
       "messages": [
         {
-          "from": "them",
-          "text": "ok dont laugh"
+          "from": "me",
+          "text": "shes crazy"
         },
         {
           "from": "them",
-          "text": "i made this a while ago"
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "made u something btw"
         },
         {
           "from": "them",
@@ -55,19 +54,19 @@
         },
         {
           "from": "me",
-          "text": "how long ago"
+          "text": "shes not crazy"
         },
         {
           "from": "them",
-          "text": "a year"
+          "text": "what did u do"
         },
         {
           "from": "me",
-          "text": "a YEAR??"
+          "text": "i sent her our texts"
         },
         {
-          "from": "them",
-          "text": "i was waiting for him to mess up"
+          "from": "me",
+          "text": "how else was i gonna get u"
         }
       ]
     }

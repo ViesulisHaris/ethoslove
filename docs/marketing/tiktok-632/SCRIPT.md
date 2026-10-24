@@ -1,34 +1,34 @@
-# 632 · suspiciously well
+# 632 · ur brother is my ex
 
-**For:** rosie first (it suits any account). **Engine:** 149's (1.3M): Maya says the one thing she shouldn't (its top comment was "Why would u even tell him that").
-**Format:** rosie's own: 3 iMessage slides (1080×1920, dark iMessage, no crop, no look), the look of rosie's hits. Post it as a photo carousel: slides 1 and 2, then your gift screenshots, then slide 3, with a trending sound. Maya and Leo, nobody else named. The pink card.
+**For:** rosie first (it suits any account). **Engine:** a reveal that rewrites slide 1, timed for Thanksgiving.
+**Format:** rosie's own: 3 iMessage slides (1080×1920, dark iMessage, no crop, no look), the look of rosie's hits. Post it as a photo carousel: slides 1 and 2, then your gift screenshots, then slide 3, with a trending sound. Maya and Leo (19–20), nobody else named. The pink card.
 **Before posting:** More options → Disclose post content → **Your brand**.
 
 ## The story, slide by slide
 
-1. 8:41 PM. She: "u havent texted me all day" / "like at all". He: "been busy". She: "busy doing what leo" (Read 8:43 PM)
-2. He: "finishing this" / "sorry i went quiet", then the link "for maya 🤍"
-3. She: "oh no". He: "what". She: "i told my mom we broke up". He: "maya". She: "she took it really well" / "like suspiciously well". He: "call her back rn"
+1. 9:14 PM. He: "my mom wants to know if ur coming for thanksgiving". She: "i cant". He: "why not". She: "its complicated" (Read 9:15 PM)
+2. He: "please come" / "i made u this", then the link "for maya 🤍"
+3. She: "leo" / "ur brother is my ex". He: "WHAT". She: "the one i told u about" (Read 9:40 PM)
 
 **Real:** the chat never says what's inside the gift.
 
-## Why it should go
+## Why people will comment
 
-Slide 1 is the fear (he went quiet all day). The twist is Maya's own overreaction, and the detail everyone calls out is the mum who took it "suspiciously well". Two camps: Maya's crazy, and the mum knows something.
+"its complicated" is the hook. "ur brother is my ex" is the shock, and "the one i told u about" makes it worse. The comments write the dinner themselves ("thanksgiving is gonna be CRAZY"). Post it in the weeks before Thanksgiving (26 Nov).
 
 ## Caption (written as a search)
 
-told my mom we broke up… she took it a little too well 😭
+first thanksgiving with my boyfriend… his brother is my ex 😭
 
-#targetaudience #funny #boyfriendtexts #relatable
+#targetaudience #thanksgiving #boyfriendtexts #relationships
 
-**Why this wording:** "told my mom about him" and "we broke up" are TikTok search suggestions (checked 24 Oct).
+**Why this wording:** "first thanksgiving with your boyfriend", "spending thanksgiving with my boyfriend" and "my boyfriends brother" are TikTok search suggestions (checked 24 Oct).
 
 Never the website in the caption, and no 💅.
 
 ## Pinned comment (in character, never a brand)
 
-my mom still hasnt called back
+thanksgiving is in 4 weeks help
 
 ## In the first hour
 

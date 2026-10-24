@@ -1,34 +1,34 @@
-# 635 · i was waiting for him to mess up
+# 635 · how else was i gonna get u
 
-**For:** rosie first (it suits any account). **Engine:** 102's (279K): friends to lovers, the friend who always knew.
-**Format:** rosie's own: 3 iMessage slides (1080×1920, dark iMessage, no crop, no look), the look of rosie's hits. Post it as a photo carousel: slides 1 and 2, then your gift screenshots, then slide 3, with a trending sound. Maya and Leo, nobody else named. The pink card.
+**For:** rosie first (it suits any account). **Engine:** Maya the villain, by manipulation: she broke them up to get him.
+**Format:** rosie's own: 3 iMessage slides (1080×1920, dark iMessage, no crop, no look), the look of rosie's hits. Post it as a photo carousel: slides 1 and 2, then your gift screenshots, then slide 3, with a trending sound. Maya and Leo (19–20), nobody else named. The pink card.
 **Before posting:** More options → Disclose post content → **Your brand**.
 
 ## The story, slide by slide
 
-1. 11:48 PM. She: "he broke up with me" / "over text". He: "are u ok". She: "no" (Read 11:49 PM)
-2. He: "ok dont laugh" / "i made this a while ago", then the link "for maya 🤍"
-3. She: "leo" / "how long ago". He: "a year". She: "a YEAR??". He: "i was waiting for him to mess up"
+1. 11:21 PM. He: "my ex just texted me". She: "what did she want". He: "she said ask u what u did"
+2. She: "shes crazy". He: "i know" / "made u something btw", then the link "for maya 🤍"
+3. She: "leo" / "shes not crazy". He: "what did u do". She: "i sent her our texts" / "how else was i gonna get u"
 
 **Real:** the chat never says what's inside the gift.
 
-## Why it should go
+## Why people will comment
 
-Everyone roots for the best friend, and the last line splits the room: sweetest thing ever, or snake behaviour. The ones who root save it.
+Slide 1 is a mystery: what did Maya do? The answer splits the comments. One camp says she's diabolical. The other says he was texting her while he had a girlfriend, so they deserve each other.
 
 ## Caption (written as a search)
 
-my best friend just confessed… he waited a whole year 😭
+my boyfriends ex said to ask me what i did 😭
 
-#targetaudience #friendstolovers #textstory #relationships
+#targetaudience #relationships #textmessage #ex
 
-**Why this wording:** "my best friend just confessed", "best friend confessed" and "friends to lovers" are TikTok search suggestions (checked 24 Oct).
+**Why this wording:** "my boyfriends ex" and "my boyfriends ex gf" are TikTok search suggestions (checked 24 Oct).
 
 Never the website in the caption, and no 💅.
 
 ## Pinned comment (in character, never a brand)
 
-update: its been 4 months 🤍
+no regrets
 
 ## In the first hour
 

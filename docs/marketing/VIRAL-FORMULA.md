@@ -2946,16 +2946,16 @@ Read from the public post list on 24 Oct: 52 posts, 326 followers, 446.6K likes,
 - **Every hit has tension on slide 1:** someone is cold, or he pretends he forgot. The sweet ones open sweet, so nothing is at stake.
 - **The "evening only" rule above was wrong.** The post ids show 30 went up at 11:14 UTC, 102 at 11:24 and 39 at 12:30.
 
-So 631 to 635 go back to the engines that made the hits, written as new stories:
+So 631 to 635 go back to the engines that made the hits. The owner then asked for "shocking so people comment", so every ending is a shock:
 
-| | Engine | Slide 1 | The twist |
+| | Engine | Slide 1 | The shock |
 |---|---|---|---|
-| 631 | 208, Maya the villain | "its 6pm maya" / "and??" | "its my birthday" / "just wanted u to have something today too" |
-| 632 | 149, what she shouldn't say | "busy doing what leo" | "i told my mom we broke up" / "she took it really well" / "like suspiciously well" |
-| 633 | cold reply, gut punch | her 👍 on "i love u" | "i got back with my ex" / "when" / "tuesday" |
-| 634 | 192, he's the villain | "why does gym bro call u baby" | "send it to gym bro" |
-| 635 | 102, friends to lovers | "he broke up with me" / "over text" | "a year" / "i was waiting for him to mess up" |
+| 631 | 208, Maya the villain | "its 6pm maya" / "and??" | "its my birthday" … "happy birthday i guess" |
+| 632 | a reveal, for Thanksgiving | "its complicated" | "ur brother is my ex" / "the one i told u about" |
+| 633 | cold reply, double life | her 👍 on "i love u" | "my boyfriend from home is visiting this weekend" / "can u not text me till monday" |
+| 634 | 192, he's the villain | "then why does gym bro have my best friends number" | "she said ur a bad kisser" |
+| 635 | Maya the villain, by manipulation | "she said ask u what u did" | "i sent her our texts" / "how else was i gonna get u" |
 
-**Post order:** 631, 633, 634, 632, 635, one a day. Pin 208, 149 and 30 to the profile.
+**Post order:** 633, 631, 634, 635, 632 (632 lands closer to Thanksgiving), one a day. Pin 208, 149 and 30 to the profile.
 
 **Maya and Leo are 19–20.** The owner sent back 633's first ending ("i signed a lease today" / "for one"): "they are like 19 20 years old no leases no nothing like that". So their world is classes, dorms or their parents' place, part-time jobs, parties, exes, mums and friends. Never leases, moving in, mortgages, weddings, babies or careers.
