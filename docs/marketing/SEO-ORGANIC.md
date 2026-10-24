@@ -158,25 +158,105 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
   and /es/gifts/for-girlfriend (about the daily limit), and the sitemap resubmitted: Google's count
   of discovered pages went from 264 to 275 at once. IndexNow has all 278 URLs.
 
+## Fourth round, 24 Oct: "do everything at the most"
+
+The owner signed up to directories for an earlier site and saw nothing from it, and asked for
+everything to be done here instead. Directories are dropped; the work went where rankings come from.
+
+- **The long lists people search for** (commit 94af935): 150 free would-you-rather questions (from
+  45) and 96 questions to ask your partner (from 36), playable and listed in full on
+  /games/rather and /games/deck in both languages. A free question deck now deals a round of
+  twelve from the whole deck, so a sitting still ends at the gift and next-game screen.
+- **Two posts a day**: the routine runs at 06:17 and 12:17 UTC (first run 24 Oct, 12:17), and the
+  playbook allows two a day. Posts link /gifts as "digital gift(s)" and the matching gift-idea
+  page. The queue leads with the biggest searches (reasons why I love you, cute things to say to
+  your boyfriend, how to write a love letter, open when letters) and two comparison posts
+  (best website to make a love letter online, best digital gift websites). In this niche the
+  comparison results are the makers' own "best websites" lists, each ranking itself first; a fair
+  table from each site's own pages can beat them.
+- **What links are left**: the sites that take guest posts openly are general link farms whose links
+  Google discounts. The editorial lists that matter (iDrop News' best digital gifts, SELF and CNN's
+  long-distance gifts) take a pitch from a person, so they need the owner's yes and address.
+
+## Fifth round, 24 Oct: "No pitches for now. Keep going with the content."
+
+- **Truth or dare and "how well do you know me"**: 50 truths and 50 dares (from 12 and 12) and 40
+  know-me questions (from 10), free, playable and listed in full on /games/dare and /games/know in
+  both languages. A free game deals twelve of each from the whole pile, fresh every game, so a
+  sitting still ends at the gift screen; a pack plays all its cards.
+- **Four more of the biggest searches in the blog queue**: good morning messages for her and for him,
+  paragraphs for your girlfriend, cute things to say to your girlfriend. They sit 7th to 10th, so
+  they are written in the first week. The queue holds 29 topics (two weeks at two a day), and the
+  routine refills it to 30 whenever it drops below 10, and every Monday.
+- **Long titles**: the six Spanish city date pages whose titles ran past 70 characters ("Ideas para
+  una cita en San Francisco: 16 planes y 24 sitios reales · Ethos") now drop " · Ethos" instead
+  of their end. Any page does the same if its title would not fit.
+- **The Christmas page** (/occasions/christmas, which owns "digital Christmas gifts"): it showed two
+  templates and about 500 words, while Christmas searches start climbing in November and a page
+  needs weeks to be ranked. It now has 12 digital Christmas gift ideas, each a template that fits
+  the day (a letter by the fire, the year as a newspaper front page, a trip revealed on a
+  departures board, news under a scratch card, a countdown to midnight, the distance if you're
+  apart), and seven questions (opening by itself on Christmas morning, too late on Christmas Eve,
+  a long-distance partner). Any occasion page can take the same list (`ideas` in
+  `src/content/occasions.ts`); Valentine's Day should be next, by early December.
+- **Pitches are on hold** (the owner's call). Nothing is sent from the owner's address.
+
+## Sixth round, 24 Oct: "make sure the contents aren't AI slop, but actually interesting"
+
+- **Idea lists you can use, on four occasion pages**: Christmas (rewritten), Valentine's Day,
+  birthday and anniversary, 12 ideas each in English and Spanish. The first Christmas list mostly
+  re-described each template. Now every idea says what to put where, with a line to borrow and the
+  character limit it has to fit: the brass plaque on Snow Globe, the classified ads on Front
+  Page, the five packing clues in Pack Your Bags, the lucky numbers in Fortune Cookie. Facts were
+  checked against each template's `schema.ts`, and two were verified outside: Margery Brews'
+  "my right well-beloved Valentine" letter of February 1477 (British Library), and paper as the
+  traditional first-anniversary gift. The Spanish lists are adapted rather than translated:
+  thirteen reasons from Christmas to Reyes, "bodas de papel", Sant Jordi, "un christmas".
+- **The game cards that every list has were replaced**: 13 truths ("What did you google about me
+  before our first date?"), 6 dares that weren't about the two of you, the superpower
+  would-you-rathers, 5 know-me questions with bland answers, and 5 light-deck questions. One draft
+  turned out to repeat a paid pack's card almost word for word; the test that keeps free and paid
+  cards apart caught it.
+- **A filler check on the whole site**: `tests/unit/filler.ts` lists about 70 phrases that mark
+  machine-written or greeting-card copy ("heartfelt", "create lasting memories", "nothing says…
+  like"), and `tests/unit/site-copy.test.ts` runs it over every occasion, gift-idea and template
+  page, the games, the packs and both message files. The blog test reads the same list, so the
+  daily posts are held to it too. The site had two hits; one was real and is rewritten.
+- **The blog's bar is now "interesting", not only "clean"**: `VOICE.md` asks for something in every
+  section the reader couldn't have guessed, and the review panel (`RUBRIC.md`) caps a post at 7
+  when every line could sit on another site.
+- **An outside read before it went live**: a separate reviewer, told to be harsh, judged the new
+  lists "interesting, not slop, with a handful of real faults". It checked about 35 claims against
+  the templates' code; five were wrong and are fixed (Balloons has confetti-only balloons, Fireside
+  has a candle and no fire, the Museum plaque shows caption, years and room, a countdown gift can
+  be opened before zero, and one sample was the template's own default). It also replaced three
+  dares and a truth that broke the soft deck's promise (opening private chats, a parent's thread),
+  fixed Spanish calques ("nota de rescate", "cursilada", "conclusiones" as the editor calls them),
+  and cut the character counts that made the lists read like a spec sheet (from about 60 of the 96
+  ideas to 26). One of its points was wrong: Recipe Box's Spanish "guardadas en la caja con ella"
+  means "with it", the recipe, so the template stays as it is.
+
 ## What's next, ranked
 
 ### Needs the owner
 
 1. **Sign up on AlternativeTo, Product Hunt, PeerPush and SaaSHub** (Google sign-in), then say so:
    the listings are written and Claude submits them (`LINK-KIT.md`).
-2. **Pitches**: say yes to each gift-guide email in `LINK-KIT.md` before it goes out from your address.
+2. **Pitches** (on hold since 24 Oct): say yes to each gift-guide email in `LINK-KIT.md` before it
+   goes out from your address.
 3. **Pinterest**: an Ethos business account, or a yes to pin from the personal one.
 
 ### Can be done in the repo next
 
-4. **Longer free question lists** on the game pages: 150+ would-you-rather and 100+ questions to ask
-   your partner. Those searches are answered by lists of that length.
+4. ~~Longer free question lists~~: done (150 would-you-rather, 96 deck questions, 100 truth or
+   dare, 40 know-me).
 5. **A free love letter writer page** ("love letter generator", "online love letter maker free"):
    the editor's writing help as a page of its own. It costs API money per use and needs rate limits,
    so it needs the owner's yes.
 6. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
    related templates so crawlers reach them sooner. Links from outside matter more.
-7. **Six Spanish date and trip titles** over 70 characters: shorten them.
+7. ~~Six Spanish date titles over 70 characters~~: done; a title that would run past 70 with
+   " · Ethos" now drops the brand (`pageMetadata`).
 
 ### On "first for digital gift"
 

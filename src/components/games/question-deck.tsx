@@ -8,7 +8,7 @@ import { PlayingCard, type BackTone } from "./cards";
 import { GameEnd } from "./game-end";
 import { PackSheets, PackStatus } from "./pack-shelf";
 import { usePacks } from "./use-packs";
-import { DECK_IDS, DECKS, shuffled, type DeckId } from "@/lib/games/questions";
+import { DECK_IDS, DECK_ROUND, DECKS, shuffled, type DeckId } from "@/lib/games/questions";
 import { PACK_IDS, PACKS } from "@/lib/games/packs";
 
 const BACK: Record<DeckId, BackTone> = { light: "rose", deep: "lilac", apart: "ocean" };
@@ -36,11 +36,14 @@ export function QuestionDeck() {
   const back: BackTone = pack ? PACKS[pack.id].back : BACK[deckId];
   // Packs shuffle on their own offsets, clear of the free decks', so no two decks share an order.
   const offset = pack ? DECK_IDS.length + PACK_IDS.indexOf(pack.id) : DECK_IDS.indexOf(deckId);
-  const order = shuffled(cards.length, seed * 7919 + offset);
+  // A free deck deals a round from all its cards, so a sitting ends where it always did and "go again"
+  // brings new questions; a pack plays through.
+  const round = pack ? cards.length : Math.min(cards.length, DECK_ROUND);
+  const order = shuffled(cards.length, seed * 7919 + offset).slice(0, round);
   const index = at[key] ?? 0;
-  const done = index >= cards.length;
+  const done = index >= round;
   const card = done ? null : cards[order[index]];
-  const eyebrow = done ? t("doneEyebrow") : t("count", { n: index + 1, total: cards.length });
+  const eyebrow = done ? t("doneEyebrow") : t("count", { n: index + 1, total: round });
   const question = card ? card[locale] : t("done");
   const action = done ? t("again") : t("next");
 

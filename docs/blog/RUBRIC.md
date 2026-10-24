@@ -52,7 +52,8 @@ English post as that person.
 - **answers:** Does the first paragraph answer what you searched? Does the post then answer the
   next three things you'd want to know?
 - **usable:** Could you act on it tonight? Look for concrete steps, times, examples, and lines you
-  would actually send.
+  would actually send. Is there a line you'd screenshot for a friend? A post where every line could
+  sit on any other site scores 7 at most.
 - **trust:** Does the product appear where it helps, and honestly? Would you tap the template, or
   does it feel like an ad?
 
@@ -71,7 +72,9 @@ Return the claims you checked in a `verified` list, each with the file that sett
 
 - **accuracy:** Every claim is true and supported. Any error is a dealbreaker.
 - **voice:** Specific, warm and plain, with no filler and nothing that sounds machine-written. It
-  follows `VOICE.md` and works for US and UK readers alike.
+  follows `VOICE.md` and works for US and UK readers alike. Machine-written shows in the shape as
+  much as in the words: the same sentence pattern all the way down a list, three adjectives in a
+  row, a list padded to a round number, a line that would fit any subject. Quote each one as a fix.
 - **spanish:** Natural Spanish from Spain, the same post as the English, with nothing lost or added.
 
 ### 3. The search competitor

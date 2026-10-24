@@ -7,6 +7,7 @@ import type { Locale } from "@/i18n/routing";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata, templateListNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { OCCASION_GUIDES } from "@/content/occasions";
+import { GiftIdeaList, withManifests } from "@/components/marketing/gift-idea-list";
 import { JsonLd } from "@/components/shared/json-ld";
 import { OccasionGuide } from "@/components/marketing/occasion-guide";
 import { PageHeader } from "@/components/shared/page-header";
@@ -53,6 +54,14 @@ export default async function OccasionPage({ params }: PageProps<"/[locale]/occa
       />
       <PageHeader eyebrow={t("occasions.title")} title={title} subtitle={t(`seo.occasion.${occasion}.intro`)} />
       <TemplateGallery manifests={templates} occasion={occasion} alsoFree={alsoFree} />
+      {guide.ideas ? (
+        <section className="container-x border-t border-line pt-14 sm:pt-16" aria-labelledby={`ideas-${occasion}`}>
+          <h2 id={`ideas-${occasion}`} className="display-md">
+            {guide.ideas.title}
+          </h2>
+          <GiftIdeaList ideas={withManifests(guide.ideas.items)} locale={locale as Locale} className="mt-4 pb-16" />
+        </section>
+      ) : null}
       <OccasionGuide occasion={occasion} locale={locale as Locale} />
     </>
   );

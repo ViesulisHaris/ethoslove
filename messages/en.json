@@ -1406,7 +1406,7 @@
       },
       "apology": {
         "title": "Digital apology gifts",
-        "description": "Say sorry properly: a heartfelt apology letter with your photos and a song, sent as a digital gift that shows you took the time. Free to start.",
+        "description": "Say sorry properly: an apology letter that names what you did, with your photos and a song, sent as a digital gift that shows you took the time. Free to start.",
         "intro": "When a text isn't enough. Take the time to write what you mean, add the moments that matter, and send something they can open when they're ready. The Letter is free, and a Text Thread says it one bubble at a time."
       },
       "long-distance": {
@@ -2212,7 +2212,7 @@
       "choose": "Choose a deck",
       "count": "Card {n} of {total}",
       "next": "Next card",
-      "done": "That's the whole deck. You two talk a lot.",
+      "done": "That's the round. You two talk a lot.",
       "doneEyebrow": "The end",
       "again": "Shuffle and go again",
       "how": "Whoever is holding the phone reads it out. You both answer.",
@@ -2357,7 +2357,7 @@
       "dare": "Dare",
       "for": "For {name}",
       "done": "Done. {name}'s turn",
-      "soft": "Twelve of each, in a fresh order every time.",
+      "soft": "Twelve of each, fresh from the whole pile every time.",
       "softPack": "{name}: {n} of each, in a fresh order every time.",
       "left": "{n} left",
       "finish": "We're done for tonight",

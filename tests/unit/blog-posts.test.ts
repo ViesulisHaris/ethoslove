@@ -3,9 +3,11 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { isOccasion } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
+import { recipientFromSlug } from "@/content/recipients";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
+import { FILLER } from "./filler";
 
 /**
  * What a post must be before it goes live. A post is written by the daily routine
@@ -20,7 +22,8 @@ const today = new Date().toISOString().slice(0, 10);
 
 const isDay = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s);
 const slugs = new Set(BLOG_POSTS.map((p) => p.slug));
-const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy"]);
+const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy", "/gifts", "/games", "/long-distance", "/dates", "/trips"]);
+const GAMES = new Set(["know", "rather", "draw", "memory", "deck", "dare", "roulette"]);
 
 /** A link inside a post goes to a page that exists. Site paths are written without the locale. */
 function resolves(href: string): boolean {
@@ -33,32 +36,12 @@ function resolves(href: string): boolean {
   if (occasion) return isOccasion(occasion[1] ?? "");
   const post = pathname.match(/^\/blog\/([a-z0-9-]+)$/);
   if (post) return slugs.has(post[1] ?? "");
+  const recipient = pathname.match(/^\/gifts\/([a-z0-9-]+)$/);
+  if (recipient) return recipientFromSlug(recipient[1] ?? "") !== null;
+  const game = pathname.match(/^\/games\/([a-z]+)$/);
+  if (game) return GAMES.has(game[1] ?? "");
   return false;
 }
-
-/** Filler that marks text nobody would say out loud. */
-const FILLER: Record<"en" | "es", RegExp[]> = {
-  en: [
-    /\bdelve\b/i,
-    /in today'?s (fast-paced|digital|modern) world/i,
-    /\bgame[- ]changer\b/i,
-    /\belevate (your|the)\b/i,
-    /\bunlock the (power|secret)/i,
-    /look no further/i,
-    /\btapestry\b/i,
-    /\bembark on\b/i,
-    /\bin the realm of\b/i,
-    /\ba testament to\b/i,
-    /it'?s (important|worth) to note/i,
-    /\bin conclusion\b/i,
-    /\bnavigat(e|ing) the (complexities|world|waters)\b/i,
-    /\bwhether you'?re a\b/i,
-    /\bseamless(ly)?\b/i,
-    /\bunforgettable\b/i,
-    /\bcherished memories\b/i,
-  ],
-  es: [/en el mundo (actual|de hoy)/i, /\bsumérgete\b/i, /\bdesbloquea(r)? (el poder|los secretos)\b/i, /\ben conclusión\b/i, /\binolvidable\b/i, /\bun testimonio de\b/i],
-};
 
 /** The panel in docs/blog/RUBRIC.md: each reader and the criteria they score. */
 const PANEL: Record<string, string[]> = {

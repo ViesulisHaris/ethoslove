@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug } from "@/content/recipients";
+import { pageMetadata } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
 
 const LOCALES = ["en", "es"] as const;
@@ -87,5 +88,21 @@ describe("gift ideas by who it's for", () => {
         expect(g.title.toLowerCase(), `${r} ${l}`).toContain(words[r][i]);
       });
     }
+  });
+});
+
+/** A result shows about seventy characters of a title, so a long one drops the brand rather than its end. */
+describe("page titles", () => {
+  it("carry the brand while it fits", () => {
+    const m = pageMetadata({ locale: "en", path: "/dates/paris", title: "Date ideas in Paris: 16 ideas and 24 real places", description: "" });
+    expect(m.title).toBe("Date ideas in Paris: 16 ideas and 24 real places");
+    expect(m.openGraph?.title).toBe("Date ideas in Paris: 16 ideas and 24 real places · Ethos");
+  });
+
+  it("drop it when it would run past seventy characters", () => {
+    const title = "Ideas para una cita en San Francisco: 16 planes y 24 sitios reales";
+    const m = pageMetadata({ locale: "es", path: "/dates/san-francisco", title, description: "" });
+    expect(m.title).toEqual({ absolute: title });
+    expect(m.openGraph?.title).toBe(title);
   });
 });

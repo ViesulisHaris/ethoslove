@@ -1,7 +1,7 @@
 # The daily blog post
 
-A routine runs this every morning: one new post on tryethos.io/blog, in English and Spanish, live
-by the time the run ends. Nobody reads it before it goes out, so this file and
+A routine runs this twice a day: a new post on tryethos.io/blog each time, in English and Spanish, live
+within hours (step 6). Nobody reads it before it goes out, so this file and
 `tests/unit/blog-posts.test.ts` are the editor.
 
 It is the job tools like Soro sell (pick a keyword, research it, write, link, publish, report),
@@ -22,8 +22,9 @@ git fetch origin main && git checkout main && git reset --hard origin/main
 npm ci --no-audit --no-fund
 ```
 
-If a post in `src/content/blog/posts/` already has today's date (UTC) as `published`, stop: today's
-post is out. Say so in one line and end the run.
+The routine runs twice a day (06:17 and 12:17 UTC). If two posts in `src/content/blog/posts/` already
+have today's date (UTC) as `published`, stop: today's posts are out. Say so in one line and end the
+run.
 
 On the mirror, earlier posts may still be waiting for the live repository's next publish run
 (step 6). That's fine: they are on `main`, so the queue already lost their topics, and today's post
@@ -91,6 +92,10 @@ Create `src/content/blog/posts/<slug>.ts` (one `export const post: BlogPost`) an
 - **Links**:
   - At least three links in the text to pages on the site: `/templates/<slug>`,
     `/occasions/<occasion>`, `/pricing`, `/blog/<slug>`.
+  - Where the reader is choosing or making something for a person, link `/gifts` with the words
+    "digital gift" or "digital gifts" (Spanish: "regalo digital", "regalos digitales"), and the
+    matching `/gifts/for-<who>` page (boyfriend, girlfriend, husband, wife, best-friend, mom, dad)
+    when the post is about one of them. `/gifts` is the page meant to be found for "digital gift".
   - When an older post is relevant, link to it.
   - Up to three external links, https only, to sources you actually read.
   - Site paths never carry `/es`: the link adds the language.
@@ -239,6 +244,6 @@ The final message is what the owner reads on their phone. Write only:
 - Never invent facts, statistics, reviews, quotes or customers, and never claim something Ethos
   doesn't do.
 - Never copy sentences from another site.
-- Never publish twice in one day, and never publish a post that failed a check or that the panel
-  hasn't rated 10/10.
+- Never publish more than two posts in one day, and never publish a post that failed a check or
+  that the panel hasn't rated 10/10.
 - Never present a made-up couple as real (the TikTok account's couple stays on TikTok).

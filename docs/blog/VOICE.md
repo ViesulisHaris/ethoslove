@@ -23,7 +23,12 @@ blocks, plus at most two mentions in the text.
   examples beat adjectives.
 - "You" is the reader. The person they're giving to is him, her or them, as the keyword says.
 - Short sentences. No exclamation marks in the prose (sample lines may have them). No emoji. No
-  "In this article we will", no recap at the end, and none of the filler the test rejects.
+  "In this article we will", no recap at the end, and none of the filler in `tests/unit/filler.ts`,
+  which the tests reject in posts and on every page of the site.
+- Interesting, not only clean. Every section gives the reader something they couldn't have guessed:
+  a real detail, a line to borrow, a time, a trick, a fact with its source. Cut any sentence that
+  would fit a post on a different subject, and stop a list when the good items run out: twelve real
+  ones beat twenty padded to a round number.
 - Sample lines (`quote` blocks) are sincere and plain, the way people actually write: specific
   memories, "I love you", nothing that sounds like a greeting card.
 - Readers are in the US, the UK and elsewhere, so wording works for all of them. Use "your mother"
