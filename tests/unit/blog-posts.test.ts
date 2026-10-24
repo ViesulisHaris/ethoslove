@@ -7,6 +7,7 @@ import { recipientFromSlug } from "@/content/recipients";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
+import { FILLER } from "./filler";
 
 /**
  * What a post must be before it goes live. A post is written by the daily routine
@@ -41,30 +42,6 @@ function resolves(href: string): boolean {
   if (game) return GAMES.has(game[1] ?? "");
   return false;
 }
-
-/** Filler that marks text nobody would say out loud. */
-const FILLER: Record<"en" | "es", RegExp[]> = {
-  en: [
-    /\bdelve\b/i,
-    /in today'?s (fast-paced|digital|modern) world/i,
-    /\bgame[- ]changer\b/i,
-    /\belevate (your|the)\b/i,
-    /\bunlock the (power|secret)/i,
-    /look no further/i,
-    /\btapestry\b/i,
-    /\bembark on\b/i,
-    /\bin the realm of\b/i,
-    /\ba testament to\b/i,
-    /it'?s (important|worth) to note/i,
-    /\bin conclusion\b/i,
-    /\bnavigat(e|ing) the (complexities|world|waters)\b/i,
-    /\bwhether you'?re a\b/i,
-    /\bseamless(ly)?\b/i,
-    /\bunforgettable\b/i,
-    /\bcherished memories\b/i,
-  ],
-  es: [/en el mundo (actual|de hoy)/i, /\bsumérgete\b/i, /\bdesbloquea(r)? (el poder|los secretos)\b/i, /\ben conclusión\b/i, /\binolvidable\b/i, /\bun testimonio de\b/i],
-};
 
 /** The panel in docs/blog/RUBRIC.md: each reader and the criteria they score. */
 const PANEL: Record<string, string[]> = {
