@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:12 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "where were u last night"
+        },
+        {
+          "from": "them",
+          "text": "library"
+        },
+        {
+          "from": "me",
+          "text": "till 3am??"
+        },
+        {
+          "from": "them",
+          "text": "finals babe"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "anyway"
+        },
+        {
+          "from": "them",
+          "text": "i made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw thats cute"
+        },
+        {
+          "from": "me",
+          "text": "the library closes at 10 tho",
+          "status": "Read 9:31 AM"
+        }
+      ]
+    }
+  ]
+}
