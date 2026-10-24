@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|1:07 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who is “gym bro”"
+        },
+        {
+          "from": "them",
+          "text": "my gym bro??"
+        },
+        {
+          "from": "me",
+          "text": "why does gym bro call u baby",
+          "status": "Read 1:08 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its not what it looks like"
+        },
+        {
+          "from": "them",
+          "text": "i was gonna give u this friday"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its nice"
+        },
+        {
+          "from": "me",
+          "text": "send it to gym bro"
+        },
+        {
+          "from": "them",
+          "text": "maya please"
+        },
+        {
+          "from": "them",
+          "text": "let me explain"
+        }
+      ]
+    }
+  ]
+}
