@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:41 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "who was the guy that walked u to ur car"
+        },
+        {
+          "from": "me",
+          "text": "my backup"
+        },
+        {
+          "from": "them",
+          "text": "ur WHAT"
+        },
+        {
+          "from": "me",
+          "text": "in case u forget our 6 months tomorrow",
+          "status": "Read 10:42 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i didnt forget"
+        },
+        {
+          "from": "them",
+          "text": "i was saving this for midnight"
+        },
+        {
+          "from": "them",
+          "text": "but here"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "me",
+          "text": "u can stay"
+        },
+        {
+          "from": "me",
+          "text": "hes still my backup tho"
+        }
+      ]
+    }
+  ]
+}
