@@ -1,0 +1,56 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|4:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ur a 10 but"
+        },
+        {
+          "from": "them",
+          "text": "but what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u never surprise me",
+          "status": "Read 4:42 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "still a 10 but?"
+        },
+        {
+          "from": "me",
+          "text": "ur an 11",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}
