@@ -152,8 +152,8 @@ const nextConfig: NextConfig = {
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';
  * dev adds eval + the HMR socket. Supabase (storage, auth), Stripe (js + Checkout) and
- * Apple's song previews/artwork are the third parties, plus Microsoft Clarity and the Meta pixel
- * once each has an id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
+ * Apple's song previews/artwork are the third parties, plus Microsoft Clarity and the Meta and
+ * TikTok pixels once each has an id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
  * dev debug scripts come from va.vercel-scripts.com. The Dates map draws OpenFreeMap's tiles,
  * lettering and icons; the map library itself is served from this origin (/vendor). Photographs of
  * places are Wikimedia's, loaded from its two image hosts.
@@ -173,14 +173,20 @@ function contentSecurityPolicy(): string {
   const meta = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
   const metaScript = meta ? " https://connect.facebook.net" : "";
   const metaPing = meta ? " https://www.facebook.com" : "";
+  // The TikTok pixel: its loader, main script and config from analytics.tiktok.com, which it reports
+  // to by beacon or image; it also looks up the visitor's IPv6 address at a host of its own.
+  const tiktok = Boolean(process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID);
+  const tiktokScript = tiktok ? " https://analytics.tiktok.com" : "";
+  const tiktokImg = tiktok ? " https://analytics.tiktok.com" : "";
+  const tiktokConnect = tiktok ? " https://analytics.tiktok.com https://analytics-ipv6.tiktokw.us" : "";
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}${metaScript}`,
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}${metaScript}${tiktokScript}`,
     "style-src 'self' 'unsafe-inline'",
-    `img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}`,
+    `img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}`,
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${tiktokConnect}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
     "frame-src https://js.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",

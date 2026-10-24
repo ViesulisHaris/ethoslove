@@ -108,6 +108,14 @@ export function isAdTrackingOff(pathname: string): boolean {
 }
 
 /**
+ * The address bar as it is right now. The pixels send the hash too, and a hash with a value in it is
+ * data, not an anchor: a shared plan rides in `#p=…`, on /plan and in the editor's `?unwrap=plan`.
+ */
+export function isAdTrackingOffHere(location: { pathname: string; hash?: string }): boolean {
+  return isAdTrackingOff(location.pathname) || (location.hash ?? "").includes("=");
+}
+
+/**
  * Where a gift is running, and the bottom of the screen therefore belongs to the gift.
  *
  * A demo is the same gift as `/g/…`, only with the sender's words swapped for ours — the blow,

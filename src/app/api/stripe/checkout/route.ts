@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
-import { META_FBC, META_FBP } from "@/lib/meta/capi";
+import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
 import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, isProductId, subscriptionsEnabled, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
@@ -42,11 +42,16 @@ const input = z.object({
     .object({ recipientName: z.string().trim().max(60).optional(), note: z.string().trim().max(300).optional() })
     .optional()
     .catch(undefined),
-  // Sent only by a browser whose visitor allowed advertising cookies (lib/analytics/meta.ts): its
-  // presence is that consent, and the webhook reports the sale to Meta only then. A malformed id is
-  // dropped, never an error.
-  meta: z
-    .object({ fbc: z.string().regex(META_FBC).optional().catch(undefined), fbp: z.string().regex(META_FBP).optional().catch(undefined) })
+  // Sent only by a browser whose visitor allowed advertising cookies (lib/analytics/ads.ts): its
+  // presence is that consent, and the webhook reports the sale to Meta and TikTok only then. A
+  // malformed id is dropped, never an error.
+  ads: z
+    .object({
+      fbc: z.string().regex(AD_FBC).optional().catch(undefined),
+      fbp: z.string().regex(AD_FBP).optional().catch(undefined),
+      ttclid: z.string().regex(AD_TTCLID).optional().catch(undefined),
+      ttp: z.string().regex(AD_TTP).optional().catch(undefined),
+    })
     .optional()
     .catch(undefined),
 });
@@ -136,8 +141,8 @@ export async function POST(request: NextRequest) {
     origin,
     returnTo: body.returnTo ?? "/dashboard",
     ref: body.ref,
-    // Meta needs the buyer's browser for a website sale; the webhook only has Stripe's.
-    meta: body.meta ? { ...body.meta, ua: request.headers.get("user-agent") ?? undefined } : undefined,
+    // The platforms need the buyer's browser for a website sale; the webhook only has Stripe's.
+    ads: body.ads ? { ...body.ads, ua: request.headers.get("user-agent") ?? undefined } : undefined,
     automaticTax: process.env.STRIPE_AUTOMATIC_TAX === "true",
     productIds: stripeProductIds(),
   };

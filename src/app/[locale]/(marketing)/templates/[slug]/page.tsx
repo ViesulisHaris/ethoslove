@@ -15,6 +15,7 @@ import {
 } from "@/lib/seo";
 import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
+import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateGuide, templateFaq } from "@/components/templates/template-guide";
@@ -73,6 +74,8 @@ export default async function TemplateDetailPage({
 
   return (
     <>
+      {/* For the ad pixels' per-template audiences (lib/analytics/ads.ts); nothing without consent. */}
+      <AdTemplateView slug={manifest.slug} tier={manifest.tier} />
       <JsonLd
         nodes={[
           templateProductNode(manifest, l, t("seo.templateCategory")),

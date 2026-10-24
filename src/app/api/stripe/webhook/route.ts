@@ -7,7 +7,7 @@ import { fulfilCheckoutSession } from "@/lib/stripe/fulfil";
 import { recoverExpiredSession } from "@/lib/stripe/recovery";
 import { handleStripeEvent } from "@/lib/stripe/events";
 import { sendMembershipEnded, sendMembershipPaymentProblem } from "@/lib/email/notify";
-import { reportPurchaseToMeta } from "@/lib/meta/capi";
+import { reportPurchase } from "@/lib/ads/report";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -37,9 +37,9 @@ export async function POST(request: NextRequest) {
     now: Date.now(),
     fulfil: fulfilCheckoutSession,
     recover: recoverExpiredSession,
-    // After Stripe has its answer: Meta being slow or down never delays or fails the webhook, and
-    // nothing is sent unless the buyer allowed advertising cookies (lib/meta/capi.ts).
-    paid: (session) => after(() => reportPurchaseToMeta(session)),
+    // After Stripe has its answer: Meta or TikTok being slow or down never delays or fails the
+    // webhook, and nothing is sent unless the buyer allowed advertising cookies (lib/ads/purchase.ts).
+    paid: (session) => after(() => reportPurchase(session)),
     send: { ended: sendMembershipEnded, paymentProblem: sendMembershipPaymentProblem },
   });
   if (outcome.status === 500) return NextResponse.json({ error: "handler_failed" }, { status: 500 });

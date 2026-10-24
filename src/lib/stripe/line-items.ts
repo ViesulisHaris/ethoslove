@@ -55,9 +55,9 @@ export type SessionOptions = {
   ref?: string;
   /**
    * Only for a buyer who said yes to advertising cookies: what the webhook needs to report the sale
-   * to Meta (lib/meta/capi.ts). Its presence is that yes. Absent, Meta is never told.
+   * to Meta and TikTok (lib/ads). Its presence is that yes. Absent, neither is ever told.
    */
-  meta?: { fbc?: string; fbp?: string; ua?: string };
+  ads?: { fbc?: string; fbp?: string; ttclid?: string; ttp?: string; ua?: string };
   automaticTax: boolean;
   /** STRIPE_PRODUCT_* values from the environment, by variable name. */
   productIds: Record<string, string | undefined>;
@@ -214,16 +214,18 @@ export function metadataRef(ref: string | undefined): string | undefined {
 }
 
 /**
- * A consented buyer's Meta fields, as metadata (lib/meta/capi.ts reads them back). Stripe caps a value
+ * A consented buyer's ad fields, as metadata (lib/ads/purchase.ts reads them back). Stripe caps a value
  * at 500 characters, which a user agent can pass.
  */
-export function metaMetadata(meta: SessionOptions["meta"]): Record<string, string> {
-  if (!meta) return {};
+export function adsMetadata(ads: SessionOptions["ads"]): Record<string, string> {
+  if (!ads) return {};
   return {
-    meta_consent: "1",
-    ...(meta.fbc ? { meta_fbc: meta.fbc } : {}),
-    ...(meta.fbp ? { meta_fbp: meta.fbp } : {}),
-    ...(meta.ua ? { meta_ua: meta.ua.slice(0, 500) } : {}),
+    ads_consent: "1",
+    ...(ads.fbc ? { ads_fbc: ads.fbc } : {}),
+    ...(ads.fbp ? { ads_fbp: ads.fbp } : {}),
+    ...(ads.ttclid ? { ads_ttclid: ads.ttclid } : {}),
+    ...(ads.ttp ? { ads_ttp: ads.ttp } : {}),
+    ...(ads.ua ? { ads_ua: ads.ua.slice(0, 500) } : {}),
   };
 }
 
@@ -232,8 +234,8 @@ export function metaMetadata(meta: SessionOptions["meta"]): Record<string, strin
  * the success page can trust (Stripe signed it, and only this server wrote it). The Stripe account
  * is shared with other businesses, so it names nothing about a person or a gift: no gift ids, no
  * names, no notes. A gift card's name and note wait in gift_card_details instead. A buyer who allowed
- * advertising cookies adds Meta's ids for their click and browser and the browser's user agent
- * (`metaMetadata`), which name a browser, not a person.
+ * advertising cookies adds Meta's and TikTok's ids for their click and browser and the browser's
+ * user agent (`adsMetadata`), which name a browser, not a person.
  */
 export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Record<string, string> {
   const ref = metadataRef(options.ref);
@@ -252,7 +254,7 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
-    ...metaMetadata(options.meta),
+    ...adsMetadata(options.ads),
   };
 }
 
@@ -357,7 +359,7 @@ export function membershipMetadata(plan: CheckoutPlan, options: SessionOptions):
     withdrawal_notice: "tickbox",
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
-    ...metaMetadata(options.meta),
+    ...adsMetadata(options.ads),
   };
 }
 

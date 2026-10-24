@@ -14,9 +14,9 @@ import { BackToGift, UpgradeAfterPurchase } from "@/components/pricing/upgrade-a
 import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
 import { isFresh, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
-import { HoldMetaPurchase } from "@/components/shared/meta-pixel";
-import { metaPurchaseOf } from "@/lib/meta/capi";
-import type { MetaPurchase } from "@/lib/analytics/meta";
+import { HoldAdPurchase } from "@/components/shared/ad-pixels";
+import { adPurchaseOf } from "@/lib/ads/purchase";
+import type { AdPurchase } from "@/lib/analytics/ads";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -50,13 +50,13 @@ export default async function CheckoutSuccessPage({
   // "Every template for the difference", for a buyer this browser is (or is about to be signed in
   // as): never on a page that asks them to sign in first.
   let upgrade: UpgradeAfter | null = null;
-  // The sale for Meta's pixel, handed to the next page (lib/analytics/meta.ts, holdPurchase).
-  let metaPurchase: MetaPurchase | null = null;
+  // The sale for the ad pixels, handed to the next page (lib/analytics/ads.ts, holdPurchase).
+  let adPurchase: AdPurchase | null = null;
   if (stripe && typeof session_id === "string") {
     try {
       const session = await stripe.checkout.sessions.retrieve(session_id);
       sold = readSession(session);
-      metaPurchase = metaPurchaseOf(session);
+      adPurchase = adPurchaseOf(session);
       if (session.metadata?.guest === "1") {
         // Guest checkout: fulfil, then sign this browser in as the buyer. The session id only
         // ever reaches the buyer's browser (Stripe redirects there), and the window is short.
@@ -174,7 +174,7 @@ export default async function CheckoutSuccessPage({
   return (
     <div className="container-narrow flex flex-col items-center py-24 text-center">
       {paid && sold && typeof session_id === "string" ? <TrackPurchase sessionId={session_id} product={sold.product} bump={sold.bump} /> : null}
-      {paid && metaPurchase ? <HoldMetaPurchase purchase={metaPurchase} /> : null}
+      {paid && adPurchase ? <HoldAdPurchase purchase={adPurchase} /> : null}
       {membership ? (
         // The membership's own colours (docs/MEMBERSHIP.md 4.1): a starlight check on the dusk.
         <div className="grid size-16 place-items-center rounded-full bg-dusk shadow-dusk-seal ring-4 ring-starlight/25" data-testid="membership-success">

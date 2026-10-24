@@ -37,7 +37,7 @@ export type StripeEventDeps = {
   recover: (session: Stripe.Checkout.Session) => Promise<unknown>;
   /**
    * Told about each checkout fulfilment has just granted (and again for a repeat delivery: whatever it
-   * starts must be safe to repeat). The Meta report hangs off it (lib/meta/capi.ts). It can't change
+   * starts must be safe to repeat). The ad platforms' report hangs off it (lib/ads/report.ts). It can't change
    * the answer Stripe gets: a throw is logged and the event still answers as fulfilment did.
    */
   paid?: (session: Stripe.Checkout.Session) => void;

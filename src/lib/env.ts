@@ -62,6 +62,13 @@ export const env = {
   /** Events Manager → Test events: while set, server events show up there instead of counting. */
   metaTestEventCode: read("META_TEST_EVENT_CODE"),
 
+  /** TikTok pixel id (its "pixel code"), the same way and for the same reasons as `metaPixelId`. */
+  tiktokPixelId: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || undefined,
+  /** The Events API's access token (server only), made in TikTok Events Manager next to the pixel. */
+  tiktokEventsToken: read("TIKTOK_EVENTS_TOKEN"),
+  /** TikTok Events Manager → Test events: while set, server events go there instead of counting. */
+  tiktokTestEventCode: read("TIKTOK_TEST_EVENT_CODE"),
+
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
   anthropicApiKey: read("ANTHROPIC_API_KEY"),
@@ -103,8 +110,9 @@ export const isConfigured = {
   posthog: Boolean(env.posthogKey),
   clarity: Boolean(env.clarityId),
   metaPixel: Boolean(env.metaPixelId),
+  tiktokPixel: Boolean(env.tiktokPixelId),
   /** Whether anything on the site waits for the cookie banner's answer, so whether it asks at all. */
-  cookieConsent: Boolean(env.clarityId || env.metaPixelId),
+  cookieConsent: Boolean(env.clarityId || env.metaPixelId || env.tiktokPixelId),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
   upstash: Boolean(env.upstashRedisUrl && env.upstashRedisToken),

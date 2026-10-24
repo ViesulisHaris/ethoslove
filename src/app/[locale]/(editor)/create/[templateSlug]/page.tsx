@@ -10,6 +10,7 @@ import { loadGiftForEdit } from "@/app/actions/gift";
 import { EditorShell } from "@/components/editor/editor-shell";
 import type { RemoteGift } from "@/lib/editor/store";
 import { shownReactions } from "@/lib/proof/proof";
+import { AdTemplateView } from "@/components/shared/ad-pixels";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/create/[templateSlug]">, "searchParams">): Promise<Metadata> {
   const { locale, templateSlug } = await params;
@@ -46,6 +47,8 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
 
   return (
     <Suspense>
+      {/* For the ad pixels' per-template audiences (lib/analytics/ads.ts); nothing without consent. */}
+      <AdTemplateView slug={manifest.slug} tier={manifest.tier} />
       <EditorShell
         slug={templateSlug}
         manifest={manifest}

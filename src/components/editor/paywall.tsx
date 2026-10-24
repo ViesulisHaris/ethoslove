@@ -7,6 +7,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { track } from "@/lib/analytics/track";
+import { adTrack } from "@/lib/analytics/ads";
 import { PRODUCTS, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
@@ -97,6 +98,13 @@ export function Paywall({
     if (manifest.tier === "free") track("extras_offer_shown", { template: slug, guest });
   }, [manifest.tier, slug, guest]);
 
+  // The price seen, once per opening, for the ad pixels' "saw the price, didn't pay" audiences.
+  // Nothing without advertising consent (lib/analytics/ads.ts).
+  const shownTotal = useRef(total);
+  useEffect(() => {
+    adTrack({ name: "PaywallSeen", contents: [{ id: slug, category: manifest.tier }], value: shownTotal.current / 100, currency: currency.toUpperCase() });
+  }, [slug, manifest.tier, currency]);
+
   // Inside the iPhone app nothing is sold here: no prices, plans, bump or checkout. Apple's own
   // sheet shows the options and their App Store prices (guideline 3.1.1).
   const inApp = useInApp();
@@ -108,7 +116,7 @@ export function Paywall({
     going.current = true;
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest });
-    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale });
+    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale }, { total, category: manifest.tier });
     if ("url" in result) {
       window.location.assign(result.url);
       return;
