@@ -188,6 +188,9 @@ everything to be done here instead. Directories are dropped; the work went where
   paragraphs for your girlfriend, cute things to say to your girlfriend. They sit 7th to 10th, so
   they are written in the first week. The queue holds 29 topics (two weeks at two a day), and the
   routine refills it to 30 whenever it drops below 10, and every Monday.
+- **Long titles**: the six Spanish city date pages whose titles ran past 70 characters ("Ideas para
+  una cita en San Francisco: 16 planes y 24 sitios reales · Ethos") now drop " · Ethos" instead
+  of their end. Any page does the same if its title would not fit.
 - **Pitches are on hold** (the owner's call). Nothing is sent from the owner's address.
 
 ## What's next, ranked
@@ -209,7 +212,8 @@ everything to be done here instead. Directories are dropped; the work went where
    so it needs the owner's yes.
 6. **The 45 discovered-but-not-crawled pages** (dates, trips): link them from the homepage and the
    related templates so crawlers reach them sooner. Links from outside matter more.
-7. **Six Spanish date and trip titles** over 70 characters: shorten them.
+7. ~~Six Spanish date titles over 70 characters~~: done; a title that would run past 70 with
+   " · Ethos" now drops the brand (`pageMetadata`).
 
 ### On "first for digital gift"
 

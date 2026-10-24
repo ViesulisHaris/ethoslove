@@ -53,7 +53,10 @@ export function pageMetadata({
   /** An article's dates; they also make the share card an article rather than a website. */
   article?: { publishedTime: string; modifiedTime: string };
 }): Metadata {
-  const shareTitle = absoluteTitle ? title : `${title} · ${SITE.name}`;
+  // Search results show about seventy characters of a title; past that, the brand is what goes.
+  const branded = `${title} · ${SITE.name}`;
+  const bare = absoluteTitle || branded.length > 70;
+  const shareTitle = bare ? title : branded;
   const card = { url: image ?? ogImageUrl(locale), width: 1200, height: 630, alt: shareTitle };
   const share = {
     siteName: SITE.name,
@@ -64,7 +67,7 @@ export function pageMetadata({
     images: [card],
   };
   return {
-    title: absoluteTitle ? { absolute: title } : title,
+    title: bare ? { absolute: title } : title,
     description,
     alternates: localeAlternates(locale, path, locales),
     openGraph: article ? { ...share, type: "article", ...article } : { ...share, type: "website" },
