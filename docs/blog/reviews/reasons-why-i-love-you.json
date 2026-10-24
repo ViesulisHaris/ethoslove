@@ -1,0 +1,91 @@
+{
+  "slug": "reasons-why-i-love-you",
+  "keyword": "reasons why i love you",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are long lists of interchangeable compliments; this gives 100 reasons written as small real moments to copy tonight, then answers how to write your own, how many and how to give them."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product claim and link checks out. Spanish needed four fixes: the cold-feet line reversed its meaning, 'cuándo' should be 'cuando', 'lo mío' read translated, and the jar note spoke to the sender instead of the recipient and said 'teléfono' for 'móvil'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every page-one result is a long list of generic qualities; this gives 100 reasons as specific moments, then the method and a generic-versus-yours table, how many to write and how to give them."
+        }
+      ],
+      "applied": [
+        "ES: 'Me pones los pies helados encima', 'Lo dices cuando algo es injusto', 'lo que estoy escribiendo', jar note 'Basta con agitar el móvil o tocar el frasco: …'.",
+        "Polish taken: 'las mayores tonterías', 'con miedo y todo', 'para coger la idea'; EN 'have never had to ask twice'; jar note says each reason is a short note of a line or two (the schema caps a reason at 160 characters); older post's link reads 'list of 100 reasons why I love you'."
+      ],
+      "rejected": [
+        "Polish not taken: a different last reason, paper-jar sizes, a time estimate takeaway, a gender line in the FAQ, '52' in a heading, and 'galletas' for 'picoteo' (each adds or changes text without fixing anything)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the top results, which are bare lists of interchangeable compliments, this gives 100 specific borrowable moments plus a method, a before-and-after table and ways to give them, so the reader can write their own twenty tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All four Spanish fixes are in and correct; it is the only page for this search that pairs 100 reasons written as specific moments with a method for writing your own, in Spanish that reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It is the only page-one result whose 100 reasons are written as real, specific moments, and it also teaches how to write and hand over your own, with a before/after table, target numbers and ways to give them."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): '2am' in one reason, a for-him-or-her heading, 'jar, letter, one a day' in a heading, 'cada una en una nota corta', and 'agotada' for 'sin fuerzas'."
+      ]
+    }
+  ]
+}
