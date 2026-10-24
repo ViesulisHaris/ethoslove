@@ -16,12 +16,28 @@
     "angle": "Things to say sorted by moment (good morning, before a big day, after a fight, just because), each specific enough to sound like you, plus how to save the best ones."
   },
   {
+    "slug": "best-online-love-letter-websites",
+    "keyword": "best website to make a love letter online",
+    "keyword_es": "mejor página para hacer una carta de amor digital",
+    "occasion": "valentines",
+    "templates": ["the-letter", "keepsake"],
+    "angle": "A fair side-by-side of the sites that make digital love letters, built from each one’s own pricing and feature pages: what is free, what it costs, music, photos, scheduling and whether the link lasts. Ethos sits in the same table with no special treatment, so the reader leaves knowing which one suits them."
+  },
+  {
     "slug": "how-to-write-a-love-letter",
     "keyword": "how to write a love letter",
     "keyword_es": "cómo escribir una carta de amor",
     "occasion": "valentines",
     "templates": ["the-letter", "xoxo", "coquette"],
     "angle": "A step-by-step method for people who freeze at a blank page: start with one memory, say what it meant, end with what you want next. Opening and closing lines that don't sound borrowed."
+  },
+  {
+    "slug": "digital-gift-websites",
+    "keyword": "best digital gift websites",
+    "keyword_es": "mejores páginas para hacer regalos digitales",
+    "occasion": "just-because",
+    "templates": ["the-letter", "bouquet", "jar-of-reasons"],
+    "angle": "The websites that make a personal digital gift rather than sell a gift card, compared honestly from their own pages: what each one makes, what is free, prices, languages and how the gift opens. Gift cards get a line on when they are the better choice."
   },
   {
     "slug": "open-when-letter-ideas",
