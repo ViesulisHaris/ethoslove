@@ -50,6 +50,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A birthday gift they'll open twice",
       lead: "Most birthday messages are a line in a group chat, read once and buried by lunch. This is the other kind: a page with their name on it, the photos you have of them, the song they can't help singing, and the thing you actually mean — opened on their phone, whenever they like.",
+      ideas: {
+        title: "12 digital birthday gift ideas",
+        items: [
+          {
+            template: "midnight-countdown",
+            heading: "A countdown that goes off at midnight, their time",
+            body: "The first message of a birthday is the one they remember, so let yours arrive at 00:00 by itself. The headline sits over the timer, “Until you're 30”, and the line with the fireworks gets 60 characters: “30. You look exactly the same. I checked.” If they're eight hours ahead, it goes off in your afternoon and on their midnight.",
+          },
+          {
+            template: "the-council",
+            heading: "Five cats review their year",
+            body: "A hearing about them in front of a bench of cats. Charge them with something specific (“turning 30 and acting 12”), give each cat one finding of up to 90 characters, “still has the receipt for every present since 2015”, “sings in the car, only the wrong words”, and let the stamp come down on certified icon. The full ruling is your letter.",
+          },
+          {
+            template: "party-animals",
+            heading: "A party crashed by hamsters who heckle",
+            body: "Their age in foil balloons, their name in cut-out letters and ten animals in party hats, each of which yells a line you wrote when tapped. Use all ten: “THIRTY?”, “who invited the ferrets”, “you said no fuss, we heard fuss”, “make a wish, we'll wait”. At the bottom they blow out the candles into the phone.",
+          },
+          {
+            template: "front-page",
+            heading: "A tabloid that adores them",
+            body: "A newspaper with their name on the masthead, written like a tabloid that's obsessed with them. Headline: “40 YEARS ON, SOURCES CONFIRM: STILL GORGEOUS”. Weather: “Overcast, with a chance of being sung at”. Then spend the eight classified ads on in-jokes: “WANTED: anyone who has seen their keys. Reward: cake.”",
+          },
+          {
+            template: "fortune-cookie",
+            heading: "Fortune cookies with lucky numbers that mean something",
+            body: "A plate of cookies, each cracking open on a fortune you wrote, with their lucky numbers underneath. Make the numbers yours: the day you met, their age, the number on the door of your first place, the table you had on the first date. Fortunes take 140 characters each: “You will be sung to in a restaurant today. Do not resist.”",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "The weekend away, on a departures board",
+            body: "Hide the destination behind five clues they pack one at a time: “swimsuit”, “the good sunglasses”, “nothing for work”, “a book you haven't started”, “your passport, yes really”. The board clatters to the city, the boarding pass shows the date and the nights, and your letter is under the stub.",
+          },
+          {
+            template: "text-thread",
+            heading: "A conversation that starts at 00:00",
+            body: "Write the chat the way you two actually text, typos and in-jokes included, and it arrives bubble by bubble with the typing dots: “are you awake”, “it's 00:00”, “happy birthday”, a photo, then the paragraph you'd never send by text. Type [photo] on a line of its own wherever the next photo should drop in.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "One reason for every year",
+            body: "A jar of folded notes they shake out one at a time. Write as many as they're turning, up to a hundred. If you've only known them for a few of those years, the rest can come from the stories you've heard: the school play, the first car, the haircut nobody mentions. The rule: each note is something they did, not something they are.",
+          },
+          {
+            template: "birthday-cinema",
+            heading: "Their name in lights, and a wish they make by blowing",
+            body: "Red curtains part on a marquee with their name, or 40 characters of your own: “NOW SHOWING: SAM, AGE 30”. Then a cake with flickering candles that they blow out into the microphone (or swipe), confetti, and a film strip of your photos. It takes a short video too, from the people who couldn't be there.",
+          },
+          {
+            template: "sticker-bomb",
+            heading: "Twelve taps of chaos, labelled by you",
+            body: "Every tap slaps a sticker where their finger lands, and some sit on label-maker strips you wrote, up to six of 28 characters: “officially vintage”, “30 and still can't whistle”, “best in show”. Twelve stickers in, the page is a mess and your card opens. For the friend who'd never forgive you a soppy one.",
+          },
+          {
+            template: "balloons",
+            heading: "A ceiling of balloons with a photo in each",
+            body: "Their age floats in as gold foil numbers, the bunting spells a line you choose, up to 24 characters, and every balloon they pop drops one of your photos. Hide one baby photo among them, the one they'll shriek at, and know that the biggest balloon, the last one, is holding your letter.",
+          },
+          {
+            template: "constellations",
+            heading: "Twelve stars for the twelve months since their last birthday",
+            body: "The free option: a night sky where every photo is a star they fly to. It takes up to twelve photos, so use one from each month since their last birthday. When they've found them all, the stars join into a heart, an infinity sign or a star, and your line appears underneath.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "What to write",
@@ -76,6 +141,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de cumpleaños que abrirá dos veces",
       lead: "Casi todas las felicitaciones son una línea en un grupo, leída una vez y enterrada antes de comer. Esto es lo otro: una página con su nombre, las fotos que tienes de esa persona, la canción que no puede evitar cantar y lo que de verdad quieres decirle, abierto en su móvil cuando quiera.",
+      ideas: {
+        title: "12 ideas de regalos digitales de cumpleaños",
+        items: [
+          {
+            template: "midnight-countdown",
+            heading: "Una cuenta atrás que llega a las doce, en su hora",
+            body: "El primer mensaje de un cumpleaños es el que se recuerda, así que deja que el tuyo llegue solo a las 00:00. El titular va sobre el contador, “Hasta tus 30”, y la frase de los fuegos artificiales admite 60 caracteres: “30. Estás igual. Lo he comprobado.” Si vive ocho horas por delante, sonará en tu tarde y en su medianoche.",
+          },
+          {
+            template: "the-council",
+            heading: "Cinco gatos revisan su año",
+            body: "Una vista sobre esa persona ante un tribunal de gatos. Acúsale de algo concreto (“cumplir 30 y comportarse como si tuviera 12”), dale a cada gato una prueba de hasta 90 caracteres, “guarda el tique de cada regalo desde 2015”, “canta en el coche, solo las letras que se inventa”, y que el sello caiga en icono certificado. El fallo completo es tu carta.",
+          },
+          {
+            template: "party-animals",
+            heading: "Una fiesta colada por hámsteres con opiniones",
+            body: "Su edad en globos metalizados, su nombre en letras recortadas y diez animales con gorro de fiesta que gritan una frase tuya al tocarlos. Usa las diez: “¿¡TREINTA!?”, “¿quién ha invitado a los hurones?”, “dijiste sin lío y oímos lío”, “pide un deseo, esperamos”. Abajo, las velas se apagan soplando al móvil.",
+          },
+          {
+            template: "front-page",
+            heading: "Una portada que le adora",
+            body: "Un periódico con su nombre en la cabecera, escrito como una revista del corazón obsesionada con esa persona. Titular: “40 AÑOS Y NI UNA CANA, SEGÚN SU PELUQUERÍA”. El tiempo: “Nublado, con probabilidad de que le canten”. Y los ocho anuncios por palabras, para las bromas vuestras: “SE BUSCA: quien haya visto sus llaves. Recompensa: tarta.”",
+          },
+          {
+            template: "fortune-cookie",
+            heading: "Galletas de la fortuna con números que significan algo",
+            body: "Un plato de galletas que se abren en una fortuna escrita por ti, con sus números de la suerte debajo. Haz que los números sean vuestros: el día que os conocisteis, su edad, el número del portal de vuestra primera casa, la mesa de la primera cita. Cada fortuna admite 140 caracteres: “Hoy te cantarán en un restaurante. No te resistas.”",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "El fin de semana fuera, en un panel de salidas",
+            body: "Esconde el destino tras cinco pistas que va metiendo en la maleta: “bañador”, “las gafas de sol buenas”, “nada del trabajo”, “un libro sin empezar”, “tu pasaporte, sí”. El panel gira hasta la ciudad, la tarjeta de embarque muestra la fecha y las noches, y tu carta está debajo de la matriz.",
+          },
+          {
+            template: "text-thread",
+            heading: "Una conversación que empieza a las 00:00",
+            body: "Escribe el chat como os escribís de verdad, con erratas y bromas incluidas, y llega burbuja a burbuja con los puntitos de escribiendo: “¿sigues ahí?”, “son las 00:00”, “feliz cumple”, una foto, y luego el párrafo que nunca mandarías por mensaje. Escribe [photo] en una línea propia donde quieras que caiga la siguiente foto.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "Una razón por cada año",
+            body: "Un frasco de notas dobladas que salen de una en una. Escribe tantas como años cumple, hasta cien. Si solo conoces unos pocos de esos años, el resto puede salir de las historias que te han contado: la función del colegio, el primer coche, el corte de pelo del que nadie habla. La regla: cada nota es algo que hizo, no algo que es.",
+          },
+          {
+            template: "birthday-cinema",
+            heading: "Su nombre en luces y un deseo que se pide soplando",
+            body: "Se abre el telón rojo sobre una marquesina con su nombre, o con 40 caracteres tuyos: “HOY EN CARTEL: SAM, 30 AÑOS”. Luego, una tarta con velas que parpadean y se apagan soplando al micrófono (o deslizando el dedo), confeti y una tira de película con tus fotos. Admite también un vídeo corto de quienes no pudieron venir.",
+          },
+          {
+            template: "sticker-bomb",
+            heading: "Doce toques de caos, con etiquetas tuyas",
+            body: "Cada toque pega una pegatina donde cae el dedo, y algunas llevan debajo una tira de etiquetadora que escribes tú, hasta seis de 28 caracteres: “oficialmente vintage”, “30 y aún no sabe silbar”, “primer premio”. Con doce pegatinas la página es un caos y se abre tu tarjeta. Para quien nunca te perdonaría una cursi.",
+          },
+          {
+            template: "balloons",
+            heading: "Un techo de globos con una foto en cada uno",
+            body: "Su edad entra flotando en números dorados, el banderín dice la frase que elijas, hasta 24 caracteres, y cada globo que explota deja caer una de tus fotos. Esconde entre ellas una foto de bebé, la que le hará gritar; el globo más grande, el último, guarda tu carta.",
+          },
+          {
+            template: "constellations",
+            heading: "Doce estrellas por los doce meses desde su último cumpleaños",
+            body: "La opción gratuita: un cielo nocturno donde cada foto es una estrella a la que se vuela. Admite hasta doce fotos, así que usa una de cada mes desde su último cumpleaños. Cuando las encuentra todas, las estrellas forman un corazón, un infinito o una estrella, y aparece tu frase debajo.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "Qué escribir",
@@ -105,6 +235,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "An anniversary gift made of your own story",
       lead: "An anniversary is the one day a year the two of you are the subject. Cards borrow other people's words for it. This uses yours: the photos only you have, the song that's yours, and a note about what these years have actually been like, opened on their phone and kept.",
+      ideas: {
+        title: "12 digital anniversary gift ideas",
+        items: [
+          {
+            template: "the-letter",
+            heading: "Paper, the traditional first-anniversary gift",
+            body: "Paper is the gift for a first anniversary, on lists going back to Emily Post's Etiquette in 1922, and The Letter is the free template. Choose kraft paper, press your initial into the wax, and open with the first message you ever sent them, word for word if you can find it. Then write what you'd send now.",
+          },
+          {
+            template: "text-thread",
+            heading: "Your first conversation, replayed",
+            body: "Scroll back to your first messages (it's worth the scrolling) and rebuild them as a thread that arrives bubble by bubble with the typing dots, awkward bits included. Then keep going past where it really ended: the last few bubbles are what you'd say to that person now, a year or ten later. It holds up to 40 bubbles.",
+          },
+          {
+            template: "our-timeline",
+            heading: "Every year as a stop on a road",
+            body: "Photos pinned to a road that draws itself as they scroll, each with a label of up to 40 characters. Label what happened, not just when: “2021: the first place, the noisy one”, “2023: the dog”, “2024: the year we nearly moved abroad”. It ends on a countdown, so aim it at your next plan.",
+          },
+          {
+            template: "museum",
+            heading: "A retrospective, framed and titled",
+            body: "A quiet gallery where each photo hangs over a plaque with a title, a year and a line. Name the exhibition, up to 60 characters, “The Sam and Alex Years: A Retrospective”, put your years on every plaque (“2019–2026”), and caption each photo like a curator who is far too close to the subject: “Untitled (Burnt Toast), 2022”.",
+          },
+          {
+            template: "halfway",
+            heading: "The distance you've already covered",
+            body: "For a long-distance anniversary: a postcard map with your homes on two islands and the distance between them, which they close by blowing into the phone. Add up to four places you've met in the middle as stops; they're stamped on the postcard and counted, so the total is how far you've travelled to be together.",
+          },
+          {
+            template: "keepsake",
+            heading: "A locket with your date engraved inside",
+            body: "A parcel under a wax seal, with a box of kept things inside: a ticket, pressed flowers, a word torn out of a book and a gold locket that opens on a tap. Engrave your date in the locket, up to 18 characters (“12·06·2021”), make the ticket admit them to the night you met, and choose the one word you'd tear out for them.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "One reason for every month",
+            body: "Twelve notes for a first anniversary, twenty-four for a second, and so on up to a hundred. Give each month its own note, so every shake lands somewhere different in your time together. The rule for each: something they did, not something they are: “March: you learned to make my grandmother's soup.”",
+          },
+          {
+            template: "the-toast",
+            heading: "Your wedding toast, given again",
+            body: "Two glasses on a table, filled by tilting the phone and clinked by knocking it, then the menu card opens into your speech. Print the card like the original: the venue, up to 60 characters, and the date as free text, so “the hottest day of 2019” works. Then give the toast you'd give now, years in.",
+          },
+          {
+            template: "the-council",
+            heading: "Five cats review year one",
+            body: "A bench of cats holds a hearing on your relationship. The charge, 60 characters: “stealing the covers for twelve months”. The findings, one per cat: “took four days to answer the first message”, “now answers in four seconds”. The verdict: approved, with a stamp. The full ruling is your letter.",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "Back to where it started",
+            body: "Take them back to the city where you met, or the town of your first trip, and let the packing list do the talking: five clues like “the jacket you wore that night” or “comfortable shoes, there's a hill”. The departures board clatters to the place, and the boarding pass has both your names and the date.",
+          },
+          {
+            template: "picnic",
+            heading: "A picnic basket where everything means something",
+            body: "Every tap takes something out of the basket, strawberries, lemonade, tulips, a ticket, your photos, and each comes with a tag you wrote, up to 48 characters. Write them like an inventory of your relationship: “strawberries, because you always steal mine”, “the lemonade from our first date”. One for a summer anniversary.",
+          },
+          {
+            template: "constellations",
+            heading: "A sky with a star for every year",
+            body: "The other free template: every photo is a star, and when they've found them all, the stars join into a heart, an infinity sign or a star, with your line beneath. Use a photo from each year together, up to twelve, and pick the infinity sign if you're feeling confident.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "What to write",
@@ -134,6 +329,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de aniversario hecho con vuestra historia",
       lead: "El aniversario es el único día del año en que el tema sois vosotros dos. Las tarjetas lo cuentan con palabras de otros. Esto usa las tuyas: las fotos que solo tienes tú, la canción que es vuestra y una nota sobre cómo han sido estos años de verdad, abierta en su móvil y guardada.",
+      ideas: {
+        title: "12 ideas de regalos digitales de aniversario",
+        items: [
+          {
+            template: "the-letter",
+            heading: "Bodas de papel: una carta",
+            body: "Al primer aniversario se le llama bodas de papel, y La carta es la plantilla gratuita. Elige papel kraft, imprime tu inicial en el lacre y empieza con el primer mensaje que le mandaste, palabra por palabra si lo encuentras. Luego escribe lo que le mandarías hoy.",
+          },
+          {
+            template: "text-thread",
+            heading: "Vuestra primera conversación, otra vez",
+            body: "Sube hasta vuestros primeros mensajes (merece la pena) y reconstrúyelos como un hilo que llega burbuja a burbuja con los puntitos de escribiendo, momentos incómodos incluidos. Luego sigue más allá de donde terminó de verdad: las últimas burbujas son lo que le dirías hoy, uno o diez años después. Caben hasta 40 burbujas.",
+          },
+          {
+            template: "our-timeline",
+            heading: "Cada año como una parada del camino",
+            body: "Fotos clavadas en un camino que se dibuja al bajar, cada una con una etiqueta de hasta 40 caracteres. Pon qué pasó, no solo cuándo: “2021: el primer piso, el del ruido”, “2023: el perro”, “2024: el año que casi nos vamos fuera”. Termina en una cuenta atrás, así que apúntala a vuestro próximo plan.",
+          },
+          {
+            template: "museum",
+            heading: "Una retrospectiva, enmarcada y con título",
+            body: "Una galería tranquila donde cada foto cuelga sobre una cartela con título, año y una frase. Ponle nombre a la exposición, hasta 60 caracteres, “Sam y Alex: una retrospectiva”, pon vuestros años en todas las cartelas (“2019–2026”) y titula cada foto como un comisario demasiado implicado: “Sin título (tostada quemada), 2022”.",
+          },
+          {
+            template: "halfway",
+            heading: "La distancia que ya habéis recorrido",
+            body: "Para un aniversario a distancia: un mapa en forma de postal con vuestras casas en dos islas y la distancia que las separa, que se acorta soplando al móvil. Añade hasta cuatro sitios donde os habéis visto a medio camino como paradas: quedan sellados y cuentan en el total, que pasa a ser lo que habéis viajado para veros.",
+          },
+          {
+            template: "keepsake",
+            heading: "Un guardapelo con vuestra fecha grabada",
+            body: "Un paquete con sello de lacre y, dentro, una caja de cosas guardadas: una entrada, flores prensadas, una palabra arrancada de un libro y un guardapelo de oro que se abre con un toque. Graba vuestra fecha, hasta 18 caracteres (“12·06·2021”), haz que la entrada sea para la noche en que os conocisteis y elige la palabra que arrancarías para esa persona.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "Una razón por cada mes",
+            body: "Doce notas para el primer aniversario, veinticuatro para el segundo, y así hasta cien. Dale a cada mes su nota, para que cada sacudida caiga en un momento distinto de vuestra historia. La regla de cada una: algo que hizo, no algo que es: “Marzo: aprendiste a hacer la sopa de mi abuela.”",
+          },
+          {
+            template: "the-toast",
+            heading: "El brindis de vuestra boda, otra vez",
+            body: "Dos copas en una mesa que se llenan inclinando el móvil y chocan con un golpecito; luego la carta del menú se abre con tu discurso. Imprime la carta como la original: el lugar, hasta 60 caracteres, y la fecha en texto libre, así que “el día más caluroso de 2019” vale. Y da el brindis que darías ahora, años después.",
+          },
+          {
+            template: "the-council",
+            heading: "Cinco gatos revisan el primer año",
+            body: "Un tribunal de gatos celebra una vista sobre vuestra relación. La acusación, 60 caracteres: “robar la manta doce meses seguidos”. Las pruebas, una por gato: “tardó cuatro días en contestar el primer mensaje”, “ahora contesta en cuatro segundos”. El veredicto: visto bueno, con sello. El fallo completo es tu carta.",
+          },
+          {
+            template: "pack-your-bags",
+            heading: "Volver a donde empezó todo",
+            body: "Llévale a la ciudad donde os conocisteis, o al pueblo del primer viaje, y deja que la lista de equipaje hable: cinco pistas como “la chaqueta que llevabas esa noche” o “zapatos cómodos, hay cuesta”. El panel gira hasta el sitio y la tarjeta de embarque lleva vuestros nombres y la fecha.",
+          },
+          {
+            template: "picnic",
+            heading: "Una cesta de pícnic en la que todo significa algo",
+            body: "Cada toque saca algo de la cesta, fresas, limonada, tulipanes, una entrada, tus fotos, y cada cosa trae una etiqueta escrita por ti, de hasta 48 caracteres. Escríbelas como un inventario de vuestra relación: “fresas, porque siempre me robas las mías”, “la limonada de nuestra primera cita”. Para un aniversario de verano.",
+          },
+          {
+            template: "constellations",
+            heading: "Un cielo con una estrella por cada año",
+            body: "La otra plantilla gratuita: cada foto es una estrella y, cuando las encuentra todas, se unen en un corazón, un infinito o una estrella, con tu frase debajo. Usa una foto de cada año de relación, hasta doce, y elige el infinito si te sientes con confianza.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "Qué escribir",
@@ -166,6 +426,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A Valentine's gift that lasts past the evening",
       lead: "Flowers wilt, chocolates are gone by ten, and the card ends up in a drawer. A gift they open on their phone — a letter under a wax seal, a bouquet you picked stem by stem, a sky where every star is a photo of the two of you — is still there next February, and the one after.",
+      ideas: {
+        title: "12 digital Valentine's Day gift ideas",
+        items: [
+          {
+            template: "the-letter",
+            heading: "A letter, which is how valentines started",
+            body: "The oldest valentine in English is usually said to be a letter: in February 1477 Margery Brews wrote to John Paston as “my right well-beloved Valentine”, while their families haggled over her dowry. The Letter is free and its greeting is yours to change, so you can open the way she did, then write the thing you noticed about them this year that nobody else did.",
+          },
+          {
+            template: "photo-booth",
+            heading: "A photo-booth strip of every year so far",
+            body: "The booth flashes four times and prints a strip, so give it four photos in order: year one, year two, year three, now. Or four from the same good night. Print it in black and white and change the sign on top, “PHOTOS · 4 POSES” until you do, to something like “BE MINE · AGAIN”. The handwritten line beside it takes 40 characters.",
+          },
+          {
+            template: "xoxo",
+            heading: "The name only you call them, in cut-out letters",
+            body: "XOXO spells out what you call them in ransom-note letters, “my person” unless you change it, and you should: use the nickname nobody else is allowed to, up to 16 characters. Under the first photo goes a card with the lines you'd underline in a book about them, already underlined. Wherever they tap, a kiss lands.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "Fourteen reasons for the fourteenth",
+            body: "A jar of folded notes they shake out one by one. Fourteen is enough to say something real and few enough to write in an evening. Make each one a moment, not a quality: not “you're kind” but “you learned my mother's recipe from her over the phone, without telling me”. Read them aloud before you send it, and cut any that could be about anyone.",
+          },
+          {
+            template: "bouquet",
+            heading: "Their flowers, not a dozen red roses",
+            body: "Built stem by stem, so it can be what they actually like: peonies if that's their flower, sunflowers if roses make them roll their eyes, in the colours closest to something of yours. It doesn't wilt by the weekend or cost more on the fourteenth. The card inside takes 30 characters: “Still picking you. Every time.”",
+          },
+          {
+            template: "dark-romance",
+            heading: "For the couple who can't stand pink",
+            body: "A black leather diary, a tarot card, dark roses and a crow, for people who roll their eyes at hearts. Three things are yours to rename: the cut-out headline (“only you”), the tarot card (“the lovers”) and the bet on the playing cards (“i'd bet on us”). Give the card a name only you two understand: “the night bus”, “the one who stayed”.",
+          },
+          {
+            template: "the-council",
+            heading: "Five cats approve the relationship",
+            body: "For the ones who don't do soppy. The cats hold a hearing, each one reads out a finding you wrote, and the stamp comes down: guilty, approved, certified icon or pardoned. Charge them with “taking my side of the bed, nightly”, add findings like “claims to hate romcoms, cried at the airport scene”, and go with approved.",
+          },
+          {
+            template: "scratch-card",
+            heading: "The plan, under the foil",
+            body: "Valentine's plans are better found out than announced. Put the clues on the cards in order, a photo of the restaurant's door, “Friday, 8 pm”, a photo of a train ticket, and save the final card's big line for the part they'll scratch fastest: “Pack a bag. We're not back until Sunday.”",
+          },
+          {
+            template: "coquette",
+            heading: "A ticket that gets them into an actual date",
+            body: "A pink gingham collage that unrolls when they untie the bow, with a ticket in the middle that reads “ticket to happiness” until you change it. Change it to the plan, in 26 characters: “admit two: Friday, 8 pm”. The postcard in your handwriting takes 90, room for a line and where to meet.",
+          },
+          {
+            template: "vinyl",
+            heading: "An album of the two of you",
+            body: "A turntable that plays their song as the record spins. Name the album and the artist, 40 characters each, and the side, 12: album “Songs I play when you're out”, artist “the one who can't sing”, side “Side Us”. Your photos sit in a crate as album covers, and your message is printed on the liner notes.",
+          },
+          {
+            template: "arcade",
+            heading: "A game for the one who'd rather play",
+            body: "A tiny retro game: they drag a basket to catch falling hearts, each level clears one of your photos, and the last reveals your message. You set how many catches a level takes, from 3 to 20: eight is a nice game, twenty is a dare. The title screen takes 24 characters: “LEVEL 14: BE MINE”.",
+          },
+          {
+            template: "constellations",
+            heading: "If you're apart on the fourteenth",
+            body: "The other free template: a night sky where every photo is a star. They fly from star to star, and once they've found them all the stars join into a heart and your line appears beneath it, up to 120 characters. Use a photo from each place you've met, and end on the date you'll next see each other.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "What to write",
@@ -192,6 +517,71 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de San Valentín que dura más que la noche",
       lead: "Las flores se marchitan, los bombones no llegan a las diez y la tarjeta acaba en un cajón. Un regalo que abre en su móvil, una carta con sello de lacre, un ramo que has elegido tallo a tallo, un cielo en el que cada estrella es una foto vuestra, sigue ahí el febrero que viene, y el otro.",
+      ideas: {
+        title: "12 ideas de regalos digitales para San Valentín",
+        items: [
+          {
+            template: "the-letter",
+            heading: "Una carta, que es como empezó San Valentín",
+            body: "Se suele decir que la felicitación de San Valentín más antigua en inglés es una carta: en febrero de 1477, Margery Brews escribió a John Paston llamándole “mi muy amado Valentín”, mientras sus familias regateaban la dote. La carta es la plantilla gratuita y su saludo se puede cambiar, así que empieza como ella y luego escribe lo que este año notaste solo tú.",
+          },
+          {
+            template: "photo-booth",
+            heading: "Una tira de fotomatón con cada año hasta hoy",
+            body: "El fotomatón dispara cuatro veces e imprime una tira, así que dale cuatro fotos en orden: el primer año, el segundo, el tercero, ahora. O cuatro de una sola noche que salió bien. Imprímela en blanco y negro y cambia el letrero de arriba por algo vuestro, como “TÚ Y YO · OTRA VEZ”. La frase a mano de al lado admite 40 caracteres.",
+          },
+          {
+            template: "xoxo",
+            heading: "El mote que solo usas tú, en letras recortadas",
+            body: "XOXO escribe cómo le llamas con letras recortadas de periódico, como una nota de secuestro. Pon el mote que nadie más puede usar, hasta 16 caracteres. Bajo la primera foto va una tarjeta con las frases que subrayarías en un libro sobre esa persona, ya subrayadas. Donde toque, cae un beso.",
+          },
+          {
+            template: "jar-of-reasons",
+            heading: "Catorce razones para el catorce",
+            body: "Un frasco de notas dobladas que salen de una en una. Catorce bastan para decir algo de verdad y se escriben en una tarde. Que cada una sea un momento y no una cualidad: no “eres buena persona”, sino “aprendiste la receta de mi madre por teléfono, sin decírmelo”. Léelas en voz alta antes de enviarlo y quita las que podrían ser de cualquiera.",
+          },
+          {
+            template: "bouquet",
+            heading: "Sus flores, no una docena de rosas rojas",
+            body: "Se monta tallo a tallo, así que puede ser lo que le gusta de verdad: peonías si son lo suyo, girasoles si las rosas le parecen un tópico, en los colores más cercanos a algo vuestro. No se marchita el fin de semana ni cuesta más el catorce. La tarjeta admite 30 caracteres: “Te sigo eligiendo. Siempre.” En Cataluña sirve también para Sant Jordi, el 23 de abril, con un libro al lado.",
+          },
+          {
+            template: "dark-romance",
+            heading: "Para la pareja que no soporta el rosa",
+            body: "Un diario de cuero negro, una carta del tarot, rosas oscuras y un cuervo, para quien pone los ojos en blanco ante un corazón. Puedes cambiar tres cosas: el titular recortado, la carta del tarot y la apuesta de los naipes. Ponle a la carta un nombre que solo entendáis: “el último metro”, “quien se quedó”.",
+          },
+          {
+            template: "the-council",
+            heading: "Cinco gatos dan el visto bueno a la relación",
+            body: "Para quien no soporta lo cursi. Los gatos celebran una vista, cada uno lee una prueba que has escrito y cae el sello: culpable, visto bueno, icono certificado o indulto. Acúsale de “quedarse con mi lado de la cama, cada noche”, añade pruebas como “dice que odia las comedias románticas y lloró en la del aeropuerto” y elige visto bueno.",
+          },
+          {
+            template: "scratch-card",
+            heading: "El plan, bajo el rasca",
+            body: "Los planes de San Valentín se disfrutan más si se descubren. Pon las pistas en orden, una foto de la puerta del restaurante, “viernes, 21:00”, una foto de un billete de tren, y guarda la frase grande de la última para lo que más rápido rascará: “Haz la maleta. Volvemos el domingo.”",
+          },
+          {
+            template: "coquette",
+            heading: "Una entrada que vale para una cita de verdad",
+            body: "Un collage de cuadros rosas que se despliega al deshacer el lazo, con una entrada en el centro. Cambia lo que dice por el plan real, en 26 caracteres: “para dos: viernes, 21 h”. La postal escrita a mano admite 90, espacio para una frase y el lugar donde quedar.",
+          },
+          {
+            template: "vinyl",
+            heading: "Un disco de los dos",
+            body: "Un tocadiscos que pone su canción mientras gira el vinilo. Ponle nombre al álbum y al artista, 40 caracteres cada uno, y a la cara, 12: álbum “Lo que pongo cuando no estás”, artista “quien no sabe cantar”, cara “Cara Tú”. Tus fotos están en una caja como portadas, y tu mensaje va impreso en las notas del disco.",
+          },
+          {
+            template: "arcade",
+            heading: "Un juego para quien prefiere jugar",
+            body: "Un pequeño juego retro: arrastra una cesta para atrapar corazones, cada nivel descubre una de tus fotos y el último muestra tu mensaje. Tú decides cuántos hay que atrapar por nivel, de 3 a 20: ocho es una partida bonita; veinte, un reto. La pantalla de título admite 24 caracteres: “NIVEL 14: TÚ Y YO”.",
+          },
+          {
+            template: "constellations",
+            heading: "Si el catorce estáis lejos",
+            body: "La otra plantilla gratuita: un cielo nocturno donde cada foto es una estrella. Va de estrella en estrella y, cuando las encuentra todas, se unen en un corazón y aparece tu frase debajo, de hasta 120 caracteres. Usa una foto de cada sitio donde os habéis visto y termina con la fecha en que os volvéis a ver.",
+          },
+        ],
+      },
       sections: [
         {
           heading: "Qué escribir",
@@ -342,63 +732,63 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         items: [
           {
             template: "snow-globe",
-            heading: "A snow globe with the two of you inside",
-            body: "They shake the phone and it snows, harder for a wilder storm. Each time the snow settles there is something new in the globe: one of your lines, or a photo hanging like an ornament. After the last one the brass plaque is engraved and your letter opens. A button shakes it on a phone without a motion sensor.",
+            heading: "A snow globe that tells the year in four shakes",
+            body: "Set it to four shakes and the snow settles four times: a line, a photo, a line, a photo. That's a short story of the year: “January: we said this would be the year”, the photo from the spring, “It was, mostly”, then this month's. The brass plaque at the end takes 44 characters: “Next Christmas: Lisbon, the two of us”.",
           },
           {
             template: "fireside",
-            heading: "A letter by the fire",
-            body: "A cabin at dusk, with snow falling past the window. They light the candle, the room turns gold and your letter unfolds from the blanket, with your photos pegged on a string and their song playing low. The one for the quiet hour after dinner.",
+            heading: "A letter by the fire, with their drink on the table",
+            body: "Set the window to snow and put their real drink by the candle: cocoa, tea or coffee. The tag tied to the candle says “for Sam” unless you change it, and it takes 24 characters, enough for something only they'd get: “for after the washing-up”. Then write what you'd say to them once everyone else has gone to bed.",
           },
           {
             template: "the-letter",
-            heading: "A Christmas letter, sealed with wax",
-            body: "The free one. They break the seal, the letter slides out and unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Write them the year: what you'll remember about it, and what you want for them in the next one.",
-          },
-          {
-            template: "evergreen",
-            heading: "A parcel they actually unwrap",
-            body: "Wrapped in old newspaper and tied with twine, with their name on the tag. They tear it open and butterflies fly out over a collage of your photos on polaroids, a record with your words on the label, your song on a little player and your letter at the end.",
-          },
-          {
-            template: "our-timeline",
-            heading: "Your year, as a road that draws itself",
-            body: "Every month that mattered, pinned to a winding road with a photo and a date, drawn as they scroll. It ends on a countdown to whatever comes next: the trip, the move, the new year.",
+            heading: "A Christmas letter that isn't a round-robin",
+            body: "The free one, and the opposite of the family newsletter: no promotions, no exam results, just them. Change the greeting from “Dear Sam,” to what you actually call them, press your initial into the wax, and leave the year's highlights to the group chat. Write about one evening from this year, start to finish, and why it's the one you'd keep.",
           },
           {
             template: "front-page",
-            heading: "The year's front page, with them on it",
-            body: "A newspaper with their name on the masthead: your headline, a lead photo, your message set in columns, classified ads you write and a horoscope that is suspiciously accurate. A good one for a parent, or for the friend who made your year.",
+            heading: "The year's front page, with them as the story",
+            body: "A newspaper with their name on the masthead and room for a headline, a weather box, a horoscope and up to eight classified ads. It works best when it's petty: “LOCAL LEGEND STILL HASN'T PUT UP THE SHELF”, weather “Mild, with a chance of leftovers”, and in the classifieds, “FOUND: the end of the tape. Owner may collect.” A good one for a parent.",
+          },
+          {
+            template: "recipe-box",
+            heading: "The recipe for whoever cooks Christmas dinner",
+            body: "A recipe card about them, poured in one ingredient at a time as they tilt the phone. Write it the way they cook: “one kitchen, taken over from 7 a.m.”, “a timer nobody else may touch”, “gravy, made twice, the first one doesn't count”. Name the recipe after them, and make the line under the title “Makes one whole family, every year.”",
           },
           {
             template: "pack-your-bags",
-            heading: "A trip, revealed on a departures board",
-            body: "If the present is a trip, let them find out properly. They pack a suitcase with your clues, a departures board clatters to where you're going, and a boarding pass, train ticket or road-trip map slides up with both your names on it. Your letter is under the stub.",
+            heading: "The trip, unwrapped on a departures board",
+            body: "If the present is a trip, don't just tell them. The suitcase takes five clues, one luggage tag at a time, so tease: “thermal socks”, “your passport”, “the big coat, not the nice one”. Then the board clatters through the letters to the city, and the ticket shows the date and the number of nights. It can be a train or a road trip too.",
           },
           {
             template: "scratch-card",
             heading: "News under the foil",
-            body: "For the Christmas you have something to tell them: a stack of scratch cards, each with a photo and a line, and the last one holding the news. A move, a baby, a puppy, a question. They rub the foil away with a finger.",
-          },
-          {
-            template: "recipe-box",
-            heading: "The recipe for the one who makes Christmas dinner",
-            body: "A recipe card on the kitchen counter, written about them. They tilt the phone to pour in each ingredient (two cups of patience, a whole Sunday of their time), shake it to stir, and the card turns over into your letter. There are buttons for a phone that can't feel a tilt.",
+            body: "For the Christmas you have something to announce. Every card hides a photo and a line, so build up to it: a photo of the old kitchen, “last Christmas here”, a photo of a set of keys, and on the final card, in big letters, “We got the house”. It works for a baby, a puppy or a yes. Be in the room when they scratch.",
           },
           {
             template: "midnight-countdown",
-            heading: "A countdown to midnight",
-            body: "A live countdown to the minute you choose: midnight on Christmas Eve, or the turn of the year. The sky darkens from dusk to night as it gets close, and at zero fireworks fill the screen and the gift opens, with your photos and your words.",
+            heading: "A countdown that goes off at midnight",
+            body: "Point it at midnight on Christmas Eve, or at New Year if Christmas is crowded. The headline sits over the timer (“Until it's officially Christmas”), and the line that arrives with the fireworks gets 60 characters: “It's Christmas. Go back to sleep. I love you.” If they're in another time zone, set it to theirs.",
           },
           {
             template: "halfway",
             heading: "If you're apart this Christmas",
-            body: "A postcard map, your home on one island and theirs on the other, with the real distance between you in big numbers. They blow into the phone and a paper plane rides their breath along the path, until it turns into a heart and the postcard flips over to your letter. Without a microphone, a tap flies it.",
+            body: "A postcard map with your homes on two islands and the real distance between them in big numbers, which they close by blowing into the phone. Add the places you've met in the middle as stops: they're stamped on the postcard and counted in the total, so the number becomes the distance you've already travelled to see each other.",
           },
           {
             template: "jar-of-reasons",
-            heading: "A jar of reasons to open by the tree",
-            body: "A glass jar of folded notes, one reason on each. They shake the phone, or tap the jar, and a note tumbles out and unfolds, some with a photo, until the jar is empty and your letter is waiting underneath.",
+            heading: "Twelve reasons for the twelve days of Christmas",
+            body: "A jar of folded notes they shake out one at a time. Write twelve and give them the rule: one a day, from Christmas Day to the fifth of January, no shaking ahead. Each note takes 160 characters, enough for a moment rather than a compliment: “The way you said ‘oh no’ when the tree fell over, then laughed for ten minutes.”",
+          },
+          {
+            template: "our-timeline",
+            heading: "The year as a road, month by month",
+            body: "Every photo gets a label of up to 40 characters, and a month with a note says more than a date: “March: no heating, all month”, “July: the wedding we nearly missed”. The road draws itself as they scroll and ends on a countdown, so point it at the next thing you've planned together.",
+          },
+          {
+            template: "evergreen",
+            heading: "A parcel for the one who saves wrapping paper",
+            body: "Wrapped in newspaper and twine, with their name on the tag, and it really unwraps: the paper falls open and butterflies fly out over your photos. The words across the record and the newsprint are yours, 22 characters of them, so swap “my evergreen” for the name only you call them.",
           },
         ],
       },
@@ -449,63 +839,63 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         items: [
           {
             template: "snow-globe",
-            heading: "Una bola de nieve con vuestra historia dentro",
-            body: "Al agitar el móvil, nieva; cuanto más fuerte, más tormenta. Cada vez que la nieve se posa aparece algo nuevo en la bola: una de tus frases o una foto colgada como un adorno. Tras la última se graba la placa de latón y se abre tu carta. En un móvil sin sensor de movimiento, un botón la agita.",
+            heading: "Una bola de nieve que cuenta el año en cuatro sacudidas",
+            body: "Pon cuatro sacudidas y la nieve se posa cuatro veces: una frase, una foto, una frase, una foto. Cabe una historia corta del año: “Enero: dijimos que este sería el año”, la foto de la primavera, “Y lo fue, casi”, y la de este mes. La placa de latón del final admite 44 caracteres: “La próxima Navidad, en Lisboa”.",
           },
           {
             template: "fireside",
-            heading: "Una carta junto al fuego",
-            body: "Una cabaña al atardecer y la nieve cayendo tras la ventana. Al encender la vela, la habitación se vuelve dorada y tu carta se despliega desde la manta, con tus fotos colgadas de un cordel con pinzas y su canción sonando bajito. Para la hora tranquila después de la cena.",
+            heading: "Una carta junto al fuego, con su bebida en la mesa",
+            body: "Pon nieve en la ventana y su bebida de verdad junto a la vela: chocolate, té o café. La etiqueta atada a la vela admite 24 caracteres, suficientes para algo que solo entienda esa persona: “para después de fregar”. Luego escribe lo que le dirías cuando el resto ya se ha ido a dormir.",
           },
           {
             template: "the-letter",
-            heading: "Una carta de Navidad con sello de lacre",
-            body: "La gratuita. Al romper el sello, la carta sale del sobre y se despliega en un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Escribe el año: lo que vas a recordar de él y lo que le deseas para el siguiente.",
-          },
-          {
-            template: "evergreen",
-            heading: "Un paquete que se desenvuelve de verdad",
-            body: "Envuelto en papel de periódico y atado con cordel, con su nombre en la etiqueta. Al abrirlo salen volando mariposas sobre un collage con tus fotos en polaroids, un disco con tus palabras en la etiqueta, tu canción en un pequeño reproductor y tu carta al final.",
-          },
-          {
-            template: "our-timeline",
-            heading: "Vuestro año, como un camino que se dibuja solo",
-            body: "Cada mes que importó, clavado en un camino sinuoso con una foto y una fecha, que se dibuja al bajar por la página. Termina con una cuenta atrás hacia lo que venga: el viaje, la mudanza, el año nuevo.",
+            heading: "Una carta, no un christmas",
+            body: "La gratuita. Un christmas se firma y acaba en una estantería; una carta se guarda. Cambia el saludo por cómo le llamas de verdad, imprime tu inicial en el lacre y deja los resúmenes del año para el grupo de la familia: escribe sobre una sola tarde de este año, de principio a fin, y por qué es la que te quedarías.",
           },
           {
             template: "front-page",
-            heading: "Su año, en primera plana",
-            body: "Un periódico con su nombre en la cabecera: tu titular, una foto principal, tu mensaje en columnas, anuncios clasificados que escribes tú y un horóscopo sospechosamente acertado. Va bien para un padre o una madre, o para quien te ha alegrado el año.",
+            heading: "La portada del año, con esa persona de protagonista",
+            body: "Un periódico con su nombre en la cabecera y sitio para un titular, el tiempo, el horóscopo y hasta ocho anuncios por palabras. Cuanto más mezquino, mejor: “LEYENDA LOCAL SIGUE SIN COLGAR LA BALDA”, el tiempo, “Templado, con probabilidad de sobras”, y en los anuncios, “SE BUSCA: el principio del celo. Se gratificará.” Ideal para un padre o una madre.",
+          },
+          {
+            template: "recipe-box",
+            heading: "La receta de quien hace la cena de Nochebuena",
+            body: "Una ficha de receta sobre esa persona, que se vierte ingrediente a ingrediente al inclinar el móvil. Escríbela como cocina: “una cocina, ocupada desde las siete”, “un temporizador que nadie más puede tocar”, “el caldo, hecho dos veces; el primero no cuenta”. Ponle su nombre a la receta y, debajo del título, “Da para toda la familia, cada año.”",
           },
           {
             template: "pack-your-bags",
-            heading: "Un viaje que se descubre en un panel de salidas",
-            body: "Si el regalo es un viaje, que se descubra como se merece. Se llena una maleta con tus pistas, un panel de salidas gira letra a letra hasta el destino y aparece una tarjeta de embarque, un billete de tren o un mapa de carretera con vuestros nombres. Tu carta está debajo de la matriz.",
+            heading: "El viaje, desvelado en un panel de salidas",
+            body: "Si el regalo es un viaje, no lo digas sin más. La maleta admite cinco pistas, una etiqueta cada vez, así que juega: “calcetines térmicos”, “tu pasaporte”, “el abrigo gordo, no el bonito”. Luego el panel gira letra a letra hasta la ciudad y el billete muestra la fecha y las noches. También vale un tren o un viaje en coche.",
           },
           {
             template: "scratch-card",
             heading: "Una noticia bajo el rasca",
-            body: "Para la Navidad en la que tienes algo que contar: un montón de rascas, cada uno con una foto y una frase, y el último con la noticia. Una mudanza, un bebé, un perro, una pregunta. La capa se quita con el dedo.",
-          },
-          {
-            template: "recipe-box",
-            heading: "La receta de quien cocina en Navidad",
-            body: "Una ficha de receta en la encimera, escrita sobre esa persona. Al inclinar el móvil se vierte cada ingrediente en el bol (dos tazas de paciencia, un domingo entero de su tiempo), al agitarlo se remueve y la ficha se da la vuelta con tu carta. Hay botones para los móviles que no notan la inclinación.",
+            body: "Para la Navidad en la que hay algo que anunciar. Cada tarjeta esconde una foto y una frase, así que ve preparando el terreno: una foto de la cocina vieja, “la última Navidad aquí”, una foto de unas llaves y, en la última, en grande, “Tenemos casa”. Vale para un bebé, un perro o un sí. Tú, delante cuando rasque.",
           },
           {
             template: "midnight-countdown",
-            heading: "Una cuenta atrás hasta medianoche",
-            body: "Una cuenta atrás en directo hasta el minuto que elijas: la medianoche de Nochebuena o la del fin de año. El cielo pasa del atardecer a la noche a medida que se acerca y, al llegar a cero, los fuegos artificiales llenan la pantalla y se abre el regalo, con tus fotos y tus palabras.",
+            heading: "Una cuenta atrás hasta las doce",
+            body: "Ponla para la medianoche de Nochebuena, o para las campanadas si la Navidad viene llena. El titular va encima del contador (“Hasta que sea Navidad de verdad”) y la frase que llega con los fuegos artificiales admite 60 caracteres: “Feliz Navidad. Vuelve a dormirte. Te quiero.” Si vive en otra zona horaria, usa la suya.",
           },
           {
             template: "halfway",
             heading: "Si este año pasáis la Navidad lejos",
-            body: "Un mapa en forma de postal, con tu casa en una isla y la suya en la otra, y en números grandes la distancia real que os separa. Al soplar al móvil, un avión de papel vuela con ese aliento por el camino hasta que se convierte en un corazón y la postal se da la vuelta con tu carta. Sin micrófono, basta un toque.",
+            body: "Un mapa en forma de postal con vuestras casas en dos islas y la distancia real en números grandes, que se acorta soplando al móvil. Añade como paradas los sitios donde os habéis visto a medio camino: quedan sellados en la postal y cuentan en el total, así que el número pasa a ser la distancia que ya habéis recorrido para veros.",
           },
           {
             template: "jar-of-reasons",
-            heading: "Un frasco de razones para abrir junto al árbol",
-            body: "Un frasco de cristal lleno de notas dobladas, una razón en cada una. Al agitar el móvil, o tocar el frasco, cae una nota y se despliega, algunas con foto, hasta que el frasco se vacía y debajo espera tu carta.",
+            heading: "Una razón al día, de Navidad a Reyes",
+            body: "Un frasco de notas dobladas que salen de una en una al agitar el móvil. Escribe trece y pon la regla: una al día, del 25 de diciembre al 6 de enero, sin agitar antes de tiempo. Cada nota admite 160 caracteres, suficientes para un momento y no un piropo: “Cómo dijiste ‘ay, no’ cuando se cayó el árbol, y luego te reíste diez minutos.”",
+          },
+          {
+            template: "our-timeline",
+            heading: "El año como un camino, mes a mes",
+            body: "Cada foto lleva una etiqueta de hasta 40 caracteres, y un mes con nota dice más que una fecha: “Marzo: un mes sin calefacción”, “Julio: la boda a la que casi no llegamos”. El camino se dibuja al bajar por la página y termina en una cuenta atrás, así que apúntala a lo próximo que tengáis planeado.",
+          },
+          {
+            template: "evergreen",
+            heading: "Un paquete para quien guarda el papel de regalo",
+            body: "Envuelto en papel de periódico y cordel, con su nombre en la etiqueta, y se desenvuelve de verdad: el papel se abre y salen mariposas sobre tus fotos. Las palabras del disco y del periódico las eliges tú, 22 caracteres, así que pon el nombre que solo usas tú.",
           },
         ],
       },
