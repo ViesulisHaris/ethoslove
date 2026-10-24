@@ -158,6 +158,26 @@ the blog must run from the cloud by itself; a digital product has no returns; Bi
   and /es/gifts/for-girlfriend (about the daily limit), and the sitemap resubmitted: Google's count
   of discovered pages went from 264 to 275 at once. IndexNow has all 278 URLs.
 
+## Fourth round, 24 Oct: "do everything at the most"
+
+The owner signed up to directories for an earlier site and saw nothing from it, and asked for
+everything to be done here instead. Directories are dropped; the work went where rankings come from.
+
+- **The long lists people search for** (commit 94af935): 150 free would-you-rather questions (from
+  45) and 96 questions to ask your partner (from 36), playable and listed in full on
+  /games/rather and /games/deck in both languages. A free question deck now deals a round of
+  twelve from the whole deck, so a sitting still ends at the gift and next-game screen.
+- **Two posts a day**: the routine runs at 06:17 and 12:17 UTC (first run 24 Oct, 12:17), and the
+  playbook allows two a day. Posts link /gifts as "digital gift(s)" and the matching gift-idea
+  page. The queue leads with the biggest searches (reasons why I love you, cute things to say to
+  your boyfriend, how to write a love letter, open when letters) and two comparison posts
+  (best website to make a love letter online, best digital gift websites). In this niche the
+  comparison results are the makers' own "best websites" lists, each ranking itself first; a fair
+  table from each site's own pages can beat them.
+- **What links are left**: the sites that take guest posts openly are general link farms whose links
+  Google discounts. The editorial lists that matter (iDrop News' best digital gifts, SELF and CNN's
+  long-distance gifts) take a pitch from a person, so they need the owner's yes and address.
+
 ## What's next, ranked
 
 ### Needs the owner
