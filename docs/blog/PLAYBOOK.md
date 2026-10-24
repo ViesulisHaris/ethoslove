@@ -35,9 +35,10 @@ for b in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin/blog
 done
 ```
 
-If that prints a branch, stop: say which one is waiting in one line and end the run. A branch whose
-commits are all on `main` is merged and doesn't count; whoever merges it can delete it
-(`git push <mirror> --delete blog/<slug>`).
+If that prints a branch, stop: say which one is waiting in one line and end the run. The Publish
+blog workflow deletes a branch once its post is live, so a waiting branch means its run failed:
+the Actions tab on the mirror says why (most often `LIVE_REPO_TOKEN` isn't set; see step 6). A branch
+whose commits are all on `main` is merged and doesn't count.
 
 ## 1. Pick today's topic
 
@@ -195,15 +196,36 @@ If the push is rejected because `main` moved, run
 the first four checks, and push again. The post is at `https://tryethos.io/blog/<slug>` a few minutes
 later.
 
-If it is anything else (the mirror), the post can't go live from this run. Don't push to `main`.
-Push the commit to its own branch instead, so it waits for someone to merge it into the live
-repository:
+If it is anything else (the mirror), don't push to `main`. Push the commit to its own branch:
 
 ```bash
 git push origin HEAD:refs/heads/blog/<slug>
 ```
 
-Skip the live check below and report it as not live (step 7).
+The mirror's **Publish blog** workflow (`.github/workflows/publish-blog.yml`) takes it from there,
+usually within ten minutes: it checks the branch with `scripts/blog-guard.mjs` (only files under
+`src/content/blog/`, `public/blog/` and `docs/blog/`; a post file must be plain data; the team's
+author), puts the commit on top of the live `main`, runs the blog tests and the type check, pushes
+it to `reasj2/ethoslove`, moves the mirror's `main` to the same commit, deletes the branch, waits for
+the post on tryethos.io and tells IndexNow. So keep everything inside those three folders: a branch
+that touches anything else is refused and waits. Skip the live check below (the workflow does it)
+and report it as sent (step 7).
+
+### How a post goes live (set up once)
+
+The workflow needs one secret on the mirror, `LIVE_REPO_TOKEN`, a token that can push to
+`reasj2/ethoslove`. The routine never sees it. Without it, the workflow checks the post and stops,
+the branch waits, and step 0 holds every later run until it's published. To set it up:
+
+1. A token: either Adrian makes a fine-grained token for `reasj2/ethoslove` alone with *Contents:
+   read and write* (the narrowest), or the owner makes a classic token with the `repo` scope
+   (GitHub → Settings → Developer settings → Personal access tokens).
+2. On `github.com/ViesulisHaris/ethoslove`: Settings → Secrets and variables → Actions → New
+   repository secret, name `LIVE_REPO_TOKEN`, the token as the value.
+3. For a branch already waiting: Actions → Publish blog → Run workflow, with the branch name.
+
+Recommended: a ruleset on the mirror's `main` that lets only the owner (and GitHub Actions) update
+it, so nothing but the owner can change the workflow or the guard.
 
 ### When the network allows it: check it's live, then ping IndexNow
 
@@ -220,7 +242,7 @@ node scripts/indexnow.mjs https://tryethos.io/blog/<slug> https://tryethos.io/es
 ## 7. Report
 
 Send one push notification: `New on tryethos.io: <English title>`, or, when it went to a branch,
-`Blog post ready, not live yet: <English title>`.
+`Blog post sent to publish: <English title>`.
 
 The final message is what the owner reads on their phone. Write only:
 - the title;
@@ -228,8 +250,8 @@ The final message is what the owner reads on their phone. Write only:
 - the search it targets;
 - the templates it recommends;
 - the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
-- "Live and sent to IndexNow", or "Live check skipped (no network)", or "Not live: waiting on
-  branch blog/<slug> to be merged into reasj2/ethoslove";
+- "Live and sent to IndexNow", or "Live check skipped (no network)", or "Sent to publish: branch
+  blog/<slug> on the mirror; the Publish blog workflow takes it live";
 - one line if anything was skipped or failed.
 
 ## Never
