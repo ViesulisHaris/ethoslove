@@ -65,8 +65,61 @@ These are what make seventeen templates feel like one product. Match them before
 `Ambience` (petals, sparkles, hearts, bokeh, dust, snow, leaves, embers, bats), `Sticker` (die-cut
 stickers), `useBlowDetector` (microphone), `useContainerSize`, `places.ts` (offline cities, haversine).
 
+`_shared/night/` is what the Halloween gifts of October 2026 share: `NightPage` (the scrolling letter every one of
+them hands over to: message, photos by render prop, countdown, surprise, end screen, progress events,
+lightbox), `sfx.ts` (thunder, creak, scrape, splash, cork… synthesized, muted with the song; see "Sound"
+below) and `useTimers` (timeouts that die with the gift). Reach for them before writing a page of your own.
+
 If a template needs a stage the kit lacks, add it to the template first. Move it to `_shared` only
 when a second template wants it.
+
+## Sound
+
+Nothing is downloaded: effects are synthesized in WebAudio. The night kit shows how to do it so it sounds like
+something and not like a synth patch.
+
+- **`_shared/night/sound-math.ts`** holds every number a sound is made of (pitches, a bell's partials, the shape of a
+  rumble, when a hinge sticks, the room's impulse response), with the random function passed in so a test can
+  seed it. **`foley.ts`** holds the graph tools (`ring`, `tap`, `bubble`, `hit`, `swell`, `sprinkle`) and the bus every
+  voice ends in: a stereo room and a soft ceiling. **`sfx.ts`** is the designs, one function per sound, and `MIX`,
+  where each sits in the mix in dB.
+- **A sound is layers, not an oscillator.** A click that starts it, a body that rings (partials for a bell, resonant
+  bands excited by a click for wood, a sine that climbs for a bubble), air around it, all through the room.
+  A bare sine or a noise burst sounds like a synth patch; a hinge made of square waves sounds like a broken toy.
+- **Test it without a speaker.** `tests/unit/night-sounds.test.ts` builds every effect against a stand-in for the
+  audio context that records what it is asked to do. The effects run inside a `try/catch` (an audio device is
+  optional), so a broken sound is silent and nobody notices: the test catches a non-finite time, an exponential ramp
+  to zero, a source that never stops, a source stopped while still audible (a click), a runaway node count.
+- **Measure it.** `node scripts/sfx-bench.mjs` renders each effect offline and prints its peak, how bright it is and
+  how much of it a phone's speaker would play. `--calibrate --apply` sets `MIX` so each hits its target peak.
+  Run it again after any change to a design: a design change moves the level.
+- **A phone plays nothing below about 400 Hz.** The first knock, thunk and thunder were built from low sines and
+  low modes, and on a phone (where most recipients are) they were a faint tick. Put the weight of a sound
+  between 300 Hz and 4 kHz; a low note under it is a bonus for headphones. The bench's "phone keeps" column
+  is how much of the sound survives a high-pass at 420 Hz: keep it above about -8 dB.
+- **A resonator rings only as high as it is hit.** A click that fades out over 7 ms has almost nothing above 200 Hz, so
+  it wakes the lowest mode of a knock and not the wood's other notes. Make the click 2 ms.
+- **Resonators are quiet.** A narrow band of noise carries a tenth of the amplitude of a sine, so a knock made of
+  both needs its bands turned up ten times to be heard over the sine, not the other way round.
+- **Put a sound where the movement is, not where its step starts.** A sound that fires with the step is over before
+  a movement that eases in or out has done anything (the bats' whoosh was over 0.5 s before they were quickest; the
+  jar's rush fired as it lifted though it speeds up all the way to the pot; the pumpkin's thunk played as the knife
+  let go though the piece fell for most of a second). Timed effects take `delay`, `ms` and `peak` (how far through
+  they are loudest). Derive the cue from the function or constant the picture is drawn from, export it (`cuesFor`,
+  `RUSH`, `PIECE_LANDS_S`), and test it against that: `tests/unit/bat-swarm-sync.test.ts` measures when the swarm
+  is busiest from `positionAt` and holds each cue to it.
+- **A state change is drawn a frame or two after the handler that made it** (about 40 ms, `RENDER_LAG_S`). A sound
+  timed against an animation that the change starts has to wait that long as well.
+- **A gain that has not been told what to do yet is 1, not 0.** A source that starts before its envelope plays at full
+  volume until the envelope arrives: the cork's puff of air did for 10 ms at -10 dBFS whatever the mix said, and a start
+  time that is not on a sample boundary does it for one sample, as a tick. Every envelope helper sets the value to 0
+  first, and the recording stand-in's gains start at 1 so the test fails if one is missed.
+- **The songs peak at 0 dBFS** (one decodes to +0.3), so any effect on top can add up past full scale and clip in the
+  speaker. The five night gifts pass `MUSIC_CEILING` to `useGiftAudio`, and no effect peaks above `LOUDEST_EFFECT_DB`
+  (-11 dBFS). Check a new effect against the song it plays over, not against silence. An iPhone ignores an audio
+  element's volume, so the ceiling does not reach it.
+- **Give the shared bus the level, not the voice.** `send` takes the options of a send; passing it a voice's own
+  `level` applies the level twice (every bell was 20 dB too quiet until the bench showed it).
 
 ## Registering it
 
@@ -84,6 +137,10 @@ Miss one of these and the template half-exists. After adding the folder:
 5. `tests/e2e/templates.spec.ts` — add the slug to the demo list.
 6. `public/templates/<slug>/poster.jpg` + `preview.webm` — generated, see below. The gallery card,
    the template page and the sitemap all point at them, so a missing poster is a broken image.
+7. `src/content/template-seo.ts` — the words the template's page is found by, in English and
+   Spanish: the phrase people type for the thing it is (check Google's suggestions for it, e.g.
+   "digital snow globe"), a title under 60 characters, a snippet under 160 and the how-to heading.
+   Without one the page falls back to "{name}: digital gift template", which nobody searches.
 
 Everything else follows automatically: the editor, unlocking after payment, occasion pages,
 `llms.txt`, the sitemap and the dashboard all read the manifests.
@@ -118,6 +175,9 @@ npx playwright install chromium                       # once per machine (a ~150
 node scripts/capture-thumbnails.mjs http://localhost:3000 <slug>
 ```
 
+Hide the skip link and the mute button before the poster (see `hideControls` in the script): they are controls,
+not part of the picture, and they show in every frame otherwise.
+
 The routine should screenshot the frame that sells it (usually just before the big interaction) and
 then drive the interaction so the recording has movement. Elements that pulse forever are never
 "stable" for Playwright — click those with `{ force: true }`.
@@ -151,6 +211,24 @@ Pure logic — geometry, physics, time — belongs in its own module with unit t
 - **The editor preview plays from the gift's cover**, so a test or script that presses "Play from the
   start" has to tap the cover before the template's own controls exist.
 - **Demo photos must fit `features.photos`** min and max, or the template unit test fails.
+- **Demo data that fails its own schema fails quietly.** The template parses `data.fields` and falls back to
+  the defaults, so the gift just shows the wrong thing (the Witch's Brew's Spanish demo showed its default
+  ingredients because one line was 32 characters against a `.max(30)`). `tests/unit/templates.test.ts` catches it:
+  leave room, since Spanish runs longer than English.
+- **An `opening` is drawn outside the gift, and that breaks two things.** The cover picker puts it inside a
+  button tile that is not a `.gift-root`. (1) A button in it is a button in a button, which React reports as a
+  hydration error (the dev overlay says "2 issues"): give the scene an `inert` mode with nothing to press.
+  (2) `--u` is only defined by `.gift-root`, so a scene that sizes from it collapses to giant clipped text
+  in the tile: set `TILE_VARS` (`_shared/night/tile.ts`) on the opening's root. Look at the Classic tile in
+  the editor's cover picker; the e2e specs check both.
+- **A layer stacked over another swallows its clicks.** A stage box holding the gate, title and pill, placed
+  after the camera layer that holds the windows and the door, caught every tap meant for them. Make a layer that
+  is only there to look at `pointer-events-none`, and let `tests/e2e/halloween-gifts.spec.ts` tap the real thing.
+- **Wide screens are real screens.** A recipient opens the link on a laptop. A scene drawn in a centred stage
+  box (`--k`) needs its ground, table or wall to run edge to edge, or the house floats on a dark slab.
+  Check 1280 × 720 and 844 × 390 as well as 390 × 844.
+- **Never decide a template's look from the idle frame alone.** Play it through in every look: the glow, the
+  moon and the window light are where a palette fails.
 - **Adding a template conflicts with anyone else adding one**, always in the same files: the
   manifests, the registry and schema loaders, `defaultCoverFor`, the capture script and the demo
   test list. Keep both sides.

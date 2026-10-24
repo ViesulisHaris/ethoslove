@@ -2,14 +2,15 @@ import type { Db } from "@/lib/commerce/db";
 
 /**
  * An in-memory stand-in for the service-role Supabase client, covering the query-builder calls the
- * commerce code makes: select / insert / upsert / update / delete, the eq / in / is / lt(e) / gt(e)
- * filters, order, limit, single and maybeSingle. Unique constraints mirror the migrations, so a
+ * commerce code makes: select (with an exact count, head or not) / insert / upsert / update / delete,
+ * the eq / in / is / not-is / lt(e) / gt(e) filters and simple or() lists of them, order, limit, single
+ * and maybeSingle. Unique constraints mirror the migrations, so a
  * duplicate fails with Postgres's 23505 the way the real one does, and a failing statement changes
  * nothing. Given `missingColumns` (COLUMNS_0014: the live database before migration 0014), a
  * statement that names one of them fails with PostgREST's 42703 or PGRST204, and rows have none.
  */
 type Row = Record<string, unknown>;
-type Result = { data: unknown; error: { code?: string; message: string } | null };
+type Result = { data: unknown; error: { code?: string; message: string } | null; count?: number | null };
 
 const UNIQUE: Record<string, string[][]> = {
   profiles: [["id"], ["email"]],
@@ -21,11 +22,15 @@ const UNIQUE: Record<string, string[][]> = {
   gifts: [["id"], ["short_id"]],
   free_replies: [["original_gift_id"], ["reply_gift_id"]],
   gift_card_details: [["purchase_id"]],
+  gift_keeps: [["id"], ["gift_id", "email_sha256"]],
+  keep_reminders: [["id"], ["keep_id", "occasion", "month", "day"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
   purchases: { status: "pending", template_slugs: [], currency: "usd", creator_code: null, ref: null, discount_amount: null, kind: null, terms_consent: null, terms_consent_at: null, store: null, store_product_id: null, store_transaction_id: null, store_environment: null, stripe_invoice_id: null, membership_id: null },
   template_unlocks: { purchase_id: null },
+  gift_keeps: { locale: "en", requested: [], confirm_sent_at: null, confirmed_at: null },
+  keep_reminders: { last_sent_year: null },
   couple_passes: {
     partner_user_id: null,
     renewal_reminded_at: null,
@@ -72,8 +77,13 @@ class Query implements PromiseLike<Result> {
   /** Columns the statement names (select list, filters, order), checked against a schema that lacks some (FakeDb options.missingColumns). */
   private used: string[] = [];
 
-  select(columns?: string) {
+  private counting = false;
+  private headOnly = false;
+
+  select(columns?: string, options: { count?: "exact"; head?: boolean } = {}) {
     if (this.op !== "select") this.returning = true;
+    this.counting = options.count === "exact";
+    this.headOnly = Boolean(options.head);
     if (columns) this.used.push(...columns.split(",").map((c) => c.trim()).filter((c) => c && c !== "*" && !c.includes("(")));
     return this;
   }
@@ -120,6 +130,35 @@ class Query implements PromiseLike<Result> {
     const array = /^\{(.*)\}$/.exec(value);
     const wanted = array ? (array[1] ? array[1].split(",") : []) : value;
     this.filters.push((row) => JSON.stringify(row[column]) === JSON.stringify(wanted));
+    return this;
+  }
+  /** Only `not(column, "is", null)`, the one form the code uses. */
+  not(column: string, operator: "is", value: null) {
+    this.used.push(column);
+    this.filters.push((row) => operator === "is" && value === null && !isNull(row[column]));
+    return this;
+  }
+  /** PostgREST's or=(a.op.v,b.op.v): any of them, for is.null, eq, neq, lt(e) and gt(e). */
+  or(expression: string) {
+    const tests = expression.split(",").map((part) => {
+      const [column, op, ...rest] = part.split(".");
+      const raw = rest.join(".");
+      const value = raw === "null" ? null : Number.isNaN(Number(raw)) ? raw : Number(raw);
+      this.used.push(column);
+      return (row: Row) => {
+        const v = row[column] as string | number | null;
+        if (op === "is") return value === null ? isNull(v) : v === value;
+        if (op === "eq") return v === value;
+        if (op === "neq") return v !== value;
+        if (isNull(v)) return false;
+        if (op === "lt") return (v as number) < (value as number);
+        if (op === "lte") return (v as number) <= (value as number);
+        if (op === "gt") return (v as number) > (value as number);
+        if (op === "gte") return (v as number) >= (value as number);
+        throw new Error(`fake or(): ${op} not supported`);
+      };
+    });
+    this.filters.push((row) => tests.some((t) => t(row)));
     return this;
   }
   is(column: string, value: null) {
@@ -241,6 +280,7 @@ class Query implements PromiseLike<Result> {
         });
       }
       if (this.max !== null || this.offset) rows = rows.slice(this.offset, this.max === null ? undefined : this.offset + this.max);
+      if (this.counting) return { data: this.headOnly ? null : rows.map((row) => ({ ...row })), error: null, count: rows.length };
       return this.shape(rows);
     }
 

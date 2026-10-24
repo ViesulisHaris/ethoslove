@@ -43,6 +43,31 @@ node scripts/indexnow.mjs https://tryethos.io/pricing   # just these
 
 Run it after a deploy that changes what public pages say. It speeds up crawling, not ranking.
 
+## Checking every page the way a crawler reads it
+
+```bash
+node scripts/seo-check.mjs                          # every page in the live sitemap
+node scripts/seo-check.mjs http://localhost:3217    # a local `next start`, before pushing
+node scripts/seo-check.mjs https://tryethos.io --only /gifts
+```
+
+For each page in the sitemap it checks the status, the title, the description, exactly one h1, a
+canonical pointing at itself, the en/x-default alternates, that every JSON-LD block parses, and
+that no two pages share a title. It exits 1 if any page fails.
+
+## What the pages are found by
+
+- Template pages lead with the phrase people search for the thing the template is ("digital
+  bouquet maker", "carta de amor digital"), from `src/content/template-seo.ts`.
+- `/gifts/for-<who>` (boyfriend, girlfriend, husband, wife, best-friend, mom, dad) are gift-idea
+  pages by recipient, from `src/content/recipients.ts`; every idea is a template.
+- The game pages list every free question under the game, since the searches they answer
+  ("would you rather questions for couples") are answered elsewhere by long lists.
+- FAQ answers are rendered in `<details>` so they are in the HTML: Radix's accordion only renders an
+  answer once it is opened, and crawlers saw the questions without the answers.
+
+The data behind these choices, and the plan for the rest, is in `docs/marketing/SEO-ORGANIC.md`.
+
 ## AI assistants
 
 - `robots.txt` allows every crawler except on private paths. GPTBot, OAI-SearchBot, ClaudeBot,

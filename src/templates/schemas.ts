@@ -59,6 +59,11 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "photo-booth": () => import("./photo-booth/schema"),
   picnic: () => import("./picnic/schema"),
   "music-box": () => import("./music-box/schema"),
+  seance: () => import("./seance/schema"),
+  "bat-swarm": () => import("./bat-swarm/schema"),
+  cauldron: () => import("./cauldron/schema"),
+  "jack-o-lantern": () => import("./jack-o-lantern/schema"),
+  "haunted-house": () => import("./haunted-house/schema"),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);

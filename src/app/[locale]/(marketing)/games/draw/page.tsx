@@ -7,7 +7,7 @@ import { DrawGame } from "@/components/games/draw-game";
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/games/draw">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.draw" });
-  return pageMetadata({ locale, path: "/games/draw", title: t("title"), description: t("blurb") });
+  return pageMetadata({ locale, path: "/games/draw", title: t("seoTitle"), description: t("seoDescription") });
 }
 
 export default async function Page({ params }: PageProps<"/[locale]/games/draw">) {

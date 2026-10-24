@@ -1,13 +1,15 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { OCCASIONS } from "@/config/occasions";
+import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { Logo } from "@/components/shared/logo";
 import { CookieChoiceButton } from "@/components/shared/cookie-consent";
 import { LocaleSwitcher } from "./locale-switcher";
 
 export async function MarketingFooter() {
   const t = await getTranslations();
+  const locale = (await getLocale()) === "es" ? "es" : "en";
   const year = new Date().getFullYear();
 
   return (
@@ -27,11 +29,12 @@ export async function MarketingFooter() {
         <FooterColumn title={t("footer.explore")}>
           <FooterLink href="/dates">{t("nav.dates")}</FooterLink>
           <FooterLink href="/trips">{t("nav.trips")}</FooterLink>
-          <FooterLink href="/gifts">{t("nav.gifts")}</FooterLink>
+          <FooterLink href="/gifts">{t("footer.digitalGifts")}</FooterLink>
           <FooterLink href="/templates">{t("nav.templates")}</FooterLink>
           <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
           <FooterLink href="/games">{t("nav.games")}</FooterLink>
           <FooterLink href="/pricing">{t("nav.pricing")}</FooterLink>
+          <FooterLink href="/blog">{t("common.blog")}</FooterLink>
         </FooterColumn>
         <FooterColumn title={t("nav.occasions")}>
           {OCCASIONS.slice(0, 6).map((o) => (
@@ -54,6 +57,19 @@ export async function MarketingFooter() {
           </li>
         </FooterColumn>
       </div>
+      {/* Who it's for: the gift-idea pages, linked from every page so search engines find them. */}
+      <nav aria-labelledby="footer-recipients" className="container-x relative border-t border-white/10 pt-6 pb-4">
+        <p id="footer-recipients" className="mb-2 text-[11px] font-medium tracking-[0.2em] text-cream/45 uppercase">
+          {t("recipients.footerTitle")}
+        </p>
+        <ul className="flex flex-wrap gap-x-6">
+          {RECIPIENTS.map((r) => (
+            <FooterLink key={r} href={`/gifts/${recipientSlug(r)}`}>
+              {RECIPIENT_GUIDES[r][locale].label}
+            </FooterLink>
+          ))}
+        </ul>
+      </nav>
       <div className="container-x relative flex flex-col items-start justify-between gap-4 border-t border-white/10 py-6 text-[12px] text-cream/50 sm:flex-row sm:items-center">
         <p>{t("footer.rights", { year })}</p>
         <div className="flex items-center gap-5">

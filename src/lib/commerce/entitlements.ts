@@ -3,7 +3,7 @@ import { EVERY_PACK, EVERY_TEMPLATE, FREE_SAVED_DATES, type Currency } from "@/l
 import type { MembershipSummary } from "@/lib/membership/types";
 import type { Pass } from "./passes";
 import { currentMembership, personOf, summariseMembership, type Person } from "./memberships";
-import { UPGRADE_CREDITED, upgradeAmount, type PaidPurchase } from "./pricing";
+import { PURCHASE_CREDIT_COLUMNS, creditEndsAt, creditedPurchases, upgradeAmount, type CreditOptions, type PaidPurchase } from "./pricing";
 import { MissingMigrationError, inviteUrl, type Db, type Locale } from "./db";
 import { splitUnlocks } from "./unlocks";
 
@@ -21,8 +21,14 @@ export type Entitlements = {
   /** How many dates and trips the account can save: FREE_SAVED_DATES, or null (no limit) while a membership runs. */
   savedDatesLimit: number | null;
   /** "Upgrade to Everything for the difference", for a buyer who paid for singles, pick-threes or extras. */
-  upgrade: { amount: number; currency: Currency } | null;
+  upgrade: UpgradeOffer | null;
 };
+
+/**
+ * The upgrade's price for this buyer. `creditUntil` (ISO) is there only while the credit has a
+ * deadline (UPGRADE_CREDIT_DAYS), which today it doesn't: the price holds until it is set.
+ */
+export type UpgradeOffer = { amount: number; currency: Currency; creditUntil?: string };
 
 export type PassSummary = { endsAt: string; isOwner: boolean; partnerJoined: boolean; inviteUrl?: string };
 
@@ -80,11 +86,15 @@ function asAfter0014(passes: Pass[]): Pass[] {
   return passes.map((pass) => ({ ...AFTER_0014, ...pass }));
 }
 
-/** The upgrade price to show, or null when there is nothing to upgrade from (or Everything is owned). */
-export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], currency: Currency): Entitlements["upgrade"] {
+/**
+ * The upgrade price to show, or null when there is nothing to upgrade from (or Everything is owned).
+ * Checkout charges upgradeAmount over the same purchases, so the price quoted is the price charged.
+ */
+export function upgradeOffer(ownedForever: string[], purchases: PaidPurchase[], currency: Currency, options: CreditOptions = {}): UpgradeOffer | null {
   if (ownedForever.includes(EVERY_TEMPLATE)) return null;
-  const credited = purchases.some((p) => p.status === "paid" && (UPGRADE_CREDITED as readonly string[]).includes(p.product));
-  return credited ? { amount: upgradeAmount(currency, purchases), currency } : null;
+  if (creditedPurchases(purchases, options).length === 0) return null;
+  const until = creditEndsAt(purchases, options);
+  return { amount: upgradeAmount(currency, purchases, options), currency, ...(until ? { creditUntil: until } : {}) };
 }
 
 /**
@@ -100,7 +110,7 @@ export async function readEntitlements(db: Db, userId: string, options: { locale
     db.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
     db.from("couple_passes").select("*").eq("owner_user_id", userId),
     db.from("couple_passes").select("*").eq("partner_user_id", userId),
-    db.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
+    db.from("purchases").select(PURCHASE_CREDIT_COLUMNS).eq("user_id", userId).eq("status", "paid"),
   ]);
   const rows = unlocks.data ?? [];
   const passes = asAfter0014([...(owned.data ?? []), ...(joined.data ?? [])].filter((pass, i, all) => all.findIndex((other) => other.id === pass.id) === i));

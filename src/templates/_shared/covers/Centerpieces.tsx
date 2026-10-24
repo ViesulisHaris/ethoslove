@@ -1,11 +1,14 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { shaded, type EnvelopeColors, type GiftBoxColors } from "./looks";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+/** The outside of the flap folding up to its hinge: slow off the mark, fastest as it goes edge-on. */
+const FOLD_UP = [0.42, 0, 1, 1] as const;
+const FLAP_UP_S = 0.16;
+const FLAP_OPEN_S = 0.42;
 
 /** The fibres in a sheet of paper, laid over a flat colour so it stops looking like a vector. */
 const PAPER = "url(\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .2  0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E\")";
@@ -25,22 +28,23 @@ function SealMark({ mark }: { mark: EnvelopeColors["mark"] }) {
 }
 
 /**
- * An envelope whose flap folds open and a letter slides out. Layering is the whole trick:
- * the flap sits on top of the pocket while closed, then drops behind the letter once it has
- * swung past vertical, so the letter can rise out in front of it. The inside can be lined with
- * a pattern, and the seal can be a real one: wax, or a lipstick print.
+ * An envelope whose flap folds open and a letter slides out. The inside can be lined with a
+ * pattern, and the seal can be a real one: wax, or a lipstick print.
+ *
+ * Drawn flat on purpose. The flap is two faces: its outside folds up to the hinge, then its
+ * inside unfolds above the envelope, each a squash about the hinge. Every layer keeps the place
+ * it is written in, in every browser: inside of the flap, then the letter, then the pocket, then
+ * the closed flap. It used to be one 3D flip (perspective, preserve-3d, backface-visibility, and
+ * a z-index swapped halfway round), which Safari drew with the flap's outside over the letter,
+ * and which showed the open flap's inside upside down, pointing at the envelope.
  */
 export function Envelope({ colors, opening }: { colors: EnvelopeColors; opening: boolean }) {
-  const [flapBehind, setFlapBehind] = useState(false);
-  useEffect(() => {
-    if (!opening) return;
-    const id = window.setTimeout(() => setFlapBehind(true), 260);
-    return () => window.clearTimeout(id);
-  }, [opening]);
   const lining = colors.liner ?? colors.inner;
 
   return (
-    <div className="relative w-full" style={{ aspectRatio: "1.45 / 1", perspective: "900px" }}>
+    // isolate: the layers' z-indexes stay inside the envelope, so it stacks as one piece among the
+    // cut-outs laid over and under it (the 3D version had this from its perspective).
+    <div className="relative isolate w-full" style={{ aspectRatio: "1.45 / 1" }}>
       {/*
         * The back of the envelope, in its own paper, and the lining laid inside it a hair short of
         * the edges: a patterned lining flush with the edge showed as a dotted line under the pocket.
@@ -48,12 +52,30 @@ export function Envelope({ colors, opening }: { colors: EnvelopeColors; opening:
       <div className="absolute inset-0 rounded-[3%]" style={{ background: colors.body, boxShadow: "0 calc(3.4*var(--u)) calc(7*var(--u)) calc(-2*var(--u)) rgba(60,20,30,.34), 0 calc(.6*var(--u)) calc(1.2*var(--u)) rgba(60,20,30,.12)" }} />
       <div className="absolute inset-x-[1.2%] top-[1.5%] bottom-[2.5%] rounded-[3%]" style={{ background: lining }} />
 
+      {/* The inside of the flap, once it is open: it unfolds upwards from the hinge, behind the letter. */}
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-full h-[62%]"
+        style={{ transformOrigin: "50% 100%", zIndex: 1 }}
+        initial={false}
+        animate={opening ? { scaleY: 1, scaleX: 1 } : { scaleY: 0, scaleX: 1.05 }}
+        transition={opening ? { delay: FLAP_UP_S, duration: FLAP_OPEN_S, ease: EASE } : { duration: 0 }}
+      >
+        <div className="absolute inset-0" style={{ clipPath: "polygon(0 100%, 100% 100%, 52.4% 6.5%, 50% 3%, 47.6% 6.5%)", background: colors.flap }} />
+        <div className="absolute inset-0" style={{ clipPath: "polygon(5% 97%, 95% 97%, 52% 11%, 50% 8.5%, 48% 11%)", background: lining }} />
+      </motion.div>
+
+      {/*
+        * The letter is in the envelope from the moment it starts to open, not faded in: a fade
+        * showed the lines of the paper through the lining. It stays hidden while sealed only because
+        * a sliver of the inside shows between the flap and the side folds near the top corners.
+        */}
       <motion.div
         className="absolute inset-x-[8%] top-[8%] h-[84%] rounded-[3%]"
         style={{ backgroundColor: colors.letter, backgroundImage: PAPER, zIndex: 5, boxShadow: "0 calc(.6*var(--u)) calc(1.6*var(--u)) rgba(0,0,0,.12)" }}
         initial={false}
         animate={opening ? { opacity: 1, y: "-58%" } : { opacity: 0, y: "0%" }}
-        transition={{ opacity: { delay: 0.28, duration: 0.2 }, y: { delay: 0.42, duration: 0.7, ease: EASE } }}
+        transition={{ opacity: { duration: 0 }, y: { delay: 0.42, duration: 0.7, ease: EASE } }}
       >
         <div className="absolute inset-x-[14%] top-[18%] space-y-[7%]">
           {[88, 100, 72, 94].map((w, i) => (
@@ -80,15 +102,15 @@ export function Envelope({ colors, opening }: { colors: EnvelopeColors; opening:
       </svg>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[3%] mix-blend-multiply" style={{ backgroundImage: PAPER, zIndex: 6 }} />
 
-      {/* The flap, with the seal on its tip. Two faces so the lining shows once it is open. */}
+      {/* The closed flap, with the seal on its tip: it folds up to the hinge, and the inside takes over. */}
       <motion.div
         className="absolute inset-x-0 top-0 h-[62%]"
-        style={{ transformOrigin: "50% 0%", transformStyle: "preserve-3d", zIndex: flapBehind ? 1 : 7 }}
+        style={{ transformOrigin: "50% 0%", zIndex: 7 }}
         initial={false}
-        animate={{ rotateX: opening ? 180 : 0 }}
-        transition={{ duration: 0.55, ease: EASE }}
+        animate={opening ? { scaleY: 0, scaleX: 1.05 } : { scaleY: 1, scaleX: 1 }}
+        transition={opening ? { duration: FLAP_UP_S, ease: FOLD_UP } : { duration: 0 }}
       >
-        <svg viewBox="0 0 145 62" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" style={{ backfaceVisibility: "hidden", filter: "drop-shadow(0 calc(.5*var(--u)) calc(.7*var(--u)) rgba(60,20,30,.16))" }} aria-hidden="true">
+        <svg viewBox="0 0 145 62" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" style={{ filter: "drop-shadow(0 calc(.5*var(--u)) calc(.7*var(--u)) rgba(60,20,30,.16))" }} aria-hidden="true">
           <defs>
             <linearGradient id="flap-shade" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0" stopColor="#fff" stopOpacity=".28" />
@@ -99,22 +121,18 @@ export function Envelope({ colors, opening }: { colors: EnvelopeColors; opening:
           <path d="M0 0 H145 L76 58 Q72.5 61 69 58 Z" fill="url(#flap-shade)" />
           <path d="M0 0 L69 58 Q72.5 61 76 58 L145 0" fill="none" stroke="rgba(0,0,0,.07)" strokeWidth=".7" />
         </svg>
-        <div aria-hidden="true" className="absolute inset-0" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateX(180deg)", clipPath: "polygon(5% 3%, 95% 3%, 52% 89%, 50% 91.5%, 48% 89%)", background: lining }} />
-        <div aria-hidden="true" className="absolute inset-0 -z-[1]" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateX(180deg)", clipPath: "polygon(0 0, 100% 0, 52.4% 93.5%, 50% 97%, 47.6% 93.5%)", background: colors.flap }} />
         {colors.sealArt ? (
           <img
             src={colors.sealArt.cut.src}
             alt=""
             draggable={false}
             className="absolute top-[94%] left-1/2 block max-w-none -translate-x-1/2 -translate-y-1/2 select-none"
-            style={{ width: `${colors.sealArt.w}%`, aspectRatio: String(colors.sealArt.cut.ratio), rotate: `${colors.sealArt.rotate ?? 0}deg`, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", filter: shaded(colors.sealArt.cut.tone, "drop-shadow(0 calc(.7*var(--u)) calc(1*var(--u)) rgba(60,10,20,.35))") }}
+            style={{ width: `${colors.sealArt.w}%`, aspectRatio: String(colors.sealArt.cut.ratio), rotate: `${colors.sealArt.rotate ?? 0}deg`, filter: shaded(colors.sealArt.cut.tone, "drop-shadow(0 calc(.7*var(--u)) calc(1*var(--u)) rgba(60,10,20,.35))") }}
           />
         ) : (
           <div
             className="absolute top-[94%] left-1/2 grid aspect-square w-[21%] -translate-x-1/2 -translate-y-1/2 place-items-center overflow-hidden rounded-full"
             style={{
-              backfaceVisibility: "hidden",
-              WebkitBackfaceVisibility: "hidden",
               background: `radial-gradient(circle at 35% 30%, color-mix(in srgb, ${colors.seal} 70%, white), ${colors.seal} 55%, color-mix(in srgb, ${colors.seal} 75%, black))`,
               boxShadow: "0 calc(.8*var(--u)) calc(1.6*var(--u)) rgba(0,0,0,.25), inset 0 calc(-.6*var(--u)) calc(1*var(--u)) rgba(0,0,0,.2)",
             }}

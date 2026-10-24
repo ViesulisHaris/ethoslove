@@ -7,14 +7,17 @@ import { SITE } from "@/config/site";
 import type { GiftLocale } from "@/lib/gift/schema";
 import {
   breadcrumbNode,
+  faqNode,
   localizedUrl,
   ogImageUrl,
   pageMetadata,
   templateProductNode,
 } from "@/lib/seo";
+import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
+import { TemplateGuide, templateFaq } from "@/components/templates/template-guide";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
 import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
 
@@ -30,11 +33,12 @@ export async function generateMetadata({
   if (!manifest) return {};
   const l = locale as GiftLocale;
   const t = await getTranslations({ locale, namespace: "seo" });
+  const seo = templateSeo(slug, l);
   return pageMetadata({
     locale,
     path: `/templates/${slug}`,
-    title: t("templateTitle", { name: manifest.name[l] }),
-    description: manifest.description[l],
+    title: seo?.title ?? t("templateTitle", { name: manifest.name[l] }),
+    description: seo?.description ?? manifest.description[l],
     image: ogImageUrl(locale, slug),
   });
 }
@@ -55,6 +59,8 @@ export default async function TemplateDetailPage({
     currency,
     l,
   );
+  const seo = templateSeo(manifest.slug, l);
+  const faq = await templateFaq(manifest, l, price);
 
   const featureList: [boolean, string][] = [
     [true, t("templates.featurePhotos", { max: manifest.features.photos.max })],
@@ -75,6 +81,7 @@ export default async function TemplateDetailPage({
             { name: t("templates.title"), url: localizedUrl(locale, "/templates") },
             { name: manifest.name[l], url: localizedUrl(locale, `/templates/${manifest.slug}`) },
           ]),
+          faqNode(faq),
         ]}
       />
       {/*
@@ -106,7 +113,11 @@ export default async function TemplateDetailPage({
                 </span>
               ))}
             </div>
-            <h1 className="mt-6 display-xl">{manifest.name[l]}</h1>
+            {/* The phrase people search for, then the name we gave it: one heading, both read. */}
+            <h1 className="mt-6">
+              {seo ? <span className="mb-3 block text-eyebrow text-ink-soft">{seo.keyword}</span> : null}
+              <span className="block display-xl">{manifest.name[l]}</span>
+            </h1>
             <p className="mt-3 font-display text-2xl text-ink-soft italic">{manifest.tagline[l]}</p>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
               {manifest.description[l]}
@@ -178,6 +189,7 @@ export default async function TemplateDetailPage({
           </p>
         </div>
       </div>
+      <TemplateGuide manifest={manifest} locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} faq={faq} />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
+import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import type { PublishDecision } from "@/lib/gift/publish";
 import type { MembershipSummary } from "@/lib/membership/types";
 import { BUMP, PRODUCTS, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
@@ -303,6 +304,15 @@ export function purchaseOutcome(sold: { product: ProductId; bump: boolean }): Pu
   // The order bump and the upgrade both end in "*": the buyer now has every template.
   if (sold.product === "everything" || sold.product === "upgrade" || sold.bump) return "everything";
   return "gift";
+}
+
+/**
+ * Whether a finished checkout is one the success page follows with "every template for the
+ * difference": a single, a pick three or "make it special" (what counts towards the upgrade), and
+ * not one that already took the bump, which made it Everything.
+ */
+export function upgradesAfter(sold: { product: ProductId; bump: boolean }): boolean {
+  return (UPGRADE_CREDITED as readonly string[]).includes(sold.product) && !sold.bump;
 }
 
 /**

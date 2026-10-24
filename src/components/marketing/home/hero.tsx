@@ -51,11 +51,12 @@ export function Hero() {
            * what made LCP 4.4s and what the eleven-to-nineteen-second sessions were looking at.
            * The scene below still animates; the sentence someone came to read does not.
            */}
-          <p className="text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">
-            {t("eyebrow")}
-          </p>
-          <h1 className="mt-6 max-w-[6.6em] display-hero text-balance text-forest">
-            {t("h1a")} <em className="text-[#B0245A]">{t("h1b")}</em> {t("h1c")}
+          {/* The eyebrow is the h1's first line: "Digital gifts" is what this page is found by. */}
+          <h1 className="text-forest">
+            <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</span>
+            <span className="mt-6 block max-w-[6.6em] display-hero text-balance">
+              {t("h1a")} <em className="text-[#B0245A]">{t("h1b")}</em> {t("h1c")}
+            </span>
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">
             {t("sub")}

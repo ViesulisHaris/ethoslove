@@ -26,7 +26,7 @@ import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
-import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
+import { PURCHASE_CREDIT_COLUMNS, UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import { foreverUnlocks, grantForever } from "@/lib/commerce/unlocks";
 import { consentSentence } from "@/lib/stripe/line-items";
 import { isEthosMetadata, normaliseSubscription, paymentIntentOfInvoice, tagCheckout } from "@/lib/stripe/subscriptions";
@@ -364,7 +364,7 @@ async function receiptUpgrade(admin: Admin, userId: string, currency: string, lo
   try {
     const [forever, { data: purchases, error }] = await Promise.all([
       foreverUnlocks(admin, userId),
-      admin.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
+      admin.from("purchases").select(PURCHASE_CREDIT_COLUMNS).eq("user_id", userId).eq("status", "paid"),
     ]);
     if (error) return undefined;
     const offer = upgradeOffer(forever, purchases ?? [], currency as Currency);

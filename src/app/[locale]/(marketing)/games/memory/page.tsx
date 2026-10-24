@@ -7,7 +7,7 @@ import { MemoryGame } from "@/components/games/memory";
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/games/memory">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.memory" });
-  return pageMetadata({ locale, path: "/games/memory", title: t("title"), description: t("blurb") });
+  return pageMetadata({ locale, path: "/games/memory", title: t("seoTitle"), description: t("seoDescription") });
 }
 
 export default async function Page({ params }: PageProps<"/[locale]/games/memory">) {

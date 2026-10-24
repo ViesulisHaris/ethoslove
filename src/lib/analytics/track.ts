@@ -29,7 +29,10 @@ export type FunnelEvent =
   // Saved dates: which kind was saved and whether by a member, which reason opened the upsell, which maps app a whole date went to. No ids, no places.
   | "saved_date_saved"
   | "saved_date_upsell"
-  | "maps_opened";
+  | "maps_opened"
+  // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
+  | "keep_tapped"
+  | "keep_requested";
 
 type Props = Record<string, string | number | boolean | null>;
 

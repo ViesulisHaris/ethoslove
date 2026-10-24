@@ -70,7 +70,8 @@ export async function POST(request: NextRequest) {
     day: r.day,
     locale: r.locale,
     template_slug: r.templateSlug ?? null,
-    last_sent_year: initialLastSentYear({ month: r.month, day: r.day }, new Date(), r.giftDay),
+    // Only the gift's own occasion skips this year: it is the day the gift was just made for.
+    last_sent_year: r.forThisGift ? initialLastSentYear({ month: r.month, day: r.day }, new Date(), r.giftDay) : null,
   };
   // ignoreDuplicates: a request that raced this one to the same row wins, and this one reads it back.
   const inserted = await db.from("reminders").upsert(row, { onConflict: "user_id,recipient_name,occasion,month,day", ignoreDuplicates: true }).select(COLUMNS).maybeSingle();

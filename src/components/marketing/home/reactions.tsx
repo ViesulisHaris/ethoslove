@@ -1,16 +1,21 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import type { ProofNumbers, ShownReaction } from "@/lib/proof/numbers";
 import { Cutout } from "./cutouts";
 
 /**
- * "See the reaction". Sample threads set like notes pinned to a board; each becomes a
- * <video> once real recipient reactions exist.
+ * "See the reaction". Real reactions once there are enough of them (their writers agreed, the owner
+ * approved them: lib/proof), each only its emoji and words; until then, sample threads set like
+ * notes pinned to a board, and said to be samples. Under the blurb, the count of gifts opened, when
+ * the database has one worth saying.
  */
-export function Reactions() {
+export function Reactions({ real = null, numbers = null }: { real?: ShownReaction[] | null; numbers?: ProofNumbers | null }) {
   const t = useTranslations("home.reactions");
+  const locale = useLocale();
   const cards = t.raw("cards") as { from: string; to: string; sent: string; reply: string; emoji: string; time: string }[];
+  const count = numbers ? `${new Intl.NumberFormat(locale).format(numbers.opened)}${numbers.more ? "+" : ""}` : "";
   return (
     <section className="border-b border-line bg-paper-deep/40 py-20 lg:py-28">
       <div className="container-x">
@@ -21,10 +26,36 @@ export function Reactions() {
             {/* what comes back, more often than not */}
             <Cutout id="kiss-red" className="absolute right-2 bottom-1 w-[84px] rotate-[14deg] opacity-95 drop-shadow-[0_8px_12px_rgba(120,20,40,0.22)] sm:right-16 sm:w-[112px]" />
           </div>
-          <p className="max-w-md text-lg leading-relaxed text-ink-soft lg:col-span-5 lg:pb-1">{t("blurb")}</p>
+          <div className="max-w-md lg:col-span-5 lg:pb-1">
+            <p className="text-lg leading-relaxed text-ink-soft">{t("blurb")}</p>
+            {numbers ? (
+              <p className="mt-4 text-lg font-semibold leading-snug text-ink" data-testid="proof-numbers">
+                {numbers.opensEach
+                  ? t("openedEach", { count, times: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(numbers.opensEach) })
+                  : t("opened", { count })}
+              </p>
+            ) : null}
+          </div>
         </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {cards.map((c, i) => (
+        <div className="mt-12 grid gap-5 md:grid-cols-3" data-testid={real ? "reactions-real" : "reactions-samples"}>
+          {real
+            ? real.map((r, i) => (
+                <motion.figure
+                  key={i}
+                  initial={{ opacity: 0, y: 20, rotate: i % 2 ? 1 : -1 }}
+                  whileInView={{ opacity: 1, y: 0, rotate: i % 2 ? 0.6 : -0.6 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ type: "spring", stiffness: 110, damping: 18, delay: i * 0.08 }}
+                  className="flex flex-col gap-3 rounded-lg border border-line bg-paper p-5 shadow-soft"
+                >
+                  <figcaption className="text-mono-meta text-muted-foreground">{t("realLabel")}</figcaption>
+                  <p className="max-w-[92%] rounded-xl rounded-bl-sm bg-paper-deep px-3.5 py-2.5 text-sm [overflow-wrap:anywhere]">{r.text}</p>
+                  <span className="text-2xl" aria-hidden="true">
+                    {r.emoji}
+                  </span>
+                </motion.figure>
+              ))
+            : cards.map((c, i) => (
             <motion.figure
               key={i}
               initial={{ opacity: 0, y: 20, rotate: i % 2 ? 1 : -1 }}
@@ -62,9 +93,9 @@ export function Reactions() {
                 </motion.span>
               </div>
             </motion.figure>
-          ))}
+              ))}
         </div>
-        <p className="text-mono-meta mt-6 text-muted-foreground">{t("placeholderNote")}</p>
+        <p className="text-mono-meta mt-6 text-muted-foreground">{real ? t("realNote") : t("placeholderNote")}</p>
       </div>
     </section>
   );

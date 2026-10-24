@@ -13,11 +13,11 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
-import { siteOrigin, type Db } from "@/lib/commerce/db";
+import { siteOrigin } from "@/lib/commerce/db";
+import { readBuyer } from "@/lib/commerce/buyer";
 import { creditedCreator } from "@/lib/commerce/creators";
 import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
 import { planCheckout } from "@/lib/commerce/plan";
-import { passPurchaseIds, splitUnlocks } from "@/lib/commerce/unlocks";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -50,17 +50,6 @@ const input = z.object({
     .optional()
     .catch(undefined),
 });
-
-/** What the buyer already holds for good, and paid, when signed in. */
-async function buyerContext(admin: Db, userId: string | null): Promise<{ ownedForever: string[]; purchases: { product: string; amount: number; currency: string; status: string }[] }> {
-  if (!userId) return { ownedForever: [], purchases: [] };
-  const [{ data: rows }, passIds, { data: purchases }] = await Promise.all([
-    admin.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
-    passPurchaseIds(admin, userId),
-    admin.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
-  ]);
-  return { ownedForever: splitUnlocks(rows ?? [], passIds).forever, purchases: purchases ?? [] };
-}
 
 /**
  * Creates a Stripe Checkout Session and returns its URL (contract C1). Every amount is worked out
@@ -97,7 +86,7 @@ export async function POST(request: NextRequest) {
   const now = Date.now();
   const [creatorCode, owned, membership] = await Promise.all([
     creditedCreator(admin, body.ref, user?.email),
-    buyerContext(admin, userId),
+    readBuyer(admin, userId),
     userId && (product === "membership" || product === "pass") ? membershipContextOf(admin, userId, now) : null,
   ]);
   const plan = planCheckout(

@@ -35,7 +35,8 @@ test.describe("the trips room", () => {
     await page.getByRole("button", { name: /^Road trips/ }).click();
     await expect(cards).toHaveCount(6);
     await expect(page.getByRole("button", { name: /^Road trips/ })).toHaveAttribute("aria-pressed", "true");
-    await page.getByRole("button", { name: /^All/ }).click();
+    // "All 12", not the footer's "Allow cookies".
+    await page.getByRole("button", { name: /^All \d+$/ }).click();
     await expect(cards).toHaveCount(12);
     noErrors();
   });

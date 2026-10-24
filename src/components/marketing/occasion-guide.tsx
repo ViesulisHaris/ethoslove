@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { FaqList } from "@/components/shared/faq-list";
 
 /**
  * The part of an occasion page that answers "how do I make one for this day": what to write,
@@ -28,14 +28,7 @@ export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; 
         ))}
       </div>
       <h2 className="display-md mt-16 mb-6">{t("faqTitle")}</h2>
-      <Accordion type="single" collapsible className="divide-y divide-border border-y border-border">
-        {guide.faq.map((item, i) => (
-          <AccordionItem key={i} value={`q${i}`} className="border-0">
-            <AccordionTrigger className="py-5 text-left text-base font-medium hover:no-underline">{item.q}</AccordionTrigger>
-            <AccordionContent className="pb-5 text-[15px] leading-relaxed text-ink-soft">{item.a}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <FaqList items={guide.faq} name={`faq-${occasion}`} />
     </section>
   );
 }

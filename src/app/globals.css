@@ -718,6 +718,19 @@
   --u: min(1cqw, calc(1cqh * 0.6));
 }
 
+/*
+ * A gift is drawn in its own colours. A browser's forced dark mode (Chrome's "dark theme for web
+ * pages", Samsung Internet's dark mode) repainted it: the paper came out black, the envelope olive,
+ * the cover's page near-black. `only light` is how a page says not to. On the gift itself wherever
+ * it is shown (the editor's preview, a card's live demo), and on the whole page on the gift routes,
+ * whose <html> is what such a browser looks at (with the meta tag their layout sets, read before
+ * any of this). The app shell keeps its own dark mode; the marketing pages are left as they were.
+ */
+.gift-root,
+:root:has([data-gift-page]) {
+  color-scheme: only light;
+}
+
 /* ------------------------------------------------------------------ */
 /* The Dates map: markers MapLibre positions as plain DOM elements.    */
 /* ------------------------------------------------------------------ */

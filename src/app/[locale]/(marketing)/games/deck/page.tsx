@@ -5,11 +5,13 @@ import { Link } from "@/i18n/navigation";
 import { pageMetadata } from "@/lib/seo";
 import { GameTable } from "@/components/games/cards";
 import { QuestionDeck } from "@/components/games/question-deck";
+import { QuestionList } from "@/components/games/question-list";
+import { DECKS, DECK_IDS } from "@/lib/games/questions";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/games/deck">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "games.deck" });
-  return pageMetadata({ locale, path: "/games/deck", title: t("title"), description: t("blurb") });
+  return pageMetadata({ locale, path: "/games/deck", title: t("seoTitle"), description: t("seoDescription") });
 }
 
 export default async function Page({ params }: PageProps<"/[locale]/games/deck">) {
@@ -17,6 +19,7 @@ export default async function Page({ params }: PageProps<"/[locale]/games/deck">
   setRequestLocale(locale);
   const t = await getTranslations("games.deck");
   const tg = await getTranslations("games");
+  const l = locale === "es" ? "es" : "en";
   return (
     <GameTable>
       {/* The deck is the game, so on a phone it comes straight after the title: the "how" note and
@@ -39,6 +42,12 @@ export default async function Page({ params }: PageProps<"/[locale]/games/deck">
           </Link>
         </div>
       </section>
+      <QuestionList
+        id="deck-questions"
+        title={t("listTitle", { count: DECK_IDS.reduce((n, id) => n + DECKS[id].cards.length, 0) })}
+        intro={t("listIntro")}
+        groups={DECK_IDS.map((id) => ({ name: DECKS[id].name[l], items: DECKS[id].cards.map((c) => c[l]) }))}
+      />
     </GameTable>
   );
 }
