@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { isOccasion } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
+import { recipientFromSlug } from "@/content/recipients";
 import { blockTexts, contentTexts, contentWords, linksIn, plainText, wordCount } from "@/content/blog/text";
 import type { BlogContent, BlogPost } from "@/content/blog/types";
 import { TEMPLATE_SLUGS } from "@/templates/manifests";
@@ -20,7 +21,8 @@ const today = new Date().toISOString().slice(0, 10);
 
 const isDay = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s);
 const slugs = new Set(BLOG_POSTS.map((p) => p.slug));
-const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy"]);
+const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy", "/gifts", "/games", "/long-distance", "/dates", "/trips"]);
+const GAMES = new Set(["know", "rather", "draw", "memory", "deck", "dare", "roulette"]);
 
 /** A link inside a post goes to a page that exists. Site paths are written without the locale. */
 function resolves(href: string): boolean {
@@ -33,6 +35,10 @@ function resolves(href: string): boolean {
   if (occasion) return isOccasion(occasion[1] ?? "");
   const post = pathname.match(/^\/blog\/([a-z0-9-]+)$/);
   if (post) return slugs.has(post[1] ?? "");
+  const recipient = pathname.match(/^\/gifts\/([a-z0-9-]+)$/);
+  if (recipient) return recipientFromSlug(recipient[1] ?? "") !== null;
+  const game = pathname.match(/^\/games\/([a-z]+)$/);
+  if (game) return GAMES.has(game[1] ?? "");
   return false;
 }
 
