@@ -49,7 +49,7 @@ export const DECKS: Record<DeckId, { name: L; blurb: L; from: string; to: string
       { en: "Which film romance would never work in real life?", es: "¿Qué romance de película no funcionaría en la vida real?" },
       { en: "What would your job be in a medieval village?", es: "¿A qué te dedicarías en un pueblo medieval?" },
       { en: "What's the funniest thing I've said in my sleep?", es: "¿Qué es lo más gracioso que he dicho en sueños?" },
-      { en: "What's the most you've spent on something you never used?", es: "¿Qué es lo más caro que has comprado y no has usado nunca?" },
+      { en: "Which hobby did you buy all the gear for and quit within a month?", es: "¿De qué afición te compraste todo el equipo y la dejaste al mes?" },
       { en: "Which job would you be fired from on the first day?", es: "¿De qué trabajo te echarían el primer día?" },
       { en: "What would our band be called?", es: "¿Cómo se llamaría nuestro grupo de música?" },
     ],
