@@ -2959,3 +2959,43 @@ So 631 to 635 go back to the engines that made the hits. The owner then asked fo
 **Post order:** 633, 631, 634, 635, 632 (632 lands closer to Thanksgiving), one a day. Pin 208, 149 and 30 to the profile.
 
 **Maya and Leo are 19–20.** The owner sent back 633's first ending ("i signed a lease today" / "for one"): "they are like 19 20 years old no leases no nothing like that". So their world is classes, dorms or their parents' place, part-time jobs, parties, exes, mums and friends. Never leases, moving in, mortgages, weddings, babies or careers.
+
+
+## The viral comparison (24 Oct), and 636 to 640
+
+The owner asked to compare every account they had sent against what went viral, then make posts people comment on, in 3 slides: 2 before the gift, 1 after. Read from TikTok's post lists on 24 Oct: 1,545 posts from rosie and the accounts they sent, 166 of them over 1M.
+
+| Account | Posts | Median | 1M+ | Format |
+|---|---|---|---|---|
+| @richie_prince1 | 419 | 2K | 69 | 5–7 s still of one iOS 26 chat |
+| @you_sir_naim | 159 | 203K | 31 | 2–6 cropped screenshots |
+| @36grm | 261 | 94K | 17 | 10 s still, "#targetaudience" |
+| @diarywithoutalockk | 420 | 40K | 15 | one image |
+| @unicornsprinklewaffles | 57 | 424K | 10 | 9–12 s still, sincere line |
+| @dianaa.auclair | 26 | 470K | 8 | memes and chat carousels |
+| @tingarchive14 | 22 | 590K | 7 | 16–35 slide love stories |
+| @savgilbertt | 78 | 145K | 5 | wrong-text fan fiction |
+
+**What the most-commented posts have in common.** Each one gives the viewer a job:
+
+| Engine | Post | Top comment |
+|---|---|---|
+| Take her side: he's caught lying by one detail | @you_sir_naim 7.4M (forgot her birthday; the date he remembered was his ex's) | "I'll bail you out" (459K) |
+| Quote the dodge: a shocking question, a casual reply | @richie_prince1 14.8M ("did you take my dad wallet", after "sup my love") | "This mf said 'Sup my love'" (473K) |
+| Pick a side: her savage comeback | @richie_prince1 8.8M ("Caleb is the guy that will come if you don't come"); @36grm 6.6M (her reply to "go to the party or be single", typed in the box and not sent) | "I would never disrespect my man like this" / "they say this and be cheating lol" (210K) |
+| Argue the answer | @richie_prince1 12.2M (a maths question, 18K comments) | "It's 2 right or wrong" (206K) |
+| Feel it: the ex still loves her | @you_sir_naim 6.0M (2 slides: his mom still asks when she's coming over) | – |
+| The cold flip | @36grm 11.1M ("my love for you is like dinosaurs, it doesn't exist") | "but it used to" (194K) |
+| Fill in your own | @36grm 4.4M ("my heart goes…") | "My heart goes cha-ching" (287K) |
+
+So 636 to 640 each copy one engine, written as a new story for Maya and Leo:
+
+| | Engine | Slide 1 | The ending people comment on |
+|---|---|---|---|
+| 636 | caught by one detail | "where were u last night" / "library" / "till 3am??" | "the library closes at 10 tho" (Read, no reply) |
+| 637 | her savage comeback | "who was the guy that walked u to ur car" / "my backup" | "u can stay" / "hes still my backup tho" |
+| 638 | the ex still loves her | "tomorrow wouldve been 1 year" / "please dont" | "because hes not gonna remember" |
+| 639 | the casual dodge | "who ate her birthday cake" / "hi beautiful" | "did u eat the cake tho" / "i love u" |
+| 640 | argue the answer | "8 ÷ 2(2+2)" / "1" / "my roommate says 16" | "its 16 tho" / "im taking it back" |
+
+**Post order:** 637, 636, 640, 638, 639, one a day.
