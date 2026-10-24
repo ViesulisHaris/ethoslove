@@ -39,11 +39,11 @@
     "myDates": "Mis citas"
   },
   "meta": {
-    "defaultTitle": "Ethos — Regalos, ideas para citas y escapadas en pareja",
+    "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
-    "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis.",
-    "giftsTitle": "Ethos — Regalos que se abren como una historia",
-    "giftsDescription": "Crea un regalo personal que se abre como una historia: tus fotos, su canción y tus palabras, enviado con un enlace o un código QR. Empezar es gratis."
+    "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos.",
+    "giftsTitle": "Ethos — Regalos virtuales que se abren como una historia",
+    "giftsDescription": "Envía un regalo virtual que se abre como una historia: tus fotos, su canción y tus palabras en una tarjeta animada, con un enlace o un QR. Empezar es gratis, sin instalar nada."
   },
   "nav": {
     "templates": "Plantillas",
@@ -788,6 +788,28 @@
     "badge": {
       "popular": "Favorita",
       "new": "Nueva"
+    },
+    "guide": {
+      "eyebrow": "Cómo hacerlo",
+      "heading": "Cómo hacer {name}",
+      "step1Title": "Añade tus fotos",
+      "step1Body": "{min, plural, =0 {Añade hasta {max} fotos, o ninguna.} other {Elige hasta {max} fotos.}} La vista previa muestra exactamente lo que verán mientras lo haces.",
+      "step1Music": "Pon una canción de la biblioteca, o la de verdad, la vuestra: treinta segundos esperan al final, a un toque.",
+      "step2Title": "Escribe lo que sientes",
+      "step2Body": "Di lo que nunca cabe en una tarjeta, con tus palabras: un recuerdo, una broma que solo entenderá esa persona, lo que le contarías de ella a un desconocido. Ponle un pie a cada foto si quieres.",
+      "step2Extras": "Añade una cuenta atrás hasta el día y una sorpresa escondida al final.",
+      "step3Title": "Envía el enlace",
+      "step3Body": "Publícalo y envía el enlace por donde quieras, o imprime su código QR y mételo en una tarjeta de papel. Se abre en cualquier móvil u ordenador, sin instalar nada.",
+      "faqTitle": "Preguntas frecuentes",
+      "faqFreeQ": "¿Es gratis?",
+      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice “Hecho con Ethos”. Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
+      "faqPaidQ": "¿Cuánto cuesta?",
+      "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta y Constelaciones son gratis.",
+      "faqOpenQ": "¿Cómo lo abren?",
+      "faqOpenA": "Con el enlace que les envías, por WhatsApp, iMessage, Instagram o email, o escaneando su código QR con la cámara del móvil. Se abre en el navegador de cualquier móvil u ordenador: sin app que instalar ni cuenta que crear.",
+      "faqEditQ": "¿Puedo cambiarlo después de enviarlo?",
+      "faqEditA": "Sí. Edítalo cuando quieras y el cambio sale en el mismo enlace. Los enlaces no caducan, así que se puede volver a abrir el año que viene.",
+      "moreTitle": "Más como este"
     }
   },
   "occasions": {
@@ -1764,7 +1786,7 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Hecho por ti, abierto en su móvil",
+      "eyebrow": "Regalos digitales hechos por ti",
       "h1a": "Hazle un regalo",
       "h1b": "que abrirá una y otra vez.",
       "sub": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Diez minutos para hacerlo; se envía como enlace o código QR.",
@@ -1886,8 +1908,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Regalos, ideas para citas y escapadas en pareja",
-      "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis."
+      "title": "Ethos — Regalos digitales que se abren como una historia",
+      "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos."
     },
     "hero": {
       "eyebrow": "Para vosotros dos",
@@ -2194,7 +2216,11 @@
       "again": "Barajar y otra vez",
       "how": "Quien tenga el móvil la lee en voz alta y luego respondéis.",
       "title": "Cartas de preguntas",
-      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded."
+      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded.",
+      "seoTitle": "Preguntas para tu pareja: juego de cartas gratis",
+      "seoDescription": "Preguntas para hacerle a tu pareja, en un juego de cartas: ligeras para el sofá, más profundas para luego y una baraja para la distancia. Gratis.",
+      "listTitle": "{count} preguntas para hacerle a tu pareja",
+      "listIntro": "Las tres barajas gratis: ligeras para el sofá, más cercanas para luego y una para cuando estáis lejos. Pasaos el móvil, leed una en voz alta y responded."
     },
     "lobby": {
       "one": {
@@ -2267,7 +2293,11 @@
         "ok": "Queda mucho por aprender. Bien.",
         "sub": "Puntúan los aciertos sobre la otra persona, no las respuestas propias. Quien tenga más puntos escucha mejor. O miente.",
         "again": "Jugar otra vez"
-      }
+      },
+      "seoTitle": "¿Cuánto me conoces? Test para parejas gratis",
+      "seoDescription": "Un test de ¿cuánto me conoces? para parejas: respondes sobre ti, adivinas lo suyo y puntúan los aciertos. En uno o dos móviles. Gratis, sin app.",
+      "listTitle": "{count} preguntas de ¿cuánto me conoces?",
+      "listIntro": "Las preguntas del juego gratis, cada una con cuatro respuestas. Responde sobre ti y luego adivina qué dijo la otra persona."
     },
     "rather": {
       "title": "¿Qué prefieres?",
@@ -2294,7 +2324,11 @@
         "again": "Jugar otra vez",
         "date": "Planear una cita"
       },
-      "or": "o"
+      "or": "o",
+      "seoTitle": "Preguntas de ¿qué prefieres? para parejas, online",
+      "seoDescription": "Preguntas de ¿qué prefieres? para parejas, de tiernas a dramáticas. Elegís en secreto en uno o dos móviles y veis si coincidís. Gratis, sin app.",
+      "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
+      "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
     },
     "roulette": {
       "title": "La ruleta de los platos",
@@ -2309,7 +2343,9 @@
         "eyebrow": "La ruleta ha hablado",
         "title": "Decidido. Sin apelaciones.",
         "again": "Girar un poco más"
-      }
+      },
+      "seoTitle": "Ruleta de tareas para parejas: ¿quién friega?",
+      "seoDescription": "Una ruleta con vuestros nombres: cada giro decide una tarea y lo que diga la ruleta va a misa. Una ruleta de tareas para parejas, gratis y sin app."
     },
     "dare": {
       "title": "Verdad o reto, versión suave",
@@ -2329,7 +2365,13 @@
         "title": "Balance de la noche: {truths, plural, one {# verdad} other {# verdades}} y {dares, plural, one {# reto} other {# retos}}.",
         "sub": "Lo que se dice en esta mesa se queda en esta mesa.",
         "again": "Barajar y jugar otra vez"
-      }
+      },
+      "seoTitle": "Verdad o reto para parejas: juego online gratis",
+      "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
+      "listTitle": "{count} preguntas de verdad o reto para parejas",
+      "listIntro": "Todas las verdades y todos los retos del juego gratis. Sobre todo piropos y bailar mal.",
+      "listTruths": "Verdades",
+      "listDares": "Retos"
     },
     "play": {
       "one": "1 móvil",
@@ -2370,7 +2412,9 @@
         "kiss": "un beso",
         "butterfly": "una mariposa",
         "cake": "una tarta"
-      }
+      },
+      "seoTitle": "Memory con vuestras fotos, un juego para dos",
+      "seoDescription": "El juego de parejas para dos, con nuestras pegatinas o con vuestras fotos. Da la vuelta a dos cartas; si son pareja, son tuyas y repites. Gratis."
     },
     "draw": {
       "title": "Dibuja y adivina",
@@ -2416,7 +2460,9 @@
         "sub": "Habéis acertado {n} de {total} en equipo. Las falladas son las que seguiréis recordando.",
         "again": "Jugar otra vez"
       },
-      "imHere": "Soy {name}, vamos"
+      "imHere": "Soy {name}, vamos",
+      "seoTitle": "Juego de dibujar para parejas, en dos móviles",
+      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis."
     },
     "end": {
       "label": "¿Y ahora qué?",
@@ -3145,5 +3191,16 @@
       "title": "Pruébalas gratis, paga una vez al enviar",
       "blurb": "Haz el regalo entero primero, gratis. Si lo envías, pagas una vez y va sin la marca."
     }
+  },
+  "recipients": {
+    "eyebrow": "Ideas de regalo",
+    "breadcrumb": "Regalos",
+    "free": "Gratis",
+    "make": "Hacer este regalo",
+    "guideTitle": "Cómo acertar",
+    "faqTitle": "Preguntas frecuentes",
+    "more": "Ideas de regalo para otra persona",
+    "occasions": "Por ocasión",
+    "footerTitle": "Ideas de regalo"
   }
 }

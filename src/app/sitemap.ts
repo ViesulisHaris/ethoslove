@@ -3,6 +3,7 @@ import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { BLOG_POSTS, postLocales, postModified } from "@/content/blog";
+import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { localizedUrl } from "@/lib/seo";
 import { TRIPS } from "@/lib/trips/presets";
@@ -30,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/dates", priority: 0.9, changeFrequency: "weekly" },
     ...CITY_SLUGS.map((slug): Page => ({ path: `/dates/${slug}`, priority: 0.7, changeFrequency: "weekly" })),
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
+    ...RECIPIENTS.map((r): Page => ({ path: `/gifts/${recipientSlug(r)}`, priority: 0.8, changeFrequency: "monthly" })),
     { path: "/trips", priority: 0.8, changeFrequency: "monthly" },
     ...TRIPS.map((trip): Page => ({ path: `/trips/${trip.id}`, priority: 0.7, changeFrequency: "monthly", ...(trip.image ? { images: [`${SITE.url}${trip.image}`] } : {}) })),
     { path: "/long-distance", priority: 0.8, changeFrequency: "monthly" },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Mail } from "lucide-react";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { localeAlternates } from "@/lib/seo";
 import { Link } from "@/i18n/navigation";
 import { BRAND } from "@/config/brand";
 import { LEGAL_UPDATED, WITHDRAW_DOCS } from "@/content/legal";
@@ -10,7 +11,7 @@ import { LegalDocument } from "@/components/marketing/legal-document";
 export async function generateMetadata({ params }: Omit<PageProps<"/[locale]/legal/withdraw">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const doc = WITHDRAW_DOCS[locale as GiftLocale];
-  return { title: doc.title, description: doc.intro };
+  return { title: doc.title, description: doc.intro, alternates: localeAlternates(locale, "/legal/withdraw") };
 }
 
 /**

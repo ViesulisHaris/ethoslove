@@ -137,6 +137,10 @@ Miss one of these and the template half-exists. After adding the folder:
 5. `tests/e2e/templates.spec.ts` — add the slug to the demo list.
 6. `public/templates/<slug>/poster.jpg` + `preview.webm` — generated, see below. The gallery card,
    the template page and the sitemap all point at them, so a missing poster is a broken image.
+7. `src/content/template-seo.ts` — the words the template's page is found by, in English and
+   Spanish: the phrase people type for the thing it is (check Google's suggestions for it, e.g.
+   "digital snow globe"), a title under 60 characters, a snippet under 160 and the how-to heading.
+   Without one the page falls back to "{name}: digital gift template", which nobody searches.
 
 Everything else follows automatically: the editor, unlocking after payment, occasion pages,
 `llms.txt`, the sitemap and the dashboard all read the manifests.

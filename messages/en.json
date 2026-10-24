@@ -39,11 +39,11 @@
     "myDates": "My dates"
   },
   "meta": {
-    "defaultTitle": "Ethos — Gifts, date ideas and trips for couples",
+    "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
-    "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start.",
-    "giftsTitle": "Ethos — Gifts that open like a story",
-    "giftsDescription": "Make a personal gift that opens like a story: your photos, their song and your words, sent as a link or a QR code. Free to start."
+    "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two.",
+    "giftsTitle": "Ethos — Virtual gifts that open like a story",
+    "giftsDescription": "Send a virtual gift that opens like a story: your photos, their song and your words in an animated card, sent as a link or a QR code. Free to start, nothing to install."
   },
   "nav": {
     "templates": "Templates",
@@ -788,6 +788,28 @@
     "badge": {
       "popular": "Most loved",
       "new": "New"
+    },
+    "guide": {
+      "eyebrow": "How to make one",
+      "heading": "How to make {name}",
+      "step1Title": "Add your photos",
+      "step1Body": "{min, plural, =0 {Add up to {max} photos, or none at all.} other {Choose up to {max} photos.}} The preview shows exactly what they'll see while you go.",
+      "step1Music": "Add a song from the library, or the real one that's yours: thirty seconds of it wait at the end, a tap away.",
+      "step2Title": "Write what you mean",
+      "step2Body": "Say the thing a card never has room for, in your own words: a memory, a joke only they'll get, what you'd tell a stranger about them. Give every photo a caption if you like.",
+      "step2Extras": "Add a countdown to the day and a surprise hidden at the very end.",
+      "step3Title": "Send the link",
+      "step3Body": "Publish it and send the link anywhere a link goes, or print its QR code and tuck it in a real card. It opens on any phone or laptop, with nothing to install.",
+      "faqTitle": "Questions people ask",
+      "faqFreeQ": "Is it free?",
+      "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
+      "faqPaidQ": "How much does it cost?",
+      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter and Constellations are free.",
+      "faqOpenQ": "How do they open it?",
+      "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
+      "faqEditQ": "Can I change it after I send it?",
+      "faqEditA": "Yes. Edit it whenever you like and the change goes live at the same link. Links don't expire, so it opens again next year.",
+      "moreTitle": "More like this"
     }
   },
   "occasions": {
@@ -1764,7 +1786,7 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Made by you, opened on their phone",
+      "eyebrow": "Digital gifts, made by you",
       "h1a": "Make them a gift",
       "h1b": "they'll open again and again.",
       "sub": "Your photos, your words and their song, turned into a gift that opens like a story. Ten minutes to make, sent as a link or a QR code.",
@@ -1886,8 +1908,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Gifts, date ideas and trips for couples",
-      "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start."
+      "title": "Ethos — Digital gifts that open like a story",
+      "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two."
     },
     "hero": {
       "eyebrow": "For the two of you",
@@ -2194,7 +2216,11 @@
       "again": "Shuffle and go again",
       "how": "Whoever is holding the phone reads it out. You both answer.",
       "title": "Question cards",
-      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer."
+      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer.",
+      "seoTitle": "Questions to Ask Your Partner: Free Card Game",
+      "seoDescription": "Questions to ask your boyfriend or girlfriend, as a card game: light ones for the sofa, deeper ones for later and a deck for long distance. Free.",
+      "listTitle": "{count} questions to ask your partner",
+      "listIntro": "All three free decks: light ones for the sofa, closer ones for later and a deck for when you're apart. Pass the phone, read one out, and both answer."
     },
     "lobby": {
       "one": {
@@ -2267,7 +2293,11 @@
         "ok": "There is more to learn. Good.",
         "sub": "Guesses about the other person, not answers about yourself. The one with more points listens better. Or is lying.",
         "again": "Play again"
-      }
+      },
+      "seoTitle": "How Well Do You Know Me? A Quiz for Couples",
+      "seoDescription": "A how well do you know me quiz for couples: answer for yourself, guess for them, and the guesses score. Play on one phone or two. Free, no app.",
+      "listTitle": "{count} how well do you know me questions",
+      "listIntro": "The questions in the free game, each with four answers to pick from. Answer for yourself, then guess what they said."
     },
     "rather": {
       "title": "Would you rather?",
@@ -2294,7 +2324,11 @@
         "again": "Play again",
         "date": "Plan a date"
       },
-      "or": "or"
+      "or": "or",
+      "seoTitle": "Would You Rather Questions for Couples: Play Online",
+      "seoDescription": "Would you rather questions for couples, from sweet to dramatic. Both pick in secret on one phone or two, then see if you agree. Free, no app, no sign-up.",
+      "listTitle": "{count} would you rather questions for couples",
+      "listIntro": "Every question in the free deck, from easy ones for the sofa to the ones that start an argument worth screenshotting. Play them above on one phone or two, or read them out on a date."
     },
     "roulette": {
       "title": "Dishes roulette",
@@ -2309,7 +2343,9 @@
         "eyebrow": "The wheel has spoken",
         "title": "Settled. No appeals.",
         "again": "Spin some more"
-      }
+      },
+      "seoTitle": "Chore Wheel for Couples: Who Does the Dishes?",
+      "seoDescription": "A wheel of the two of you: every spin settles one chore, and the wheel's word is final. A free chore roulette for couples, no app needed."
     },
     "dare": {
       "title": "Truth or dare, soft edition",
@@ -2329,7 +2365,13 @@
         "title": "{truths, plural, one {# truth} other {# truths}} and {dares, plural, one {# dare} other {# dares}} later.",
         "sub": "What's said at this table stays at this table.",
         "again": "Shuffle and play again"
-      }
+      },
+      "seoTitle": "Truth or Dare for Couples: A Free Online Game",
+      "seoDescription": "Truth or dare for couples, the soft edition: sweet truths and silly dares, nothing you'd regret in the morning. One phone, going round. Free.",
+      "listTitle": "{count} truth or dare questions for couples",
+      "listIntro": "Every truth and every dare in the free game. Mostly compliments and bad dancing.",
+      "listTruths": "Truths",
+      "listDares": "Dares"
     },
     "play": {
       "one": "1 phone",
@@ -2370,7 +2412,9 @@
         "kiss": "a kiss",
         "butterfly": "a butterfly",
         "cake": "a cake"
-      }
+      },
+      "seoTitle": "Memory Game with Your Own Photos, for Two",
+      "seoDescription": "The pairs game for two, dealt from our stickers or from your own photos. Turn two cards; a pair is yours and you go again. Free, in the browser."
     },
     "draw": {
       "title": "Draw it, guess it",
@@ -2416,7 +2460,9 @@
         "sub": "You got {n} of {total} between you. The misses are the ones you'll keep quoting.",
         "again": "Play again"
       },
-      "imHere": "I'm {name}, go"
+      "imHere": "I'm {name}, go",
+      "seoTitle": "Drawing Game for Couples, Live on Two Phones",
+      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two."
     },
     "end": {
       "label": "What next",
@@ -3145,5 +3191,16 @@
       "title": "Free to try, pay once to send",
       "blurb": "Make the whole gift first, for free. If you send it, you pay once, and it goes without the footer."
     }
+  },
+  "recipients": {
+    "eyebrow": "Gift ideas",
+    "breadcrumb": "Gifts",
+    "free": "Free",
+    "make": "Make this gift",
+    "guideTitle": "How to make it land",
+    "faqTitle": "Questions people ask",
+    "more": "Gift ideas for someone else",
+    "occasions": "By occasion",
+    "footerTitle": "Gift ideas"
   }
 }

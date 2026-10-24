@@ -2,6 +2,8 @@ import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
+import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
+import { templateSeo } from "@/content/template-seo";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { CREATOR_COMMISSION_PCT } from "@/lib/commerce/creators";
 import {
@@ -69,12 +71,16 @@ export function GET() {
     "",
     ...manifests.map(
       (m) =>
-        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)}): ${m.tagline.en} ${m.description.en} ${m.tier === "free" ? "Free." : "Premium."} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
+        `- [${m.name.en}](${localizedUrl("en", `/templates/${m.slug}`)})${templateSeo(m.slug, "en") ? ` (${templateSeo(m.slug, "en")?.keyword.toLowerCase()})` : ""}: ${m.tagline.en} ${m.description.en} ${m.tier === "free" ? "Free." : "Premium."} Good for: ${m.occasions.map((o) => en.occasions[o]).join(", ")}.`,
     ),
     "",
     "## Occasions",
     "",
     ...OCCASIONS.map((o) => `- [${en.seo.occasion[o].title}](${localizedUrl("en", `/occasions/${o}`)}): ${en.seo.occasion[o].description}`),
+    "",
+    "## Gift ideas by who it's for",
+    "",
+    ...RECIPIENTS.map((r) => `- [${RECIPIENT_GUIDES[r].en.h1}](${localizedUrl("en", `/gifts/${recipientSlug(r)}`)}): ${RECIPIENT_GUIDES[r].en.description}`),
     "",
     "## Blog",
     "",
