@@ -1,0 +1,72 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:18 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did you like my ex's post"
+        },
+        {
+          "from": "them",
+          "text": "it was a good post"
+        },
+        {
+          "from": "me",
+          "text": "LEO"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok ok"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im not mad anymore"
+        },
+        {
+          "from": "me",
+          "text": "but i followed your ex"
+        },
+        {
+          "from": "me",
+          "text": "were getting coffee tuesday"
+        },
+        {
+          "from": "them",
+          "text": "maya why"
+        }
+      ]
+    }
+  ]
+}
