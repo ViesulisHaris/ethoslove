@@ -2922,3 +2922,38 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 169 | u called me pathetic | four slides; he is the problem: the gift instead of the apology | the most beautiful frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
+
+
+## rosie, read 24 Oct, and 631 to 635
+
+Read from the public post list on 24 Oct: 52 posts, 326 followers, 446.6K likes, nothing pinned. Ten posts are over 100K, none sit between 50K and 100K, and all ten went up 10–26 Sept.
+
+| Views | # | Engine | Comments | Saves |
+|---|---|---|---|---|
+| 1.3M | 149 | Maya cold, he made something, her breakup speech | 776 | 14.7K |
+| 986K | 30 | midnight, "first one to say it" | 181 | 24.9K |
+| 474K | 208 | Maya cold, he made something, she's cheating | 701 | 2.9K |
+| 349K | 138 | cat court | 31 | 4.1K |
+| 279K | 192 | "u said k", he has a secret baby | 61 | 1.1K |
+| 279K | 102 | friends to lovers | 25 | 1.1K |
+| 184K | 170 | his phone checks, she lied about where she was | 73 | 610 |
+| 138K | 78 | "it's tomorrow", he counted | 54 | 760 |
+| 130K | 03 | "thursday" / "bin day", he pretended to forget | 38 | 357 |
+| 122K | 39 | "2 months isnt an anniversary", he counted | 21 | 1.2K |
+
+- **208 went viral again when the hold lifted:** 158K on 21 Oct, 474K on 24 Oct, and its comments went from about 200 to 701. Nearly all of them yell at Maya by name: "maya pass the FUCKING controller" (14.5K likes), "making me side with a man🫩" (7.3K). The display name is maya, so the comments go to her.
+- **Every post since the return was sweet** (575, 573, 584, 599, 605, 610, 615, 626). The first three were shown to 12–17K people, but got 32–226 likes and 1–2 comments each, so TikTok stopped. The rest sit at 500–1,100. Most hits get 6–15 likes per 100 views.
+- **Every hit has tension on slide 1:** someone is cold, or he pretends he forgot. The sweet ones open sweet, so nothing is at stake.
+- **The "evening only" rule above was wrong.** The post ids show 30 went up at 11:14 UTC, 102 at 11:24 and 39 at 12:30.
+
+So 631 to 635 go back to the engines that made the hits, written as new stories:
+
+| | Engine | Slide 1 | The twist |
+|---|---|---|---|
+| 631 | 208, Maya the villain | "its 6pm maya" / "and??" | "its my birthday" / "just wanted u to have something today too" |
+| 632 | 149, what she shouldn't say | "busy doing what leo" | "i told my mom we broke up" / "she took it really well" / "like suspiciously well" |
+| 633 | cold reply, gut punch | her 👍 on "i love u" | "i signed a lease today" / "for us??" / "for one" |
+| 634 | 192, he's the villain | "why does gym bro call u baby" | "send it to gym bro" |
+| 635 | 102, friends to lovers | "he broke up with me" / "over text" | "a year" / "i was waiting for him to mess up" |
+
+**Post order:** 631, 633, 634, 632, 635, one a day. Pin 208, 149 and 30 to the profile.
