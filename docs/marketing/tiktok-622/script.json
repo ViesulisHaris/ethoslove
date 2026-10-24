@@ -1,0 +1,47 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my phone still connects to your wifi"
+        },
+        {
+          "from": "them",
+          "text": "when"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "when i drive past your street"
+        },
+        {
+          "from": "them",
+          "text": "why are you driving past my street"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "why didnt you change your password",
+          "status": "Read 11:54 PM"
+        }
+      ]
+    }
+  ]
+}
