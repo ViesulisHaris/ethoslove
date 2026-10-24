@@ -1,0 +1,51 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i found your airpod in my bag"
+        },
+        {
+          "from": "them",
+          "text": "the left one?"
+        },
+        {
+          "from": "me",
+          "text": "how do you know",
+          "status": "Read 8:15 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "because i have your right one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "should we swap back"
+        },
+        {
+          "from": "them",
+          "text": "or we could meet halfway"
+        }
+      ]
+    }
+  ]
+}
