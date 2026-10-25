@@ -42,6 +42,8 @@ now, and a cached page can't show one country's price to another.
   in row 48.2 as now, converted at the ECB rate.
 - **Google mostly crawls from the US**, so search results will mostly show $11.99, to European
   searchers too. If that matters, crawlers can be kept on euros; say so.
+- **The product feed for Meta and TikTok catalog ads** (`/api/catalog/meta.csv`) still says 9.99 EUR.
+  The USA test doesn't use catalog ads; if US catalog ads come later, that feed needs a US version.
 
 ## Checked, and not checked
 
