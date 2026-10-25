@@ -201,7 +201,8 @@ If that is rejected because `main` moved, pull with `--rebase` as above, repeat 
 checks, and push again. Never force-push.
 
 The live repository's **Publish blog** workflow (`.github/workflows/publish-blog.yml`) reads the
-mirror at 10:00 and 16:00 UTC, with no key, since the mirror is public. It checks the new commits
+mirror at 07:43, 10:43, 13:43 and 16:43 UTC, an hour and a half after each routine run and again
+three hours later, with no key, since the mirror is public. It checks the new commits
 with `scripts/blog-guard.mjs` (only files under `src/content/blog/`, `public/blog/` and
 `docs/blog/`; a post file must be plain data; the team's author), moves the live `main` to them,
 runs the blog tests and the type check, pushes (Vercel deploys it), waits for the post on
@@ -224,7 +225,7 @@ node scripts/indexnow.mjs https://tryethos.io/blog/<slug> https://tryethos.io/es
 ## 7. Report
 
 Send one push notification: `New on tryethos.io: <English title>`, or, when it went to a branch,
-`Blog post queued, live by 16:00 UTC: <English title>`.
+`Blog post queued, live at the next publish run: <English title>`.
 
 The final message is what the owner reads on their phone. Write only:
 - the title;
@@ -233,7 +234,7 @@ The final message is what the owner reads on their phone. Write only:
 - the templates it recommends;
 - the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
 - "Live and sent to IndexNow", or "Live check skipped (no network)", or "Queued on the mirror's
-  main; the live repository publishes it at 10:00 or 16:00 UTC";
+  main; the live repository publishes it at the next of 07:43, 10:43, 13:43 or 16:43 UTC";
 - one line if anything was skipped or failed.
 
 ## Never

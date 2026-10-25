@@ -2,8 +2,9 @@
 
 1. The daily blog routine (docs/blog/PLAYBOOK.md) writes the post in the cloud and commits it to
    `main` of the public mirror, github.com/ViesulisHaris/ethoslove.
-2. At 10:00 and 16:00 UTC the live repository's Publish blog workflow
-   (`.github/workflows/publish-blog.yml`) reads the mirror. If the mirror's `main` is ahead, it checks
+2. At 07:43, 10:43, 13:43 and 16:43 UTC, an hour and a half after each routine run and again three
+   hours later, the live repository's Publish blog workflow (`.github/workflows/publish-blog.yml`)
+   reads the mirror. If the mirror's `main` is ahead, it checks
    the new commits with `scripts/blog-guard.mjs`: only files under `src/content/blog/`,
    `public/blog/` and `docs/blog/`, post files that are plain data, and the team's author.
 3. It moves the live `main` to them, runs the blog tests and the type check, and pushes. Vercel
