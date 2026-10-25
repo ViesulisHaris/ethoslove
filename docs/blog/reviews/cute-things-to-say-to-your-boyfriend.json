@@ -1,0 +1,184 @@
+{
+  "slug": "cute-things-to-say-to-your-boyfriend",
+  "keyword": "cute things to say to your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Answers the search with lines sorted by moment and a table that makes them personal, but two lines read as lifted from every other list: the cute-cumber pun and the weather-forecast morning text."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product claim and link checks out. 'I'm not busy for anyone else tonight' said the opposite of what it meant; the Spanish had a calque of it, 'enfadarme contigo' for angry on his behalf, 'no eres tú' (the break-up line), 'querer a' plus infinitive, a Latin American 'igual', a doubled 'llegan', a vosotros/tú switch and a description missing 'sin motivo'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Sorting by moment and the borrowed-versus-yours table beat page one, but every top result leads with compliments and thank-yous and the post had no section for them; the morning heading used the queued good-morning post's search."
+        }
+      ],
+      "applied": [
+        "Replaced the cute-cumber pun and the forecast line with lines about a sister at Sunday dinner and his mug next to hers (ES matches); takeaway now says 'joke' rather than 'pun'.",
+        "New section 'Sweet compliments and thank-yous to tell him' / 'Piropos y gracias bonitos para decirle'.",
+        "Morning heading now 'Cute things to say to your boyfriend in the morning' / 'Cosas bonitas para decirle a tu novio por la mañana'.",
+        "'Tonight I'm busy for everyone but you' / 'ocupada para todo el mundo menos para ti'.",
+        "ES: 'que me enfade por ti', 'funcionan', 'Lo malo ha sido el día, no tú' (lead and list), 'lo que me gusta quedarme en la cama', 'Y te va a salir bien igualmente', 'Haz un álbum', description includes 'sin motivo' (shortened to fit 160 characters).",
+        "Polish taken: blankets line made clear, ES title 'en cada momento', 'cuando te acabas de levantar', 'Siento lo que dije. No lo decía en serio', repeated 'one message a day' takeaway cut, older post link reads 'list of cute things…' / 'lista de cosas bonitas…'."
+      ],
+      "rejected": [
+        "Polish not taken: an extra flirty in-person line (adds text without fixing anything)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are long lists of interchangeable lines; this sorts sendable lines by the moment he'll read them, gives a timing rule for each and shows in a table how to make a line sound like you."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-one fixes went in correctly. The new mug line repeated 'at lunch' from two lines below, and the Spanish heading 'Piropos y gracias bonitos' used 'gracias' as a countable noun, which reads translated."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is long generic lists of compliments; this sorts short, specific lines by the exact moment and adds a borrowed-versus-personalised table, so the reader can send something tonight that sounds like her."
+        }
+      ],
+      "applied": [
+        "Mug line ends 'Call me tonight?' / '¿Me llamas esta noche?'.",
+        "ES heading 'Piropos para tu novio y cosas que agradecerle'.",
+        "Polish taken to head off a pattern fix: the compliments intro no longer repeats 'most lists' ('Compliments are the easy part…' / 'Los piropos son lo fácil…'); ES 'te pasan desapercibidos'."
+      ],
+      "rejected": [
+        "Polish not taken: 'recién levantado' back in the dog line (round one's editor asked for the change it would undo), the repeated one-message point (the takeaway was already cut in round one), and repointing the apology link to a post that doesn't exist yet."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are long lists of interchangeable lines; this sorts lines by when you'd send them, says when to send them, has bad-day and after-a-fight lines that work, and shows how to make any line sound like you."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-two fixes made correctly and every claim verified. One FAQ answer opened with three adjectives in a row ('light, unexpected and specific'), a machine-written shape the rubric names."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is long generic lists and scraped pages; this sorts specific, sendable lines by the moment you need them and shows how to make any line your own in ten seconds."
+        }
+      ],
+      "applied": [
+        "FAQ: 'Something unexpected and specific' / 'Algo inesperado y concreto'.",
+        "Polish taken to head off a Spain-Spanish fix: «cari» instead of «bebé»."
+      ],
+      "rejected": [
+        "Polish not taken: moving the mug line, 'dinner' for 'lunch', and three ES word-order tweaks ('Mensajes bonitos de buenas noches', 'la noche anterior', 'hablando de ti a alguien'), each fine as written; linking posts that don't exist yet."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are long, generic lists of interchangeable lines; this sorts real-sounding texts by when to send them and shows how to make any line specific to him, so you can act on it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Last round's fix made correctly in both languages; every product claim and link verified, and the Spanish reads as written in Spain rather than translated."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one sorts lines by theme; this sorts them by moment with timing, and its borrowed-versus-yours table shows how to make a line yours instead of handing over 200 lines nobody would send."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): moving the mug line to the far-away list, a pet-name FAQ, linking future posts, 'Mensajes bonitos de buenas noches', 'Send your message the night before', and 'bastan' in the Spanish FAQ."
+      ]
+    }
+  ]
+}
