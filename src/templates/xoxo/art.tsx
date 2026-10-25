@@ -11,6 +11,8 @@ import { decor, type DecorSlot, type Highlight, type Look, type Mark } from "./l
 
 /** How the cover's pieces leave when the envelope opens: slow off the mark, then gone. */
 const LEAVE = [0.5, 0, 0.75, 0] as const;
+/** The outside of the flap folding up to its hinge: slow off the mark, fastest as it goes edge-on. */
+const FOLD_UP = [0.42, 0, 1, 1] as const;
 
 /**
  * An envelope seen from the flap side, sealed with a lipstick print. Opening it lifts the flap on
@@ -31,14 +33,32 @@ export function Envelope({ look, name, to, opening, reduce }: { look: Look; name
   );
 }
 
+/**
+ * Drawn flat on purpose, like the shared cover's envelope: the flap is two faces, its outside
+ * folding up to the hinge, then its inside unfolding above the envelope, each a squash about the
+ * hinge. Every layer keeps the place it is written in: inside of the flap, letter, pocket, closed
+ * flap. It used to be one 3D flip with its z-index dropped as it began, which painted the open
+ * flap over the letter as it rose, cutting a triangle out of the page.
+ */
 function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: string; to: string; opening: boolean; reduce: boolean }) {
   const { body, flap, lining } = look.envelope;
   const ease = [0.6, 0, 0.3, 1] as const;
+  const foldUp = reduce ? 0.06 : 0.16;
+  const unfold = reduce ? 0.09 : 0.44;
   return (
-    <div className="relative w-full" style={{ aspectRatio: "1.42", perspective: "calc(220*var(--p))", filter: "drop-shadow(0 calc(3*var(--p)) calc(4*var(--p)) rgba(30,5,10,.4))" }}>
+    // isolate: the layers' z-indexes stay inside the envelope, so it stacks as one piece among the cut-outs.
+    <div className="relative isolate w-full" style={{ aspectRatio: "1.42", filter: "drop-shadow(0 calc(3*var(--p)) calc(4*var(--p)) rgba(30,5,10,.4))" }}>
       {/* the inside of the envelope, and its lining */}
       <span aria-hidden="true" className="absolute inset-0 rounded-[calc(1.2*var(--p))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN }} />
       <span aria-hidden="true" className="absolute inset-x-[3%] top-[3%] h-[58%] rounded-[calc(.8*var(--p))]" style={{ backgroundColor: lining, backgroundImage: "radial-gradient(rgba(255,255,255,.28) 1.1px, transparent 1.4px)", backgroundSize: "calc(3*var(--p)) calc(3*var(--p))" }} />
+      {/* the inside of the flap, once it is open: it unfolds upwards from the hinge, behind the letter */}
+      <motion.div aria-hidden="true" className="absolute inset-x-0 bottom-full h-[62%]" style={{ transformOrigin: "50% 100%" }} initial={false} animate={opening ? { scaleY: 1, scaleX: 1 } : { scaleY: 0, scaleX: 1.05 }} transition={opening ? { delay: foldUp, duration: unfold, ease } : { duration: 0 }}>
+        <span className="absolute inset-0 rounded-b-[calc(1.2*var(--p))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN, clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
+        <span className="absolute inset-0" style={{ background: "linear-gradient(0deg, transparent 40%, rgba(0,0,0,.14))", clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+          <path d="M0 100 L50 0 L100 100" fill="none" stroke={look.dark ? "rgba(255,255,255,.2)" : "rgba(60,30,20,.26)"} strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </motion.div>
       {/* the letter, which rises */}
       <motion.div className="absolute inset-x-[7%] top-[8%] h-[84%] rounded-[calc(.6*var(--p))] px-[8%] pt-[7%]" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, color: "#2A1A1C", boxShadow: "0 0 calc(1.4*var(--p)) rgba(0,0,0,.2)" }} animate={opening ? { y: "-58%" } : { y: 0 }} transition={{ duration: reduce ? 0.15 : 0.75, delay: opening && !reduce ? 0.32 : 0, ease }}>
         <FitName as="p" className="text-[calc(7*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
@@ -57,8 +77,8 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
       <FitName as="p" className="absolute inset-x-[8%] bottom-[5%] text-center text-[calc(6.4*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT, color: look.ink, opacity: 0.85 }}>
         {to} {name}
       </FitName>
-      {/* the flap, hinged along the top */}
-      <motion.div className="absolute inset-x-0 top-0 h-[62%] origin-top" style={{ transformStyle: "preserve-3d", zIndex: opening ? 0 : 3 }} animate={opening ? { rotateX: 178 } : { rotateX: 0 }} transition={{ duration: reduce ? 0.15 : 0.6, ease }}>
+      {/* the closed flap, hinged along the top: it folds up to the hinge, and the inside takes over */}
+      <motion.div className="absolute inset-x-0 top-0 z-[3] h-[62%] origin-top" initial={false} animate={opening ? { scaleY: 0, scaleX: 1.05 } : { scaleY: 1, scaleX: 1 }} transition={opening ? { duration: foldUp, ease: FOLD_UP } : { duration: 0 }}>
         <span aria-hidden="true" className="absolute inset-0 rounded-t-[calc(1.2*var(--p))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN, clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
         <span aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(0,0,0,.14))", clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
         <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">

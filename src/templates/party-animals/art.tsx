@@ -48,21 +48,40 @@ export const PARTY_KEYFRAMES = `
 /* The invitation                                                                              */
 /* ------------------------------------------------------------------------------------------ */
 
+/** The outside of the flap folding up to its hinge: slow off the mark, fastest as it goes edge-on. */
+const FOLD_UP = [0.42, 0, 1, 1] as const;
+
 /**
  * An invitation seen from the flap side, sealed with a hamster in a party hat. Opening it throws
  * the hamster off, lifts the flap on its fold and draws the card up out of the pocket. Sized in
  * `--o`, the opener's own unit, so it stays whole on a short phone held sideways.
+ *
+ * Drawn flat, as XOXO's envelope is: the flap's outside folds up to the hinge and its inside
+ * unfolds above it, each a squash about the hinge, and every layer keeps the place it is written
+ * in (inside of the flap, card, pocket, closed flap). A 3D flip painted the open flap over the card.
  */
 export function Invitation({ look, name, to, card, opening, reduce }: { look: Look; name: string; to: string; card: string; opening: boolean; reduce: boolean }) {
   const { body, flap, lining, liningPrint, ink } = look.envelope;
   const ease = [0.6, 0, 0.3, 1] as const;
+  const lift = reduce ? 0 : 0.12;
+  const foldUp = reduce ? 0.06 : 0.16;
+  const unfold = reduce ? 0.09 : 0.44;
   const stripes = `repeating-linear-gradient(-45deg, ${lining} 0 calc(1.7*var(--o)), ${liningPrint} calc(1.7*var(--o)) calc(3.4*var(--o)))`;
   const dots = `radial-gradient(${mix(lining, body, 0.72)} calc(.45*var(--o)), transparent calc(.55*var(--o)))`;
   return (
-    <div className="relative w-full" style={{ aspectRatio: "1.42", perspective: "calc(220*var(--o))", filter: "drop-shadow(0 calc(2.6*var(--o)) calc(3.6*var(--o)) rgba(40,15,25,.34))" }}>
+    // isolate: the layers' z-indexes stay inside the invitation, so it stacks as one piece.
+    <div className="relative isolate w-full" style={{ aspectRatio: "1.42", filter: "drop-shadow(0 calc(2.6*var(--o)) calc(3.6*var(--o)) rgba(40,15,25,.34))" }}>
       {/* the inside, and the striped lining */}
       <span aria-hidden="true" className="absolute inset-0 rounded-[calc(1.2*var(--o))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN }} />
       <span aria-hidden="true" className="absolute inset-x-[3%] top-[3%] h-[58%] rounded-[calc(.8*var(--o))]" style={{ background: stripes }} />
+      {/* the inside of the flap, once it is open: it unfolds upwards from the hinge, behind the card */}
+      <motion.div aria-hidden="true" className="absolute inset-x-0 bottom-full h-[62%]" style={{ transformOrigin: "50% 100%" }} initial={false} animate={opening ? { scaleY: 1, scaleX: 1 } : { scaleY: 0, scaleX: 1.05 }} transition={opening ? { delay: lift + foldUp, duration: unfold, ease } : { duration: 0 }}>
+        <span className="absolute inset-0 rounded-b-[calc(1.2*var(--o))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN, clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
+        <span className="absolute inset-0" style={{ background: "linear-gradient(0deg, transparent 40%, rgba(0,0,0,.13))", clipPath: "polygon(0 100%, 100% 100%, 50% 0)" }} />
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+          <path d="M0 100 L50 0 L100 100" fill="none" stroke={look.dark ? "rgba(255,255,255,.22)" : "rgba(60,30,20,.24)"} strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
+        </svg>
+      </motion.div>
       {/* the card, which rises */}
       <motion.div className="absolute inset-x-[7%] top-[8%] h-[84%] overflow-hidden rounded-[calc(.6*var(--o))] px-[7%] pt-[6%] text-center" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, color: "#2E2622", boxShadow: "0 0 calc(1.4*var(--o)) rgba(0,0,0,.2)" }} animate={opening ? { y: "-60%" } : { y: 0 }} transition={{ duration: reduce ? 0.15 : 0.75, delay: opening && !reduce ? 0.34 : 0, ease }}>
         <p className="text-[calc(2.3*var(--o))] leading-none font-semibold tracking-[0.34em] uppercase opacity-60">{card}</p>
@@ -84,8 +103,8 @@ export function Invitation({ look, name, to, card, opening, reduce }: { look: Lo
       <p className="absolute inset-x-[8%] bottom-[6%] truncate text-center text-[calc(6*var(--o))] leading-[1.35]" style={{ fontFamily: SCRIPT_FONT, color: ink, opacity: 0.88 }}>
         {to} {name}
       </p>
-      {/* the flap, hinged along the top */}
-      <motion.div className="absolute inset-x-0 top-0 h-[62%] origin-top" style={{ transformStyle: "preserve-3d", zIndex: opening ? 0 : 3 }} animate={opening ? { rotateX: 178 } : { rotateX: 0 }} transition={{ duration: reduce ? 0.15 : 0.6, delay: opening && !reduce ? 0.12 : 0, ease }}>
+      {/* the closed flap, hinged along the top: it folds up to the hinge, and the inside takes over */}
+      <motion.div className="absolute inset-x-0 top-0 z-[3] h-[62%] origin-top" initial={false} animate={opening ? { scaleY: 0, scaleX: 1.05 } : { scaleY: 1, scaleX: 1 }} transition={opening ? { duration: foldUp, delay: lift, ease: FOLD_UP } : { duration: 0 }}>
         <span aria-hidden="true" className="absolute inset-0 rounded-t-[calc(1.2*var(--o))]" style={{ backgroundColor: flap, backgroundImage: PAPER_GRAIN, clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
         <span aria-hidden="true" className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(0,0,0,.13))", clipPath: "polygon(0 0, 100% 0, 50% 100%)" }} />
         <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
