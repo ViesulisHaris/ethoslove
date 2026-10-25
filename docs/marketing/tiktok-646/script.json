@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:41 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why havent u posted me"
+        },
+        {
+          "from": "them",
+          "text": "i like keeping things private"
+        },
+        {
+          "from": "me",
+          "text": "its been 6 months"
+        },
+        {
+          "from": "them",
+          "text": "so?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so??"
+        },
+        {
+          "from": "them",
+          "text": "dont be like that"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "u posted ur car 3 times this week"
+        },
+        {
+          "from": "them",
+          "text": "thats different"
+        }
+      ]
+    }
+  ]
+}
