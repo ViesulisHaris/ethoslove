@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:22 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so are we gonna talk about last night"
+        },
+        {
+          "from": "them",
+          "text": "what about it"
+        },
+        {
+          "from": "me",
+          "text": "u said i love u"
+        },
+        {
+          "from": "them",
+          "text": "i was tired"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "TIRED??"
+        },
+        {
+          "from": "them",
+          "text": "ok dont freak out"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "do u love me or not"
+        },
+        {
+          "from": "them",
+          "text": "i dont want to rush things"
+        }
+      ]
+    }
+  ]
+}
