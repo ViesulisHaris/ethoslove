@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|12:52 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what are we"
+        },
+        {
+          "from": "them",
+          "text": "what do u mean"
+        },
+        {
+          "from": "me",
+          "text": "its been 5 months leo"
+        },
+        {
+          "from": "them",
+          "text": "were chilling"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "chilling??"
+        },
+        {
+          "from": "them",
+          "text": "relax"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "so am i ur girlfriend"
+        },
+        {
+          "from": "them",
+          "text": "why do u need a label"
+        }
+      ]
+    }
+  ]
+}
