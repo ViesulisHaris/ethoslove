@@ -3037,3 +3037,18 @@ The owner: "none of them went viral.... a lot of them got 500 views". Here are r
 | 645 | the situationship | "what are we" / "were chilling" | "so am i ur girlfriend" / "why do u need a label" |
 
 **Post order:** 641, 643, 645, 644, 642.
+
+
+## 646 to 650: more like 645
+
+The owner on 641–645: "that 645 is good in my opinion you need to create more like that". 645 is the situationship post: "what are we" / "were chilling" / the gift / "so am i ur girlfriend" / "why do u need a label". It works because every 19 or 20 year old has lived it. She asks a fair question. He answers with a red-flag line everyone has heard, and the gift stands in for the answer. The comments write themselves ("RUN").
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 646 | "why havent u posted me" | "i like keeping things private" | "u posted ur car 3 times this week" / "thats different" |
+| 647 | "u said i love u" | "i was tired" | "do u love me or not" / "i dont want to rush things" |
+| 648 | "u left me on delivered all weekend" | "my phone died" / "it was a long weekend" | "u posted a story saturday tho" / "from my laptop" |
+| 649 | "my friend asked if ur my boyfriend" | "say were talking" / "why rush it" | "are u talking to anyone else" / "why would u ask that" |
+| 650 | "from me??" | "i think i need space" | "do u want space or not" / "space but like with u" |
+
+**Post order:** 649, 646, 648, 647, 650, between 20:00 and 23:00 Riga time, one a day.
