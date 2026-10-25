@@ -7,7 +7,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { MOVE_TO_SLUGS } from "@/config/featured";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { useEditor } from "@/lib/editor/store";
 import { useInApp } from "@/lib/app/use-bridge";
 import { moveGiftTo } from "@/lib/editor/move-gift";
@@ -49,11 +50,11 @@ export function MoveOffer({ manifest }: { manifest: TemplateManifest }) {
   const [dismissed, setDismissed] = useState(dismissedLately);
   const [moving, setMoving] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
+  const currency = useCurrency();
 
   if (manifest.tier !== "free" || status !== "draft" || dismissed) return null;
   const options = MOVE_TO_SLUGS.flatMap((slug) => getManifest(slug) ?? []);
   // The same price the publish sheet will quote for a premium template.
-  const currency = currencyFor(locale === "es" ? "ES" : "US");
   const price = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
 
   const dismiss = () => {

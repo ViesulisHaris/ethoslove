@@ -311,7 +311,7 @@ describe("the sender's no", () => {
     // Already on the site: gone on the next visit, never served from a cache.
     expect(state.cleared).toEqual([
       ["tag", "proof-reactions", { expire: 0 }],
-      ["path", "/[locale]/gifts", "page"],
+      ["path", "/[currency]/[locale]/gifts", "page"],
     ]);
     expect((await linkPage("GET", token)).text).toContain("It's private.");
     expect((await linkPage("POST", `11111111-1111-4111-8111-111111111111.${"A".repeat(43)}`)).status).toBe(404);

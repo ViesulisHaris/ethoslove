@@ -7,7 +7,7 @@
  * file sends only what the client components it renders read, and the providers stack: a page
  * gets its own entries plus those of every layout above it (see ClientMessages).
  *
- * Keys are route files under src/app/[locale], without the extension; the file wraps what it
+ * Keys are route files under src/app/[currency]/[locale], without the extension; the file wraps what it
  * renders in <ClientMessages scope="<key>">. Values are namespaces, or dotted paths into one.
  * Server components read the full catalogue on the server and need nothing here.
  *

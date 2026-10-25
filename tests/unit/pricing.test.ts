@@ -8,6 +8,7 @@ import {
   PRODUCTS,
   PRODUCT_ORDER,
   bumpAmount,
+  chargedCurrency,
   currencyFor,
   giftCardsOnSale,
   formatAmount,
@@ -109,6 +110,7 @@ describe("pricing catalogue", () => {
     expect(currencyFor("GB")).toBe("eur");
     expect(currencyFor("en-US")).toBe("eur");
     expect(currencyFor(null)).toBe("eur");
+    expect(chargedCurrency("usd")).toBe("eur");
   });
   it("guesses the visitor's own currency once Stripe carries it", async () => {
     vi.stubEnv("NEXT_PUBLIC_PRICE_CURRENCIES", "eur,usd,gbp");
@@ -117,7 +119,22 @@ describe("pricing catalogue", () => {
     expect(fresh.currencyFor("es-ES")).toBe("eur");
     expect(fresh.currencyFor("GB")).toBe("gbp");
     expect(fresh.currencyFor("en-US")).toBe("usd");
-    expect(fresh.currencyFor(null)).toBe("usd");
+    // Dollars in the United States and its territories, pounds wherever sterling is the money.
+    for (const country of ["US", "PR", "GU", "VI"]) expect(fresh.currencyFor(country)).toBe("usd");
+    for (const country of ["GB", "IM", "JE", "GG", "en-GB"]) expect(fresh.currencyFor(country)).toBe("gbp");
+    // Euros for everyone else: the euro area, the rest of Europe (a Pole or a Swede never saw a dollar
+    // price from us), and the rest of the world, as before any other currency was switched on.
+    for (const country of ["LV", "DE", "BG", "PL", "SE", "NO", "CH", "CA", "AU", "MX", "es-419", "en", null, ""]) expect(fresh.currencyFor(country)).toBe("eur");
+    // The proxy and checkout read the same header the same way; next dev has only the browser's language.
+    const headers = (h: Record<string, string>) => new Headers(h);
+    expect(fresh.visitorCurrency(headers({ "x-vercel-ip-country": "US", "accept-language": "lv-LV" }))).toBe("usd");
+    expect(fresh.visitorCurrency(headers({ "x-vercel-ip-country": "LV", "accept-language": "en-US,en;q=0.9" }))).toBe("eur");
+    expect(fresh.visitorCurrency(headers({ "accept-language": "en-GB,en;q=0.9" }))).toBe("gbp");
+    expect(fresh.visitorCurrency(headers({}))).toBe("eur");
+    // A page's segment: only a charged currency, anything else the first.
+    expect(fresh.chargedCurrency("usd")).toBe("usd");
+    expect(fresh.chargedCurrency("jpy")).toBe("eur");
+    expect(fresh.chargedCurrency(undefined)).toBe("eur");
     // One currency switched on and not the other: the unsupported one falls back to the first listed.
     vi.stubEnv("NEXT_PUBLIC_PRICE_CURRENCIES", "eur,gbp");
     vi.resetModules();

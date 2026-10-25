@@ -10,7 +10,8 @@ import { featuredFor, POPULAR_SLUGS, sectionTemplates } from "@/config/featured"
 import { track } from "@/lib/analytics/track";
 import { saveGiftSeed } from "@/lib/editor/gift-seed";
 import type { GiftLocale, GiftUnwrap } from "@/lib/gift/schema";
-import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
@@ -56,7 +57,7 @@ export function TemplateChooser({
 
   const templates = useMemo(() => sectionTemplates(listManifests()).flatMap((s) => s.items), []);
   const shown = useMemo(() => templates.filter((m) => filter === "all" || (filter === "free" ? m.tier === "free" : LOVED.includes(m.slug))), [templates, filter]);
-  const currency = currencyFor(locale === "es" ? "ES" : "US");
+  const currency = useCurrency();
   const single = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
   const extras = formatAmount(PRODUCTS.extras.amounts[currency], currency, locale);
 

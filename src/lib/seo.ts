@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { routing, type Locale } from "@/i18n/routing";
-import { PRODUCTS, PRODUCT_ORDER, currencyFor, type Currency } from "@/lib/pricing/products";
+import { PRODUCTS, PRODUCT_ORDER, type Currency } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
 
 type Node = Record<string, unknown>;
@@ -127,11 +127,6 @@ function instantDelivery(currency: string): Node {
   };
 }
 
-/** The currency a locale's pages show prices in. */
-export function displayCurrency(locale: string): Currency {
-  return currencyFor(locale === "es" ? "ES" : "US");
-}
-
 export function organizationNode(): Node {
   return {
     "@type": "Organization",
@@ -157,9 +152,12 @@ export function websiteNode(): Node {
   };
 }
 
-/** Ethos itself: a web app that is free to start, with one-time purchases. */
-export function appNode(locale: Locale, description: string, planNames: Record<"free" | (typeof PRODUCT_ORDER)[number], string>): Node {
-  const currency = displayCurrency(locale).toUpperCase();
+/**
+ * Ethos itself: a web app that is free to start, with one-time purchases, priced in the currency the
+ * page shows (its [currency] segment), so what a search result quotes is what the page says.
+ */
+export function appNode(locale: Locale, shown: Currency, description: string, planNames: Record<"free" | (typeof PRODUCT_ORDER)[number], string>): Node {
+  const currency = shown.toUpperCase();
   return {
     "@type": "WebApplication",
     "@id": `${SITE.url}/#app`,
@@ -176,7 +174,7 @@ export function appNode(locale: Locale, description: string, planNames: Record<"
       ...PRODUCT_ORDER.map((id) => ({
         "@type": "Offer",
         name: planNames[id],
-        price: price(PRODUCTS[id].amounts[displayCurrency(locale)]),
+        price: price(PRODUCTS[id].amounts[shown]),
         priceCurrency: currency,
         url: localizedUrl(locale, "/pricing"),
       })),
@@ -184,9 +182,8 @@ export function appNode(locale: Locale, description: string, planNames: Record<"
   };
 }
 
-/** A template as a product: what it is, what it looks like, and what it costs to send one. */
-export function templateProductNode(manifest: TemplateManifest, locale: Locale, category: string): Node {
-  const currency = displayCurrency(locale);
+/** A template as a product: what it is, what it looks like, and what it costs to send one, in the page's currency. */
+export function templateProductNode(manifest: TemplateManifest, locale: Locale, currency: Currency, category: string): Node {
   const url = localizedUrl(locale, `/templates/${manifest.slug}`);
   return {
     "@type": "Product",

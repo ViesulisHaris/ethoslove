@@ -20,7 +20,8 @@ const GiftRenderer = dynamic(
   () => import("@/templates/_shared/GiftRenderer").then((m) => m.GiftRenderer),
   { ssr: false },
 );
-import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
 
 /**
@@ -36,7 +37,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   const t = useTranslations();
   const [live, setLive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const currency = currencyFor(locale === "es" ? "ES" : "US");
+  const currency = useCurrency();
   const price = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
   /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
   const above = index < 4;

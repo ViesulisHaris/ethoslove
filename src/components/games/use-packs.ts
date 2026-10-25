@@ -12,6 +12,7 @@ import { tabStorage } from "@/lib/games/saved";
 import { PACKS, adultConfirmed, confirmAdult, packAccess, packCheckoutBody, packFromSearch, packReturnPath, packsFor, type PackAccess, type PackId } from "@/lib/games/packs";
 import { fetchEntitlements, type Entitlements } from "@/components/pricing/entitlements";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { isInApp, request } from "@/lib/app/bridge";
 
 /** sessionStorage, or nothing: some browsers throw on the property itself when storage is blocked. */
@@ -30,6 +31,7 @@ export function usePacks(game: GameKey) {
   const t = useTranslations("packs");
   const locale = useLocale() === "es" ? "es" : "en";
   const pathname = usePathname();
+  const currency = useCurrency();
   const showCheckoutError = useCheckoutError();
   const [owned, setOwned] = useState<{ data: Entitlements | null; loaded: boolean }>({ data: null, loaded: false });
   const [cards, setCards] = useState<Partial<Record<PackId, PackCards>>>({});
@@ -144,7 +146,7 @@ export function usePacks(game: GameKey) {
     setBuying(true);
     // No code travels: a creator is credited through the ref of their personal link, which
     // startCheckout adds to every checkout.
-    const result = await startCheckout(packCheckoutBody(id, { pathname, locale }));
+    const result = await startCheckout(packCheckoutBody(id, { pathname, locale, currency }));
     if ("url" in result) {
       track("pay_clicked", { product: "pack", pack: id, game });
       window.location.assign(result.url);

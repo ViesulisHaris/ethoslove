@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { currencyFor } from "@/lib/pricing/products";
+import { visitorCurrency } from "@/lib/pricing/products";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
   const user = await getCurrentUser();
   if (!supabase || !user) return NextResponse.json(SIGNED_OUT, { headers: NO_STORE });
   const locale = request.nextUrl.searchParams.get("locale") === "es" ? "es" : "en";
-  const currency = currencyFor(request.headers.get("x-vercel-ip-country") ?? request.headers.get("accept-language")?.split(",")[0]);
+  // The visitor's country, exactly as the proxy read it to pick the page's currency (src/proxy.ts).
+  const currency = visitorCurrency(request.headers);
   const body = await readEntitlements(supabase, user.id, { locale, currency, now: Date.now(), names: getSupabaseAdminClient() });
   return NextResponse.json(body, { headers: NO_STORE });
 }

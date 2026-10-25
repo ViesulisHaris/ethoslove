@@ -45,7 +45,7 @@ describe("cutting the catalogue down", () => {
 describe("every route sends what its client components read", () => {
   const ROOT = fileURLToPath(new URL("../..", import.meta.url));
   const SRC = path.join(ROOT, "src");
-  const APP = path.join(SRC, "app", "[locale]");
+  const APP = path.join(SRC, "app", "[currency]", "[locale]");
   const EXT = [".tsx", ".ts", ".jsx", ".js"];
 
   const isFile = (p: string) => existsSync(p) && statSync(p).isFile();

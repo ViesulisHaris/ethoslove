@@ -1,6 +1,6 @@
 import type { GiftLocale } from "@/lib/gift/schema";
 import { BRAND } from "@/config/brand";
-import { FREE_SAVED_DATES, PRODUCTS, formatAmount, membershipAmount, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, FREE_SAVED_DATES, PRODUCTS, formatAmount, membershipAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
 import { consentSentence } from "@/lib/stripe/line-items";
 
@@ -38,15 +38,39 @@ export type LegalDoc = { title: string; intro: string; sections: LegalSection[] 
 const E = LEGAL_ENTITY;
 const B = BRAND.name;
 
+/** Where a currency other than euros is charged (currencyFor in lib/pricing/products.ts). */
+const CHARGED_IN: Record<Exclude<Currency, "eur">, Record<GiftLocale, string>> = {
+  usd: { en: "in the US", es: "en EE. UU." },
+  gbp: { en: "in the UK", es: "en el Reino Unido" },
+};
+const otherCurrencies = CHARGED_CURRENCIES.filter((c): c is Exclude<Currency, "eur"> => c !== "eur");
+
 /**
- * Prices come from the catalogue, in euros (the only currency charged), so the terms can never
- * quote a price checkout doesn't charge. "upgrade" is its floor: the real price is per buyer.
+ * Prices come from the catalogue, in euros and in every other currency checkout charges (“€9.99
+ * ($11.99 in the US, £8.99 in the UK)”), so the terms can never quote a price checkout doesn't
+ * charge. With euros alone, just the euro price. "upgrade" is its floor: the real price is per buyer.
  */
-const price = (id: ProductId, locale: GiftLocale) => formatAmount(PRODUCTS[id].amounts.eur, "eur", locale);
+const inEach = (amount: (c: Currency) => number, locale: GiftLocale) => {
+  const eur = formatAmount(amount("eur"), "eur", locale);
+  const others = otherCurrencies.map((c) => `${formatAmount(amount(c), c, locale)} ${CHARGED_IN[c][locale]}`);
+  return others.length > 0 ? `${eur} (${others.join(", ")})` : eur;
+};
+const price = (id: ProductId, locale: GiftLocale) => inEach((c) => PRODUCTS[id].amounts[c], locale);
 const P = { en: (id: ProductId) => price(id, "en"), es: (id: ProductId) => price(id, "es") };
 /** Ethos for Two's two plans, from the same catalogue its subscriptions are charged from. */
-const planPrice = (plan: MembershipPlan, locale: GiftLocale) => formatAmount(membershipAmount(plan, "eur"), "eur", locale);
+const planPrice = (plan: MembershipPlan, locale: GiftLocale) => inEach((c) => membershipAmount(plan, c), locale);
 const M = { en: (plan: MembershipPlan) => planPrice(plan, "en"), es: (plan: MembershipPlan) => planPrice(plan, "es") };
+/** Which currency a buyer is charged in: euros, unless checkout also charges their own. */
+const CHARGED = {
+  en:
+    otherCurrencies.length > 0
+      ? `We charge in euros, or in ${otherCurrencies.map((c) => (c === "usd" ? "US dollars if you're in the United States" : "pounds sterling if you're in the United Kingdom")).join(" and in ")}: the currency our site shows you its prices in.`
+      : "We charge in euros.",
+  es:
+    otherCurrencies.length > 0
+      ? `Cobramos en euros, o en ${otherCurrencies.map((c) => (c === "usd" ? "dólares estadounidenses si estás en Estados Unidos" : "libras esterlinas si estás en el Reino Unido")).join(" y en ")}: la moneda en la que nuestra web te muestra los precios.`
+      : "Cobramos en euros.",
+};
 
 const termsEn: LegalDoc = {
   title: "Terms of Service",
@@ -112,7 +136,7 @@ const termsEn: LegalDoc = {
         "No discount codes. We don't offer discount or promotion codes, and Stripe's checkout page doesn't ask for one.",
         `Creators. Some people who post about ${B} are in our creator programme: when you buy after arriving through a creator's personal link, we pay that creator a commission. It doesn't change your price, there's no code to enter, and creators must make clear in their posts that we pay them.`,
         `If you are a creator in the programme, we pay you ${CREATOR_COMMISSION_PCT}% of what we receive for each sale made through your personal link, worked out without VAT and after refunds and chargebacks: a sale that is refunded or reversed earns nothing. For Ethos for Two, only its first payment counts as a sale: renewals earn nothing. We pay monthly, once what you're owed passes €${CREATOR_PAYOUT_MIN_EUR}; smaller amounts carry over to the next month. Only sales through your personal link count, and your own purchases earn no commission, even through your own link. You must be 18 or over, say in every post that we pay you, and keep to section 4. We may end your place in the programme, or ask you to take down a post, if it breaks these terms or the law; commission already earned on genuine sales is still paid. The creator programme page, and anything we agree with you by email, set out the rest.`,
-        "Prices are shown on our site before you pay. For consumers they are final prices, including VAT where it applies. We charge in euros. If you pay in another currency, Stripe may convert the price at checkout, at its own rate and possibly with a conversion fee: the amount on the Stripe Checkout page, before you confirm, is the amount you pay. Your bank may add its own fees for payments in a foreign currency. If we ever charge you more than the price we showed you, we'll refund the difference.",
+        `Prices are shown on our site before you pay. For consumers they are final prices, including VAT where it applies. ${CHARGED.en} If you pay in another currency, Stripe may convert the price at checkout, at its own rate and possibly with a conversion fee: the amount on the Stripe Checkout page, before you confirm, is the amount you pay. Your bank may add its own fees for payments in a foreign currency. If we ever charge you more than the price we showed you, we'll refund the difference.`,
         "How a purchase works: you choose what to buy on our site and go to Stripe Checkout, where you see the final amount, can check or correct your details, or go back, and tick the box described in section 9 before you pay. For Ethos for Two, the page also says, directly above the button, what it renews at, how often and how to cancel. The contract is concluded when Stripe confirms your payment, and we add what you bought to your account straight away (a gift card's code is emailed to you). We email you a confirmation of your purchase (for Ethos for Two, the welcome email), Stripe may send its own receipt, and your purchases are listed on your account page. Payments are processed by Stripe; we never see or store your full card details. The charge appears on your statement with “ETHOS” in its description.",
       ],
     },
@@ -305,7 +329,7 @@ const termsEs: LegalDoc = {
         "Sin códigos de descuento. No ofrecemos códigos de descuento ni promocionales, y la página de pago de Stripe no pide ninguno.",
         `Creadores. Algunas personas que publican sobre ${B} forman parte de nuestro programa de creadores: si compras después de llegar a través del enlace personal de un creador, le pagamos una comisión. No cambia tu precio, no hay ningún código que introducir y los creadores deben dejar claro en sus publicaciones que les pagamos.`,
         `Si eres creador del programa, te pagamos el ${CREATOR_COMMISSION_PCT} % de lo que recibimos por cada venta hecha a través de tu enlace personal, calculado sin el IVA y descontando reembolsos y contracargos: una venta que se reembolsa o se revierte no genera comisión. En Ethos for Two solo cuenta como venta su primer pago: las renovaciones no generan comisión. Pagamos cada mes, cuando lo que se te debe supera los ${CREATOR_PAYOUT_MIN_EUR} €; las cantidades menores se suman al mes siguiente. Solo cuentan las ventas hechas a través de tu enlace personal, y tus propias compras no generan comisión, aunque las hagas con tu propio enlace. Debes tener 18 años o más, decir en cada publicación que te pagamos y respetar la sección 4. Podemos sacarte del programa, o pedirte que retires una publicación, si incumple estos términos o la ley; la comisión ya generada por ventas auténticas se paga igualmente. La página del programa de creadores, y lo que acordemos contigo por correo, establecen el resto.`,
-        "Los precios se muestran en nuestra web antes de pagar. Para los consumidores son precios finales, con el IVA incluido cuando corresponde. Cobramos en euros. Si pagas en otra moneda, Stripe puede convertir el precio al pagar, a su propio tipo de cambio y quizá con una comisión de conversión: el importe que aparece en la página de pago de Stripe, antes de confirmar, es el que pagas. Tu banco puede cobrar sus propias comisiones por pagos en moneda extranjera. Si alguna vez te cobramos más que el precio que te mostramos, te devolveremos la diferencia.",
+        `Los precios se muestran en nuestra web antes de pagar. Para los consumidores son precios finales, con el IVA incluido cuando corresponde. ${CHARGED.es} Si pagas en otra moneda, Stripe puede convertir el precio al pagar, a su propio tipo de cambio y quizá con una comisión de conversión: el importe que aparece en la página de pago de Stripe, antes de confirmar, es el que pagas. Tu banco puede cobrar sus propias comisiones por pagos en moneda extranjera. Si alguna vez te cobramos más que el precio que te mostramos, te devolveremos la diferencia.`,
         "Cómo funciona una compra: eliges qué comprar en nuestra web y pasas a la página de pago de Stripe (Stripe Checkout), donde ves el importe final, puedes revisar o corregir tus datos, o volver atrás, y marcas la casilla que describe la sección 9 antes de pagar. En Ethos for Two, la página indica además, justo encima del botón, por cuánto se renueva, cada cuánto y cómo cancelarla. El contrato se celebra cuando Stripe confirma el pago, y añadimos lo que has comprado a tu cuenta en ese mismo momento (el código de una tarjeta regalo te lo enviamos por correo). Te enviamos por correo una confirmación de la compra (en Ethos for Two, el correo de bienvenida), Stripe puede enviarte su propio recibo y tus compras aparecen en la página de tu cuenta. Los pagos los procesa Stripe; nunca vemos ni guardamos los datos completos de tu tarjeta. El cargo aparece en tu extracto con «ETHOS» en la descripción.",
       ],
     },

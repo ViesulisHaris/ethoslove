@@ -13,7 +13,13 @@
 
 ## Routing
 
-`src/app/[locale]/` is the root layout (next-intl). Route groups give each surface its own shell:
+`src/app/[currency]/[locale]/` is the root layout (next-intl). `[currency]` never shows in an address:
+`src/proxy.ts` puts the visitor's currency in front of every page's path (`/templates/bouquet` is
+`/usd/en/templates/bouquet` inside, from New York), so a static page is built once per currency
+Stripe charges in (`NEXT_PUBLIC_PRICE_CURRENCIES`; euros alone when it is unset) and a cached page
+never shows one country another's prices. A new page goes under `src/app/[currency]/[locale]/` like
+the rest; server components read `params.currency` (`chargedCurrency`), client ones `useCurrency()`.
+Route groups give each surface its own shell:
 
 | Group         | Purpose                         | Chrome                       | Rendering        |
 | ------------- | ------------------------------- | ---------------------------- | ---------------- |

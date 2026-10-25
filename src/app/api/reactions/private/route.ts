@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
   try {
     // Never served stale: the next visit reads afresh, with this reaction left out.
     revalidateTag(REACTIONS_TAG, { expire: 0 });
-    revalidatePath("/[locale]/gifts", "page");
+    revalidatePath("/[currency]/[locale]/gifts", "page");
   } catch (e) {
     console.error("[reactions] couldn't clear the cache", (e as Error).message);
   }
