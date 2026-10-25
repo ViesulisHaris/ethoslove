@@ -8,7 +8,7 @@ winners are picked, and when to stop.
 
 | | |
 |---|---|
-| What a US sale leaves after Stripe | **≈ $10.50–11** (the site charges **€9.99** everywhere: `NEXT_PUBLIC_PRICE_CURRENCIES` is unset, so US buyers pay in euros and their bank converts; no VAT on US orders) |
+| What a US sale leaves after Stripe | **≈ $11** (US visitors see and pay **$11.99** since 25 Oct, see `LOCAL-PRICES.md`; no sales tax on US orders; Stripe takes 2% to convert the dollars to the euro payout) |
 | Break-even | an ad brings a buyer for **≤ $11** |
 | 1.5× | **≤ $7.50** a buyer |
 | A US Reels visitor who reaches the template (CPM $12–16, 1.5% CTR, 80% load) | **≈ $1.00–1.30** |
@@ -35,9 +35,10 @@ agent panel liked best for it. Every ad lands on its own template's editor.
 All links on `https://tryethos.io`, plus `&utm_source=meta&utm_medium=paid&utm_campaign=usa-test`.
 Each gift is filmed full-screen from the live site with one TikTok couple's photos (Maya & Leo), to
 Debussy's *Clair de Lune* (Laurens Goedhart's recording, CC BY 3.0, credited on the end card). Primary
-text on every ad: *"Make it free with their name, your words and your photos. Pay once, only when you send
-it. No app, no subscription."* End card: "Ethos · Make one in minutes · Free to start. Pay once, only when
-you send it · tryethos.io". No dollar amount anywhere until the site charges dollars.
+text on every ad: *"Make it free with their name, your words and your photos. Pay $11.99 once, only when you
+send it. No app, no subscription."* (the dollar amount went back in on 25 Oct, once the site charged US
+visitors in dollars). End card: "Ethos · Make one in minutes · Free to start. Pay once, only when you send
+it · tryethos.io".
 
 ### The 100-person panel (25 Oct, on the finished videos and both landing pages)
 
@@ -113,13 +114,10 @@ at **$3–5 a day out of the $30** once the audience reaches 100 people. Usually
   needs ≈ €185: raise it to about **€200**, still "only when changed by hand".
 - The EU advertiser/payer fields aren't needed for USA-only ads.
 
-## Three levers bigger than any ad
+## Levers bigger than any ad
 
-0. **Charge US visitors in dollars.** Today a US buyer sees €9.99 and pays a foreign-currency charge,
-   which reads as a foreign site and costs many US cards a 3% fee. The code already has $11.99 for the US
-   (`NEXT_PUBLIC_PRICE_CURRENCIES=eur,usd,gbp`), but the English template pages would then show dollars to
-   every English reader, Europe included, so it needs the pages to follow the visitor's country first. The
-   owners' decision.
+0. ~~**Charge US visitors in dollars.**~~ Done 25 Oct: US $11.99, UK £8.99, everyone else €9.99, by the
+   visitor's country (`LOCAL-PRICES.md`). Checked live from California ($11.99) and Ireland (€9.99).
 
 1. **The cookie banner.** Meta can only learn from buyers who press "Allow". US state laws (California
    and others) ask for an opt-out for ad tracking (a "Do not sell or share" link, honouring Global

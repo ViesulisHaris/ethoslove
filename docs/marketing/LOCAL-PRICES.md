@@ -1,8 +1,14 @@
-# Dollar and pound prices: built, off until you say go
+# Dollar and pound prices: live since 25 Oct 2026
 
-Written 25 Oct 2026 for the USA Meta test. Today everyone sees and pays €9.99, so the ads send
-Americans to a euro price: it reads as a foreign shop, and many US cards add a ~3% foreign-transaction
-fee. The code to fix that is ready and does nothing until one setting is switched on.
+**Switched on 25 Oct 2026** at the owners' go: `NEXT_PUBLIC_PRICE_CURRENCIES=eur,usd,gbp` in Vercel
+Production, Terms dated 2026-10-25, deployed with 65f5513. Checked live: `/llms.txt` lists all three
+prices; `/templates/bouquet` shows $11.99 from California and €9.99 from Ireland and Latvia; a faked
+`x-vercel-ip-country` header is ignored (Vercel sets it). The four USA ads say "$11.99" again. Not yet
+seen: a real dollar purchase going through Stripe.
+
+Written 25 Oct 2026 for the USA Meta test. Before this, everyone saw and paid €9.99, so the ads sent
+Americans to a euro price: it read as a foreign shop, and many US cards add a ~3% foreign-transaction
+fee.
 
 ## What a visitor sees once it is on
 
