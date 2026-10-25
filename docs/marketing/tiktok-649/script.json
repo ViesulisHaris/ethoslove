@@ -1,0 +1,74 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:07 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my friend asked if ur my boyfriend"
+        },
+        {
+          "from": "them",
+          "text": "what did u say"
+        },
+        {
+          "from": "me",
+          "text": "i didnt know what to say"
+        },
+        {
+          "from": "them",
+          "text": "say were talking"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "talking??"
+        },
+        {
+          "from": "me",
+          "text": "its been 7 months"
+        },
+        {
+          "from": "them",
+          "text": "why rush it"
+        },
+        {
+          "from": "them",
+          "text": "i made u this tho"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "are u talking to anyone else"
+        },
+        {
+          "from": "them",
+          "text": "why would u ask that"
+        }
+      ]
+    }
+  ]
+}
