@@ -16,7 +16,7 @@ export const LEGAL_ENTITY = {
   registeredAt: "27 March 2026",
 } as const;
 
-export const LEGAL_UPDATED = "2026-10-24";
+export const LEGAL_UPDATED = "2026-10-25";
 
 /**
  * The box every buyer ticks on Stripe's checkout page, word for word without its link. Terms s.9
