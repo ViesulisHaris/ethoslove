@@ -8,7 +8,7 @@ winners are picked, and when to stop.
 
 | | |
 |---|---|
-| What a US sale leaves after Stripe | **≈ $11** ($11.99, no VAT on US orders) |
+| What a US sale leaves after Stripe | **≈ $10.50–11** (the site charges **€9.99** everywhere: `NEXT_PUBLIC_PRICE_CURRENCIES` is unset, so US buyers pay in euros and their bank converts; no VAT on US orders) |
 | Break-even | an ad brings a buyer for **≤ $11** |
 | 1.5× | **≤ $7.50** a buyer |
 | A US Reels visitor who reaches the template (CPM $12–16, 1.5% CTR, 80% load) | **≈ $1.00–1.30** |
@@ -27,15 +27,36 @@ agent panel liked best for it. Every ad lands on its own template's editor.
 
 | Ad | Hook (first 2.6 s) | Landing |
 |---|---|---|
-| Birthday Cinema: curtains, she blows the candles out, confetti, the message | Can’t be there for their birthday? Send this. | `/create/birthday-cinema?ref=ad-meta-bc` |
-| Pop-up Card: the cake rises out of the card, candles lit and blown out, the letter | A birthday card that pops up on their phone | `/create/popup-card?ref=ad-meta-pc` |
-| Bouquet: a flower blooms, the bouquet gathers, the card opens | A bouquet that blooms on her phone 💐 | `/create/bouquet?ref=ad-meta-bq` |
-| xoxo: the envelope, "my person", the love letter | When “I love you” isn’t enough to text | `/create/xoxo?ref=ad-meta-xo` |
+| Birthday Cinema: curtains, she blows the candles out, confetti, the film strip and the message | Can’t be there for their birthday? Send this. | `/templates/birthday-cinema?ref=ad-meta-bc` |
+| Pop-up Card: the cake rises out of the card, candles lit and blown out, photos on pegs, the letter | A birthday card that pops up on their phone | `/templates/popup-card?ref=ad-meta-pc` |
+| Bouquet: the bouquet gathers, the card opens, the message, their photos | A bouquet that blooms on her phone 💐 | `/templates/bouquet?ref=ad-meta-bq` |
+| xoxo: the envelope, "my person", the polaroids, the lines | When “I love you” isn’t enough to text | `/templates/xoxo?ref=ad-meta-xo` |
 
 All links on `https://tryethos.io`, plus `&utm_source=meta&utm_medium=paid&utm_campaign=usa-test`.
-Primary text on every ad: *"Make it free with their name, your words and your photos. Pay $11.99 once,
-only when you send it. No app, no subscription."* End card: "Make one in minutes · Free to start.
-$11.99 once, only when you send it · tryethos.io".
+Each gift is filmed full-screen from the live site with one TikTok couple's photos (Maya & Leo), to
+Debussy's *Clair de Lune* (Laurens Goedhart's recording, CC BY 3.0, credited on the end card). Primary
+text on every ad: *"Make it free with their name, your words and your photos. Pay once, only when you send
+it. No app, no subscription."* End card: "Ethos · Make one in minutes · Free to start. Pay once, only when
+you send it · tryethos.io". No dollar amount anywhere until the site charges dollars.
+
+### The 100-person panel (25 Oct, on the finished videos and both landing pages)
+
+100 simulated US feed viewers (seeded mix: 60% women, 24% under 25, 44% with no occasion coming up, 50%
+ad-skeptics), four groups of 25 seeing the ads in rotated order, told to behave like real feed viewers:
+
+| | stopped (≥7/10) | tapped | favourite | would buy, landing on the editor | would buy, landing on the template page |
+|---|---|---|---|---|---|
+| Pop-up Card | 9 | 8 | **27** | 1 yes · 18 maybe | 6 yes · 56 maybe |
+| xoxo | 8 | 5 | 19 | 0 · 7 | 7 · 30 |
+| Bouquet | 2 | 2 | 13 | 0 · 14 | 4 · 53 |
+| Birthday Cinema | 2 | 3 | 5 | 0 · 5 | 2 · 34 |
+
+36 of 100 picked none. What changed because of it: the landing moved from the empty editor ("Who is it
+for?", a Publish button, no price, no sight of the gift) to each template's page with its live demo; the
+Safari bar that hid the foot of every gift is gone; the end card fades through white instead of ghosting
+over the letter; the Bouquet skips its static first seconds; brighter photos; the dollar price is gone.
+Still open: the "Use microphone" pill (reads as a permission grab) in Birthday Cinema and Pop-up Card, the
+template page's long text above its demo, and no reviews or trust cues on either page.
 
 ### What the agent panel said (5 simulated US shoppers, 19–41, 8 ad ideas)
 
@@ -86,13 +107,19 @@ at **$3–5 a day out of the $30** once the audience reaches 100 people. Usually
 
 ## Before publishing
 
-- Meta won't publish until the ad account has a **verified phone number** (error #3858013, "Add phone
-  number" in the editor). Only the owner can do this.
+- ~~Meta won't publish until the ad account has a verified phone number~~ (error #3858013): added by
+  the owner on 25 Oct.
 - The ad account's spending cap is **€100 total** (set 25 Oct so nothing can run away). The 7-day test
   needs ≈ €185: raise it to about **€200**, still "only when changed by hand".
 - The EU advertiser/payer fields aren't needed for USA-only ads.
 
-## Two levers bigger than any ad
+## Three levers bigger than any ad
+
+0. **Charge US visitors in dollars.** Today a US buyer sees €9.99 and pays a foreign-currency charge,
+   which reads as a foreign site and costs many US cards a 3% fee. The code already has $11.99 for the US
+   (`NEXT_PUBLIC_PRICE_CURRENCIES=eur,usd,gbp`), but the English template pages would then show dollars to
+   every English reader, Europe included, so it needs the pages to follow the visitor's country first. The
+   owners' decision.
 
 1. **The cookie banner.** Meta can only learn from buyers who press "Allow". US state laws (California
    and others) ask for an opt-out for ad tracking (a "Do not sell or share" link, honouring Global
