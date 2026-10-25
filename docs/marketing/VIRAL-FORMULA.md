@@ -2999,3 +2999,41 @@ So 636 to 640 each copy one engine, written as a new story for Maya and Leo:
 | 640 | argue the answer | "8 ÷ 2(2+2)" / "1" / "my roommate says 16" | "its 16 tho" / "im taking it back" |
 
 **Post order:** 637, 636, 640, 638, 639, one a day.
+
+
+## Why the posts stall at 500 (25 Oct), and 641 to 645
+
+The owner: "none of them went viral.... a lot of them got 500 views". Here are rosie's posts since the hold lifted, read 25 Oct (UTC, with Riga time):
+
+| Posted (UTC) | Riga | Views | Likes | Comments |
+|---|---|---|---|---|
+| 20 Oct 23:09 | 02:09 | 14.4K | 32 | 2 |
+| 21 Oct 10:38 | 13:38 | 17.5K | 226 | 1 |
+| 21 Oct 17:58 | 20:58 | 12.3K | 93 | 1 |
+| 22 Oct 10:42 | 13:42 | 1.1K | 29 | 0 |
+| 22 Oct 12:57 | 15:57 | 514 | 9 | 2 |
+| 22 Oct 18:05 | 21:05 | 1.1K | 42 | 0 |
+| 23 Oct 09:00 | 12:00 | 534 | 28 | 1 |
+| 24 Oct 18:01 | 21:01 | 4.3K (626) | 142 | 0 |
+| 25 Oct 07:09 | 09:09 | 277 after an hour | 13 | 0 |
+
+- **Almost nobody comments:** 0–2 comments a post, where the hits had 25–776. TikTok shows a new post to a few hundred people first, and stops there if they scroll on.
+- **Time of day matters for the account as it is now.** The posts that went up between 9 AM and 4 PM Riga time stalled at about 500. The two that went up around 9 PM got 1.1K and 4.3K. Six of the ten hits went up 18:00–23:00 UTC. On 24 Oct I said the hour didn't matter, because 30 and 102 went up at midday. That was wrong for now.
+- **Five website screenshots sit in the middle of every story.** The viral accounts post 2–6 slides of pure story. Every screenshot of the site in the middle is a place to scroll away, and it makes the post read as an ad.
+- **Three posts in one day** on 22 Oct.
+
+**The changes, from 641 on:**
+- One gift screenshot between slides 2 and 3, cropped so the address bar doesn't show.
+- Post between 20:00 and 23:00 Riga time (2–5 PM in New York), one a day.
+- Every ending gives people a job: take a side, answer the question, quote the line.
+- To check whether TikTok is limiting reach, open one stalled post in TikTok Studio. If it says "Not eligible for For You feed", it gives the reason.
+
+| | Engine | Slide 1 | The ending people comment on |
+|---|---|---|---|
+| 641 | caught by one detail | "whose hoodie is in ur car" / "mine" / "its a small" | "its my sisters" … "u dont have a sister" (Read, no reply) |
+| 642 | argue the answer | "if ur mom and i were drowning who would u save" / "my mom" | "i cant swim tho" / "learn" |
+| 643 | Maya the villain (208) | "u posted me on ur story??" / "felt like it" | "it worked" / "my ex just texted me" |
+| 644 | her savage answer | "delete his number or delete mine" / "guess" | "i deleted his" / "i still know it by heart tho" |
+| 645 | the situationship | "what are we" / "were chilling" | "so am i ur girlfriend" / "why do u need a label" |
+
+**Post order:** 641, 643, 645, 644, 642.
