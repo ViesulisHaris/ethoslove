@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:26 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u posted me on ur story??"
+        },
+        {
+          "from": "me",
+          "text": "yeah why"
+        },
+        {
+          "from": "them",
+          "text": "u never post me"
+        },
+        {
+          "from": "me",
+          "text": "felt like it",
+          "status": "Read 9:26 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok well"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "it worked"
+        },
+        {
+          "from": "them",
+          "text": "what worked"
+        },
+        {
+          "from": "me",
+          "text": "my ex just texted me"
+        }
+      ]
+    }
+  ]
+}
