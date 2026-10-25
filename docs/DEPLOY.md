@@ -25,7 +25,7 @@ use **Import .env** on that page; tick Production and Preview. Otherwise copy th
 | `VIEWER_HASH_SECRET` | long random string that signs email links (reminder removal, unsubscribe) and seals the free-reply token in a gift's "send one back" link. The service key is used when it's unset, but then rotating that key voids every open reply link, so set it |
 | `GIFT_CARDS_ENABLED` | leave unset: gift cards stay off sale until VAT on vouchers is settled. `true` shows the card on `/pricing` and lets checkout sell it; `/redeem` works either way |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier): rate limits and "one recovery email per address a week" only hold across serverless instances with it |
-| `NEXT_PUBLIC_PRICE_CURRENCIES` | leave unset (euros only): the terms say we charge in euros |
+| `NEXT_PUBLIC_PRICE_CURRENCIES` | unset: euros for everyone, as today. `eur,usd,gbp` (the owners' call, docs/marketing/LOCAL-PRICES.md): dollars in the US, pounds in the UK, euros everywhere else; each page is built once per currency and the terms say so. Inlined at build, so a change needs a redeploy |
 | `REVENUECAT_SECRET_API_KEY` | the iPhone app's In-App Purchases: RevenueCat → Project → API keys → a **v1 secret** key (`sk_…`), server only. Lets `POST /api/app/purchases/sync` ask RevenueCat what a user bought (restores, a webhook that hasn't arrived). Unset: sync with `pull` answers 503 `not_configured`, and a credit only applies once the webhook has recorded it |
 | `REVENUECAT_WEBHOOK_AUTH` | the exact Authorization value set on RevenueCat's webhook (step 7), e.g. `Bearer <long random string>`. Unset: the webhook answers 503 |
 

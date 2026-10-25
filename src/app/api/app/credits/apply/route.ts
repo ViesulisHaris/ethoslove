@@ -3,7 +3,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { env } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import { currencyFor } from "@/lib/pricing/products";
+import { visitorCurrency } from "@/lib/pricing/products";
 import { readEntitlements } from "@/lib/commerce/entitlements";
 import { applyCredit, isTransactionId, pullAppStore } from "@/lib/commerce/app-store";
 import { appLocale, NO_STORE } from "@/lib/app/http";
@@ -48,6 +48,6 @@ export async function POST(request: NextRequest) {
   if (!result.ok) return NextResponse.json(result.error === "already_applied" ? { error: result.error, appliedTo: result.appliedTo } : { error: result.error }, { status: STATUS[result.error], headers: NO_STORE });
 
   const locale = appLocale(request.nextUrl.searchParams);
-  const entitlements = await readEntitlements(db, user.id, { locale, currency: currencyFor(locale === "es" ? "ES" : "US"), now });
+  const entitlements = await readEntitlements(db, user.id, { locale, currency: visitorCurrency(request.headers), now });
   return NextResponse.json({ ok: true, entitlements }, { headers: NO_STORE });
 }

@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
-import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, isProductId, subscriptionsEnabled, type Currency } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
 import { RETURN_PATH, membershipSessionParams, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
@@ -82,11 +82,10 @@ export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   const userId = user?.id ?? null;
 
-  // Only ever a currency the site shows prices in.
-  const currency: Currency =
-    body.currency && CHARGED_CURRENCIES.includes(body.currency)
-      ? body.currency
-      : currencyFor(request.headers.get("x-vercel-ip-country") ?? request.headers.get("accept-language")?.split(",")[0]);
+  // The currency the page showed its price in, which every buy button sends (the page's [currency]
+  // segment, src/proxy.ts), so the amount charged is the number the buyer saw. Without one, the
+  // visitor's country, read the way the proxy reads it. Only ever a currency the site shows prices in.
+  const currency: Currency = body.currency && CHARGED_CURRENCIES.includes(body.currency) ? body.currency : visitorCurrency(request.headers);
 
   const now = Date.now();
   const [creatorCode, owned, membership] = await Promise.all([

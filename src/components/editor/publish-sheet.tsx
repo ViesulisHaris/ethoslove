@@ -10,7 +10,8 @@ import type { ShownReaction } from "@/lib/proof/numbers";
 import { track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
-import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
@@ -77,7 +78,7 @@ export function PublishSheet({
   const inApp = useInApp();
   const [appUnlocked, setAppUnlocked] = useState(false);
   const signingIn = useRef(false);
-  const currency = currencyFor(locale === "es" ? "ES" : "US");
+  const currency = useCurrency();
   // The price a guest is told before signing in: what this gift's own row costs.
   const priceHint = formatAmount(PRODUCTS[templatePlan(manifest.tier)].amounts[currency], currency, locale);
   // "Send one back" from a paid premium gift opens this editor with ?reply=<token>: the reply is free

@@ -23,7 +23,7 @@ export function earnsFreeReply(gift: GiftRow): boolean {
  * one free reply has been sent already: the editor then opens at the normal price instead of
  * promising a free reply that publishing would refuse.
  *
- * Minted by the gift page itself, for a gift it has just shown (app/[locale]/(gift)/g/[shortId]), so
+ * Minted by the gift page itself, for a gift it has just shown (app/[currency]/[locale]/(gift)/g/[shortId]), so
  * only someone who could open the gift gets one: a password-protected gift's password is checked
  * before this is ever called. A token handed out for a bare short id would let anyone holding the link
  * but not the password spend the recipient's free reply.

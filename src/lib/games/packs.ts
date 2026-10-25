@@ -1,3 +1,4 @@
+import type { Currency } from "@/lib/pricing/products";
 import type { GameKey } from "./catalogue";
 
 type L = { en: string; es: string };
@@ -139,15 +140,16 @@ export function confirmAdult(storage: Pick<Storage, "setItem"> | null): void {
 
 /**
  * The body for POST /api/stripe/checkout. No amount travels: the server prices a pack from its own
- * catalogue. The buyer comes back to the game they were on with `?pack=` set, and the pack opens.
+ * catalogue, in the currency the shelf showed it in. The buyer comes back to the game they were on
+ * with `?pack=` set, and the pack opens.
  */
-export function packCheckoutBody(id: PackId, at: { pathname: string; locale: "en" | "es"; ref?: string }) {
+export function packCheckoutBody(id: PackId, at: { pathname: string; locale: "en" | "es"; currency: Currency; ref?: string }) {
   return {
     product: "pack" as const,
     packId: id,
     returnTo: packReturnPath(at.pathname, id),
     locale: at.locale,
-    currency: "eur" as const,
+    currency: at.currency,
     ...(at.ref ? { ref: at.ref } : {}),
   };
 }

@@ -212,9 +212,10 @@ describe("who may open a pack", () => {
 
 describe("buying a pack", () => {
   it("asks checkout for the pack by id, never with an amount, and comes back to the same game", () => {
-    expect(packCheckoutBody("deep", { pathname: "/games/deck", locale: "es" })).toEqual({ product: "pack", packId: "deep", returnTo: "/games/deck?pack=deep", locale: "es", currency: "eur" });
-    const body = packCheckoutBody("spicy", { pathname: "/games/rather", locale: "en", ref: "c-maria" });
-    expect(body).toEqual({ product: "pack", packId: "spicy", returnTo: "/games/rather?pack=spicy", locale: "en", currency: "eur", ref: "c-maria" });
+    expect(packCheckoutBody("deep", { pathname: "/games/deck", locale: "es", currency: "eur" })).toEqual({ product: "pack", packId: "deep", returnTo: "/games/deck?pack=deep", locale: "es", currency: "eur" });
+    // In the currency the shelf showed it in: dollars for a visitor in the United States.
+    const body = packCheckoutBody("spicy", { pathname: "/games/rather", locale: "en", currency: "usd", ref: "c-maria" });
+    expect(body).toEqual({ product: "pack", packId: "spicy", returnTo: "/games/rather?pack=spicy", locale: "en", currency: "usd", ref: "c-maria" });
     // A creator is credited through their link's ref only: no code field exists to send.
     expect(Object.keys(body)).not.toContain("creatorCode");
     expect(Object.keys(body)).not.toContain("amount");
