@@ -248,7 +248,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**A jar of folded notes.** Write each reason on a strip of paper, fold it and fill a jar. It's the classic for a reason: they can take one whenever they need it.",
-            "**A letter.** Pick your best ten and put them in a letter, in order, with a line at the start about why you're writing.",
+            "**A letter.** Pick your best ten and put them in a letter, in order, with a line at the start about why you're writing. Our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) walks through it.",
             "**One a day.** Send one reason every morning for a week or a month, as a message or a note on the mirror. For shorter lines to send in between, see our [list of cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend).",
             "**Out loud.** Read five of them at dinner. Shorter than it sounds, and harder than it sounds.",
           ],
@@ -543,7 +543,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**Un frasco de notas dobladas.** Escribe cada razón en una tira de papel, dóblala y llena un frasco. Es el clásico por algo: puede coger una cuando la necesite.",
-            "**Una carta.** Elige tus diez mejores razones y ponlas en una carta, en orden, con una frase al principio sobre por qué la escribes.",
+            "**Una carta.** Elige tus diez mejores razones y ponlas en una carta, en orden, con una frase al principio sobre por qué la escribes. Nuestra guía sobre [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) te lleva paso a paso.",
             "**Una al día.** Mándale una razón cada mañana durante una semana o un mes, por mensaje o en una nota en el espejo. Para frases más cortas que mandar entre medias, mira nuestra [lista de cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend).",
             "**En voz alta.** Léele cinco en la cena. Es más corto de lo que parece, y más difícil de lo que parece.",
           ],

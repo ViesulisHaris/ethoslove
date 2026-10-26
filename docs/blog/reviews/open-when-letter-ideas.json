@@ -1,0 +1,97 @@
+{
+  "slug": "open-when-letter-ideas",
+  "keyword": "open when letter ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 8,
+            "trust": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Concrete prompts with what to tuck inside, but no line to copy anywhere (asked for sample fight and can't-sleep letters), UK 'in the post' and 'post it', and no note that Fortune Cookie and Jar of Reasons are paid."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Scheduling a Letter comes with 'Make it special', not with any unlock, since unlocks are per template; the fight-letter tip got the reader wrong; UK 'post', 'parcels'; ES heading 'cuando que sean graciosas' was ungrammatical and 'juego de cartas' means a card game (also in the older post's new cell)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Pairing each prompt with what to put inside and the six-to-twelve rule beat page one, but every top list has an 'open when you need to know how much I love you' letter and this didn't."
+        }
+      ],
+      "applied": [
+        "Sample letters as quotes: 'Open when we've had a fight' and 'Open when you can't sleep' (EN and ES).",
+        "New item 'Open when you need to know how much I love you' linking to the reasons post (EN and ES).",
+        "Scheduling: comes with 'Make it special' / «Hazlo especial», a one-time paid extra for The Letter.",
+        "Fight tip: 'a message from your calmest self, read on a day when you're both at your worst' (ES matches).",
+        "US/UK: 'won't melt on the way', 'send it', 'anything crossing a border', FAQ 'If you're sending them'.",
+        "Fortune Cookie and Jar of Reasons notes end 'Premium.'.",
+        "ES: heading 'Ideas graciosas de cartas para abrir cuando', 'Si todas las cartas son serias, el conjunto pesa', older post 'una serie de cartas para abrir cuando'.",
+        "Polish taken: 'Most letters are better with one thing…' (ES matches), gender-neutral 'todo lo que te enorgullece de esa persona', 'Some slips carry a photo', 'a packet of hot chocolate'."
+      ],
+      "rejected": [
+        "Polish not taken: 'Open first' envelope wording, a rules heading, 'sick' for 'ill', and a pacing line for the jar."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results list fifty bare 'open when' labels; this tells you what to write and put inside each one, gives two sample letters and a sending timeline, and stops when the good ideas run out."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-one fix made correctly, including the 'Make it special' scheduling line, which matches products.ts and the editor copy; the sample letters are plain and specific and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one mostly lists envelope labels; this says what to write and put inside each one, with a table, two real sample letters, a six-to-twelve count and two weeks' notice for anything crossing a border."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): 'get through them too fast', an 'Open first' envelope, a friend or sibling line, 'writing this', 'esta carta', 'birds started singing', 'herramientas gratuitas', 'malo o mala' in the ES FAQ, the jar's label, and one wording for the rule."
+      ]
+    }
+  ]
+}
