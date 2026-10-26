@@ -203,6 +203,10 @@ Instagram's browser.
 - the bar is solid;
 - the gift's description was added.
 
-**To use it:** each ad's link changes from `/templates/<slug>` to `/try/<slug>`, keeping the same `ref` and
-`utm` parameters. Changing an ad's link sends it back to Meta review. Do it on the owners' go, after the
-page is live.
+**Live since 26 Oct (634c940).** All four ads now link to `/try/<slug>`, with the same `ref` and `utm`
+parameters. The change was published on 26 Oct, which sent the ads back into Meta review. Checked live: from
+California the page shows $11.99, and every page loads in a phone browser. The retargeting drafts were
+left unpublished.
+
+Compare the ads' landing → editor rate from 27 Oct with 25–26 Oct, when 10 of about 41 US ad visitors (24%)
+opened an editor.

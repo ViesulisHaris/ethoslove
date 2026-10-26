@@ -27,12 +27,12 @@ agent panel liked best for it. Every ad lands on its own template's editor.
 
 | Ad | Hook (first 2.6 s) | Landing |
 |---|---|---|
-| Birthday Cinema: curtains, she blows the candles out, confetti, the film strip and the message | Can’t be there for their birthday? Send this. | `/templates/birthday-cinema?ref=ad-meta-bc` |
-| Pop-up Card: the cake rises out of the card, candles lit and blown out, photos on pegs, the letter | A birthday card that pops up on their phone | `/templates/popup-card?ref=ad-meta-pc` |
-| Bouquet: the bouquet gathers, the card opens, the message, their photos | A bouquet that blooms on her phone 💐 | `/templates/bouquet?ref=ad-meta-bq` |
-| xoxo: the envelope, "my person", the polaroids, the lines | When “I love you” isn’t enough to text | `/templates/xoxo?ref=ad-meta-xo` |
+| Birthday Cinema: curtains, she blows the candles out, confetti, the film strip and the message | Can’t be there for their birthday? Send this. | `/try/birthday-cinema?ref=ad-meta-bc` |
+| Pop-up Card: the cake rises out of the card, candles lit and blown out, photos on pegs, the letter | A birthday card that pops up on their phone | `/try/popup-card?ref=ad-meta-pc` |
+| Bouquet: the bouquet gathers, the card opens, the message, their photos | A bouquet that blooms on her phone 💐 | `/try/bouquet?ref=ad-meta-bq` |
+| xoxo: the envelope, "my person", the polaroids, the lines | When “I love you” isn’t enough to text | `/try/xoxo?ref=ad-meta-xo` |
 
-All links on `https://tryethos.io`, plus `&utm_source=meta&utm_medium=paid&utm_campaign=usa-test`.
+All links on `https://tryethos.io`, plus `&utm_source=meta&utm_medium=paid&utm_campaign=usa-test`. Since 26 Oct they land on `/try/<slug>`, the ad landing page that opens with the gift playing (`PROFITABLE-ADS.md`); before that, on `/templates/<slug>`.
 Each gift is filmed full-screen from the live site with one TikTok couple's photos (Maya & Leo), to
 Debussy's *Clair de Lune* (Laurens Goedhart's recording, CC BY 3.0, credited on the end card). Primary
 text on every ad: *"Make it free with their name, your words and your photos. Pay $11.99 once, only when you
