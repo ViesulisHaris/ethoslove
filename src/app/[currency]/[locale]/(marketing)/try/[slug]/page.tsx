@@ -86,15 +86,17 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
         {/*
          * The phone has to fit between the heading and the dock on the first screen, so its width
          * comes from the screen's height: what's left after the header, heading, hint and dock
-         * (≈ 19.5rem), over the frame's 844:390. Instagram's browser on an iPhone leaves about 660px,
-         * hence the small floor: 160px still shows the whole gift above the dock. Never wider than 300.
+         * (--above: ≈ 19.5rem on a phone, more from `sm` where the heading is bigger and from `lg`
+         * where the page starts lower), over the frame's 844:390. Instagram's browser on an iPhone
+         * leaves about 660px, hence the small floor: 160px still shows the whole gift above the dock.
+         * Never wider than 300.
          */}
-        <div className="mt-3">
+        <div className="mt-3 [--above:19.5rem] sm:[--above:21.25rem] lg:[--above:23.5rem]">
           <TemplatePhonePreview
             slug={manifest.slug}
             locale={l}
             autoStart
-            width="clamp(160px, (100svh - 19.5rem) * 0.462, min(300px, 100vw - 2.5rem))"
+            width="clamp(160px, (100svh - var(--above)) * 0.462, min(300px, 100vw - 2.5rem))"
           />
         </div>
 
@@ -167,7 +169,8 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
         className="sticky bottom-0 z-40 border-t border-line bg-paper px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
       >
         <div className="mx-auto flex max-w-md flex-col gap-2">
-          <p className="text-center text-sm text-ink-soft">
+          {/* One line, which the cookie strip's offset (globals.css) counts on: smaller under 360px. */}
+          <p className="text-center text-sm text-ink-soft max-[359px]:text-xs">
             {free ? t("priceFree", { price }) : t("pricePaid", { price })}
           </p>
           <Button asChild size="lg" className="h-12 w-full rounded-full text-base shadow-lift">
