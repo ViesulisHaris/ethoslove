@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "so are we official or not"
+        },
+        {
+          "from": "them",
+          "text": "im just not in a good place rn"
+        },
+        {
+          "from": "me",
+          "text": "u said that in july"
+        },
+        {
+          "from": "them",
+          "text": "and im still not"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "but i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "ur ex just posted u on her story"
+        },
+        {
+          "from": "them",
+          "text": "were just friends"
+        }
+      ]
+    }
+  ]
+}
