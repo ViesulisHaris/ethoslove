@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|2:14 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u up"
+        },
+        {
+          "from": "me",
+          "text": "its 2am leo"
+        },
+        {
+          "from": "them",
+          "text": "so ur up"
+        },
+        {
+          "from": "me",
+          "text": "what do u want",
+          "status": "Read 2:15 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "nothing"
+        },
+        {
+          "from": "them",
+          "text": "made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "why do u only ever text me at 2am"
+        },
+        {
+          "from": "them",
+          "text": "thats when i miss u"
+        }
+      ]
+    }
+  ]
+}
