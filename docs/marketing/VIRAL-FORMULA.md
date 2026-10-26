@@ -3052,3 +3052,31 @@ The owner on 641–645: "that 645 is good in my opinion you need to create more 
 | 650 | "from me??" | "i think i need space" | "do u want space or not" / "space but like with u" |
 
 **Post order:** 649, 646, 648, 647, 650, between 20:00 and 23:00 Riga time, one a day.
+
+
+## Read 26 Oct, and 651 to 655
+
+The newest posts on rosie now get 4–5K, up from 500, and still almost no comments:
+
+| Post | Posted (UTC) | Views | Likes | Comments | Saves |
+|---|---|---|---|---|---|
+| 640, the maths question | 25 Oct 07:09 | 4.9K | 147 | **6** | 12 |
+| 641, the hoodie | 25 Oct 08:50 | 5.3K | 149 | 0 | 12 |
+| 647, "i was tired" | 25 Oct 18:59 | 4.4K | 66 | 0 | 7 |
+| 626, wrong text | 24 Oct 18:01 | 4.7K | 157 | 0 | 4 |
+
+- The two morning posts did as well as the evening one, so the hour isn't the problem the 25 Oct note thought it was.
+- Only the post that asked the viewer something (the maths) got comments. None of the posts has a caption.
+- They still go up with 8 images, so about five gift screenshots.
+
+So 651 to 655 keep 645's red-flag line, the owner's pick, and each caption asks the viewer to judge it ("red flag or not?"). The owner has to paste the caption: it's the question people answer.
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 651 | "why did u like her pic at 2am" | "ur overthinking" | "u liked another one while i was opening it" / "ur overthinking" |
+| 652 | "so are we official or not" | "im just not in a good place rn" | "ur ex just posted u on her story" / "were just friends" |
+| 653 | "what do u want" (at 2:14 AM) | "u up" / "so ur up" | "why do u only ever text me at 2am" / "thats when i miss u" |
+| 654 | "u forgot our 3 months" | "its not that deep" | "when did u make this" / "2 weeks ago" (he was acting) |
+| 655 | "u take 6 hours to reply" | "i dont really text" | "u replied to her in 2 minutes tho" / "she had a question" |
+
+**Post order:** 652, 651, 655, 653, 654, one a day.
