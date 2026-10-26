@@ -1,0 +1,140 @@
+{
+  "slug": "how-to-write-a-love-letter",
+  "keyword": "how to write a love letter",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The lead gives the whole structure and one example runs through every step, but 'start this week' for Valentine's Day was mistimed in October, and the digital-gift line implied the free Letter could open at a set moment, which is a paid extra."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Template claims and the 140-word count check out. Asked to fix the Valentine's timing, say scheduling is paid, replace 'It took about twenty minutes' with a general claim, fix the confusing phone-name row, soften 'read first' for the P.S., and correct the Spanish ('De qué te diste cuenta', 'así que que sea')."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Turns page one's general advice into five shown steps, a finished letter, a length table and what to leave out, but 'start this week' for Valentine's misleads a post that stays up all year."
+        }
+      ],
+      "applied": [
+        "Valentine's: 'start a week ahead' / 'empieza una semana antes'.",
+        "Digital-gift paragraph: opening at a set moment is a paid extra on any template (EN and ES).",
+        "'A letter like this takes about twenty minutes to write'.",
+        "Sign-off row: 'The name you're saved under in their phone'.",
+        "P.S.: 'It's often the line they remember longest' / 'Suele ser la línea que más tiempo se recuerda, así que hazla ligera … «P. D.: me sigues…»'.",
+        "ES: '¿De qué te diste cuenta…?'.",
+        "Polish taken: 'chips out of the paper' (US/UK), ES 'que pase después' for 'que venga', 'Media página sentida vale más que dos de relleno', 'marear la perdiz', 'en esa persona', 'Baja por un collage', ES description now promises how to start and end."
+      ],
+      "rejected": [
+        "Polish not taken: a name greeting and P.S. in the example letter, and a line about folding in a ticket stub (each adds text without fixing anything)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Both round-one fixes made correctly; 'chips out of the paper' still reads British to US readers, who'd picture a bag of crisps."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-one fix made correctly and verified against the code; the one-memory method carried through a finished 140-word letter, the what-to-leave-out list and the Spain Spanish make it the page to send."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one gives generic tips without showing how; this gives five steps with a line at each, puts them together into a finished letter and adds length and timing tables, so the reader can write it tonight."
+        }
+      ],
+      "applied": [
+        "The example letter and the P.S. use a shared slice of pizza instead of chips, in both languages (the letter is still about 140 words).",
+        "Polish taken: ES FAQ 'que más tiempo se recuerda'."
+      ],
+      "rejected": [
+        "Polish not taken: a line on paper, a second internal link, a greeting-by-relationship-length line, 'comes with any paid unlock', and 'Va bajando' (round one's editor asked for 'Baja')."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results list generic tips or paste flowery samples; this gives a five-step method with a line for each step, shows them assembled into a real 140-word letter, and adds openings, sign-offs and a length table you can use tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A fresh read of both languages found no errors: the pizza swap is consistent everywhere, the 140-word claim holds, every product claim matches the code and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It is the only page-one result that shows the method working, one memory carried through five steps into a finished letter, then gives openings, sign-offs, length and what to leave out that you can use tonight."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): 'comes with any paid unlock', a 'too much, too soon' item, starting from a photo, and 'You still owe me a slice'."
+      ]
+    }
+  ]
+}

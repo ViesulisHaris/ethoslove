@@ -8,14 +8,6 @@
     "angle": "A fair side-by-side of the sites that make digital love letters, built from each one’s own pricing and feature pages: what is free, what it costs, music, photos, scheduling and whether the link lasts. Ethos sits in the same table with no special treatment, so the reader leaves knowing which one suits them."
   },
   {
-    "slug": "how-to-write-a-love-letter",
-    "keyword": "how to write a love letter",
-    "keyword_es": "cómo escribir una carta de amor",
-    "occasion": "valentines",
-    "templates": ["the-letter", "xoxo", "coquette"],
-    "angle": "A step-by-step method for people who freeze at a blank page: start with one memory, say what it meant, end with what you want next. Opening and closing lines that don't sound borrowed."
-  },
-  {
     "slug": "digital-gift-websites",
     "keyword": "best digital gift websites",
     "keyword_es": "mejores páginas para hacer regalos digitales",
@@ -214,5 +206,37 @@
     "occasion": "valentines",
     "templates": ["xoxo", "bouquet", "halfway"],
     "angle": "Valentine's apart: flowers that arrive on the day, a midnight letter in their time zone, and a shared evening. Publish in January."
+  },
+  {
+    "slug": "sorry-message-for-girlfriend",
+    "keyword": "sorry message for girlfriend",
+    "keyword_es": "mensaje de perdón para mi novia",
+    "occasion": "apology",
+    "templates": ["paper-crane", "the-letter", "text-thread"],
+    "angle": "Page one is spam on odd domains. Real messages sorted by what happened (forgot something, said something, broke a promise), each naming the mistake and what changes, and when a message isn't enough and you should call instead."
+  },
+  {
+    "slug": "love-letter-to-husband",
+    "keyword": "love letter to husband",
+    "keyword_es": "carta de amor para mi marido",
+    "occasion": "anniversary",
+    "templates": ["keepsake", "the-letter"],
+    "angle": "Letters for a long marriage, about the ordinary years rather than the wedding day: what to write after five, fifteen and thirty years, with three short examples and the details only a wife of years would notice."
+  },
+  {
+    "slug": "songs-to-dedicate-to-your-boyfriend",
+    "keyword": "songs to dedicate to your boyfriend",
+    "keyword_es": "canciones para dedicar a tu novio",
+    "occasion": "just-because",
+    "templates": ["vinyl", "the-letter"],
+    "angle": "Songs sorted by what you want to say (I miss you, thank you, I'm sorry, this is our song), with why each one fits, and how to send one so it lands: the timestamp to start from and a line of your own with it."
+  },
+  {
+    "slug": "christmas-message-for-girlfriend",
+    "keyword": "christmas message for girlfriend",
+    "keyword_es": "mensaje de navidad para mi novia",
+    "occasion": "christmas",
+    "templates": ["snow-globe", "fireside", "the-letter"],
+    "angle": "Christmas messages that sound like the two of you: what this year held, a small plan for the next, lines for a card, a text on Christmas morning and a longer letter. Publish by early December."
   }
 ]
