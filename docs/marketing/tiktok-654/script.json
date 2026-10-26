@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u forgot our 3 months"
+        },
+        {
+          "from": "them",
+          "text": "its not that deep"
+        },
+        {
+          "from": "me",
+          "text": "it is to me"
+        },
+        {
+          "from": "them",
+          "text": "maya its 3 months"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "but fine"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg leo"
+        },
+        {
+          "from": "me",
+          "text": "when did u make this"
+        },
+        {
+          "from": "them",
+          "text": "2 weeks ago"
+        }
+      ]
+    }
+  ]
+}
