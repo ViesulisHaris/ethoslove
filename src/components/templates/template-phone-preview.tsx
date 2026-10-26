@@ -8,7 +8,18 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { PhoneFrame } from "@/components/shared/phone-frame";
 import { GiftRenderer } from "@/templates/_shared/GiftRenderer";
 
-export function TemplatePhonePreview({ slug, locale, autoStart = false }: { slug: string; locale: GiftLocale; autoStart?: boolean }) {
+export function TemplatePhonePreview({
+  slug,
+  locale,
+  autoStart = false,
+  width = "min(340px, 100vw - 2.5rem)",
+}: {
+  slug: string;
+  locale: GiftLocale;
+  autoStart?: boolean;
+  /** Any CSS width; a page that has to fit the phone on its first screen hands it a height-derived one. */
+  width?: string;
+}) {
   const t = useTranslations("templates");
   const [live, setLive] = useState(autoStart);
   return (
@@ -16,7 +27,7 @@ export function TemplatePhonePreview({ slug, locale, autoStart = false }: { slug
     // 340 made the whole page scroll sideways on a 320px screen, and the frame's side button
     // poked out at 360. The frame derives the gift's notch clearance from this width, so it has
     // to be the width it is actually drawn at, not the 340 it was squeezed from.
-    <PhoneFrame width="min(340px, 100vw - 2.5rem)" className="mx-auto max-w-full">
+    <PhoneFrame width={width} className="mx-auto max-w-full">
       {live ? (
         <GiftRenderer slug={slug} mode="demo" demoLocale={locale} />
       ) : (

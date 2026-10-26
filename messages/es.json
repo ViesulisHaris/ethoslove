@@ -726,6 +726,26 @@
     "soundOn": "Activa el sonido",
     "phaseNote": "La experiencia del destinatario se construye en la fase 4."
   },
+  "adLanding": {
+    "hooks": {
+      "popup-card": "Una tarjeta de cumpleaños que se despliega en su móvil",
+      "birthday-cinema": "¿No puedes estar en su cumpleaños? Envíale esto.",
+      "bouquet": "Un ramo que florece en su móvil",
+      "xoxo": "Cuando un “te quiero” por mensaje no basta"
+    },
+    "description": "Prueba el regalo de verdad y crea el tuyo con su nombre, tus palabras y tus fotos.",
+    "tapHint": "Es el regalo de verdad. Tócalo.",
+    "make": "Crea el tuyo",
+    "pricePaid": "Gratis crearlo · {price} una vez, al enviarlo",
+    "priceFree": "Gratis crearlo y enviarlo · extras por {price}, una vez",
+    "stepsTitle": "Cómo funciona",
+    "whatTheySee": "Lo que verá",
+    "reactionsTitle": "Lo que respondieron",
+    "step1": "Añade su nombre, tus palabras y tus fotos.",
+    "step2": "Míralo tal como lo verá. Gratis y sin cuenta.",
+    "step3Paid": "Paga {price} una sola vez, sin suscripción, y envía el enlace. Se abre en su móvil, sin descargar nada.",
+    "step3Free": "Envía el enlace gratis. Se abre en su móvil, sin descargar nada."
+  },
   "templates": {
     "title": "Plantillas",
     "subtitle": "Todas tienen una demo completa en vivo. Pruébala antes de comprar.",

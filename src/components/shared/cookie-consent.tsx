@@ -36,8 +36,10 @@ export function CookieConsent() {
           // Steps aside while the editor's phone preview is up: that is a gift running full-screen
           // with "Play from the start" docked exactly here. It comes back with the form.
           // Never inside the iPhone app: its web view asks nobody for consent, so neither Clarity nor the pixel runs there.
+          // A page with its own button docked at the bottom (the ad landing, /try) sets --bottom-dock
+          // (globals.css): the strip docks just above that button instead of over it.
           data-app-hide
-          className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] [[data-gift-running]_&]:hidden"
+          className="fixed inset-x-0 bottom-[var(--bottom-dock,0px)] z-50 flex justify-center px-4 pb-[var(--bottom-dock-pad,max(1rem,env(safe-area-inset-bottom)))] [[data-gift-running]_&]:hidden"
           role="region"
           aria-label={t("title")}
         >

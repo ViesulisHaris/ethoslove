@@ -726,6 +726,26 @@
     "soundOn": "Turn your sound on",
     "phaseNote": "The recipient experience is built in Phase 4."
   },
+  "adLanding": {
+    "hooks": {
+      "popup-card": "A birthday card that pops up on their phone",
+      "birthday-cinema": "Can't be there for their birthday? Send this.",
+      "bouquet": "A bouquet that blooms on their phone",
+      "xoxo": "When “I love you” isn't enough to text"
+    },
+    "description": "Try the real gift, then make yours with their name, your words and your photos.",
+    "tapHint": "This is the real gift. Tap it.",
+    "make": "Make yours",
+    "pricePaid": "Free to make · {price} once, when you send it",
+    "priceFree": "Free to make and send · extras {price}, paid once",
+    "stepsTitle": "How it works",
+    "whatTheySee": "What they'll see",
+    "reactionsTitle": "What came back",
+    "step1": "Add their name, your words and your photos.",
+    "step2": "Watch it exactly as they'll see it. Free, no account.",
+    "step3Paid": "Pay {price} once, no subscription, and send the link. It opens on their phone, nothing to download.",
+    "step3Free": "Send the link for free. It opens on their phone, nothing to download."
+  },
   "templates": {
     "title": "Templates",
     "subtitle": "Every one has a full live demo. Try it before you buy it.",

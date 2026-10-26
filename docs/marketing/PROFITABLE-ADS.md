@@ -165,3 +165,44 @@ Pop-up Card after the fixes lands near break-even, not 1.6×.
   Pop-up Card on its full order.
 - Competitors sell one-off love-letter websites for $3–60 (Etsy, Gumroad). There is no subscription
   leader to copy in this niche.
+
+## Update, 26 Oct: the ad landing page is built (local only, not live)
+
+`/try/<slug>` (for example `/try/popup-card`) is a page only for ad links. It is hidden from search and
+left out of the sitemap. The first screen shows the ad's own line and "This is the real gift. Tap it." over
+the real gift, already running in a phone frame. At the bottom sits a docked bar: "Free to make · $11.99
+once, when you send it" and the "Make yours" button. The cookie strip now docks above that button instead
+of covering it.
+
+Below the first screen:
+- what the recipient will see;
+- three steps;
+- the money-back line;
+- real reactions, shown only when three approved ones exist;
+- what's included.
+
+The normal template pages are unchanged.
+
+**The same 100-person panel, comparing the old and new pages for all four ads.** The pages were shown as
+X and Y, not as old and new, and half the groups saw them in the opposite order.
+
+| | Old page (`/templates/…`) | New page (`/try/…`) |
+|---|---|---|
+| Would press the button to start | 17 yes · 100 maybe | **47 yes · 176 maybe** |
+| Would make it and pay $11.99 | 6 yes | 8 yes |
+| Preferred it | 17 | **68** (15 the same) |
+
+The new page gets far more people into the editor. Paying barely moved, because price and trust decide
+that. Every group asked for reviews, a company name, a refund line and payment logos. The money-back line
+and real reactions are in. Company details and payment logos are not, because Apple Pay may not show inside
+Instagram's browser.
+
+**After the panel's notes:**
+- the "tap it" line moved above the phone;
+- the price line says "Free to make" first, so "free" no longer reads as bait;
+- the bar is solid;
+- the gift's description was added.
+
+**To use it:** each ad's link changes from `/templates/<slug>` to `/try/<slug>`, keeping the same `ref` and
+`utm` parameters. Changing an ad's link sends it back to Meta review. Do it on the owners' go, after the
+page is live.

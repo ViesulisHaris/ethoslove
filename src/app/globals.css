@@ -731,6 +731,17 @@
   color-scheme: only light;
 }
 
+/*
+ * A page with its own button docked at the bottom of the screen (the ad landing, /try/…) marks it
+ * `data-bottom-dock`. The cookie strip, which docks in the same place, then sits just above it:
+ * the dock already keeps clear of the home bar, so the strip needs only a small gap of its own.
+ * The height is the dock's: 5.5rem of price line and button, and its bottom padding.
+ */
+:root:has([data-bottom-dock]) {
+  --bottom-dock: calc(5.5rem + max(0.75rem, env(safe-area-inset-bottom)));
+  --bottom-dock-pad: 0.5rem;
+}
+
 /* ------------------------------------------------------------------ */
 /* The Dates map: markers MapLibre positions as plain DOM elements.    */
 /* ------------------------------------------------------------------ */

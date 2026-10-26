@@ -37,6 +37,8 @@ export const CLIENT_NAMESPACES = {
   // Development only: the share screen's reminder card (the real one needs a published gift).
   "(marketing)/reminders/preview/page": ["lifecycle", "pickers"],
   "(marketing)/templates/layout": ["templates", "occasions"],
+  // The ad landing: only the live demo's own words.
+  "(marketing)/try/layout": ["templates"],
   // Where a free gift's footer leads: the template cards.
   "(marketing)/made-with-ethos/page": ["templates"],
   "(marketing)/occasions/layout": ["templates", "occasions"],
