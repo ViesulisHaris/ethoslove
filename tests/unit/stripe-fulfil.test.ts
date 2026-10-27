@@ -85,6 +85,7 @@ describe("reading a session back", () => {
       slugs: ["vinyl"],
       packId: null,
       bump: true,
+      second: null,
       kind: "bump",
       creatorCode: "MARIA",
       ref: "c-maria",
@@ -119,6 +120,26 @@ describe("fulfilment, signed in", () => {
     expect(mail.notifyReceipt).toHaveBeenCalledWith("u1", "One template + every other template", "€23.98", ["Vinyl", "All templates, current and future"], undefined);
   });
 
+  it("grants the second gift's template too, and names it on the receipt", async () => {
+    useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 1498, currency: "eur" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet" });
+    expect(meta).toMatchObject({ kind: "second", second: "bouquet" });
+    expect(readSession(session(meta))).toMatchObject({ product: "single", slugs: ["vinyl"], second: "bouquet", bump: false, kind: "second" });
+    expect(await fulfilCheckoutSession(session(signedIn(meta), { amount_total: 1498 }))).toEqual({ ok: true, userId: "u1" });
+    expect(unlocks("u1")).toEqual([`bouquet@${PURCHASE}`, `vinyl@${PURCHASE}`]);
+    expect(mail.notifyReceipt).toHaveBeenCalledWith("u1", "One template + a second gift", "€14.98", ["Vinyl", "Bouquet"], expect.objectContaining({ upgrade: expect.objectContaining({ amountLabel: "€10.01" }) }));
+    // The upgrade counts what the second gift cost: Everything minus €14.98.
+  });
+
+  it("ignores a second gift the session can't carry", () => {
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] });
+    expect(readSession(session({ ...meta, second: "not-a-template" }))?.second).toBeNull();
+    const withBump = metadata({ product: "single", templateSlugs: ["vinyl"], addEverything: true }).meta;
+    expect(readSession(session({ ...withBump, second: "bouquet" }))?.second).toBeNull();
+    const pick3 = metadata({ product: "pick3", templateSlugs: ["vinyl", "bloom", "museum"] }).meta;
+    expect(readSession(session({ ...pick3, second: "bouquet" }))?.second).toBeNull();
+  });
+
   it("records the withdrawal sentence the buyer ticked, and repeats it on the receipt", async () => {
     useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 999, currency: "eur" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
     const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] }, { locale: "es" });
@@ -131,6 +152,14 @@ describe("fulfilment, signed in", () => {
     vi.setSystemTime(NOW + 60_000);
     await fulfilCheckoutSession(session(signedIn(meta), { consent: { terms_of_service: "accepted", promotions: null } }));
     expect(fake.rows("purchases")[0].terms_consent_at).toBe(new Date(NOW).toISOString());
+  });
+
+  it("records the same sentence when it was ticked on our pay sheet, for the one-tap buttons", async () => {
+    useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 1199, currency: "usd" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] });
+    // Stripe shows no box of its own there: session.consent stays empty, the metadata says ours was ticked.
+    await fulfilCheckoutSession(session(signedIn({ ...meta, withdrawal_notice: "pay_sheet" }), { consent: null, amount_total: 1199, currency: "usd" }));
+    expect(fake.rows("purchases")[0]).toMatchObject({ status: "paid", terms_consent: consentSentence("single", "en"), terms_consent_at: new Date(NOW).toISOString() });
   });
 
   it("records nothing when Stripe couldn't show the tickbox", async () => {

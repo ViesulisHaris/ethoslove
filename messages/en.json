@@ -39,11 +39,11 @@
     "myDates": "My dates"
   },
   "meta": {
-    "defaultTitle": "Ethos — Gifts, date ideas and trips for couples",
+    "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
-    "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start.",
-    "giftsTitle": "Ethos — Gifts that open like a story",
-    "giftsDescription": "Make a personal gift that opens like a story: your photos, their song and your words, sent as a link or a QR code. Free to start."
+    "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two.",
+    "giftsTitle": "Digital Gifts: Make a Free, Personal One Online · Ethos",
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, a bouquet, a scrapbook or a small game from your photos, your words and their song, sent as a link. 30 ideas, two free."
   },
   "nav": {
     "templates": "Templates",
@@ -69,7 +69,7 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Personal gifts. Ten minutes to make, years to keep.",
+      "eyebrow": "Digital gifts. Ten minutes to make, years to keep.",
       "h1a": "Give them a moment they'll",
       "h1b": "open again",
       "h1c": "and again.",
@@ -142,7 +142,11 @@
           "time": "09:58"
         }
       ],
-      "placeholderNote": "Sample reactions. Real ones replace these as they come in."
+      "placeholderNote": "Sample reactions. Real ones replace these as they come in.",
+      "realNote": "Real reactions, shared by the people who got the gifts. Names left out.",
+      "realLabel": "A real reaction",
+      "opened": "{count} Ethos gifts opened so far.",
+      "openedEach": "{count} Ethos gifts opened so far, {times} times each on average."
     },
     "how": {
       "eyebrow": "How it works",
@@ -190,7 +194,8 @@
     "contact": "Contact",
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
     "madeWith": "Made in Riga.",
-    "explore": "Explore"
+    "explore": "Explore",
+    "digitalGifts": "Digital gifts"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -512,8 +517,19 @@
       "featureVoiceNote": "a voice message",
       "featureMorePhotos": "more than 10 photos",
       "featureUnwrap": "a surprise inside",
-      "payTitle": "One payment, then it's sent",
-      "payBlurb": "This gift uses {features}. Pay once and this template is yours for good, with everything in it.",
+      "benefitPremiumTemplate": "No Ethos footer, all from you",
+      "benefitNoWatermark": "No Ethos footer, all from you",
+      "benefitSchedule": "Opens at the minute you chose",
+      "benefitPassword": "Only they can open it",
+      "benefitPhotos": "Every photo you added, up to 20",
+      "benefitSong": "Your song playing",
+      "benefitVideo": "Your video in it",
+      "benefitVoiceNote": "Your voice saying it",
+      "benefitUnwrap": "A surprise at the end",
+      "payTitle": "Picture their face when it opens",
+      "realReaction": "a real reaction to an Ethos gift",
+      "payIncludes": "In this gift: {features}",
+      "payBlurb": "Pay once and this template is yours for good.",
       "payButton": "Pay {price} and send",
       "appUnlock": "Unlock and send",
       "appUnlockNote": "Through the App Store: you'll see the options and prices next.",
@@ -525,13 +541,17 @@
       "planEverything": "Every template",
       "planEverythingBlurb": "All {n} templates, and every one we add",
       "payNote": "No subscription. Card, Apple Pay and more at checkout.",
+      "oneTapApple": "or pay with Apple Pay",
+      "oneTapGoogle": "or pay with Google Pay",
+      "oneTapTerms": "Terms",
+      "oneTapNone": "It isn't set up in this browser. Use the button above.",
       "paying": "Opening secure checkout…",
       "signInBlurbPaid": "Your draft is saved on this device. Sign in, pay {price} once, and it's sent.",
       "signInBlurbFreeReply": "Sending this one back is free. Sign in and it's sent, with the “Made with Ethos” footer.",
       "freeReply": "<who>{name}</who> covered your reply: it's free, and it goes with the small “Made with Ethos” footer.",
       "freeReplyUsed": "This gift's free reply has already been sent, so this one is the template's normal price.",
       "freeReplyInvalid": "This link can't make the reply free any more, so it's the template's normal price.",
-      "payGuestBlurb": "This gift uses {features}. Pay once and it's sent. Your account is created from the email you give at checkout, no password needed.",
+      "payGuestBlurb": "Pay once and it's sent. Your account is created from the email you give at checkout: nothing to sign up for.",
       "signInInstead": "Already have an account? Sign in instead",
       "uploadsAfterPay": "Photos upload right after payment.",
       "ownedElsewhere": "Your purchase covers {templates}. This is a different template.",
@@ -710,6 +730,26 @@
     "soundOn": "Turn your sound on",
     "phaseNote": "The recipient experience is built in Phase 4."
   },
+  "adLanding": {
+    "hooks": {
+      "popup-card": "A birthday card that pops up on their phone",
+      "birthday-cinema": "Can't be there for their birthday? Send this.",
+      "bouquet": "A bouquet that blooms on their phone",
+      "xoxo": "When “I love you” isn't enough to text"
+    },
+    "description": "Try the real gift, then make yours with their name, your words and your photos.",
+    "tapHint": "This is the real gift. Tap it.",
+    "make": "Make yours",
+    "pricePaid": "Free to make · {price} once, when you send it",
+    "priceFree": "Free to make and send · extras {price}, paid once",
+    "stepsTitle": "How it works",
+    "whatTheySee": "What they'll see",
+    "reactionsTitle": "What came back",
+    "step1": "Add their name, your words and your photos.",
+    "step2": "Watch it exactly as they'll see it. Free, no account.",
+    "step3Paid": "Pay {price} once, no subscription, and send the link. It opens on their phone, nothing to download.",
+    "step3Free": "Send the link for free. It opens on their phone, nothing to download."
+  },
   "templates": {
     "title": "Templates",
     "subtitle": "Every one has a full live demo. Try it before you buy it.",
@@ -762,7 +802,7 @@
       "new": {
         "eyebrow": "New",
         "title": "Just arrived",
-        "blurb": "A party crashed by hamsters, a digicam, a photo booth, a music box and a picnic."
+        "blurb": "A spirit board, a swarm of bats, a witch's cauldron, a pumpkin to carve and a haunted house."
       },
       "all": {
         "eyebrow": "The collection",
@@ -773,6 +813,28 @@
     "badge": {
       "popular": "Most loved",
       "new": "New"
+    },
+    "guide": {
+      "eyebrow": "How to make one",
+      "heading": "How to make {name}",
+      "step1Title": "Add your photos",
+      "step1Body": "{min, plural, =0 {Add up to {max} photos, or none at all.} other {Choose up to {max} photos.}} The preview shows exactly what they'll see while you go.",
+      "step1Music": "Add a song from the library, or the real one that's yours: thirty seconds of it wait at the end, a tap away.",
+      "step2Title": "Write what you mean",
+      "step2Body": "Say the thing a card never has room for, in your own words: a memory, a joke only they'll get, what you'd tell a stranger about them. Give every photo a caption if you like.",
+      "step2Extras": "Add a countdown to the day and a surprise hidden at the very end.",
+      "step3Title": "Send the link",
+      "step3Body": "Publish it and send the link anywhere a link goes, or print its QR code and tuck it in a real card. It opens on any phone or laptop, with nothing to install.",
+      "faqTitle": "Questions people ask",
+      "faqFreeQ": "Is it free?",
+      "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
+      "faqPaidQ": "How much does it cost?",
+      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter and Constellations are free.",
+      "faqOpenQ": "How do they open it?",
+      "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
+      "faqEditQ": "Can I change it after I send it?",
+      "faqEditA": "Yes. Edit it whenever you like and the change goes live at the same link. Links don't expire, so it opens again next year.",
+      "moreTitle": "More like this"
     }
   },
   "occasions": {
@@ -793,6 +855,20 @@
     "long-distance": "Long distance",
     "just-because": "Just because"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "What to write, make and send",
+    "subtitle": "Practical guides for birthdays, anniversaries, distance and the ordinary days in between: what to say, what to make, and how to get it to them on time.",
+    "takeaways": "Key takeaways",
+    "faqTitle": "Questions people ask",
+    "minutes": "{minutes} min read",
+    "related": "Keep reading",
+    "makeThis": "Make this gift",
+    "seeIt": "See the template",
+    "templateFree": "Free template",
+    "templatePremium": "Premium template",
+    "englishOnly": "This guide is only in English for now."
+  },
   "pricing": {
     "eyebrow": "Pricing",
     "title": "Free to date. Pay once for a gift.",
@@ -805,19 +881,20 @@
     "plans": {
       "single": {
         "name": "One template",
-        "blurb": "The one you can't stop thinking about.",
+        "blurb": "One gift they'll open again and again.",
         "cta": "Unlock one",
         "features": [
-          "One premium template, forever",
-          "Unlimited gifts with it",
-          "Video and voice messages",
-          "No footer, 20 photos",
-          "Scheduling and password"
+          "One premium template, yours for good",
+          "Make it as often as you like",
+          "Your voice saying it, or your video",
+          "Up to 20 photos, and no footer",
+          "Opens at midnight on their day",
+          "Only they can open it"
         ]
       },
       "pick3": {
         "name": "Pick three",
-        "blurb": "Birthday, anniversary, and the one for your mum.",
+        "blurb": "Three days they'll remember: their birthday, your anniversary, and one for your mum.",
         "cta": "Pick three",
         "features": [
           "Any three templates, forever",
@@ -828,13 +905,14 @@
       },
       "everything": {
         "name": "Everything",
-        "blurb": "Every template we've made, and every one we'll make.",
+        "blurb": "A gift for every day that matters, now and later.",
         "cta": "Unlock everything",
         "features": [
           "All templates, now and future",
-          "Unlimited gifts, forever",
-          "Video and voice messages",
-          "No footer, 20 photos, scheduling, passwords",
+          "Make as many gifts as you like, forever",
+          "Your voice saying it, or your video",
+          "Up to 20 photos, and no footer",
+          "Opens at midnight on their day, and only they can open it",
           "First access to new templates"
         ]
       }
@@ -963,7 +1041,7 @@
   },
   "cookies": {
     "title": "Cookies",
-    "blurb": "Cookies, so we can see what's working. Never on a gift someone's been sent.",
+    "blurb": "Cookies for our stats and our ads on Meta (Facebook, Instagram) and TikTok. Never on a gift someone's been sent.",
     "readMore": "Read the policy",
     "accept": "Allow",
     "decline": "No thanks",
@@ -1093,19 +1171,23 @@
     "paywall": {
       "extras": "Make it special",
       "extrasBlurb": "Video, voice, 20 photos, a surprise inside, no footer, scheduling and a password, on this template for good",
-      "extrasIntro": "This gift uses {features}. Make it special once and this template keeps them for good.",
-      "extrasGuestIntro": "This gift uses {features}. Make it special once and it's sent. Your account is made from the email you give at checkout, no password needed.",
+      "extrasIntro": "Make it special once and this template keeps them for good.",
+      "extrasGuestIntro": "Make it special once and it's sent. Your account is created from the email you give at checkout: nothing to sign up for.",
       "upgrade": "Everything for the difference",
-      "upgradeBlurb": "Every template, forever. What you've paid already comes off {full}.",
+      "upgradeBlurb": "Every template, forever. What you've already paid counts towards {full}.",
       "pick3": "Or pick any three for {price}",
-      "bump": "Add every other template, forever",
-      "bumpBlurb": "Every template we have, and every one we add",
+      "bump": "Every other template",
+      "bumpBlurb": "Yours forever, and every one we add.",
+      "second": "A second gift",
+      "secondPrice": "+{price}",
+      "secondBlurb": "Save it for their birthday, or just because.",
+      "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
       "guarantee": "If it doesn't open on their phone, you get your money back."
     },
     "plans": {
-      "upgradeNote": "Instead of {full}: what you've already paid for templates comes off."
+      "upgradeNote": "Instead of {full}: what you've already paid counts towards it."
     },
     "checkoutErrors": {
       "alreadyOwned": "That's already on your account. Nothing to pay.",
@@ -1132,7 +1214,8 @@
       "pack": "Game pack",
       "giftcard": "Gift card",
       "upgrade": "Upgrade to Everything",
-      "withBump": "{product}, plus every template"
+      "withBump": "{product}, plus every template",
+      "withSecond": "{product}, plus a second gift"
     },
     "giftcard": {
       "eyebrow": "A gift card",
@@ -1184,9 +1267,32 @@
       "toAccount": "Go to your account",
       "toGift": "Back to your gift"
     },
+    "after": {
+      "eyebrow": "Every template, forever",
+      "sorted": {
+        "one": "That's one occasion sorted.",
+        "birthday": "Their birthday's sorted.",
+        "anniversary": "Your anniversary's sorted.",
+        "valentines": "Valentine's is sorted.",
+        "christmas": "Christmas is sorted.",
+        "halloween": "Halloween's sorted."
+      },
+      "ahead": {
+        "birthday": "their birthday",
+        "anniversary": "your anniversary",
+        "valentines": "Valentine's",
+        "christmas": "Christmas"
+      },
+      "next": "And {occasions} too: every template, forever, for {price} more.",
+      "credit": "You've already paid {paid} of the {full}.",
+      "creditEarlier": "What you've paid so far counts towards the {full}.",
+      "creditUntil": "You've already paid {paid} of the {full}, and that counts until {date}.",
+      "cta": "Add every template for {price} more",
+      "note": "One payment. No subscription."
+    },
     "account": {
       "upgradeTitle": "Upgrade to Everything",
-      "upgradeBlurb": "What you've paid for templates counts: every template, now and future, for {price} more.",
+      "upgradeBlurb": "What you've already paid counts: every template, now and future, for {price} more.",
       "upgradeCta": "Upgrade for {price}",
       "packs": "Game packs",
       "everyPack": "Every game pack",
@@ -1329,7 +1435,7 @@
       },
       "apology": {
         "title": "Digital apology gifts",
-        "description": "Say sorry properly: a heartfelt apology letter with your photos and a song, sent as a digital gift that shows you took the time. Free to start.",
+        "description": "Say sorry properly: an apology letter that names what you did, with your photos and a song, sent as a digital gift that shows you took the time. Free to start.",
         "intro": "When a text isn't enough. Take the time to write what you mean, add the moments that matter, and send something they can open when they're ready. The Letter is free, and a Text Thread says it one bubble at a time."
       },
       "long-distance": {
@@ -1347,7 +1453,9 @@
         "description": "No occasion needed: a small digital gift with your photos, a song and a few honest words, to tell someone you're thinking of them.",
         "intro": "The best gifts don't wait for a date on the calendar. Make one in ten minutes and send it for no reason at all."
       }
-    }
+    },
+    "blogTitle": "Gift ideas and love letter guides",
+    "blogDescription": "What to write, what to make and how to send it: ideas and how-tos for birthdays, anniversaries, long distance and every day in between."
   },
   "cities": {
     "meta": {
@@ -1708,7 +1816,7 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Made by you, opened on their phone",
+      "eyebrow": "Digital gifts, made by you",
       "h1a": "Make them a gift",
       "h1b": "they'll open again and again.",
       "sub": "Your photos, your words and their song, turned into a gift that opens like a story. Ten minutes to make, sent as a link or a QR code.",
@@ -1830,8 +1938,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Gifts, date ideas and trips for couples",
-      "description": "Your photos, your words and their song, turned into a gift that opens like a story. Plus date ideas near you, weekend trips and games for two. Free to start."
+      "title": "Ethos — Digital gifts that open like a story",
+      "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two."
     },
     "hero": {
       "eyebrow": "For the two of you",
@@ -1872,7 +1980,7 @@
         "cta": "Find a date"
       },
       "gifts": {
-        "title": "Gifts",
+        "title": "Digital gifts",
         "blurb": "A letter, a bouquet, a scratch card: made in minutes, opened on their phone, kept for good.",
         "cta": "Make a gift"
       },
@@ -2133,12 +2241,16 @@
       "choose": "Choose a deck",
       "count": "Card {n} of {total}",
       "next": "Next card",
-      "done": "That's the whole deck. You two talk a lot.",
+      "done": "That's the round. You two talk a lot.",
       "doneEyebrow": "The end",
       "again": "Shuffle and go again",
       "how": "Whoever is holding the phone reads it out. You both answer.",
       "title": "Question cards",
-      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer."
+      "blurb": "Three decks: light ones for the sofa, closer ones for later, and a deck for long distance. Pass the phone, read it out, both answer.",
+      "seoTitle": "Questions to Ask Your Partner: Free Card Game",
+      "seoDescription": "Questions to ask your boyfriend or girlfriend, as a card game: light ones for the sofa, deeper ones for later and a deck for long distance. Free.",
+      "listTitle": "{count} questions to ask your partner",
+      "listIntro": "All three free decks: light ones for the sofa, closer ones for later and a deck for when you're apart. Pass the phone, read one out, and both answer."
     },
     "lobby": {
       "one": {
@@ -2211,7 +2323,11 @@
         "ok": "There is more to learn. Good.",
         "sub": "Guesses about the other person, not answers about yourself. The one with more points listens better. Or is lying.",
         "again": "Play again"
-      }
+      },
+      "seoTitle": "How Well Do You Know Me? A Quiz for Couples",
+      "seoDescription": "A how well do you know me quiz for couples: answer for yourself, guess for them, and the guesses score. Play on one phone or two. Free, no app.",
+      "listTitle": "{count} how well do you know me questions",
+      "listIntro": "The questions in the free game, each with four answers to pick from. Answer for yourself, then guess what they said."
     },
     "rather": {
       "title": "Would you rather?",
@@ -2238,7 +2354,11 @@
         "again": "Play again",
         "date": "Plan a date"
       },
-      "or": "or"
+      "or": "or",
+      "seoTitle": "Would You Rather Questions for Couples: Play Online",
+      "seoDescription": "Would you rather questions for couples, from sweet to dramatic. Both pick in secret on one phone or two, then see if you agree. Free, no app, no sign-up.",
+      "listTitle": "{count} would you rather questions for couples",
+      "listIntro": "Every question in the free deck, from easy ones for the sofa to the ones that start an argument worth screenshotting. Play them above on one phone or two, or read them out on a date."
     },
     "roulette": {
       "title": "Dishes roulette",
@@ -2253,7 +2373,9 @@
         "eyebrow": "The wheel has spoken",
         "title": "Settled. No appeals.",
         "again": "Spin some more"
-      }
+      },
+      "seoTitle": "Chore Wheel for Couples: Who Does the Dishes?",
+      "seoDescription": "A wheel of the two of you: every spin settles one chore, and the wheel's word is final. A free chore roulette for couples, no app needed."
     },
     "dare": {
       "title": "Truth or dare, soft edition",
@@ -2264,7 +2386,7 @@
       "dare": "Dare",
       "for": "For {name}",
       "done": "Done. {name}'s turn",
-      "soft": "Twelve of each, in a fresh order every time.",
+      "soft": "Twelve of each, fresh from the whole pile every time.",
       "softPack": "{name}: {n} of each, in a fresh order every time.",
       "left": "{n} left",
       "finish": "We're done for tonight",
@@ -2273,7 +2395,13 @@
         "title": "{truths, plural, one {# truth} other {# truths}} and {dares, plural, one {# dare} other {# dares}} later.",
         "sub": "What's said at this table stays at this table.",
         "again": "Shuffle and play again"
-      }
+      },
+      "seoTitle": "Truth or Dare for Couples: A Free Online Game",
+      "seoDescription": "Truth or dare for couples, the soft edition: sweet truths and silly dares, nothing you'd regret in the morning. One phone, going round. Free.",
+      "listTitle": "{count} truth or dare questions for couples",
+      "listIntro": "Every truth and every dare in the free game. Mostly compliments and bad dancing.",
+      "listTruths": "Truths",
+      "listDares": "Dares"
     },
     "play": {
       "one": "1 phone",
@@ -2314,7 +2442,9 @@
         "kiss": "a kiss",
         "butterfly": "a butterfly",
         "cake": "a cake"
-      }
+      },
+      "seoTitle": "Memory Game with Your Own Photos, for Two",
+      "seoDescription": "The pairs game for two, dealt from our stickers or from your own photos. Turn two cards; a pair is yours and you go again. Free, in the browser."
     },
     "draw": {
       "title": "Draw it, guess it",
@@ -2360,7 +2490,9 @@
         "sub": "You got {n} of {total} between you. The misses are the ones you'll keep quoting.",
         "again": "Play again"
       },
-      "imHere": "I'm {name}, go"
+      "imHere": "I'm {name}, go",
+      "seoTitle": "Drawing Game for Couples, Live on Two Phones",
+      "seoDescription": "Draw it, guess it: one of you draws with a finger and the other guesses, live on two phones even an ocean apart. A free drawing game for two."
     },
     "end": {
       "label": "What next",
@@ -2673,24 +2805,111 @@
   },
   "lifecycle": {
     "remind": {
-      "title": "Remind me next year",
-      "blurb": "We'll email you nine days before, so there's time to make {name} something.",
+      "title": "Want a nudge before the next one?",
+      "blurb": "One email nine days before each day you add; for the monthly one, a check the day before. Nothing else.",
       "save": "Remind me",
       "saving": "Saving…",
-      "saved": "Saved. We'll email you nine days before {date}.",
       "failed": "That didn't save. Try again in a moment.",
       "tooMany": "You already have {max} reminders. Remove one on your account page to add this one.",
-      "edit": "Change the details",
+      "edit": "Change",
+      "done": "Done",
       "name": "Who it's for",
       "occasion": "Occasion",
       "date": "Date",
       "manage": "All your reminders",
+      "nextYear": "next year",
+      "add": "Add",
+      "cancel": "Cancel",
+      "addLabel": "Remind me: {what}",
+      "added": "Added",
+      "saveDay": "Save",
+      "pickDay": "Pick the day",
+      "rows": {
+        "birthday": "{name}'s birthday",
+        "birthdayNoName": "Their birthday",
+        "anniversary": "Your anniversary",
+        "other": "A day for {name}",
+        "otherNoName": "Another day",
+        "monthly": "Every month too",
+        "someone": "Someone else",
+        "someoneMore": "Someone else too"
+      },
+      "monthlySub": "We ask the day before. Nothing is sent to {name}.",
+      "monthlySaved": "Day {day} of each month, with a check the day before",
+      "since": "Together since",
+      "year": "Year",
+      "monthlyNote": "The day before each one, we'll ask if it's still on, and only remind you if you say yes. Nothing is ever sent to {name}.",
+      "sinceFuture": "That day hasn't come yet.",
+      "monthlySave": "Remind me every month",
+      "someoneSub": "Mum, a best friend…",
+      "someonePlaceholder": "Mum",
+      "othersLabel": "Added",
       "occasions": {
         "birthday": "Birthday",
         "anniversary": "Anniversary",
         "valentines": "Valentine's Day",
         "other": "Something else"
       }
+    },
+    "monthly": {
+      "yesTitle": "Confirm your yes",
+      "yesBody": "Tomorrow morning we'll send you one email, with a small idea for {name}.",
+      "yesTodayTitle": "Want the idea now?",
+      "yesTodayBody": "Say yes and we'll show you a small idea for {name}, right here.",
+      "yesConfirm": "Confirm",
+      "yesTodayConfirm": "Show me the idea",
+      "yesDoneTitle": "Done.",
+      "yesDoneBody": "Tomorrow morning: one email, with a small idea for {name}.",
+      "todayTitle": "Here's a small idea.",
+      "todayBody": "{template}: a few minutes to make, for {name} to open on the day.",
+      "todayCta": "Make {template}",
+      "passedTitle": "That day has passed.",
+      "passedBody": "Nothing to do. We'll ask again before the next one.",
+      "stoppedTitle": "These emails are stopped.",
+      "stoppedBody": "You stopped the monthly emails, so this link does nothing now. You can turn them on again when you make a gift.",
+      "staleTitle": "That was an earlier question.",
+      "staleBody": "Nothing to do: we'll ask again before the next one.",
+      "stopTitle": "Stop the monthly emails?",
+      "stopBody": "No more check-ins or reminders about your monthsaries with {name}. Your yearly reminders stay as they are.",
+      "stopConfirm": "Stop them",
+      "stopDoneTitle": "Stopped.",
+      "stopDoneBody": "You won't get these again. If you ever want them back, you can turn them on when you make a gift.",
+      "manage": "See your reminders"
+    },
+    "keep": {
+      "confirmTitle": "Email you the gift's link?",
+      "confirmBody": "We'll send it to this address now, so you can open the gift again any time.",
+      "confirmBodyDays": "We'll send it to this address now, so you can open the gift again any time, and remind you nine days before {days}.",
+      "confirmButton": "Yes, email me the link",
+      "doneTitle": "It's on its way.",
+      "doneBody": "The gift's link will be in your inbox in a moment. You can open the gift from here too.",
+      "doneDays": "The gift's link will be in your inbox in a moment, and we'll remind you nine days before {days}. You can open the gift from here too.",
+      "open": "Open the gift",
+      "goneTitle": "This link has expired.",
+      "goneBody": "Nothing was kept, and nothing more will come. To keep the gift, open it again and tap “Keep this gift”.",
+      "stopTitle": "Unsubscribe?",
+      "stopBody": "We'll forget this address for this gift: no more reminders, and nothing else about it.",
+      "stopConfirm": "Unsubscribe",
+      "stopDoneTitle": "You're unsubscribed.",
+      "stopDoneBody": "Nothing more will come about this gift. Its link still opens it, wherever you saved it.",
+      "neverTitle": "Never email this address?",
+      "neverBody": "Nobody will be able to ask us to email it about a gift again, and it won't get offers from us either.",
+      "neverConfirm": "Never email me",
+      "neverDoneTitle": "Done.",
+      "neverDoneBody": "This address won't hear from us about kept gifts again, whoever types it in.",
+      "reminderOffTitle": "Remove this reminder?",
+      "reminderOffBody": "We won't email you before {day} again. Any other day you asked for stays.",
+      "reminderOffConfirm": "Remove it",
+      "reminderOffDoneTitle": "Removed.",
+      "reminderOffDoneBody": "No more emails before {day}.",
+      "reminderOffGoneBody": "That reminder was already removed."
+    },
+    "reactionPrivate": {
+      "title": "Keep this reaction private?",
+      "body": "It won't be shown on Ethos's site, even without names. It stays yours, on your dashboard.",
+      "confirm": "Keep it private",
+      "doneTitle": "It's private.",
+      "doneBody": "This reaction won't be shown on Ethos's site. It stays on your dashboard, as it was."
     },
     "trip": {
       "title": "Book the trip",
@@ -2702,10 +2921,13 @@
     },
     "page": {
       "title": "Reminders",
-      "subtitle": "Birthdays, anniversaries and other days we'll email you about, nine days before. Once a year each, nothing else.",
+      "subtitle": "The days you asked us to remember: we email you nine days before, once a year. And the day before your monthsary, if you asked for it.",
       "empty": "No reminders yet. After you publish a gift, you can ask us to remind you next year.",
       "remove": "Remove",
-      "removeLabel": "Remove the reminder for {name}",
+      "removeLabel": "Remove the reminder: {what}",
+      "monthly": "Every month on day {day}, with a check the day before",
+      "monthlyRemove": "Stop",
+      "monthlyRemoveLabel": "Stop the monthly reminders about {name}",
       "failed": "Couldn't remove it. Try again in a moment.",
       "back": "Account",
       "makeGift": "Make a gift"
@@ -2981,5 +3203,34 @@
       "signIn": "Sign in first, then enter the password.",
       "generic": "That didn't work. Try again in a moment."
     }
+  },
+  "madeWith": {
+    "metaTitle": "Make one back",
+    "metaDescription": "Someone made you an Ethos gift. Make one back: two templates are free, and every other one is free to try.",
+    "eyebrow": "Made with Ethos",
+    "title": "Someone made you one of these.",
+    "subtitle": "Make one back — free to start.",
+    "yours": "The one you got",
+    "free": {
+      "eyebrow": "Free",
+      "title": "Free to make and send",
+      "blurb": "No payment, and no account until you send it. These carry the small “Made with Ethos” footer, like the one you got."
+    },
+    "premium": {
+      "eyebrow": "Premium",
+      "title": "Free to try, pay once to send",
+      "blurb": "Make the whole gift first, for free. If you send it, you pay once, and it goes without the footer."
+    }
+  },
+  "recipients": {
+    "eyebrow": "Gift ideas",
+    "breadcrumb": "Digital gifts",
+    "free": "Free",
+    "make": "Make this gift",
+    "guideTitle": "How to make it land",
+    "faqTitle": "Questions people ask",
+    "more": "Gift ideas for someone else",
+    "occasions": "By occasion",
+    "footerTitle": "Gift ideas"
   }
 }

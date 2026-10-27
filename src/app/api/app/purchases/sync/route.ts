@@ -3,7 +3,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { env } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
-import { currencyFor } from "@/lib/pricing/products";
+import { visitorCurrency } from "@/lib/pricing/products";
 import { readEntitlements } from "@/lib/commerce/entitlements";
 import { pullAppStore, unusedCredits } from "@/lib/commerce/app-store";
 import { appLocale, NO_STORE } from "@/lib/app/http";
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
   }
   const locale = appLocale(request.nextUrl.searchParams);
   const [entitlements, credits] = await Promise.all([
-    readEntitlements(db, user.id, { locale, currency: currencyFor(locale === "es" ? "ES" : "US"), now }),
+    readEntitlements(db, user.id, { locale, currency: visitorCurrency(request.headers), now }),
     unusedCredits(db, user.id),
   ]);
   return NextResponse.json({ entitlements, credits }, { headers: NO_STORE });

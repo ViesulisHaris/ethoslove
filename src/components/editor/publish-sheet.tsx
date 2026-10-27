@@ -6,10 +6,12 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
+import type { ShownReaction } from "@/lib/proof/numbers";
 import { track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
-import { PRODUCTS, currencyFor, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
 import { stuckUploads, type StuckUpload } from "@/lib/editor/failed-uploads";
@@ -44,6 +46,7 @@ export function PublishSheet({
   supabaseConfigured,
   paymentsEnabled,
   resume = false,
+  reaction = null,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -55,6 +58,8 @@ export function PublishSheet({
   /** Back from checkout with ?resume=publish: publish as soon as everything is in place. */
   resume?: boolean;
   paymentsEnabled: boolean;
+  /** A real reaction (approved, its writer agreed: lib/proof) the pay panel may open with. */
+  reaction?: ShownReaction | null;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tCommon = useTranslations("common");
@@ -73,7 +78,7 @@ export function PublishSheet({
   const inApp = useInApp();
   const [appUnlocked, setAppUnlocked] = useState(false);
   const signingIn = useRef(false);
-  const currency = currencyFor(locale === "es" ? "ES" : "US");
+  const currency = useCurrency();
   // The price a guest is told before signing in: what this gift's own row costs.
   const priceHint = formatAmount(PRODUCTS[templatePlan(manifest.tier)].amounts[currency], currency, locale);
   // "Send one back" from a paid premium gift opens this editor with ?reply=<token>: the reply is free
@@ -189,27 +194,23 @@ export function PublishSheet({
         .filter((m): m is TemplateManifest => Boolean(m)),
     [fetchedEntitlement, state.authed, slug],
   );
-  const premiumFeatures = [
+  // What in this gift is paid for, once: named as features for the App Store's sheet, and on the pay
+  // panel as what each one does for them ("Your voice saying it", not "a voice message").
+  const premiumKeys = [
     // A free reply's template costs nothing: what it's paying for is the rest of the list.
-    manifest.tier === "premium" && !freeReply && !campaign && t("featurePremiumTemplate"),
-    options.removeWatermark && t("featureNoWatermark"),
-    options.schedule && t("featureSchedule"),
-    options.password && t("featurePassword"),
+    manifest.tier === "premium" && !freeReply && !campaign && "PremiumTemplate",
+    options.removeWatermark && "NoWatermark",
+    options.schedule && "Schedule",
+    options.password && "Password",
     ...(serialized ? premiumExtras(serialized) : [])
       // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
       .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply || Boolean(campaign))
-      .map(
-        (extra) =>
-          ({
-            // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
-            song: t("featureSong"),
-            video: t("featureVideo"),
-            voiceNote: t("featureVoiceNote"),
-            morePhotos: t("featurePhotos"),
-            unwrap: t("featureUnwrap"),
-          })[extra],
-      ),
+      // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
+      .map((extra) => ({ song: "Song", video: "Video", voiceNote: "VoiceNote", morePhotos: "Photos", unwrap: "Unwrap" })[extra]),
   ].filter(Boolean) as string[];
+  const premiumFeatures = premiumKeys.map((key) => t(`feature${key}`));
+  // A premium template and its missing footer say the same for them: once.
+  const premiumBenefits = [...new Set(premiumKeys.map((key) => t(`benefit${key}`)))];
 
   const publish = async () => {
     setBusy(true);
@@ -435,7 +436,8 @@ export function PublishSheet({
                 currency={currency}
                 locale={locale}
                 guest
-                features={premiumFeatures}
+                features={premiumBenefits}
+                reaction={reaction}
                 returnTo={next}
                 freeReply={freeReply}
                 upgrade={null}
@@ -464,7 +466,8 @@ export function PublishSheet({
                   currency={currency}
                   locale={locale}
                   guest={false}
-                  features={premiumFeatures}
+                  features={premiumBenefits}
+                  reaction={reaction}
                   returnTo={next}
                   freeReply={freeReply}
                   upgrade={upgrade}

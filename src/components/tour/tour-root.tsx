@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CircleQuestionMark } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { env } from "@/lib/env";
+import { isConfigured } from "@/lib/env";
 import { hidesConsentBanner } from "@/lib/analytics/consent";
 import { useConsent } from "@/lib/analytics/use-consent";
 import { useScrolledPast } from "@/hooks/use-scrolled-past";
@@ -73,7 +73,7 @@ export function TourRoot({ room, pathname }: { room: TourRoom; pathname: string 
   const reduced = useReducedMotion() ?? false;
   const consent = useConsent();
   // The consent strip asks first, and the tour never sits over it: one thing at a time.
-  const bannerUp = consent === null && Boolean(env.clarityId) && !hidesConsentBanner(pathname);
+  const bannerUp = consent === null && isConfigured.cookieConsent && !hidesConsentBanner(pathname);
   const giftRunning = useGiftRunning();
   const tucked = useScrolledPast(TUCK_AFTER_PX);
   const [ready, setReady] = useState(false);

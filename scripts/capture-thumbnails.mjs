@@ -23,6 +23,18 @@ async function scrollCollage(page, opener) {
   return poster;
 }
 
+/** The skip link and the mute button are controls, not part of the picture: hidden for the poster and for the recording. */
+async function hideControls(page) {
+  await page.evaluate(() => {
+    const hide = () =>
+      document.querySelectorAll("button").forEach((b) => {
+        if (/^(skip|saltar)$/i.test((b.textContent || "").trim()) || /^(mute music|play music|silenciar|reproducir)/i.test(b.getAttribute("aria-label") || "")) b.style.visibility = "hidden";
+      });
+    hide();
+    new MutationObserver(hide).observe(document.body, { childList: true, subtree: true });
+  });
+}
+
 async function open(page) {
   const cover = page.getByRole("button", { name: /tap to open/i });
   if (await cover.count()) {
@@ -558,6 +570,78 @@ const SCRIPTS = {
       await page.getByTestId("close-photo").click({ force: true });
       await page.waitForTimeout(1000);
     }
+    return poster;
+  },
+  // The five Halloween gifts: the poster is the moment that sells each, the recording is the run up to it and a little after.
+  seance: async (page) => {
+    await hideControls(page);
+    const touch = page.getByRole("button", { name: /touch the planchette/i });
+    await touch.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await touch.click({ force: true });
+    // "STAY W" is on the line under the board, and the planchette is on its way to the next letter.
+    await page.waitForTimeout(5800);
+    const poster = await page.screenshot();
+    await page.waitForTimeout(4600);
+    return poster;
+  },
+  "bat-swarm": async (page) => {
+    await hideControls(page);
+    const moon = page.getByRole("button", { name: /tap the moon/i });
+    await moon.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await moon.click({ force: true });
+    // Emerge, orbit, gather: the name is formed on the moon from about five seconds in.
+    await page.waitForTimeout(6000);
+    const poster = await page.screenshot();
+    await page.waitForTimeout(5000);
+    return poster;
+  },
+  cauldron: async (page) => {
+    await hideControls(page);
+    const jars = page.getByRole("button", { name: /to the potion$/i });
+    await jars.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    for (let i = 0; i < 3; i++) {
+      await jars.nth(i).click({ force: true });
+      await page.waitForTimeout(1900);
+    }
+    // After the third it boils over, the heart is drawn and the bottle comes up with their name on it.
+    await page.getByRole("button", { name: /pop the cork/i }).waitFor({ timeout: 15000 });
+    await page.waitForTimeout(1200);
+    const poster = await page.screenshot();
+    await page.getByRole("button", { name: /pop the cork/i }).click({ force: true });
+    await page.waitForTimeout(1500);
+    return poster;
+  },
+  "jack-o-lantern": async (page) => {
+    await hideControls(page);
+    const carve = page.getByRole("button", { name: /tap to carve/i });
+    await carve.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await carve.click({ force: true });
+    const light = page.getByRole("button", { name: /light the candle/i });
+    await light.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(500);
+    await light.click({ force: true });
+    await page.waitForTimeout(3000);
+    const poster = await page.screenshot();
+    await page.waitForTimeout(1500);
+    return poster;
+  },
+  "haunted-house": async (page) => {
+    await hideControls(page);
+    const gate = page.getByRole("button", { name: /open the gate/i });
+    await gate.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    await gate.click({ force: true });
+    // The gate swings, the camera climbs the path and the windows light one by one.
+    const knock = page.getByRole("button", { name: /knock on the door/i });
+    await knock.waitFor({ timeout: 25000 });
+    await page.waitForTimeout(600);
+    const poster = await page.screenshot();
+    await page.locator('button[aria-label*="lost on purpose"]').first().click({ force: true });
+    await page.waitForTimeout(1600);
     return poster;
   },
 };

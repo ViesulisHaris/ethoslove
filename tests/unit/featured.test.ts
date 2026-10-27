@@ -17,8 +17,8 @@ describe("what the gallery leads with", () => {
     for (const slug of POPULAR_SLUGS) expect(manifests.find((m) => m.slug === slug)?.tier, slug).toBe("premium");
   });
 
-  it("puts this October's Halloween collages at the front of what is new, then the pair before them", () => {
-    expect(NEW_SLUGS.slice(0, 5)).toEqual(["be-my-boo", "fall-for-you", "autumn-reel", "spooky-season", "dark-romance"]);
+  it("puts the five Halloween gifts that play at the front of what is new, then the collages before them", () => {
+    expect(NEW_SLUGS).toEqual(["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "be-my-boo", "fall-for-you", "autumn-reel"]);
   });
 
   it("shelves every template exactly once: best sellers, new, then the rest in the order given", () => {

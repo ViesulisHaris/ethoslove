@@ -8,7 +8,17 @@
  * SHA-256 of it, which is also all the opt-out list stores.
  */
 
-export type TokenPurpose = "reminder-remove" | "email-optout" | "saved-date-reminder-off";
+export type TokenPurpose =
+  | "reminder-remove"
+  | "email-optout"
+  | "saved-date-reminder-off"
+  | "monthsary-yes"
+  | "monthsary-stop"
+  | "keep-confirm"
+  | "keep-stop"
+  | "keep-never"
+  | "keep-reminder-off"
+  | "reaction-private";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -17,6 +27,21 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   "email-optout": /^[0-9a-f]{64}$/,
   // "Turn off reminders for this date", in the day-before email of a saved date: its row's id.
   "saved-date-reminder-off": UUID,
+  // "Yes, remind me", in a monthsary's check-in: the account's id and the day it asks about, so a yes
+  // from an old email can't confirm a later month.
+  "monthsary-yes": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{4}-\d{2}-\d{2}$/,
+  // "Stop these", in every monthsary email: the account's id, so it outlives the row it came with.
+  "monthsary-stop": UUID,
+  // "Yes, email me the link", in a kept gift's confirmation: the keep's id.
+  "keep-confirm": UUID,
+  // "Unsubscribe", in every email a kept gift brings once confirmed: the keep's id. It ends the lot.
+  "keep-stop": UUID,
+  // "Never email me", in the confirmation, for an address someone else typed in: its hash.
+  "keep-never": /^[0-9a-f]{64}$/,
+  // "Remove this reminder", in a keeper's reminder: that reminder's id.
+  "keep-reminder-off": UUID,
+  // "Keep it private", in the email telling a sender about a reaction they may see on the site: its id.
+  "reaction-private": UUID,
 };
 
 const encoder = new TextEncoder();

@@ -19,11 +19,13 @@ export type LinkPage = {
   body: string;
   /** A button that POSTs to `action` (the page's own address, token included). */
   confirm?: { label: string; action: string };
+  /** A plain link onward, drawn as the button is (a page that has already acted: "Make it"). */
+  next?: { label: string; href: string };
   home: string;
   status?: number;
 };
 
-export function linkPage({ locale, title, body, confirm, home, status = 200 }: LinkPage): Response {
+export function linkPage({ locale, title, body, confirm, next, home, status = 200 }: LinkPage): Response {
   const homeHref = `${siteUrl()}${locale === "es" ? "/es" : ""}/`;
   const html = `<!doctype html>
 <html lang="${locale}">
@@ -41,7 +43,8 @@ export function linkPage({ locale, title, body, confirm, home, status = 200 }: L
   main { width: 100%; max-width: 440px; }
   h1 { font: italic 400 30px/1.15 Georgia, "Iowan Old Style", serif; letter-spacing: -0.3px; margin: 0 0 14px; }
   p { margin: 0 0 24px; color: var(--muted); }
-  button { appearance: none; border: 0; border-radius: 999px; background: var(--coral); color: var(--on-coral); font-family: inherit; font-weight: 600; font-size: 15px; line-height: 1; min-height: 44px; padding: 0 22px; cursor: pointer; }
+  button, .next { appearance: none; border: 0; border-radius: 999px; background: var(--coral); color: var(--on-coral); font-family: inherit; font-weight: 600; font-size: 15px; line-height: 1; min-height: 44px; padding: 0 22px; cursor: pointer; }
+  .next { display: flex; width: fit-content; align-items: center; text-decoration: none; }
   a { color: var(--ink); }
   .home { display: inline-block; margin-top: 20px; font-size: 14px; color: var(--muted); }
 </style>
@@ -51,6 +54,7 @@ export function linkPage({ locale, title, body, confirm, home, status = 200 }: L
   <h1>${escape(title)}</h1>
   <p>${escape(body)}</p>
   ${confirm ? `<form method="post" action="${escape(confirm.action)}"><button type="submit">${escape(confirm.label)}</button></form>` : ""}
+  ${next ? `<a class="next" href="${escape(next.href)}">${escape(next.label)}</a>` : ""}
   <a class="home" href="${escape(homeHref)}">${escape(home)}</a>
 </main>
 </body>

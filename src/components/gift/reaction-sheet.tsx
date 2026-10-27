@@ -10,8 +10,32 @@ import { VoiceRecorder } from "./voice-recorder";
 const EMOJI = ["❤️", "😭", "🥹", "😂", "😮"] as const;
 
 const S = {
-  en: { title: "Send {sender} a reaction", blurb: "They'll get it right away.", placeholder: "Say something back (optional)", send: "Send", sending: "Sending…", sent: "Sent to {sender}.", sentBlurb: "They'll see it the next time they open their gifts.", close: "Close", error: "Couldn't send. Try again in a moment." },
-  es: { title: "Envíale una reacción a {sender}", blurb: "Le llegará al momento.", placeholder: "Responde algo (opcional)", send: "Enviar", sending: "Enviando…", sent: "Enviado a {sender}.", sentBlurb: "Lo verá la próxima vez que abra sus regalos.", close: "Cerrar", error: "No se pudo enviar. Inténtalo en un momento." },
+  en: {
+    title: "Send {sender} a reaction",
+    blurb: "They'll get it right away.",
+    placeholder: "Say something back (optional)",
+    share: "Ethos may show this reaction on its site, without your name",
+    shareSub: "Only the emoji and your words, never your voice.",
+    send: "Send",
+    sending: "Sending…",
+    sent: "Sent to {sender}.",
+    sentBlurb: "They'll see it the next time they open their gifts.",
+    close: "Close",
+    error: "Couldn't send. Try again in a moment.",
+  },
+  es: {
+    title: "Envíale una reacción a {sender}",
+    blurb: "Le llegará al momento.",
+    placeholder: "Responde algo (opcional)",
+    share: "Ethos puede mostrar esta reacción en la web de Ethos, sin tu nombre",
+    shareSub: "Solo el emoji y tus palabras, nunca tu voz.",
+    send: "Enviar",
+    sending: "Enviando…",
+    sent: "Enviado a {sender}.",
+    sentBlurb: "Lo verá la próxima vez que abra sus regalos.",
+    close: "Cerrar",
+    error: "No se pudo enviar. Inténtalo en un momento.",
+  },
 };
 
 export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { open: boolean; onClose: () => void; shortId: string; senderName: string; locale: GiftLocale }) {
@@ -19,6 +43,8 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
   const [emoji, setEmoji] = useState<(typeof EMOJI)[number]>("❤️");
   const [text, setText] = useState("");
   const [audio, setAudio] = useState<Blob | null>(null);
+  // Unticked until they tick it: the reaction is theirs, and so is whether anyone else sees it.
+  const [share, setShare] = useState(false);
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [burst, setBurst] = useState(0);
 
@@ -27,6 +53,7 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
     const form = new FormData();
     form.set("emoji", emoji);
     form.set("text", text);
+    if (share) form.set("share", "1");
     if (audio) form.set("audio", audio, "reaction.webm");
     const res = await fetch(`/api/gift/${shortId}/react`, { method: "POST", body: form }).catch(() => null);
     if (res?.ok) {
@@ -74,6 +101,13 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
                 <div className="mt-3">
                   <VoiceRecorder locale={locale} value={audio} onChange={setAudio} />
                 </div>
+                <label className="mt-4 flex cursor-pointer items-start gap-3 text-left text-sm text-white/80">
+                  <input type="checkbox" checked={share} onChange={(e) => setShare(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-coral" data-testid="reaction-share" />
+                  <span>
+                    {t.share}
+                    <span className="mt-0.5 block text-xs text-white/50">{t.shareSub}</span>
+                  </span>
+                </label>
                 {state === "error" ? <p className="mt-3 text-sm text-coral">{t.error}</p> : null}
                 <button type="button" onClick={send} disabled={state === "sending"} className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-coral text-[15px] font-semibold text-paper shadow-glow disabled:opacity-60">
                   {state === "sending" ? <Loader2 className="size-4 animate-spin" /> : null}

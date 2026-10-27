@@ -18,7 +18,16 @@ export const env = {
 
   stripeSecretKey: read("STRIPE_SECRET_KEY"),
   stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
-  stripePublishableKey: read("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
+  /**
+   * Written out literally, like `clarityId` below: the pay sheet's one-tap Apple Pay / Google Pay
+   * buttons load Stripe.js with it in the browser. Unset, the buttons are simply not offered.
+   */
+  stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || undefined,
+  /**
+   * "on" offers the one-tap buttons to everyone. Until then they show only on an editor opened with
+   * ?onetap=1, so the owners can try Apple Pay on their own phones on the live site first.
+   */
+  oneTap: process.env.NEXT_PUBLIC_ONE_TAP === "on",
   /**
    * Ethos's own Customer Portal configuration (bpc_…), made by scripts/setup-billing-portal.mjs. The
    * Stripe account is shared, so its default portal belongs to nobody in particular: without this the
@@ -50,6 +59,24 @@ export const env = {
    * so it has to be one Next can inline.
    */
   clarityId: process.env.NEXT_PUBLIC_CLARITY_ID || undefined,
+
+  /**
+   * Meta (Facebook and Instagram) pixel id, for telling Meta's ads which visits ended in a sale.
+   * Written out literally for the same reason as `clarityId`: the browser decides with it whether the
+   * banner asks and whether the pixel loads. Unset, nothing of Meta's loads and nothing is sent.
+   */
+  metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || undefined,
+  /** The Conversions API's access token (server only): the webhook reports each consented sale with it. */
+  metaCapiToken: read("META_CAPI_TOKEN"),
+  /** Events Manager → Test events: while set, server events show up there instead of counting. */
+  metaTestEventCode: read("META_TEST_EVENT_CODE"),
+
+  /** TikTok pixel id (its "pixel code"), the same way and for the same reasons as `metaPixelId`. */
+  tiktokPixelId: process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || undefined,
+  /** The Events API's access token (server only), made in TikTok Events Manager next to the pixel. */
+  tiktokEventsToken: read("TIKTOK_EVENTS_TOKEN"),
+  /** TikTok Events Manager → Test events: while set, server events go there instead of counting. */
+  tiktokTestEventCode: read("TIKTOK_TEST_EVENT_CODE"),
 
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
@@ -91,6 +118,10 @@ export const isConfigured = {
   resend: Boolean(env.resendApiKey),
   posthog: Boolean(env.posthogKey),
   clarity: Boolean(env.clarityId),
+  metaPixel: Boolean(env.metaPixelId),
+  tiktokPixel: Boolean(env.tiktokPixelId),
+  /** Whether anything on the site waits for the cookie banner's answer, so whether it asks at all. */
+  cookieConsent: Boolean(env.clarityId || env.metaPixelId || env.tiktokPixelId),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
   upstash: Boolean(env.upstashRedisUrl && env.upstashRedisToken),

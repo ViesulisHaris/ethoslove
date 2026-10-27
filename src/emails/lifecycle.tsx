@@ -1,5 +1,5 @@
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
-import { EmailLayout, Mono, P, Quiet } from "./layout";
+import { CtaButton, EmailLayout, Idea, InlineLink, Mono, P, Quiet } from "./layout";
 
 type L = "en" | "es";
 const accountFooter: Record<L, string> = { en: "You're getting this because you have an Ethos account.", es: "Recibes esto porque tienes una cuenta en Ethos." };
@@ -124,22 +124,106 @@ const REMINDER_HEADING: Record<ReminderOccasion, Record<L, (name: string, date: 
   other: { en: (n, d) => `A day for ${n}: ${d}.`, es: (n, d) => `Un día para ${n}: el ${d}.` },
 };
 
-export const reminderHeading = (occasion: ReminderOccasion, locale: L, recipientName: string, date: string): string => REMINDER_HEADING[occasion][locale](recipientName, date);
+/** The same with no name to say: a kept gift signed with a pet name ("Tu amor") reminds of "the sender". */
+const UNNAMED_HEADING: Record<ReminderOccasion, Record<L, (date: string) => string>> = {
+  birthday: { en: (d) => `The sender's birthday is on ${d}.`, es: (d) => `El cumpleaños de quien te lo regaló es el ${d}.` },
+  anniversary: { en: (d) => `Your anniversary is on ${d}.`, es: (d) => `Vuestro aniversario es el ${d}.` },
+  valentines: { en: (d) => `Valentine's Day is on ${d}.`, es: (d) => `San Valentín es el ${d}.` },
+  other: { en: (d) => `A day to remember: ${d}.`, es: (d) => `Un día para recordar: el ${d}.` },
+};
 
-/** "Remind me next year", a year on. It names the day, not how far away it is: a late run still reads true. */
-export function ReminderEmail({ locale, recipientName, occasion, date, makeUrl, removeUrl }: { locale: L; recipientName: string; occasion: ReminderOccasion; date: string; makeUrl: string; removeUrl: string }) {
+export const reminderHeading = (occasion: ReminderOccasion, locale: L, recipientName: string, date: string): string =>
+  recipientName ? REMINDER_HEADING[occasion][locale](recipientName, date) : UNNAMED_HEADING[occasion][locale](date);
+
+/** A template an email suggests (lib/lifecycle/suggest.ts): its name and line in the reader's language, its editor and its poster. */
+export type EmailIdea = { name: string; tagline: string; url: string; poster: string };
+
+/**
+ * "Remind me next year", a year on. It names the day, not how far away it is: a late run still reads
+ * true. One template is suggested for the occasion, a tap from its editor. Nothing from the gift the
+ * reminder was saved with goes in: not its photos, not its words, not even that there was one (a
+ * reminder can be for someone no gift was made for). With no name (a kept gift signed with a pet
+ * name), it speaks of "the sender" and "them".
+ */
+export function ReminderEmail({ locale, recipientName, occasion, date, idea, moreUrl, removeUrl }: { locale: L; recipientName: string; occasion: ReminderOccasion; date: string; idea: EmailIdea; moreUrl: string; removeUrl: string }) {
   const es = locale === "es";
   const heading = reminderHeading(occasion, locale, recipientName, date);
   return (
     <EmailLayout
+      lang={locale}
       preview={heading}
       heading={heading}
-      cta={{ label: es ? `Hacerle un regalo a ${recipientName}` : `Make ${recipientName} something`, href: makeUrl }}
       footer={es ? "Recibes esto porque le pediste a Ethos que te lo recordara." : "You're getting this because you asked Ethos to remind you."}
       footerLink={{ label: es ? "Quitar este recordatorio" : "Remove this reminder", href: removeUrl }}
     >
-      <P>{es ? `Hay tiempo de sobra para hacerle algo a ${recipientName} y programarlo para que se abra esa mañana.` : `There's time to make ${recipientName} something and schedule it to open that morning.`}</P>
-      <Quiet>{es ? `Pediste este recordatorio al hacerle un regalo a ${recipientName} en Ethos. Te lo enviamos una vez al año.` : `You asked for this reminder when you made ${recipientName} a gift on Ethos. It comes once a year.`}</Quiet>
+      <P>
+        {es
+          ? `Hay tiempo de sobra para hacerle algo${recipientName ? ` a ${recipientName}` : ""} y programarlo para que se abra esa mañana. Una idea:`
+          : `There's time to make ${recipientName || "them"} something and schedule it to open that morning. One idea:`}
+      </P>
+      <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
+      <CtaButton href={idea.url} label={recipientName ? (es ? `Hacerlo para ${recipientName}` : `Make it for ${recipientName}`) : es ? "Hazle algo" : "Make them something"} />
+      <Quiet>
+        {es ? "¿Otra cosa? " : "Something else? "}
+        <InlineLink href={moreUrl}>{es ? "Todas las plantillas" : "Every template"}</InlineLink>.
+      </Quiet>
+      <Quiet>{es ? "Pediste este recordatorio en Ethos. Llega una vez al año." : "You asked Ethos for this reminder. It comes once a year."}</Quiet>
+    </EmailLayout>
+  );
+}
+
+/** "Still celebrating with Ana tomorrow?": the check-in's subject and heading, which say nothing about what. */
+export const monthsaryCheckInHeading = (locale: L, partnerName: string): string =>
+  locale === "es" ? `¿Mañana seguís celebrándolo, ${partnerName} y tú?` : `Still celebrating with ${partnerName} tomorrow?`;
+
+/** "7 months with Ana today", "A year with Ana today": the reminder's, once they've said yes. */
+export function monthsaryHeading(locale: L, partnerName: string, months: number): string {
+  const years = months % 12 === 0 ? months / 12 : null;
+  if (locale === "es") return years ? `Hoy cumplís ${years === 1 ? "un año" : `${years} años`}, ${partnerName} y tú` : `Hoy cumplís ${months} ${months === 1 ? "mes" : "meses"}, ${partnerName} y tú`;
+  return years ? `${years === 1 ? "A year" : `${years} years`} with ${partnerName} today` : `${months} ${months === 1 ? "month" : "months"} with ${partnerName} today`;
+}
+
+/**
+ * The day before a monthsary: a neutral check that it is still on. Many couples break up, so the
+ * subject names no milestone, and a reminder only follows a yes. No answer means nothing more this
+ * month; one tap stops them all.
+ */
+export function MonthsaryCheckInEmail({ locale, partnerName, date, yesUrl, stopUrl }: { locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string }) {
+  const es = locale === "es";
+  const heading = monthsaryCheckInHeading(locale, partnerName);
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={es ? "Un sí y te lo recordamos mañana. Si no, no hace falta contestar." : "Say yes and we'll remind you tomorrow. Otherwise, no need to answer."}
+      heading={heading}
+      footer={es ? "Recibes esto porque le pediste a Ethos recordatorios cada mes." : "You're getting this because you asked Ethos for monthly reminders."}
+      footerLink={{ label: es ? "Dejar de recibir estos correos" : "Stop these", href: stopUrl }}
+    >
+      <P>{es ? `Mañana, ${date}, es vuestro mesiversario. ¿Quieres que te lo recordemos por la mañana, con una idea pequeña?` : `Tomorrow, ${date}, is your monthsary with ${partnerName}. Want a reminder in the morning, with one small idea?`}</P>
+      <CtaButton href={yesUrl} label={es ? "Sí, recuérdamelo" : "Yes, remind me"} />
+      <Quiet>
+        {es ? "Si no contestas, no te escribimos más sobre este mesiversario. " : "If you don't answer, we won't write about this one again. "}
+        <InlineLink href={stopUrl}>{es ? "Dejar de recibir estos correos" : "Stop these for good"}</InlineLink>.
+      </Quiet>
+    </EmailLayout>
+  );
+}
+
+/** On the monthsary, after a yes: the day, and one small template to make before the evening. */
+export function MonthsaryReminderEmail({ locale, partnerName, months, idea, stopUrl }: { locale: L; partnerName: string; months: number; idea: EmailIdea; stopUrl: string }) {
+  const es = locale === "es";
+  const heading = monthsaryHeading(locale, partnerName, months);
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={es ? "Algo pequeño, antes de esta noche." : "Something small, before tonight."}
+      heading={`${heading}.`}
+      footer={es ? "Recibes esto porque dijiste que sí ayer. Cada mes te preguntamos primero." : "You're getting this because you said yes yesterday. We always ask first."}
+      footerLink={{ label: es ? "Dejar de recibir estos correos" : "Stop these", href: stopUrl }}
+    >
+      <P>{es ? "¿Qué tal algo pequeño para que lo abra esta noche? Una idea:" : "Something small, for tonight? One idea:"}</P>
+      <Idea name={idea.name} tagline={idea.tagline} href={idea.url} poster={idea.poster} />
+      <CtaButton href={idea.url} label={es ? `Hacerlo para ${partnerName}` : `Make it for ${partnerName}`} />
     </EmailLayout>
   );
 }

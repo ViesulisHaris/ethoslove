@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { isConfigured } from "@/lib/env";
+import { chargedCurrency, FREE_SAVED_DATES, subscriptionsEnabled } from "@/lib/pricing/products";
+import { CoupleUnavailable } from "@/lib/saved-dates/couple";
+import { listSavedDates, SavedStoreError, savedDatesSession } from "@/lib/saved-dates/server";
+import type { SavedDatesList } from "@/lib/saved-dates/types";
+import { NotConnected } from "@/components/app/not-connected";
+import { MyDatesGrid } from "@/components/saved-dates/my-dates-grid";
+import { tripCovers } from "@/components/saved-dates/trip-covers";
+
+export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/my-dates">, "searchParams">): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "savedDates.meta" });
+  return { title: t("title"), robots: { index: false } };
+}
+
+const EMPTY: SavedDatesList = { items: [], quota: { used: 0, limit: FREE_SAVED_DATES }, member: false, partner: null };
+
+/**
+ * My dates: the dates and trips saved to this account, and the partner's while they share Ethos for
+ * Two. The (app) layout has already sent anyone signed out to sign in. The first page is drawn here
+ * from the same rules as GET /api/saved-dates; the grid takes over in the browser.
+ */
+export default async function MyDatesPage({ params }: PageProps<"/[currency]/[locale]/my-dates">) {
+  const { currency, locale } = await params;
+  setRequestLocale(locale);
+  const l = locale === "es" ? "es" : "en";
+  if (!isConfigured.supabase) return <NotConnected />;
+
+  let initial: SavedDatesList | null = null;
+  const session = await savedDatesSession();
+  if ("deps" in session) {
+    try {
+      initial = await listSavedDates(session.deps);
+    } catch (error) {
+      if (!(error instanceof SavedStoreError || error instanceof CoupleUnavailable)) throw error;
+      // Said on the page, with a way to try again, rather than shown as "nothing saved".
+      console.error(`[my-dates] ${error.message}`);
+    }
+  }
+
+  return <MyDatesGrid initial={initial ?? EMPTY} failed={initial === null} monthly={subscriptionsEnabled()} currency={chargedCurrency(currency)} trips={tripCovers(l)} />;
+}

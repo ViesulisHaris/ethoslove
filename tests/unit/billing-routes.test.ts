@@ -98,6 +98,57 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
+describe("POST /api/stripe/checkout: the pay sheet's one-tap Apple Pay / Google Pay buttons", () => {
+  const post = (body: unknown) => checkout.POST(new NextRequest("https://ethos.test/api/stripe/checkout", { method: "POST", body: JSON.stringify(body) }));
+  const sent = () => stripe.calls.filter((c) => c.method === "checkout.sessions.create").map((c) => c.args[0] as Record<string, unknown> & { metadata: Record<string, string> });
+  const single = { product: "single", templateSlugs: ["bouquet"], currency: "usd", locale: "en", returnTo: "/create/bouquet", ref: "ad-meta-bq" };
+
+  it("makes an embedded session for Stripe's buttons, marked as ticked on our sheet, and answers with its secret", async () => {
+    const res = await post({ ...single, oneTap: true, waiver: true });
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ clientSecret: "cs_test_1_secret_test" });
+    const [params] = sent();
+    expect(params).toMatchObject({ mode: "payment", ui_mode: "elements", metadata: { app: "ethos", product: "single", template_slugs: "bouquet", ref: "ad-meta-bq", withdrawal_notice: "pay_sheet" } });
+    // Back to the same success page Stripe's own page returns to.
+    expect(params.return_url).toMatch(/^https?:\/\/[^/]+\/checkout\/success\?session_id=\{CHECKOUT_SESSION_ID\}&return=%2Fcreate%2Fbouquet$/);
+    // Nothing that belongs to Stripe's hosted page: its tickbox, texts, header, recovery or language.
+    for (const key of ["success_url", "cancel_url", "consent_collection", "custom_text", "branding_settings", "after_expiration", "locale"]) expect(params, key).not.toHaveProperty(key);
+    // The same lines, prices and tax as the pay button's own checkout for the same request.
+    await post(single);
+    expect(params.line_items).toEqual(sent()[1].line_items);
+    expect(params.automatic_tax).toEqual(sent()[1].automatic_tax);
+  });
+
+  it("won't make one without the withdrawal box ticked, and never for a subscription, a pass or a gift card", async () => {
+    expect((await post({ ...single, oneTap: true })).status).toBe(400);
+    expect(await (await post({ ...single, oneTap: true })).json()).toEqual({ error: "consent_required" });
+    vi.stubEnv("STRIPE_SUBSCRIPTIONS_ENABLED", "true");
+    state.user = { id: U1, email: "u1@x.co" };
+    expect((await post({ product: "membership", plan: "monthly", currency: "eur", oneTap: true, waiver: true })).status).toBe(400);
+    expect(sent()).toEqual([]);
+    expect(fake.rows("purchases")).toEqual([]);
+  });
+
+  it("leaves the pay button's own checkout as it was", async () => {
+    const res = await post(single);
+    expect(await res.json()).toEqual({ url: "https://checkout.stripe.test/c/cs_test_1" });
+    expect(sent()[0]).toMatchObject({ consent_collection: { terms_of_service: "required" }, metadata: { withdrawal_notice: "tickbox" } });
+    expect(sent()[0]).not.toHaveProperty("ui_mode");
+  });
+
+  it("adds the second gift as its own line, on both checkouts, and refuses one it can't sell", async () => {
+    for (const body of [{ ...single, secondSlug: "xoxo" }, { ...single, secondSlug: "xoxo", oneTap: true, waiver: true }]) {
+      expect((await post(body)).status).toBe(200);
+      const params = sent().at(-1)!;
+      expect(params.metadata).toMatchObject({ kind: "second", second: "xoxo", template_slugs: "bouquet" });
+      expect(params.line_items).toMatchObject([{ price_data: { unit_amount: 999 } }, { price_data: { unit_amount: 499, product_data: { name: "Ethos: a second gift", description: "XOXO" } } }]);
+    }
+    const res = await post({ ...single, secondSlug: "bouquet" });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "second_not_available" });
+  });
+});
+
 describe("POST /api/stripe/checkout: a membership is a subscription under the shared account's rules", () => {
   const post = (body: unknown) => checkout.POST(new NextRequest("https://ethos.test/api/stripe/checkout", { method: "POST", body: JSON.stringify(body) }));
   const sent = () => stripe.calls.filter((c) => c.method === "checkout.sessions.create").map((c) => c.args[0] as Record<string, unknown> & { metadata: Record<string, string> });

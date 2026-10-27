@@ -30,7 +30,8 @@ checkout charges it with Stripe `price_data`, VAT included, so the price shown i
 | Gift card "Give Everything" | €24.99 | built but **off** until `GIFT_CARDS_ENABLED=true` (voucher VAT); `/redeem` works either way |
 
 USD and GBP amounts are set too ($11.99 / $17.99 / $29.99 / $8.99; £8.99 / £12.99 / £21.99 / £6.49)
-for later; only euros are shown and charged (`CHARGED_CURRENCIES`).
+for later; only euros are shown and charged (`CHARGED_CURRENCIES`) until `NEXT_PUBLIC_PRICE_CURRENCIES` lists
+the others (docs/marketing/LOCAL-PRICES.md).
 
 There are **no discounts and no codes**: every Ethos checkout sets `allow_promotion_codes: false`
 (sessions and recovery), because the shared account's other businesses have live codes. A creator is
@@ -129,7 +130,7 @@ New or changed, in Vercel for Production (and Preview for testing):
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | recommended (free tier). Without them rate limits and "one recovery email per address a week" are per serverless instance only |
 | `STRIPE_PRODUCT_EXTRAS`, `_PASS`, `_PACK`, `_GIFTCARD`, `_UPGRADE`, `_BUMP` | optional, reporting only (docs/STRIPE.md §2). The existing `STRIPE_PRODUCT_SINGLE/PICK3/EVERYTHING` keep working the same way |
 | `STRIPE_PRICE_*` | no longer read; can be removed |
-| `NEXT_PUBLIC_PRICE_CURRENCIES` | leave unset: euros only, which is what the terms say |
+| `NEXT_PUBLIC_PRICE_CURRENCIES` | unset: euros only. `eur,usd,gbp` charges the US in dollars and the UK in pounds, and the terms follow (docs/marketing/LOCAL-PRICES.md) |
 | `GIFT_CARDS_ENABLED` | leave unset until the accountant has settled VAT on vouchers; `true` shows the gift card on `/pricing` and lets checkout sell it. Unset, checkout refuses `giftcard` (`not_on_sale`) and `/redeem` still works for codes already issued |
 
 Unchanged but required: Supabase URL and keys, `STRIPE_SECRET_KEY`,

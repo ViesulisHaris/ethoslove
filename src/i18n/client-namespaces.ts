@@ -7,7 +7,7 @@
  * file sends only what the client components it renders read, and the providers stack: a page
  * gets its own entries plus those of every layout above it (see ClientMessages).
  *
- * Keys are route files under src/app/[locale], without the extension; the file wraps what it
+ * Keys are route files under src/app/[currency]/[locale], without the extension; the file wraps what it
  * renders in <ClientMessages scope="<key>">. Values are namespaces, or dotted paths into one.
  * Server components read the full catalogue on the server and need nothing here.
  *
@@ -24,8 +24,9 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/page": ["dates.where", "home.templates", "templates"],
   "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors", "money.recovery"],
   "(marketing)/pricing/layout": ["pricing", "membership", "money.plans", "money.account", "money.checkoutErrors", "money.recovery", "money.giftcard"],
-  // Ethos for Two's success page only needs its own lines in the browser (the one still switching on).
-  "(marketing)/checkout/layout": ["money.success", "money.invite", "membership.success"],
+  // Ethos for Two's success page only needs its own lines in the browser (the one still switching on),
+  // and the upgrade card after a single, a pick three or "make it special" its own.
+  "(marketing)/checkout/layout": ["money.success", "money.invite", "membership.success", "money.after", "money.checkoutErrors"],
   "(marketing)/redeem/layout": ["auth", "money.redeem"],
   "(marketing)/campaign/layout": ["auth", "campaign"],
   "(marketing)/for-two/layout": ["auth", "money.join"],
@@ -33,7 +34,13 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/for-two/preview/page": ["membership.account", "money.invite"],
   // Development only: My dates in each state (the real page needs a signed-in account).
   "(marketing)/for-two/preview/my-dates/page": ["savedDates"],
+  // Development only: the share screen's reminder card (the real one needs a published gift).
+  "(marketing)/reminders/preview/page": ["lifecycle", "pickers"],
   "(marketing)/templates/layout": ["templates", "occasions"],
+  // The ad landing: only the live demo's own words.
+  "(marketing)/try/layout": ["templates"],
+  // Where a free gift's footer leads: the template cards.
+  "(marketing)/made-with-ethos/page": ["templates"],
   "(marketing)/occasions/layout": ["templates", "occasions"],
   "(marketing)/dates/layout": ["dates", "affiliate", "savedDates"],
   "(marketing)/plan/layout": ["plan", "affiliate", "giftChooser", "pickers", "savedDates", "auth"],

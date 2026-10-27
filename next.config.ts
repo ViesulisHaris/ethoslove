@@ -79,6 +79,11 @@ const nextConfig: NextConfig = {
       source: "/templates/:slug/:file+",
       headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
     },
+    // A blog post's images (public/blog/<post>/), for the same reason one level below the post.
+    {
+      source: "/blog/:slug/:file+",
+      headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+    },
     // The cut-outs the covers and the collage templates are made of. They are on the first screen of
     // a gift now, a dozen at a time, and every one was being re-checked with the server on every
     // open. A day, not a year: a picture can be swapped for another under the same name.
@@ -117,6 +122,14 @@ const nextConfig: NextConfig = {
       ],
     },
     {
+      // The success page's address carries the Stripe session id, and for 30 minutes that id signs a
+      // guest buyer in. A page reached from it (the gift they go straight back to) gets only the origin
+      // as its referrer, so no analytics there, Meta's pixel included, can read the id from it. After
+      // the rule above on purpose: for the same header, the later rule wins.
+      source: "/:locale(es)?/checkout/:path*",
+      headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
+    },
+    {
       // MapLibre's browser files (scripts/copy-maplibre.mjs). The folder is named after the version.
       source: "/vendor/maplibre-gl/:version/:file",
       headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
@@ -139,8 +152,8 @@ const nextConfig: NextConfig = {
 /**
  * One policy for the whole site. Next's own inline scripts/styles need 'unsafe-inline';
  * dev adds eval + the HMR socket. Supabase (storage, auth), Stripe (js + Checkout) and
- * Apple's song previews/artwork are the third parties, plus Microsoft Clarity once it has a
- * project id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
+ * Apple's song previews/artwork are the third parties, plus Microsoft Clarity and the Meta and
+ * TikTok pixels once each has an id. Vercel Analytics and Speed Insights load from /_vercel on this origin; only their
  * dev debug scripts come from va.vercel-scripts.com. The Dates map draws OpenFreeMap's tiles,
  * lettering and icons; the map library itself is served from this origin (/vendor). Photographs of
  * places are Wikimedia's, loaded from its two image hosts.
@@ -155,16 +168,29 @@ function contentSecurityPolicy(): string {
   const clarity = Boolean(process.env.NEXT_PUBLIC_CLARITY_ID);
   const clarityScript = clarity ? " https://*.clarity.ms" : "";
   const clarityConnect = clarity ? " https://*.clarity.ms https://c.bing.com" : "";
+  // The Meta pixel: its script and config come from connect.facebook.net, and it reports to
+  // www.facebook.com as an image or a request, whichever the browser allows.
+  const meta = Boolean(process.env.NEXT_PUBLIC_META_PIXEL_ID);
+  const metaScript = meta ? " https://connect.facebook.net" : "";
+  const metaPing = meta ? " https://www.facebook.com" : "";
+  // The TikTok pixel: its loader, main script and config from analytics.tiktok.com, which it reports
+  // to by beacon or image; it also looks up the visitor's IPv6 address at a host of its own.
+  const tiktok = Boolean(process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID);
+  const tiktokScript = tiktok ? " https://analytics.tiktok.com" : "";
+  const tiktokImg = tiktok ? " https://analytics.tiktok.com" : "";
+  const tiktokConnect = tiktok ? " https://analytics.tiktok.com https://analytics-ipv6.tiktokw.us" : "";
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}`,
+    // Stripe.js, for the pay sheet's one-tap Apple Pay / Google Pay buttons: Stripe's own list
+    // (docs.stripe.com/security/guide, "Stripe.js"), which starts frames on js.stripe.com subdomains.
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com https://*.js.stripe.com${clarityScript}${metaScript}${tiktokScript}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org",
+    `img-src 'self' data: blob: https://*.supabase.co https://*.stripe.com https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}`,
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
-    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${dev ? " ws: http://localhost:*" : ""}`,
+    `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${tiktokConnect}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
-    "frame-src https://js.stripe.com https://checkout.stripe.com",
+    "frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self' https://checkout.stripe.com",

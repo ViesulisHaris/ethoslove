@@ -1,11 +1,12 @@
 "use client";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { Heart, Mic, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
+import { Bookmark, Heart, Mic, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { isCatalogPreview } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics/track";
 import { getManifest } from "../manifests";
 import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
@@ -17,14 +18,15 @@ import { UnwrapGift } from "./UnwrapGift";
 import { Watermark } from "./Watermark";
 
 /**
- * The reply offer, in the gift's own language like every other line here. Only this screen says
- * these, so they live with it rather than in ./i18n. "The first": a gift has one free reply, and a
- * page can't know it's been sent without asking, so the line stays true after it has (a "free"
- * that turns out not to be is a banned claim; once it's used the editor opens at the normal price).
+ * The reply offer and "Keep this gift", in the gift's own language like every other line here. Only
+ * this screen says these, so they live with it rather than in ./i18n. "The first": a gift has one
+ * free reply, and a page can't know it's been sent without asking, so the line stays true after it
+ * has (a "free" that turns out not to be is a banned claim; once it's used the editor opens at the
+ * normal price).
  */
 const REPLY_OFFER = {
-  en: { free: "The first reply is free", someoneElse: "Make one for someone else" },
-  es: { free: "La primera respuesta es gratis", someoneElse: "Hazle uno a otra persona" },
+  en: { free: "The first reply is free", keep: "Keep this gift" },
+  es: { free: "La primera respuesta es gratis", keep: "Guardar este regalo" },
 } as const satisfies Record<GiftLocale, Record<string, string>>;
 
 /**
@@ -161,18 +163,22 @@ export function EndScreen({
             ) : null}
           </div>
         ) : null}
-        {/* Not everyone who liked the gift wants to answer its sender: the gallery, for anyone else.
-            Not inside the iPhone app, where the gifts are a tab of their own. */}
-        {reply && onMakeOne ? (
+        {/* Their reason to make one comes later (the sender's birthday, the anniversary): the gift's own
+            link by email, to open again, and a nudge before the day if they want one. On a page off
+            the gift (the gift itself carries no form). Not inside the iPhone app, which has its own. */}
+        {reply && chrome.keepHref ? (
           <a
             data-app-hide
-            href={`${locale === "es" ? "/es" : ""}/templates?ref=gift-end`}
+            href={chrome.keepHref}
+            onClick={() => track("keep_tapped", { template: data.templateSlug })}
             className={cn(
-              "flex min-h-11 items-center justify-center text-sm underline-offset-4 hover:underline",
+              "flex min-h-11 items-center justify-center gap-1.5 text-sm underline-offset-4 hover:underline",
               dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
             )}
+            data-testid="keep-gift"
           >
-            {(REPLY_OFFER[locale] ?? REPLY_OFFER.en).someoneElse}
+            <Bookmark aria-hidden="true" className="size-3.5 shrink-0" />
+            <span>{(REPLY_OFFER[locale] ?? REPLY_OFFER.en).keep}</span>
           </a>
         ) : null}
         {onReplay ? (

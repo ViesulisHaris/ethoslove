@@ -1,0 +1,107 @@
+# The daily blog post, from the public mirror to the live site, with nobody at a computer.
+#
+# The blog routine (docs/blog/PLAYBOOK.md) runs in the cloud and can push only to the mirror,
+# github.com/ViesulisHaris/ethoslove: it commits each post to the mirror's main. This runs on the
+# live repository, the one Vercel deploys, at 07:43, 10:43, 13:43 and 16:43 UTC: an hour and a half
+# after each of the routine's runs (06:17 and 12:17), and three hours later for one that ran long.
+# Never on the hour: GitHub starts scheduled runs late when everyone's are due (on 24 Oct 2026 the
+# 10:00 run began at 13:44). The mirror is public, so it is read without any key. When the
+# mirror's main has commits this main hasn't, it:
+#   1. checks them with scripts/blog-guard.mjs from this main: only blog files, posts that are
+#      plain data, the team's author;
+#   2. moves main forward to them, or merges them as the team's author if main has moved on;
+#   3. runs the blog tests and the type check on the result, and only then pushes, which Vercel
+#      deploys;
+#   4. waits for each new post on tryethos.io and tells IndexNow.
+#
+# Nothing from the mirror runs here: the guard runs from this main before anything is merged, and
+# the guard refuses any change outside src/content/blog/, public/blog/ and docs/blog/, so the tests
+# and tools that run afterwards are this repository's own. It holds no secrets and pushes with the
+# workflow's own token. On the mirror it never runs. Run it by hand (Actions, Publish blog, Run
+# workflow) to publish a waiting post now.
+name: Publish blog
+
+on:
+  schedule:
+    - cron: "43 7,10,13,16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-blog
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'reasj2/ethoslove'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          filter: blob:none
+
+      - name: Anything new on the mirror?
+        id: new
+        run: |
+          git fetch -q --filter=blob:none https://github.com/ViesulisHaris/ethoslove.git "refs/heads/main:refs/remotes/mirror"
+          ahead=$(git rev-list --count HEAD..refs/remotes/mirror)
+          echo "ahead=$ahead" >> "$GITHUB_OUTPUT"
+          echo "BASE=$(git merge-base HEAD refs/remotes/mirror)" >> "$GITHUB_ENV"
+          if [ "$ahead" -gt 0 ]; then git log --format='%h %an <%ae> %s' HEAD..refs/remotes/mirror; else echo "Nothing new on the mirror."; fi
+
+      - name: Only blog files, plain data, the team's author
+        if: steps.new.outputs.ahead != '0'
+        run: node scripts/blog-guard.mjs "$BASE" refs/remotes/mirror
+
+      - name: Bring them onto main
+        if: steps.new.outputs.ahead != '0'
+        run: |
+          git diff --name-only --diff-filter=A "$BASE" refs/remotes/mirror -- 'src/content/blog/posts/*.ts' | sed 's#.*/##; s#\.ts$##' > "$RUNNER_TEMP/new-posts"
+          if git merge-base --is-ancestor HEAD refs/remotes/mirror; then
+            git merge -q --ff-only refs/remotes/mirror
+          else
+            git -c user.name="Haralds" -c user.email="adulis2014@gmail.com" merge -q --no-ff refs/remotes/mirror -m "Merge the blog from the mirror"
+          fi
+          git log -1 --format='%h %an <%ae> %s'
+
+      - uses: actions/setup-node@v4
+        if: steps.new.outputs.ahead != '0'
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Blog tests and type check
+        if: steps.new.outputs.ahead != '0'
+        run: |
+          npm ci --no-audit --no-fund
+          npx vitest run tests/unit/blog-posts.test.ts tests/unit/messages.test.ts tests/unit/blog-guard.test.ts
+          npm run typecheck
+
+      - name: Publish
+        if: steps.new.outputs.ahead != '0'
+        run: git push -q origin HEAD:main
+
+      - name: Wait for the new posts on tryethos.io, then tell IndexNow
+        if: steps.new.outputs.ahead != '0'
+        run: |
+          [ -s "$RUNNER_TEMP/new-posts" ] || { echo "No new post in this batch."; exit 0; }
+          urls=()
+          while read -r slug; do
+            for i in $(seq 1 30); do
+              [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")" = 200 ] && break
+              sleep 30
+            done
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "https://tryethos.io/blog/$slug")
+            if [ "$code" = 200 ]; then
+              echo "Live: https://tryethos.io/blog/$slug"
+              urls+=("https://tryethos.io/blog/$slug" "https://tryethos.io/es/blog/$slug")
+            else
+              echo "::warning::https://tryethos.io/blog/$slug still answers $code after 15 minutes. Check the Vercel deploy."
+            fi
+          done < "$RUNNER_TEMP/new-posts"
+          [ ${#urls[@]} -eq 0 ] || node scripts/indexnow.mjs "${urls[@]}"

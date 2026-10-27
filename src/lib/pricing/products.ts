@@ -81,6 +81,19 @@ export const BUMP = {
   onto: ["single", "extras"] as readonly ProductId[],
 } as const;
 
+/**
+ * The second gift: one more premium template, picked on the pay sheet from a few suggestions, added to
+ * a single for much less than a single costs, so the next birthday or anniversary is already covered.
+ * Offered unticked, like the bump, and never together with it: every template includes the second.
+ */
+export const SECOND_GIFT = {
+  envProductKey: "STRIPE_PRODUCT_SECOND",
+  name: { en: "Ethos: a second gift", es: "Ethos: un segundo regalo" },
+  amounts: { usd: 499, eur: 499, gbp: 449 } as Record<Currency, number>,
+  /** The products it can be added to. */
+  onto: ["single"] as readonly ProductId[],
+} as const;
+
 /** What the bump costs on top of `base`: Everything's price minus the base line's (€24.99 − €9.99 = €15.00). */
 export function bumpAmount(base: ProductId, currency: Currency): number {
   return PRODUCTS.everything.amounts[currency] - PRODUCTS[base].amounts[currency];
@@ -115,7 +128,8 @@ export function formatAmount(minor: number, currency: Currency, locale = "en"): 
  * The currencies the site shows and charges, in order of preference, from
  * NEXT_PUBLIC_PRICE_CURRENCIES ("eur,usd,gbp"). Checkout only ever charges one of these, in the
  * amount above, so the price on the page is the price charged. Anything else is shown in the first
- * (euros) and the buyer's bank converts it.
+ * (euros) and the buyer's bank converts it. Inlined at build: changing it needs a redeploy, which
+ * also builds a copy of every page per currency (src/app/[currency]/[locale]/layout.tsx).
  */
 export const CHARGED_CURRENCIES: Currency[] = (() => {
   const listed = (process.env.NEXT_PUBLIC_PRICE_CURRENCIES ?? "eur")
@@ -125,12 +139,41 @@ export const CHARGED_CURRENCIES: Currency[] = (() => {
   return listed.length > 0 ? listed : ["eur"];
 })();
 
-/** The currency to show and charge for a locale/country: its own if Stripe carries it, otherwise the first charged one. */
+/** Where dollars are the money: the United States and its territories. */
+const DOLLAR_COUNTRIES = ["US", "PR", "GU", "VI", "AS", "MP", "UM"];
+/** Where pounds are: the United Kingdom, and the Isle of Man and the Channel Islands, which use sterling. */
+const POUND_COUNTRIES = ["GB", "IM", "JE", "GG"];
+
+/**
+ * The currency to show and charge for a country ("US") or a locale ("en-US"): dollars in the United
+ * States, pounds in the United Kingdom, euros everywhere else, Europe outside the euro included (a
+ * Pole or a Swede is used to euro prices, never to dollar ones). Only ever one Stripe charges in:
+ * anything not in CHARGED_CURRENCIES gets the first, euros.
+ */
 export function currencyFor(countryOrLocale: string | null | undefined): Currency {
   const v = (countryOrLocale ?? "").toUpperCase();
-  const eu = ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PT", "SI", "SK"];
-  const local: Currency = v === "GB" || v.endsWith("-GB") ? "gbp" : eu.some((c) => v === c || v.endsWith(`-${c}`)) ? "eur" : "usd";
+  const region = v.includes("-") ? v.slice(v.lastIndexOf("-") + 1) : v;
+  const local: Currency = DOLLAR_COUNTRIES.includes(region) ? "usd" : POUND_COUNTRIES.includes(region) ? "gbp" : "eur";
   return CHARGED_CURRENCIES.includes(local) ? local : CHARGED_CURRENCIES[0];
+}
+
+/**
+ * The visitor's currency, from the country Vercel puts on every request (the browser's language
+ * stands in on a machine with no Vercel in front, such as next dev). The proxy uses it to pick
+ * which copy of a page to serve (src/app/[currency]), and checkout charges in it when the page
+ * didn't say, so both read the same header the same way.
+ */
+export function visitorCurrency(headers: Pick<Headers, "get">): Currency {
+  return currencyFor(headers.get("x-vercel-ip-country") ?? headers.get("accept-language")?.split(",")[0]);
+}
+
+/**
+ * A page's currency, from its hidden [currency] segment: one Stripe charges in, or the first. The
+ * segment only ever holds what the proxy put there, so this guards against nothing worse than a
+ * test or a stray link.
+ */
+export function chargedCurrency(value: string | null | undefined): Currency {
+  return CHARGED_CURRENCIES.find((c) => c === value) ?? CHARGED_CURRENCIES[0];
 }
 
 /** Unlock rows are template slugs, "*" for every template, and "pack:<id>" / "pack:*" for game packs. */

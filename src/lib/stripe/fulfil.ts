@@ -9,6 +9,7 @@ import {
   CHARGED_CURRENCIES,
   EVERY_TEMPLATE,
   PRODUCTS,
+  SECOND_GIFT,
   formatAmount,
   isMembershipPlan,
   isProductId,
@@ -26,11 +27,11 @@ import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
-import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
+import { PURCHASE_CREDIT_COLUMNS, UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import { foreverUnlocks, grantForever } from "@/lib/commerce/unlocks";
-import { consentSentence } from "@/lib/stripe/line-items";
+import { consentSentence, sellsInOneTap } from "@/lib/stripe/line-items";
 import { isEthosMetadata, normaliseSubscription, paymentIntentOfInvoice, tagCheckout } from "@/lib/stripe/subscriptions";
-import { getManifest } from "@/templates/manifests";
+import { getManifest, isTemplateSlug } from "@/templates/manifests";
 
 export type Fulfilment = {
   ok: boolean;
@@ -75,12 +76,14 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
 const RECEIPT_LINES = {
   en: {
     withBump: (label: string) => `${label} + every other template`,
+    withSecond: (label: string) => `${label} + a second gift`,
     everyTemplate: "All templates, current and future",
     pass: "Every gift template and every game pack, for both of you",
     giftcard: "A gift card code for Everything, forever (sent in its own email)",
   },
   es: {
     withBump: (label: string) => `${label} + todas las demás plantillas`,
+    withSecond: (label: string) => `${label} + un segundo regalo`,
     everyTemplate: "Todas las plantillas, las de ahora y las que vengan",
     pass: "Todas las plantillas de regalo y todos los packs de juegos, para los dos",
     giftcard: "Un código de tarjeta regalo para «Todo», para siempre (te llega en otro correo)",
@@ -94,6 +97,8 @@ export type Sold = {
   slugs: string[];
   packId: PackId | null;
   bump: boolean;
+  /** The second gift's template (metadata `second`), only ever on a single; null otherwise. */
+  second: string | null;
   kind: string;
   creatorCode: string | null;
   ref: string | null;
@@ -124,13 +129,15 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
   const plan = product === "membership" ? (isMembershipPlan(m.plan) ? m.plan : null) : product === "pass" ? "yearly" : null;
   if (product === "membership" && !plan) return null;
   const bump = m.bump === "1" && BUMP.onto.includes(product);
+  const second = SECOND_GIFT.onto.includes(product) && !bump && isTemplateSlug(m.second) ? m.second : null;
   return {
     purchaseId,
     product,
     slugs: (m.template_slugs ?? "").split(",").filter(Boolean),
     packId,
     bump,
-    kind: m.kind || (bump ? "bump" : product),
+    second,
+    kind: m.kind || (bump ? "bump" : second ? "second" : product),
     creatorCode: m.creator_code || null,
     ref: m.ref || null,
     locale: m.locale === "es" ? "es" : "en",
@@ -152,11 +159,18 @@ export function chargedAmount(session: Stripe.Checkout.Session, fallback: number
 
 /**
  * What the buyer ticked at checkout: the withdrawal sentence Stripe showed them, word for word, when
- * session.consent says they accepted it. Null when Stripe couldn't show the box (checkout fell back to
- * the notice above the pay button), and then the purchase keeps its right to cancel.
+ * session.consent says they accepted it, or the same sentence ticked on our pay sheet before the
+ * one-tap buttons appeared ("pay_sheet": the route makes that session only with the box ticked).
+ * Null when neither was shown (checkout fell back to the notice above the pay button), and then the
+ * purchase keeps its right to cancel.
  */
-export function agreedConsent(session: Pick<Stripe.Checkout.Session, "consent" | "currency" | "currency_conversion">, sold: Pick<Sold, "product" | "locale" | "plan">): string | null {
-  if (session.consent?.terms_of_service !== "accepted") return null;
+export function agreedConsent(
+  session: Pick<Stripe.Checkout.Session, "consent" | "currency" | "currency_conversion" | "metadata">,
+  sold: Pick<Sold, "product" | "locale" | "plan">,
+): string | null {
+  const onStripe = session.consent?.terms_of_service === "accepted";
+  const onPaySheet = session.metadata?.withdrawal_notice === "pay_sheet" && sellsInOneTap(sold.product);
+  if (!onStripe && !onPaySheet) return null;
   // A membership's box quotes its price, in the currency the catalogue priced it in.
   const currency = (session.currency_conversion?.source_currency ?? session.currency ?? "eur") as Currency;
   return consentSentence(sold.product, sold.locale, { plan: sold.plan, currency: CHARGED_CURRENCIES.includes(currency) ? currency : "eur" });
@@ -167,7 +181,7 @@ export function foreverRowsFor(sold: Sold): string[] | null {
   if (sold.product === "pass" || sold.product === "membership" || sold.product === "giftcard") return [];
   try {
     const rows = unlocksFor(sold.product, sold.slugs, { packId: sold.packId ?? undefined });
-    return sold.bump ? [...rows, EVERY_TEMPLATE] : rows;
+    return [...rows, ...(sold.bump ? [EVERY_TEMPLATE] : []), ...(sold.second ? [sold.second] : [])];
   } catch {
     return null;
   }
@@ -246,7 +260,7 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
 
   if (buyer.guest && buyer.createdUser) void notifyWelcome(buyer.email!, sold.locale).catch(() => {});
   if (claimed) {
-    const label = sold.bump ? lines.withBump(LABELS[buyer.locale][sold.product]) : LABELS[buyer.locale][sold.product];
+    const label = sold.bump ? lines.withBump(LABELS[buyer.locale][sold.product]) : sold.second ? lines.withSecond(LABELS[buyer.locale][sold.product]) : LABELS[buyer.locale][sold.product];
     // A pass lasts a year: `until` stops the receipt saying "yours, forever". A gift card keeps its
     // 14-day right to cancel until the code is redeemed, so its receipt must not say it's gone.
     const extra =
@@ -364,7 +378,7 @@ async function receiptUpgrade(admin: Admin, userId: string, currency: string, lo
   try {
     const [forever, { data: purchases, error }] = await Promise.all([
       foreverUnlocks(admin, userId),
-      admin.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
+      admin.from("purchases").select(PURCHASE_CREDIT_COLUMNS).eq("user_id", userId).eq("status", "paid"),
     ]);
     if (error) return undefined;
     const offer = upgradeOffer(forever, purchases ?? [], currency as Currency);

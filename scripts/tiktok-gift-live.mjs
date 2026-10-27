@@ -79,7 +79,8 @@ const SLIDE = { width: 1080, height: 1920 };
 const SCREEN = { left: 189, top: 200, width: 702, height: 1248, radius: 60 };
 // How the gift sits on the slide. "phone" is the phone's screen on black. "safari" is how the
 // account's hits are posted: the gift full-bleed, as a screenshot, with Safari's bar along the
-// bottom carrying tryethos.io — so the domain is on every gift slide. TIKTOK_STILLS=1 writes only
+// bottom carrying tryethos.io — so the domain is on every gift slide. "full" is the gift full-bleed
+// with no bar, for ads: the bar hid the foot of the gift, and the ad carries the domain anyway. TIKTOK_STILLS=1 writes only
 // the stills (still-<name>.jpg), no Live Photos, which is what a screenshot carousel needs.
 const FRAME = process.env.TIKTOK_FRAME ?? "phone";
 const STILLS = !!process.env.TIKTOK_STILLS;
@@ -337,6 +338,8 @@ const safariBar = await sharp(svg(`
 const onSlide = async (frame) =>
   FRAME === "safari"
     ? sharp(frame).resize(SLIDE.width, SLIDE.height, { kernel: "lanczos3" }).composite([{ input: safariBar, left: 0, top: 0 }]).removeAlpha()
+    : FRAME === "full"
+    ? sharp(frame).resize(SLIDE.width, SLIDE.height, { kernel: "lanczos3" }).removeAlpha()
     : sharp(backdrop)
         .composite([{ input: await sharp(frame).resize(W, H, { kernel: "lanczos3" }).composite([{ input: corners, blend: "dest-in" }]).png().toBuffer(), left: L, top: T }])
         .removeAlpha();

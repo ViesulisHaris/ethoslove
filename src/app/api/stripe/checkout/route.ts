@@ -2,9 +2,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
-import { CHARGED_CURRENCIES, currencyFor, giftCardsOnSale, isProductId, subscriptionsEnabled, type Currency } from "@/lib/pricing/products";
+import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
+import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
-import { RETURN_PATH, membershipSessionParams, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
+import { RETURN_PATH, membershipSessionParams, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
 import { ethosCustomerFor } from "@/lib/stripe/subscriptions";
 import { membershipContextOf } from "@/lib/commerce/memberships";
@@ -12,11 +13,11 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
-import { siteOrigin, type Db } from "@/lib/commerce/db";
+import { siteOrigin } from "@/lib/commerce/db";
+import { readBuyer } from "@/lib/commerce/buyer";
 import { creditedCreator } from "@/lib/commerce/creators";
 import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
 import { planCheckout } from "@/lib/commerce/plan";
-import { passPurchaseIds, splitUnlocks } from "@/lib/commerce/unlocks";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -29,6 +30,8 @@ const input = z.object({
   templateSlugs: z.array(z.string().max(80)).max(10).default([]),
   packId: z.string().max(40).optional(),
   addEverything: z.boolean().optional(),
+  // The second gift's template (lib/pricing/products.ts SECOND_GIFT), picked on the pay sheet.
+  secondSlug: z.string().max(80).optional(),
   returnTo: z.string().max(1000).regex(RETURN_PATH).optional(),
   currency: z.enum(["usd", "eur", "gbp"]).optional(),
   locale: z.enum(["en", "es"]).optional(),
@@ -41,18 +44,24 @@ const input = z.object({
     .object({ recipientName: z.string().trim().max(60).optional(), note: z.string().trim().max(300).optional() })
     .optional()
     .catch(undefined),
+  // Sent only by a browser whose visitor allowed advertising cookies (lib/analytics/ads.ts): its
+  // presence is that consent, and the webhook reports the sale to Meta and TikTok only then. A
+  // malformed id is dropped, never an error.
+  ads: z
+    .object({
+      fbc: z.string().regex(AD_FBC).optional().catch(undefined),
+      fbp: z.string().regex(AD_FBP).optional().catch(undefined),
+      ttclid: z.string().regex(AD_TTCLID).optional().catch(undefined),
+      ttp: z.string().regex(AD_TTP).optional().catch(undefined),
+    })
+    .optional()
+    .catch(undefined),
+  // The one-tap Apple Pay / Google Pay buttons on the pay sheet (lib/stripe/line-items.ts,
+  // oneTapSessionParams): a session for Stripe's buttons instead of a link to its page. Made only
+  // with `waiver`, which the pay sheet sends once the buyer has ticked the withdrawal box there.
+  oneTap: z.literal(true).optional(),
+  waiver: z.literal(true).optional(),
 });
-
-/** What the buyer already holds for good, and paid, when signed in. */
-async function buyerContext(admin: Db, userId: string | null): Promise<{ ownedForever: string[]; purchases: { product: string; amount: number; currency: string; status: string }[] }> {
-  if (!userId) return { ownedForever: [], purchases: [] };
-  const [{ data: rows }, passIds, { data: purchases }] = await Promise.all([
-    admin.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
-    passPurchaseIds(admin, userId),
-    admin.from("purchases").select("product, amount, currency, status").eq("user_id", userId).eq("status", "paid"),
-  ]);
-  return { ownedForever: splitUnlocks(rows ?? [], passIds).forever, purchases: purchases ?? [] };
-}
 
 /**
  * Creates a Stripe Checkout Session and returns its URL (contract C1). Every amount is worked out
@@ -80,23 +89,25 @@ export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   const userId = user?.id ?? null;
 
-  // Only ever a currency the site shows prices in.
-  const currency: Currency =
-    body.currency && CHARGED_CURRENCIES.includes(body.currency)
-      ? body.currency
-      : currencyFor(request.headers.get("x-vercel-ip-country") ?? request.headers.get("accept-language")?.split(",")[0]);
+  // The currency the page showed its price in, which every buy button sends (the page's [currency]
+  // segment, src/proxy.ts), so the amount charged is the number the buyer saw. Without one, the
+  // visitor's country, read the way the proxy reads it. Only ever a currency the site shows prices in.
+  const currency: Currency = body.currency && CHARGED_CURRENCIES.includes(body.currency) ? body.currency : visitorCurrency(request.headers);
 
   const now = Date.now();
   const [creatorCode, owned, membership] = await Promise.all([
     creditedCreator(admin, body.ref, user?.email),
-    buyerContext(admin, userId),
+    readBuyer(admin, userId),
     userId && (product === "membership" || product === "pass") ? membershipContextOf(admin, userId, now) : null,
   ]);
   const plan = planCheckout(
-    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, currency, plan: body.plan },
+    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan },
     { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, ...owned },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
+  // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
+  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product))) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  if (body.oneTap && !body.waiver) return NextResponse.json({ error: "consent_required" }, { status: 400 });
 
   let purchaseId: string;
   if (user) {
@@ -139,6 +150,8 @@ export async function POST(request: NextRequest) {
     origin,
     returnTo: body.returnTo ?? "/dashboard",
     ref: body.ref,
+    // The platforms need the buyer's browser for a website sale; the webhook only has Stripe's.
+    ads: body.ads ? { ...body.ads, ua: request.headers.get("user-agent") ?? undefined } : undefined,
     automaticTax: process.env.STRIPE_AUTOMATIC_TAX === "true",
     productIds: stripeProductIds(),
   };
@@ -150,7 +163,10 @@ export async function POST(request: NextRequest) {
       : sessionParams(plan, options);
   let session: Stripe.Checkout.Session;
   try {
-    session = await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
+    // The one-tap session has no tickbox of Stripe's to fall back from: the box was ours, and ticked.
+    session = body.oneTap
+      ? await stripe.checkout.sessions.create(oneTapSessionParams(params))
+      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
   } catch (e) {
     // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
     const err = e as Partial<Stripe.errors.StripeError>;
@@ -158,5 +174,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
   }
   if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
+  if (body.oneTap) return NextResponse.json({ clientSecret: session.client_secret });
   return NextResponse.json({ url: session.url });
 }

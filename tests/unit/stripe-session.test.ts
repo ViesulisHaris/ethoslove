@@ -112,6 +112,10 @@ describe("the Checkout Session", () => {
     expect(params.payment_intent_data).toEqual({ statement_descriptor_suffix: "ETHOS" });
     expect(params.success_url).toBe("https://ethos.test/checkout/success?session_id={CHECKOUT_SESSION_ID}&return=%2Fcreate%2Fvinyl");
     expect(params.cancel_url).toBe("https://ethos.test/create/vinyl");
+    // The link they came through comes back with a cancel, so trying again is still credited to it.
+    expect(sessionParams(plan({ product: "single", templateSlugs: ["vinyl"] }), { ...options, ref: "watermark", returnTo: "/create/vinyl?resume=publish" }).cancel_url).toBe("https://ethos.test/create/vinyl?resume=publish&ref=watermark");
+    // Never a gift's short id, which opens that gift.
+    expect(sessionParams(plan({ product: "single", templateSlugs: ["vinyl"] }), { ...options, ref: "abc23def4" }).cancel_url).toBe("https://ethos.test/create/vinyl");
   });
 
   it("is headed Ethos, with the site's own icon", () => {

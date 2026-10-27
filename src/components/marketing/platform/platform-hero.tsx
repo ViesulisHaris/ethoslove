@@ -108,9 +108,12 @@ async function GiftFirst() {
   return (
     <>
       <div className="lg:col-span-6">
-        <p className="text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</p>
-        <h1 className="mt-6 max-w-[7.8em] display-hero text-balance text-forest">
-          {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
+        {/* The eyebrow is the first line of the h1: "Digital gifts" is what this page is found by. */}
+        <h1 className="text-forest">
+          <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</span>
+          <span className="mt-6 block max-w-[7.8em] display-hero text-balance">
+            {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
+          </span>
         </h1>
         <p className="mt-7 max-w-xl text-lg leading-relaxed text-forest/75 sm:text-xl">{t("sub")}</p>
 

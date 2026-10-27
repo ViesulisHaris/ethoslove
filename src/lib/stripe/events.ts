@@ -35,6 +35,12 @@ export type StripeEventDeps = {
   now: number;
   fulfil: (session: Stripe.Checkout.Session) => Promise<Fulfilment>;
   recover: (session: Stripe.Checkout.Session) => Promise<unknown>;
+  /**
+   * Told about each checkout fulfilment has just granted (and again for a repeat delivery: whatever it
+   * starts must be safe to repeat). The ad platforms' report hangs off it (lib/ads/report.ts). It can't change
+   * the answer Stripe gets: a throw is logged and the event still answers as fulfilment did.
+   */
+  paid?: (session: Stripe.Checkout.Session) => void;
   send: {
     ended: SendEnded;
     /** "Your payment didn't go through": `kind` says whether to update the card or confirm with the bank at `url`. */
@@ -84,6 +90,13 @@ export async function handleStripeEvent(event: Stripe.Event, deps: StripeEventDe
 
 async function onCheckout(session: Stripe.Checkout.Session, deps: StripeEventDeps): Promise<EventOutcome> {
   const result = await deps.fulfil(session);
+  if (result.ok) {
+    try {
+      deps.paid?.(session);
+    } catch (e) {
+      console.error("[stripe] after-payment hook failed", session.id, (e as Error).message);
+    }
+  }
   if (result.ok || result.reason === "unpaid") return ok();
   // Another business's session on the shared account: not ours to fulfil.
   if (result.reason === "not_ours" || (result.reason === "bad_metadata" && !session.metadata?.purchase_id)) return ok("foreign");

@@ -2,7 +2,7 @@ import "server-only";
 
 import Stripe from "stripe";
 import { env, isConfigured } from "@/lib/env";
-import { BUMP, PRODUCTS } from "@/lib/pricing/products";
+import { BUMP, SECOND_GIFT, PRODUCTS } from "@/lib/pricing/products";
 
 let stripe: Stripe | null = null;
 
@@ -17,7 +17,7 @@ export function getStripe(): Stripe | null {
  * lines under an existing Stripe Product; the amount charged always comes from the catalogue.
  */
 export function stripeProductIds(): Record<string, string | undefined> {
-  const keys = [...Object.values(PRODUCTS).map((p) => p.envProductKey), BUMP.envProductKey];
+  const keys = [...Object.values(PRODUCTS).map((p) => p.envProductKey), BUMP.envProductKey, SECOND_GIFT.envProductKey];
   return Object.fromEntries(keys.map((key) => [key, process.env[key] || undefined]));
 }
 

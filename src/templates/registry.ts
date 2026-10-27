@@ -61,6 +61,11 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "photo-booth": () => import("./photo-booth"),
   picnic: () => import("./picnic"),
   "music-box": () => import("./music-box"),
+  seance: () => import("./seance"),
+  "bat-swarm": () => import("./bat-swarm"),
+  cauldron: () => import("./cauldron"),
+  "jack-o-lantern": () => import("./jack-o-lantern"),
+  "haunted-house": () => import("./haunted-house"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

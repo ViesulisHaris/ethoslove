@@ -6,7 +6,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { PACKS, adultConfirmed, confirmAdult, isPackId, type PackId } from "@/lib/games/packs";
-import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, formatAmount, type Currency } from "@/lib/pricing/products";
+import { useCurrency } from "@/lib/pricing/use-currency";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { PlayingCard, type BackTone, type SuitName } from "./cards";
 import { ScreenTop } from "./screen-top";
@@ -16,15 +17,16 @@ import { closeInApp } from "@/lib/app/bridge";
 
 const SUITS: SuitName[] = ["heart", "spade", "diamond"];
 
-/** A pack's price as checkout charges it: the catalogue's euro amount, the currency the pack is sold in. */
-export function packPrice(locale: string): string {
-  return formatAmount(PRODUCTS.pack.amounts.eur, "eur", locale);
+/** A pack's price as checkout charges it: the catalogue's amount, in the page's currency. */
+export function packPrice(locale: string, currency: Currency): string {
+  return formatAmount(PRODUCTS.pack.amounts[currency], currency, locale);
 }
 
 /** Under a pack's name: its price with a lock, "Yours", or that it came with Ethos for Two. */
 export function PackStatus({ shelf, id }: { shelf: Shelf; id: PackId }) {
   const t = useTranslations("packs");
   const locale = useLocale();
+  const currency = useCurrency();
   const access = shelf.accessOf(id);
   // Inside the iPhone app a price is the App Store's to show, in its own sheet.
   const inApp = useInApp();
@@ -50,7 +52,7 @@ export function PackStatus({ shelf, id }: { shelf: Shelf; id: PackId }) {
     <>
       <Lock aria-hidden="true" className="size-3.5" />
       <span className="sr-only">{t("locked")}</span>
-      {packPrice(locale)}
+      {packPrice(locale, currency)}
     </>
   );
 }
@@ -112,6 +114,7 @@ export function PackSheets({ shelf }: { shelf: Shelf }) {
 function OfferSheet({ shelf }: { shelf: Shelf }) {
   const t = useTranslations("packs");
   const locale = useLocale() === "es" ? "es" : "en";
+  const currency = useCurrency();
   // Inside the iPhone app: no price and no link to the site's pricing; the App Store's sheet sells it.
   const inApp = useInApp();
   // The pack stays on the sheet while it slides away, after the offer itself has been cleared.
@@ -155,7 +158,7 @@ function OfferSheet({ shelf }: { shelf: Shelf }) {
             <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:items-center">
               <button type="button" onClick={() => void shelf.buy(info.id)} disabled={shelf.buying} className="btn-rose inline-flex h-12 items-center justify-center gap-2 rounded-full px-7 text-[15px] font-semibold disabled:opacity-70">
                 {shelf.buying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : <Lock aria-hidden="true" className="size-4" />}
-                {inApp ? t("sheet.appBuy") : t("sheet.buy", { price: packPrice(locale) })}
+                {inApp ? t("sheet.appBuy") : t("sheet.buy", { price: packPrice(locale, currency) })}
               </button>
               <Link href="/pricing?from=packs#for-two" data-app-hide className="inline-flex h-12 items-center justify-center rounded-full border border-forest/15 px-6 text-center text-[14.5px] font-semibold text-forest hover:bg-forest/5">
                 {t("sheet.pass")}

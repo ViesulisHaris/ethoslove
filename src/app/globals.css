@@ -718,6 +718,30 @@
   --u: min(1cqw, calc(1cqh * 0.6));
 }
 
+/*
+ * A gift is drawn in its own colours. A browser's forced dark mode (Chrome's "dark theme for web
+ * pages", Samsung Internet's dark mode) repainted it: the paper came out black, the envelope olive,
+ * the cover's page near-black. `only light` is how a page says not to. On the gift itself wherever
+ * it is shown (the editor's preview, a card's live demo), and on the whole page on the gift routes,
+ * whose <html> is what such a browser looks at (with the meta tag their layout sets, read before
+ * any of this). The app shell keeps its own dark mode; the marketing pages are left as they were.
+ */
+.gift-root,
+:root:has([data-gift-page]) {
+  color-scheme: only light;
+}
+
+/*
+ * A page with its own button docked at the bottom of the screen (the ad landing, /try/…) marks it
+ * `data-bottom-dock`. The cookie strip, which docks in the same place, then sits just above it:
+ * the dock already keeps clear of the home bar, so the strip needs only a small gap of its own.
+ * The height is the dock's: 5.5rem of price line and button, and its bottom padding.
+ */
+:root:has([data-bottom-dock]) {
+  --bottom-dock: calc(5.5rem + max(0.75rem, env(safe-area-inset-bottom)));
+  --bottom-dock-pad: 0.5rem;
+}
+
 /* ------------------------------------------------------------------ */
 /* The Dates map: markers MapLibre positions as plain DOM elements.    */
 /* ------------------------------------------------------------------ */

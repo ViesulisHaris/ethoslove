@@ -6,6 +6,7 @@ import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { giftUnwrapSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
+import type { ShownReaction } from "@/lib/proof/numbers";
 import { loadTemplate } from "@/templates/registry";
 import { getManifest } from "@/templates/manifests";
 import { useEditor, type RemoteGift } from "@/lib/editor/store";
@@ -40,6 +41,8 @@ export type EditorShellProps = {
   supabaseConfigured: boolean;
   aiEnabled: boolean;
   paymentsEnabled: boolean;
+  /** A real reaction the pay panel may open with (lib/proof), or null. */
+  reaction?: ShownReaction | null;
 };
 
 function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: TemplateModule): GiftData {
@@ -68,7 +71,7 @@ function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: Template
   };
 }
 
-export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled }: EditorShellProps) {
+export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null }: EditorShellProps) {
   const locale = useLocale() as GiftLocale;
   const search = useSearchParams();
   const [mod, setMod] = useState<TemplateModule | null>(null);
@@ -343,6 +346,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         supabaseConfigured={supabaseConfigured}
         paymentsEnabled={paymentsEnabled}
         resume={resumePublish}
+        reaction={reaction}
       />
     </div>
   );

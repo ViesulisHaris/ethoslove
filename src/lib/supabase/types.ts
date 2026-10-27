@@ -152,6 +152,15 @@ export interface Database {
           text: string | null;
           audio_path: string | null;
           created_at: string;
+          /** The recipient ticked "Ethos may show this reaction on its site, without your name" (0017). */
+          share_consent: boolean;
+          share_consent_at: string | null;
+          /** The sender said no to showing it. */
+          sender_withheld_at: string | null;
+          /** The owner approved it for the site. */
+          approved_at: string | null;
+          /** The language of the gift it was written on, kept with the yes: pages show their own language's. */
+          locale: string | null;
         };
         Insert: {
           id?: string;
@@ -161,7 +170,14 @@ export interface Database {
           audio_path?: string | null;
           created_at?: string;
         };
-        Update: never;
+        /** Only whether it may be shown changes; what was said never does. */
+        Update: {
+          share_consent?: boolean;
+          share_consent_at?: string | null;
+          sender_withheld_at?: string | null;
+          approved_at?: string | null;
+          locale?: string | null;
+        };
         Relationships: [];
       };
       place_reviews: {
@@ -524,6 +540,105 @@ export interface Database {
         };
         Relationships: [];
       };
+      /** Monthly anniversaries (0016): one per account, written by the server, read by its owner. */
+      monthsaries: {
+        Row: {
+          id: string;
+          user_id: string;
+          partner_name: string;
+          /** YYYY-MM-DD: the day they got together. */
+          since: string;
+          /** Generated from `since`. */
+          since_day: number;
+          locale: "en" | "es";
+          checkin_for: string | null;
+          confirmed_for: string | null;
+          reminded_for: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          partner_name: string;
+          since: string;
+          locale?: "en" | "es";
+          checkin_for?: string | null;
+          confirmed_for?: string | null;
+          reminded_for?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          partner_name?: string;
+          since?: string;
+          locale?: "en" | "es";
+          checkin_for?: string | null;
+          confirmed_for?: string | null;
+          reminded_for?: string | null;
+        };
+        Relationships: [];
+      };
+      /** Recipients who asked to be emailed a gift's link (0017). Service role only. */
+      gift_keeps: {
+        Row: {
+          id: string;
+          gift_id: string;
+          email: string;
+          email_sha256: string;
+          locale: "en" | "es";
+          /** The sentence they agreed to, word for word. */
+          consent: string;
+          /** Reminders asked for, waiting for the confirmation. */
+          requested: Json;
+          created_at: string;
+          confirm_sent_at: string | null;
+          confirmed_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          gift_id: string;
+          email: string;
+          email_sha256: string;
+          locale?: "en" | "es";
+          consent: string;
+          requested?: Json;
+          created_at?: string;
+          confirm_sent_at?: string | null;
+          confirmed_at?: string | null;
+        };
+        Update: {
+          locale?: "en" | "es";
+          consent?: string;
+          requested?: Json;
+          confirm_sent_at?: string | null;
+          confirmed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      /** The days a confirmed keeper is reminded of (0017). Service role only. */
+      keep_reminders: {
+        Row: {
+          id: string;
+          keep_id: string;
+          name: string;
+          occasion: "birthday" | "anniversary" | "valentines" | "other";
+          month: number;
+          day: number;
+          last_sent_year: number | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          keep_id: string;
+          name: string;
+          occasion: "birthday" | "anniversary" | "valentines" | "other";
+          month: number;
+          day: number;
+          last_sent_year?: number | null;
+          created_at?: string;
+        };
+        Update: { last_sent_year?: number | null };
+        Relationships: [];
+      };
       email_optouts: {
         Row: { email_sha256: string; created_at: string };
         Insert: { email_sha256: string; created_at?: string };
@@ -583,6 +698,8 @@ export interface Database {
       gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };
       storage_orphans: { Args: { p_limit?: number }; Returns: { name: string; bytes: number }[] };
       purge_stale_drafts: { Args: { p_days?: number }; Returns: number };
+      /** Gifts opened and opens counted, for the numbers on the site (0017). Service role only. */
+      proof_numbers: { Args: Record<string, never>; Returns: Json };
       get_public_gift: { Args: { p_short_id: string; p_password?: string | null }; Returns: Json };
       set_gift_password: { Args: { p_gift_id: string; p_password: string | null }; Returns: undefined };
       record_gift_view: {

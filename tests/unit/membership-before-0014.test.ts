@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type Stripe from "stripe";
 import { NextRequest } from "next/server";
 import { DAY_MS, MissingMigrationError, iso } from "@/lib/commerce/db";
@@ -123,6 +123,14 @@ beforeEach(() => {
   logged = vi.spyOn(console, "error").mockImplementation(() => {});
   stripe = new FakeStripe(() => NOW);
   state.stripe = stripe.client;
+  // The code under test reads the real clock (the daily sweep, where a renewal starts) and the
+  // database is seeded around NOW: unfrozen, these passed only while real time stayed near it.
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(NOW);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
 });
 
 describe("deployed before migration 0014", () => {

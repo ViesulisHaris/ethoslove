@@ -49,6 +49,11 @@ import { manifest as digicam } from "./digicam/manifest";
 import { manifest as photoBooth } from "./photo-booth/manifest";
 import { manifest as picnic } from "./picnic/manifest";
 import { manifest as musicBox } from "./music-box/manifest";
+import { manifest as hauntedHouse } from "./haunted-house/manifest";
+import { manifest as jackOLantern } from "./jack-o-lantern/manifest";
+import { manifest as cauldron } from "./cauldron/manifest";
+import { manifest as batSwarm } from "./bat-swarm/manifest";
+import { manifest as seance } from "./seance/manifest";
 
 /**
  * What a template is — its names, occasions, tier, poster — and nothing it runs.
@@ -60,7 +65,7 @@ import { manifest as musicBox } from "./music-box/manifest";
  * on the homepage, pricing and the gallery, for gifts nobody had opened. Import from here unless
  * you are about to render a template.
  */
-export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance, favoritePerson, onRepeat, evergreen, beMyBoo, fallForYou, autumnReel];
+export const TEMPLATE_MANIFESTS: readonly TemplateManifest[] = [theLetter, constellations, birthdayCinema, jarOfReasons, scratchCard, midnightCountdown, ourTimeline, vinyl, museum, frontPage, fortuneCookie, textThread, arcade, passport, bloom, bouquet, kawaii, fireside, trickOrTreat, scrapbook, halfway, garden, snowGlobe, recipeBox, capToss, paperCrane, theToast, balloons, popupCard, sketchbook, partyAnimals, theCouncil, stickerBomb, coquette, xoxo, keepsake, packYourBags, digicam, photoBooth, picnic, musicBox, spookySeason, darkRomance, favoritePerson, onRepeat, evergreen, beMyBoo, fallForYou, autumnReel, seance, batSwarm, cauldron, jackOLantern, hauntedHouse];
 
 export const TEMPLATE_SLUGS = TEMPLATE_MANIFESTS.map((m) => m.slug);
 

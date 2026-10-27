@@ -2,7 +2,7 @@ import type Stripe from "stripe";
 import { BRAND } from "@/config/brand";
 import { PACK_NAMES } from "@/lib/games/packs";
 import { isShortId } from "@/lib/gift/short-id";
-import { BUMP, MEMBERSHIP_PLANS, PRODUCTS, formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
+import { BUMP, MEMBERSHIP_PLANS, PRODUCTS, SECOND_GIFT, formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
 import type { CheckoutPlan, PlanLine } from "@/lib/commerce/plan";
 import { getManifest } from "@/templates/manifests";
 
@@ -53,13 +53,30 @@ export type SessionOptions = {
   /** A same-site path to come back to. */
   returnTo: string;
   ref?: string;
+  /**
+   * Only for a buyer who said yes to advertising cookies: what the webhook needs to report the sale
+   * to Meta and TikTok (lib/ads). Its presence is that yes. Absent, neither is ever told.
+   */
+  ads?: { fbc?: string; fbp?: string; ttclid?: string; ttp?: string; ua?: string };
   automaticTax: boolean;
   /** STRIPE_PRODUCT_* values from the environment, by variable name. */
   productIds: Record<string, string | undefined>;
 };
 
+/**
+ * What Stripe's page says under the upgrade, so its price is read as what it is: credit for what the
+ * buyer has paid, never a discount (a buyer who upgrades has paid Everything's price in all).
+ */
+export function upgradeLineDescription(currency: Currency, locale: Locale): string {
+  const full = formatAmount(PRODUCTS.everything.amounts[currency], currency, locale);
+  return locale === "es" ? `Todas las plantillas cuestan ${full}, y lo que ya has pagado se resta.` : `Every template is ${full}, and what you've already paid counts towards it.`;
+}
+
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
   if (line.key === "bump") return undefined;
+  // The second gift says which template it is.
+  if (line.key === "second") return plan.second ? (getManifest(plan.second)?.name[locale] ?? plan.second) : undefined;
+  if (line.key === "upgrade") return upgradeLineDescription(plan.currency, locale);
   if (plan.packId) return PACK_NAMES[plan.packId][locale];
   const names = plan.templateSlugs.map((slug) => getManifest(slug)?.name[locale] ?? slug);
   return names.length > 0 ? names.join(", ") : undefined;
@@ -77,7 +94,7 @@ function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | 
  */
 export function lineItems(plan: CheckoutPlan, options: Pick<SessionOptions, "locale" | "productIds">): Stripe.Checkout.SessionCreateParams.LineItem[] {
   return plan.lines.map((line) => {
-    const catalogue = line.key === "bump" ? BUMP : PRODUCTS[line.key];
+    const catalogue = line.key === "bump" ? BUMP : line.key === "second" ? SECOND_GIFT : PRODUCTS[line.key];
     const configured = options.productIds[catalogue.envProductKey];
     const product = options.locale === "en" ? configured : undefined;
     const description = describe(line, plan, options.locale);
@@ -199,10 +216,28 @@ export function metadataRef(ref: string | undefined): string | undefined {
 }
 
 /**
+ * A consented buyer's ad fields, as metadata (lib/ads/purchase.ts reads them back). Stripe caps a value
+ * at 500 characters, which a user agent can pass.
+ */
+export function adsMetadata(ads: SessionOptions["ads"]): Record<string, string> {
+  if (!ads) return {};
+  return {
+    ads_consent: "1",
+    ...(ads.fbc ? { ads_fbc: ads.fbc } : {}),
+    ...(ads.fbp ? { ads_fbp: ads.fbp } : {}),
+    ...(ads.ttclid ? { ads_ttclid: ads.ttclid } : {}),
+    ...(ads.ttp ? { ads_ttp: ads.ttp } : {}),
+    ...(ads.ua ? { ads_ua: ads.ua.slice(0, 500) } : {}),
+  };
+}
+
+/**
  * Everything fulfilment needs, in the session's metadata: it is the only thing both the webhook and
  * the success page can trust (Stripe signed it, and only this server wrote it). The Stripe account
  * is shared with other businesses, so it names nothing about a person or a gift: no gift ids, no
- * names, no notes. A gift card's name and note wait in gift_card_details instead.
+ * names, no notes. A gift card's name and note wait in gift_card_details instead. A buyer who allowed
+ * advertising cookies adds Meta's and TikTok's ids for their click and browser and the browser's
+ * user agent (`adsMetadata`), which name a browser, not a person.
  */
 export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Record<string, string> {
   const ref = metadataRef(options.ref);
@@ -214,28 +249,40 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     locale: options.locale,
     product: plan.product,
     template_slugs: plan.packId ? "" : plan.templateSlugs.join(","),
-    // "tickbox" becomes "shown_at_payment" when Stripe can't show the box (lib/stripe/create-session.ts).
+    // "tickbox" becomes "shown_at_payment" when Stripe can't show the box (lib/stripe/create-session.ts),
+    // and "pay_sheet" when the buyer ticked ours, for the one-tap buttons (oneTapSessionParams).
     withdrawal_notice: "tickbox",
     kind: plan.kind,
     ...(plan.bump ? { bump: "1" } : {}),
+    ...(plan.second ? { second: plan.second } : {}),
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
+    ...adsMetadata(options.ads),
   };
 }
 
 /**
  * Where Stripe sends the buyer. returnTo is a path without the locale (the app's Links add it);
  * Stripe sends the buyer to a bare URL, so a Spanish buyer is sent back under /es rather than left
- * to the language redirect.
+ * to the language redirect. A cancel brings the link they came through back with it (?ref=): the
+ * site keeps it nowhere but the address (lib/attribution/ref.ts), so trying again is still
+ * credited to it.
  */
-function returnUrls(options: Pick<SessionOptions, "locale" | "origin" | "returnTo">): { success_url: string; cancel_url: string } {
+function returnUrls(options: Pick<SessionOptions, "locale" | "origin" | "returnTo" | "ref">): { success_url: string; cancel_url: string } {
   const prefix = options.locale === "es" ? "/es" : "";
   const back = options.returnTo;
   const cancel = prefix && back === "/" ? prefix : `${prefix}${back}`;
+  const ref = metadataRef(options.ref);
+  let cancelUrl = `${options.origin}${cancel}`;
+  if (ref) {
+    const url = new URL(cancelUrl);
+    if (!url.searchParams.has("ref")) url.searchParams.set("ref", ref);
+    cancelUrl = url.toString();
+  }
   return {
     success_url: `${options.origin}${prefix}/checkout/success?session_id={CHECKOUT_SESSION_ID}&return=${encodeURIComponent(back)}`,
-    cancel_url: `${options.origin}${cancel}`,
+    cancel_url: cancelUrl,
   };
 }
 
@@ -269,6 +316,30 @@ export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stri
     automatic_tax: options.automaticTax ? { enabled: true } : undefined,
     ...returnUrls(options),
   };
+}
+
+/** One-time products the one-tap buttons sell: those whose tickbox is the plain "unlock it now" sentence. */
+export function sellsInOneTap(product: CheckoutPlan["product"]): boolean {
+  return product !== "membership" && product !== "pass" && product !== "giftcard";
+}
+
+/**
+ * The same session for the one-tap Apple Pay and Google Pay buttons on the pay sheet (Stripe's
+ * Express Checkout Element, ui_mode "elements"). Stripe shows nothing of its own there: no page, no
+ * header and no tickbox. So the withdrawal tickbox is ours, on the pay sheet, and the buttons appear
+ * only once it is ticked. The route won't make this session without it, the metadata says
+ * "pay_sheet", and fulfilment records the sentence the way it records Stripe's (lib/stripe/fulfil.ts).
+ * The buyer comes back to the same success page, and Stripe's language follows the page it sits on.
+ */
+export function oneTapSessionParams(params: Stripe.Checkout.SessionCreateParams): Stripe.Checkout.SessionCreateParams {
+  const oneTap: Stripe.Checkout.SessionCreateParams = {
+    ...params,
+    ui_mode: "elements",
+    return_url: params.success_url,
+    metadata: { ...params.metadata, withdrawal_notice: "pay_sheet" },
+  };
+  for (const key of ["success_url", "cancel_url", "custom_text", "consent_collection", "after_expiration", "branding_settings", "locale"] as const) delete oneTap[key];
+  return oneTap;
 }
 
 /**
@@ -316,6 +387,7 @@ export function membershipMetadata(plan: CheckoutPlan, options: SessionOptions):
     withdrawal_notice: "tickbox",
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),
+    ...adsMetadata(options.ads),
   };
 }
 

@@ -6,27 +6,59 @@ import { isConfigured } from "@/lib/env";
 import { emailKey, linkSecret, signToken } from "@/lib/lifecycle/links";
 import type { ReminderOccasion } from "@/lib/lifecycle/reminders";
 import { getManifest } from "@/templates/manifests";
+import type { TemplateManifest } from "@/templates/types";
+import { suggestTemplate, suggestionPath } from "@/lib/lifecycle/suggest";
 import { optedOut } from "./optouts";
 import { isUndeliverable, sendEmail } from "./send";
 import { pageUrl, siteUrl } from "./urls";
-import { GiftOpenedEmail, GiftPublishedEmail, GiftUnlockedEmail, ReactionEmail, ReceiptEmail, WelcomeEmail } from "@/emails/templates";
-import { CheckoutRecoveryEmail, GiftCardEmail, PassRenewalEmail, PassWelcomeEmail, ReminderEmail, recoveryHeading, reminderHeading } from "@/emails/lifecycle";
+import { GiftOpenedEmail, GiftPublishedEmail, GiftUnlockedEmail, ReactionEmail, ReceiptEmail, WelcomeEmail, type NextIdea } from "@/emails/templates";
+import {
+  CheckoutRecoveryEmail,
+  GiftCardEmail,
+  MonthsaryCheckInEmail,
+  MonthsaryReminderEmail,
+  PassRenewalEmail,
+  PassWelcomeEmail,
+  ReminderEmail,
+  monthsaryCheckInHeading,
+  monthsaryHeading,
+  recoveryHeading,
+  reminderHeading,
+  type EmailIdea,
+} from "@/emails/lifecycle";
 import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
+import { KeepConfirmEmail, KeepLinkEmail, keepConfirmSubject, keepLinkSubject, type KeptDay } from "@/emails/keep";
 import { accountUrl, pricingUrl } from "@/lib/commerce/db";
 import type { Pass } from "@/lib/commerce/passes";
 import { formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
 
 type L = "en" | "es";
 
-async function ownerOf(giftId: string): Promise<{ email: string; locale: L; recipientName: string; shortId: string } | null> {
+async function ownerOf(giftId: string): Promise<{ email: string; locale: L; recipientName: string; shortId: string; templateSlug: string } | null> {
   const admin = getSupabaseAdminClient();
   if (!admin) return null;
-  const { data: gift } = await admin.from("gifts").select("user_id, locale, short_id, data").eq("id", giftId).single();
+  const { data: gift } = await admin.from("gifts").select("user_id, locale, short_id, data, template_slug").eq("id", giftId).single();
   if (!gift) return null;
   const { data: profile } = await admin.from("profiles").select("email, locale").eq("id", gift.user_id).single();
   if (!profile?.email) return null;
   const data = gift.data as { recipientName?: string } | null;
-  return { email: profile.email, locale: (profile.locale === "es" ? "es" : "en") as L, recipientName: data?.recipientName ?? "", shortId: gift.short_id };
+  return { email: profile.email, locale: (profile.locale === "es" ? "es" : "en") as L, recipientName: data?.recipientName ?? "", shortId: gift.short_id, templateSlug: gift.template_slug };
+}
+
+/** A suggested template as an email shows it: in the reader's language, its editor (with where the click came from) and its poster. */
+export function emailIdea(manifest: TemplateManifest, locale: L, ref: string): EmailIdea {
+  return { name: manifest.name[locale], tagline: manifest.tagline[locale], url: pageUrl(locale, suggestionPath(manifest.slug, ref)), poster: `${siteUrl()}${manifest.thumbnail.poster}` };
+}
+
+/**
+ * "Whose day is next?" under the news that a gift was opened or answered: a template other than the
+ * one just sent, named and linked (`ref` says which email). Nothing for an address on the
+ * unsubscribe list, or when the list can't be read.
+ */
+async function nextIdea(admin: NonNullable<ReturnType<typeof getSupabaseAdminClient>>, owner: { email: string; locale: L; templateSlug: string }, ref: string): Promise<NextIdea | undefined> {
+  if (await optedOut(admin, await emailKey(owner.email))) return undefined;
+  const idea = suggestTemplate("next", { avoid: owner.templateSlug });
+  return { name: idea.name[owner.locale], url: pageUrl(owner.locale, suggestionPath(idea.slug, ref)) };
 }
 
 /** "23 September 2027" / "23 de septiembre de 2027": a day, in UTC, which is how the pass dates are kept. */
@@ -57,21 +89,33 @@ export async function notifyFirstOpen(giftId: string) {
   if ((count ?? 0) !== 1) return;
   const owner = await ownerOf(giftId);
   if (!owner) return;
-  const offer = !(await optedOut(admin, await emailKey(owner.email)));
   return sendEmail({
     to: owner.email,
     subject: owner.locale === "es" ? `${owner.recipientName} ha abierto tu regalo` : `${owner.recipientName} opened your gift`,
-    react: GiftOpenedEmail({ locale: owner.locale, recipientName: owner.recipientName, dashboardUrl: `${siteUrl()}/dashboard/gift/${giftId}`, nextUrl: offer ? pageUrl(owner.locale, "/templates?ref=email-opened") : undefined }),
+    react: GiftOpenedEmail({ locale: owner.locale, recipientName: owner.recipientName, dashboardUrl: `${siteUrl()}/dashboard/gift/${giftId}`, next: await nextIdea(admin, owner, "email-opened") }),
   });
 }
 
-export async function notifyReaction(giftId: string, emoji: string, text: string | null, hasAudio: boolean) {
+/** `sharedId`: the reaction its writer agreed Ethos may show, which the sender can keep private from here. */
+export async function notifyReaction(giftId: string, emoji: string, text: string | null, hasAudio: boolean, sharedId: string | null = null) {
+  const admin = getSupabaseAdminClient();
   const owner = await ownerOf(giftId);
-  if (!owner) return;
+  if (!admin || !owner) return;
+  const secret = sharedId ? linkSecret() : null;
+  const privateUrl = sharedId && secret ? `${siteUrl()}/api/reactions/private?t=${await signToken("reaction-private", sharedId, secret)}&l=${owner.locale}` : undefined;
   return sendEmail({
     to: owner.email,
     subject: `${emoji} ${owner.locale === "es" ? `${owner.recipientName} te ha enviado una reacción` : `${owner.recipientName} sent you a reaction`}`,
-    react: ReactionEmail({ locale: owner.locale, recipientName: owner.recipientName, emoji, text, hasAudio, dashboardUrl: `${siteUrl()}/dashboard/gift/${giftId}` }),
+    react: ReactionEmail({
+      locale: owner.locale,
+      recipientName: owner.recipientName,
+      emoji,
+      text,
+      hasAudio,
+      dashboardUrl: `${siteUrl()}/dashboard/gift/${giftId}`,
+      next: await nextIdea(admin, owner, "email-reaction"),
+      privateUrl,
+    }),
   });
 }
 
@@ -285,14 +329,91 @@ export async function sendGiftCardEmail({ to, locale, code, redeemUrl, recipient
   });
 }
 
-/** "Remind me next year", a year on. `date` is already formatted; `removeUrl` is a signed link (api/reminders/remove). */
-export async function sendReminderEmail({ to, locale, recipientName, occasion, date, makeUrl, removeUrl }: { to: string; locale: L; recipientName: string; occasion: ReminderOccasion; date: string; makeUrl: string; removeUrl: string }): Promise<boolean> {
+/**
+ * "Remind me next year", a year on. `date` is already formatted; `removeUrl` is a signed link
+ * (api/reminders/remove). One template is suggested for the occasion; `avoid` is the template the
+ * reminder was saved with, skipped so the idea is a new one, and never shown.
+ */
+/** `ref` says which reminders the click came from: a buyer's own (the default), or a kept gift's (lib/keep). */
+export async function sendReminderEmail({
+  to,
+  locale,
+  recipientName,
+  occasion,
+  date,
+  avoid,
+  removeUrl,
+  ref = "email-reminder",
+}: {
+  to: string;
+  locale: L;
+  recipientName: string;
+  occasion: ReminderOccasion;
+  date: string;
+  avoid?: string | null;
+  removeUrl: string;
+  ref?: string;
+}): Promise<boolean> {
   return safely("reminder", async () =>
     deliver("reminder", {
       to,
       subject: reminderHeading(occasion, locale, recipientName, date).replace(/\.$/, ""),
-      react: ReminderEmail({ locale, recipientName, occasion, date, makeUrl, removeUrl }),
+      react: ReminderEmail({
+        locale,
+        recipientName,
+        occasion,
+        date,
+        idea: emailIdea(suggestTemplate(occasion, { avoid }), locale, ref),
+        moreUrl: pageUrl(locale, occasion === "other" ? `/templates?ref=${ref}` : `/occasions/${occasion}?ref=${ref}`),
+        removeUrl,
+      }),
       headers: unsubscribeHeaders(removeUrl),
+    }),
+  );
+}
+
+/**
+ * "Keep this gift": the one email a request on the keep page sends, to confirm the address. It names
+ * nobody and nothing from the gift; `neverUrl` (api/keep/never) puts the address on the unsubscribe
+ * list, which no keep request gets past, and is also the mail app's one-click unsubscribe.
+ */
+export async function sendKeepConfirm({ to, locale, confirmUrl, neverUrl }: { to: string; locale: L; confirmUrl: string; neverUrl: string }): Promise<boolean> {
+  return safely("keep confirm", async () =>
+    deliver("keep confirm", { to, subject: keepConfirmSubject(locale), react: KeepConfirmEmail({ locale, confirmUrl, neverUrl }), headers: unsubscribeHeaders(neverUrl) }),
+  );
+}
+
+/** After the yes: the gift's own link and the days they'll be reminded of; `stopUrl` ends it all. */
+export async function sendKeepLink({ to, locale, giftUrl, days, sender = "", stopUrl }: { to: string; locale: L; giftUrl: string; days: KeptDay[]; sender?: string; stopUrl: string }): Promise<boolean> {
+  return safely("keep link", async () =>
+    deliver("keep link", { to, subject: keepLinkSubject(locale, sender), react: KeepLinkEmail({ locale, giftUrl, days, sender, stopUrl }), headers: unsubscribeHeaders(stopUrl) }),
+  );
+}
+
+/**
+ * The day before a monthsary: the neutral check-in. `date` is the monthsary, formatted; `yesUrl` and
+ * `stopUrl` are signed links (api/monthsaries/yes and /stop). The stop link is also the one-click
+ * unsubscribe a mail app offers.
+ */
+export async function sendMonthsaryCheckIn({ to, locale, partnerName, date, yesUrl, stopUrl }: { to: string; locale: L; partnerName: string; date: string; yesUrl: string; stopUrl: string }): Promise<boolean> {
+  return safely("monthsary check-in", async () =>
+    deliver("monthsary check-in", {
+      to,
+      subject: monthsaryCheckInHeading(locale, partnerName),
+      react: MonthsaryCheckInEmail({ locale, partnerName, date, yesUrl, stopUrl }),
+      headers: unsubscribeHeaders(stopUrl),
+    }),
+  );
+}
+
+/** On a monthsary the buyer said yes to: one small template, a different one each month. */
+export async function sendMonthsaryReminder({ to, locale, partnerName, months, stopUrl }: { to: string; locale: L; partnerName: string; months: number; stopUrl: string }): Promise<boolean> {
+  return safely("monthsary reminder", async () =>
+    deliver("monthsary reminder", {
+      to,
+      subject: monthsaryHeading(locale, partnerName, months),
+      react: MonthsaryReminderEmail({ locale, partnerName, months, idea: emailIdea(suggestTemplate("monthsary", { turn: months }), locale, "email-monthsary"), stopUrl }),
+      headers: unsubscribeHeaders(stopUrl),
     }),
   );
 }

@@ -4,14 +4,15 @@ import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
-import { env } from "@/lib/env";
+import { isConfigured } from "@/lib/env";
 import { hidesConsentBanner, setConsent } from "@/lib/analytics/consent";
 import { useConsent, useIsClient } from "@/lib/analytics/use-consent";
 
 /**
  * Asks once, in the least intrusive place that is still honest.
  *
- * It never appears with no Clarity id configured, and never where a gift is running — a real one
+ * It never appears with neither a Clarity nor a Meta pixel id configured (nothing would wait for the
+ * answer), and never where a gift is running — a real one
  * at `/g/…` or a demo — because that is most of the traffic, the worst possible moment to
  * interrupt, and the strip would sit directly on top of the gift's own controls. A strip at the
  * bottom rather than a modal, two plain buttons, no "manage preferences" maze — the choice is
@@ -22,7 +23,7 @@ export function CookieConsent() {
   const pathname = usePathname();
   const consent = useConsent();
   const isClient = useIsClient();
-  const visible = isClient && consent === null && Boolean(env.clarityId) && !hidesConsentBanner(pathname);
+  const visible = isClient && consent === null && isConfigured.cookieConsent && !hidesConsentBanner(pathname);
 
   return (
     <AnimatePresence>
@@ -34,9 +35,11 @@ export function CookieConsent() {
           transition={{ type: "spring", stiffness: 340, damping: 34, mass: 0.9 }}
           // Steps aside while the editor's phone preview is up: that is a gift running full-screen
           // with "Play from the start" docked exactly here. It comes back with the form.
-          // Never inside the iPhone app: its web view asks nobody for consent, so Clarity never runs there.
+          // Never inside the iPhone app: its web view asks nobody for consent, so neither Clarity nor the pixel runs there.
+          // A page with its own button docked at the bottom (the ad landing, /try) sets --bottom-dock
+          // (globals.css): the strip docks just above that button instead of over it.
           data-app-hide
-          className="fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] [[data-gift-running]_&]:hidden"
+          className="fixed inset-x-0 bottom-[var(--bottom-dock,0px)] z-50 flex justify-center px-4 pb-[var(--bottom-dock-pad,max(1rem,env(safe-area-inset-bottom)))] [[data-gift-running]_&]:hidden"
           role="region"
           aria-label={t("title")}
         >
@@ -76,7 +79,7 @@ export function CookieChoiceButton({ className }: { className?: string }) {
   const t = useTranslations("cookies");
   const consent = useConsent();
 
-  if (!env.clarityId) return null;
+  if (!isConfigured.cookieConsent) return null;
 
   return (
     <button

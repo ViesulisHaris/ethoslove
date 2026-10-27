@@ -93,6 +93,34 @@ describe("checkout plan: the order bump", () => {
   });
 });
 
+describe("checkout plan: the second gift", () => {
+  it("adds a second premium template as its own line on a single, at its catalogue price in every currency", () => {
+    const plan = ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet" }), guest));
+    expect(plan.lines).toEqual([
+      { key: "single", amount: 999 },
+      { key: "second", amount: 499 },
+    ]);
+    expect(plan).toMatchObject({ kind: "second", second: "bouquet", bump: false, total: 1498, unlocks: ["vinyl", "bouquet"], templateSlugs: ["vinyl"] });
+    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet", currency: "usd" }), guest)).total).toBe(1199 + 499);
+    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet", currency: "gbp" }), guest)).total).toBe(899 + 449);
+    // Not asked for: no line, and the plan says so.
+    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"] }), guest))).toMatchObject({ second: null, kind: "single" });
+  });
+  it("is only sold on a single, never with the bump, and only as another premium template", () => {
+    for (const product of ["extras", "pick3", "everything", "pass", "pack", "giftcard"] as const)
+      expect(planCheckout(req({ product, templateSlugs: product === "extras" ? ["the-letter"] : ["vinyl", "bloom", "museum"], packId: "deep", secondSlug: "bouquet" }), guest)).toMatchObject({ ok: false, error: "second_not_available", status: 400 });
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], addEverything: true, secondSlug: "bouquet" }), guest)).toMatchObject({ ok: false, error: "second_not_available" });
+    for (const secondSlug of ["vinyl", "the-letter", "constellations", "not-a-template", "*"])
+      expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug }), guest)).toMatchObject({ ok: false, error: "second_not_available", status: 400 });
+  });
+  it("isn't sold for a template the buyer already owns", () => {
+    const owner: CheckoutContext = { ...guest, signedIn: true, ownedForever: ["bouquet"] };
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet" }), owner)).toMatchObject({ ok: false, error: "second_owned", status: 409 });
+    expect(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet" }), { ...owner, ownedForever: ["*"] }).ok).toBe(false);
+    expect(ok(planCheckout(req({ product: "single", templateSlugs: ["vinyl"], secondSlug: "xoxo" }), owner)).total).toBe(1498);
+  });
+});
+
 describe("checkout plan: creators", () => {
   it("credits the creator whose link brought the buyer, and never changes a price", () => {
     const plan = ok(planCheckout(req({ product: "everything" }), { ...guest, creatorCode: "MARIA" }));

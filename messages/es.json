@@ -39,11 +39,11 @@
     "myDates": "Mis citas"
   },
   "meta": {
-    "defaultTitle": "Ethos — Regalos, ideas para citas y escapadas en pareja",
+    "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
-    "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis.",
-    "giftsTitle": "Ethos — Regalos que se abren como una historia",
-    "giftsDescription": "Crea un regalo personal que se abre como una historia: tus fotos, su canción y tus palabras, enviado con un enlace o un código QR. Empezar es gratis."
+    "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos.",
+    "giftsTitle": "Regalos digitales: crea uno gratis y personal online · Ethos",
+    "giftsDescription": "Crea un regalo digital en diez minutos: una carta de amor, un ramo, un álbum o un pequeño juego con vuestras fotos, tus palabras y su canción, en un enlace. 30 ideas, dos gratis."
   },
   "nav": {
     "templates": "Plantillas",
@@ -69,7 +69,7 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Regalos personales. Diez minutos para hacerlo, años para guardarlo.",
+      "eyebrow": "Regalos digitales. Diez minutos para hacerlo, años para guardarlo.",
       "h1a": "Regálale un momento que",
       "h1b": "abrirá una",
       "h1c": "y otra vez.",
@@ -142,7 +142,11 @@
           "time": "09:58"
         }
       ],
-      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan."
+      "placeholderNote": "Reacciones de muestra. Las reales las sustituyen conforme llegan.",
+      "realNote": "Reacciones reales, compartidas por quienes recibieron los regalos. Sin nombres.",
+      "realLabel": "Una reacción real",
+      "opened": "{count} regalos de Ethos abiertos hasta ahora.",
+      "openedEach": "{count} regalos de Ethos abiertos hasta ahora, {times} veces cada uno de media."
     },
     "how": {
       "eyebrow": "Cómo funciona",
@@ -190,7 +194,8 @@
     "contact": "Contacto",
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
     "madeWith": "Hecho en Riga.",
-    "explore": "Explorar"
+    "explore": "Explorar",
+    "digitalGifts": "Regalos digitales"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -512,8 +517,19 @@
       "featureVoiceNote": "un mensaje de voz",
       "featureMorePhotos": "más de 10 fotos",
       "featureUnwrap": "una sorpresa dentro",
-      "payTitle": "Un pago y se envía",
-      "payBlurb": "Este regalo usa {features}. Pagas una vez y esta plantilla es tuya para siempre, con todo lo que lleva.",
+      "benefitPremiumTemplate": "Sin la marca de Ethos, todo de tu parte",
+      "benefitNoWatermark": "Sin la marca de Ethos, todo de tu parte",
+      "benefitSchedule": "Se abre al minuto que elegiste",
+      "benefitPassword": "Solo esa persona puede abrirlo",
+      "benefitPhotos": "Todas tus fotos, hasta 20",
+      "benefitSong": "Vuestra canción sonando",
+      "benefitVideo": "Tu vídeo dentro",
+      "benefitVoiceNote": "Tu voz diciéndolo",
+      "benefitUnwrap": "Una sorpresa al final",
+      "payTitle": "Imagina su cara cuando lo abra",
+      "realReaction": "una reacción real a un regalo de Ethos",
+      "payIncludes": "En este regalo: {features}",
+      "payBlurb": "Pagas una vez y esta plantilla es tuya para siempre.",
       "payButton": "Pagar {price} y enviar",
       "appUnlock": "Desbloquear y enviar",
       "appUnlockNote": "A través del App Store: a continuación verás las opciones y los precios.",
@@ -525,13 +541,17 @@
       "planEverything": "Todas las plantillas",
       "planEverythingBlurb": "Las {n} plantillas, y cada una que añadamos",
       "payNote": "Sin suscripción. Tarjeta, Apple Pay y más al pagar.",
+      "oneTapApple": "o paga con Apple Pay",
+      "oneTapGoogle": "o paga con Google Pay",
+      "oneTapTerms": "Términos",
+      "oneTapNone": "No está configurado en este navegador. Usa el botón de arriba.",
       "paying": "Abriendo el pago seguro…",
       "signInBlurbPaid": "Tu borrador está guardado en este dispositivo. Inicia sesión, paga {price} una vez y se envía.",
       "signInBlurbFreeReply": "Devolver este es gratis. Inicia sesión y se envía, con el pie «Hecho con Ethos».",
       "freeReply": "<who>{name}</who> te invita a responder: es gratis y va con el pequeño pie «Hecho con Ethos».",
       "freeReplyUsed": "La respuesta gratis de este regalo ya se ha enviado, así que esta cuesta el precio normal de la plantilla.",
       "freeReplyInvalid": "Este enlace ya no hace gratis la respuesta, así que cuesta el precio normal de la plantilla.",
-      "payGuestBlurb": "Este regalo usa {features}. Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
+      "payGuestBlurb": "Pagas una vez y se envía. Tu cuenta se crea con el email que das al pagar: no hace falta registrarse.",
       "signInInstead": "¿Ya tienes cuenta? Inicia sesión",
       "uploadsAfterPay": "Las fotos se suben justo después del pago.",
       "ownedElsewhere": "Tu compra incluye {templates}. Esta es otra plantilla.",
@@ -710,6 +730,26 @@
     "soundOn": "Activa el sonido",
     "phaseNote": "La experiencia del destinatario se construye en la fase 4."
   },
+  "adLanding": {
+    "hooks": {
+      "popup-card": "Una tarjeta de cumpleaños que se despliega en su móvil",
+      "birthday-cinema": "¿No puedes estar en su cumpleaños? Envíale esto.",
+      "bouquet": "Un ramo que florece en su móvil",
+      "xoxo": "Cuando un “te quiero” por mensaje no basta"
+    },
+    "description": "Prueba el regalo de verdad y crea el tuyo con su nombre, tus palabras y tus fotos.",
+    "tapHint": "Es el regalo de verdad. Tócalo.",
+    "make": "Crea el tuyo",
+    "pricePaid": "Gratis crearlo · {price} una vez, al enviarlo",
+    "priceFree": "Gratis crearlo y enviarlo · extras por {price}, una vez",
+    "stepsTitle": "Cómo funciona",
+    "whatTheySee": "Lo que verá",
+    "reactionsTitle": "Lo que respondieron",
+    "step1": "Añade su nombre, tus palabras y tus fotos.",
+    "step2": "Míralo tal como lo verá. Gratis y sin cuenta.",
+    "step3Paid": "Paga {price} una sola vez, sin suscripción, y envía el enlace. Se abre en su móvil, sin descargar nada.",
+    "step3Free": "Envía el enlace gratis. Se abre en su móvil, sin descargar nada."
+  },
   "templates": {
     "title": "Plantillas",
     "subtitle": "Todas tienen una demo completa en vivo. Pruébala antes de comprar.",
@@ -762,7 +802,7 @@
       "new": {
         "eyebrow": "Novedades",
         "title": "Recién llegadas",
-        "blurb": "Una fiesta invadida por hámsters, una digicam, un fotomatón, una caja de música y un pícnic."
+        "blurb": "Un tablero espiritista, una bandada de murciélagos, un caldero de bruja, una calabaza que tallar y una casa encantada."
       },
       "all": {
         "eyebrow": "La colección",
@@ -773,6 +813,28 @@
     "badge": {
       "popular": "Favorita",
       "new": "Nueva"
+    },
+    "guide": {
+      "eyebrow": "Cómo hacerlo",
+      "heading": "Cómo hacer {name}",
+      "step1Title": "Añade tus fotos",
+      "step1Body": "{min, plural, =0 {Añade hasta {max} fotos, o ninguna.} other {Elige hasta {max} fotos.}} La vista previa muestra exactamente lo que verán mientras lo haces.",
+      "step1Music": "Pon una canción de la biblioteca, o la de verdad, la vuestra: treinta segundos esperan al final, a un toque.",
+      "step2Title": "Escribe lo que sientes",
+      "step2Body": "Di lo que nunca cabe en una tarjeta, con tus palabras: un recuerdo, una broma que solo entenderá esa persona, lo que le contarías de ella a un desconocido. Ponle un pie a cada foto si quieres.",
+      "step2Extras": "Añade una cuenta atrás hasta el día y una sorpresa escondida al final.",
+      "step3Title": "Envía el enlace",
+      "step3Body": "Publícalo y envía el enlace por donde quieras, o imprime su código QR y mételo en una tarjeta de papel. Se abre en cualquier móvil u ordenador, sin instalar nada.",
+      "faqTitle": "Preguntas frecuentes",
+      "faqFreeQ": "¿Es gratis?",
+      "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice “Hecho con Ethos”. Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
+      "faqPaidQ": "¿Cuánto cuesta?",
+      "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta y Constelaciones son gratis.",
+      "faqOpenQ": "¿Cómo lo abren?",
+      "faqOpenA": "Con el enlace que les envías, por WhatsApp, iMessage, Instagram o email, o escaneando su código QR con la cámara del móvil. Se abre en el navegador de cualquier móvil u ordenador: sin app que instalar ni cuenta que crear.",
+      "faqEditQ": "¿Puedo cambiarlo después de enviarlo?",
+      "faqEditA": "Sí. Edítalo cuando quieras y el cambio sale en el mismo enlace. Los enlaces no caducan, así que se puede volver a abrir el año que viene.",
+      "moreTitle": "Más como este"
     }
   },
   "occasions": {
@@ -793,6 +855,20 @@
     "long-distance": "A distancia",
     "just-because": "Porque sí"
   },
+  "blog": {
+    "eyebrow": "Blog",
+    "title": "Qué escribir, qué hacer y qué enviar",
+    "subtitle": "Guías prácticas para cumpleaños, aniversarios, la distancia y los días normales de en medio: qué decir, qué hacer y cómo hacérselo llegar a tiempo.",
+    "takeaways": "Lo esencial",
+    "faqTitle": "Preguntas frecuentes",
+    "minutes": "{minutes} min de lectura",
+    "related": "Sigue leyendo",
+    "makeThis": "Hacer este regalo",
+    "seeIt": "Ver la plantilla",
+    "templateFree": "Plantilla gratis",
+    "templatePremium": "Plantilla premium",
+    "englishOnly": "De momento, esta guía solo está en inglés."
+  },
   "pricing": {
     "eyebrow": "Precios",
     "title": "Las citas, gratis. Los regalos, un solo pago.",
@@ -805,19 +881,20 @@
     "plans": {
       "single": {
         "name": "Una plantilla",
-        "blurb": "La que no te quitas de la cabeza.",
+        "blurb": "Un regalo que abrirá una y otra vez.",
         "cta": "Desbloquear una",
         "features": [
-          "Una plantilla premium, para siempre",
-          "Regalos ilimitados con ella",
-          "Vídeo y mensajes de voz",
-          "Sin pie, 20 fotos",
-          "Programación y contraseña"
+          "Una plantilla premium, tuya para siempre",
+          "Hazlo tantas veces como quieras",
+          "Tu voz diciéndolo, o tu vídeo",
+          "Hasta 20 fotos, y sin la marca de Ethos",
+          "Se abre a medianoche en su día",
+          "Solo esa persona puede abrirlo"
         ]
       },
       "pick3": {
         "name": "Elige tres",
-        "blurb": "Cumpleaños, aniversario y la de tu madre.",
+        "blurb": "Tres días que recordarán: su cumpleaños, vuestro aniversario y uno para tu madre.",
         "cta": "Elegir tres",
         "features": [
           "Tres plantillas cualesquiera, para siempre",
@@ -828,13 +905,14 @@
       },
       "everything": {
         "name": "Todo",
-        "blurb": "Cada plantilla que hemos hecho, y cada una que haremos.",
+        "blurb": "Un regalo para cada día que importa, ahora y más adelante.",
         "cta": "Desbloquear todo",
         "features": [
           "Todas las plantillas, actuales y futuras",
-          "Regalos ilimitados, para siempre",
-          "Vídeo y mensajes de voz",
-          "Sin pie, 20 fotos, programación, contraseñas",
+          "Haz tantos regalos como quieras, para siempre",
+          "Tu voz diciéndolo, o tu vídeo",
+          "Hasta 20 fotos, y sin la marca de Ethos",
+          "Se abre a medianoche en su día, y solo esa persona puede abrirlo",
           "Acceso anticipado a plantillas nuevas"
         ]
       }
@@ -963,7 +1041,7 @@
   },
   "cookies": {
     "title": "Cookies",
-    "blurb": "Cookies, para ver qué funciona. Nunca en un regalo que alguien ha recibido.",
+    "blurb": "Cookies para nuestras estadísticas y nuestros anuncios en Meta (Facebook, Instagram) y TikTok. Nunca en un regalo que alguien ha recibido.",
     "readMore": "Leer la política",
     "accept": "Aceptar",
     "decline": "No, gracias",
@@ -1093,19 +1171,23 @@
     "paywall": {
       "extras": "Hazlo especial",
       "extrasBlurb": "Vídeo, voz, 20 fotos, una sorpresa dentro, sin pie, programación y contraseña, en esta plantilla para siempre",
-      "extrasIntro": "Este regalo usa {features}. Hazlo especial una vez y esta plantilla los conserva para siempre.",
-      "extrasGuestIntro": "Este regalo usa {features}. Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar, sin contraseña.",
+      "extrasIntro": "Hazlo especial una vez y esta plantilla los conserva para siempre.",
+      "extrasGuestIntro": "Hazlo especial una vez y se envía. Tu cuenta se crea con el email que das al pagar: no hace falta registrarse.",
       "upgrade": "Todo por la diferencia",
-      "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se descuenta de {full}.",
+      "upgradeBlurb": "Todas las plantillas, para siempre. Lo que ya has pagado se resta de los {full}.",
       "pick3": "O elige las tres que quieras por {price}",
-      "bump": "Añade todas las demás plantillas, para siempre",
-      "bumpBlurb": "Todas las que tenemos y todas las que añadamos",
+      "bump": "Todas las demás plantillas",
+      "bumpBlurb": "Para siempre, y las que añadamos.",
+      "second": "Un segundo regalo",
+      "secondPrice": "+{price}",
+      "secondBlurb": "Guárdalo para su cumpleaños, o porque sí.",
+      "secondPick": "¿Cuál?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
       "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
     },
     "plans": {
-      "upgradeNote": "En lugar de {full}: lo que ya has pagado por plantillas se descuenta."
+      "upgradeNote": "En lugar de {full}: lo que ya has pagado se resta."
     },
     "checkoutErrors": {
       "alreadyOwned": "Ya lo tienes en tu cuenta. No hay nada que pagar.",
@@ -1132,7 +1214,8 @@
       "pack": "Pack de juegos",
       "giftcard": "Tarjeta regalo",
       "upgrade": "Pasar a Todo",
-      "withBump": "{product}, más todas las plantillas"
+      "withBump": "{product}, más todas las plantillas",
+      "withSecond": "{product}, más un segundo regalo"
     },
     "giftcard": {
       "eyebrow": "Tarjeta regalo",
@@ -1184,9 +1267,32 @@
       "toAccount": "Ir a tu cuenta",
       "toGift": "Volver a tu regalo"
     },
+    "after": {
+      "eyebrow": "Todas las plantillas, para siempre",
+      "sorted": {
+        "one": "Ya tienes un regalo listo.",
+        "birthday": "Su cumpleaños ya está listo.",
+        "anniversary": "Vuestro aniversario ya está listo.",
+        "valentines": "San Valentín ya está listo.",
+        "christmas": "La Navidad ya está lista.",
+        "halloween": "Halloween ya está listo."
+      },
+      "ahead": {
+        "birthday": "su cumpleaños",
+        "anniversary": "vuestro aniversario",
+        "valentines": "San Valentín",
+        "christmas": "Navidad"
+      },
+      "next": "Para {occasions}, añade todas las plantillas, para siempre, por {price} más.",
+      "credit": "Ya has pagado {paid} de los {full}.",
+      "creditEarlier": "Lo que has pagado hasta ahora se resta de los {full}.",
+      "creditUntil": "Ya has pagado {paid} de los {full}, y cuenta hasta el {date}.",
+      "cta": "Añadir todas por {price} más",
+      "note": "Un solo pago. Sin suscripción."
+    },
     "account": {
       "upgradeTitle": "Pasa a Todo",
-      "upgradeBlurb": "Lo que has pagado por plantillas cuenta: todas las plantillas, actuales y futuras, por {price} más.",
+      "upgradeBlurb": "Lo que ya has pagado se resta: todas las plantillas, actuales y futuras, por {price} más.",
       "upgradeCta": "Pasar a Todo por {price}",
       "packs": "Packs de juegos",
       "everyPack": "Todos los packs de juegos",
@@ -1347,7 +1453,9 @@
         "description": "Sin ninguna ocasión: un pequeño regalo digital con tus fotos, una canción y unas palabras sinceras para decirle a alguien que piensas en esa persona.",
         "intro": "Los mejores regalos no esperan a una fecha en el calendario. Haz uno en diez minutos y envíalo sin ningún motivo."
       }
-    }
+    },
+    "blogTitle": "Ideas de regalos y guías para cartas de amor",
+    "blogDescription": "Qué escribir, qué hacer y cómo enviarlo: ideas y guías para cumpleaños, aniversarios, relaciones a distancia y cualquier otro día."
   },
   "cities": {
     "meta": {
@@ -1708,7 +1816,7 @@
   },
   "growth": {
     "hero": {
-      "eyebrow": "Hecho por ti, abierto en su móvil",
+      "eyebrow": "Regalos digitales hechos por ti",
       "h1a": "Hazle un regalo",
       "h1b": "que abrirá una y otra vez.",
       "sub": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Diez minutos para hacerlo; se envía como enlace o código QR.",
@@ -1830,8 +1938,8 @@
   },
   "platform": {
     "meta": {
-      "title": "Ethos — Regalos, ideas para citas y escapadas en pareja",
-      "description": "Tus fotos, tus palabras y su canción, convertidas en un regalo que se abre como una historia. Y además ideas para citas cerca de ti, escapadas y juegos para dos. Empezar es gratis."
+      "title": "Ethos — Regalos digitales que se abren como una historia",
+      "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos."
     },
     "hero": {
       "eyebrow": "Para vosotros dos",
@@ -1872,7 +1980,7 @@
         "cta": "Buscar una cita"
       },
       "gifts": {
-        "title": "Regalos",
+        "title": "Regalos digitales",
         "blurb": "Una carta, un ramo, un rasca: hecho en minutos, abierto en su móvil, guardado para siempre.",
         "cta": "Crear un regalo"
       },
@@ -2133,12 +2241,16 @@
       "choose": "Elige una baraja",
       "count": "Carta {n} de {total}",
       "next": "Siguiente carta",
-      "done": "Se acabó la baraja. Habláis un montón.",
+      "done": "Se acabó la ronda. Habláis un montón.",
       "doneEyebrow": "Fin",
       "again": "Barajar y otra vez",
       "how": "Quien tenga el móvil la lee en voz alta y luego respondéis.",
       "title": "Cartas de preguntas",
-      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded."
+      "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded.",
+      "seoTitle": "Preguntas para tu pareja: juego de cartas gratis",
+      "seoDescription": "Preguntas para hacerle a tu pareja, en un juego de cartas: ligeras para el sofá, más profundas para luego y una baraja para la distancia. Gratis.",
+      "listTitle": "{count} preguntas para hacerle a tu pareja",
+      "listIntro": "Las tres barajas gratis: ligeras para el sofá, más cercanas para luego y una para cuando estáis lejos. Pasaos el móvil, leed una en voz alta y responded."
     },
     "lobby": {
       "one": {
@@ -2211,7 +2323,11 @@
         "ok": "Queda mucho por aprender. Bien.",
         "sub": "Puntúan los aciertos sobre la otra persona, no las respuestas propias. Quien tenga más puntos escucha mejor. O miente.",
         "again": "Jugar otra vez"
-      }
+      },
+      "seoTitle": "¿Cuánto me conoces? Test para parejas gratis",
+      "seoDescription": "Un test de ¿cuánto me conoces? para parejas: respondes sobre ti, adivinas lo suyo y puntúan los aciertos. En uno o dos móviles. Gratis, sin app.",
+      "listTitle": "{count} preguntas de ¿cuánto me conoces?",
+      "listIntro": "Las preguntas del juego gratis, cada una con cuatro respuestas. Responde sobre ti y luego adivina qué dijo la otra persona."
     },
     "rather": {
       "title": "¿Qué prefieres?",
@@ -2238,7 +2354,11 @@
         "again": "Jugar otra vez",
         "date": "Planear una cita"
       },
-      "or": "o"
+      "or": "o",
+      "seoTitle": "Preguntas de ¿qué prefieres? para parejas, online",
+      "seoDescription": "Preguntas de ¿qué prefieres? para parejas, de tiernas a dramáticas. Elegís en secreto en uno o dos móviles y veis si coincidís. Gratis, sin app.",
+      "listTitle": "{count} preguntas de ¿qué prefieres? para parejas",
+      "listIntro": "Todas las preguntas de la baraja gratis, desde las fáciles para el sofá hasta las que empiezan una discusión digna de captura. Jugadlas arriba en uno o dos móviles, o leedlas en voz alta en una cita."
     },
     "roulette": {
       "title": "La ruleta de los platos",
@@ -2253,7 +2373,9 @@
         "eyebrow": "La ruleta ha hablado",
         "title": "Decidido. Sin apelaciones.",
         "again": "Girar un poco más"
-      }
+      },
+      "seoTitle": "Ruleta de tareas para parejas: ¿quién friega?",
+      "seoDescription": "Una ruleta con vuestros nombres: cada giro decide una tarea y lo que diga la ruleta va a misa. Una ruleta de tareas para parejas, gratis y sin app."
     },
     "dare": {
       "title": "Verdad o reto, versión suave",
@@ -2264,7 +2386,7 @@
       "dare": "Reto",
       "for": "Para {name}",
       "done": "Hecho. Turno de {name}",
-      "soft": "Doce de cada, en un orden nuevo cada vez.",
+      "soft": "Doce de cada, nuevas de toda la baraja cada vez.",
       "softPack": "{name}: {n} de cada, en un orden nuevo cada vez.",
       "left": "Quedan {n}",
       "finish": "Por hoy ya está",
@@ -2273,7 +2395,13 @@
         "title": "Balance de la noche: {truths, plural, one {# verdad} other {# verdades}} y {dares, plural, one {# reto} other {# retos}}.",
         "sub": "Lo que se dice en esta mesa se queda en esta mesa.",
         "again": "Barajar y jugar otra vez"
-      }
+      },
+      "seoTitle": "Verdad o reto para parejas: juego online gratis",
+      "seoDescription": "Verdad o reto para parejas, versión suave: verdades tiernas y retos tontos, nada de lo que arrepentirse por la mañana. Un móvil, por turnos. Gratis.",
+      "listTitle": "{count} preguntas de verdad o reto para parejas",
+      "listIntro": "Todas las verdades y todos los retos del juego gratis. Sobre todo piropos y bailar mal.",
+      "listTruths": "Verdades",
+      "listDares": "Retos"
     },
     "play": {
       "one": "1 móvil",
@@ -2314,7 +2442,9 @@
         "kiss": "un beso",
         "butterfly": "una mariposa",
         "cake": "una tarta"
-      }
+      },
+      "seoTitle": "Memory con vuestras fotos, un juego para dos",
+      "seoDescription": "El juego de parejas para dos, con nuestras pegatinas o con vuestras fotos. Da la vuelta a dos cartas; si son pareja, son tuyas y repites. Gratis."
     },
     "draw": {
       "title": "Dibuja y adivina",
@@ -2360,7 +2490,9 @@
         "sub": "Habéis acertado {n} de {total} en equipo. Las falladas son las que seguiréis recordando.",
         "again": "Jugar otra vez"
       },
-      "imHere": "Soy {name}, vamos"
+      "imHere": "Soy {name}, vamos",
+      "seoTitle": "Juego de dibujar para parejas, en dos móviles",
+      "seoDescription": "Dibuja y adivina: una persona dibuja con el dedo y la otra adivina, en directo en dos móviles aunque haya un océano de por medio. Gratis."
     },
     "end": {
       "label": "¿Y ahora qué?",
@@ -2673,24 +2805,111 @@
   },
   "lifecycle": {
     "remind": {
-      "title": "Recuérdamelo el año que viene",
-      "blurb": "Te escribiremos nueve días antes, para que tengas tiempo de hacerle algo a {name}.",
+      "title": "¿Te avisamos antes de la próxima fecha?",
+      "blurb": "Un correo nueve días antes de cada fecha que añadas; para la de cada mes, una pregunta el día antes. Nada más.",
       "save": "Recuérdamelo",
       "saving": "Guardando…",
-      "saved": "Guardado. Te escribiremos nueve días antes del {date}.",
       "failed": "No se ha guardado. Prueba otra vez en un momento.",
       "tooMany": "Ya tienes {max} recordatorios. Quita alguno en la página de tu cuenta para añadir este.",
-      "edit": "Cambiar los datos",
+      "edit": "Cambiar",
+      "done": "Listo",
       "name": "Para quién",
       "occasion": "Ocasión",
       "date": "Fecha",
       "manage": "Todos tus recordatorios",
+      "nextYear": "el año que viene",
+      "add": "Añadir",
+      "cancel": "Cancelar",
+      "addLabel": "Recuérdamelo: {what}",
+      "added": "Añadido",
+      "saveDay": "Guardar",
+      "pickDay": "Elige la fecha",
+      "rows": {
+        "birthday": "El cumpleaños de {name}",
+        "birthdayNoName": "Su cumpleaños",
+        "anniversary": "Vuestro aniversario",
+        "other": "Un día para {name}",
+        "otherNoName": "Otra fecha",
+        "monthly": "Y cada mes",
+        "someone": "Otra persona",
+        "someoneMore": "Alguien más"
+      },
+      "monthlySub": "Te preguntamos el día antes. A {name} no le enviamos nada.",
+      "monthlySaved": "El día {day} de cada mes, con una pregunta el día antes",
+      "since": "Juntos desde",
+      "year": "Año",
+      "monthlyNote": "El día antes de cada uno te preguntamos si sigue en pie, y solo te lo recordamos si dices que sí. A {name} nunca le enviamos nada.",
+      "sinceFuture": "Ese día aún no ha llegado.",
+      "monthlySave": "Recuérdamelo cada mes",
+      "someoneSub": "Tu madre, un amigo…",
+      "someonePlaceholder": "Mamá",
+      "othersLabel": "Añadidos",
       "occasions": {
         "birthday": "Cumpleaños",
         "anniversary": "Aniversario",
         "valentines": "San Valentín",
         "other": "Otra fecha"
       }
+    },
+    "monthly": {
+      "yesTitle": "Confirma tu sí",
+      "yesBody": "Mañana por la mañana te escribimos con una idea pequeña para {name}.",
+      "yesTodayTitle": "¿Quieres la idea ya?",
+      "yesTodayBody": "Di que sí y te enseñamos aquí mismo una idea pequeña para {name}.",
+      "yesConfirm": "Confirmar",
+      "yesTodayConfirm": "Enséñame la idea",
+      "yesDoneTitle": "Hecho.",
+      "yesDoneBody": "Mañana por la mañana te escribimos con una idea pequeña para {name}.",
+      "todayTitle": "Una idea pequeña.",
+      "todayBody": "{template}: unos minutos para hacerlo, y que {name} lo abra ese día.",
+      "todayCta": "Hacer {template}",
+      "passedTitle": "Ese día ya pasó.",
+      "passedBody": "No hace falta hacer nada. Te preguntaremos antes del próximo.",
+      "stoppedTitle": "Estos correos están desactivados.",
+      "stoppedBody": "Desactivaste los correos de cada mes, así que este enlace ya no hace nada. Puedes volver a activarlos al hacer un regalo.",
+      "staleTitle": "Era una pregunta anterior.",
+      "staleBody": "No hace falta hacer nada: te preguntaremos antes del próximo.",
+      "stopTitle": "¿Dejar de recibir los correos de cada mes?",
+      "stopBody": "No más preguntas ni recordatorios de cada mes sobre {name}. Tus recordatorios anuales siguen igual.",
+      "stopConfirm": "Sí, dejar de recibirlos",
+      "stopDoneTitle": "Hecho.",
+      "stopDoneBody": "No volverás a recibirlos. Si algún día los quieres, puedes activarlos al hacer un regalo.",
+      "manage": "Ver tus recordatorios"
+    },
+    "keep": {
+      "confirmTitle": "¿Te enviamos el enlace del regalo?",
+      "confirmBody": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras.",
+      "confirmBodyDays": "Te lo enviamos ahora a esta dirección, para que puedas abrir el regalo cuando quieras, y te avisamos nueve días antes de {days}.",
+      "confirmButton": "Sí, envíame el enlace",
+      "doneTitle": "Ya va de camino.",
+      "doneBody": "El enlace del regalo llegará a tu correo en un momento. También puedes abrirlo desde aquí.",
+      "doneDays": "El enlace del regalo llegará a tu correo en un momento, y te avisaremos nueve días antes de {days}. También puedes abrirlo desde aquí.",
+      "open": "Abrir el regalo",
+      "goneTitle": "Este enlace ha caducado.",
+      "goneBody": "No se ha guardado nada y no te llegará nada más. Para guardar el regalo, vuelve a abrirlo y toca «Guardar este regalo».",
+      "stopTitle": "¿Darte de baja?",
+      "stopBody": "Olvidaremos esta dirección para este regalo: ni recordatorios ni nada más sobre él.",
+      "stopConfirm": "Darme de baja",
+      "stopDoneTitle": "Te has dado de baja.",
+      "stopDoneBody": "No te llegará nada más sobre este regalo. Su enlace lo sigue abriendo, allá donde lo guardaras.",
+      "neverTitle": "¿No escribir nunca más a esta dirección?",
+      "neverBody": "Nadie podrá volver a pedirnos que le escribamos sobre un regalo, y tampoco le llegarán ofertas nuestras.",
+      "neverConfirm": "No escribirme nunca más",
+      "neverDoneTitle": "Hecho.",
+      "neverDoneBody": "Esta dirección no volverá a recibir correos sobre regalos guardados, aunque alguien la vuelva a escribir.",
+      "reminderOffTitle": "¿Quitar este recordatorio?",
+      "reminderOffBody": "No volveremos a escribirte antes de {day}. Las demás fechas que pediste se quedan.",
+      "reminderOffConfirm": "Quitarlo",
+      "reminderOffDoneTitle": "Quitado.",
+      "reminderOffDoneBody": "No más correos antes de {day}.",
+      "reminderOffGoneBody": "Ese recordatorio ya estaba quitado."
+    },
+    "reactionPrivate": {
+      "title": "¿Mantener esta reacción en privado?",
+      "body": "No se mostrará en la web de Ethos, ni siquiera sin nombres. Sigue siendo tuya, en tu panel.",
+      "confirm": "Mantenerla privada",
+      "doneTitle": "Es privada.",
+      "doneBody": "Esta reacción no se mostrará en la web de Ethos. Sigue en tu panel, como estaba."
     },
     "trip": {
       "title": "Reserva el viaje",
@@ -2702,10 +2921,13 @@
     },
     "page": {
       "title": "Recordatorios",
-      "subtitle": "Cumpleaños, aniversarios y otros días de los que te avisaremos por correo, nueve días antes. Una vez al año cada uno, nada más.",
+      "subtitle": "Las fechas que nos has pedido recordar: te escribimos nueve días antes, una vez al año. Y el día antes de vuestro mesiversario, si lo has pedido.",
       "empty": "Aún no tienes recordatorios. Cuando publiques un regalo, puedes pedirnos que te lo recordemos el año que viene.",
       "remove": "Quitar",
-      "removeLabel": "Quitar el recordatorio de {name}",
+      "removeLabel": "Quitar el recordatorio: {what}",
+      "monthly": "Cada mes, el día {day}, con una pregunta el día antes",
+      "monthlyRemove": "Quitar",
+      "monthlyRemoveLabel": "Quitar los recordatorios de cada mes sobre {name}",
       "failed": "No se ha podido quitar. Prueba otra vez en un momento.",
       "back": "Cuenta",
       "makeGift": "Hacer un regalo"
@@ -2981,5 +3203,34 @@
       "signIn": "Inicia sesión primero y luego escribe la contraseña.",
       "generic": "No ha funcionado. Inténtalo de nuevo en un momento."
     }
+  },
+  "madeWith": {
+    "metaTitle": "Hazle uno tú también",
+    "metaDescription": "Alguien te ha hecho un regalo de Ethos. Hazle uno de vuelta: dos plantillas son gratis, y todas las demás se prueban gratis.",
+    "eyebrow": "Hecho con Ethos",
+    "title": "Alguien te ha hecho uno de estos.",
+    "subtitle": "Hazle uno tú también: empezar es gratis.",
+    "yours": "El que te llegó",
+    "free": {
+      "eyebrow": "Gratis",
+      "title": "Gratis para hacer y enviar",
+      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan la pequeña marca «Hecho con Ethos», como el que te llegó."
+    },
+    "premium": {
+      "eyebrow": "Premium",
+      "title": "Pruébalas gratis, paga una vez al enviar",
+      "blurb": "Haz el regalo entero primero, gratis. Si lo envías, pagas una vez y va sin la marca."
+    }
+  },
+  "recipients": {
+    "eyebrow": "Ideas de regalo",
+    "breadcrumb": "Regalos digitales",
+    "free": "Gratis",
+    "make": "Hacer este regalo",
+    "guideTitle": "Cómo acertar",
+    "faqTitle": "Preguntas frecuentes",
+    "more": "Ideas de regalo para otra persona",
+    "occasions": "Por ocasión",
+    "footerTitle": "Ideas de regalo"
   }
 }

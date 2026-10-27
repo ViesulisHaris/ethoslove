@@ -129,6 +129,7 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
             router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
           }}
           replyMode
+          keepHref={`/g/${shortId}/keep`}
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}
