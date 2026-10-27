@@ -30,6 +30,7 @@ import {
   type UpgradeQuote,
 } from "@/components/pricing/offers";
 import { cn } from "@/lib/utils";
+import { EtsyClaim, useEtsyMode } from "./etsy-claim";
 
 // Apple Pay / Google Pay in one tap: in the browser only, and its code loads with the pay sheet.
 const OneTapPay = dynamic(() => import("./one-tap-pay").then((m) => m.OneTapPay), { ssr: false });
@@ -121,8 +122,11 @@ export function Paywall({
   // Inside the iPhone app nothing is sold here: no prices, plans, bump or checkout. Apple's own
   // sheet shows the options and their App Store prices (guideline 3.1.1).
   const inApp = useInApp();
+  // Bought on Etsy (the order's PDF links here with ?etsy=1): the order number instead of prices.
+  const [etsy, setEtsy] = useEtsyMode();
   if (inApp && onAppUnlock && !guest)
     return <AppUnlock manifest={manifest} locale={locale} features={features} freeReply={freeReply} ownedElsewhere={ownedElsewhere} blocked={blocked} onUnlock={onAppUnlock} />;
+  if (etsy && !freeReply) return <EtsyClaim slug={slug} locale={locale} guest={guest} returnTo={returnTo} blocked={blocked} onLeave={() => setEtsy(false)} />;
 
   const pay = async () => {
     if (going.current) return;

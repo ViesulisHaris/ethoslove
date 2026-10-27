@@ -750,6 +750,16 @@
     "step3Paid": "Pay {price} once, no subscription, and send the link. It opens on their phone, nothing to download.",
     "step3Free": "Send the link for free. It opens on their phone, nothing to download."
   },
+  "etsyLanding": {
+    "metaTitle": "Your Etsy order: make your {template}",
+    "title": "Thanks for your Etsy order",
+    "lead": "Here's how to make your {template}.",
+    "step1": "Tap the button and fill it in: names, photos, your words. It works on your phone and takes a few minutes.",
+    "step2": "Press Send when it looks right.",
+    "step3": "Type your Etsy order number. We check it with Etsy, and your gift's link is ready to share.",
+    "cta": "Make my {template}",
+    "help": "Stuck? Message us on Etsy and we'll sort it out."
+  },
   "templates": {
     "title": "Templates",
     "subtitle": "Every one has a full live demo. Try it before you buy it.",
@@ -1185,6 +1195,29 @@
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
       "guarantee": "If it doesn't open on their phone, you get your money back."
+    },
+    "etsy": {
+      "title": "Bought on Etsy",
+      "intro": "Type your Etsy order number to send your {template}. We check it with Etsy; there's nothing more to pay.",
+      "order": "Etsy order number",
+      "orderHint": "It's in your Etsy receipt email, and on Etsy under You → Purchases.",
+      "email": "Your email",
+      "emailHint": "Your Ethos account and your gift's link go here.",
+      "submit": "Send my gift",
+      "checking": "Checking with Etsy…",
+      "notEtsy": "Not from Etsy? See the prices",
+      "errors": {
+        "invalid_input": "That doesn't look like an Etsy order number. It's the long number on your Etsy receipt.",
+        "email_required": "Add your email, so your gift has an account to live in.",
+        "order_not_found": "We can't find that order in our Etsy shop. Check the number on your Etsy receipt.",
+        "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
+        "refunded": "This order was cancelled or refunded on Etsy, so it can't send a gift.",
+        "other_template": "This order is for {templates}. Open that one to send it.",
+        "order_used": "This order has already sent a gift. If that wasn't you, message us on Etsy.",
+        "rate_limited": "Too many tries. Wait a little while and try again.",
+        "etsy_unavailable": "We can't reach Etsy right now. Try again in a minute.",
+        "failed": "Something went wrong on our side. Try again, or message us on Etsy."
+      }
     },
     "plans": {
       "upgradeNote": "Instead of {full}: what you've already paid counts towards it."

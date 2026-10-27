@@ -750,6 +750,16 @@
     "step3Paid": "Paga {price} una sola vez, sin suscripción, y envía el enlace. Se abre en su móvil, sin descargar nada.",
     "step3Free": "Envía el enlace gratis. Se abre en su móvil, sin descargar nada."
   },
+  "etsyLanding": {
+    "metaTitle": "Tu pedido de Etsy: crea tu {template}",
+    "title": "Gracias por tu pedido en Etsy",
+    "lead": "Así se crea tu {template}.",
+    "step1": "Toca el botón y rellénalo: nombres, fotos, tus palabras. Funciona en el móvil y lleva unos minutos.",
+    "step2": "Pulsa Enviar cuando esté como quieres.",
+    "step3": "Escribe tu número de pedido de Etsy. Lo comprobamos con Etsy y el enlace de tu regalo queda listo para compartir.",
+    "cta": "Crear mi {template}",
+    "help": "¿Algún problema? Escríbenos en Etsy y lo arreglamos."
+  },
   "templates": {
     "title": "Plantillas",
     "subtitle": "Todas tienen una demo completa en vivo. Pruébala antes de comprar.",
@@ -1185,6 +1195,29 @@
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
       "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
+    },
+    "etsy": {
+      "title": "Comprado en Etsy",
+      "intro": "Escribe tu número de pedido de Etsy para enviar tu {template}. Lo comprobamos con Etsy; no hay nada más que pagar.",
+      "order": "Número de pedido de Etsy",
+      "orderHint": "Está en el email del recibo de Etsy, y en Etsy en Tú → Compras.",
+      "email": "Tu email",
+      "emailHint": "Aquí van tu cuenta de Ethos y el enlace de tu regalo.",
+      "submit": "Enviar mi regalo",
+      "checking": "Comprobando con Etsy…",
+      "notEtsy": "¿No vienes de Etsy? Ver los precios",
+      "errors": {
+        "invalid_input": "Eso no parece un número de pedido de Etsy. Es el número largo de tu recibo de Etsy.",
+        "email_required": "Añade tu email, para que tu regalo tenga una cuenta donde vivir.",
+        "order_not_found": "No encontramos ese pedido en nuestra tienda de Etsy. Revisa el número en tu recibo de Etsy.",
+        "not_paid": "Etsy aún no ha confirmado este pago. Vuelve a intentarlo en unos minutos.",
+        "refunded": "Este pedido se canceló o se reembolsó en Etsy, así que no puede enviar un regalo.",
+        "other_template": "Este pedido es para {templates}. Abre esa plantilla para enviarlo.",
+        "order_used": "Este pedido ya envió un regalo. Si no fuiste tú, escríbenos en Etsy.",
+        "rate_limited": "Demasiados intentos. Espera un poco y vuelve a intentarlo.",
+        "etsy_unavailable": "Ahora mismo no podemos conectar con Etsy. Vuelve a intentarlo en un minuto.",
+        "failed": "Algo falló por nuestra parte. Vuelve a intentarlo o escríbenos en Etsy."
+      }
     },
     "plans": {
       "upgradeNote": "En lugar de {full}: lo que ya has pagado se resta."

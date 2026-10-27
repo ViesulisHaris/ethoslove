@@ -487,8 +487,11 @@ async function claimGuest(admin: Admin, session: Stripe.Checkout.Session, sold: 
   return { userId, email, locale: asLocale(profile?.locale, sold.locale), claimed, guest: true, createdUser: created, amount, currency };
 }
 
-/** An account made by guest checkout records the session that made it (see accountCreatedByCheckout). */
-async function findOrCreateUser(
+/**
+ * An account made by guest checkout records the session that made it (see accountCreatedByCheckout).
+ * An Etsy order claimed without an account passes "etsy:<item>" instead (app/api/etsy/claim).
+ */
+export async function findOrCreateUser(
   admin: Admin,
   email: string,
   locale: "en" | "es",

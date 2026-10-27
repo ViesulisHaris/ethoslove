@@ -9,7 +9,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 
 export type GiftStatus = "draft" | "scheduled" | "live" | "archived";
 export type PurchaseStatus = "pending" | "paid" | "refunded";
-export type PurchaseStore = "stripe" | "app_store";
+export type PurchaseStore = "stripe" | "app_store" | "etsy";
 export type StoreEnvironment = "production" | "sandbox";
 export type AssetType = "photo" | "audio" | "video";
 export type ReminderOccasion = "birthday" | "anniversary" | "valentines" | "other";
@@ -250,7 +250,7 @@ export interface Database {
           /** The withdrawal sentence the buyer ticked at checkout, and when (0012). Null without the tickbox. */
           terms_consent: string | null;
           terms_consent_at: string | null;
-          /** Where it was bought (0013): null (Stripe, before 0013), 'stripe' or 'app_store'. */
+          /** Where it was bought (0013, 0018): null (Stripe, before 0013), 'stripe', 'app_store' or 'etsy'. */
           store: PurchaseStore | null;
           /** The App Store's product and transaction ids and environment (0013); null for Stripe. */
           store_product_id: string | null;
@@ -651,6 +651,13 @@ export interface Database {
         Row: { original_gift_id: string; reply_gift_id: string | null; created_at: string };
         Insert: { original_gift_id: string; reply_gift_id: string; created_at?: string };
         Update: never;
+        Relationships: [];
+      };
+      /** The shop's Etsy sign-in (0018): one row, renewed as it expires (lib/etsy/api.ts). Service role only. */
+      etsy_connection: {
+        Row: { id: number; shop_id: number; access_token: string; refresh_token: string; expires_at: string; updated_at: string };
+        Insert: { id?: number; shop_id: number; access_token: string; refresh_token: string; expires_at: string; updated_at?: string };
+        Update: { shop_id?: number; access_token?: string; refresh_token?: string; expires_at?: string; updated_at?: string };
         Relationships: [];
       };
       /** A gift card's name and note between checkout and fulfilment, never sent to Stripe (0012). Service role only. */

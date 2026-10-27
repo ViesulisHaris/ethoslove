@@ -24,6 +24,7 @@ const UNIQUE: Record<string, string[][]> = {
   gift_card_details: [["purchase_id"]],
   gift_keeps: [["id"], ["gift_id", "email_sha256"]],
   keep_reminders: [["id"], ["keep_id", "occasion", "month", "day"]],
+  etsy_connection: [["id"]],
 };
 
 const DEFAULTS: Record<string, Row> = {
