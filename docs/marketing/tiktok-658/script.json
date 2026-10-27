@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:05 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u havent seen me in 2 weeks"
+        },
+        {
+          "from": "them",
+          "text": "im busy with school"
+        },
+        {
+          "from": "me",
+          "text": "u went to 3 parties"
+        },
+        {
+          "from": "them",
+          "text": "networking"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "NETWORKING??"
+        },
+        {
+          "from": "them",
+          "text": "i made u this instead"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "can i come to the next one"
+        },
+        {
+          "from": "them",
+          "text": "its not that kind of party"
+        }
+      ]
+    }
+  ]
+}

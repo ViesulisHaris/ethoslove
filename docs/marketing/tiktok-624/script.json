@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:49 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i need to be honest"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "i cant stop thinking about someone"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who"
+        },
+        {
+          "from": "me",
+          "text": "leo who",
+          "status": "Read 10:50 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "you"
+        },
+        {
+          "from": "them",
+          "text": "3 years and its still you"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

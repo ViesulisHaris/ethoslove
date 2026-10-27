@@ -1,0 +1,79 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:41 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "do u know what today is"
+        },
+        {
+          "from": "me",
+          "text": "tuesday?"
+        },
+        {
+          "from": "them",
+          "text": "its my birthday maya"
+        },
+        {
+          "from": "me",
+          "text": "WAIT"
+        },
+        {
+          "from": "me",
+          "text": "leo im so sorry"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its ok"
+        },
+        {
+          "from": "them",
+          "text": "i made u something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why are u giving ME something on UR birthday"
+        },
+        {
+          "from": "them",
+          "text": "u looked stressed this week"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im coming over with a cake"
+        },
+        {
+          "from": "them",
+          "text": "maya its 11:58"
+        }
+      ]
+    }
+  ]
+}

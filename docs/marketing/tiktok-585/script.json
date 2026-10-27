@@ -1,0 +1,69 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 14 months my love"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "14 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|7:41 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how have u never missed one"
+        },
+        {
+          "from": "me",
+          "text": "not one month"
+        },
+        {
+          "from": "them",
+          "text": "i set a reminder the day u said yes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "it goes off every month and i smile like an idiot"
+        },
+        {
+          "from": "me",
+          "text": "im keeping u forever",
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "whats the reminder called"
+        },
+        {
+          "from": "them",
+          "text": "dont lose her"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:36 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you were typing for 10 minutes"
+        },
+        {
+          "from": "me",
+          "text": "and then sent ok",
+          "status": "Read 11:37 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i deleted it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "made this instead"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already sent your ok to my sister"
+        },
+        {
+          "from": "me",
+          "text": "she's driving over"
+        },
+        {
+          "from": "them",
+          "text": "maya tell her to turn around"
+        }
+      ]
+    }
+  ]
+}

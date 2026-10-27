@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:34 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my phone just showed me us at the lake"
+        },
+        {
+          "from": "them",
+          "text": "mine too"
+        },
+        {
+          "from": "me",
+          "text": "i thought you deleted them",
+          "status": "Read 11:36 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i thought you did"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya ♡",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "open this before you do"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm not deleting them"
+        }
+      ]
+    }
+  ]
+}

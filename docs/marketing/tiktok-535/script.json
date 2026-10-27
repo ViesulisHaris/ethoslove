@@ -1,0 +1,66 @@
+{
+  "demo": {
+    "template": "coquette?look=bow",
+    "steps": [
+      "swap \"Elena\" \"Maya\"",
+      "swap \"Sam\" \"Leo\"",
+      "wait 2600",
+      "shot gift-1.png",
+      "tap \"untie the bow\"",
+      "wait 3600",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:31 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "did you get it"
+        },
+        {
+          "from": "me",
+          "text": "get what"
+        },
+        {
+          "from": "them",
+          "text": "my reaction at the end"
+        },
+        {
+          "from": "them",
+          "text": "the voice note"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "was it too much"
+        },
+        {
+          "from": "them",
+          "text": "you can delete it"
+        },
+        {
+          "from": "me",
+          "text": "i've played it 11 times",
+          "status": "Read 10:34 PM"
+        }
+      ]
+    }
+  ],
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false
+}

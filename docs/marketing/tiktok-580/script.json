@@ -1,0 +1,68 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "worst day of my life"
+        },
+        {
+          "from": "them",
+          "text": "what happened"
+        },
+        {
+          "from": "me",
+          "text": "everything"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "come over"
+        },
+        {
+          "from": "me",
+          "text": "cant move"
+        },
+        {
+          "from": "them",
+          "text": "ok then open this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for the worst day 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|6:40 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok its not the worst day anymore"
+        },
+        {
+          "from": "them",
+          "text": "good"
+        },
+        {
+          "from": "them",
+          "text": "now come over",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:40 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you alone"
+        },
+        {
+          "from": "me",
+          "text": "no my mom's here why"
+        },
+        {
+          "from": "them",
+          "text": "ok wait till she leaves"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "too late"
+        },
+        {
+          "from": "me",
+          "text": "she saw it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "she's crying"
+        },
+        {
+          "from": "me",
+          "text": "she wants your number"
+        },
+        {
+          "from": "them",
+          "text": "maya is that good or bad"
+        }
+      ]
+    }
+  ]
+}

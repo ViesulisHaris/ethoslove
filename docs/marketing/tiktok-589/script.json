@@ -1,0 +1,59 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|1:37 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i cant sleep"
+        },
+        {
+          "from": "me",
+          "text": "its too quiet without ur snoring"
+        },
+        {
+          "from": "them",
+          "text": "thats the nicest thing anyone has ever said about my snoring"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok hold on"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when im not there 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im crying"
+        },
+        {
+          "from": "me",
+          "text": "come back tomorrow"
+        },
+        {
+          "from": "them",
+          "text": "ill snore extra loud",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

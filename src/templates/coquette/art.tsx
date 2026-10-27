@@ -71,23 +71,27 @@ function Knot({ id, satin }: { id: string; satin: Satin }) {
 }
 
 /**
- * A satin bow in four pieces that come apart when it is untied: the loops fold into the knot,
- * the tails slip down, the knot lets go.
+ * A satin bow in four pieces that come apart when it is untied: the knot gives with a little pop,
+ * the loops spring out to the sides and fall away turning, and the tails slide down after them.
+ * Still, or with reduced motion, it only fades.
  */
 export function SatinBow({ id, satin, untied, reduce, className }: { id: string; satin: Satin; untied: boolean; reduce: boolean; className?: string }) {
-  const ease = { duration: reduce ? 0.15 : 0.7, ease: [0.5, 0, 0.2, 1] as const };
+  const quick = { duration: 0.15 };
+  // Out to the side first, then gravity: the keyframes ease out, then fall.
+  const fall = { duration: 0.95, times: [0, 0.28, 1], ease: [[0.2, 0.8, 0.3, 1], [0.6, 0, 0.9, 0.5]] as [number, number, number, number][] };
+  const loop = (side: 1 | -1) => (untied ? (reduce ? { opacity: 0 } : { x: ["0%", `${side * 20}%`, `${side * 34}%`], y: ["0%", "-9%", "78%"], rotate: [0, side * 26, side * 100], opacity: [1, 1, 0] }) : { x: "0%", y: "0%", rotate: 0, opacity: 1 });
   return (
     <div className={className} style={{ aspectRatio: "200 / 170", filter: "drop-shadow(0 calc(1.4*var(--p)) calc(2*var(--p)) rgba(80,20,45,.32))" }}>
-      <motion.div className="absolute inset-0" animate={untied ? { y: "46%", opacity: 0, scaleY: 1.3 } : { y: 0, opacity: 1, scaleY: 1 }} transition={{ ...ease, delay: untied && !reduce ? 0.12 : 0 }}>
+      <motion.div className="absolute inset-0" animate={untied ? (reduce ? { opacity: 0 } : { y: ["0%", "-3%", "115%"], rotate: [0, -4, 9], opacity: [1, 1, 0] }) : { y: "0%", rotate: 0, opacity: 1 }} transition={untied && !reduce ? { ...fall, delay: 0.08 } : quick}>
         <Tails id={`${id}-t`} satin={satin} />
       </motion.div>
-      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={untied ? { rotate: -48, scale: 0.12, opacity: 0 } : { rotate: 0, scale: 1, opacity: 1 }} transition={ease}>
+      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={loop(-1)} transition={untied && !reduce ? fall : quick}>
         <Loop id={`${id}-l`} satin={satin} flip={false} />
       </motion.div>
-      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={untied ? { rotate: 48, scale: 0.12, opacity: 0 } : { rotate: 0, scale: 1, opacity: 1 }} transition={ease}>
+      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={loop(1)} transition={untied && !reduce ? { ...fall, delay: 0.04 } : quick}>
         <Loop id={`${id}-r`} satin={satin} flip />
       </motion.div>
-      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={untied ? { scale: 0, opacity: 0 } : { scale: 1, opacity: 1 }} transition={{ ...ease, delay: untied && !reduce ? 0.2 : 0 }}>
+      <motion.div className="absolute inset-0" style={{ transformOrigin: KNOT_ORIGIN }} animate={untied ? (reduce ? { opacity: 0 } : { scale: [1, 1.25, 0], opacity: [1, 1, 0] }) : { scale: 1, opacity: 1 }} transition={untied && !reduce ? { duration: 0.45, times: [0, 0.3, 1] } : quick}>
         <Knot id={`${id}-k`} satin={satin} />
       </motion.div>
     </div>

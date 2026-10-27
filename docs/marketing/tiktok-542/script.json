@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|1:07 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you finished our show"
+        },
+        {
+          "from": "them",
+          "text": "you can see that?"
+        },
+        {
+          "from": "me",
+          "text": "it's my netflix",
+          "status": "Read 1:09 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i waited 6 months"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "noir"
+          }
+        },
+        {
+          "from": "them",
+          "text": "made this while i waited"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "rewatch it with me"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|1:07 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who is “gym bro”"
+        },
+        {
+          "from": "them",
+          "text": "my gym bro??"
+        },
+        {
+          "from": "me",
+          "text": "then why does gym bro have my best friends number",
+          "status": "Read 1:08 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "its not what u think"
+        },
+        {
+          "from": "them",
+          "text": "i was gonna give u this friday"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "keep it"
+        },
+        {
+          "from": "me",
+          "text": "she told me everything"
+        },
+        {
+          "from": "them",
+          "text": "everything??"
+        },
+        {
+          "from": "me",
+          "text": "she said ur a bad kisser"
+        }
+      ]
+    }
+  ]
+}

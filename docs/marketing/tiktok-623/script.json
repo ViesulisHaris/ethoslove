@@ -1,0 +1,47 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy birthday"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "we broke up in march"
+        },
+        {
+          "from": "me",
+          "text": "why are you still the first one",
+          "status": "Read 12:02 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "i set a reminder when we were together"
+        },
+        {
+          "from": "them",
+          "text": "never turned it off"
+        }
+      ]
+    }
+  ]
+}

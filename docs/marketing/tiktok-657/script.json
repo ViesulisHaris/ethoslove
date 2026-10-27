@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:36 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "does ur mom know about me"
+        },
+        {
+          "from": "them",
+          "text": "not yet"
+        },
+        {
+          "from": "me",
+          "text": "its been a year"
+        },
+        {
+          "from": "them",
+          "text": "shes not ready"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "not READY??"
+        },
+        {
+          "from": "them",
+          "text": "im working on it"
+        },
+        {
+          "from": "them",
+          "text": "i made u this tho"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "she follows me on instagram"
+        },
+        {
+          "from": "them",
+          "text": "she thinks ur my friend"
+        }
+      ]
+    }
+  ]
+}

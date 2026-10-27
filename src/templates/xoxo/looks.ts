@@ -264,6 +264,25 @@ export function kissAt(n: number, x: number, y: number, seed: number): Kiss {
 /** A new kiss joins the page; past the limit the oldest one goes. */
 export const addKiss = (kisses: Kiss[], kiss: Kiss): Kiss[] => [...kisses, kiss].slice(-MAX_KISSES);
 
+/** One of the prints that fly off the seal as it breaks: its direction in degrees, how far it goes and how big it is, in `--p`. */
+export type BurstKiss = { scrap: ScrapId; angle: number; distance: number; rotate: number; w: number; delay: number };
+
+/**
+ * The ring of kisses the seal breaks into when the envelope is opened: spaced round the circle so
+ * none of them overlap, each nudged off its slot, seeded so a replay throws the same ones.
+ */
+export function burstKisses(seed: number, count = 8): BurstKiss[] {
+  const random = mulberry32(seed + 104729);
+  return Array.from({ length: count }, (_, i) => ({
+    scrap: KISSES[Math.floor(random() * KISSES.length)],
+    angle: Math.round((i / count) * 360 + (random() - 0.5) * 24),
+    distance: 38 + Math.round(random() * 14),
+    rotate: Math.round((random() - 0.5) * 80),
+    w: 10 + Math.round(random() * 5),
+    delay: Math.round(random() * 9) / 100,
+  }));
+}
+
 /** The looks in the order the editor offers them, each as its swatch: the page, the paper, the red. */
 export const LOOK_ORDER: LookId[] = ["cream", "blush", "lilac", "blue", "sage", "mocha", "noir", "rose", "gothic", "letters"];
 export const SWATCHES = Object.fromEntries(LOOK_ORDER.map((id) => [id, { page: LOOKS[id].wall, paper: LOOKS[id].paper, accent: LOOKS[id].red }])) as Record<LookId, { page: string; paper: string; accent: string }>;

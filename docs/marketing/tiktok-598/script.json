@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:09 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u awake"
+        },
+        {
+          "from": "me",
+          "text": "yes why"
+        },
+        {
+          "from": "them",
+          "text": "look at the time in 2 mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:11 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "make a wish"
+        },
+        {
+          "from": "me",
+          "text": "done"
+        },
+        {
+          "from": "them",
+          "text": "mine already came true"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok who taught u to talk like this"
+        },
+        {
+          "from": "them",
+          "text": "u did",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:47 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i did something"
+        },
+        {
+          "from": "me",
+          "text": "what did u do"
+        },
+        {
+          "from": "them",
+          "text": "something i cant take back"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "what did u do",
+          "status": "Read 6:48 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "told my grandma ur coming for thanksgiving"
+        },
+        {
+          "from": "them",
+          "text": "she already set ur seat"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

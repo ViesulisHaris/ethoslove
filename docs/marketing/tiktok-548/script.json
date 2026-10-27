@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you took 5 hours to reply"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what",
+          "status": "Read 11:12 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya ♡",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i rated you a 6 in the group chat"
+        },
+        {
+          "from": "them",
+          "text": "maya out of what"
+        }
+      ]
+    }
+  ]
+}

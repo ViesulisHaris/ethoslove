@@ -1,0 +1,54 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:33 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "are u mad at me"
+        },
+        {
+          "from": "them",
+          "text": "yes"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what did i do"
+        },
+        {
+          "from": "them",
+          "text": "u know what u did"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u made me fall in love with u in 2 weeks"
+        },
+        {
+          "from": "them",
+          "text": "who does that"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

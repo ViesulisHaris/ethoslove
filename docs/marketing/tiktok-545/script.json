@@ -1,0 +1,59 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Mar 14|9:02 PM",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for when you miss me",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "noir"
+          }
+        },
+        {
+          "ts": "Today|2:11 AM"
+        },
+        {
+          "from": "me",
+          "text": "how do you delete something from your home screen"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "hold it down till it shakes"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "did it work"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i'm still holding it"
+        }
+      ]
+    }
+  ]
+}

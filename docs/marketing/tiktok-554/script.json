@@ -1,0 +1,71 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:12 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "first day today"
+        },
+        {
+          "from": "me",
+          "text": "i feel sick"
+        },
+        {
+          "from": "them",
+          "text": "you're going to be amazing"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for your lunch break 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "not before lunch"
+        },
+        {
+          "from": "me",
+          "text": "it's 7am leo"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "ts": "Today|12:03 PM"
+        },
+        {
+          "from": "me",
+          "text": "i opened it at 12 exactly"
+        },
+        {
+          "from": "me",
+          "text": "now my whole team is crying"
+        },
+        {
+          "from": "them",
+          "text": "maya it was for you"
+        }
+      ]
+    }
+  ]
+}

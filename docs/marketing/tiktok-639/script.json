@@ -1,0 +1,74 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|4:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my mom wants to know who ate her birthday cake"
+        },
+        {
+          "from": "them",
+          "text": "hi beautiful"
+        },
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "hows ur day going"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "them",
+          "text": "ok dont be mad"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg"
+        },
+        {
+          "from": "me",
+          "text": "this is so cute"
+        },
+        {
+          "from": "me",
+          "text": "did u eat the cake tho"
+        },
+        {
+          "from": "them",
+          "text": "i love u"
+        }
+      ]
+    }
+  ]
+}

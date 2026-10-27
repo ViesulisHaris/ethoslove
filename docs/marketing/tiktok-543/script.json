@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:16 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can i come see the dog"
+        },
+        {
+          "from": "them",
+          "text": "he misses you"
+        },
+        {
+          "from": "me",
+          "text": "just him?",
+          "status": "Read 8:17 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "saturday works"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "from the dog 🐶",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "pressed"
+          }
+        },
+        {
+          "from": "them",
+          "text": "he made you something"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "tell the dog i miss him too"
+        },
+        {
+          "from": "them",
+          "text": "just him?"
+        }
+      ]
+    }
+  ]
+}

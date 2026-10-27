@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "can i get my key back"
+        },
+        {
+          "from": "them",
+          "text": "it's on my keychain"
+        },
+        {
+          "from": "me",
+          "text": "so take it off",
+          "status": "Read 10:53 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i tried"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "rouge"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "you made this??"
+        },
+        {
+          "from": "me",
+          "text": "keep the key"
+        }
+      ]
+    }
+  ]
+}

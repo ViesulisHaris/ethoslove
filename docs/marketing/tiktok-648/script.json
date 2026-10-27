@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:15 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u left me on delivered all weekend"
+        },
+        {
+          "from": "them",
+          "text": "my phone died"
+        },
+        {
+          "from": "me",
+          "text": "for 3 days??"
+        },
+        {
+          "from": "them",
+          "text": "it was a long weekend"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "i made u this to make up for it"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "u posted a story saturday tho"
+        },
+        {
+          "from": "them",
+          "text": "from my laptop"
+        }
+      ]
+    }
+  ]
+}

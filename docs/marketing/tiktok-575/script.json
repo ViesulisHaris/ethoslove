@@ -1,0 +1,65 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|3:01 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u up"
+        },
+        {
+          "from": "them",
+          "text": "am now"
+        },
+        {
+          "from": "me",
+          "text": "cant sleep"
+        },
+        {
+          "from": "me",
+          "text": "my brain wont stop"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|3:04 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for when u cant sleep 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|3:21 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im crying but in a sleepy way"
+        },
+        {
+          "from": "me",
+          "text": "goodnight leo"
+        },
+        {
+          "from": "them",
+          "text": "goodnight maya",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

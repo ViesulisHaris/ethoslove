@@ -1,0 +1,60 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:22 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why is your wifi still named after your ex"
+        },
+        {
+          "from": "them",
+          "text": "i never changed it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "changing it tonight"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already did"
+        },
+        {
+          "from": "me",
+          "text": "it's maya's wifi now"
+        },
+        {
+          "from": "them",
+          "text": "maya what's the password"
+        }
+      ]
+    }
+  ]
+}

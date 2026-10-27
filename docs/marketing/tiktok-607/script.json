@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:44 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u didnt say anything about my nails"
+        },
+        {
+          "from": "them",
+          "text": "were they different"
+        },
+        {
+          "from": "me",
+          "text": "they were PINK"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok i messed up"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im not mad anymore"
+        },
+        {
+          "from": "me",
+          "text": "but i painted ur toenails while u were asleep"
+        },
+        {
+          "from": "me",
+          "text": "theyre pink too"
+        },
+        {
+          "from": "them",
+          "text": "maya i have a game tomorrow"
+        }
+      ]
+    }
+  ]
+}

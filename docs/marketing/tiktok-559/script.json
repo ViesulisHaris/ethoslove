@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you fell asleep on facetime"
+        },
+        {
+          "from": "me",
+          "text": "mid sentence"
+        },
+        {
+          "from": "them",
+          "text": "you were telling the long story"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for the long story 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "made you this to make up for it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i recorded you snoring"
+        },
+        {
+          "from": "me",
+          "text": "it's my ringtone now"
+        },
+        {
+          "from": "them",
+          "text": "maya change it"
+        }
+      ]
+    }
+  ]
+}

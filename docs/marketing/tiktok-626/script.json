@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:14 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "should i tell him i love him or is it too soon"
+        },
+        {
+          "from": "me",
+          "text": "its only been 2 months"
+        },
+        {
+          "from": "me",
+          "text": "WAIT"
+        },
+        {
+          "from": "me",
+          "text": "that was for my best friend",
+          "status": "Read 11:14 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "too late"
+        },
+        {
+          "from": "them",
+          "text": "i saw it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i love u too"
+        },
+        {
+          "from": "them",
+          "text": "i was waiting for u to say it first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

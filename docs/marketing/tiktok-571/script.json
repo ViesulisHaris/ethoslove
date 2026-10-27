@@ -1,0 +1,83 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:47 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u watched my story"
+        },
+        {
+          "from": "me",
+          "text": "6 hours ago"
+        },
+        {
+          "from": "me",
+          "text": "and didnt answer my text"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        },
+        {
+          "from": "me",
+          "text": "doing what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "i already told the girls we're on a break"
+        },
+        {
+          "from": "them",
+          "text": "a what"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "they planned my whole single era"
+        },
+        {
+          "from": "me",
+          "text": "theres a group chat"
+        },
+        {
+          "from": "them",
+          "text": "maya cancel the single era"
+        }
+      ]
+    }
+  ]
+}

@@ -9,7 +9,7 @@ import type { LookSwatch } from "@/templates/_shared/look-swatches";
 import { arrangePhotos, LOOKS as COQUETTE, LOOK_ORDER as COQUETTE_ORDER, stripHeight, SWATCHES as COQUETTE_SWATCHES, TRINKETS } from "@/templates/coquette/looks";
 import { fieldsSchema as coquetteFields } from "@/templates/coquette/schema";
 import { fieldMeta as coquetteMeta } from "@/templates/coquette/field-meta";
-import { addKiss, decor, DECOR, highlightPlan, kissAt, LOOKS as XOXO, LOOK_ORDER as XOXO_ORDER, MAX_KISSES, SWATCHES as XOXO_SWATCHES, type DecorSlot, type Kiss } from "@/templates/xoxo/looks";
+import { addKiss, burstKisses, decor, DECOR, highlightPlan, kissAt, LOOKS as XOXO, LOOK_ORDER as XOXO_ORDER, MAX_KISSES, SWATCHES as XOXO_SWATCHES, type DecorSlot, type Kiss } from "@/templates/xoxo/looks";
 import { fieldsSchema as xoxoFields } from "@/templates/xoxo/schema";
 import { fieldMeta as xoxoMeta } from "@/templates/xoxo/field-meta";
 import { PRESSED_PITCH, pressedHeight, pressedSpots } from "@/templates/keepsake/looks";
@@ -215,5 +215,33 @@ describe("XOXO", () => {
     expect(page).toHaveLength(MAX_KISSES);
     expect(page[0].id).toBe(5);
     expect(page[page.length - 1].id).toBe(MAX_KISSES + 4);
+  });
+});
+
+describe("XOXO's seal bursting into kisses", () => {
+  it("throws the same ring for the same names, and a different one for others", () => {
+    expect(burstKisses(42)).toEqual(burstKisses(42));
+    expect(burstKisses(42)).not.toEqual(burstKisses(43));
+  });
+
+  it("spaces the prints round the whole circle, every one a real kiss cut-out", () => {
+    const ring = burstKisses(7);
+    expect(ring).toHaveLength(8);
+    const kisses = new Set(ofKind("kiss"));
+    ring.forEach((k, i) => {
+      expect(kisses.has(k.scrap)).toBe(true);
+      // each stays near its own slot, so no two land on top of each other
+      expect(Math.abs(k.angle - (i / ring.length) * 360)).toBeLessThanOrEqual(12);
+    });
+  });
+
+  it("keeps the throw and the size of every print in range", () => {
+    for (const k of burstKisses(99, 12)) {
+      expect(k.distance).toBeGreaterThanOrEqual(38);
+      expect(k.distance).toBeLessThanOrEqual(52);
+      expect(k.w).toBeGreaterThanOrEqual(10);
+      expect(k.w).toBeLessThanOrEqual(15);
+      expect(k.delay).toBeLessThan(0.1);
+    }
   });
 });

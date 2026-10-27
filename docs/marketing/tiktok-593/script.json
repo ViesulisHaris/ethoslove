@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "cramps from hell"
+        },
+        {
+          "from": "me",
+          "text": "i cant move"
+        },
+        {
+          "from": "them",
+          "text": "on my way"
+        },
+        {
+          "from": "them",
+          "text": "snacks and the heating pad"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this while u wait"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u dont even know what chocolate i want"
+        },
+        {
+          "from": "them",
+          "text": "i do"
+        },
+        {
+          "from": "them",
+          "text": "i always do",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

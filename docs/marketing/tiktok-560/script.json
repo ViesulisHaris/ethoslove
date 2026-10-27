@@ -1,0 +1,56 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:41 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you sent a tiktok instead of saying goodnight"
+        },
+        {
+          "from": "them",
+          "text": "it was a goodnight tiktok"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "goodnight maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "ok this is the real one"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already made a finsta to check your likes"
+        },
+        {
+          "from": "them",
+          "text": "maya what's it called"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|12:22 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "who's the guy on your story"
+        },
+        {
+          "from": "me",
+          "text": "my cousin"
+        },
+        {
+          "from": "them",
+          "text": "you don't have a cousin"
+        },
+        {
+          "from": "me",
+          "text": "you unfollowed me",
+          "status": "Read 12:24 AM"
+        }
+      ]
+    }
+  ]
+}

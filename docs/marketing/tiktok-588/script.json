@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:41 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "good morning interview girl"
+        },
+        {
+          "from": "me",
+          "text": "im so nervous"
+        },
+        {
+          "from": "them",
+          "text": "ur going to walk in there and own it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this in the car"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "u got this 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:08 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "I GOT THE JOB"
+        },
+        {
+          "from": "me",
+          "text": "she asked why i was smiling so much"
+        },
+        {
+          "from": "them",
+          "text": "what did u tell her"
+        },
+        {
+          "from": "me",
+          "text": "the truth",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:03 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "whose hoodie is in ur car"
+        },
+        {
+          "from": "them",
+          "text": "mine"
+        },
+        {
+          "from": "me",
+          "text": "its a small",
+          "status": "Read 8:03 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its my sisters"
+        },
+        {
+          "from": "them",
+          "text": "anyway"
+        },
+        {
+          "from": "them",
+          "text": "i made u something"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "u dont have a sister",
+          "status": "Read 8:24 PM"
+        }
+      ]
+    }
+  ]
+}

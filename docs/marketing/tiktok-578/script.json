@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u told ur friends im chill"
+        },
+        {
+          "from": "them",
+          "text": "u are chill"
+        },
+        {
+          "from": "me",
+          "text": "im not chill"
+        },
+        {
+          "from": "me",
+          "text": "im insane"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "thats why i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my not chill girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok i forgive u"
+        },
+        {
+          "from": "me",
+          "text": "but i already texted all ur friends to prove it"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya why is my group chat on fire"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:12 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "did i fall asleep on facetime"
+        },
+        {
+          "from": "them",
+          "text": "at 1:14"
+        },
+        {
+          "from": "me",
+          "text": "why didnt u hang up"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u were holding the phone"
+        },
+        {
+          "from": "them",
+          "text": "didnt want to wake u"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "good morning 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u stayed on all night??"
+        },
+        {
+          "from": "them",
+          "text": "6 hours"
+        },
+        {
+          "from": "them",
+          "text": "u said my name twice",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

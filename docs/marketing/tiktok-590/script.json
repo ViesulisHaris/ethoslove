@@ -1,0 +1,59 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|3:22 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i miss u"
+        },
+        {
+          "from": "me",
+          "text": "u saw me this morning"
+        },
+        {
+          "from": "them",
+          "text": "and?"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "made u something"
+        },
+        {
+          "from": "them",
+          "text": "no reason"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "just because 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who does this on a tuesday"
+        },
+        {
+          "from": "them",
+          "text": "someone whos obsessed with u",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

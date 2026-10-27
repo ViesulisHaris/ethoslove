@@ -1,0 +1,69 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:22 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "how was today"
+        },
+        {
+          "from": "me",
+          "text": "i'm fine"
+        },
+        {
+          "from": "them",
+          "text": "that's 212"
+        },
+        {
+          "from": "me",
+          "text": "212 what",
+          "status": "Read 10:23 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "times you've said i'm fine this year"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for number 213 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok i'm not fine"
+        },
+        {
+          "from": "me",
+          "text": "i'm crying"
+        },
+        {
+          "from": "them",
+          "text": "that's better"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:12 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "why is my phone on 3%"
+        },
+        {
+          "from": "me",
+          "text": "idk"
+        },
+        {
+          "from": "them",
+          "text": "it was 80 when i fell asleep"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok i went through it",
+          "status": "Read 8:13 AM"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for friday 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "was it this"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i've already opened it 6 times"
+        },
+        {
+          "from": "them",
+          "text": "maya act surprised on friday"
+        }
+      ]
+    }
+  ]
+}

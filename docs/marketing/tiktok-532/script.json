@@ -1,0 +1,79 @@
+{
+  "demo": {
+    "template": "xoxo?look=gothic",
+    "steps": [
+      "swap \"Dani\" \"Maya\"",
+      "swap \"Sam\" \"Leo\"",
+      "wait 2600",
+      "shot gift-1.png",
+      "tap \"open it\"",
+      "wait 3600",
+      "shot gift-2.png"
+    ]
+  },
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|1:47 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know we said no contact"
+        },
+        {
+          "from": "them",
+          "text": "but please stop opening it"
+        }
+      ]
+    },
+    {
+      "type": "photo",
+      "src": "gift-1.png"
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "me",
+          "text": "i haven't opened anything"
+        },
+        {
+          "from": "them",
+          "text": "11 times this week"
+        },
+        {
+          "from": "me",
+          "text": "how do you even know that"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "it shows me"
+        },
+        {
+          "from": "me",
+          "text": "since when do you check",
+          "status": "Read 1:49 AM"
+        },
+        {
+          "from": "them",
+          "text": "since march"
+        }
+      ]
+    }
+  ],
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false
+}

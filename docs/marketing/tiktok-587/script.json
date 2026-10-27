@@ -1,0 +1,62 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:48 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u were quiet at dinner"
+        },
+        {
+          "from": "me",
+          "text": "im fine"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im not fine"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "i made this for nights like this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for nights like this 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "how did u know"
+        },
+        {
+          "from": "them",
+          "text": "u twist ur ring when ur sad"
+        }
+      ]
+    }
+  ]
+}

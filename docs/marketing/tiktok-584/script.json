@@ -1,0 +1,73 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:47 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im so sorry i have to work today"
+        },
+        {
+          "from": "me",
+          "text": "on our anniversary"
+        },
+        {
+          "from": "them",
+          "text": "dont be sorry baby"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this on ur break"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy anniversary 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|1:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my coworkers are asking why im crying"
+        },
+        {
+          "from": "them",
+          "text": "tell them its our anniversary",
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i did"
+        },
+        {
+          "from": "me",
+          "text": "now my manager wants to know if u have a brother"
+        },
+        {
+          "from": "them",
+          "text": "maya i have 3"
+        }
+      ]
+    }
+  ]
+}

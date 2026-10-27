@@ -1,0 +1,72 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:14 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my mom wants to know if ur coming for thanksgiving"
+        },
+        {
+          "from": "me",
+          "text": "i cant"
+        },
+        {
+          "from": "them",
+          "text": "why not"
+        },
+        {
+          "from": "me",
+          "text": "its complicated",
+          "status": "Read 9:15 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "please come"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "ur brother is my ex"
+        },
+        {
+          "from": "them",
+          "text": "WHAT"
+        },
+        {
+          "from": "me",
+          "text": "the one i told u about",
+          "status": "Read 9:40 PM"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:38 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i know you said you needed space"
+        },
+        {
+          "from": "me",
+          "text": "i did"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i made you something anyway"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "i miss you so much it hurts",
+      "messages": [
+        {
+          "from": "them",
+          "text": "you dont have to answer"
+        }
+      ]
+    }
+  ]
+}

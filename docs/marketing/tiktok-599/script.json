@@ -1,0 +1,66 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:31 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are u still mad"
+        },
+        {
+          "from": "me",
+          "text": "yes"
+        },
+        {
+          "from": "them",
+          "text": "can i call"
+        },
+        {
+          "from": "me",
+          "text": "no"
+        }
+      ],
+      "encrypted": true
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|10:47 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "then open this before u decide anything"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "i was going to break up with u tonight",
+      "messages": [
+        {
+          "from": "them",
+          "text": "did u open it"
+        }
+      ]
+    }
+  ]
+}

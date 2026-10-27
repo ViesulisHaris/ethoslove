@@ -1,0 +1,66 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|7:26 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u take 6 hours to reply"
+        },
+        {
+          "from": "them",
+          "text": "i dont really text"
+        },
+        {
+          "from": "me",
+          "text": "u were online the whole time"
+        },
+        {
+          "from": "them",
+          "text": "i was busy"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "busy doing what"
+        },
+        {
+          "from": "them",
+          "text": "making this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "u replied to her in 2 minutes tho"
+        },
+        {
+          "from": "them",
+          "text": "she had a question"
+        }
+      ]
+    }
+  ]
+}

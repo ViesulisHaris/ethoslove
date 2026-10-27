@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Yesterday|11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u awake"
+        },
+        {
+          "from": "me",
+          "text": "yes why"
+        },
+        {
+          "from": "them",
+          "text": "2 mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "its november"
+        },
+        {
+          "from": "them",
+          "text": "u know what that means"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🎄",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO ITS NOT EVEN THANKSGIVING"
+        },
+        {
+          "from": "them",
+          "text": "its christmas season now"
+        },
+        {
+          "from": "them",
+          "text": "i dont make the rules",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:18 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "if ur mom and i were drowning who would u save"
+        },
+        {
+          "from": "them",
+          "text": "my mom"
+        },
+        {
+          "from": "me",
+          "text": "WOW",
+          "status": "Read 10:18 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "she cant swim"
+        },
+        {
+          "from": "them",
+          "text": "u can"
+        },
+        {
+          "from": "them",
+          "text": "anyway i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw ok"
+        },
+        {
+          "from": "me",
+          "text": "i cant swim tho"
+        },
+        {
+          "from": "them",
+          "text": "learn"
+        }
+      ]
+    }
+  ]
+}

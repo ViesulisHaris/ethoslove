@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:37 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "delete his number or delete mine"
+        },
+        {
+          "from": "me",
+          "text": "ok"
+        },
+        {
+          "from": "them",
+          "text": "which one"
+        },
+        {
+          "from": "me",
+          "text": "guess",
+          "status": "Read 11:38 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "maya"
+        },
+        {
+          "from": "them",
+          "text": "i was gonna give u this tomorrow"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok fine"
+        },
+        {
+          "from": "me",
+          "text": "i deleted his"
+        },
+        {
+          "from": "me",
+          "text": "i still know it by heart tho"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:52 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "first night in our place"
+        },
+        {
+          "from": "me",
+          "text": "its so quiet"
+        },
+        {
+          "from": "them",
+          "text": "come to the kitchen"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "actually wait"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for our first night home 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why are u texting me from the other room"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:58 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok im crying in our new hallway"
+        },
+        {
+          "from": "me",
+          "text": "come here"
+        },
+        {
+          "from": "them",
+          "text": "turn around",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|8:50 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my driving test is in 10 mins"
+        },
+        {
+          "from": "me",
+          "text": "i'm going to throw up"
+        },
+        {
+          "from": "them",
+          "text": "where are you"
+        },
+        {
+          "from": "me",
+          "text": "in the parking lot"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🍀",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "open it before you go in"
+        },
+        {
+          "from": "me",
+          "text": "why would you make me cry right now"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "ts": "Today|11:26 AM"
+        },
+        {
+          "from": "me",
+          "text": "I PASSED"
+        },
+        {
+          "from": "me",
+          "text": "i opened it 6 times in the waiting room"
+        },
+        {
+          "from": "them",
+          "text": "only 6?"
+        }
+      ]
+    }
+  ]
+}

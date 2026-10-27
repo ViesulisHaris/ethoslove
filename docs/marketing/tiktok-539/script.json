@@ -1,0 +1,31 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|11:34 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my phone just showed me us at the lake"
+        },
+        {
+          "from": "them",
+          "text": "mine too"
+        },
+        {
+          "from": "me",
+          "text": "i thought you deleted them",
+          "status": "Read 11:36 PM"
+        },
+        {
+          "from": "them",
+          "text": "i thought you did"
+        }
+      ]
+    }
+  ]
+}

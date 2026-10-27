@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:38 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "are you on your phone"
+        },
+        {
+          "from": "me",
+          "text": "yes why"
+        },
+        {
+          "from": "them",
+          "text": "stay on it for 3 mins"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "9:41 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "me",
+          "text": "why 9:41"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "2 years ago you said hi"
+        },
+        {
+          "from": "them",
+          "text": "at 9:41"
+        },
+        {
+          "from": "me",
+          "text": "you remember the MINUTE??"
+        }
+      ]
+    }
+  ]
+}

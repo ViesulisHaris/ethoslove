@@ -1,0 +1,63 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|6:03 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ur mom just called me her future daughter in law"
+        },
+        {
+          "from": "them",
+          "text": "oh no"
+        },
+        {
+          "from": "them",
+          "text": "i might have told her some things"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "what things"
+        },
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im crying in ur moms kitchen"
+        },
+        {
+          "from": "them",
+          "text": "is she crying too"
+        },
+        {
+          "from": "me",
+          "text": "shes hugging me",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

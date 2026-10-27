@@ -1,0 +1,55 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:43 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "would u still love me if i was a worm"
+        },
+        {
+          "from": "them",
+          "text": "what kind of worm"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "LEO"
+        },
+        {
+          "from": "me",
+          "text": "a normal worm",
+          "status": "Read 11:44 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "id carry u everywhere in a little jar"
+        },
+        {
+          "from": "them",
+          "text": "with air holes"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for my worm 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

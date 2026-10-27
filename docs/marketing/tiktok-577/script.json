@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|8:51 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u were 45 minutes late"
+        },
+        {
+          "from": "me",
+          "text": "i sat there alone"
+        },
+        {
+          "from": "them",
+          "text": "i can explain"
+        },
+        {
+          "from": "me",
+          "text": "go on"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "ok thats cute"
+        },
+        {
+          "from": "me",
+          "text": "but i only got there a minute before u"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "so u were 44 minutes late"
+        },
+        {
+          "from": "them",
+          "text": "maya"
+        }
+      ]
+    }
+  ]
+}

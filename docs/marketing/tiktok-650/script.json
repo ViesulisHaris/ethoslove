@@ -1,0 +1,67 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:48 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i think i need space"
+        },
+        {
+          "from": "me",
+          "text": "from me??"
+        },
+        {
+          "from": "them",
+          "text": "from everything"
+        },
+        {
+          "from": "me",
+          "text": "ok",
+          "status": "Read 11:49 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "wait"
+        },
+        {
+          "from": "them",
+          "text": "i still made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "do u want space or not"
+        },
+        {
+          "from": "them",
+          "text": "space but like with u"
+        }
+      ]
+    }
+  ]
+}

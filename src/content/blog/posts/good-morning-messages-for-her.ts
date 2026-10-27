@@ -109,7 +109,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A long romantic good morning message for her" },
         {
           type: "p",
-          text: "Once in a while, a longer one. Not every day: it's the surprise that makes it work. Keep it to one memory and one wish for her day, the way our guide to [writing a love letter](/blog/how-to-write-a-love-letter) builds a letter from one moment:",
+          text: "Once in a while, a longer one. Not every day: it's the surprise that makes it work. Keep it to one memory and one wish for her day, the way our guide to [writing a love letter](/blog/how-to-write-a-love-letter) builds a letter from one moment. For longer ones when you miss her, after a fight or on her bad day, see our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend). Two for the morning:",
         },
         {
           type: "quote",
@@ -280,7 +280,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Un mensaje de buenos días largo y romántico para ella" },
         {
           type: "p",
-          text: "De vez en cuando, uno más largo. No cada día: la sorpresa es lo que lo hace funcionar. Cíñete a un recuerdo y un deseo para su día, igual que nuestra guía para [escribir una carta de amor](/blog/how-to-write-a-love-letter) construye una carta a partir de un momento:",
+          text: "De vez en cuando, uno más largo. No cada día: la sorpresa es lo que lo hace funcionar. Cíñete a un recuerdo y un deseo para su día, igual que nuestra guía para [escribir una carta de amor](/blog/how-to-write-a-love-letter) construye una carta a partir de un momento. Si buscas textos largos para cuando la echas de menos, después de una pelea o en un mal día, mira nuestros [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend). Dos para la mañana:",
         },
         {
           type: "quote",

@@ -1,0 +1,74 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:21 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "my ex just texted me"
+        },
+        {
+          "from": "me",
+          "text": "what did she want"
+        },
+        {
+          "from": "them",
+          "text": "she said ask u what u did"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "shes crazy"
+        },
+        {
+          "from": "them",
+          "text": "i know"
+        },
+        {
+          "from": "them",
+          "text": "made u something btw"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "me",
+          "text": "shes not crazy"
+        },
+        {
+          "from": "them",
+          "text": "what did u do"
+        },
+        {
+          "from": "me",
+          "text": "i sent her our texts"
+        },
+        {
+          "from": "me",
+          "text": "how else was i gonna get u"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|12:14 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "do u love me as much as u did at the start"
+        },
+        {
+          "from": "them",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "oh"
+        },
+        {
+          "from": "me",
+          "text": "ok",
+          "status": "Read 12:15 AM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "way more"
+        },
+        {
+          "from": "them",
+          "text": "i love u way more now"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

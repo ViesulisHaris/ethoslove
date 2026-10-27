@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can i show u something"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "promise u wont laugh"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "promise"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "is it too much"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "input": "my ex never did anything like this",
+      "messages": [
+        {
+          "from": "them",
+          "text": "say something"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|9:51 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "my phone is on 1%"
+        },
+        {
+          "from": "me",
+          "text": "and im still at my friends"
+        },
+        {
+          "from": "them",
+          "text": "ok quick"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "open this before it dies"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|11:32 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "it died the second i opened it"
+        },
+        {
+          "from": "me",
+          "text": "had to open it again on my friends phone"
+        },
+        {
+          "from": "them",
+          "text": "so she saw it first"
+        },
+        {
+          "from": "me",
+          "text": "now she wants one",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

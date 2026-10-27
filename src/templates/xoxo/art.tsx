@@ -7,7 +7,7 @@ import type { GiftMusic, GiftPhoto } from "@/lib/gift/schema";
 import { PAPER_GRAIN, SCRIPT_FONT } from "../_shared/cover-kit";
 import { FitName } from "../_shared/FitName";
 import { Scrap } from "../_shared/collage/kit";
-import { decor, type DecorSlot, type Highlight, type Look, type Mark } from "./looks";
+import { decor, type BurstKiss, type DecorSlot, type Highlight, type Look, type Mark } from "./looks";
 
 /** How the cover's pieces leave when the envelope opens: slow off the mark, then gone. */
 const LEAVE = [0.5, 0, 0.75, 0] as const;
@@ -15,20 +15,47 @@ const LEAVE = [0.5, 0, 0.75, 0] as const;
 const FOLD_UP = [0.42, 0, 1, 1] as const;
 
 /**
- * An envelope seen from the flap side, sealed with a lipstick print. Opening it lifts the flap on
- * its fold and draws the letter up out of the pocket.
+ * An envelope seen from the flap side, sealed with a lipstick print. Opening it breaks the seal
+ * into a ring of kisses, lifts the flap on its fold and draws the letter up out of the pocket.
  */
-export function Envelope({ look, name, to, opening, reduce }: { look: Look; name: string; to: string; opening: boolean; reduce: boolean }) {
+export function Envelope({ look, name, to, opening, reduce, burst = [] }: { look: Look; name: string; to: string; opening: boolean; reduce: boolean; burst?: BurstKiss[] }) {
   return (
     <div className="relative w-full">
       {/* the doily it was left on, and a bow on its corner: both go as it opens */}
       <motion.div aria-hidden="true" className="pointer-events-none absolute top-[56%] left-[44%] w-[90%]" style={{ x: "-50%", y: "-50%", rotate: -12 }} initial={reduce ? false : { opacity: 0, scale: 0.6, rotate: -40 }} animate={opening ? { opacity: 0, scale: 1.1, rotate: -4 } : { opacity: look.dark ? 0.85 : 0.95, scale: 1, rotate: -12 }} transition={opening ? { duration: reduce ? 0.15 : 0.5, ease: LEAVE } : { type: "spring", stiffness: 70, damping: 14, delay: 0.15 }}>
         <Scrap {...decor(look, "envelopeDoily")} shadow={false} eager />
       </motion.div>
-      <EnvelopeBody look={look} name={name} to={to} opening={opening} reduce={reduce} />
+      <EnvelopeBody look={look} name={name} to={to} opening={opening} reduce={reduce} burst={burst} />
       <motion.div aria-hidden="true" className="pointer-events-none absolute top-[-11%] left-[-7%] z-[5] w-[26%]" style={{ rotate: -20 }} initial={reduce ? false : { opacity: 0, scale: 0.4, rotate: -60 }} animate={opening ? { opacity: 0, x: "-80%", y: "-80%", rotate: -70 } : { opacity: 1, scale: 1, rotate: -20 }} transition={opening ? { duration: reduce ? 0.15 : 0.5, ease: LEAVE } : { type: "spring", stiffness: 260, damping: 15, delay: 1 }}>
         <Scrap {...decor(look, "envelopeBow")} eager />
       </motion.div>
+    </div>
+  );
+}
+
+/**
+ * What the seal breaks into: a heart drawn round it that swells and fades, and lipstick prints
+ * thrown out in a ring. Each print moves by a share of its own width (a percentage translate),
+ * so the throw is measured in `--p` like everything else and needs no pixel size.
+ */
+function SealBurst({ look, burst }: { look: Look; burst: BurstKiss[] }) {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute top-[44%] left-1/2 z-[6] h-0 w-0">
+      <motion.svg viewBox="-50 -46 100 92" className="absolute top-0 left-0 w-[calc(30*var(--p))] overflow-visible" style={{ x: "-50%", y: "-50%" }} initial={{ scale: 0.35, opacity: 0.95 }} animate={{ scale: 2.6, opacity: 0 }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}>
+        <path d="M0 34C-26 16 -42 2 -42 -16C-42 -32 -28 -40 -16 -40C-8 -40 -2 -35 0 -29C2 -35 8 -40 16 -40C28 -40 42 -32 42 -16C42 2 26 16 0 34Z" fill="none" stroke={look.red} strokeWidth="3" vectorEffect="non-scaling-stroke" />
+      </motion.svg>
+      {burst.map((k, i) => {
+        const rad = (k.angle * Math.PI) / 180;
+        const share = (d: number) => `${Math.round((d / k.w) * 100)}%`;
+        return (
+          <div key={i} className="absolute top-0 left-0" style={{ width: `calc(${k.w} * var(--p))`, translate: "-50% -50%" }}>
+            {/* square, so a percentage translate means the same distance across and down, and the ring stays round */}
+            <motion.div className="grid aspect-square place-items-center" initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }} animate={{ x: share(Math.cos(rad) * k.distance), y: share(Math.sin(rad) * k.distance), scale: [0.3, 1.15, 1], opacity: [0, 1, 1, 0], rotate: k.rotate }} transition={{ duration: 0.9, delay: k.delay, ease: [0.16, 1, 0.3, 1], opacity: { duration: 0.9, delay: k.delay, times: [0, 0.1, 0.5, 1] } }}>
+              <Scrap id={k.scrap} tone={look.kissTone} eager shadow={false} />
+            </motion.div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -40,7 +67,7 @@ export function Envelope({ look, name, to, opening, reduce }: { look: Look; name
  * flap. It used to be one 3D flip with its z-index dropped as it began, which painted the open
  * flap over the letter as it rose, cutting a triangle out of the page.
  */
-function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: string; to: string; opening: boolean; reduce: boolean }) {
+function EnvelopeBody({ look, name, to, opening, reduce, burst }: { look: Look; name: string; to: string; opening: boolean; reduce: boolean; burst: BurstKiss[] }) {
   const { body, flap, lining } = look.envelope;
   const ease = [0.6, 0, 0.3, 1] as const;
   const foldUp = reduce ? 0.06 : 0.16;
@@ -60,7 +87,7 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
         </svg>
       </motion.div>
       {/* the letter, which rises */}
-      <motion.div className="absolute inset-x-[7%] top-[8%] h-[84%] rounded-[calc(.6*var(--p))] px-[8%] pt-[7%]" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, color: "#2A1A1C", boxShadow: "0 0 calc(1.4*var(--p)) rgba(0,0,0,.2)" }} animate={opening ? { y: "-58%" } : { y: 0 }} transition={{ duration: reduce ? 0.15 : 0.75, delay: opening && !reduce ? 0.32 : 0, ease }}>
+      <motion.div className="absolute inset-x-[7%] top-[8%] h-[84%] rounded-[calc(.6*var(--p))] px-[8%] pt-[7%]" style={{ backgroundColor: "#FFFDF8", backgroundImage: PAPER_GRAIN, color: "#2A1A1C", boxShadow: "0 0 calc(1.4*var(--p)) rgba(0,0,0,.2)" }} animate={opening ? { y: "-74%", scale: 1.05 } : { y: 0, scale: 1 }} transition={{ duration: reduce ? 0.15 : 0.7, delay: opening && !reduce ? 0.24 : 0, ease }}>
         <FitName as="p" className="text-[calc(7*var(--p))] leading-[1.1]" style={{ fontFamily: SCRIPT_FONT }}>
           {name},
         </FitName>
@@ -85,10 +112,11 @@ function EnvelopeBody({ look, name, to, opening, reduce }: { look: Look; name: s
           <path d="M0 0 L50 100 L100 0" fill="none" stroke={look.dark ? "rgba(255,255,255,.2)" : "rgba(60,30,20,.26)"} strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
         </svg>
       </motion.div>
-      {/* the seal */}
-      <motion.div className="absolute top-[44%] left-1/2 z-[4] w-[34%]" style={{ x: "-50%", y: "-50%", rotate: -8 }} animate={opening ? { scale: [1, 1.35, 1.2], opacity: [1, 1, 0] } : { scale: 1, opacity: 1 }} transition={{ duration: reduce ? 0.15 : 0.5, times: [0, 0.4, 1] }}>
+      {/* the seal: it beats while it waits, then pops */}
+      <motion.div className="absolute top-[44%] left-1/2 z-[4] w-[34%]" style={{ x: "-50%", y: "-50%", rotate: -8 }} animate={opening ? { scale: [1, 1.5, 0.2], opacity: [1, 1, 0], rotate: [-8, 4, 26] } : reduce ? { scale: 1, opacity: 1 } : { scale: [1, 1.09, 1, 1.06, 1], opacity: 1 }} transition={opening ? { duration: reduce ? 0.15 : 0.42, times: [0, 0.35, 1] } : reduce ? { duration: 0 } : { duration: 1.25, repeat: Infinity, repeatDelay: 1.1, ease: "easeInOut", delay: 1.4 }}>
         <Scrap {...decor(look, "seal")} eager />
       </motion.div>
+      {opening && !reduce && burst.length ? <SealBurst look={look} burst={burst} /> : null}
     </div>
   );
 }

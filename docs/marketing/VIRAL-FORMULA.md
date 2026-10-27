@@ -2220,6 +2220,377 @@ need show the same card, and the picture no longer prints the site's address. Th
 a link's `"card"` picks the paper (`scripts/share-card.mjs` renders it into `docs/marketing/cards`). 529 and
 531 use blush, 527 black, 528 burgundy, 530 pressed.
 
+### The site's name on screen gets a post 0 views (16 Oct), and 532 to 535
+
+The owner posted the first tryethos post (529, with the link card) on the account where 520 ("then stay",
+no link) did 70K and is still going viral: **0 views**. The same account, the same kind of story, a post of
+theirs climbing at that moment. The difference was the site's name on screen ("tryethos.io" in the link card),
+so that is the working explanation: TikTok reads text in pictures, and a post that shows a web address gets
+held back. Not yet confirmed by TikTok Studio's notice on the post.
+
+From now on, on the accounts that work:
+- **Nothing that names the site on screen.** No link card, no domain, no "tryethos" in the chat.
+- **Show the gift instead.** The story names it ("i made you something", "it shows me") and a screenshot of
+  the gift itself (a demo frame in one of the new presets, names swapped) shows it. People who want one ask
+  in the comments, which is engagement too: 30's top comment was "PLEASE TELL ME THE WEBSITE".
+- **Don't delete or repost the held post;** set it to Only me. Deleting and reposting is what got rosie held
+  in September.
+- **The name goes in once the post is safe:** test one comment reply with "tryethos" on a post that already has
+  views, and whether TikTok accepts tryethos.io as the bio link. If it refuses the link, the domain itself is
+  blocked and needs a new one.
+
+532–535 are 527, 528, 530 and 531 told this way (529 is the one that was posted, so it isn't repeated):
+
+| | Story | The gift on screen |
+|---|---|---|
+| 532 | since march | XOXO Black roses: the sealed envelope "to Maya" |
+| 533 | i forgot to cancel it | Coquette Burgundy roses: the bow "for Maya", then the page |
+| 534 | 38% | XOXO Pink kisses: the envelope "to Maya" |
+| 535 | 11 times | Coquette Black bow: the bow "for Maya" |
+
+### TikTok confirmed it (17 Oct), and 536 to 540
+
+TikTok support looked at the 0-view tryethos post on @luvierosiie and replied that its visibility "was limited
+due to a violation of our Community Guidelines". No notice came in System notifications, and no guideline was named. The
+likely one is in TikTok's Community Guidelines (effective 24 Sept 2026), under Commercial Disclosure:
+- Content promoting your own business or product must have the content disclosure setting turned on.
+- If it doesn't, TikTok can reduce its visibility.
+- If that keeps happening, the account can be restricted for a while, or banned.
+
+So keeping the name off-screen is not enough. 532–535 still show the product, so they go up only with
+**Your brand** turned on. Posts with no product in them need no label; they carry the reach, and the brand
+sits in the bio.
+
+If an account goes quiet, check whether it is restricted, not just one post:
+- Can it still add a post to its story?
+- Does it show up when you search for it from another account?
+
+If either fails, the Reddit fix is the way back. Open a support ticket and ask for a human. The bot takes only
+the full `tiktok.com/@user/video/<id>` link, not the app's tt.site short link.
+
+536–540 are product-free one-image posts in 520's shape: exes, something everyday they still share, and a
+quiet last line that reads two ways.
+
+| | The chat | The last line | What the room argues about | Caption (search phrase) |
+|---|---|---|---|---|
+| 536 | "can i get my key back" / "it's on my keychain" / "so take it off" | "i tried" | the keyring, or her | getting my stuff back from my ex 🔑 |
+| 537 | "you finished our show" / "you can see that?" / "it's my netflix" | "i waited 6 months" | he waited for her, or he's on her netflix | my ex still uses my netflix 💔 |
+| 538 | "can i come see the dog" / "he misses you" / "just him?" | "saturday works" | the dodge; get back together | my ex has our dog 🥺 |
+| 539 | "my phone just showed me us at the lake" / "mine too" / "i thought you deleted them" | "i thought you did" | neither deleted anything | deleting old pictures of my ex 🥲 |
+| 540 | "who's the guy on your story" / "my cousin" / "you don't have a cousin" | "you unfollowed me", read, no reply | who's worse | why your ex watches your story 👀 |
+
+**Post order:** 537 and 540 first, then 536, 538 and 539. One a day per account, in the evening. Post
+`video.mp4`, not the picture.
+
+The owner wanted the five with the tryethos link in them. So 541–545 are the same stories as 3-slide carousels,
+like 527–531, with his gift link at the turn. 540's flip doesn't take a gift, so 545 is a new one. Each one is
+posted with **Your brand** turned on.
+
+| | Story | The link | The last line |
+|---|---|---|---|
+| 541 | 536, the key | "for maya 🤍", burgundy | her double text "you made this??" / "keep the key" |
+| 542 | 537, the show | "for maya", black, "made this while i waited" | "rewatch it with me" |
+| 543 | 538, the dog | "from the dog 🐶", pressed, "he made you something" | "tell the dog i miss him too" / his "just him?" |
+| 544 | 539, the lake | "for maya ♡", blush, "open this before you do" | "i'm not deleting them" |
+| 545 | his Mar 14 gift "for when you miss me", her 2am "how do you delete something from your home screen" | black | "i'm still holding it" |
+
+**Post order:** 541, 543, 545, 542, 544.
+
+### Back to the account's own hits, on the pink card (18 Oct): 546 to 550
+
+The owner: "5 more … with the tryethos, but make it good again", with the blush card as "the banner for each".
+So this batch goes back to the two engines behind the account's biggest gift posts: 149 (1.3M, Maya in the
+wrong to a sweet guy) and 30 (972K, a clock, and "PLEASE TELL ME THE WEBSITE"). Every link uses
+`"card": "blush"`. Each post is 3 slides with **Your brand** turned on.
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 546 | comments (149) | "lol" to her 4-minute voice note, but "i listened to it 3 times", then the link | "i already told my mom we broke up / she said finally" | "maya why did she say finally" |
+| 547 | saves and sales (30) | 9:14 PM link, "don't open it till midnight", asleep for an early shift | 11:58 PM "it says 2 minutes" → 12:00 "IT OPENED" | 6:12 AM "happy birthday maya / was i first" |
+| 548 | comments (149) | 5 hours to reply, "i was busy" / "doing what" → link, "this" | "i rated you a 6 in the group chat" | "maya out of what" |
+| 549 | saves (102) | "open it before you go in", before her driving test | "I PASSED / i opened it 6 times in the waiting room" | "only 6?" |
+| 550 | comments (208) | "are you home" / "no reason" → link "1 year 🤍" | "wait / that's today??" | "maya come home" |
+
+Timestamps from before midnight read "Yesterday" once the chat runs past 12:00 (547). The US accounts get US
+words: "parking lot", "mom".
+
+**Post order:** 547, 546, 549, 548, 550.
+
+551–555 (18 Oct) are five more of the same: pink card, 3 slides, **Your brand** turned on.
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 551 | saves and sales (30) | "stay on it for 3 mins", then the link "9:41 🤍" | "you remember the MINUTE??" | hers, after "2 years ago you said hi / at 9:41" |
+| 552 | comments (208) | "why is my phone on 3%" / "it was 80 when i fell asleep", then the link "for friday 🤍" | "ok i went through it" / "i've already opened it 6 times" | "maya act surprised on friday" |
+| 553 | comments (149) | broke a 412-day streak, "it died making this" | "i already started one with your brother" | "maya how many days" |
+| 554 | saves (102) | "for your lunch break 🤍", "not before lunch" | "now my whole team is crying" | "maya it was for you" |
+| 555 | comments (149) | typed for 10 minutes and sent "ok", then "made this instead" | "i already sent your ok to my sister / she's driving over" | "maya tell her to turn around" |
+
+iMessage only prints a new time after a real gap. Don't put a second timestamp a few minutes after the first. The
+exception is midnight in 547, where the clock is the story.
+
+**Post order:** 551, 555, 554, 553, 552.
+
+556–560 (19 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 556 | saves (he counted) | "that's 212" / "times you've said i'm fine this year", then the link "for number 213 🤍" | "ok i'm not fine / i'm crying" | "that's better" |
+| 557 | comments (149) | "calm down" in front of his friends, then the link "sorry 🤍" | "i already told your friends about your teddy" | "maya they were never supposed to know" |
+| 558 | saves and sales | "for when you land 🤍", "it opens when you land" | "it has a countdown??" → "the guy next to me cried too" | "maya you showed him??" |
+| 559 | comments (149) | fell asleep on FaceTime, "you were telling the long story", then the link "for the long story 🤍" | "i recorded you snoring / it's my ringtone now" | "maya change it" |
+| 560 | comments (149) | a TikTok instead of goodnight, then the link "goodnight maya 🤍", "ok this is the real one" | "i already made a finsta to check your likes" | "maya what's it called" |
+
+**Post order:** 558, 557, 556, 559, 560.
+
+561–565 (19 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 561 | comments (149) | "interesting is a compliment", then the link "sorry chef 🤍", "you cooked for 3 hours. i owed you" | "i ordered it / from olive garden" | "maya i watched you stir it" |
+| 562 | comments (149) | "you're in slide 9", then the link "for slide 1 🤍" | "slide 9 is a blurry arm" / "i already archived all our pics" | "maya unarchive them" |
+| 563 | comments (149) | "it was a small laugh", then the link "for the girl who tripped 🤍" | "i already posted the video of you falling at the gym / it has 40k views" | "maya take it down" |
+| 564 | saves and sales | "are you alone" / "wait till she leaves", then the link | "too late / she saw it / she's crying / she wants your number" | "maya is that good or bad" |
+| 565 | saves (send-to-partner) | "no idea", then the link "sorry about whatever it was 🤍" | "i accept / still don't remember" | "me neither" |
+
+**Post order:** 564, 561, 565, 562, 563.
+
+566–570 (20 Oct) are five more on the pink card:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 566 | comments (149) | 2 hours of Fortnite, then the link "gg 🤍", "made you this between games" | "i've been playing on your account / i lost 23 games" | "maya that's why i'm bronze" |
+| 567 | comments (149) | forgot to pick her up, "my phone was on silent", then the link | "i got an uber / on your card" | "maya it says $86" |
+| 568 | comments (149, an ex) | wifi still named after his ex, then the link, "changing it tonight" | "i already did / it's maya's wifi now" | "maya what's the password" |
+| 569 | saves and sales (102) | "open this at 30k", then the link "for 30k 🤍" | "i'm crying and running" / "I FINISHED" | "i know / look left" |
+| 570 | saves (he remembered) | "on your break?" / "3am every thursday", then the link "for your 3am 🤍" | "you set an alarm for my break??" | "open it first" |
+
+**Post order:** 569, 566, 570, 568, 567.
+
+## rosie is back (21 Oct), and 571 to 575
+
+TikTok told the owner that @luvierosiie's hold was a false bot detection, and lifted it. The public profile
+(read 21 Oct, no login) has 44 posts, the newest from 26 Sept, 303 followers and 420.8K likes. The October
+posts are not public. The top ten, with the September numbers updated:
+
+| Views | Likes | Comments | Shares | Saves | Slides | Post |
+|---|---|---|---|---|---|---|
+| 1.3M | 168.7K | 777 | 5,948 | 14.7K | 10 | 149 "are u mad at me" |
+| 984.8K | 146.7K | 181 | 4,177 | 24.9K | 9 | 30 "first one to say it" |
+| 347.1K | 23.8K | 30 | 3,378 | 4,103 | 12 | 138 cat court |
+| 278.2K | 17.8K | 61 | 232 | 1,089 | 10 | 192 "u said k" |
+| 277.8K | 15.7K | 25 | 178 | 1,053 | 11 | 102 "I PASSED" |
+| 183.2K | 4,610 | 73 | 102 | 610 | 11 | 170 "u still at jess's" |
+| 157.8K | 9,814 | 200 | 600 | 807 | 12 | 208 "u too" |
+| 137.7K | 11.5K | 54 | 209 | 762 | 12 | 78 |
+| 121.4K | 12.0K | 21 | 526 | 1,250 | 7 | 39 |
+| 103.2K | 5,377 | 33 | 103 | 286 | 14 | 03 |
+
+Every hit is rosie's own format: 7–14 full-screen slides, the chat, the link, then frames of the gift itself.
+None is a 3-slide crop or a single image. So rosie's posts stay in that format (no `crop`, no `look`, US times),
+with the gift frames from the live demos (`scripts/tiktok-demo-frames.mjs`). The chat never describes the
+gift; the frames show it. Maya and Leo, the pink card, and **Your brand** turned on.
+
+| | Engine | The story | Gift frames | Last bubble |
+|---|---|---|---|---|
+| 571 | comments (149) | story watched, text ignored, "i was busy" / "doing what" → "this" | XOXO | "maya cancel the single era" |
+| 572 | comments (208) | she forgot his birthday; "i made u something anyway" | Coquette, Burgundy roses | "maya its 11:58" |
+| 573 | saves (30) | 1:58 AM → 1:00 AM, the night the clocks go back: "we get this hour twice" | none, link only | "happy extra hour maya" |
+| 574 | comments (192) | "couples costume?" / "maybe" | Be My Boo | "maya the cat doesnt even like u" |
+| 575 | saves (30) | "cant sleep" at 3 AM | none, link only | "goodnight maya" |
+
+**Post plan:** 572 tonight, then 571, 574 (before Halloween), 575. 573 goes up on Saturday 31 Oct in the evening,
+because the US clocks go back that night (1 Nov, 2 AM → 1 AM). One a night, 7–10 PM. Reply as Maya in the first hour.
+
+**The same day, the owner: "just create them without the slides in them just the imessages".** So the demo
+frames are gone. 571, 572 and 574 are now 4 chat slides, and the owner adds their own screenshots of the gift
+after slide 2, the way 149's were made. 573 and 575 had none. From now on these batches are the chats only.
+
+576–580 are five more like that, for every account:
+
+| | Engine | His side | Her line they'll quote | Last bubble |
+|---|---|---|---|---|
+| 576 | comments (149) | watched the finale without her, then the link "sorry 🤍" | "ive watched the whole season twice" | "maya u made me wait 3 weeks" |
+| 577 | comments (149) | 45 minutes late, "i can explain" → "this" + the link | "but i only got there a minute before u" | "so u were 44 minutes late / maya" |
+| 578 | comments (149) | told his friends she's chill, then the link "for my not chill girl 🤍" | "im not chill / im insane" / "i already texted all ur friends" | "maya why is my group chat on fire" |
+| 579 | saves (30) | the link "for our first night home 🤍" from the other room | "why are u texting me from the other room" | "turn around" |
+| 580 | saves | "ok then open this", the link "for the worst day 🤍" | "ok its not the worst day anymore" | "good / now come over" |
+
+**Post order:** 577, 580, 576, 579, 578, alongside 571–575, one a night per account.
+
+### Anniversaries people send to their boyfriends (21 Oct): 581 to 585
+
+The owner: "really love love, so people get jealous and send to their bf about anniversary". So all five are the
+saves-and-sends engine: a boyfriend plainly in love on an anniversary, three chat slides, the link card only,
+chats only. The detail is always something he did that viewers' boyfriends don't: stayed up, counted, set a
+reminder, woke at 1am.
+
+| | Occasion | His line people send | Last bubble |
+|---|---|---|---|
+| 581 | 1 year, at midnight ("stay up 2 more minutes") | "365 days and id pick u every single one" | his |
+| 582 | 6 months, long distance ("its 1am here but i wanted to be first") | "6 months down / forever to go" | "come home" |
+| 583 | 2 years, "day 730" | "i counted every single one" | "the luckiest guy alive does" |
+| 584 | she has to work on their anniversary | "open this on ur break" | "tell them its our anniversary" |
+| 585 | 14 months, never missed one | "i set a reminder the day u said yes" / "i smile like an idiot" | "im keeping u forever" |
+
+**Post order:** 581, 585, 582, 584, 583. One a night per account, with a soft sound. 581's caption asks
+viewers to "send this to your boyfriend".
+
+**Then the owner: "add a twist or something so people comment".** Each one now has a fourth slide. The love
+stays; one last line gives the room something to ask, argue or quote:
+
+| | The twist (slide 4) | What people comment |
+|---|---|---|
+| 581 | "even the day i threw ur phone in the lake?" / "especially that day" | why the lake |
+| 582 | "check ur front door" / "u said it was 1am there" / "i lied" | slide 1 was a lie; they reread it |
+| 583 | "its 731 for me" / "how" / "i liked u a day before i said yes" | who fell first |
+| 584 | "now my manager wants to know if u have a brother" / "maya i have 3" | tagging single friends |
+| 585 | "whats the reminder called" / "dont lose her" | the line they send |
+
+Love posts get their comments from a line like this. Every SCRIPT.md has a reply ready for the obvious question.
+
+### Lovely, three slides max (21 Oct): 586 to 590
+
+The owner: "make 5 ones more like lovely like 3 slides max". These are ordinary days rather than anniversaries,
+each with one detail to comment on, in three chat slides with the link card:
+
+| | The day | The detail people comment on | Last bubble |
+|---|---|---|---|
+| 586 | she's sick, he's at work | "soup is on its way / and this" | "im not / i just really like u" |
+| 587 | quiet at dinner | "u twist ur ring when ur sad" | his |
+| 588 | her job interview | "she asked why i was smiling so much" | "what did u tell her" / "the truth" |
+| 589 | can't sleep without him | "its too quiet without ur snoring" | "ill snore extra loud" |
+| 590 | a Tuesday, no reason | "who does this on a tuesday" | "someone whos obsessed with u" |
+
+**Post order:** 590, 587, 586, 589, 588.
+
+591–595 (22 Oct) are five more of the same:
+
+| | The day | The line people send | Last bubble |
+|---|---|---|---|
+| 591 | she hates her haircut | "u havent even seen it" | "i dont need to" |
+| 592 | phone on 1%, at her friend's | "it died the second i opened it" | "now she wants one" |
+| 593 | cramps | "u dont even know what chocolate i want" | "i do / i always do" |
+| 594 | her graduation, "wish u were here" | "open this first" | "i know / im 4 rows behind u" |
+| 595 | his mum calls her "future daughter in law" | "i might have told her some things" | "shes hugging me" |
+
+**Post order:** 594, 591, 595, 593, 592.
+
+## What's working now (read 22 Oct), and 596 to 600
+
+The owner: "create them better so it goes really viral", looking at rosie and the accounts sent earlier.
+Read live the same day, no login:
+
+- **@36grm is the biggest thing in the niche right now.**
+  - Posts: 11.1M (2 Oct), 6.5M (8 Oct), 5.7M, 4.8M, 4.3M, 3.4M, 2.7M.
+  - Every one is a single screenshot posted as a 10-second still video. The caption is "#targetaudience" and nothing else.
+  - The shapes:
+    - a confession flipped cold in the last line ("my love for you is like dinosaurs, it doesn't exist", 11.1M, 195.9K shares);
+    - an ultimatum with the answer typed in her message box and not sent ("go to the party", 6.5M);
+    - a dark reveal (sharing location "so u can see when and where i'm cheating at", 5.7M);
+    - an ex correcting the date of an anniversary that would have been (2.7M);
+    - a photo of a real phone screen instead of a screenshot (4.8M, 2.7M).
+  - It also posts some 60-second videos now (1.1M each).
+- **@unicornsprinklewaffles:** 4.9M down to 1.5M, all still videos, the last on 12 Oct.
+- **@savgilbertt:** nothing big since August.
+- **rosie:** her hits are still 149 (1.3M, comments) and 30 (985K, saves).
+
+So the batch mixes the two that are proven: rosie's two engines in her own 3-slide chats, and @36grm's
+one-screenshot flip with the gift inside it.
+
+| | Shape | The story | Last line |
+|---|---|---|---|
+| 596 | rosie 149, 3 slides | "we'll see" to her cousin's wedding → "this" | "maya im giving a WHAT" |
+| 597 | rosie 149, 3 slides | he called her "bro" → "for my girlfriend not my bro 🤍" | "maya change it back" |
+| 598 | rosie 30, 3 slides | "look at the time in 2 mins" → 11:11 "make a wish" / "mine already came true" | "u did" |
+| 599 | @36grm, 1 image | "open this before u decide anything" + the link, her unsent "i was going to break up with u tonight" | the draft |
+| 600 | @36grm, 1 image | "do u love me as much as u did at the start" / "no" / the link / "way more" | "way more" |
+
+**Post order:** 600, 596, 599, 598, 597.
+
+**The owner: "make better like not in one slide but like 2-3 slides".** So 599 and 600 are now three slides each, and no post in the batch is a single image. 600 is in rosie's look: "no" alone on slide 1, "oh / ok" read on slide 2, "way more" and the link on slide 3. 599 is three iOS 26 crops, because only that look draws the reply typed in her box: "are u still mad" / "no", then the link, then "did u open it" over her unsent "i was going to break up with u tonight".
+
+**The owner: "make more of these, these were good".** 601–605 keep the shape: three slides, each ending on a beat that makes people swipe.
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 601 | warm flip | "i dont think i can do this anymore" | "go a whole day without telling u i love u" / "i tried. lasted til 10:58" + link |
+| 602 | rosie 149 | "for 3 hours?" (he didn't hold her hand) | her playlist "he doesnt deserve me", 47 songs / "maya send me the playlist" |
+| 603 | saves | "i set mine for 6:58" | "every morning from now on" |
+| 604 | trend + warm flip | "would u still love me if i was a worm" / "what kind of worm" | "id carry u everywhere in a little jar / with air holes" + link |
+| 605 | 599's draft, sweet | "i have something for u" | "did u like it" over her unsent "i think im going to marry u one day" |
+
+**Post order:** 601, 604, 605, 602, 603.
+
+606–610, five more:
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 606 | warm flip | "we need to talk" / "us" | "i think we should move in together" + link |
+| 607 | rosie 149 | "they were PINK" (he missed her nails) | "i painted ur toenails while u were asleep / theyre pink too" / "maya i have a game tomorrow" |
+| 608 | trend (the bird test) | "what kind" | "ok tell me everything about the bird" + link |
+| 609 | saves | "at exactly this minute" / "no?" | "u took forever to answer" / "4 seconds / i counted" |
+| 610 | 192, funny | "u said k 4 times" | "my little brother was answering" / "so the k's were him" |
+
+**Post order:** 606, 608, 607, 609, 610.
+
+611–615 (23 Oct), with the season in two of them:
+
+| | Shape | Slide 1 ends on | Slide 3 |
+|---|---|---|---|
+| 611 | warm flip | "something i cant take back" | "told my grandma ur coming for thanksgiving / she already set ur seat" + link |
+| 612 | rosie 149, Halloween | "we were supposed to match" | "ur the back half of the horse" / "maya whos the front half" |
+| 613 | trend (orange peel theory) | "ur literally in the next room" | "check the kitchen / peeled. no white bits" + link |
+| 614 | saves | "why didnt u hang up" | "6 hours / u said my name twice" |
+| 615 | 30 at midnight, 1 Nov | "2 mins" | "its christmas season now / i dont make the rules" |
+
+**Post order:** 612 before Halloween, 613, 611, 614; 615 on the night of 31 Oct.
+
+### The US account is back (23 Oct): 616 to 620
+
+The owner's US account was unblocked too. Read the same day, @mayiiloveu shows one public post, the tryethos one from 16 Oct (12 views). 520, its 64.7K hit, is no longer public. What worked there was 520's shape: exes, an ordinary thing one of them won't let go of, a quiet last line, no link, in the iOS 26 look.
+
+So three of these are pure reach in that shape, no product, which the bio turns into visits. Two carry the gift and use the three-slide swipers the owner liked (599, 600). All five are three iOS 26 crops.
+
+| | Link | The thing | Last line |
+|---|---|---|---|
+| 616 | no | his hoodie, "keep it" | "so you have a reason to text me" |
+| 617 | no | still her emergency contact after 5 months | "are you ok" / "i am now" |
+| 618 | no | the Spotify Blend nobody deletes, "all sad songs now" | "i noticed / half of them are mine" |
+| 619 | yes | "i lied to you last night" | "i wasnt at the gym / i was making this" + link |
+| 620 | yes | "i know you said you needed space" + link | "you dont have to answer" over her unsent "i miss you so much it hurts" |
+
+**Post order on the US account:** 616, 618, 619, 617, 620, one a night, 7–10 PM. The reach posts go first, so the account has views again before the link posts.
+
+621–625 (24 Oct), the same mix:
+
+| | Link | The thing | Last line |
+|---|---|---|---|
+| 621 | no | each kept one of the other's AirPods | "should we swap back" / "or we could meet halfway" |
+| 622 | no | her phone still joins his wifi "when i drive past your street" | "why didnt you change your password" |
+| 623 | no | 12:00 "happy birthday" from her ex | "i set a reminder when we were together / never turned it off" |
+| 624 | yes | "i cant stop thinking about someone" | "you / 3 years and its still you" + link |
+| 625 | yes | he liked her ex's post | "i followed your ex / were getting coffee tuesday" / "maya why" |
+
+**Post order:** 621, 623, 624, 622, 625.
+
+**The owner on 621–625: "these are bad i need them good good so they go viral".** Read against what they liked (596–600): those had a hook that hits on slide 1 ("no", "i was going to break up with u tonight"), a detail people call out, and a twist people quote. 616–625 were quiet ex stories that only end on a line that means two things. So 626–630 go back to clear mechanics people already search: the wrong-text trend, a loyalty test, "hes a 10 but", rosie's own "are u mad at me", and a two-camp draft.
+
+| | Mechanic | Slide 1 hook | The twist |
+|---|---|---|---|
+| 626 | wrong-text trend | "should i tell him i love him…" / "WAIT" / "that was for my best friend" | "too late" → "i love u too / i was waiting for u to say it first" + link |
+| 627 | loyalty test | "so the girl who dmed me last night / that was u right" | "the profile pic was ur cat" → "my girlfriend has the same cat" + link |
+| 628 | "hes a 10 but" | "ur a 10 but" / "but what" | "u never surprise me" → the link → "still a 10 but?" / "ur an 11" |
+| 629 | rosie's opener | "are u mad at me" / "yes" | "u made me fall in love with u in 2 weeks / who does that" + link |
+| 630 | two-camp draft | "promise u wont laugh" | her unsent "my ex never did anything like this" |
+
+**Post order:** 626, 627, 629, 630, 628.
+
+**Names, checked 22 Oct.** The owner's rule since 3 Oct is that the only names are Maya and Leo, and nobody else is
+named, pets and teddies included. 592's friend, 568's ex ("emma's wifi"), 538/543's dog ("biscuit") and 557's
+teddy ("mr bear") broke it. They now say "my friend", "named after your ex", "the dog" and "your teddy". 538's
+video was made again.
+
 ## Shockers: the sentence that means something else after the gift (165 and 166)
 
 Two posts built on one move: the first bubble is the worst text a person can receive, and the
@@ -2551,3 +2922,176 @@ written. 06 is now the first "i love you" and 04 is three months of extra shifts
 | 169 | u called me pathetic | four slides; he is the problem: the gift instead of the apology | the most beautiful frame | yours |
 
 06 to 18 are the short ones. 19 to 28 follow the 3.1M post: pure banter, with the link as one move in it. 29 to 34 put that banter around real gift occasions. 35 to 38 open on a crying photo and alternate her side and his. 41 to 48 are the short format from the big text posts: three slides, pet names, a last line that mirrors the first, a premium template in the gift. 43 and 47 are Instagram DMs. Post 45, 42 and 44 first. 49 to 56 are the autumn and birthday set, each captioned as a two-sided vote; post the dated ones (50, 51, 55) on their days.
+
+
+## rosie, read 24 Oct, and 631 to 635
+
+Read from the public post list on 24 Oct: 52 posts, 326 followers, 446.6K likes, nothing pinned. Ten posts are over 100K, none sit between 50K and 100K, and all ten went up 10–26 Sept.
+
+| Views | # | Engine | Comments | Saves |
+|---|---|---|---|---|
+| 1.3M | 149 | Maya cold, he made something, her breakup speech | 776 | 14.7K |
+| 986K | 30 | midnight, "first one to say it" | 181 | 24.9K |
+| 474K | 208 | Maya cold, he made something, she's cheating | 701 | 2.9K |
+| 349K | 138 | cat court | 31 | 4.1K |
+| 279K | 192 | "u said k", he has a secret baby | 61 | 1.1K |
+| 279K | 102 | friends to lovers | 25 | 1.1K |
+| 184K | 170 | his phone checks, she lied about where she was | 73 | 610 |
+| 138K | 78 | "it's tomorrow", he counted | 54 | 760 |
+| 130K | 03 | "thursday" / "bin day", he pretended to forget | 38 | 357 |
+| 122K | 39 | "2 months isnt an anniversary", he counted | 21 | 1.2K |
+
+- **208 went viral again when the hold lifted:** 158K on 21 Oct, 474K on 24 Oct, and its comments went from about 200 to 701. Nearly all of them yell at Maya by name: "maya pass the FUCKING controller" (14.5K likes), "making me side with a man🫩" (7.3K). The display name is maya, so the comments go to her.
+- **Every post since the return was sweet** (575, 573, 584, 599, 605, 610, 615, 626). The first three were shown to 12–17K people, but got 32–226 likes and 1–2 comments each, so TikTok stopped. The rest sit at 500–1,100. Most hits get 6–15 likes per 100 views.
+- **Every hit has tension on slide 1:** someone is cold, or he pretends he forgot. The sweet ones open sweet, so nothing is at stake.
+- **The "evening only" rule above was wrong.** The post ids show 30 went up at 11:14 UTC, 102 at 11:24 and 39 at 12:30.
+
+So 631 to 635 go back to the engines that made the hits. The owner then asked for "shocking so people comment", so every ending is a shock:
+
+| | Engine | Slide 1 | The shock |
+|---|---|---|---|
+| 631 | 208, Maya the villain | "its 6pm maya" / "and??" | "its my birthday" … "happy birthday i guess" |
+| 632 | a reveal, for Thanksgiving | "its complicated" | "ur brother is my ex" / "the one i told u about" |
+| 633 | cold reply, double life | her 👍 on "i love u" | "my boyfriend from home is visiting this weekend" / "can u not text me till monday" |
+| 634 | 192, he's the villain | "then why does gym bro have my best friends number" | "she said ur a bad kisser" |
+| 635 | Maya the villain, by manipulation | "she said ask u what u did" | "i sent her our texts" / "how else was i gonna get u" |
+
+**Post order:** 633, 631, 634, 635, 632 (632 lands closer to Thanksgiving), one a day. Pin 208, 149 and 30 to the profile.
+
+**Maya and Leo are 19–20.** The owner sent back 633's first ending ("i signed a lease today" / "for one"): "they are like 19 20 years old no leases no nothing like that". So their world is classes, dorms or their parents' place, part-time jobs, parties, exes, mums and friends. Never leases, moving in, mortgages, weddings, babies or careers.
+
+
+## The viral comparison (24 Oct), and 636 to 640
+
+The owner asked to compare every account they had sent against what went viral, then make posts people comment on, in 3 slides: 2 before the gift, 1 after. Read from TikTok's post lists on 24 Oct: 1,545 posts from rosie and the accounts they sent, 166 of them over 1M.
+
+| Account | Posts | Median | 1M+ | Format |
+|---|---|---|---|---|
+| @richie_prince1 | 419 | 2K | 69 | 5–7 s still of one iOS 26 chat |
+| @you_sir_naim | 159 | 203K | 31 | 2–6 cropped screenshots |
+| @36grm | 261 | 94K | 17 | 10 s still, "#targetaudience" |
+| @diarywithoutalockk | 420 | 40K | 15 | one image |
+| @unicornsprinklewaffles | 57 | 424K | 10 | 9–12 s still, sincere line |
+| @dianaa.auclair | 26 | 470K | 8 | memes and chat carousels |
+| @tingarchive14 | 22 | 590K | 7 | 16–35 slide love stories |
+| @savgilbertt | 78 | 145K | 5 | wrong-text fan fiction |
+
+**What the most-commented posts have in common.** Each one gives the viewer a job:
+
+| Engine | Post | Top comment |
+|---|---|---|
+| Take her side: he's caught lying by one detail | @you_sir_naim 7.4M (forgot her birthday; the date he remembered was his ex's) | "I'll bail you out" (459K) |
+| Quote the dodge: a shocking question, a casual reply | @richie_prince1 14.8M ("did you take my dad wallet", after "sup my love") | "This mf said 'Sup my love'" (473K) |
+| Pick a side: her savage comeback | @richie_prince1 8.8M ("Caleb is the guy that will come if you don't come"); @36grm 6.6M (her reply to "go to the party or be single", typed in the box and not sent) | "I would never disrespect my man like this" / "they say this and be cheating lol" (210K) |
+| Argue the answer | @richie_prince1 12.2M (a maths question, 18K comments) | "It's 2 right or wrong" (206K) |
+| Feel it: the ex still loves her | @you_sir_naim 6.0M (2 slides: his mom still asks when she's coming over) | – |
+| The cold flip | @36grm 11.1M ("my love for you is like dinosaurs, it doesn't exist") | "but it used to" (194K) |
+| Fill in your own | @36grm 4.4M ("my heart goes…") | "My heart goes cha-ching" (287K) |
+
+So 636 to 640 each copy one engine, written as a new story for Maya and Leo:
+
+| | Engine | Slide 1 | The ending people comment on |
+|---|---|---|---|
+| 636 | caught by one detail | "where were u last night" / "library" / "till 3am??" | "the library closes at 10 tho" (Read, no reply) |
+| 637 | her savage comeback | "who was the guy that walked u to ur car" / "my backup" | "u can stay" / "hes still my backup tho" |
+| 638 | the ex still loves her | "tomorrow wouldve been 1 year" / "please dont" | "because hes not gonna remember" |
+| 639 | the casual dodge | "who ate her birthday cake" / "hi beautiful" | "did u eat the cake tho" / "i love u" |
+| 640 | argue the answer | "8 ÷ 2(2+2)" / "1" / "my roommate says 16" | "its 16 tho" / "im taking it back" |
+
+**Post order:** 637, 636, 640, 638, 639, one a day.
+
+
+## Why the posts stall at 500 (25 Oct), and 641 to 645
+
+The owner: "none of them went viral.... a lot of them got 500 views". Here are rosie's posts since the hold lifted, read 25 Oct (UTC, with Riga time):
+
+| Posted (UTC) | Riga | Views | Likes | Comments |
+|---|---|---|---|---|
+| 20 Oct 23:09 | 02:09 | 14.4K | 32 | 2 |
+| 21 Oct 10:38 | 13:38 | 17.5K | 226 | 1 |
+| 21 Oct 17:58 | 20:58 | 12.3K | 93 | 1 |
+| 22 Oct 10:42 | 13:42 | 1.1K | 29 | 0 |
+| 22 Oct 12:57 | 15:57 | 514 | 9 | 2 |
+| 22 Oct 18:05 | 21:05 | 1.1K | 42 | 0 |
+| 23 Oct 09:00 | 12:00 | 534 | 28 | 1 |
+| 24 Oct 18:01 | 21:01 | 4.3K (626) | 142 | 0 |
+| 25 Oct 07:09 | 09:09 | 277 after an hour | 13 | 0 |
+
+- **Almost nobody comments:** 0–2 comments a post, where the hits had 25–776. TikTok shows a new post to a few hundred people first, and stops there if they scroll on.
+- **Time of day matters for the account as it is now.** The posts that went up between 9 AM and 4 PM Riga time stalled at about 500. The two that went up around 9 PM got 1.1K and 4.3K. Six of the ten hits went up 18:00–23:00 UTC. On 24 Oct I said the hour didn't matter, because 30 and 102 went up at midday. That was wrong for now.
+- **Five website screenshots sit in the middle of every story.** The viral accounts post 2–6 slides of pure story. Every screenshot of the site in the middle is a place to scroll away, and it makes the post read as an ad.
+- **Three posts in one day** on 22 Oct.
+
+**The changes, from 641 on:**
+- One gift screenshot between slides 2 and 3, cropped so the address bar doesn't show.
+- Post between 20:00 and 23:00 Riga time (2–5 PM in New York), one a day.
+- Every ending gives people a job: take a side, answer the question, quote the line.
+- To check whether TikTok is limiting reach, open one stalled post in TikTok Studio. If it says "Not eligible for For You feed", it gives the reason.
+
+| | Engine | Slide 1 | The ending people comment on |
+|---|---|---|---|
+| 641 | caught by one detail | "whose hoodie is in ur car" / "mine" / "its a small" | "its my sisters" … "u dont have a sister" (Read, no reply) |
+| 642 | argue the answer | "if ur mom and i were drowning who would u save" / "my mom" | "i cant swim tho" / "learn" |
+| 643 | Maya the villain (208) | "u posted me on ur story??" / "felt like it" | "it worked" / "my ex just texted me" |
+| 644 | her savage answer | "delete his number or delete mine" / "guess" | "i deleted his" / "i still know it by heart tho" |
+| 645 | the situationship | "what are we" / "were chilling" | "so am i ur girlfriend" / "why do u need a label" |
+
+**Post order:** 641, 643, 645, 644, 642.
+
+
+## 646 to 650: more like 645
+
+The owner on 641–645: "that 645 is good in my opinion you need to create more like that". 645 is the situationship post: "what are we" / "were chilling" / the gift / "so am i ur girlfriend" / "why do u need a label". It works because every 19 or 20 year old has lived it. She asks a fair question. He answers with a red-flag line everyone has heard, and the gift stands in for the answer. The comments write themselves ("RUN").
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 646 | "why havent u posted me" | "i like keeping things private" | "u posted ur car 3 times this week" / "thats different" |
+| 647 | "u said i love u" | "i was tired" | "do u love me or not" / "i dont want to rush things" |
+| 648 | "u left me on delivered all weekend" | "my phone died" / "it was a long weekend" | "u posted a story saturday tho" / "from my laptop" |
+| 649 | "my friend asked if ur my boyfriend" | "say were talking" / "why rush it" | "are u talking to anyone else" / "why would u ask that" |
+| 650 | "from me??" | "i think i need space" | "do u want space or not" / "space but like with u" |
+
+**Post order:** 649, 646, 648, 647, 650, between 20:00 and 23:00 Riga time, one a day.
+
+
+## Read 26 Oct, and 651 to 655
+
+The newest posts on rosie now get 4–5K, up from 500, and still almost no comments:
+
+| Post | Posted (UTC) | Views | Likes | Comments | Saves |
+|---|---|---|---|---|---|
+| 640, the maths question | 25 Oct 07:09 | 4.9K | 147 | **6** | 12 |
+| 641, the hoodie | 25 Oct 08:50 | 5.3K | 149 | 0 | 12 |
+| 647, "i was tired" | 25 Oct 18:59 | 4.4K | 66 | 0 | 7 |
+| 626, wrong text | 24 Oct 18:01 | 4.7K | 157 | 0 | 4 |
+
+- The two morning posts did as well as the evening one, so the hour isn't the problem the 25 Oct note thought it was.
+- Only the post that asked the viewer something (the maths) got comments. None of the posts has a caption.
+- They still go up with 8 images, so about five gift screenshots.
+
+So 651 to 655 keep 645's red-flag line, the owner's pick, and each caption asks the viewer to judge it ("red flag or not?"). The owner has to paste the caption: it's the question people answer.
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 651 | "why did u like her pic at 2am" | "ur overthinking" | "u liked another one while i was opening it" / "ur overthinking" |
+| 652 | "so are we official or not" | "im just not in a good place rn" | "ur ex just posted u on her story" / "were just friends" |
+| 653 | "what do u want" (at 2:14 AM) | "u up" / "so ur up" | "why do u only ever text me at 2am" / "thats when i miss u" |
+| 654 | "u forgot our 3 months" | "its not that deep" | "when did u make this" / "2 weeks ago" (he was acting) |
+| 655 | "u take 6 hours to reply" | "i dont really text" | "u replied to her in 2 minutes tho" / "she had a question" |
+
+**Post order:** 652, 651, 655, 653, 654, one a day.
+
+
+## 656 to 660 (27 Oct)
+
+More of 645's red-flag lines (the owner's pick), each with a caption that asks the viewer to judge. Rosie's numbers couldn't be re-read today, because the browser step was blocked.
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 656 | "why did u and ur ex break up" | "she was crazy" / "crazy too" / "dont worry ur different" | "so what will u tell the next girl about me" / "depends" |
+| 657 | "does ur mom know about me" | "not yet" / "shes not ready" | "she follows me on instagram" / "she thinks ur my friend" |
+| 658 | "u havent seen me in 2 weeks" | "im busy with school" / "networking" | "can i come to the next one" / "its not that kind of party" |
+| 659 | "who is she" | "shes like a sister to me" | "u have matching tattoos" / "sibling tattoos" |
+| 660 | "about what" (to "can we talk tomorrow") | "tomorrow" | "will u be my girlfriend" / "leo weve been dating for 9 months" |
+
+**Post order:** 657, 656, 658, 659, 660, one a day.

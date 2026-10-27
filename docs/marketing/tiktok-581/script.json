@@ -1,0 +1,82 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Yesterday|11:58 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "u awake my love"
+        },
+        {
+          "from": "me",
+          "text": "yes why"
+        },
+        {
+          "from": "them",
+          "text": "stay up 2 more minutes"
+        },
+        {
+          "from": "me",
+          "text": "why"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|12:00 AM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "happy 1 year baby"
+        },
+        {
+          "from": "them",
+          "text": "best year of my whole life"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "happy 1 year maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "timestamp": "Today|12:06 AM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "im crying"
+        },
+        {
+          "from": "me",
+          "text": "i love u so much"
+        },
+        {
+          "from": "them",
+          "text": "365 days and id pick u every single one",
+          "tapback": "heart"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "even the day i threw ur phone in the lake?"
+        },
+        {
+          "from": "them",
+          "text": "especially that day"
+        }
+      ]
+    }
+  ]
+}

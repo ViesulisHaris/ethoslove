@@ -1,0 +1,61 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|7:31 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you posted a photo dump"
+        },
+        {
+          "from": "me",
+          "text": "and i'm not in it"
+        },
+        {
+          "from": "them",
+          "text": "you're in slide 9"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "slide 9 is a blurry arm",
+          "status": "Read 7:33 PM"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for slide 1 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i already archived all our pics"
+        },
+        {
+          "from": "them",
+          "text": "maya unarchive them"
+        }
+      ]
+    }
+  ]
+}

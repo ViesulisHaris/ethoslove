@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:34 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did u like her pic at 2am"
+        },
+        {
+          "from": "them",
+          "text": "ur overthinking"
+        },
+        {
+          "from": "me",
+          "text": "u never like my pics"
+        },
+        {
+          "from": "them",
+          "text": "ur overthinking again"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "here"
+        },
+        {
+          "from": "them",
+          "text": "i made u this so u stop overthinking"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "its cute"
+        },
+        {
+          "from": "me",
+          "text": "u liked another one while i was opening it"
+        },
+        {
+          "from": "them",
+          "text": "ur overthinking"
+        }
+      ]
+    }
+  ]
+}

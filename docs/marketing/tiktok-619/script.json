@@ -1,0 +1,65 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|10:22 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "i have to tell you something"
+        },
+        {
+          "from": "me",
+          "text": "what"
+        },
+        {
+          "from": "them",
+          "text": "i lied to you last night"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "about what"
+        },
+        {
+          "from": "me",
+          "text": "leo",
+          "status": "Read 10:23 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "them",
+          "text": "i wasnt at the gym"
+        },
+        {
+          "from": "them",
+          "text": "i was making this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    }
+  ]
+}

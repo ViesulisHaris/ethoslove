@@ -1,0 +1,64 @@
+{
+  "crop": true,
+  "look": "ios26",
+  "silenced": false,
+  "bar": false,
+  "slides": [
+    {
+      "type": "chat",
+      "encrypted": true,
+      "timestamp": "Today|9:51 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "you forgot to pick me up"
+        },
+        {
+          "from": "me",
+          "text": "i waited 40 minutes"
+        },
+        {
+          "from": "them",
+          "text": "my phone was on silent"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "link": {
+            "title": "sorry 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        },
+        {
+          "from": "them",
+          "text": "it'll never happen again"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "bar": true,
+      "messages": [
+        {
+          "from": "me",
+          "text": "i got an uber"
+        },
+        {
+          "from": "me",
+          "text": "on your card"
+        },
+        {
+          "from": "them",
+          "text": "maya it says $86"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|4:12 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "i hate my haircut"
+        },
+        {
+          "from": "me",
+          "text": "i want to cry"
+        },
+        {
+          "from": "them",
+          "text": "send a pic"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "no"
+        },
+        {
+          "from": "them",
+          "text": "ok then"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for the prettiest girl 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "u havent even seen it"
+        },
+        {
+          "from": "them",
+          "text": "i dont need to",
+          "tapback": "heart"
+        }
+      ]
+    }
+  ]
+}

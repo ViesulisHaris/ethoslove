@@ -57,6 +57,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const [stage, setStage] = useState<Stage>(preview ? "open" : "tied");
   const [burst, setBurst] = useState(0);
+  const [petals, setPetals] = useState(0);
   const [run, setRun] = useState(0);
   const eventRef = useRef(onEvent);
   useEffect(() => {
@@ -70,14 +71,17 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     buzz(12);
     eventRef.current?.({ type: "started" });
     setStage("untying");
+    if (!reduce) setPetals((p) => p + 1);
+    // The page starts coming in while the ribbon is still sliding away, so the gingham is never left empty.
     window.setTimeout(
       () => {
         setBurst((b) => b + 1);
         playChime(audio.muted);
+        buzz(8);
         setStage("open");
         eventRef.current?.({ type: "progress", pct: 30 });
       },
-      reduce ? 250 : 1050,
+      reduce ? 250 : 620,
     );
   };
 
@@ -96,7 +100,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <Ambience layers={look.ambience} opacity={0.75} />
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {stage !== "open" ? (
           <Tied key={`tied-${run}`} look={look} s={s} data={data} untying={stage === "untying"} reduce={reduce} onUntie={untie} />
         ) : (
@@ -104,6 +108,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         )}
       </AnimatePresence>
 
+      <Confetti burst={petals} colors={[look.satin.light, look.satin.mid, "#FFFFFF"]} count={40} shape="petal" origin={{ x: 0.5, y: 0.42 }} className="pointer-events-none absolute inset-0 z-[35]" />
       <Confetti burst={burst} colors={look.confetti} count={130} origin={{ x: 0.5, y: 0.42 }} className="pointer-events-none absolute inset-0 z-[36]" />
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
@@ -112,8 +117,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
 /** The page still wrapped, waiting to be untied. */
 function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy; data: Data; untying: boolean; reduce: boolean; onUntie: () => void }) {
+  // Above the page as it leaves, fading while the page comes in under it.
   return (
-    <motion.div className="absolute inset-0 z-10" exit={{ opacity: 0, transition: { duration: 0.35 } }}>
+    <motion.div className="absolute inset-0 z-20" style={{ pointerEvents: untying ? "none" : undefined }} exit={{ opacity: 0, transition: { duration: reduce ? 0.25 : 0.5 } }}>
       <Wrapping look={look} s={s} recipientName={data.recipientName} senderName={data.senderName} untying={untying} reduce={reduce} bow="cq-bow" />
       <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
       <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
@@ -128,14 +134,17 @@ function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy
  * first screen, and, drawn still, the Classic tile in the editor's cover picker.
  */
 function Wrapping({ look, s, recipientName, senderName, untying, reduce, bow }: { look: Look; s: Copy; recipientName: string; senderName: string; untying: boolean; reduce: boolean; bow: string }) {
-  const slide = { duration: reduce ? 0.15 : 0.8, ease: [0.6, 0, 0.3, 1] as const };
+  // Pulled, the ribbon starts slow and runs off fast, once the knot has given.
+  const slide = { duration: reduce ? 0.15 : 0.62, ease: [0.62, 0, 0.86, 0.36] as const, delay: untying && !reduce ? 0.14 : 0 };
+  const idle = !untying && !reduce;
   return (
     <>
       <motion.span aria-hidden="true" className="absolute inset-y-0 left-1/2 w-[calc(11*var(--p))] -translate-x-1/2" style={{ background: satinBand(look.satin, false), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { y: "105%" } : { y: 0 }} transition={slide} />
-      <motion.span aria-hidden="true" className="absolute inset-x-0 top-[42%] h-[calc(11*var(--p))] -translate-y-1/2" style={{ background: satinBand(look.satin, true), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { x: "105%" } : { x: 0 }} transition={{ ...slide, delay: untying && !reduce ? 0.08 : 0 }} />
+      <motion.span aria-hidden="true" className="absolute inset-x-0 top-[42%] h-[calc(11*var(--p))] -translate-y-1/2" style={{ background: satinBand(look.satin, true), boxShadow: "0 0 calc(2*var(--p)) rgba(80,20,45,.25)" }} animate={untying ? { x: "105%" } : { x: 0 }} transition={{ ...slide, delay: untying && !reduce ? 0.2 : 0 }} />
 
-      {/* the tag hangs from the knot on a thread */}
-      <motion.div className="absolute top-[42%] left-1/2 z-[3] w-[calc(48*var(--p))] origin-top" style={{ x: "-4%", rotate: 7 }} initial={reduce ? false : { opacity: 0, rotate: 24 }} animate={untying ? { opacity: 0, y: "70%", rotate: 30 } : { opacity: 1, y: 0, rotate: 7 }} transition={untying ? slide : { delay: 0.5, type: "spring", stiffness: 60, damping: 8 }}>
+      {/* the tag hangs from the knot on a thread: it sways while it waits, and swings off when the knot goes */}
+      <motion.div className="absolute top-[42%] left-1/2 z-[3] w-[calc(48*var(--p))] origin-top" style={{ x: "-4%", rotate: 7 }} initial={reduce ? false : { opacity: 0, rotate: 24 }} animate={untying ? (reduce ? { opacity: 0 } : { opacity: [1, 1, 0], y: ["0%", "-4%", "150%"], rotate: [7, -16, 38] }) : { opacity: 1, y: "0%", rotate: 7 }} transition={untying ? (reduce ? { duration: 0.15 } : { duration: 0.95, times: [0, 0.26, 1], ease: "easeIn" }) : { delay: 0.5, type: "spring", stiffness: 60, damping: 8 }}>
+        <motion.div style={{ transformOrigin: "50% 0%" }} animate={idle ? { rotate: [0, -3.5, 0, 3, 0] } : { rotate: 0 }} transition={idle ? { duration: 4.6, repeat: Infinity, ease: "easeInOut", delay: 1.6 } : { duration: 0.2 }}>
         <span aria-hidden="true" className="mx-auto block h-[calc(30*var(--p))] w-px" style={{ background: look.satin.deep, opacity: 0.6 }} />
         <div className="relative rounded-[calc(1.6*var(--p))] px-[calc(4*var(--p))] pt-[calc(6*var(--p))] pb-[calc(4.4*var(--p))] text-center" style={{ backgroundColor: look.paper, backgroundImage: PAPER_GRAIN, clipPath: "polygon(22% 0, 78% 0, 100% 16%, 100% 100%, 0 100%, 0 16%)", boxShadow: "0 calc(1.2*var(--p)) calc(2.4*var(--p)) rgba(60,20,40,.3)" }}>
           <span aria-hidden="true" className="absolute top-[calc(2*var(--p))] left-1/2 block h-[calc(2.2*var(--p))] w-[calc(2.2*var(--p))] -translate-x-1/2 rounded-full" style={{ boxShadow: `inset 0 0 0 calc(.5*var(--p)) ${look.satin.mid}`, background: look.wall }} />
@@ -149,10 +158,14 @@ function Wrapping({ look, s, recipientName, senderName, untying, reduce, bow }: 
             </FitName>
           ) : null}
         </div>
+        </motion.div>
       </motion.div>
 
       <motion.div className="absolute top-[42%] left-1/2 z-[2] w-[calc(78*var(--p))]" style={{ x: "-50%", y: "-41.2%" }} initial={reduce ? false : { scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 120, damping: 12, delay: 0.15 }}>
-        <SatinBow id={bow} satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
+        {/* the bow breathes a little while it waits, so the first screen is never quite still */}
+        <motion.div style={{ transformOrigin: "50% 41.2%" }} animate={idle ? { scale: [1, 1.025, 1] } : { scale: 1 }} transition={idle ? { duration: 2.8, repeat: Infinity, ease: "easeInOut", delay: 1.2 } : { duration: 0.15 }}>
+          <SatinBow id={bow} satin={look.satin} untied={untying} reduce={reduce} className="relative w-full" />
+        </motion.div>
       </motion.div>
     </>
   );
