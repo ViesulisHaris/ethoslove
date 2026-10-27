@@ -1,0 +1,71 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:52 PM",
+      "messages": [
+        {
+          "from": "them",
+          "text": "can we talk tomorrow"
+        },
+        {
+          "from": "me",
+          "text": "about what"
+        },
+        {
+          "from": "them",
+          "text": "tomorrow"
+        },
+        {
+          "from": "me",
+          "text": "leo im not gonna sleep now",
+          "status": "Read 11:53 PM"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "them",
+          "text": "ok fine"
+        },
+        {
+          "from": "them",
+          "text": "open this first"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "omg"
+        },
+        {
+          "from": "me",
+          "text": "so what did u want to talk about"
+        },
+        {
+          "from": "them",
+          "text": "will u be my girlfriend"
+        },
+        {
+          "from": "me",
+          "text": "leo weve been dating for 9 months"
+        }
+      ]
+    }
+  ]
+}
