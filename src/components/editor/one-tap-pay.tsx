@@ -97,13 +97,13 @@ export function OneTapPay({ request, locale, disabled, sale }: { request: Checko
         <span aria-hidden="true" className="h-px flex-1 bg-line" />
       </p>
       {/* The sentence Stripe's page shows by its own tickbox, word for word (lib/stripe/line-items.ts). */}
-      <label className="mt-3 flex cursor-pointer items-start gap-3 text-left text-xs leading-relaxed text-ink-soft">
+      <label className="mt-3 flex cursor-pointer items-start gap-3 text-left text-xs leading-normal text-muted-foreground">
         <input
           type="checkbox"
           checked={ticked}
           disabled={disabled}
           onChange={(e) => setTicked(e.target.checked)}
-          className="mt-0.5 size-5 shrink-0 accent-coral"
+          className="size-5 shrink-0 accent-coral"
           data-testid="one-tap-consent"
         />
         <span>
