@@ -3,7 +3,7 @@
  * poster, a link and a QR code to tryethos.io/etsy/<slug>, and the three steps. Written to
  * docs/marketing/etsy/<slug>.pdf, ready to upload as the listing's digital file.
  *
- *   node scripts/etsy-pdfs.mjs [origin=https://tryethos.io]
+ *   node scripts/etsy-pdfs.mjs [origin=https://tryethos.io] [slugs…]   (no slugs: every listing)
  */
 import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -11,6 +11,7 @@ import { chromium } from "@playwright/test";
 import QRCode from "qrcode";
 
 const origin = (process.argv[2] ?? "https://tryethos.io").replace(/\/$/, "");
+const only = process.argv.slice(3);
 const OUT = "docs/marketing/etsy";
 const LISTINGS = [
   ["popup-card", "Pop-up Card"],
@@ -21,6 +22,15 @@ const LISTINGS = [
   ["digicam", "Digicam"],
   ["scrapbook", "Scrapbook"],
   ["museum", "Museum"],
+  ["jar-of-reasons", "Jar of Reasons"],
+  ["halfway", "Halfway"],
+  ["passport", "Passport"],
+  ["pack-your-bags", "Pack Your Bags"],
+  ["scratch-card", "Scratch Card"],
+  ["snow-globe", "Snow Globe"],
+  ["fireside", "Fireside"],
+  ["arcade", "Arcade"],
+  ["on-repeat", "On Repeat"],
 ];
 
 const page = ({ name, link, qr, poster }) => `<!doctype html>
@@ -71,6 +81,7 @@ mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
 const tab = await browser.newPage({ viewport: { width: 794, height: 1123 } });
 for (const [slug, name] of LISTINGS) {
+  if (only.length && !only.includes(slug)) continue;
   const link = `${origin}/etsy/${slug}`;
   const qr = await QRCode.toDataURL(link, { margin: 1, width: 600, color: { dark: "#24121b", light: "#fdf7f3" } });
   const poster = `data:image/jpeg;base64,${readFileSync(join("public/templates", slug, "poster.jpg")).toString("base64")}`;

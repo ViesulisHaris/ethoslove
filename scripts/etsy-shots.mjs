@@ -18,6 +18,24 @@ async function scrollCollage(page, opener) {
   for (let i = 0; i < 6; i++) { await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.62, behavior: "smooth" })); await page.waitForTimeout(1600); }
 }
 const swipeUp = async (page) => { await page.mouse.move(W / 2, H * 0.8); await page.mouse.down(); await page.mouse.move(W / 2, H * 0.45, { steps: 6 }); await page.mouse.up(); };
+/** Taps through a gift's cover, when it has one. */
+async function open(page) {
+  const cover = page.getByRole("button", { name: /tap to open/i }).first();
+  if (await cover.waitFor({ timeout: 6000 }).then(() => true, () => false)) { await page.waitForTimeout(1600); await cover.click({ force: true }); await page.waitForTimeout(2200); }
+}
+/** Scrolls the gift so a section starts at the top of the screen (no half-scrolled stills): the last text matching `re`, `offset` px down. */
+const scrollToText = (page, re, offset = 30) =>
+  page.evaluate(({ src, flags, offset }) => {
+    const rx = new RegExp(src, flags);
+    const el = [...document.querySelectorAll("body *")].filter((e) => e.children.length === 0 && rx.test((e.textContent || "").trim())).pop();
+    let sc = el?.parentElement;
+    while (sc && !(sc.scrollHeight > sc.clientHeight + 10 && /(auto|scroll)/.test(getComputedStyle(sc).overflowY))) sc = sc.parentElement;
+    if (sc) sc.scrollTo({ top: el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - offset, behavior: "smooth" });
+  }, { src: re.source, flags: re.flags, offset });
+const scrollDown = async (page, sel, times, part = 0.55, wait = 1500) => {
+  const sc = page.locator(sel).last();
+  if (await sc.count()) for (let i = 0; i < times; i++) { await sc.evaluate((el, p) => el.scrollBy({ top: el.clientHeight * p, behavior: "smooth" }), part).catch(() => {}); await page.waitForTimeout(wait); }
+};
 
 const SCRIPTS = {
   "popup-card": async (page) => {
@@ -82,6 +100,115 @@ const SCRIPTS = {
     await enter.click({ force: true });
     await page.waitForTimeout(2000);
     for (let i = 0; i < 5; i++) { await page.getByRole("button", { name: /next room/i }).first().click({ force: true }).catch(() => {}); await page.waitForTimeout(1800); }
+  },
+  "jar-of-reasons": async (page) => {
+    const jar = page.getByRole("button", { name: /tap the jar/i });
+    await jar.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await jar.click({ force: true });
+    await page.waitForTimeout(2200);
+    await page.mouse.click(W / 2, H * 0.93);
+    await page.waitForTimeout(1200);
+    for (let i = 0; i < 5; i++) { await page.getByRole("button", { name: /pull another/i }).click({ force: true, timeout: 5000 }).catch(() => {}); await page.waitForTimeout(2200); await page.mouse.click(W / 2, H * 0.93); await page.waitForTimeout(1200); }
+  },
+  halfway: async (page) => {
+    const plane = page.getByRole("button", { name: /fly to/i });
+    await plane.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await plane.click({ force: true });
+    await page.waitForTimeout(10000);
+    await scrollDown(page, ".overflow-y-auto", 3);
+  },
+  passport: async (page) => {
+    const cover = page.getByRole("button", { name: /^open$/i }).first();
+    await cover.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await cover.click({ force: true });
+    await page.waitForTimeout(16000);
+    await scrollToText(page, /^visa$/i, 40);
+    await page.waitForTimeout(9000);
+  },
+  "pack-your-bags": async (page) => {
+    const clues = page.getByTestId("pyb-clue");
+    await clues.first().waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2000);
+    const count = await clues.count();
+    for (let i = 0; i < count; i++) { await clues.nth(i).click({ force: true }); await page.waitForTimeout(1100); }
+    await page.waitForTimeout(1200);
+    await page.getByTestId("pyb-where").click({ force: true, timeout: 12000 });
+    await page.locator('[data-testid="pyb-board"][data-resolved="true"]').waitFor({ timeout: 15000 });
+    await page.waitForTimeout(2400);
+    await page.getByTestId("pyb-to-ticket").click({ force: true, timeout: 8000 });
+    await page.waitForTimeout(3600);
+    await page.getByTestId("pyb-stub").click({ force: true });
+    await page.waitForTimeout(4500);
+    await scrollDown(page, ".overflow-y-auto", 2);
+  },
+  "scratch-card": async (page) => {
+    const start = page.getByRole("button", { name: /scratch here/i }).first();
+    await start.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await start.click({ force: true });
+    await page.waitForTimeout(1400);
+    for (let card = 0; card < 6; card++) {
+      const box = await page.locator("canvas[role=img]").first().boundingBox().catch(() => null);
+      // Back and forth in one long stroke, close rows, until the foil gives way (it clears itself past 55%).
+      if (box) {
+        await page.mouse.move(box.x + 6, box.y + 10);
+        await page.mouse.down();
+        for (let row = 0; row < 14; row++) { const y = box.y + 10 + (row / 13) * (box.height - 20); await page.mouse.move(row % 2 ? box.x + 6 : box.x + box.width - 6, y, { steps: 24 }); }
+        await page.mouse.up();
+      }
+      await page.waitForTimeout(2200);
+      const next = page.getByRole("button", { name: /^(next card|the last one)$/i });
+      if (!(await next.count())) break;
+      await next.click({ force: true });
+      await page.waitForTimeout(1200);
+    }
+    await page.waitForTimeout(3000);
+  },
+  "snow-globe": async (page) => {
+    await open(page);
+    await page.getByRole("button", { name: /shake the globe/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    for (let i = 0; i < 3; i++) { await page.getByRole("button", { name: /^shake it$/i }).click({ force: true }); await page.waitForTimeout(4200); }
+    await page.getByRole("button", { name: /turn it over/i }).click({ force: true }).catch(() => {});
+    await page.waitForTimeout(6500);
+  },
+  fireside: async (page) => {
+    await open(page);
+    const candle = page.getByRole("button", { name: /light the candle/i });
+    await candle.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await candle.click({ force: true });
+    await page.waitForTimeout(9000);
+    await scrollDown(page, ".overflow-y-auto", 3);
+  },
+  arcade: async (page) => {
+    await page.getByRole("button", { name: /press start/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2400);
+    await page.getByRole("button", { name: /press start/i }).click({ force: true });
+    for (let level = 0; level < 4; level++) {
+      const box = await page.locator("canvas").first().boundingBox().catch(() => null);
+      if (box) for (let i = 0; i < 14; i++) { const x = box.x + 20 + ((i * 53) % (box.width - 40)); await page.mouse.move(x, box.y + box.height - 24, { steps: 4 }); await page.mouse.down(); await page.mouse.up(); await page.waitForTimeout(260); }
+      await page.getByRole("button", { name: /skip level/i }).click({ force: true, timeout: 4000 }).catch(() => {});
+      await page.waitForTimeout(2600);
+      const next = page.getByRole("button", { name: /next level/i });
+      if (!(await next.count())) break;
+      await next.click({ force: true });
+      await page.waitForTimeout(800);
+    }
+    await page.getByRole("button", { name: /read message/i }).click({ force: true, timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(4500);
+  },
+  "on-repeat": async (page) => {
+    await page.getByRole("button", { name: /press play/i }).first().click({ force: true, timeout: 20000 });
+    await page.locator("[data-scroller]").waitFor({ timeout: 15000 });
+    await page.waitForTimeout(4800);
+    await scrollToText(page, /^playlist$/i, 34);
+    await page.waitForTimeout(3600);
+    await scrollToText(page, /^dear /i, 64);
+    await page.waitForTimeout(8000);
   },
 };
 

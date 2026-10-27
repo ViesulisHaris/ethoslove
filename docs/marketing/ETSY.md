@@ -28,7 +28,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
 - **Shop open:** TryEthos (tryethos.etsy.com). English, Latvia, EUR; Migla as an incorporated business; Etsy Plus declined.
 - **Shop basics:** logo, tagline and About are filled in. The banner is in `etsy/photos/shop-banner.jpg`, not uploaded.
-- **8 listings saved as drafts, not published:**
+- **17 listings saved as drafts, not published:** the first 8, and 9 more (wave 2) added on 28 Oct.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999;
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
@@ -41,9 +41,12 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 3. ~~Migration 0018.~~ Applied 28 Oct.
 4. The connect link.
 5. A real test order bought by someone else, then refunded.
-6. Publish the 8 drafts ($0.20 each).
+6. Publish the 17 drafts ($0.20 each, $3.40).
 
 Photos: `docs/marketing/etsy/photos/<slug>/`, made by `scripts/etsy-shots.mjs`, then `etsy-photos.mjs` and `etsy-brand.mjs`.
+All three take slugs, to make one listing without touching the others. A new listing is quickest as an
+Etsy copy of a draft in the same category (Copy, Delete all photos, then upload): it keeps the price,
+quantity, digital type, category and attributes.
 
 ## Setting it up (the owners, once)
 
@@ -135,20 +138,20 @@ boyfriend"** (one). Those are the quickest #1s.
 
 ### The plan to be #1 (money steps need the owners' OK)
 
-1. **Publish** the 8 drafts after the test order passes ($0.20 each).
+1. **Publish** the 17 drafts after the test order passes ($0.20 each).
 2. **Etsy Ads at $3–5 a day** on every listing for 30 days. A new listing with no sales gets almost
    no organic views; ads bring the first orders, and orders lift the organic rank. A sale leaves about
    €9.30 after Etsy's published fees (6.5% transaction, 4% + €0.30 payment, $0.20 listing; check it
    against the first payout), so an ad order must cost less than that. Turn Offsite Ads off while the
    shop is under $10k a year: they take 15% of the sale.
-3. **Wave 2, nine listings for the open searches** (photos, video and PDF from the same scripts):
+3. **Wave 2, nine listings for the open searches:** built as drafts on 28 Oct (texts under Wave 2 listings, at the end).
    - Jar of Reasons: "reasons why i love you"
    - Halfway and Passport: "long distance gift for boyfriend"
    - Pack Your Bags: "surprise trip reveal"
    - Scratch Card: "scratch off cards", "digital anniversary scratch off"
-   - Snow Globe and Fireside: Christmas (live by mid-November, when Christmas searches climb)
-   - Arcade: "interactive birthday"
-   - Vinyl or On Repeat: song and playlist gifts
+   - Snow Globe: Christmas; Fireside: "thinking of you gift" (both live by mid-November, when Christmas searches climb)
+   - Arcade: "video game gift", "interactive birthday"
+   - On Repeat: "custom album cover", song and playlist gifts
 4. **Dates:** Christmas listings live by mid-November; every love listing needs orders and reviews
    by mid-January, before Valentine's week.
 5. **Shop:** sections (Birthday, Love letters, Anniversary, Photo gifts), the Spanish texts as
@@ -326,3 +329,207 @@ How it works:
 1. After you buy, download the PDF and open its link.
 2. Add your photos, their plaques and your message.
 3. Press Send and type your Etsy order number. Your gallery's link is ready to share.
+
+## Wave 2 listings (drafts since 28 Oct)
+
+Written from Etsy's search suggestions (see Getting found). Snow Globe and Fireside are copies of
+XOXO with the Occasion cleared; Arcade is a copy of the Pop-up Card (Birthday Cards); the rest are
+copies of XOXO (Love Cards, Anniversary).
+
+### Jar of Reasons · SKU `ethos-jar-of-reasons`
+
+**Title:** Reasons Why I Love You Jar, Digital Love Jar for Boyfriend or Girlfriend, Interactive Love Notes
+
+**Tags:** reasons i love you, reasons jar, love jar, love notes, jar of love notes, digital love letter, love website, gift for boyfriend, gift for girlfriend, valentines gift, anniversary gift, long distance gift, digital gift for him
+
+**Occasion:** Anniversary
+
+**Description:**
+Reasons why I love you, in a jar they shake: every folded note is one of your reasons, some carry a photo, and your letter waits at the bottom.
+
+A glass jar stuffed with folded notes. They shake the phone (or tap the jar) and a note tumbles out and unfolds. They keep going until the jar is empty. Write as few as 3 reasons or as many as 100, and add up to 20 photos. White, kraft or pastel.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Write your reasons, add photos, pick a colour.
+3. Press Send and type your Etsy order number. Your jar's link is ready to share.
+
+Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Halfway · SKU `ethos-halfway`
+
+**Title:** Long Distance Relationship Gift for Boyfriend, Interactive Miss You Card, Digital Love Letter Map
+
+**Tags:** long distance gift, long distance love, miss you gift, miss you card, thinking of you gift, gift for boyfriend, gift for girlfriend, digital love letter, love website, interactive card, anniversary gift, valentines gift, digital gift for him
+
+**Occasion:** Anniversary
+
+**Description:**
+Long distance relationship gift: a postcard map of your two towns, and a paper plane they fly from your door to theirs with their breath.
+
+Your home on one island, theirs on the other, and the real distance between you in big numbers. They blow into their phone and a paper plane, a balloon or a little bird rides their breath along the dotted path, the kilometres counting down, until the path turns into a heart and the postcard flips over to your letter, with your photos taped beside it. No microphone? A tap flies it home. Up to 8 photos; blush, sea, butter or dusk.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Type both towns, add your photos and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Passport · SKU `ethos-passport`
+
+**Title:** Long Distance Relationship Gift, Digital Passport with Your Photos as Stamps, Travel Anniversary Gift
+
+**Tags:** long distance gift, long distance love, travel gift, passport gift, travel anniversary, anniversary gift, gift for boyfriend, gift for girlfriend, gift for traveler, digital photo album, digital love letter, love website, digital gift for him
+
+**Occasion:** Anniversary
+
+**Description:**
+A digital passport for the one you travel with, or the one you miss: a globe draws the route from your city to theirs, and your photos fill the pages as stamps.
+
+Their name is on the cover. They open it, a globe turns, the route draws itself (stopovers welcome), the pages fill with stamps, one per photo, and the visa page reveals your message. Up to 10 photos; navy, burgundy, forest or black.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Add both cities, your photos and your message.
+3. Press Send and type your Etsy order number. Your passport's link is ready to share.
+
+Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Pack Your Bags · SKU `ethos-pack-your-bags`
+
+**Title:** Surprise Trip Reveal, Digital Boarding Pass Gift, Trip Reveal Ticket for Boyfriend or Girlfriend
+
+**Tags:** surprise trip reveal, trip reveal, trip reveal gift, surprise trip, surprise trip ticket, boarding pass gift, boarding pass, travel gift, gift for boyfriend, gift for girlfriend, anniversary gift, birthday surprise, digital gift for him
+
+**Occasion:** Anniversary
+
+**Description:**
+A surprise trip reveal they play through: they pack a suitcase with your clues, and a departures board spells out where you're going.
+
+They pack an open suitcase with your clues, one luggage tag at a time. The lid shuts, the zip runs and a tag with the date swings from the handle. Then a departures board clatters letter by letter to the destination, a boarding pass, train ticket or road-trip map slides up with both your names on it, and when they tear off the stub, your letter is underneath. Up to 5 clues and 6 photos.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Type where you're going, when, and your clues; add photos.
+3. Press Send and type your Etsy order number. Your trip's link is ready to share.
+
+Add music and a countdown that opens it on the day. If it doesn't open on their phone, message us and we'll refund you.
+
+### Scratch Card · SKU `ethos-scratch-card`
+
+**Title:** Scratch Off Cards, Digital Scratch Card Reveal with Your Photos, Pregnancy Announcement or Proposal
+
+**Tags:** scratch off cards, scratch off ticket, scratch off, scratch card reveal, digital scratch off, proposal gift, baby announcement, pregnancy reveal, anniversary gift, gift for boyfriend, gift for girlfriend, valentines gift, interactive card
+
+**Occasion:** Anniversary
+
+**Description:**
+Scratch off cards they rub with a finger: each one hides a photo and a line, and the last one holds your message, or your news.
+
+A stack of scratch cards. They rub the foil away and it clears with a little burst. Made for proposals, pregnancy and other announcements, and every "will you?". 1 to 12 photos; silver, gold, rose or holographic foil.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Add your photos and a line for each card, then the last card's message.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Snow Globe · SKU `ethos-snow-globe`
+
+**Title:** Christmas Gift for Boyfriend or Girlfriend, Personalized Snow Globe with Your Photos, Digital Christmas Card
+
+**Tags:** snow globe, custom snow globe, christmas gift, digital christmas, christmas card, our first christmas, christmas for him, christmas for her, gift for boyfriend, gift for girlfriend, long distance gift, digital love letter, interactive card
+
+**Occasion:** none (this category has no Christmas occasion)
+
+**Description:**
+A snow globe on their shelf: they shake their phone, it snows, and every time it settles one of your photos or lines appears.
+
+A snow globe on a shelf. A harder shake makes a wilder storm, and turning the phone over tips the whole globe. After the last one the brass plaque is engraved and your letter opens. No motion sensor? A button shakes it. 1 to 8 photos.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Add your photos, your lines and your letter.
+3. Press Send and type your Etsy order number. Your globe's link is ready to share.
+
+Add music, a countdown that opens it on Christmas morning, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Fireside · SKU `ethos-fireside`
+
+**Title:** Thinking of You Gift, Cozy Digital Love Letter with a Candle and Your Photos, Miss You Card
+
+**Tags:** thinking of you gift, miss you card, miss you gift, cozy gifts, cozy gifts for her, digital love letter, love letter, love website, long distance gift, gift for girlfriend, gift for boyfriend, christmas card, interactive card
+
+**Occasion:** none (this category has no Christmas occasion)
+
+**Description:**
+A thinking of you gift for a cold evening: they light a candle in a little cabin, the room turns gold, and your letter unfolds from the blanket.
+
+Leaves or snow fall past the window. Your photos hang from a string on wooden pegs, sparks drift up from the candle, and their song plays low. Up to 8 photos; amber, maple or moss.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Write your letter, add photos and their song.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### Arcade · SKU `ethos-arcade`
+
+**Title:** Video Game Gift for Boyfriend, Interactive Birthday Game with Your Photos, Retro Arcade Message
+
+**Tags:** video game gift, gamer gift, interactive birthday, birthday for him, gift for boyfriend, digital gift for him, retro game, arcade game, pixel gift, anniversary gift, valentines for him, long distance gift, last minute gifts
+
+**Occasion:** Birthday
+
+**Description:**
+A video game gift made from your photos: they catch falling hearts, every level clears a photo, and the last one reveals your message.
+
+A tiny retro game. They drag the basket to catch hearts, stars or slices of cake; bleeps, pixel text, a CRT scanline switch and a leaderboard of one. 1 to 8 photos, one per level.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Add your photos and your message, pick what falls.
+3. Press Send and type your Etsy order number. Your game's link is ready to share.
+
+Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+### On Repeat · SKU `ethos-on-repeat`
+
+**Title:** Custom Album Cover Gift, Digital Playlist Love Letter with Your Photo and Song, Gift for Girlfriend
+
+**Tags:** custom album cover, album cover art, album cover gift, song gifts, playlist gift, our song, digital love letter, love website, gift for girlfriend, gift for boyfriend, anniversary gift, valentines for her, pink aesthetic
+
+**Occasion:** Anniversary
+
+**Description:**
+Your photo as the album cover and their name as the artist: a music player that turns into a sticker collage, with your song and a playlist of your photos.
+
+Under a pink sunset they press play: a gingham bow, flower stickers, a bouquet, a heart paperclip on a note in your handwriting, your song on the big player, and every photo on a playlist with your captions as the song titles, down to your letter. Every tap adds a sticker. 1 to 10 photos; sunset, lilac or night.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+How it works:
+1. After you buy, download the PDF and open its link.
+2. Add your photos and captions, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.

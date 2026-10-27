@@ -1,12 +1,12 @@
 // Etsy listing photos, 2000x2000: a hero, two pairs of moments, a single moment and "how it works",
 // from the demo frames etsy-shots.mjs captured. Plus a 15 s MP4 for each listing.
-//   node scripts/etsy-photos.mjs . <shots> docs/marketing/etsy/photos   (videos land beside the photos; Etsy has them, the repo keeps only the photos)
+//   node scripts/etsy-photos.mjs <repo> <shots> docs/marketing/etsy/photos [slugs…]   (videos land beside the photos; Etsy has them, the repo keeps only the photos)
 import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const [WT, SHOTS, OUT] = process.argv.slice(2);
+const [WT, SHOTS, OUT, ...only] = process.argv.slice(2);
 const req = createRequire(join(WT, "package.json"));
 const { chromium } = req("@playwright/test");
 const sharp = req("sharp");
@@ -20,6 +20,15 @@ const GIFTS = {
   digicam: { bg: "#f9dbe6", ink: "#47202f", title: "Digicam Photo Gift", line: "Your photos on a little 2006 camera", hero: 7, a: [1, 4, "They press power", "and it says hello"], b: [13, 17, "Every shutter press, a photo", "then it prints the roll"], single: [10, "The orange date in the corner"] },
   scrapbook: { bg: "#f3ebe1", ink: "#3b2a22", title: "Digital Scrapbook", line: "Polaroids, washi tape and a note from you", hero: 5, a: [1, 7, "They open the book", "and your photos develop"], b: [10, 14, "A typed letter from you", "and their song playing"], single: [8, "Photo strips, film and washi tape"] },
   museum: { bg: "#ebe5dc", ink: "#2b2622", title: "Museum Gallery Gift", line: "A quiet gallery of the two of you", hero: 3, a: [2, 6, "They walk in", "and swipe from room to room"], b: null, single: [3, "Each photo framed, with a title, a year, a line"] },
+  "jar-of-reasons": { bg: "#fbe4ea", ink: "#4a1d2e", title: "Reasons I Love You Jar", line: "A jar of your reasons. They shake one out.", hero: 2, a: [2, 4, "They tap the jar", "and a reason falls out"], b: [6, 14, "Some notes carry a photo", "one reason at a time"], single: [11, "Every note in your words"] },
+  halfway: { bg: "#fbe4ea", ink: "#4a1d2e", title: "Long Distance Love Map", line: "Blow a paper plane from your door to theirs", hero: 3, a: [1, 5, "The real distance between you", "they blow, the plane flies"], b: [7, 10, "Until it's zero", "and your letter is there"], single: [4, "The halfway point, in your words"] },
+  passport: { bg: "#e3ecf6", ink: "#1d2a44", title: "Digital Passport", line: "From your city to theirs, in one flight", hero: 2, a: [2, 6, "Their name on the cover", "the route draws itself"], b: [10, 12, "They land in your city", "every photo is a stamp"], single: [14, "Every stamp a place you've been"] },
+  "on-repeat": { bg: "#fbe0ea", ink: "#4a1d2e", title: "Album Cover Love Letter", line: "Your photo as the album cover, their name as the artist", hero: 1, a: [1, 5, "Your photo as the album cover", "and your song plays"], b: [9, 12, "A playlist of your photos", "and your letter at the end"], single: [3, "Stickers, a bow and your song"] },
+  "pack-your-bags": { bg: "#1b2440", ink: "#f4ecdf", title: "Surprise Trip Reveal", line: "They pack the bag. The board says where.", hero: 14, a: [3, 8, "They pack your clues", "the date swings from the handle"], b: [12, 15, "A departures board spells it out", "a boarding pass with both your names"], single: [20, "Your letter under the stub"] },
+  "scratch-card": { bg: "#f3e2cc", ink: "#3d2a14", title: "Scratch Off Cards", line: "Five cards. The last one is the big one.", hero: 2, a: [2, 7, "A stack of cards for them", "they scratch the foil away"], b: [29, 57, "Each one hides a photo", "and the last one asks"], single: [10, "A photo and a line on every card"] },
+  "snow-globe": { bg: "#2b1d16", ink: "#f6eadb", title: "Snow Globe", line: "Shake it. Each time it settles, a photo or a line.", hero: 6, a: [1, 8, "A globe on their shelf", "they shake it and it snows"], b: [10, 13, "It settles on one of your lines", "or one of your photos"], single: [23, "Then your letter opens"] },
+  fireside: { bg: "#2a1a14", ink: "#f6e7d6", title: "Fireside Letter", line: "A candle, a blanket and a letter by the window", hero: 6, a: [1, 6, "It arrives as a letter", "they light the candle"], b: [12, 17, "Your letter unfolds", "your photos on a string"], single: [7, "The room turns gold"] },
+  arcade: { bg: "#ece4f8", ink: "#3a2a55", title: "Arcade Love Game", line: "Catch the hearts. Unlock the photos.", hero: 14, a: [1, 9, "Press start", "catch the falling hearts"], b: [25, 45, "Each level clears a photo", "then they win"], single: [51, "And your message"] },
 };
 
 const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">';
@@ -62,7 +71,7 @@ const how = (g) => `<style>${base(g)}
   li { display: flex; gap: 28px; align-items: flex-start }
   b { flex: none; width: 64px; height: 64px; border-radius: 50%; background: ${g.ink}; color: ${g.bg}; display: grid; place-items: center; font-size: 30px }
   li span { font-size: 31px; line-height: 1.3 } li strong { display: block; font-size: 36px; margin-bottom: 4px }
-  .note { margin-top: 64px; font-size: 26px; padding: 22px 28px; border-radius: 18px; background: rgba(255,255,255,.55) }
+  .note { margin-top: 64px; font-size: 26px; padding: 22px 28px; border-radius: 18px; background: color-mix(in srgb, ${g.ink} 12%, transparent) }
 </style>
 <div class="wrap"><h2>How it works</h2><ol>
 <li><b>1</b><span><strong>Buy and download</strong>A one-page PDF with your link.</span></li>
@@ -80,6 +89,7 @@ mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1000, height: 1000 }, deviceScaleFactor: 2 });
 for (const [slug, g] of Object.entries(GIFTS)) {
+  if (only.length && !only.includes(slug)) continue;
   const dir = join(OUT, slug);
   mkdirSync(dir, { recursive: true });
   const shots = [
