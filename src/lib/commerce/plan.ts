@@ -3,6 +3,7 @@ import {
   BUMP,
   EVERY_TEMPLATE,
   PRODUCTS,
+  SECOND_GIFT,
   bumpAmount,
   hasUnlock,
   membershipAmount,
@@ -16,14 +17,19 @@ import type { MembershipProvider, MembershipStatus } from "@/lib/membership/type
 import { getManifest, isTemplateSlug } from "@/templates/manifests";
 import { upgradeAmount, type PaidPurchase } from "./pricing";
 
-/** purchases.kind: the product, or "bump" for a single or extras with every other template added. */
-export type PurchaseKind = ProductId | "bump";
+/**
+ * purchases.kind: the product, "bump" for a single or extras with every other template added, or
+ * "second" for a single with a second gift.
+ */
+export type PurchaseKind = ProductId | "bump" | "second";
 
 export type CheckoutRequest = {
   product: ProductId;
   templateSlugs: string[];
   packId?: string;
   addEverything?: boolean;
+  /** The second gift's template (SECOND_GIFT), picked on the pay sheet; only ever with a single. */
+  secondSlug?: string;
   currency: Currency;
   /** Ethos for Two: which plan. The server decides whether that is a subscription or the pass. */
   plan?: MembershipPlan;
@@ -52,7 +58,7 @@ export type CheckoutContext = {
   membership?: MembershipContext | null;
 };
 
-export type PlanLine = { key: ProductId | "bump"; amount: number };
+export type PlanLine = { key: ProductId | "bump" | "second"; amount: number };
 
 export type CheckoutPlan = {
   product: ProductId;
@@ -62,6 +68,8 @@ export type CheckoutPlan = {
   templateSlugs: string[];
   packId: PackId | null;
   bump: boolean;
+  /** The second gift's template, or null. */
+  second: string | null;
   lines: PlanLine[];
   total: number;
   /** The creator credited with the sale (purchases.creator_code), or null. */
@@ -105,6 +113,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
         templateSlugs: [],
         packId: null,
         bump: false,
+        second: null,
         lines: [{ key: "membership", amount: membershipAmount(membership.plan, currency) }],
         total: membershipAmount(membership.plan, currency),
         creatorCode: ctx.creatorCode,
@@ -140,26 +149,37 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   // every template costs this buyer. Once earlier purchases come off it (the upgrade), the paywall
   // hides the bump, and a page that still shows it can't charge more than the upgrade would.
   if (bump && upgradeAmount(currency, ctx.purchases) < PRODUCTS.everything.amounts[currency]) return fail("bump_not_available", 400);
+  // The second gift: one more premium template, only on a single and never with the bump (every
+  // template already includes it), and never one the buyer has or is buying now.
+  const second = req.secondSlug ?? null;
+  if (second !== null) {
+    if (!SECOND_GIFT.onto.includes(product) || bump) return fail("second_not_available", 400);
+    if (!isTemplateSlug(second) || getManifest(second)?.tier !== "premium" || slugs.includes(second)) return fail("second_not_available", 400);
+    if (alreadyCovered(ctx.ownedForever, second)) return fail("second_owned", 409);
+  }
   // The price depends on what the buyer already paid, so it needs to know who they are.
   if (product === "upgrade" && !ctx.signedIn) return fail("sign_in_required", 401);
 
   const unlocks = product === "pass" || product === "giftcard" ? [] : unlocksFor(product, slugs, { packId: packId ?? undefined });
   // addEverything on a pass is refused above (the bump only rides on a single or extras).
   if (bump) unlocks.push(EVERY_TEMPLATE);
+  if (second) unlocks.push(second);
   if (unlocks.length > 0 && unlocks.every((u) => alreadyCovered(ctx.ownedForever, u))) return fail("already_owned", 409);
 
   const lines: PlanLine[] = [{ key: product, amount: product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : catalogue.amounts[currency] }];
   // The bump takes the order to exactly Everything's price.
   if (bump) lines.push({ key: "bump", amount: bumpAmount(product, currency) });
+  if (second) lines.push({ key: "second", amount: SECOND_GIFT.amounts[currency] });
 
   return {
     ok: true,
     product,
-    kind: bump ? "bump" : product,
+    kind: bump ? "bump" : second ? "second" : product,
     currency,
     templateSlugs: packId ? [`pack:${packId}`] : slugs,
     packId,
     bump,
+    second,
     lines,
     total: lines.reduce((sum, line) => sum + line.amount, 0),
     creatorCode: ctx.creatorCode,

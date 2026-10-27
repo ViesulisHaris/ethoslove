@@ -1,6 +1,6 @@
 import type { GiftLocale } from "@/lib/gift/schema";
 import { BRAND } from "@/config/brand";
-import { CHARGED_CURRENCIES, FREE_SAVED_DATES, PRODUCTS, formatAmount, membershipAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { CHARGED_CURRENCIES, FREE_SAVED_DATES, PRODUCTS, SECOND_GIFT, formatAmount, membershipAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
 import { CREATOR_COMMISSION_PCT, CREATOR_PAYOUT_MIN_EUR } from "@/lib/commerce/creators";
 import { consentSentence } from "@/lib/stripe/line-items";
 
@@ -60,6 +60,8 @@ const P = { en: (id: ProductId) => price(id, "en"), es: (id: ProductId) => price
 /** Ethos for Two's two plans, from the same catalogue its subscriptions are charged from. */
 const planPrice = (plan: MembershipPlan, locale: GiftLocale) => inEach((c) => membershipAmount(plan, c), locale);
 const M = { en: (plan: MembershipPlan) => planPrice(plan, "en"), es: (plan: MembershipPlan) => planPrice(plan, "es") };
+/** The second gift ticked on the pay sheet (SECOND_GIFT), from the catalogue it is charged from. */
+const SECOND = { en: inEach((c) => SECOND_GIFT.amounts[c], "en"), es: inEach((c) => SECOND_GIFT.amounts[c], "es") };
 /** Which currency a buyer is charged in: euros, unless checkout also charges their own. */
 const CHARGED = {
   en:
@@ -131,6 +133,7 @@ const termsEn: LegalDoc = {
         "Game packs: extra rounds and cards for our games, each bought on its own. Ethos for Two: a membership for two people, monthly or yearly, with unlimited saved dates and trips shared between you, every gift template and every game pack, for as long as it runs (section 7). Gift cards: not on sale at the moment (section 8).",
         "Unlocks, “Make it special” and game packs have no end date: they stay on your account for as long as your account exists and we run the Service. They are personal to your account and can't be transferred.",
         "Adding every template at checkout. When you buy one template or “Make it special”, we may offer a box to add every other template for the difference between that price and the price of “Everything”, so that in total you pay exactly the price of “Everything”. It is never ticked for you. If you tick it, your purchase is “Everything”.",
+        `A second gift at checkout. When you buy one template, we may offer a box to add a second template, from a few we suggest, for ${SECOND.en}, for a later birthday, anniversary or any other day. It is never ticked for you, it can't be added together with every template, and it is unlocked on your account straight away, exactly like a template bought on its own.`,
         `Upgrading to Everything. If you're signed in and have already bought single templates, three templates or “Make it special”, you can upgrade to “Everything” for its price minus what you paid us for those, and never less than ${P.en("upgrade")}. The price is worked out and shown before you pay.`,
         `Free replies. When you receive a gift someone paid for, made with one of our paid templates, the “send one back” button at its end lets you make one gift in reply, with the same template, for free. A free reply carries the “${BRAND.watermark.en}” footer and no paid extras; to add extras or remove the footer, you pay the usual price for that template. Each paid gift gives one free reply, only through its button, and a free reply doesn't earn another.`,
         "No discount codes. We don't offer discount or promotion codes, and Stripe's checkout page doesn't ask for one.",
@@ -324,6 +327,7 @@ const termsEs: LegalDoc = {
         "Packs de juegos: rondas y cartas extra para nuestros juegos; cada pack se compra por separado. Ethos for Two: una suscripción para dos personas, mensual o anual, con citas y viajes guardados sin límite y compartidos entre los dos, todas las plantillas de regalo y todos los packs de juegos, mientras esté activa (sección 7). Tarjetas regalo: ahora mismo no están a la venta (sección 8).",
         "Los desbloqueos, «Hazlo especial» y los packs de juegos no caducan: permanecen en tu cuenta mientras exista tu cuenta y mantengamos el Servicio. Son personales e intransferibles.",
         "Añadir todas las plantillas al pagar. Cuando compras una plantilla o «Hazlo especial», puede que te ofrezcamos una casilla para añadir todas las demás plantillas por la diferencia entre ese precio y el de «Todo», de modo que en total pagues exactamente el precio de «Todo». Nunca está marcada de antemano. Si la marcas, tu compra es «Todo».",
+        `Un segundo regalo al pagar. Cuando compras una plantilla, puede que te ofrezcamos una casilla para añadir una segunda plantilla, entre unas pocas que te sugerimos, por ${SECOND.es}, para otro cumpleaños, un aniversario o cualquier otro día. Nunca está marcada de antemano, no se puede añadir junto con todas las plantillas y se desbloquea en tu cuenta al momento, igual que una plantilla comprada por separado.`,
         `Pasar a Todo. Si has iniciado sesión y ya compraste plantillas sueltas, tres plantillas o «Hazlo especial», puedes pasar a «Todo» por su precio menos lo que nos pagaste por esas compras, y nunca por menos de ${P.es("upgrade")}. El precio se calcula y se muestra antes de pagar.`,
         `Respuestas gratis. Cuando recibes un regalo que alguien ha pagado, hecho con una de nuestras plantillas de pago, el botón para devolver el detalle que aparece al final te permite hacer un regalo de respuesta con la misma plantilla, gratis. La respuesta gratuita lleva el pie «${BRAND.watermark.es}» y ningún extra de pago; si quieres añadir extras o quitar el pie, pagas el precio habitual de esa plantilla. Cada regalo pagado da para una respuesta gratuita, solo a través de su botón, y una respuesta gratuita no da para otra.`,
         "Sin códigos de descuento. No ofrecemos códigos de descuento ni promocionales, y la página de pago de Stripe no pide ninguno.",

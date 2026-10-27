@@ -135,6 +135,18 @@ describe("POST /api/stripe/checkout: the pay sheet's one-tap Apple Pay / Google 
     expect(sent()[0]).toMatchObject({ consent_collection: { terms_of_service: "required" }, metadata: { withdrawal_notice: "tickbox" } });
     expect(sent()[0]).not.toHaveProperty("ui_mode");
   });
+
+  it("adds the second gift as its own line, on both checkouts, and refuses one it can't sell", async () => {
+    for (const body of [{ ...single, secondSlug: "xoxo" }, { ...single, secondSlug: "xoxo", oneTap: true, waiver: true }]) {
+      expect((await post(body)).status).toBe(200);
+      const params = sent().at(-1)!;
+      expect(params.metadata).toMatchObject({ kind: "second", second: "xoxo", template_slugs: "bouquet" });
+      expect(params.line_items).toMatchObject([{ price_data: { unit_amount: 999 } }, { price_data: { unit_amount: 499, product_data: { name: "Ethos: a second gift", description: "XOXO" } } }]);
+    }
+    const res = await post({ ...single, secondSlug: "bouquet" });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "second_not_available" });
+  });
 });
 
 describe("POST /api/stripe/checkout: a membership is a subscription under the shared account's rules", () => {

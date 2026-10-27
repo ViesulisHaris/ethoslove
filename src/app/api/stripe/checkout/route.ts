@@ -30,6 +30,8 @@ const input = z.object({
   templateSlugs: z.array(z.string().max(80)).max(10).default([]),
   packId: z.string().max(40).optional(),
   addEverything: z.boolean().optional(),
+  // The second gift's template (lib/pricing/products.ts SECOND_GIFT), picked on the pay sheet.
+  secondSlug: z.string().max(80).optional(),
   returnTo: z.string().max(1000).regex(RETURN_PATH).optional(),
   currency: z.enum(["usd", "eur", "gbp"]).optional(),
   locale: z.enum(["en", "es"]).optional(),
@@ -99,7 +101,7 @@ export async function POST(request: NextRequest) {
     userId && (product === "membership" || product === "pass") ? membershipContextOf(admin, userId, now) : null,
   ]);
   const plan = planCheckout(
-    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, currency, plan: body.plan },
+    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan },
     { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, ...owned },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });

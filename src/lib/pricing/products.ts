@@ -81,6 +81,19 @@ export const BUMP = {
   onto: ["single", "extras"] as readonly ProductId[],
 } as const;
 
+/**
+ * The second gift: one more premium template, picked on the pay sheet from a few suggestions, added to
+ * a single for much less than a single costs, so the next birthday or anniversary is already covered.
+ * Offered unticked, like the bump, and never together with it: every template includes the second.
+ */
+export const SECOND_GIFT = {
+  envProductKey: "STRIPE_PRODUCT_SECOND",
+  name: { en: "Ethos: a second gift", es: "Ethos: un segundo regalo" },
+  amounts: { usd: 499, eur: 499, gbp: 449 } as Record<Currency, number>,
+  /** The products it can be added to. */
+  onto: ["single"] as readonly ProductId[],
+} as const;
+
 /** What the bump costs on top of `base`: Everything's price minus the base line's (€24.99 − €9.99 = €15.00). */
 export function bumpAmount(base: ProductId, currency: Currency): number {
   return PRODUCTS.everything.amounts[currency] - PRODUCTS[base].amounts[currency];

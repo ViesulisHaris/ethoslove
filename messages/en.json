@@ -1178,6 +1178,10 @@
       "pick3": "Or pick any three for {price}",
       "bump": "Add every other template, forever",
       "bumpBlurb": "Every template we have, and every one we add",
+      "second": "Add a second gift",
+      "secondPrice": "+{price}",
+      "secondBlurb": "For their next birthday, anniversary or just because. Yours to send any time.",
+      "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
       "guarantee": "If it doesn't open on their phone, you get your money back."
@@ -1210,7 +1214,8 @@
       "pack": "Game pack",
       "giftcard": "Gift card",
       "upgrade": "Upgrade to Everything",
-      "withBump": "{product}, plus every template"
+      "withBump": "{product}, plus every template",
+      "withSecond": "{product}, plus a second gift"
     },
     "giftcard": {
       "eyebrow": "A gift card",

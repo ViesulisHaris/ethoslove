@@ -9,8 +9,8 @@ import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { track } from "@/lib/analytics/track";
 import { adTrack } from "@/lib/analytics/ads";
-import { PRODUCTS, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
-import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
+import { PRODUCTS, SECOND_GIFT, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
+import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
@@ -23,6 +23,8 @@ import {
   payTotal,
   pick3Href,
   pick3Offered,
+  secondOffered,
+  secondSuggestions,
   templatePlan,
   type PaywallPlan,
   type UpgradeQuote,
@@ -87,6 +89,9 @@ export function Paywall({
   // A plan that stopped existing (the upgrade quote arrived, or went) falls back to its row.
   const chosen: PaywallPlan = plan === null ? defaultPaywallPlan(forTemplate, all, currency) : plan === forTemplate ? forTemplate : all.plan;
   const [bump, setBump] = useState(false);
+  // The second gift: off until ticked; its template is the first suggestion until another is picked.
+  const [secondOn, setSecondOn] = useState(false);
+  const [secondPick, setSecondPick] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
   // Taps that land together are one checkout, not one each.
   const going = useRef(false);
@@ -96,7 +101,11 @@ export function Paywall({
   const planAmount = chosen === forTemplate ? PRODUCTS[forTemplate].amounts[currency] : all.amount;
   const showBump = bumpOffered(chosen, all);
   const bumpOn = showBump && bump;
-  const total = payTotal(chosen, planAmount, bumpOn, currency);
+  const suggestions = secondSuggestions(slug, ownedElsewhere.map((m) => m.slug));
+  const pick = secondPick && suggestions.includes(secondPick) ? secondPick : (suggestions[0] ?? null);
+  const showSecond = secondOffered(chosen, bumpOn) && pick !== null;
+  const second = showSecond && secondOn ? pick : null;
+  const total = payTotal(chosen, planAmount, bumpOn, currency, second !== null);
 
   useEffect(() => {
     if (manifest.tier === "free") track("extras_offer_shown", { template: slug, guest });
@@ -119,8 +128,8 @@ export function Paywall({
     if (going.current) return;
     going.current = true;
     setPaying(true);
-    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest });
-    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale }, { total, category: manifest.tier });
+    track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
+    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }, { total, category: manifest.tier });
     if ("url" in result) {
       window.location.assign(result.url);
       return;
@@ -234,6 +243,8 @@ export function Paywall({
             disabled={paying}
             onChange={(e) => {
               setBump(e.target.checked);
+              // Every template includes the second gift: one or the other.
+              if (e.target.checked) setSecondOn(false);
               track("bump_toggled", { template: slug, on: e.target.checked, product: chosen });
             }}
             className="size-5 shrink-0 accent-coral"
@@ -249,6 +260,48 @@ export function Paywall({
         </label>
       ) : null}
 
+      {showSecond ? (
+        // Unticked, like the bump: one more template for the next occasion, picked from three.
+        <div className={cn("mt-3 rounded-lg border border-dashed p-3 transition-colors", secondOn ? "border-coral bg-coral/5" : "border-line hover:border-ink/40")} data-testid="second">
+          <label className="flex min-h-8 cursor-pointer items-center gap-3">
+            <input
+              type="checkbox"
+              checked={secondOn}
+              disabled={paying}
+              onChange={(e) => {
+                setSecondOn(e.target.checked);
+                track("second_toggled", { template: slug, on: e.target.checked, pick: pick ?? "" });
+              }}
+              className="size-5 shrink-0 accent-coral"
+            />
+            <span className="min-w-0 flex-1">
+              <span className="flex items-baseline justify-between gap-3">
+                <span className="min-w-0 text-sm font-medium">{tm("second")}</span>
+                <span className="shrink-0 text-sm font-semibold whitespace-nowrap">{tm("secondPrice", { price: money(SECOND_GIFT.amounts[currency]) })}</span>
+              </span>
+              <span className="mt-0.5 block text-xs text-muted-foreground">{tm("secondBlurb")}</span>
+            </span>
+          </label>
+          {secondOn ? (
+            <div role="radiogroup" aria-label={tm("secondPick")} className="mt-3 flex flex-wrap gap-2 pl-8" data-testid="second-pick">
+              {suggestions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  role="radio"
+                  aria-checked={pick === s}
+                  disabled={paying}
+                  onClick={() => setSecondPick(s)}
+                  className={cn("min-h-9 rounded-full border px-3 text-xs font-medium transition-colors", pick === s ? "border-coral bg-coral text-paper" : "border-line hover:border-ink/40")}
+                >
+                  {getManifest(s)?.name[locale] ?? s}
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
       <Button
         className="mt-4 h-12 w-full rounded-full text-base"
         disabled={paying || blocked}
@@ -259,10 +312,10 @@ export function Paywall({
         <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
       <OneTapPay
-        request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale }}
+        request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }}
         locale={locale}
         disabled={paying || blocked}
-        sale={{ template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest, total, category: manifest.tier, currency }}
+        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency }}
       />
       <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[13px] font-medium text-ink" data-testid="guarantee">
         <ShieldCheck aria-hidden="true" className="size-4 shrink-0 text-moss" />

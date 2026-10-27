@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import type { MembershipSummary } from "@/lib/membership/types";
-import { PRODUCTS, bumpAmount } from "@/lib/pricing/products";
+import { PRODUCTS, SECOND_GIFT, bumpAmount } from "@/lib/pricing/products";
 import {
   GIFT_CARD_NAME_MAX,
   GIFT_CARD_NOTE_MAX,
@@ -28,6 +28,8 @@ import {
   redeemErrorKey,
   replyTokenFrom,
   resumePath,
+  secondOffered,
+  secondSuggestions,
   safeReturnPath,
   templatePlan,
 } from "@/components/pricing/offers";
@@ -138,6 +140,32 @@ describe("the paywall's offer", () => {
       const body = paywallRequest({ plan, slug: "bouquet", bump: true });
       expect(Object.keys(body).some((k) => /amount|price/i.test(k))).toBe(false);
     }
+  });
+
+  it("offers the second gift beside a single only, and not once the bump is ticked", () => {
+    expect(secondOffered("single", false)).toBe(true);
+    expect(secondOffered("single", true)).toBe(false);
+    for (const plan of ["extras", "everything", "upgrade"] as const) expect(secondOffered(plan, false)).toBe(false);
+  });
+
+  it("suggests three best sellers for the second gift, never this one or one already owned", () => {
+    expect(secondSuggestions("vinyl")).toEqual(["bouquet", "xoxo", "popup-card"]);
+    expect(secondSuggestions("bouquet")).toEqual(["xoxo", "popup-card", "birthday-cinema"]);
+    expect(secondSuggestions("bouquet", ["xoxo"])).toEqual(["popup-card", "birthday-cinema", "coquette"]);
+  });
+
+  it("adds the second gift to the pay button and the checkout body only when it is ticked", () => {
+    for (const currency of ["eur", "usd", "gbp"] as const) {
+      const single = PRODUCTS.single.amounts[currency];
+      expect(payTotal("single", single, false, currency, true)).toBe(single + SECOND_GIFT.amounts[currency]);
+      expect(payTotal("single", single, false, currency, false)).toBe(single);
+      // The bump wins: every template already includes it.
+      expect(payTotal("single", single, true, currency, true)).toBe(PRODUCTS.everything.amounts[currency]);
+    }
+    expect(paywallRequest({ plan: "single", slug: "vinyl", bump: false, second: "bouquet" })).toEqual({ product: "single", templateSlugs: ["vinyl"], secondSlug: "bouquet" });
+    expect(paywallRequest({ plan: "single", slug: "vinyl", bump: false, second: null })).toEqual({ product: "single", templateSlugs: ["vinyl"] });
+    expect(paywallRequest({ plan: "single", slug: "vinyl", bump: true, second: "bouquet" })).toEqual({ product: "single", templateSlugs: ["vinyl"], addEverything: true });
+    expect(paywallRequest({ plan: "everything", slug: "vinyl", bump: false, second: "bouquet" })).toEqual({ product: "everything", templateSlugs: [] });
   });
 });
 

@@ -2,7 +2,7 @@ import type Stripe from "stripe";
 import { BRAND } from "@/config/brand";
 import { PACK_NAMES } from "@/lib/games/packs";
 import { isShortId } from "@/lib/gift/short-id";
-import { BUMP, MEMBERSHIP_PLANS, PRODUCTS, formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
+import { BUMP, MEMBERSHIP_PLANS, PRODUCTS, SECOND_GIFT, formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
 import type { CheckoutPlan, PlanLine } from "@/lib/commerce/plan";
 import { getManifest } from "@/templates/manifests";
 
@@ -74,6 +74,8 @@ export function upgradeLineDescription(currency: Currency, locale: Locale): stri
 
 function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | undefined {
   if (line.key === "bump") return undefined;
+  // The second gift says which template it is.
+  if (line.key === "second") return plan.second ? (getManifest(plan.second)?.name[locale] ?? plan.second) : undefined;
   if (line.key === "upgrade") return upgradeLineDescription(plan.currency, locale);
   if (plan.packId) return PACK_NAMES[plan.packId][locale];
   const names = plan.templateSlugs.map((slug) => getManifest(slug)?.name[locale] ?? slug);
@@ -92,7 +94,7 @@ function describe(line: PlanLine, plan: CheckoutPlan, locale: Locale): string | 
  */
 export function lineItems(plan: CheckoutPlan, options: Pick<SessionOptions, "locale" | "productIds">): Stripe.Checkout.SessionCreateParams.LineItem[] {
   return plan.lines.map((line) => {
-    const catalogue = line.key === "bump" ? BUMP : PRODUCTS[line.key];
+    const catalogue = line.key === "bump" ? BUMP : line.key === "second" ? SECOND_GIFT : PRODUCTS[line.key];
     const configured = options.productIds[catalogue.envProductKey];
     const product = options.locale === "en" ? configured : undefined;
     const description = describe(line, plan, options.locale);
@@ -252,6 +254,7 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     withdrawal_notice: "tickbox",
     kind: plan.kind,
     ...(plan.bump ? { bump: "1" } : {}),
+    ...(plan.second ? { second: plan.second } : {}),
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
     ...(ref ? { ref } : {}),

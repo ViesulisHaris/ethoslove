@@ -2,7 +2,8 @@ import { INVITE_CODE_PATTERN } from "@/lib/commerce/codes";
 import { UPGRADE_CREDITED } from "@/lib/commerce/pricing";
 import type { PublishDecision } from "@/lib/gift/publish";
 import type { MembershipSummary } from "@/lib/membership/types";
-import { BUMP, PRODUCTS, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { BUMP, PRODUCTS, SECOND_GIFT, bumpAmount, type Currency, type MembershipPlan, type ProductId } from "@/lib/pricing/products";
+import { getManifest } from "@/templates/manifests";
 import { membershipState, needsPayment } from "@/components/membership/status";
 
 /**
@@ -23,6 +24,8 @@ export type CheckoutRequest = {
   templateSlugs?: string[];
   packId?: string;
   addEverything?: boolean;
+  /** The second gift's template, picked on the pay sheet (SECOND_GIFT). */
+  secondSlug?: string;
   returnTo?: string;
   locale?: "en" | "es";
   currency?: Currency;
@@ -124,18 +127,39 @@ export function pick3Offered(tier: "free" | "premium", currency: Currency, all: 
   return tier === "premium" && PRODUCTS.pick3.amounts[currency] < all.amount;
 }
 
-/** What the pay button says: the plan, plus the bump when it is shown and ticked (then Everything's price). */
-export function payTotal(plan: PaywallPlan, planAmount: number, bumpOn: boolean, currency: Currency): number {
-  return planAmount + (bumpOn && BUMP.onto.includes(plan) ? bumpAmount(plan, currency) : 0);
+/**
+ * The second gift rides along with a single template and never with the bump, which already covers
+ * every template.
+ */
+export function secondOffered(plan: PaywallPlan, bumpOn: boolean): boolean {
+  return SECOND_GIFT.onto.includes(plan) && !bumpOn;
 }
 
-/** The checkout body for a paywall choice. The bump goes with the template rows only. */
-export function paywallRequest(input: { plan: PaywallPlan; slug: string; bump: boolean }): Pick<CheckoutRequest, "product" | "templateSlugs" | "addEverything"> {
+/** The best-selling premium templates, in order: the second gift's suggestions. */
+export const SECOND_SUGGESTIONS = ["bouquet", "xoxo", "popup-card", "birthday-cinema", "coquette", "digicam"] as const;
+
+/** Three suggestions for the second gift: best sellers, never this gift's own template or one already owned. */
+export function secondSuggestions(slug: string, owned: string[] = []): string[] {
+  return SECOND_SUGGESTIONS.filter((s) => s !== slug && !owned.includes(s) && getManifest(s)?.tier === "premium").slice(0, 3);
+}
+
+/**
+ * What the pay button says: the plan, plus the bump when it is shown and ticked (then Everything's
+ * price), or plus the second gift when that is.
+ */
+export function payTotal(plan: PaywallPlan, planAmount: number, bumpOn: boolean, currency: Currency, secondOn = false): number {
+  if (bumpOn && BUMP.onto.includes(plan)) return planAmount + bumpAmount(plan, currency);
+  return planAmount + (secondOn && secondOffered(plan, bumpOn) ? SECOND_GIFT.amounts[currency] : 0);
+}
+
+/** The checkout body for a paywall choice. The bump goes with the template rows only, the second gift with a single. */
+export function paywallRequest(input: { plan: PaywallPlan; slug: string; bump: boolean; second?: string | null }): Pick<CheckoutRequest, "product" | "templateSlugs" | "addEverything" | "secondSlug"> {
   const forTemplate = input.plan === "single" || input.plan === "extras";
   return {
     product: input.plan,
     templateSlugs: forTemplate ? [input.slug] : [],
     ...(forTemplate && input.bump ? { addEverything: true } : {}),
+    ...(input.second && secondOffered(input.plan, input.bump) ? { secondSlug: input.second } : {}),
   };
 }
 

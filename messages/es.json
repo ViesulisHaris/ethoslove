@@ -1178,6 +1178,10 @@
       "pick3": "O elige las tres que quieras por {price}",
       "bump": "Añade todas las demás plantillas, para siempre",
       "bumpBlurb": "Todas las que tenemos y todas las que añadamos",
+      "second": "Añade un segundo regalo",
+      "secondPrice": "+{price}",
+      "secondBlurb": "Para su próximo cumpleaños, aniversario o porque sí. Tuyo para enviarlo cuando quieras.",
+      "secondPick": "¿Cuál?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
       "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
@@ -1210,7 +1214,8 @@
       "pack": "Pack de juegos",
       "giftcard": "Tarjeta regalo",
       "upgrade": "Pasar a Todo",
-      "withBump": "{product}, más todas las plantillas"
+      "withBump": "{product}, más todas las plantillas",
+      "withSecond": "{product}, más un segundo regalo"
     },
     "giftcard": {
       "eyebrow": "Tarjeta regalo",

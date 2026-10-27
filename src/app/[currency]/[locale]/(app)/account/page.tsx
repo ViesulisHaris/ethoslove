@@ -86,7 +86,7 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
 
   const productLabel = (p: (typeof purchases)[number]) => {
     const name = isProductId(p.product) ? tm(`product.${p.product}`) : p.product;
-    const label = p.kind === "bump" ? tm("product.withBump", { product: name }) : name;
+    const label = p.kind === "bump" ? tm("product.withBump", { product: name }) : p.kind === "second" ? tm("product.withSecond", { product: name }) : name;
     // What was picked, where there is something to name: the template, the three, the pack.
     const picked = p.template_slugs.map((slug) => (slug.startsWith("pack:") ? packName(slug) : (getManifest(slug)?.name[l] ?? null))).filter(Boolean);
     return picked.length ? `${label} · ${picked.join(", ")}` : label;

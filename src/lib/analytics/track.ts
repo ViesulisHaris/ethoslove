@@ -16,6 +16,7 @@ export type FunnelEvent =
   | "purchase_completed"
   | "extras_offer_shown"
   | "bump_toggled"
+  | "second_toggled"
   | "affiliate_click"
   | "reminder_saved"
   | "reply_started"
