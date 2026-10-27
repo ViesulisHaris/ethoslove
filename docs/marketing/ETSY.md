@@ -24,20 +24,21 @@ Nothing the buyer's browser sends decides whether something was paid: that answe
 Etsy every time. Code: `src/lib/etsy/`, `src/app/api/etsy/`, `src/components/editor/etsy-claim.tsx`,
 migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
-## Where it stands (27 Oct 2026)
+## Where it stands (28 Oct 2026)
 
 - **Shop open:** TryEthos (tryethos.etsy.com). English, Latvia, EUR; Migla as an incorporated business; Etsy Plus declined.
 - **Shop basics:** logo, tagline and About are filled in. The banner is in `etsy/photos/shop-banner.jpg`, not uploaded.
 - **8 listings saved as drafts, not published:**
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999;
+  - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
   - "made by me", "created by me".
 - **The Etsy app "ethos":** registered, waiting for Etsy's personal approval. Its callback URL can only be added once it's approved.
 
 **Left before publishing:**
 1. App approved, then add the callback URL.
 2. Keys in Vercel.
-3. Migration 0018.
+3. ~~Migration 0018.~~ Applied 28 Oct.
 4. The connect link.
 5. A real test order bought by someone else, then refunded.
 6. Publish the 8 drafts ($0.20 each).
@@ -96,27 +97,76 @@ return policy). Etsy Ads put a listing in the ad slots at the top but don't chan
 ranking. Sources: [How Etsy Search Works](https://www.etsy.com/seller-handbook/article/375461474487),
 [Search visibility](https://help.etsy.com/hc/en-us/articles/25869947521175).
 
-- Words buyers type, exactly: "digital love letter", "virtual bouquet", "digital pop up card",
-  "interactive birthday gift". Never another brand's name.
+### What buyers type
+
+Etsy's search box suggests only phrases people search, so its suggestions are the demand list
+(checked 28 Oct 2026):
+
+- **Birthday:** interactive birthday card, interactive birthday website (template), birthday website
+  template, digital birthday card for husband / boyfriend, birthday card for husband.
+- **Love:** digital love letter, digital love letter website, love letter template, love website
+  template, interactive website template, anniversary website template, open when letters digital.
+- **Who it's for:** digital gift for him / for mom / ideas, long distance gift for boyfriend / him /
+  girlfriend, valentines gift for him / her / boyfriend / girlfriend / husband / wife.
+- **Photos:** digital memory book, digital photo album, photo book template couple, photo slideshow video.
+- **Others we can serve:** reasons why i love you, surprise trip reveal, scratch off cards, digital
+  anniversary scratch off, advent calendar digital, digital flowers, animated card, pop up card, last
+  minute gifts.
+
+**No suggestions, so hardly searched:** virtual bouquet, virtual gift, digital bouquet, birthday ecard,
+christmas ecard, digital gift for her / boyfriend / girlfriend. Two of the first titles led with these.
+
+### Who is on top
+
+Canva website and photo-book templates at €4–15 ("edit in Canva"). Two searches have almost no
+digital listing in their top 10: **"reasons why i love you"** (none) and **"long distance gift for
+boyfriend"** (one). Those are the quickest #1s.
+
+### How every listing is written
+
+- The title opens with the phrase with the most demand, then a second phrase, then who it's for.
+- 13 tags, all phrases from the list above, at most 20 characters; the title's main phrase is a tag too.
+- The description's first line says the main phrase in an ordinary sentence.
+- Occasion: Birthday or Anniversary. This category has no Valentine's occasion; the title and tags carry it.
 - Say what Canva templates can't: **no Canva, no app, made on your phone in minutes, opens as a real
   interactive gift**. It's why someone who clicks buys, and buying is what ranks.
-- Etsy Ads at $1–3 a day for the first weeks bring the first orders and reviews.
-- Add the Spanish texts as Etsy translations: own translations beat Etsy's.
-- Valentine's Day is the niche's biggest week; listings need orders and reviews before January.
-- Never buy from the shop ourselves, ask friends to, or offer anything for a review: Etsy closes
-  shops for it.
+- Never another brand's name. Never buy from the shop ourselves, ask friends to, or offer anything
+  for a review: Etsy closes shops for it.
+
+### The plan to be #1 (money steps need the owners' OK)
+
+1. **Publish** the 8 drafts after the test order passes ($0.20 each).
+2. **Etsy Ads at $3–5 a day** on every listing for 30 days. A new listing with no sales gets almost
+   no organic views; ads bring the first orders, and orders lift the organic rank. A sale leaves about
+   €9.30 after Etsy's published fees (6.5% transaction, 4% + €0.30 payment, $0.20 listing; check it
+   against the first payout), so an ad order must cost less than that. Turn Offsite Ads off while the
+   shop is under $10k a year: they take 15% of the sale.
+3. **Wave 2, nine listings for the open searches** (photos, video and PDF from the same scripts):
+   - Jar of Reasons: "reasons why i love you"
+   - Halfway and Passport: "long distance gift for boyfriend"
+   - Pack Your Bags: "surprise trip reveal"
+   - Scratch Card: "scratch off cards", "digital anniversary scratch off"
+   - Snow Globe and Fireside: Christmas (live by mid-November, when Christmas searches climb)
+   - Arcade: "interactive birthday"
+   - Vinyl or On Repeat: song and playlist gifts
+4. **Dates:** Christmas listings live by mid-November; every love listing needs orders and reviews
+   by mid-January, before Valentine's week.
+5. **Shop:** sections (Birthday, Love letters, Anniversary, Photo gifts), the Spanish texts as
+   Etsy translations, replies within 24 hours. A sale only if the price was really higher before.
 
 ## The listings
 
-Each title is short and starts with what buyers search. Tags are at most 20 characters.
+Live in the drafts since 28 Oct. Each title starts with what buyers search; tags are at most 20 characters.
 
 ### Pop-up Card · SKU `ethos-popup-card`
 
-**Title:** Digital Pop Up Birthday Card, Interactive Birthday Gift for Her or Him, Blow Out the Candles
+**Title:** Interactive Birthday Card, Digital Birthday Card for Boyfriend or Husband, Birthday Website Gift
 
-**Tags:** digital pop up card, interactive card, birthday ecard, digital birthday, pop up birthday, virtual cake, birthday for her, birthday for him, long distance gift, last minute gift, ecard with photos, animated card, no canva needed
+**Tags:** interactive birthday, digital birthday, birthday website, interactive card, card for boyfriend, card for husband, birthday for him, birthday for her, pop up card, last minute gifts, digital gift for him, long distance gift, animated card
 
 **Description:**
+Interactive birthday card for him or her: a little birthday website with candles they really blow out, and your photos inside.
+
 A birthday card they open on their phone, like a real pop-up card. A three-tier paper cake rises out
 of the fold with their age on the topper, balloons and bunting stand up behind it, and a little
 present waits at the front. They tap the candles to light them, make a wish, and blow into the phone
@@ -134,11 +184,13 @@ on their phone, message us and we'll refund you.
 
 ### Bouquet · SKU `ethos-bouquet`
 
-**Title:** Virtual Bouquet Gift, Digital Flowers for Her, Interactive Bouquet with Your Message
+**Title:** Digital Flowers Gift, Interactive Bouquet Love Website, Digital Gift for Her or Mom
 
-**Tags:** virtual bouquet, digital flowers, virtual flowers, flowers for her, digital bouquet, long distance gift, anniversary gift, valentines for her, mothers day ecard, flower ecard, gift for girlfriend, last minute gift, no canva needed
+**Tags:** digital flowers, flowers for her, digital gift for mom, love website, digital love letter, valentines for her, gift for girlfriend, mothers day gift, anniversary gift, long distance gift, interactive website, last minute gifts, birthday for her
 
 **Description:**
+Digital flowers for her, or for mom: an interactive bouquet with a little card inside holding your message.
+
 Flowers that never wilt. You build the bouquet stem by stem: roses, peonies, tulips, sunflowers and
 more, in the colours you choose, wrapped in paper and tied with a ribbon. They watch it come together
 one flower at a time, then open the little card inside to find your message. Add up to 6 photos.
@@ -154,11 +206,13 @@ For Valentine's Day, anniversaries, Mother's Day, birthdays, or any day you're f
 
 ### XOXO · SKU `ethos-xoxo`
 
-**Title:** Digital Love Letter for Boyfriend or Girlfriend, Interactive Valentine with Your Photos
+**Title:** Digital Love Letter Website, Interactive Valentine Gift for Boyfriend or Girlfriend, Love Website
 
-**Tags:** digital love letter, love letter, interactive letter, valentines gift, gift for boyfriend, gift for girlfriend, anniversary gift, long distance gift, romantic ecard, love note, polaroid gift, just because gift, no canva needed
+**Tags:** digital love letter, love letter website, love website, interactive website, valentines gift, gift for boyfriend, gift for girlfriend, anniversary website, long distance gift, love letter template, digital gift for him, love notes, digital anniversary
 
 **Description:**
+Digital love letter website for your boyfriend or girlfriend: a red collage of your photos as polaroids, a kiss wherever they tap, and your letter at the bottom.
+
 An envelope sealed with a lipstick kiss. They open it and scroll a collage in red: your photos as
 polaroids on a lace doily, cut-out letters spelling what you call them, ribbon bows, fingerprint
 hearts, and a card with the lines you'd underline. Wherever they tap, a kiss lands. Your letter waits
@@ -173,11 +227,13 @@ How it works:
 
 ### Birthday Cinema · SKU `ethos-birthday-cinema`
 
-**Title:** Interactive Birthday Gift, Cinema Style Digital Birthday Card with Photos and Video
+**Title:** Interactive Birthday Website, Digital Birthday Card for Him with Photos and Video, Last Minute Gift
 
-**Tags:** birthday ecard, digital birthday, interactive birthday, birthday for him, birthday for her, birthday video, photo slideshow, virtual birthday, movie birthday, long distance gift, last minute gift, birthday surprise, no canva needed
+**Tags:** interactive birthday, birthday website, digital birthday, photo slideshow, slideshow video, card for husband, card for boyfriend, birthday for him, digital gift for him, last minute gifts, long distance gift, birthday surprise, animated card
 
 **Description:**
+Interactive birthday website for him or her: their name in lights, a cake whose candles they blow out, and your photos and video rolling like a film.
+
 Red curtains part on a marquee with their name in lights. A cake with flickering candles waits: they
 blow into the phone (or swipe) to put them out, confetti fires, and a film strip of your photos rolls.
 Up to 20 photos and a video clip, with music.
@@ -191,11 +247,13 @@ How it works:
 
 ### Coquette · SKU `ethos-coquette`
 
-**Title:** Coquette Digital Gift for Girlfriend, Pink Gingham Love Letter with Your Song and Photos
+**Title:** Love Website Template, Coquette Digital Love Letter for Girlfriend, Interactive Anniversary Gift
 
-**Tags:** coquette gift, pink aesthetic gift, digital love letter, gift for girlfriend, anniversary gift, valentines for her, bow aesthetic, scrapbook gift, long distance gift, polaroid gift, birthday for her, romantic ecard, no canva needed
+**Tags:** love website, website template, digital love letter, love letter website, coquette gift, pink aesthetic, gift for girlfriend, anniversary website, digital anniversary, valentines for her, birthday for her, interactive website, long distance gift
 
 **Description:**
+Love website template in pink gingham: a coquette digital love letter for your girlfriend, with your photos as polaroids, real lilies and your song.
+
 They untie a satin bow and a collage unrolls: a polaroid of the two of you between lilies and
 blossom, a ticket to happiness, your song on a little player that really pauses, a postcard in your
 handwriting, a gingham photo strip, and more polaroids all the way down. Your letter waits at the
@@ -210,11 +268,13 @@ How it works:
 
 ### Digicam · SKU `ethos-digicam`
 
-**Title:** Digital Camera Photo Gift, Y2K Birthday Gift with Your Photos, Interactive Ecard
+**Title:** Interactive Birthday Website, Y2K Digital Camera Gift with Your Photos, Digital Gift for Her
 
-**Tags:** y2k gift, digicam aesthetic, photo gift, birthday ecard, digital camera, gift for best friend, birthday for her, photo strip, memory gift, interactive card, anniversary gift, just because gift, no canva needed
+**Tags:** interactive birthday, birthday website, y2k gift, digital camera, photo gift, digital birthday, birthday for her, gift for best friend, digital memory book, photo strip, gift for girlfriend, digital gift for him, last minute gifts
 
 **Description:**
+Interactive birthday website for her (or him): a little Y2K digital camera with your photos on its roll, date-stamped, and printed as a photo strip at the end.
+
 A pocket camera from 2006 on a collage of tulips, stars and a disco ball. They press power, the lens
 whirs out and your photos are on the camera roll, each with the orange date in the corner and your
 caption in pixel type. Every press of the shutter takes the next one with a flash. After the last,
@@ -229,11 +289,13 @@ How it works:
 
 ### Scrapbook · SKU `ethos-scrapbook`
 
-**Title:** Digital Scrapbook Gift for Boyfriend or Girlfriend, Interactive Photo Memory Book
+**Title:** Digital Memory Book Website, Interactive Digital Scrapbook, Anniversary Gift for Boyfriend
 
-**Tags:** digital scrapbook, scrapbook gift, photo memory book, anniversary gift, gift for boyfriend, gift for girlfriend, long distance gift, polaroid gift, our story gift, birthday gift, just because gift, interactive letter, no canva needed
+**Tags:** digital memory book, digital scrapbook, memory book, digital photo album, photo book template, anniversary website, digital anniversary, anniversary gift, gift for boyfriend, gift for girlfriend, long distance gift, love website, interactive website
 
 **Description:**
+Digital memory book for your boyfriend or girlfriend: an interactive scrapbook website of your photos, their song and a letter from you.
+
 A scrapbook they open like a real one. Your photos land on the pages as polaroids that develop, a
 photo-booth strip, a stamp and a roll of film, taped and pinned between flowers. A torn note in
 handwriting, a typed letter from you, their song playing, and a bouquet at the end. Up to 12 photos.
@@ -247,11 +309,13 @@ How it works:
 
 ### Museum · SKU `ethos-museum`
 
-**Title:** Anniversary Gift, Digital Photo Gallery of Your Relationship, Interactive Museum
+**Title:** Anniversary Website, Digital Photo Album Gift for Him or Her, Interactive Photo Gallery
 
-**Tags:** anniversary gift, photo gallery gift, our story gift, gift for husband, gift for wife, relationship gift, memory gift, wedding anniversary, long distance gift, gift for parents, digital gift, interactive gift, no canva needed
+**Tags:** anniversary website, digital anniversary, digital photo album, anniversary gift, anniversary for him, photo gallery gift, memory book, gift for husband, gift for wife, wedding anniversary, digital memory book, gift for parents, interactive website
 
 **Description:**
+Anniversary website and digital photo album for him or her, or for your parents: your years together, hung as a gallery they walk through.
+
 A quiet gallery of the two of you. Each photo hangs framed on a wall with a plaque underneath: a
 title, a year, a line. They walk from room to room as they swipe, and the last room is a wall text
 with your message. 2 to 20 photos, a video clip and music.
