@@ -181,14 +181,16 @@ function contentSecurityPolicy(): string {
   const tiktokConnect = tiktok ? " https://analytics.tiktok.com https://analytics-ipv6.tiktokw.us" : "";
   const directives = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com${clarityScript}${metaScript}${tiktokScript}`,
+    // Stripe.js, for the pay sheet's one-tap Apple Pay / Google Pay buttons: Stripe's own list
+    // (docs.stripe.com/security/guide, "Stripe.js"), which starts frames on js.stripe.com subdomains.
+    `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval' https://va.vercel-scripts.com" : ""} https://js.stripe.com https://*.js.stripe.com${clarityScript}${metaScript}${tiktokScript}`,
     "style-src 'self' 'unsafe-inline'",
-    `img-src 'self' data: blob: https://*.supabase.co https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}`,
+    `img-src 'self' data: blob: https://*.supabase.co https://*.stripe.com https://*.mzstatic.com https://i.ytimg.com https://i.scdn.co https://*.spotifycdn.com https://tiles.openfreemap.org https://upload.wikimedia.org https://thumb.wikimedia.org${metaPing}${tiktokImg}`,
     "media-src 'self' data: blob: https://*.supabase.co https://*.itunes.apple.com https://*.apple.com https://*.mzstatic.com",
     "font-src 'self' data:",
     `connect-src 'self' data: blob: https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://itunes.apple.com https://*.itunes.apple.com https://*.mzstatic.com https://tiles.openfreemap.org${clarityConnect}${metaPing}${tiktokConnect}${dev ? " ws: http://localhost:*" : ""}`,
     "worker-src 'self' blob:",
-    "frame-src https://js.stripe.com https://checkout.stripe.com",
+    "frame-src https://js.stripe.com https://*.js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self' https://checkout.stripe.com",

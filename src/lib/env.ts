@@ -18,7 +18,16 @@ export const env = {
 
   stripeSecretKey: read("STRIPE_SECRET_KEY"),
   stripeWebhookSecret: read("STRIPE_WEBHOOK_SECRET"),
-  stripePublishableKey: read("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
+  /**
+   * Written out literally, like `clarityId` below: the pay sheet's one-tap Apple Pay / Google Pay
+   * buttons load Stripe.js with it in the browser. Unset, the buttons are simply not offered.
+   */
+  stripePublishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || undefined,
+  /**
+   * "on" offers the one-tap buttons to everyone. Until then they show only on an editor opened with
+   * ?onetap=1, so the owners can try Apple Pay on their own phones on the live site first.
+   */
+  oneTap: process.env.NEXT_PUBLIC_ONE_TAP === "on",
   /**
    * Ethos's own Customer Portal configuration (bpc_…), made by scripts/setup-billing-portal.mjs. The
    * Stripe account is shared, so its default portal belongs to nobody in particular: without this the

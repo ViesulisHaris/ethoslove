@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { ArrowRight, Check, Gift, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
@@ -27,6 +28,9 @@ import {
   type UpgradeQuote,
 } from "@/components/pricing/offers";
 import { cn } from "@/lib/utils";
+
+// Apple Pay / Google Pay in one tap: in the browser only, and its code loads with the pay sheet.
+const OneTapPay = dynamic(() => import("./one-tap-pay").then((m) => m.OneTapPay), { ssr: false });
 
 /**
  * The paywall inside the publish sheet, for guests and signed-in senders alike. It opens with what
@@ -254,6 +258,12 @@ export function Paywall({
         {paying ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
         <span>{paying ? t("paying") : t("payButton", { price: money(total) })}</span>
       </Button>
+      <OneTapPay
+        request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn }), currency, returnTo, locale }}
+        locale={locale}
+        disabled={paying || blocked}
+        sale={{ template: slug, product: chosen, bump: bumpOn, reply: freeReply, guest, total, category: manifest.tier, currency }}
+      />
       <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[13px] font-medium text-ink" data-testid="guarantee">
         <ShieldCheck aria-hidden="true" className="size-4 shrink-0 text-moss" />
         {tm("guarantee")}

@@ -247,7 +247,8 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     locale: options.locale,
     product: plan.product,
     template_slugs: plan.packId ? "" : plan.templateSlugs.join(","),
-    // "tickbox" becomes "shown_at_payment" when Stripe can't show the box (lib/stripe/create-session.ts).
+    // "tickbox" becomes "shown_at_payment" when Stripe can't show the box (lib/stripe/create-session.ts),
+    // and "pay_sheet" when the buyer ticked ours, for the one-tap buttons (oneTapSessionParams).
     withdrawal_notice: "tickbox",
     kind: plan.kind,
     ...(plan.bump ? { bump: "1" } : {}),
@@ -312,6 +313,30 @@ export function sessionParams(plan: CheckoutPlan, options: SessionOptions): Stri
     automatic_tax: options.automaticTax ? { enabled: true } : undefined,
     ...returnUrls(options),
   };
+}
+
+/** One-time products the one-tap buttons sell: those whose tickbox is the plain "unlock it now" sentence. */
+export function sellsInOneTap(product: CheckoutPlan["product"]): boolean {
+  return product !== "membership" && product !== "pass" && product !== "giftcard";
+}
+
+/**
+ * The same session for the one-tap Apple Pay and Google Pay buttons on the pay sheet (Stripe's
+ * Express Checkout Element, ui_mode "elements"). Stripe shows nothing of its own there: no page, no
+ * header and no tickbox. So the withdrawal tickbox is ours, on the pay sheet, and the buttons appear
+ * only once it is ticked. The route won't make this session without it, the metadata says
+ * "pay_sheet", and fulfilment records the sentence the way it records Stripe's (lib/stripe/fulfil.ts).
+ * The buyer comes back to the same success page, and Stripe's language follows the page it sits on.
+ */
+export function oneTapSessionParams(params: Stripe.Checkout.SessionCreateParams): Stripe.Checkout.SessionCreateParams {
+  const oneTap: Stripe.Checkout.SessionCreateParams = {
+    ...params,
+    ui_mode: "elements",
+    return_url: params.success_url,
+    metadata: { ...params.metadata, withdrawal_notice: "pay_sheet" },
+  };
+  for (const key of ["success_url", "cancel_url", "custom_text", "consent_collection", "after_expiration", "branding_settings", "locale"] as const) delete oneTap[key];
+  return oneTap;
 }
 
 /**

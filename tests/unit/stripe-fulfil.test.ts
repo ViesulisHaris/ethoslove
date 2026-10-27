@@ -133,6 +133,14 @@ describe("fulfilment, signed in", () => {
     expect(fake.rows("purchases")[0].terms_consent_at).toBe(new Date(NOW).toISOString());
   });
 
+  it("records the same sentence when it was ticked on our pay sheet, for the one-tap buttons", async () => {
+    useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 1199, currency: "usd" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
+    const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] });
+    // Stripe shows no box of its own there: session.consent stays empty, the metadata says ours was ticked.
+    await fulfilCheckoutSession(session(signedIn({ ...meta, withdrawal_notice: "pay_sheet" }), { consent: null, amount_total: 1199, currency: "usd" }));
+    expect(fake.rows("purchases")[0]).toMatchObject({ status: "paid", terms_consent: consentSentence("single", "en"), terms_consent_at: new Date(NOW).toISOString() });
+  });
+
   it("records nothing when Stripe couldn't show the tickbox", async () => {
     useDb({ purchases: [{ id: PURCHASE, user_id: "u1", product: "single", status: "pending", amount: 999, currency: "eur" }], profiles: [{ id: "u1", email: "u1@x.co", locale: "en" }] });
     const { meta } = metadata({ product: "single", templateSlugs: ["vinyl"] });

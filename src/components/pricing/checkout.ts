@@ -31,6 +31,19 @@ export async function startCheckout(body: CheckoutRequest, shown?: { total?: num
 }
 
 /**
+ * The session behind the one-tap Apple Pay / Google Pay buttons on the pay sheet: the same request
+ * as startCheckout's, sent once the withdrawal box there is ticked, and answered with the session's
+ * client secret instead of a link to Stripe's page. The ad pixels hear of it when a button is used.
+ */
+export async function startOneTapCheckout(body: CheckoutRequest): Promise<{ clientSecret: string } | { error: string }> {
+  const ads = adCheckoutFields();
+  const result = await postJson("/api/stripe/checkout", { ...body, ref: body.ref ?? currentRef(), ...(ads ? { ads } : {}), oneTap: true, waiver: true });
+  const secret = result.json.clientSecret;
+  if (typeof secret === "string" && secret.length > 0) return { clientSecret: secret };
+  return { error: errorOf(result) ?? (result.status === 0 ? "network" : "checkout") };
+}
+
+/**
  * Says why checkout didn't open, in words. Owning it already isn't a failure, so it isn't shown as
  * one; everything else is. Ethos for Two's two refusals (already a member, a payment Stripe is still
  * collecting) are settled on the account page, so their message carries the way there.

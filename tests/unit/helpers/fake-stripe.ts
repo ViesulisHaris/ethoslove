@@ -215,6 +215,8 @@ export class FakeStripe {
           create: async (params: Obj) => {
             this.record("checkout.sessions.create", [params]);
             const n = this.calls.filter((c) => c.method === "checkout.sessions.create").length;
+            // An embedded (ui_mode "elements") session has no page to go to, only a secret for Stripe.js.
+            if (params.ui_mode === "elements") return { id: `cs_test_${n}`, object: "checkout.session", url: null, client_secret: `cs_test_${n}_secret_test`, mode: params.mode, metadata: params.metadata };
             return { id: `cs_test_${n}`, object: "checkout.session", url: `https://checkout.stripe.test/c/cs_test_${n}`, mode: params.mode, metadata: params.metadata };
           },
         },

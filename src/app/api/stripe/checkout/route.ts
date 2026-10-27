@@ -5,7 +5,7 @@ import { REF_PATTERN } from "@/lib/attribution/ref";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
 import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
-import { RETURN_PATH, membershipSessionParams, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
+import { RETURN_PATH, membershipSessionParams, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
 import { ethosCustomerFor } from "@/lib/stripe/subscriptions";
 import { membershipContextOf } from "@/lib/commerce/memberships";
@@ -54,6 +54,11 @@ const input = z.object({
     })
     .optional()
     .catch(undefined),
+  // The one-tap Apple Pay / Google Pay buttons on the pay sheet (lib/stripe/line-items.ts,
+  // oneTapSessionParams): a session for Stripe's buttons instead of a link to its page. Made only
+  // with `waiver`, which the pay sheet sends once the buyer has ticked the withdrawal box there.
+  oneTap: z.literal(true).optional(),
+  waiver: z.literal(true).optional(),
 });
 
 /**
@@ -98,6 +103,9 @@ export async function POST(request: NextRequest) {
     { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, ...owned },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
+  // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
+  if (body.oneTap && (plan.billing === "subscription" || !sellsInOneTap(plan.product))) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  if (body.oneTap && !body.waiver) return NextResponse.json({ error: "consent_required" }, { status: 400 });
 
   let purchaseId: string;
   if (user) {
@@ -153,7 +161,10 @@ export async function POST(request: NextRequest) {
       : sessionParams(plan, options);
   let session: Stripe.Checkout.Session;
   try {
-    session = await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
+    // The one-tap session has no tickbox of Stripe's to fall back from: the box was ours, and ticked.
+    session = body.oneTap
+      ? await stripe.checkout.sessions.create(oneTapSessionParams(params))
+      : await createCheckoutSession(stripe, params, { withdrawalNotice: withdrawalNotice(plan.product, locale, origin, { plan: plan.plan, currency }) });
   } catch (e) {
     // The code and parameter only: Stripe's message can quote what was sent, the buyer's email included.
     const err = e as Partial<Stripe.errors.StripeError>;
@@ -161,5 +172,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
   }
   if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
+  if (body.oneTap) return NextResponse.json({ clientSecret: session.client_secret });
   return NextResponse.json({ url: session.url });
 }
