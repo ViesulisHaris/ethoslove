@@ -74,6 +74,9 @@ Claude can't open accounts, enter bank details or handle keys: these steps are y
 6. **Connect**: signed in to Etsy as the shop's owner, open
    `https://tryethos.io/api/etsy/connect?key=<ETSY_CONNECT_SECRET>` and press Allow. The page says
    "Etsy is connected". If Etsy ever stops answering (a revoked app, 90 days unused), do this again.
+   Then open `https://tryethos.io/api/etsy/status?key=<ETSY_CONNECT_SECRET>`: every check should say
+   `"ok": true`. It tests the keys, migration 0018, the connection, the token's renewal, Etsy
+   answering for the shop, and permission to read orders, without buying anything.
 7. **Create the listings** below. On each one:
    - Type: **Digital files**. Upload that template's PDF from `docs/marketing/etsy/`.
    - **SKU**: exactly as given (`ethos-<slug>`). This is how the site knows which template was bought;

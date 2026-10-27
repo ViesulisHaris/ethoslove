@@ -27,6 +27,8 @@ const claimRoute = await import("@/app/api/etsy/claim/route");
 const cronRoute = await import("@/app/api/cron/etsy/route");
 const connectRoute = await import("@/app/api/etsy/connect/route");
 const callbackRoute = await import("@/app/api/etsy/callback/route");
+const statusRoute = await import("@/app/api/etsy/status/route");
+const { etsyHealth } = await import("@/lib/etsy/health");
 
 const NOW = Date.parse("2026-10-27T12:00:00.000Z");
 const SHOP = 55501234;
@@ -298,6 +300,42 @@ describe("connecting the shop", () => {
     vi.stubGlobal("fetch", signIn(999));
     expect((await back(other.state, other.cookie)).status).toBe(403);
     expect(fake.rows("etsy_connection")).toEqual([]);
+  });
+});
+
+describe("the health check", () => {
+  /** Etsy for a connected shop: the shop and its orders, or a status for the orders call. */
+  function etsyUp(orders: number | { count: number } = { count: 3 }) {
+    return vi.fn(async (url: string | URL) => {
+      const u = String(url);
+      if (u.endsWith(`/v3/application/shops/${SHOP}`)) return new Response(JSON.stringify({ shop_name: "TryEthos", listing_active_count: 8 }), { status: 200 });
+      if (u.includes(`/v3/application/shops/${SHOP}/receipts`)) return typeof orders === "number" ? new Response("{}", { status: orders }) : new Response(JSON.stringify(orders), { status: 200 });
+      return new Response("{}", { status: 404 });
+    });
+  }
+
+  it("is all green when the shop is connected and its sign-in may read orders", async () => {
+    const health = await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, etsyUp() as never);
+    expect(health.ok).toBe(true);
+    expect(health.checks).toMatchObject({ database: { ok: true }, connected: { ok: true }, signIn: { ok: true }, shop: { ok: true, detail: "TryEthos, 8 active listings" }, readOrders: { ok: true, detail: "3 orders" } });
+  });
+
+  it("says which link is broken", async () => {
+    expect((await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, etsyUp(403) as never)).checks.readOrders.ok).toBe(false);
+    expect((await etsyHealth(fake.db as never, CONFIG, { cronSecret: false }, NOW, etsyUp() as never)).checks.cronSecret.ok).toBe(false);
+    openDb({ etsy_connection: [] });
+    const fetch = etsyUp();
+    const notConnected = await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, fetch as never);
+    expect(notConnected).toMatchObject({ ok: false, checks: { connected: { ok: false } } });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("answers only with the connect secret, and names missing settings without it", async () => {
+    vi.stubEnv("ETSY_CONNECT_SECRET", "connect-test");
+    expect((await statusRoute.GET(new NextRequest("https://ethos.test/api/etsy/status?key=wrong"))).status).toBe(401);
+    vi.stubEnv("ETSY_CONNECT_SECRET", "");
+    const res = await statusRoute.GET(new NextRequest("https://ethos.test/api/etsy/status"));
+    expect([res.status, await res.json()]).toEqual([503, { ok: false, missing: ["ETSY_CONNECT_SECRET"] }]);
   });
 });
 
