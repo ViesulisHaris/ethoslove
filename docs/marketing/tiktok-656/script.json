@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|10:21 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "why did u and ur ex break up"
+        },
+        {
+          "from": "them",
+          "text": "she was crazy"
+        },
+        {
+          "from": "me",
+          "text": "and the one before her"
+        },
+        {
+          "from": "them",
+          "text": "crazy too"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "dont worry ur different"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "so what will u tell the next girl about me"
+        },
+        {
+          "from": "them",
+          "text": "depends"
+        }
+      ]
+    }
+  ]
+}
