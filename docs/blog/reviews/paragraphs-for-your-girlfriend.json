@@ -1,0 +1,140 @@
+{
+  "slug": "paragraphs-for-your-girlfriend",
+  "keyword": "paragraphs for your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The four-part table and a 'make it yours' line under every sample beat the copy-paste lists, but there was no goodnight paragraph, the one moment every top result covers."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The love-letter guide has five steps, not four parts; the FAQ's 80-120 words contradicted the samples (66-81); the link sentence added to the good-morning post misdescribed this post; ES 'chupito', 'estar a dos semanas', 'pillarse haciendo', 'raro' for rare, 'evita la mitad de su jornada' and 'algo verdad'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The only result with a method, but 'paragraphs to make her cry' is the biggest variant of the search and every top result gives it a section."
+        }
+      ],
+      "applied": [
+        "New section 'A long paragraph to make her cry (the good kind)' with a sample and how to make it yours (EN and ES).",
+        "New section 'A paragraph to send her at night', linking the good-morning post (EN and ES).",
+        "Love-letter link: 'builds a longer letter the same way, in five steps' (ES matches).",
+        "FAQ length: 'around 60 to 90 words' / 'entre 60 y 90 palabras'; every sample now falls in that range.",
+        "Good-morning post's link sentence names this post's moments and introduces its own quotes ('Two for the morning:').",
+        "ES: 'doble de café', 'faltan dos semanas para verte', 'te has sorprendido haciendo', 'llega pocas veces', 'Evita mandarlo en plena jornada… de madrugada… de vez en cuando', 'Algo cierto ahora'.",
+        "Polish taken: US/UK-neutral 'taken care of… what we watch', 'right now', one varied 'Make it yours' opener, 'when she isn't rushing'; ES 'que pase después', 'dice más', 'Estoy orgulloso de ser', 'Elige bien el momento', 'por el chat', parallel FAQ list."
+      ],
+      "rejected": [
+        "Polish not taken: 'long paragraphs… make her cry' in the description (over 160 characters), and linking a sorry-message post that doesn't exist yet."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Top results give dozens of interchangeable compliment paragraphs; this gives a reusable shape, seven specific paragraphs for the moments people write them, the detail to swap in each and when to send it."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-one fixes made correctly and every sample counted inside 60 to 90 words; one Spanish calque in the new 'make her cry' sample: 'hiciste que fuera sobre ti'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is near-duplicate spam and lists of interchangeable compliments; this gives a four-part method with a worked table, seven paragraphs for the situations people search and the detail to change in each."
+        }
+      ],
+      "applied": [
+        "ES: 'ni una sola vez te pusiste tú en el centro'.",
+        "Polish taken: ES 'te acordaras de cómo tomo el té', 'mantener los ojos abiertos', 'cuando no vaya con prisa'; the night sample no longer says it can wait until morning when the advice is to send it before she sleeps (EN and ES); 'hard stretch' / 'temporada difícil'."
+      ],
+      "rejected": [
+        "Polish not taken: a birthday section, 'long' and 'make her cry' in the title or description, setting up the tea earlier, and varying the 'Make it yours' openers again."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Top results hand you dozens of interchangeable compliment paragraphs; this gives a four-part shape with a worked example, seven paragraphs built on concrete moments and a note under each saying exactly which detail to swap."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page for this search that teaches a four-part shape and gives seven paragraphs for specific moments, each 60 to 90 words with the one detail to change, checked against the product and mirrored in natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is lists of 100 to 140 interchangeable messages and scraped duplicates; this is the one page that teaches the shape of a good paragraph, gives seven sincere samples for the moments people search and shows which detail to change."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): a birthday section, 'long' in the title, linking a future sorry-message post, the Text Thread note's 'never send by text', 'eyes' twice, 'café' three times, setting up the tea, 'saying sorry'."
+      ]
+    }
+  ]
+}
