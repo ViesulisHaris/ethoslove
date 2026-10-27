@@ -3080,3 +3080,18 @@ So 651 to 655 keep 645's red-flag line, the owner's pick, and each caption asks 
 | 655 | "u take 6 hours to reply" | "i dont really text" | "u replied to her in 2 minutes tho" / "she had a question" |
 
 **Post order:** 652, 651, 655, 653, 654, one a day.
+
+
+## 656 to 660 (27 Oct)
+
+More of 645's red-flag lines (the owner's pick), each with a caption that asks the viewer to judge. Rosie's numbers couldn't be re-read today, because the browser step was blocked.
+
+| | Her question | His red-flag line | The ending |
+|---|---|---|---|
+| 656 | "why did u and ur ex break up" | "she was crazy" / "crazy too" / "dont worry ur different" | "so what will u tell the next girl about me" / "depends" |
+| 657 | "does ur mom know about me" | "not yet" / "shes not ready" | "she follows me on instagram" / "she thinks ur my friend" |
+| 658 | "u havent seen me in 2 weeks" | "im busy with school" / "networking" | "can i come to the next one" / "its not that kind of party" |
+| 659 | "who is she" | "shes like a sister to me" | "u have matching tattoos" / "sibling tattoos" |
+| 660 | "about what" (to "can we talk tomorrow") | "tomorrow" | "will u be my girlfriend" / "leo weve been dating for 9 months" |
+
+**Post order:** 657, 656, 658, 659, 660, one a day.
