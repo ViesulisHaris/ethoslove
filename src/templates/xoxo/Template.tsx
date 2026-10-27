@@ -23,10 +23,10 @@ import { Snippet } from "../_shared/collage/cards";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
 import { printed } from "../_shared/collage/paper";
 import { RansomRows } from "../_shared/collage/ransom";
-import { playChime, playPaper, playSmooch } from "../_shared/collage/sounds";
+import { playChime, playPaper, playSealCrack, playSmooch } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { CoverBits, Envelope, HeartScribble, LinesCard, MarkedLines } from "./art";
-import { addKiss, decor, highlightPlan, kissAt, LOOKS, type DecorSlot, type Kiss, type Look, type LookId } from "./looks";
+import { addKiss, burstKisses, decor, highlightPlan, kissAt, LOOKS, type BurstKiss, type DecorSlot, type Kiss, type Look, type LookId } from "./looks";
 import { fieldsSchema, type XoxoFields } from "./schema";
 
 type Copy = { open: string; to: string; sealed: string; scroll: string; tap: string; headline: string; lines: string; word: string; yours: string; cardTitle: string };
@@ -58,7 +58,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const [stage, setStage] = useState<Stage>(preview ? "open" : "sealed");
   const [burst, setBurst] = useState(0);
+  const [hearts, setHearts] = useState(0);
+  const [pressed, setPressed] = useState(false);
   const [run, setRun] = useState(0);
+  const sealBurst = useMemo(() => burstKisses(hashString(`${data.recipientName}|${data.senderName}|seal`)), [data.recipientName, data.senderName]);
   const eventRef = useRef(onEvent);
   useEffect(() => {
     eventRef.current = onEvent;
@@ -67,19 +70,24 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const open = () => {
     if (stage !== "sealed") return;
     void audio.start();
+    playSealCrack(audio.muted);
     playSmooch(audio.muted);
     buzz(14);
     eventRef.current?.({ type: "started" });
+    setPressed(false);
     setStage("opening");
-    window.setTimeout(() => playPaper(audio.muted), reduce ? 0 : 320);
+    if (!reduce) setHearts((h) => h + 1);
+    window.setTimeout(() => playPaper(audio.muted), reduce ? 0 : 260);
+    // The page comes in under the letter as it rises (the two overlap), so there is never a blank screen between them.
     window.setTimeout(
       () => {
         setBurst((b) => b + 1);
         playChime(audio.muted);
+        buzz(8);
         setStage("open");
         eventRef.current?.({ type: "progress", pct: 30 });
       },
-      reduce ? 250 : 1300,
+      reduce ? 250 : 1080,
     );
   };
 
@@ -99,11 +107,12 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <Ambience layers={[{ kind: "hearts", colors: [look.red, "#FFFFFF"], count: 9 }]} opacity={look.dark ? 0.55 : 0.4} />
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {stage !== "open" ? (
-          <motion.div key={`sealed-${run}`} className="absolute inset-0 z-10 grid place-items-center" exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.35 } }}>
-            <Sealed look={look} s={s} name={data.recipientName} opening={stage === "opening"} reduce={reduce} />
-            <button type="button" onClick={open} aria-label={s.open} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
+          // Leaving, the envelope flies at the camera while the page fades up behind it: one move, no gap.
+          <motion.div key={`sealed-${run}`} className="absolute inset-0 z-20 grid place-items-center" style={{ transformOrigin: "50% 42%" }} exit={reduce ? { opacity: 0, transition: { duration: 0.25 } } : { opacity: 0, scale: 2.1, transition: { duration: 0.6, ease: [0.45, 0, 0.2, 1] } }}>
+            <Sealed look={look} s={s} name={data.recipientName} opening={stage === "opening"} reduce={reduce} pressed={pressed} burst={sealBurst} />
+            <button type="button" onClick={open} onPointerDown={() => stage === "sealed" && setPressed(true)} onPointerUp={() => setPressed(false)} onPointerLeave={() => setPressed(false)} onPointerCancel={() => setPressed(false)} aria-label={s.open} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: look.dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.85)", color: look.dark ? "#FFF5F0" : look.red, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(60,10,20,.2)" }} initial={{ opacity: 0 }} animate={stage === "opening" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "opening" ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>
               {s.open}
             </motion.p>
@@ -113,6 +122,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         )}
       </AnimatePresence>
 
+      <Confetti burst={hearts} colors={[look.red, "#FF8FAB", "#FFFFFF"]} count={44} shape="heart" origin={{ x: 0.5, y: 0.53 }} className="pointer-events-none absolute inset-0 z-[35]" />
       <Confetti burst={burst} colors={look.confetti} count={130} origin={{ x: 0.5, y: 0.45 }} className="pointer-events-none absolute inset-0 z-[36]" />
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
@@ -123,7 +133,9 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
  * The sealed envelope on its page, with everything stuck round it: the first screen, and, drawn
  * still, the Classic tile in the editor's cover picker.
  */
-function Sealed({ look, s, name, opening, reduce }: { look: Look; s: Copy; name: string; opening: boolean; reduce: boolean }) {
+function Sealed({ look, s, name, opening, reduce, pressed = false, burst = [] }: { look: Look; s: Copy; name: string; opening: boolean; reduce: boolean; pressed?: boolean; burst?: BurstKiss[] }) {
+  // While it waits the envelope floats a little, and a finger on it presses it down: the cover is alive before anyone taps.
+  const idle = !opening && !reduce;
   return (
     <>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(62% 40% at 50% 52%, ${look.dark ? "rgba(212,33,61,.16)" : "rgba(255,255,255,.55)"}, transparent 72%)` }} />
@@ -132,7 +144,9 @@ function Sealed({ look, s, name, opening, reduce }: { look: Look; s: Copy; name:
         <p className="mb-[calc(7*var(--p))] text-center text-[calc(6.4*var(--p))] leading-none" style={{ fontFamily: SCRIPT_FONT, color: look.red, textShadow: `0 0 calc(1.2*var(--p)) ${look.wall}, 0 0 calc(2.6*var(--p)) ${look.wall}` }}>
           {s.sealed}
         </p>
-        <Envelope look={look} name={name} to={s.to} opening={opening} reduce={reduce} />
+        <motion.div animate={pressed ? { scale: 0.965, y: "0%" } : idle ? { scale: 1, y: ["0%", "-2.2%", "0%"] } : { scale: 1, y: "0%" }} transition={pressed ? { duration: 0.12 } : idle ? { scale: { type: "spring", stiffness: 500, damping: 18 }, y: { duration: 3.4, repeat: Infinity, ease: "easeInOut" } } : { duration: 0.2 }}>
+          <Envelope look={look} name={name} to={s.to} opening={opening} reduce={reduce} burst={burst} />
+        </motion.div>
       </motion.div>
     </>
   );
