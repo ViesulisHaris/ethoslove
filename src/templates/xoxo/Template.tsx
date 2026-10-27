@@ -23,6 +23,7 @@ import { Snippet } from "../_shared/collage/cards";
 import { scatterHeight, scatterSpots } from "../_shared/collage/layout";
 import { printed } from "../_shared/collage/paper";
 import { RansomRows } from "../_shared/collage/ransom";
+import { scrapSrc } from "../_shared/collage/scraps";
 import { playChime, playPaper, playSealCrack, playSmooch } from "../_shared/collage/sounds";
 import { buzz } from "../_shared/memes/sounds";
 import { CoverBits, Envelope, HeartScribble, LinesCard, MarkedLines } from "./art";
@@ -62,6 +63,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [pressed, setPressed] = useState(false);
   const [run, setRun] = useState(0);
   const sealBurst = useMemo(() => burstKisses(hashString(`${data.recipientName}|${data.senderName}|seal`)), [data.recipientName, data.senderName]);
+  // The ring's prints mount at the tap and are gone within a second; fetched only then, on a slow first open they would land after the ring had faded. Fetch them while the envelope waits.
+  useEffect(() => {
+    if (preview || reduce) return;
+    for (const id of new Set(sealBurst.map((k) => k.scrap))) new Image().src = scrapSrc(id);
+  }, [sealBurst, preview, reduce]);
   const eventRef = useRef(onEvent);
   useEffect(() => {
     eventRef.current = onEvent;
@@ -110,7 +116,8 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       <AnimatePresence>
         {stage !== "open" ? (
           // Leaving, the envelope flies at the camera while the page fades up behind it: one move, no gap.
-          <motion.div key={`sealed-${run}`} className="absolute inset-0 z-20 grid place-items-center" style={{ transformOrigin: "50% 42%" }} exit={reduce ? { opacity: 0, transition: { duration: 0.25 } } : { opacity: 0, scale: 2.1, transition: { duration: 0.6, ease: [0.45, 0, 0.2, 1] } }}>
+          // Once opening, it lets taps through: it lingers over the page for its exit, and the page has to be scrollable at once.
+          <motion.div key={`sealed-${run}`} className="absolute inset-0 z-20 grid place-items-center" style={{ transformOrigin: "50% 42%", pointerEvents: stage === "sealed" ? undefined : "none" }} exit={reduce ? { opacity: 0, transition: { duration: 0.25 } } : { opacity: 0, scale: 2.1, transition: { duration: 0.6, ease: [0.45, 0, 0.2, 1] } }}>
             <Sealed look={look} s={s} name={data.recipientName} opening={stage === "opening"} reduce={reduce} pressed={pressed} burst={sealBurst} />
             <button type="button" onClick={open} onPointerDown={() => stage === "sealed" && setPressed(true)} onPointerUp={() => setPressed(false)} onPointerLeave={() => setPressed(false)} onPointerCancel={() => setPressed(false)} aria-label={s.open} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
             <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: look.dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.85)", color: look.dark ? "#FFF5F0" : look.red, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(60,10,20,.2)" }} initial={{ opacity: 0 }} animate={stage === "opening" ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={stage === "opening" ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>

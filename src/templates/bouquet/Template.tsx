@@ -116,9 +116,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const arr = useMemo(() => arrange(data.fields.stems, data.fields.seed), [data.fields.stems, data.fields.seed]);
   // One flower blooms big across the screen first, then the bouquet assembles under it.
   const BLOOM_S = 2.6;
-  const cardAt = animate ? BLOOM_S + timingFor(arr).card + 1.1 : 0;
+  // A bouquet of only greens and fillers has no head to bloom: it assembles straight away instead of never.
+  const hasBloom = animate && !!arr.heads[0];
+  const cardAt = animate ? (hasBloom ? BLOOM_S : 0) + timingFor(arr).card + 1.1 : 0;
   const [ready, setReady] = useState(!animate);
-  const [bloomed, setBloomed] = useState(!animate);
+  const [bloomed, setBloomed] = useState(!hasBloom);
   const [open, setOpen] = useState(false);
   const [petals, setPetals] = useState(0);
   const [run, setRun] = useState(0);
@@ -276,7 +278,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
                   : () => {
                       setOpen(false);
                       setReady(!animate);
-                      setBloomed(!animate);
+                      setBloomed(!hasBloom);
                       setRun((r) => r + 1);
                     }
               }
@@ -338,10 +340,10 @@ function pressedPair(heads: Head[]): Head[] {
 /** A head from their own bouquet, pressed flat onto the card's corner. */
 function PressedFlower({ head, uid, rotate, delay, reduce, className }: { head: Head; uid: string; rotate: number; delay: number; reduce: boolean; className?: string }) {
   return (
-    // Cropped close to the head (the drawing leaves room round it for the opener's bloom), so the box is the flower.
+    // A head is drawn about 100 units across round 0,0: this box is the flower, so the sizes below are what shows.
     <motion.svg
       aria-hidden="true"
-      viewBox="-33 -33 66 66"
+      viewBox="-50 -50 100 100"
       className={cn("pointer-events-none absolute overflow-visible", className)}
       style={{ filter: "drop-shadow(0 4px 6px rgba(40,20,20,.24))" }}
       initial={reduce ? false : { scale: 0, rotate: rotate - 60, opacity: 0 }}
@@ -421,7 +423,7 @@ function Finale({
         <Washi className="-top-[11px] left-1/2 h-[22px] w-[clamp(84px,26cqw,112px)] -translate-x-1/2 -rotate-2" />
         {pressed[0] ? <PressedFlower head={pressed[0]} uid="pressed-a" rotate={-18} delay={0.85} reduce={reduce} className="-top-[clamp(22px,6cqw,30px)] -left-[clamp(8px,2.4cqw,14px)] w-[clamp(58px,17cqw,80px)]" /> : null}
         {pressed[1] ? <PressedFlower head={pressed[1]} uid="pressed-b" rotate={26} delay={1.05} reduce={reduce} className="-right-[clamp(6px,2cqw,12px)] -bottom-[clamp(18px,5cqw,26px)] w-[clamp(52px,15cqw,72px)]" /> : null}
-        <p className="text-center text-[clamp(28px,8cqw,36px)] leading-none" style={{ fontFamily: "var(--gift-font-hand)", color: "var(--gift-accent-deep)" }}>
+        <p className="relative z-[3] text-center text-[clamp(28px,8cqw,36px)] leading-none" style={{ fontFamily: "var(--gift-font-hand)", color: "var(--gift-accent-deep)" }}>
           {cardText}
         </p>
         <div className="mt-6">

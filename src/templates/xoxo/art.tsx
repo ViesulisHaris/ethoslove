@@ -49,7 +49,8 @@ function SealBurst({ look, burst }: { look: Look; burst: BurstKiss[] }) {
         const share = (d: number) => `${Math.round((d / k.w) * 100)}%`;
         return (
           <div key={i} className="absolute top-0 left-0" style={{ width: `calc(${k.w} * var(--p))`, translate: "-50% -50%" }}>
-            <motion.div initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }} animate={{ x: share(Math.cos(rad) * k.distance), y: share(Math.sin(rad) * k.distance), scale: [0.3, 1.15, 1], opacity: [0, 1, 1, 0], rotate: k.rotate }} transition={{ duration: 0.9, delay: k.delay, ease: [0.16, 1, 0.3, 1], opacity: { duration: 0.9, delay: k.delay, times: [0, 0.1, 0.5, 1] } }}>
+            {/* square, so a percentage translate means the same distance across and down, and the ring stays round */}
+            <motion.div className="grid aspect-square place-items-center" initial={{ x: 0, y: 0, scale: 0.3, opacity: 0, rotate: 0 }} animate={{ x: share(Math.cos(rad) * k.distance), y: share(Math.sin(rad) * k.distance), scale: [0.3, 1.15, 1], opacity: [0, 1, 1, 0], rotate: k.rotate }} transition={{ duration: 0.9, delay: k.delay, ease: [0.16, 1, 0.3, 1], opacity: { duration: 0.9, delay: k.delay, times: [0, 0.1, 0.5, 1] } }}>
               <Scrap id={k.scrap} tone={look.kissTone} eager shadow={false} />
             </motion.div>
           </div>

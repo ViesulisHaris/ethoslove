@@ -119,7 +119,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 function Tied({ look, s, data, untying, reduce, onUntie }: { look: Look; s: Copy; data: Data; untying: boolean; reduce: boolean; onUntie: () => void }) {
   // Above the page as it leaves, fading while the page comes in under it.
   return (
-    <motion.div className="absolute inset-0 z-20" exit={{ opacity: 0, transition: { duration: reduce ? 0.25 : 0.5 } }}>
+    <motion.div className="absolute inset-0 z-20" style={{ pointerEvents: untying ? "none" : undefined }} exit={{ opacity: 0, transition: { duration: reduce ? 0.25 : 0.5 } }}>
       <Wrapping look={look} s={s} recipientName={data.recipientName} senderName={data.senderName} untying={untying} reduce={reduce} bow="cq-bow" />
       <button type="button" onClick={onUntie} aria-label={s.untie} className="absolute inset-0 z-[5] outline-none focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:ring-inset" />
       <motion.p aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[max(9cqh,64px)] z-[4] mx-auto w-max rounded-full px-[calc(4.5*var(--k))] py-[calc(1.7*var(--k))] text-[calc(3.1*var(--k))] font-semibold tracking-[0.22em] uppercase backdrop-blur-sm" style={{ background: "rgba(255,255,255,.85)", color: look.satin.deep, boxShadow: "0 calc(.6*var(--k)) calc(2.4*var(--k)) rgba(70,25,45,.18)" }} initial={{ opacity: 0 }} animate={untying ? { opacity: 0 } : { opacity: 1, scale: reduce ? 1 : [1, 1.05, 1] }} transition={untying ? { duration: 0.2 } : { opacity: { delay: 0.9, duration: 0.5 }, scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" } }}>

@@ -235,7 +235,7 @@ describe("XOXO's seal bursting into kisses", () => {
     });
   });
 
-  it("throws them past the envelope's edge but keeps them on the phone", () => {
+  it("keeps the throw and the size of every print in range", () => {
     for (const k of burstKisses(99, 12)) {
       expect(k.distance).toBeGreaterThanOrEqual(38);
       expect(k.distance).toBeLessThanOrEqual(52);
