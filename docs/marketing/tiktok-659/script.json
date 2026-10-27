@@ -1,0 +1,70 @@
+{
+  "slides": [
+    {
+      "type": "chat",
+      "timestamp": "Today|11:13 PM",
+      "messages": [
+        {
+          "from": "me",
+          "text": "who is she"
+        },
+        {
+          "from": "them",
+          "text": "my best friend"
+        },
+        {
+          "from": "me",
+          "text": "since when do u have a girl best friend"
+        },
+        {
+          "from": "them",
+          "text": "shes like a sister to me"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "leo"
+        },
+        {
+          "from": "them",
+          "text": "trust me"
+        },
+        {
+          "from": "them",
+          "text": "i made u this"
+        },
+        {
+          "from": "them",
+          "link": {
+            "title": "for maya 🤍",
+            "domain": "tryethos.io",
+            "image": "og",
+            "name": "Maya",
+            "card": "blush"
+          }
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "messages": [
+        {
+          "from": "me",
+          "text": "aw"
+        },
+        {
+          "from": "me",
+          "text": "u have matching tattoos"
+        },
+        {
+          "from": "them",
+          "text": "sibling tattoos"
+        }
+      ]
+    }
+  ]
+}
