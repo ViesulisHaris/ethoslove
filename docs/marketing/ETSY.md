@@ -24,6 +24,26 @@ Nothing the buyer's browser sends decides whether something was paid: that answe
 Etsy every time. Code: `src/lib/etsy/`, `src/app/api/etsy/`, `src/components/editor/etsy-claim.tsx`,
 migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
+## Where it stands (27 Oct 2026)
+
+- **Shop open:** TryEthos (tryethos.etsy.com). English, Latvia, EUR; Migla as an incorporated business; Etsy Plus declined.
+- **Shop basics:** logo, tagline and About are filled in. The banner is in `etsy/photos/shop-banner.jpg`, not uploaded.
+- **8 listings saved as drafts, not published:**
+  - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
+  - all 13 tags, €10.99, quantity 999;
+  - "made by me", "created by me".
+- **The Etsy app "ethos":** registered, waiting for Etsy's personal approval. Its callback URL can only be added once it's approved.
+
+**Left before publishing:**
+1. App approved, then add the callback URL.
+2. Keys in Vercel.
+3. Migration 0018.
+4. The connect link.
+5. A real test order bought by someone else, then refunded.
+6. Publish the 8 drafts ($0.20 each).
+
+Photos: `docs/marketing/etsy/photos/<slug>/`, made by `scripts/etsy-shots.mjs`, then `etsy-photos.mjs` and `etsy-brand.mjs`.
+
 ## Setting it up (the owners, once)
 
 Claude can't open accounts, enter bank details or handle keys: these steps are yours.
