@@ -1,0 +1,187 @@
+{
+  "slug": "good-morning-messages-for-her",
+  "keyword": "good morning messages for her",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 8,
+            "usable": 8,
+            "trust": 10
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Sorted by the morning she's having, with a strong timing rule and table, but most lines assume you live together, two funny lines didn't land ('The alarm can stay unwelcome', 'better than the weather'), and 'if your app can do it' left the reader searching for how to schedule."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "A scheduled gift needs its link sent in advance (it shows a countdown until the time), so 'have it open when her alarm goes off' needed the link step; a three-item lead; 'Our messages … has' in the older post; ES 'está siendo mucho' and 'te has ensayado'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The only result that says which message to send on which morning and when, but 'romantic', the most common modifier on page one, never appeared in a heading."
+        }
+      ],
+      "applied": [
+        "New section 'Good morning texts for her early on' / 'Mensajes de buenos días para ella al principio' for couples who don't live together.",
+        "Funny lines: 'Reminder that you're my favourite person and the alarm is not', 'No pressure, but my standards for your reply are high' (ES matches the second).",
+        "Scheduling steps from Apple's and Google's help pages: Send Later in iPhone Messages (linked), touch and hold send in Google Messages, in the body and the FAQ (EN and ES).",
+        "Heading 'A long romantic good morning message for her' / 'largo y romántico'.",
+        "Surprise paragraph: send her the link the night before and set it to open at her alarm (EN and ES).",
+        "Lead: 'short and specific, and they arrive when she actually wakes up' (ES matches).",
+        "Older post: 'Our post on good morning messages for her has…' / 'Nuestro artículo de…'.",
+        "ES: 'muy dura', 'Has ensayado'.",
+        "Polish taken: takeaway 'By the second week she stops reading it' (ES matches)."
+      ],
+      "rejected": [
+        "Polish not taken: a time-zone caveat on 'Good morning from yesterday', 'girlfriend' in the description, a flirty line, 'mi novia' in the ES title, 'Ya te alcanzaré'."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are lists of 50 to 100 interchangeable greeting-card lines; this sorts lines by the morning she's having, shows how to make any borrowed line yours, and says exactly when and how to schedule it so it arrives as she wakes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-one fixes correct and the phone steps verified, but 'It's one of our digital gifts for your girlfriend' implied Text Thread is on that page, which it isn't, and ES 'Quédate en' was a calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is 150-300-line dumps, much of it mirrored spam; this sorts sendable lines by the morning she's having, shows how to schedule for her time zone and teaches personalisation with a table."
+        }
+      ],
+      "applied": [
+        "Text Thread paragraph no longer implies it's on the girlfriend gifts page: 'For other ideas, see our digital gifts for your girlfriend' (ES matches).",
+        "ES 'Cíñete a un recuerdo…'.",
+        "Polish taken: ES 'no pide el mismo mensaje', 'decirte en persona en qué parte', 'Anoche fue el mejor martes', iMessage qualifier in the FAQ (EN and ES), ES alarm line now matches the English."
+      ],
+      "rejected": [
+        "Polish not taken: a countdown sentence, cutting one of three 'second week' mentions, 'girlfriend' in the description, a flirty line and 'mi novia' in the ES title."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Most top results are long lists of interchangeable greeting-card lines; this sorts lines by the morning she's having, shows how to make any line personal in ten seconds and how to schedule it for her alarm."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-two fixes made correctly and every claim verified; one Spanish line, «Estás lista, aunque no lo parezca», read as a small dig rather than 'even if it doesn't feel like it'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is 150 to 300 context-free lines, much of it scraped; this sorts lines by the morning she's having, gives real scheduling steps and a borrowed-to-personal table."
+        }
+      ],
+      "applied": [
+        "ES: «Estás lista, aunque no te lo parezca».",
+        "Polish taken (grammar): ES FAQ «hacen que siga siendo algo que espera con ganas»."
+      ],
+      "rejected": [
+        "Polish not taken: 'I'm still on Monday here', 'girlfriend' in the description, flirty lines, 'mi novia' in the ES title, «al principio de la relación»."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results list hundreds of interchangeable greeting-card lines; this gives fewer lines that sound like real people, sorted by situation, with send times, scheduling steps and a ten-second way to make any line personal."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Last round's Spanish fix made correctly; every product claim matches the code, every link resolves, and each line comes with a real detail and a time to send it."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is 150 to 300 item greeting-card dumps and mirror pages; this sorts plainly written lines by the morning she's having, including early on and after a fight, with a borrowed-versus-yours table and real send-later steps."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): saying the scheduling step once, 'girlfriend or wife' in the description, a flirty set, 'mi novia' in an ES heading, «al principio de la relación», «te alcanzo en el tiempo»."
+      ]
+    }
+  ]
+}
