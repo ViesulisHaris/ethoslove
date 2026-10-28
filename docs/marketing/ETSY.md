@@ -47,6 +47,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
+  - an optional "Their name" custom option and a closing line on every listing, and four titles with "Personalized" (28 Oct, see Ranking edits);
   - "made by me", "created by me".
 - **The Etsy app "ethos":** approved (Personal Access), callback URL set, the three keys in Vercel, and the shop connected on 28 Oct. A made-up order number now answers "order_not_found", which only happens once Etsy answers for our shop.
 - **The buyer's path, tested locally on 28 Oct** against a stand-in Etsy (iPhone sizes, Chrome and Safari's engine). A new buyer goes from the PDF link to a sent gift in about 18 s, and the recipient's link opens. Also tested:
@@ -231,10 +232,10 @@ Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills
 
 **The plan, in order:**
 1. **Conversion first** (done: the 40% sale, the clear "how to get your gift" block, the new fifth photo).
-2. **Attributes:** fill every attribute that fits ("Show all attributes": Occasion, Holiday, Recipient…) on all listings; wave 3 does it as it builds.
-3. **A second video and up to 10 more photos per listing:** the recipient's view, the making, "works on any phone".
-4. **Titles:** add a true buyer modifier ("Personalized", "Gift for…") where it is missing; a closing call to action in the descriptions.
-5. **Personalisation fields** (Etsy "Custom options"): they would put us under the "Personalised" filter (eRank: "personalized gift" ≈ 63K searches a month). The cost is an extra checkout field. **Owner's decision.**
+2. **Attributes:** fill every attribute that fits ("Show all attributes": Occasion, Holiday, Recipient…) on all listings. Done 28 Oct: these categories have nothing besides Occasion to fill (see Ranking edits below).
+3. **A second video and up to 10 more photos per listing:** the recipient's view, the making, "works on any phone". Not done yet.
+4. **Titles:** add a true buyer modifier ("Personalized", "Gift for…") where it is missing; a closing call to action in the descriptions. Done 28 Oct.
+5. **Personalisation fields** (Etsy "Custom options"): they would put us under the "Personalised" filter (eRank: "personalized gift" ≈ 63K searches a month). The cost is an extra checkout field. Owner's go; done 28 Oct on all 54.
 6. **Etsy Ads from about 12 Nov:**
    - $5/day on all listings for the first 14 days, then cut any listing with 30+ clicks and no sale, and keep the converters.
    - Ceiling: cost per sale under the €5.40 a sale nets during the sale.
@@ -244,11 +245,28 @@ Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills
 7. **Outside traffic to the listings** (TikTok, Pinterest), through Etsy's Share & Save links, which return 4% of the fees on those sales.
 8. **Re-measure ranks signed out** (the in-app browser) once indexed, then weekly. Searches to track: interactive birthday card, digital love letter, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book.
 
+### Ranking edits, 28 Oct
+
+Made on all 54 live listings after the audit (owner: "we need to rank high before the ads").
+
+- **A custom option on every listing** (Item details → Custom options → Add field): a text box "Their name", not required, so buyers see "Their name (optional)"; at most 40 characters; instructions "Optional. You add their name, your photos and your words on tryethos.io after you buy." It is there for the "Personalised" filter: the site never reads what a buyer types into it, the gift is still made on tryethos.io.
+- **A closing line at the end of every description:** "Make it tonight and send it in minutes." Added once for all 54 with Listings → select all → Bulk edit → Descriptions → "Add to end". The position menu is a native select inside a shadow root, so a click doesn't change it; set it by script, and type the text after, because changing the position empties the text box.
+- **Four titles with a buyer modifier,** the search phrase still first:
+  - Jar of Reasons: Reasons Why I Love You Jar, Personalized Digital Love Jar Gift for Boyfriend or Girlfriend, Interactive Love Notes
+  - Scratch Card: Scratch Off Cards, Personalized Digital Scratch Card Reveal with Your Photos, Proposal or Pregnancy Announcement Gift
+  - Jack-o'-Lantern: Jack O Lantern with Their Name, Personalized Digital Halloween Card for Him or Her, Pumpkin Carving Gift with Your Photos
+  - Midnight Countdown: New Years Eve Countdown to Midnight, Personalized Digital New Year Card with Your Photos, Long Distance Gift for Him or Her
+
+  The other 50 already carry one of "gift", "personalized", "custom", who it's for or "with your photos".
+- **Attributes:** "Show all attributes" in Love Cards and Birthday Cards offers Occasion, Materials, Width, Length, Envelope included and Blank inside. Only Occasion fits a digital gift, and every listing has it, so there is no Holiday or Recipient to set.
+- **Checked:** every listing's editor data was read back afterwards: 54 SKUs, one optional "Their name" field each with the 40-character limit, the closing line once, at the end.
+- **Not done:** the second video ("made in a minute": the editor, Publish, the Etsy box) and more photos.
+
 ## The listings
 
 Live in the drafts since 28 Oct. Each title starts with what buyers search; tags are at most 20 characters.
 
-### Pop-up Card · SKU `ethos-popup-card`
+### Pop-up Card · SKU `ethos-popup-card` · listing 4604473165
 
 **Title:** Interactive Birthday Card, Digital Birthday Card for Boyfriend or Husband, Birthday Website Gift
 
@@ -275,7 +293,9 @@ How it works:
 Add music, a countdown that opens it on their birthday, and a surprise at the end. If it doesn't open
 on their phone, message us and we'll refund you.
 
-### Bouquet · SKU `ethos-bouquet`
+Make it tonight and send it in minutes.
+
+### Bouquet · SKU `ethos-bouquet` · listing 4604497606
 
 **Title:** Digital Flowers Gift, Interactive Bouquet Love Website, Digital Gift for Her or Mom
 
@@ -300,7 +320,9 @@ How it works:
 
 For Valentine's Day, anniversaries, Mother's Day, birthdays, or any day you're far apart.
 
-### XOXO · SKU `ethos-xoxo`
+Make it tonight and send it in minutes.
+
+### XOXO · SKU `ethos-xoxo` · listing 4604476273
 
 **Title:** Digital Love Letter Website, Interactive Valentine Gift for Boyfriend or Girlfriend, Love Website
 
@@ -324,7 +346,9 @@ How it works:
 2. Add your photos, your words and what you call them.
 3. Press Send and type your Etsy order number. Your letter's link is ready to share.
 
-### Birthday Cinema · SKU `ethos-birthday-cinema`
+Make it tonight and send it in minutes.
+
+### Birthday Cinema · SKU `ethos-birthday-cinema` · listing 4604478829
 
 **Title:** Interactive Birthday Website, Digital Birthday Card for Him with Photos and Video, Last Minute Gift
 
@@ -347,7 +371,9 @@ How it works:
 2. Add their name, photos, a video and your message.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
-### Coquette · SKU `ethos-coquette`
+Make it tonight and send it in minutes.
+
+### Coquette · SKU `ethos-coquette` · listing 4604477605
 
 **Title:** Love Website Template, Coquette Digital Love Letter for Girlfriend, Interactive Anniversary Gift
 
@@ -371,7 +397,9 @@ How it works:
 2. Add your photos, your song and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
-### Digicam · SKU `ethos-digicam`
+Make it tonight and send it in minutes.
+
+### Digicam · SKU `ethos-digicam` · listing 4604503122
 
 **Title:** Interactive Birthday Website, Y2K Digital Camera Gift with Your Photos, Digital Gift for Her
 
@@ -395,7 +423,9 @@ How it works:
 2. Add your photos, captions and letter. Pick baby pink, silver, lilac or black.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
-### Scrapbook · SKU `ethos-scrapbook`
+Make it tonight and send it in minutes.
+
+### Scrapbook · SKU `ethos-scrapbook` · listing 4604504298
 
 **Title:** Digital Memory Book Website, Interactive Digital Scrapbook, Anniversary Gift for Boyfriend
 
@@ -418,7 +448,9 @@ How it works:
 2. Add your photos, notes and letter. Pick Blossom, Favorite person, Seaside, Sunshine or Memories.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
-### Museum · SKU `ethos-museum`
+Make it tonight and send it in minutes.
+
+### Museum · SKU `ethos-museum` · listing 4604505462
 
 **Title:** Anniversary Website, Digital Photo Album Gift for Him or Her, Interactive Photo Gallery
 
@@ -441,15 +473,17 @@ How it works:
 2. Add your photos, their plaques and your message.
 3. Press Send and type your Etsy order number. Your gallery's link is ready to share.
 
+Make it tonight and send it in minutes.
+
 ## Wave 2 listings (drafts since 28 Oct)
 
 Written from Etsy's search suggestions (see Getting found). Snow Globe and Fireside are copies of
 XOXO with the Occasion cleared; Arcade is a copy of the Pop-up Card (Birthday Cards); the rest are
 copies of XOXO (Love Cards, Anniversary).
 
-### Jar of Reasons · SKU `ethos-jar-of-reasons`
+### Jar of Reasons · SKU `ethos-jar-of-reasons` · listing 4604540224
 
-**Title:** Reasons Why I Love You Jar, Digital Love Jar for Boyfriend or Girlfriend, Interactive Love Notes
+**Title:** Reasons Why I Love You Jar, Personalized Digital Love Jar Gift for Boyfriend or Girlfriend, Interactive Love Notes
 
 **Tags:** reasons i love you, reasons jar, love jar, love notes, jar of love notes, digital love letter, love website, gift for boyfriend, gift for girlfriend, valentines gift, anniversary gift, long distance gift, digital gift for him
 
@@ -472,7 +506,9 @@ How it works:
 
 Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Halfway · SKU `ethos-halfway`
+Make it tonight and send it in minutes.
+
+### Halfway · SKU `ethos-halfway` · listing 4604519163
 
 **Title:** Long Distance Relationship Gift for Boyfriend, Interactive Miss You Card, Digital Love Letter Map
 
@@ -497,7 +533,9 @@ How it works:
 
 Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Passport · SKU `ethos-passport`
+Make it tonight and send it in minutes.
+
+### Passport · SKU `ethos-passport` · listing 4604542210
 
 **Title:** Long Distance Relationship Gift, Digital Passport with Your Photos as Stamps, Travel Anniversary Gift
 
@@ -522,7 +560,9 @@ How it works:
 
 Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Pack Your Bags · SKU `ethos-pack-your-bags`
+Make it tonight and send it in minutes.
+
+### Pack Your Bags · SKU `ethos-pack-your-bags` · listing 4604521473
 
 **Title:** Surprise Trip Reveal, Digital Boarding Pass Gift, Trip Reveal Ticket for Boyfriend or Girlfriend
 
@@ -547,9 +587,11 @@ How it works:
 
 Add music and a countdown that opens it on the day. If it doesn't open on their phone, message us and we'll refund you.
 
-### Scratch Card · SKU `ethos-scratch-card`
+Make it tonight and send it in minutes.
 
-**Title:** Scratch Off Cards, Digital Scratch Card Reveal with Your Photos, Pregnancy Announcement or Proposal
+### Scratch Card · SKU `ethos-scratch-card` · listing 4604544324
+
+**Title:** Scratch Off Cards, Personalized Digital Scratch Card Reveal with Your Photos, Proposal or Pregnancy Announcement Gift
 
 **Tags:** scratch off cards, scratch off ticket, scratch off, scratch card reveal, digital scratch off, proposal gift, baby announcement, pregnancy reveal, anniversary gift, gift for boyfriend, gift for girlfriend, valentines gift, interactive card
 
@@ -572,7 +614,9 @@ How it works:
 
 Add music, a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Snow Globe · SKU `ethos-snow-globe`
+Make it tonight and send it in minutes.
+
+### Snow Globe · SKU `ethos-snow-globe` · listing 4604522937
 
 **Title:** Christmas Gift for Boyfriend or Girlfriend, Personalized Snow Globe with Your Photos, Digital Christmas Card
 
@@ -597,7 +641,9 @@ How it works:
 
 Add music, a countdown that opens it on Christmas morning, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Fireside · SKU `ethos-fireside`
+Make it tonight and send it in minutes.
+
+### Fireside · SKU `ethos-fireside` · listing 4604523547
 
 **Title:** Thinking of You Gift, Cozy Digital Love Letter with a Candle and Your Photos, Miss You Card
 
@@ -622,7 +668,9 @@ How it works:
 
 Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### Arcade · SKU `ethos-arcade`
+Make it tonight and send it in minutes.
+
+### Arcade · SKU `ethos-arcade` · listing 4604546154
 
 **Title:** Video Game Gift for Boyfriend, Interactive Birthday Game with Your Photos, Retro Arcade Message
 
@@ -647,7 +695,9 @@ How it works:
 
 Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
-### On Repeat · SKU `ethos-on-repeat`
+Make it tonight and send it in minutes.
+
+### On Repeat · SKU `ethos-on-repeat` · listing 4604524705
 
 **Title:** Custom Album Cover Gift, Digital Playlist Love Letter with Your Photo and Song, Gift for Girlfriend
 
@@ -671,6 +721,8 @@ How it works:
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
 Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ## Wave 3 listings (live since 28 Oct)
 
@@ -711,6 +763,8 @@ HOW IT WORKS
 
 Add music and a countdown too. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### The Letter · SKU `ethos-the-letter` · listing 4604969518
 
 **Title:** Digital Love Letter, Wax Sealed Open When Letter with Your Photos, Love Letter for Boyfriend or Girlfriend
@@ -737,6 +791,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your letter's link is ready to share.
 
 Add music and a countdown too. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Autumn Reel · SKU `ethos-autumn-reel` · listing 4604974128
 
@@ -765,6 +821,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Balloons · SKU `ethos-balloons` · listing 4604981589
 
 **Title:** Birthday Balloons Surprise, Interactive Birthday Card with Your Photos, Digital Birthday Gift for Her or Him
@@ -789,6 +847,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Bat Swarm · SKU `ethos-bat-swarm` · listing 4604963109
 
@@ -817,6 +877,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Be My Boo · SKU `ethos-be-my-boo` · listing 4604954969
 
 **Title:** Be My Boo Halloween Card, Cute Ghost Collage with Your Photos, Halloween Gift for Girlfriend or Boyfriend
@@ -844,6 +906,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Bloom · SKU `ethos-bloom` · listing 4604977197
 
 **Title:** Digital Flower Gift for Her, a Flower That Opens While They Hold the Screen, Sorry Gift or Mothers Day Gift
@@ -869,6 +933,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### Cap Toss · SKU `ethos-cap-toss` · listing 4604979339
 
 **Title:** Graduation Gift for Her or Him, Interactive Digital Graduation Card with Photos, They Cheer and the Cap Flies
@@ -893,6 +959,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your card's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Witch's Brew · SKU `ethos-cauldron` · listing 4604965501
 
@@ -921,6 +989,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Dark Romance · SKU `ethos-dark-romance` · listing 4604977780
 
 **Title:** Dark Romance Gift, Gothic Digital Love Letter with Your Photos and Song, Goth Anniversary Gift for Him or Her
@@ -947,6 +1017,8 @@ HOW IT WORKS
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
 
 ### Evergreen · SKU `ethos-evergreen` · listing 4604978746
 
@@ -975,6 +1047,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Fall for You · SKU `ethos-fall-for-you` · listing 4604958155
 
 **Title:** Fall for You Cozy Gift for Her, Autumn Gingham Collage with Your Photos and Song, Fall Gift for Girlfriend
@@ -1001,6 +1075,8 @@ HOW IT WORKS
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
 
 ### Favorite Person · SKU `ethos-favorite-person` · listing 4604958873
 
@@ -1029,6 +1105,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Fortune Cookie · SKU `ethos-fortune-cookie` · listing 4605008148
 
 **Title:** Personalized Fortune Cookies with a Custom Message, Digital Fortune Cookie Gift, Funny Gift for Boyfriend
@@ -1053,6 +1131,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Front Page · SKU `ethos-front-page` · listing 4604982707
 
@@ -1079,6 +1159,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### The Garden · SKU `ethos-garden` · listing 4604987604
 
 **Title:** Digital Flower Garden Gift, Interactive Love Letter That Blooms as They Scroll, Gift for Her or Mom
@@ -1103,6 +1185,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your garden's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Haunted House · SKU `ethos-haunted-house` · listing 4604967413
 
@@ -1131,9 +1215,11 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Jack-o'-Lantern · SKU `ethos-jack-o-lantern` · listing 4604968335
 
-**Title:** Jack O Lantern with Their Name, Digital Halloween Card, Pumpkin Carving Gift with Your Photos and Letter
+**Title:** Jack O Lantern with Their Name, Personalized Digital Halloween Card for Him or Her, Pumpkin Carving Gift with Your Photos
 
 **Tags:** jack o lantern, pumpkin carving, pumpkin gift, pumpkin, halloween gifts, halloween cards, halloween lover gift, halloween love card, spooky gift for her, spooky gifts for him, gift for boyfriend, gift for girlfriend, animated card
 
@@ -1157,6 +1243,8 @@ HOW IT WORKS
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
 
 ### Kawaii · SKU `ethos-kawaii` · listing 4604983533
 
@@ -1185,6 +1273,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Keepsake · SKU `ethos-keepsake` · listing 4604959573
 
 **Title:** Anniversary Keepsake Gift, Digital Locket with Your Photo, Pressed Flowers and a Typed Letter, Gift for Her
@@ -1210,9 +1300,11 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### Midnight Countdown · SKU `ethos-midnight-countdown` · listing 4604978235
 
-**Title:** New Years Eve Countdown to Midnight with Fireworks, Digital New Year Card with Your Photos, Long Distance Gift
+**Title:** New Years Eve Countdown to Midnight, Personalized Digital New Year Card with Your Photos, Long Distance Gift for Him or Her
 
 **Tags:** new years eve, new years, new year card, new years cards, happy new year card, new year countdown, countdown, birthday countdown, long distance gift, new year gifts, gift for boyfriend, gift for girlfriend, digital love letter
 
@@ -1236,6 +1328,8 @@ HOW IT WORKS
 Add music and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
 
 ### Music Box · SKU `ethos-music-box` · listing 4604968985
 
@@ -1262,6 +1356,8 @@ HOW IT WORKS
 
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### Our Timeline · SKU `ethos-our-timeline` · listing 4604991116
 
 **Title:** Relationship Timeline Gift, Our Story Timeline with Your Photos and Dates, Dating Anniversary Gift for Him or Her
@@ -1287,6 +1383,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### Paper Crane · SKU `ethos-paper-crane` · listing 4604970381
 
 **Title:** Im Sorry Gift for Her or Him, Digital Paper Crane Apology Message They Fold Line by Line, Origami Crane Card
@@ -1311,6 +1409,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your crane's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Party Animals · SKU `ethos-party-animals` · listing 4604984551
 
@@ -1339,6 +1439,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Photo Booth · SKU `ethos-photo-booth` · listing 4604971025
 
 **Title:** Photo Booth Strip Gift, Digital Photo Strip of the Two of You, Love Letter for Boyfriend or Girlfriend
@@ -1363,6 +1465,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your strip's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Picnic · SKU `ethos-picnic` · listing 4604971701
 
@@ -1389,6 +1493,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### Recipe Box · SKU `ethos-recipe-box` · listing 4604986141
 
 **Title:** Mom Birthday Gift, Digital Recipe Card for Mom with Your Photos and Letter, Mothers Day Gift from Daughter
@@ -1413,6 +1519,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your recipe's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### The Séance · SKU `ethos-seance` · listing 4604972425
 
@@ -1441,6 +1549,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Sketchbook · SKU `ethos-sketchbook` · listing 4604985399
 
 **Title:** Birthday Card for Her or Him, Doodle Sketchbook That Draws Itself Around Your Photos, Hand Drawn Digital Card
@@ -1465,6 +1575,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your sketchbook's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Spooky Season · SKU `ethos-spooky-season` · listing 4604960217
 
@@ -1493,6 +1605,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Sticker Bomb · SKU `ethos-sticker-bomb` · listing 4604987773
 
 **Title:** Funny Gift for Boyfriend, Digital Meme Sticker Card Where Every Tap Slaps a Sticker, Funny Birthday Card
@@ -1517,6 +1631,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your card's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Text Thread · SKU `ethos-text-thread` · listing 4604973173
 
@@ -1543,6 +1659,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### The Council · SKU `ethos-the-council` · listing 4604995276
 
 **Title:** Funny Cat Gift, a Council of Cats Reviews the Evidence and Stamps a Verdict, Funny Anniversary or Birthday Card
@@ -1568,6 +1686,8 @@ HOW IT WORKS
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
 
+Make it tonight and send it in minutes.
+
 ### The Toast · SKU `ethos-the-toast` · listing 4604980435
 
 **Title:** Digital Wedding Toast with Your Speech and Photos, Champagne Glasses That Clink, Wedding Gift for the Couple
@@ -1592,6 +1712,8 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your toast's link is ready to share.
 
 Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
 
 ### Trick or Treat · SKU `ethos-trick-or-treat` · listing 4604996120
 
@@ -1620,6 +1742,8 @@ Add a countdown to a day that matters and a surprise at the end, or lock it unti
 
 The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
+Make it tonight and send it in minutes.
+
 ### Vinyl · SKU `ethos-vinyl` · listing 4604996914
 
 **Title:** Custom Vinyl Record Gift, Our Song Digital Love Letter, Song Gift for Boyfriend or Girlfriend with Photos
@@ -1644,3 +1768,5 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your record's link is ready to share.
 
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
