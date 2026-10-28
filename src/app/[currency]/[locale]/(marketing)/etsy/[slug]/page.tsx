@@ -42,10 +42,14 @@ export default async function EtsyOrderPage({ params }: PageProps<"/[currency]/[
       <div className="mx-auto max-w-md">
         <h1 className="text-center font-display text-[1.75rem] leading-[1.15] text-balance sm:text-4xl">{t("title")}</h1>
         <p className="mt-2 text-center text-base text-ink-soft">{t("lead", { template })}</p>
-        <div className="mt-6">
-          <TemplatePhonePreview slug={manifest.slug} locale={l} autoStart width="clamp(160px, (100svh - 24rem) * 0.462, min(280px, 100vw - 2.5rem))" />
-        </div>
-        <ol className="mt-8 grid gap-4">
+        {/* The button comes first: on a phone the preview below would push it off the first screen. */}
+        <Button asChild className="mt-6 h-12 w-full rounded-full text-base" data-testid="etsy-start">
+          <Link href={`/create/${manifest.slug}?etsy=1`}>
+            {t("cta", { template })}
+            <ArrowRight aria-hidden="true" className="size-4" />
+          </Link>
+        </Button>
+        <ol className="mt-6 grid gap-3">
           {steps.map((step, i) => (
             <li key={i} className="flex gap-3 text-base leading-relaxed">
               <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-sm font-semibold text-paper">{i + 1}</span>
@@ -53,13 +57,10 @@ export default async function EtsyOrderPage({ params }: PageProps<"/[currency]/[
             </li>
           ))}
         </ol>
-        <Button asChild className="mt-8 h-12 w-full rounded-full text-base" data-testid="etsy-start">
-          <Link href={`/create/${manifest.slug}?etsy=1`}>
-            {t("cta", { template })}
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </Link>
-        </Button>
         <p className="mt-4 text-center text-sm text-muted-foreground">{t("help")}</p>
+        <div className="mt-8">
+          <TemplatePhonePreview slug={manifest.slug} locale={l} autoStart width="clamp(160px, (100svh - 24rem) * 0.462, min(280px, 100vw - 2.5rem))" />
+        </div>
       </div>
     </div>
   );
