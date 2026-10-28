@@ -110,7 +110,8 @@ for (const [slug, g] of Object.entries(GIFTS)) {
   const duration = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", webm]).toString());
   const frames = readdirSync(join(SHOTS, slug, "frames")).length;
   const start = Math.max(0, duration - frames * 1.2 - 1.5);
-  execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", start.toFixed(2), "-i", webm, "-t", "15", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", "-preset", "slow", "-movflags", "+faststart", join(dir, "video.mp4")]);
+  // The phone screen is the top-left 405x720 (older captures padded it with grey to 1080x1920): crop, then scale to 1080x1920.
+  execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", start.toFixed(2), "-i", webm, "-t", "15", "-an", "-vf", "crop=405:720:0:0,scale=1080:1920:flags=lanczos,unsharp=5:5:0.5", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-preset", "slow", "-movflags", "+faststart", join(dir, "video.mp4")]);
   console.log(slug, "ok");
 }
 await browser.close();

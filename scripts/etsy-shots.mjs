@@ -224,7 +224,8 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     viewport: { width: W, height: H },
     deviceScaleFactor: 3,
     locale: "en-US",
-    recordVideo: { dir: join(dir, "video"), size: { width: 1080, height: 1920 } },
+    // Playwright records the viewport at its CSS size and never scales up: a bigger size only pads it with grey.
+    recordVideo: { dir: join(dir, "video"), size: { width: W, height: H } },
   });
   await context.route(/clarity\.ms|facebook|_vercel\//, (r) => r.abort());
   await context.addInitScript((css) => {
