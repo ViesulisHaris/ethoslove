@@ -26,6 +26,11 @@ Pins drive outside visitors to the Etsy listings, and Etsy ranks listings that c
 Each pin links to its Etsy listing. Image: `pins/<slug>.jpg` (1000×1500, made by
 `scripts/etsy-pins.mjs` from the listing's first photo).
 
+Account: business, [@tryethosgifts](https://www.pinterest.com/tryethosgifts/) (@tryethos was taken).
+All 17 went in on 28 Oct through Settings → Import content → Upload .csv, with `pins/pinterest-bulk.csv`.
+Its Publish date column (UTC) spreads them over a week, so a new account doesn't post 17 shop links at once.
+For new listings, add rows with a new date and upload only those rows.
+
 Boards: **Digital birthday gifts** · **Digital love letters** · **Long distance relationship gifts** ·
 **Anniversary gift ideas** · **Christmas gifts for him and her**.
 
