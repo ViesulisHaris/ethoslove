@@ -108,7 +108,9 @@ describe("reading an Etsy order", () => {
   it("takes the order number as Etsy prints it, and the template from the listing's SKU", () => {
     expect(etsyOrderNumber("3456789012")).toBe(3456789012);
     expect(etsyOrderNumber(" #3456 789 012 ")).toBe(3456789012);
-    for (const bad of ["", "12345", "34567890ab", "1234567890123456"]) expect(etsyOrderNumber(bad)).toBeNull();
+    // Pasted from Etsy's email as it prints it.
+    expect(etsyOrderNumber("Order #3456789012")).toBe(3456789012);
+    for (const bad of ["", "12345", "1234567890123456", "Order #3456789012 on 28 Oct"]) expect(etsyOrderNumber(bad)).toBeNull();
     expect(skuTemplate("ethos-popup-card")).toBe("popup-card");
     expect(skuTemplate("POPUP-CARD")).toBe("popup-card");
     expect(skuTemplate("ethos-not-a-template")).toBeNull();

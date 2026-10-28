@@ -1,6 +1,7 @@
 // Etsy listing photos, 2000x2000: a hero, two pairs of moments, a single moment and "how it works",
 // from the demo frames etsy-shots.mjs captured. (The listing video comes from etsy-shots.mjs with ETSY_VIDEO=1.)
 //   node scripts/etsy-photos.mjs <repo> <shots> docs/marketing/etsy/photos [slugs…]
+// ETSY_PHOTOS=5-how-it-works renders only the photos named (comma-separated); that one needs no frames.
 import { createRequire } from "node:module";
 import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -73,7 +74,7 @@ const how = (g) => `<style>${base(g)}
   .note { margin-top: 64px; font-size: 26px; padding: 22px 28px; border-radius: 18px; background: color-mix(in srgb, ${g.ink} 12%, transparent) }
 </style>
 <div class="wrap"><h2>How it works</h2><ol>
-<li><b>1</b><span><strong>Buy and download</strong>A one-page PDF with your link.</span></li>
+<li><b>1</b><span><strong>Go to tryethos.io/etsy</strong>Type your Etsy order number. No download.</span></li>
 <li><b>2</b><span><strong>Make it on your phone</strong>Names, photos, your words. A few minutes, no Canva.</span></li>
 <li><b>3</b><span><strong>Send them the link</strong>They open it on any phone, wherever they are.</span></li>
 </ol><div class="note">If it doesn't open on their phone, message us and we'll refund you.</div></div>`;
@@ -92,14 +93,16 @@ for (const [slug, g] of Object.entries(GIFTS)) {
   const dir = join(OUT, slug);
   mkdirSync(dir, { recursive: true });
   const shots = [
-    ["1-hero", hero(g, frame(slug, g.hero))],
-    ["2-moments", pair(g, frame(slug, g.a[0]), frame(slug, g.a[1]), g.a[2], g.a[3])],
-    ...(g.b ? [["3-moments", pair(g, frame(slug, g.b[0]), frame(slug, g.b[1]), g.b[2], g.b[3])]] : []),
-    ["4-detail", single(g, frame(slug, g.single[0]), g.single[1])],
-    ["5-how-it-works", how(g)],
+    ["1-hero", () => hero(g, frame(slug, g.hero))],
+    ["2-moments", () => pair(g, frame(slug, g.a[0]), frame(slug, g.a[1]), g.a[2], g.a[3])],
+    ...(g.b ? [["3-moments", () => pair(g, frame(slug, g.b[0]), frame(slug, g.b[1]), g.b[2], g.b[3])]] : []),
+    ["4-detail", () => single(g, frame(slug, g.single[0]), g.single[1])],
+    ["5-how-it-works", () => how(g)],
   ];
+  const named = process.env.ETSY_PHOTOS?.split(",");
   for (const [name, html] of shots) {
-    await page.setContent(`<!doctype html><html><head><meta charset="utf-8">${FONTS}</head><body>${html}</body></html>`, { waitUntil: "networkidle" });
+    if (named && !named.includes(name)) continue;
+    await page.setContent(`<!doctype html><html><head><meta charset="utf-8">${FONTS}</head><body>${html()}</body></html>`, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
     const png = await page.screenshot();
     await sharp(png).jpeg({ quality: 88, mozjpeg: true }).toFile(join(dir, `${name}.jpg`));

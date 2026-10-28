@@ -20,9 +20,13 @@ export type EtsyTransaction = {
   price?: { amount: number; divisor: number; currency_code: string } | null;
 };
 
-/** An Etsy order number as typed: digits only, spaces and a leading "#" forgiven. */
+/**
+ * An Etsy order number as typed or pasted: its one run of digits, so "#4213425511" and Etsy's own
+ * "Order #4213425511" work, and spaces inside it are forgiven. Two numbers are no order number.
+ */
 export function etsyOrderNumber(raw: string): number | null {
-  const digits = raw.replace(/[\s#]/g, "");
+  const runs = raw.replace(/(\d)\s+(?=\d)/g, "$1").match(/\d+/g) ?? [];
+  const digits = runs.length === 1 ? runs[0] : "";
   if (!/^\d{6,15}$/.test(digits)) return null;
   const n = Number(digits);
   return Number.isSafeInteger(n) ? n : null;
