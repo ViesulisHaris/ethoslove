@@ -56,8 +56,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - unpaid, typo and already-used orders each get their own message;
   - a refunded order is taken back by the daily check (its gift link stops working, as with a Stripe refund), and a partly refunded one is only flagged in the logs.
 
-**Left:** a real test order bought by someone else, sent as a gift on the site, then refunded on Etsy. By
-the next morning the daily check takes the template back.
+**Real test order done (28 Oct, #4213425511):** bought on Etsy with a code (€1.20), found through tryethos.io/etsy, the gift made and sent; its link opens for the recipient. The refund half was skipped on the owner's call and the order kept. Refunds taking a gift back are covered by the local test; the first real refund is the moment to check the gift went down the next morning.
 
 **Where buyers are told about tryethos.io/etsy (28 Oct):** a starred "★ HOW TO GET YOUR GIFT ★" block right above "No Canva, no app" in every description, the fifth photo ("Go to tryethos.io/etsy: type your Etsy order number. No download.", all 17 replaced and checked as Etsy serves them), step 1 of every listing's "How it works", the shop announcement, the first FAQ, "Message to buyers" on every receipt and "Message to buyers for digital items" on the Downloads page (Shop Manager → Settings → Info & Appearance). Etsy's own emails can't be edited, and its guest email shows neither message.
 
