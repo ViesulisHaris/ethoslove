@@ -1,0 +1,186 @@
+{
+  "slug": "cute-things-to-say-to-your-girlfriend",
+  "keyword": "cute things to say to your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Sorted by moment with lines that sound like a real person, but almost nothing plainly sincere or romantic, which every top result has and a reader searching 'cute' wants next."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Product claims and links all check out, but many sentences repeated the boyfriend post word for word or nearly (goodnight lines, intros, tips, template notes, FAQ phrasing, a shared heading), and the Spanish had 'me iría antes de una fiesta', 'solo hace desde el desayuno', 'fuéramos de una peli', 'ordenadas por cuándo', a missing subjunctive and 'átalo a un momento'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Sorting by moment and the borrowed-versus-detail table beat page one, but 'Before bed' was the only heading without search words, so it couldn't rank for goodnight searches."
+        }
+      ],
+      "applied": [
+        "New section 'Sweet things to say when you mean it' / 'Cosas bonitas para cuando lo dices en serio'.",
+        "Heading 'Cute things to say to your girlfriend before bed' / '…antes de dormir'.",
+        "Every sentence the editor found shared with the boyfriend post rewritten in both languages: goodnight lines, the in-person intro, the one-at-a-time tip, the afternoon intro, the bad-day intro, the ES takeaway, the keep-them paragraph, both template notes, the table's last row, 'No news', the funny-list carton line, two FAQ phrases and the personalising heading.",
+        "ES: 'me iría pronto de una fiesta', 'orgulloso estoy de ti', 'Frunces un poco el ceño', 'eso que te he visto en el desayuno', 'Si estuviéramos en una peli', 'según el momento', 'quieras decir algo más', 'relaciónalo con un momento concreto'.",
+        "Polish taken: ES 'Te ofrezco las dos cosas', 'orgulloso estoy de ti' in the list, 'la persona más buena de la sala'; EN 'her interview'."
+      ],
+      "rejected": [
+        "Polish not taken: a far-away list, a funny-list intro, a free-Letter line, swapping the family conversation in the big-day intro (the table now has 'telling your manager no'), and the dessert joke (kept)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The new sincere section works, but the in-person section says to speak so only she hears and then its first line, and the lead, have you saying it across a room."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Round-one overlaps fixed, but the same across-the-room contradiction, plus near-copies of lines in the good-morning, reasons and paragraphs posts (pet-name tip, umbrella row, jar note, 'prepare for this all month', 'one bad day', a takeaway, the lead's closing clause), a garden-path 'make her smile disappear', ES 'Ve llegar' read as an imperative and 'tan en calma'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one runs 23 to 400 interchangeable lines; this sorts by moment and its borrowed-versus-detail table shows how to make any line sound like you."
+        }
+      ],
+      "applied": [
+        "In-person line and lead: 'At a party, leaning in' / 'said in her ear at a party'; description says 'in person' (ES 'En una fiesta, al oído', 'dicho al oído').",
+        "Rewritten to avoid near-copies of other posts: the pet-name tip, the waiter row instead of the umbrella, the jar note's second sentence, 'All those evenings at the kitchen table', 'Today was one day', the out-loud takeaway, the lead's closing clause, 'The best lines get buried in the chat' (EN and ES).",
+        "ES: 'Ella ve llegar tus mensajes… un pequeño pop', 'tan en paz'.",
+        "Polish taken to head off overlap or awkwardness: the gifts line, 'my thumb's already on your name', ES 'pronto', 'según cuándo decirlas', 'todas juntas', 'para cuando va en serio', 'sobre la mesa'."
+      ],
+      "rejected": [
+        "Polish not taken: 'a big interview' (the reader called it optional), a far-away set and a funny-list intro."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are long, generic lists that could be about anyone; this sorts short, specific lines by when to say them, advises against compliments on a bad day and teaches you to make any line your own."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-two fixes made correctly, but the gifts line read as if the templates above weren't gifts she opens, the Spanish Text Thread note still nearly copied three other posts, and «Ha sido un día» reads as 'what a day'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is generic lists; this sorts specific, sendable lines by moment and its borrowed-versus-detail table shows how to make a line your own, which no top result does."
+        }
+      ],
+      "applied": [
+        "Gifts line: 'For other gifts she opens on her phone, browse our digital gifts for your girlfriend' (ES matches).",
+        "ES Text Thread note: 'Tus mensajes le van llegando de uno en uno… un pop por cada mensaje y las fotos como adjuntos'.",
+        "ES «Solo ha sido un día».",
+        "Polish taken: 'party' no longer twice in the lead, 'Screenshot the good ones' (ES 'las buenas'), ES 'Algunas solo funcionan dichas en voz alta', 'carrera de fondo', 'cuando intentaste aparcar en línea narrándolo'."
+      ],
+      "rejected": [
+        "Polish not taken: 'Funny and flirty' in a heading."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are lists of 100+ interchangeable greeting-card lines; this sorts fewer, more specific lines by when to say them and shows in a table how one real detail makes a line yours."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-three fixes made correctly; no whole sentence is shared with another post, every claim matches the templates' code and the Spanish uses real Spain idioms rather than translation."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is marriage.com's lists, MomJunction's 400+ and scraped copies; this gives fewer lines, each tied to a moment you'd say it, plus a table that turns a borrowed line into your own."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): 'Go to sleep' for the alarm line, 'flirty' in the funny heading (EN and ES), ES 'capturas', ES jar note opening 'Si agita', 'movies' for 'films'."
+      ]
+    }
+  ]
+}
