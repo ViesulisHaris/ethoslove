@@ -148,7 +148,11 @@ export async function generateMetadata({
     // Absent until a token is set, which is correct: ownership proved by DNS needs no tag.
     verification: {
       ...(env.googleSiteVerification ? { google: env.googleSiteVerification } : {}),
-      ...(env.bingSiteVerification ? { other: { "msvalidate.01": env.bingSiteVerification } } : {}),
+      other: {
+        // Pinterest's claim of tryethos.io for @tryethosgifts; the code is public by design.
+        "p:domain_verify": "365627a4783c20f4c4ea4821ce074e28",
+        ...(env.bingSiteVerification ? { "msvalidate.01": env.bingSiteVerification } : {}),
+      },
     },
     icons: { apple: "/icons/apple-touch-icon.png" },
     appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: SITE.name },

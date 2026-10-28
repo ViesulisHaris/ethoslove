@@ -68,9 +68,14 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 - **Search:** on 28 Oct none of the 17 listings showed up signed out, even for their exact titles; Etsy hadn't indexed them yet. Signed in as the shop, Etsy hides your own listings, so measure ranks signed out.
 - **The 37 remaining templates:** listed and published on 28 Oct (wave 3, at the end). Not yet in search either; check each signed out by its exact title once Etsy indexes them.
 
-**Ready to enter on Etsy and Pinterest** (the browser work waits until the wave-3 session is done with Brave):
+- **Pinterest:** business account [@tryethosgifts](https://www.pinterest.com/tryethosgifts/) ("Ethos", the shop logo, website tryethos.io), set up 28 Oct.
+  - Five public boards, each with a keyword description.
+  - The 17 pins went in by bulk upload (`etsy/pins/pinterest-bulk.csv`, images served from `tryethos.io/pins/etsy/`). Two publish at once, then 3 a day at 13:00/18:00/23:00 UTC until 2 Nov.
+  - Pinterest no longer lets you claim an Etsy shop, so tryethos.io is claimed instead (the `p:domain_verify` tag in the root layout).
+
+**Ready to enter on Etsy** (the browser work waits until the wave-3 session is done with Brave):
 - `etsy/listings-es.md`: Spanish titles, tags and descriptions for the 17. Add Spanish as a shop language first.
-- `etsy/replies-and-pins.md`: five Etsy saved replies (EN/ES), and a pin per listing with its board and link.
+- `etsy/replies-and-pins.md`: five Etsy saved replies (EN/ES). The pin table there is now on Pinterest.
 - `etsy/pins/<slug>.jpg`: 1000×1500 pins, made by `scripts/etsy-pins.mjs`.
 - A one-off rank check is scheduled for 29 Oct 10:00, in the signed-out in-app browser.
 
