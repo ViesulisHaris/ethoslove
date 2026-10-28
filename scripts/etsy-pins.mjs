@@ -20,6 +20,15 @@ const SLUGS = {
   XOXO: "xoxo", Coquette: "coquette", Bouquet: "bouquet", "Jar of Reasons": "jar-of-reasons", "On Repeat": "on-repeat",
   Halfway: "halfway", Passport: "passport", Fireside: "fireside", Scrapbook: "scrapbook", Museum: "museum",
   "Pack Your Bags": "pack-your-bags", "Scratch Card": "scratch-card", "Snow Globe": "snow-globe",
+  // Wave 3 (no Halloween ones until September).
+  Constellations: "constellations", "The Letter": "the-letter", "Autumn Reel": "autumn-reel", Balloons: "balloons",
+  Bloom: "bloom", "Cap Toss": "cap-toss", "Dark Romance": "dark-romance", Evergreen: "evergreen",
+  "Fall for You": "fall-for-you", "Favorite Person": "favorite-person", "Fortune Cookie": "fortune-cookie",
+  "Front Page": "front-page", "The Garden": "garden", Kawaii: "kawaii", Keepsake: "keepsake",
+  "Midnight Countdown": "midnight-countdown", "Music Box": "music-box", "Our Timeline": "our-timeline",
+  "Paper Crane": "paper-crane", "Party Animals": "party-animals", "Photo Booth": "photo-booth", Picnic: "picnic",
+  "Recipe Box": "recipe-box", Sketchbook: "sketchbook", "Sticker Bomb": "sticker-bomb", "Text Thread": "text-thread",
+  "The Council": "the-council", "The Toast": "the-toast", Vinyl: "vinyl",
 };
 const rows = DOC.split("\n")
   .map((l) => l.split("|").map((c) => c.trim()))

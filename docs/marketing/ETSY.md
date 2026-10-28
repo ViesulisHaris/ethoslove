@@ -71,6 +71,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 - **Pinterest:** business account [@tryethosgifts](https://www.pinterest.com/tryethosgifts/) ("Ethos", the shop logo, website tryethos.io), set up 28 Oct.
   - Five public boards, each with a keyword description.
   - The 17 pins went in by bulk upload (`etsy/pins/pinterest-bulk.csv`, images served from `tryethos.io/pins/etsy/`). Two publish at once, then 3 a day at 13:00/18:00/23:00 UTC until 2 Nov.
+  - 29 wave-3 pins follow, 3 to 4 a day from 3 Nov to 11 Nov (Pinterest schedules at most 14 days ahead). The eight Halloween listings get pins in September.
   - Pinterest no longer lets you claim an Etsy shop, so tryethos.io is claimed instead (the `p:domain_verify` tag in the root layout).
 
 - **Spanish:** added as a shop language on 28 Oct. Shoppers browsing Etsy in Spanish see the Spanish versions.

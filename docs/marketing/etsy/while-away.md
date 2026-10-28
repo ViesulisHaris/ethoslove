@@ -8,7 +8,7 @@ So Etsy work needs this PC, or the owner's phone.
 - **Buyers get their gift** at tryethos.io/etsy (Vercel).
 - **The daily Etsy job** (05:00 UTC) takes back refunded orders and keeps the shop connected.
 - **Sales:** LAUNCH40 (−40%) ends 22 Nov on its own; Cyber Specials (−40%) runs 23 Nov – 1 Dec, already set up in Etsy.
-- **Pinterest** posts the 15 scheduled pins by 2 Nov.
+- **Pinterest** posts the 15 scheduled pins by 2 Nov, then the 29 wave-3 pins from 3 to 11 Nov. Pinterest schedules at most 14 days ahead, so nothing is planned after 11 Nov.
 - **Offsite Ads** stay on: Etsy pays, and takes 15% only of a sale they bring.
 
 ## Only with the PC on and the Claude app open
