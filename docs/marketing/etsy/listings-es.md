@@ -1,8 +1,10 @@
 # Etsy listings in Spanish
 
-Etsy shows these to buyers browsing in Spanish once Spanish is added as a shop language
-(Shop Manager → Settings → Info & Appearance → shop languages); each listing then has a Spanish
-title, description and tags. Written from the English listings in `../ETSY.md`, which were checked
+Etsy shows these to buyers browsing in Spanish. They were entered on 28 Oct 2026 after Spanish
+was added as a shop language (Shop Manager → Settings → Languages and translations). Each listing's
+Spanish title, description and tags are in its editor, under Settings → Translations. The description
+is built like the English one: the two opening paragraphs, the ★ block, "Sin Canva", CÓMO FUNCIONA
+(steps 1 and 3 shared, step 2 per listing), the extras plus the refund line, then "Hazlo esta noche…". Written from the English listings in `../ETSY.md`, which were checked
 against each template; the Spanish page is tryethos.io/es/etsy. Tags are 20 characters at most.
 
 Common blocks, the same in every listing:
