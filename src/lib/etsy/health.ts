@@ -1,5 +1,5 @@
 import type { Db } from "@/lib/commerce/db";
-import { EtsyError, accessToken, type EtsyConfig } from "./api";
+import { EtsyError, accessToken, keysAccepted, type EtsyConfig } from "./api";
 
 type Check = { ok: boolean; detail?: string };
 export type EtsyHealth = { ok: boolean; checks: Record<string, Check> };
@@ -7,14 +7,14 @@ export type EtsyHealth = { ok: boolean; checks: Record<string, Check> };
 const API = "https://openapi.etsy.com";
 
 /**
- * Whether every link in the Etsy chain holds, without buying anything (/api/etsy/status): the keys
- * and secrets are set, migration 0018 is in, the shop is connected, its sign-in renews, Etsy answers
+ * Whether every link in the Etsy chain holds, without buying anything (/api/etsy/status): Etsy takes
+ * the keys, the secrets are set, migration 0018 is in, the shop is connected, its sign-in renews, Etsy answers
  * for our shop, and the token may read orders (the one thing a claim needs). Nothing personal comes
  * back: counts and names of checks only.
  */
 export async function etsyHealth(db: Db, config: EtsyConfig, env: { cronSecret: boolean }, now: number, doFetch: typeof fetch = fetch): Promise<EtsyHealth> {
   const checks: Record<string, Check> = {
-    keys: { ok: true },
+    keys: await keysAccepted(config, doFetch),
     connectSecret: { ok: config.connectSecret !== null },
     cronSecret: { ok: env.cronSecret, detail: env.cronSecret ? undefined : "CRON_SECRET is unset: refunds won't be checked" },
   };

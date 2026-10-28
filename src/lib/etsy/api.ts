@@ -33,9 +33,33 @@ export function etsyConfig(): EtsyConfig | null {
 }
 
 export class EtsyError extends Error {
-  constructor(readonly code: "not_connected" | "unauthorized" | "unavailable") {
-    super(code);
+  /** `detail` is Etsy's own words, when it gave any: never a key or a token. */
+  constructor(
+    readonly code: "not_connected" | "unauthorized" | "unavailable",
+    readonly detail?: string,
+  ) {
+    super(detail ? `${code}: ${detail}` : code);
   }
+}
+
+/** What Etsy said in a refusal ({"error": "…"}), else its status. */
+async function etsyMessage(res: Response): Promise<string> {
+  const json = (await res.json().catch(() => null)) as { error?: unknown } | null;
+  return (typeof json?.error === "string" ? json.error : `HTTP ${res.status}`).slice(0, 300);
+}
+
+/**
+ * Whether Etsy takes the app's keystring and shared secret (its ping needs no shop sign-in), so a
+ * mistyped key is named as such instead of surfacing later as a failed sign-in.
+ */
+export async function keysAccepted(config: EtsyConfig, doFetch: typeof fetch = fetch): Promise<{ ok: boolean; detail?: string }> {
+  let res: Response;
+  try {
+    res = await doFetch(`${API}/v3/application/openapi-ping`, { headers: { "x-api-key": `${config.keystring}:${config.sharedSecret}` }, cache: "no-store" });
+  } catch {
+    return { ok: false, detail: "Etsy didn't answer" };
+  }
+  return res.ok ? { ok: true } : { ok: false, detail: await etsyMessage(res) };
 }
 
 type Tokens = { access_token: string; refresh_token: string; expires_in: number };
@@ -74,7 +98,9 @@ async function tokenRequest(body: Record<string, string>, doFetch: typeof fetch)
   }
   const json: unknown = await res.json().catch(() => null);
   if (res.ok && isTokens(json)) return json;
-  throw new EtsyError(res.status >= 500 ? "unavailable" : "unauthorized");
+  const said = (json as { error_description?: unknown; error?: unknown } | null) ?? {};
+  const detail = typeof said.error_description === "string" ? said.error_description : typeof said.error === "string" ? said.error : `HTTP ${res.status}`;
+  throw new EtsyError(res.status >= 500 ? "unavailable" : "unauthorized", detail.slice(0, 300));
 }
 
 /** The code Etsy sent back to /api/etsy/callback, swapped for the shop's tokens. */
@@ -99,12 +125,16 @@ async function apiGet(config: EtsyConfig, path: string, accessToken: string, doF
   }
 }
 
-/** The shop the signed-in Etsy user owns, if any: the shop whose orders we may then read. */
+/**
+ * The shop the signed-in Etsy user owns, if any: the shop whose orders we may then read. Etsy
+ * answers 404 when the user has no shop; any other refusal is thrown with Etsy's reason.
+ */
 export async function ownedShopId(config: EtsyConfig, accessToken: string, doFetch: typeof fetch = fetch): Promise<number | null> {
   const userId = tokenUserId(accessToken);
   if (!userId) return null;
   const res = await apiGet(config, `/v3/application/users/${userId}/shops`, accessToken, doFetch);
-  if (!res.ok) return null;
+  if (res.status === 404) return null;
+  if (!res.ok) throw new EtsyError(res.status >= 500 ? "unavailable" : "unauthorized", await etsyMessage(res));
   const json = (await res.json().catch(() => null)) as { shop_id?: unknown; user_id?: unknown } | null;
   return typeof json?.shop_id === "number" && json.user_id === userId ? json.shop_id : null;
 }

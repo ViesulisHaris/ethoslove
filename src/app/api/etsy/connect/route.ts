@@ -1,7 +1,7 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { siteOrigin } from "@/lib/commerce/db";
-import { ETSY_OAUTH_COOKIE, etsyAuthorizeUrl, etsyConfig, pkcePair } from "@/lib/etsy/api";
+import { ETSY_OAUTH_COOKIE, etsyAuthorizeUrl, etsyConfig, keysAccepted, pkcePair } from "@/lib/etsy/api";
 
 export const runtime = "nodejs";
 
@@ -20,6 +20,15 @@ export async function GET(request: NextRequest) {
   const config = etsyConfig();
   if (!config?.connectSecret) return NextResponse.json({ error: "not_configured" }, { status: 503 });
   if (!sameSecret(request.nextUrl.searchParams.get("key") ?? "", config.connectSecret)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  // A wrong keystring or shared secret would only show up after the Etsy sign-in, as a refusal.
+  const keys = await keysAccepted(config);
+  if (!keys.ok) {
+    console.error("[etsy] keys refused", keys.detail);
+    return NextResponse.json(
+      { error: "keys_refused", etsy: keys.detail, fix: "Paste ETSY_KEYSTRING and ETSY_SHARED_SECRET again in Vercel (reveal the shared secret with the eye before copying it), redeploy, then open this link again." },
+      { status: 502 },
+    );
+  }
 
   const { verifier, challenge } = pkcePair();
   const state = randomBytes(24).toString("base64url");

@@ -260,13 +260,15 @@ describe("connecting the shop", () => {
   function signIn(ownedShop: number) {
     return vi.fn(async (url: string | URL) => {
       const u = String(url);
+      if (u.endsWith("/v3/application/openapi-ping")) return new Response(JSON.stringify({ application_id: 1 }), { status: 200 });
       if (u.endsWith("/v3/public/oauth/token")) return new Response(JSON.stringify({ access_token: "4321.fresh", refresh_token: "refresh-fresh", expires_in: 3600 }), { status: 200 });
-      if (u.endsWith("/v3/application/users/4321/shops")) return new Response(JSON.stringify({ shop_id: ownedShop, user_id: 4321 }), { status: 200 });
+      if (u.endsWith("/v3/application/users/4321/shops")) return ownedShop === 0 ? new Response(JSON.stringify({ error: "Invalid API credentials." }), { status: 403 }) : new Response(JSON.stringify({ shop_id: ownedShop, user_id: 4321 }), { status: 200 });
       return new Response("{}", { status: 404 });
     });
   }
   async function connect() {
     vi.stubEnv("ETSY_CONNECT_SECRET", "connect-test");
+    vi.stubGlobal("fetch", signIn(SHOP));
     const res = await connectRoute.GET(new NextRequest("https://ethos.test/api/etsy/connect?key=connect-test"));
     const to = new URL(res.headers.get("location")!);
     const cookie = res.cookies.get("etsy_oauth")!.value;
@@ -277,6 +279,7 @@ describe("connecting the shop", () => {
 
   it("only with the connect secret, and asks Etsy for order reading alone, with PKCE", async () => {
     vi.stubEnv("ETSY_CONNECT_SECRET", "connect-test");
+    vi.stubGlobal("fetch", signIn(SHOP));
     expect((await connectRoute.GET(new NextRequest("https://ethos.test/api/etsy/connect?key=wrong"))).status).toBe(401);
     const { to, cookie, state } = await connect();
     expect(to.origin + to.pathname).toBe("https://www.etsy.com/oauth/connect");
@@ -301,6 +304,25 @@ describe("connecting the shop", () => {
     expect((await back(other.state, other.cookie)).status).toBe(403);
     expect(fake.rows("etsy_connection")).toEqual([]);
   });
+
+  it("names Etsy's refusal instead of blaming the shop's owner", async () => {
+    openDb({ etsy_connection: [] });
+    const { cookie, state } = await connect();
+    vi.stubGlobal("fetch", signIn(0));
+    const res = await back(state, cookie);
+    expect(res.status).toBe(502);
+    expect(await res.text()).toContain("Etsy said: &quot;Invalid API credentials.&quot;");
+    expect(fake.rows("etsy_connection")).toEqual([]);
+  });
+
+  it("checks the app's keys with Etsy before sending the owner there", async () => {
+    vi.stubEnv("ETSY_CONNECT_SECRET", "connect-test");
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ error: "Invalid API credentials." }), { status: 403 })));
+    const res = await connectRoute.GET(new NextRequest("https://ethos.test/api/etsy/connect?key=connect-test"));
+    expect(res.status).toBe(502);
+    expect(res.headers.get("location")).toBeNull();
+    expect(await res.json()).toMatchObject({ error: "keys_refused", etsy: "Invalid API credentials." });
+  });
 });
 
 describe("the health check", () => {
@@ -308,6 +330,7 @@ describe("the health check", () => {
   function etsyUp(orders: number | { count: number } = { count: 3 }) {
     return vi.fn(async (url: string | URL) => {
       const u = String(url);
+      if (u.endsWith("/v3/application/openapi-ping")) return new Response(JSON.stringify({ application_id: 1 }), { status: 200 });
       if (u.endsWith(`/v3/application/shops/${SHOP}`)) return new Response(JSON.stringify({ shop_name: "TryEthos", listing_active_count: 8 }), { status: 200 });
       if (u.includes(`/v3/application/shops/${SHOP}/receipts`)) return typeof orders === "number" ? new Response("{}", { status: orders }) : new Response(JSON.stringify(orders), { status: 200 });
       return new Response("{}", { status: 404 });
@@ -317,7 +340,7 @@ describe("the health check", () => {
   it("is all green when the shop is connected and its sign-in may read orders", async () => {
     const health = await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, etsyUp() as never);
     expect(health.ok).toBe(true);
-    expect(health.checks).toMatchObject({ database: { ok: true }, connected: { ok: true }, signIn: { ok: true }, shop: { ok: true, detail: "TryEthos, 8 active listings" }, readOrders: { ok: true, detail: "3 orders" } });
+    expect(health.checks).toMatchObject({ keys: { ok: true }, database: { ok: true }, connected: { ok: true }, signIn: { ok: true }, shop: { ok: true, detail: "TryEthos, 8 active listings" }, readOrders: { ok: true, detail: "3 orders" } });
   });
 
   it("says which link is broken", async () => {
@@ -326,8 +349,10 @@ describe("the health check", () => {
     openDb({ etsy_connection: [] });
     const fetch = etsyUp();
     const notConnected = await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, fetch as never);
-    expect(notConnected).toMatchObject({ ok: false, checks: { connected: { ok: false } } });
-    expect(fetch).not.toHaveBeenCalled();
+    expect(notConnected).toMatchObject({ ok: false, checks: { keys: { ok: true }, connected: { ok: false } } });
+    expect(fetch.mock.calls.map(([u]) => String(u))).toEqual(["https://openapi.etsy.com/v3/application/openapi-ping"]);
+    const refused = vi.fn(async () => new Response(JSON.stringify({ error: "Shared secret is required in x-api-key header." }), { status: 403 }));
+    expect((await etsyHealth(fake.db as never, CONFIG, { cronSecret: true }, NOW, refused as never)).checks.keys).toEqual({ ok: false, detail: "Shared secret is required in x-api-key header." });
   });
 
   it("answers only with the connect secret, and names missing settings without it", async () => {

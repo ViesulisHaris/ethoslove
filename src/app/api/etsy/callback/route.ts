@@ -6,8 +6,10 @@ import { ETSY_OAUTH_COOKIE, EtsyError, etsyConfig, exchangeCode, ownedShopId, sa
 
 export const runtime = "nodejs";
 
+const escapeHtml = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+
 function page(status: number, text: string) {
-  const res = new NextResponse(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Etsy</title><p style="font:16px/1.5 system-ui;margin:2rem">${text}</p>`, {
+  const res = new NextResponse(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Etsy</title><p style="font:16px/1.5 system-ui;margin:2rem">${escapeHtml(text)}</p>`, {
     status,
     headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
   });
@@ -39,8 +41,9 @@ export async function GET(request: NextRequest) {
     const saved = await saveConnection(admin, shopId, tokens, Date.now());
     if (saved.error) return page(500, "Etsy said yes, but saving the connection failed. Try the connect link again.");
   } catch (e) {
-    console.error("[etsy] connect failed", e instanceof EtsyError ? e.code : "unknown");
-    return page(502, "Etsy didn't accept the sign-in. Open the connect link again.");
+    const err = e instanceof EtsyError ? e : null;
+    console.error("[etsy] connect failed", err?.code ?? "unknown", err?.detail ?? "");
+    return page(502, `Etsy didn't accept the sign-in${err?.detail ? `. Etsy said: "${err.detail}"` : ""}. Open the connect link again.`);
   }
   return page(200, "Etsy is connected. Orders typed on the site are now checked with Etsy. You can close this tab.");
 }
