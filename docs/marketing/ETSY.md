@@ -33,7 +33,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 - **Shop page finished on 28 Oct:**
   - logo, tagline, About; location Riga, Latvia; the banner (`etsy/photos/shop-banner.jpg`);
   - an announcement (how it works, the refund promise);
-  - six sections: Birthday gifts 4, Love letters 5, Long distance 3, Anniversary & photos 2, Surprise reveals 2, Christmas 1;
+  - eleven sections: Birthday gifts 10, Love letters 11, Long distance 4, Anniversary & photos 9, Surprise reveals 3, Christmas 1, Halloween & fall 10, Graduation 1, New Year 1, Wedding 1, Funny gifts 3 (the last five added with wave 3);
   - four featured listings: Pop-up Card, XOXO, Jar of Reasons, Halfway;
   - five FAQs: getting the gift, the order number, no Canva, if it doesn't open, how long it lasts.
 - **Policies:**
@@ -43,7 +43,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - The EU ODR link is left off: that platform closed in 2025.
   - Etsy's advisor lists nothing left to do; only a seller photo is missing.
 - **EU seller status: Trader** (set 28 Oct, owner's OK). Buyers see it under "View shop registration details", with SIA MIGLAI's registration and VAT numbers, address and support email from `src/content/legal.ts`. There is no phone number: add one under Other details if the company gets one.
-- **17 listings live since 28 Oct:** the first 8, and 9 more (wave 2). Publishing cost $3.40; each renews itself every four months for $0.20.
+- **All 54 templates live since 28 Oct:** the first 8, 9 more (wave 2) and the other 37 (wave 3, at the end). Publishing cost $3.40 + $7.40; each renews itself every four months for $0.20.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
@@ -65,7 +65,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 - **Cyber Specials:** signed up at 40%, 23 Nov – 1 Dec (Etsy's event), so the price holds through 1 Dec. After that it goes back to €10.99; the next sale should be a real event, not a permanent one.
 - **Etsy Ads:** approved at $3–5/day from about 12 Nov, when a new shop's 15-day wait ends. Not started yet.
 - **Search:** on 28 Oct none of the 17 listings showed up signed out, even for their exact titles; Etsy hadn't indexed them yet. Signed in as the shop, Etsy hides your own listings, so measure ranks signed out.
-- **The 37 remaining templates:** listing them is approved.
+- **The 37 remaining templates:** listed and published on 28 Oct (wave 3, at the end). Not yet in search either; check each signed out by its exact title once Etsy indexes them.
 
 ### The test order
 
@@ -628,3 +628,976 @@ After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
 Add a countdown that opens it on the day, and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+## Wave 3 listings (live since 28 Oct)
+
+The other 37 templates, built the way waves 1 and 2 were and published on 28 Oct (owner: "yes list all", $7.40).
+
+- **Keywords:** Etsy's search suggestions, 28 Oct. The phrases that carried them: be my boo, love potion, dark romance, spirit board, haunted house, jack o lantern, trick or treat and spooky season (Halloween); fall gift for her; graduation gift / card; new years eve; birthday newspaper; personalized fortune cookies; custom music box; relationship timeline / our story timeline; im sorry gift / apology gift; photo booth strip; date night gift; mom birthday gift; funny cat gift; custom vinyl record; best friend gift; wedding toast / speech.
+- **Not used:** "custom star map" (buyers expect the real sky on a date; Constellations is a sky of your photos, and says so), "ouija" (a brand), "haunted mansion" (a Disney ride), and Christmas for Evergreen (it is a sage butterfly collage, nothing about Christmas).
+- **Facts:** every description was checked against the template's `schema.ts` and `Template.tsx` by an outside reader before listing; 21 needed fixes (a searched song plays as a 30-second preview, never on Vinyl's record; Front Page has no doormat; the countdown is a timer, the unlock is a schedule; and so on). Descriptions that mention a song say which music plays.
+- **The two free templates** (The Letter, Constellations) are sold as their full version: their SKU unlocks "make it special" (`etsyProduct()`), and the description lists what that adds.
+- **Copies:** love, Halloween and the rest of XOXO (Love Cards, Occasion Anniversary); birthday ones of the Pop-up Card (Birthday Cards, Occasion Birthday; their quantity came over as 998 and was set back to 999). Love Cards has no Halloween or New Year occasion; Cap Toss has Occasion Graduation and The Toast Wedding.
+- **Photos and videos:** `scripts/etsy-shots.mjs` plays each demo through (wave 3 scripts after On Repeat). Midnight Countdown's demo counts to a birthday, so its capture swaps in New Year words the buyer would type (`WORDS`). Bloom's 3D flower drops frames in software WebGL: its video is recorded with `ETSY_GPU=1`. Every video was checked frame by frame before upload and again as Etsy serves it (`v.etsystatic.com/…/vid_v1.mp4`, 720x1280, read from the editor's `<video><source>`): no grey padding, no zoom flashes, 0–1 repeated frames each; the remaining "flashes" are the gifts' own (lightning, camera flash, stickers landing).
+- **In the editor:** a copy, then "Delete all" media and the copied PDF, the five photos and the video in one upload (two when over 10 MB), the PDF, then title, description, SKU, tags and section filled by script. Tags need about half a second each, or Etsy drops one and repeats another.
+
+### Constellations · SKU `ethos-constellations` · listing 4604976457
+
+**Title:** Constellation Gift with Your Photos as Stars, Digital Night Sky Love Letter, Anniversary Gift for Him or Her
+
+**Tags:** constellation gift, constellation, night sky, night sky keepsake, written in the stars, star gifts, galaxy gifts, anniversary gift, gift for boyfriend, gift for girlfriend, long distance gift, digital love letter, valentines gift
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A constellation gift they explore with a finger: every star in this night sky is one of your photos, and once they have found them all, the stars join into a heart over your message.
+
+They tap a star and fly to it, and your photo opens with your caption under it. When the last one is found, the lines draw themselves into a heart, an infinity sign or a star, and your last line appears under the sky, which shifts as they tilt the phone. It isn't a chart of the real sky on a date: the stars are your photos. 3 to 12 photos; a midnight, aurora or dawn sky.
+
+This listing is the full version, with every extra: a voice message, up to 12 photos, a surprise wrapped at the end (a date or a trip), a time it unlocks, a password, and no Ethos footer.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos and a caption for each, pick the sky and the shape.
+3. Press Send and type your Etsy order number. Your sky's link is ready to share.
+
+Add music and a countdown too. If it doesn't open on their phone, message us and we'll refund you.
+
+### The Letter · SKU `ethos-the-letter` · listing 4604969518
+
+**Title:** Digital Love Letter, Wax Sealed Open When Letter with Your Photos, Love Letter for Boyfriend or Girlfriend
+
+**Tags:** digital love letter, love letter, love letters, open when letter, love letter template, love notes for him, anniversary letters, gift for boyfriend, gift for girlfriend, long distance gift, valentines gift, anniversary gift, im sorry gift
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+A digital love letter sealed with wax: they break the seal, the letter unfolds on a candlelit desk, and your words write themselves in handwriting.
+
+The envelope carries your initial on the seal. One tap and it breaks, the letter slides out, and your words appear letter by letter, as if you were writing them now. Your photos drop in as polaroids with your captions. Cream, white or kraft paper on a walnut, linen or slate desk. For an anniversary, an apology, an open-when letter or a day you're apart.
+
+This listing is the full version, with every extra: a video clip, a voice message, up to 20 photos, a surprise wrapped at the end (a date or a trip), a time it unlocks, a password, and no Ethos footer.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write your letter, add photos, pick the paper and the desk.
+3. Press Send and type your Etsy order number. Your letter's link is ready to share.
+
+Add music and a countdown too. If it doesn't open on their phone, message us and we'll refund you.
+
+### Autumn Reel · SKU `ethos-autumn-reel` · listing 4604974128
+
+**Title:** Fall Gift for Her, Vintage Autumn Photo Collage on Film with Your Song, Fall Anniversary Gift for Girlfriend
+
+**Tags:** fall gift for her, fall gift, autumn gift, fall anniversary, cozy gifts for her, vintage gifts, anniversary gift, gift for girlfriend, gift for boyfriend, digital love letter, love website, digital photo album, our song gift
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A fall gift for her (or him): a darkroom where your photos develop, then a vintage autumn collage of them on film, with your song and your letter.
+
+Your first three photos hang on the line as negatives under a red light. One tap and the light comes on, the prints develop, and the collage is underneath: your photos on frames of film, a page from an old novel with your two names as its running head, pressed maple leaves, an apple with I LOVE YOU on its skin, two cats cuddling, a line cut word by word from a book, a ticket for two, your song on a little player and your letter at the end. Every tap presses another leaf onto the page. 1 to 10 photos; rust, espresso or olive.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song and your letter. Pick rust, espresso or olive.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Balloons · SKU `ethos-balloons` · listing 4604981589
+
+**Title:** Birthday Balloons Surprise, Interactive Birthday Card with Your Photos, Digital Birthday Gift for Her or Him
+
+**Tags:** birthday balloons, birthday surprise, interactive birthday, digital birthday, birthday website, birthday for her, birthday for him, best friend gift, digital gift for him, last minute gifts, long distance gift, animated card, birthday card
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A birthday balloons surprise they pop with a finger: the balloons drop your photos one by one, and the biggest one holds your letter.
+
+A ceiling of hand-painted balloons floats in, with their age in gold foil numbers and a bunting line spelling out the day. They pop the balloons one by one: some burst into confetti, the rest drop a polaroid of yours onto the floor. The last balloon, the biggest, holds your letter. 1 to 8 photos; pastel, sunset, jewel, or cream and gold.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add their age, your photos and your letter. Pick the colours.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Bat Swarm · SKU `ethos-bat-swarm` · listing 4604963109
+
+**Title:** Halloween Card for Boyfriend, Bats Spell Their Name Across the Moon, Digital Halloween Gift with Your Photos
+
+**Tags:** halloween gifts, halloween cards, halloween lover gift, halloween love card, spooky gifts for him, spooky gift for her, bat gifts, spooky season, gift for boyfriend, gift for girlfriend, digital love letter, animated card, interactive card
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A Halloween card for your boyfriend (or anyone you love): they tap the moon and hundreds of bats pour out and spell their name across it.
+
+A huge moon over a castle on the hill, a few bats circling it. One tap and the swarm pours out of the moon, whirls into a vortex, then flies in to spell their name, a short line of yours and a heart, wings still beating, before bursting away into the night. Underneath: your letter on dark glass, your photos hung in the moonlight and your song. Up to 8 photos; midnight, harvest moon, blood moon or frost.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Type their name and your line, add photos, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Be My Boo · SKU `ethos-be-my-boo` · listing 4604954969
+
+**Title:** Be My Boo Halloween Card, Cute Ghost Collage with Your Photos, Halloween Gift for Girlfriend or Boyfriend
+
+**Tags:** be my boo, be my boo card, be my boo halloween, halloween love card, halloween lover gift, cute ghost, cute ghost gift, spooky gift for her, halloween gifts, gift for girlfriend, gift for boyfriend, digital love letter, spooky season
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A be my boo Halloween card: a little ghost holds a sign with their name, says boo, and flies off to show your photos on a page of watercolour pumpkins.
+
+One tap and the ghost says boo and flies off in a flurry of bats. Underneath: your photos on polaroids down a page printed with pumpkins and ghosts, a black cat stretched along the edge of a photo, swishing its tail, your song on a little player, a note in handwriting and your letter at the end. Every tap on the page sends up a tiny ghost. 1 to 10 photos; pumpkin, pink or midnight.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song, a note and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Bloom · SKU `ethos-bloom` · listing 4604977197
+
+**Title:** Digital Flower Gift for Her, a Flower That Opens While They Hold the Screen, Sorry Gift or Mothers Day Gift
+
+**Tags:** digital flowers, flower gift, flowers for her, flower gift for mom, apology gift, apology gift for her, im sorry gift, sorry gifts for him, mothers day gift, valentines for her, digital love letter, gift for girlfriend, thinking of you gift
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+Digital flowers for her: one flower, grown in 3D, that opens petal by petal only while they hold the screen, with your message waiting inside.
+
+Pollen drifts in the light as it opens. When it's fully open your photos float up around it and your message appears. A peony, a tulip or a daisy, in any colour you like, against a dawn, dusk or paper sky. Up to 8 photos. For an apology, Mother's Day, Valentine's, or a day you can't bring real ones.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the flower and its colour, add photos and your message.
+3. Press Send and type your Etsy order number. Your flower's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Cap Toss · SKU `ethos-cap-toss` · listing 4604979339
+
+**Title:** Graduation Gift for Her or Him, Interactive Digital Graduation Card with Photos, They Cheer and the Cap Flies
+
+**Tags:** graduation gift, graduation card, grad gift for her, grad gift for him, graduation, graduation keepsake, graduation card son, class of 2027 gifts, congratulations card, gift for graduate, interactive card, digital card, last minute gifts
+
+**Section:** Graduation · **Occasion:** Graduation
+
+**Description:**
+A graduation card they open on their phone: they cheer into it and the cap flies up, then a diploma unrolls into your letter.
+
+A mortarboard hovers in a pool of light, a crowd in gowns behind it. They tap the microphone and cheer, shout or whoop, a meter climbs, and the cap launches, spinning through the confetti; the louder, the higher. Or they just press "throw it". Then a rolled diploma drops in, tied with a ribbon: they pull the ribbon and it unrolls into your letter, with their photos taped on like a yearbook. 1 to 10 photos; the year, the school and what it's awarded for are yours to write.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add the year, their school, your photos and your letter.
+3. Press Send and type your Etsy order number. Your card's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Witch's Brew · SKU `ethos-cauldron` · listing 4604965501
+
+**Title:** Love Potion Halloween Gift, Witch's Cauldron with Your Photos, Witchy Gift for Her or Him, Digital Halloween Card
+
+**Tags:** love potion, love potion witch, witchy gifts, witchy gifts for her, witch gift, halloween gifts, halloween love card, halloween lover gift, spooky gift for her, spooky gifts for him, gift for girlfriend, gift for boyfriend, digital love letter
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A love potion for Halloween: they tip up to three jars into a witch's cauldron, each labelled with something you love about them, and it boils over into a heart.
+
+A witch's kitchen at night: a black cat on the windowsill, herbs drying overhead, a cauldron over the fire. Each jar they tap in makes a splash, a new colour, harder bubbling. After the last one the steam coils into a heart and a bottle with their name on the label floats up. One tap and the cork pops, and the page opens on the potion's recipe card, your letter, your photos kept in glass jars and your song. Up to 8 photos; witch green, love pink, midnight blue or pumpkin gold.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write up to three jar labels and the potion's name, add photos, your song and your letter.
+3. Press Send and type your Etsy order number. Your potion's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Dark Romance · SKU `ethos-dark-romance` · listing 4604977780
+
+**Title:** Dark Romance Gift, Gothic Digital Love Letter with Your Photos and Song, Goth Anniversary Gift for Him or Her
+
+**Tags:** dark romance, dark romance gift, gothic gift, gothic gifts for her, gothic gifts for him, spooky anniversary, digital love letter, love letter, anniversary gift, valentines gift, gift for boyfriend, gift for girlfriend, halloween love card
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+A dark romance gift: a black leather diary with their name in gold, locked with a heart, that opens onto a gothic love collage of your photos.
+
+They turn the key, the lock drops and the cover swings open: your photo between dark roses and an anatomical heart, your words in cut-out letters, your song on a little player, your second photo printed on a tarot card, The Lovers, playing cards and a die for the bet you'd make on the two of you, a crow, candles burnt low, and polaroids all the way down to your letter under a wax seal. Every tap leaves a rose. 1 to 10 photos; bordeaux, noir or parchment.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song, your bet and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Evergreen · SKU `ethos-evergreen` · listing 4604978746
+
+**Title:** Sage Green Butterfly Gift, Digital Love Letter Collage with Your Photos and Song, Just Because Gift for Her
+
+**Tags:** butterfly gift, sage green, just because gift, just because card, anniversary gift, gift for girlfriend, gift for wife, digital love letter, love letter, love website, digital photo album, our song gift, vintage gifts
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A butterfly gift in sage green: a parcel wrapped in old newspaper that they unwrap, and butterflies fly out over a collage of your photos, your song and your letter.
+
+It arrives tied with twine, a tag with their name on it and a butterfly resting on the corner. When the paper falls open, cream butterflies fly out over the collage: your photos on white polaroids, a record labelled with your song and your two names, torn newsprint, green leaves, white flowers, a sage ribbon, your song on a little player and your letter at the end. Every tap lets another butterfly go. 1 to 10 photos; sage, olive or mint.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song and your letter. Pick sage, olive or mint.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Fall for You · SKU `ethos-fall-for-you` · listing 4604958155
+
+**Title:** Fall for You Cozy Gift for Her, Autumn Gingham Collage with Your Photos and Song, Fall Gift for Girlfriend
+
+**Tags:** fall gift for her, fall gift, autumn gift, cozy gifts for her, cozy gifts, fall anniversary, anniversary gift, gift for girlfriend, gift for wife, digital love letter, love website, thinking of you gift, our song gift
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A cozy fall gift for her (or him): a jar candle with their name on the label, and when they light it, an autumn collage of your photos on gingham.
+
+One tap lights the candle and the room warms up: your photos on polaroids, their name spelled out in wooden letter blocks, real maple leaves, an acorn, a wooden heart, a patchwork pumpkin, a coffee steaming and a teddy, then your song on a little player, a recipe card for the two of you and your letter at the end. Every tap lets a leaf fall. 1 to 10 photos; gingham, sage or cranberry.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, the word for the letter blocks, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Favorite Person · SKU `ethos-favorite-person` · listing 4604958873
+
+**Title:** Best Friend Gift, Favorite Person Digital Scrapbook with Your Photos, Pink Watercolour Gift for Her
+
+**Tags:** best friend gift, favorite person, bestie gift, bestie birthday gift, gift for girlfriend, gift for sister, digital scrapbook, digital memory book, memory book, anniversary gift, just because gift, digital love letter, pink aesthetic
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A best friend gift (or one for your girlfriend): a watercolour scrapbook page of your photos, pearls and pressed flowers, under a sheet of tissue paper with their name on it.
+
+They lift the tissue and underneath: your photos on polaroids held with gingham tape and a gold clip, soft watercolour, baby's breath, cherry blossom, pearls, a satin bow, a torn note that says favorite person, your song on a little player and a bouquet with love you written under it, down to your letter. Every tap doodles a heart. 1 to 10 photos; blush, lilac or peach.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Fortune Cookie · SKU `ethos-fortune-cookie` · listing 4605008148
+
+**Title:** Personalized Fortune Cookies with a Custom Message, Digital Fortune Cookie Gift, Funny Gift for Boyfriend
+
+**Tags:** fortune cookie, fortune cookies, fortune cookie gifts, funny gift for him, funny gift for her, funny birthday gift, just because gift, gift for boyfriend, gift for girlfriend, love notes, long distance gift, graduation gift, digital gift for him
+
+**Section:** Funny gifts · **Occasion:** Birthday
+
+**Description:**
+Personalized fortune cookies with your own messages: they crack each one open and find a fortune you wrote, silly, sweet or oddly specific.
+
+A plate of fortune cookies. They tap one and it cracks in two; a paper slip slides out with your fortune and their lucky numbers. A slip can carry a photo too, one per fortune. The last cookie holds your message. 3 to 20 fortunes and up to 10 photos, on a red, jade or linen table.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write your fortunes and lucky numbers, add photos and your message.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Front Page · SKU `ethos-front-page` · listing 4604982707
+
+**Title:** Birthday Newspaper Personalized, Digital Newspaper Front Page About Them with Your Photos, Birthday Gift for Him
+
+**Tags:** birthday newspaper, custom newspaper, newspaper birthday, newspaper gift, birthday for him, birthday for her, fathers day gift, graduation gift, gift for husband, gift for dad, funny birthday gift, birthday surprise, newspaper wedding
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A personalized birthday newspaper with them on the front page: your headline, their photo and the stories only you could write.
+
+It waits folded on a table beside a coffee and a pair of glasses, their name on the masthead. They tap to open it: your headline and subhead, a lead photo with its caption, your message set as newspaper copy with a drop cap, a weather box ("100% chance of cake", or your own forecast), up to 8 classified ads you write and a horoscope that is suspiciously accurate. 1 to 8 photos; black, navy or sepia ink. For a birthday, a graduation, Father's Day or a wedding.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write the headline, the stories and the ads, add photos.
+3. Press Send and type your Etsy order number. Your paper's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### The Garden · SKU `ethos-garden` · listing 4604987604
+
+**Title:** Digital Flower Garden Gift, Interactive Love Letter That Blooms as They Scroll, Gift for Her or Mom
+
+**Tags:** digital flowers, flower gift, flowers for her, flower gift for mom, mothers day gift, digital love letter, love website, anniversary gift, valentines for her, gift for girlfriend, gift for wife, thinking of you gift, long distance gift
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+Digital flowers for her, or for mom: a garden that grows as they scroll, with your photos on a trellis and your letter taped up in the greenhouse.
+
+They push open a gate with their name on it and walk down a page that grows as they go: seedlings drawn in ink, a meadow that opens flower by flower, your photos pinned to a trellis under climbing vines, a greenhouse with your letter taped up inside, and at the end a bouquet of everything they walked past, tied and tagged for them. Wildflowers, roses, peonies or sunflowers, with a butterfly, a bee or a cat for company. 1 to 12 photos and a video clip.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the flowers and the garden's colours, add photos and your letter.
+3. Press Send and type your Etsy order number. Your garden's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Haunted House · SKU `ethos-haunted-house` · listing 4604967413
+
+**Title:** Haunted House Halloween Gift, Interactive Halloween Card with Your Photos in the Windows, Spooky Gift for Him
+
+**Tags:** haunted house, halloween house, halloween gifts, halloween cards, halloween lover gift, spooky gifts for him, spooky gift for her, spooky season, halloween love card, gift for boyfriend, gift for girlfriend, interactive card, digital love letter
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A haunted house for Halloween: they open the gate in a thunderstorm, every lit window holds one of your photos, and the door holds your letter.
+
+A mansion on a hill in the rain: a wind-bent tree, bats, and lightning that lights the whole house for a heartbeat. They tap the gate and walk up the path as the windows light one by one, each with a little silhouette inside. Tap a window and the silhouette steps aside to show your photo in a gilt frame. Then they knock, and the door swings open on a warm glow, your letter and your song. Up to 6 photos; storm blue, blood moon, swamp green or midnight violet.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Jack-o'-Lantern · SKU `ethos-jack-o-lantern` · listing 4604968335
+
+**Title:** Jack O Lantern with Their Name, Digital Halloween Card, Pumpkin Carving Gift with Your Photos and Letter
+
+**Tags:** jack o lantern, pumpkin carving, pumpkin gift, pumpkin, halloween gifts, halloween cards, halloween lover gift, halloween love card, spooky gift for her, spooky gifts for him, gift for boyfriend, gift for girlfriend, animated card
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A jack-o'-lantern carved with their name: they watch the pumpkin get carved piece by piece, then light the candle and the face glows.
+
+A pumpkin on a table in a dark room, and a knife. One tap and it carves itself: the eyes, the nose, the grin, then their name across the belly, each piece dropping onto the table. Then they light the candle and the whole face glows through the cuts, embers rising. Underneath: your letter on old paper, your photos as candlelit polaroids and your song. A name of up to 12 letters, up to 8 photos; orange, ghost white, witch purple or blush pink; a classic grin, heart eyes or a cat.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Type the name to carve, pick the face, add photos and your letter.
+3. Press Send and type your Etsy order number. Your pumpkin's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Kawaii · SKU `ethos-kawaii` · listing 4604983533
+
+**Title:** Cute Birthday Card for Her, Kawaii Digital Gift with a Plush Bunny and Your Photos, Cute Gift for Girlfriend
+
+**Tags:** cute birthday card, kawaii gift, kawaii, cute gift for her, cute birthday gifts, birthday for her, gift for girlfriend, best friend gift, pink aesthetic, interactive birthday, digital birthday, valentines for her, animated card
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A cute birthday card for her: a plush bunny, bear or kitten in a bow waves hello, then a gift box pops open with your photos as stickers.
+
+A pastel sticker book of a gift. Hearts and sparkles drift across the screen, the ribboned box pops open with a burst of confetti, and inside are your photos as taped-in stickers, your message on a taped-in note and their song. Up to 8 photos; pink, lavender, mint or cherry.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the plushie and the colour, add photos and your message.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Keepsake · SKU `ethos-keepsake` · listing 4604959573
+
+**Title:** Anniversary Keepsake Gift, Digital Locket with Your Photo, Pressed Flowers and a Typed Letter, Gift for Her
+
+**Tags:** keepsake gift, keepsake, locket with photo, pressed flowers, anniversary gift, long distance gift, gift for wife, gift for girlfriend, gift for mom, digital love letter, love letter, vintage gifts, memory book
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+An anniversary keepsake they open like a box of kept things: pressed flowers, a gold locket with your initials that opens on your photo, and a typed letter.
+
+A kraft-paper parcel tied with twine and closed with a wax seal. They break it and scroll through: your first photo on deckle-edged paper under dried flowers, a ticket with your words on it, one word torn out of a book, and the locket, which opens on a tap. The rest of your photos are pressed in like pages, and your letter is typed on aged paper (add a surprise and it comes as a P.S. in its own envelope). 1 to 9 photos; kraft, ivory or dusty rose.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, the word, the ticket and your letter.
+3. Press Send and type your Etsy order number. Your keepsake's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Midnight Countdown · SKU `ethos-midnight-countdown` · listing 4604978235
+
+**Title:** New Years Eve Countdown to Midnight with Fireworks, Digital New Year Card with Your Photos, Long Distance Gift
+
+**Tags:** new years eve, new years, new year card, new years cards, happy new year card, new year countdown, countdown, birthday countdown, long distance gift, new year gifts, gift for boyfriend, gift for girlfriend, digital love letter
+
+**Section:** New Year · **Occasion:** Anniversary
+
+**Description:**
+A New Year's Eve countdown to midnight: the sky darkens from dusk to night as it gets close, and at zero fireworks fill the screen and your photos and words open.
+
+A live countdown to the moment you choose, landing at midnight in their time zone: send it before New Year's Eve, or set it for the stroke of midnight on their birthday. Over a city, the sea or the mountains, with the headline and the line at zero written by you ("Happy New Year, Ana."). Then your photos, your song and your message. 1 to 20 photos.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Set the moment, write the line it shows at zero, add photos and your message.
+3. Press Send and type your Etsy order number. Your countdown's link is ready to share.
+
+Add music and a surprise at the end. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Music Box · SKU `ethos-music-box` · listing 4604968985
+
+**Title:** Custom Music Box with Your Photos, Digital Ballerina Music Box That Plays Swan Lake, Anniversary Gift for Her
+
+**Tags:** custom music box, music box, ballerina music box, music box gift, swan lake music box, ballerina gift, anniversary gift, gift for wife, gift for mom, mothers day gift, gift for girlfriend, digital love letter, wedding anniversary
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A custom music box with your photos in its mirror: they wind the key, the lid opens, and a ballerina turns to Swan Lake, Brahms' Lullaby or Für Elise.
+
+A lacquered music box on a lace-covered vanity, their name on the gold plate. They wind the key three turns, the ratchet clicking under their thumb, and the lid opens: a porcelain ballerina, or two swans who meet as a heart, turns on the velvet while the box plays, note by note. Your photos come up one at a time in the oval mirror inside the lid. As the spring runs down the tune slows, and a folded letter lifts out of the velvet. 1 to 8 photos; blush, ivory, lilac or sage.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the figurine, the tune and the colour, add photos and your letter.
+3. Press Send and type your Etsy order number. Your music box's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Our Timeline · SKU `ethos-our-timeline` · listing 4604991116
+
+**Title:** Relationship Timeline Gift, Our Story Timeline with Your Photos and Dates, Dating Anniversary Gift for Him or Her
+
+**Tags:** our story timeline, our story, dating anniversary, 1 year anniversary, anniversary gift, first anniversary, anniversary website, digital photo album, memory book, gift for boyfriend, gift for girlfriend, wedding anniversary, long distance gift
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A relationship timeline of the two of you: a road that draws itself down the page as they scroll, every milestone pinned with a photo and a date.
+
+From the day you met to now: each stop on the road is a photo with its date and your words, in layers that move as they scroll. It ends on "and it's only the beginning" (or your own last line) with, if you set one, a countdown to whatever comes next. 2 to 20 photos and a video clip; an asphalt, chalk or ink road.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos with their dates, and your last line.
+3. Press Send and type your Etsy order number. Your timeline's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Paper Crane · SKU `ethos-paper-crane` · listing 4604970381
+
+**Title:** Im Sorry Gift for Her or Him, Digital Paper Crane Apology Message They Fold Line by Line, Origami Crane Card
+
+**Tags:** im sorry gift, apology gift, apology gift for her, sorry gifts for him, apology card, im sorry card, origami crane, origami crane card, paper crane, paper anniversary, thinking of you gift, long distance gift, digital love letter
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+An I'm sorry gift that takes a little patience: they fold a paper crane crease by crease, and every fold that lands says one more line of what you wanted to say.
+
+A sheet of paper on a quiet table. They press and hold each crease and the paper folds while they hold it; let go early and it springs open. After the last fold it is a crane, and when they blow into the phone it lifts and flies off, leaving your letter where it was. No microphone? There are tap-to-fold and let-it-go buttons. Up to 6 photos. For an apology, a hard week, or someone far away.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write a line for each fold and your letter, add photos.
+3. Press Send and type your Etsy order number. Your crane's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Party Animals · SKU `ethos-party-animals` · listing 4604984551
+
+**Title:** Funny Birthday Card for Him or Her, Interactive Birthday Collage Crashed by Hamsters in Party Hats, Digital Card
+
+**Tags:** funny birthday card, funny birthday gift, cat birthday card, birthday for her, birthday for him, interactive birthday, digital birthday, birthday website, best friend gift, hamster, gift for sister, last minute gifts, animated card
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A funny birthday card they scroll: a birthday collage crashed by hamsters, cats and puppies in party hats, and each one yells a line you wrote when tapped.
+
+An invitation sealed with a hamster in a party hat. They open it and scroll down: their name in cut-out letters, their age in foil balloons, your photos in polaroids and a photo-booth strip, your song, and ten animals in party hats in between, including two ferrets nobody invited. Tap an animal and it jumps, squeaks and yells a line (yours, or ours where you leave one blank); tap anywhere else and confetti pops. Further down, a cake with their age in candles: they tap it, or blow into the phone, to put them out. Your letter is at the bottom. 1 to 7 photos; linen, bubblegum, lime or midnight.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add their age, the animals' lines, your photos and your letter.
+3. Press Send and type your Etsy order number. Your card's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Photo Booth · SKU `ethos-photo-booth` · listing 4604971025
+
+**Title:** Photo Booth Strip Gift, Digital Photo Strip of the Two of You, Love Letter for Boyfriend or Girlfriend
+
+**Tags:** photo booth, photo strip, photo booth strip, digital love letter, love letter, gift for boyfriend, gift for girlfriend, anniversary gift, valentines gift, 1 year anniversary, digital photo album, long distance gift, love notes
+
+**Section:** Anniversary & photos · **Occasion:** Anniversary
+
+**Description:**
+A photo booth strip of the two of you: they pull the curtain, press the button, four flashes go off, and the strip prints, coming up in colour as they watch.
+
+An old photo booth in red velvet with a sign lit up on top. Three, two, one, flash, four times, each flash freezing one of your photos in the booth's mirror. The machine whirrs and the strip slides out of the slot still grey. They tap it to take it, and it lands on a wall of love letters: your letter on lined paper in handwriting, lipstick kisses, a teddy, envelopes and heart stamps, and a line of yours in pen. 1 to 10 photos; a cherry, blush, black or mint booth, in colour, black and white or sepia.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your line and your letter.
+3. Press Send and type your Etsy order number. Your strip's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Picnic · SKU `ethos-picnic` · listing 4604971701
+
+**Title:** Date Night Gift, Digital Picnic Basket of Love Notes with Your Photos, Date Reveal for Boyfriend or Girlfriend
+
+**Tags:** date night gift, date night ideas, date ideas, date night, picnic, picnic basket, love notes, love notes for him, gift for boyfriend, gift for girlfriend, anniversary gift, just because gift, digital love letter
+
+**Section:** Surprise reveals · **Occasion:** Anniversary
+
+**Description:**
+A date night gift: a picnic basket on a gingham blanket, every thing they take out carries a line from you, and the date you've planned can come out just before your letter.
+
+They tap the basket and the lid creaks open; every tap after that takes one thing out and sets it on the blanket: strawberries, cherries tied with a bow, a bottle of pink lemonade, tulips, a ticket to happiness, your photos in gingham frames. Each carries a tag with your line, and butterflies land on them as they arrive. Planned a date? It comes out of the basket too, and the last thing out is a folded note with your letter. 3 to 8 tags, up to 6 photos; a pink, blue, red or lilac blanket.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write the tags, add photos, your letter and the date if you've planned one.
+3. Press Send and type your Etsy order number. Your picnic's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Recipe Box · SKU `ethos-recipe-box` · listing 4604986141
+
+**Title:** Mom Birthday Gift, Digital Recipe Card for Mom with Your Photos and Letter, Mothers Day Gift from Daughter
+
+**Tags:** mom birthday gift, gift for mom, mothers day gift, mothers day card, mothers day present, recipe card gifts, recipe cards, gift for grandma, mom birthday, gift for wife, long distance gift, thinking of you gift, digital gift for mom
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A mom birthday gift in the shape of a recipe: the recipe for her, written on a card on the kitchen counter one ingredient at a time, two cups of patience, a whole Sunday of her time.
+
+She tilts the phone and the jar tips with it, pouring each ingredient into the bowl, and each one is written on the card as it lands. When the last is in she shakes the phone to stir, and the full recipe card appears, your letter as its method and your photos clipped to it. Pour and stir buttons are there for any phone that can't feel a tilt. 1 to 8 photos. For Mother's Day, her birthday, or a grandmother.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Name the recipe, write the ingredients, add photos and your letter.
+3. Press Send and type your Etsy order number. Your recipe's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### The Séance · SKU `ethos-seance` · listing 4604972425
+
+**Title:** Spirit Board Halloween Gift, Digital Planchette Spells Out Your Message, Spooky Love Letter for Him or Her
+
+**Tags:** spirit board, spirit boards, planchette, halloween gifts, halloween cards, halloween love card, halloween lover gift, spooky gifts for him, spooky gift for her, spooky season, gift for boyfriend, gift for girlfriend, digital love letter
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A spirit board message for Halloween: they touch the planchette and it glides from letter to letter by itself, spelling out the words you chose.
+
+A candlelit table at midnight, the board between two candles. Each letter glows as the planchette passes. Then it says goodbye and the candles go out, and in the dark your letter is written on old paper, your photos develop out of the mist as spirit photographs, and your song plays. Up to 22 letters on the board, up to 8 photos; candle, moonlight, blood moon or graveyard green.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Type the words it spells, add photos, your song and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Sketchbook · SKU `ethos-sketchbook` · listing 4604985399
+
+**Title:** Birthday Card for Her or Him, Doodle Sketchbook That Draws Itself Around Your Photos, Hand Drawn Digital Card
+
+**Tags:** birthday card, birthday for her, birthday for him, doodle gifts, doodle art, sketchbook, interactive birthday, digital birthday, cute birthday card, best friend gift, gift for girlfriend, last minute gifts, animated card
+
+**Section:** Birthday gifts · **Occasion:** Birthday
+
+**Description:**
+A birthday card that draws itself: a coil-bound sketchbook with their name on the cover, and every page doodles itself in ink as they turn to it.
+
+A cake with candles, their age circled twice, a party hat, presents, arrows and hearts, with watercolour bleeding in behind the lines. Your photos are taped in between the doodles with notes in handwriting, and the last page is your letter. Up to 12 photos; white paper, kraft, or black paper with a white pen.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add their name and age, your photos and notes, and your letter.
+3. Press Send and type your Etsy order number. Your sketchbook's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Spooky Season · SKU `ethos-spooky-season` · listing 4604960217
+
+**Title:** Spooky Season Gift for Her, Cozy Halloween Scrapbook with Your Photos and Song, Halloween Gift for Girlfriend
+
+**Tags:** spooky season, spooky gift for her, spooky gifts for him, spooky gift, halloween gifts, halloween love card, halloween lover gift, black cat gift, digital scrapbook, gift for girlfriend, gift for boyfriend, digital love letter, cozy gifts for her
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A spooky season gift: a heap of autumn leaves with their name on a kraft tag, and one tap blows them away to show a cozy Halloween scrapbook of your photos.
+
+Underneath: your photo on a frame of film under the moon, a black cat, a ticket for two to the haunted house, your song on a little player, a postcard in handwriting, a film strip of three more photos and polaroids all the way down to your letter. 1 to 10 photos; pumpkin patch, midnight or cozy kraft.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your photos, your song, the ticket and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Sticker Bomb · SKU `ethos-sticker-bomb` · listing 4604987773
+
+**Title:** Funny Gift for Boyfriend, Digital Meme Sticker Card Where Every Tap Slaps a Sticker, Funny Birthday Card
+
+**Tags:** funny gift for him, funny gift for her, funny birthday card, funny birthday gift, meme gifts, cat meme, funny cat gift, im sorry gift, just because gift, best friend gift, gift for boyfriend, gift for girlfriend, interactive card
+
+**Section:** Funny gifts · **Occasion:** Birthday
+
+**Description:**
+A funny gift made of meme stickers: every tap slaps one down exactly where their finger lands, and twelve taps in, your card is waiting.
+
+A blank cutting mat and one instruction: tap anywhere. A cat in a shark hat, a hamster with cake, your own photos as polaroids, some with a label-maker strip saying whatever you wrote ("certified menace"). Twelve stickers in, the page is a mess, the confetti goes, and a "read the card" button opens your card. Up to 6 photos; cats, party animals, the soft ones with bows, or all of it at once.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the sticker pack, add photos, the labels and your card.
+3. Press Send and type your Etsy order number. Your card's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Text Thread · SKU `ethos-text-thread` · listing 4604973173
+
+**Title:** Long Distance Gift, Text Message Love Story That Arrives Bubble by Bubble, Digital Love Letter for Boyfriend
+
+**Tags:** long distance gift, long distance love, text messages, miss you gift, miss you card, thinking of you gift, im sorry gift, digital love letter, love letter, gift for boyfriend, gift for girlfriend, anniversary gift, funny birthday card
+
+**Section:** Long distance · **Occasion:** Anniversary
+
+**Description:**
+A long distance gift written as a text thread: your messages arrive one bubble at a time, typing dots and all, ending on the one you'd never send by text.
+
+You write the chat; they watch it come in, little pops, the pauses while you're typing, and your photos landing as attachments wherever you type [photo]. 2 to 40 messages and up to 12 photos; ink, blue, green or coral bubbles.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write the messages, add photos and type [photo] where each should land.
+3. Press Send and type your Etsy order number. Your thread's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### The Council · SKU `ethos-the-council` · listing 4604995276
+
+**Title:** Funny Cat Gift, a Council of Cats Reviews the Evidence and Stamps a Verdict, Funny Anniversary or Birthday Card
+
+**Tags:** funny cat gift, cat lover gift, cat gift, cat gifts for her, cat birthday card, funny anniversary, funny birthday card, funny gift for him, funny gift for her, gift for boyfriend, gift for girlfriend, cat lover, interactive card
+
+**Section:** Funny gifts · **Occasion:** Anniversary
+
+**Description:**
+A funny cat gift: a council of five cats hears the case for (or against) them, reads out the evidence you wrote, and stamps a verdict.
+
+The chair with the paperwork, the prosecution, security in a shark hat, a witness already in tears. They call the hearing to order, each cat reads out one of your findings ("said five minutes away, from bed"), the gavel comes down three times, and the ruling arrives with a rubber stamp: guilty, approved, certified or pardoned. Your photos go in as exhibits, and the full ruling is your letter. Up to 6 findings and 6 photos.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write the charge and the findings, pick the verdict, add photos and your letter.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### The Toast · SKU `ethos-the-toast` · listing 4604980435
+
+**Title:** Digital Wedding Toast with Your Speech and Photos, Champagne Glasses That Clink, Wedding Gift for the Couple
+
+**Tags:** wedding toast, wedding speech, wedding speech gift, wedding card, wedding gift, engagement gift, engagement card, wedding anniversary, anniversary gift, gift for husband, gift for wife, valentines gift, champagne
+
+**Section:** Wedding · **Occasion:** Wedding
+
+**Description:**
+A wedding toast in their pocket: they tilt the phone to pour, knock it to clink the glasses, and your speech begins.
+
+Two glasses on cream linen, a candle and a menu card standing between them. They tilt and the bottle tips with it, filling both glasses (overfill and it goes over the side, which is funnier). One knock, the way you touch two glasses, and gold rings ring out across the screen while your first photos rise in the bubbles. The menu card opens into your speech. No tilt sensor? Pour and clink buttons do the same. 1 to 8 photos. For a wedding, an engagement or an anniversary.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write your speech, the venue and the date line, add photos.
+3. Press Send and type your Etsy order number. Your toast's link is ready to share.
+
+Add music, a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+### Trick or Treat · SKU `ethos-trick-or-treat` · listing 4604996120
+
+**Title:** Trick or Treat Halloween Card, Digital Halloween Gift with a Little Ghost and Your Photos, Halloween for Her
+
+**Tags:** trick or treat, halloween gifts, halloween cards, halloween love card, halloween lover gift, cute ghost gift, spooky gift for her, spooky gifts for him, spooky season, gift for girlfriend, gift for boyfriend, interactive card, animated card
+
+**Section:** Halloween & fall · **Occasion:** Anniversary
+
+**Description:**
+A trick or treat Halloween card: they ring the bell of a moonlit porch, choose trick or treat, and a little ghost opens the door on your photos.
+
+Bats cross the sky and a jack-o'-lantern waits by the door. Treat lights the pumpkin and rains sweets; trick earns a boo first, then the treat anyway. Inside: your words on a scroll, your photos in haunted frames and their song, with a little ghost, cat or pumpkin keeping them company. Up to 8 photos; midnight, pumpkin, witch or candy.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Pick the host, add photos, your words and their song.
+3. Press Send and type your Etsy order number. Your gift's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+### Vinyl · SKU `ethos-vinyl` · listing 4604996914
+
+**Title:** Custom Vinyl Record Gift, Our Song Digital Love Letter, Song Gift for Boyfriend or Girlfriend with Photos
+
+**Tags:** custom vinyl record, record gift, song gifts, our song, our song gift, music gifts for him, music gift, vinyl records, anniversary gift, gift for boyfriend, gift for girlfriend, digital love letter, valentines gift
+
+**Section:** Love letters · **Occasion:** Anniversary
+
+**Description:**
+A custom vinyl record gift: they drop the needle, the record spins, and your photos sit in a crate as album covers.
+
+A turntable, with the album name and artist you make up on the label. The record turns while the music plays: a track from our library, or your song as an audio file you upload. (A song you search for by name plays as a 30-second preview at the end instead.) They flip through your photos in the crate like records, and your message is printed on the liner notes. 1 to 12 photos; a black, cream or burgundy sleeve.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Add your song, your photos and the liner notes.
+3. Press Send and type your Etsy order number. Your record's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
