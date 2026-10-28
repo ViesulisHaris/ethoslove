@@ -28,20 +28,15 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
 - **Shop open:** TryEthos (tryethos.etsy.com). English, Latvia, EUR; Migla as an incorporated business; Etsy Plus declined.
 - **Shop basics:** logo, tagline and About are filled in. The banner is in `etsy/photos/shop-banner.jpg`, not uploaded.
-- **17 listings saved as drafts, not published:** the first 8, and 9 more (wave 2) added on 28 Oct.
+- **17 listings live since 28 Oct:** the first 8, and 9 more (wave 2). Publishing cost $3.40; each renews itself every four months for $0.20.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
-  - all 13 tags, €10.99, quantity 999;
+  - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
   - "made by me", "created by me".
-- **The Etsy app "ethos":** registered, waiting for Etsy's personal approval. Its callback URL can only be added once it's approved.
+- **The Etsy app "ethos":** approved (Personal Access), callback URL set, the three keys in Vercel, and the shop connected on 28 Oct. A made-up order number now answers "order_not_found", which only happens once Etsy answers for our shop.
 
-**Left before publishing:**
-1. App approved, then add the callback URL.
-2. Keys in Vercel.
-3. ~~Migration 0018.~~ Applied 28 Oct.
-4. The connect link.
-5. A real test order bought by someone else, then refunded.
-6. Publish the 17 drafts ($0.20 each, $3.40).
+**Left:** a real test order bought by someone else, sent as a gift on the site, then refunded on Etsy. By
+the next morning the daily check takes the template back.
 
 Photos: `docs/marketing/etsy/photos/<slug>/`, made by `scripts/etsy-shots.mjs`, then `etsy-photos.mjs` and `etsy-brand.mjs`.
 All three take slugs, to make one listing without touching the others. A new listing is quickest as an
