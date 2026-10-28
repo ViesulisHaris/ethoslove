@@ -21,7 +21,7 @@ vi.mock("@/lib/email/notify", () => mail);
 
 const { claimable, etsyOrderNumber, skuTemplate, claimKey } = await import("@/lib/etsy/receipt");
 const { claimEtsyItem } = await import("@/lib/etsy/claim");
-const { accessToken, fetchReceipt, EtsyError } = await import("@/lib/etsy/api");
+const { accessToken, fetchReceipt, keepConnected, EtsyError } = await import("@/lib/etsy/api");
 const { reconcileEtsyRefunds } = await import("@/lib/etsy/refunds");
 const claimRoute = await import("@/app/api/etsy/claim/route");
 const cronRoute = await import("@/app/api/cron/etsy/route");
@@ -178,6 +178,19 @@ describe("the shop's Etsy sign-in", () => {
     await expect(accessToken(fake.db as never, CONFIG, NOW)).rejects.toEqual(new EtsyError("not_connected"));
     // Without ETSY_SHOP_ID, the shop is the one that was connected.
     expect((await accessToken(fake.db as never, { ...CONFIG, shopId: null }, NOW)).shopId).toBe(999);
+  });
+
+  it("is renewed once a month though no order needs it, so a quiet shop stays connected", async () => {
+    const day = 86_400_000;
+    openDb({ etsy_connection: [{ id: 1, shop_id: SHOP, access_token: "1234.access-old", refresh_token: "refresh-old", expires_at: new Date(NOW + 60 * day).toISOString(), updated_at: new Date(NOW - 10 * day).toISOString() }] });
+    const fetch = etsyFetch(receipt());
+    await keepConnected(fake.db as never, CONFIG, NOW, fetch as never);
+    expect(fetch).not.toHaveBeenCalled();
+    await keepConnected(fake.db as never, CONFIG, NOW + 21 * day, fetch as never);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fake.rows("etsy_connection")[0]).toMatchObject({ refresh_token: "refresh-new", updated_at: new Date(NOW + 21 * day).toISOString() });
+    openDb({ etsy_connection: [] });
+    await expect(keepConnected(fake.db as never, CONFIG, NOW, fetch as never)).rejects.toEqual(new EtsyError("not_connected"));
   });
 
   it("asks Etsy for the order every time, and treats an unknown order as none", async () => {
@@ -384,11 +397,23 @@ describe("the daily refund check", () => {
     expect(fake.rows("purchases")[0]).toMatchObject({ status: "paid" });
   });
 
-  it("runs only for Vercel's cron", async () => {
+  it("runs only for Vercel's cron, and keeps the shop signed in", async () => {
     vi.stubEnv("CRON_SECRET", "cron-test");
+    vi.stubGlobal("fetch", etsyFetch(receipt()));
     const res = await cronRoute.GET(new NextRequest("https://ethos.test/api/cron/etsy"));
     expect(res.status).toBe(401);
     const ok = await cronRoute.GET(new NextRequest("https://ethos.test/api/cron/etsy", { headers: { authorization: "Bearer cron-test" } }));
-    expect(await ok.json()).toEqual({ checked: 0, revoked: 0, flagged: 0, failed: 0 });
+    expect(await ok.json()).toEqual({ checked: 0, revoked: 0, flagged: 0, failed: 0, connection: "ok" });
+    expect(fake.rows("etsy_connection")[0]).toMatchObject({ refresh_token: "refresh-new" });
+  });
+
+  it("says when the shop's sign-in is gone, and still checks refunds it can", async () => {
+    vi.stubEnv("CRON_SECRET", "cron-test");
+    openDb({ etsy_connection: [] });
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const ok = await cronRoute.GET(new NextRequest("https://ethos.test/api/cron/etsy", { headers: { authorization: "Bearer cron-test" } }));
+    expect(await ok.json()).toMatchObject({ connection: "not_connected" });
+    expect(errors).toHaveBeenCalledWith("[etsy] the shop's Etsy sign-in failed", "not_connected");
+    errors.mockRestore();
   });
 });

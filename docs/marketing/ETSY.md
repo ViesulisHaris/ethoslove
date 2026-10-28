@@ -27,7 +27,19 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 ## Where it stands (28 Oct 2026)
 
 - **Shop open:** TryEthos (tryethos.etsy.com). English, Latvia, EUR; Migla as an incorporated business; Etsy Plus declined.
-- **Shop basics:** logo, tagline and About are filled in. The banner is in `etsy/photos/shop-banner.jpg`, not uploaded.
+- **Shop page finished on 28 Oct:**
+  - logo, tagline, About; location Riga, Latvia; the banner (`etsy/photos/shop-banner.jpg`);
+  - an announcement (how it works, the refund promise);
+  - six sections: Birthday gifts 4, Love letters 5, Long distance 3, Anniversary & photos 2, Surprise reveals 2, Christmas 1;
+  - four featured listings: Pop-up Card, XOXO, Jar of Reasons, Halfway;
+  - five FAQs: getting the gift, the order number, no Canva, if it doesn't open, how long it lasts.
+- **Policies:**
+  - Returns: Etsy's fixed digital-item policy.
+  - Privacy: a GDPR policy naming SIA "MIGLAI" as controller, consistent with the site's.
+  - EU right of withdrawal: 14 days, with the model form. It is stated rather than waived because Etsy's checkout doesn't ask the buyer to give it up for the gift; unstated, the law stretches it to 12 months.
+  - The EU ODR link is left off: that platform closed in 2025.
+  - Etsy's advisor lists nothing left to do; only a seller photo is missing.
+- **Seller status in the EU says "Private individual".** Migla is a company, so it should be "professional seller" with the company's details. That is the owner's declaration (Shop Home editor → Seller details → Edit).
 - **17 listings live since 28 Oct:** the first 8, and 9 more (wave 2). Publishing cost $3.40; each renews itself every four months for $0.20.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
@@ -43,6 +55,14 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
 **Left:** a real test order bought by someone else, sent as a gift on the site, then refunded on Etsy. By
 the next morning the daily check takes the template back.
+
+### The test order
+
+1. Someone else buys one listing. A shop can't buy from itself, and the buyer shouldn't leave a review: a refunded order with a review looks like the shop bought it.
+   A message to send them: *"Could you test my Etsy shop? Buy any gift at tryethos.etsy.com and I'll refund you the same day. After paying, download the PDF, open its link on your phone, make a little gift for anyone, press Send and type the order number from your Etsy receipt. Tell me if anything was confusing. Please don't leave a review."*
+2. Check they got the "It's live" page and that their gift's link opens on another phone. The logs show it too: `vercel logs --scope ethoslvoe --project ethoslove` should have `POST /api/etsy/claim 200` and no `[etsy]` errors.
+3. Refund the order on Etsy: Shop Manager → Orders → the order → Issue a refund, full amount.
+4. The next morning, after the 05:00 UTC daily check, their gift's link should show "This page wandered off", as a Stripe refund does.
 
 Photos: `docs/marketing/etsy/photos/<slug>/`, made by `scripts/etsy-shots.mjs`, then `etsy-photos.mjs` and `etsy-brand.mjs`.
 All three take slugs, to make one listing without touching the others. A new listing is quickest as an
@@ -78,7 +98,9 @@ Claude can't open accounts, enter bank details or handle keys: these steps are y
    with the earlier ones).
 6. **Connect**: signed in to Etsy as the shop's owner, open
    `https://tryethos.io/api/etsy/connect?key=<ETSY_CONNECT_SECRET>` and press Allow. The page says
-   "Etsy is connected". If Etsy ever stops answering (a revoked app, 90 days unused), do this again.
+   "Etsy is connected". If Etsy ever stops answering (the app revoked, or its sign-in refused), do this again. The
+   daily check renews the sign-in once a month, so a quiet shop doesn't lapse after Etsy's 90 days, and logs
+   `[etsy] the shop's Etsy sign-in failed` if it can't.
    Then open `https://tryethos.io/api/etsy/status?key=<ETSY_CONNECT_SECRET>`: every check should say
    `"ok": true`. It tests the keys, migration 0018, the connection, the token's renewal, Etsy
    answering for the shop, and permission to read orders, without buying anything.
@@ -143,8 +165,11 @@ boyfriend"** (one). Those are the quickest #1s.
 2. **Etsy Ads at $3–5 a day** on every listing for 30 days. A new listing with no sales gets almost
    no organic views; ads bring the first orders, and orders lift the organic rank. A sale leaves about
    €9.30 after Etsy's published fees (6.5% transaction, 4% + €0.30 payment, $0.20 listing; check it
-   against the first payout), so an ad order must cost less than that. Turn Offsite Ads off while the
-   shop is under $10k a year: they take 15% of the sale.
+   against the first payout), so an ad order must cost less than that. A new shop can only start Etsy
+   Ads 15 days after opening: TryEthos from about 12 Nov 2026.
+   **Offsite Ads: keep them on** (they are on). Etsy pays for the ads on Google, Pinterest and Instagram
+   and takes 15% only when one brings a sale, about €2 of an €11 gift. That still leaves about €7.30, far
+   cheaper than a Meta sale, and every sale lifts the ranking.
 3. **Wave 2, nine listings for the open searches:** built as drafts on 28 Oct (texts under Wave 2 listings, at the end).
    - Jar of Reasons: "reasons why i love you"
    - Halfway and Passport: "long distance gift for boyfriend"
@@ -155,8 +180,8 @@ boyfriend"** (one). Those are the quickest #1s.
    - On Repeat: "custom album cover", song and playlist gifts
 4. **Dates:** Christmas listings live by mid-November; every love listing needs orders and reviews
    by mid-January, before Valentine's week.
-5. **Shop:** sections (Birthday, Love letters, Anniversary, Photo gifts), the Spanish texts as
-   Etsy translations, replies within 24 hours. A sale only if the price was really higher before.
+5. **Shop:** sections done on 28 Oct. Still to do: the Spanish texts as Etsy translations, and replies within
+   24 hours. A sale only if the price was really higher before.
 
 ## The listings
 

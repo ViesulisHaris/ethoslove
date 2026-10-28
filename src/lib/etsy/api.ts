@@ -174,6 +174,20 @@ export async function accessToken(db: Db, config: EtsyConfig, now: number, optio
   throw new EtsyError("unauthorized");
 }
 
+/** How often the sign-in is renewed though no order needed it: Etsy's refresh token lapses after 90 days unused. */
+export const ETSY_RENEW_DAYS = 30;
+
+/**
+ * The daily check's touch on the shop's sign-in (/api/cron/etsy). Quiet weeks have no order to ask
+ * Etsy about, so nothing renews the token; left alone for 90 days the shop would be disconnected
+ * and the next buyer told Etsy can't be reached. Renewing once a month keeps it connected.
+ */
+export async function keepConnected(db: Db, config: EtsyConfig, now: number, doFetch: typeof fetch = fetch): Promise<void> {
+  const { data: row } = await db.from("etsy_connection").select("updated_at").eq("id", 1).maybeSingle();
+  const renewed = row?.updated_at ? Date.parse(row.updated_at) : 0;
+  await accessToken(db, config, now, { force: now - renewed > ETSY_RENEW_DAYS * 86_400_000, doFetch });
+}
+
 /**
  * One order of our shop, as Etsy has it now; null when our shop has no such order. Asked of Etsy
  * every time: nothing the buyer's browser sends says what was paid.
