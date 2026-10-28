@@ -67,6 +67,12 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 - **Search:** on 28 Oct none of the 17 listings showed up signed out, even for their exact titles; Etsy hadn't indexed them yet. Signed in as the shop, Etsy hides your own listings, so measure ranks signed out.
 - **The 37 remaining templates:** listing them is approved.
 
+**Ready to enter on Etsy and Pinterest** (the browser work waits until the wave-3 session is done with Brave):
+- `etsy/listings-es.md`: Spanish titles, tags and descriptions for the 17. Add Spanish as a shop language first.
+- `etsy/replies-and-pins.md`: five Etsy saved replies (EN/ES), and a pin per listing with its board and link.
+- `etsy/pins/<slug>.jpg`: 1000×1500 pins, made by `scripts/etsy-pins.mjs`.
+- A one-off rank check is scheduled for 29 Oct 10:00, in the signed-out in-app browser.
+
 ### The test order
 
 **Real test order #4213425511, 28 Oct:** paid €1.20 with Apple Pay as a guest. Etsy's guest email only offers "Sign in & view order", so the owner couldn't reach the PDF; that led to /etsy. `/api/etsy/find` read the real receipt correctly (popup-card), and the editor opened with the order filled in.
@@ -256,12 +262,12 @@ of the fold with their age on the topper, balloons and bunting stand up behind i
 present waits at the front. They tap the candles to light them, make a wish, and blow into the phone
 (or swipe) to put them out. Inside: your letter in handwriting and up to 8 of your photos on pegs.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add their name, your photos and your words. Pick a colour: vanilla, midnight, kraft or cherry.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -282,12 +288,12 @@ Flowers that never wilt. You build the bouquet stem by stem: roses, peonies, tul
 more, in the colours you choose, wrapped in paper and tied with a ribbon. They watch it come together
 one flower at a time, then open the little card inside to find your message. Add up to 6 photos.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Pick the flowers and colours, write your card, add photos.
 3. Press Send and type your Etsy order number. Your bouquet's link is ready to share.
@@ -308,12 +314,12 @@ polaroids on a lace doily, cut-out letters spelling what you call them, ribbon b
 hearts, and a card with the lines you'd underline. Wherever they tap, a kiss lands. Your letter waits
 at the bottom, with one last kiss by your name. 1 to 9 photos. Cream, noir or blush.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your words and what you call them.
 3. Press Send and type your Etsy order number. Your letter's link is ready to share.
@@ -331,12 +337,12 @@ Red curtains part on a marquee with their name in lights. A cake with flickering
 blow into the phone (or swipe) to put them out, confetti fires, and a film strip of your photos rolls.
 Up to 20 photos and a video clip, with music.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add their name, photos, a video and your message.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -355,12 +361,12 @@ blossom, a ticket to happiness, your song on a little player that really pauses,
 handwriting, a gingham photo strip, and more polaroids all the way down. Your letter waits at the
 bottom. 1 to 10 photos. Blush, or something blue.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your song and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -379,12 +385,12 @@ whirs out and your photos are on the camera roll, each with the orange date in t
 caption in pixel type. Every press of the shutter takes the next one with a flash. After the last,
 it prints the whole roll as a strip, and your letter comes out on a printed card. 1 to 12 photos.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, captions and letter. Pick baby pink, silver, lilac or black.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -402,12 +408,12 @@ A scrapbook they open like a real one. Your photos land on the pages as polaroid
 photo-booth strip, a stamp and a roll of film, taped and pinned between flowers. A torn note in
 handwriting, a typed letter from you, their song playing, and a bouquet at the end. Up to 12 photos.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, notes and letter. Pick Blossom, Favorite person, Seaside, Sunshine or Memories.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -425,12 +431,12 @@ A quiet gallery of the two of you. Each photo hangs framed on a wall with a plaq
 title, a year, a line. They walk from room to room as they swipe, and the last room is a wall text
 with your message. 2 to 20 photos, a video clip and music.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, their plaques and your message.
 3. Press Send and type your Etsy order number. Your gallery's link is ready to share.
@@ -454,12 +460,12 @@ Reasons why I love you, in a jar they shake: every folded note is one of your re
 
 A glass jar stuffed with folded notes. They shake the phone (or tap the jar) and a note tumbles out and unfolds. They keep going until the jar is empty. Write as few as 3 reasons or as many as 100, and add up to 20 photos. White, kraft or pastel.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Write your reasons, add photos, pick a colour.
 3. Press Send and type your Etsy order number. Your jar's link is ready to share.
@@ -479,12 +485,12 @@ Long distance relationship gift: a postcard map of your two towns, and a paper p
 
 Your home on one island, theirs on the other, and the real distance between you in big numbers. They blow into their phone and a paper plane, a balloon or a little bird rides their breath along the dotted path, the kilometres counting down, until the path turns into a heart and the postcard flips over to your letter, with your photos taped beside it. No microphone? A tap flies it home. Up to 8 photos; blush, sea, butter or dusk.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Type both towns, add your photos and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -504,12 +510,12 @@ A digital passport for the one you travel with, or the one you miss: a globe dra
 
 Their name is on the cover. They open it, a globe turns, the route draws itself (stopovers welcome), the pages fill with stamps, one per photo, and the visa page reveals your message. Up to 10 photos; navy, burgundy, forest or black.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add both cities, your photos and your message.
 3. Press Send and type your Etsy order number. Your passport's link is ready to share.
@@ -529,12 +535,12 @@ A surprise trip reveal they play through: they pack a suitcase with your clues, 
 
 They pack an open suitcase with your clues, one luggage tag at a time. The lid shuts, the zip runs and a tag with the date swings from the handle. Then a departures board clatters letter by letter to the destination, a boarding pass, train ticket or road-trip map slides up with both your names on it, and when they tear off the stub, your letter is underneath. Up to 5 clues and 6 photos.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Type where you're going, when, and your clues; add photos.
 3. Press Send and type your Etsy order number. Your trip's link is ready to share.
@@ -554,12 +560,12 @@ Scratch off cards they rub with a finger: each one hides a photo and a line, and
 
 A stack of scratch cards. They rub the foil away and it clears with a little burst. Made for proposals, pregnancy and other announcements, and every "will you?". 1 to 12 photos; silver, gold, rose or holographic foil.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and a line for each card, then the last card's message.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -579,12 +585,12 @@ A snow globe on their shelf: they shake their phone, it snows, and every time it
 
 A snow globe on a shelf. A harder shake makes a wilder storm, and turning the phone over tips the whole globe. After the last one the brass plaque is engraved and your letter opens. No motion sensor? A button shakes it. 1 to 8 photos.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your lines and your letter.
 3. Press Send and type your Etsy order number. Your globe's link is ready to share.
@@ -604,12 +610,12 @@ A thinking of you gift for a cold evening: they light a candle in a little cabin
 
 Leaves or snow fall past the window. Your photos hang from a string on wooden pegs, sparks drift up from the candle, and their song plays low. Up to 8 photos; amber, maple or moss.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Write your letter, add photos and their song.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
@@ -629,12 +635,12 @@ A video game gift made from your photos: they catch falling hearts, every level 
 
 A tiny retro game. They drag the basket to catch hearts, stars or slices of cake; bleeps, pixel text, a CRT scanline switch and a leaderboard of one. 1 to 8 photos, one per level.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and your message, pick what falls.
 3. Press Send and type your Etsy order number. Your game's link is ready to share.
@@ -654,12 +660,12 @@ Your photo as the album cover and their name as the artist: a music player that 
 
 Under a pink sunset they press play: a gingham bow, flower stickers, a bouquet, a heart paperclip on a note in your handwriting, your song on the big player, and every photo on a playlist with your captions as the song titles, down to your letter. Every tap adds a sticker. 1 to 10 photos; sunset, lilac or night.
 
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-★ HOW TO GET YOUR GIFT ★ (just above "No Canva, no app")
-After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
-
 1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and captions, your song and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
