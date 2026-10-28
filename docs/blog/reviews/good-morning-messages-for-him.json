@@ -1,0 +1,148 @@
+{
+  "slug": "good-morning-messages-for-him",
+  "keyword": "good morning messages for him",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The table and the specific lines are what I'd use, but it sent me to the girlfriend post for two lines of scheduling steps and had no plain romantic or 'I love you' mornings, which this search wants most."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product claim checks out, but whole sentences, a FAQ answer and a Spanish heading echoed the her post and the boyfriend post, 'car park' was UK-only, 'every hour of his day' overstated the twenty-fortune limit, and the Spanish had 'contigo dentro', 'guardarías para cuando le ves' and 'Para más'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The morning-by-morning table beats page one, but there was no section or heading for sweet good morning messages, the biggest slice of the search."
+        }
+      ],
+      "applied": [
+        "Inline scheduling steps for iPhone (Send Later) and Google Messages in place of the link to the her post.",
+        "New section 'Sweet good morning messages for him' / 'Mensajes de buenos días bonitos para tu novio', with a plain 'I love you' line.",
+        "Every sentence the editor found shared with the her and boyfriend posts rewritten in both languages: big-day intro, late-nights line, after-it's-done line, takeaway, two FAQ answers, FAQ question, ES heading.",
+        "'In the car park' changed to 'parks the car'; lead no longer promises a reply.",
+        "Fortune Cookie note rewritten around a day written as fortunes, with lucky numbers you pick and 'one every waking hour' in place of 'every hour of his day'.",
+        "Spanish: 'contigo', 'te guardarías para decírselo en persona', 'Llevo un tiempo', 'Si quieres más… tienes' in the boyfriend-post link-in, description now includes how to choose.",
+        "Polish taken: table examples no longer repeat list lines, 'Dinner's on me tonight. Go get them.', 'half asleep… out the door', 'Dreamed', scheduling mention in the product paragraph, ES title 'para mi novio', 'turno de mañana', 'día normal entre semana', 'Aun así'."
+      ],
+      "rejected": [
+        "'Long good morning paragraphs for him' heading: kept 'messages', the search term the post targets; paragraphs has its own post.",
+        "An 'early on' set: would repeat the her post's section; left for a later update.",
+        "A free-Letter line: the product paragraph already holds both allowed product mentions."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes work and the post now answers what to send, when and how to schedule it, but the table's 'three to six words' example had grown to seven."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim checks out, including scheduling in his time zone, but the table example broke its own word count, phone scheduling needed a note that it goes by the sender's clock, one long-message tip echoed the her post, the Spanish had lost the scheduling sentence, and 'en la misma almohada' was a calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes landed; the sweet section covers the romantic slice page one leads with, and the morning table, timing advice and search-word headings beat the 100-to-250-line lists."
+        }
+      ],
+      "applied": [
+        "Table example now 'Dinner's on me tonight. Good luck.' / «Esta noche invito yo. Suerte», within three to six words.",
+        "Scheduling steps now say both apps go by the sender's clock, so work out his alarm in her time first (EN and ES).",
+        "Long-message tip rewritten ('Tell him one small thing you noticed lately…') so it no longer echoes the her post.",
+        "ES product paragraph gains the scheduling sentence, so both languages match; EN no longer says premium twice before naming a template.",
+        "«compartiendo almohada» in place of «en la misma almohada».",
+        "Polish taken: 'out the door', FAQ quotes match the list lines exactly, «se abre y sale una tira», heading 'Long distance good morning messages for him' / «…a distancia»."
+      ],
+      "rejected": [
+        "ES FAQ question to 'tu novio': it is the reader's own question, so 'mi novio' is right and matches the ES keyword.",
+        "A flirty set: the post already covers sweet, funny and last-night lines; left for a later update.",
+        "Voice-note line: different words and idea from the her post's line, kept."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers what to send, when and how to schedule it across time zones; the morning table and lines that sound like a real couple beat page one's interchangeable lists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the code, including scheduling by time zone and the sender's-clock note; all round-2 fixes landed, no reused sentences, and the Spanish is natural Spain Spanish in her voice."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Headings carry the search modifiers in both languages, the ES title matches the keyword, and no page-one result sorts messages by the morning he's having or explains timing."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: 'Years in' for 'Six years' (reader); a flirty set in a later update (search); ES Text Thread note wording and 'normalmente… se haya sentado' in the timing FAQ (editor)."
+      ]
+    }
+  ]
+}

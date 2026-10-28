@@ -20,7 +20,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cute things to say to your boyfriend in the morning" },
         {
           type: "p",
-          text: "A morning message works because it's the first thing he reads before work, the news and everyone else. Keep it short enough to read with one eye open. Writing for her instead? Our post on [good morning messages for her](/blog/good-morning-messages-for-her) has a set of its own.",
+          text: "A morning message works because it's the first thing he reads before work, the news and everyone else. Keep it short enough to read with one eye open. For more, sorted by the kind of morning he's having, see our [good morning messages for him](/blog/good-morning-messages-for-him). Writing for her instead? Our post on [good morning messages for her](/blog/good-morning-messages-for-her) has a set of its own.",
         },
         {
           type: "list",
@@ -251,7 +251,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cosas bonitas para decirle a tu novio por la mañana" },
         {
           type: "p",
-          text: "Un mensaje por la mañana funciona porque es lo primero que lee, antes del trabajo, las noticias y todo lo demás. Que sea lo bastante corto para leerlo con un ojo abierto. ¿Escribes para ella? Nuestro artículo de [mensajes de buenos días para tu novia](/blog/good-morning-messages-for-her) tiene los suyos.",
+          text: "Un mensaje por la mañana funciona porque es lo primero que lee, antes del trabajo, las noticias y todo lo demás. Que sea lo bastante corto para leerlo con un ojo abierto. Si quieres más, ordenados según la mañana que tenga, tienes nuestros [mensajes de buenos días para tu novio](/blog/good-morning-messages-for-him). ¿Escribes para ella? Nuestro artículo de [mensajes de buenos días para tu novia](/blog/good-morning-messages-for-her) tiene los suyos.",
         },
         {
           type: "list",
