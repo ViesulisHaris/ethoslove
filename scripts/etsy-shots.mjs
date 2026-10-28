@@ -1,21 +1,82 @@
 // For the Etsy listings: each gift's live demo on an iPhone, played through, with a screenshot every
-// 1.2 s (3x pixels) and a 9:16 video. Interactions follow scripts/capture-thumbnails.mjs.
-//   node scripts/etsy-shots.mjs . <out> [base=https://tryethos.io] [slugs…]
+// 1.2 s (3x pixels). Interactions follow scripts/capture-thumbnails.mjs.
+//   node scripts/etsy-shots.mjs <repo> <out> [base=https://tryethos.io] [slugs…]
+// With ETSY_VIDEO=1 it plays them through again for the listing video instead: the screen recorded at
+// full 3x size (Chrome's screencast), no stills taken meanwhile, made into a 15 s 1080x1920 <out>/<slug>/video.mp4.
+// (Stills during Playwright's own recording slipped 3x frames into it: the video kept zooming in and out.)
 import { createRequire } from "node:module";
-import { mkdirSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { linkSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const [WT, OUT, BASE = "https://tryethos.io", ...only] = process.argv.slice(2);
 const req = createRequire(join(WT, "package.json"));
 const { chromium, devices } = req("@playwright/test");
 const W = 405, H = 720;
+const VIDEO = process.env.ETSY_VIDEO === "1";
+
+/** Seconds of the first screen kept before the first tap: the bouquet is the picture itself, so it stays longer. */
+const PREROLL = { bouquet: 3.5 };
+
+/** Records the screen while `run` plays the gift, then cuts the first 15 s into dir/video.mp4. */
+async function screencast(page, dir, run, slug) {
+  const cdp = await page.context().newCDPSession(page);
+  const frames = [];
+  mkdirSync(join(dir, "cast"), { recursive: true });
+  cdp.on("Page.screencastFrame", ({ data, metadata, sessionId }) => {
+    const file = join(dir, "cast", `${String(frames.length).padStart(5, "0")}.jpg`).replace(/\\/g, "/");
+    writeFileSync(file, Buffer.from(data, "base64"));
+    frames.push({ file, t: metadata.timestamp });
+    cdp.send("Page.screencastFrameAck", { sessionId }).catch(() => {});
+  });
+  // The video starts just before the first tap, not on the seconds the script waits for the page to settle.
+  await page.evaluate(() => { window.__firstTap = null; addEventListener("pointerdown", () => { window.__firstTap ??= Date.now(); }, true); });
+  await cdp.send("Page.startScreencast", { format: "jpeg", quality: 92, maxWidth: W * 3, maxHeight: H * 3, everyNthFrame: 1 });
+  try { await run(); } catch (e) { console.log("FAILED", e.message.split("\n")[0]); }
+  await page.waitForTimeout(1500);
+  await cdp.send("Page.stopScreencast").catch(() => {});
+  const firstTap = await page.evaluate(() => window.__firstTap).catch(() => null);
+  const from = firstTap ? firstTap / 1000 - (PREROLL[slug] ?? 1.2) : frames[0].t;
+  // Chrome sends a frame only when the screen changes (about every 16.7 ms while something moves). Laid out
+  // on an exact 60 fps clock (each tick shows the latest frame), then every other tick: an even 30 fps.
+  // (ffmpeg's concat with per-frame durations rounds them to 1/25 s and repeated every 6th frame.)
+  const seq = join(dir, "seq");
+  mkdirSync(seq, { recursive: true });
+  const last = frames.at(-1).t;
+  let i = 0;
+  for (let k = 0; k < 15 * 60 && from + k / 60 <= last; k++) {
+    const t = from + k / 60;
+    while (i + 1 < frames.length && frames[i + 1].t <= t) i++;
+    linkSync(frames[i].file, join(seq, `${String(k).padStart(5, "0")}.jpg`));
+  }
+  // Etsy takes up to 10 MB per upload here: busy collages get a lighter encode.
+  const encode = (crf) => execFileSync("ffmpeg", ["-v", "error", "-y", "-framerate", "60", "-i", join(seq, "%05d.jpg"), "-vf", "fps=30,scale=1080:1920:flags=lanczos", "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", String(crf), "-preset", "slow", "-movflags", "+faststart", join(dir, "video.mp4")]);
+  encode(20);
+  if (statSync(join(dir, "video.mp4")).size > 9.5e6) encode(25);
+  return frames.length;
+}
+
+/**
+ * Moves a scroller from where it is to `to(el)` over 1.1 s, eased, one step per frame. The browser's own
+ * smooth scroll covers half a screen in three frames and drops one on the way: a jerk in the video.
+ */
+const GLIDE = `(el, top) => new Promise((done) => {
+  const y0 = el.scrollTop, t0 = performance.now(), ms = 1100;
+  const step = (t) => {
+    const p = Math.min(1, (t - t0) / ms), e = p < 0.5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
+    el.scrollTo({ top: y0 + (top - y0) * e, behavior: "instant" });
+    if (p < 1) requestAnimationFrame(step); else done();
+  };
+  requestAnimationFrame(step);
+})`;
+const glideBy = (scroller, part) => scroller.evaluate((el, [glide, part]) => (0, eval)(glide)(el, el.scrollTop + el.clientHeight * part), [GLIDE, part]);
 
 async function scrollCollage(page, opener) {
   await page.getByRole("button", { name: opener }).first().click({ force: true, timeout: 20000 });
   const scroller = page.locator("[data-scroller]");
   await scroller.waitFor({ timeout: 15000 });
   await page.waitForTimeout(3600);
-  for (let i = 0; i < 6; i++) { await scroller.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.62, behavior: "smooth" })); await page.waitForTimeout(1600); }
+  for (let i = 0; i < 6; i++) { await glideBy(scroller, 0.62); await page.waitForTimeout(700); }
 }
 const swipeUp = async (page) => { await page.mouse.move(W / 2, H * 0.8); await page.mouse.down(); await page.mouse.move(W / 2, H * 0.45, { steps: 6 }); await page.mouse.up(); };
 /** Taps through a gift's cover, when it has one. */
@@ -25,16 +86,16 @@ async function open(page) {
 }
 /** Scrolls the gift so a section starts at the top of the screen (no half-scrolled stills): the last text matching `re`, `offset` px down. */
 const scrollToText = (page, re, offset = 30) =>
-  page.evaluate(({ src, flags, offset }) => {
+  page.evaluate(({ src, flags, offset, glide }) => {
     const rx = new RegExp(src, flags);
     const el = [...document.querySelectorAll("body *")].filter((e) => e.children.length === 0 && rx.test((e.textContent || "").trim())).pop();
     let sc = el?.parentElement;
     while (sc && !(sc.scrollHeight > sc.clientHeight + 10 && /(auto|scroll)/.test(getComputedStyle(sc).overflowY))) sc = sc.parentElement;
-    if (sc) sc.scrollTo({ top: el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - offset, behavior: "smooth" });
-  }, { src: re.source, flags: re.flags, offset });
+    if (sc) return (0, eval)(glide)(sc, el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop - offset);
+  }, { src: re.source, flags: re.flags, offset, glide: GLIDE });
 const scrollDown = async (page, sel, times, part = 0.55, wait = 1500) => {
   const sc = page.locator(sel).last();
-  if (await sc.count()) for (let i = 0; i < times; i++) { await sc.evaluate((el, p) => el.scrollBy({ top: el.clientHeight * p, behavior: "smooth" }), part).catch(() => {}); await page.waitForTimeout(wait); }
+  if (await sc.count()) for (let i = 0; i < times; i++) { await glideBy(sc, part).catch(() => {}); await page.waitForTimeout(Math.max(300, wait - 1100)); }
 };
 
 const SCRIPTS = {
@@ -51,7 +112,7 @@ const SCRIPTS = {
     await swipeUp(page);
     await page.waitForTimeout(4500);
     const sc = page.locator(".overflow-y-auto").last();
-    if (await sc.count()) for (let i = 0; i < 3; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.6, behavior: "smooth" })).catch(() => {}); await page.waitForTimeout(1500); }
+    if (await sc.count()) for (let i = 0; i < 3; i++) { await glideBy(sc, 0.6).catch(() => {}); await page.waitForTimeout(500); }
   },
   bouquet: async (page) => {
     const card = page.getByRole("button", { name: /open the card/i }).first();
@@ -91,7 +152,7 @@ const SCRIPTS = {
     await book.click({ force: true });
     await page.waitForTimeout(3000);
     const sc = page.locator('[data-template="scrapbook"] .overflow-y-auto').last();
-    for (let i = 0; i < 6; i++) { await sc.evaluate((el) => el.scrollBy({ top: el.clientHeight * 0.45, behavior: "smooth" })); await page.waitForTimeout(1400); }
+    for (let i = 0; i < 6; i++) { await glideBy(sc, 0.45); await page.waitForTimeout(400); }
   },
   museum: async (page) => {
     const enter = page.getByRole("button", { name: /^enter$/i }).first();
@@ -190,8 +251,10 @@ const SCRIPTS = {
     await page.getByRole("button", { name: /press start/i }).click({ force: true });
     for (let level = 0; level < 4; level++) {
       const box = await page.locator("canvas").first().boundingBox().catch(() => null);
-      if (box) for (let i = 0; i < 14; i++) { const x = box.x + 20 + ((i * 53) % (box.width - 40)); await page.mouse.move(x, box.y + box.height - 24, { steps: 4 }); await page.mouse.down(); await page.mouse.up(); await page.waitForTimeout(260); }
-      await page.getByRole("button", { name: /skip level/i }).click({ force: true, timeout: 4000 }).catch(() => {});
+      // A few seconds of play, then on to the photo the level unlocks (the video has 15 s for it all).
+      if (box) for (let i = 0; i < (VIDEO ? 3 : 14); i++) { const x = box.x + 20 + ((i * 53) % (box.width - 40)); await page.mouse.move(x, box.y + box.height - 24, { steps: 4 }); await page.mouse.down(); await page.mouse.up(); await page.waitForTimeout(260); }
+      // "Skip level" only shows once a level is lost; the video waits for it rather than for the end.
+      await page.getByRole("button", { name: /skip level/i }).click({ force: true, timeout: VIDEO ? 15000 : 4000 }).catch(() => {});
       await page.waitForTimeout(2600);
       const next = page.getByRole("button", { name: /next level/i });
       if (!(await next.count())) break;
@@ -224,8 +287,6 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     viewport: { width: W, height: H },
     deviceScaleFactor: 3,
     locale: "en-US",
-    // Playwright records the viewport at its CSS size and never scales up: a bigger size only pads it with grey.
-    recordVideo: { dir: join(dir, "video"), size: { width: W, height: H } },
   });
   await context.route(/clarity\.ms|facebook|_vercel\//, (r) => r.abort());
   await context.addInitScript((css) => {
@@ -241,6 +302,12 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
     const hide = () => document.querySelectorAll("button").forEach((b) => { if (/^(skip|saltar)$/i.test((b.textContent || "").trim()) || /^(mute music|play music)/i.test(b.getAttribute("aria-label") || "")) b.style.visibility = "hidden"; });
     hide(); new MutationObserver(hide).observe(document.body, { childList: true, subtree: true });
   });
+  if (VIDEO) {
+    const n = await screencast(page, dir, () => run(page), slug);
+    await context.close();
+    console.log("recorded", slug, n, "screen frames");
+    continue;
+  }
   let running = true;
   let n = 0;
   const loop = (async () => {
@@ -255,9 +322,6 @@ for (const [slug, run] of Object.entries(SCRIPTS)) {
   running = false;
   await loop;
   await context.close();
-  const vids = readdirSync(join(dir, "video")).filter((f) => f.endsWith(".webm"));
-  if (vids[0]) renameSync(join(dir, "video", vids[0]), join(dir, "demo.webm"));
-  rmSync(join(dir, "video"), { recursive: true, force: true });
   console.log("captured", slug, n, "frames");
 }
 await browser.close();

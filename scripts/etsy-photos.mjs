@@ -1,8 +1,7 @@
 // Etsy listing photos, 2000x2000: a hero, two pairs of moments, a single moment and "how it works",
-// from the demo frames etsy-shots.mjs captured. Plus a 15 s MP4 for each listing.
-//   node scripts/etsy-photos.mjs <repo> <shots> docs/marketing/etsy/photos [slugs…]   (videos land beside the photos; Etsy has them, the repo keeps only the photos)
+// from the demo frames etsy-shots.mjs captured. (The listing video comes from etsy-shots.mjs with ETSY_VIDEO=1.)
+//   node scripts/etsy-photos.mjs <repo> <shots> docs/marketing/etsy/photos [slugs…]
 import { createRequire } from "node:module";
-import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
@@ -105,13 +104,6 @@ for (const [slug, g] of Object.entries(GIFTS)) {
     const png = await page.screenshot();
     await sharp(png).jpeg({ quality: 88, mozjpeg: true }).toFile(join(dir, `${name}.jpg`));
   }
-  // The video: the demo from its first screen, 15 s, silent, as Etsy takes it (MP4, under 100 MB).
-  const webm = join(SHOTS, slug, "demo.webm");
-  const duration = Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", webm]).toString());
-  const frames = readdirSync(join(SHOTS, slug, "frames")).length;
-  const start = Math.max(0, duration - frames * 1.2 - 1.5);
-  // The phone screen is the top-left 405x720 (older captures padded it with grey to 1080x1920): crop, then scale to 1080x1920.
-  execFileSync("ffmpeg", ["-v", "error", "-y", "-ss", start.toFixed(2), "-i", webm, "-t", "15", "-an", "-vf", "crop=405:720:0:0,scale=1080:1920:flags=lanczos,unsharp=5:5:0.5", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-preset", "slow", "-movflags", "+faststart", join(dir, "video.mp4")]);
   console.log(slug, "ok");
 }
 await browser.close();
