@@ -2,6 +2,8 @@
 // from the demo frames etsy-shots.mjs captured. (The listing video comes from etsy-shots.mjs with ETSY_VIDEO=1.)
 //   node scripts/etsy-photos.mjs <repo> <shots> docs/marketing/etsy/photos [slugs…]
 // ETSY_PHOTOS=5-how-it-works renders only the photos named (comma-separated); that one needs no frames.
+// ETSY_MAKING=<etsy-making.mjs's out dir> adds photos 6-10: their name, your words, sending it with the
+// Etsy order number (its stills), then the gift's ending and one more moment where MORE has them.
 import { createRequire } from "node:module";
 import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -69,6 +71,43 @@ const GIFTS = {
   seance: { bg: "#24170e", ink: "#f6e6cf", title: "Spirit Board Message", line: "Touch the planchette. It spells your words.", hero: 12, a: [2, 6, "They touch the planchette", "it moves by itself"], b: [10, 15, "Letter by letter", "then your letter in the dark"], single: [20, "Your photos as spirit photographs"] },
 };
 
+/**
+ * Photos 9 and 10, where the demo has them: its ending (a demo frame and a caption) and one moment the
+ * first five don't show. Photos 6-8 are the same for every gift, from etsy-making.mjs's stills.
+ */
+const PS = "A P.S. to tap open, and a reaction they can send you";
+const REACTION = "And at the end, a reaction they can send you";
+const MORE = {
+  xoxo: { end: [16, PS] },
+  coquette: { end: [17, PS] },
+  halfway: { end: [15, "A countdown until you land, and a P.S."] },
+  fireside: { end: [19, PS] },
+  "autumn-reel": { end: [17, PS], extra: [11, "Your captions, in handwriting"] },
+  balloons: { end: [22, PS], extra: [17, "The last one bursts into confetti"] },
+  "be-my-boo": { end: [17, PS], extra: [15, "And the question, in your words"] },
+  "cap-toss": { end: [20, "A countdown to their first day, and a P.S."] },
+  cauldron: { extra: [15, "Your recipe for them, part by part"] },
+  "dark-romance": { end: [16, PS] },
+  evergreen: { end: [16, PS] },
+  "fall-for-you": { end: [17, PS] },
+  "favorite-person": { end: [19, PS] },
+  "front-page": { end: [14, "A P.S. on the back page, and a reaction they can send you"] },
+  garden: { end: [29, REACTION] },
+  "jack-o-lantern": { extra: [20, "Your photos, with your captions"] },
+  kawaii: { end: [16, PS] },
+  "midnight-countdown": { end: [16, REACTION] },
+  "music-box": { extra: [44, "Your photos in gold frames"] },
+  "our-timeline": { end: [30, REACTION] },
+  "paper-crane": { extra: [20, "Every fold's line, kept on one page"] },
+  "photo-booth": { extra: [27, "Your photos, sealed with kisses"] },
+  "recipe-box": { end: [28, "A countdown to Sunday lunch, and a P.S."] },
+  "spooky-season": { end: [16, PS] },
+  "sticker-bomb": { end: [20, PS] },
+  "the-toast": { end: [30, "A countdown to their first anniversary, and a P.S."] },
+  "trick-or-treat": { end: [19, PS] },
+  vinyl: { end: [15, REACTION] },
+};
+
 const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">';
 const base = (g) => `
   * { box-sizing: border-box; margin: 0 }
@@ -122,6 +161,8 @@ const frame = (slug, i) => {
   const f = files[Math.min(i, files.length - 1)];
   return `data:image/png;base64,${readFileSync(join(SHOTS, slug, "frames", f)).toString("base64")}`;
 };
+/** A still etsy-making.mjs took: names, loading, message, photos, preview or order. */
+const still = (slug, name) => `data:image/png;base64,${readFileSync(join(process.env.ETSY_MAKING, slug, `${name}.png`)).toString("base64")}`;
 
 mkdirSync(OUT, { recursive: true });
 const browser = await chromium.launch();
@@ -137,6 +178,16 @@ for (const [slug, g] of Object.entries(GIFTS)) {
     ["4-detail", () => single(g, frame(slug, g.single[0]), g.single[1])],
     ["5-how-it-works", () => how(g)],
   ];
+  if (process.env.ETSY_MAKING) {
+    const m = MORE[slug] ?? {};
+    shots.push(
+      ["6-their-name", () => pair(g, still(slug, "names"), still(slug, "loading"), "You type their name", "and it's the first thing they see")],
+      ["7-your-words", () => pair(g, still(slug, "message"), still(slug, "photos"), "You write it on your phone", "and add your own photos")],
+      ["8-send", () => pair(g, still(slug, "preview"), still(slug, "order"), "You check it in Preview", "then type your Etsy order number")],
+      ...(m.end ? [["9-ending", () => single(g, frame(slug, m.end[0]), m.end[1])]] : []),
+      ...(m.extra ? [[m.end ? "10-moment" : "9-moment", () => single(g, frame(slug, m.extra[0]), m.extra[1])]] : []),
+    );
+  }
   const named = process.env.ETSY_PHOTOS?.split(",");
   for (const [name, html] of shots) {
     if (named && !named.includes(name)) continue;

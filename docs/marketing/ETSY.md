@@ -44,7 +44,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - Etsy's advisor lists nothing left to do; only a seller photo is missing.
 - **EU seller status: Trader** (set 28 Oct, owner's OK). Buyers see it under "View shop registration details", with SIA MIGLAI's registration and VAT numbers, address and support email from `src/content/legal.ts`. There is no phone number: add one under Other details if the company gets one.
 - **All 54 templates live since 28 Oct:** the first 8, 9 more (wave 2) and the other 37 (wave 3, at the end). Publishing cost $3.40 + $7.40; each renews itself every four months for $0.20.
-  - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
+  - each has 8 to 10 photos (Museum 7), two videos (the gift playing, and "made in a minute": the buyer's path from Etsy to the order box), its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
   - an optional "Their name" custom option and a closing line on every listing, and four titles with "Personalized" (28 Oct, see Ranking edits);
@@ -238,7 +238,7 @@ Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills
 **The plan, in order:**
 1. **Conversion first** (done: the 40% sale, the clear "how to get your gift" block, the new fifth photo).
 2. **Attributes:** fill every attribute that fits ("Show all attributes": Occasion, Holiday, Recipient…) on all listings. Done 28 Oct: these categories have nothing besides Occasion to fill (see Ranking edits below).
-3. **A second video and up to 10 more photos per listing:** the recipient's view, the making, "works on any phone". Not done yet.
+3. **A second video and up to 10 more photos per listing:** the recipient's view, the making, "works on any phone". Done 28 Oct (see Second video and photos 6-10).
 4. **Titles:** add a true buyer modifier ("Personalized", "Gift for…") where it is missing; a closing call to action in the descriptions. Done 28 Oct.
 5. **Personalisation fields** (Etsy "Custom options"): they would put us under the "Personalised" filter (eRank: "personalized gift" ≈ 63K searches a month). The cost is an extra checkout field. Owner's go; done 28 Oct on all 54.
 6. **Etsy Ads from about 12 Nov:**
@@ -265,9 +265,33 @@ Made on all 54 live listings after the audit (owner: "we need to rank high befor
   The other 50 already carry one of "gift", "personalized", "custom", who it's for or "with your photos".
 - **Attributes:** "Show all attributes" in Love Cards and Birthday Cards offers Occasion, Materials, Width, Length, Envelope included and Blank inside. Only Occasion fits a digital gift, and every listing has it, so there is no Holiday or Recipient to set.
 - **Checked:** every listing's editor data was read back afterwards: 54 SKUs, one optional "Their name" field each with the 40-character limit, the closing line once, at the end.
-- **Not done:** the second video ("made in a minute": the editor, Publish, the Etsy box) and more photos.
 
-## The listings
+### Second video and photos 6-10 (28 Oct)
+
+Etsy takes 20 photos and 2 videos a listing. Every listing now has a second video and three to five more photos, after the owner's "do them now, with checks frame by frame as the first wave".
+
+- **The second video, "made in a minute"** (`scripts/etsy-making.mjs`): a buyer's real path on tryethos.io, as a guest from Etsy, at most 15 s.
+  - The order of the video: the /etsy/<slug> "Thanks for your Etsy order" page, then the editor (their name and yours typed, the first line of the message typed, the photos added), then Preview, then Publish, ending on the "Bought on Etsy" box with an order number typed.
+  - The number (4613027584) is not an Etsy order yet and is never sent. Nothing reaches the server: a guest's draft and photos stay on the device.
+  - The template's own fields come from its demo, written into the editor's local draft first, so the preview shows a whole gift.
+  - The waits between steps (page loads, scrolling) are cut, so the video is a series of short scenes.
+  - The two free templates (The Letter, Constellations) have the "no footer" extra switched on. A plain free gift asks for a sign-in instead of the Etsy box, so this is the full version their listings sell.
+  - Midnight Countdown types its New Year words (`scripts/etsy-words.mjs`, shared with `etsy-shots.mjs`).
+  - Typing stops at a word after 1.7 s, because Pack Your Bags draws its trip on every keystroke.
+- **Photos, after "How it works"** (`etsy-photos.mjs` with `ETSY_MAKING`):
+  - 6, "You type their name / and it's the first thing they see": the editor, and the gift's first screen with the name ("Someone made this for you", or "For Ivy" where the gift opens on its own screen). The name fades in for two seconds and the screen fades out right after, so the capture holds it at the end of the fade-in.
+  - 7, "You write it on your phone / and add your own photos".
+  - 8, "You check it in Preview / then type your Etsy order number".
+  - 9 and 10 where the demo has them: the ending (a P.S. to tap open and the reaction they can send, or a countdown) and one moment the first five don't show.
+  - Listings have 8 to 10 photos; Museum has 7.
+  - Left out: frames already in photos 1-5, half-scrolled screens, Pack Your Bags' countdown (it reads 00 00 00 00 in the demo) and Bat Swarm's bats spelling the name (not legible as a still).
+- **Uploading:** one file input takes the photos and the video together, in order. A round of uploads has to stay under 10 MB in all, so three listings at a time. The editor counts a video as "Photos" in "You changed:".
+- **Checked:**
+  - every making video frame by frame (`vcheck.mjs`): 11.9-14.9 s, 30 fps, 1080x1920, no blank, grey or flash frames, 0-4 single repeated frames (cut starts, photos loading);
+  - the 54 copies Etsy serves (720x1280, picked by frame count against the local file), the same way;
+  - all 193 new photos looked at;
+  - every listing read back.
+
 
 Live in the drafts since 28 Oct. Each title starts with what buyers search; tags are at most 20 characters.
 

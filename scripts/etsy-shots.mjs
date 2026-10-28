@@ -8,6 +8,7 @@ import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
 import { linkSync, mkdirSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { WORDS } from "./etsy-words.mjs";
 
 const [WT, OUT, BASE = "https://tryethos.io", ...only] = process.argv.slice(2);
 const req = createRequire(join(WT, "package.json"));
@@ -17,21 +18,6 @@ const VIDEO = process.env.ETSY_VIDEO === "1";
 
 /** Seconds of the first screen kept before the first tap: the bouquet is the picture itself, so it stays longer. */
 const PREROLL = { bouquet: 3.5 };
-
-/**
- * Words a buyer types into the gift, swapped into a demo whose listing sells it for another day: the
- * Midnight Countdown demo counts to a birthday, its listing to New Year's Eve (its own countdown already
- * ends at midnight on 1 January). Only the fields' text changes; the template draws it as it would.
- */
-const WORDS = {
-  "midnight-countdown": [
-    ["Until you're 30", "Until 2027"],
-    ["Happy birthday, Ana.", "Happy New Year, Ana."],
-    ["I wanted to be the first. Not", "I wanted to be the first this year. Not"],
-    ["the day gets loud", "everyone starts singing"],
-    ["So: happy birthday. Here's the year in six frames.", "So: happy New Year. Here's the last one in six frames."],
-  ],
-};
 
 /** Records the screen while `run` plays the gift, then cuts the first 15 s into dir/video.mp4. */
 async function screencast(page, dir, run, slug) {
