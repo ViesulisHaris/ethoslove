@@ -73,10 +73,13 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - The 17 pins went in by bulk upload (`etsy/pins/pinterest-bulk.csv`, images served from `tryethos.io/pins/etsy/`). Two publish at once, then 3 a day at 13:00/18:00/23:00 UTC until 2 Nov.
   - Pinterest no longer lets you claim an Etsy shop, so tryethos.io is claimed instead (the `p:domain_verify` tag in the root layout).
 
-**Ready to enter on Etsy** (the browser work waits until the wave-3 session is done with Brave):
-- `etsy/listings-es.md`: Spanish titles, tags and descriptions for the 17. Add Spanish as a shop language first.
-- `etsy/replies-and-pins.md`: five Etsy saved replies (EN/ES). The pin table there is now on Pinterest.
-- `etsy/pins/<slug>.jpg`: 1000×1500 pins, made by `scripts/etsy-pins.mjs`.
+- **Spanish:** added as a shop language on 28 Oct. Shoppers browsing Etsy in Spanish see the Spanish versions.
+  - The 17 original listings have Spanish titles, 13 tags and descriptions (`etsy/listings-es.md`).
+  - The shop texts are translated too: title, announcement, both thank-you messages, sections, FAQ and About.
+  - The two legal policies stay in English. Photos and videos have no per-language version on Etsy, so they stay English.
+  - Checked signed out as a shopper in Spain: the Spanish title, description, sale price and seller "Ethos" show.
+  - The 37 wave-3 listings are not translated yet.
+- **Saved replies:** the five from `etsy/replies-and-pins.md` are in Etsy as "snippets", reached from the snippet icon under any message box.
 - A one-off rank check is scheduled for 29 Oct 10:00, in the signed-out in-app browser.
 
 ### The test order

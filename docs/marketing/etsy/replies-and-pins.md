@@ -1,9 +1,13 @@
 # Etsy saved replies and Pinterest pins
 
-## Saved replies (Etsy → Messages → Saved replies)
+## Saved replies (Etsy calls them snippets)
 
 Fast answers count towards the shop's service score and, after 5 orders, the Star Seller badge.
 Never promise anything the site doesn't do.
+
+All five are in Etsy since 28 Oct 2026. Use them from the snippet icon under any message box.
+"Save as a new snippet" there saves whatever is in the box. Etsy's Manage snippets list shows
+apostrophes as `&#39;`, but the inserted text is correct.
 
 **Where's my gift? (EN)**
 Hi! Your gift is made on our site, nothing to download: go to tryethos.io/etsy and type your order number (it's in Etsy's email, after "Order #"). Your gift opens on your phone: add their name, your photos and your words, then press Send, and its link is ready to share. If anything doesn't work, reply here and I'll sort it out.
