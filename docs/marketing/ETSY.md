@@ -60,6 +60,13 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 
 **Where buyers are told about tryethos.io/etsy (28 Oct):** a starred "★ HOW TO GET YOUR GIFT ★" block right above "No Canva, no app" in every description, the fifth photo ("Go to tryethos.io/etsy: type your Etsy order number. No download.", all 17 replaced and checked as Etsy serves them), step 1 of every listing's "How it works", the shop announcement, the first FAQ, "Message to buyers" on every receipt and "Message to buyers for digital items" on the Downloads page (Shop Manager → Settings → Info & Appearance). Etsy's own emails can't be edited, and its guest email shows neither message.
 
+**Launch pricing and ads (owner's go, 28 Oct):**
+- **Sale LAUNCH40:** 40% off the whole shop, 28 Oct – 22 Nov. €10.99 becomes €6.59 (€7.97 with Latvian VAT), and new listings get it too. It is legal because €10.99 was the only price before. Top competitors all show 25–57% off.
+- **Cyber Specials:** signed up at 40%, 23 Nov – 1 Dec (Etsy's event), so the price holds through 1 Dec. After that it goes back to €10.99; the next sale should be a real event, not a permanent one.
+- **Etsy Ads:** approved at $3–5/day from about 12 Nov, when a new shop's 15-day wait ends. Not started yet.
+- **Search:** on 28 Oct none of the 17 listings showed up signed out, even for their exact titles; Etsy hadn't indexed them yet. Signed in as the shop, Etsy hides your own listings, so measure ranks signed out.
+- **The 37 remaining templates:** listing them is approved.
+
 ### The test order
 
 **Real test order #4213425511, 28 Oct:** paid €1.20 with Apple Pay as a guest. Etsy's guest email only offers "Sign in & view order", so the owner couldn't reach the PDF; that led to /etsy. `/api/etsy/find` read the real receipt correctly (popup-card), and the editor opened with the order filled in.
