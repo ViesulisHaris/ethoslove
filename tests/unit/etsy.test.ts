@@ -19,11 +19,12 @@ vi.mock("@/lib/auth/get-user", () => ({ getCurrentUser: async () => state.user }
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: async () => state.allowed }));
 vi.mock("@/lib/email/notify", () => mail);
 
-const { claimable, etsyOrderNumber, skuTemplate, claimKey } = await import("@/lib/etsy/receipt");
+const { claimable, orderTemplates, etsyOrderNumber, skuTemplate, claimKey } = await import("@/lib/etsy/receipt");
 const { claimEtsyItem } = await import("@/lib/etsy/claim");
 const { accessToken, fetchReceipt, keepConnected, EtsyError } = await import("@/lib/etsy/api");
 const { reconcileEtsyRefunds } = await import("@/lib/etsy/refunds");
 const claimRoute = await import("@/app/api/etsy/claim/route");
+const findRoute = await import("@/app/api/etsy/find/route");
 const cronRoute = await import("@/app/api/cron/etsy/route");
 const connectRoute = await import("@/app/api/etsy/connect/route");
 const callbackRoute = await import("@/app/api/etsy/callback/route");
@@ -199,6 +200,43 @@ describe("the shop's Etsy sign-in", () => {
     await expect(fetchReceipt(fake.db as never, CONFIG, RECEIPT, NOW, etsyFetch(503) as never)).rejects.toEqual(new EtsyError("unavailable"));
     // An answer about some other order is no answer.
     await expect(fetchReceipt(fake.db as never, CONFIG, RECEIPT, NOW, etsyFetch(receipt({ receipt_id: 1 })) as never)).rejects.toEqual(new EtsyError("unavailable"));
+  });
+});
+
+describe("POST /api/etsy/find", () => {
+  const find = (order: unknown) => findRoute.POST(new NextRequest("https://ethos.test/api/etsy/find", { method: "POST", body: JSON.stringify({ order }) }));
+
+  it("names the gifts a paid order is for, from the number alone, and hands nothing over", async () => {
+    vi.stubGlobal("fetch", etsyFetch(receipt({}, [{ sku: "ethos-popup-card" }, { sku: "ethos-bouquet", tx: 9001 }, { sku: "ethos-popup-card", tx: 9002 }])));
+    const res = await find(`#${RECEIPT}`);
+    expect([res.status, await res.json()]).toEqual([200, { templates: ["popup-card", "bouquet"] }]);
+    expect(fake.rows("purchases")).toEqual([]);
+    expect(fake.rows("template_unlocks")).toEqual([]);
+  });
+
+  it("says why an order can't be used, as the claim does", async () => {
+    const cases: [unknown, number, Record<string, unknown>][] = [
+      [receipt({ status: "payment processing" }), 402, { error: "not_paid" }],
+      [receipt({ status: "fully refunded" }), 410, { error: "refunded" }],
+      [receipt({}, [{ sku: "a-mug" }]), 404, { error: "order_not_found" }],
+      [404, 404, { error: "order_not_found" }],
+      [503, 502, { error: "etsy_unavailable" }],
+    ];
+    for (const [answer, status, body] of cases) {
+      vi.stubGlobal("fetch", etsyFetch(answer));
+      const res = await find(String(RECEIPT));
+      expect([res.status, await res.json()]).toEqual([status, body]);
+    }
+    expect(orderTemplates(receipt({ refunds: [{}] }))).toEqual({ ok: false, error: "refunded" });
+  });
+
+  it("checks the number before asking Etsy, and slows down guessing", async () => {
+    const fetch = etsyFetch(receipt());
+    vi.stubGlobal("fetch", fetch);
+    expect((await find("not a number")).status).toBe(400);
+    state.allowed = false;
+    expect([(await find(String(RECEIPT))).status]).toEqual([429]);
+    expect(fetch).not.toHaveBeenCalled();
   });
 });
 

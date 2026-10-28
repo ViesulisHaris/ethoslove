@@ -9,7 +9,10 @@ On 27 Oct 2026 the top results for those searches were Canva templates the buyer
 
 1. The buyer pays on Etsy. Etsy charges the price and, for EU and UK buyers, the VAT on digital items.
 2. Etsy hands them the listing's download at once: a one-page PDF with a link (and QR code) to
-   `tryethos.io/etsy/<slug>`.
+   `tryethos.io/etsy/<slug>`. A buyer who checked out as a guest can't download it without signing in
+   to Etsy (seen on the real test order, 28 Oct), so every listing and the message to buyers also give
+   **tryethos.io/etsy**: type the order number from any Etsy email and it opens the gift bought, the
+   number already in its "Bought on Etsy" box (`/api/etsy/find`, which hands nothing over).
 3. That page shows the gift running and three steps; its button opens `/create/<slug>?etsy=1`.
 4. They make the gift on the site like anyone else. When they press Send, the pay sheet shows
    **Bought on Etsy** instead of prices: the Etsy order number, and an email if they have no account.
@@ -209,7 +212,7 @@ present waits at the front. They tap the candles to light them, make a wish, and
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add their name, your photos and your words. Pick a colour: vanilla, midnight, kraft or cherry.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -232,7 +235,7 @@ one flower at a time, then open the little card inside to find your message. Add
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Pick the flowers and colours, write your card, add photos.
 3. Press Send and type your Etsy order number. Your bouquet's link is ready to share.
 
@@ -255,7 +258,7 @@ at the bottom, with one last kiss by your name. 1 to 9 photos. Cream, noir or bl
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your words and what you call them.
 3. Press Send and type your Etsy order number. Your letter's link is ready to share.
 
@@ -275,7 +278,7 @@ Up to 20 photos and a video clip, with music.
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add their name, photos, a video and your message.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -296,7 +299,7 @@ bottom. 1 to 10 photos. Blush, or something blue.
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your song and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -317,7 +320,7 @@ it prints the whole roll as a strip, and your letter comes out on a printed card
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, captions and letter. Pick baby pink, silver, lilac or black.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -337,7 +340,7 @@ handwriting, a typed letter from you, their song playing, and a bouquet at the e
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, notes and letter. Pick Blossom, Favorite person, Seaside, Sunshine or Memories.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -357,7 +360,7 @@ with your message. 2 to 20 photos, a video clip and music.
 No Canva, no app: you make it on your phone in a few minutes and send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, their plaques and your message.
 3. Press Send and type your Etsy order number. Your gallery's link is ready to share.
 
@@ -383,7 +386,7 @@ A glass jar stuffed with folded notes. They shake the phone (or tap the jar) and
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Write your reasons, add photos, pick a colour.
 3. Press Send and type your Etsy order number. Your jar's link is ready to share.
 
@@ -405,7 +408,7 @@ Your home on one island, theirs on the other, and the real distance between you 
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Type both towns, add your photos and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -427,7 +430,7 @@ Their name is on the cover. They open it, a globe turns, the route draws itself 
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add both cities, your photos and your message.
 3. Press Send and type your Etsy order number. Your passport's link is ready to share.
 
@@ -449,7 +452,7 @@ They pack an open suitcase with your clues, one luggage tag at a time. The lid s
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Type where you're going, when, and your clues; add photos.
 3. Press Send and type your Etsy order number. Your trip's link is ready to share.
 
@@ -471,7 +474,7 @@ A stack of scratch cards. They rub the foil away and it clears with a little bur
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and a line for each card, then the last card's message.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -493,7 +496,7 @@ A snow globe on a shelf. A harder shake makes a wilder storm, and turning the ph
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos, your lines and your letter.
 3. Press Send and type your Etsy order number. Your globe's link is ready to share.
 
@@ -515,7 +518,7 @@ Leaves or snow fall past the window. Your photos hang from a string on wooden pe
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Write your letter, add photos and their song.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 
@@ -537,7 +540,7 @@ A tiny retro game. They drag the basket to catch hearts, stars or slices of cake
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and your message, pick what falls.
 3. Press Send and type your Etsy order number. Your game's link is ready to share.
 
@@ -559,7 +562,7 @@ Under a pink sunset they press play: a gingham bow, flower stickers, a bouquet, 
 No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
 
 How it works:
-1. After you buy, download the PDF and open its link.
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
 2. Add your photos and captions, your song and your letter.
 3. Press Send and type your Etsy order number. Your gift's link is ready to share.
 

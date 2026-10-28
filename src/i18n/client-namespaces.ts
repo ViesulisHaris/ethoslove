@@ -40,7 +40,7 @@ export const CLIENT_NAMESPACES = {
   // The ad landing: only the live demo's own words.
   "(marketing)/try/layout": ["templates"],
   // An Etsy order's page: the same live demo.
-  "(marketing)/etsy/layout": ["templates"],
+  "(marketing)/etsy/layout": ["templates", "etsyFind"],
   // Where a free gift's footer leads: the template cards.
   "(marketing)/made-with-ethos/page": ["templates"],
   "(marketing)/occasions/layout": ["templates", "occasions"],

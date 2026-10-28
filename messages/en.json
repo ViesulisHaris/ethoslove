@@ -760,6 +760,30 @@
     "cta": "Make my {template}",
     "help": "Stuck? Message us on Etsy and we'll sort it out."
   },
+  "etsyFind": {
+    "metaTitle": "Bought on Etsy? Make your gift",
+    "title": "Bought on Etsy?",
+    "lead": "Type your Etsy order number and we'll open the gift you bought. Nothing to download.",
+    "order": "Etsy order number",
+    "orderHint": "The long number after \"Order #\" in Etsy's email.",
+    "submit": "Find my gift",
+    "checking": "Checking with Etsy…",
+    "pick": "Your order has more than one gift. Which one first?",
+    "make": "Make my {template}",
+    "whereTitle": "Where's my order number?",
+    "whereEmail": "In any email Etsy sent about your order (\"Download your Etsy purchase\" or your receipt): it's the number after \"Order #\".",
+    "whereEtsy": "Signed in to Etsy? Tap You → Purchases, and it's on your order.",
+    "help": "Stuck? <shop>Message us on Etsy</shop> and we'll send you your link.",
+    "errors": {
+      "invalid_input": "That doesn't look like an Etsy order number. It's the long number after \"Order #\".",
+      "order_not_found": "We can't find that order in our Etsy shop. Check the number in Etsy's email.",
+      "not_paid": "Etsy hasn't confirmed this payment yet. Try again in a few minutes.",
+      "refunded": "This order was cancelled or refunded on Etsy.",
+      "rate_limited": "Too many tries. Wait a little while and try again.",
+      "etsy_unavailable": "We can't reach Etsy right now. Try again in a minute.",
+      "failed": "Something went wrong on our side. Try again, or message us on Etsy."
+    }
+  },
   "templates": {
     "title": "Templates",
     "subtitle": "Every one has a full live demo. Try it before you buy it.",

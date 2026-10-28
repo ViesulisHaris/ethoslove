@@ -19,6 +19,7 @@ export type FunnelEvent =
   | "second_toggled"
   | "etsy_claim_sent"
   | "etsy_claimed"
+  | "etsy_found"
   | "affiliate_click"
   | "reminder_saved"
   | "reply_started"

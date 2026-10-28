@@ -760,6 +760,30 @@
     "cta": "Crear mi {template}",
     "help": "¿Algún problema? Escríbenos en Etsy y lo arreglamos."
   },
+  "etsyFind": {
+    "metaTitle": "¿Compraste en Etsy? Crea tu regalo",
+    "title": "¿Compraste en Etsy?",
+    "lead": "Escribe tu número de pedido de Etsy y abrimos el regalo que compraste. No hay nada que descargar.",
+    "order": "Número de pedido de Etsy",
+    "orderHint": "El número largo después de «Order #» en el correo de Etsy.",
+    "submit": "Buscar mi regalo",
+    "checking": "Comprobando con Etsy…",
+    "pick": "Tu pedido tiene más de un regalo. ¿Cuál primero?",
+    "make": "Crear mi {template}",
+    "whereTitle": "¿Dónde está mi número de pedido?",
+    "whereEmail": "En cualquier correo de Etsy sobre tu pedido («Download your Etsy purchase» o tu recibo): es el número después de «Order #».",
+    "whereEtsy": "¿Tienes sesión en Etsy? Ve a Tú → Compras y aparece en tu pedido.",
+    "help": "¿Te has atascado? <shop>Escríbenos en Etsy</shop> y te enviamos tu enlace.",
+    "errors": {
+      "invalid_input": "Eso no parece un número de pedido de Etsy. Es el número largo después de «Order #».",
+      "order_not_found": "No encontramos ese pedido en nuestra tienda de Etsy. Revisa el número en el correo de Etsy.",
+      "not_paid": "Etsy aún no ha confirmado este pago. Inténtalo de nuevo en unos minutos.",
+      "refunded": "Este pedido se canceló o se reembolsó en Etsy.",
+      "rate_limited": "Demasiados intentos. Espera un poco y vuelve a intentarlo.",
+      "etsy_unavailable": "Ahora mismo no podemos conectar con Etsy. Inténtalo en un minuto.",
+      "failed": "Algo ha fallado por nuestra parte. Inténtalo de nuevo o escríbenos en Etsy."
+    }
+  },
   "templates": {
     "title": "Plantillas",
     "subtitle": "Todas tienen una demo completa en vivo. Pruébala antes de comprar.",

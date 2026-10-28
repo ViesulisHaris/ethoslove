@@ -66,9 +66,8 @@ export type Claimable =
  * being paid for ("open", "payment processing") waits, and a cancelled or refunded one never counts.
  */
 export function claimable(receipt: EtsyReceipt, slug: string): Claimable {
-  const status = receipt.status.toLowerCase();
-  if (status === "canceled" || status === "cancelled" || status.includes("refunded") || (receipt.refunds?.length ?? 0) > 0) return { ok: false, error: "refunded" };
-  if (receipt.is_paid !== true || (status !== "paid" && status !== "completed")) return { ok: false, error: "not_paid" };
+  const unpaid = paymentProblem(receipt);
+  if (unpaid) return { ok: false, error: unpaid };
   const units: ClaimableUnit[] = [];
   for (const tx of receipt.transactions) {
     if (skuTemplate(tx.sku) !== slug) continue;
@@ -78,6 +77,25 @@ export function claimable(receipt: EtsyReceipt, slug: string): Claimable {
     for (let unit = 0; unit < count; unit++) units.push({ key: claimKey(receipt.receipt_id, tx.transaction_id, unit), listingId: tx.listing_id, amount, currency });
   }
   if (units.length > 0) return { ok: true, units };
-  const templates = [...new Set(receipt.transactions.map((tx) => skuTemplate(tx.sku)).filter((s): s is string => s !== null))];
-  return { ok: false, error: "other_template", templates };
+  return { ok: false, error: "other_template", templates: orderedTemplates(receipt) };
+}
+
+/**
+ * The templates a paid order is for, from the order number alone: how /etsy finds a buyer's gift
+ * without the PDF. Handing them over is still the claim's job (claimable), item by item.
+ */
+export function orderTemplates(receipt: EtsyReceipt): { ok: true; templates: string[] } | { ok: false; error: "not_paid" | "refunded" } {
+  const unpaid = paymentProblem(receipt);
+  return unpaid ? { ok: false, error: unpaid } : { ok: true, templates: orderedTemplates(receipt) };
+}
+
+function paymentProblem(receipt: EtsyReceipt): "not_paid" | "refunded" | null {
+  const status = receipt.status.toLowerCase();
+  if (status === "canceled" || status === "cancelled" || status.includes("refunded") || (receipt.refunds?.length ?? 0) > 0) return "refunded";
+  if (receipt.is_paid !== true || (status !== "paid" && status !== "completed")) return "not_paid";
+  return null;
+}
+
+function orderedTemplates(receipt: EtsyReceipt): string[] {
+  return [...new Set(receipt.transactions.map((tx) => skuTemplate(tx.sku)).filter((s): s is string => s !== null))];
 }

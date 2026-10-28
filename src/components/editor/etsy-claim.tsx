@@ -10,8 +10,7 @@ import { AuthForm } from "@/components/auth/auth-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { track } from "@/lib/analytics/track";
-
-const ETSY_MODE = "ethos-etsy";
+import { ETSY_MODE, rememberedEtsyOrder } from "@/lib/etsy/order-memory";
 
 /**
  * Whether this visitor came from an Etsy order (the PDF's link, /etsy/<slug> → /create/<slug>?etsy=1).
@@ -61,6 +60,12 @@ export function EtsyClaim({ slug, locale, guest, returnTo, blocked, onLeave }: {
   // The order went to an account this email already has: its owner signs in here, the email typed.
   const [signIn, setSignIn] = useState(false);
   const name = getManifest(slug)?.name[locale] ?? slug;
+  useEffect(() => {
+    // The number typed on /etsy (lib/etsy/order-memory.ts), once mounted: the tab's storage is the browser's.
+    const known = rememberedEtsyOrder();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (known) setOrder((typed) => typed || known);
+  }, []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
