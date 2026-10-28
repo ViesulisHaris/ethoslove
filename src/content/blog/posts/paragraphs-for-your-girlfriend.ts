@@ -107,7 +107,7 @@ export const post: BlogPost = {
             "**Read it out loud once.** Any sentence you'd never say to her face, rewrite or cut.",
             "**Cut the last line if it repeats the first.** Most paragraphs end one sentence too late.",
             "**Check the timing.** If she's at work, send it for her lunch break or her evening, when she isn't rushing.",
-            "**Don't send three in a week.** A long message is special because it's rare.",
+            "**Don't send three in a week.** A long message is special because it's rare. For shorter lines in between, see our [cute things to say to your girlfriend](/blog/cute-things-to-say-to-your-girlfriend).",
           ],
         },
         {
@@ -245,7 +245,7 @@ export const post: BlogPost = {
             "**Léelo en voz alta una vez.** Cualquier frase que nunca le dirías a la cara, reescríbela o quítala.",
             "**Quita la última frase si repite la primera.** Casi todos los textos terminan una frase tarde.",
             "**Elige bien el momento.** Si está trabajando, mándalo para su descanso o para la noche, cuando no vaya con prisa.",
-            "**No mandes tres en una semana.** Un texto largo es especial porque llega pocas veces.",
+            "**No mandes tres en una semana.** Un texto largo es especial porque llega pocas veces. Para frases más cortas entre medias, mira nuestras [cosas bonitas para decirle a tu novia](/blog/cute-things-to-say-to-your-girlfriend).",
           ],
         },
         {

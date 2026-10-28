@@ -1,6 +1,7 @@
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { BlogContent, BlogPost } from "./types";
 import { post as cuteThingsToSayToYourBoyfriend } from "./posts/cute-things-to-say-to-your-boyfriend";
+import { post as cuteThingsToSayToYourGirlfriend } from "./posts/cute-things-to-say-to-your-girlfriend";
 import { post as goodMorningMessagesForHer } from "./posts/good-morning-messages-for-her";
 import { post as halloweenIdeasForCouples } from "./posts/halloween-ideas-for-couples";
 import { post as howToWriteALoveLetter } from "./posts/how-to-write-a-love-letter";
@@ -13,7 +14,7 @@ import { post as reasonsWhyILoveYou } from "./posts/reasons-why-i-love-you";
  * Every post on /blog. A new post is one file in ./posts and one entry here; the list is sorted
  * newest first below, so the order here doesn't matter. docs/blog/PLAYBOOK.md is how they're written.
  */
-const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend];
+const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend];
 
 export const BLOG_POSTS: readonly BlogPost[] = [...POSTS].sort((a, b) => b.published.localeCompare(a.published) || a.slug.localeCompare(b.slug));
 
