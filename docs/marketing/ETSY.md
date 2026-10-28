@@ -39,7 +39,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - EU right of withdrawal: 14 days, with the model form. It is stated rather than waived because Etsy's checkout doesn't ask the buyer to give it up for the gift; unstated, the law stretches it to 12 months.
   - The EU ODR link is left off: that platform closed in 2025.
   - Etsy's advisor lists nothing left to do; only a seller photo is missing.
-- **Seller status in the EU says "Private individual".** Migla is a company, so it should be "professional seller" with the company's details. That is the owner's declaration (Shop Home editor → Seller details → Edit).
+- **EU seller status: Trader** (set 28 Oct, owner's OK). Buyers see it under "View shop registration details", with SIA MIGLAI's registration and VAT numbers, address and support email from `src/content/legal.ts`. There is no phone number: add one under Other details if the company gets one.
 - **17 listings live since 28 Oct:** the first 8, and 9 more (wave 2). Publishing cost $3.40; each renews itself every four months for $0.20.
   - each has 5 photos (Museum has 4), a 15 s video, its PDF and its SKU;
   - all 13 tags, €10.99, quantity 999. Etsy adds VAT on top for EU buyers (a buyer in Latvia sees €13.30, "VAT included");
