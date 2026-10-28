@@ -59,6 +59,11 @@ the next morning the daily check takes the template back.
 ### The test order
 
 1. Someone else buys one listing. A shop can't buy from itself, and the buyer shouldn't leave a review: a refunded order with a review looks like the shop bought it.
+   **A promo code makes it cost about €1** (created 28 Oct, in Etsy under Marketing → Sales and discounts; the code itself is kept out of this repo).
+   - It takes €10 off any listing, so a buyer pays €0.99 plus their VAT: about €1.20 in Latvia.
+   - It works from 28 Oct to 11 Nov 2026, twice in all, once per buyer. Etsy caps percentage codes at 75%, hence the fixed amount.
+   - The buyer types it at checkout, or opens the shop link with `?coupon=<code>`.
+   - Our side doesn't look at the price, so a discounted order unlocks the gift like a full-price one.
    A message to send them: *"Could you test my Etsy shop? Buy any gift at tryethos.etsy.com and I'll refund you the same day. After paying, download the PDF, open its link on your phone, make a little gift for anyone, press Send and type the order number from your Etsy receipt. Tell me if anything was confusing. Please don't leave a review."*
 2. Check they got the "It's live" page and that their gift's link opens on another phone. The logs show it too: `vercel logs --scope ethoslvoe --project ethoslove` should have `POST /api/etsy/claim 200` and no `[etsy]` errors.
 3. Refund the order on Etsy: Shop Manager → Orders → the order → Issue a refund, full amount.
