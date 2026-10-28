@@ -201,6 +201,43 @@ boyfriend"** (one). Those are the quickest #1s.
 5. **Shop:** sections done on 28 Oct. Still to do: the Spanish texts as Etsy translations, and replies within
    24 hours. A sale only if the price was really higher before.
 
+### Ranking audit, 28 Oct
+
+Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills, reviewed, then installed in `~/.claude/skills`) and current guides.
+
+**Where we stand:**
+- The etsy-seo analyzer scores the 17 listings 83–91/100:
+  - titles and tags are full and well within limits;
+  - Jar of Reasons and Scratch Card titles lack a buyer modifier ("personalized", "gift");
+  - photos score 50/100 (5 of 20 slots);
+  - attributes 80/100: only Occasion is set;
+  - descriptions have no closing call to action.
+- Etsy's own search-visibility page rates the shop "set up for success".
+- Each listing has room for a second video.
+
+**What ranks on Etsy (2026):**
+- Relevance first: title, tags, category, attributes.
+- Then listing quality: clicks, favourites, add-to-basket and sales relative to views. Conversion is the biggest lever.
+- Dwell time, which video helps.
+- A short boost for new or renewed listings.
+- Shop reputation: reviews, policies, replies.
+- Each shopper's own history.
+
+**The plan, in order:**
+1. **Conversion first** (done: the 40% sale, the clear "how to get your gift" block, the new fifth photo).
+2. **Attributes:** fill every attribute that fits ("Show all attributes": Occasion, Holiday, Recipient…) on all listings; wave 3 does it as it builds.
+3. **A second video and up to 10 more photos per listing:** the recipient's view, the making, "works on any phone".
+4. **Titles:** add a true buyer modifier ("Personalized", "Gift for…") where it is missing; a closing call to action in the descriptions.
+5. **Personalisation fields** (Etsy "Custom options"): they would put us under the "Personalised" filter (eRank: "personalized gift" ≈ 63K searches a month). The cost is an extra checkout field. **Owner's decision.**
+6. **Etsy Ads from about 12 Nov:**
+   - $5/day on all listings for the first 14 days, then cut any listing with 30+ clicks and no sale, and keep the converters.
+   - Ceiling: cost per sale under the €5.40 a sale nets during the sale.
+   - KPIs: click-through 1.5%+, conversion 2%+, ROAS 2+.
+   - Per-listing strategies only unlock at $25/day.
+   - Offsite Ads stay on (fee only on a sale).
+7. **Outside traffic to the listings** (TikTok, Pinterest), through Etsy's Share & Save links, which return 4% of the fees on those sales.
+8. **Re-measure ranks signed out** (the in-app browser) once indexed, then weekly. Searches to track: interactive birthday card, digital love letter, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book.
+
 ## The listings
 
 Live in the drafts since 28 Oct. Each title starts with what buyers search; tags are at most 20 characters.
