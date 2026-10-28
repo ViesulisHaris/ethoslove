@@ -63,7 +63,7 @@ export function EtsyFind({ locale }: { locale: GiftLocale }) {
             onChange={(e) => setOrder(e.target.value)}
             inputMode="numeric"
             autoComplete="off"
-            placeholder="4213425511"
+            placeholder="3456789012"
             required
             className="h-12 text-base"
             data-testid="etsy-find-order"
