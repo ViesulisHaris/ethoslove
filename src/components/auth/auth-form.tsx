@@ -22,14 +22,14 @@ function safeNext(value: string | null): string {
   return value;
 }
 
-export function AuthForm({ mode, next: nextOverride, compact = false }: { mode: "login" | "signup"; next?: string; compact?: boolean }) {
+export function AuthForm({ mode, next: nextOverride, compact = false, email: knownEmail = "" }: { mode: "login" | "signup"; next?: string; compact?: boolean; email?: string }) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const search = useSearchParams();
   const next = safeNext(nextOverride ?? search.get("next"));
   const callbackError = search.get("error") === "callback";
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(knownEmail);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [code, setCode] = useState("");
   const [codeState, setCodeState] = useState<"idle" | "checking" | "wrong">("idle");

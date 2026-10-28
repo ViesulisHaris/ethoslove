@@ -1206,6 +1206,8 @@
       "submit": "Send my gift",
       "checking": "Checking with Etsy…",
       "notEtsy": "Not from Etsy? See the prices",
+      "openOther": "Open {template}",
+      "onAccount": "Your order is on the Ethos account for {email}. Sign in to send your gift.",
       "errors": {
         "invalid_input": "That doesn't look like an Etsy order number. It's the long number on your Etsy receipt.",
         "email_required": "Add your email, so your gift has an account to live in.",

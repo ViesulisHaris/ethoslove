@@ -34,6 +34,12 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - titles, tags, a first line and the Occasion rewritten on 28 Oct from Etsy's own search suggestions (see Getting found);
   - "made by me", "created by me".
 - **The Etsy app "ethos":** approved (Personal Access), callback URL set, the three keys in Vercel, and the shop connected on 28 Oct. A made-up order number now answers "order_not_found", which only happens once Etsy answers for our shop.
+- **The buyer's path, tested locally on 28 Oct** against a stand-in Etsy (iPhone sizes, Chrome and Safari's engine). A new buyer goes from the PDF link to a sent gift in about 18 s, and the recipient's link opens. Also tested:
+  - a returning buyer signs in inside the Etsy box, their email filled in, and the gift they wrote goes out;
+  - an order of 2 sends two gifts and refuses a third;
+  - an order for another gift offers "Open <that gift>";
+  - unpaid, typo and already-used orders each get their own message;
+  - a refunded order is taken back by the daily check (its gift link stops working, as with a Stripe refund), and a partly refunded one is only flagged in the logs.
 
 **Left:** a real test order bought by someone else, sent as a gift on the site, then refunded on Etsy. By
 the next morning the daily check takes the template back.
