@@ -59,7 +59,11 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 **Left:** a real test order bought by someone else, sent as a gift on the site, then refunded on Etsy. By
 the next morning the daily check takes the template back.
 
+**Where buyers are told about tryethos.io/etsy (28 Oct):** step 1 of every listing's "How it works", the shop announcement, the first FAQ, "Message to buyers" on every receipt and "Message to buyers for digital items" on the Downloads page (Shop Manager → Settings → Info & Appearance). Etsy's own emails can't be edited, and its guest email shows neither message.
+
 ### The test order
+
+**Real test order #4213425511, 28 Oct:** paid €1.20 with Apple Pay as a guest. Etsy's guest email only offers "Sign in & view order", so the owner couldn't reach the PDF; that led to /etsy. `/api/etsy/find` read the real receipt correctly (popup-card), and the editor opened with the order filled in.
 
 1. Someone else buys one listing. A shop can't buy from itself, and the buyer shouldn't leave a review: a refunded order with a review looks like the shop bought it.
    **A promo code makes it cost about €1** (created 28 Oct, in Etsy under Marketing → Sales and discounts; the code itself is kept out of this repo).
