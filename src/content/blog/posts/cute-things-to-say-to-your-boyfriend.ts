@@ -67,7 +67,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cute things to text your boyfriend for no reason" },
         {
           type: "p",
-          text: "The middle of an ordinary afternoon is when a message surprises him most. These need no excuse:",
+          text: "The middle of an ordinary afternoon is when a message surprises him most. For ones that say what reminded you of him, see our [thinking of you messages for him](/blog/thinking-of-you-messages-for-him). The ones below need no excuse:",
         },
         {
           type: "list",
@@ -298,7 +298,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cosas bonitas para escribirle a tu novio sin motivo" },
         {
           type: "p",
-          text: "En mitad de una tarde cualquiera es cuando más le sorprende un mensaje. Estos no necesitan excusa:",
+          text: "En mitad de una tarde cualquiera es cuando más le sorprende un mensaje. Para los que le cuentan qué te lo recordó, tienes nuestros [mensajes de pienso en ti para él](/blog/thinking-of-you-messages-for-him). Los de abajo no necesitan excusa:",
         },
         {
           type: "list",

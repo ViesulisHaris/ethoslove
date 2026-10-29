@@ -1,0 +1,97 @@
+{
+  "slug": "thinking-of-you-messages-for-him",
+  "keyword": "thinking of you messages for him",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The 'say what reminded you' rule and the timing advice are usable at once, but one takeaway contradicted the body on when to send, and every line assumed a settled couple, leaving nothing for a new relationship."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "False claim about Ethos: 'all three are among our digital gifts for your boyfriend' (ES 'las tres están entre nuestros regalos digitales para tu novio'). /gifts/for-boyfriend lists ten ideas in src/content/recipients.ts (the-letter, on-repeat, jar-of-reasons, arcade, the-council, scratch-card, passport, pack-your-bags, front-page, constellations). Of the three, only The Letter is there. Neither paper-crane nor text-thread appears anywhere in recipients.ts."
+          ],
+          "summary": "The product paragraph claimed Paper Crane and Text Thread are on /gifts/for-boyfriend, which lists only The Letter; the Text Thread note echoed other posts; one takeaway contradicted the body; 'cough drops' and 'On a hard week' were off; and the Spanish had a misread 'volver a casa contigo', 'con total seguridad' and 'también aquí estoy'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The reason-first angle beats page one's greeting-card lists and the headings carry the search words, but the timing takeaway gave the opposite default to the body and FAQ."
+        }
+      ],
+      "applied": [
+        "Product paragraph: all three templates tied to /occasions/just-because, where they appear; /gifts/for-boyfriend offered for more ideas (EN and ES).",
+        "Timing takeaway now matches the body: send when the thought happens, unless it's his busiest hour (EN and ES).",
+        "New section 'Thinking of you messages for him when it's still new' / «…cuando estáis empezando».",
+        "Text Thread note rewritten from the schema so it no longer echoes other posts.",
+        "'In a hard week'; romantic intro sentence fixed; 'toothpaste' for 'cough drops' (EN and ES).",
+        "Spanish: «al llegar a casa estés tú», «con un aplomo total», «también estoy aquí».",
+        "Link-in sentence in cute-things-to-say-to-your-boyfriend: 'The ones below' / «Los de abajo» so 'these' isn't ambiguous.",
+        "Polish taken: 'a safe default' for an unsourced 'most people'; a grief line ('I know what today is'); heading 'Short and funny thinking of you texts for him'; ES «La mayoría de los días», «por tercera vez hoy», «Que es en él en quien has pensado», FAQ sentence clarified."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The timing takeaway now matches the body and the new-relationship section gives a reader a few weeks in lines she can send; it teaches her to write her own from whatever reminded her of him."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix landed; the template notes and the just-because claim match the code, no sentence repeats another post, and the Spanish is natural Spain Spanish in her voice."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers every tone and situation page one does, adds the reason-first rule and timing nobody else gives, and stays clear of the boyfriend, good-morning and queued posts."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: 'Thought of you' on the Saturday line (reader); a past-strength line in the hard-week list (search); «La media tarde», «al pie del cañón», «banco del parque», «la noche de allí», exact FAQ quote, varied endings in the new-relationship list and 'work pass' (editor)."
+      ]
+    }
+  ]
+}
