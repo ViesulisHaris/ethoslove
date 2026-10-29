@@ -1,0 +1,185 @@
+{
+  "slug": "what-to-write-in-boyfriends-birthday-card",
+  "keyword": "what to write in your boyfriend's birthday card",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A blank-card-tonight reader leaves with a four-line formula, a finished example, a card-size table and practical tips, where page one gives only interchangeable wishes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 7
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "The Letter template note says the photos sit 'beside' the words (EN 'with your photos beside them as polaroids', ES 'con tus fotos al lado como polaroids'). The manifest says the photos 'drop in as polaroids', and in Template.tsx the Polaroids grid renders below the letter after a 'scroll down' hint. This describes the template in a way its files don't support. The fix is below."
+          ],
+          "summary": "Birthday Cinema, scheduling and links all check out, but The Letter's note put the photos beside the words when they drop in below, one sweet line echoed reasons-why-i-love-you, 'parcel' and 'glossy card' were UK wording, and the Spanish had 'y para:', 'Exes', 'si tendría', 'novio reciente' and an ungrammatical 'el nombre que solo te llama él'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result on page one that gives a method and a finished card, with headings in the search's own words and no overlap with the long-distance or queued birthday posts."
+        }
+      ],
+      "applied": [
+        "The Letter note: photos drop in below as polaroids (EN and ES), matching the manifest and Template.tsx.",
+        "Sweet line rewritten ('Half the things I notice in a day…') so it no longer echoes reasons-why-i-love-you.",
+        "'In the box with his present' for 'travels with a parcel' in the long-distance link-in; 'a glossy finish' for 'glossy card'.",
+        "Spanish: 'y no sigas', 'o la manía de leer', 'más valiente que cuando estoy sola', 'dedícale un momento', 'El mote que solo usa él contigo', 'Sus ex', 'Si tiene que', FAQ question 'si llevamos poco tiempo', 'sobre lo que habéis vivido juntos'.",
+        "Polish taken: Birthday Cinema candles put out by blowing or swiping up; the gift holds the long version and is sent after he's read the card; 'Both are among our digital gifts'; ES 'frases vagas' and 'lo próximo que quieres hacer'; 'algo concreto'; a fresh hidden-present joke in place of the laundry-basket meme; 'my risotto' for 'my cooking'; '(Change the numbers to his age.)'; link to how-to-write-a-love-letter for the long version."
+      ],
+      "rejected": [
+        "'Romantic' heading for the sweet section: 'Sweet' already ranks with the page-one sorting and the section is plain rather than romantic."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 changes read well; the formula, finished card, size table and tips still let her write her own card tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "One claim about Ethos isn't supported by the files. 'Both are among our [digital gifts for your boyfriend](/gifts/for-boyfriend)' (ES 'Las dos están entre nuestros [regalos digitales para tu novio]') says Birthday Cinema is on that page. It isn't: /gifts/for-boyfriend lists only RECIPIENT_GUIDES.boyfriend.ideas (the-letter, on-repeat, jar-of-reasons, arcade, the-council, scratch-card, passport, pack-your-bags, front-page, constellations), in both EN and ES. A reader who taps the link won't find Birthday Cinema. This wording came from round-1 polish. The fix is below."
+          ],
+          "summary": "Round-1 fixes all landed, but the round-1 polish 'Both are among our digital gifts for your boyfriend' put Birthday Cinema on a page that doesn't list it, and the Spanish had 'Me fijo en la mitad de las cosas' (reads as noticing only half) and 'un año pesado'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The love-letter link landed; still the only page-one result with a method, a finished card and size guidance, with no overlap with the long-distance post or queued birthday topics."
+        }
+      ],
+      "applied": [
+        "Product paragraph: only The Letter is tied to /gifts/for-boyfriend (it's first on that list); Birthday Cinema keeps its premium and scheduling clause (EN and ES).",
+        "ES: «La mitad de las cosas en las que me fijo al día son para contártelas después» and «un año duro».",
+        "Polish taken: Birthday Cinema note adds scheduling it for midnight when the card comes the night before; a guard on the 'turning 25 again' joke; heading 'Sweet and romantic birthday card messages for him' / «Frases bonitas y románticas…»; ES link-in «dentro de la caja con su regalo» to match the EN."
+      ],
+      "rejected": [
+        "'Cabinet' for 'cupboard': cupboard is understood everywhere, and the reviewer suggested leaving it."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes landed and read clearly; she can write a card that could only be about him tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim now checks out, including which templates /gifts/for-boyfriend lists, but the formula's opening sentence nearly repeated how-to-write-a-love-letter in both languages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes landed; the 'romantic' heading picks up page one's sorting, and no top result has the formula, finished card or size guidance."
+        }
+      ],
+      "applied": [
+        "Formula intro rewritten ('A card the size of your hand can't hold the whole relationship, so don't ask it to.' / «Una tarjeta del tamaño de tu mano no puede con toda la relación…») so it no longer echoes the love-letter guide.",
+        "Polish taken: «Pon ahí», a lighter Letter note in ES, «hace tiempo que los pasó», «Volvería a decirte que sí» in place of a stock line used in three posts, and 'I'm glad I get to be at your birthdays. All of them, I hope.' (EN and ES)."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes read naturally; the formula, finished card, size table and tips let her write a card tonight that could only be about him."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim matches the code, no sentence repeats another post, and the Spanish is natural Spain Spanish in her voice."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result in either language with a method, a finished card and size guidance, with search-word headings and no overlap with other posts."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: «Me alegro de poder estar en tus cumpleaños» (editor)."
+      ]
+    }
+  ]
+}
