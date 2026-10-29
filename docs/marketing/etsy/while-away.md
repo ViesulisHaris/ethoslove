@@ -13,7 +13,7 @@ So Etsy work needs this PC, or the owner's phone.
 
 ## Only with the PC on and the Claude app open
 
-- **Etsy rank checks:** a one-off is set for 29 Oct 10:00. On 28 Oct evening none of the 54 listings were in Etsy search yet, not even by exact title. Etsy reported nothing wrong: no policy violations, "set up for success". A new shop's listings can take a few days to appear.
+- **Etsy rank checks:** the 29 Oct 10:00 one-off never fired (the PC was asleep), so it was run by hand at 12:55. All 54 listings are indexed now: both waves show in search sorted by Newest. In the default (relevance) sort, none is in the top ~120 for any of the 12 test searches, not even by exact title. That is normal for listings a day or two old with no views, favourites or sales. Pinterest clicks, the 40% sale and, from about 12 Nov, Etsy Ads are what move them up.
 - **The other desktop tasks:** HALDEN inbox/tracking and the VID PVN on the 10th.
 
 ## From the phone
