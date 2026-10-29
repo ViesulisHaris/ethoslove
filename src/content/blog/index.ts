@@ -10,12 +10,13 @@ import { post as longDistanceBirthdayIdeas } from "./posts/long-distance-birthda
 import { post as openWhenLetterIdeas } from "./posts/open-when-letter-ideas";
 import { post as paragraphsForYourGirlfriend } from "./posts/paragraphs-for-your-girlfriend";
 import { post as reasonsWhyILoveYou } from "./posts/reasons-why-i-love-you";
+import { post as whatToWriteInBoyfriendsBirthdayCard } from "./posts/what-to-write-in-boyfriends-birthday-card";
 
 /**
  * Every post on /blog. A new post is one file in ./posts and one entry here; the list is sorted
  * newest first below, so the order here doesn't matter. docs/blog/PLAYBOOK.md is how they're written.
  */
-const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim];
+const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard];
 
 export const BLOG_POSTS: readonly BlogPost[] = [...POSTS].sort((a, b) => b.published.localeCompare(a.published) || a.slug.localeCompare(b.slug));
 

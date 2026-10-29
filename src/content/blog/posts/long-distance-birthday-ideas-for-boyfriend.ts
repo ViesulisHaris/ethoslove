@@ -120,7 +120,7 @@ export const post: BlogPost = {
         { type: "quote", text: "Happy birthday. I want this to be the last one we spend in different time zones." },
         {
           type: "p",
-          text: "Then sign it the way you sign everything else. If the words still won't come, our [birthday gifts page](/occasions/birthday) has a few more prompts and a line to start from, and our [list of 100 reasons why I love you](/blog/reasons-why-i-love-you) shows how to turn a memory into a line of your own.",
+          text: "Then sign it the way you sign everything else. If it's going in a card in the box with his present, our guide on [what to write in your boyfriend's birthday card](/blog/what-to-write-in-boyfriends-birthday-card) turns this into four lines that fit. If the words still won't come, our [birthday gifts page](/occasions/birthday) has a few more prompts and a line to start from, and our [list of 100 reasons why I love you](/blog/reasons-why-i-love-you) shows how to turn a memory into a line of your own.",
         },
         { type: "h2", text: "Mistakes that make it feel further away" },
         {
@@ -270,7 +270,7 @@ export const post: BlogPost = {
         { type: "quote", text: "Feliz cumpleaños. Quiero que este sea el último que pasemos en zonas horarias distintas." },
         {
           type: "p",
-          text: "Luego fírmalo como firmas todo lo demás. Si aun así no te salen las palabras, nuestra página de [regalos de cumpleaños](/occasions/birthday) tiene unas cuantas ideas más y una frase para empezar, y nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) enseñan a convertir un recuerdo en una frase tuya.",
+          text: "Luego fírmalo como firmas todo lo demás. Si va en una tarjeta dentro de la caja con su regalo, nuestra guía de [qué escribir en la tarjeta de cumpleaños de tu novio](/blog/what-to-write-in-boyfriends-birthday-card) lo convierte en cuatro frases que caben. Si aun así no te salen las palabras, nuestra página de [regalos de cumpleaños](/occasions/birthday) tiene unas cuantas ideas más y una frase para empezar, y nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) enseñan a convertir un recuerdo en una frase tuya.",
         },
         { type: "h2", text: "Errores que hacen que la distancia se note más" },
         {
