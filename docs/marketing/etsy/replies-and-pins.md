@@ -95,5 +95,61 @@ Trick or Treat) get pins in early September, when Halloween searches start.
 | The Toast | Digital cards for every occasion | Wedding toast they pour and clink on their phone | https://www.etsy.com/listing/4604980435 |
 | Vinyl | Digital love letters | Custom vinyl record gift with your photos as album covers | https://www.etsy.com/listing/4604996914 |
 
+### Second pins, scheduled 30 Oct – 12 Nov 2026
+
+A second pin for every listing except Cap Toss (graduation searches come in spring) and the Halloween eight:
+photo 2 (the gift before and after; The Garden's photo 3) instead of the hero, a second search phrase from the listing's tags,
+and another board where one fits. Images: `pins/<slug>-b.jpg` (`ETSY_PIN=b node scripts/etsy-pins.mjs`).
+A new Pinterest account gets little reach per pin, so more fresh pins to the same listings is the free
+way to more outside visits; outside visits that buy are what lift an Etsy listing before it has sales.
+
+| Listing | Board | Pin title | Etsy listing |
+|---|---|---|---|
+| Pop-up Card | Long distance relationship gifts | Long distance birthday card for him or her | https://www.etsy.com/listing/4604473165 |
+| Birthday Cinema | Long distance relationship gifts | Birthday surprise for him when you can't be there | https://www.etsy.com/listing/4604478829 |
+| Digicam | Gifts for best friends and mom | Y2K best friend gift: a camera full of your photos | https://www.etsy.com/listing/4604503122 |
+| Arcade | Christmas gifts for him and her | Gamer gift for him: a retro game of your photos | https://www.etsy.com/listing/4604546154 |
+| XOXO | Anniversary gift ideas | Love website for her, full of your photos | https://www.etsy.com/listing/4604476273 |
+| Coquette | Anniversary gift ideas | Pink coquette gift for her with your song | https://www.etsy.com/listing/4604477605 |
+| Bouquet | Gifts for best friends and mom | Digital flowers for mom, wrapped with your card | https://www.etsy.com/listing/4604497606 |
+| Jar of Reasons | Long distance relationship gifts | Love notes jar: they tap and a reason falls out | https://www.etsy.com/listing/4604540224 |
+| On Repeat | Christmas gifts for him and her | Our song gift: your photo as their album cover | https://www.etsy.com/listing/4604524705 |
+| Halfway | Digital love letters | Miss you gift: the real distance between you | https://www.etsy.com/listing/4604519163 |
+| Passport | Anniversary gift ideas | Travel anniversary gift: a passport of your trips | https://www.etsy.com/listing/4604542210 |
+| Fireside | Christmas gifts for him and her | Cozy gift for her: a cabin, a candle, your letter | https://www.etsy.com/listing/4604523547 |
+| Scrapbook | Long distance relationship gifts | Digital scrapbook for your boyfriend or girlfriend | https://www.etsy.com/listing/4604504298 |
+| Museum | Gifts for best friends and mom | Anniversary gift for parents: a gallery of photos | https://www.etsy.com/listing/4604505462 |
+| Pack Your Bags | Christmas gifts for him and her | Surprise trip reveal gift for Christmas morning | https://www.etsy.com/listing/4604521473 |
+| Scratch Card | Digital cards for every occasion | Pregnancy reveal scratch card with your photos | https://www.etsy.com/listing/4604544324 |
+| Snow Globe | Long distance relationship gifts | Long distance Christmas gift: a snow globe of you | https://www.etsy.com/listing/4604522937 |
+| Constellations | Digital love letters | Written in the stars: your night sky of photos | https://www.etsy.com/listing/4604976457 |
+| The Letter | Long distance relationship gifts | Love letter for him, sealed with your initial | https://www.etsy.com/listing/4604969518 |
+| Autumn Reel | Anniversary gift ideas | Vintage film gift: your photos develop as they tap | https://www.etsy.com/listing/4604974128 |
+| Balloons | Gifts for best friends and mom | Best friend birthday surprise: balloons to pop | https://www.etsy.com/listing/4604981589 |
+| Bloom | Gifts for best friends and mom | Flower gift for mom that opens while she holds it | https://www.etsy.com/listing/4604977197 |
+| Dark Romance | Anniversary gift ideas | Gothic gift for her: a diary with her name in gold | https://www.etsy.com/listing/4604977780 |
+| Evergreen | Gifts for best friends and mom | Just because gift: butterflies over your photos | https://www.etsy.com/listing/4604978746 |
+| Fall for You | Long distance relationship gifts | Thinking of you gift: a candle with their name | https://www.etsy.com/listing/4604958155 |
+| Favorite Person | Digital birthday gifts | Bestie birthday gift: a scrapbook of your photos | https://www.etsy.com/listing/4604958873 |
+| Fortune Cookie | Digital love letters | Love notes in fortune cookies they crack open | https://www.etsy.com/listing/4605008148 |
+| Front Page | Gifts for best friends and mom | Gift for dad: him on the front page of a newspaper | https://www.etsy.com/listing/4604982707 |
+| The Garden | Gifts for best friends and mom | A garden gift for mom, with your letter inside | https://www.etsy.com/listing/4604987604 |
+| Kawaii | Gifts for best friends and mom | Kawaii best friend card with a waving bunny | https://www.etsy.com/listing/4604983533 |
+| Keepsake | Gifts for best friends and mom | Keepsake gift for mom: pressed flowers and a photo | https://www.etsy.com/listing/4604959573 |
+| Midnight Countdown | Long distance relationship gifts | Long distance New Year's countdown to midnight | https://www.etsy.com/listing/4604978235 |
+| Music Box | Christmas gifts for him and her | Ballerina music box gift for her, with your photos | https://www.etsy.com/listing/4604968985 |
+| Our Timeline | Digital love letters | 1 year anniversary gift: your story as a timeline | https://www.etsy.com/listing/4604991116 |
+| Paper Crane | Long distance relationship gifts | Apology card: every fold says one more line | https://www.etsy.com/listing/4604970381 |
+| Party Animals | Funny gifts | Cat birthday card with your photos in a collage | https://www.etsy.com/listing/4604984551 |
+| Photo Booth | Long distance relationship gifts | Long distance photo strip: three, two, one, flash | https://www.etsy.com/listing/4604971025 |
+| Picnic | Digital love letters | Date ideas gift: a picnic basket of your plans | https://www.etsy.com/listing/4604971701 |
+| Recipe Box | Digital cards for every occasion | Gift for grandma: a recipe card written for her | https://www.etsy.com/listing/4604986141 |
+| Sketchbook | Gifts for best friends and mom | Doodle birthday card for your best friend | https://www.etsy.com/listing/4604985399 |
+| Sticker Bomb | Gifts for best friends and mom | Best friend gift: cat meme stickers to slap on | https://www.etsy.com/listing/4604987773 |
+| Text Thread | Digital love letters | Miss you text that starts on their lock screen | https://www.etsy.com/listing/4604973173 |
+| The Council | Digital birthday gifts | Cat birthday card: the council of cats has met | https://www.etsy.com/listing/4604995276 |
+| The Toast | Anniversary gift ideas | Engagement gift: a toast they pour on their phone | https://www.etsy.com/listing/4604980435 |
+| Vinyl | Christmas gifts for him and her | Music gift for him: your photos on a vinyl record | https://www.etsy.com/listing/4604996914 |
+
 Pin description, the same pattern for each (keep the listing's first sentence, then):
 "Made on your phone in a few minutes, no Canva, no app. Instant digital gift: they open it on any phone, wherever they are."

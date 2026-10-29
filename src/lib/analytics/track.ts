@@ -20,6 +20,8 @@ export type FunnelEvent =
   | "etsy_claim_sent"
   | "etsy_claimed"
   | "etsy_found"
+  // The share screen's "Review it on Etsy" (the template).
+  | "etsy_review_click"
   | "affiliate_click"
   | "reminder_saved"
   | "reply_started"

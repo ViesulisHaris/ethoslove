@@ -1232,6 +1232,9 @@
       "notEtsy": "Not from Etsy? See the prices",
       "openOther": "Open {template}",
       "onAccount": "Your order is on the Ethos account for {email}. Sign in to send your gift.",
+      "reviewTitle": "Bought it on Etsy?",
+      "reviewBlurb": "A review there is how other people find this gift. It takes a minute, under Purchases.",
+      "reviewLink": "Review it on Etsy",
       "errors": {
         "invalid_input": "That doesn't look like an Etsy order number. It's the long number on your Etsy receipt.",
         "email_required": "Add your email, so your gift has an account to live in.",

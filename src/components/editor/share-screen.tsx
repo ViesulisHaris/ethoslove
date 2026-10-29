@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Car, Check, Copy, ExternalLink, MessageCircle, Plane, Share2, Ticket } from "lucide-react";
+import { Car, Check, Copy, ExternalLink, MessageCircle, Plane, Share2, Star, Ticket } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { GiftData } from "@/lib/gift/schema";
@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
+import { useEtsyMode } from "./etsy-claim";
 
 export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
   const t = useTranslations("editor.share");
@@ -80,6 +81,8 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
         {t("instagram")}: {t("instagramHint")}
       </p>
 
+      <EtsyReview template={data.templateSlug} />
+
       <BookTheTrip data={data} />
 
       {authed ? <RemindNextYear data={data} /> : null}
@@ -100,6 +103,32 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
         </Button>
       </div>
     </div>
+  );
+}
+
+/**
+ * After an Etsy buyer sends their gift: a plain ask for a review on Etsy, where reviews decide who
+ * gets found. Never only for good ones, never for anything in return: Etsy closes shops for that.
+ */
+function EtsyReview({ template }: { template: string }) {
+  const t = useTranslations("money.etsy");
+  const [etsy] = useEtsyMode();
+  if (!etsy) return null;
+  return (
+    <section className="mt-8 rounded-2xl border border-border bg-card p-5" data-testid="etsy-review">
+      <p className="font-display text-xl">{t("reviewTitle")}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{t("reviewBlurb")}</p>
+      <a
+        href="https://www.etsy.com/your/purchases"
+        target="_blank"
+        rel="noopener"
+        onClick={() => track("etsy_review_click", { template })}
+        className="mt-4 flex min-h-11 items-center justify-center gap-2 rounded-full border border-ink text-sm font-medium"
+      >
+        <Star className="size-4" aria-hidden />
+        {t("reviewLink")}
+      </a>
+    </section>
   );
 }
 

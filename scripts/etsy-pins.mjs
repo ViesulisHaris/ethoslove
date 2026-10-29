@@ -1,6 +1,8 @@
 // Pinterest pins for the Etsy listings, 1000x1500: the pin title over the listing's first photo,
 // in that photo's own background colour. Titles come from docs/marketing/etsy/replies-and-pins.md.
 //   node scripts/etsy-pins.mjs <repo> [slugs…]
+// ETSY_PIN=b makes the second pins instead: photo 2 (before and after), the "Second pins" table's
+// titles, saved as <slug>-b.jpg.
 import { createRequire } from "node:module";
 import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -12,7 +14,10 @@ const sharp = req("sharp");
 
 const PHOTOS = join(WT, "docs/marketing/etsy/photos");
 const OUT = join(WT, "docs/marketing/etsy/pins");
-const DOC = readFileSync(join(WT, "docs/marketing/etsy/replies-and-pins.md"), "utf8");
+const B = process.env.ETSY_PIN === "b";
+const FULL = readFileSync(join(WT, "docs/marketing/etsy/replies-and-pins.md"), "utf8").replace(/\r/g, "");
+const SECOND = FULL.indexOf("### Second pins");
+const DOC = B ? FULL.slice(SECOND) : SECOND < 0 ? FULL : FULL.slice(0, SECOND);
 
 // Listing name in the pin table → template slug.
 const SLUGS = {
@@ -42,7 +47,8 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1000, height: 1500 } });
 for (const { slug, title } of rows) {
   if (only.length && !only.includes(slug)) continue;
-  const hero = join(PHOTOS, slug, "1-hero.jpg");
+  // The Garden's photo 2 is still mostly blank paper (the garden is being drawn): its photo 3 instead.
+  const hero = join(PHOTOS, slug, !B ? "1-hero.jpg" : slug === "garden" ? "3-moments.jpg" : "2-moments.jpg");
   // The photo's own background (its top-left corner), and ink that reads on it.
   const { data } = await sharp(hero).extract({ left: 4, top: 4, width: 8, height: 8 }).raw().toBuffer({ resolveWithObject: true });
   const [r, g, b] = [data[0], data[1], data[2]];
@@ -58,7 +64,7 @@ for (const { slug, title } of rows) {
   </style></head><body><h1>${title}</h1><img src="${img}"><p>On Etsy · opens on any phone</p></body></html>`;
   await page.setContent(html, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
-  await sharp(await page.screenshot()).jpeg({ quality: 86, mozjpeg: true }).toFile(join(OUT, `${slug}.jpg`));
+  await sharp(await page.screenshot()).jpeg({ quality: 86, mozjpeg: true }).toFile(join(OUT, `${slug}${B ? "-b" : ""}.jpg`));
   console.log(slug, "ok");
 }
 await browser.close();

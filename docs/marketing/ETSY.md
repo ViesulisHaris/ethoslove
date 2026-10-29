@@ -72,6 +72,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
   - Five public boards, each with a keyword description.
   - The 17 pins went in by bulk upload (`etsy/pins/pinterest-bulk.csv`, images served from `tryethos.io/pins/etsy/`). Two publish at once, then 3 a day at 13:00/18:00/23:00 UTC until 2 Nov.
   - 29 wave-3 pins follow, 3 to 4 a day from 3 Nov to 11 Nov (Pinterest schedules at most 14 days ahead). The eight Halloween listings get pins in September.
+  - 45 second pins (another photo, another search phrase, often another board), 3 to 4 a day from 30 Oct to 12 Nov, uploaded 29 Oct (`etsy/replies-and-pins.md`, Second pins).
   - Pinterest no longer lets you claim an Etsy shop, so tryethos.io is claimed instead (the `p:domain_verify` tag in the root layout).
 
 - **Spanish:** added as a shop language on 28 Oct. Shoppers browsing Etsy in Spanish see the Spanish versions.
@@ -253,6 +254,27 @@ Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills
    - Offsite Ads stay on (fee only on a sale).
 7. **Outside traffic to the listings** (TikTok, Pinterest), through Etsy's Share & Save links, which return 4% of the fees on those sales.
 8. **Re-measure ranks signed out** (the in-app browser) once indexed, then weekly. Searches to track: interactive birthday card, digital love letter, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book.
+
+### Where ranking stands, 29 Oct
+
+Checked signed out (the in-app browser, Etsy Latvia):
+- **All 54 are indexed:** with "Newest" sort both waves appear.
+- **Default sort (relevance):**
+  - none of the 54 is in the top ~120 for any of the tracked searches, nor for narrow ones like "digital fortune cookie", "digital snow globe" or "digital music box";
+  - only a phrase no one else uses finds one: "favorite person digital scrapbook pink watercolour" puts Favorite Person 3rd.
+  - Spanish and German searches give no shortcut: Etsy translates the query and they have 1,000+ results too.
+- **Stats, 23-29 Oct:** 8 visits, none from Etsy search, 0 favourites; the one order is our test.
+- **Etsy Ads:** "14 days left", so from about 12 Nov.
+
+What that means: the listing work (titles, tags, attributes, photos, videos, the sale) is done and the
+first photos hold up against the top results. Etsy ranks a new listing by what shoppers do with it, and
+nobody has seen these yet. What moves them now:
+1. **Visits from outside that buy:** Pinterest (87 pins queued to 12 Nov, 45 of them added 29 Oct).
+   Share & Save links would return 4% of those sales; joining means accepting Etsy's terms, so it waits for the owners.
+2. **Reviews:** since 29 Oct the share screen an Etsy buyer sees after sending their gift asks, plainly,
+   for a review on Etsy (`EtsyReview` in `components/editor/share-screen.tsx`, event `etsy_review_click`).
+   Etsy allows asking; it bans anything in return and asking only for good ones.
+3. **Etsy Ads from about 12 Nov** (plan step 6), which buys the first impressions the ranking needs.
 
 ### Ranking edits, 28 Oct
 

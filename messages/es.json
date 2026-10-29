@@ -1232,6 +1232,9 @@
       "notEtsy": "¿No vienes de Etsy? Ver los precios",
       "openOther": "Abrir {template}",
       "onAccount": "Tu pedido está en la cuenta de Ethos de {email}. Inicia sesión para enviar tu regalo.",
+      "reviewTitle": "¿Lo compraste en Etsy?",
+      "reviewBlurb": "Una reseña allí es como otras personas encuentran este regalo. Es un minuto, en Compras.",
+      "reviewLink": "Reseñarlo en Etsy",
       "errors": {
         "invalid_input": "Eso no parece un número de pedido de Etsy. Es el número largo de tu recibo de Etsy.",
         "email_required": "Añade tu email, para que tu regalo tenga una cuenta donde vivir.",
