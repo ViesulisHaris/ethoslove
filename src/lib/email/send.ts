@@ -23,8 +23,23 @@ export const isUndeliverable = (to: string): boolean => UNDELIVERABLE.test(to.tr
  *
  * `headers` is for List-Unsubscribe on the optional emails: mail apps show their own
  * unsubscribe button for it, and Gmail and Yahoo expect it from anyone who sends in bulk.
+ *
+ * `idempotencyKey` makes an email once-only on Resend's side for 24 hours: a second send with the
+ * same key gets the first one's answer and sends nothing.
  */
-export async function sendEmail({ to, subject, react, headers }: { to: string; subject: string; react: ReactElement; headers?: Record<string, string> }): Promise<{ ok: boolean; skipped?: boolean; id?: string; error?: string }> {
+export async function sendEmail({
+  to,
+  subject,
+  react,
+  headers,
+  idempotencyKey,
+}: {
+  to: string;
+  subject: string;
+  react: ReactElement;
+  headers?: Record<string, string>;
+  idempotencyKey?: string;
+}): Promise<{ ok: boolean; skipped?: boolean; id?: string; error?: string }> {
   if (!to) return { ok: false, error: "no_recipient" };
   if (isUndeliverable(to)) {
     console.info(`[email] skipped (reserved test domain): ${subject}`);
@@ -37,7 +52,10 @@ export async function sendEmail({ to, subject, react, headers }: { to: string; s
   try {
     client ??= new Resend(env.resendApiKey);
     const html = await render(react);
-    const { data, error } = await client.emails.send({ from: env.emailFrom, to, subject, html, replyTo: BRAND.supportEmail, ...(headers ? { headers } : {}) });
+    const { data, error } = await client.emails.send(
+      { from: env.emailFrom, to, subject, html, replyTo: BRAND.supportEmail, ...(headers ? { headers } : {}) },
+      idempotencyKey ? { idempotencyKey } : undefined,
+    );
     if (error) return { ok: false, error: error.message };
     return { ok: true, id: data?.id };
   } catch (e) {

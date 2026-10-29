@@ -18,7 +18,8 @@ export type TokenPurpose =
   | "keep-stop"
   | "keep-never"
   | "keep-reminder-off"
-  | "reaction-private";
+  | "reaction-private"
+  | "publish-finish";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -42,6 +43,10 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   "keep-reminder-off": UUID,
   // "Keep it private", in the email telling a sender about a reaction they may see on the site: its id.
   "reaction-private": UUID,
+  // "Publish my gift", in the reminder for a gift paid for and never published: the purchase's id and
+  // when the link stops signing anyone in (Unix seconds), so a forwarded email doesn't open the
+  // account for good.
+  "publish-finish": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
 };
 
 const encoder = new TextEncoder();

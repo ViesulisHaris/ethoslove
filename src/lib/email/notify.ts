@@ -19,9 +19,11 @@ import {
   MonthsaryReminderEmail,
   PassRenewalEmail,
   PassWelcomeEmail,
+  PublishReminderEmail,
   ReminderEmail,
   monthsaryCheckInHeading,
   monthsaryHeading,
+  publishReminderSubject,
   recoveryHeading,
   reminderHeading,
   type EmailIdea,
@@ -196,6 +198,24 @@ export async function sendCheckoutRecovery({ to, locale, url, templateSlug }: { 
       subject: recoveryHeading(locale, Boolean(templateName)).replace(/\.$/, ""),
       react: CheckoutRecoveryEmail({ locale, url, templateName, unsubscribeUrl }),
       headers: unsubscribeHeaders(unsubscribeUrl),
+    });
+  });
+}
+
+/**
+ * "One step left": a gift paid for and still not published (lib/commerce/publish-reminders.ts). Once
+ * per purchase on Resend's side too, for a day, which outlasts the job's window: two runs, or a claim
+ * the limiter couldn't keep, can't send it twice.
+ */
+export async function sendPublishReminder({ to, locale, url, templateSlug, purchaseId }: { to: string; locale: L; url: string; templateSlug: string; purchaseId: string }): Promise<boolean> {
+  return safely("publish reminder", async () => {
+    const manifest = getManifest(templateSlug);
+    if (!manifest) return false;
+    return deliver("publish reminder", {
+      to,
+      subject: publishReminderSubject(locale),
+      react: PublishReminderEmail({ locale, url, template: { name: manifest.name[locale], tagline: manifest.tagline[locale], poster: `${siteUrl()}${manifest.thumbnail.poster}` } }),
+      idempotencyKey: `publish-reminder/${purchaseId}`,
     });
   });
 }

@@ -39,6 +39,38 @@ export function CheckoutRecoveryEmail({ locale, url, templateName, unsubscribeUr
   );
 }
 
+export function publishReminderSubject(locale: L): string {
+  return locale === "es" ? "Te falta un paso: publica tu regalo" : "One step left: publish your gift";
+}
+
+/**
+ * A gift paid for and still not published a quarter of an hour later (lib/commerce/publish-reminders.ts),
+ * once per purchase. The button signs them in to the account the purchase is on and opens the gift
+ * ready to publish (api/checkout/finish). A guest's gift is kept only on the device it was made on,
+ * so the email says where to open it, and that it won't be charged for twice.
+ */
+export function PublishReminderEmail({ locale, url, template }: { locale: L; url: string; template: Omit<EmailIdea, "url"> }) {
+  const es = locale === "es";
+  return (
+    <EmailLayout
+      lang={locale}
+      preview={es ? "Ya está pagado. Publícalo y tendrás el enlace para enviarlo." : "It's paid for. Publish it to get the link to send."}
+      heading={es ? "Te falta un paso." : "One step left."}
+      cta={{ label: es ? "Publicar mi regalo" : "Publish my gift", href: url }}
+      footer={es ? "Recibes esto porque pagaste un regalo en Ethos que aún no está publicado. Solo te lo enviamos una vez." : "You're getting this because you paid for a gift on Ethos that isn't published yet. We only send this once."}
+    >
+      <P>{es ? "Tu regalo ya está pagado, pero aún no está publicado, así que todavía no tienes el enlace para enviarlo." : "Your gift is paid for, but it isn't published yet, so there's no link to send."}</P>
+      <Idea name={template.name} tagline={template.tagline} href={url} poster={template.poster} />
+      <P>{es ? "Ábrelo, échale un último vistazo y pulsa Publicar: tendrás el enlace al momento." : "Open it, give it a last look and tap Publish: you'll get the link straight away."}</P>
+      <Quiet>
+        {es
+          ? "Ábrelo en el móvil o el ordenador donde lo hiciste: tu regalo está guardado ahí hasta que lo publiques. Ya está pagado, así que no te pedirá pagar otra vez."
+          : "Open it on the phone or computer you made it on: your gift is saved there until you publish it. It's already paid for, so you won't be asked to pay again."}
+      </Quiet>
+    </EmailLayout>
+  );
+}
+
 /** Right after the pass is bought: what it covers, until when, and the link that brings the other person in. */
 export function PassWelcomeEmail({ locale, inviteUrl, endsAt, makeUrl, partnerJoined = false }: { locale: L; inviteUrl: string; endsAt: string; makeUrl: string; partnerJoined?: boolean }) {
   const es = locale === "es";
