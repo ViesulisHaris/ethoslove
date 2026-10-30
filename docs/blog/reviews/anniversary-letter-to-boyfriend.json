@@ -1,0 +1,185 @@
+{
+  "slug": "anniversary-letter-to-boyfriend",
+  "keyword": "anniversary letter to boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Then, now, next and three specific letters are usable this weekend, but one takeaway promised advice ('what you've given up, how lucky he is') the post never gives."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every template and scheduling claim checks out, but two 'leave out' items restated how-to-write-a-love-letter, 'got past' and 'got the time wrong' were UK usage, and the Spanish had 'en breve', 'ha sido mucho', 'más de exactamente esto', 'acaban en pedir' and an odd 'media'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The only result with a structure by years and three detailed letters, but the title didn't say there were example letters inside and no heading named the one-year letter, the biggest variant."
+        }
+      ],
+      "applied": [
+        "Takeaway now matches the 'leave out' list (EN and ES).",
+        "'Promises you can't keep' replaced with an anniversary-specific item, 'The way things used to be'; the famous-quote item removed (both echoed the love-letter guide).",
+        "'Haven't moved past', 'had the time wrong'.",
+        "Title 'Anniversary letter to your boyfriend, with 3 example letters' / «…con 3 cartas de ejemplo».",
+        "Example headings name the years: 1-year, three years in, five years in (EN and ES).",
+        "Spanish: «en pocas palabras», «homenaje póstumo», «de extensión media», «ha pasado de todo», «esta noche hace cinco años», «más de esto, tal cual», «acaban pidiendo pizza».",
+        "Polish taken: a fill-in-the-blank version of the structure; a long-distance line for the next visit; «Los ex», «ochenta años», «más desenfadada»; FAQ length answer reworded away from the love-letter FAQ."
+      ],
+      "rejected": [
+        "Exact word count '275' in the long-letter intro: 'close to three hundred' is accurate and reads better.",
+        "Softening the 'I don't say this enough' line in src/content/recipients.ts: outside the blog folders the routine may change."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 changes landed; the structure, the fill-in version and three letters with honest lengths let her write it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim and round-1 fix checks out, but the long letter's hospital waiting room was the blog's third, and the medium letter's 'for everyone, me included' echoed good-morning-messages-for-him."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The new title and year-named headings match page one's sample-letter intent and the 1-, 3- and 5-year searches without taking the queued ideas posts' searches."
+        }
+      ],
+      "applied": [
+        "Long letter: the waiting room becomes a four-hour night drive after a cancelled flight, with a sandwich on the passenger seat (EN and ES).",
+        "Medium letter: 'from your sister's exam dates to the name of my boss's dog' in place of the echoing line (EN and ES).",
+        "Polish taken: hard-year FAQ sample reworded away from the birthday-card post; «de llegar», «se quede en», «relación a distancia»; '(Your name)' at the end of the fill-in version; 'on top of his phone' for the paper letter."
+      ],
+      "rejected": [
+        "Month-by-month letters: the search reviewer advised against them so the queued 6-month and monthiversary posts keep their searches."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes read naturally; a structure, a fill-in version and three letters whose lengths match their intros."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "No reused sentences and every claim checks out, but the new night-drive line said 'fetch me' (UK), and the Spanish switched to the indefinido within 'este año' frames, which reads non-peninsular."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Title, year-named headings and the by-years table match page one's intent without taking the queued anniversary posts' searches."
+        }
+      ],
+      "applied": [
+        "'Pick me up' for 'fetch me'.",
+        "Spanish pretérito perfecto within 'este año': «has conducido», «has montado», «te has reído», «has llamado», «has sido tú quien se ha asegurado», «me has hecho sentir sola».",
+        "Polish taken: 'showed up' / 'showing up', «un billete» to match the Keepsake manifest, 'the move to the place with the noisy pipes' (EN and ES)."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes read naturally; a structure to fill in tonight, a version with blanks and three letters whose lengths match their intros."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim matches the code, no sentence repeats another post, and the Spanish is natural Spain Spanish in her voice with the right tenses."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Title, year-named headings and the by-years table match page one's sample-letter intent while leaving the queued anniversary and long-distance posts their searches."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: a write-it-the-night-before line (reader); 'coffee jar', «se abre con un toque y muestra una foto» and 'de la más corta a la más larga' in the ES description (editor)."
+      ]
+    }
+  ]
+}

@@ -118,7 +118,7 @@ export const post: BlogPost = {
           rows: [
             ["A note in a lunchbox or a coat pocket", "Two or three sentences", "Five minutes"],
             ["Just because", "100 to 200 words", "Twenty minutes"],
-            ["An anniversary or a birthday", "200 to 400 words", "An evening, with a night's sleep before you reread it"],
+            ["[An anniversary](/blog/anniversary-letter-to-boyfriend) or a birthday", "200 to 400 words", "An evening, with a night's sleep before you reread it"],
             ["Before time apart", "As long as one memory needs, or a set of [open when letters](/blog/open-when-letter-ideas)", "Write it a few days before, not the night before"],
           ],
         },
@@ -278,7 +278,7 @@ export const post: BlogPost = {
           rows: [
             ["Una nota en la fiambrera o en el bolsillo del abrigo", "Dos o tres frases", "Cinco minutos"],
             ["Sin motivo", "De 100 a 200 palabras", "Veinte minutos"],
-            ["Un aniversario o un cumpleaños", "De 200 a 400 palabras", "Una tarde, y una noche de sueño antes de releerla"],
+            ["[Un aniversario](/blog/anniversary-letter-to-boyfriend) o un cumpleaños", "De 200 a 400 palabras", "Una tarde, y una noche de sueño antes de releerla"],
             ["Antes de una temporada separados", "Lo que pida un recuerdo, o una serie de [cartas para abrir cuando](/blog/open-when-letter-ideas)", "Escríbela unos días antes, no la noche anterior"],
           ],
         },
