@@ -53,7 +53,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Going through your camera roll from the month you met is the fastest way to find the *then*. One photo usually brings back a detail you'd lost, and that detail is the sentence he'll remember.",
+          text: "Going through your camera roll from the month you met is the fastest way to find the *then*. One photo usually brings back a detail you'd lost, and that detail is the sentence he'll remember. If it's six months rather than years, our [6 month anniversary ideas](/blog/6-month-anniversary-ideas) are sized for that.",
         },
         { type: "h2", text: "What to leave out of an anniversary letter" },
         {
@@ -188,7 +188,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Repasar las fotos del móvil del mes en que os conocisteis es la forma más rápida de encontrar el *antes*. Una foto suele devolverte un detalle que habías perdido, y ese detalle es la frase que él recordará.",
+          text: "Repasar las fotos del móvil del mes en que os conocisteis es la forma más rápida de encontrar el *antes*. Una foto suele devolverte un detalle que habías perdido, y ese detalle es la frase que él recordará. Si son seis meses y no años, nuestras [ideas para celebrar 6 meses de novios](/blog/6-month-anniversary-ideas) tienen la medida justa.",
         },
         { type: "h2", text: "Qué dejar fuera de una carta de aniversario" },
         {

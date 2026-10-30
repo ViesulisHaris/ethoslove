@@ -1,0 +1,187 @@
+{
+  "slug": "6-month-anniversary-ideas",
+  "keyword": "6 month anniversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The counting check, the effort table and the card lines are usable at once, but 'pick one' then allowed two, one sample line didn't quite make sense, and one skip-list label was too abstract."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 7,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [],
+          "summary": "Template claims check out, but the jar and Letter notes, the /occasions link sentence, the 100-reasons sentence and one sample detail echoed older posts; the /occasions link implied more wrappable gifts; the ES jar note told the reader to shake the phone; and the Spanish had 'la escala justa', 'gana a caro' and 'media historia'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'That don't overdo it' and the effort table beat page one's unsorted listicles, but 'by spring' only fits an autumn reader of an evergreen post."
+        }
+      ],
+      "applied": [
+        "/occasions/anniversary link now says what's there: digital anniversary gifts made from your photos and song (EN and ES).",
+        "Jar of Reasons and The Letter notes rewritten from the manifests so they no longer echo other posts; ES jar note has the recipient shake the phone.",
+        "100-reasons sentence and the 'hum when you cook' sample replaced (EN and ES).",
+        "'Pick one, two at most'; skip label 'Measuring how they feel by the calendar'; the Fridays line rewritten.",
+        "'By spring' removed: 'Even a good card ends up in a drawer.'",
+        "Spanish: «eso es lo justo», «Algo hecho o elegido con cuidado vale más que algo caro», «así tenéis más que contar».",
+        "Polish taken: long-distance section names what to send; birthday-budget fallback for couples without a birthday yet; Our Timeline countdown 'if you set one'; heading 'Keep the six months in one place'; sharper description; ES present tense, «con la misma postura», «de tu pareja»."
+      ],
+      "rejected": [
+        "A gift idea aimed at him: the keyword names no one, so the post stays neutral.",
+        "A link to the long-distance birthday post: it's about birthdays; the queued long-distance anniversary post will be the right link."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes read clearly; sized to six months with an effort table, a spending limit, card lines and the only 'what to skip' list."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes landed, but the long-distance section's 'letter timed to open that morning' implies scheduling, which is premium, two sections before the post says The Letter is free; the same sentence stacked two 'rather than' contrasts."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "'By spring' is gone; the effort table, counting check, card lines and skip list beat page one's unsorted listicles, with no overlap with the queued posts."
+        }
+      ],
+      "applied": [
+        "Long-distance send list: 'a letter by email, scheduled for that morning' (no premium feature implied), and 'one plan with a start and an end' (EN and ES).",
+        "Polish taken: Our Timeline note split so 'the best part' is clearly what comes next (EN and ES); «en vez de envolverlo»; 'at each end'."
+      ],
+      "rejected": [
+        "A link to long-distance-anniversary-ideas: that post isn't published yet.",
+        "Reworking the takeaways' contrast pairs: the reviewer advised leaving them."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes read correctly; sized to six months, with a plan, a spending limit, card lines and the 'what to skip' list behind the real worry."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim matches the code and the round-2 fixes landed, but the ES Letter note's subjectless «Rompe» read as an instruction to the giver rather than the recipient."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes touch nothing search depends on; still the only result sized to six months, with no overlap with the queued posts."
+        }
+      ],
+      "applied": [
+        "ES Letter note: «Tu pareja rompe el sello…».",
+        "Polish taken: comma removed in the long-distance list; «cuando cumpláis un año» for «al año»; «capricho» for «picoteo»; 'an evening one later'; one sentence on why a link helps before the templates (EN and ES)."
+      ],
+      "rejected": [
+        "A link to long-distance-anniversary-ideas: not published yet.",
+        "Reworking the takeaways' contrast pairs: optional, and each reads fine."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes read correctly; sized for six months, with a plan by effort, a spending limit, card lines and the only 'what to skip' list."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim matches the code, no sentence repeats another post, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers every idea page one recurs on, adds why each fits six months, and leaves the queued anniversary and long-distance posts their searches."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: a link to long-distance-anniversary-ideas once it's published (search); «lo hicisteis oficial» and «vale más que» in the ES (editor)."
+      ]
+    }
+  ]
+}
