@@ -9,6 +9,7 @@ import { post as goodMorningMessagesForHim } from "./posts/good-morning-messages
 import { post as halloweenIdeasForCouples } from "./posts/halloween-ideas-for-couples";
 import { post as howToWriteALoveLetter } from "./posts/how-to-write-a-love-letter";
 import { post as longDistanceBirthdayIdeas } from "./posts/long-distance-birthday-ideas-for-boyfriend";
+import { post as monthiversaryIdeas } from "./posts/monthiversary-ideas";
 import { post as openWhenLetterIdeas } from "./posts/open-when-letter-ideas";
 import { post as paragraphsForYourGirlfriend } from "./posts/paragraphs-for-your-girlfriend";
 import { post as reasonsWhyILoveYou } from "./posts/reasons-why-i-love-you";
@@ -19,7 +20,7 @@ import { post as whatToWriteInBoyfriendsBirthdayCard } from "./posts/what-to-wri
  * Every post on /blog. A new post is one file in ./posts and one entry here; the list is sorted
  * newest first below, so the order here doesn't matter. docs/blog/PLAYBOOK.md is how they're written.
  */
-const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas];
+const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas, monthiversaryIdeas];
 
 export const BLOG_POSTS: readonly BlogPost[] = [...POSTS].sort((a, b) => b.published.localeCompare(a.published) || a.slug.localeCompare(b.slug));
 

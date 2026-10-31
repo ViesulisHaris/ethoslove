@@ -39,7 +39,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Pick one, two at most: a ten-minute idea in the morning and an evening one later.",
+          text: "Pick one, two at most: a ten-minute idea in the morning and an evening one later. For the other months of the first year, our [monthiversary ideas](/blog/monthiversary-ideas) have a smaller plan for each.",
         },
         { type: "h2", text: "Small 6 month anniversary gifts" },
         {
@@ -170,7 +170,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Elige una, dos como mucho: una de diez minutos por la mañana y otra para la noche.",
+          text: "Elige una, dos como mucho: una de diez minutos por la mañana y otra para la noche. Para el resto de meses del primer año, nuestras [ideas para celebrar los meses con tu pareja](/blog/monthiversary-ideas) tienen un plan más pequeño para cada uno.",
         },
         { type: "h2", text: "Regalos pequeños para los 6 meses" },
         {

@@ -1,0 +1,192 @@
+{
+  "slug": "monthiversary-ideas",
+  "keyword": "monthiversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The table, the chore-proofing list and the 'something from this month' rule work, but the table read as a fixed sequence for someone whose month three is tomorrow, the toast line was muddled and one sample was greeting-card wordplay."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Template claims mostly check out, but two link sentences echoed the 6-month and anniversary posts, the lead stacked three adjectives, the toast and 'days I get to' samples failed, the Fortune Cookie note had the plate rather than a cookie take the tap, the free Letter note implied a sealed letter it can't hold back, and the ES had a subjectless «Rompe» and «se deja de celebrar los meses»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The only month-by-month rotation with time costs, but it never used 'monthsary' and didn't answer what to do when you started on the 29th to 31st."
+        }
+      ],
+      "applied": [
+        "Any row can be used in any month: a line before the month-six note (EN and ES).",
+        "'Monthsary' added, with the last-day rule for the 29th to 31st, matching src/lib/lifecycle/monthsaries.ts (EN and ES).",
+        "Link sentences to the 6-month post and /occasions + /gifts rewritten so they no longer echo other posts.",
+        "Lead: 'cost little and change every month'.",
+        "Samples: the toast line fixed; the wordplay line replaced with a specific one (the hair tie in a coat pocket).",
+        "Fortune Cookie note: each cookie splits at a tap; fortunes tied to months you've had. Letter note: write it in month ten, send the link on the anniversary.",
+        "ES: «Le basta un toque para romper el lacre», «se dejan de celebrar los meses».",
+        "Polish taken: 'most taking'; Sticker Bomb note reworded (strips only on some stickers); headings 'from 1 month to 12 months' and 'If you can't be together on the date'; title '12 monthiversary ideas…'; 'from the very first one'."
+      ],
+      "rejected": [
+        "A recreate-the-first-date line: the 6-month post already uses it, and month six links there."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes landed, but the 'If you can't be together' section gave a long-distance reader only templates, not a way to do the table's ideas apart."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every claim checks out, including the last-day rule, but the lead tripped on 'ideas that last cost little', the any-row example used the table's own month-two row, the hair-tie sample pictured a long-haired partner, the apart paragraph echoed its heading, and the ES had a subjectless «están ordenadas» and a tú/vosotros switch."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "'Monthsary', the last-day rule and the 1-to-12-month heading landed; the only page with a rotation, chore rules and the 29th-to-31st answer, with no overlap with the queued posts."
+        }
+      ],
+      "applied": [
+        "Apart section: most of the table works over a video call (swap songs and press play together; order the same dessert), then send something on the day (EN and ES).",
+        "Lead: 'The best monthiversary ideas cost little and change every month'.",
+        "Any-row line: 'If month three is tomorrow and you're only starting now, take whichever row suits the week.'",
+        "Sample: the toothbrush that has stopped being temporary, in place of the hair tie (EN and ES).",
+        "Cookie note: 'splits open at a tap to show a paper slip'.",
+        "ES: «nuestras [ideas…] están ordenadas», «mandad» to stay in vosotros.",
+        "Polish taken: samples in month order; 'For the other months of the first year' in the 6-month link-in; «una carta cada uno… cerradlas»; «luego os las intercambiáis»; 'Twelve stickers, one for each month.'"
+      ],
+      "rejected": [
+        "Envelopes for each month (search): optional, for a later refresh.",
+        "«guía para escribir una carta de aniversario» anchor: the editor noted it's house style shared with the 6-month post."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The apart section now adapts the table's own rows before any template; a ready rotation with time costs, the 29th-to-31st answer and lines worth sending."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-2 fixes landed and every claim checks out, but the ES had «leédoslas» (should be «leéoslas») and «empezáis ahora», which read as if the relationship were starting now."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes landed; the video-call lines adapt the table without taking the queued virtual-date or long-distance searches."
+        }
+      ],
+      "applied": [
+        "ES: «leéoslas», «y es el primero que celebráis».",
+        "Polish taken: lead trimmed of its contents-preview tail (EN and ES); «después lo van dejando sin más»; 6-month ES link-in «Para el resto de meses del primer año»; «Doce pegatinas, una para cada mes»; 'Before the call, send something…' (EN and ES); FAQ 'Usually at the first anniversary…' to vary 'most couples'."
+      ],
+      "rejected": [
+        "Envelopes for each month (search): for a later refresh.",
+        "A send time for the monthly message (reader): optional, and the table already gives timings."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes landed; a ready rotation with time costs, any row for any month, the 29th-to-31st rule and lines worth sending."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim matches the code, no sentence repeats another post, and the Spanish is natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page with a rotation, chore rules, the last-day answer and when to stop, with no overlap with the queued posts."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: breakfast 'before the day gets going' and a morning send time (reader); envelopes for each month (search); 'twelve stickers for twelve months' and «el resto de los meses» (editor)."
+      ]
+    }
+  ]
+}
