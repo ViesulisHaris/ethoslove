@@ -1,0 +1,96 @@
+{
+  "slug": "how-to-apologize-to-your-boyfriend",
+  "keyword": "how to apologize to your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The four parts and the family-fight sample fit the day after a fight, but the post never gave the text to send this morning when the big apology has to wait until tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The study and template claims check out, but 'research behind the order' overclaimed (the study ranked elements, not their order), the Paper Crane note echoed thinking-of-you-messages-for-him, and the ES had 'si te fallarían' and 'nuestras cosas bonitas… tienen'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The four parts, decision table and specific samples beat page one's loose tip lists, but there was no step for listening while he answers and the big-mistake heading had no search words."
+        }
+      ],
+      "applied": [
+        "New: a morning text that names it and asks for the talk, with a sample (EN and ES).",
+        "New: 'Then listen' — let him finish, say back what you heard, leave unfair points for another day (EN and ES).",
+        "'Research behind which parts matter most' / «Hay estudios sobre qué partes pesan más».",
+        "Paper Crane note rewritten so it no longer echoes the other post, with 'a short line each' (EN and ES).",
+        "Heading 'How to apologize after a big fight or when you've really hurt him' / «Cómo pedirle perdón después de una pelea fuerte…».",
+        "ES: «si crees que te fallarían los nervios al decirla», «nuestra guía de… tiene una sección».",
+        "Polish taken: heading 'Apologize over text, in person or in a letter?'; 'What he said in the same fight' added to what not to say; the crying line now returns to how he feels; Text Thread note says lines are typed back in and ends on your own words; 'our post on'; ES «pedirle a domicilio su comida favorita… o», «Voy a recuperar tu confianza»."
+      ],
+      "rejected": [
+        "An extra text-length sample for a hurtful comment: the new morning text covers that case."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The morning text is exactly the line to send today; four parts on one example, a listen step and a decision table beat page one's loose tips."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out, including the study ranking with its workplace caveat; all round-1 fixes landed, no reused sentences, and the Spanish reads as Spain Spanish in her voice."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes landed; the headings now carry the 'after a big fight' and 'over text' variants, with no overlap with the boyfriend post or the queued girlfriend apology post."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: moving the morning text before the talk (reader, editor); a line on tone and phone face down (search); 'picked my friends', «cuando os veáis» and the ES Text Thread note wording (editor)."
+      ]
+    }
+  ]
+}

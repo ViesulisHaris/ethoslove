@@ -7,6 +7,7 @@ import { post as cuteThingsToSayToYourGirlfriend } from "./posts/cute-things-to-
 import { post as goodMorningMessagesForHer } from "./posts/good-morning-messages-for-her";
 import { post as goodMorningMessagesForHim } from "./posts/good-morning-messages-for-him";
 import { post as halloweenIdeasForCouples } from "./posts/halloween-ideas-for-couples";
+import { post as howToApologizeToYourBoyfriend } from "./posts/how-to-apologize-to-your-boyfriend";
 import { post as howToWriteALoveLetter } from "./posts/how-to-write-a-love-letter";
 import { post as longDistanceBirthdayIdeas } from "./posts/long-distance-birthday-ideas-for-boyfriend";
 import { post as monthiversaryIdeas } from "./posts/monthiversary-ideas";
@@ -20,7 +21,7 @@ import { post as whatToWriteInBoyfriendsBirthdayCard } from "./posts/what-to-wri
  * Every post on /blog. A new post is one file in ./posts and one entry here; the list is sorted
  * newest first below, so the order here doesn't matter. docs/blog/PLAYBOOK.md is how they're written.
  */
-const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas, monthiversaryIdeas];
+const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas, monthiversaryIdeas, howToApologizeToYourBoyfriend];
 
 export const BLOG_POSTS: readonly BlogPost[] = [...POSTS].sort((a, b) => b.published.localeCompare(a.published) || a.slug.localeCompare(b.slug));
 

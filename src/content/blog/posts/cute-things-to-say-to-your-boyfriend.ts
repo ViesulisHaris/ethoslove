@@ -132,7 +132,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What to say to your boyfriend after a fight" },
         {
           type: "p",
-          text: "Cute isn't the point here, and a joke too early can sound like you're brushing it off. Say something that's true and leaves a door open. For the bigger ones, our [apology page](/occasions/apology) has more on what to write.",
+          text: "Cute isn't the point here, and a joke too early can sound like you're brushing it off. Say something that's true and leaves a door open. For the bigger ones, our guide on [how to apologize to your boyfriend](/blog/how-to-apologize-to-your-boyfriend) walks through what to say, and our [apology page](/occasions/apology) has more on what to write.",
         },
         {
           type: "list",
@@ -363,7 +363,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Qué decirle a tu novio después de una pelea" },
         {
           type: "p",
-          text: "Aquí lo bonito no es lo importante, y una broma demasiado pronto puede sonar a que le quitas importancia. Di algo que sea verdad y deje la puerta abierta. Para las más gordas, nuestra [página para pedir perdón](/occasions/apology) tiene más sobre qué escribir.",
+          text: "Aquí lo bonito no es lo importante, y una broma demasiado pronto puede sonar a que le quitas importancia. Di algo que sea verdad y deje la puerta abierta. Para las más gordas, nuestra guía de [cómo pedirle perdón a tu novio](/blog/how-to-apologize-to-your-boyfriend) explica qué decir, y nuestra [página para pedir perdón](/occasions/apology) tiene más sobre qué escribir.",
         },
         {
           type: "list",
