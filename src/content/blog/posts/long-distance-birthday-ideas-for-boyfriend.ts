@@ -85,7 +85,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the time difference puts his evening in your night, stay up for it; if it lands in your working day, take that hour off. It's one day, and he'll know what it cost you.",
+          text: "If the time difference puts his evening in your night, stay up for it; if it lands in your working day, take that hour off. It's one day, and he'll know what it cost you. The rest of the year, our [virtual date ideas for long distance couples](/blog/virtual-date-ideas-long-distance) keep the calls from turning into a routine.",
         },
         {
           type: "template",
@@ -235,7 +235,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si la diferencia horaria pone su noche en tu madrugada, trasnocha tú; si cae en tu jornada de trabajo, pide esa hora libre. Es un día, y él sabrá lo que te ha costado.",
+          text: "Si la diferencia horaria pone su noche en tu madrugada, trasnocha tú; si cae en tu jornada de trabajo, pide esa hora libre. Es un día, y él sabrá lo que te ha costado. El resto del año, nuestras [ideas de citas virtuales para parejas a distancia](/blog/virtual-date-ideas-long-distance) evitan que las llamadas se vuelvan rutina.",
         },
         {
           type: "template",

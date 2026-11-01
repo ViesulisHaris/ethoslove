@@ -1,0 +1,242 @@
+{
+  "slug": "virtual-date-ideas-long-distance",
+  "keyword": "virtual date ideas for long distance couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 8,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Factual error in the time-difference table, in the row for my own case (seven hours apart): ['Four to eight hours', 'Your evening is their night, or their morning', 'Breakfast for one, dinner for the other; ...']. At a 4-8 hour gap your evening is never their morning. 8pm for you is 1-3am for someone 5-7 hours ahead, or 12-4pm for someone behind. Breakfast-for-dinner only works at roughly 10-14 hours. If I followed this I'd book an 8am breakfast date that falls at 1am or 3am for my partner."
+          ],
+          "summary": "Sorting by energy and the date rules fit a couple whose calls feel the same, but the time-difference table put breakfast-and-dinner dates in the four-to-eight-hour row, where the clocks don't line up, and 'a two-player online game' named nothing to open tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Factual error in the time-difference table. With a 4 to 8 hour gap, your evening is either their night (if they're ahead) or their afternoon (if they're behind). It is never their morning. Breakfast for one and dinner for the other needs a gap of about 9 to 13 hours, not 4 to 8. Both languages have the error."
+          ],
+          "summary": "Template claims check out, but the time table's arithmetic was wrong in both languages, the Arcade and Halfway notes echoed occasions.ts and the birthday post, the games-night note implied a race only the recipient can play, delivery timing was overstated, and the ES had «Decidídlo», «sea distinta», «Le pone fin a la espera» and «¿Cómo se ve una película juntos?»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Energy-sorted ideas, date rules and the async angle beat page one, but the four-to-eight-hour row sent readers to a plan that doesn't fit their clocks."
+        }
+      ],
+      "applied": [
+        "Time table corrected: at four to eight hours, the evening of whoever is behind is the late night of whoever is ahead (short weeknight dates, weekend afternoon/evening for long ones); breakfast-and-dinner moved to nine hours or more (EN and ES).",
+        "Arcade and Halfway notes rewritten from the manifests (one level per photo up to eight; the plane drifts back if they stop blowing); the games night now has them play on the call while you watch.",
+        "Delivery: ordered for the agreed time, after checking the app delivers where they live.",
+        "Named, free things to open: chess on Lichess, Gartic Phone, Google Arts & Culture's museum tours.",
+        "ES: «Decididlo», «para que no parezca la llamada», «Cada vez lo elige uno de los dos», «Así la espera tiene final», «¿Cómo ver una película juntos a distancia?», «las horas en que coincidís», «cita para planear la visita».",
+        "Polish taken: a sample invite text; mics muted to avoid echo; a same-class idea; heading 'Easy long-distance dates for tired evenings'; ES title is the exact keyword; «hagáis la compra», «a ver quién», «aunque os quede fatal», «cuestionario»."
+      ],
+      "rejected": [
+        "Trimming one list to four items: every item is a real idea, and the lists now differ in length."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The table now adds up, but the sample invite's '8 your time, 3 mine' lands at 3am for one of them, and Gartic Phone needs about four players."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes landed and the arithmetic holds, but the sample invite broke the post's own table, Gartic Phone is a group game, 'swap breakfast for dinner' read as replacing a meal, the Text Thread note echoed other posts, and «eso es media gracia» isn't Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The corrected table, exact-keyword ES title, class idea and 'long-distance dates' heading landed; the only page with energy sorting, date rules and a time-zone table."
+        }
+      ],
+      "applied": [
+        "Sample invite: 'Saturday, 8pm your time, 1pm mine' — the table's weekend afternoon/evening for a seven-hour gap (EN and ES).",
+        "Gartic Phone replaced in the two-player list by skribbl.io (private rooms work with two); Gartic Phone moved to the double date, where there are four.",
+        "Takeaway: 'pair one person's breakfast with the other's dinner' (EN and ES).",
+        "Text Thread note rewritten so it no longer echoes other posts.",
+        "ES: «ahí está la mitad de la gracia».",
+        "Polish taken: «se lo pide a domicilio», «online», 'run a quiz' / «haced un trivial», 'puzzle' for 'jigsaw'."
+      ],
+      "rejected": [
+        "An online escape room (search): optional, and the games item covers it.",
+        "Moving the walk to the medium list: it works as an occasion when you make a night of it."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The invite now fits the table and Gartic Phone is with four people; energy sorting, date rules and a table that adds up tell a seven-hour couple when to call."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim checks out, but one takeaway nearly repeated the Halloween post, the games item read as five things, 'a friend each' isn't couple against couple, and the ES had «querer una ocasión» and «qué hacer con zonas horarias»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-2 changes landed; title, headings and FAQ match the searches, with no overlap with the queued long-distance posts."
+        }
+      ],
+      "applied": [
+        "Takeaway rewritten so it no longer echoes the Halloween post (EN and ES).",
+        "Games item split into three clear options (EN and ES).",
+        "Double date: invite another couple (EN and ES).",
+        "ES: «Citas virtuales especiales para cuando queréis celebrar algo», «si queréis celebrar algo», description «qué hacer con horarios distintos».",
+        "Polish taken: check the film is on both services before the countdown (catalogues differ by country); 'At the shorter end' for weeknight dates in the four-to-eight row; «a las 8 de la tarde en tu hora y a la una en la mía»; «activad el micro»."
+      ],
+      "rejected": [
+        "A watch-party feature line (reader), an escape room and a tasting date (search): optional; the countdown works with any service and the games and same-kit items cover the rest."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes landed; energy sorting, date rules, a table that adds up and an invite to copy tell a seven-hour couple this week's slot."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim and the arithmetic hold, but the round-3 streaming clause copied a sentence in the birthday post and the rewritten takeaway still followed the Halloween takeaway's shape, in both languages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-3 changes landed; still the only result sorted by the reader's evening, with a time-zone table and no overlap with the queued long-distance posts."
+        }
+      ],
+      "applied": [
+        "Film item: 'Pick one you can both stream where you each live (services carry different films in different countries)' (EN and ES), no longer echoing the birthday post.",
+        "Takeaway: 'On a tired Tuesday, an album in the dark is a better date than a cooking night abandoned halfway' (EN and ES), no longer echoing Halloween.",
+        "Polish taken: table row now 'At four or five hours… at seven or eight…' (EN and ES); ES description ends «noches temáticas y diferencia horaria» (it had been shortened to «horarios distintos» to fit 160 characters after round 3); «cuando os apetece estar juntos más que hacer algo»; «Quedaos dormidos en la llamada»; «Quítate la ropa del trabajo»."
+      ],
+      "rejected": [
+        "Camera-roll wording for 'Show me your week' (reader), escape room, tasting date and date jar (search): optional, already covered by other items."
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-4 changes landed; a tired couple seven hours apart can pick tonight's date and copy the invite as written."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-4 fixes in EN and ES; facts check out against the Arcade, Halfway and Text Thread manifests and the external tools, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers the energy, game, themed-date and time-zone intents the top results split across pages; the title and description match the query."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Reader: optional line about falling asleep on the call at the same bedtime; final-round polish, the table already covers it.",
+        "Search: optional extra ideas (escape room, tasting box, memory lane, dream trip); final-round polish, rejected in earlier rounds too.",
+        "Editor: optional note that a Halfway tap flies the plane when the call holds the mic; final-round polish, the current line is correct."
+      ]
+    }
+  ]
+}
