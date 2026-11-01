@@ -155,7 +155,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Keep the ones that work" },
         {
           type: "p",
-          text: "The best lines get buried in the chat. Screenshot the good ones as you go, and on her birthday or your anniversary hand them back in one go. If you want to list everything you love about her, our [100 reasons why I love you](/blog/reasons-why-i-love-you) shows how to write them.",
+          text: "The best lines get buried in the chat. Screenshot the good ones as you go, and on her birthday or your anniversary hand them back in one go. If you want to list everything you love about her, our [100 reasons why I love you](/blog/reasons-why-i-love-you) shows how to write them. When you want to do something as well as say it, here's [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), from five minutes to a whole day.",
         },
         {
           type: "template",
@@ -340,7 +340,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Guarda las que funcionan" },
         {
           type: "p",
-          text: "Las mejores frases acaban enterradas en el chat. Ve haciendo captura de las buenas y, en su cumpleaños o en vuestro aniversario, dáselas todas juntas. Si quieres apuntar todo lo que te gusta de ella, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) enseñan a escribirlas.",
+          text: "Las mejores frases acaban enterradas en el chat. Ve haciendo captura de las buenas y, en su cumpleaños o en vuestro aniversario, dáselas todas juntas. Si quieres apuntar todo lo que te gusta de ella, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) enseñan a escribirlas. Y cuando quieras hacer algo además de decirlo, aquí tienes [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), de cinco minutos a un día entero.",
         },
         {
           type: "template",

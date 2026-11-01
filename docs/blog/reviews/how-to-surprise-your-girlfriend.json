@@ -1,0 +1,187 @@
+{
+  "slug": "how-to-surprise-your-girlfriend",
+  "keyword": "how to surprise your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to clear (not close) the search history on a shared laptop; polish on the dates line, the proposal-style wording and naming the car chore."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to fix The Letter's timing (polaroids wait below, they don't drop in while the words write), replace the parallel-parking joke that three other posts use, and smooth four Spanish lines (lead, takeaway, a plural subject, the FAQ question)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for a trail-of-notes idea, since a scavenger hunt is in nearly every top result; polish on a long-distance heading and extra internal links."
+        }
+      ],
+      "applied": [
+        "Search history: 'clear the search history'.",
+        "Added 'A trail of notes' to the evening list, EN and ES.",
+        "The Letter note: the letter unfolds, the words write out, the photos wait below as polaroids (EN and ES).",
+        "Photo quote: a ticket machine in the rain instead of parallel parking (EN and ES).",
+        "ES lead, takeaway, 'Juntar en un solo día…' and the FAQ question rewritten as asked.",
+        "Polish taken: jar note says shake the phone or tap the jar; 'delante del que' in ES; 'the dates that matter to her'; 'a big moment in front of strangers'; 'washing the car'."
+      ],
+      "rejected": [
+        "Search polish: the long-distance heading and extra links, left out to keep the post on its one search; the phone-charging item stays as the smallest five-minute idea.",
+        "Editor polish: 'stem and its colour' (UK spelling breaks the US/UK-neutral rule) and cutting the just-because link (the paragraph is one product mention, within the limit)."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fix landed in the body, but the FAQ still said only 'close tabs'; asked to add clearing the search history there too."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to fix the ES restaurant line ('en el que dijo' moved her inside the restaurant), match its callback, and use 'recupera' in the no-reason FAQ answer as in the lead."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The running phone note, time-sized surprises, the secrecy section and the personality table give the reader the how that the first page's 21-tip listicles only gesture at."
+        }
+      ],
+      "applied": [
+        "FAQ: 'close the tabs and clear the search history' (EN), 'cierra las pestañas y borra el historial' (ES).",
+        "ES restaurant line and callback: 'que visteis al pasar'.",
+        "ES FAQ: 'recupera algo que mencionó hace poco'.",
+        "Polish heading off fixes: ES bouquet note matches EN ('eliges tú cada tallo, flor a flor'); 'Mejor algo pequeño y personal que…' in the ES FAQ; the just-because sentence no longer repeats 'has more' (EN and ES)."
+      ],
+      "rejected": [
+        "Reader polish: asking about Saturday a few days ahead instead of the 14th two weeks ahead; the line sits in the planned-day section, where two weeks is the right lead time."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Instead of 21 interchangeable ideas, it shows how to find the surprise that fits her, sizes ideas to the time you have, and covers the logistics and backfires the listicles skip."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to untangle the ES secrecy FAQ, where the added 'y borra el historial' made 'y que lo sepa una persona' read as part of the laptop clause."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It shows the how the first page only gestures at: a running phone note, time-sized surprises, a secrecy script and a table matching each surprise to the person."
+        }
+      ],
+      "applied": [
+        "ES secrecy FAQ: '…que compartáis, y no se lo cuentes a más de una persona.'",
+        "Polish heading off a voice fix: EN FAQ 'Something small and personal does more than something expensive and generic.' (no longer echoes the takeaway's 'beats' shape)."
+      ],
+      "rejected": [
+        "Reader polish: dropping the first 'these' in the digital-gift sentence; optional, nothing unclear.",
+        "Search polish: home spa, hot bath and fairy lights ideas, which the evening-at-home section already covers; adding them would be new unreviewed text."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Instead of a list of interchangeable ideas, it shows how to find the surprise that fits her, sizes ideas to the time you have, and covers the logistics and backfires the listicles leave out."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the manifests and Template.tsx, EN and ES are the same post line for line, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It shows the how the first page only gestures at: a running phone note, time-sized surprises, a secrecy script to borrow, sample texts and a table matching each surprise to the person."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish, recorded not applied: editor's 'sale una nota doblada cada vez' in the ES jar note; search's home spa, hot bath, candles and game night ideas, which the evening section already covers."
+      ]
+    }
+  ]
+}
