@@ -98,7 +98,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**On paper, in the morning.** Leave it where he'll find it before you're up: on top of his phone, in his shoe, inside the coffee tin. He gets to read it alone first.",
-            "**At dinner, read out loud.** Only if you can get through it. Read it out loud once at home first; the second time is easier.",
+            "**At dinner, read out loud.** Only if you can get through it. Read it out loud once at home first; the second time is easier. If dinner is at home, our [anniversary ideas at home](/blog/anniversary-ideas-at-home) plan the evening around it.",
             "**At midnight, on his phone.** If you won't be together when the day starts, send it so it's the first thing of the anniversary. If you're long distance, put the next visit in the *next* paragraph, with the date if you have it.",
           ],
         },
@@ -233,7 +233,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**En papel, por la mañana.** Déjala donde la encuentre antes de que te levantes: sobre el móvil, dentro de un zapato, en el bote del café. Así la lee primero a solas.",
-            "**En la cena, leída en voz alta.** Solo si eres capaz de terminarla. Ensáyala una vez en casa; la segunda cuesta menos.",
+            "**En la cena, leída en voz alta.** Solo si eres capaz de terminarla. Ensáyala una vez en casa; la segunda cuesta menos. Si la cena es en casa, nuestras [ideas de aniversario en casa](/blog/anniversary-ideas-at-home) organizan la noche a su alrededor.",
             "**A medianoche, en el móvil.** Si no vais a estar juntos cuando empiece el día, mándala para que sea lo primero del aniversario. Si tenéis una relación a distancia, pon la próxima visita en el párrafo del *después*, con la fecha si ya la tenéis.",
           ],
         },
