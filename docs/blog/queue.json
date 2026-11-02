@@ -16,14 +16,6 @@
     "angle": "The websites that make a personal digital gift rather than sell a gift card, compared honestly from their own pages: what each one makes, what is free, prices, languages and how the gift opens. Gift cards get a line on when they are the better choice."
   },
   {
-    "slug": "first-anniversary-ideas-for-boyfriend",
-    "keyword": "1 year anniversary ideas for boyfriend",
-    "keyword_es": "ideas para el primer aniversario con mi novio",
-    "occasion": "anniversary",
-    "templates": ["our-timeline", "scrapbook", "the-letter"],
-    "angle": "First-anniversary plans that use the year itself as the material: recreating the first date, a timeline of the twelve months, and a letter about the moment you knew."
-  },
-  {
     "slug": "anniversary-ideas-at-home",
     "keyword": "anniversary ideas at home",
     "keyword_es": "ideas de aniversario en casa",
@@ -134,5 +126,18 @@
     "occasion": "christmas",
     "templates": ["snow-globe", "fireside", "the-letter"],
     "angle": "Christmas messages that sound like the two of you: what this year held, a small plan for the next, lines for a card, a text on Christmas morning and a longer letter. Publish by early December."
-  }
+  },
+  {"slug": "good-night-messages-for-him", "keyword": "good night messages for him", "keyword_es": "mensajes de buenas noches para mi novio", "occasion": "just-because", "templates": ["text-thread", "constellations", "the-letter"], "angle": "Good night texts sorted by the night you've had (normal, after a fight, long distance, before his big day), with when to send so it isn't the last thing he sees at 2am, and the one detail that keeps it from sounding copied."},
+  {"slug": "good-night-messages-for-her", "keyword": "good night messages for her", "keyword_es": "mensajes de buenas noches para mi novia", "occasion": "just-because", "templates": ["text-thread", "constellations", "the-letter"], "angle": "Good night texts for her by situation, short enough to read half asleep, each with the specific detail to swap in, plus what to send when she's in a different time zone."},
+  {"slug": "surprise-trip-reveal-ideas", "keyword": "surprise trip reveal ideas", "keyword_es": "ideas para revelar un viaje sorpresa", "occasion": "birthday", "templates": ["pack-your-bags", "passport"], "angle": "Ways to reveal a surprise trip sized by how long you can keep the secret (on the day, a week of clues, at the airport), what they need to know to pack, and how to reveal it when you live apart."},
+  {"slug": "how-to-say-i-love-you-for-the-first-time", "keyword": "how to say i love you for the first time", "keyword_es": "cómo decir te quiero por primera vez", "occasion": "just-because", "templates": ["the-letter", "text-thread"], "angle": "When it's time, where to say it, the exact words in plain language, what to do if they don't say it back, and whether a text or a letter counts."},
+  {"slug": "birthday-letter-to-best-friend", "keyword": "birthday letter to best friend", "keyword_es": "carta de cumpleaños para mi mejor amiga", "occasion": "birthday", "templates": ["the-letter", "scrapbook", "photo-booth"], "angle": "A birthday letter to your best friend built from the friendship's actual history, with example letters for old friends, new ones and friends far away, instead of the keyword-stuffed templates that rank now."},
+  {"slug": "how-to-ask-her-to-be-your-girlfriend", "keyword": "how to ask her to be your girlfriend", "keyword_es": "cómo pedirle a una chica que sea tu novia", "occasion": "valentines", "templates": ["scratch-card", "the-letter"], "angle": "Reading whether she's ready, low-pressure ways to ask (in person, over text, with a small gesture), the words to use, and how to make a no easy for both of you."},
+  {"slug": "birthday-message-for-girlfriend", "keyword": "birthday message for girlfriend", "keyword_es": "mensaje de cumpleaños para mi novia", "occasion": "birthday", "templates": ["birthday-cinema", "popup-card", "the-letter"], "angle": "Birthday messages for her by relationship stage (new, a few years in, long distance), when to send so she wakes up to it, and a short formula that keeps it from sounding like a card."},
+  {"slug": "letter-to-dad-from-daughter", "keyword": "letter to dad from daughter", "keyword_es": "carta para mi padre de su hija", "occasion": "fathers-day", "templates": ["keepsake", "the-letter", "front-page"], "angle": "How to write a letter to your father that he'll actually read to the end: what to say for gratitude, for a dad who isn't good with feelings, and for a complicated relationship, with sample letters and when to give it."},
+  {"slug": "letter-to-mom-from-daughter", "keyword": "letter to mom from daughter", "keyword_es": "carta para mi madre de su hija", "occasion": "mothers-day", "templates": ["keepsake", "recipe-box", "the-letter"], "angle": "A letter to your mother made of specific memories rather than greeting-card lines, with a structure, sample letters for different moments (a birthday, leaving home, a hard year) and ways to give it."},
+  {"slug": "one-year-anniversary-message-for-girlfriend", "keyword": "1 year anniversary message for girlfriend", "keyword_es": "mensaje de un año de novios para mi novia", "occasion": "anniversary", "templates": ["our-timeline", "the-letter", "museum"], "angle": "One-year anniversary messages built on the year's real moments, with a month-by-month prompt list to find them, sample messages at three lengths, and how to send it on the day."},
+  {"slug": "graduation-message-for-boyfriend", "keyword": "graduation message for boyfriend", "keyword_es": "mensaje de graduación para mi novio", "occasion": "graduation", "templates": ["cap-toss", "front-page", "the-letter"], "angle": "Graduation messages that name what he actually did to get there (the late nights, the exam he nearly quit over), for the card, the text on the day and the speech at dinner, instead of 200 interchangeable lines."},
+  {"slug": "what-to-say-to-your-boyfriend-when-hes-stressed", "keyword": "what to say to your boyfriend when he's stressed", "keyword_es": "qué decirle a tu novio cuando está estresado", "occasion": "just-because", "templates": ["text-thread", "the-letter", "paper-crane"], "angle": "What to say depending on whether he wants to talk, wants fixing or wants distraction, texts for when you're apart, what not to say, and small things to do instead of saying anything."},
+  {"slug": "love-letter-to-wife", "keyword": "love letter to wife", "keyword_es": "carta de amor para mi esposa", "occasion": "anniversary", "templates": ["keepsake", "the-letter", "music-box"], "angle": "A love letter to your wife years in, about the ordinary married life you share rather than the wedding, with prompts, three sample letters (an anniversary, a hard year, no reason) and how to give it."}
 ]

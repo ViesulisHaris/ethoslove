@@ -77,7 +77,7 @@ export const post: BlogPost = {
         { type: "h2", text: "When to stop counting months" },
         {
           type: "p",
-          text: "Most couples switch to years after the first anniversary, and that's a natural place to stop. If you both like the monthly date, keep it, but let it become smaller: a standing dinner on the date, or simply saying it out loud when you wake up. Mark the first anniversary with a real letter: then, now and next, as our [anniversary letter guide](/blog/anniversary-letter-to-boyfriend) sets out.",
+          text: "Most couples switch to years after the first anniversary, and that's a natural place to stop. If you both like the monthly date, keep it, but let it become smaller: a standing dinner on the date, or simply saying it out loud when you wake up. Mark the first anniversary with a real letter: then, now and next, as our [anniversary letter guide](/blog/anniversary-letter-to-boyfriend) sets out. For the day itself, here are [1 year anniversary ideas for your boyfriend](/blog/first-anniversary-ideas-for-boyfriend) built from the twelve months you've had.",
         },
         { type: "h2", text: "If you can't be together on the date" },
         {
@@ -190,7 +190,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cuándo dejar de contar meses" },
         {
           type: "p",
-          text: "Casi todas las parejas pasan a contar años después del primer aniversario, y es un buen sitio para parar. Si a los dos os gusta la fecha de cada mes, mantenedla, pero que se haga más pequeña: una cena fija ese día, o simplemente decirlo en voz alta al despertaros. Marcad el primer aniversario con una carta de verdad: antes, ahora y después, como explica nuestra [guía de carta de aniversario](/blog/anniversary-letter-to-boyfriend).",
+          text: "Casi todas las parejas pasan a contar años después del primer aniversario, y es un buen sitio para parar. Si a los dos os gusta la fecha de cada mes, mantenedla, pero que se haga más pequeña: una cena fija ese día, o simplemente decirlo en voz alta al despertaros. Marcad el primer aniversario con una carta de verdad: antes, ahora y después, como explica nuestra [guía de carta de aniversario](/blog/anniversary-letter-to-boyfriend). Para el día en sí, aquí tienes [ideas para el primer aniversario con tu novio](/blog/first-anniversary-ideas-for-boyfriend) hechas con los doce meses que habéis vivido.",
         },
         { type: "h2", text: "Si no podéis estar juntos ese día" },
         {

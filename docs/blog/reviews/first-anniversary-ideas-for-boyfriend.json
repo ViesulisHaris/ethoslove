@@ -1,0 +1,143 @@
+{
+  "slug": "first-anniversary-ideas-for-boyfriend",
+  "keyword": "1 year anniversary ideas for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The 'collect the year' table and one photo per month turn generic anniversary lists into a method, with card lines that sound like real people; polish only (a fallback if the first-date place is full, 'often' softened, engraving the date)."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Scrapbook note says all twelve photos appear 'as polaroids that develop'. That is a claim about Ethos the code doesn't support. In src/templates/scrapbook/Template.tsx only photos[0] is the developing Polaroid. photos[1-3] go in a photo-booth strip, photos[4] is a stamp and the rest go on a roll of film (the manifest description lists all four)."
+          ],
+          "summary": "Dealbreaker: the Scrapbook note said all twelve photos develop as polaroids, but only the first does (the rest go in a booth strip, a stamp and a film roll). Also asked to replace two sample lines that echo other posts (wine on the shoes, asleep on the train) and fix two Spanish calques."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for titles that say what's inside (dates and gifts) instead of 'use the year', in EN and ES; polish on a long-distance heading, a budget line and 'for him' in the card heading."
+        }
+      ],
+      "applied": [
+        "Scrapbook note (EN, ES): first photo as a developing polaroid, the rest in a photo-booth strip, on a stamp and on a roll of film.",
+        "Sample lines replaced: the wrong bus stop; the dance move at the cousin's wedding (EN, ES); 'Gracias por todo'.",
+        "ES: 'algo que esperar con ganas'.",
+        "Titles: '1 year anniversary ideas for your boyfriend: dates and gifts' / 'Primer aniversario con tu novio: ideas de citas y regalos'.",
+        "Polish heading off fixes: Our Timeline countdown described as optional (EN, ES); 'Cuando ya lleváis un año…'; cotton added to the ES paper lines; 'can easily land on a weeknight'; 'If it can be engraved, put the date on it'."
+      ],
+      "rejected": [
+        "Reader polish: fallback if the first-date place is full; not needed for the advice to hold.",
+        "Search polish: long-distance heading, budget half-sentence and 'for him' in the card heading; the FAQ already covers budget and the headings already match the searches."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A twenty-minute method (collect the year, one photo per month) that turns the usual flat lists into dates, gifts and card lines that could only be his."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes check out against the code; asked to reword the Our Timeline note, whose round-1 polish now repeated a sentence from 6-month-anniversary-ideas word for word (EN and ES)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result with a method that makes the usual ideas personal, plus card lines, a weeknight booking tip and a long-distance plan; the Spanish fills a gap the wedding-anniversary results leave."
+        }
+      ],
+      "applied": [
+        "Our Timeline note reworded (EN, ES): 'The last screen is a line of yours to close on, plus a countdown if you add one'.",
+        "Polish heading off an accuracy fix: Scrapbook note says 'With a torn note…' instead of 'Then', since the note comes right after the first polaroid (EN, ES)."
+      ],
+      "rejected": [
+        "Reader polish: first-date fallback (rejected in round 1 too) and the tip's title; both optional.",
+        "Search polish: long-distance and 'for him' headings, rejected in round 1 for the same reason.",
+        "Editor polish: 'mark it somehow' and dropping 'mucho' in the ES lead; optional, not errors."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It answers the search in its first sentence, then dates, gifts, the card and being apart in the order a reader asks, all built on one photo per month."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every template note matches the code, both languages say the same thing, and the collect-the-year method makes each idea specific to him, which the ranking lists don't."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only result with a method (collect the year, one photo per month) that makes the shared ideas personal, plus card lines, a weekday booking tip and a plan for being apart; the Spanish fills a gap."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish, recorded not applied: reader's first-date fallback and tip title; search's long-distance heading; editor's 'early weeks' wording and dropping 'mucho' in the ES lead."
+      ]
+    }
+  ]
+}
