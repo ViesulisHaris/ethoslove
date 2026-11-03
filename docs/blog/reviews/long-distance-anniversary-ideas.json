@@ -1,0 +1,147 @@
+{
+  "slug": "long-distance-anniversary-ideas",
+  "keyword": "long distance anniversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 8,
+            "trust": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Factual error in the sample-day table (en and es): with the anniversary on Saturday, it starts in New York at Saturday 00:00, which is Saturday 6am in Madrid, not 'Saturday midnight / Sunday 6am'. Saturday midnight in New York is when the anniversary ends there. The row is also in the wrong place in the timeline."
+          ],
+          "summary": "Dealbreaker: the sample-day table put the start of the anniversary in New York at Saturday midnight (when the day ends) instead of Friday-to-Saturday midnight (6am in Madrid). Also asked for a same-week fallback when it's too late to post anything."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "Factual error in the sample-day table (EN and ES). The anniversary is on Saturday, so it starts in New York at midnight between Friday and Saturday, which is Saturday 6am in Madrid. 'Saturday midnight / Sunday 6am' is when the day ends in New York, not when it starts. The row is in the wrong place and has the wrong times."
+          ],
+          "summary": "Same table error as a dealbreaker; asked for a note that the New York–Madrid gap is five hours for a few weeks a year because clocks change on different dates, and a cleaner ES line for the photo item."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Factual error in the sample-day table, in both languages. In New York the anniversary (a Saturday) starts at Saturday 00:00 New York time, which is Saturday 6am in Madrid. The table's last row puts it at 'Saturday midnight' New York / 'Sunday 6am' Madrid, which is when the day ends in New York. The row is also in the wrong place in the sequence: it belongs second, before the 7am/1pm box-opening call."
+          ],
+          "summary": "Same table error; asked for local same-day delivery for late planners, which nearly every top result covers, and a heading with 'long distance anniversary gifts'."
+        }
+      ],
+      "applied": [
+        "Sample-day table (EN, ES): New York's start moved to the second row, midnight NY = Saturday 6am Madrid; the wrong last row removed.",
+        "Daylight-saving note before the table (EN, ES).",
+        "Added a paragraph on ordering to their door from a shop in their city when it's too late to post (EN, ES).",
+        "Heading: 'Long distance anniversary gifts to send ahead' (EN, ES).",
+        "ES: 'Las fotos del año. Una foto impresa de cada vez que os habéis visto…'.",
+        "Polish heading off fixes: 'Press play at the same moment' instead of the count of three used in three other posts (EN, ES); 'six hundred and ninety' so the sum adds up; same-time-zone line; ES 'Algo de picar', 'por la noche', 'decirlo en serio igualmente'."
+      ],
+      "rejected": [
+        "Reader polish: a halfway-city or savings-target line in the booking section; optional.",
+        "Search polish: new title, a first-anniversary link and a playlist or video item; optional, and the title already leads with the keyword."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It plans the actual day across real time zones, hour by hour, with lines to send, where most results only list gift ideas."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes check out; asked to place the autumn five-hour week correctly (end of October to start of November; in 2026 it falls entirely in October), EN and ES."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that deals with time zones and plans the day hour by hour, with sample messages and a same-day delivery fallback; nothing overlaps."
+        }
+      ],
+      "applied": [
+        "Daylight-saving note: 'one week at the end of October or the start of November' / 'una entre finales de octubre y principios de noviembre'.",
+        "Polish heading off fixes: ES 'alguien de su entorno' (EN says 'a friend'); 'en punto'; Halfway note 'No microphone? A tap flies it there.' (EN, ES)."
+      ],
+      "rejected": [
+        "Reader polish: a halfway city in the booking line; optional.",
+        "Search polish: a link to the long-distance tools and a new ES title; optional, and the ES title already leads with the keyword."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It plans the actual anniversary day across real time zones, hour by hour, with lines to send and a fallback for late planners, where the top results only list generic ideas."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every fact checks out against the templates, the scheduling code and the clock-change rules; both languages say the same thing, and the time-zone table is right."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that plans the day across two time zones (which midnight counts, an hour-by-hour table), while covering everything the first page's numbered lists agree on."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish, recorded not applied: reader's 'Friday midnight' label; search's long-distance tools link and new ES title; editor's gender-neutral 'orgulloso de lo nuestro'."
+      ]
+    }
+  ]
+}

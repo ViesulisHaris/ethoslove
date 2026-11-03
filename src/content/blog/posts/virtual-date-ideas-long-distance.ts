@@ -72,6 +72,10 @@ export const post: BlogPost = {
             "**A double date.** Invite another couple onto the call and run a quiz, couple against couple, or play Gartic Phone, the drawing game, now that there are four of you.",
           ],
         },
+        {
+          type: "p",
+          text: "If the occasion is your anniversary, our [long distance anniversary ideas](/blog/long-distance-anniversary-ideas) plan the whole day around the call.",
+        },
         { type: "h2", text: "A planning date for the next visit" },
         {
           type: "p",
@@ -196,6 +200,10 @@ export const post: BlogPost = {
             "**Un paseo juntos.** Salid los dos a la vez, con la cámara hacia fuera, y enseñaos vuestras calles.",
             "**Una cita doble.** Invitad a otra pareja a la llamada y haced un trivial, pareja contra pareja, o jugad a Gartic Phone, el juego de dibujar, ahora que sois cuatro.",
           ],
+        },
+        {
+          type: "p",
+          text: "Si lo que celebráis es vuestro aniversario, nuestras [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas) organizan el día entero alrededor de la llamada.",
         },
         { type: "h2", text: "Una cita para planear la próxima visita" },
         {
