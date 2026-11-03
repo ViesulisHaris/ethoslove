@@ -2,12 +2,13 @@ import { describe, expect, it, vi } from "vitest";
 import { render } from "@react-email/render";
 import { PublishReminderEmail, publishReminderSubject } from "@/emails/lifecycle";
 import { signToken, verifyToken } from "@/lib/lifecycle/links";
+import type { ReminderCandidate } from "@/lib/commerce/publish-reminders";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: async () => true }));
 
-const { isDue, isPublished, sendPublishReminders, REMIND_AFTER_MS, REMIND_UNTIL_MS } = await import("@/lib/commerce/publish-reminders");
-type Candidate = Parameters<typeof isPublished>[0];
+const { isDue, isPublished, linkUntil, sendPublishReminders, LINK_SECONDS, REMIND_AFTER_MS, REMIND_UNTIL_MS } = await import("@/lib/commerce/publish-reminders");
+type Candidate = ReminderCandidate;
 type Gift = Parameters<typeof isPublished>[1][number];
 
 /** React escapes apostrophes in text; compare against what a reader sees. */
@@ -19,7 +20,7 @@ const ID = "11111111-2222-4333-8444-555555555555";
 const candidate = (over: Partial<Candidate> = {}): Candidate => ({ id: ID, userId: "u1", slug: "the-letter", createdAt: NOW - 20 * MIN, paymentIntent: "pi_1", store: null, ...over });
 
 function run(rows: Candidate[], { gifts = [] as Gift[], paidAt = (c: Candidate) => c.createdAt as number | null, claim = async () => true, send = async () => true } = {}) {
-  const sent: { to: string; url: string; templateSlug: string; purchaseId: string; locale: string }[] = [];
+  const sent: { to: string; url: string; templateSlug: string; onceKey: string; locale: string }[] = [];
   return {
     sent,
     result: sendPublishReminders({
@@ -79,6 +80,8 @@ describe("publish reminders job", () => {
     expect(isDue(NOW - REMIND_AFTER_MS, NOW)).toBe(true);
     expect(isDue(NOW - REMIND_UNTIL_MS, NOW)).toBe(true);
     expect(isDue(NOW - REMIND_UNTIL_MS - 1, NOW)).toBe(false);
+    // Paid twice: due from a quarter of an hour after the first, until two hours after the last.
+    expect(isDue(NOW - 3 * 60 * MIN, NOW, NOW - 30 * MIN)).toBe(true);
   });
 
   it("counts a gift of that template live or updated since the purchase began, and nothing else", () => {
@@ -92,7 +95,7 @@ describe("publish reminders job", () => {
   it("emails the buyer once a paid gift sits unpublished for 15 minutes", async () => {
     const { sent, result } = run([candidate()]);
     expect(await result).toEqual({ sent: 1, failed: 0, deferred: 0 });
-    expect(sent).toEqual([{ to: "u1@icloud.test", locale: "en", url: `https://ethos.test/api/checkout/finish?t=${ID}`, templateSlug: "the-letter", purchaseId: ID }]);
+    expect(sent).toEqual([{ to: "u1@icloud.test", locale: "en", url: `https://ethos.test/api/checkout/finish?t=${ID}`, templateSlug: "the-letter", onceKey: "publish-reminder/u1:the-letter" }]);
   });
 
   it("leaves alone a published gift, one paid less than 15 minutes ago, one too old, and one already claimed", async () => {
@@ -108,6 +111,26 @@ describe("publish reminders job", () => {
     const claimed = run([candidate()], { claim: async () => false });
     expect(await claimed.result).toEqual({ sent: 0, failed: 0, deferred: 0 });
     expect([published, justPaid, old, unknown, claimed].every((r) => r.sent.length === 0)).toBe(true);
+  });
+
+  it("sends one reminder for an account's template, however many payments it took", async () => {
+    const second = "33333333-2222-4333-8444-555555555555";
+    const { sent, result } = run([candidate(), candidate({ id: second, createdAt: NOW - 18 * MIN, paymentIntent: "pi_2" })]);
+    expect(await result).toEqual({ sent: 1, failed: 0, deferred: 0 });
+    expect(sent.map((s) => s.onceKey)).toEqual(["publish-reminder/u1:the-letter"]);
+  });
+
+  it("knows a gift published after the payment, even before a late payment was recorded", async () => {
+    // Paid an hour ago; Stripe could only deliver it 20 minutes ago; the gift went live 40 minutes ago.
+    const late = candidate({ createdAt: NOW - 20 * MIN });
+    const { sent, result } = run([late], { paidAt: () => NOW - 60 * MIN, gifts: [{ userId: "u1", slug: "the-letter", savedAt: NOW - 40 * MIN }] });
+    expect(await result).toEqual({ sent: 0, failed: 0, deferred: 0 });
+    expect(sent).toEqual([]);
+  });
+
+  it("makes the same link on every run: it works for three days from the purchase", () => {
+    expect(LINK_SECONDS).toBe(3 * 86_400);
+    expect(linkUntil(candidate())).toBe(Math.floor((NOW - 20 * MIN) / 1000) + LINK_SECONDS);
   });
 
   it("skips an account with no address and counts a send that failed", async () => {

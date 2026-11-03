@@ -2,7 +2,7 @@ import { unique, type Db } from "./db";
 import { voidUnredeemedCards } from "./gift-cards";
 import { endMembershipNow, membershipOfPurchase, paysLatestPeriod } from "./memberships";
 import { regrantRunningPasses } from "./passes";
-import { relockGifts, revokeUnlocksOf } from "./unlocks";
+import { regrantFromOtherPurchases, relockGifts, revokeUnlocksOf } from "./unlocks";
 
 type RevokedPurchase = { id: string; user_id: string | null; product: string; membership_id?: string | null };
 
@@ -43,6 +43,8 @@ export async function revokePurchase(db: Db, purchase: RevokedPurchase, now: num
   if (purchase.product === "giftcard") await voidUnredeemedCards(db, purchase.id, now);
   // A buyer who deleted their account has no user_id left (0011); whoever held the rows still counts.
   const affected = unique([...(purchase.user_id ? [purchase.user_id] : []), ...(await revokeUnlocksOf(db, purchase.id))]);
+  // A second payment for the same template still covers it: only what nothing else paid for goes.
+  await regrantFromOtherPurchases(db, affected, purchase.id);
   await regrantRunningPasses(db, affected, now);
   for (const userId of affected) await relockGifts(db, userId);
 }

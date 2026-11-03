@@ -5,7 +5,7 @@ import { getStripe } from "@/lib/stripe/server";
 import { linkSecret, signToken } from "@/lib/lifecycle/links";
 import { sendPublishReminder } from "@/lib/email/notify";
 import { siteUrl } from "@/lib/email/urls";
-import { sendPublishReminders, supabasePublishReminderStore } from "@/lib/commerce/publish-reminders";
+import { linkUntil, sendPublishReminders, supabasePublishReminderStore } from "@/lib/commerce/publish-reminders";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -14,8 +14,6 @@ export const maxDuration = 60;
 const BUDGET_MS = 45_000;
 /** Resend's default limit is two requests a second per team; one email at a time, spaced, stays under it. */
 const SEND_GAP_MS = 500;
-/** How long the email's button signs its reader in; after that it asks them to sign in. */
-const LINK_SECONDS = 3 * 86_400;
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
@@ -33,12 +31,11 @@ export async function GET(request: NextRequest) {
   if (!isConfigured.resend || !linkKey) return NextResponse.json({ ok: true, skipped: "email_not_configured" });
 
   const started = Date.now();
-  const until = Math.floor(started / 1000) + LINK_SECONDS;
   try {
     const result = await sendPublishReminders({
       store: supabasePublishReminderStore(admin, getStripe()),
       send: sendPublishReminder,
-      link: async (row, locale) => `${siteUrl()}/api/checkout/finish?t=${await signToken("publish-finish", `${row.id}:${until}`, linkKey)}${locale === "es" ? "&l=es" : ""}`,
+      link: async (row, locale) => `${siteUrl()}/api/checkout/finish?t=${await signToken("publish-finish", `${row.id}:${linkUntil(row)}`, linkKey)}${locale === "es" ? "&l=es" : ""}`,
       now: started,
       inTime: () => Date.now() - started < BUDGET_MS,
       pause: () => sleep(SEND_GAP_MS),

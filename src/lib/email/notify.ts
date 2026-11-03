@@ -204,10 +204,10 @@ export async function sendCheckoutRecovery({ to, locale, url, templateSlug }: { 
 
 /**
  * "One step left": a gift paid for and still not published (lib/commerce/publish-reminders.ts). Once
- * per purchase on Resend's side too, for a day, which outlasts the job's window: two runs, or a claim
- * the limiter couldn't keep, can't send it twice.
+ * per account and template on Resend's side too (`onceKey`), for a day, which outlasts the job's
+ * window: two runs, or a claim the limiter couldn't keep, can't send it twice.
  */
-export async function sendPublishReminder({ to, locale, url, templateSlug, purchaseId }: { to: string; locale: L; url: string; templateSlug: string; purchaseId: string }): Promise<boolean> {
+export async function sendPublishReminder({ to, locale, url, templateSlug, onceKey }: { to: string; locale: L; url: string; templateSlug: string; onceKey: string }): Promise<boolean> {
   return safely("publish reminder", async () => {
     const manifest = getManifest(templateSlug);
     if (!manifest) return false;
@@ -215,7 +215,7 @@ export async function sendPublishReminder({ to, locale, url, templateSlug, purch
       to,
       subject: publishReminderSubject(locale),
       react: PublishReminderEmail({ locale, url, template: { name: manifest.name[locale], tagline: manifest.tagline[locale], poster: `${siteUrl()}${manifest.thumbnail.poster}` } }),
-      idempotencyKey: `publish-reminder/${purchaseId}`,
+      idempotencyKey: onceKey,
     });
   });
 }

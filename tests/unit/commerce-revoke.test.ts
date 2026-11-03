@@ -46,6 +46,45 @@ describe("refunds and chargebacks", () => {
     expect(fake.rows("gifts")[0].status).toBe("live");
   });
 
+  it("keep a template a second payment for it still covers, whichever of the two is refunded", async () => {
+    for (const refunded of ["s1", "s2"]) {
+      const fake = new FakeDb(
+        { purchases: [{ ...purchase("s1", "u1", "single"), template_slugs: ["vinyl"] }, { ...purchase("s2", "u1", "single"), template_slugs: ["vinyl"] }], gifts: [gift("g1", "u1", "vinyl")] },
+        NOW,
+      );
+      await grantForever(fake.db, "u1", ["vinyl"], "s1");
+      // The second payment, recorded later, adds no row of its own: the first one holds it.
+      await grantForever(fake.db, "u1", ["vinyl"], "s2");
+      await revokePurchase(fake.db, { id: refunded, user_id: "u1", product: "single" }, NOW);
+      expect(slugs(fake, "u1")).toEqual(["vinyl"]);
+      expect(fake.rows("gifts")[0].status).toBe("live");
+    }
+  });
+
+  it("still take a template back once every payment for it is refunded", async () => {
+    const fake = new FakeDb(
+      { purchases: [{ ...purchase("s1", "u1", "single"), template_slugs: ["vinyl"] }, { ...purchase("s2", "u1", "single"), template_slugs: ["vinyl"] }], gifts: [gift("g1", "u1", "vinyl")] },
+      NOW,
+    );
+    await grantForever(fake.db, "u1", ["vinyl"], "s1");
+    await revokePurchase(fake.db, { id: "s1", user_id: "u1", product: "single" }, NOW);
+    await revokePurchase(fake.db, { id: "s2", user_id: "u1", product: "single" }, NOW);
+    expect(slugs(fake, "u1")).toEqual([]);
+    expect(fake.rows("gifts")[0].status).toBe("draft");
+  });
+
+  it("give Everything back from an order bump still paid for when Everything itself is refunded", async () => {
+    const fake = new FakeDb(
+      { purchases: [{ ...purchase("e1", "u1", "everything"), template_slugs: [] }, { ...purchase("s1", "u1", "single"), template_slugs: ["vinyl"], kind: "bump" }], gifts: [gift("g1", "u1", "bloom")] },
+      NOW,
+    );
+    await grantForever(fake.db, "u1", ["*"], "e1");
+    await grantForever(fake.db, "u1", ["vinyl", "*"], "s1");
+    await revokePurchase(fake.db, { id: "e1", user_id: "u1", product: "everything" }, NOW);
+    expect(slugs(fake, "u1")).toEqual(["*", "vinyl"]);
+    expect(fake.rows("gifts")[0].status).toBe("live");
+  });
+
   it("give a free template's footer back when only 'make it special' paid to drop it", async () => {
     const fake = new FakeDb({ purchases: [purchase("x1", "u1", "extras")], gifts: [gift("g1", "u1", "the-letter")] }, NOW);
     await grantForever(fake.db, "u1", ["the-letter"], "x1");

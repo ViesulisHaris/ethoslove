@@ -1,6 +1,6 @@
 import { premiumExtras } from "@/lib/gift/publish";
 import type { GiftData } from "@/lib/gift/schema";
-import { hasUnlock } from "@/lib/pricing/products";
+import { EVERY_TEMPLATE, hasUnlock } from "@/lib/pricing/products";
 import type { Json } from "@/lib/supabase/types";
 import { getManifest } from "@/templates/manifests";
 import { unique, type Db } from "./db";
@@ -50,6 +50,43 @@ export async function grantForever(db: Db, userId: string, slugs: string[], purc
     .in("template_slug", unique(slugs))
     .in("purchase_id", passIds);
   return takeOver ? { error: takeOver.message } : {};
+}
+
+/**
+ * What a paid purchase covers for good, read back from its row: its templates (and the order bump's
+ * "*"), Everything, or a game pack. A pass, a membership or a gift card covers nothing here: passes
+ * have their own regrant, and a card's "*" belongs to whoever redeemed it.
+ */
+export function foreverRowsOfPurchase(purchase: { product: string; template_slugs: string[] | null; kind: string | null }): string[] {
+  switch (purchase.product) {
+    case "single":
+    case "extras":
+    case "pick3":
+      return [...(purchase.template_slugs ?? []), ...(purchase.kind === "bump" ? [EVERY_TEMPLATE] : [])];
+    case "everything":
+    case "upgrade":
+      return [EVERY_TEMPLATE];
+    case "pack":
+      return purchase.template_slugs ?? [];
+    default:
+      return [];
+  }
+}
+
+/**
+ * After a refund or a chargeback took a purchase's rows away, whatever the same people's other paid
+ * purchases cover is granted again, from those. There is one row per user and template, pointing at
+ * the purchase recorded first; without this, refunding that one of two payments for the same
+ * template (a buyer charged twice) took the template away and relocked a gift still paid for.
+ */
+export async function regrantFromOtherPurchases(db: Db, userIds: string[], refundedId: string): Promise<void> {
+  for (const userId of unique(userIds)) {
+    const { data } = await db.from("purchases").select("id, product, template_slugs, kind").eq("user_id", userId).eq("status", "paid");
+    for (const other of (data ?? []).filter((p) => p.id !== refundedId)) {
+      const { error } = await grantForever(db, userId, foreverRowsOfPurchase(other), other.id);
+      if (error) throw new Error(`regrant failed: ${error}`);
+    }
+  }
 }
 
 /** Deletes every unlock row the purchase(s) granted, to whoever holds them. Returns whose rows went. */
