@@ -261,6 +261,7 @@ Checked signed out (the in-app browser, Etsy Latvia), default sort, three result
 - **First listings in the results:**
   - "digital fortune cookie": Fortune Cookie 33rd, on page 1.
   - "digital love letter": XOXO 86th, Coquette 91st, The Letter 111th.
+- **"digital gift" on Etsy:** none of the 54 in the top ~137. On Etsy the search means digital products in general: the top results are €0.56-2 planners, coloring-page bundles and "100,000+ digital product ideas", with one couple photo-book template. Our listings target the narrower phrases; the site's "digital gift" goal is about Google (`SEO-ORGANIC.md`).
 - **Still not in the top ~130:** interactive birthday card, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book, digital scrapbook. Also not in the top ~85 for "digital snow globe" or "digital music box" (two pages checked).
 - **Stats, 28 Oct - 3 Nov:**
   - 23 visits and 79 views. The busiest days were 28-29 Oct (7 and 11 visits, mostly our own checks); 2-3 Nov had none.

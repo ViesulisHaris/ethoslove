@@ -280,3 +280,14 @@ Query → *Doesn't contain* "ethos"), and compare with today's baseline, which i
 - **External links** in the Links report: from 8 (all scam checkers) to the first 20 real sites.
 
 `node scripts/seo-check.mjs` checks the pages themselves at any time.
+
+### 3 Nov reading (Search Console, last 28 days)
+
+- **"digital gift" itself: no impressions yet.** The site isn't in Google's top ~100 for it. The
+  results are still Amazon and Visa gift cards.
+- **The longer "digital …" searches have started:** 132 impressions, 4 clicks, average position 23:
+  - fortune cookie digital 3.3, digital gift template 5.0 (3 clicks), digital wedding gifts 6.5, digital fortune cookie 7.2, digital wedding gift 7.8;
+  - regalos digitales 20.9 (1 click), digital scratch cards 27.4, digital scratch card maker 31.4, digital scratch card 33.7, digital scratch off greeting 52.
+- **/gifts:** indexed. Its 11K impressions are brand searches, where Google shows it under the home result. It has no non-brand searches yet.
+- **Indexing is fine.** The Pages report (data to about 23 Oct) lists /gifts/for-boyfriend, -girlfriend, -best-friend and five Spanish ones as "crawled, not indexed". A live URL inspection on 3 Nov shows them, and /gifts, as indexed. Read that report against a live inspection before acting on it.
+- **External links: 14, still only scamadviser.com (13) and gridinsoft.com (1).** Nothing else on this list moves "digital gift" as much as real links would, which are the owner's steps 1-2 above.
