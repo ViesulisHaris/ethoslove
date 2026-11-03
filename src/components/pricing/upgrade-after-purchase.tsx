@@ -120,6 +120,24 @@ export function UpgradeAfterPurchase({ sessionId, returnTo, upgrade }: { session
  * page, which the card's own sign-in spends and which a page brought back from the browser's cache,
  * or open in a second tab, would still carry.
  */
+/**
+ * The same sign-in as "Back to your gift", made in the background as soon as the page is open, so
+ * a guest is already in the account the purchase is on whichever way they leave: the way back, the
+ * card, or the login page. Buyers who never tapped the way back were left signed out, signed up
+ * under another address, and were asked to pay again. Nothing moves the page; the server's rules
+ * are the tap's.
+ */
+export function SignInWhileHere({ sessionId, returnTo }: { sessionId: string; returnTo: string }) {
+  const locale = useLocale() === "es" ? "es" : "en";
+  const asked = useRef(false);
+  useEffect(() => {
+    if (asked.current) return;
+    asked.current = true;
+    void postJson("/api/checkout/continue", { sessionId, returnTo, locale });
+  }, [sessionId, returnTo, locale]);
+  return null;
+}
+
 export function BackToGift({ sessionId, returnTo, label }: { sessionId: string; returnTo: string; label: string }) {
   const locale = useLocale() === "es" ? "es" : "en";
   const [busy, setBusy] = useState(false);

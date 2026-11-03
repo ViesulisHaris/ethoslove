@@ -10,9 +10,9 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { Button } from "@/components/ui/button";
 import { InviteLink } from "@/components/pricing/invite-link";
 import { purchaseOutcome, safeReturnPath } from "@/components/pricing/offers";
-import { BackToGift, UpgradeAfterPurchase } from "@/components/pricing/upgrade-after-purchase";
+import { BackToGift, SignInWhileHere, UpgradeAfterPurchase } from "@/components/pricing/upgrade-after-purchase";
 import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
-import { isFresh, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
+import { isFresh, settledSession, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
 import { HoldAdPurchase } from "@/components/shared/ad-pixels";
 import { adPurchaseOf } from "@/lib/ads/purchase";
@@ -54,7 +54,8 @@ export default async function CheckoutSuccessPage({
   let adPurchase: AdPurchase | null = null;
   if (stripe && typeof session_id === "string") {
     try {
-      const session = await stripe.checkout.sessions.retrieve(session_id);
+      // One-tap Apple Pay and Google Pay come back before Stripe has marked the checkout paid.
+      const session = await settledSession(stripe, session_id);
       sold = readSession(session);
       adPurchase = adPurchaseOf(session);
       if (session.metadata?.guest === "1") {
@@ -197,7 +198,8 @@ export default async function CheckoutSuccessPage({
         <GiftCardCode code={giftCardCode} redeemUrl={giftCardUrl.toString()} redeemAt={`${giftCardUrl.host}${giftCardUrl.pathname}`} />
       ) : null}
       {invite ? <InviteLink url={invite} className="mt-8 w-full max-w-sm text-left" /> : null}
-      {forTwoState?.kind === "arriving" ? <RefreshWhileArriving /> : null}
+      {/* Still unpaid after the server's wait: the page asks again by itself, rather than leave a way back that asks to pay. */}
+      {forTwoState?.kind === "arriving" || (state === "pending" && !forTwo) ? <RefreshWhileArriving /> : null}
 
       {autoContinue ? <AutoContinue href={continueHref} /> : null}
       {member ? (
@@ -226,8 +228,12 @@ export default async function CheckoutSuccessPage({
           )}
         </div>
       ) : upgrade && signInUrl && typeof session_id === "string" ? (
-        // A guest with the card: signed in when they tap, not by the page's own link (BackToGift).
-        <BackToGift sessionId={session_id} returnTo={returnTo} label={continueLabel} />
+        // A guest with the card: signed in by a request, not by the page's own link, straight away in
+        // the background (SignInWhileHere) and again at the tap (BackToGift).
+        <>
+          <SignInWhileHere sessionId={session_id} returnTo={returnTo} />
+          <BackToGift sessionId={session_id} returnTo={returnTo} label={continueLabel} />
+        </>
       ) : (
         <Button asChild className="mt-8 h-12 rounded-full px-6">
           {state === "signin" ? (

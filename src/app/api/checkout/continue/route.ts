@@ -6,10 +6,11 @@ import { RETURN_PATH } from "@/lib/stripe/line-items";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
-import { SESSION_ID, buyerOfCheckout, signInBrowser } from "@/lib/commerce/after-checkout";
+import { SESSION_ID, buyerOfCheckout, settledSession, signInBrowser } from "@/lib/commerce/after-checkout";
 
 export const runtime = "nodejs";
-export const maxDuration = 10;
+// A one-tap checkout can take a few seconds to be marked paid (settledSession).
+export const maxDuration = 20;
 
 const input = z.object({
   sessionId: z.string().regex(SESSION_ID),
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
   }
   let finished: Stripe.Checkout.Session;
   try {
-    finished = await stripe.checkout.sessions.retrieve(parsed.data.sessionId);
+    finished = await settledSession(stripe, parsed.data.sessionId);
   } catch {
     return NextResponse.json(signIn, { headers: NO_STORE });
   }

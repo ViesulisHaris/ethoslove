@@ -33,6 +33,32 @@ export const isFresh = (createdAtSeconds: number, now = Date.now()) => now / 100
 /** A Checkout Session id as Stripe makes them: anything else is never looked up. */
 export const SESSION_ID = /^cs_(?:test|live)_[A-Za-z0-9]{10,250}$/;
 
+/** A one-tap checkout still being marked paid is read again this often, at most this many times. */
+const SETTLE_EVERY_MS = 750;
+const SETTLE_TRIES = 6;
+
+/**
+ * Paid on our own pay sheet (one-tap Apple Pay or Google Pay, ui_mode "elements") and not marked
+ * paid yet. The wallet hands the browser back the moment it confirms, a second or two before Stripe
+ * marks the session paid; read that early it can neither be fulfilled nor sign its guest in, and the
+ * buyer is left on "Almost there." with a way back that asks them to pay again. Stripe's own
+ * checkout page sends the buyer back only once paid, so its sessions never wait here.
+ */
+export function stillSettling(session: Pick<Stripe.Checkout.Session, "metadata" | "ui_mode" | "payment_status" | "status">): boolean {
+  const oneTap = session.metadata?.withdrawal_notice === "pay_sheet" || String(session.ui_mode) === "elements";
+  return oneTap && session.payment_status === "unpaid" && session.status !== "expired";
+}
+
+/** The finished checkout, asked again for a few seconds while a one-tap payment is still being marked paid. */
+export async function settledSession(stripe: Stripe, sessionId: string, wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))): Promise<Stripe.Checkout.Session> {
+  let session = await stripe.checkout.sessions.retrieve(sessionId);
+  for (let tries = 0; tries < SETTLE_TRIES && stillSettling(session); tries++) {
+    await wait(SETTLE_EVERY_MS);
+    session = await stripe.checkout.sessions.retrieve(sessionId);
+  }
+  return session;
+}
+
 export type BuyerRefusal = { ok: false; error: "not_found" | "unpaid" | "not_eligible" | "sign_in_required" | "wrong_account" | "refunded"; status: number };
 export type CheckoutBuyer = { ok: true; userId: string; email: string | null; sold: Sold; signIn: boolean };
 
