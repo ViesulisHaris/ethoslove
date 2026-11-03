@@ -1,0 +1,239 @@
+{
+  "slug": "midnight-birthday-surprise-ideas",
+  "keyword": "midnight birthday surprise ideas for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Three steps couldn't be done as written: lights off in his room after you've left it, turning a laptop round with a lit cake in your hands, and 'on the doorway'."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Lead contradicted the table (a gift before the date changes); a scheduled gift doesn't 'arrive', the link is shared ahead; phone-scheduled messages use the sender's clock; mixed 24-hour time; the Birthday Cinema note echoed the manifest and three other pages; two descriptions left hanging; two Spanish calques."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the /gifts/for-boyfriend link a boyfriend post should carry, the lead fix and 'in the doorway'; polish on a '12am' heading and a morning note."
+        }
+      ],
+      "applied": [
+        "Lead (EN, ES): the first gift before anyone else's message reaches his phone.",
+        "Timeline: candles lit in the kitchen away from the smoke alarm, hallway dark; switch off his light as you walk in; 'in the doorway'; '12:05am' and 'the wicks are still warm'.",
+        "Friends' call started on your phone and propped on the plate by the cake (EN, ES).",
+        "Scheduling (EN, ES): send the link in the evening and it opens at midnight; added the digital gifts for your boyfriend link.",
+        "FAQ 3 (EN, ES): gift link sent ahead; phone-scheduled messages use your own time zone.",
+        "Birthday Cinema note rewritten from the template's code (marquee with his name and age, candles out by blowing or swiping up).",
+        "Descriptions completed ('what to do if you live apart'); ES takeaways 'Organízalo de atrás hacia delante' and 'que le haga sospechar'.",
+        "Polish heading off fixes: a new first quote (the old one echoed the birthday page); the bookcase instead of drilling a shelf; the room set while he showers before the film; ES FAQ word order."
+      ],
+      "rejected": [
+        "Reader polish: a single 'ready by' time and a workday line; the table already gives each time its job.",
+        "Search polish: a '12am' heading, a morning note and The Letter as a free option; optional."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A timeline you can follow step by step, tricks to keep him up that you couldn't have guessed, and lines to say, where the results for this search are mostly auto-generated pages."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The round-1 timeline fix was missing from the Spanish table; one 'arrives on the second' was left; the countdown paragraph and the FAQ's time-zone line echoed the long-distance posts; 00:00 still appeared in the English."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the Spanish timeline to match the English and for the gift paragraph not to stack 'more ideas' twice."
+        }
+      ],
+      "applied": [
+        "ES table 23:57 and Medianoche rows now match the English (kitchen, smoke alarm, dark hallway, his light off as you walk in).",
+        "'Give him something that opens at midnight where he is' (EN, ES).",
+        "Countdown paragraph rewritten from extras.tsx and scheduled-screen.tsx (pick the minute and his time zone, a timer with your name if he taps early), keeping the /gifts and /gifts/for-boyfriend links (EN, ES).",
+        "FAQ 3 time-zone sentence rewritten so it no longer echoes the long-distance post (EN, ES).",
+        "EN times: 'midnight', '9:30pm', '12:10am', '12:15am'.",
+        "Polish heading off fixes: lamp on before the candles are lit; 'Five friends singing through a phone'; ES description 'un horario hacia atrás desde las 23:59'."
+      ],
+      "rejected": [
+        "Search fix in part: swapping the /gifts link for /gifts/for-boyfriend; the playbook asks for /gifts with the words 'digital gift' and the matching recipient page, so both stay, now in one sentence each.",
+        "Search polish: a morning note; optional."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A timed plan you can follow tonight, minute by minute, with tricks and lines to say, where most pages for this search are generic lists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked that the lock be described as optional: a premium gift locks only if 'Schedule the reveal' is on, and a locked Midnight Countdown would hide the sky he's meant to watch."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page with a backwards timeline, ways to keep him awake without asking and the pitfalls (smoke alarm, wrong midnight, neighbours); the gift links follow the playbook."
+        }
+      ],
+      "applied": [
+        "'A premium one can also stay locked until then' (EN, ES).",
+        "Polish heading off fixes: Midnight Countdown note says set its countdown to his midnight, leave the lock off, send the link after dinner (EN, ES); ES 'Dale algo pequeño', 'cuando esté bien despierto'; lead 'in place by 11:55'; 'more for birthdays on the birthday page' (EN, ES)."
+      ],
+      "rejected": [
+        "Reader polish: 'your phone' and the elbow; optional.",
+        "Search polish: a morning note; optional, rejected in earlier rounds too."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A minute-by-minute plan you can follow tonight, with ways to keep him up and lines to say, where most pages for this search are generic lists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "The countdown paragraph (EN and ES) now presents the lock as optional, then says without condition that if he taps early he gets a timer with your name on it and that the gift opens at twelve. Both are only true when 'Schedule the reveal' is on (ScheduledScreen in g/[shortId]/page.tsx) or for Midnight Countdown, which holds back its own gift. In every other countdown template, The Letter and Constellations included, the countdown is a timer block inside a gift that is already open (_shared/Countdown.tsx; the-letter/Template.tsx:632, constellations/Template.tsx:626). So someone who makes a free gift and sends it after dinner would have him reading the whole message at 9pm."
+          ],
+          "summary": "Dealbreaker: the countdown paragraph said he'd get a timer and the gift would open at twelve without saying that only happens with the premium lock; unlocked, most templates open at once with the countdown inside, so a free gift would be read at 9pm."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page with a backwards timeline from 11:59, ways to keep him up without asking, the door plan with an ally and the pitfalls; the first page hasn't changed."
+        }
+      ],
+      "applied": [
+        "Countdown paragraph (EN, ES): a digital gift with a countdown set to the minute in his time zone; on a premium one you can also lock the whole gift, and only then does an early tap show a timer with your name and the gift open at twelve.",
+        "Heading off the same fix in FAQ 3 (EN, ES): the link is to a premium gift locked until exactly midnight his time."
+      ],
+      "rejected": [
+        "Reader polish: 'if it's locked' wording, now covered by the rewrite.",
+        "Search polish: a morning note; optional, rejected in earlier rounds."
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A minute-by-minute plan you can follow tonight, with ways to keep him up and lines to say, where most pages for this search are generic lists."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim now matches the code, including the difference between a countdown and the premium lock; the safety advice is sound and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page with a timeline back from 11:59, ways to keep him up without asking, the door plan with someone inside and the pitfalls; nothing overlaps."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish, recorded not applied: reader's 'Either way' before 'send him the link'; search's morning note; editor's 'sin cerrar el regalo'."
+      ]
+    }
+  ]
+}

@@ -30,7 +30,7 @@ export const post: BlogPost = {
         { type: "h2", text: "At midnight: a surprise that arrives on the second" },
         {
           type: "p",
-          text: "Midnight is the moment people remember, because it's the first thing that happens on the day. When you can't be there, the next best thing is something that's already waiting for him at exactly twelve, his time. If he's usually asleep by then, it still works: it's the first thing he sees when he wakes up.",
+          text: "Midnight is the moment people remember, because it's the first thing that happens on the day. When you can't be there, the next best thing is something that's already waiting for him at exactly twelve, his time. If he's usually asleep by then, it still works: it's the first thing he sees when he wakes up. If you'll be with him at midnight after all, see our [midnight birthday surprise ideas](/blog/midnight-birthday-surprise-ideas).",
         },
         {
           type: "list",
@@ -180,7 +180,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A medianoche: una sorpresa que llega al segundo" },
         {
           type: "p",
-          text: "La medianoche es el momento que se recuerda, porque es lo primero que pasa ese día. Si no puedes estar con él, lo mejor es que algo ya le esté esperando a las doce en punto, hora de allí. Si a esa hora suele estar dormido, funciona igual: será lo primero que vea al despertarse.",
+          text: "La medianoche es el momento que se recuerda, porque es lo primero que pasa ese día. Si no puedes estar con él, lo mejor es que algo ya le esté esperando a las doce en punto, hora de allí. Si a esa hora suele estar dormido, funciona igual: será lo primero que vea al despertarse. Si al final vas a estar con él a medianoche, mira nuestras ideas de [sorpresa de cumpleaños a medianoche](/blog/midnight-birthday-surprise-ideas).",
         },
         {
           type: "list",
