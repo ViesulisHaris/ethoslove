@@ -255,6 +255,19 @@ Made with the etsy-seo and etsy-advertising skills (nexscope-ai/ecommerce-skills
 7. **Outside traffic to the listings** (TikTok, Pinterest), through Etsy's Share & Save links, which return 4% of the fees on those sales.
 8. **Re-measure ranks signed out** (the in-app browser) once indexed, then weekly. Searches to track: interactive birthday card, digital love letter, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book.
 
+### Where ranking stands, 3 Nov
+
+Checked signed out (the in-app browser, Etsy Latvia), default sort, three result pages per search: 36-48 organic results a page after the ads, so about the top 130.
+- **First listings in the results:**
+  - "digital fortune cookie": Fortune Cookie 33rd, on page 1.
+  - "digital love letter": XOXO 86th, Coquette 91st, The Letter 111th.
+- **Still not in the top ~130:** interactive birthday card, reasons why i love you, long distance gift for boyfriend, digital flowers, surprise trip reveal, scratch off card, digital memory book, digital scrapbook. Also not in the top ~85 for "digital snow globe" or "digital music box" (two pages checked).
+- **Stats, 28 Oct - 3 Nov:**
+  - 23 visits and 79 views. The busiest days were 28-29 Oct (7 and 11 visits, mostly our own checks); 2-3 Nov had none.
+  - Visits by source: Etsy search 3, Etsy marketing and SEO (Offsite Ads, Google) 6, Etsy app and pages 3, direct 11, Pinterest 0.
+  - 1 order, our test. No messages.
+- **Etsy Ads:** "9 days left", so from 12 Nov.
+
 ### Where ranking stands, 29 Oct
 
 Checked signed out (the in-app browser, Etsy Latvia):
