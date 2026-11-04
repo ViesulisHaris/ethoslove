@@ -145,7 +145,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**An apology for the card.** \"I'm so bad at this\" makes him read the rest as an effort. Just write the four lines.",
-            "**An explanation of the present.** The card is about him; the present can speak for itself.",
+            "**An explanation of the present.** The card is about him; the present can speak for itself. If you still need one, our [last minute birthday gift ideas](/blog/last-minute-birthday-gift-for-boyfriend) can all be done tonight.",
             "**Exes, birthdays that went wrong, and his weight.** Even as jokes. They read worse in ink than they sound out loud.",
             "**Inside jokes that need a footnote.** If he'd have to ask what it means, he will, at the table, in front of his parents.",
             "**A line copied word for word.** Borrow the shape from the lists above and change one detail so it could only be about him.",
@@ -325,7 +325,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**Una disculpa por la tarjeta.** «Se me da fatal esto» hace que lea el resto como un esfuerzo. Escribe las cuatro frases y ya.",
-            "**La explicación del regalo.** La tarjeta va de él; el regalo ya habla por sí solo.",
+            "**La explicación del regalo.** La tarjeta va de él; el regalo ya habla por sí solo. Si todavía te falta, nuestras ideas de [regalo de cumpleaños de última hora](/blog/last-minute-birthday-gift-for-boyfriend) se pueden hacer esta misma noche.",
             "**Sus ex, cumpleaños que salieron mal y su peso.** Ni en broma. Escritos quedan peor que dichos.",
             "**Bromas internas que necesitan nota al pie.** Si tiene que preguntar qué significa, lo preguntará, en la mesa, delante de sus padres.",
             "**Una frase copiada tal cual.** Toma la forma de las listas de arriba y cambia un detalle para que solo pueda ser sobre él.",
