@@ -62,7 +62,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Things you can still buy today that don't look last-minute" },
         {
           type: "p",
-          text: "If you're buying, skip the gift section and buy one good thing he'll use. The trick is to tie it to something he said:",
+          text: "If you're buying, skip the gift section and buy one good thing he'll use. The trick is to tie it to something he said. If what he said was \"I don't want anything\", see [what to get a boyfriend who says he wants nothing](/blog/what-to-get-a-boyfriend-who-wants-nothing):",
         },
         {
           type: "list",
@@ -197,7 +197,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cosas que aún puedes comprar hoy sin que parezcan de última hora" },
         {
           type: "p",
-          text: "Si vas a comprar, sáltate la sección de regalos y compra una cosa buena que vaya a usar. El truco es relacionarla con algo que dijo:",
+          text: "Si vas a comprar, sáltate la sección de regalos y compra una cosa buena que vaya a usar. El truco es relacionarla con algo que dijo. Si lo que dijo fue «no quiero nada», mira [qué regalarle a tu novio si dice que no quiere nada](/blog/what-to-get-a-boyfriend-who-wants-nothing):",
         },
         {
           type: "list",
