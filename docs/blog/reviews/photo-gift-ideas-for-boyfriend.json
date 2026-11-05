@@ -1,0 +1,145 @@
+{
+  "slug": "photo-gift-ideas-for-boyfriend",
+  "keyword": "photo gift ideas for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add a paragraph after the printed list, before the tip: \"Check the delivery date before you order. A photo book or calendar made online can "
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "A newspaper about him: the best photo as the lead picture with your caption underneath, a few more further down the page, and a headline you; Un periódico sobre él: la mejor foto como imagen principal con tu pie de foto debajo, unas cuantas más abajo en la misma página y un titular; Ask friends to send the originals as files, by email or a download link, and take screenshots out of the set altogether. iCloud Shared Album; Pide a tus amigos las originales como archivo, por correo o con un enlace de descarga, y deja fuera las capturas de pantalla. Los álbumes co; An exhibition of your photos, on"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "title: \"Photo gift ideas for your boyfriend, and how to pick the photos\""
+        }
+      ],
+      "applied": [
+        "Reader: added a paragraph after the printed ideas on checking delivery dates, with loose or framed prints from a local photo shop when the birthday is days away (EN and ES).",
+        "Search: title now says 'how to pick the photos' (shortened to fit 60 characters).",
+        "Editor: Front Page extra photos are further down the page, up to seven more, not 'inside'; ES 'pie de foto' to avoid 'pie' read as foot.",
+        "Editor: compression tip asks for originals as files by email or download link and notes iCloud Shared Albums shrink photos (EN and ES).",
+        "Editor: Museum note rewritten to stop echoing the wants-nothing post, and now mentions the final wall text room (EN and ES).",
+        "Editor: ES digital-gift sentence reworded ('pies de foto', no 'en su móvil desde un enlace').",
+        "Editor: ES 'te ha pedido que borres' (pretérito perfecto).",
+        "Polish taken: description says twelve to twenty; 'Most of his have probably never been printed'; link paragraph reshaped; Scrapbook note gives photo order; ES tram caption, caption rule and 'dormido con el perro encima'."
+      ],
+      "rejected": [
+        "Reader polish on adding midnight scheduling: would add a product mention for little gain.",
+        "Reader polish on moving the photo booth strip: kept, it fits the day itself.",
+        "Search polish on an illustrated portrait idea and an anniversary link back: left out to keep the post on photos she already has and the birthday intent."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Up to twelve photos taped in, in the order you add them: the first is a polaroid that develops as he watches, the next three make a booth st; Hasta doce fotos pegadas con cinta, en el orden en que las subes: la primera es una polaroid que se revela mientras mira, las tres siguiente; A [digital gift](/gifts) is the same set of photos and captions with a song behind it, and it reaches him as a link.; Un [regalo digital](/gifts) es la misma selección de fotos, con sus pies de foto y una canción de fondo, y le llega como un enlace."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: Scrapbook note now says only the polaroid shows a full caption, the film a few words and the strip and stamp none, so the best line goes on the first photo (EN and ES; checked in scrapbook/Template.tsx).",
+        "Editor: digital-gift opening no longer echoes 'on his phone from a link' (EN and ES); 'built around your photos' replaces 'made for captioned photos' to match the Scrapbook caption limits.",
+        "Polish taken: ES description without the doubled 'entre', 'Él desliza', 'os hicieron otros', card-guide sentence, 'una tarde tranquila'."
+      ],
+      "rejected": [
+        "Reader polish adding a premium/pricing line: would spend the second product mention, and template blocks already show the tier."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Reader polish 'Up to twenty photos, one room each': final round, left as is.",
+        "Editor polish on 'he opens on his phone' in the first FAQ and the 'birthday ones' link label: final round, left as is."
+      ]
+    }
+  ]
+}

@@ -63,7 +63,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**The twelve photos, printed.** As a small book, a strip in a frame or loose prints in an envelope, one per month, each with the date and one line on the back.",
+            "**The twelve photos, printed.** As a small book, a strip in a frame or loose prints in an envelope, one per month, each with the date and one line on the back. More ways to use them are in our [photo gift ideas for your boyfriend](/blog/photo-gift-ideas-for-boyfriend).",
             "**Tickets for something in year two.** A concert months away, a game, a trip. You're giving him the next thing to look forward to, which is the point of a first anniversary.",
             "**A map of where it started.** A print of the streets where you met, with a small mark on the spot. Easy to find, and it means nothing to anyone but the two of you.",
             "**The thing he uses every day, the good version.** The wallet that's falling apart, the headphones with tape on them, the mug he always reaches for. If it can be engraved, put the date on it.",
@@ -193,7 +193,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Las doce fotos, impresas.** En un librito, en una tira enmarcada o sueltas en un sobre, una por mes, cada una con la fecha y una frase detrás.",
+            "**Las doce fotos, impresas.** En un librito, en una tira enmarcada o sueltas en un sobre, una por mes, cada una con la fecha y una frase detrás. Tienes más formas de usarlas en nuestros [regalos con fotos para tu novio](/blog/photo-gift-ideas-for-boyfriend).",
             "**Entradas para algo del segundo año.** Un concierto dentro de unos meses, un partido, un viaje. Le estás regalando algo que esperar con ganas, que es justo de lo que va un primer aniversario.",
             "**Un mapa de donde empezó todo.** Una lámina de las calles donde os conocisteis, con una marca pequeña en el sitio exacto. Es fácil de encontrar y no significa nada para nadie más que para vosotros dos.",
             "**Lo que usa todos los días, en su versión buena.** La cartera que se cae a trozos, los auriculares con celo, la taza que siempre coge. Si se puede grabar, ponle la fecha.",
