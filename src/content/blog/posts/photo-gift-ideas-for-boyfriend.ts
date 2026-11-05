@@ -105,7 +105,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If he's told you he doesn't want anything, a box of photos about him is one of the few gifts that still fits ([more on that here](/blog/what-to-get-a-boyfriend-who-wants-nothing)). A few lines for the card that goes with it are in [our birthday card guide](/blog/what-to-write-in-boyfriends-birthday-card).",
+          text: "If he's told you he doesn't want anything, a box of photos about him is one of the few gifts that still fits ([more on that here](/blog/what-to-get-a-boyfriend-who-wants-nothing)). A few lines for the card that goes with it are in [our birthday card guide](/blog/what-to-write-in-boyfriends-birthday-card), and if you would rather lay out the pages yourself, here is [how to make a digital scrapbook](/blog/how-to-make-a-digital-scrapbook).",
         },
         { type: "h2", text: "Digital photo gift ideas" },
         {
@@ -246,7 +246,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si te ha dicho que no quiere nada, una caja de fotos sobre él es de los pocos regalos que siguen encajando ([aquí tienes más sobre eso](/blog/what-to-get-a-boyfriend-who-wants-nothing)). Para la tarjeta que lo acompañe, tienes frases en [nuestra guía de tarjetas de cumpleaños](/blog/what-to-write-in-boyfriends-birthday-card).",
+          text: "Si te ha dicho que no quiere nada, una caja de fotos sobre él es de los pocos regalos que siguen encajando ([aquí tienes más sobre eso](/blog/what-to-get-a-boyfriend-who-wants-nothing)). Para la tarjeta que lo acompañe, tienes frases en [nuestra guía de tarjetas de cumpleaños](/blog/what-to-write-in-boyfriends-birthday-card), y si prefieres montar tú las páginas, aquí va [cómo hacer un álbum de recortes digital](/blog/how-to-make-a-digital-scrapbook).",
         },
         { type: "h2", text: "Ideas de regalos digitales con fotos" },
         {

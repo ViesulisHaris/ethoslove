@@ -1,0 +1,143 @@
+{
+  "slug": "how-to-make-a-digital-scrapbook",
+  "keyword": "how to make a digital scrapbook",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add a quote block right after this paragraph (and the matching one in es): { type: \"quote\", text: \"Fifty-two weeks, one train we nearly miss; For an anniversary, plan backward from the day. Give yourself one evening to gather, one to sort into chapters and one or two to lay out the"
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "On a scrapbook page a caption can be short, a date and three words, because the scraps around it tell the rest. If you're stuck choosing pho; En un álbum de recortes el pie de foto puede ser corto, una fecha y tres palabras, porque los recortes de alrededor cuentan el resto. Si te ; Lleva una tarde o más, y los archivos grandes cuesta enviarlos; Uses la herramienta que uses, unas pocas reglas hacen que las páginas se lean bien:"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "EN: add the item \"**A quiet background.** A plain colour, a paper texture or a photo of real brown paper. Stickers, tape and doodles go on t"
+        }
+      ],
+      "applied": [
+        "Reader: added a sample last-page note as a quote block after Step 5's first paragraph (EN and ES).",
+        "Reader: added a time plan (an evening to gather, one to sort, one or two to lay out and write; check print delivery and add a few days) (EN and ES).",
+        "Search: added a layout rule on a quiet background with a few stickers, tape or doodles on top (EN and ES; 'plain shade' instead of UK 'colour').",
+        "Editor: caption sentence rewritten so it no longer echoes the photo-gift post (short caption, scraps tell the rest) (EN and ES).",
+        "Editor: ES 'cuesta enviarlos' (not the calque 'cuestan de enviar') and 'unas pocas reglas'.",
+        "Polish taken: ES 'entre cuatro y seis', 'no deja dónde posar la vista', ES description adds 'monta cada página'; Museum note reworded away from the photo-gift post; phone FAQ without the 'most people' claim; 'que eliges tú'; first-anniversary post linked from the 'Our first year' item."
+      ],
+      "rejected": [
+        "Reader polish with a sample caption: replaced by the editor's short-caption fix, which avoids repeating the photo-gift post.",
+        "Search polish adding '(layout ideas)' to the Step 4 heading: reads as keyword stuffing in a step heading."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fifty-two weeks, one train we nearly missed and a lot of Sunday breakfasts. I kept the ticket from that train, and now you know why. I can't; Cincuenta y dos semanas, un tren que casi perdimos y muchos desayunos de domingo. Guardé el billete de aquel tren, y ahora ya sabes para qué; Los años que lleváis juntos aparecen debajo de cada pie."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: sample last-page note no longer repeats a line from the birthday-card post; it now keeps the train ticket (EN and ES), and ES says 'el siguiente álbum'.",
+        "Editor: ES Museum note puts the years under each caption, matching museum/Template.tsx.",
+        "Polish taken: the years line says you add them (optional field); ES 'junto al álbum'; ES 'cuatro, cinco o seis capítulos'; reader's split of the time plan into its own paragraph and 'fill the next one with you'."
+      ],
+      "rejected": [
+        "Search polish '(layout ideas)' in the Step 4 heading: kept out, as in round 1."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Reader polish on a spare evening in the time plan: final round, left as is.",
+        "Editor polish on the ES Scrapbook note wording ('con tu letra'): final round, left as is; it follows the manifest.",
+        "Search polish '(layout ideas)' heading: kept out, as in earlier rounds."
+      ]
+    }
+  ]
+}
