@@ -1,0 +1,191 @@
+{
+  "slug": "christmas-letter-to-boyfriend",
+  "keyword": "christmas letter to boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "**Complaints about his family.** Not even as a joke. He'll read it on the day, possibly with them nearby."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Snow Globe note says \"Up to four of your lines appear in the snow ... with photos in between\". The code doesn't allow that. revealPlan() in src/templates/snow-globe/storm.ts caps the whole reveal at the number of shakes (at most four), and lines take turns with photos. The manifest needs at least one photo (photos.min = 1), so at most three lines can ever appear in the snow. field-meta.ts says it too: \"One thing appears in the snow each time it settles\". The Spanish note («Hasta cuatro frases tuyas aparecen en la nieve») has the same error."
+          ],
+          "summary": "For a letter he has to shake his way to. Up to four things appear in the snow, one each time it settles: your lines, tak; Para una carta a la que hay que llegar agitando la bola. Hasta cuatro cosas aparecen en la nieve, una cada vez que se po; If you're apart, send it early in a parcel or, on a premium template, schedule it to open on his Christmas morning.; Si estáis lejos, mándala pronto en un paquete o, con una plantilla premium, prográmala para que se abra su mañana de Nav; **Digs at his family's Christmas.** Even as a joke. He'll read it on the day, possibly with them nearby.; **Pullas so"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add a new section after this paragraph, before \"What to leave out\": { type: \"h2\", text: \"If it's a Christmas card, not a; { type: \"h2\", text: \"A long distance Christmas letter to your boyfriend\" }; { type: \"h2\", text: \"Una carta de Navidad para tu novio a distancia\" }"
+        }
+      ],
+      "applied": [
+        "Editor (dealbreaker): Snow Globe note corrected: up to four things appear in the snow in all, your lines taking turns with photos, then the plaque and the letter (storm.ts revealPlan) (EN and ES).",
+        "Editor: FAQ says scheduling needs a premium template (EN and ES).",
+        "Reader and editor: 'leave out' now targets digs at his family, not any mention, so it no longer contradicts the examples (EN and ES).",
+        "Editor: removed echoes of occasions.ts and other posts: one evening 'start to finish', month-by-month recap, 'keep postponing', the coast wish, sign-off line, 'read it twice', 'promises you can't keep', 'These three suit', the Fireside drink line (EN and ES).",
+        "Editor: ES calques fixed ('llevar más peso', 'aguantando que te pregunte', 'te puso fácil', 'entre 100 y 200').",
+        "Search: added a short Christmas-card section with two card lines; long-distance example heading now uses 'long distance' / 'a distancia'.",
+        "Polish taken: lead names the scene-setting part; 'heating' instead of 'boiler' in EN; read-aloud line clarified; ES 'él rompe', 'ni pidas perdón por él', 'Lo mete'; last H2 'How to give him a Christmas letter'; sign-off example (reader and search)."
+      ],
+      "rejected": [
+        "Reader polish on handwriting: the post is about what to write, and the love-letter guide it links covers handwritten or digital.",
+        "Search polish lengthening the few-years-in heading: kept short."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "A card has room for two or three lines. Keep two parts of the shape and drop the rest: the moment or the thing you noticed, and the promise."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "A card has room for two or three lines. Keep the promise and one other part, the moment or the thing you noticed about him, and drop the res; En una tarjeta caben dos o tres frases. Quédate con la promesa y con una parte más, el momento o lo que te ha llamado la atención de él, y d; Hay gente que no aguanta oír en voz alta una carta sobre sí misma sin salir de la habitación."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Reader and editor: the card rule now keeps the promise plus the moment or the thing you noticed, matching both card lines (EN and ES).",
+        "Editor: ES read-aloud line now matches the EN ('una carta sobre sí misma').",
+        "Polish taken: card section says the first line is the longer letter cut down; card H2 'What to write in a Christmas card to your boyfriend'; 'Not even as a joke'; ES 'una Navidad a distancia', 'Le mete' (consistent leísmo), 'a la luz de una vela'."
+      ],
+      "rejected": [
+        "Search polish replacing the first card line's memory: kept and labelled as the longer letter cut down, per the editor.",
+        "Search note that four ES lines were unchanged: those strings are the round-1 corrected wording; the old phrases are gone."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "{ type: \"h2\", text: \"Qué escribir en una tarjeta de Navidad para tu novio\" }"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor and search: ES card heading now 'Qué escribir en una tarjeta de Navidad para tu novio', matching the EN.",
+        "Polish taken: ES FAQ 'algo que te hizo más fácil'."
+      ],
+      "rejected": [
+        "Reader polish on the card promise and 'January 9th': the card line stands as the cut-down letter, and the bare date reads clearly in context."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Reader polish on the card promise: final round, kept as the cut-down letter.",
+        "Editor polish 'antes de que cogieras el avión': final round, 'la terminal' already makes the flight clear.",
+        "Search polish lengthening the ES 'Cómo darle la carta' heading: final round, kept."
+      ]
+    }
+  ]
+}

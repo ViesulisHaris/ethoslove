@@ -45,7 +45,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**A handwritten card, sent first.** It's the cheapest thing to send and the one they'll keep. Send it in mid-November, before the box, so it gets there even if the rest is late.",
+            "**A handwritten card, sent first.** It's the cheapest thing to send and the one they'll keep. Send it in mid-November, before the box, so it gets there even if the rest is late. If it grows into a letter, here's [what to write in a Christmas letter to your boyfriend](/blog/christmas-letter-to-boyfriend).",
             "**One decoration for each of you.** Two of the same ornament, one for their tree and one for yours. Wood or fabric, not glass.",
             "**Something soft and warm.** A scarf, a blanket, thick socks. Nothing in a size you have to guess.",
             "**Printed photos from the year.** Light, flat and hard to break. On the back of each, write where you were and one line.",
@@ -179,7 +179,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Una tarjeta escrita a mano, la primera.** Es lo más barato de enviar y lo que va a guardar. Échala al correo a mediados de noviembre, antes que la caja, para que llegue aunque el resto se retrase.",
+            "**Una tarjeta escrita a mano, la primera.** Es lo más barato de enviar y lo que va a guardar. Échala al correo a mediados de noviembre, antes que la caja, para que llegue aunque el resto se retrase. Si acaba siendo una carta, aquí tienes [qué escribir en una carta de Navidad para tu novio](/blog/christmas-letter-to-boyfriend).",
             "**Un adorno para cada uno.** Dos iguales, uno para su árbol y otro para el tuyo. De madera o de tela, no de cristal.",
             "**Algo blando y que abrigue.** Una bufanda, una manta, unos calcetines gordos. Nada de una talla que tengas que adivinar.",
             "**Fotos impresas del año.** Ligeras, planas y difíciles de romper. Escribe por detrás dónde estabais y una frase.",
