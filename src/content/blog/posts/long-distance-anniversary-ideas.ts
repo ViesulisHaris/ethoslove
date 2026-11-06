@@ -70,7 +70,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Between now and the next visit there will be plenty of ordinary calls too; for those, try one of these [virtual date ideas](/blog/virtual-date-ideas-long-distance).",
+          text: "Between now and the next visit there will be plenty of ordinary calls too; for those, try one of these [virtual date ideas](/blog/virtual-date-ideas-long-distance). If Christmas falls before then, here are [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) that get there on time.",
         },
         { type: "h2", text: "Book the next visit before you hang up" },
         {
@@ -219,7 +219,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "De aquí a la próxima visita habrá muchas llamadas normales; para esas, prueba alguna de estas [ideas de citas virtuales](/blog/virtual-date-ideas-long-distance).",
+          text: "De aquí a la próxima visita habrá muchas llamadas normales; para esas, prueba alguna de estas [ideas de citas virtuales](/blog/virtual-date-ideas-long-distance). Si la Navidad llega antes, aquí tienes [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) que llegan a tiempo.",
         },
         { type: "h2", text: "Reservad la próxima visita antes de colgar" },
         {
