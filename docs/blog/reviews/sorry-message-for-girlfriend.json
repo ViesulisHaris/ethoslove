@@ -1,0 +1,193 @@
+{
+  "slug": "sorry-message-for-girlfriend",
+  "keyword": "sorry message for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Add a quote after it: \"You asked how my day was and I bit your head off. None of it was about you, and you got; Add after it: \"If it's small and you only need two lines, this works for most things: \\\"I was wrong about earl"
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "EN: \"Describe one moment the way she lived it, so she knows you saw it.\" / ES: «Cuenta un momento tal como lo ; EN: \"Leave out the reasons for now. If she wants them, she'll ask, and by then she'll hear an explanation rath; EN: \"**\\\"I'm sorry you feel that way.\\\"** It tells her the problem is how she took it.\" / ES: «**«Siento que t; EN: \"You cooked for six people and all I gave you was a laugh at your expense.\" / ES: «Cocinaste para seis y l; EN: \"You stood outside the restaurant for half an hour because I lost track of time.\" / ES: «Estuviste media h; EN: \"One message saying you'll wait is e"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "{ type: \"h2\", text: \"Sorry messages after a fight, for something you said\" }  (ES: { type: \"h2\", text: \"Mensaj; { type: \"p\", text: \"If the fight needs more than four lines, there's a longer [paragraph for after a fight](/b"
+        }
+      ],
+      "applied": [
+        "Reader: added a message for snapping at her after a bad day, replacing the cooking-joke sample (which also echoed the boyfriend apology post's 'punchline') (EN and ES).",
+        "Reader: added a two-line starting message for small things, with one detail to add (EN and ES).",
+        "Search: the 'something you said' heading now says 'after a fight'; linked the after-a-fight paragraph in paragraphs-for-your-girlfriend (EN and ES).",
+        "Editor: removed echoes of how-to-apologize-to-your-boyfriend and the apology occasion page: 'one sentence from her side', 'hiding behind it', 'I'm sorry you feel that way' gloss, the forty-minute wait, the FAQ 'there when she's ready', 'open when she's ready', the crane's 'until it stays' (EN and ES).",
+        "Editor: The Letter note fixed so 'easier to write' refers to the apology (EN and ES).",
+        "Editor: ES calques fixed: takeaways, 'pon otra fecha', 'Te hice pasar vergüenza', 'girar todo en torno a ti', 'como es debido', 'un compromiso que pueda reclamarte', '¿Cómo de largo...?'.",
+        "Polish taken: 'You shouldn't have had to cover for me'; Text Thread note 'deserves more than a plain text'; Paper Crane note includes blowing into the phone and the letter left behind; 'messages you can adapt'; ES 'dando la cara', 'excusándome', 'recordatorio', 'no es la forma'."
+      ],
+      "rejected": [
+        "Editor polish marking Paper Crane and Text Thread as premium in prose: it would add a third product mention; the template blocks show the tier.",
+        "Search polish on retitling and the description: the current ones are within limits and clear.",
+        "Search polish on one-line texts: covered by the new two-line starting message."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "EN: \"I came home in a mood, answered everything you said in one word, then got sharp with you when you asked w; EN: \"start from \\\"I was wrong about earlier and I'm sorry. I'd like to make it up to you tonight,\\\"\" / ES: «em; EN: \"**\\\"But\\\".** It turns the apology into a defence.\" / ES: «**«Pero».** Convierte la disculpa en una defens; EN: \"**Asking her to reply.** \\\"Please just answer\\\" asks her for something when you're the one who owes.\" / E; EN: \"If she needs a day, she gets a day.\" / ES: «Si necesita un día, tiene un día.»"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: the snapping sample rewritten (came home in a mood, one-word answers) so it no longer echoes the boyfriend apology post or paragraphs-for-your-girlfriend (EN and ES).",
+        "Editor: the two-line starter drops 'You didn't deserve that'; ES now 'Lo de antes estuvo mal por mi parte'.",
+        "Editor: 'But' and 'Please just answer' glosses reworded away from the boyfriend post (EN 'an argument for your side' to stay US/UK-neutral); 'If she needs a day, she gets a day' replaces the repeated 'there when she's ready' (EN and ES).",
+        "Polish taken: ES 'Lo que dices es más difícil de retirar', 'la confianza se arregla en persona'; 'keep the promise in the message' (EN and ES); 'after midnight'; Paper Crane note simplified (reader); description says 'in a fight' and 'call her' (search)."
+      ],
+      "rejected": [
+        "Reader polish moving the two-line starter into a quote block: it stays in the paragraph so the samples stay at six.",
+        "Search polish on 'the one who paid for my mood': the sample was rewritten instead."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "EN: \"A sorry message for your girlfriend works when it is specific: the thing you did, one moment of how it wa; EN: \"**Exactly what you did.** \\\"I forgot your sister's dinner\\\", not \\\"I messed up\\\".\" / ES: «**Qué hiciste, ; EN: \"Three or four lines: exactly what you did, one moment of how it was for her, and what you'll do now and n; EN: \"She has to hold each crease while it folds, so she can't rush it.\" / ES: «Tiene que mantener pulsado cada; «Mensajes de perdón para tu novia según lo que pasó: algo que olvidaste, algo que dijiste en una discusión, un"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: lead, first list item and first FAQ reworded so they no longer echo the apology occasion page ('in plain words', 'what it cost them', 'what you'll do differently') or the boyfriend post ('one sentence from his side') (EN and ES).",
+        "Editor: Paper Crane note now says she holds each crease while it folds, not the boyfriend post's 'springs back open' (EN and ES).",
+        "Editor and search: ES description now includes 'en una discusión', within length.",
+        "Polish taken: takeaway 'Be specific'; ES 'la obliga'; last FAQ no longer opens like the boyfriend post's (EN and ES); the two-line starter tells you to swap 'earlier' for the thing itself (reader)."
+      ],
+      "rejected": [
+        "Search polish on adding reassurance about how you feel: the samples carry it through detail."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Reader polish adding a sample 'I'll wait' line to the FAQ: final round, left as is.",
+        "Editor polish on ES parity of the first sample, the repeated 'de verdad' and the FAQ wording: final round, left as is.",
+        "Search polish dropping 'sorted' from the description: final round, within the limit."
+      ]
+    }
+  ]
+}

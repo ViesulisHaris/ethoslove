@@ -91,6 +91,10 @@ export const post: BlogPost = {
             ["You're far apart", "A call, not a text", "Your voice carries what a text can't"],
           ],
         },
+        {
+          type: "p",
+          text: "If you're the one writing to a girlfriend, there are ready [sorry messages for your girlfriend](/blog/sorry-message-for-girlfriend), sorted by what happened.",
+        },
         { type: "h2", text: "What not to say" },
         {
           type: "list",
@@ -232,6 +236,10 @@ export const post: BlogPost = {
             ["Te ha pedido espacio", "Un mensaje, y luego espera", "Más mensajes lo convierten en presión"],
             ["Estáis lejos", "Una llamada, no un mensaje", "Tu voz transmite lo que un mensaje no puede"],
           ],
+        },
+        {
+          type: "p",
+          text: "Si eres tú quien le escribe a una novia, tienes [mensajes de perdón para tu novia](/blog/sorry-message-for-girlfriend) ordenados según lo que pasó.",
         },
         { type: "h2", text: "Lo que no hay que decir" },
         {
