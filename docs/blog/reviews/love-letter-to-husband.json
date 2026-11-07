@@ -1,0 +1,181 @@
+{
+  "slug": "love-letter-to-husband",
+  "keyword": "love letter to husband",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "**Comparisons that only look back.** \"You used to\" reads as a list of what's gone. If you mention how he's cha"
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "One page in your handwriting under a wax seal with your initial, and a few photos from the years dropping in a; Una página escrita a mano bajo un sello de lacre con tu inicial, y unas cuantas fotos de estos años que caen c; For a long marriage, a box of what you've kept. Put your wedding photo under the dried flowers, write the year; Para un matrimonio largo, una caja con lo que habéis guardado. Pon la foto de la boda bajo las flores secas, e; That's why the best ones aren't about the big day. You both remember the wedding. What he hasn't heard is what; Por eso las mejores no hablan del gran d"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "title: \"Love letter to your husband: examples at 5, 15 and 30 years\" (59 chars) / es title: \"Carta de amor par; Add { type: \"h2\", text: \"A short love note to your husband\" }, then { type: \"p\", text: \"Not every letter needs"
+        }
+      ],
+      "applied": [
+        "Reader and editor: 'leave out' comparisons now target lines that only look back, and say change should be about what he's gained, matching the prompts and the five-year letter (EN and ES).",
+        "Search: titles now promise examples at 5, 15 and 30 years (EN 59, ES 60 characters); added a short love-note section with a three-line sample (EN and ES).",
+        "Editor: removed echoes of the anniversary and Christmas letter posts (The Letter's 'free one, and the plainest', the Keepsake note's order, 'He was there for the wedding', 'You used to... reads as') (EN and ES); Keepsake note stays within manifest and schema (ticket and word are fields).",
+        "Editor: 'warming the house up' instead of UK 'turning the heating up'; ES fixes: 'quedarse con', 'el día a día', 'saltaba a la primera'.",
+        "Polish taken: H2 'What to write in a love letter to your husband'; 'Details only you would notice' (reader and search); coffee mug 'the night before'; 'our parents''; trimmed two three-item runs; ES 'a tus pies', 'empieza los libros por la última página', 'recogidas del cole'."
+      ],
+      "rejected": [
+        "Search polish linking reasons-why-i-love-you: the post already links the love-letter guide.",
+        "Editor polish on 'I'd marry you again': kept; it's a common phrase, not a sentence from the husband page."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [
+            "The Letter note says \"One page in your handwriting\". The template shows the message in a handwriting font, not in her own handwriting: letter.module.css `.body` uses `var(--gift-font-hand)`, and the manifest says \"your words appear in handwriting\". A reader would expect to upload or draw her own handwriting. This line came from my own round-one fix. The fix below changes one phrase."
+          ],
+          "summary": "One page with your words in handwriting, under a wax seal with your initial, and a few photos from the years dropping in; Una página con tus palabras escritas a mano, bajo un sello de lacre con tu inicial, y unas cuantas fotos de estos años q"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor (dealbreaker): The Letter note now says 'your words in handwriting', not 'your handwriting'; the template uses a handwriting font (letter.module.css, manifest) (EN and ES).",
+        "Polish taken: 'putting the lights on' (no repeat of 'warming'); 'used to snap'; ES 'escribe en el billete adónde le lleva'; an example for the Keepsake ticket (reader); birthday added to the digital-gift sentence (search)."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "**Algo que hace solo por ti.** Dejarte el último trozo de chocolate, encender las luces antes de que llegues."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor and search: ES 'encender las luces' matches the EN 'putting the lights on' and drops the repeat with 'Calentar el coche'.",
+        "Polish taken: the ticket example is the full line, 'ticket to one more Tuesday' / «billete a un martes más», since it replaces the default line (Template.tsx)."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Editor polish 'la noche anterior': final round, left as is."
+      ]
+    }
+  ]
+}

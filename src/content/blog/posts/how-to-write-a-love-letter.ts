@@ -59,7 +59,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Notice what it doesn't do: it never says \"you're amazing\" or \"I can't live without you\". The memory says it for you. For more on turning moments into lines, our [100 reasons why I love you](/blog/reasons-why-i-love-you) uses the same method on a list.",
+          text: "Notice what it doesn't do: it never says \"you're amazing\" or \"I can't live without you\". The memory says it for you. For more on turning moments into lines, our [100 reasons why I love you](/blog/reasons-why-i-love-you) uses the same method on a list, and if you're writing after years of marriage, here are examples of a [love letter to your husband](/blog/love-letter-to-husband).",
         },
         { type: "h2", text: "How to start a love letter" },
         {
@@ -219,7 +219,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Fíjate en lo que no hace: nunca dice «eres increíble» ni «no puedo vivir sin ti». El recuerdo lo dice por ti. Para convertir momentos en frases, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) usan el mismo método en una lista.",
+          text: "Fíjate en lo que no hace: nunca dice «eres increíble» ni «no puedo vivir sin ti». El recuerdo lo dice por ti. Para convertir momentos en frases, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) usan el mismo método en una lista, y si escribes después de años casada, aquí tienes ejemplos de [carta de amor para tu marido](/blog/love-letter-to-husband).",
         },
         { type: "h2", text: "Cómo empezar una carta de amor" },
         {
