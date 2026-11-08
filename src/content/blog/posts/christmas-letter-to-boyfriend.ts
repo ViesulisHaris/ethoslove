@@ -65,7 +65,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference.",
+          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference. Writing to a girlfriend instead? Here are [Christmas messages for your girlfriend](/blog/christmas-message-for-girlfriend).",
         },
         { type: "h2", text: "What to write in a Christmas card to your boyfriend" },
         {
@@ -199,7 +199,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria.",
+          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria. ¿Le escribes a una novia? Aquí tienes [mensajes de Navidad para tu novia](/blog/christmas-message-for-girlfriend).",
         },
         { type: "h2", text: "Qué escribir en una tarjeta de Navidad para tu novio" },
         {
