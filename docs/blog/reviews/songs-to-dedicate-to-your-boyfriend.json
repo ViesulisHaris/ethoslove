@@ -1,0 +1,238 @@
+{
+  "slug": "songs-to-dedicate-to-your-boyfriend",
+  "keyword": "songs to dedicate to your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 8,
+            "usable": 8,
+            "trust": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Add after it: \"**\\\"Lover\\\", Taylor Swift.** About choosing someone for keeps, waltz and all. For when it's sto; On a computer, YouTube's share menu has a \"Start at\" box. On your phone, copy the YouTube link and add &t=100 ; On YouTube, yes: tick \"Start at\" in the share menu on a computer, or on your phone add &t= and the number of s; After the \"How to send\" list, add a quote block with three lines to borrow: \"Listen to this before bed. The se; Vinyl is a premium template, and unlocking it also lets you add a 30-second preview of the actual track."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 5,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "Product claim the files contradict: the vinyl note says \"Any premium unlock lets you add a 30-second preview of the actual track\" (ES: \"Con cualquier desbloqueo premium puedes poner 30 segundos de la canción de verdad\"). The real-song preview is free on every template: messages/en.json pricing.freeNote (\"Free gifts include ... a 30-second preview of a real song they can tap to hear\"), editor.music.songHint (\"Free on every template. At the end of the gift they tap it to hear 30 seconds, with a link to the full song on Apple Music\"), src/lib/gift/publish.ts (a catalogue song is not a premium extra) and the comment in src/lib/pricing/products.ts (\"The song is free on every gift\"). VOICE.md's 'Any unlock adds real songs' line is out of date, and VOICE.md says the file wins. It also never plays on the turntable: src/templates/vinyl/Template.tsx says 'A real song never goes on the platter ... The record then spins in silence, and the song waits on the end screen for a tap' (src/lib/gift/music.ts backgroundMusic). So 'the record spins as it plays' next to the real-track line misleads.",
+            "The Letter note: \"The free option: a letter he opens with a wax seal, with a song from the music library playing underneath. Name the real song in the letter and send him the link to it alongside.\" This tells the reader to work around a limit that doesn't exist. The free Letter can carry the real song itself, and gift music is a single choice (library OR real song, src/components/editor/sections/music.tsx Mode), so the advice misleads."
+          ],
+          "summary": "A turntable for one song: he drops the needle and the record spins in time with the music. He taps through you; Un tocadiscos para una sola canción: pone la aguja y el disco gira al ritmo de la música. Va pasando tus fotos; The free option: a letter he opens by breaking a wax seal. Add the real song and 30 seconds of it wait at the ; La opción gratuita: una carta que abre rompiendo un sello de lacre. Añade la canción de verdad y treinta segun; On YouTube on a computer, the share menu has a \"Start at\" box that makes the link begin at that point. The pho; En YouTube desde el ordenador, el menú d"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Add after it: \"**\\\"All of Me\\\", John Legend.** Written for his wife, about loving all of someone, flaws includ; { type: \"h2\", text: \"Love songs that say \\\"this is us\\\"\" } (es: «Canciones de amor que dicen «esto somos»»)"
+        }
+      ],
+      "applied": [
+        "Editor (dealbreakers): the real-song preview is free on every template and plays on the end screen, not on the record (messages/en.json editor.music.songHint, pricing.freeNote; vinyl/Template.tsx); Vinyl and The Letter notes rewritten (EN and ES); Vinyl named as premium (reader).",
+        "Reader and editor: YouTube 'Start at' is on a computer; on a phone add &t= and the seconds to the link (body and FAQ, EN and ES).",
+        "Reader and search: added recent songs (EN: All of Me, Lover, Die with a Smile; ES: All of Me, Mi persona favorita, Solamente tú).",
+        "Reader: added three lines to borrow as quote blocks (EN and ES).",
+        "Search: heading now 'Love songs that say \"this is us\"'; title 'by what you want to say' (60 characters).",
+        "Editor: removed echoes of paragraphs-for-your-girlfriend ('not in the middle of his day') and thinking-of-you-messages-for-him ('so it lands'); 'while he's at work' instead of US 'workday'; ES 'esperanzadora', 'dueto'.",
+        "Polish taken: 'jealousy and surveillance' (Sting's wording); 'isn't missing her'; ES 'así somos'. The ES lists swap in Spanish-language songs on purpose (localisation)."
+      ],
+      "rejected": [
+        "Search polish on a miss-you FAQ and links to thinking-of-you messages and the long-distance page: kept the post on dedicating songs.",
+        "Reader polish naming a clock time to send: 'in the evening, or before a long drive' covers it."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "The YouTube advice is out of date as of this post's date (2026-11-08): \"The phone app usually doesn't show it, so add &t=100...\" (ES: \"La app del móvil no suele mostrarla...\"), and the FAQ tells phone users to edit the link by hand. On 16-17 April 2026 YouTube retired viewer Clips and brought \"share at timestamp\" to its Android and iOS apps: you pause, tap Share and switch on the timestamp toggle (Android Headlines 2026/04, ppc.land, Sendible's 2026 guide, RouteNote, Social Media Today). The &t= trick still works, but only as a fallback. Telling the reader the app lacks the option is now false."
+          ],
+          "summary": "On YouTube, pause at that moment, tap Share and switch on the start time (on a computer it's the \"Start at\" bo; En YouTube, para el vídeo en ese momento, toca Compartir y activa la opción de empezar ahí (en el ordenador es; On YouTube, yes: pause where you want it to start, tap Share and switch on the start time (\"Start at\" on a com; En YouTube, sí: para el vídeo donde quieras que empiece, toca Compartir y activa la opción de empezar ahí («Em; **Mándala cuando pueda escucharla.** Por la noche, o antes de un viaje largo, no mientras está trabajando.; **\"Die with a Smile\", Lady Gaga and Bruno Ma"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor (dealbreaker): YouTube start-time advice updated for 2026: pause, tap Share and switch on the start time ('Start at' on a computer), with &t= as the fallback (body and FAQ, EN and ES).",
+        "Editor: ES 'no mientras está trabajando' (matches EN, drops an echo); 'Die with a Smile' described without paraphrasing the chorus; 'Mi persona favorita' no longer rests on its title.",
+        "Polish taken: 'All of Me' written for Chrissy Teigen before their wedding; ES 'Solamente tú' closer varied."
+      ],
+      "rejected": [
+        "Editor note on Swift filing 'Lover' under 'denial' in 2024: the description is a fair reading of the song, and it remains a common first-dance pick.",
+        "Reader polish on ?t= for bare youtu.be links: an edge case, and the main advice now uses the share toggle.",
+        "Search note on refreshing recent songs later: for a later update."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "La canción adecuada para dedicar a tu novio depende de lo que quieras que diga, no de lo famosa que sea."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-2 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: ES lead uses the subjunctive 'lo que quieras que diga'.",
+        "Polish taken: ES description 'lo que quieras decirle'; 'un día sin motivo' instead of the site's stock 'un martes cualquiera'; 'Die with a Smile' described as 'from 2024'."
+      ],
+      "rejected": [
+        "Reader polish on ?t= for bare links: an edge case behind the share toggle, as in round 2.",
+        "Search note on refreshing recent songs: for a later update."
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Lo mismo vale para cualquier canción de la que solo conozcas el estribillo. Escúchala entera antes de mandarla"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-3 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Editor: ES body uses the subjunctive 'de la que solo conozcas el estribillo', matching the FAQ."
+      ],
+      "rejected": [
+        "Editor note on the 'song that reminds you of them' end-screen link: an omission, left for a later update to keep this version stable.",
+        "Reader polish on ?t= for bare links and search note on refreshing recent songs: as in earlier rounds."
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-4 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-4 fixes confirmed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-4 fixes confirmed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish (the ?t= edge case, the end-screen song link, refreshing recent songs): left for a later update."
+      ]
+    }
+  ]
+}

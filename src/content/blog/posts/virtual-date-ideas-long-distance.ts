@@ -66,7 +66,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**A themed night.** Pick a country, cook its food, play its music and dress for it, badly if you like.",
-            "**Karaoke for two.** Take turns choosing songs for the other person to sing. No vetoes.",
+            "**Karaoke for two.** Take turns choosing songs for the other person to sing. No vetoes. If you'd rather send one than sing it, here are [songs to dedicate to your boyfriend](/blog/songs-to-dedicate-to-your-boyfriend).",
             "**The same puzzle or kit.** Buy two of the same small puzzle or building kit, start together and see who finishes first.",
             "**A walk together.** Both go outside at the same time, cameras facing out, and show each other your streets.",
             "**A double date.** Invite another couple onto the call and run a quiz, couple against couple, or play Gartic Phone, the drawing game, now that there are four of you.",
@@ -195,7 +195,7 @@ export const post: BlogPost = {
           type: "list",
           items: [
             "**Una noche temática.** Elegid un país, cocinad su comida, poned su música y vestíos para la ocasión, aunque os quede fatal.",
-            "**Karaoke para dos.** Por turnos, elegid canciones para que las cante el otro. Sin vetos.",
+            "**Karaoke para dos.** Por turnos, elegid canciones para que las cante el otro. Sin vetos. Si prefieres mandarle una a cantarla, aquí tienes [canciones para dedicar a tu novio](/blog/songs-to-dedicate-to-your-boyfriend).",
             "**El mismo puzle o la misma maqueta.** Comprad dos iguales, pequeños, empezad a la vez y a ver quién termina antes.",
             "**Un paseo juntos.** Salid los dos a la vez, con la cámara hacia fuera, y enseñaos vuestras calles.",
             "**Una cita doble.** Invitad a otra pareja a la llamada y haced un trivial, pareja contra pareja, o jugad a Gartic Phone, el juego de dibujar, ahora que sois cuatro.",
