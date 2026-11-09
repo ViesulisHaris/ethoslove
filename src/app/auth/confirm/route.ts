@@ -42,6 +42,14 @@ export async function GET(request: NextRequest) {
       void welcomeIfNew(supabase).catch(() => {});
       return redirectTo;
     }
+    // A link works once. A second tap (the person again, or the success page's button after its own
+    // automatic continue) finds this browser already signed in, and used to get "That sign-in link
+    // didn't work" anyway: 34 of the 104 failed taps in the week to 9 Nov 2026. Signed in, it goes on.
+    const signedIn = await supabase.auth.getUser().then(({ data }) => data.user, () => null);
+    if (signedIn) {
+      console.info("[auth/confirm] link already used; this browser is signed in, going on");
+      return redirectTo;
+    }
     console.error("[auth/confirm] verifyOtp failed", error.message);
   }
   return NextResponse.redirect(`${origin}/login?error=callback`);
