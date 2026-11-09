@@ -1,0 +1,192 @@
+{
+  "slug": "last-minute-christmas-gift-for-girlfriend",
+  "keyword": "last minute christmas gift for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Many Christmas markets close on or before the 23rd, so a reader who books 'the Christmas market before it closes' for the 27th could turn up to empty stalls. (Spanish needs the same change: 'el mercadillo navideño antes de que cierre' becomes 'un recorrido de luces que siga abierto en enero. Comprueba que abre esa semana y apúntalo para el 27 o el 28...'.)"
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The first Friday in January 2027 is 1 January, New Year's Day, when many restaurants are closed or fully booked. Checked with date -d 2027-01-01.; Same error: the first Friday of January 2027 is 1 January, a public holiday in Spain.; \"his head\" assumes the reader is a man. The keyword doesn't say who's giving, the Spanish (\"alguien\") is neutral, and VOICE.md genders only the person receiving.; \"A letter. One page about her this year\" is nearly word for word the line in last-minute-birthday-gift-for-boyfriend.ts (\"A letter. One page about him this year\").; Echoes \"Una carta. Una página sobre él este año\" in last-minute-birthday-gift-for-boyfriend.ts. This keeps the Spanish in step with the En"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The first H2 sits over the post's best asset, the table, and uses none of the words people search with. The sibling birthday post names its sections with the keyword phrase. ES: replace \"En qué punto de la cuenta atrás estás\" with \"Regalos de Navidad de última hora según el tiempo que te queda\".; Adds the search phrase. It also fixes a mismatch: the list covers things she has mentioned, borrowed or rationed, not things she asked for. ES: replace \"Quedan unos días: algo que ya te ha pedido\" with \"Quedan unos días: regalos de última hora que ya te ha mencionado\".; Same-day flowers are a staple of the current top results (Classpop, Bustle and the gift-card blogs), and the post never mentions th"
+        }
+      ],
+      "applied": [
+        "Winter morning: Christmas market swapped for a light trail that runs into January, with a check that it's open",
+        "First Friday in January (1 Jan 2027) changed to the second Friday",
+        "Sample card line made gender-neutral",
+        "Letter and gift-card lines rewritten to stop echoing last-minute-birthday-gift-for-boyfriend",
+        "'Most pharmacies' softened to 'Many'",
+        "FAQ 1 doubled 'card' fixed",
+        "H2s now carry the search words; flowers idea added in EN and ES",
+        "ES fixes: H2 on the digital gift, subjects for the Snow Globe and Letter notes, 'cambiarla', 'le hayas visto elegir'",
+        "Polish: 'or before you see her', time zone for scheduling, 'game' for 'match', Letter note ties to the morning, Snow Globe note reworded to avoid echoing christmas-message-for-girlfriend, ES 'hojear' and 'esa comida'"
+      ],
+      "rejected": [
+        "Search polish: title change and a Reyes line in ES not taken, to keep EN and ES the same post",
+        "Editor polish: 'make it before she wakes up' heading not taken; the kitchen-table heading is specific to Christmas morning"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "As written, 'The planning is the part she'll love most' reads as if she enjoys doing the planning, which contradicts 'it's all handled'. The Spanish ('no tener que organizar nada') already says it clearly, so only the English changes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'one ... from this year, start to finish' repeats the Christmas occasion page's Letter tip ('Write about one evening from this year, start to finish'), and the post links to that page (src/content/occasions.ts line 746).; Same echo in Spanish: occasions.ts line 853 has 'una sola tarde de este año, de principio a fin'.; 'things you'd pick for her there' is still the birthday post's 'what you'd pick for him there' (last-minute-birthday-gift-for-boyfriend.ts lines 78, 136), the echo round 1 asked to remove.; 'que le elegirías tú allí' is word for word the birthday post's 'qué le elegirías tú allí' (line 213).; 'a print or more of something she loves' first reads as 'one print or more'. 'A refil"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "'The planning is the part she'll love most' made unambiguous",
+        "Letter line no longer echoes the Christmas occasion page; gift-card line no longer echoes the birthday post",
+        "Table cell 'a print or more' made unambiguous; ES 'repuesto'",
+        "ES fixes: restaurant subject, 'escapada a principios de año', 'esperándola cuando acaben', 'tarea de casa envuelta para regalo'",
+        "Polish to head off fixes: 'Christmas lights walk' (EN and ES), 'como tarde el 22', ES packed line, 'siempre te queda', 'guarda para ocasiones especiales', takeaway rephrased (EN and ES)"
+      ],
+      "rejected": [
+        "Search polish (title change, a subscription idea, a Reyes line in ES) not taken: not required and would add unreviewed text"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The same sentence turns up again in the tickets item ('The weeks after Christmas are long, and this gives her something on the other side of them'). The post says it twice in the same shape.; Almost word for word the tickets item ('se hacen largas, y así tiene algo esperándola cuando acaben').; 'send it before you go to sleep so it's waiting when she' is a nine-word run from good-morning-messages-for-her.ts line 168.; Same echo in Spanish: good-morning-messages-for-him.ts line 315 has 'mándalo antes de irte a dormir para que le esté esperando'.; The same FAQ slot in last-minute-birthday-gift-for-boyfriend.ts (line 140, 'What can I give my boyfriend if the shops are closed?') ends on 'or a di"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Takeaway no longer repeats the tickets item (EN and ES)",
+        "Letter note and FAQ 2 reworded to stop echoing good-morning posts and the birthday post",
+        "ES: 'días señalados', 'recorrido de luces', Snow Globe note no longer echoes the Christmas posts",
+        "Polish to head off fixes: 'light display', card-meaning line (EN and ES), 'Part two' moved to the 5th (3 Jan 2027 is a Sunday)"
+      ],
+      "rejected": [
+        "Reader polish 'a night or two away' and search polish (title, subscription, Reyes) not taken: not required"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): editor's ES 'los compraste' and 'cogido prestado'; search's title change, subscription idea and Reyes line"
+      ]
+    }
+  ]
+}

@@ -67,7 +67,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you're sending a present across a border too, our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) cover when to send it and what time it will be for her on the 25th.",
+          text: "If you're sending a present across a border too, our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) cover when to send it and what time it will be for her on the 25th. If you've left it late, here are [last minute Christmas gifts for your girlfriend](/blog/last-minute-christmas-gift-for-girlfriend) that still feel chosen.",
         },
         { type: "h2", text: "A funny Christmas message for her" },
         {
@@ -202,7 +202,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si además mandas un regalo a otro país, en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes cuándo enviarlo y qué hora será para ella el día 25.",
+          text: "Si además mandas un regalo a otro país, en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes cuándo enviarlo y qué hora será para ella el día 25. Y si se te ha echado el tiempo encima, aquí tienes [regalos de Navidad de última hora para tu novia](/blog/last-minute-christmas-gift-for-girlfriend) que no lo parecen.",
         },
         { type: "h2", text: "Un mensaje de Navidad con humor para ella" },
         {
