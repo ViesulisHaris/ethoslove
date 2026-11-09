@@ -141,6 +141,9 @@ Miss one of these and the template half-exists. After adding the folder:
    Spanish: the phrase people type for the thing it is (check Google's suggestions for it, e.g.
    "digital snow globe"), a title under 60 characters, a snippet under 160 and the how-to heading.
    Without one the page falls back to "{name}: digital gift template", which nobody searches.
+8. `src/content/page-dates.ts` — the day the page goes live, as `"/templates/<slug>"`. Search
+   engines recrawl a page sooner when the sitemap's date says it changed, and trust that date only
+   while it's true, so set it again whenever you change what an existing template's page says.
 
 Everything else follows automatically: the editor, unlocking after payment, occasion pages,
 `llms.txt`, the sitemap and the dashboard all read the manifests.

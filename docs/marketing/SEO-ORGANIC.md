@@ -320,8 +320,31 @@ Query → *Doesn't contain* "ethos"), and compare with today's baseline, which i
 - **The Spanish /gifts page answers "regalos virtuales"** in its title, definition and two new
   questions (a detalle virtual for a partner; a birthday postal), and English gets the same two.
 - **Occasion pages get search titles that promise the list** ("Digital Anniversary Gifts: 12
-  Ideas to Send Today"), separate from their headings, which stay as they are.
+  Ideas From Your Photos"), separate from their headings, which stay as they are.
 - **The blog follows the data:** the queue leads with product-adjacent and Spanish-first topics,
   drops the two comparison posts (they would name competitors, which `VOICE.md` rules out), and
   holds Valentine's topics until 6 Dec. The playbook's season rule moves from six weeks to ten,
   learns `not_before`, and asks that a third of new topics be product-adjacent and a third Spanish.
+
+## Eighth round, 9 Nov: let Google see the changes
+
+Requesting indexing for the seventh round showed that Google's copy of the Spanish template pages
+was from 12 Sep, older than every change since 24 Oct (the English ones were recrawled after it).
+Two things on our side were in the way:
+
+- **The sitemap dated every page with the build time.** 276 of its 340 URLs said "changed now"
+  at every deploy, a few times a day. Google uses `<lastmod>` only while it proves true, so it had
+  every reason to stop reading ours, the blog posts' real dates included. Pages now carry the day
+  their words last changed (`src/content/page-dates.ts`, seeded from the git history: the search
+  rounds of 24 Oct and 9 Nov, the local prices of 25 Oct, the legal pages' printed date). A page
+  with no known date sends none. **When you change what a page says, set its date there.**
+- **44% of Googlebot's requests were Next's link prefetches.** Search Console's crawl stats
+  (18 Sep to 7 Nov): 16.7K requests, 44% "other file type", every example a `?_rsc=` URL, against
+  13% HTML. Google's renderer sees every link on a page at once, and each `<Link>` fetches its
+  page's data again; a page here makes 19 to 133 such requests. robots.txt now disallows
+  `/*_rsc=` and `/*.rsc$`. With all of them blocked, ten live pages rendered the same title,
+  canonical, headings, links, structured data and text. Expect "Blocked by robots.txt" for these
+  URLs in Search Console for a while; that's the rule working, and they were never pages.
+
+`tests/unit/crawl.test.ts` reads robots.txt the way Google does (every sitemap page open, every
+prefetch closed, assets open) and checks that no sitemap date comes from the clock.

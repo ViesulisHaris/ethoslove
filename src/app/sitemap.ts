@@ -3,6 +3,7 @@ import { routing } from "@/i18n/routing";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { BLOG_POSTS, postLocales, postModified } from "@/content/blog";
+import { pageUpdated } from "@/content/page-dates";
 import { RECIPIENTS, recipientSlug } from "@/content/recipients";
 import { CITY_SLUGS } from "@/lib/cities/cities";
 import { localizedUrl } from "@/lib/seo";
@@ -14,8 +15,12 @@ type Page = {
   priority: number;
   changeFrequency: "daily" | "weekly" | "monthly" | "yearly";
   images?: string[];
-  /** When the page last changed, if it's known; otherwise the build time. */
-  lastModified?: Date;
+  /**
+   * When the page last changed: a blog post's own date, else the page's date in
+   * content/page-dates.ts. A page without one sends no date: never the build time, which said
+   * every page changed at every deploy until search engines stopped believing any of our dates.
+   */
+  lastModified?: Date | string;
   /** The languages it exists in, if not all of them. */
   locales?: readonly string[];
 };
@@ -25,7 +30,6 @@ type Page = {
  * trip pages and blog posts carry their picture.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const built = new Date();
   const pages: Page[] = [
     { path: "/", priority: 1, changeFrequency: "weekly" },
     { path: "/dates", priority: 0.9, changeFrequency: "weekly" },
@@ -59,12 +63,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/legal/privacy", priority: 0.3, changeFrequency: "yearly" },
     { path: "/legal/withdraw", priority: 0.2, changeFrequency: "yearly" },
   ];
-  return pages.flatMap(({ path, priority, changeFrequency, images, lastModified = built, locales = routing.locales }) => {
+  return pages.flatMap(({ path, priority, changeFrequency, images, lastModified = pageUpdated(path), locales = routing.locales }) => {
     const languages: Record<string, string> = { "x-default": localizedUrl(routing.defaultLocale, path) };
     for (const l of locales) languages[l] = localizedUrl(l, path);
     return locales.map((locale) => ({
       url: localizedUrl(locale, path),
-      lastModified,
+      ...(lastModified ? { lastModified } : {}),
       changeFrequency,
       priority,
       alternates: { languages },
