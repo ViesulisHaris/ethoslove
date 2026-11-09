@@ -55,6 +55,16 @@ const SCENES = {
   creak: [3.5, [[0, "creak", []]]],
   knock: [4, [[0, "knock", []]]],
   "tink-windows": [5, [0, 1, 2, 3, 4, 5].map((i) => [i * 0.42, "tink", [i, "rise"]])],
+  flap: [2, [[0, "flap", []]]],
+  rattle: [2, [[0, "rattle", []]]],
+  jingle: [3, [[0, "jingle", [{ ms: 700 }]]]],
+  "jingle-long": [3.5, [[0, "jingle", [{ ms: 1400 }]]]],
+  scribble: [2.5, [0, 1, 2].map((i) => [i * 0.6, "scribble", [320]])],
+  stamp: [2.5, [[0, "stamp", []]]],
+  rustle: [3, [[0, "rustle", [{ ms: 1200 }]]]],
+  snap: [2, [[0, "snap", []]]],
+  crackle: [2.5, [[0, "crackle", [{ ms: 600, strain: 1 }]]]],
+  tear: [2.5, [0, 0.7, 1.4].map((t) => [t, "tear", [320]])],
 };
 
 /**
@@ -80,6 +90,15 @@ const TARGETS = {
   thunk: ["thunk", -16],
   chime: ["chime", -14],
   knock: ["knock", -11],
+  flap: ["flap", -18],
+  rattle: ["rattle", -20],
+  jingle: ["jingle", -16],
+  scribble: ["scribble", -22],
+  stamp: ["stamp", -12],
+  rustle: ["rustle", -22],
+  snap: ["snap", -13],
+  crackle: ["crackle", -22],
+  tear: ["tear", -17],
 };
 
 /* ------------------------------------------------------------------ bundle the effects for the page */

@@ -774,6 +774,48 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       howTo: "Cómo hacer una casa encantada de regalo",
     },
   },
+  "nice-list": {
+    en: {
+      keyword: "Naughty or nice list",
+      title: "The Nice List: Naughty or Nice, Stamped",
+      description: "Unroll their naughty or nice list: every good deed and every crime gets a tick, then the verdict is stamped. A funny Christmas gift for them.",
+      howTo: "How to make a naughty or nice list",
+    },
+    es: {
+      keyword: "Lista de Papá Noel",
+      title: "La lista de Papá Noel: carbón o sin carbón",
+      description: "Desenrolla su lista de Papá Noel: cada buena obra y cada fechoría llevan su marca y al final cae el sello. Un regalo de Navidad divertido.",
+      howTo: "Cómo hacer una lista de Papá Noel",
+    },
+  },
+  unwrapped: {
+    en: {
+      keyword: "Year in review gift for couples",
+      title: "Unwrapped: Your Year Together, in Numbers",
+      description: "Your year together as presents to tear open: each holds a number that counts up, and the last prints the whole year as a receipt.",
+      howTo: "How to make a year in review gift",
+    },
+    es: {
+      keyword: "Resumen del año en pareja",
+      title: "Nuestro año, desenvuelto: el año en números",
+      description: "Vuestro año en regalos que se rompen: cada uno guarda un número que sube, y el último imprime el año entero como un tique.",
+      howTo: "Cómo hacer un resumen del año en pareja",
+    },
+  },
+  wishbone: {
+    en: {
+      keyword: "Thanksgiving gift for boyfriend or girlfriend",
+      title: "Wishbone: A Thanksgiving Gift They Pull",
+      description: "They pull the wishbone until it snaps, and your wish comes out with the big half, then your letter and photos. A digital Thanksgiving gift.",
+      howTo: "How to make a wishbone gift",
+    },
+    es: {
+      keyword: "Regalo de Acción de Gracias",
+      title: "La espoleta: un regalo de Acción de Gracias",
+      description: "Tira de la espoleta hasta que se parta y tu deseo sale con la mitad grande, seguido de tu carta y tus fotos. Acción de Gracias, digital.",
+      howTo: "Cómo hacer un regalo con una espoleta",
+    },
+  },
 };
 
 export function templateSeo(slug: string, locale: GiftLocale): TemplateSeo | null {

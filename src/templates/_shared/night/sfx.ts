@@ -13,7 +13,7 @@
  */
 import { guard } from "../synth";
 import { busFor, filter, glide, hit, noiseSource, ring, send, sine, sprinkle, swell, sweepPan, tap, wobble, bubble, type Voice } from "./foley";
-import { BELL, BOTTLE_MODES, CELESTA, DOOR_MODES, GLASS, RIND_MODES, bellHz, between, bubbleSpec, clamp, creakPitch, creakSlips, dB, glassHz, grains, sparkHz, thunderEnvelope } from "./sound-math";
+import { BELL, BONE_MODES, BOTTLE_MODES, CARD_MODES, CELESTA, DESK_MODES, DOOR_MODES, GLASS, JINGLE, JINGLE_HZ, RIND_MODES, bellHz, between, bubbleSpec, clamp, creakPitch, creakSlips, dB, glassHz, grains, sparkHz, thunderEnvelope } from "./sound-math";
 
 /** When a sound that follows a movement starts and how long it runs: `delay` seconds after the call, over `ms`. */
 export type Timing = { delay?: number; ms?: number };
@@ -44,6 +44,15 @@ const MIX = {
   knock: -13.1,
   boil: -6.3,
   glow: -5.3,
+  flap: -3.3,
+  rattle: -4.4,
+  jingle: 8.9,
+  scribble: -5.3,
+  stamp: -10.1,
+  rustle: -6.5,
+  snap: -8.7,
+  crackle: -2.6,
+  tear: -0.2,
 };
 
 /** The arch of a sound that comes up out of nothing and goes back into it. */
@@ -481,8 +490,184 @@ const knock = (v: Voice) => {
   });
 };
 
+/* -------------------------------------------------------------------------------------------
+ * The holiday gifts' sounds (November 2026): paper doors, sleigh bells, a pen, a rubber stamp, a
+ * wishbone. Same rules as the night's: layers, nothing below about 300 Hz that matters, all of it
+ * into the one room, and every envelope starting from silence.
+ * ----------------------------------------------------------------------------------------- */
+
+/** A paper door coming open along its perforation: the tab giving with a dry "prrt", the flap swishing round, and the soft tap of it against its fold. */
+const flap = (v: Voice) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.flap);
+  const pan = between(rnd, -0.3, 0.3);
+  // The perforation: a few fibres going one after another.
+  const tear = noiseSource(v, "white", t, 0.09);
+  const tb = filter(c, "bandpass", 3600, 1.4);
+  const tg = c.createGain();
+  sprinkle(tg.gain, tb.frequency, t, grains(rnd, { length: 0.07, rate: 140, hz: [2800, 5200], len: [0.003, 0.008], level: [0.4, 1], shape: (x) => 1 - x * 0.5 }));
+  tear.connect(tb).connect(tg);
+  send(v, tg, { dry: 1, wet: 0.05, pan, level: 0.5 * k });
+  // The swing: air off a moving card, rising as it goes round.
+  const swing = noiseSource(v, "pink", t + 0.04, 0.3);
+  const band = filter(c, "bandpass", 900, 1);
+  glide(band.frequency, t + 0.04, between(rnd, 800, 1000), between(rnd, 2200, 2800), 0.26);
+  const sg = c.createGain();
+  swell(sg.gain, t + 0.04, 0.32 * k, 0.15, 0, 0.14);
+  swing.connect(band).connect(sg);
+  send(v, sg, { dry: 1, wet: 0.12, pan });
+  // The flap against its fold.
+  tap(v, t + 0.27, CARD_MODES.map((m) => ({ ...m, hz: m.hz * between(rnd, 0.94, 1.06) })), { level: 3.2 * k, burst: 0.0018, tone: 6000, wet: 0.12, pan });
+};
+
+/** A door that will not open yet, tugged twice against its tab: two light taps of card and a tick of the latch. */
+const rattle = (v: Voice) => {
+  const { t, rnd } = v;
+  const k = dB(MIX.rattle);
+  const pan = between(rnd, -0.25, 0.25);
+  [0, between(rnd, 0.07, 0.09)].forEach((at, i) => {
+    tap(v, t + at, CARD_MODES.map((m) => ({ ...m, hz: m.hz * 1.15 })), { level: (i ? 2.2 : 3) * k, burst: 0.0015, tone: 6000, wet: 0.08, pan });
+    click(v, t + at, 0.05 * k, 4200, 1.2, 0.003, { pan });
+  });
+};
+
+/**
+ * Sleigh bells, shaken, over `ms`: a strap of small bells struck by their pellets many times a second,
+ * every strike a little different, with the shimmer of metal round them.
+ */
+const jingle = (v: Voice, o: Timing = {}) => {
+  const { c, rnd } = v;
+  const t = v.t + (o.delay ?? 0);
+  const k = dB(MIX.jingle);
+  const length = clamp((o.ms ?? 700) / 1000, 0.3, 2);
+  for (const g of grains(rnd, { length, rate: 26, hz: [0, JINGLE_HZ.length - 0.001], len: [0.08, 0.2], level: [0.35, 1], shape: (x) => Math.sin(Math.PI * clamp(x, 0, 1)) ** 0.6 })) {
+    const hz = JINGLE_HZ[Math.floor(g.hz)] * between(rnd, 0.99, 1.01);
+    ring(v, t + g.at, hz, JINGLE, { level: 0.05 * k * g.level, decay: g.len, attack: 0.001, wet: 0.35, pan: between(rnd, -0.5, 0.5) });
+  }
+  const shimmer = noiseSource(v, "white", t, length + 0.1);
+  const sg = c.createGain();
+  wobble(sg.gain, t, length, 24, 0.3, 1, arch, rnd);
+  shimmer.connect(filter(c, "bandpass", 7000, 1.2)).connect(sg);
+  send(v, sg, { dry: 1, wet: 0.3, level: 0.025 * k });
+};
+
+/** A pen ticking a box, over `ms`: a short stroke down, a longer one up, paper under the nib. */
+const scribble = (v: Voice, ms = 320) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.scribble);
+  const length = clamp(ms / 1000, 0.15, 0.8);
+  const nib = noiseSource(v, "white", t, length);
+  const band = filter(c, "bandpass", 3200, 1.6);
+  const ng = c.createGain();
+  // Two strokes: the first a third of the way, the second the rest, with a lift between.
+  const split = length * 0.32;
+  const strokes = [
+    ...grains(rnd, { length: split * 0.9, rate: 70, hz: [2600, 3600], len: [0.006, 0.014], level: [0.5, 1] }),
+    ...grains(rnd, { length: length - split, rate: 70, hz: [3000, 4400], len: [0.006, 0.014], level: [0.5, 1] }).map((g) => ({ ...g, at: g.at + split })),
+  ];
+  sprinkle(ng.gain, band.frequency, t, strokes);
+  nib.connect(band).connect(ng);
+  send(v, ng, { dry: 1, wet: 0.08, level: 0.6 * k });
+  const paper = noiseSource(v, "pink", t, length);
+  const pg = c.createGain();
+  wobble(pg.gain, t, length, 30, 0.4, 1, arch, rnd);
+  paper.connect(filter(c, "bandpass", 1700, 0.9)).connect(pg);
+  send(v, pg, { dry: 1, wet: 0.08, level: 0.12 * k });
+};
+
+/** A rubber stamp brought down hard on paper on a desk: the desk's knock, the slap of the paper, the rubber's give. */
+const stamp = (v: Voice) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.stamp);
+  tap(v, t, DESK_MODES.map((m) => ({ ...m, hz: m.hz * between(rnd, 0.97, 1.03) })), { level: 14 * k, burst: 0.002, tone: 3200, wet: 0.22 });
+  const slap = noiseSource(v, "white", t, 0.1);
+  const sg = c.createGain();
+  hit(sg.gain, t, 0.5 * k, 0.0008, 0.05);
+  slap.connect(filter(c, "bandpass", 1500, 0.8)).connect(sg);
+  send(v, sg, { dry: 1, wet: 0.15 });
+  const squish = noiseSource(v, "pink", t + 0.006, 0.08);
+  const qg = c.createGain();
+  hit(qg.gain, t + 0.006, 0.35 * k, 0.004, 0.05);
+  squish.connect(filter(c, "bandpass", 700, 1.2)).connect(qg);
+  send(v, qg, { dry: 1, wet: 0.1 });
+  const body = c.createGain();
+  hit(body.gain, t, 0.12 * k, 0.001, 0.12);
+  sine(v, t, 0.16, [190, 120]).connect(body);
+  send(v, body, { dry: 1, wet: 0.2 });
+};
+
+/** Paper unrolling off a scroll, over `ms`: a soft rush of it, crinkling now and then. */
+const rustle = (v: Voice, o: Timing = {}) => {
+  const { c, rnd } = v;
+  const t = v.t + (o.delay ?? 0);
+  const k = dB(MIX.rustle);
+  const length = clamp((o.ms ?? 900) / 1000, 0.3, 3);
+  const rush = noiseSource(v, "pink", t, length);
+  const rg = c.createGain();
+  wobble(rg.gain, t, length, 18, 0.4, 1, arch, rnd);
+  rush.connect(filter(c, "bandpass", 2100, 0.8)).connect(rg);
+  send(v, rg, { dry: 1, wet: 0.15, level: 0.4 * k });
+  const crinkle = noiseSource(v, "white", t, length);
+  const cb = filter(c, "bandpass", 4500, 1.5);
+  const cg = c.createGain();
+  sprinkle(cg.gain, cb.frequency, t, grains(rnd, { length, rate: 24, hz: [3500, 6500], len: [0.004, 0.012], level: [0.3, 1] }));
+  crinkle.connect(cb).connect(cg);
+  send(v, cg, { dry: 1, wet: 0.12, level: 0.5 * k });
+};
+
+/** A wishbone giving way: one sharp crack, and the splinter of the second half a moment after. */
+const snap = (v: Voice) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.snap);
+  const crack = noiseSource(v, "white", t, 0.05);
+  const cg = c.createGain();
+  hit(cg.gain, t, 0.9 * k, 0.0003, 0.012);
+  crack.connect(filter(c, "highpass", 1400)).connect(cg);
+  send(v, cg, { dry: 1, wet: 0.1 });
+  tap(v, t, BONE_MODES.map((m) => ({ ...m, hz: m.hz * between(rnd, 0.95, 1.05) })), { level: 6 * k, burst: 0.001, tone: 9000, wet: 0.1 });
+  const splinter = t + between(rnd, 0.03, 0.05);
+  tap(v, splinter, BONE_MODES.map((m) => ({ ...m, hz: m.hz * 1.25 })), { level: 2.4 * k, burst: 0.001, tone: 9000, wet: 0.08, pan: between(rnd, -0.3, 0.3) });
+  click(v, splinter, 0.2 * k, 3800, 1, 0.004);
+};
+
+/** A wishbone under strain, over `ms`: ticks of it starting to give, more of them the harder it is pulled (`strain`, 0 to 1). */
+const crackle = (v: Voice, o: Timing & { strain?: number } = {}) => {
+  const { rnd } = v;
+  const t = v.t + (o.delay ?? 0);
+  const k = dB(MIX.crackle);
+  const length = clamp((o.ms ?? 400) / 1000, 0.1, 1.2);
+  const strain = clamp(o.strain ?? 0.5, 0, 1);
+  for (const g of grains(rnd, { length, rate: 6 + 22 * strain, hz: [1.1, 1.5], len: [0.001, 0.002], level: [0.3, 1] })) {
+    tap(v, t + g.at, BONE_MODES.slice(0, 3).map((m) => ({ ...m, hz: m.hz * g.hz })), { level: 1.6 * k * g.level * (0.5 + strain / 2), burst: g.len, tone: 8000, wet: 0.06 });
+  }
+};
+
+/**
+ * Wrapping paper torn off a present, over `ms`: fibres parting one after another, faster as the tear runs,
+ * the pitch of them climbing as the strip gets narrower, and the flap of the loose piece at the end.
+ */
+const tear = (v: Voice, ms = 320) => {
+  const { c, t, rnd } = v;
+  const k = dB(MIX.tear);
+  const length = clamp(ms / 1000, 0.15, 0.7);
+  const fibres = noiseSource(v, "white", t, length);
+  const band = filter(c, "bandpass", 2400, 1.3);
+  const fg = c.createGain();
+  sprinkle(fg.gain, band.frequency, t, grains(rnd, { length, rate: 90, hz: [1800, 4200], len: [0.004, 0.012], level: [0.4, 1], shape: (x) => Math.min(1, x * 5) * (1 - x * 0.4) }));
+  fibres.connect(band).connect(fg);
+  send(v, fg, { dry: 1, wet: 0.1, level: 0.7 * k });
+  const body = noiseSource(v, "pink", t, length);
+  const bb = filter(c, "bandpass", 1100, 0.9);
+  glide(bb.frequency, t, 900, 2200, length);
+  const bg = c.createGain();
+  swell(bg.gain, t, 0.22 * k, length * 0.7, 0, length * 0.3);
+  body.connect(bb).connect(bg);
+  send(v, bg, { dry: 1, wet: 0.12 });
+  tap(v, t + length, CARD_MODES.map((m) => ({ ...m, hz: m.hz * 0.8 })), { level: 1.2 * k, burst: 0.003, tone: 5000, wet: 0.15, pan: between(rnd, -0.4, 0.4) });
+};
+
 /** Every effect as a function of a voice, for anything that wants to render them without a speaker. */
-export const EFFECTS = { thunder, creak, scrape, tink, whoosh, flutter, bubbles, splash, boil, cork, sparkle, glow, ignite, carve, thunk, chime, knock };
+export const EFFECTS = { thunder, creak, scrape, tink, whoosh, flutter, bubbles, splash, boil, cork, sparkle, glow, ignite, carve, thunk, chime, knock, flap, rattle, jingle, scribble, stamp, rustle, snap, crackle, tear };
 
 const play =
   <A extends unknown[]>(effect: (v: Voice, ...args: A) => void) =>
@@ -523,3 +708,21 @@ export const playThunk = play(thunk);
 export const playChime = play(chime);
 /** Knuckles on a door, twice. */
 export const playKnock = play(knock);
+/** A paper door coming open. */
+export const playFlap = play(flap);
+/** A paper door that will not open yet, tugged. */
+export const playRattle = play(rattle);
+/** Sleigh bells, shaken over `ms`. */
+export const playJingle = play(jingle);
+/** A pen ticking a box, over `ms`. */
+export const playScribble = play(scribble);
+/** A rubber stamp on paper on a desk. */
+export const playStamp = play(stamp);
+/** Paper unrolling, over `ms`. */
+export const playRustle = play(rustle);
+/** A wishbone snapping. */
+export const playSnap = play(snap);
+/** A wishbone under strain, over `ms`; `strain` is 0 to 1. */
+export const playCrackle = play(crackle);
+/** Wrapping paper torn off a present, over `ms`. */
+export const playTear = play(tear);

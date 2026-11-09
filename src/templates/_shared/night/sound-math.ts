@@ -127,6 +127,45 @@ export const RIND_MODES: readonly Mode[] = [
   { hz: 5.8, q: 3, gain: 0.12 },
 ];
 
+/** A door cut into a card calendar, coming up against its own fold: light, papery, done almost at once. */
+export const CARD_MODES: readonly Mode[] = [
+  { hz: 780, q: 5, gain: 1 },
+  { hz: 1460, q: 6, gain: 0.7 },
+  { hz: 2550, q: 6, gain: 0.45 },
+  { hz: 3900, q: 5, gain: 0.25 },
+];
+
+/** A desk under a rubber stamp: a hard top on a frame, its notes kept above 300 Hz so a phone has them. */
+export const DESK_MODES: readonly Mode[] = [
+  { hz: 330, q: 9, gain: 0.8 },
+  { hz: 540, q: 9, gain: 1 },
+  { hz: 820, q: 8, gain: 1 },
+  { hz: 1220, q: 8, gain: 0.75 },
+  { hz: 1850, q: 7, gain: 0.45 },
+];
+
+/** A dry wishbone: thin, hard and hollow, so everything it has is high and over in a few milliseconds. */
+export const BONE_MODES: readonly Mode[] = [
+  { hz: 1150, q: 7, gain: 1 },
+  { hz: 1980, q: 8, gain: 0.85 },
+  { hz: 2950, q: 8, gain: 0.6 },
+  { hz: 4300, q: 6, gain: 0.35 },
+];
+
+/**
+ * A sleigh bell: a little hollow sphere with a pellet loose inside, so its partials are inharmonic and
+ * short, and all of it sits high, where a phone's speaker is at its best.
+ */
+export const JINGLE: readonly Overtone[] = [
+  { ratio: 1, gain: 1, ring: 1 },
+  { ratio: 2.32, gain: 0.6, ring: 0.7 },
+  { ratio: 4.25, gain: 0.35, ring: 0.45 },
+  { ratio: 6.63, gain: 0.2, ring: 0.3 },
+];
+
+/** The pitches of a strap of sleigh bells: no two alike, all between 2 and 4 kHz. */
+export const JINGLE_HZ = [2380, 2710, 3080, 3460] as const;
+
 /** The hollow of a small bottle when the cork has just left it. */
 export const BOTTLE_MODES: readonly Mode[] = [
   { hz: 330, q: 14, gain: 1 },

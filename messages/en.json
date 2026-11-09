@@ -883,6 +883,7 @@
     "graduation": "Graduation",
     "christmas": "Christmas",
     "halloween": "Halloween",
+    "thanksgiving": "Thanksgiving",
     "mothers-day": "Mother's Day",
     "fathers-day": "Father's Day",
     "apology": "Apology",
@@ -1514,6 +1515,11 @@
         "title": "Digital Halloween gifts",
         "description": "A Halloween gift they open with a tap: a doorbell, a jack-o'-lantern, a small ghost with your photos and your words, and a song in the dark. Free to start.",
         "intro": "Better than a bag of sweets. Ring the bell in Trick or Treat, light the pumpkin and let a small ghost hand over your photos, your message and your song."
+      },
+      "thanksgiving": {
+        "title": "Digital Thanksgiving gifts",
+        "description": "A Thanksgiving gift they open on their phone: a wishbone to pull, your wish on a card, your photos and the things you are thankful for, in your words.",
+        "intro": "Say the thank-you properly this year. They pull the wishbone, it snaps, and your wish comes out with the big half, followed by your letter, your photos and your song."
       },
       "just-because": {
         "title": "Just because gifts",

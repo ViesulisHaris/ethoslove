@@ -995,6 +995,61 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     },
   },
 
+  thanksgiving: {
+    en: {
+      title: "A Thanksgiving gift for the one across the table",
+      lead: "Thanksgiving is the one day of the year built around saying what you are grateful for, and most of us still mumble it over the turkey. Say it properly instead: a gift they open on their phone, with your photos, your song and a wishbone only one of you can win.",
+      sections: [
+        {
+          heading: "What to write",
+          body: "Gratitude goes flat when it is general. “Thankful for you” is a greeting card; “thankful you warm the car up before I get in” is a person. Pick three small, specific things from this year and one bigger one, and put the bigger one last. In Wishbone the wish on the card is 120 characters: make it about next year, not this one.",
+        },
+        {
+          heading: "Who it's for",
+          body: "A partner, obviously, but also the friend who hosts Friendsgiving every year and never gets thanked, the sibling who flies home for it, or the parent who still makes the stuffing nobody else is allowed to touch. For a host, send it the morning after, when the dishes are done and the house has gone quiet.",
+        },
+        {
+          heading: "When to send it",
+          body: "Schedule it for Thursday morning in their time zone, before the cooking starts and the phones go face down. Or hand it over at the table: print the QR card, tuck it under their plate, and let them pull the wishbone while everyone else argues about the pie. It opens with the phone camera, with nothing to install.",
+        },
+      ],
+      faq: [
+        {
+          q: "What happens in the Wishbone gift?",
+          a: "They pull their end of the wishbone with a finger until it snaps. You choose beforehand who gets the bigger half; then your wish comes out on a card, followed by your letter, your photos and your song.",
+        },
+        phoneEn,
+        costEn,
+      ],
+    },
+    es: {
+      title: "Un regalo de Acción de Gracias para quien se sienta a tu lado",
+      lead: "Acción de Gracias es el único día del año pensado para decir qué agradeces, y casi siempre acaba en un murmullo antes del pavo. Si lo celebráis, porque vivís fuera o porque lo habéis adoptado, dilo bien: un regalo que se abre en el móvil, con tus fotos, vuestra canción y una espoleta que solo uno de los dos puede ganar.",
+      sections: [
+        {
+          heading: "Qué escribir",
+          body: "El agradecimiento se queda plano cuando es general. «Gracias por ser como eres» es una tarjeta de supermercado; «gracias por calentar el coche antes de que yo salga» es una persona. Elige tres cosas pequeñas y concretas de este año y una más grande, y deja la grande para el final. En Wishbone, el deseo de la tarjeta tiene 120 caracteres: que hable del año que viene, no de este.",
+        },
+        {
+          heading: "Para quién",
+          body: "Para tu pareja, claro, pero también para quien organiza el Friendsgiving cada año y nunca recibe las gracias, para quien vuelve a casa en avión o para quien sigue haciendo el relleno que nadie más puede tocar. A quien organiza, mándaselo a la mañana siguiente, con los platos fregados y la casa en silencio.",
+        },
+        {
+          heading: "Cuándo enviarlo",
+          body: "Prográmalo para el jueves por la mañana en su zona horaria, antes de que empiece la cocina y los móviles acaben boca abajo. O dáselo en la mesa: imprime la tarjeta con el código QR, déjala bajo su plato y que tire de la espoleta mientras los demás discuten por la tarta. Se abre con la cámara del móvil, sin instalar nada.",
+        },
+      ],
+      faq: [
+        {
+          q: "¿Qué pasa en el regalo de Wishbone?",
+          a: "Tira de su punta de la espoleta con el dedo hasta que se parte. Tú eliges antes a quién le toca la mitad grande; después sale tu deseo en una tarjeta y, luego, tu carta, tus fotos y vuestra canción.",
+        },
+        phoneEs,
+        costEs,
+      ],
+    },
+  },
+
   "mothers-day": {
     en: {
       title: "A Mother's Day gift in your own words",

@@ -30,6 +30,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/occasions/anniversary": "2026-11-09",
   "/occasions/valentines": "2026-11-09",
   "/occasions/christmas": "2026-11-09",
+  "/occasions/thanksgiving": "2026-11-09",
   "/occasions/wedding": "2026-11-09",
   "/games/rather": "2026-10-24",
   "/games/deck": "2026-10-24",

@@ -39,8 +39,8 @@ describe("the headroom the song is given", () => {
     expect(LOUDEST_EFFECT_DB).toBeLessThan(-8);
   });
 
-  it("is applied by every one of the five gifts, to the song they start", () => {
-    for (const slug of ["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house"]) {
+  it("is applied by every gift that plays these effects, to the song it starts", () => {
+    for (const slug of ["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "nice-list", "unwrapped", "wishbone"]) {
       const source = readFileSync(`src/templates/${slug}/Template.tsx`, "utf8");
       expect(source, slug).toMatch(/useGiftAudio\(data\.music, mode !== "preview", MUSIC_CEILING\)/);
     }
@@ -394,6 +394,7 @@ class Fake {
 /** How long each effect may run, from the moment it starts, before it has to be over: the sound plus its room. */
 const MOST_SECONDS: Record<keyof typeof EFFECTS, number> = {
   thunder: 5, creak: 1.6, scrape: 1.4, tink: 1.5, whoosh: 1.7, flutter: 2, bubbles: 0.9, splash: 1.4, boil: 3, cork: 0.5, sparkle: 2, glow: 2.6, ignite: 2, carve: 1.3, thunk: 1.4, chime: 4, knock: 0.9,
+  flap: 0.8, rattle: 0.5, jingle: 1.6, scribble: 0.9, stamp: 0.6, rustle: 1.6, snap: 0.4, crackle: 0.9, tear: 1,
 };
 /** How each is played by the gifts that play it with a timing. */
 const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = {
@@ -408,6 +409,11 @@ const ARGS: Partial<Record<keyof typeof EFFECTS, unknown[]>> = {
   thunk: [{ delay: 0.85 }],
   boil: [{ ms: 2300 }],
   glow: [{ ms: 2200 }],
+  jingle: [{ ms: 700 }],
+  scribble: [320],
+  rustle: [{ ms: 1200 }],
+  crackle: [{ ms: 600, strain: 1 }],
+  tear: [320],
 };
 
 describe("every night sound, built against a recording stand-in", () => {

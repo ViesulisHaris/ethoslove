@@ -64,6 +64,9 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   cauldron: () => import("./cauldron/schema"),
   "jack-o-lantern": () => import("./jack-o-lantern/schema"),
   "haunted-house": () => import("./haunted-house/schema"),
+  wishbone: () => import("./wishbone/schema"),
+  unwrapped: () => import("./unwrapped/schema"),
+  "nice-list": () => import("./nice-list/schema"),
 };
 
 export const SCHEMA_SLUGS = Object.keys(schemaLoaders);

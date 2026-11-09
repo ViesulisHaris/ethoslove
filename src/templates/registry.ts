@@ -66,6 +66,9 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   cauldron: () => import("./cauldron"),
   "jack-o-lantern": () => import("./jack-o-lantern"),
   "haunted-house": () => import("./haunted-house"),
+  wishbone: () => import("./wishbone"),
+  unwrapped: () => import("./unwrapped"),
+  "nice-list": () => import("./nice-list"),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any */
 

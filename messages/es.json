@@ -883,6 +883,7 @@
     "graduation": "Graduación",
     "christmas": "Navidad",
     "halloween": "Halloween",
+    "thanksgiving": "Acción de Gracias",
     "mothers-day": "Día de la Madre",
     "fathers-day": "Día del Padre",
     "apology": "Disculpa",
@@ -1514,6 +1515,11 @@
         "title": "Regalos digitales de Halloween",
         "description": "Un regalo de Halloween que se abre con un toque: un timbre, una calabaza iluminada, un fantasmita con tus fotos y tus palabras, y una canción en la oscuridad. Gratis para empezar.",
         "intro": "Mejor que una bolsa de caramelos. Llama al timbre en Truco o trato, enciende la calabaza y deja que un fantasmita entregue tus fotos, tu mensaje y tu canción."
+      },
+      "thanksgiving": {
+        "title": "Regalos digitales de Acción de Gracias",
+        "description": "Un regalo de Acción de Gracias que se abre en el móvil: una espoleta de la que tirar, tu deseo en una tarjeta, tus fotos y lo que agradeces, con tus palabras.",
+        "intro": "Este año, da las gracias bien. Tira de la espoleta, se parte y tu deseo sale con la mitad grande, seguido de tu carta, tus fotos y vuestra canción."
       },
       "just-because": {
         "title": "Regalos porque sí",

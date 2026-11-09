@@ -629,6 +629,41 @@ const SCRIPTS = {
     await page.waitForTimeout(1500);
     return poster;
   },
+  "nice-list": async (page) => {
+    await hideControls(page);
+    const untie = page.getByRole("button", { name: /untie the ribbon/i });
+    await untie.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    await untie.click({ force: true });
+    await page.waitForTimeout(900);
+    await page.getByRole("button", { name: /pull it down/i }).click({ force: true });
+    // It unrolls, ticks every line, and the stamp comes down: the stamped list is the poster.
+    await page.getByRole("button", { name: /read the letter/i }).waitFor({ timeout: 20000 });
+    await page.waitForTimeout(600);
+    return page.screenshot();
+  },
+  unwrapped: async (page) => {
+    await hideControls(page);
+    const unwrap = page.getByRole("button", { name: /tap to unwrap/i });
+    await unwrap.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    const poster = await page.screenshot();
+    await unwrap.click({ force: true });
+    await page.waitForTimeout(500);
+    await page.getByRole("button", { name: /tap to unwrap/i }).click({ force: true });
+    await page.waitForTimeout(1800);
+    return poster;
+  },
+  wishbone: async (page) => {
+    await hideControls(page);
+    const pull = page.getByRole("button", { name: /pull your side/i });
+    await pull.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    const poster = await page.screenshot();
+    await pull.click({ force: true });
+    await page.waitForTimeout(2600);
+    return poster;
+  },
   "haunted-house": async (page) => {
     await hideControls(page);
     const gate = page.getByRole("button", { name: /open the gate/i });
