@@ -5,7 +5,7 @@ import { catchesPerLevel } from "@/templates/arcade/Game";
 import { fieldsSchema as arcadeFields } from "@/templates/arcade/schema";
 import { TEMPLATE_SLUGS, loadTemplate } from "@/templates/registry";
 
-describe("template settings a gift left out or can't use", () => {
+describe("template settings a gift left out or its template can't use", () => {
   it("give the Arcade gift of 9 Nov its 8 catches per level, and keep everything its sender set", () => {
     // Exactly what that gift had saved after an edit to it live: no perLevel at all.
     const saved = { crt: true, item: "heart", title: "Buggle's Birthday Quest" };
@@ -13,11 +13,19 @@ describe("template settings a gift left out or can't use", () => {
     expect(saved).toEqual({ crt: true, item: "heart", title: "Buggle's Birthday Quest" });
   });
 
-  it("fill a null its schema doesn't allow, and leave whatever the sender saved exactly as it is", () => {
+  it("fill a null its schema doesn't allow", () => {
     expect(withFieldDefaults(arcadeFields, { item: "star", perLevel: null, crt: false })).toEqual({ item: "star", perLevel: 8, crt: false });
-    // Odd values are the template's to handle (catchesPerLevel below), never silently swapped here.
-    const odd = { item: "cake", perLevel: 88, crt: false };
-    expect(withFieldDefaults(arcadeFields, odd)).toBe(odd);
+  });
+
+  it("bring a number back within its limits, and swap a choice the template can't take for its default", () => {
+    expect(withFieldDefaults(arcadeFields, { item: "cake", perLevel: 88, crt: false })).toEqual({ item: "cake", perLevel: 20, crt: false });
+    expect(withFieldDefaults(arcadeFields, { item: "kite", perLevel: 2, crt: "yes" })).toEqual({ item: "heart", perLevel: 3, crt: true });
+    expect(withFieldDefaults(arcadeFields, { item: "star", perLevel: "8", crt: false })).toEqual({ item: "star", perLevel: 8, crt: false });
+  });
+
+  it("never change what the sender wrote, even past the editor's limits", () => {
+    const long = { item: "star", perLevel: 5, crt: false, title: "A title far longer than the twenty-four letters" };
+    expect(withFieldDefaults(arcadeFields, long)).toBe(long);
   });
 
   it("keep a sender's short list, even below the template's minimum, rather than swap it for an empty default", async () => {

@@ -15,6 +15,7 @@ import { getCurrentUser } from "@/lib/auth/get-user";
 // components, and three.js, into the editor's first download (see src/templates/schemas.ts).
 import { getManifest } from "@/templates/manifests";
 import { loadFieldsSchema } from "@/templates/schemas";
+import { withFieldDefaults } from "@/templates/_shared/field-defaults";
 import type { Json } from "@/lib/supabase/types";
 import { notifyPublished } from "@/lib/email/notify";
 import { claimFreeReply, freeReplyFor, releaseFreeReply } from "@/lib/commerce/free-reply";
@@ -131,9 +132,15 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
 
   const writer = recipientFacingWriter();
   if (!writer) return { ok: false, error: "not_configured" };
+  // Recipients see a live edit at once, so it is stored complete, as publishing stores a gift: a
+  // setting it left out (a cleared number box saves none) or a choice the template can't take goes
+  // in as the template's default, a number past its limits as the limit. What the sender wrote is
+  // kept as it is. On 9 Nov an Arcade gift lost its catches per level this way.
+  const fieldsSchema = await loadFieldsSchema(row.template_slug);
+  const fields = data.fields && typeof data.fields === "object" ? withFieldDefaults(fieldsSchema, data.fields as Record<string, unknown>) : data.fields;
   const { error } = await writer
     .from("gifts")
-    .update({ ...patch, storage_pruned_at: null })
+    .update({ ...patch, data: { ...data, fields } as unknown as Json, storage_pruned_at: null })
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .in("status", ["scheduled", "live"]);
