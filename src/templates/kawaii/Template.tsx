@@ -16,6 +16,7 @@ import { RichMessage } from "../_shared/RichMessage";
 import { Countdown } from "../_shared/Countdown";
 import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { EndScreen } from "../_shared/EndScreen";
+import { FitName } from "../_shared/FitName";
 import { SoundToggle } from "../_shared/SoundToggle";
 import { Ambience } from "../_shared/Ambience";
 import { Confetti } from "../_shared/Confetti";
@@ -119,15 +120,19 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 function Waiting({ p, tone, data, s, greeting, banner, opening, onOpen, reduce }: { p: Palette; tone: CoverTone; data: TemplateProps<KawaiiFields>["data"]; s: (typeof S)["en"]; greeting: string; banner: string; opening: boolean; onOpen: () => void; reduce: boolean }) {
   return (
     <motion.div className="absolute inset-0 z-10 flex flex-col items-center" exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.45 } }}>
-      {/* their name, big, in the handwriting */}
+      {/* their name, big, in the handwriting. A long title shrinks to fit rather than filling the
+          screen: at full size an 80-letter one took five lines and pushed the box, the only way
+          in, off the bottom of a phone (the template sweep, 9 Nov). */}
       <motion.p
-        className="mt-[calc(19*var(--k))] max-w-[calc(86*var(--k))] text-center text-[calc(13*var(--k))] leading-none"
+        className="mt-[calc(19*var(--k))] w-[calc(86*var(--k))] max-w-[calc(86*var(--k))] text-center text-[calc(13*var(--k))] leading-[1.05]"
         style={{ fontFamily: "var(--gift-font-hand)", color: p.bowDeep, textShadow: "0 2px 0 #fff" }}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.7 }}
       >
-        {data.title || data.recipientName}
+        <FitName min={0.4} className="block w-full">
+          {data.title || data.recipientName}
+        </FitName>
       </motion.p>
 
       {/* speech bubble */}
