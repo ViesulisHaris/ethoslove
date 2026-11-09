@@ -8,6 +8,15 @@ type Particle = { x: number; y: number; vx: number; vy: number; life: number; co
 export const W = 160;
 export const H = 260;
 
+/**
+ * Catches a level needs: the sender's number, kept to the 3–20 the editor offers, or the default 8.
+ * Never anything a level can't be cleared with: a gift once reached its game with none, the counter
+ * read "8/undefined" and every level ended in three lost lives.
+ */
+export function catchesPerLevel(n: unknown): number {
+  return typeof n === "number" && Number.isFinite(n) ? Math.min(20, Math.max(3, Math.round(n))) : 8;
+}
+
 export class CatchGame {
   private ctx: CanvasRenderingContext2D;
   private items: Item[] = [];

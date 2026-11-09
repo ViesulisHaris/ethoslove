@@ -17,6 +17,7 @@ import { TemplateErrorBoundary } from "./ErrorBoundary";
 import { ReplyModeContext } from "./reply-mode";
 import { GiftChromeContext } from "./gift-chrome";
 import { UnwrapPeek } from "./UnwrapGift";
+import { withFieldDefaults } from "./field-defaults";
 
 const MIN_LOADING_MS = 1600;
 
@@ -98,8 +99,12 @@ export function GiftRenderer({
   const resolved = useMemo(() => {
     if (!base) return base;
     const covered = coverOverride ? { ...base, cover: coverOverride } : base;
-    return lookOverride ? { ...covered, fields: { ...covered.fields, look: lookOverride } } : covered;
-  }, [base, coverOverride, lookOverride]);
+    const looked = lookOverride ? { ...covered, fields: { ...covered.fields, look: lookOverride } } : covered;
+    // A setting the gift left out, or one its template can't take, reads as the template's default,
+    // as the editor showed it: no template ever meets a hole in its own settings.
+    const fields = mod && looked.fields && typeof looked.fields === "object" ? withFieldDefaults(mod.fieldsSchema, looked.fields) : looked.fields;
+    return fields === looked.fields ? looked : { ...looked, fields };
+  }, [base, coverOverride, lookOverride, mod]);
   const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview");
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
 
