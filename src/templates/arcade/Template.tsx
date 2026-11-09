@@ -450,6 +450,8 @@ function MessagePanel({
   const [done, setDone] = useState(instant);
   const endRef = useRef<HTMLDivElement>(null);
   const endedRef = useRef(false);
+  // `done` too: the end screen only exists once the message has typed out, so watching for it only
+  // when the panel opened found nothing, and a typed message never said the gift was seen to its end.
   useEffect(() => {
     const el = endRef.current;
     if (!el) return;
@@ -464,7 +466,7 @@ function MessagePanel({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <div
       className="mx-auto flex w-[min(90cqw,520px)] flex-col gap-5 pt-[max(10cqh,56px)] pb-[max(2rem,env(safe-area-inset-bottom))] text-[#e9e4d8]"

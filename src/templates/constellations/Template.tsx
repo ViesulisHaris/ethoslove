@@ -587,7 +587,7 @@ function MessagePanel({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
 
   const followCaret = useCallback((caret: HTMLElement) => {
     const scroller = scrollerRef.current;

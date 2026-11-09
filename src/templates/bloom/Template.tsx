@@ -538,7 +538,7 @@ function Note({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <div className="mx-auto flex w-[min(90cqw,520px)] flex-col gap-4 pt-[max(12cqh,64px)] pb-[max(2rem,env(safe-area-inset-bottom))]">
       <button

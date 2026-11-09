@@ -290,7 +290,7 @@ function GiftPanel({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, on
     }, { threshold: 0.5 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   const photo = data.photos[active];
   return (
     <div className="mx-auto flex w-[min(92cqw,560px)] flex-col gap-5 pt-[max(10cqh,56px)] pb-[max(2rem,env(safe-area-inset-bottom))]">

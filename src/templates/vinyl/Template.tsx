@@ -309,7 +309,7 @@ function LinerNotes({ data, mode, blocks, reduce, paper, muted, tone, label, onE
     }, { threshold: 0.5 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <section ref={ref} className="mx-auto mt-10 flex w-[min(92cqw,560px)] flex-col gap-5 pb-[max(2rem,env(safe-area-inset-bottom))]">
       <div className="rounded-[6px] p-6 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.5)] sm:p-8" style={{ background: paper }}>

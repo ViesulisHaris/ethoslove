@@ -448,7 +448,7 @@ function Pages({
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
 
   const pageStyle = {
     background: "#f3eee0",

@@ -352,7 +352,7 @@ function LetterBody({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, o
     }, { threshold: 0.5 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <div className="mx-auto flex w-[min(88cqw,560px)] flex-col gap-6 pt-[max(8cqh,48px)] pb-[calc(3.5rem+env(safe-area-inset-bottom))] text-ink">
       <div>

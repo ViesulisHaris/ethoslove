@@ -337,7 +337,7 @@ function EndingSection({ data, mode, blocks, reduce, ending, paper, onEvent, onR
     }, { threshold: 0.5 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <section ref={ref} className="relative flex min-h-full flex-col items-center px-6 pt-[14cqh] pb-[max(2rem,env(safe-area-inset-bottom))]">
       <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.9 }} className="max-w-sm text-center text-[clamp(1.7rem,8cqw,2.4rem)] leading-tight italic" style={{ fontFamily: "var(--gift-font-display)" }}>

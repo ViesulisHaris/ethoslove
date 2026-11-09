@@ -266,7 +266,7 @@ function WallText({ data, mode, blocks, reduce, palette, label, onEvent, onReact
     }, { threshold: 0.4 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
   return (
     <div ref={ref} className="flex w-[min(88cqw,520px)] flex-col gap-5">
       <div>

@@ -332,7 +332,7 @@ function FilmPanel({ data, mode, blocks, reduce, onEvent, onReact, onMakeOne, on
     }, { threshold: 0.5 });
     io.observe(el);
     return () => io.disconnect();
-  }, [onEvent]);
+  }, [onEvent, done]);
 
   return (
     <motion.div ref={scroller} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} className="absolute inset-0 z-[35] overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none">
