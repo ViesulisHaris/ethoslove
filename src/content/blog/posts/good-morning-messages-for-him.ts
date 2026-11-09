@@ -118,7 +118,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Long good morning messages for him" },
         {
           type: "p",
-          text: "Once in a while, on a morning when he isn't rushing, send something he'll read twice. Tell him one small thing you noticed lately, then end on the day he has ahead. Our guide on [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend) has shorter lines for the rest of the day.",
+          text: "Once in a while, on a morning when he isn't rushing, send something he'll read twice. Tell him one small thing you noticed lately, then end on the day he has ahead. Our guide on [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend) has shorter lines for the rest of the day, and for the other end of it there are [good night messages for him](/blog/good-night-messages-for-him).",
         },
         {
           type: "quote",
@@ -275,7 +275,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Mensajes de buenos días largos para tu novio" },
         {
           type: "p",
-          text: "De vez en cuando, una mañana en que no vaya con prisa, mándale algo que lea dos veces. Cuéntale una cosa pequeña que hayas notado últimamente y termina con el día que tiene por delante. Nuestra guía de [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tiene frases más cortas para el resto del día.",
+          text: "De vez en cuando, una mañana en que no vaya con prisa, mándale algo que lea dos veces. Cuéntale una cosa pequeña que hayas notado últimamente y termina con el día que tiene por delante. Nuestra guía de [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tiene frases más cortas para el resto del día, y para el final de la jornada están los [mensajes de buenas noches para tu novio](/blog/good-night-messages-for-him).",
         },
         {
           type: "quote",

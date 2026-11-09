@@ -1,0 +1,150 @@
+{
+  "slug": "good-night-messages-for-him",
+  "keyword": "good night messages for him",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The paragraph above says 'None of these ask for a reply', and the post later says 'Leave the question for tomorrow', but this line is a question that asks for a reply.; The night before an interview or exam, a line that brings up something he forgot to prepare puts the worry back in his head. That is the opposite of the section's advice to give him permission to stop going over it."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "The Constellations note claims something about Ethos that the code contradicts. EN: \"Free, with three to twelve photos.\" ES: \"Gratis, con entre tres y doce fotos.\" Free gifts hold 10 photos. src/lib/gift/publish.ts premiumExtras() adds \"morePhotos\" when data.photos.length > 10, and messages/en.json editor...free10 says \"Free gifts hold 10 photos. Unlock the template for 20.\" pricing.freeNote agrees. The manifest max of 12 is only reachable with an unlock or with \"Make it special\"."
+          ],
+          "summary": "Free gifts stop at 10 photos (publish.ts premiumExtras 'morePhotos', en.json free10). This is the dealbreaker above.; Same error in Spanish (es.json free10: \"Los regalos gratis admiten 10 fotos\").; The seal shows the sender's initial by default (the-letter/Template.tsx: sealInitial falls back to initialOf(data.senderName); field-meta.ts: \"Defaults to your initial.\"). His name goes on the envelope.; Same error in Spanish (field-meta.ts es: \"Por defecto, tu inicial.\").; On silent, a phone still lights the screen and by default still vibrates. Only Do Not Disturb or a sleep mode stops it. As writ"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The top-ranking result (marriage.com, '100+ Cute Good Night Messages for Him (Romantic, Sweet & Flirty Texts)', in both EN and ES) and several others carry a flirty section; 'flirty good night texts for him' is a major variant this post has no heading or lines for.; The Spanish keyword and the way people search is 'para mi novio'; the sister post good-morning-messages-for-him already uses 'Mensajes de buenos días para mi novio' in its ES title, so this one should match the query in the title."
+        }
+      ],
+      "applied": [
+        "Constellations note: free gifts hold ten photos, not twelve (src/config/site.ts LIMITS.free.maxPhotos); shape no longer fixed to a heart",
+        "The Letter: seal carries the sender's initial (field-meta.ts)",
+        "Silent mode replaced with Do Not Disturb or a sleep mode in body, takeaways and FAQ, EN and ES",
+        "Text Thread note no longer implies texting someone lying next to you; ES subjunctive fixed",
+        "ES 'deslizarse' line rewritten",
+        "'Same time tomorrow?' made a statement; big-day line no longer brings up what he forgot",
+        "Flirty good night texts section added in EN and ES",
+        "ES title uses 'para mi novio'",
+        "Polish: squeaky door instead of cupboard, ES wording (cuenta repeat, en las dos horas, claro, ni repeated, pie de foto, curly quotes), phone-on-pillow line replaced to avoid echoing virtual-date-ideas-long-distance, Constellations note reworded"
+      ],
+      "rejected": [
+        "Editor's suggested 'or up to twelve with an unlock' left out: the note only states the free limit, to avoid a further pricing claim",
+        "Search polish: thinking-of-you link and edits to cute-things-to-say-to-your-boyfriend not taken, to keep the change set to what was asked",
+        "'Sweet and romantic' heading polish not taken"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Almost word for word the same as reasons-why-i-love-you.ts (\"You laugh at your own joke before you've finished it\"). The new line still matches the FAQ's \"the joke he ruined\".; Matches the EN fix and still agrees with the ES FAQ's \"el chiste que estropeó\".; \"en las dos horas\" reads as \"within those two hours\" (a span of time), not \"at both times\". The round-1 polish swapped one ambiguity for another."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Own-joke line rewritten in EN and ES (echoed reasons-why-i-love-you)",
+        "ES 'en las dos horas' ambiguity fixed",
+        "Polish taken to head off echo fixes: 'across a pillow', 'undoes the first', Text Thread closing line",
+        "Polish taken for accuracy: scheduling uses the sender's phone time; The Letter photos appear as polaroids rather than inside the envelope",
+        "ES polish: 'prefiero que sean', 'Varía' line, 'quedar dormida'"
+      ],
+      "rejected": [
+        "Search polish (romantic heading, ES description 'mi novio', link from cute-things-to-say-to-your-boyfriend) not taken: not needed and outside what the reviewers required",
+        "Reader polish on the '11 here and 5 there' line not taken; it stays a sample line as the editor agreed"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's '11 here and 5 there' rewording; search's 'romantic' heading, ES description 'mi novio' and a link from cute-things-to-say-to-your-boyfriend; editor's ES 'aunque nadie esté mirando'"
+      ]
+    }
+  ]
+}
