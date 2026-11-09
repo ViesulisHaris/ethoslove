@@ -348,3 +348,23 @@ Two things on our side were in the way:
 
 `tests/unit/crawl.test.ts` reads robots.txt the way Google does (every sitemap page open, every
 prefetch closed, assets open) and checks that no sitemap date comes from the clock.
+## Ninth round, 9 Nov: links and reach without hand work
+
+The owner asked for link building that runs by itself, under about $50 a month, and for Pinterest
+automated "for max reach". What runs now:
+
+- **A free tool people link to without being asked:** /tools/how-long-have-we-been-together (EN and ES),
+  a days-together counter with every milestone ahead (100 days, 1,000 days, monthiversaries, anniversaries,
+  the Korean first-day-is-day-1 count) and a shareable link. Google shows small tool sites for "how long
+  have we been together calculator" and "how many days have we been together" (lovecounter, loverzz.app,
+  ourcouple.app, amourly.app): winnable. Linked from the footer on every page.
+- **Pinterest by itself:** a daily cloud routine (ethoslove-tiktok, cloud/pins.mjs, routine
+  trig_01BkhLBVtvjMqyTQ1qttZiqn) pins the site's own pages, 6 a day growing to 10, in English and Spanish,
+  onto 17 keyword boards (8 new ones for searches Google sends to Pinterest, like "virtual gift ideas for
+  boyfriend" and "regalos digitales para novio").
+- **Journalist requests (HARO):** HARO.md. The owner writes answers once in their own words; Claude matches
+  requests to them. Not running until the owner signs up.
+
+Not done on purpose: paid daily backlinks (Google's spam policy names automated link services) and Reddit
+(the owner tried it for earlier businesses; it did nothing).
+

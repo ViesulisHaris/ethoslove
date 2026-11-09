@@ -195,7 +195,8 @@
     "rights": "© {year} Ethos · SIA MIGLAI, Latvia",
     "madeWith": "Made in Riga.",
     "explore": "Explore",
-    "digitalGifts": "Digital gifts"
+    "digitalGifts": "Digital gifts",
+    "togetherCounter": "Days together counter"
   },
   "auth": {
     "loginTitle": "Welcome back",
@@ -3299,5 +3300,29 @@
     "more": "Gift ideas for someone else",
     "occasions": "By occasion",
     "footerTitle": "Gift ideas"
+  },
+  "together": {
+    "dateLabel": "The day you got together",
+    "firstDay": "Count the first day as day 1, the way couples in Korea do",
+    "empty": "Pick your date and the count starts.",
+    "future": "That's still ahead: {count, plural, one {# day} other {# days}} to go.",
+    "days": "{count, plural, one {# day together} other {# days together}}",
+    "dayN": "{count, plural, other {Today is day #}}",
+    "years": "{count, plural, one {# year} other {# years}}",
+    "months": "{count, plural, one {# month} other {# months}}",
+    "daysPart": "{count, plural, one {# day} other {# days}}",
+    "live": "{hours} hours · {minutes} minutes · {seconds} seconds",
+    "next": "Coming up",
+    "past": "Behind you",
+    "mDays": "{count, plural, other {# days}}",
+    "mMonths": "{count, plural, one {1 month} other {# months}} together",
+    "mYears": "{count, plural, one {Your first anniversary} other {# years together}}",
+    "today": "Today",
+    "inDays": "{count, plural, one {in # day} other {in # days}}",
+    "ago": "{count, plural, one {# day ago} other {# days ago}}",
+    "share": "Copy the link to your counter",
+    "copied": "Link copied",
+    "gift": "Make a gift that opens on {date}",
+    "privacy": "Your date stays on this device. The link carries only the date."
   }
 }

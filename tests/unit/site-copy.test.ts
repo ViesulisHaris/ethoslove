@@ -10,6 +10,7 @@ import { DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content
 import { PACK_CARDS } from "@/lib/games/pack-cards";
 import { DECKS } from "@/lib/games/questions";
 import { listManifests } from "@/templates/manifests";
+import { TOGETHER_GUIDE } from "@/content/together-guide";
 import { fillerIn } from "./filler";
 
 type Locale = "en" | "es";
@@ -34,6 +35,7 @@ const SOURCES: Record<string, unknown> = {
   "digital gifts": { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS },
   "template search entries": TEMPLATE_SEO,
   "template guides": TEMPLATE_GUIDES,
+  "days-together counter": TOGETHER_GUIDE,
   games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
   "game packs": PACK_CARDS,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),

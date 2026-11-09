@@ -36,6 +36,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/games/dare": "2026-10-24",
   "/games/know": "2026-10-24",
   "/long-distance": "2026-10-25",
+  "/tools/how-long-have-we-been-together": "2026-11-09",
   "/pricing": "2026-10-25",
   // The date the legal pages print at the top.
   "/legal/*": LEGAL_UPDATED,

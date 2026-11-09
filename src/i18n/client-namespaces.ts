@@ -49,6 +49,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/trips/layout": ["trips", "affiliate", "giftChooser", "savedDates", "auth"],
   "(marketing)/long-distance/layout": ["ldr", "dates.where", "trips.flights", "affiliate", "templates"],
   "(marketing)/games/layout": ["games", "packs", "money.checkoutErrors"],
+  // The days-together counter and its template cards.
+  "(marketing)/tools/how-long-have-we-been-together/page": ["together", "templates"],
   "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers"],
   "(app)/layout": ["account", "dashboard", "lifecycle", "money", "membership", "savedDates"],
   "(auth)/layout": ["auth"],

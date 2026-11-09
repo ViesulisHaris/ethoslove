@@ -195,7 +195,8 @@
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
     "madeWith": "Hecho en Riga.",
     "explore": "Explorar",
-    "digitalGifts": "Regalos digitales"
+    "digitalGifts": "Regalos digitales",
+    "togetherCounter": "Contador de días juntos"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -3299,5 +3300,29 @@
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
     "footerTitle": "Ideas de regalo"
+  },
+  "together": {
+    "dateLabel": "El día que empezasteis",
+    "firstDay": "Contar el primer día como el día 1, como hacen las parejas en Corea",
+    "empty": "Elige vuestra fecha y empieza la cuenta.",
+    "future": "Todavía no ha llegado: {count, plural, one {falta # día} other {faltan # días}}.",
+    "days": "{count, plural, one {# día juntos} other {# días juntos}}",
+    "dayN": "{count, plural, other {Hoy es el día #}}",
+    "years": "{count, plural, one {# año} other {# años}}",
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "daysPart": "{count, plural, one {# día} other {# días}}",
+    "live": "{hours} horas · {minutes} minutos · {seconds} segundos",
+    "next": "Lo que viene",
+    "past": "Lo que ya habéis vivido",
+    "mDays": "{count, plural, other {# días}}",
+    "mMonths": "{count, plural, one {1 mes} other {# meses}} juntos",
+    "mYears": "{count, plural, one {Vuestro primer aniversario} other {# años juntos}}",
+    "today": "Hoy",
+    "inDays": "{count, plural, one {dentro de # día} other {dentro de # días}}",
+    "ago": "{count, plural, one {hace # día} other {hace # días}}",
+    "share": "Copiar el enlace de vuestro contador",
+    "copied": "Enlace copiado",
+    "gift": "Haz un regalo que se abra el {date}",
+    "privacy": "Vuestra fecha se queda en este dispositivo. El enlace solo lleva la fecha."
   }
 }
