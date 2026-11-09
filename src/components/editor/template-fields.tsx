@@ -78,13 +78,28 @@ export function TemplateFields({ mod, locale, only, except }: { mod: TemplateMod
                 <ColorInput value={String(value || "#000000")} onChange={(v) => patchFields({ [d.key]: v })} />
               </Field>
             );
-          case "number":
+          case "number": {
+            // The box shows what is saved, nothing else. An empty optional number stays empty: shown as 0
+            // it read as an age, and saved as 0 it failed the schema's minimum at publish. A cleared box
+            // with a default shows that default greyed out, as what the gift will use: shown as a real "8"
+            // it looked set while nothing was saved (an Arcade gift's catches per level, 9 Nov).
+            const saved = fields[d.key];
             return (
               <Field key={d.key} id={id} label={label} help={m?.help}>
-                {/* An empty optional number stays empty: shown as 0 it read as an age, and saved as 0 it failed the schema's minimum at publish. */}
-                <Input id={id} type="number" inputMode="numeric" value={value === "" || value === undefined || value === null ? "" : String(value)} min={d.min} max={d.max} onChange={(e) => patchFields({ [d.key]: e.target.value === "" ? undefined : Number(e.target.value) })} className="h-11" />
+                <Input
+                  id={id}
+                  type="number"
+                  inputMode="numeric"
+                  value={typeof saved === "number" && Number.isFinite(saved) ? String(saved) : ""}
+                  placeholder={d.defaultValue !== undefined ? String(d.defaultValue) : undefined}
+                  min={d.min}
+                  max={d.max}
+                  onChange={(e) => patchFields({ [d.key]: e.target.value === "" ? undefined : Number(e.target.value) })}
+                  className="h-11"
+                />
               </Field>
             );
+          }
           case "list":
             return (
               <Field key={d.key} id={id} label={label} help={m?.help}>

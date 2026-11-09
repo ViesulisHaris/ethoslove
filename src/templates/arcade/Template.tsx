@@ -22,7 +22,7 @@ import { EndScreen } from "../_shared/EndScreen";
 import { Ambience, type AmbienceKind } from "../_shared/Ambience";
 import { COVER_VARS, CoverPage, Float, StickerScatter, TapPill, type CoverTone, type StickerPlacement } from "../_shared/cover-kit";
 import type { ArcadeFields } from "./schema";
-import { CatchGame, W, H, type GameState } from "./Game";
+import { CatchGame, W, H, catchesPerLevel, type GameState } from "./Game";
 import { ARCADE_KEYFRAMES, Console, MINT_DEEP, PixelDrift, PRINT } from "./art";
 
 const MONO = "ui-monospace, Menlo, monospace";
@@ -103,6 +103,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const levels = Math.max(1, Math.min(8, data.photos.length));
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
   const title = data.fields.title || `${data.recipientName.toUpperCase()} ${s.quest}`;
+  const perLevel = catchesPerLevel(data.fields.perLevel);
 
   const onClear = useCallback(
     (st: GameState) => {
@@ -122,13 +123,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       onLevelClear: onClear,
       onFail: () => setPhase("fail"),
     });
-    game.perLevel = data.fields.perLevel;
+    game.perLevel = perLevel;
     game.sprite = data.fields.item;
     game.accent = data.accentColor;
     game.reduced = !!reduce;
     gameRef.current = game;
     return () => game.stop();
-  }, [mode, data.fields.perLevel, data.fields.item, data.accentColor, reduce, onClear]);
+  }, [mode, perLevel, data.fields.item, data.accentColor, reduce, onClear]);
 
   const play = (lv: number) => {
     const game = gameRef.current;
@@ -277,7 +278,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
                       <span aria-hidden="true" className="ar-blink ml-[calc(.9*var(--k))] inline-block h-[calc(3.8*var(--k))] w-[calc(2.2*var(--k))] translate-y-[calc(.3*var(--k))] bg-current" />
                     </p>
                     <p className="text-[calc(2.3*var(--k))] leading-snug tracking-[0.1em] text-[#D6E9DE]/80" style={{ fontFamily: MONO }}>
-                      {s.drag.replace("{n}", String(data.fields.perLevel))}
+                      {s.drag.replace("{n}", String(perLevel))}
                     </p>
                     <p className="text-[calc(2*var(--k))] tracking-[0.08em] text-[#D6E9DE]/45" style={{ fontFamily: MONO }}>
                       {s.bad}

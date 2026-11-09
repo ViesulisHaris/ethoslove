@@ -2,11 +2,21 @@
 export type GameState = { level: number; caught: number; misses: number; score: number };
 export type GameEvents = { onCatch: (s: GameState) => void; onMiss: (s: GameState) => void; onLevelClear: (s: GameState) => void; onFail: (s: GameState) => void };
 
-type Item = { x: number; y: number; vy: number; wobble: number; kind: "good" | "bad" };
+/** `gone`: caught, or fell past the floor. Out of play from that frame on, and counted only once. */
+type Item = { x: number; y: number; vy: number; wobble: number; kind: "good" | "bad"; gone?: boolean };
 type Particle = { x: number; y: number; vx: number; vy: number; life: number; color: string };
 
 export const W = 160;
 export const H = 260;
+
+/**
+ * Catches a level needs: the sender's number, kept to the 3–20 the editor offers, or the default 8.
+ * Never anything a level can't be cleared with: a gift once reached its game with none, the counter
+ * read "8/undefined" and every level ended in three lost lives.
+ */
+export function catchesPerLevel(n: unknown): number {
+  return typeof n === "number" && Number.isFinite(n) ? Math.min(20, Math.max(3, Math.round(n))) : 8;
+}
 
 export class CatchGame {
   private ctx: CanvasRenderingContext2D;
@@ -98,7 +108,7 @@ export class CatchGame {
       it.y += it.vy * dt;
       it.x += Math.sin(this.time * 3 + it.wobble) * 12 * dt;
       if (it.y > by - 8 && it.y < by + 8 && Math.abs(it.x - bx) < 16) {
-        it.y = 999;
+        it.gone = true;
         if (it.kind === "good") {
           this.state.caught += 1;
           this.state.score += 10 * this.state.level;
@@ -125,20 +135,23 @@ export class CatchGame {
         }
       }
     }
+    // Past the floor: a heart that got away costs a life, a bomb is simply gone. One already caught
+    // is gone and never counts here: it used to be marked by a y of 999, which this check then took
+    // for a heart that fell, so every catch also cost a life and no level of 4+ catches could be won.
     for (const it of this.items) {
-      if (it.y > H + 6 && it.kind === "good") {
-        it.y = 999;
-        this.state.misses += 1;
-        this.beep(160, 120, "triangle", 0.06);
-        this.events.onMiss(this.state);
-        if (this.state.misses >= this.lives) {
-          this.stop();
-          this.events.onFail(this.state);
-          return;
-        }
+      if (it.gone || it.y <= H + 6) continue;
+      it.gone = true;
+      if (it.kind !== "good") continue;
+      this.state.misses += 1;
+      this.beep(160, 120, "triangle", 0.06);
+      this.events.onMiss(this.state);
+      if (this.state.misses >= this.lives) {
+        this.stop();
+        this.events.onFail(this.state);
+        return;
       }
     }
-    this.items = this.items.filter((it) => it.y < 900);
+    this.items = this.items.filter((it) => !it.gone);
     for (const p of this.particles) {
       p.life -= dt;
       p.vy += 160 * dt;
