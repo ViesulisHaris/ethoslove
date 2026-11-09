@@ -69,13 +69,21 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
         q: "Do digital gifts expire?",
         a: "Not here. Links are meant to be permanent, so it opens again next year, and if you spot a typo after sending you can fix it at the same link.",
       },
+      {
+        q: "What digital gift should I give my partner?",
+        a: "Pick by what you want them to feel. To move them: a letter (The Letter is free) or a jar of reasons. To make them laugh: a fortune cookie full of your in-jokes. Flowers while you’re apart: a bouquet built stem by stem. Whichever it is, it should only make sense for them: their name, your photos, the song that’s yours.",
+      },
+      {
+        q: "Can a digital gift be a birthday e-card?",
+        a: "Yes, and it does more than an e-card: in Birthday Cinema they blow out the candles into the microphone, and in Balloons your photos fall from the balloons as they pop them. On a premium template it can open at 00:00 in their time zone.",
+      },
     ],
   },
   es: {
     eyebrow: "Regalos digitales",
     title: "¿Qué es un regalo digital?",
     definition:
-      "Un regalo digital es un regalo que envías en un enlace en vez de en una caja: una carta de amor, un ramo, un álbum o un pequeño juego, hecho con tus fotos, tus palabras y una canción, que se abre en su móvil. Llega en el segundo en que lo envías, no hay envío y sigue ahí el año que viene.",
+      "Un regalo digital, o regalo virtual, es lo que mandas en un enlace en vez de en una caja: una carta de amor, un ramo, un álbum o un pequeño juego, hecho con tus fotos, tus palabras y una canción, que se abre en su móvil. Llega en el segundo en que lo mandas, no hay paquete que esperar y sigue ahí el año que viene.",
     notACard:
       "No es una tarjeta regalo. Una tarjeta regalo es dinero con un diseño; un regalo digital es el regalo en sí, hecho por ti para una persona. Ethos tiene 54 para empezar, todos con demo en vivo, y dos son gratis.",
     ideasTitle: `${DIGITAL_GIFT_IDEAS.length} ideas de regalos digitales`,
@@ -88,8 +96,8 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
         a: "Uno hecho para una sola persona: su nombre, vuestras fotos, tus palabras y una canción que signifique algo para los dos. Una carta de amor o un frasco de razones es lo que más dice; un ramo o una caja de música, lo que más luce; un pequeño juego o una tarjeta de memes, para quien prefiere reír.",
       },
       {
-        q: "¿Se puede enviar un regalo digital gratis?",
-        a: "Sí. La carta y Constelaciones son gratis, con hasta diez fotos, música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y envías el enlace: nadie paga y no hay nada que instalar.",
+        q: "¿Hay regalos virtuales gratis?",
+        a: "Sí. La carta (una carta digital con sello de lacre) y Constelaciones (un cielo en el que cada foto es una estrella) son gratis, con hasta diez fotos, música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y mandas el enlace: no se paga y no hay nada que instalar.",
       },
       {
         q: "¿Cómo se envía un regalo digital?",
@@ -102,6 +110,14 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       {
         q: "¿Los regalos digitales caducan?",
         a: "Aquí no. Los enlaces están pensados para durar, así que se vuelve a abrir el año que viene, y si ves una errata después de enviarlo puedes corregirla en el mismo enlace.",
+      },
+      {
+        q: "¿Qué detalle virtual le regalo a mi pareja?",
+        a: "Depende de lo que quieras que sienta. Para emocionar: una carta (La carta es gratis) o un frasco de razones. Para hacer reír: una galleta de la fortuna con vuestras bromas. Flores aunque estéis lejos: un ramo virtual hecho tallo a tallo. Sea cual sea, que solo tenga sentido para esa persona: su nombre, vuestras fotos, vuestra canción.",
+      },
+      {
+        q: "¿Sirve como felicitación o postal de cumpleaños?",
+        a: "Sí, y hace más que una postal electrónica: en Cine de cumpleaños sopla las velas al micrófono, y en Globos tus fotos caen de los globos que va explotando. En una plantilla premium puede abrirse a las 00:00 en su zona horaria.",
       },
     ],
   },

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { RECIPIENT_GUIDES } from "@/content/recipients";
+import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { DARES, KNOW_QUESTIONS, RATHER_PAIRS, TRUTHS } from "@/lib/games/content";
 import { PACK_CARDS } from "@/lib/games/pack-cards";
@@ -32,6 +33,7 @@ const SOURCES: Record<string, unknown> = {
   recipients: RECIPIENT_GUIDES,
   "digital gifts": { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS },
   "template search entries": TEMPLATE_SEO,
+  "template guides": TEMPLATE_GUIDES,
   games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
   "game packs": PACK_CARDS,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),

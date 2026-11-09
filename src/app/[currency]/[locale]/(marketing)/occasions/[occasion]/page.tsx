@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   return pageMetadata({
     locale,
     path: `/occasions/${occasion}`,
-    title: t(`occasion.${occasion}.title`),
+    // The page's heading names the day; the search result can say what's on the page (12 ideas).
+    title: t.has(`occasion.${occasion}.metaTitle`) ? t(`occasion.${occasion}.metaTitle`) : t(`occasion.${occasion}.title`),
     description: t(`occasion.${occasion}.description`),
   });
 }

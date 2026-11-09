@@ -1457,21 +1457,25 @@
     "occasion": {
       "birthday": {
         "title": "Digital birthday gifts",
+        "metaTitle": "Digital Birthday Gifts: 12 Ideas You Can Send Today",
         "description": "Make a digital birthday gift they'll open again and again: your photos, their favourite song and your words, animated and sent as a link or QR code. Free to start.",
         "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
       },
       "anniversary": {
         "title": "Digital anniversary gifts",
+        "metaTitle": "Digital Anniversary Gifts: 12 Ideas From Your Photos",
         "description": "An anniversary gift made from your own story: your photos, your song and a letter in your words, animated and sent as a link. Try every template free.",
         "intro": "One year or twenty: tell the story of the two of you with the photos only you have, the song that's yours and a note that says what a card can't. Walk them down Our Timeline, hang your photos in a Museum or seal it all in The Letter."
       },
       "valentines": {
         "title": "Digital Valentine's Day gifts",
+        "metaTitle": "Digital Valentine's Gifts: 12 Ideas Beyond Red Roses",
         "description": "A Valentine's gift that arrives in seconds and lasts for years: a wax-sealed love letter, a bouquet that never wilts or a sky full of your photos, with your song.",
         "intro": "Flowers wilt and chocolates don't last the evening. A love letter they open with a tap, a bouquet you picked stem by stem, or a night sky where every photo is a star will still be there next February."
       },
       "wedding": {
         "title": "Digital wedding gifts",
+        "metaTitle": "Digital Wedding Gifts: a Toast, a Timeline, a Front Page",
         "description": "A wedding gift for the couple or for each other: photos, your wishes and a song gathered in an animated gift to keep, shared with a link or a printed QR card.",
         "intro": "Collect the moments and the words that matter into something the couple can open the morning after, or give one to your partner before the ceremony. Print the QR card and tuck it inside a real one."
       },
@@ -1482,6 +1486,7 @@
       },
       "christmas": {
         "title": "Digital Christmas gifts",
+        "metaTitle": "Digital Christmas Gifts: 12 Ideas That Arrive on Time",
         "description": "A Christmas gift that can't get lost in the post: an animated gift with your photos, a festive song and your message, timed to open on Christmas morning.",
         "intro": "For the people you won't see this year, and the ones you will: a gift that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
       },

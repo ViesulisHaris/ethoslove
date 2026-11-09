@@ -42,8 +42,8 @@
     "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
     "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos.",
-    "giftsTitle": "Regalos digitales: crea uno gratis y personal online · Ethos",
-    "giftsDescription": "Crea un regalo digital en diez minutos: una carta de amor, un ramo, un álbum o un pequeño juego con vuestras fotos, tus palabras y su canción, en un enlace. 30 ideas, dos gratis."
+    "giftsTitle": "Regalos digitales y virtuales: crea uno gratis online · Ethos",
+    "giftsDescription": "Crea un regalo digital o virtual en diez minutos: una carta, un ramo o un pequeño juego con tus fotos y tu canción, en un enlace. 30 ideas, dos gratis."
   },
   "nav": {
     "templates": "Plantillas",
@@ -1457,21 +1457,25 @@
     "occasion": {
       "birthday": {
         "title": "Regalos digitales de cumpleaños",
+        "metaTitle": "Regalos digitales de cumpleaños: 12 ideas para hoy",
         "description": "Crea un regalo de cumpleaños digital que abrirán una y otra vez: tus fotos, su canción favorita y tus palabras, animados y enviados con un enlace o un código QR. Empezar es gratis.",
         "intro": "Una felicitación que no se queda perdida en un chat. Sopla las velas en Cine de cumpleaños, abre una Galleta de la fortuna o dedícale una Portada, con tus fotos y su canción, y prográmalo para que se abra a medianoche."
       },
       "anniversary": {
         "title": "Regalos digitales de aniversario",
+        "metaTitle": "Regalos digitales de aniversario: 12 ideas con vuestras fotos",
         "description": "Un regalo de aniversario hecho con vuestra propia historia: tus fotos, vuestra canción y una carta con tus palabras, animado y enviado con un enlace. Prueba todas las plantillas gratis.",
         "intro": "Un año o veinte: cuenta vuestra historia con las fotos que solo tenéis vosotros, la canción que es vuestra y una nota que dice lo que una tarjeta no puede. Recorred Nuestra línea del tiempo, colgad las fotos en un Museo o séllalo todo en La carta."
       },
       "valentines": {
         "title": "Regalos digitales de San Valentín",
+        "metaTitle": "Regalos digitales de San Valentín: 12 ideas sin rosas rojas",
         "description": "Un regalo de San Valentín que llega en segundos y dura años: una carta de amor lacrada, un ramo que nunca se marchita o un cielo lleno de tus fotos, con vuestra canción.",
         "intro": "Las flores se marchitan y los bombones no duran ni la noche. Una carta de amor que se abre con un toque, un ramo que eliges flor a flor o un cielo nocturno donde cada foto es una estrella seguirán ahí el próximo febrero."
       },
       "wedding": {
         "title": "Regalos digitales de boda",
+        "metaTitle": "Regalos digitales de boda: brindis, historia y portada",
         "description": "Un regalo de boda para la pareja o para el uno al otro: fotos, tus deseos y una canción reunidos en un regalo animado para guardar, compartido con un enlace o una tarjeta QR impresa.",
         "intro": "Reúne los momentos y las palabras que importan en algo que la pareja pueda abrir la mañana siguiente, o regálale uno a tu pareja antes de la ceremonia. Imprime la tarjeta QR y métela dentro de una de verdad."
       },
@@ -1482,6 +1486,7 @@
       },
       "christmas": {
         "title": "Regalos digitales de Navidad",
+        "metaTitle": "Regalos digitales de Navidad: 12 ideas que llegan a tiempo",
         "description": "Un regalo de Navidad que no se pierde en el correo: un regalo animado con tus fotos, una canción navideña y tu mensaje, programado para abrirse la mañana de Navidad.",
         "intro": "Para quienes no verás este año, y para quienes sí: un regalo que se abre la mañana de Navidad estén donde estén, sin plazos de envío que se te pasen. Agita tus fotos en la nieve con Bola de nieve, o deja una carta a la luz de una vela con Junto al fuego."
       },

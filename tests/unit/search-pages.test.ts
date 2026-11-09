@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
+import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug } from "@/content/recipients";
 import { pageMetadata } from "@/lib/seo";
@@ -104,5 +105,27 @@ describe("page titles", () => {
     const m = pageMetadata({ locale: "es", path: "/dates/san-francisco", title, description: "" });
     expect(m.title).toEqual({ absolute: title });
     expect(m.openGraph?.title).toBe(title);
+  });
+});
+
+/** The extra guides on the template pages searches have found: real templates, the same in both languages. */
+describe("template guides", () => {
+  const words = (s: string) => s.trim().split(/\s+/).length;
+  it("belong to real templates and match across languages", () => {
+    for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES)) {
+      expect(getManifest(slug), slug).not.toBeNull();
+      expect(guide.es.ideas.items.length, slug).toBe(guide.en.ideas.items.length);
+      expect(guide.es.faq.length, slug).toBe(guide.en.faq.length);
+      for (const l of LOCALES) {
+        const g = guide[l];
+        expect(new Set(g.ideas.items.map((i) => i.heading)).size, `${slug} ${l} headings repeat`).toBe(g.ideas.items.length);
+        for (const idea of g.ideas.items) expect(words(idea.body), `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(25);
+        for (const f of g.faq) {
+          expect(f.q.trim().endsWith("?"), f.q).toBe(true);
+          if (l === "es") expect(f.q.trim().startsWith("¿"), f.q).toBe(true);
+          expect(words(f.a), f.q).toBeGreaterThanOrEqual(15);
+        }
+      }
+    }
   });
 });

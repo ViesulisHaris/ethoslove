@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { templateGuide } from "@/content/template-guides";
 import { templateSeo } from "@/content/template-seo";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
@@ -9,7 +10,8 @@ import { FaqList } from "@/components/shared/faq-list";
 
 /**
  * The questions a template page answers, in the words of the page's own facts: what it costs comes
- * from its tier and the price shown above, so the answer can't drift from the button.
+ * from its tier and the price shown above, so the answer can't drift from the button. A template
+ * with a guide of its own (content/template-guides.ts) adds the questions people search about it.
  */
 export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale, price: string) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
@@ -20,6 +22,7 @@ export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale
       : { q: t("faqPaidQ"), a: t("faqPaidA", { name, price }) },
     { q: t("faqOpenQ"), a: t("faqOpenA") },
     { q: t("faqEditQ"), a: t("faqEditA") },
+    ...(templateGuide(manifest.slug, locale)?.faq ?? []),
   ];
 }
 
@@ -48,6 +51,7 @@ export async function TemplateGuide({
   ];
   const occasion = manifest.occasions[0];
   const more = (occasion ? listManifests({ occasion }) : listManifests()).filter((m) => m.slug !== manifest.slug).slice(0, 6);
+  const guide = templateGuide(manifest.slug, locale);
 
   return (
     <section className="container-narrow border-t border-line pt-14 pb-24 sm:pt-16" aria-labelledby="template-guide">
@@ -67,18 +71,36 @@ export async function TemplateGuide({
         ))}
       </ol>
 
+      {guide ? (
+        <>
+          <h2 className="display-md mt-16">{guide.ideas.title}</h2>
+          <ol className="mt-8 flex flex-col gap-8">
+            {guide.ideas.items.map((idea, i) => (
+              <li key={idea.heading} className="flex gap-5">
+                <span className="text-mono-meta mt-1.5 w-7 shrink-0 text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className="font-display text-2xl">{idea.heading}</h3>
+                  <p className="mt-2.5 leading-relaxed text-ink-soft">{idea.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : null}
+
       <h2 className="display-md mt-16 mb-6">{t("faqTitle")}</h2>
       <FaqList items={faq} name={`faq-${manifest.slug}`} />
 
       {more.length > 0 ? (
         <>
           <h2 className="display-md mt-16 mb-6">{t("moreTitle")}</h2>
-          <ul className="grid border-t border-line sm:grid-cols-2 sm:gap-x-10">
+          {/* grid-cols-1 is minmax(0, 1fr): without it the one column grows to its longest row and the keyword never truncates. */}
+          <ul className="grid grid-cols-1 border-t border-line sm:grid-cols-2 sm:gap-x-10">
             {more.map((m) => (
               <li key={m.slug} className="border-b border-line">
                 <Link href={`/templates/${m.slug}`} className="group flex items-baseline gap-3 py-4 transition-colors hover:text-coral">
                   <span className="font-display text-xl leading-tight">{m.name[locale]}</span>
-                  <span className="truncate text-sm text-muted-foreground">{templateSeo(m.slug, locale)?.keyword ?? m.tagline[locale]}</span>
+                  <span className="min-w-0 truncate text-sm text-muted-foreground">{templateSeo(m.slug, locale)?.keyword ?? m.tagline[locale]}</span>
                   <ArrowUpRight className="ml-auto size-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
                 </Link>
               </li>
