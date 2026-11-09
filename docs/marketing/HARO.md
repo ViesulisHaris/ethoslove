@@ -6,19 +6,21 @@ which is the kind of link that moves Google most (`LINK-KIT.md`, `SEO-ORGANIC.md
 
 ## How it runs
 
-1. **The owner signs up once** (free), with the business email:
-   - HARO: helpareporter.com → "Subscribe for free daily media queries". Emails at 5:35, 12:35 and
-     17:35 New York time (12:35, 19:35 and 00:35 in Riga).
-   - Source of Sources: sosrcs.com, up to three emails a day.
-   - Qwoted (optional): qwoted.com, free plan, two pitches a month.
-2. **The owner answers the questions below once, in their own words**, the way they'd say it to a
-   friend: three to five sentences each, one real detail or example in each. Rough is fine; the
-   words are kept as written (typos fixed, nothing reworded).
-3. **Each day Claude reads the new requests**, picks the ones about gifts, couples, long distance,
-   Valentine's, Christmas or small online businesses, matches each to the closest answer, trims it
-   to what the journalist asked and adds the sign-off. If a request needs something no answer
-   covers, Claude asks for two lines.
-4. **The owner reads it and sends it** from their own email.
+Set up 9 Nov 2026:
+
+1. **HARO**: support@secuora.xyz is subscribed and verified (helpareporter.com, free). Emails at
+   5:35, 12:35 and 17:35 New York time (12:35, 19:35 and 00:35 in Riga). Source of Sources is gone
+   (sosrcs.com no longer exists).
+2. **Featured.com** (free plan, the company behind HARO): account on support@secuora.xyz, and an
+   "All-in-One" workflow limited to journalist requests and HARO, matched to a description of Ethos,
+   emailed to support@secuora.xyz every day at 8:00 Riga. Featured never contacts journalists itself;
+   its requests are answered on featured.com.
+3. **The owner's answers** are below, written once in their own words (typos fixed, nothing reworded).
+4. **Each day at 13:00 Riga** a scheduled task on the owner's PC (Claude app, "HARO: daily reply
+   drafts", taskId haro-daily-drafts; runs while the app is open) reads only the HARO and Featured
+   emails in Spacemail, picks up to three requests the answers fit, and leaves replies in Spacemail
+   Drafts. Featured items are listed for the owner to answer on featured.com. It never sends.
+5. **The owner reads the drafts and sends them.**
 
 Why the owner's own words: HARO's owner runs every pitch through an AI-text detector. In its own
 figures about 21% of 1.39 million pitches were flagged as fully AI-written, about a third of
