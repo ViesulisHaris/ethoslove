@@ -51,7 +51,31 @@ The questions gift and relationship writers ask most. Answer each in your own wo
 
 ## Answers
 
-(The owner's words, kept as written.)
+The owner's words, 9 Nov 2026, with punctuation and typos fixed and nothing reworded. Claude trims an
+answer to the question asked and adds the sign-off; anything new comes from the owner.
+
+1. We offer a gift that many long-distance couples use: a "Passport" gift. It shows a route from your
+   city to theirs, with your photos as stamps.
+2. Every gift is easy to make, even if it's last minute, and looks good and well thought out.
+3. Of course they are just as meaningful. You can easily add any photo you want, send the meaningful
+   message you want to send, and it easily opens on any phone.
+4. Any gift from tryethos.io. They are $11.99, and we usually run a discount for them, so you can get
+   them even cheaper.
+5. TryEthos gifts are the ideal thing for this kind of person, as you can give them a meaningful gift.
+6. You make a gift feel personal by including precious moments, photos, songs, a place, or even some
+   inside jokes between you.
+7. Digital gifts for Valentine's are on the rise, and we at TryEthos.io offer many kinds of templates
+   exactly for seasonal gifts.
+8. We have categories on our site for this, so you can find a gift for any kind of occasion.
+9. You use our "The Letter" template and just speak from your heart.
+10. Our "Scratch Card" is the perfect option for this.
+11. Our "Bouquet", "Recipe Box", "Museum" and "Pop-up Card", as they're elegant and still send the
+    meaningful message.
+12. We wanted a new type of digital gift that is actually meaningful and that you want to keep.
+13. By aligning ourselves with the problem we wanted to solve in the first place, the first customers
+    came on their own.
+14. Yes, they are much greener. No shipping, no wrapping, nothing thrown away.
+15. They don't put in the actually meaningful message.
 
 ## Log
 
