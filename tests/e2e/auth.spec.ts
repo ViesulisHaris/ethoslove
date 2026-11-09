@@ -3,19 +3,21 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 
 /**
- * A sign-in link that failed — opened in a different browser than the one that asked for it, or
- * expired — must not be a dead end: the code from the same email gets the person in right there.
+ * A sign-in link that failed (already used, expired, or replaced by a newer email) must not be a
+ * dead end. The page says so plainly, and offers a new link or the code from the newest email. The
+ * link and the code in one email are the same one-time token, so that email's own code is spent too.
  */
 test.describe("a sign-in link that failed", () => {
   for (const [locale, path] of [
     ["en", "/login?error=callback"],
     ["es", "/es/login?error=callback"],
   ] as const) {
-    test(`${locale}: the login page offers the code from the same email`, async ({ page }) => {
+    test(`${locale}: the login page offers a new link or the newest email's code`, async ({ page }) => {
       await page.goto(path);
       await skipWithoutSignIn(page);
       const alert = page.getByRole("alert").first();
-      await expect(alert).toContainText(/different browser|otro navegador/);
+      await expect(alert).toContainText(/already been used or has expired|ya se usó o caducó/);
+      await expect(page.getByText(/newest email|correo más reciente/).first()).toBeVisible();
       const otp = page.locator("#otp");
       await expect(otp).toBeVisible();
       const verify = page.getByRole("button", { name: /^(Verify|Verificar)$/ });
