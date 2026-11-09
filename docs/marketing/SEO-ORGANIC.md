@@ -291,3 +291,37 @@ Query → *Doesn't contain* "ethos"), and compare with today's baseline, which i
 - **/gifts:** indexed. Its 11K impressions are brand searches, where Google shows it under the home result. It has no non-brand searches yet.
 - **Indexing is fine.** The Pages report (data to about 23 Oct) lists /gifts/for-boyfriend, -girlfriend, -best-friend and five Spanish ones as "crawled, not indexed". A live URL inspection on 3 Nov shows them, and /gifts, as indexed. Read that report against a live inspection before acting on it.
 - **External links: 14, still only scamadviser.com (13) and gridinsoft.com (1).** Nothing else on this list moves "digital gift" as much as real links would, which are the owner's steps 1-2 above.
+
+### 9 Nov reading (Search Console to 7 Nov, last 28 days)
+
+- **Brand searches carry everything:** 12.4K clicks and 17.7K impressions, a 5,470-click day on
+  1 Nov, CTR 70–90%. That is demand from social reach; the site catches it.
+- **Non-brand is real but small:** about 700 impressions (some 25 a day, from 2–6 in mid-October)
+  and about 10 clicks. Without "ethos", ~400 of the 415 clicks are misspellings of the name or
+  Google Lens scans of a gift ("scan this", "how do i make that?").
+- **Page one, for small searches:** digital gift template 4.8, digital fortune cookie 6.9, digital
+  wedding gifts 6.9, digital anniversary gift 7.8, the Spanish Halloween searches about 8.
+  **Near it:** monthiversary 10.2, scratch card maker 11.1, digital bouquet 11.4.
+- **Biggest and furthest back:** the scratch card cluster (~150 impressions at 20–65),
+  regalos digitales (27 at 22), the Spanish apology searches (~45 at 40–77).
+- **Blog:** 32 posts, two a day without a gap; most sit at 46–78. Monthiversary ideas is the best
+  at 13.
+- **Indexed 294 pages** (202 on 16 Oct). **External links: still 14, all scam checkers.**
+
+## Seventh round, 9 Nov: what the reading says to do
+
+- **The three template pages searches have found get depth** (`src/content/template-guides.ts`):
+  scratch card, bouquet and fortune cookie each list six things people make with them, with lines
+  to borrow, and answer what people typed ("share scratch card whatsapp", "digital bouquet with
+  letter"); the answers also go into the FAQPage markup.
+- **A Scratch Card bug, fixed:** since the covers arrived on 16 Sep, the cover ticket printed the
+  last card's big line, so a proposal showed "Will you marry me?" before anything was scratched
+  (the demo did too). The cover now always says the big one is on the last card.
+- **The Spanish /gifts page answers "regalos virtuales"** in its title, definition and two new
+  questions (a detalle virtual for a partner; a birthday postal), and English gets the same two.
+- **Occasion pages get search titles that promise the list** ("Digital Anniversary Gifts: 12
+  Ideas to Send Today"), separate from their headings, which stay as they are.
+- **The blog follows the data:** the queue leads with product-adjacent and Spanish-first topics,
+  drops the two comparison posts (they would name competitors, which `VOICE.md` rules out), and
+  holds Valentine's topics until 6 Dec. The playbook's season rule moves from six weeks to ten,
+  learns `not_before`, and asks that a third of new topics be product-adjacent and a third Spanish.
