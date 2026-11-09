@@ -37,9 +37,11 @@ Take the first entry in `docs/blog/queue.json`. Before using it, check:
 - No existing post answers the same search (compare with every post's `keyword` and title). The
   occasion pages own "digital <occasion> gifts" (`seo.occasion.*.title` in `messages/en.json`), so
   a post never targets those either.
-- If a dated occasion is within six weeks, an entry for it goes first: Halloween (31 Oct),
+- An entry with a `not_before` date waits until that day: leave it where it is and take the next.
+- If a dated occasion is within ten weeks, an entry for it goes first: Halloween (31 Oct),
   Christmas (25 Dec), Valentine's Day (14 Feb), Mother's Day (UK: March or April; US: second
-  Sunday of May), Father's Day (third Sunday of June). A post needs a few weeks to be found.
+  Sunday of May; Spain: first Sunday of May), Father's Day (third Sunday of June). A post on this
+  site takes weeks to be found, so it has to be out well before the day.
 
 If the entry fails a check, delete it from the queue and take the next one.
 
@@ -51,13 +53,23 @@ boyfriend", "open when letter ideas", "6 month anniversary ideas". Use the WebSe
 
 - Prefer searches where the current results are weak: forums, thin lists, spam on odd domains,
   PDFs. Skip head terms that big publishers own outright ("gift ideas for him").
+- Follow what Search Console says we can win. On 9 Nov 2026 the posts on head terms that big
+  publishers hold ("cute things to say to your boyfriend", "paragraphs for your girlfriend") sat
+  at positions 46 to 78, page five and beyond, while page one or close to it came from searches
+  next to what Ethos makes ("digital fortune cookie" at 7, "scratch card maker" at 11,
+  "monthiversary ideas" at 13) and from Spanish, where the results are thinner (the Spanish
+  Halloween post at about 8; the Spanish apology post had the most impressions of any). So of
+  the topics you add, at least a third show a template doing what the searcher wants ("scratch
+  card ideas", "funny fortune cookie messages"), and at least a third are picked by their Spanish
+  keyword, where the Spanish results are forums, thin lists or translations.
 - Every topic must lead naturally to one to three templates that fit it. Read the template's
   `src/templates/<slug>/manifest.ts` and never stretch what it does.
 - One search, one post. If two topics would answer the same search, keep one.
 
 An entry is
 `{ "slug", "keyword", "keyword_es", "occasion", "templates": [...], "angle" }`, where the angle is
-what this post gives that the current results don't.
+what this post gives that the current results don't. A topic for a dated occasion more than ten
+weeks away also gets `"not_before": "YYYY-MM-DD"`, the day ten weeks before it.
 
 ## 2. Research (about fifteen minutes)
 
