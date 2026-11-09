@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import type { RichBlock } from "@/lib/gift/rich-text";
 import { cn } from "@/lib/utils";
@@ -20,6 +21,15 @@ export function RichMessage({
   paragraphClassName?: string;
   onDone?: () => void;
 }) {
+  // An empty message has no paragraph to finish fading in, so nothing ever said it was done, and
+  // every template that waits for it before its end screen stopped there (a gift may have no
+  // message: Text Thread's chat, Jar of Reasons' notes). It is done as soon as it shows. Once.
+  const doneRef = useRef(false);
+  useEffect(() => {
+    if (!active || blocks.length > 0 || doneRef.current) return;
+    doneRef.current = true;
+    onDone?.();
+  }, [active, blocks.length, onDone]);
   if (!active) return null;
   return (
     <div className={cn("whitespace-pre-wrap", className)}>
