@@ -24,8 +24,8 @@ import { ScratchSurface } from "./ScratchSurface";
 import { Coin, Ticket } from "./art";
 
 const S = {
-  en: { scratch: "Scratch here", next: "Next card", last: "The last one", cardOf: "Card {i} of {n}", tapStart: "Tap to begin", done: "Keep scratching", pill: "scratch here", for: "for", ticket: "scratch card", prize: "one real story, in five" },
-  es: { scratch: "Rasca aquí", next: "Siguiente tarjeta", last: "La última", cardOf: "Tarjeta {i} de {n}", tapStart: "Toca para empezar", done: "Sigue rascando", pill: "rasca aquí", for: "para", ticket: "tarjeta rasca", prize: "una historia de verdad, en cinco" },
+  en: { scratch: "Scratch here", next: "Next card", last: "The last one", cardOf: "Card {i} of {n}", tapStart: "Tap to begin", done: "Keep scratching", pill: "scratch here", for: "for", ticket: "scratch card", prize: "the big one is on the last card" },
+  es: { scratch: "Rasca aquí", next: "Siguiente tarjeta", last: "La última", cardOf: "Tarjeta {i} de {n}", tapStart: "Toca para empezar", done: "Sigue rascando", pill: "rasca aquí", for: "para", ticket: "tarjeta rasca", prize: "lo más grande, en la última" },
 };
 
 /** The counter the ticket was left on: warm paper, gold light, a shimmer off the foil. */
@@ -192,7 +192,8 @@ function ScratchCover({
   onStart: () => void;
 }) {
   const title = data.title?.trim();
-  const prize = data.fields.finalTitle?.trim() || s.prize;
+  // Never the last card's own line: on a proposal or an announcement that line is the surprise.
+  const prize = s.prize;
   const serial = `№ ${100000 + (hashString(`${data.senderName}${data.recipientName}`) % 899999)}`;
 
   return (
