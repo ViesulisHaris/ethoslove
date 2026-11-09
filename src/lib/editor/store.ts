@@ -24,6 +24,7 @@ import { uploadTypeFor } from "./media-types";
 import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, stuckUploads, type FailedGroup } from "./failed-uploads";
 import { processImageFile, transformImage } from "./image";
 import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
+import { completeGiftData } from "./complete-data";
 
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
@@ -341,21 +342,25 @@ export const useEditor = create<EditorState>((set, get) => {
       let password = "";
       let removeWatermark = false;
 
-      const local = readLocalDraft(draftScope(slug, giftId));
+      // Both made whole first: a draft's row is empty until its first save, and a draft this browser
+      // kept from an older version can miss pieces (see completeGiftData).
+      const saved = readLocalDraft(draftScope(slug, giftId));
+      const local = saved ? { ...saved, data: completeGiftData(initial, saved.data) } : null;
 
       if (remote) {
         // Editing something already in the database: storage paths need signed URLs for preview.
-        data = remote.data;
+        const stored = completeGiftData(initial, remote.data);
+        data = stored;
         const paths = [
-          ...remote.data.photos.map((p) => p.url).filter(isStoragePath),
-          ...(remote.data.music?.source === "upload" && isStoragePath(remote.data.music.url)
-            ? [remote.data.music.url]
+          ...stored.photos.map((p) => p.url).filter(isStoragePath),
+          ...(stored.music?.source === "upload" && isStoragePath(stored.music.url)
+            ? [stored.music.url]
             : []),
-          ...(remote.data.video && isStoragePath(remote.data.video.url)
-            ? [remote.data.video.url]
+          ...(stored.video && isStoragePath(stored.video.url)
+            ? [stored.video.url]
             : []),
-          ...(remote.data.video?.poster && isStoragePath(remote.data.video.poster)
-            ? [remote.data.video.poster]
+          ...(stored.video?.poster && isStoragePath(stored.video.poster)
+            ? [stored.video.poster]
             : []),
         ];
         const signed = paths.length
@@ -378,30 +383,30 @@ export const useEditor = create<EditorState>((set, get) => {
               }
             : undefined,
         };
-        if (remote.data.video && isStoragePath(remote.data.video.url)) {
-          const vid = remote.data.video.url.split("/").pop()!.split(".")[0];
+        if (stored.video && isStoragePath(stored.video.url)) {
+          const vid = stored.video.url.split("/").pop()!.split(".")[0];
           assets[vid] = {
             id: vid,
             kind: "video",
             local: false,
-            storagePath: remote.data.video.url,
+            storagePath: stored.video.url,
             status: "uploaded",
             progress: 1,
-            objectUrl: map[remote.data.video.url],
+            objectUrl: map[stored.video.url],
           };
-          if (remote.data.video.poster && isStoragePath(remote.data.video.poster)) {
+          if (stored.video.poster && isStoragePath(stored.video.poster)) {
             assets[`${vid}p`] = {
               id: `${vid}p`,
               kind: "photo",
               local: false,
-              storagePath: remote.data.video.poster,
+              storagePath: stored.video.poster,
               status: "uploaded",
               progress: 1,
-              objectUrl: map[remote.data.video.poster],
+              objectUrl: map[stored.video.poster],
             };
           }
         }
-        for (const p of remote.data.photos) {
+        for (const p of stored.photos) {
           if (isStoragePath(p.url))
             assets[p.id] = {
               id: p.id,
@@ -413,15 +418,15 @@ export const useEditor = create<EditorState>((set, get) => {
             };
         }
         if (
-          remote.data.music?.source === "upload" &&
-          remote.data.music.trackId &&
-          isStoragePath(remote.data.music.url)
+          stored.music?.source === "upload" &&
+          stored.music.trackId &&
+          isStoragePath(stored.music.url)
         ) {
-          assets[remote.data.music.trackId] = {
-            id: remote.data.music.trackId,
+          assets[stored.music.trackId] = {
+            id: stored.music.trackId,
             kind: "audio",
             local: false,
-            storagePath: remote.data.music.url,
+            storagePath: stored.music.url,
             status: "uploaded",
             progress: 1,
           };
@@ -432,7 +437,7 @@ export const useEditor = create<EditorState>((set, get) => {
             unlockAt: remote.unlockAt,
             timezone: remote.timezone ?? timezone,
           };
-        removeWatermark = !remote.data.watermark;
+        removeWatermark = !stored.watermark;
         // A newer local draft for the same gift wins (the user kept editing offline).
         if (local && local.updatedAt > Date.now() - 1000 * 60 * 60 * 24 * 7) {
           const rehydrated = await rehydrate(local, assets);
