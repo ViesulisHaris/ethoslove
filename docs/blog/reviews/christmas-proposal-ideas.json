@@ -1,0 +1,137 @@
+{
+  "slug": "christmas-proposal-ideas",
+  "keyword": "christmas proposal ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"get let slip\" is broken grammar and trips the reader.; A note doesn't \"say\" a question. It asks it.; \"presionada\" makes the partner female. The English is neutral (\"they\"), and VOICE says the reader is most often proposing to him.; In Spain you \"pedir\" a proposal, you don't \"preguntar\" it. \"Pregúntalo\" reads as a translation of \"Ask\".; \"no aún en la cama\" is a calque of \"not still in bed\". Speakers in Spain say \"todavía\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes."
+        }
+      ],
+      "applied": [
+        "'get let slip' and 'says the question' fixed",
+        "ES: partner no longer gendered in FAQ 1, 'Pídeselo', 'todavía'",
+        "Polish: Christmas dinner instead of lunch in EN, 'glass ornament', ES 'sin ser tuya', 'primer piso', 'calcetín de Navidad', 'Compruébalo', 'traza el contorno', 'necesita', Snow Globe Premium linked to /pricing, stocking line says 'not still in the kitchen'"
+      ],
+      "rejected": [
+        "Reader polish on ring size from the other hand not taken: it adds a sizing claim we can't support",
+        "Search polish (Christmas market, cracker, swapping recipient links for the long-distance post) not taken: optional, and adds unreviewed text"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Last round's \"todavía\" fix (my role's) left a calque: \"no todavía en la cocina\" reads as a word-for-word \"not still in the kitchen\". \"No seguir en la cocina\" is how someone in Spain would say it."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        }
+      ],
+      "applied": [
+        "ES 'no seguir en la cocina'",
+        "Polish to head off fixes: Snow Globe plaque timing made accurate (EN and ES), ES table header 'Ideal para', 'has hecho de mi familia la tuya' (quote and FAQ), 'el día de Navidad', 'Pedir antes la mano'"
+      ],
+      "rejected": [
+        "Reader polish (ring size from the other hand, the ring waiting for the next visit) and search polish (cracker, trail of clues, swapping recipient links) not taken: optional and would add unreviewed claims or text"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's ring-size and ring-waits lines; editor's ES 'la tiene' and longer ES title; search's cracker, clue trail and long-distance link"
+      ]
+    }
+  ]
+}
