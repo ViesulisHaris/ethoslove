@@ -20,7 +20,7 @@ describe("what an error screen sends home", () => {
   });
 
   it("trims the stack and message to something a log line can hold, and still validates", () => {
-    const report = buildClientErrorReport({ ...crash, message: "x".repeat(5000) }, "gift", { path: "/g/94p3j6szr", template: "the-letter", build: "dpl_68NTNFaBw8ogHSf5UjJTzEcxd6q1" });
+    const report = buildClientErrorReport({ ...crash, message: "x".repeat(5000) }, "gift", { path: "/g/x2x2x2x2x", template: "the-letter", build: "dpl_68NTNFaBw8ogHSf5UjJTzEcxd6q1" });
     expect(report.stack?.split("\n")).toHaveLength(12);
     expect(report.message).toHaveLength(500);
     expect(report.template).toBe("the-letter");
@@ -71,8 +71,8 @@ describe("errors that never reach an error screen", () => {
   });
 
   it("never logs a gift's link, in either language", () => {
-    expect(redactGiftPath("/g/94p3j6szr")).toBe("/g/[shortId]");
-    expect(redactGiftPath("/es/g/94p3j6szr/reply")).toBe("/es/g/[shortId]/reply");
+    expect(redactGiftPath("/g/x2x2x2x2x")).toBe("/g/[shortId]");
+    expect(redactGiftPath("/es/g/x2x2x2x2x/reply")).toBe("/es/g/[shortId]/reply");
     expect(redactGiftPath("/templates/garden")).toBe("/templates/garden");
     expect(redactGiftPath("/gifts")).toBe("/gifts");
   });
@@ -88,13 +88,13 @@ describe("errors that never reach an error screen", () => {
 describe("scrubStack", () => {
   it("drops query strings and gift links from a stack, and keeps line and column", () => {
     const stack = [
-      "letter@https://tryethos.io/g/94p3j6szr:1:46",
+      "letter@https://tryethos.io/g/x2x2x2x2x:1:46",
       "at done (https://tryethos.io/checkout/success?session_id=cs_live_abc123:2:10)",
       "at f (https://tryethos.io/_next/static/chunks/abc.js:1:2)",
       "at g (https://tryethos.io/es/g/zz9/reply:3:4)",
     ].join("\n");
     const out = scrubStack(stack);
-    expect(out).not.toMatch(/94p3j6szr|cs_live|zz9/);
+    expect(out).not.toMatch(/x2x2x2x2x|cs_live|zz9/);
     expect(out).toContain("https://tryethos.io/g/[shortId]:1:46");
     expect(out).toContain("https://tryethos.io/checkout/success:2:10)");
     expect(out).toContain("https://tryethos.io/_next/static/chunks/abc.js:1:2");
