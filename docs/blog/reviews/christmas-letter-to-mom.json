@@ -1,0 +1,233 @@
+{
+  "slug": "christmas-letter-to-mom",
+  "keyword": "christmas letter to mom",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "\"No fue nada\" means \"it was nothing\", the opposite of \"It wasn't nothing\". It is a literal calque that reverses the line.; \"todo lo que sientes\" reads as \"everything you feel\", not \"everything you're sorry for\".; \"unas 150 a 250\" is not grammatical Spanish.; \"seguir estando\" with nothing after it is incomplete. \"seguir ahí\" is the natural phrase.; \"que todo saliera\" needs \"bien\" to mean \"made it all work\".; The current sentence nearly copies long-distance-christmas-gift-ideas.ts (\"A [digital gift](/gifts) is a link with your photos, a song and your words, and with a premium template you can use \\\"Schedule the reveal\\\" to set it to open at a time you choose in their time zone\"). \"It also keep"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The ES snippet says 'siendo ya adulta', so it tells sons the page isn't for them. The post has a son's letter, and the EN description is neutral ('as a grown child').; The lead can show as the search snippet. 'De tu infancia' works for a daughter or a son and matches the gender-neutral EN 'when you were small'."
+        }
+      ],
+      "applied": [
+        "ES fixes: 'No fue poca cosa', 'lo que lamentas', 'entre 150 y 250', 'seguir ahí', 'saliera bien'",
+        "Digital-gift paragraph rewritten (no echo of long-distance-christmas-gift-ideas; countdown and non-expiring link from scheduled-screen and faqEditA), without the 'nothing to install' claim",
+        "Echoes removed: 'By the time you open this', the four-hours drive and card line",
+        "ES description, lead and body made neutral for sons ('seas hija o hijo', 'de tu infancia', 'juntos'); description trimmed to the limit",
+        "Polish: tea towel instead of coat pocket (EN and ES, list and FAQ), FAQ 3 reworded, ES 'tranquila', 'notaste', 'estructura', 'un peso'"
+      ],
+      "rejected": [
+        "Reader polish ('come and stay', a line for a mother who has died) not taken: a grief letter is a separate search, as the search reviewer noted",
+        "Editor polish on 'Make it special' for The Letter not taken: adds a pricing claim beyond what the post needs",
+        "Search polish (rewording the boyfriend-letter link, more card lines) not taken"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "\"Tea towel\" is UK-only. US readers say dish towel, so VOICE.md's rule that wording must work for US and UK readers is broken. An apron works everywhere.; This matches the list fix and removes the UK-only \"tea towel\".; Mirrors the English fix.; Mirrors the English fix.; This echoes christmas-letter-to-boyfriend.ts (\"A card has room for two or three lines. Keep the promise and one other part\"), which this post links to.; Mirrors the English fix.; This nearly copies the girlfriend FAQ in src/content/recipients.ts l.129 (\"The link doesn't expire, so she can open it again next year\").; Mirrors the English fix.; All three sample letters have a sentence starting \"This year you/I...\" at the same poi"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        }
+      ],
+      "applied": [
+        "UK-only 'tea towel' replaced with the apron pocket (EN and ES, list and FAQ)",
+        "Card intro and non-expiring-link line reworded to stop echoing the boyfriend post and recipients.ts",
+        "Repeated 'This year' openings in the sample letters varied (EN and ES); ES can't-be-home sample made neutral",
+        "ES grammar: 'Si es de las que lloran', 'dile qué día vuelves', 'Ella inclina'",
+        "Polish: 'the 3rd', ES FAQ 3 matches EN, can't-be-home intro softened, ES 'estás fuera comprando'"
+      ],
+      "rejected": [
+        "Reader polish ('come and stay', a line for a mother who has died, a four-part lead) and search polish (boyfriend link wording, a second card line) not taken: optional"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "It repeats the takeaway shape in christmas-letter-to-boyfriend.ts l.15 (\"One evening in detail is worth more than the whole year in outline.\"), and the two posts link to each other. recipients.ts l.395 also has \"is worth more than a page\".; Same echo in Spanish: christmas-letter-to-boyfriend.ts l.149 has \"Una tarde contada con detalle vale más que el año entero en resumen.\"; The English became \"Tell her about your day, show her you can picture hers\" in round 2, but the Spanish wasn't updated. \"Que tú ves el suyo\" is also unnatural (\"that you see her day\")."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        }
+      ],
+      "applied": [
+        "Childhood-Christmas takeaway no longer echoes the boyfriend letter (EN and ES)",
+        "ES can't-be-home intro now matches the EN wording",
+        "Polish: 'In June you gave up two weekends' (EN and ES), ES 'Menciona'"
+      ],
+      "rejected": [
+        "Editor polish on 'parcel' not taken: understood in the US and UK, and 'mail'/'post' are each one-sided",
+        "Reader and search polish carried over (come and stay, grief line, four-part lead, boyfriend-link wording) not taken"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Spain uses the pretérito perfecto ('has dado', 'has dicho') only for a period that includes now ('este año'). It is wrong with 'en junio', and 'me has dado dos fines de semana' is also a calque of 'gave up'. Last round's polish brought this in, and the card line ('que cargaste') already uses the right tense."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        }
+      ],
+      "applied": [
+        "ES tense with 'en junio' fixed to the pretérito indefinido",
+        "Polish to head off echo fixes: 'what you now know it cost her' (EN and ES; was close to the Mother's Day occasion page), Fireside note reworded (was close to anniversary-ideas-at-home)"
+      ],
+      "rejected": [
+        "Reader and search polish carried over (come and stay, grief line, four-part lead, boyfriend-link wording) not taken"
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's 'come and stay', four-part lead, word-count range and grief line; search's boyfriend-link wording and note for the queued letter-to-mom-from-daughter post; editor's two 'leave as is' notes"
+      ]
+    }
+  ]
+}

@@ -144,14 +144,6 @@
     "angle": "New Year messages for a girlfriend sorted by moment: the midnight text, the one for when you're apart, the look back at your year and the plans for the next, with how to time it to the minute."
   },
   {
-    "slug": "christmas-letter-to-mom",
-    "keyword": "christmas letter to mom",
-    "keyword_es": "carta de navidad para mi madre",
-    "occasion": "christmas",
-    "templates": ["fireside", "recipe-box", "the-letter"],
-    "angle": "A Christmas letter to your mom from a grown child: what to thank her for that she would not expect, prompts built on the family's own traditions, sample letters and how to give it if you are not home."
-  },
-  {
     "slug": "countdown-until-we-meet-ideas",
     "keyword": "countdown until we see each other ideas",
     "keyword_es": "ideas de cuenta atrás para vernos",
