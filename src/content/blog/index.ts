@@ -18,6 +18,7 @@ import { post as songsToDedicateToYourBoyfriend } from "./posts/songs-to-dedicat
 import { post as christmasMessageForGirlfriend } from "./posts/christmas-message-for-girlfriend";
 import { post as goodNightMessagesForHim } from "./posts/good-night-messages-for-him";
 import { post as lastMinuteChristmasGiftForGirlfriend } from "./posts/last-minute-christmas-gift-for-girlfriend";
+import { post as christmasProposalIdeas } from "./posts/christmas-proposal-ideas";
 import { post as sixMonthAnniversaryIdeas } from "./posts/6-month-anniversary-ideas";
 import { post as anniversaryLetterToBoyfriend } from "./posts/anniversary-letter-to-boyfriend";
 import { post as cuteThingsToSayToYourBoyfriend } from "./posts/cute-things-to-say-to-your-boyfriend";
@@ -39,7 +40,7 @@ import { post as whatToWriteInBoyfriendsBirthdayCard } from "./posts/what-to-wri
  * Every post on /blog. A new post is one file in ./posts and one entry here; the list is sorted
  * newest first below, so the order here doesn't matter. docs/blog/PLAYBOOK.md is how they're written.
  */
-const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas, monthiversaryIdeas, howToApologizeToYourBoyfriend, virtualDateIdeasLongDistance, howToSurpriseYourGirlfriend, firstAnniversaryIdeasForBoyfriend, anniversaryIdeasAtHome, longDistanceAnniversaryIdeas, midnightBirthdaySurpriseIdeas, lastMinuteBirthdayGiftForBoyfriend, whatToGetABoyfriendWhoWantsNothing, photoGiftIdeasForBoyfriend, howToMakeADigitalScrapbook, longDistanceChristmasGiftIdeas, christmasLetterToBoyfriend, sorryMessageForGirlfriend, loveLetterToHusband, songsToDedicateToYourBoyfriend, christmasMessageForGirlfriend, goodNightMessagesForHim, lastMinuteChristmasGiftForGirlfriend];
+const POSTS: BlogPost[] = [longDistanceBirthdayIdeas, halloweenIdeasForCouples, reasonsWhyILoveYou, cuteThingsToSayToYourBoyfriend, howToWriteALoveLetter, openWhenLetterIdeas, goodMorningMessagesForHer, paragraphsForYourGirlfriend, cuteThingsToSayToYourGirlfriend, goodMorningMessagesForHim, whatToWriteInBoyfriendsBirthdayCard, thinkingOfYouMessagesForHim, anniversaryLetterToBoyfriend, sixMonthAnniversaryIdeas, monthiversaryIdeas, howToApologizeToYourBoyfriend, virtualDateIdeasLongDistance, howToSurpriseYourGirlfriend, firstAnniversaryIdeasForBoyfriend, anniversaryIdeasAtHome, longDistanceAnniversaryIdeas, midnightBirthdaySurpriseIdeas, lastMinuteBirthdayGiftForBoyfriend, whatToGetABoyfriendWhoWantsNothing, photoGiftIdeasForBoyfriend, howToMakeADigitalScrapbook, longDistanceChristmasGiftIdeas, christmasLetterToBoyfriend, sorryMessageForGirlfriend, loveLetterToHusband, songsToDedicateToYourBoyfriend, christmasMessageForGirlfriend, goodNightMessagesForHim, lastMinuteChristmasGiftForGirlfriend, christmasProposalIdeas];
 
 export const BLOG_POSTS: readonly BlogPost[] = [...POSTS].sort((a, b) => b.published.localeCompare(a.published) || a.slug.localeCompare(b.slug));
 

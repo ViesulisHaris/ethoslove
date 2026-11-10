@@ -48,7 +48,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A Christmas letter for him, a few years in" },
         {
           type: "p",
-          text: "After a few Christmases, the danger is repeating last year's letter. Pick something that only happened in this one, and be more specific about him than you'd dare in a card:",
+          text: "After a few Christmases, the danger is repeating last year's letter. Pick something that only happened in this one, and be more specific about him than you'd dare in a card. If this is the year one of you plans to ask the big question, see our [Christmas proposal ideas](/blog/christmas-proposal-ideas):",
         },
         {
           type: "quote",
@@ -182,7 +182,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Una carta de Navidad para él cuando lleváis unos años" },
         {
           type: "p",
-          text: "Después de unas cuantas Navidades, el peligro es repetir la carta del año pasado. Elige algo que solo haya pasado en este, y sé más concreta sobre él de lo que te atreverías en una tarjeta:",
+          text: "Después de unas cuantas Navidades, el peligro es repetir la carta del año pasado. Elige algo que solo haya pasado en este, y sé más concreta sobre él de lo que te atreverías en una tarjeta. Si este es el año en que uno de los dos piensa hacer la gran pregunta, mira nuestras [ideas para pedir matrimonio en Navidad](/blog/christmas-proposal-ideas):",
         },
         {
           type: "quote",
