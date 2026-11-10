@@ -58,12 +58,73 @@ export function catalogCsv(format: CatalogFormat): string {
   return `${lines.map((line) => line.map(field).join(",")).join("\r\n")}\r\n`;
 }
 
+/** The feed changes only with a deploy; the platforms fetch it on a schedule. */
+const FEED_CACHE = "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400";
+
 export function catalogResponse(format: CatalogFormat): Response {
   return new Response(catalogCsv(format), {
-    headers: {
-      "content-type": "text/csv; charset=utf-8",
-      // The feed changes only with a deploy; the platforms fetch it on a schedule.
-      "cache-control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
-    },
+    headers: { "content-type": "text/csv; charset=utf-8", "cache-control": FEED_CACHE },
+  });
+}
+
+/**
+ * ChatGPT shopping: the same premium templates in OpenAI's product feed format
+ * (developers.openai.com/commerce/product-feeds/spec, read 10 Nov 2026). ChatGPT shopping is for
+ * people in the US, so the price is the US one, in dollars, as the pricing page shows it there. A row
+ * links to the template's public page, which ChatGPT can read (robots.txt keeps crawlers out of
+ * /create). OpenAI takes the file from merchants it has approved (chatgpt.com/merchants); until
+ * then /api/catalog/chatgpt.jsonl is where it can be read and checked.
+ */
+export type ChatGptFeedRow = {
+  item_id: string;
+  title: string;
+  description: string;
+  url: string;
+  brand: string;
+  seller_name: string;
+  seller_url: string;
+  image_url: string;
+  availability: "in_stock";
+  condition: "new";
+  price: string;
+  shipping_price: string;
+  is_digital: true;
+  seller_tos: string;
+  seller_privacy_policy: string;
+};
+
+/** What every template is, in plain words, after its own description: every premium one takes photos. */
+const HOW_IT_ARRIVES =
+  "A digital gift: you make it online with your own photos and words, and they open it as a link on their phone. No app, nothing shipped.";
+
+export function chatgptFeedRows(): ChatGptFeedRow[] {
+  const dollars = (cents: number) => `${(cents / 100).toFixed(2)} USD`;
+  return listManifests({ tier: "premium" }).map((m) => ({
+    item_id: m.slug,
+    title: `${m.name.en}: ${m.tagline.en.replace(/\.$/, "")}`.slice(0, 150),
+    description: `${m.description.en} ${HOW_IT_ARRIVES}`,
+    url: `${ORIGIN}/templates/${m.slug}`,
+    brand: BRAND.name,
+    seller_name: BRAND.name,
+    seller_url: ORIGIN,
+    image_url: `${ORIGIN}${m.thumbnail.poster}`,
+    availability: "in_stock",
+    condition: "new",
+    price: dollars(PRODUCTS.single.amounts.usd),
+    shipping_price: dollars(0),
+    is_digital: true,
+    seller_tos: `${ORIGIN}/legal/terms`,
+    seller_privacy_policy: `${ORIGIN}/legal/privacy`,
+  }));
+}
+
+/** The feed as JSON Lines, one whole record per line, which the spec accepts. */
+export function chatgptFeedJsonl(): string {
+  return `${chatgptFeedRows().map((row) => JSON.stringify(row)).join("\n")}\n`;
+}
+
+export function chatgptFeedResponse(): Response {
+  return new Response(chatgptFeedJsonl(), {
+    headers: { "content-type": "application/x-ndjson; charset=utf-8", "cache-control": FEED_CACHE },
   });
 }
