@@ -5,6 +5,7 @@ import { linkSecret, verifyToken } from "@/lib/lifecycle/links";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import { resumePath } from "@/components/pricing/offers";
+import { isPageNavigation } from "@/lib/auth/navigation";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -18,6 +19,8 @@ export const maxDuration = 10;
  * anything that doesn't add up, it asks them to sign in, and on to the gift after.
  */
 export async function GET(request: NextRequest) {
+  // A sign-in for whoever opens it: only when a page is opened, never as an image inside a gift.
+  if (!isPageNavigation(request.headers)) return new NextResponse(null, { status: 400 });
   const url = new URL(request.url);
   const lang = url.searchParams.get("l") === "es" ? "/es" : "";
   const to = (path: string) => NextResponse.redirect(new URL(path, url.origin));
