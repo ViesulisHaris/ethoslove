@@ -63,7 +63,9 @@ const pct = (share: number) => `${(share * 100).toFixed(2)}%`;
 export function PaperSheet({ base, art, children, crown, foot, margin = 0.075, head = 0.08, tail = 0.07, className, style }: { base: string; art: SheetArt; children: ReactNode; crown?: ReactNode; foot?: ReactNode; margin?: number; head?: number; tail?: number; className?: string; style?: CSSProperties }) {
   return (
     <div className={cn("relative grid", className)} style={style}>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none" style={{ filter: "drop-shadow(0 calc(1.6*var(--u)) calc(3.4*var(--u)) rgba(0,0,0,.4))" }}>
+      {/* a soft shadow under the paper: a plain box inside its edges, which costs nothing to move (a filter on the pictures would be redrawn on every frame of a scroll) */}
+      <div aria-hidden="true" className="pointer-events-none absolute" style={{ left: pct(art.inset.left + 0.01), right: pct(art.inset.right + 0.01), top: "1.2%", bottom: "1.2%", boxShadow: "0 calc(1.6*var(--u)) calc(4*var(--u)) rgba(0,0,0,.42)" }} />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
         <img src={`${base}sheet-${art.name}-top.webp`} alt="" draggable={false} className="absolute top-0 left-0 block w-full max-w-none" />
         {/* Margins in percent are shares of the width, which is what the caps' heights are too. A pixel of overlap, so rounding never opens a seam. */}
         <div className="absolute inset-0" style={{ marginTop: `calc(${pct(art.top)} - 1px)`, marginBottom: pct(art.bottom - art.fade), backgroundImage: `url(${base}sheet-${art.name}-mid.webp)`, backgroundSize: "100% auto", backgroundRepeat: "repeat-y", backgroundPosition: "top" }} />

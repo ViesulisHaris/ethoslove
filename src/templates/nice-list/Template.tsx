@@ -528,14 +528,14 @@ function Scroll({ lookId, s, list, inks, verdict, year, to, from, revealed, inke
   return (
     <div className="absolute inset-0" style={{ transform: `translateY(calc(${tied ? TIED_DROP : 0} * var(--k)))`, transition: reduce ? undefined : "transform .8s cubic-bezier(.5,0,.2,1)" }}>
       {/* the paper, as much of it as has come down */}
-      <motion.div className="absolute overflow-hidden" style={{ left: `${PAPER.x}%`, top: down(PAPER.y), width: `${PAPER.w}%`, height: paperHeight, backgroundImage: `url(${ART_BASE}paper.webp)`, backgroundSize: "100% auto", backgroundRepeat: "no-repeat", backgroundPosition: "top" }}>
+      <motion.div className="absolute overflow-hidden" style={{ left: `${PAPER.x}%`, top: down(PAPER.y), width: `${PAPER.w}%`, height: paperHeight, backgroundImage: `url(${ART_BASE}paper.webp)`, backgroundSize: "100% auto", backgroundRepeat: "no-repeat", backgroundPosition: "top", transition: out ? "height .35s ease" : undefined }}>
         <div ref={contentRef} className="relative origin-top" style={{ transform: fit < 1 ? `scale(${fit})` : undefined, width: fit < 1 ? `${100 / fit}%` : undefined, marginLeft: fit < 1 ? `${(100 - 100 / fit) / 2}%` : undefined }}>
           <Sheet look={look} s={s} list={list} inks={inks} verdict={verdict} year={year} to={to} from={from} revealed={revealed} inked={inked} reduce={reduce} />
         </div>
       </motion.div>
 
       <Sprite base={ART_BASE} name="rod" rect={SPRITES.rod} style={{ zIndex: 3 }} />
-      <motion.img src={`${ART_BASE}roll.webp`} alt="" draggable={false} className="pointer-events-none absolute max-w-none select-none" style={{ left: `${ROLL.x}%`, top: rollAt, width: `${ROLL.w}%`, height: down(ROLL.h), zIndex: 4 }} />
+      <motion.img src={`${ART_BASE}roll.webp`} alt="" draggable={false} className="pointer-events-none absolute max-w-none select-none" style={{ left: `${ROLL.x}%`, top: rollAt, width: `${ROLL.w}%`, height: down(ROLL.h), zIndex: 4, transition: out ? "top .35s ease" : undefined }} />
 
       {/* the ribbon and its tag: on while it is tied, falling away when it is not */}
       {tied || phase === "ready" ? (

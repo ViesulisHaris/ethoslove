@@ -15,9 +15,9 @@ const shared = {
   cover: "classic" as const,
   music: {
     source: "library" as const,
-    url: "/audio/library/sunday-slowly.mp3",
-    trackId: "sunday-slowly",
-    title: "Sunday Slowly",
+    url: "/audio/library/simple-gifts.mp3",
+    trackId: "simple-gifts",
+    title: "Simple Gifts",
     startAt: 0,
   },
   video: undefined,

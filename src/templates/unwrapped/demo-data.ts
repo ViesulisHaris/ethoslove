@@ -15,9 +15,9 @@ const shared = {
   cover: "classic" as const,
   music: {
     source: "library" as const,
-    url: "/audio/library/golden-hour.mp3",
-    trackId: "golden-hour",
-    title: "Golden Hour",
+    url: "/audio/library/waltz-of-the-flowers.mp3",
+    trackId: "waltz-of-the-flowers",
+    title: "Waltz of the Flowers",
     startAt: 0,
   },
   video: undefined,

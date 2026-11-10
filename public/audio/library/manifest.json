@@ -68,5 +68,29 @@
     "mood": "dreamy",
     "note": "Music box · a waltz in the dark",
     "kb": 563
+  },
+  {
+    "id": "merry-christmas",
+    "seconds": 62,
+    "mood": "playful",
+    "note": "U.S. Air Force Band · bright and festive",
+    "kb": 1939,
+    "source": "Wikimedia Commons, public domain (U.S. government recording)"
+  },
+  {
+    "id": "waltz-of-the-flowers",
+    "seconds": 66,
+    "mood": "romantic",
+    "note": "Tchaikovsky · U.S. Army Band",
+    "kb": 1548,
+    "source": "Wikimedia Commons, public domain (U.S. government recording)"
+  },
+  {
+    "id": "simple-gifts",
+    "seconds": 70,
+    "mood": "warm",
+    "note": "U.S. Air Force Band · a quiet hymn",
+    "kb": 1642,
+    "source": "Wikimedia Commons, public domain (U.S. government recording)"
   }
 ]

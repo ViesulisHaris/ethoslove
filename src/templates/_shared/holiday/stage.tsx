@@ -26,7 +26,7 @@ export const STAGE: CSSProperties = { position: "absolute", top: "50%", left: "5
 
 export const STAGE_KEYFRAMES = `
 .hol-tw{animation:hol-tw var(--d,3s) ease-in-out var(--o,0s) infinite alternate}
-@keyframes hol-tw{from{opacity:.12;transform:translate(-50%,-50%) scale(.75)}to{opacity:.95;transform:translate(-50%,-50%) scale(1.2)}}
+@keyframes hol-tw{from{opacity:.42;transform:translate(-50%,-50%) scale(.94)}to{opacity:.8;transform:translate(-50%,-50%) scale(1.08)}}
 .hol-spark{animation:hol-spark .95s cubic-bezier(.15,.7,.3,1) forwards}
 @keyframes hol-spark{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}18%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1) rotate(var(--r))}}
 @media (prefers-reduced-motion: reduce){.hol-tw{animation:none;opacity:.5}.hol-spark{animation:none;opacity:0}}
@@ -49,7 +49,7 @@ export function Plate({ base, look, floor, bulbs, still, shade, glow = "255,208,
   const box: CSSProperties = { position: "absolute", top: down((170 - PLATE_H) / 2), height: down(PLATE_H), width: `${PLATE_W}%`, maxWidth: "none" };
   const lit = useMemo(() => {
     const rnd = mulberry32(11);
-    return (bulbs ?? []).map(([x, y]) => ({ x, y, d: 2.2 + rnd() * 2.6, o: -rnd() * 4 }));
+    return (bulbs ?? []).map(([x, y]) => ({ x, y, d: 4.5 + rnd() * 4, o: -rnd() * 8 }));
   }, [bulbs]);
   const reach = wide ? (PLATE_W - 100) / 2 + 4 : 4;
   return (

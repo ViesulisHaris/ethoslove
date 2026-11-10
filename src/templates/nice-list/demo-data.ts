@@ -15,9 +15,9 @@ const shared = {
   cover: "classic" as const,
   music: {
     source: "library" as const,
-    url: "/audio/library/home.mp3",
-    trackId: "home",
-    title: "Home",
+    url: "/audio/library/merry-christmas.mp3",
+    trackId: "merry-christmas",
+    title: "We Wish You a Merry Christmas",
     startAt: 0,
   },
   video: undefined,

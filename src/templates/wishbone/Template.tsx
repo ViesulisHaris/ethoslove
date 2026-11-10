@@ -84,9 +84,8 @@ const CARD = ANCHORS.card;
 /** A pose as motion takes it: shifts as shares of the stage, which is the size of the piece's box. */
 const placed = (p: Pose) => ({ x: `${p.shift.x.toFixed(3)}%`, y: `${((p.shift.y / 170) * 100).toFixed(3)}%`, rotate: p.turn });
 
-/** The time, and a small random tremble: kept outside the component, since they are only ever read in a handler or a frame. */
+/** The time: kept outside the component, since it is only ever read in a handler or a frame. */
 const clockNow = () => performance.now();
-const tremble = () => Math.random() - 0.5;
 
 /** whole: waiting to be pulled. pulling: under strain. snapped: in two. open: the letter. */
 type Phase = "whole" | "pulling" | "snapped" | "open";
@@ -157,9 +156,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       playCrackle(mutedRef.current, { ms: 260, strain: CREAKS[creak.current] });
       creak.current += 1;
     }
-    // Under real strain the bone trembles in the hand.
-    const shake = strain > 0.55 ? (strain - 0.55) * 1.1 : 0;
-    setPull({ x: p.x + tremble() * shake, y: p.y + tremble() * shake });
+    setPull(p);
     if (strain >= 1) snap();
   };
 
