@@ -79,8 +79,16 @@ answer to the question asked and adds the sign-off; anything new comes from the 
 14. Yes, they are much greener. No shipping, no wrapping, nothing thrown away.
 15. They don't put in the actually meaningful message.
 
+## Free codes for writers
+
+A pitch can carry a free "Give Everything" code (every gift, forever, single use) so the writer can
+make a gift themself. It is a gift card with no purchase behind it, added in Supabase with the
+owner's OK each time, and redeemed at tryethos.io/redeem (this works while gift cards aren't on
+sale). Codes go only in the email, never in this file: the mirror of this repository is public.
+
 ## Log
 
 | Date | Request | Outlet | Sent | Published |
 |---|---|---|---|---|
-| | | | | |
+| 10 Nov 2026 | Holiday gift guide: Gifts for Avid Travelers, Stocking Stuffers (HARO, deadline 19 Nov) | Lizz Spano (lizzspano.com and her social accounts) | 10 Nov, with a free code | |
+| 10 Nov 2026 | Holiday gifts under $100 (HARO via Featured, deadline 11 Nov) | Posh Lifestyle & Beauty Blog (Carla Snuggs) | 10 Nov, with a free code | |
