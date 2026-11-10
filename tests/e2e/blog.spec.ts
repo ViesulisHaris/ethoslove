@@ -1,3 +1,5 @@
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 
 /**
@@ -7,7 +9,10 @@ import { expect, test, type Page } from "@playwright/test";
  * template cards keep their posters' shape, and nothing is wider than a phone.
  */
 
+/** The posts these tests open one by one. */
 const POSTS = ["halloween-ideas-for-couples", "long-distance-birthday-ideas-for-boyfriend"];
+/** Every post on /blog: one file each in src/content/blog/posts. The blog routine adds them daily. */
+const POST_COUNT = readdirSync(join(process.cwd(), "src/content/blog/posts")).filter((f) => f.endsWith(".ts")).length;
 
 /** Fails the test on any uncaught error in the page. */
 function watchErrors(page: Page) {
@@ -36,7 +41,7 @@ for (const lang of LANGS) {
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(lang.title);
       // The cards are the page's sections: h2 under the h1.
       const cards = page.locator("article").getByRole("heading", { level: 2 });
-      await expect(cards).toHaveCount(POSTS.length);
+      await expect(cards).toHaveCount(POST_COUNT);
       for (const slug of POSTS) await expect(page.locator(`article a[href="${lang.prefix}/blog/${slug}"]`)).toHaveCount(1);
       await readsClean(page);
       noErrors();
