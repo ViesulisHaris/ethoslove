@@ -1,22 +1,24 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { hashString, mulberry32 } from "../_shared/random";
 import { SoundToggle } from "../_shared/SoundToggle";
-import { COVER_VARS, PAPER_GRAIN, POSTER_FONT, SCRIPT_FONT, TapPill } from "../_shared/cover-kit";
+import { COVER_VARS, POSTER_FONT, SCRIPT_FONT, TapPill } from "../_shared/cover-kit";
 import { buzz, prime } from "../_shared/synth";
-import { NightPage, type NightTheme, type PhotoSlot } from "../_shared/night/NightPage";
 import { playChime, playCrackle, playSnap, playSparkle, playTink } from "../_shared/night/sfx";
 import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
-import { APEX, arms, autoPull, clampPull, CREAKS, halves, LEFT_END, pathOf, strainOf, type Curve, type Pt } from "./bone";
+import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
+import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
+import { down, laid, Plate, Sparks, Sprite, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { ANCHORS, ART_BASE, BULBS, SHEETS, SPRITES } from "./art-map";
+import { armTurn, autoPull, clampPull, CREAKS, settled, strained, strainOf, type Pose, type Pt } from "./bone";
 import { LOOKS, type Look, type LookId } from "./looks";
-import { Bokeh, Candle, CANDLE_KEYFRAMES, FIBRE, FOIL_KEYFRAMES, FOIL_ON_LIGHT, LINEN, mix, RoundLight, Texture } from "../_shared/holiday/materials";
 import { fieldsSchema, type WishboneFields } from "./schema";
 
 const S = {
@@ -50,7 +52,6 @@ const S = {
 type Copy = (typeof S)["en"];
 
 const fill = (line: string, vars: Record<string, string | number>) => line.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ""));
-const pct = (units: number, of: number) => `${(units / of) * 100}%`;
 
 const readFields = (fields: unknown) => {
   const parsed = fieldsSchema.safeParse(fields);
@@ -60,6 +61,28 @@ const readFields = (fields: unknown) => {
   const wish = typeof raw.wish === "string" ? raw.wish.trim().slice(0, 120) : "";
   return { look, winner, wish };
 };
+export const readLook = (fields: unknown): LookId => readFields(fields).look;
+
+/** Every picture a gift in this look is made of, so they can be fetched before it opens. */
+export function artFor(lookId: LookId): string[] {
+  const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
+  const size = wide ? "wide" : "phone";
+  const scene = [`plate-${lookId}-${size}`, "head", "arm-left", "arm-right"];
+  const note = [`soft-${lookId}-${size}`, "sheet-letter-top", "sheet-letter-mid", "sheet-letter-bottom", "peg", "twine"];
+  return [...scene, ...note].map((n) => `${ART_BASE}${n}.webp`);
+}
+
+/*
+ * The bone, in stage units (100 across, 170 down). It is three pictures (its head, and each arm
+ * with the name tag tied to it), each drawn in a box the size of the stage, so that turning that
+ * box about the joint turns the piece about the joint.
+ */
+const JOINT = ANCHORS.joint;
+const TIP = ANCHORS.endRight;
+const ORIGIN = `${JOINT.x}% ${((JOINT.y / 170) * 100).toFixed(3)}%`;
+const CARD = ANCHORS.card;
+/** A pose as motion takes it: shifts as shares of the stage, which is the size of the piece's box. */
+const placed = (p: Pose) => ({ x: `${p.shift.x.toFixed(3)}%`, y: `${((p.shift.y / 170) * 100).toFixed(3)}%`, rotate: p.turn });
 
 /** The time, and a small random tremble: kept outside the component, since they are only ever read in a handler or a frame. */
 const clockNow = () => performance.now();
@@ -86,7 +109,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [run, setRun] = useState(0);
   const { after, clear } = useTimers();
 
-  const svgRef = useRef<SVGSVGElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const grab = useRef<{ x: number; y: number; scale: number; moved: boolean } | null>(null);
   const creak = useRef(0);
   const raf = useRef(0);
@@ -126,7 +149,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     });
   };
 
-  /** Bends the bone to `p`, creaking as it passes each mark on the way to giving, and gives at the end. */
+  /** Pulls the bone to `p`, creaking as it passes each mark on the way to giving, and gives at the end. */
   const strainTo = (p: Pt) => {
     const strain = strainOf(p);
     while (creak.current < CREAKS.length && strain >= CREAKS[creak.current]) {
@@ -160,15 +183,15 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const onDown = (e: ReactPointerEvent<HTMLButtonElement>) => {
     if (phase !== "whole") return;
-    const svg = svgRef.current;
-    if (!svg) return;
+    const stage = stageRef.current;
+    if (!stage) return;
     begin();
     e.currentTarget.setPointerCapture?.(e.pointerId);
-    grab.current = { x: e.clientX, y: e.clientY, scale: svg.getBoundingClientRect().width / 100, moved: false };
+    grab.current = { x: e.clientX, y: e.clientY, scale: stage.getBoundingClientRect().width / 100, moved: false };
   };
   const onMove = (e: ReactPointerEvent<HTMLButtonElement>) => {
     const g = grab.current;
-    if (!g) return;
+    if (!g || !g.scale) return;
     const d = { x: (e.clientX - g.x) / g.scale, y: (e.clientY - g.y) / g.scale };
     if (!g.moved && Math.hypot(d.x, d.y) > 2) {
       g.moved = true;
@@ -226,11 +249,11 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const title = data.title?.trim() || s.title;
 
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: `linear-gradient(180deg, ${look.wall[0]} 0%, ${look.wall[1]} 100%)`, color: look.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}>
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: look.floor, color: look.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}>
       {!sceneGone && !preview ? (
         <Scene
           key={`scene-${run}`}
-          look={look}
+          lookId={f.look}
           s={s}
           title={title}
           from={data.senderName}
@@ -242,7 +265,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           card={card}
           canRead={canRead && phase === "snapped"}
           reduce={reduce}
-          svgRef={svgRef}
+          stageRef={stageRef}
           leaving={phase === "open"}
           onDown={onDown}
           onMove={onMove}
@@ -252,7 +275,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         />
       ) : null}
       {phase === "open" || preview ? (
-        <Page key={`page-${run}`} look={look} s={s} data={data} winner={f.winner} wish={wish} seed={seed} mode={mode} still={preview || reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} />
+        <Page key={`page-${run}`} lookId={f.look} s={s} data={data} winner={f.winner} wish={wish} seed={seed} mode={mode} still={preview || reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} />
       ) : null}
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
@@ -265,14 +288,14 @@ export function Opening({ fields, recipientName, senderName, locale }: OpeningPr
   const look = LOOKS[f.look];
   const s = S[locale] ?? S.en;
   return (
-    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...TILE_VARS, background: `linear-gradient(180deg, ${look.wall[0]} 0%, ${look.wall[1]} 100%)`, color: look.ink } as CSSProperties}>
-      <Scene look={look} s={s} title={s.title} from={senderName} to={recipientName} winner={f.winner} wish="" phase="whole" pull={{ x: 0, y: 0 }} card={false} canRead={false} reduce svgRef={{ current: null }} leaving={false} inert onDown={() => {}} onMove={() => {}} onUp={() => {}} onPull={() => {}} onRead={() => {}} />
+    <div className="absolute inset-0 overflow-hidden select-none" style={{ ...TILE_VARS, background: look.floor, color: look.ink } as CSSProperties}>
+      <Scene lookId={f.look} s={s} title={s.title} from={senderName} to={recipientName} winner={f.winner} wish="" phase="whole" pull={{ x: 0, y: 0 }} card={false} canRead={false} reduce leaving={false} inert onDown={() => {}} onMove={() => {}} onUp={() => {}} onPull={() => {}} onRead={() => {}} />
     </div>
   );
 }
 
 type SceneProps = {
-  look: Look;
+  lookId: LookId;
   s: Copy;
   title: string;
   from: string;
@@ -284,7 +307,7 @@ type SceneProps = {
   card: boolean;
   canRead: boolean;
   reduce: boolean;
-  svgRef: RefObject<SVGSVGElement | null>;
+  stageRef?: RefObject<HTMLDivElement | null>;
   leaving: boolean;
   inert?: boolean;
   onDown: (e: ReactPointerEvent<HTMLButtonElement>) => void;
@@ -294,69 +317,65 @@ type SceneProps = {
   onRead: () => void;
 };
 
-function Scene({ look, s, title, from, to, winner, wish, phase, pull, card, canRead, reduce, svgRef, leaving, inert = false, onDown, onMove, onUp, onPull, onRead }: SceneProps) {
+function Scene({ lookId, s, title, from, to, winner, wish, phase, pull, card, canRead, reduce, stageRef, leaving, inert = false, onDown, onMove, onUp, onPull, onRead }: SceneProps) {
+  const look = LOOKS[lookId];
   const snapped = phase === "snapped" || phase === "open";
-  const tone = { page: look.cloth, glow: [look.accent, look.accent] as const, accent: look.accent, dark: look.dark };
+  const tone = { page: look.floor, glow: [look.accent, look.accent] as const, accent: look.accent, dark: look.dark };
+  const pose = snapped ? settled(winner, armTurn(JOINT, TIP, pull)) : strained(JOINT, TIP, pull);
+  const move = snapped && !reduce ? { type: "spring" as const, stiffness: 120, damping: 11 } : { duration: 0 };
+  const piece = "pointer-events-none absolute inset-0";
   return (
     <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
-      <style>{`${FOIL_KEYFRAMES}${CANDLE_KEYFRAMES}`}</style>
-      {/* the table seen from above: woven, checked linen to every edge, lit from the top left */}
-      <div aria-hidden="true" className="absolute inset-0 overflow-hidden" style={{ backgroundColor: look.cloth, backgroundImage: `repeating-linear-gradient(0deg, ${look.check} 0 calc(4.4*var(--k)), transparent calc(4.4*var(--k)) calc(8.8*var(--k))), repeating-linear-gradient(90deg, ${look.check} 0 calc(4.4*var(--k)), transparent calc(4.4*var(--k)) calc(8.8*var(--k)))` }}>
-        <Texture image={LINEN} blend="multiply" opacity={0.75} size="calc(24*var(--k))" />
-        {/* the soft folds a cloth keeps from being stored */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, transparent 31%, rgba(0,0,0,.07) 33%, rgba(255,255,255,.08) 34.5%, transparent 37%, transparent 64%, rgba(0,0,0,.07) 66%, rgba(255,255,255,.08) 67.5%, transparent 70%)" }} />
-        <div className="absolute inset-0" style={{ background: look.dark ? "radial-gradient(80% 60% at 30% 25%, rgba(255,200,130,.22), transparent 70%)" : "radial-gradient(80% 60% at 26% 20%, rgba(255,255,255,.4), transparent 70%)" }} />
-        <div className="absolute inset-0" style={{ background: look.dark ? "radial-gradient(120% 90% at 50% 50%, transparent 45%, rgba(0,0,0,.6))" : "radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(80,40,20,.28))" }} />
-      </div>
+      <style>{`${STAGE_KEYFRAMES}${FOIL_KEYFRAMES}`}</style>
+      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} />
 
-      <div className="absolute top-1/2 left-1/2" style={{ width: "calc(100 * var(--k))", height: "calc(170 * var(--k))", transform: "translate(-50%, -50%)" }}>
-        {/* the place card, with the title in foil */}
-        <div className="absolute inset-x-[13%]" style={{ top: pct(4, 170), opacity: card ? 0 : 1, transition: "opacity .4s ease" }}>
-          <PlaceCard look={look} title={title} from={from} to={to} />
-        </div>
-
-        {/* what else is on the table */}
-        <div aria-hidden="true" className="pointer-events-none absolute" style={{ left: pct(76, 100), top: pct(26, 170), width: pct(18, 100), height: pct(28, 170) }}>
-          <Candle still={reduce} />
-        </div>
-        <div aria-hidden="true" className="pointer-events-none absolute" style={{ left: pct(-6, 100), top: pct(140, 170), width: pct(30, 100), height: pct(26, 170), rotate: "-12deg" }}>
-          <Pumpkin color="#d9702a" />
-        </div>
-        <div aria-hidden="true" className="pointer-events-none absolute" style={{ left: pct(82, 100), top: pct(146, 170), width: pct(20, 100), height: pct(17, 170), rotate: "14deg" }}>
-          <Pumpkin color="#efe2c6" />
+      <div ref={stageRef} style={STAGE}>
+        {/* the place card at the head of the table: who it is from, and the title in foil */}
+        <div className="absolute text-center" style={{ left: `${CARD.x}%`, top: down(CARD.y), width: "60%", transform: "translate(-50%, -50%) rotate(1.5deg)", color: look.ink, opacity: card ? 0 : 1, transition: "opacity .4s ease" }}>
+          <p className="truncate text-[calc(2.1*var(--k))] tracking-[0.34em] uppercase" style={{ color: look.soft }}>
+            {from} → {to}
+          </p>
+          <h1
+            className="mt-[calc(.8*var(--k))] line-clamp-3 leading-[1.04] text-balance italic [overflow-wrap:anywhere]"
+            style={{ ...(reduce ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: title.length > 44 ? "calc(3.5*var(--k))" : title.length > 22 ? "calc(4.8*var(--k))" : "calc(7*var(--k))" }}
+          >
+            {title}
+          </h1>
         </div>
 
-        {/* the plate, glazed, from above */}
-        <div aria-hidden="true" className="absolute rounded-[50%]" style={{ left: pct(4, 100), top: pct(54, 170), width: pct(92, 100), height: pct(80, 170), background: `radial-gradient(closest-side, ${look.plate} 0%, ${look.plate} 52%, ${mix(look.plate, "#8a7a60", 0.14)} 57%, ${mix(look.plate, "#ffffff", 0.6)} 62%, ${look.plate} 74%, ${mix(look.plate, "#7a6a50", 0.2)} 100%)`, boxShadow: "0 calc(2.4*var(--k)) calc(5*var(--k)) rgba(0,0,0,.32), 0 calc(.6*var(--k)) calc(1*var(--k)) rgba(0,0,0,.2)" }}>
-          <div className="absolute inset-[3.5%] rounded-[50%]" style={{ boxShadow: `inset 0 0 0 calc(.35*var(--k)) ${mix(look.rim, "#b08a3a", 0.55)}`, opacity: 0.85 }} />
-          <div className="absolute rounded-full" style={{ left: "14%", top: "8%", width: "40%", height: "18%", background: "radial-gradient(closest-side, rgba(255,255,255,.8), transparent)", filter: "blur(calc(.7*var(--k)))", transform: "rotate(-28deg)" }} />
-        </div>
+        {/* the wishbone on its plate: each arm with the name tied to it, and the head they share */}
+        <motion.div aria-hidden="true" className={piece} style={{ transformOrigin: ORIGIN }} initial={false} animate={placed(pose.left)} transition={move}>
+          <Sprite base={ART_BASE} name="arm-left" rect={SPRITES["arm-left"]} />
+          <TagName at={ANCHORS.tagLeft} name={from} turn={5} />
+        </motion.div>
+        <motion.div aria-hidden="true" className={piece} style={{ transformOrigin: ORIGIN }} initial={false} animate={placed(pose.right)} transition={move}>
+          <Sprite base={ART_BASE} name="arm-right" rect={SPRITES["arm-right"]} />
+          <TagName at={ANCHORS.tagRight} name={to} turn={-5} />
+        </motion.div>
+        <motion.div aria-hidden="true" className={piece} style={{ transformOrigin: ORIGIN }} initial={false} animate={placed(pose.head)} transition={move}>
+          <Sprite base={ART_BASE} name="head" rect={SPRITES.head} />
+        </motion.div>
+        {snapped && !reduce ? <Sparks at={winner === "them" ? ANCHORS.breakLeft : ANCHORS.breakRight} count={12} reach={16} colors={["#fff6dc", "#f0dcae", "#ffffff", "#e9cf9a"]} seed={5} /> : null}
 
-        <div className="absolute" style={{ left: pct(6, 100), top: pct(46, 170), width: pct(88, 100), height: pct(88, 170) }}>
-          <svg ref={svgRef} viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-            <BoneLight />
-            {snapped ? <Halves look={look} pull={pull} winner={winner} from={from} to={to} reduce={reduce} /> : <Whole look={look} pull={pull} from={from} to={to} />}
-          </svg>
-          {!inert && !snapped ? (
-            <button
-              type="button"
-              aria-label={s.pull}
-              onClick={(e) => {
-                // A keyboard press has no pointer before it: it pulls by itself.
-                if (e.detail === 0) onPull();
-              }}
-              onPointerDown={onDown}
-              onPointerMove={onMove}
-              onPointerUp={onUp}
-              onPointerCancel={onUp}
-              className="absolute cursor-grab touch-none rounded-[30%] outline-none focus-visible:ring-4 focus-visible:ring-white/60 active:cursor-grabbing"
-              style={{ left: "48%", top: "18%", width: "52%", height: "82%" }}
-            />
-          ) : null}
-        </div>
+        {!inert && !snapped ? (
+          <button
+            type="button"
+            aria-label={s.pull}
+            onClick={(e) => {
+              // A keyboard press has no pointer before it: it pulls by itself.
+              if (e.detail === 0) onPull();
+            }}
+            onPointerDown={onDown}
+            onPointerMove={onMove}
+            onPointerUp={onUp}
+            onPointerCancel={onUp}
+            className="z-[5] cursor-grab touch-none rounded-[calc(8*var(--k))] outline-none focus-visible:ring-4 focus-visible:ring-white/60 active:cursor-grabbing"
+            style={laid({ x: 46, y: JOINT.y - 6, w: 54, h: TIP.y - JOINT.y + 26 })}
+          />
+        ) : null}
 
         {!inert ? (
-          <div className="pointer-events-none absolute inset-x-0 z-[6] flex justify-center" style={{ top: pct(148, 170) }}>
+          <div className="pointer-events-none absolute inset-x-0 z-[6] flex justify-center" style={{ top: down(149) }}>
             <TapPill tone={tone} reduce={reduce} hidden={phase !== "whole"}>
               {s.pull}
             </TapPill>
@@ -365,17 +384,25 @@ function Scene({ look, s, title, from, to, winner, wish, phase, pull, card, canR
 
         <AnimatePresence>
           {card ? (
-            <motion.div key="card" className="absolute inset-x-[7%] z-[8]" style={{ top: pct(4, 170) }} initial={reduce ? false : { opacity: 0, y: -20, rotate: -4 }} animate={{ opacity: 1, y: 0, rotate: -1.5 }} transition={{ type: "spring", stiffness: 180, damping: 16 }}>
-              <WishCard look={look} s={s} from={from} winner={winner} wish={wish} />
+            <motion.div key="card" className="absolute inset-x-[7%] z-[8]" style={{ top: down(3) }} initial={reduce ? false : { opacity: 0, y: -20, rotate: -4 }} animate={{ opacity: 1, y: 0, rotate: -1.5 }} transition={{ type: "spring", stiffness: 180, damping: 16 }}>
+              <WishCard look={look} s={s} from={from} winner={winner} wish={wish} reduce={reduce} />
             </motion.div>
           ) : null}
         </AnimatePresence>
 
         {canRead ? (
-          <div className="absolute inset-x-0 z-[9] flex justify-center" style={{ top: pct(148, 170) }}>
-            <button type="button" onClick={onRead} className="rounded-full px-[calc(5*var(--k))] py-[calc(1.9*var(--k))] text-[calc(3.1*var(--k))] leading-none font-semibold tracking-[0.22em] uppercase outline-none focus-visible:ring-4 focus-visible:ring-white/60" style={{ background: `linear-gradient(180deg, ${mix(look.accent, "#ffffff", 0.12)}, ${mix(look.accent, "#000000", 0.12)})`, color: "#fffaf2", boxShadow: "0 calc(1*var(--k)) calc(3*var(--k)) rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.25)" }}>
+          <div className="absolute inset-x-0 z-[9] flex justify-center" style={{ top: down(148.5) }}>
+            <motion.button
+              type="button"
+              onClick={onRead}
+              initial={reduce ? false : { opacity: 0, y: "30%" }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="rounded-full px-[calc(5*var(--k))] py-[calc(1.9*var(--k))] text-[calc(3.1*var(--k))] leading-none font-semibold tracking-[0.22em] uppercase outline-none focus-visible:ring-4 focus-visible:ring-white/60"
+              style={{ background: "linear-gradient(180deg, #fbe9bd 0%, #e9c777 55%, #c99a3e 100%)", color: "#3a2410", boxShadow: "0 calc(1*var(--k)) calc(3*var(--k)) rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.6), inset 0 -1px 0 rgba(120,70,10,.35)" }}
+            >
               {s.read}
-            </button>
+            </motion.button>
           </div>
         ) : null}
       </div>
@@ -383,168 +410,69 @@ function Scene({ look, s, title, from, to, winner, wish, phase, pull, card, canR
   );
 }
 
-/** The place card at the head of the table: heavy cream stock, the title in foil, the two names under it. */
-function PlaceCard({ look, title, from, to }: { look: Look; title: string; from: string; to: string }) {
-  return (
-    <div className="relative overflow-hidden rounded-[calc(1*var(--k))] px-[calc(4*var(--k))] pt-[calc(3.4*var(--k))] pb-[calc(3*var(--k))] text-center" style={{ background: `linear-gradient(180deg, ${mix(look.card, "#ffffff", 0.5)}, ${look.card} 60%, ${mix(look.card, "#b89a70", 0.12)})`, color: look.cardInk, boxShadow: "0 calc(1.6*var(--k)) calc(3.4*var(--k)) rgba(0,0,0,.3)" }}>
-      <Texture image={FIBRE} blend="multiply" opacity={0.5} size="calc(26*var(--k))" />
-      {/* the fold of a tented card, across the top */}
-      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[calc(1.6*var(--k))]" style={{ background: "linear-gradient(180deg, rgba(120,90,50,.22), transparent)" }} />
-      <p className="relative text-[calc(2.2*var(--k))] tracking-[0.34em] uppercase [overflow-wrap:anywhere]" style={{ color: look.cardSoft }}>
-        {from} → {to}
-      </p>
-      <h1 className="relative mt-[calc(1.2*var(--k))] leading-[1.02] text-balance italic [overflow-wrap:anywhere]" style={{ ...FOIL_ON_LIGHT, fontFamily: POSTER_FONT, fontWeight: 600, fontSize: title.length > 22 ? "calc(5.4*var(--k))" : "calc(7.4*var(--k))" }}>
-        {title}
-      </h1>
-    </div>
-  );
-}
-
-/** What the big half says, on a little card. */
-function WishCard({ look, s, from, winner, wish }: { look: Look; s: Copy; from: string; winner: "them" | "me"; wish: string }) {
-  return (
-    <div className="relative overflow-hidden rounded-[calc(1.4*var(--k))] px-[calc(5.4*var(--k))] py-[calc(5*var(--k))] text-center" style={{ background: `linear-gradient(160deg, ${mix(look.card, "#ffffff", 0.5)}, ${look.card} 55%, ${mix(look.card, "#b89a70", 0.16)})`, color: look.cardInk, boxShadow: "0 calc(3*var(--k)) calc(9*var(--k)) rgba(0,0,0,.35)" }}>
-      <Texture image={FIBRE} blend="multiply" opacity={0.5} size="calc(28*var(--k))" />
-      <div aria-hidden="true" className="absolute inset-[3.5%] rounded-[calc(.8*var(--k))]" style={{ boxShadow: "inset 0 0 0 calc(.28*var(--k)) rgba(176,126,40,.55), inset 0 0 0 calc(1.1*var(--k)) transparent, inset 0 0 0 calc(1.35*var(--k)) rgba(176,126,40,.3)" }} />
-      <p className="relative leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...FOIL_ON_LIGHT, fontFamily: POSTER_FONT, fontSize: "calc(7*var(--k))", fontWeight: 600 }}>
-        {winner === "them" ? s.themWon : fill(s.meWon, { name: from })}
-      </p>
-      <p className="relative mt-[calc(1.2*var(--k))] text-[calc(3*var(--k))] italic" style={{ color: look.cardSoft }}>
-        {winner === "them" ? s.themAside : s.meAside}
-      </p>
-      <p className="relative mt-[calc(3.4*var(--k))] text-[calc(2.4*var(--k))] font-semibold tracking-[0.24em] uppercase [overflow-wrap:anywhere]" style={{ color: look.cardSoft }}>
-        {fill(s.wished, { name: from })}
-      </p>
-      <p className="relative mt-[calc(1.2*var(--k))] leading-[1.2] text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: wish.length > 70 ? "calc(5*var(--k))" : "calc(6.2*var(--k))" }}>
-        {wish}
-      </p>
-    </div>
-  );
-}
-
-/** A bone drawn along curves: a dark edge under a pale body, with a soft highlight. */
-function BonePath({ curves, look, knob }: { curves: Curve[]; look: Look; knob?: Pt }) {
-  return (
-    <g strokeLinecap="round" fill="none" filter="url(#wb-round)">
-      {curves.map((c, i) => (
-        <path key={`b${i}`} d={pathOf(c)} stroke={look.bone[0]} strokeWidth="6.2" />
-      ))}
-      {knob ? <ellipse cx={knob.x} cy={knob.y - 1} rx="6" ry="3.6" fill={look.bone[0]} /> : null}
-    </g>
-  );
-}
-
-/** The light the bone is drawn in, and the tint of its hollows. Defined once, in the bone's own drawing. */
-function BoneLight() {
-  return (
-    <defs>
-      <RoundLight id="wb-round" soft={1.7} glint={0.32} exponent={9} depth={0.5} light={{ x: 30, y: -10, z: 70 }} />
-    </defs>
-  );
-}
-
-/** A name on a tag tied to the end of an arm. */
-function Tag({ at, name, look, tilt }: { at: Pt; name: string; look: Look; tilt: number }) {
+/** A name written on the tag tied to an arm. */
+function TagName({ at, name, turn }: { at: Pt; name: string; turn: number }) {
   const short = name.length > 11 ? `${name.slice(0, 10)}…` : name;
   return (
-    <g transform={`translate(${at.x.toFixed(2)} ${at.y.toFixed(2)}) rotate(${tilt})`}>
-      <path d="M0 0 C .6 2, -.4 4, 0 5.6" stroke={mix(look.tag, "#3a2010", 0.4)} strokeWidth=".45" fill="none" />
-      <rect x="-10" y="5.6" width="20" height="8" rx="1.4" fill={look.tag} style={{ filter: "drop-shadow(0 .6px .8px rgba(0,0,0,.35))" }} />
-      <rect x="-10" y="5.6" width="20" height="3.2" rx="1.4" fill="#ffffff" opacity=".18" />
-      <circle cx="0" cy="7.2" r=".75" fill={mix(look.tag, "#2a1608", 0.6)} />
-      <text x="0" y="11.8" textAnchor="middle" fontSize="3.6" fill={look.tagInk} style={{ fontFamily: SCRIPT_FONT }}>
-        {short}
-      </text>
-    </g>
+    <p className="absolute whitespace-nowrap" style={{ left: `${at.x}%`, top: down(at.y), transform: `translate(-50%, -50%) rotate(${turn}deg)`, fontFamily: SCRIPT_FONT, fontSize: `calc(${short.length > 7 ? 2.5 : 3.2}*var(--k))`, lineHeight: 1, color: "#3a2410" }}>
+      {short}
+    </p>
   );
 }
 
-function Whole({ look, pull, from, to }: { look: Look; pull: Pt; from: string; to: string }) {
-  const { left, right } = arms(pull);
+/** What the big half says, on a gold-lined card. `unit` is what its type is sized in: the stage's on the table, the page's on the note. */
+function WishCard({ look, s, from, winner, wish, reduce, unit = "var(--k)" }: { look: Look; s: Copy; from: string; winner: "them" | "me"; wish: string; reduce: boolean; unit?: string }) {
+  const size = (n: number) => `calc(${n} * ${unit})`;
   return (
-    <g style={{ filter: "drop-shadow(0 1.2px 1.4px rgba(0,0,0,.3))" }}>
-      <BonePath curves={[left, right]} look={look} knob={left[0]} />
-      <Tag at={LEFT_END} name={from} look={look} tilt={6} />
-      <Tag at={right[2]} name={to} look={look} tilt={-6 - pull.x * 0.6} />
-    </g>
+    <PaperSheet base={ART_BASE} art={SHEETS.letter} margin={0.11} head={0.12} tail={0.11}>
+      <div className="text-center" style={{ color: look.ink }}>
+        <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(reduce ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontSize: size(6.6), fontWeight: 600 }}>
+          {winner === "them" ? s.themWon : fill(s.meWon, { name: from })}
+        </p>
+        <p className="italic" style={{ marginTop: size(1.1), fontSize: size(2.9), color: look.soft }}>
+          {winner === "them" ? s.themAside : s.meAside}
+        </p>
+        <p className="font-semibold tracking-[0.24em] uppercase [overflow-wrap:anywhere]" style={{ marginTop: size(3), fontSize: size(2.3), color: look.soft }}>
+          {fill(s.wished, { name: from })}
+        </p>
+        <p className="leading-[1.2] text-balance [overflow-wrap:anywhere]" style={{ marginTop: size(1.1), fontFamily: "var(--gift-font-hand)", fontSize: size(wish.length > 70 ? 4.8 : 6) }}>
+          {wish}
+        </p>
+      </div>
+    </PaperSheet>
   );
 }
 
-/** The bone in two: the big half (joint and all) goes one way, the small half the other, and both settle on the plate. */
-function Halves({ look, pull, winner, from, to, reduce }: { look: Look; pull: Pt; winner: "them" | "me"; from: string; to: string; reduce: boolean }) {
-  const { big, small } = halves(pull, winner);
-  const { right } = arms(pull);
-  const away = winner === "them" ? 1 : -1;
-  const spring = { type: "spring" as const, stiffness: 120, damping: 11 };
-  return (
-    <g style={{ filter: "drop-shadow(0 1.2px 1.4px rgba(0,0,0,.3))" }}>
-      <motion.g initial={false} animate={reduce ? {} : { x: -9 * away, y: 4, rotate: -22 * away }} transition={spring} style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}>
-        <BonePath curves={small} look={look} />
-        <Tag at={winner === "them" ? LEFT_END : right[2]} name={winner === "them" ? from : to} look={look} tilt={winner === "them" ? 14 : -14} />
-      </motion.g>
-      <motion.g initial={false} animate={reduce ? {} : { x: 6 * away, y: 7, rotate: 10 * away }} transition={spring} style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}>
-        <BonePath curves={big} look={look} knob={big[0][0] ?? APEX} />
-        <Tag at={winner === "them" ? right[2] : LEFT_END} name={winner === "them" ? to : from} look={look} tilt={winner === "them" ? -10 : 10} />
-      </motion.g>
-    </g>
-  );
-}
-
-/** A small pumpkin for the table: ribbed, lit from the top left, its stem curling. */
-function Pumpkin({ color }: { color: string }) {
-  const id = useId().replace(/:/g, "");
-  const lit = mix(color, "#fff4dc", 0.38);
-  const deep = mix(color, "#3a1a06", 0.5);
-  return (
-    <svg viewBox="0 0 60 50" aria-hidden="true" className="h-full w-full overflow-visible">
-      <defs>
-        <radialGradient id={`p${id}`} cx=".36" cy=".3" r=".8">
-          <stop offset="0" stopColor={lit} />
-          <stop offset=".5" stopColor={color} />
-          <stop offset="1" stopColor={deep} />
-        </radialGradient>
-        <linearGradient id={`s${id}`} x1="0" x2="1">
-          <stop offset="0" stopColor="#3e4a1c" />
-          <stop offset=".5" stopColor="#7a8a3a" />
-          <stop offset="1" stopColor="#2e3812" />
-        </linearGradient>
-      </defs>
-      <ellipse cx="30" cy="47.5" rx="25" ry="3.2" fill="rgba(0,0,0,.28)" style={{ filter: "blur(1.2px)" }} />
-      {[-15, -7.5, 0, 7.5, 15].map((dx, i) => (
-        <ellipse key={i} cx={30 + dx} cy="30" rx={i === 2 ? 11 : 10} ry="16.5" fill={`url(#p${id})`} opacity={i === 2 ? 1 : 0.96} />
-      ))}
-      {[-11, -4, 4, 11].map((dx, i) => (
-        <path key={i} d={`M${30 + dx} 15 C ${30 + dx * 1.2} 24, ${30 + dx * 1.2} 36, ${30 + dx} 46`} fill="none" stroke={deep} strokeOpacity=".28" strokeWidth="1.4" />
-      ))}
-      <ellipse cx="22" cy="21" rx="6" ry="3" fill="#ffffff" opacity=".22" style={{ filter: "blur(1.4px)" }} />
-      <path d="M29 15 C 29 10, 30 6, 34 3" stroke={`url(#s${id})`} strokeWidth="3.2" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
-
-function Page({ look, s, data, winner, wish, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { look: Look; s: Copy; data: TemplateProps<WishboneFields>["data"]; winner: "them" | "me"; wish: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
-  const theme: NightTheme = { card: look.card, cardImage: PAPER_GRAIN, ink: look.cardInk, soft: look.cardSoft, accent: look.accent, edge: "rgba(80,40,20,.14)", dark: false, label: look.ink, face: "serif" };
+/** The note: the wish on its card, the letter on a gold-lined sheet under it, then the photos, pegged to a line. */
+function Page({ lookId, s, data, winner, wish, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<WishboneFields>["data"]; winner: "them" | "me"; wish: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
+  const look = LOOKS[lookId];
+  const theme: HolidayTheme = { ink: look.ink, soft: look.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
-    return data.photos.map(() => (rng() - 0.5) * 6);
+    return data.photos.map(() => ({ print: (rng() - 0.5) * 6, peg: (rng() - 0.5) * 10, shift: (rng() - 0.5) * 24 }));
   }, [data.photos, seed]);
   return (
-    <motion.div className="absolute inset-0 z-[20]" style={{ ...COVER_VARS, background: `linear-gradient(180deg, ${look.wall[0]} 0%, ${look.wall[1]} 100%)` } as CSSProperties} initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
-      <Bokeh colors={look.lights} count={14} seed={seed} still={still} strength={look.dark ? 0.75 : 0.5} />
-      <NightPage
+    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+      <HolidayPage
         data={data}
         mode={mode}
-        theme={theme}
         still={still}
+        base={ART_BASE}
+        look={lookId}
+        floor={look.floor}
+        shade={look.veil}
+        sheet={SHEETS.letter}
+        frame={0.05}
+        theme={theme}
+        hero={
+          <div className="mx-auto w-[min(82cqw,420px)]" style={{ rotate: "-1.5deg" }}>
+            <WishCard look={look} s={s} from={data.senderName} winner={winner} wish={wish} reduce={still} unit="var(--u)" />
+          </div>
+        }
         eyebrow={fill(s.note, { name: data.senderName })}
         gallery={s.gallery}
         columns={2}
-        hero={
-          <div className="mx-auto w-[min(80cqw,400px)]" style={{ rotate: "-1.5deg" }}>
-            <WishCard look={look} s={s} from={data.senderName} winner={winner} wish={wish} />
-          </div>
-        }
-        photo={(slot) => <Snapshot slot={slot} rot={tilt[slot.index] ?? 0} />}
+        photo={(slot) => <Pegged slot={slot} tilt={tilt[slot.index]} />}
         onEvent={onEvent}
         onReact={onReact}
         onMakeOne={onMakeOne}
@@ -554,21 +482,34 @@ function Page({ look, s, data, winner, wish, seed, mode, still, onEvent, onReact
   );
 }
 
-function Snapshot({ slot, rot }: { slot: PhotoSlot; rot: number }) {
-  const { photo, open } = slot;
+/*
+ * A photo pegged to a line. Everything is a share of the print's width: the peg's picture (which
+ * has its shadow in it) is PEG_W wide, PEG_EDGE of the way down it is where the print begins, and
+ * the twine runs behind it a little above that.
+ */
+const PEG = SPRITES.peg;
+const PEG_EDGE = (ANCHORS.pegEdge.y - PEG.y) / PEG.h;
+const PEG_W = 12;
+const PEG_ABOVE = PEG_EDGE * PEG_W * (PEG.h / PEG.w);
+
+function Pegged({ slot, tilt }: { slot: PhotoSlot; tilt?: { print: number; peg: number; shift: number } }) {
   return (
-    <figure className="relative m-0" style={{ rotate: `${rot}deg` }}>
-      <button type="button" onClick={open} aria-label={photo.alt || photo.caption || "photo"} className="block w-full cursor-pointer text-left outline-none focus-visible:ring-4 focus-visible:ring-white/60">
-        <div className="relative p-[calc(1.8*var(--u))] pb-[calc(9.5*var(--u))]" style={{ background: "#fffaf2", backgroundImage: PAPER_GRAIN, boxShadow: "0 calc(3*var(--u)) calc(7*var(--u)) rgba(0,0,0,.3)" }}>
-          <img src={photo.url} alt="" loading="lazy" draggable={false} className="aspect-square w-full object-cover" />
-          {photo.caption ? (
-            <figcaption className="absolute inset-x-[calc(2*var(--u))] bottom-[calc(1.4*var(--u))] line-clamp-2 text-center leading-[1.1]" style={{ fontFamily: SCRIPT_FONT, fontSize: "calc(2.9*var(--u))", color: "#3a2410" }}>
-              {photo.caption}
-            </figcaption>
-          ) : null}
-        </div>
-        <span aria-hidden="true" className="absolute -top-[calc(2*var(--u))] left-1/2 h-[calc(5*var(--u))] w-[calc(20*var(--u))] -translate-x-1/2 rotate-2" style={{ background: "rgba(230,205,150,.7)", boxShadow: "0 1px 2px rgba(0,0,0,.25)" }} />
-      </button>
-    </figure>
+    <div className="relative" style={{ paddingTop: `${(PEG_ABOVE + 1).toFixed(2)}%` }}>
+      <div aria-hidden="true" className="pointer-events-none absolute top-0 h-0" style={{ left: "-80%", right: "-80%", marginTop: `${(PEG_ABOVE * 0.62).toFixed(2)}%`, paddingTop: "2%", backgroundImage: `url(${ART_BASE}twine.webp)`, backgroundSize: "100% 100%", backgroundRepeat: "no-repeat", filter: "drop-shadow(0 calc(.6*var(--u)) calc(.8*var(--u)) rgba(0,0,0,.35))" }} />
+      <Print
+        slot={slot}
+        rot={tilt?.print ?? 0}
+        holder={
+          <img
+            src={`${ART_BASE}peg.webp`}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            className="pointer-events-none absolute top-0 max-w-none select-none"
+            style={{ left: `${(50 + (tilt?.shift ?? 0)).toFixed(1)}%`, width: `${PEG_W}%`, transform: `translate(-50%, ${(-PEG_EDGE * 100).toFixed(1)}%) rotate(${(tilt?.peg ?? 0).toFixed(1)}deg)`, transformOrigin: `50% ${(PEG_EDGE * 100).toFixed(1)}%` }}
+          />
+        }
+      />
+    </div>
   );
 }

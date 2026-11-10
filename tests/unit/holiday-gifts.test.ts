@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { entries, hitTimes, readVerdict, reviewYear, stamps, STAMP_GAP_S, STAMP_HIT, STAMP_S, unrollSeconds } from "@/templates/nice-list/review";
 import { barcode, formatCount, parseStat, PIECES, readStats, tearPieces, unwrapYear } from "@/templates/unwrapped/year";
-import { APEX, arms, autoPull, clampPull, CREAKS, GIVE, halves, LEFT_END, RIGHT_END, split, strainOf } from "@/templates/wishbone/bone";
+import { armTurn, autoPull, clampPull, CREAKS, GIVE, settled, strained, strainOf } from "@/templates/wishbone/bone";
 import { fieldsSchema as niceSchema } from "@/templates/nice-list/schema";
 import { fieldsSchema as unwrappedSchema } from "@/templates/unwrapped/schema";
 import { fieldsSchema as wishboneSchema } from "@/templates/wishbone/schema";
@@ -139,20 +139,43 @@ describe("Unwrapped", () => {
 });
 
 describe("Wishbone", () => {
-  it("rests whole, its ends where the tags hang, when nobody is pulling", () => {
-    const { left, right } = arms({ x: 0, y: 0 });
-    expect(left[0]).toEqual(APEX);
-    expect(right[0]).toEqual(APEX);
-    expect(left[2]).toEqual(LEFT_END);
-    expect(right[2]).toEqual(RIGHT_END);
+  // A joint and a tip like the rendered bone's: the right arm points down and to the right.
+  const JOINT = { x: 50, y: 70 };
+  const TIP = { x: 72, y: 110 };
+  const nowhere = { x: 0, y: 0 };
+
+  it("rests whole when nobody is pulling", () => {
+    const { head, left, right } = strained(JOINT, TIP, nowhere);
+    for (const piece of [head, left, right]) {
+      expect(piece.turn).toBeCloseTo(0, 9);
+      expect(piece.shift).toEqual(nowhere);
+    }
+  });
+
+  it("turns the pulled arm about the joint until its tip points at the finger, and barely moves the rest", () => {
+    const pull = { x: 12, y: 3 };
+    const { head, left, right } = strained(JOINT, TIP, pull);
+    // Pulled outwards, an arm that points down and right swings anticlockwise on the screen.
+    expect(right.turn).toBeLessThan(0);
+    const r = (right.turn * Math.PI) / 180;
+    const dx = TIP.x - JOINT.x;
+    const dy = TIP.y - JOINT.y;
+    const turned = { x: dx * Math.cos(r) - dy * Math.sin(r), y: dx * Math.sin(r) + dy * Math.cos(r) };
+    expect(Math.atan2(turned.y, turned.x)).toBeCloseTo(Math.atan2(dy + pull.y, dx + pull.x), 9);
+    expect(right.turn).toBeCloseTo(armTurn(JOINT, TIP, pull), 9);
+    // The head and the other arm are one piece until it gives, and only lean.
+    expect(head).toEqual(left);
+    expect(Math.abs(left.turn)).toBeLessThan(Math.abs(right.turn) * 0.2);
+    expect(Math.hypot(left.shift.x, left.shift.y)).toBeLessThan(Math.hypot(pull.x, pull.y) * 0.2);
   });
 
   it("follows the finger only as far as the bone goes, then gives", () => {
     const far = clampPull({ x: 300, y: 400 });
     expect(Math.hypot(far.x, far.y)).toBeCloseTo(GIVE, 6);
     expect(strainOf(far)).toBe(1);
-    expect(strainOf({ x: 0, y: 0 })).toBe(0);
+    expect(strainOf(nowhere)).toBe(0);
     expect(clampPull({ x: 3, y: 4 })).toEqual({ x: 3, y: 4 });
+    expect(armTurn(JOINT, TIP, { x: 300, y: 400 })).toBeCloseTo(armTurn(JOINT, TIP, far), 9);
   });
 
   it("creaks on the way, louder each time, and before it gives", () => {
@@ -166,25 +189,19 @@ describe("Wishbone", () => {
     for (let t = 0.1; t <= 1; t += 0.1) expect(strainOf(autoPull(t))).toBeGreaterThanOrEqual(strainOf(autoPull(t - 0.1)));
   });
 
-  it("splits a curve into two pieces that meet", () => {
-    const { left } = arms({ x: 5, y: 3 });
-    const [a, b] = split(left, 0.3);
-    expect(a[0]).toEqual(left[0]);
-    expect(b[2]).toEqual(left[2]);
-    expect(a[2]).toEqual(b[0]);
-  });
-
-  it("gives the joint to the winner, with their arm and a stub of the other", () => {
-    const pull = autoPull(1);
-    const them = halves(pull, "them");
-    const { right, left } = arms(pull);
-    expect(them.big[0]).toEqual(right);
-    expect(them.big[1][0]).toEqual(left[0]);
-    expect(them.small).toHaveLength(1);
-    expect(them.small[0][2]).toEqual(LEFT_END);
-    const me = halves(pull, "me");
-    expect(me.big[0]).toEqual(left);
-    expect(me.small[0][2]).toEqual(right[2]);
+  it("gives the head to the winner: it goes wherever their arm goes, and the other arm is left alone", () => {
+    const turn = armTurn(JOINT, TIP, autoPull(1));
+    const them = settled("them", turn);
+    expect(them.head).toEqual(them.right);
+    expect(them.left).not.toEqual(them.head);
+    // The halves part: the loser's arm goes left, the winner's half right.
+    expect(them.left.shift.x).toBeLessThan(0);
+    expect(them.head.shift.x).toBeGreaterThan(0);
+    const me = settled("me", turn);
+    expect(me.head).toEqual(me.left);
+    // The arm they are left holding keeps the turn it had when it gave, and a little more.
+    expect(me.right.turn).toBeCloseTo(turn + 8, 9);
+    expect(me.right.shift.x).toBeGreaterThan(0);
   });
 
   it("makes a whole, publishable gift from nothing", () => {

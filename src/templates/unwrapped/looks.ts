@@ -2,24 +2,27 @@ import type { LookSwatch } from "../_shared/look-swatches";
 
 export type LookId = "red" | "kraft" | "plaid" | "pink";
 
-/** A wrapping paper: its colour, the print on it, and the ribbon that goes round it. */
-export type Paper = { base: string; ink: string; print: "dots" | "stripes" | "tartan" | "stars"; ribbon: string; satin: string };
-
-/** Ribbon colours: a deep red, a warm ivory, a blush pink. */
-const RIBBON = { red: "#a8202a", ivory: "#efe4d6", blush: "#f0bccb" } as const;
+/** The wrapping papers and ribbons that were rendered (scripts/art/holiday/unwrapped.py). */
+export type PaperId = "red-dots" | "green-stripes" | "kraft-stars" | "kraft-stripes" | "tartan-green" | "tartan-red" | "pink-stripes" | "blush-dots" | "gold";
+export type RibbonId = "cream" | "red" | "blush" | "gold";
+export type Wrapping = { paper: PaperId; ribbon: RibbonId };
 
 export type Look = {
-  /** The room, top to bottom, and whether it is dark. */
-  wall: [string, string];
+  /** Whether the floor is dark, which sets the words on it in cream. */
   dark: boolean;
-  /** The two papers the presents alternate between. */
-  papers: [Paper, Paper];
-  /** The lights in the room behind, and the floor the presents stand on. */
-  lights: string[];
-  floor: [string, string];
-  /** Words on the wall. */
+  /** The floor's own colour, for the instant before its picture arrives and past its edges. */
+  floor: string;
+  /** Words written on the floor. */
   ink: string;
-  /** The card inside each present, and its words. */
+  /** The presents take turns in these two wrappings; the last one is gold. */
+  presents: [Wrapping, Wrapping];
+  last: Wrapping;
+  /** The colour of the fairy lights' glow, as "r,g,b". */
+  glow: string;
+  /** A soft dark (or light) laid over the table's edges, and over all of it behind the letter. */
+  vignette: string;
+  veil: string;
+  /** The card inside each present, and the letter's paper. */
   card: string;
   cardInk: string;
   cardSoft: string;
@@ -28,60 +31,56 @@ export type Look = {
 
 export const LOOKS: Record<LookId, Look> = {
   red: {
-    wall: ["#1c2944", "#0a1120"],
     dark: true,
-    papers: [
-      { base: "#b8262b", ink: "rgba(255,248,240,.92)", print: "dots", ribbon: RIBBON.ivory, satin: "#ffffff" },
-      { base: "#24573f", ink: "rgba(255,255,255,.16)", print: "stripes", ribbon: RIBBON.red, satin: "#ff8a8a" },
-    ],
-    lights: ["#ffd27a", "#ff9a6a", "#fff1c8", "#ffc46a"],
-    floor: ["#4a2e1e", "#1e120a"],
-    ink: "#fbf1e4",
-    card: "#fbf4e6",
+    floor: "#2a180e",
+    ink: "#fbf1e2",
+    presents: [{ paper: "red-dots", ribbon: "cream" }, { paper: "green-stripes", ribbon: "red" }],
+    last: { paper: "gold", ribbon: "red" },
+    glow: "255,208,138",
+    vignette: "radial-gradient(125% 95% at 50% 46%, transparent 52%, rgba(10,4,0,.55))",
+    veil: "linear-gradient(180deg, rgba(24,12,6,.26), rgba(16,8,4,.5))",
+    card: "#fbf5ea",
     cardInk: "#2a1a14",
     cardSoft: "#9a6a52",
-    accent: "#c62f2a",
+    accent: "#a8232a",
   },
   kraft: {
-    wall: ["#2a1c13", "#110a06"],
-    dark: true,
-    papers: [
-      { base: "#b98d5e", ink: "rgba(255,250,240,.8)", print: "stars", ribbon: RIBBON.red, satin: "#ff8a8a" },
-      { base: "#9c6e43", ink: "rgba(255,240,220,.2)", print: "stripes", ribbon: RIBBON.ivory, satin: "#ffffff" },
-    ],
-    lights: ["#ffd27a", "#ffe9b0", "#ffb36a", "#ffdca0"],
-    floor: ["#3a2618", "#160c06"],
-    ink: "#fbefe0",
-    card: "#fbf4e6",
+    dark: false,
+    floor: "#c39a6c",
+    ink: "#3a2414",
+    presents: [{ paper: "kraft-stars", ribbon: "red" }, { paper: "kraft-stripes", ribbon: "cream" }],
+    last: { paper: "gold", ribbon: "red" },
+    glow: "255,226,170",
+    vignette: "radial-gradient(125% 95% at 50% 46%, transparent 56%, rgba(70,40,14,.32))",
+    veil: "linear-gradient(180deg, rgba(60,36,16,.2), rgba(50,28,12,.4))",
+    card: "#fbf5ea",
     cardInk: "#2e1d10",
     cardSoft: "#9a744a",
-    accent: "#a5502a",
+    accent: "#a5402a",
   },
   plaid: {
-    wall: ["#18261b", "#08110a"],
     dark: true,
-    papers: [
-      { base: "#244d34", ink: "rgba(200,36,44,.55)", print: "tartan", ribbon: RIBBON.red, satin: "#ff8a8a" },
-      { base: "#a8232a", ink: "rgba(20,56,34,.5)", print: "tartan", ribbon: RIBBON.ivory, satin: "#ffffff" },
-    ],
-    lights: ["#ffd27a", "#ff8a6a", "#fff1c8", "#ffc46a"],
-    floor: ["#3a2a1c", "#140c06"],
+    floor: "#17301f",
     ink: "#f6efe0",
-    card: "#fbf4e6",
+    presents: [{ paper: "tartan-red", ribbon: "cream" }, { paper: "tartan-green", ribbon: "gold" }],
+    last: { paper: "gold", ribbon: "red" },
+    glow: "255,208,138",
+    vignette: "radial-gradient(125% 95% at 50% 46%, transparent 52%, rgba(0,8,2,.55))",
+    veil: "linear-gradient(180deg, rgba(8,24,14,.26), rgba(4,16,8,.5))",
+    card: "#fbf5ea",
     cardInk: "#1d2a1f",
     cardSoft: "#6a7a5a",
-    accent: "#b8262b",
+    accent: "#a8232a",
   },
   pink: {
-    wall: ["#fde7ee", "#f5c9d7"],
     dark: false,
-    papers: [
-      { base: "#ef9ab3", ink: "rgba(255,255,255,.6)", print: "stripes", ribbon: RIBBON.ivory, satin: "#ffffff" },
-      { base: "#fdf1f4", ink: "rgba(232,120,156,.7)", print: "dots", ribbon: RIBBON.blush, satin: "#ffffff" },
-    ],
-    lights: ["#ffffff", "#ffc2d4", "#ffe2a8", "#ffd6e2"],
-    floor: ["#f3d2dc", "#e8b4c4"],
-    ink: "#8a2a4f",
+    floor: "#efc0cf",
+    ink: "#7a2848",
+    presents: [{ paper: "pink-stripes", ribbon: "cream" }, { paper: "blush-dots", ribbon: "blush" }],
+    last: { paper: "gold", ribbon: "cream" },
+    glow: "255,238,200",
+    vignette: "radial-gradient(125% 95% at 50% 46%, transparent 58%, rgba(150,50,90,.2))",
+    veil: "linear-gradient(180deg, rgba(110,40,68,.16), rgba(100,34,60,.32))",
     card: "#fffaf8",
     cardInk: "#4a1a2c",
     cardSoft: "#b0708a",
@@ -89,21 +88,12 @@ export const LOOKS: Record<LookId, Look> = {
   },
 };
 
-/** The last present, the same in every look: gold foil, so it reads as the big one. */
-export const GOLD: Paper = { base: "#c9a046", ink: "rgba(255,248,220,.55)", print: "stars", ribbon: RIBBON.red, satin: "#ff8a8a" };
-
-/** The print, as a CSS background in the gift's own units. */
-export function printOf(p: Paper): string {
-  const k = (n: number) => `calc(${n}*var(--k))`;
-  if (p.print === "dots") return `radial-gradient(circle, ${p.ink} 0 ${k(1)}, transparent ${k(1.15)}) 0 0 / ${k(7)} ${k(7)}, radial-gradient(circle, ${p.ink} 0 ${k(1)}, transparent ${k(1.15)}) ${k(3.5)} ${k(3.5)} / ${k(7)} ${k(7)}, ${p.base}`;
-  if (p.print === "stripes") return `repeating-linear-gradient(45deg, ${p.ink} 0 ${k(1.6)}, transparent ${k(1.6)} ${k(4.8)}), ${p.base}`;
-  if (p.print === "stars") return `radial-gradient(circle, ${p.ink} 0 ${k(0.6)}, transparent ${k(0.75)}) 0 0 / ${k(5)} ${k(5)}, radial-gradient(circle, ${p.ink} 0 ${k(1.1)}, transparent ${k(1.25)}) ${k(2.5)} ${k(2.5)} / ${k(10)} ${k(10)}, linear-gradient(135deg, rgba(255,255,255,.25), transparent 40%, rgba(255,255,255,.18) 60%, transparent), ${p.base}`;
-  return `repeating-linear-gradient(0deg, ${p.ink} 0 ${k(1.3)}, transparent ${k(1.3)} ${k(6.5)}), repeating-linear-gradient(90deg, ${p.ink} 0 ${k(1.3)}, transparent ${k(1.3)} ${k(6.5)}), repeating-linear-gradient(0deg, rgba(255,255,255,.14) 0 ${k(0.4)}, transparent ${k(0.4)} ${k(3.25)}), repeating-linear-gradient(90deg, rgba(255,255,255,.14) 0 ${k(0.4)}, transparent ${k(0.4)} ${k(3.25)}), ${p.base}`;
-}
+const PAPER_SWATCH: Record<LookId, string> = { red: "#b8232b", kraft: "#b98d5e", plaid: "#244d34", pink: "#ef9ab3" };
+const ACCENT_SWATCH: Record<LookId, string> = { red: "#f7ead2", kraft: "#a3151f", plaid: "#a8232a", pink: "#fdf1f4" };
 
 export const SWATCHES: Record<LookId, LookSwatch> = {
-  red: { page: LOOKS.red.wall[0], paper: LOOKS.red.papers[0].base, accent: LOOKS.red.papers[0].ribbon },
-  kraft: { page: LOOKS.kraft.wall[0], paper: LOOKS.kraft.papers[0].base, accent: LOOKS.kraft.papers[0].ribbon },
-  plaid: { page: LOOKS.plaid.wall[0], paper: LOOKS.plaid.papers[0].base, accent: LOOKS.plaid.papers[0].ribbon },
-  pink: { page: LOOKS.pink.wall[0], paper: LOOKS.pink.papers[0].base, accent: LOOKS.pink.papers[1].ribbon },
+  red: { page: "#5d3a22", paper: PAPER_SWATCH.red, accent: ACCENT_SWATCH.red },
+  kraft: { page: "#c9a57c", paper: PAPER_SWATCH.kraft, accent: ACCENT_SWATCH.kraft },
+  plaid: { page: "#1d3b2a", paper: PAPER_SWATCH.plaid, accent: ACCENT_SWATCH.plaid },
+  pink: { page: "#f3c9d6", paper: PAPER_SWATCH.pink, accent: ACCENT_SWATCH.pink },
 };

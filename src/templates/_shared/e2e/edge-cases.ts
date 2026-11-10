@@ -18,6 +18,7 @@ import { DEMO_PHOTOS } from "../demo-photos";
  * - `odd`: settings a live edit or an older schema can leave: numbers past their limits, empty
  *   lists, blank texts, an option that no longer exists.
  * - `options-<k>`: every choice field on its k-th option, so each option is seen once.
+ * - `look-<k>`: the gift in its k-th look (looks have their own editor, so `options` skips them).
  */
 export type EdgeCase = { data: GiftData; options: number };
 
@@ -137,6 +138,14 @@ export function edgeCase(mod: TemplateModule, locale: GiftLocale, name: string):
     const n = Number(k[1]);
     if (n >= optionCount(mod)) return null;
     return { ...demo, fields: mapFields(mod, fields, (d, value) => (d.widget === "select" && d.options?.length ? d.options[n % d.options.length] : value)) };
+  }
+  // A look has an editor of its own, so the options above leave it alone; every look is a different set of pictures.
+  const l = /^look-(\d+)$/.exec(name);
+  if (l) {
+    const look = describeObjectSchema(mod.fieldsSchema as never).find((d) => d.key === "look" && d.widget === "select");
+    const n = Number(l[1]);
+    if (!look?.options || n >= look.options.length) return null;
+    return { ...demo, fields: { ...fields, look: look.options[n] } };
   }
   return null;
 }

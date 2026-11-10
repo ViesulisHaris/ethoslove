@@ -91,6 +91,13 @@ const nextConfig: NextConfig = {
       source: "/:dir(scraps|memes)/:file",
       headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=2592000" }],
     },
+    // The rendered scenes and sprites of the holiday gifts (public/art/<template>/, made by
+    // scripts/art/holiday). On a gift's first screen, so not re-checked on every open; a day, not a
+    // year, since a re-rendered picture goes out under the same name.
+    {
+      source: "/art/:slug/:file",
+      headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=2592000" }],
+    },
     // The Dates and trips illustrations (src/lib/dates/art.ts, src/lib/trips/presets.ts): the heroes,
     // the idea cards and the kind tiles, a dozen on the first screen of / and /dates, were each
     // re-checked with the server on every visit (Next serves public/ with max-age=0). A week fresh,

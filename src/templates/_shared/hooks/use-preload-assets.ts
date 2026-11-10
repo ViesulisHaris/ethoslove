@@ -25,9 +25,9 @@ function preloadImage(url: string): Promise<void> {
  * cache entry — and the first copy competed for the connection with the photos the gift was
  * waiting on. `useGiftAudio` starts the one download when the template mounts, after the photos.
  */
-export function usePreloadAssets(data: GiftData | null | undefined, enabled = true): PreloadState {
+export function usePreloadAssets(data: GiftData | null | undefined, enabled = true, extra: readonly string[] = []): PreloadState {
   const [state, setState] = useState<PreloadState>({ progress: 0, done: false });
-  const key = data ? JSON.stringify([data.photos.map((p) => p.url), data.video?.poster]) : "";
+  const key = data ? JSON.stringify([data.photos.map((p) => p.url), data.video?.poster, extra]) : "";
 
   useEffect(() => {
     if (!enabled || !data) return;
@@ -35,6 +35,8 @@ export function usePreloadAssets(data: GiftData | null | undefined, enabled = tr
     const tasks: Promise<void>[] = [
       ...data.photos.map((p) => preloadImage(p.url)),
       ...(data.video?.poster ? [preloadImage(data.video.poster)] : []),
+      // The template's own pictures: its rendered scene and sprites.
+      ...extra.map((url) => preloadImage(url)),
     ];
     if (tasks.length === 0) {
       queueMicrotask(() => !cancelled && setState({ progress: 1, done: true }));

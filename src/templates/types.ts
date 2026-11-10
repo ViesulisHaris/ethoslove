@@ -94,6 +94,11 @@ export interface TemplateModule<TFields = Record<string, unknown>> {
   demoData: Record<GiftLocale, GiftData<TFields>>;
   Template: ComponentType<TemplateProps<TFields>>;
   /**
+   * Pictures of the template's own that a gift opens on (a rendered scene, its sprites), by gift:
+   * fetched with the photos behind the loading screen, so the first screen arrives whole.
+   */
+  assets?: (data: GiftData<TFields>) => string[];
+  /**
    * A still of the template's own first screen, for one that opens on a screen of its own rather
    * than a cover. The editor's cover picker shows it as the Classic tile, in the colours the sender
    * picked; without it that tile is a plain card with their name.

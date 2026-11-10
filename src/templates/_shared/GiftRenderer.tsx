@@ -105,7 +105,8 @@ export function GiftRenderer({
     const fields = mod && looked.fields && typeof looked.fields === "object" ? withFieldDefaults(mod.fieldsSchema, looked.fields) : looked.fields;
     return fields === looked.fields ? looked : { ...looked, fields };
   }, [base, coverOverride, lookOverride, mod]);
-  const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview");
+  const art = useMemo(() => (mod?.assets && resolved ? mod.assets(resolved) : []), [mod, resolved]);
+  const preload = usePreloadAssets(resolved, Boolean(mod) && mode !== "preview", art);
   const ready = Boolean(mod && resolved) && (mode === "preview" || (preload.done && minElapsed));
 
   const watermarked = ready && !!resolved?.watermark && mode !== "preview";

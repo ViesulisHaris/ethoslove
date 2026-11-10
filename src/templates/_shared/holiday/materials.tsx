@@ -76,7 +76,7 @@ export const FOIL: CSSProperties = {
 /** Gold foil for light paper: the same metal, deeper, so it still reads on cream. */
 export const FOIL_ON_LIGHT: CSSProperties = {
   ...FOIL,
-  backgroundImage: "linear-gradient(115deg, #5a3608 0%, #94661a 18%, #d2a646 34%, #8a5c14 50%, #4e3006 66%, #b4862a 82%, #6a4410 100%)",
+  backgroundImage: "linear-gradient(115deg, #6a4208 0%, #a8781c 18%, #e6bb55 34%, #9a6a14 50%, #5e3a06 66%, #c99a32 82%, #7a5010 100%)",
 };
 
 export const FOIL_KEYFRAMES = "@keyframes hol-foil{from{background-position:0% 50%}to{background-position:100% 50%}}@media (prefers-reduced-motion: reduce){*{--hol-foil:none}}";

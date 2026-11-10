@@ -1,30 +1,22 @@
 /**
- * The wishbone's geometry, out of the component so it can be tested: where the two arms run, how
- * they bend under a pull, when the bone gives, and how it splits into a big half and a small one.
- * Everything is in the drawing's own 0–100 units.
+ * The wishbone's mechanics, out of the component so they can be tested: how far a pull turns the
+ * arm being pulled, when the bone gives, and where its pieces come to rest once it has. The bone
+ * is stiff: an arm turns about the joint, it does not bend. Lengths are stage units (100 across,
+ * 170 down); the bone's own points (its joint, its tips) come from the art map.
  */
 
 export type Pt = { x: number; y: number };
-export type Curve = [Pt, Pt, Pt];
+/** A piece's place: turned about the joint (degrees, clockwise as the screen sees it), then moved. */
+export type Pose = { turn: number; shift: Pt };
 
-/** The joint at the top, and the two ends: the sender holds the left, the recipient pulls the right. */
-export const APEX: Pt = { x: 50, y: 20 };
-export const LEFT_END: Pt = { x: 23, y: 80 };
-export const RIGHT_END: Pt = { x: 77, y: 80 };
-const LEFT_BOW: Pt = { x: 31, y: 40 };
-const RIGHT_BOW: Pt = { x: 69, y: 40 };
-
-/** How far the right end can be pulled, in drawing units, before the bone gives. */
-export const GIVE = 22;
-/** Where along the losing arm it breaks, from the joint: the winner's half keeps this much of it. */
-export const BREAK_AT = 0.24;
+/** How far the tip can be pulled, in stage units, before the bone gives. */
+export const GIVE = 20;
 /** The strains at which it creaks louder on the way to giving. */
 export const CREAKS = [0.35, 0.6, 0.82] as const;
+/** How much of a pull the whole bone goes with, before the pulled arm takes the rest. */
+const LEAN = 0.12;
 
-const add = (a: Pt, b: Pt, k = 1): Pt => ({ x: a.x + b.x * k, y: a.y + b.y * k });
-const lerp = (a: Pt, b: Pt, t: number): Pt => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
-
-/** A pull, limited to how far the bone goes: the end follows the finger, never past GIVE. */
+/** A pull, limited to how far the bone goes: the tip follows the finger, never past GIVE. */
 export function clampPull(d: Pt): Pt {
   const len = Math.hypot(d.x, d.y);
   if (len <= GIVE || len === 0) return d;
@@ -34,43 +26,39 @@ export function clampPull(d: Pt): Pt {
 /** How close it is to giving, 0 to 1. */
 export const strainOf = (d: Pt) => Math.min(1, Math.hypot(d.x, d.y) / GIVE);
 
-/** Both arms as quadratic curves from the joint, bent by a pull `d` on the right end. */
-export function arms(d: Pt): { left: Curve; right: Curve } {
-  const p = clampPull(d);
-  // The joint gives a little towards the pull, and the right arm bows the way it is dragged.
-  const apex = add(APEX, p, 0.14);
-  return {
-    left: [apex, add(LEFT_BOW, p, 0.06), LEFT_END],
-    right: [apex, add(RIGHT_BOW, p, 0.38), add(RIGHT_END, p)],
-  };
+/** How far the pulled arm turns about the joint for its tip to point at where the finger has taken it. */
+export function armTurn(joint: Pt, tip: Pt, pull: Pt): number {
+  const p = clampPull(pull);
+  const from = Math.atan2(tip.y - joint.y, tip.x - joint.x);
+  const to = Math.atan2(tip.y + p.y - joint.y, tip.x + p.x - joint.x);
+  let turn = ((to - from) * 180) / Math.PI;
+  if (turn > 180) turn -= 360;
+  if (turn < -180) turn += 360;
+  return turn;
 }
 
-/** A curve split at `t` (de Casteljau): the part from its start, and the rest. */
-export function split([a, b, c]: Curve, t: number): [Curve, Curve] {
-  const ab = lerp(a, b, t);
-  const bc = lerp(b, c, t);
-  const m = lerp(ab, bc, t);
-  return [
-    [a, ab, m],
-    [m, bc, c],
-  ];
+/** The bone under a pull, before it gives: all of it leans a little the way it is pulled, and the pulled (right) arm turns. */
+export function strained(joint: Pt, tip: Pt, pull: Pt): { head: Pose; left: Pose; right: Pose } {
+  const p = clampPull(pull);
+  const shift = { x: p.x * LEAN, y: p.y * LEAN };
+  const turn = armTurn(joint, tip, pull);
+  const rest: Pose = { turn: turn * 0.08, shift };
+  return { head: rest, left: rest, right: { turn, shift } };
 }
 
 /**
- * The two halves once it gives. The winner keeps the joint, their own arm and a stub of the other;
- * the loser is left holding the rest of theirs. `winner` is whose side gets the big half.
+ * Where the pieces come to rest once it gives. The winner keeps the head, so the head goes
+ * wherever the winner's arm goes; the other arm is left on its own. `turn` is how far the pulled
+ * arm had turned when it gave: the arm let go of keeps that and a little more.
  */
-export function halves(d: Pt, winner: "them" | "me"): { big: Curve[]; small: Curve[] } {
-  const { left, right } = arms(d);
+export function settled(winner: "them" | "me", turn: number): { head: Pose; left: Pose; right: Pose } {
   if (winner === "them") {
-    const [stub, rest] = split(left, BREAK_AT);
-    return { big: [right, stub], small: [rest] };
+    const big: Pose = { turn: 7, shift: { x: 7, y: 4 } };
+    return { head: big, right: big, left: { turn: -12, shift: { x: -6, y: 5 } } };
   }
-  const [stub, rest] = split(right, BREAK_AT);
-  return { big: [left, stub], small: [rest] };
+  const big: Pose = { turn: -6, shift: { x: -5, y: 2 } };
+  return { head: big, left: big, right: { turn: turn + 8, shift: { x: 8, y: 6 } } };
 }
-
-export const pathOf = ([a, b, c]: Curve) => `M${a.x.toFixed(2)} ${a.y.toFixed(2)}Q${b.x.toFixed(2)} ${b.y.toFixed(2)} ${c.x.toFixed(2)} ${c.y.toFixed(2)}`;
 
 /** The pull a tap makes on its own, towards the recipient's side and down, at `t` from 0 to 1. */
 export const autoPull = (t: number): Pt => {
