@@ -1,0 +1,235 @@
+{
+  "slug": "scratch-card-ideas",
+  "keyword": "scratch card ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The body's pattern (one warm-up card plus two to four clue cards) adds up to three to five before the last card, not six, so a reader planning tonight gets two different counts. Mirror in ES: \"Entre tres y seis tarjetas\" -> \"Entre tres y cinco tarjetas\".; 1 + (2 to 4) + 1 is four to six, so 'seven' contradicts the breakdown in the same sentence. Mirror in ES: \"Entre cuatro y siete en total\" -> \"Entre cuatro y seis en total\".; Gender reveal is one of the most common things people search scratch cards for and the top results cover it. Someone searching this week for that would leave without an answer."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The parts it lists add up to 4 to 6, not 4 to 7. The answer contradicts itself and the body's three-step pattern.; Matches the warm-up plus two to four clue cards in the body and the corrected FAQ. Same change in ES: \"Entre tres y seis tarjetas antes de la última\" becomes \"Entre tres y cinco tarjetas antes de la última\", and in the ES FAQ \"Entre cuatro y siete en total\" becomes \"Entre cuatro y seis en total\".; \"Dish soap\" is US wording, and VOICE.md asks for wording that works for US and UK readers. The how-to FAQ can keep \"dish soap\" once the body glosses it, or use the same gloss.; \"Lo bastante pocas\" is ungrammatical and reads like a translation.; \"o un cumpleaños\" breaks the run of verbs"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Most personal results for the boyfriend variant ('scratch off card ideas for boyfriend') are date night scratch-off cards (thesavvysparrow, Peter Pauper, dateyourspouse), and the post never uses the words 'date night'.; The 'pick one, scratch one' date card is the main personal format in the current top results, and the post doesn't cover it.; Keeps the Spanish version the same post as the English after the date night fix.; The craft results that rank (4over4, thecraftpatchblog, thecrazycraftlady, thriftyfun) all use 'DIY scratch off cards' or 'how to make scratch off cards'. The FAQ already uses 'scratch off', and the heading should match those searches.; 'Casero' is how people search for i"
+        }
+      ],
+      "applied": [
+        "Card counts made consistent: three to five before the last, four to six in total (EN and ES, takeaway and FAQ)",
+        "Gender reveal added to the pregnancy section and its heading (EN and ES); a middle card added for the older child",
+        "Date night: heading and a 'scratch only one' paragraph (EN and ES)",
+        "DIY heading 'How to make DIY scratch off cards' / 'rasca y gana casero'; 'dish soap (washing-up liquid)'",
+        "ES fixes: takeaway grammar, description, 'se abre', trip cards, neutral 'foto vuestra'",
+        "Polish: date written neutrally ('We fly on the 14th'), forecast screenshot, 'Say the words out loud', takeaway reworded away from occasions.ts, ES 'y', 'en papel', 'pinta por encima', 'Debajo'"
+      ],
+      "rejected": [
+        "Search polish on scratch-off stickers not taken: an unverified product claim",
+        "Search note on linking the queued trip and pregnancy posts recorded for when they exist"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1's count fixes are in (takeaway: three to five before the last; FAQ: four to six in total, 'fewer feels rushed'), but all four pregnancy sets have only two cards before the last, three in total. A reader copying the partner set tonight gets advice the FAQ calls rushed. This line makes the two agree without rewriting four items. Mirror in ES: after \"para que la noticia caiga sobre quien la lee\" replace the colon with \". Cada serie es la versión corta, dos tarjetas y la noticia; añade una o dos pistas en medio si quieres llegar a las cuatro o seis:\""
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The post's own pregnancy sets have a warm-up and one clue before the last card, while the bridesmaid and prize sets have three before the last, so 'two to four clues' and 'four to six total, fewer feels rushed' contradict four of the post's own examples. One to three clues fits every set in the post.; This matches the corrected pattern. Every set in the post has two or three cards before the last.; As written, the FAQ calls the post's own three-card pregnancy sets 'rushed'.; Mirrors the EN count fix.; Mirrors the EN count fix.; Mirrors the EN count fix.; This is nearly word for word the sample line in last-minute-birthday-gift-for-boyfriend (\"Breakfast in bed, Sunday, no phone\"), and how-to-"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        }
+      ],
+      "applied": [
+        "Counts aligned with every example set: one to three clue cards, two to four before the last, three to five in total (EN and ES, body, takeaway, FAQ). This resolves the reader's fix too, so the 'short version' note it proposed is no longer needed",
+        "Breakfast-in-bed prize line replaced (echoed last-minute-birthday-gift-for-boyfriend)",
+        "'thick paper or card' for US readers (body and FAQ)",
+        "Polish: pregnancy intro mentions the gender reveal (search), bridesmaid photo line reordered (reader), ES 'rasque la última', 'verle la cara', 'revelar el sexo del bebé', 'nos hemos enterado', 'dale una capa', concert line clarified (EN and ES), 'hicimos de esto nuestra casa'"
+      ],
+      "rejected": [
+        "Reader's 'short version' sentence not added: superseded by the editor's count fix, which makes all sets fit",
+        "Search polish (one-a-day reasons cards, scratch-off stickers) not taken: optional"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This echoes the scratch-card template guide (src/content/template-guides.ts: \"The last card names it: “Lisbon. Friday. Pack tonight.”\"), which readers see on the same template's page. Its birthday item also uses \"the 14th\".; Mirrors the EN fix. The ES template guide has «Lisboa. Viernes. Haz la maleta esta noche» and «el día 14».; Weather app screenshots show the city name. Followed literally, this gives the destination away on card 2 and breaks the post's own rule that earlier cards should 'never give it away'.; Mirrors the EN fix.; 'The scan' alone is UK usage, and US readers say 'ultrasound'. 'Ultrasound scan' works for both, as VOICE.md asks.; 'Dale una capa' (one coat) contradicts the n"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        }
+      ],
+      "applied": [
+        "Trip reveal no longer echoes the scratch-card template guide (Rome, the 9th)",
+        "Forecast screenshot crops the city name so card 2 doesn't give it away (EN and ES)",
+        "'ultrasound scan' for US and UK readers",
+        "ES FAQ coat clash fixed ('aplica encima')",
+        "Polish to head off fixes: spare room instead of tiny shoes (echoed template guide), 'a day or a month on it' (reader and editor), takeaway 'as they scratch the last card', 'For a winter proposal', ES 'hacer las tarjetas', 'dice algo', 'a mi lado', 'madrina', 'después'"
+      ],
+      "rejected": [
+        "Reader polish on the cover wording not taken",
+        "Search polish (a midnight-birthday link, one-a-day cards) not taken: optional"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Left over from last round's polish. The caption before it now says «Estuviste a mi lado en esto», so «Y para todo esto» no longer follows and reads as an unfinished fragment. «Y en todo esto» matches it and the EN 'And all of this.'"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous changes confirmed."
+        }
+      ],
+      "applied": [
+        "ES bridesmaid caption «Y en todo esto»",
+        "Polish to head off fixes: 'the food the place is famous for', FAQ 'a plan with a day on it' (EN and ES), ES lead 'además de', 'the date' for the one-date example (EN and ES)"
+      ],
+      "rejected": [
+        "Reader polish on the cover wording and search polish (midnight-birthday link, one-a-day cards) not taken: optional"
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's cover wording; editor's gender-neutral ES baby line and 'on paper' for the date-night format; search's midnight-birthday link and one-a-day cards"
+      ]
+    }
+  ]
+}

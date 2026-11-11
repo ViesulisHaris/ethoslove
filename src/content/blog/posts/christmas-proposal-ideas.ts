@@ -129,7 +129,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "scratch-card",
-          note: "Tell your story card by card: where you met, the first trip, the first home, the dog. Each scratch reveals a photo and a line, and the final card carries one big line above your message: \"Will you marry me?\" [Premium](/pricing).",
+          note: "Tell your story card by card: where you met, the first trip, the first home, the dog. Each scratch reveals a photo and a line, and the final card carries one big line above your message: \"Will you marry me?\" [Premium](/pricing). For more card-by-card builds, see our [scratch card ideas](/blog/scratch-card-ideas).",
         },
         {
           type: "template",
@@ -284,7 +284,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "scratch-card",
-          note: "Cuenta vuestra historia tarjeta a tarjeta: dónde os conocisteis, el primer viaje, el primer piso, el perro. Cada una descubre una foto y una frase al rascarla, y la última lleva una frase grande encima de tu mensaje: «¿Quieres casarte conmigo?». [Premium](/pricing).",
+          note: "Cuenta vuestra historia tarjeta a tarjeta: dónde os conocisteis, el primer viaje, el primer piso, el perro. Cada una descubre una foto y una frase al rascarla, y la última lleva una frase grande encima de tu mensaje: «¿Quieres casarte conmigo?». [Premium](/pricing). Para más ideas tarjeta a tarjeta, mira nuestras [ideas para rasca y gana](/blog/scratch-card-ideas).",
         },
         {
           type: "template",
