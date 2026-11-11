@@ -4,6 +4,7 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { env, isConfigured } from "@/lib/env";
 import { welcomeIfNew } from "@/lib/email/welcome";
 import type { Database } from "@/lib/supabase/types";
+import { isPageNavigation } from "@/lib/auth/navigation";
 
 function safeNext(value: string | null | undefined): string {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return "/dashboard";
@@ -18,6 +19,9 @@ function safeNext(value: string | null | undefined): string {
  * cookie is missing and the dashboard is the sensible place to land.
  */
 export async function GET(request: NextRequest) {
+  // Only a page being opened signs in: never an image or a fetch (a gift's "photo" was one), and
+  // the token is left unspent for the real tap.
+  if (!isPageNavigation(request.headers)) return new NextResponse(null, { status: 400 });
   const { searchParams, origin } = new URL(request.url);
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
@@ -40,6 +44,14 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
     if (!error) {
       void welcomeIfNew(supabase).catch(() => {});
+      return redirectTo;
+    }
+    // A link works once. A second tap (the person again, or the success page's button after its own
+    // automatic continue) finds this browser already signed in, and used to get "That sign-in link
+    // didn't work" anyway: 34 of the 104 failed taps in the week to 9 Nov 2026. Signed in, it goes on.
+    const signedIn = await supabase.auth.getUser().then(({ data }) => data.user, () => null);
+    if (signedIn) {
+      console.info("[auth/confirm] link already used; this browser is signed in, going on");
       return redirectTo;
     }
     console.error("[auth/confirm] verifyOtp failed", error.message);

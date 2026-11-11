@@ -48,7 +48,7 @@ export const post: BlogPost = {
         { type: "h2", text: "A Christmas letter for him, a few years in" },
         {
           type: "p",
-          text: "After a few Christmases, the danger is repeating last year's letter. Pick something that only happened in this one, and be more specific about him than you'd dare in a card:",
+          text: "After a few Christmases, the danger is repeating last year's letter. Pick something that only happened in this one, and be more specific about him than you'd dare in a card. If this is the year one of you plans to ask the big question, see our [Christmas proposal ideas](/blog/christmas-proposal-ideas):",
         },
         {
           type: "quote",
@@ -65,12 +65,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference. Writing to a girlfriend instead? Here are [Christmas messages for your girlfriend](/blog/christmas-message-for-girlfriend).",
+          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference. Writing to a girlfriend instead? Here are [Christmas messages for your girlfriend](/blog/christmas-message-for-girlfriend). And if your mother deserves a letter too, here's how to write a [Christmas letter to your mother](/blog/christmas-letter-to-mom).",
         },
         { type: "h2", text: "What to write in a Christmas card to your boyfriend" },
         {
           type: "p",
-          text: "A card has room for two or three lines. Keep the promise and one other part, the moment or the thing you noticed about him, and drop the rest. The first one below is the few-years-in letter, cut down to fit.",
+          text: "A card has room for two or three lines. Keep the promise and one other part, the moment or the thing you noticed about him, and drop the rest. The first one below is the few-years-in letter, cut down to fit. For texts to send through the day itself, see our [Christmas messages for your boyfriend](/blog/christmas-message-for-boyfriend).",
         },
         {
           type: "quote",
@@ -182,7 +182,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Una carta de Navidad para él cuando lleváis unos años" },
         {
           type: "p",
-          text: "Después de unas cuantas Navidades, el peligro es repetir la carta del año pasado. Elige algo que solo haya pasado en este, y sé más concreta sobre él de lo que te atreverías en una tarjeta:",
+          text: "Después de unas cuantas Navidades, el peligro es repetir la carta del año pasado. Elige algo que solo haya pasado en este, y sé más concreta sobre él de lo que te atreverías en una tarjeta. Si este es el año en que uno de los dos piensa hacer la gran pregunta, mira nuestras [ideas para pedir matrimonio en Navidad](/blog/christmas-proposal-ideas):",
         },
         {
           type: "quote",
@@ -199,12 +199,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria. ¿Le escribes a una novia? Aquí tienes [mensajes de Navidad para tu novia](/blog/christmas-message-for-girlfriend).",
+          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria. ¿Le escribes a una novia? Aquí tienes [mensajes de Navidad para tu novia](/blog/christmas-message-for-girlfriend). Y si tu madre también se merece una carta, aquí va cómo escribir una [carta de Navidad para tu madre](/blog/christmas-letter-to-mom).",
         },
         { type: "h2", text: "Qué escribir en una tarjeta de Navidad para tu novio" },
         {
           type: "p",
-          text: "En una tarjeta caben dos o tres frases. Quédate con la promesa y con una parte más, el momento o lo que te ha llamado la atención de él, y deja el resto. La primera de abajo es la carta de cuando lleváis unos años, recortada para que quepa.",
+          text: "En una tarjeta caben dos o tres frases. Quédate con la promesa y con una parte más, el momento o lo que te ha llamado la atención de él, y deja el resto. La primera de abajo es la carta de cuando lleváis unos años, recortada para que quepa. Para mensajes que mandarle a lo largo del día, mira nuestros [mensajes de Navidad para tu novio](/blog/christmas-message-for-boyfriend).",
         },
         {
           type: "quote",

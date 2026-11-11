@@ -8,6 +8,7 @@ import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
+import { mediaUrlsAllowed } from "@/lib/gift/media-urls";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCurrentUser } from "@/lib/auth/get-user";
@@ -128,6 +129,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
       if (!(campaign || reply?.free) || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true })) return { ok: false, error: "payment_required" };
     }
   }
+  if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music }, { local: true })) return { ok: false, error: "invalid_assets" };
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const writer = recipientFacingWriter();
@@ -207,6 +209,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   });
   // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
   if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
+  // Media only from the sender's uploads, the demo and library files and Apple previews (lib/gift/media-urls.ts).
+  if (!mediaUrlsAllowed(data)) return { ok: false, error: "invalid_assets" };
   if (!(await ownsAssets(ctx, data))) return { ok: false, error: "invalid_assets" };
 
   const scheduled = input.data.schedule && new Date(input.data.schedule.unlockAt).getTime() > Date.now();

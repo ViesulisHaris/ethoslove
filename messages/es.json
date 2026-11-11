@@ -195,7 +195,8 @@
     "rights": "© {year} Ethos · SIA MIGLAI, Letonia",
     "madeWith": "Hecho en Riga.",
     "explore": "Explorar",
-    "digitalGifts": "Regalos digitales"
+    "digitalGifts": "Regalos digitales",
+    "togetherCounter": "Contador de días juntos"
   },
   "auth": {
     "loginTitle": "Hola de nuevo",
@@ -217,8 +218,8 @@
     "notConfiguredDetail": "Añade tus claves de Supabase a .env.local y reinicia el servidor. Todo lo demás funciona sin ello.",
     "legalNote": "Al continuar aceptas nuestros <terms>Términos</terms> y la <privacy>Política de privacidad</privacy>.",
     "error": "Algo salió mal. Inténtalo de nuevo.",
-    "callbackError": "Ese enlace de acceso no funcionó: casi siempre porque se abrió en otro navegador o app distinta de donde lo pediste, o porque caducó.",
-    "callbackCodeHint": "Escribe aquí el código de 6 dígitos del mismo correo y entras. O pide un enlace nuevo más abajo.",
+    "callbackError": "Ese enlace de acceso ya se usó o caducó.",
+    "callbackCodeHint": "Cada enlace sirve una sola vez, durante una hora, y un correo nuevo reemplaza al anterior. Pide un enlace nuevo más abajo o escribe el código de tu correo más reciente.",
     "codeLabel": "O escribe el código de 6 dígitos del correo",
     "verify": "Verificar",
     "codeHint": "Útil si el enlace se abre en otro dispositivo.",
@@ -3305,5 +3306,29 @@
     "more": "Ideas de regalo para otra persona",
     "occasions": "Por ocasión",
     "footerTitle": "Ideas de regalo"
+  },
+  "together": {
+    "dateLabel": "El día que empezasteis",
+    "firstDay": "Contar el primer día como el día 1, como hacen las parejas en Corea",
+    "empty": "Elige vuestra fecha y empieza la cuenta.",
+    "future": "Todavía no ha llegado: {count, plural, one {falta # día} other {faltan # días}}.",
+    "days": "{count, plural, one {# día juntos} other {# días juntos}}",
+    "dayN": "{count, plural, other {Hoy es el día #}}",
+    "years": "{count, plural, one {# año} other {# años}}",
+    "months": "{count, plural, one {# mes} other {# meses}}",
+    "daysPart": "{count, plural, one {# día} other {# días}}",
+    "live": "{hours} horas · {minutes} minutos · {seconds} segundos",
+    "next": "Lo que viene",
+    "past": "Lo que ya habéis vivido",
+    "mDays": "{count, plural, other {# días}}",
+    "mMonths": "{count, plural, one {1 mes} other {# meses}} juntos",
+    "mYears": "{count, plural, one {Vuestro primer aniversario} other {# años juntos}}",
+    "today": "Hoy",
+    "inDays": "{count, plural, one {dentro de # día} other {dentro de # días}}",
+    "ago": "{count, plural, one {hace # día} other {hace # días}}",
+    "share": "Copiar el enlace de vuestro contador",
+    "copied": "Enlace copiado",
+    "gift": "Haz un regalo que se abra el {date}",
+    "privacy": "Vuestra fecha se queda en este dispositivo. El enlace solo lleva la fecha."
   }
 }

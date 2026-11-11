@@ -1,13 +1,5 @@
 [
   {
-    "slug": "scratch-card-ideas",
-    "keyword": "scratch card ideas",
-    "keyword_es": "ideas para rasca y gana",
-    "occasion": "just-because",
-    "templates": ["scratch-card"],
-    "angle": "What to hide under the foil for a proposal, a pregnancy, a trip, a bridesmaid or a birthday prize, with the card-by-card build-up for each, so the last card is the one they scratch hardest."
-  },
-  {
     "slug": "good-night-messages-for-her",
     "keyword": "good night messages for her",
     "keyword_es": "mensajes de buenas noches para mi novia",
@@ -136,28 +128,12 @@
     "angle": "A love letter to your wife years in, about the ordinary married life you share rather than the wedding, with prompts, three sample letters (an anniversary, a hard year, no reason) and how to give it."
   },
   {
-    "slug": "christmas-proposal-ideas",
-    "keyword": "christmas proposal ideas",
-    "keyword_es": "ideas para pedir matrimonio en navidad",
-    "occasion": "wedding",
-    "templates": ["scratch-card", "snow-globe", "the-letter"],
-    "angle": "Proposal ideas built around Christmas that are not jeweller ads: at home, outdoors, with family or alone, how to keep it secret through the season, and what to have ready if they cry or laugh."
-  },
-  {
     "slug": "new-year-message-for-girlfriend",
     "keyword": "new year message for girlfriend",
     "keyword_es": "mensaje de año nuevo para mi novia",
     "occasion": "just-because",
     "templates": ["midnight-countdown", "fortune-cookie", "the-letter"],
     "angle": "New Year messages for a girlfriend sorted by moment: the midnight text, the one for when you're apart, the look back at your year and the plans for the next, with how to time it to the minute."
-  },
-  {
-    "slug": "christmas-letter-to-mom",
-    "keyword": "christmas letter to mom",
-    "keyword_es": "carta de navidad para mi madre",
-    "occasion": "christmas",
-    "templates": ["fireside", "recipe-box", "the-letter"],
-    "angle": "A Christmas letter to your mom from a grown child: what to thank her for that she would not expect, prompts built on the family's own traditions, sample letters and how to give it if you are not home."
   },
   {
     "slug": "countdown-until-we-meet-ideas",
@@ -222,14 +198,6 @@
     "occasion": "just-because",
     "templates": ["scratch-card", "the-letter"],
     "angle": "Ways to tell your husband you're pregnant that fit the couple: quiet, funny, from far away or after a long wait, with what to say in the first minute and how to capture his reaction."
-  },
-  {
-    "slug": "christmas-message-for-boyfriend",
-    "keyword": "christmas message for boyfriend",
-    "keyword_es": "mensaje de navidad para mi novio",
-    "occasion": "christmas",
-    "templates": ["snow-globe", "fireside", "the-letter"],
-    "angle": "Christmas messages for a boyfriend by moment: the card, the Christmas Eve text, the first Christmas together, apart for the season, and how to hide one where he'll find it on the morning."
   },
   {
     "slug": "long-distance-valentines-day-ideas",

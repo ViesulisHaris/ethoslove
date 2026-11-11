@@ -33,6 +33,7 @@ export async function MarketingFooter() {
           <FooterLink href="/templates">{t("nav.templates")}</FooterLink>
           <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
           <FooterLink href="/games">{t("nav.games")}</FooterLink>
+          <FooterLink href="/tools/how-long-have-we-been-together">{t("footer.togetherCounter")}</FooterLink>
           <FooterLink href="/pricing">{t("nav.pricing")}</FooterLink>
           <FooterLink href="/blog">{t("common.blog")}</FooterLink>
         </FooterColumn>

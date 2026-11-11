@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
+import { TOGETHER_GUIDE, TOGETHER_READING, TOGETHER_TEMPLATES } from "@/content/together-guide";
+import { getPost } from "@/content/blog";
 import { TEMPLATE_SEO } from "@/content/template-seo";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientFromSlug, recipientSlug } from "@/content/recipients";
 import { pageMetadata } from "@/lib/seo";
@@ -127,5 +129,28 @@ describe("template guides", () => {
         }
       }
     }
+  });
+});
+
+/** The days-together counter's page: the same in both languages, titles that fit a result, links that exist. */
+describe("days-together counter page", () => {
+  const words = (x: string) => x.trim().split(/\s+/).length;
+  it("says the same in both languages", () => {
+    const [en, es] = [TOGETHER_GUIDE.en, TOGETHER_GUIDE.es];
+    expect(es.faq.length).toBe(en.faq.length);
+    expect(es.milestones.length).toBe(en.milestones.length);
+    for (const g of [en, es]) {
+      expect(g.title.length).toBeLessThanOrEqual(60);
+      expect(g.description.length).toBeLessThanOrEqual(160);
+      for (const f of g.faq) {
+        expect(f.q.endsWith("?"), f.q).toBe(true);
+        expect(words(f.a), f.q).toBeGreaterThanOrEqual(15);
+      }
+    }
+    for (const f of es.faq) expect(/^(¿|[A-ZÁÉÍÓÚ])/.test(f.q), f.q).toBe(true);
+  });
+  it("links only to templates and posts that exist", () => {
+    for (const slug of TOGETHER_TEMPLATES) expect(getManifest(slug), slug).not.toBeNull();
+    for (const slug of TOGETHER_READING) expect(getPost(slug), slug).not.toBeNull();
   });
 });

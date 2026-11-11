@@ -7,17 +7,25 @@ import { campaignGiftsLeft, campaignState, newCampaignGrant, parseCampaignGrant,
 
 /**
  * The server side of the creator campaign (rules in ./campaign-rules.ts). The password is compared by
- * its SHA-256, so the repository doesn't carry it in plain text; to change it, put the new hash here
- * (`printf '<password>' | shasum -a 256`) and deploy. Whoever has the old one keeps the grant they
- * already have, and nobody new gets one with it.
+ * its SHA-256. The live hash is the Vercel variable CAMPAIGN_PASSWORD_SHA256 (64 hex characters,
+ * `printf '<password>' | tr 'A-Z' 'a-z' | shasum -a 256`), so the public mirror carries neither the
+ * password nor its hash. The repository's mirror is public, and on 10 Nov 2026 the first password
+ * was readable there, so treat any password that was ever written in this file as known. Whoever
+ * has a grant already keeps it; nobody new gets one with an old password once the variable is set.
  */
-const PASSWORD_SHA256 = "ed7f784cb497fca902071dbac4c0a957a72b153079f1f02dcba0987712022cc0";
+const LEGACY_PASSWORD_SHA256 = "ed7f784cb497fca902071dbac4c0a957a72b153079f1f02dcba0987712022cc0";
+
+function passwordHash(): Buffer {
+  const configured = process.env.CAMPAIGN_PASSWORD_SHA256?.trim().toLowerCase();
+  // Until the variable is set the first password keeps working, so no creator is turned away.
+  return Buffer.from(configured && /^[0-9a-f]{64}$/.test(configured) ? configured : LEGACY_PASSWORD_SHA256, "hex");
+}
 
 const sha256 = (text: string) => createHash("sha256").update(text, "utf8").digest();
 
-/** Case and surrounding spaces are forgiven: "EthosCampaign " is the same password. */
+/** Case and surrounding spaces are forgiven. */
 export function isCampaignPassword(input: string): boolean {
-  return timingSafeEqual(sha256(input.trim().toLowerCase()), Buffer.from(PASSWORD_SHA256, "hex"));
+  return timingSafeEqual(sha256(input.trim().toLowerCase()), passwordHash());
 }
 
 export type CampaignStatus = {

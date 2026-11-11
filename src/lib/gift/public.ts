@@ -5,6 +5,7 @@ import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { GIFTS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
 import { giftStoragePaths } from "./storage-paths";
+import { withoutForeignMedia } from "./media-urls";
 
 export type PublicGift = {
   id: string;
@@ -109,7 +110,9 @@ export async function fetchPublicGift(shortId: string, password?: string | null)
   return gift;
 }
 
-async function signAssets(data: GiftData, watermark: boolean): Promise<GiftData> {
+async function signAssets(stored: GiftData, watermark: boolean): Promise<GiftData> {
+  // A media URL the gift may not hold never reaches the recipient's browser (lib/gift/media-urls.ts).
+  const data = withoutForeignMedia(stored);
   const map = await getSignedAssetUrlMap(giftStoragePaths(data));
   return {
     ...data,
