@@ -70,7 +70,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What to write in a Christmas card to your boyfriend" },
         {
           type: "p",
-          text: "A card has room for two or three lines. Keep the promise and one other part, the moment or the thing you noticed about him, and drop the rest. The first one below is the few-years-in letter, cut down to fit.",
+          text: "A card has room for two or three lines. Keep the promise and one other part, the moment or the thing you noticed about him, and drop the rest. The first one below is the few-years-in letter, cut down to fit. For texts to send through the day itself, see our [Christmas messages for your boyfriend](/blog/christmas-message-for-boyfriend).",
         },
         {
           type: "quote",
@@ -204,7 +204,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Qué escribir en una tarjeta de Navidad para tu novio" },
         {
           type: "p",
-          text: "En una tarjeta caben dos o tres frases. Quédate con la promesa y con una parte más, el momento o lo que te ha llamado la atención de él, y deja el resto. La primera de abajo es la carta de cuando lleváis unos años, recortada para que quepa.",
+          text: "En una tarjeta caben dos o tres frases. Quédate con la promesa y con una parte más, el momento o lo que te ha llamado la atención de él, y deja el resto. La primera de abajo es la carta de cuando lleváis unos años, recortada para que quepa. Para mensajes que mandarle a lo largo del día, mira nuestros [mensajes de Navidad para tu novio](/blog/christmas-message-for-boyfriend).",
         },
         {
           type: "quote",

@@ -1,0 +1,151 @@
+{
+  "slug": "christmas-message-for-boyfriend",
+  "keyword": "christmas message for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"on the morning\" is ungrammatical in the lead, the first thing the reader sees.; \"Show your working\" is British school slang (US says \"show your work\"). VOICE.md says lines must work for US and UK readers, and this is a line people will copy.; \"the same film\" has nothing to be the same as, so the joke doesn't land. The Spanish (\"la misma película de siempre\") gets it right."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "The Snow Globe note (EN and ES) describes the template wrongly. It says to write 'two to four short lines' that make up the message, that 'the closing words' get engraved, and that 'the whole message' then opens. In the code, at most four reveals appear (shakes: two/three/four), they alternate line and photo, and the template needs at least one photo, so four lines can never all appear. With two or more photos, only two lines show (storm.ts revealPlan, Template.tsx line 101, manifest photos.min 1). The plaque is a separate field of up to 44 characters, or the gift's title if left empty (schema.ts plaque, Template.tsx line 189). What opens at the end is the gift's main message (data.message), not the lines (Template.tsx Letter)."
+          ],
+          "summary": "Factual error: four lines can't all appear alongside photos, the plaque is its own field, and the letter holds the main message. The old opening also echoed the girlfriend post's 'For a message told in pieces'.; Same factual error. 'en dos a cuatro frases' is also not natural Spanish.; The photos hang on a string below the letter, after it, not beside it (fireside/Template.tsx Reading). 'For a quieter one' echoes the girlfriend post's 'For a quieter Christmas message'.; Same correction as the English (photos hang below, not beside).; Near-verbatim copy of the christmas-letter-to-mom note: 'a sealed envelope, your words in a handwriting font, and a few photos at the end.'; Matches the English"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In a results list, \"Eve to night\" reads like a typo for \"Eve tonight\". \"Bedtime\" says the same thing clearly (53 chars, inside the 20–60 test).; Nochebuena is already a night, so \"de Nochebuena a la noche\" doesn't make sense as a span. \"Al 25\" matches the post (54 chars).; \"On the morning\" is ungrammatical, and it's in the lead that Google shows as the snippet.; \"Short\" is the most common modifier people add to this search, and every top listicle uses it. It also matches the girlfriend post's heading pattern.; Spanish searchers type \"frases ... cortas\". This keeps EN and ES aligned."
+        }
+      ],
+      "applied": [
+        "Snow Globe note corrected against storm.ts and schema.ts: at most four reveals alternating with photos, plaque is its own short line, the main message opens as a letter (EN and ES)",
+        "Fireside note: photos hang below, not beside; new opening",
+        "The Letter note reworded (was close to christmas-letter-to-mom)",
+        "Title 'hour by hour' / 'hora a hora' (both reviewers flagged 'Eve to night')",
+        "Lead: 'finds it without looking'; ES lead calque fixed",
+        "Family-meal line now rates the dessert (no dig at his family; no UK-only 'show your working')",
+        "'the film they watch every year'",
+        "FAQ 2 no longer echoes the girlfriend post",
+        "Echoes removed: potatoes quote, four floors line",
+        "ES: 'Nochebuena, ya de noche', 'cómo tomo el café', 'hacer las veces de estar ahí', 'es casi un regalo'",
+        "H2 'Short Christmas card messages' / 'Frases cortas' (search)",
+        "Polish: iOS 18 for Send Later, new wrapping line, 'confirmarlo', countdown if he opens early"
+      ],
+      "rejected": [
+        "Reader polish (a separate last-text section) and search polish (a romantic section for long relationships) not taken: optional",
+        "Editor polish on the 'one thing this year, one for next year' framing not taken: it is general advice, worded differently from the girlfriend post"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Echoes anniversary-letter-to-boyfriend.ts, which says 'This year you learned my coffee order...' twice (outline item and sample letter).; Matches the English fix.; Almost the same words as christmas-message-for-girlfriend ('Use one detail from this year that only the two of you would know. Add one small plan for next year'). Also only one of the five examples has a next-year part, so the instruction doesn't match the lines under it.; Matches the English fix.; Same echo of the girlfriend post's core formula, and it's the FAQ answer Google is most likely to show.; Matches the English fix.; 'Yo ya lo he hecho' reads as 'I've already done it', so the joke is lost. The English is 'I already have "
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        }
+      ],
+      "applied": [
+        "Coffee-order card line replaced (echoed anniversary-letter-to-boyfriend)",
+        "Card intro and FAQ 1 no longer echo the girlfriend post's formula, and match the examples (EN and ES)",
+        "ES: 'Yo ya te he perdonado', 'Hacerle reír a escondidas'",
+        "Polish: Fireside opening no longer repeats 'house has gone quiet' (EN and ES), 'in parts', Snow Globe note says lines take turns with photos, ES 'cinco de la tarde', 'para mandarle en mitad', 'en autobús', word order, 'día en familia', 'Te lo cuento más abajo'"
+      ],
+      "rejected": [
+        "Editor's optional 'Christmas movie' wording not taken: 'film' is allowed by VOICE.md",
+        "Search polish (a romantic section, card-section watch item) not taken: optional"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's Snow Globe clause trim; editor's 'wasap' and premium-extra wording; search's romantic section and a wake-up-together line"
+      ]
+    }
+  ]
+}
