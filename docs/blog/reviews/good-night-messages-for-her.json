@@ -1,0 +1,142 @@
+{
+  "slug": "good-night-messages-for-her",
+  "keyword": "good night messages for her",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The post breaks its own rule: several sample lines run past fifteen words ('No need to answer this. I just wanted you to fall asleep knowing I'm proud of you.' is 17, the seventeen-tabs line is 18, 'I'm not going to win this tonight...' is 16), so a reader who counts gets confused. The lock-screen test already appears in the first section and every line passes it. Mirror this in the Spanish takeaway: 'Menos de quince palabras es la regla para un mensaje que lee en la cama.' -> 'Que se pueda leer en la pantalla de bloqueo sin abrir el chat.'"
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 8,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The post's own samples break the 'rule': \"No need to answer this. I just wanted you to fall asleep knowing I'm proud of you.\" is 17 words, \"Good night to the woman who has seventeen tabs open...\" is 18 and the afternoon line is 16. An invented rule that the post then breaks misleads the reader.; Same fix as the English line.; 'short enough to read with one eye open' is already in good-morning-messages-for-her.ts ('These are short enough to read with one eye open') and cute-things-to-say-to-your-boyfriend.ts. This version also matches the lock-screen test the post uses later.; 'leerlos con un ojo abierto' is already in the Spanish of good-morning-messages-for-her.ts and cute-things-to-say-to-"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every top result (paired.com, marriage.com, bestlifeonline, zikoko) leads with sweet/romantic lines and 'sweet good night messages for her' is a core variant; the post has no section or heading for it, and the him post does.; Same gap in Spanish; Spanish SERP (marriage.com/es, crehana) is dominated by 'bonitos'/romantic lines.; The heading has no search words; 'long good night messages for her' ranks as its own query (zikoko) and the him post uses the same pattern.; Matches the EN fix and the Spanish wording people search with."
+        }
+      ],
+      "applied": [
+        "Fifteen-word 'rule' replaced by the lock-screen test the samples all pass (EN and ES)",
+        "Lead no longer echoes 'read with one eye open'",
+        "Text Thread note: scheduling locks the gift with a countdown, not delivery at a set time (scheduled-screen.tsx); ES note no longer echoes the him post",
+        "Long quote, argument lines, funny line and 'new page' line rewritten to stop echoing good-night-messages-for-him and good-morning-messages-for-her",
+        "ES fixes: heading 'que no olvidará', lock-screen wording, 'mañana será otro día', 'ella rompe un sello', argument section",
+        "Sweet good night messages section added (EN and ES), with lines written for this post; 'Long good night messages for her' heading (search)",
+        "Polish: time-zone table shows the converted time, phone steps, ES wording, 'smiling at nothing', Letter note, ES title 'para mi novia', link to paragraphs-for-your-girlfriend"
+      ],
+      "rejected": [
+        "Search's suggested sweet lines not used as written: two repeated lines already in good-morning-messages-for-him; replaced with new ones",
+        "Reader polish (funny section intro, romantic short lines) covered by the new sweet section"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "anniversary-letter-to-boyfriend.ts already has 'the name of my boss's dog' (ES: 'cómo se llama el perro de mi jefe'). The round-1 fix brought this detail in.; Same echo as the English. 'Antes de que te duermas' is also how the him post's Spanish long message opens. 'Sí cuesta' says 'it does take effort', which is not what 'It isn't nothing' means.; Same frame as thinking-of-you-messages-for-him.ts: 'Some days I can't believe I get to come home to you. Today's one of them.'; Same 'some days… today was one' frame as «Hay días en que no me creo… Hoy es uno de ellos» in thinking-of-you-messages-for-him.ts. It also mirrors the English fix.; Same opening as thinking-of-you-messages-for-him.ts ('No"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 changes confirmed."
+        }
+      ],
+      "applied": [
+        "Echoes removed: long-quote detail (now the dad's knee), 'picked me' line, 'No need to answer' line, Letter note, Text Thread EN note, Constellations note (EN and ES), descriptions (EN and ES)",
+        "ES 'Ojalá fuera yo el que te apagara la luz'",
+        "Polish: ES takeaway grammar, 'or just her name' (EN and ES), ES 'la desvela', 'I saw it, even if I didn't say so' (search), heading 'Good night texts after a date' (reader), 'I'm lucky I'm the one you say good night to' (reader)"
+      ],
+      "rejected": [
+        "Search polish to add a flirty section not taken: the sweet section already covers it, and new lines would add unreviewed text"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous fixes confirmed. Passed."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied (RUBRIC step 4): reader's 'our first date' placeholder; editor's 'smiling at nothing', 'let your phone hold it', 'Phone down' and ES wording notes; search's flirty section and 'Put the phone down'"
+      ]
+    }
+  ]
+}
