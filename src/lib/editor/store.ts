@@ -136,30 +136,55 @@ function refsByUrl(state: Pick<EditorState, "assets">): Record<string, string | 
   return refs;
 }
 
-/** Grabs a frame ~0.6s in as a WebP poster. */
+/** How long the poster frame may take; past it the clip simply has no poster. */
+export const POSTER_MS = 5000;
+
+/** `work`, or a rejection once `ms` have passed without an answer. */
+function within<T>(work: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<never>((_, reject) => (timer = setTimeout(() => reject(new Error("timeout")), ms)));
+  return Promise.race([work, late]).finally(() => clearTimeout(timer));
+}
+
+/**
+ * Grabs a frame ~0.6s in as a WebP poster, or null. Within POSTER_MS: an iPhone can leave a
+ * <video> that isn't on the page unloaded, with neither `loadedmetadata` nor `error`, and the
+ * clip used to wait on it for ever.
+ */
 async function captureVideoPoster(file: File): Promise<Blob | null> {
+  let url: string | null = null;
   try {
-    const url = URL.createObjectURL(file);
+    url = URL.createObjectURL(file);
     const video = document.createElement("video");
     video.muted = true;
     video.playsInline = true;
     video.preload = "auto";
+    const next = (event: "loadedmetadata" | "seeked") =>
+      new Promise<void>((resolve, reject) => {
+        video.addEventListener(event, () => resolve(), { once: true });
+        video.addEventListener("error", () => reject(new Error("video")), { once: true });
+      });
+    const loaded = next("loadedmetadata");
     video.src = url;
-    await new Promise<void>((resolve, reject) => {
-      video.onloadedmetadata = () => resolve();
-      video.onerror = () => reject(new Error("video metadata"));
-    });
-    video.currentTime = Math.min(0.6, Math.max(0, video.duration / 4));
-    await new Promise<void>((resolve) => (video.onseeked = () => resolve()));
-    const canvas = document.createElement("canvas");
-    const scale = Math.min(1, 1280 / Math.max(video.videoWidth, video.videoHeight));
-    canvas.width = Math.round(video.videoWidth * scale);
-    canvas.height = Math.round(video.videoHeight * scale);
-    canvas.getContext("2d")!.drawImage(video, 0, 0, canvas.width, canvas.height);
-    URL.revokeObjectURL(url);
-    return await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.85));
+    return await within(
+      (async () => {
+        await loaded;
+        const seeked = next("seeked");
+        video.currentTime = Math.min(0.6, Math.max(0, video.duration / 4));
+        await seeked;
+        const canvas = document.createElement("canvas");
+        const scale = Math.min(1, 1280 / Math.max(video.videoWidth, video.videoHeight));
+        canvas.width = Math.round(video.videoWidth * scale);
+        canvas.height = Math.round(video.videoHeight * scale);
+        canvas.getContext("2d")!.drawImage(video, 0, 0, canvas.width, canvas.height);
+        return await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.85));
+      })(),
+      POSTER_MS,
+    );
   } catch {
     return null;
+  } finally {
+    if (url) URL.revokeObjectURL(url);
   }
 }
 
@@ -770,48 +795,46 @@ export const useEditor = create<EditorState>((set, get) => {
       const id = nanoid(10);
       const posterId = `${id}p`;
       const mime = uploadTypeFor("video", file.type, file.name) ?? (file.type || "video/mp4");
-      await putBlob(id, file);
+      // The clip shows the moment it's picked: neither the copy to disk nor the poster frame holds
+      // it back. On 12 Nov 2026 a sender's iPhone left one of them unanswered, and the picker
+      // closed on nothing, from Photos, Files and a CapCut export alike, with no word of why.
+      // (putBlob holds the clip in memory before its first await, so the upload can start now.)
+      void putBlob(id, file);
       const objectUrl = URL.createObjectURL(file);
-      const poster = await captureVideoPoster(file);
-      let posterUrl: string | undefined;
-      if (poster) {
-        await putBlob(posterId, poster);
-        posterUrl = URL.createObjectURL(poster);
-      }
       set((s) => ({
         assets: {
           ...s.assets,
-          [id]: {
-            id,
-            kind: "video",
-            local: true,
-            objectUrl,
-            mime,
-            bytes: file.size,
-            status: "local",
-            progress: 0,
-          },
-          ...(poster && posterUrl
-            ? {
-                [posterId]: {
-                  id: posterId,
-                  kind: "photo" as const,
-                  local: true,
-                  objectUrl: posterUrl,
-                  // Whatever the canvas actually wrote: Safari has handed back PNG for "image/webp".
-                  mime: poster.type || "image/webp",
-                  bytes: poster.size,
-                  status: "local" as const,
-                  progress: 0,
-                },
-              }
-            : {}),
+          [id]: { id, kind: "video", local: true, objectUrl, mime, bytes: file.size, status: "local", progress: 0 },
         },
-        data: { ...s.data, video: { url: objectUrl, poster: posterUrl } },
+        data: { ...s.data, video: { url: objectUrl } },
       }));
       touch();
       void uploadAsset(id);
-      if (poster) void uploadAsset(posterId);
+
+      const poster = await captureVideoPoster(file);
+      // Removed or swapped while the frame was being taken: the poster belongs to nothing now.
+      if (!poster || get().data.video?.url !== objectUrl) return;
+      void putBlob(posterId, poster);
+      const posterUrl = URL.createObjectURL(poster);
+      set((s) => ({
+        assets: {
+          ...s.assets,
+          [posterId]: {
+            id: posterId,
+            kind: "photo" as const,
+            local: true,
+            objectUrl: posterUrl,
+            // Whatever the canvas actually wrote: Safari has handed back PNG for "image/webp".
+            mime: poster.type || "image/webp",
+            bytes: poster.size,
+            status: "local" as const,
+            progress: 0,
+          },
+        },
+        data: { ...s.data, video: s.data.video ? { ...s.data.video, poster: posterUrl } : s.data.video },
+      }));
+      touch();
+      void uploadAsset(posterId);
     },
 
     clearVideo() {
