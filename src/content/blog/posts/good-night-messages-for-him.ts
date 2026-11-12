@@ -136,7 +136,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Long good night messages for him" },
         {
           type: "p",
-          text: "Some nights deserve a paragraph: the end of a long week, the night after he did something kind, a night apart that feels longer than usual. Build it from three parts: a moment from today, what it told you about him, and when you'll next be together. When it's his alarm you want to be part of, switch to [good morning messages for him](/blog/good-morning-messages-for-him).",
+          text: "Some nights deserve a paragraph: the end of a long week, the night after he did something kind, a night apart that feels longer than usual. Build it from three parts: a moment from today, what it told you about him, and when you'll next be together. When it's his alarm you want to be part of, switch to [good morning messages for him](/blog/good-morning-messages-for-him). Writing to her instead? Here are [good night messages for her](/blog/good-night-messages-for-her).",
         },
         {
           type: "quote",
@@ -334,7 +334,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Mensajes de buenas noches largos para tu novio" },
         {
           type: "p",
-          text: "Algunas noches merecen un párrafo: el final de una semana larga, la noche después de que hiciera algo bonito, una noche separados que se hace más larga de lo normal. Constrúyelo en tres partes: un momento de hoy, lo que te dijo de él y cuándo volveréis a estar juntos. Si lo que quieres es acompañar su despertador, pasa a los [mensajes de buenos días para tu novio](/blog/good-morning-messages-for-him).",
+          text: "Algunas noches merecen un párrafo: el final de una semana larga, la noche después de que hiciera algo bonito, una noche separados que se hace más larga de lo normal. Constrúyelo en tres partes: un momento de hoy, lo que te dijo de él y cuándo volveréis a estar juntos. Si lo que quieres es acompañar su despertador, pasa a los [mensajes de buenos días para tu novio](/blog/good-morning-messages-for-him). ¿Le escribes a ella? Aquí tienes [mensajes de buenas noches para tu novia](/blog/good-night-messages-for-her).",
         },
         {
           type: "quote",
