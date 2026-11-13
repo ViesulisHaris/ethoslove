@@ -10,7 +10,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.
-- [ ] **The rest of the queue.** On 13 Nov the eight measured topics from KEYWORDS.md went to the top
+- [x] (2026-11-13) **The rest of the queue.** On 13 Nov the eight measured topics from KEYWORDS.md went to the top
   of `docs/blog/queue.json` (questions to ask your boyfriend 74,000 and girlfriend 40,500, the two
   love letters, long distance relationship tips, the anniversary card, paragraphs for your boyfriend,
   the birthday letter) and love coupons joined the Valentine's batch. The other 20 topics were never

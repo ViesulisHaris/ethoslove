@@ -7,3 +7,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-13T13:29Z | dataforseo_labs/google/ranked_keywords/live | 0.01248 | seo: weekly ranks |
 | 2026-11-13T13:30Z | serp/google/organic/live/advanced | 0.002 | seo: monthiversary-ideas |
 | 2026-11-13T13:30Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | seo: monthiversary-ideas |
+| 2026-11-13T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01464 | seo: queue (US) |
+| 2026-11-13T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01368 | seo: queue (Spain) |
+| 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
+| 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
+| 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
+| 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
+| 2026-11-13T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | seo: queue (countdown variants) |

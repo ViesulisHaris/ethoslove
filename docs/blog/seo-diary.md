@@ -3,6 +3,31 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-13: the queue measured and re-ordered by real searches
+- **Page:** the queue (`docs/blog/queue.json`)
+- **Why:** 25 of its 34 topics had never been measured. DataForSEO, US and Spain (keyword_overview):
+  "birthday message for husband" 2,400 a month (KD 3), "what to say when you propose" 1,900 (KD 0),
+  "birthday letter to best friend" 880 (KD 0), "birthday message for girlfriend" 720 (KD 0),
+  "graduation message for daughter" and "love letter to wife" 590 each, while "what to say to your
+  boyfriend when he's stressed" gets 10 (KD 38) and "1 year anniversary message for girlfriend" 30.
+  Spain is thin for nearly all of them (best: "preguntas para mi novia" 390, "carta de san valentín
+  para mi novio" 140). The top 10s for the four biggest new entries (mobile) are all message and
+  letter lists, Reddit threads and how-tos: the searcher wants words to write, which is what the
+  posts give. "Countdown until we see each other ideas" had no searches in either language; the
+  closest variant, "long distance countdown", has 10.
+- **What changed:** Every entry now carries `volume`, `volume_es` and `difficulty`. Birthday message
+  for husband and what to say when you propose moved up to sit right after the two love letters
+  (ahead of long distance tips, KD 24); the rest follow by searches and difficulty; the Valentine's
+  batch stays at the end behind its 6 Dec date, led by "what to write in a valentine's card"
+  (3,600). The countdown topic is re-keyed to "long distance countdown" and sits last before it.
+- **Panel:** queue only, no post changed, no panel
+- **Cost:** $0.05 (two keyword overviews $0.028, four SERPs $0.008, countdown variants $0.012);
+  balance $2.97
+- **Note:** on `device: mobile` the SERP's organic `domain` and `url` come back as google.com
+  redirect links; ask desktop when the domains matter.
+- **Check on:** 2026-11-27 whether the blog routine took birthday-message-for-husband and
+  what-to-say-when-you-propose next, and by mid-December whether either shows in the rank check
+
 ## 2026-11-13: monthiversary-ideas aimed at "monthiversary"
 - **Page:** /blog/monthiversary-ideas
 - **Why:** Search Console has it at 8.2 for "monthiversary" (33 impressions a week, no clicks).
