@@ -64,7 +64,7 @@ migration `0018_etsy.sql`, tests `tests/unit/etsy.test.ts`.
 **Launch pricing and ads (owner's go, 28 Oct):**
 - **Sale LAUNCH40:** 40% off the whole shop, 28 Oct – 22 Nov. €10.99 becomes €6.59 (€7.97 with Latvian VAT), and new listings get it too. It is legal because €10.99 was the only price before. Top competitors all show 25–57% off.
 - **Cyber Specials:** signed up at 40%, 23 Nov – 1 Dec (Etsy's event), so the price holds through 1 Dec. After that it goes back to €10.99; the next sale should be a real event, not a permanent one.
-- **Etsy Ads:** approved at $3–5/day from about 12 Nov, when a new shop's 15-day wait ends. Not started yet.
+- **Etsy Ads:** running since 12 Nov at USD 5 a day (Marketing → Etsy Ads → Settings: "Your advertising budget is USD 5 a day"). 18 listings advertised, everything else off: 15 since 12 Nov (4604473165, 4605008148, 4604968985, 4604504298, 4604476273, 4604497606, 4604478829, 4604540224, 4604519163, 4604544324, 4604522937, 4604521473, 4604505462, 4604995276, 4604477605) and the three holiday listings since 13 Nov (4616287359, 4616288867, 4616343373). First two days: 68 views, 2 clicks, USD 0.20 spent. The budget is under USD 25, so Etsy uses "efficient spending" for every listing.
 - **Search:** on 28 Oct none of the 17 listings showed up signed out, even for their exact titles; Etsy hadn't indexed them yet. Signed in as the shop, Etsy hides your own listings, so measure ranks signed out.
 - **The 37 remaining templates:** listed and published on 28 Oct (wave 3, at the end). Not yet in search either; check each signed out by its exact title once Etsy indexes them.
 
@@ -1837,5 +1837,105 @@ HOW IT WORKS
 3. Press Send and type your Etsy order number. Your record's link is ready to share.
 
 Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+Make it tonight and send it in minutes.
+
+## Holiday listings (live since 13 Nov)
+
+Nice List, Unwrapped and Wishbone, the three holiday templates on the site since 11 Nov, listed the wave-3 way on 13 Nov (owner: "Jā, publicē", USD 0.60).
+
+- **Keywords:** Etsy's search suggestions, 12 Nov. Christmas: nice list, santa nice list, naughty or nice, year in review, our year together, digital christmas, boyfriend / girlfriend christmas, first christmas. Thanksgiving: thanksgiving card, digital thanksgiving, happy thanksgiving, thankful for you, wishbone. "friendsgiving" and "thanksgiving cards" were swapped for "wife thanksgiving" and "thanksgiving for her" after the outside read. "Card" stays in the titles: it is the searched phrase and the category.
+- **Category:** Christmas Cards (Physical or digital) for the two Christmas ones. Etsy has no Thanksgiving card category and its Occasion list has no holidays, so Wishbone is Greeting Cards (Digital) with the **Celebration** attribute set to Thanksgiving ("Show all attributes"; Celebration also offers Christmas, Halloween, Valentine's Day, New Year's and more). Unwrapped keeps Occasion Anniversary (a year together); Wishbone's Occasion is empty. Christmas Cards was not checked for a Celebration attribute.
+- **Section:** Christmas for Nice List and Unwrapped; a new **Thanksgiving** section for Wishbone (12 of 20 sections used). Both checked on the public shop page by `section_id`.
+- **Facts:** each description was checked against the template's `schema.ts` and `Template.tsx` by an outside reader. Unwrapped opens one present at a time (not a row), each takes a couple of taps or a swipe, and a number can be a line of your own; Wishbone's bone tilts and creaks (it doesn't bend), and the buyer picks who gets the big half.
+- **Copied from** Vinyl 4604996914 (no Spanish translation, and the optional "Their name" already on it). €10.99, quantity 999, the PDF links `tryethos.io/etsy/<slug>` (each page answers 200 and opens `/create/<slug>?etsy=1`). LAUNCH40 shows them at €7.97 with VAT like the rest.
+- **Photos and videos:** `scripts/etsy-shots.mjs` (holiday scripts after Vinyl; Unwrapped's present needs two taps, so it taps until "read the letter" shows), `etsy-making.mjs <slugs>` (slugs from the arguments now, not only from this file), `etsy-photos.mjs` GIFTS/MORE entries, `etsy-pdfs.mjs`. Both videos were checked frame by frame before upload and again as Etsy serves them: identical frame counts, no blank or padded frames, no repeats in the gift videos (3–5 in the making videos, at cut starts); the jumps are the fade into the letter and the making video's cuts.
+- **Publishing:** "Publish copy with changes" opens a fee dialog ("You are about to publish a new listing", Publish). Its change list can leave out Category even when the category changed; it saved correctly.
+- **Etsy Ads:** on for all three from 13 Nov (see Launch pricing and ads).
+
+### Nice List · SKU `ethos-nice-list` · listing 4616287359
+
+**Title:** Santa Nice List Card, Personalized Naughty or Nice Digital Christmas Gift for Boyfriend or Girlfriend, Funny Christmas Card
+
+**Tags:** nice list, santa nice list, nice list card, naughty or nice, funny christmas card, digital christmas, boyfriend christmas, girlfriend christmas, christmas gift him, christmas gift her, husband christmas, long distance xmas, first christmas
+
+**Section:** Christmas · **Category:** Christmas Cards · **Photos:** 9 + 2 videos
+
+**Description:**
+Santa's nice list, made out for them: they pull down a scroll from the North Pole, every line gets ticked, and a stamp comes down with the verdict.
+
+A scroll tied with a ribbon and tagged with their name. They untie it and pull it down, and as it unrolls each line is ticked in pen: their good deeds in the nice column, their crimes in the naughty one, up to four of each, all written by you. Then a rubber stamp comes down with the verdict: nice, naughty, or naughty and nice. Underneath: your letter, up to 8 photos filed as evidence, and your song. Candy red, sugar pink, frost blue or pine green.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write their good deeds and their crimes, pick the verdict, add photos and your letter.
+3. Press Send and type your Etsy order number. Your list's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
+
+### Unwrapped · SKU `ethos-unwrapped` · listing 4616288867
+
+**Title:** Year in Review Christmas Card, Our Year Together Personalized Digital Gift for Boyfriend or Girlfriend, First Christmas Together
+
+**Tags:** year in review, year in review card, our year together, first christmas, digital christmas, boyfriend christmas, girlfriend christmas, christmas gift him, christmas gift her, couples christmas, anniversary gift, long distance xmas, digital gift for him
+
+**Section:** Christmas · **Category:** Christmas Cards · **Photos:** 10 + 2 videos
+
+**Description:**
+Your year together in review, one present at a time: they tear the paper off and a number from your year counts up.
+
+Each present is wrapped and tied with a ribbon, and a gold one comes last. They tear the paper off with a couple of taps or a swipe, and inside each is a number from your year that counts up as it appears (or a line of your own): 1,284 voice notes, 41 nights they stole the blanket, 3 cities you got lost in. Up to eight, written by you. The gold present prints the whole year as a receipt with both your names on it. Then your letter, up to 10 photos and your song. Red and green, brown paper, tartan or pink.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write your numbers, pick the paper, add photos and your letter.
+3. Press Send and type your Etsy order number. Your year's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
+
+Make it tonight and send it in minutes.
+
+### Wishbone · SKU `ethos-wishbone` · listing 4616343373
+
+**Title:** Digital Thanksgiving Card, Personalized Wishbone Gift for Husband or Boyfriend, Thankful for You Happy Thanksgiving Card
+
+**Tags:** thanksgiving card, digital thanksgiving, happy thanksgiving, thankful for you, thanksgiving gift, thanksgiving gifts, wishbone, wishbone gifts, husband thanksgiving, wife thanksgiving, thanksgiving for her, long distance gift, gift for boyfriend
+
+**Section:** Thanksgiving · **Category:** Greeting Cards (Digital) · **Celebration:** Thanksgiving · **Photos:** 9 + 2 videos
+
+**Description:**
+A Thanksgiving wishbone with both your names on it: they pull their side until it snaps, and you decide who gets the big half.
+
+A wishbone on a plate at the Thanksgiving table, a name tag on each end: yours on one, theirs on the other. They pull their side, the bone tilts and creaks, and then it snaps. You choose who gets the big half. Out comes your wish on a card, then your letter, up to 8 photos and your song. Red gingham, harvest orange, sage linen or candlelit.
+
+★ HOW TO GET YOUR GIFT ★
+After you buy, go to tryethos.io/etsy and type your Etsy order number. Your gift opens right away on your phone. No download.
+
+No Canva, no app. You make it in your phone's browser in a few minutes, then send them a link.
+
+HOW IT WORKS
+1. After you buy, go to tryethos.io/etsy and type your Etsy order number (it's in Etsy's email, after "Order #"). No download needed.
+2. Write your wish, choose who gets the big half, add photos and your letter.
+3. Press Send and type your Etsy order number. Your wishbone's link is ready to share.
+
+Add a countdown to a day that matters and a surprise at the end, or lock it until the moment you choose. If it doesn't open on their phone, message us and we'll refund you.
+
+The music: a track from our library, your own audio file, or a 30-second preview of a real song they tap to hear.
 
 Make it tonight and send it in minutes.

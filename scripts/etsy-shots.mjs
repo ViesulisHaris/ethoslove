@@ -627,6 +627,51 @@ const SCRIPTS = {
     await page.waitForTimeout(4500);
     await scrollDown(page, ".overflow-y-auto", 5, 0.6, 1600);
   },
+  // The holiday gifts, listed 12 Nov.
+  "nice-list": async (page) => {
+    const untie = page.getByRole("button", { name: /untie the ribbon/i });
+    await untie.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2200);
+    await untie.click({ force: true });
+    await page.waitForTimeout(1200);
+    await page.getByRole("button", { name: /pull it down/i }).click({ force: true });
+    // It unrolls, ticks every line and stamps the verdict, then offers the letter.
+    const read = page.getByRole("button", { name: /read the letter/i });
+    await read.waitFor({ timeout: 25000 });
+    await page.waitForTimeout(VIDEO ? 1800 : 3000);
+    await read.click({ force: true });
+    await page.waitForTimeout(4500);
+    await scrollDown(page, ".overflow-y-auto", 5, 0.6, 1600);
+  },
+  unwrapped: async (page) => {
+    const tap = page.getByRole("button", { name: /tap to unwrap|tap for the next one|one more\. the big one/i }).first();
+    await tap.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2200);
+    // Two taps a present (tear it open, then "tap for the next one"), the gold one last; each number
+    // counts up before the next tap. The gold one prints the receipt and offers the letter.
+    const read = page.getByRole("button", { name: /read the letter/i });
+    for (let i = 0; i < 20 && !(await read.isVisible().catch(() => false)); i++) {
+      if (await tap.isVisible().catch(() => false)) await tap.click({ force: true });
+      await page.waitForTimeout(VIDEO ? 1300 : 2000);
+    }
+    await read.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(3000);
+    await read.click({ force: true });
+    await page.waitForTimeout(4500);
+    await scrollDown(page, ".overflow-y-auto", 5, 0.6, 1600);
+  },
+  wishbone: async (page) => {
+    const pull = page.getByRole("button", { name: /pull your side/i });
+    await pull.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(2200);
+    await pull.click({ force: true });
+    const read = page.getByRole("button", { name: /read the letter/i });
+    await read.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(3000);
+    await read.click({ force: true });
+    await page.waitForTimeout(4500);
+    await scrollDown(page, ".overflow-y-auto", 5, 0.6, 1600);
+  },
 };
 
 mkdirSync(OUT, { recursive: true });

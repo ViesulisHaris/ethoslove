@@ -29,8 +29,9 @@ const ORDER = "4613027584";
 /** Free templates, whose Etsy listings sell the full version (etsyProduct() in src/lib/etsy). */
 const FREE = new Set(["the-letter", "constellations"]);
 
+// The slugs named, or every listing in ETSY.md.
 const md = readFileSync(join(WT, "docs/marketing/ETSY.md"), "utf8");
-const slugs = [...new Set([...md.matchAll(/SKU `ethos-([a-z0-9-]+)`/g)].map((m) => m[1]))].filter((s) => !only.length || only.includes(s));
+const slugs = only.length ? only : [...new Set([...md.matchAll(/SKU `ethos-([a-z0-9-]+)`/g)].map((m) => m[1]))];
 
 /** The first sentence of the message, as the part typed on camera (the rest is filled in the cut after it). */
 function firstLine(message) {

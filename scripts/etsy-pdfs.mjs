@@ -69,6 +69,9 @@ const LISTINGS = [
   ["the-toast", "Toast"],
   ["trick-or-treat", "Trick or Treat"],
   ["vinyl", "Vinyl"],
+  ["nice-list", "Nice List"],
+  ["unwrapped", "Unwrapped"],
+  ["wishbone", "Wishbone"],
 ];
 
 const page = ({ name, link, qr, poster }) => `<!doctype html>

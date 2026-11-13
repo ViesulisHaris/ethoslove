@@ -69,6 +69,10 @@ const GIFTS = {
   "recipe-box": { bg: "#f6e9e2", ink: "#4a1d14", title: "The Recipe for Mom", line: "Her recipe, one ingredient at a time, then your letter", hero: 15, a: [1, 8, "The recipe for her, on the counter", "she tilts the phone to pour"], b: [16, 22, "She shakes it to stir", "and your letter is the method"], single: [27, "Your photos, kept in the box"] },
   "sticker-bomb": { bg: "#1f4a37", ink: "#f2f7ef", title: "Sticker Bomb Card", line: "Every tap slaps a meme sticker. Twelve taps open the card.", hero: 12, a: [1, 5, "Tap anywhere", "every tap slaps a sticker"], b: [8, 14, "Twelve taps and it's a mess", "then they read your card"], single: [9, "Labels in your words"] },
   seance: { bg: "#24170e", ink: "#f6e6cf", title: "Spirit Board Message", line: "Touch the planchette. It spells your words.", hero: 12, a: [2, 6, "They touch the planchette", "it moves by itself"], b: [10, 15, "Letter by letter", "then your letter in the dark"], single: [20, "Your photos as spirit photographs"] },
+  // The holiday gifts, listed 12 Nov.
+  "nice-list": { bg: "#5b1515", ink: "#f8ece2", title: "Santa's Nice List", line: "Every good deed and every crime, ticked. Then the verdict.", hero: 9, a: [1, 5, "A scroll from the North Pole", "every line ticked in pen"], b: [9, 16, "Then the stamp comes down", "and your letter is underneath"], single: [18, "Your photos, filed as evidence"] },
+  unwrapped: { bg: "#2b1a12", ink: "#f3e3c3", title: "Our Year, Unwrapped", line: "Tear the paper and your year counts up, present by present", hero: 6, a: [1, 3, "A present for every number", "they tear the paper off"], b: [12, 40, "Each one counts up a number from your year", "and the gold one comes last"], single: [43, "It prints your year as a receipt"] },
+  wishbone: { bg: "#f6ebe3", ink: "#6a1d18", title: "Thanksgiving Wishbone", line: "Pull your side until it snaps. You decide who gets the big half.", hero: 1, a: [2, 4, "A wishbone with both your names", "they pull their side until it snaps"], b: [13, 16, "Then your letter", "and your photos around the table"], single: [5, "You choose who gets the big half, and write the wish"] },
 };
 
 /**
@@ -106,6 +110,9 @@ const MORE = {
   "the-toast": { end: [30, "A countdown to their first anniversary, and a P.S."] },
   "trick-or-treat": { end: [19, PS] },
   vinyl: { end: [15, REACTION] },
+  "nice-list": { end: [21, PS] },
+  unwrapped: { end: [55, PS], extra: [52, "The year in photos, captioned by you"] },
+  wishbone: { end: [19, PS] },
 };
 
 const FONTS = '<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">';
