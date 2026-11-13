@@ -51,6 +51,8 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/games/layout": ["games", "packs", "money.checkoutErrors"],
   // The days-together counter and its template cards.
   "(marketing)/tools/how-long-have-we-been-together/page": ["together", "templates"],
+  // The love language quiz: its own words come as props; the gift cards under it read these.
+  "(marketing)/tools/love-language-quiz/page": ["templates"],
   "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers"],
   "(app)/layout": ["account", "dashboard", "lifecycle", "money", "membership", "savedDates"],
   "(auth)/layout": ["auth"],

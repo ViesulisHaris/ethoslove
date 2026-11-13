@@ -288,7 +288,7 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 | truth or dare questions for couples | 4,400 | 880 | 0 | – | /games/dare |
 | how well do you know me quiz | 1,600 | 880 | 0 | – | /games/know |
 | couple games online | 6,600 | 1,600 | 1 | – | /games |
-| love language quiz | 49,500 | – | 23 | – | new tool (stretch: its top pages average ~500 linking sites) |
+| love language quiz | 49,500 | – | 23 | – | /tools/love-language-quiz (built 13 Nov; the odds are under "Love language quiz") |
 
 **Message posts we already have**
 
@@ -952,6 +952,43 @@ What this research adds to it (suggestions; SEO-AGENT.md is unchanged):
    written for Spain.
 9. **Re-measure monthly** against the day-0 baseline (Appendix A); the routine can run it from the cloud.
 
+## Love language quiz: the check before building
+
+A later session on 13 Nov checked the biggest search a free tool of ours could answer before building
+/tools/love-language-quiz. Seven calls, $0.074 (Appendix B, rows 69 to 75).
+
+| Keyword (US) | US / mo | KD | | Keyword (Spanish) | Spain / mo | Mexico / mo |
+|---|--:|--:|---|---|--:|--:|
+| love language test | 90,500 | 19 | | lenguajes del amor | 3,600 | 18,100 |
+| love language quiz | 49,500 | 23 | | los 5 lenguajes del amor | 1,900 | 5,400 |
+| love languages quiz | 40,500 | 23 | | test lenguajes del amor | 720 | 720 |
+| free love language quiz | 18,100 | 16 | | test del lenguaje del amor | 90 | 210 |
+| love language test free | 18,100 | 15 | | test de lenguajes del amor | 390 | 170 |
+| 5 love languages quiz | 14,800 | 20 | | cual es mi lenguaje del amor | 40 | 90 |
+| what is my love language | 8,100 | 20 | | | | |
+| love language quiz for couples | 1,000 | 28 | | | | |
+| acts of service love language | 9,900 | 16 | | | | |
+| love language gifts | 720 | 1 | | | | |
+
+- **"love language quiz", US iPhone:** an AI Overview first, citing the official quiz, connectedcouples.app
+  ("free, 20 questions, no email"), Truity's 7 love styles test, Verywell Mind, garbo.io and a YouTube
+  short. Then 5lovelanguages.com twice (18,363 linking domains), my-love-language.com (91),
+  thelovelanguagetest.com (124), BuzzFeed's 8-question quiz from 2022, a Google Play app, twogle.com (54,
+  a couples app's free quiz), brightervisionclients.com (1,548) and 5lovelanguages.com again. No People
+  also ask on this page.
+- **"love language test" (the bigger twin):** weaker. The AI Overview names the official quiz,
+  connectedcouples.app and abby.gg ("15 questions, 3 minutes, no email"); the organic ten are
+  covenantcc.co, becomemorecompelling.com (367), brainmanager.io, rnfinity.com, a quiz plugin's how-to,
+  ProProfs, Oprah Daily, a Taiwanese lab and Therapist Aid, with no official page. People also ask: "What
+  are the 10 types of love languages?", "Can you have multiple love languages?", "Who loves who more test?".
+- **"test lenguajes del amor", Spain:** soft. An AI Overview (JobCannon, wikiHow, a psychologist's blog,
+  the official quiz), then a blog, a TikTok, Reddit r/love, a Mexican student guide, Milenio, Revista Mia,
+  two Scribd PDFs and testomania.app.
+- **Odds given to the owner:** about 1 in 5 for page one on "love language quiz" within six months
+  without new links, about 1 in 3 on "love language test", and a likely top five in Spanish. tryethos.io
+  had 1 linking domain. The AI Overviews list small free quizzes by their own words ("free", "no
+  email", the number of questions), which the page's title and FAQ now say too.
+
 ## What was spent
 
 | Batch | What | Paid calls | Cost |
@@ -962,8 +999,9 @@ What this research adds to it (suggestions; SEO-AGENT.md is unchanged):
 | 2 | on-page: page checks ×3, Lighthouse ×1 | 4 | $0.0305 |
 | 2 | link gap: linking-domain counts, one intersection, ten makers' linking domains, two link lookups | 14 | $0.363252 |
 | | **Total for this research** (every call is in Appendix B) | **68** | **$1.879424** |
+| later | the love language quiz check: three live searches, three Labs overviews, one linking-domain count | 7 | $0.074 |
 
-The account started with **$5.00** and has **$3.093256** left. Its own counter shows $1.906744 spent on
+The account started with **$5.00** and has **$3.093256** left (**$3.015256** after the love language quiz check). Its own counter shows $1.906744 spent on
 13 Nov: this research plus the daily SEO routine's first run ($0.02732, in `docs/blog/seo-log.md`). That
 is well under the $4.75 allowed. Nothing was topped up or bought.
 
@@ -1203,3 +1241,18 @@ routine's first run = $1.906744).
 | | | appendix/user_data | 5 balance checks | free |
 | | | (credit) | the queued searches' final cost is $0.7662, not the $0.858 charged up front: unused result pages and AI Overview loads come back | −0.0918 |
 | | | **Total** | 68 paid calls | **$1.879424** |
+
+Later on 13 Nov, the love language quiz check. The compact replies left the costs out, so each is priced
+from the account's price list; together they match the balance, which went from $3.089256 to $3.015256.
+
+| # | Time (UTC) | Endpoint | What | Cost (USD) |
+|--:|---|---|---|--:|
+| 69 | 14:33 | SERP live/advanced | US iPhone top 20 + AI Overview + People also ask: "love language quiz" | 0.004* |
+| 70 | 14:33 | Labs keyword_overview | US, 25 phrases | 0.015* |
+| 71 | 14:33 | Labs keyword_overview | Spain, 11 phrases (10 found) | 0.0132* |
+| 72 | 14:34 | backlinks/bulk_referring_domains | linking-domain counts for 11 sites and 4 pages | 0.02454* |
+| 73 | 14:34 | SERP live/advanced | US iPhone top 10 + AI Overview + People also ask: "love language test" | 0.002* |
+| 74 | 14:34 | SERP live/advanced | Spain iPhone top 10 + AI Overview + People also ask: "test lenguajes del amor" | 0.002* |
+| 75 | 14:34 | Labs keyword_overview | Mexico, 9 phrases (8 found) | 0.01296* |
+| | | appendix/user_data | 3 balance checks | free |
+| | | **Total** | 7 paid calls (the balance fell $0.074) | **$0.07394** |
