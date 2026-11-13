@@ -45,7 +45,7 @@ already states: nothing is written to the visitor's device for stats or ads with
 Both kinds of row are recorded; `remembered` tells them apart. We chose this over "only the
 referring domain without consent" because keeping the landing page in the tab's memory stores
 nothing on the device either, and it is the one thing SEO needs: which page the buyer arrived on.
-The privacy policy says all of this (sections 7, 8, 11 and 12, updated 14 Nov 2026).
+The privacy policy says all of this (sections 7, 8, 11 and 12, updated 13 Nov 2026).
 
 ## The channels
 
