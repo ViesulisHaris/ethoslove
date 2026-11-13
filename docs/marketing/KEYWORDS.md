@@ -59,7 +59,7 @@ realistically win, and how gifft.me got where it is.
    one plainly named page per gift type, versions in about ten languages, and gifts people share. Everything
    on that list except the age can be copied.
 6. **Our Spanish pages mostly target phrases nobody searches in Spain.** 30 of the 41 Spanish blog targets
-   get under 50 searches a month (the monthiversary post targets "ideas para celebrar meses con tu pareja":
+   (every post published before 13 Nov) get under 50 searches a month (the monthiversary post targets "ideas para celebrar meses con tu pareja":
    no measurable searches; Spain says "cumplemes", 480). What Spain does search: "carta de amor" 5,400,
    "regalos para parejas" 3,600, "regalo para mi novio" and "regalo para mi novia" 1,900 each, "galleta de
    la fortuna" 1,900, "preguntas para parejas" 1,600, "carta de amor para mi novio" 1,000. And the bigger
@@ -134,7 +134,7 @@ Searches a month, 12-month average. "–" means not measured there, or under abo
 
 | Keyword | US / mo | UK / mo | KD | Our Google position | Page |
 |---|--:|--:|--:|---|---|
-| virtual flowers | 1,300 | 260 | 1 | – | /templates/bouquet (+ queued virtual-flowers-for-girlfriend) |
+| virtual flowers | 1,300 | 260 | 1 | – | /templates/bouquet (+ blog: virtual-flowers-for-girlfriend, published 13 Nov) |
 | digital bouquet | 880 | 320 | 0 | 11.8 (GSC 4–10 Nov); not in US top 20 (13 Nov) | /templates/bouquet |
 | digital flower bouquet | 880 | 260 | 0 | – | /templates/bouquet |
 | digital flowers | 590 | 140 | 7 | – | /templates/bouquet, /templates/bloom |
@@ -612,7 +612,7 @@ novio" (1,000 in Spain).
 | open-when-letter-ideas | open when letter ideas (2,900) | fine; add "open when letters" (3,600; UK 880) |
 | midnight-birthday-surprise-ideas, what-to-get-a-boyfriend-who-wants-nothing, last-minute-birthday-gift-for-boyfriend, long-distance-christmas-gift-ideas, sorry-message-for-girlfriend | phrases with 0–40 searches | not checked further |
 
-Most English targets are sound: 35 of 41 get 50 or more searches, and the big ones (halloween ideas for
+Most English targets are sound: 35 of the 41 measured get 50 or more searches, and the big ones (halloween ideas for
 couples 33,100; good morning messages for her 12,100, for him 5,400; good night messages for her 4,400;
 reasons why i love you 5,400; how to write a love letter 4,400) are exactly where the volume is.
 
