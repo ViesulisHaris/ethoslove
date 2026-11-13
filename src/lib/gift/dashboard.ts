@@ -4,6 +4,7 @@ import type { GiftData } from "@/lib/gift/schema";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { GIFTS_BUCKET, REACTIONS_BUCKET, isStoragePath, storageObjectKey } from "./assets";
 import type { Tables } from "@/lib/supabase/types";
+import { UNSENT_DAYS, unsentTemplates } from "@/lib/commerce/unsent";
 
 export type DashboardGift = Tables<"gifts"> & {
   stats: { opens: number; uniqueViewers: number; avgWatchPct: number; reactions: number; lastOpenedAt: string | null };
@@ -82,6 +83,18 @@ export async function getGiftDetail(userId: string, giftId: string) {
  * since nothing marks it expired, and listed it read as a second charge waiting under the paid one.
  */
 const LISTED_PURCHASES = ["paid", "refunded"] as const;
+
+/** Templates paid for and not sent yet (lib/commerce/unsent.ts), newest first: My gifts' "one step left". */
+export async function listPaidUnsent(userId: string): Promise<string[]> {
+  const supabase = await getSupabaseServerClient();
+  if (!supabase) return [];
+  const since = new Date(Date.now() - UNSENT_DAYS * 86_400_000).toISOString();
+  const [{ data: purchases }, { data: sent }] = await Promise.all([
+    supabase.from("purchases").select("template_slugs, created_at, store").eq("user_id", userId).eq("status", "paid").eq("product", "single").gte("created_at", since),
+    supabase.from("gifts").select("template_slug, updated_at").eq("user_id", userId).in("status", ["live", "scheduled"]),
+  ]);
+  return unsentTemplates(purchases ?? [], sent ?? []);
+}
 
 export async function listMyPurchases(userId: string) {
   const supabase = await getSupabaseServerClient();

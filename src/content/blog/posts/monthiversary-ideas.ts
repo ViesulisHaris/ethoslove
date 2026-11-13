@@ -87,7 +87,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "fortune-cookie",
-          note: "Each cookie on the plate splits open at a tap to show a paper slip with your line, the lucky numbers you set and sometimes a photo. The final cookie holds your message. Give each fortune a month you've had: the dessert crawl, the board game they won, the walk with one earbud each.",
+          note: "Each cookie on the plate splits open at a tap to show a paper slip with your line, the lucky numbers you set and sometimes a photo. The final cookie holds your message. Give each fortune a month you've had: the dessert crawl, the board game they won, the walk with one earbud each. Stuck for wording? Borrow from these [funny fortune cookie messages](/blog/fortune-cookie-messages).",
         },
         {
           type: "template",
@@ -200,7 +200,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "fortune-cookie",
-          note: "Cada galleta del plato se abre con un toque y sale una tira de papel con tu frase, los números de la suerte que pusiste y, a veces, una foto. En la última está tu mensaje. Dedica cada fortuna a un mes que habéis vivido: la ruta de postres, el juego de mesa que ganó, el paseo con un auricular cada uno.",
+          note: "Cada galleta del plato se abre con un toque y sale una tira de papel con tu frase, los números de la suerte que pusiste y, a veces, una foto. En la última está tu mensaje. Dedica cada fortuna a un mes que habéis vivido: la ruta de postres, el juego de mesa que ganó, el paseo con un auricular cada uno. ¿Te falta inspiración? Tienes ideas en estas [frases para galletas de la fortuna](/blog/fortune-cookie-messages).",
         },
         {
           type: "template",

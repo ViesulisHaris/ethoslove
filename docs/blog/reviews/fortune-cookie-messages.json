@@ -1,0 +1,139 @@
+{
+  "slug": "fortune-cookie-messages",
+  "keyword": "funny fortune cookie messages",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This is a very old stock joke (the 'prisoner in a fortune cookie factory' gag) that appears on every list for this search. It is the one line here that could sit on any other site. The replacement is new and works at a party table.; This is a near-duplicate of the line just above it ('A long and happy future awaits you. I would like to be in it.'). Repeating the same idea makes the list look padded, and the reader notices."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Template.tsx doesn't enforce an order. The real cookie (index total-1, marked ✨) can be tapped at any point, its slip shows s.last, and tapping the slip goes straight to the finale. The current line suggests it only opens after the others, and the post's 'put the sweet one last' advice would fail in the template because a fortune's content is tied to the cookie's position, not to the order they're opened.; The same accuracy problem in Spanish. 'Cuando ha abierto todas' also has no clear subject.; 'Go to the shop' reads British. VOICE.md asks for wording that works for US and UK readers alike.;"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This is the biggest sub-intent in the SERP ('funny fortune cookie sayings for boyfriend', 'love fortunes'), and the post's own FAQ already asks about 'a boyfriend or girlfriend'. The heading should use the words people search with, not 'partner'.; Same fix in Spanish. People search 'frases ... galletas de la fortuna para mi novio/novia', and the ES FAQ already says 'para mi novio o mi novia'."
+        }
+      ],
+      "applied": [
+        "Template note: one cookie carries a sparkle and opens the message whenever it's tapped; they can open cookies in any order (EN+ES)",
+        "Replaced the stock 'prisoner in a bakery' line; cut the duplicate 'I'm in it' sweet line (EN+ES)",
+        "Headings use the searched words: boyfriend or girlfriend, friend, sweet and romantic (EN+ES)",
+        "UK-only wording: 'go to the shop', 'popping out'",
+        "ES: feminine 'desconocida misteriosa', grammar of 'quédate con aquellas', title/description adjective placement ('Frases para galletas de la fortuna: graciosas y tiernas')",
+        "Polish taken: 'save it for the end'/'hand it over last', office plate, ES curly quotes, 'Algo inesperado', 'dos o tres cada vez', 'se deja en casa', 'en el reverso', link label, photos up to ten, keys line swapped for the remote"
+      ],
+      "rejected": [
+        "Slip size in cm/in: no source for a standard size; left out"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The English says 'They tap one'. 'Toca una' tells the reader to tap, and two sentences later 'Puede abrirlas en el orden que quiera' has no clear subject (it can read as usted). With 'Cuando toca una', the recipient is the subject of both, as in the English."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "ES template note: 'Cuando toca una' so the recipient is the subject",
+        "Polish taken: note that tapping the sparkly cookie first brings the message first (EN+ES); 'tanda de prueba' (no repeated 'dos o tres'); 'abrir cada una'; 'acaba en una captura de pantalla'; 'something to watch'; lucky-number phrasing no longer echoes the template guide; 'tener razón sobre'; parking line clarified (EN+ES); ES friend heading uses 'frases'"
+      ],
+      "rejected": [
+        "Slip size in cm/in: no source for a standard size; left out"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: On a phone the change from quote cards to bullets looks like the start of a new section. This is cosmetic, not a fix."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: 'Tiene apuntes' sounds like class notes. 'Ha tomado notas' is closer to the English 'It has notes' and lands the joke better.; The current opening is close to the open-when post's note ('They tap one, it cracks in two and a paper slip slides out'), and it uses 'with' twice. Both paraphrase the manifest, so this is polish.; The ES 'un martes cualquiera' shares an idea with the template demo message"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: Printable PDFs still fill several first-page spots for the EN keyword. A slip size answers the next question for someone printing tonight. Carried over from rounds 1 and 2; still optional.; This is the only spot where the idea sits close to src/content/template-guides.ts (fortune-cookie). The wording and example are different, so it isn't an overlap problem."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: unify sweet quotes/list format, slip size, 'Ha tomado notas', template-note wording, 'martes cualquiera'"
+      ]
+    }
+  ]
+}

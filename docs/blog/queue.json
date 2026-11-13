@@ -1,21 +1,5 @@
 [
   {
-    "slug": "fortune-cookie-messages",
-    "keyword": "funny fortune cookie messages",
-    "keyword_es": "frases para galletas de la fortuna",
-    "occasion": "just-because",
-    "templates": ["fortune-cookie"],
-    "angle": "Fifty fortunes for someone you know well, sorted into funny, sweet and oddly specific, how to turn an in-joke into a fortune, and lucky numbers that are really your dates."
-  },
-  {
-    "slug": "surprise-trip-reveal-ideas",
-    "keyword": "surprise trip reveal ideas",
-    "keyword_es": "ideas para revelar un viaje sorpresa",
-    "occasion": "birthday",
-    "templates": ["pack-your-bags", "passport"],
-    "angle": "Ways to reveal a surprise trip sized by how long you can keep the secret (on the day, a week of clues, at the airport), what they need to know to pack, and how to reveal it when you live apart."
-  },
-  {
     "slug": "virtual-flowers-for-girlfriend",
     "keyword": "virtual flowers for girlfriend",
     "keyword_es": "flores virtuales para mi novia",

@@ -4,10 +4,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
-import { listMyGifts } from "@/lib/gift/dashboard";
+import { listMyGifts, listPaidUnsent } from "@/lib/gift/dashboard";
 import { Button } from "@/components/ui/button";
 import { NotConnected } from "@/components/app/not-connected";
 import { GiftCard } from "@/components/dashboard/gift-card";
+import { UnsentGift } from "@/components/dashboard/unsent-gift";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/dashboard">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -15,12 +16,15 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
   return { title: t("title"), robots: { index: false } };
 }
 
-export default async function DashboardPage({ params }: PageProps<"/[currency]/[locale]/dashboard">) {
+export default async function DashboardPage({ params, searchParams }: PageProps<"/[currency]/[locale]/dashboard">) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("dashboard");
   const user = await getCurrentUser();
-  const gifts = user ? await listMyGifts(user.id) : [];
+  const [gifts, paidUnsent] = user ? await Promise.all([listMyGifts(user.id), listPaidUnsent(user.id)]) : [[], []];
+  // Development only (NODE_ENV is inlined at build): ?unsent=<template> draws the card without a purchase.
+  const preview = process.env.NODE_ENV === "development" ? (await searchParams).unsent : undefined;
+  const unsent = typeof preview === "string" && preview ? [preview] : paidUnsent;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
@@ -37,7 +41,15 @@ export default async function DashboardPage({ params }: PageProps<"/[currency]/[
         </Button>
       </div>
       {!isConfigured.supabase ? <NotConnected /> : null}
-      {gifts.length === 0 ? (
+      {/* Paid for, not sent yet: first, and in place of "you haven't made a gift yet". */}
+      {unsent.length > 0 ? (
+        <div className="mt-10 grid gap-4">
+          {unsent.map((slug) => (
+            <UnsentGift key={slug} slug={slug} />
+          ))}
+        </div>
+      ) : null}
+      {gifts.length === 0 && unsent.length > 0 ? null : gifts.length === 0 ? (
         <div className="mt-12 flex flex-col items-center justify-center rounded-3xl border border-dashed border-border py-20 text-center">
           <p className="font-display text-2xl">{t("empty")}</p>
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">{t("emptyBlurb")}</p>

@@ -84,7 +84,9 @@ export function VideoSection() {
           if (!f) return;
           if (!uploadTypeFor("video", f.type, f.name)) toast.error(t("badType"));
           else if (f.size > LIMITS.videoMaxBytes) toast.error(t("tooBig", { mb }));
-          else void setUploadedVideo(f);
+          // Never silent: a clip that can't be taken says so, rather than leaving the picker
+          // closed on nothing.
+          else setUploadedVideo(f).catch(() => toast.error(t("failed")));
         }}
       />
     </section>

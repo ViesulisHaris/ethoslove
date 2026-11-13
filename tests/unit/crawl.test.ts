@@ -3,6 +3,7 @@ import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { LEGAL_UPDATED } from "@/content/legal";
 import { PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
+import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 
 type Rules = { allow: string[]; disallow: string[] };
 
@@ -125,5 +126,23 @@ describe("sitemap dates", () => {
     const legal = pages.filter((p) => new URL(p.url).pathname.includes("/legal/"));
     expect(legal.length).toBeGreaterThan(0);
     for (const p of legal) expect(p.lastModified, p.url).toBe(LEGAL_UPDATED);
+  });
+
+  it("give a template launched after the templates' shared date one of its own", () => {
+    // Every template already live on 25 Oct, the day "/templates/*" stands for. The holiday three
+    // launched on 11 Nov inherited it and told Google they were older than they were; a template
+    // added since has to carry its own date (or, if its words haven't changed, join this list).
+    const LIVE_ON_SECTION_DATE = [
+      "arcade", "autumn-reel", "balloons", "bat-swarm", "be-my-boo", "birthday-cinema", "bloom", "cap-toss", "cauldron",
+      "coquette", "dark-romance", "digicam", "evergreen", "fall-for-you", "favorite-person", "fireside", "front-page",
+      "garden", "halfway", "haunted-house", "jack-o-lantern", "jar-of-reasons", "kawaii", "keepsake",
+      "midnight-countdown", "museum", "music-box", "on-repeat", "our-timeline", "pack-your-bags", "paper-crane",
+      "party-animals", "passport", "photo-booth", "picnic", "popup-card", "recipe-box", "scrapbook", "seance",
+      "sketchbook", "snow-globe", "spooky-season", "sticker-bomb", "text-thread", "the-council", "the-toast",
+      "trick-or-treat", "vinyl", "xoxo",
+    ];
+    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-10-25");
+    for (const m of TEMPLATE_MANIFESTS)
+      if (!LIVE_ON_SECTION_DATE.includes(m.slug)) expect(PAGE_UPDATED[`/templates/${m.slug}`], m.slug).toBeDefined();
   });
 });

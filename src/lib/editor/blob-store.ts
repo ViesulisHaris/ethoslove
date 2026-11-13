@@ -21,12 +21,23 @@ const PREFIX = "asset:";
  */
 const memory = new Map<string, Blob>();
 
+/**
+ * How long a caller waits on the disk. A write can also never answer at all, neither done nor
+ * failed: an iPhone left a picked 29-second clip that way (12 Nov 2026), and since every caller
+ * waits here before showing what was picked, the picker closed on nothing, five tries over. The
+ * copy in memory already serves this tab, so past this the write carries on without the caller.
+ */
+export const DISK_WAIT_MS = 1500;
+
 export async function putBlob(id: string, blob: Blob): Promise<void> {
   memory.set(id, blob);
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    await set(PREFIX + id, blob);
+    await Promise.race([set(PREFIX + id, blob), new Promise<void>((resolve) => (timer = setTimeout(resolve, DISK_WAIT_MS)))]);
   } catch {
     /* kept in memory for this session */
+  } finally {
+    clearTimeout(timer);
   }
 }
 
