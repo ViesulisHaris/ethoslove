@@ -411,9 +411,9 @@ export function LoveLanguageQuiz({
     // First for one and last for the other, where "last" is a real bottom, not part of a tie for first.
     const lastOnly = (x: Scores) => lowest(x).filter((l) => !tops(x).includes(l));
     const theirFirstMyLast = even(theirs) ? [] : theirTops.filter((l) => lastOnly(mine).includes(l));
-    if (theirFirstMyLast.length) notes.push(fill(ui.theirTopYourLast, { language: joined(theirFirstMyLast), name: partnerName }));
+    if (theirFirstMyLast.length) notes.push(fill(ui.theirTopYourLast, { language: joined(theirFirstMyLast, true), name: partnerName }));
     const myFirstTheirLast = even(mine) ? [] : myTops.filter((l) => lastOnly(theirs).includes(l));
-    if (myFirstTheirLast.length) notes.push(fill(ui.yourTopTheirLast, { language: joined(myFirstTheirLast), name: partnerName }));
+    if (myFirstTheirLast.length) notes.push(fill(ui.yourTopTheirLast, { language: joined(myFirstTheirLast, true), name: partnerName }));
     if (even(mine) || even(theirs)) notes.push(ui.evenBody);
     const mineShares = shares(mine);
     const theirShares = shares(theirs);
