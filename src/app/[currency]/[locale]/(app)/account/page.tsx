@@ -110,7 +110,7 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
             <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-coral/30 bg-coral/5 p-6" data-testid="account-upgrade">
               <div className="min-w-0 flex-1 basis-64">
                 <h2 className="font-display text-xl">{tm("account.upgradeTitle")}</h2>
-                <p className="mt-1 text-sm text-ink-soft">{tm("account.upgradeBlurb", { price: formatAmount(upgrade.amount, upgrade.currency, locale) })}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{tm("account.upgradeBlurb", { price: formatAmount(upgrade.amount, upgrade.currency, locale) })}</p>
               </div>
               <UpgradeButton currency={upgrade.currency} returnTo="/account" label={tm("account.upgradeCta", { price: formatAmount(upgrade.amount, upgrade.currency, locale) })} />
             </section>
@@ -134,7 +134,7 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
             )}
             {packChips.length ? (
               <>
-                <h3 className="mt-5 text-eyebrow text-ink-soft">{tm("account.packs")}</h3>
+                <h3 className="mt-5 text-eyebrow text-muted-foreground">{tm("account.packs")}</h3>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {packChips.map((label) => (
                     <li key={label} className="rounded-full border border-lilac/30 bg-lilac-soft px-3 py-1.5 text-sm text-lilac">
@@ -216,7 +216,7 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
               {/* The EU withdrawal function (Consumer Rights Directive art. 11a): how to cancel where the right still applies. */}
               <li>
                 <Link href="/legal/withdraw" className="flex min-h-16 items-center gap-4 rounded-xl px-4 py-3 hover:bg-muted/60" data-testid="account-withdraw">
-                  <RotateCcw aria-hidden="true" className="size-5 shrink-0 text-ink-soft" />
+                  <RotateCcw aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
                   <span className="min-w-0 flex-1">
                     <span className="block font-medium">{tm("account.withdraw")}</span>
                     <span className="block text-sm text-muted-foreground">{tm("account.withdrawBlurb")}</span>

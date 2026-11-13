@@ -19,7 +19,7 @@ export async function UnsentGift({ slug }: { slug: string }) {
     <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-coral/30 bg-coral/5 p-6" data-testid="unsent-gift">
       <div className="min-w-0 flex-1 basis-64">
         <h2 className="font-display text-xl">{t("unsentTitle", { template: name })}</h2>
-        {/* My gifts' own grey (text-muted-foreground): ink-soft keeps its light-theme colour in dark, 2.2:1. */}
+        {/* My gifts' own grey: the brand ink-soft has no dark-theme colour (2.2:1 there). */}
         <p className="mt-1 text-sm text-muted-foreground">{t("unsentBody")}</p>
       </div>
       <Button asChild className="h-11 rounded-full px-5">
