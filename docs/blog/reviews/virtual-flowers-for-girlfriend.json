@@ -1,0 +1,186 @@
+{
+  "slug": "virtual-flowers-for-girlfriend",
+  "keyword": "virtual flowers for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The searcher's first question is how virtual flowers actually reach her. The lead only covers choosing them, and the mechanism isn't explained until the template note halfway down. Mirror it in the ES lead: \"Montas el ramo online, añades la tarjeta y a ella le llega un enlace que se abre en su móvil, al momento o a la hora que tú elijas.\"; The 'When to send them' section has no times, and that's where a reader planning for this week needs one. Scheduling with a time zone is true for both premium templates (VOICE.md). Mirror it in ES: \"Prográmalas para que se abran media hora antes de que salga, en su zona horaria, y así las tenga en el móvil antes de empezar.\""
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The English editor labels this stem \"Baby's breath\" (bouquet/catalogue.ts), and US readers mostly know it by that name, so a reader building it in Bouquet won't find \"gypsophila\". The Spanish \"paniculata\" already matches the UI.; \"They\" has nothing to refer to on a flower card, and the joke depends on the US car-mirror warning, which many UK readers won't recognise. The new line is 21 characters and still matches the Spanish «Más cerca de lo que parece.»; The English says \"adoration\", and adoration is the meaning commonly given for sunflowers. \"Admiración\" changes it, and it repeats the pink-rose row.; With no subject, \"Ve cómo...\" reads first as an imperative addressed to the reader, so it'"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The digital results ranking for this search (DigiBouquet, egreet, Flowerly) all say how the flowers reach her: a link she opens. This post never does, so a searcher asking 'how do I send them' doesn't get an answer. The wording follows the existing line in how-to-surprise-your-girlfriend and VOICE.md ('a link... opens on their phone... no app to install').; The same fix in Spanish, so the two versions stay the same post."
+        }
+      ],
+      "applied": [
+        "Lead and first section say how they arrive: a link that opens on her phone, now or at a set time, no app (EN+ES)",
+        "'Before her day starts' gives a time: set them to open half an hour before she leaves, in her time zone (EN+ES)",
+        "gypsophila (baby's breath), matching the editor's label",
+        "Card line 'Closer than it feels.'",
+        "ES sunflower 'adoración'; ES Bouquet note has a subject ('Ella ve')",
+        "Polish taken: table wording, headings with 'digital bouquet' and 'meanings', Bouquet note no longer tracks the template guide, poppy also Memorial Day, ES Remembrance date, 'rosada', 'Limítate', 'el regalo se vuelve tuyo', 'llegarle', 'tradicionalmente', 'se vino a vivir contigo', FAQ on sending for free (EN+ES)"
+      ],
+      "rejected": [
+        "Tulip note rewrite: optional; the current note is accurate",
+        "'Because it's Tuesday.': kept; shared idea only"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The Letter has no card and no bouquet (the-letter/schema.ts has a greeting, sign-off and the letter, no 30-character card), so \"carries the same card lines\" suggests a flower card it doesn't have. This answer is to \"Can I send virtual flowers for free?\", so it should say plainly that it's a letter, not flowers. The new wording follows the manifest tagline, and the link is the same one used in cute-things-to-say-to-your-boyfriend.; This is the same fix as the EN. In this post, \"tu carta\" and \"una carta\" always mean the letter behind the card, so \"La carta es gratis\" at the start of a sentence reads as \"the letter is free\", not as the template's name. The link makes it a template.; The middle "
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Free FAQ: The Letter is a wax-sealed letter, not flowers, linked to its template page (EN+ES)",
+        "Poppy note: UK/Commonwealth in early November, US around Memorial Day in late May (EN+ES)",
+        "Polish taken: 'Las plantillas Ramo y Flor'; Bouquet can carry a song (EN+ES)"
+      ],
+      "rejected": [
+        "Tulip note rewrite again: optional; accurate as is"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Everywhere else in the post, \"ella\" means the girlfriend, so \"sino con ella\" reads first as \"but with her\". The English says \"but with one\", meaning an apology.; The column is \"Por qué funcionan\", so its subject is las flores, but \"Llega... la envías\" is feminine singular. The only feminine singular noun nearby is \"la tarjeta\" in the next row, so the line reads as if the card arrives on its own."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        }
+      ],
+      "applied": [
+        "ES: 'acompañando a una disculpa' (no ambiguous 'con ella')",
+        "ES table: 'Llegan en cuanto las envías' agrees with las flores",
+        "Polish taken: 'es justo la que verá', 'en un enlace', 'no puedan llegarle'"
+      ],
+      "rejected": [
+        "Tulip note rewrite: optional; accurate as is"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: Same optional note as before, already rejected as optional in the record. It's still the one line in the table that could sit on any florist's site. It's polish, so the score stays."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: 'lo delata' also appears in surprise-trip-reveal-ideas and midnight-birthday-surprise-ideas, but it's a common phrase in a different context, so this is not a fix.; 'camera roll' appears in other posts (e.g. how-to-surprise-your-girlfriend) as an ordinary phone term, not as a copied sentence. It works for both US and UK readers.; Optional. In Spain the perfect tense is more usual for something just done. The preterite is still correct."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: This records why the free-tool results need no response in the post, so a later round doesn't add one."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: tulip note, ES 'la has elegido', free-tool results need no response"
+      ]
+    }
+  ]
+}
