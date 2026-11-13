@@ -14,8 +14,8 @@ import { LEGAL_UPDATED } from "@/content/legal";
  */
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
-  "/": "2026-10-25",
-  // 13 Nov: titles and copy aimed at what people search (docs/marketing/KEYWORDS.md).
+  // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
+  "/": "2026-11-13",
   "/gifts": "2026-11-13",
   "/gifts/*": "2026-10-24",
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.

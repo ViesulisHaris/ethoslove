@@ -8,6 +8,36 @@ export function plainText(text: RichText): string {
   return text.replace(RICH_TEXT_TOKEN, (_whole, label: string | undefined, _href, bold: string | undefined, italic: string | undefined) => label ?? bold ?? italic ?? "");
 }
 
+/** Ids the post page already uses for its own sections; a heading never takes one. */
+const PAGE_IDS = new Set(["takeaways", "contents", "faq", "related"]);
+
+/**
+ * A post's sections (its h2s), each with a stable id: the anchors the headings carry and the
+ * jump list links to. Made from the heading's words, accents dropped, so links read like the title.
+ */
+export function postSections(blocks: readonly BlogBlock[]): { index: number; id: string; text: string }[] {
+  const seen = new Map<string, number>();
+  const sections: { index: number; id: string; text: string }[] = [];
+  blocks.forEach((block, index) => {
+    if (block.type !== "h2") return;
+    const text = plainText(block.text);
+    let base =
+      text
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 60)
+        .replace(/-+$/, "") || "section";
+    if (PAGE_IDS.has(base)) base = `${base}-section`;
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    sections.push({ index, id: n === 1 ? base : `${base}-${n}`, text });
+  });
+  return sections;
+}
+
 /** Every href linked from a piece of text. */
 export function linksIn(text: RichText): string[] {
   return [...text.matchAll(RICH_TEXT_TOKEN)].flatMap((m) => (m[2] ? [m[2]] : []));

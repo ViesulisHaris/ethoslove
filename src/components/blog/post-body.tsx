@@ -4,12 +4,15 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { BlogBlock } from "@/content/blog/types";
+import { postSections } from "@/content/blog/text";
 import { getManifest } from "@/templates/manifests";
 import { RichText } from "./rich-text";
 
 /** The body of a post, block by block, in the site's editorial type. */
 export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[]; locale: GiftLocale }) {
   const t = await getTranslations("blog");
+  // Each section heading is an anchor the page's jump list links to.
+  const ids = new Map(postSections(blocks).map((s) => [s.index, s.id]));
   return (
     <div className="flex flex-col">
       {blocks.map((block, i) => {
@@ -22,7 +25,7 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
             );
           case "h2":
             return (
-              <h2 key={i} className="display-md mt-14 text-balance">
+              <h2 key={i} id={ids.get(i)} className="display-md mt-14 scroll-mt-28 text-balance">
                 {block.text}
               </h2>
             );

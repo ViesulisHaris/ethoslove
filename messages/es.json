@@ -41,7 +41,7 @@
   "meta": {
     "defaultTitle": "Ethos — Regalos digitales que se abren como una historia",
     "titleTemplate": "%s · Ethos",
-    "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos.",
+    "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, en un enlace. Gratis, con citas y juegos.",
     "giftsTitle": "Regalos digitales y virtuales: crea uno gratis online · Ethos",
     "giftsDescription": "Crea un regalo digital o virtual en diez minutos: una carta, un ramo o un pequeño juego con tus fotos y tu canción, en un enlace. 30 ideas, dos gratis."
   },
@@ -901,6 +901,8 @@
     "takeaways": "Lo esencial",
     "faqTitle": "Preguntas frecuentes",
     "minutes": "{minutes} min de lectura",
+    "updated": "Actualizado el",
+    "contents": "En este artículo",
     "related": "Sigue leyendo",
     "makeThis": "Hacer este regalo",
     "seeIt": "Ver la plantilla",
