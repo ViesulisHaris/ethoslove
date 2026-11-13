@@ -21,8 +21,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "the-letter": {
     en: {
       keyword: "Digital love letter",
-      title: "Digital Love Letter, Free with Photos and Music",
-      description: "Write a digital love letter they open like a real one: a wax seal, your words, your photos and your song, sent as a link. Free, with nothing to install.",
+      title: "Digital Love Letter Template, Free with Photos and Music",
+      description: "An online love letter they open like a real one: a wax seal, your words, your photos and your song, sent as a link. A free template with nothing to install.",
       howTo: "How to send a digital love letter",
     },
     es: {
@@ -77,8 +77,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "scratch-card": {
     en: {
       keyword: "Digital scratch card maker",
-      title: "Digital Scratch Card Maker: Scratch to Reveal",
-      description: "Make a digital scratch card: they scratch with a finger to reveal your photos and messages, and the last card hides the big one. For proposals, birthdays and news.",
+      title: "Custom Digital Scratch Card Maker: Scratch to Reveal",
+      description: "Make a custom digital scratch card: they scratch off each card to reveal your photos and words, and the last one hides the big news. For proposals and birthdays.",
       howTo: "How to make a digital scratch card",
     },
     es: {
@@ -161,8 +161,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "fortune-cookie": {
     en: {
       keyword: "Digital fortune cookie",
-      title: "Digital Fortune Cookie Maker: Write Their Fortune",
-      description: "Make a digital fortune cookie: they tap to crack it open and find the fortunes you wrote, up to 20, with your photos and a song. A small, funny gift for any day.",
+      title: "Digital Fortune Cookie Maker: Send a Virtual Fortune Cookie",
+      description: "Make a virtual fortune cookie: they tap to crack it open and find the fortunes you wrote, up to 20, with your photos and a song. A small, funny gift for any day.",
       howTo: "How to make a digital fortune cookie",
     },
     es: {

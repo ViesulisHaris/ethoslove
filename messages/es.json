@@ -1512,6 +1512,7 @@
       },
       "long-distance": {
         "title": "Regalos para relaciones a distancia",
+        "metaTitle": "Regalos para una relación a distancia que llegan al instante",
         "description": "Regalos para relaciones a distancia que llegan en cuanto los envías: un pasaporte que vuela de tu ciudad a la suya, un cielo con tus fotos o una carta de amor con vuestra canción.",
         "intro": "Lejos, pero cerca. Envía algo que pueda abrir en cuanto esté listo, programado para su zona horaria, con los lugares y las canciones que son de los dos."
       },
@@ -2104,7 +2105,7 @@
   },
   "ldr": {
     "meta": {
-      "title": "A distancia: quedad a medio camino, citas entre husos horarios",
+      "title": "Relación a distancia: ideas, citas y un punto a medio camino",
       "description": "Encuentra la ciudad a medio camino entre los dos, mira a qué horas estáis ambos despiertos y descubre ideas de citas para dos pantallas. Herramientas gratis para parejas a distancia."
     },
     "eyebrow": "A distancia",
@@ -2308,7 +2309,7 @@
   },
   "games": {
     "meta": {
-      "title": "Juegos para dos",
+      "title": "Juegos para parejas online: siete juegos gratis para dos",
       "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Dibuja y adivina, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
     },
     "h1a": "Juegos para",
@@ -2324,7 +2325,7 @@
       "how": "Quien tenga el móvil la lee en voz alta y luego respondéis.",
       "title": "Cartas de preguntas",
       "blurb": "Tres barajas: ligeras para el sofá, más cercanas para luego y una para la distancia. Pasaos el móvil, leed la carta en voz alta y responded.",
-      "seoTitle": "Preguntas para tu pareja: juego de cartas gratis",
+      "seoTitle": "Preguntas para parejas: juego de cartas gratis",
       "seoDescription": "Preguntas para hacerle a tu pareja, en un juego de cartas: ligeras para el sofá, más profundas para luego y una baraja para la distancia. Gratis.",
       "listTitle": "{count} preguntas para hacerle a tu pareja",
       "listIntro": "Las tres barajas gratis: ligeras para el sofá, más cercanas para luego y una para cuando estáis lejos. Pasaos el móvil, leed una en voz alta y responded."

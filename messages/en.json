@@ -42,7 +42,7 @@
     "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
     "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two.",
-    "giftsTitle": "Digital Gifts: Make a Free, Personal One Online · Ethos",
+    "giftsTitle": "Digital Gifts and Virtual Gifts: Make a Free, Personal One · Ethos",
     "giftsDescription": "Make a digital gift in ten minutes: a love letter, a bouquet, a scrapbook or a small game from your photos, your words and their song, sent as a link. 30 ideas, two free."
   },
   "nav": {
@@ -1462,20 +1462,20 @@
     "occasion": {
       "birthday": {
         "title": "Digital birthday gifts",
-        "metaTitle": "Digital Birthday Gifts: 12 Ideas You Can Send Today",
+        "metaTitle": "Digital and Virtual Birthday Gifts: 12 Ideas to Send Today",
         "description": "Make a digital birthday gift they'll open again and again: your photos, their favourite song and your words, animated and sent as a link or QR code. Free to start.",
         "intro": "A birthday message that does more than sit in a chat. Blow out the candles in Birthday Cinema, crack open a Fortune Cookie or print a Front Page about them, with your photos and their song, and set it to open at midnight."
       },
       "anniversary": {
         "title": "Digital anniversary gifts",
-        "metaTitle": "Digital Anniversary Gifts: 12 Ideas From Your Photos",
+        "metaTitle": "Anniversary Gift Ideas: 12 Digital Gifts From Your Photos",
         "description": "An anniversary gift made from your own story: your photos, your song and a letter in your words, animated and sent as a link. Try every template free.",
         "intro": "One year or twenty: tell the story of the two of you with the photos only you have, the song that's yours and a note that says what a card can't. Walk them down Our Timeline, hang your photos in a Museum or seal it all in The Letter."
       },
       "valentines": {
-        "title": "Digital Valentine's Day gifts",
-        "metaTitle": "Digital Valentine's Gifts: 12 Ideas Beyond Red Roses",
-        "description": "A Valentine's gift that arrives in seconds and lasts for years: a wax-sealed love letter, a bouquet that never wilts or a sky full of your photos, with your song.",
+        "title": "Virtual valentines and digital gifts",
+        "metaTitle": "Virtual Valentines and Digital Gifts: 12 Ideas Beyond Roses",
+        "description": "A virtual valentine that arrives in seconds and lasts for years: a wax-sealed love letter, a bouquet that never wilts or a sky of your photos, with your song.",
         "intro": "Flowers wilt and chocolates don't last the evening. A love letter they open with a tap, a bouquet you picked stem by stem, or a night sky where every photo is a star will still be there next February."
       },
       "wedding": {
@@ -1490,10 +1490,10 @@
         "intro": "From the first day to the cap and gown. Line up the photos, say what you're proud of, and time it to open the day they finish. Front Page puts them on the cover; Our Timeline draws the road that got them there."
       },
       "christmas": {
-        "title": "Digital Christmas gifts",
-        "metaTitle": "Digital Christmas Gifts: 12 Ideas That Arrive on Time",
-        "description": "A Christmas gift that can't get lost in the post: an animated gift with your photos, a festive song and your message, timed to open on Christmas morning.",
-        "intro": "For the people you won't see this year, and the ones you will: a gift that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
+        "title": "Virtual Christmas cards and digital gifts",
+        "metaTitle": "Virtual Christmas Cards and Digital Gifts That Arrive on Time",
+        "description": "A virtual Christmas card that's a gift too: your photos, a festive song and your message, animated, sent as a link and timed to open on Christmas morning.",
+        "intro": "For the people you won't see this year, and the ones you will: a digital Christmas card that opens on Christmas morning wherever they are, with no shipping deadline to miss. Shake your photos into the snow in Snow Globe, or leave a letter by the fire in Fireside."
       },
       "mothers-day": {
         "title": "Digital Mother's Day gifts",
@@ -1512,7 +1512,8 @@
       },
       "long-distance": {
         "title": "Long-distance relationship gifts",
-        "description": "Gifts for long-distance relationships that arrive the moment you send them: a passport that flies from your city to theirs, a sky of your photos, or a love letter with your song.",
+        "metaTitle": "Long-Distance Relationship Gifts That Arrive the Moment You Send",
+        "description": "Long-distance relationship gifts that arrive the moment you send them: a passport from your city to theirs, a sky of photos or a love letter with your song.",
         "intro": "Miles apart, still close. Send something they can open the second it's ready, scheduled for their time zone, with the places and the songs that belong to you both."
       },
       "halloween": {
@@ -2104,8 +2105,8 @@
   },
   "ldr": {
     "meta": {
-      "title": "Long distance: meet halfway, date across time zones",
-      "description": "Find the city halfway between you, see the hours you're both awake, and get date ideas for two screens. Free tools for long-distance couples."
+      "title": "Long-Distance Relationship Ideas: Meet Halfway, Dates, Gifts",
+      "description": "Free tools for a long-distance relationship: the city halfway between you, the hours you're both awake, date ideas for two screens and instant gifts."
     },
     "eyebrow": "Long distance",
     "h1a": "Apart is not",
@@ -2308,10 +2309,10 @@
   },
   "games": {
     "meta": {
-      "title": "Games for two",
-      "description": "Card games for couples: How well do you know me, Would you rather, Draw it guess it, Memory with your photos, question cards, truth or dare and a roulette for the chores. One phone or two, no downloads."
+      "title": "Couple Games Online: Seven Free Games for Two",
+      "description": "Couple games to play online, free: How well do you know me, Would you rather, truth or dare, question cards, Memory with your photos and more. No downloads."
     },
-    "h1a": "Games for",
+    "h1a": "Couple games for",
     "h1b": "exactly two.",
     "deck": {
       "playable": "Play this one now",
@@ -2473,7 +2474,7 @@
         "sub": "What's said at this table stays at this table.",
         "again": "Shuffle and play again"
       },
-      "seoTitle": "Truth or Dare for Couples: A Free Online Game",
+      "seoTitle": "Truth or Dare Questions for Couples: Free Online Game",
       "seoDescription": "Truth or dare for couples, the soft edition: sweet truths and silly dares, nothing you'd regret in the morning. One phone, going round. Free.",
       "listTitle": "{count} truth or dare questions for couples",
       "listIntro": "Every truth and every dare in the free game. Mostly compliments and bad dancing.",

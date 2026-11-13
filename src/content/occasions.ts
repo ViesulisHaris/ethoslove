@@ -507,6 +507,10 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       ],
       faq: [
         {
+          q: "What is a virtual valentine?",
+          a: "A valentine that arrives as a link instead of in an envelope: they open it on their phone and it plays your photos, your words and a song. Here it can be a love letter under a wax seal, a bouquet you picked stem by stem, a sky of your photos or a small game, and it arrives the second you send it.",
+        },
+        {
           q: "Is it too much for someone I've only just started seeing?",
           a: "Pick a light template — Kawaii, Arcade, XOXO — write two honest lines, and it reads as a gesture, not a declaration. What you write sets the weight, not the format.",
         },
@@ -597,6 +601,10 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
       ],
       faq: [
+        {
+          q: "¿Qué es un regalo de San Valentín virtual?",
+          a: "Un regalo que llega como un enlace en vez de en un sobre: lo abre en el móvil y se reproducen vuestras fotos, tus palabras y una canción. Aquí puede ser una carta de amor con sello de lacre, un ramo que eliges flor a flor, un cielo con vuestras fotos o un pequeño juego, y llega en el segundo en que lo envías.",
+        },
         {
           q: "¿Es demasiado para alguien con quien acabo de empezar?",
           a: "Elige una plantilla ligera, Kawaii, Arcade, XOXO, escribe dos líneas sinceras y se lee como un gesto, no como una declaración. El peso lo pone lo que escribes, no el formato.",
@@ -808,6 +816,10 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
       ],
       faq: [
         {
+          q: "Can I send it as a virtual Christmas card?",
+          a: "Yes, and it does more than an e-card: it opens with your photos, a Christmas song and a message in your words, and the same link can go to the whole family. Send it on WhatsApp, iMessage or by email, or print the QR card and tuck it inside a paper one.",
+        },
+        {
           q: "Can one gift go to several people?",
           a: "Yes. A gift is a link, and the link can be opened by anyone you send it to. For a family, address it to all of them and send it once.",
         },
@@ -914,6 +926,10 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
         },
       ],
       faq: [
+        {
+          q: "¿Puedo enviarlo como una felicitación de Navidad virtual?",
+          a: "Sí, y hace más que una tarjeta: se abre con vuestras fotos, una canción navideña y un mensaje con tus palabras, y el mismo enlace puede ir a toda la familia. Envíalo por WhatsApp, iMessage o correo, o imprime la tarjeta QR y métela dentro de una de papel.",
+        },
         {
           q: "¿Un regalo puede ir a varias personas?",
           a: "Sí. Un regalo es un enlace, y el enlace lo abre cualquiera a quien se lo mandes. Para una familia, dirígelo a todos y envíalo una vez.",
