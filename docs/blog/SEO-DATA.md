@@ -40,6 +40,16 @@ query, page, country, device, date; filters `page=/blog/<slug>`, `query=<words>`
 `limit` (up to 25000) and `offset`. A 401 or 503 means it isn't connected yet: say "Search
 Console not connected" in the report and carry on with DataForSEO alone.
 
+**Leave brand searches out before judging anything.** Nearly all our clicks come from people
+typing the name: tryethos, try ethos, tryethos.io, and typos such as trythos, treythos, trytheos
+or tryethos.oi. Each of those results lists other pages of ours as sitelinks, and every sitelink
+counts an impression. So in the 28 days to 11 Nov, /gifts showed 17,368 impressions at position 1.2
+with 0.7% clicked, and /templates and /templates/the-letter looked much the same. Those numbers say
+nothing about how a page ranks. Pull `dimensions=query,page`, drop every row whose query contains
+"ethos", "ythos" or "theos" or is plainly the name misspelled (not a bare "thos": that would drop
+real searches with "those" in them), filtering with node because the `query` parameter keeps
+matches and can't exclude them, and judge pages and searches only on what remains.
+
 **Sales: which pages sell** (free; our own numbers, since 14 Nov 2026). Website sales of the last 7
 and 28 days, split by where each buyer first came from:
 `curl -s "https://tryethos.io/api/internal/sales"` (the same network secret: pass nothing).

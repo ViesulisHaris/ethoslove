@@ -72,7 +72,9 @@ ours, note which: those pages are worth keeping sharp.
 Take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
 pick from the data, in this order of value. Start every run by pulling Search Console for the last
 28 days, query by page (SEO-DATA.md, free): it is Google's own record of how our pages do, and it
-comes before any estimate. Then pull the sales report (`/api/internal/sales`, SEO-DATA.md, free):
+comes before any estimate. Leave the brand searches out first (SEO-DATA.md): the name and its typos
+show /gifts and /templates as sitelinks thousands of times, which looks like "seen but not clicked"
+and isn't. Then pull the sales report (`/api/internal/sales`, SEO-DATA.md, free):
 which pages the buyers of the last 7 and 28 days first landed on, and from where. Between two
 candidates of the same kind, take the one on a page that sells to searchers (channel `search`), or
 one that can send searchers to such a page. Never write sales, orders or money into the repository,
@@ -146,8 +148,8 @@ Add today's entry at the top of `docs/blog/seo-diary.md`:
 
 On the "check on" date, the routine that reads it says in that day's entry whether it worked, with
 Search Console's numbers for that page: the 14 days before the change against the latest 14
-(`page=/blog/<slug>`, `start` and `end`), for its target search and in total: impressions, clicks,
-average position. A change that didn't move anything is worth knowing too: say so, and what to try
+(`page=/blog/<slug>`, `start` and `end`), for its target search and in total with brand searches
+left out: impressions, clicks, average position. A change that didn't move anything is worth knowing too: say so, and what to try
 next.
 
 ## 6. Publish

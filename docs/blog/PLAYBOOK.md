@@ -91,8 +91,9 @@ with real monthly searches, difficulty under 30 and an intent that fits a post. 
 when it exists, lists the opportunities already found: take from it first.
 
 Then ask Search Console (free; SEO-DATA.md) for the searches we were shown for in the last 28 days
-(`dimensions=query`): a search with impressions that no post of ours answers is one Google already
-connects with us. Queue the ones that fit, before anything else.
+(`dimensions=query`), with the brand searches left out (SEO-DATA.md): a search with impressions
+that no post of ours answers is one Google already connects with us. Queue the ones that fit,
+before anything else.
 
 Then mine the competitors (on the Monday refill, about $0.10): what the couples apps and gift makers
 that hold the searches we want already rank for, and we don't. Take the two or three domains that
