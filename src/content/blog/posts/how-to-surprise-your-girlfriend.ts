@@ -131,7 +131,7 @@ export const post: BlogPost = {
             ["Has a packed week", "Small and done for her: the chore, dinner made, a text at the right moment", "A plan that needs her energy, or a late night before a big day"],
             ["Loves a plan", "A partial surprise: the date and the dress code, but not where", "Dropping a trip on her that means rearranging her week"],
             ["Is a homebody", "Her film night, the dish from your trip, a jar of reasons", "A surprise party with people she barely knows"],
-            ["Loves adventure", "A day out built from your note, or a mystery trip", "Something generic you could have given anyone"],
+            ["Loves adventure", "A day out built from your note, or a [mystery trip](/blog/surprise-trip-reveal-ideas)", "Something generic you could have given anyone"],
           ],
         },
         {
@@ -303,7 +303,7 @@ export const post: BlogPost = {
             ["Tiene una semana a tope", "Algo pequeño y que le quite trabajo: la tarea hecha, la cena lista, un mensaje en el momento justo", "Un plan que le pida energía, o trasnochar antes de un día importante"],
             ["Necesita tenerlo todo planeado", "Una sorpresa a medias: la fecha y qué ponerse, pero no adónde", "Soltarle un viaje que la obligue a reorganizar la semana"],
             ["Es muy casera", "Su noche de peli, el plato de vuestro viaje, un frasco de razones", "Una fiesta sorpresa con gente que apenas conoce"],
-            ["Le encanta la aventura", "Un día hecho con tu nota, o un viaje misterioso", "Algo genérico que podrías haberle dado a cualquiera"],
+            ["Le encanta la aventura", "Un día hecho con tu nota, o un [viaje misterioso](/blog/surprise-trip-reveal-ideas)", "Algo genérico que podrías haberle dado a cualquiera"],
           ],
         },
         {

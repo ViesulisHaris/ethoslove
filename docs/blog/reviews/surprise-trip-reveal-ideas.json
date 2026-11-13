@@ -1,0 +1,144 @@
+{
+  "slug": "surprise-trip-reveal-ideas",
+  "keyword": "surprise trip reveal ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 8,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Right now the lead is a framing plus a table of contents. Someone who searched for reveal ideas should get two real ones before they scroll.; This is backwards. Their reaction appears on your screen, and asking them to record would tip them off. A reader following it as written would miss the moment.; The schema caps each clue at 40 characters (src/templates/pack-your-bags/schema.ts). Lines like \"Three nights. Bring enough for four, just in case.\" are longer, so anyone pasting them in would hit the limit.; A scavenger or treasure hunt is one of the most common reveal ideas on the current top results, and the post doesn't have it. Add it as its own list item after the decoy present.; The tip "
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Each clue is capped at 40 characters (schema.ts clues .max(40)) and is shown as an item to pack ('Pack {thing}'), so the table's example lines don't fit: \"Three nights. Bring enough for four, just in case.\" is 51 characters and \"One nice dinner. Everything else is walking.\" is 44. The nights already appear on the date tag (Pack.tsx DateTag).; Same 40-character limit. Also, next to the imperative 'usa', «Mete» reads as an instruction to the reader, when it's the recipient who packs. The English says 'They pack'.; A missing visa or ESTA/ETA is the classic way a secret trip falls apart, and a top result on this topic would cover it. You can't sort it at the airport, and it needs the passport de"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "A scavenger hunt around the house is in nearly every top result for 'surprise trip reveal ideas' (getawaytoday, lostontheroute, AAA, Disney reveal posts); the post's week of clues is by text, so the in-person hunt is missing.; The table and the description promise 'at the door or the airport', but no section gives a reveal for that timing; top results (getawaytoday, AAA, travel guides) all cover disguising departure day as an ordinary errand.; With the cover-story item the section covers the 'at the door / airport' row of the table, and the heading should say so, so every timing in the description has a matching heading."
+        }
+      ],
+      "applied": [
+        "Lead gives two real reveal ideas before the rest (EN+ES)",
+        "Video call: screen-record on your side before sharing, ask afterwards (EN+ES)",
+        "Pack Your Bags note: clues are short (40 characters), with examples that fit; ES 'Va metiendo' so the recipient packs",
+        "Visa/ESTA/ETA added to the passport check (EN+ES)",
+        "Added the treasure hunt around the house and the cover story for a reveal on the day; heading now 'the night before or on the day' (EN+ES)",
+        "Tip title now matches its advice",
+        "ES: 'para abrir en el móvil'",
+        "Polish taken: passport validity 'beyond your travel dates', manager only if you know them, plug adapter, guidebook area, passport note (stamps are past places, route ends at their city, no 'meeting halfway'), 'cambiáis de avión', ES wording (cena para arreglarse, a última hora, pedir esos días, momento especial, mascotas, se entere), day-four passport only if abroad, echoes of occasions.ts and long-distance-anniversary-ideas removed"
+      ],
+      "rejected": [
+        "'Vacation' in the description: US-only word (VOICE.md)",
+        "Linking 'digital gift' to the template page: the playbook wants /gifts for those words; the template block links the template"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'Passport details' undersells both forms. The ESTA asks for their address, employer and parents' names plus eligibility questions, and the UK ETA asks for a photo of their face. Someone planning to do it in secret should know that before they book.; The same fix in Spanish.; Once you share your screen in FaceTime, WhatsApp or Zoom, the other person shrinks to a small tile or disappears, so a screen recording made while sharing mostly shows the booking page, not their reaction.; The same fix in Spanish.; Without the reflexive, «resérvalas» next to a trip reads as 'book them'. «Resérvatelas» is how you'd say 'keep them free' in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "ESTA/ETA: the forms need personal details and (ETA) a face photo, so you may need their help; allow a few days (EN+ES)",
+        "Video call: hold up the ticket or the booking on a second device so their face stays full size, record before showing (EN+ES)",
+        "ES 'resérvatelas'",
+        "Polish taken: lead says printed booking or made-up boarding pass; passport stamps carry route cities; ES 'felicitación', 'búsqueda del tesoro'; night-before intro now covers on-the-day; film the doorstep reveal; scheduling is part of a premium unlock; Passport marked premium; scratch-card-ideas now links here (EN+ES)"
+      ],
+      "rejected": [
+        "ES 'si el destino lo pide' for the passport line: the item is about leaving the country and the ID line already covers DNI"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: Says how the passport clue is delivered, the way the other days do. Optional."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: long-distance-birthday-ideas-for-boyfriend.ts already says a countdown 'is half the fun' (ES «la mitad de la gracia» in the same place). It's a common phrase, so it doesn't lower the score. ES: «Hasta que se abre, ve una cuenta atrás.»; iPhone screen recording usually leaves out the other person's audio on FaceTime and WhatsApp calls. Optional, because the picture is the reaction that matters.; The English says 'your own device'. The Spanish narro"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: Several page-one results (thepointsguy, felicesvacaciones) suggest giving the trip without dates when you can't know their availability. It's a small gap, since the post already says to tell them the dates early.; This is the only on-site page that targets a closely related term. The intent differs (a product page versus an ideas list), so it doesn't cannibalise this post today."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: passport clue on the pillow, book dates together if you can't pin them, 'half the fun' wording, phone screen-recording audio note, ES 'dispositivo tuyo', two colons in the Pack Your Bags note"
+      ]
+    }
+  ]
+}
