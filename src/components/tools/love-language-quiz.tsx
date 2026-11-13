@@ -288,12 +288,12 @@ export function LoveLanguageQuiz({
         />
       </label>
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <button type="button" onClick={() => void send(kind)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-forest-raised">
+        <button type="button" onClick={() => void send(kind)} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-forest-raised sm:w-auto">
           {copied ? <Check aria-hidden="true" className="size-4" /> : <Send aria-hidden="true" className="size-4" />}
           {copied ? ui.copied : canShare ? (kind === "invite" ? ui.share : fill(ui.sendBack, { name: partnerName })) : ui.copy}
         </button>
         {kind === "invite" ? (
-          <button type="button" onClick={handOver} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-forest/20 bg-white/60 px-5 py-2.5 text-sm font-semibold text-forest transition-colors hover:bg-white">
+          <button type="button" onClick={handOver} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-forest/20 bg-white/60 px-5 py-2.5 text-sm font-semibold text-forest transition-colors hover:bg-white sm:w-auto">
             <Smartphone aria-hidden="true" className="size-4" />
             {ui.samePhone}
           </button>
@@ -312,7 +312,8 @@ export function LoveLanguageQuiz({
     return (
       <div className="mt-6 flex gap-4 rounded-3xl border border-forest/10 bg-paper p-4 sm:gap-5 sm:p-5">
         <Link href={`/templates/${gift.slug}`} onClick={() => clicked("template")} className="relative block aspect-[390/600] w-[76px] shrink-0 overflow-hidden rounded-2xl bg-ink/10 ring-1 ring-black/5 sm:w-[92px]">
-          <Image src={gift.poster} alt={gift.name} fill sizes="92px" className="object-cover" />
+          {/* Eager: it only exists once a result is on screen, and a lazy one showed up blank on the way down. */}
+          <Image src={gift.poster} alt={gift.name} fill sizes="92px" loading="eager" className="object-cover" />
         </Link>
         <div className="min-w-0">
           <p className="text-[12px] font-semibold tracking-[0.18em] text-rose-deep uppercase">{ui.giftTitle}</p>
@@ -346,7 +347,8 @@ export function LoveLanguageQuiz({
               {ui.back}
             </button>
           ) : (
-            <span className="text-right text-[13px] text-forest/50">{ui.meta}</span>
+            // The intro above says it on a phone, where this line would push the counter onto two.
+            <span className="hidden text-right text-[13px] text-forest/50 sm:inline">{ui.meta}</span>
           )}
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-forest/10" aria-hidden="true">
@@ -479,13 +481,14 @@ export function LoveLanguageQuiz({
     const mine = s.mine;
     const top = tops(mine);
     const first = top[0]!;
+    const even = top.length === LANGUAGES.length;
     const pct = shares(mine);
     body = (
       <div>
         {s.note === "own" ? <p className="mb-6 rounded-2xl bg-rose-soft px-4 py-3 text-[14.5px] leading-snug text-forest">{ui.ownLink}</p> : null}
         <p className="text-[12px] font-semibold tracking-[0.18em] text-rose-deep uppercase">{ui.resultEyebrow}</p>
         <h2 className="mt-2 font-display text-[clamp(2.2rem,8.5vw,3.5rem)] leading-[1.02] text-forest">{firstOf(mine)}</h2>
-        {top.length === LANGUAGES.length ? (
+        {even ? (
           <p className="mt-3 text-lg leading-snug text-forest/85">{ui.evenBody}</p>
         ) : (
           <>
@@ -515,11 +518,12 @@ export function LoveLanguageQuiz({
           </ul>
         </div>
 
-        <Lands title={ui.landsTitle} items={languages[first].lands} misses={languages[first].misses} missesTitle={ui.missesTitle} />
+        {/* An even split has no first language to explain or give for: the five are below the quiz. */}
+        {even ? null : <Lands title={ui.landsTitle} items={languages[first].lands} misses={languages[first].misses} missesTitle={ui.missesTitle} />}
 
         {s.partner ? null : shareBox("invite")}
 
-        {giftCard(first, "mine")}
+        {even ? null : giftCard(first, "mine")}
 
         <div className="mt-8 flex flex-wrap gap-3">
           {s.partner ? (
