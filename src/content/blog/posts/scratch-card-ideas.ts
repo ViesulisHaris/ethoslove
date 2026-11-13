@@ -73,7 +73,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Surprise trip reveal scratch card ideas" },
         {
           type: "p",
-          text: "A trip is perfect for clue cards, because every detail is a hint. Go from vague to specific:",
+          text: "A trip is perfect for clue cards, because every detail is a hint. Go from vague to specific (for other ways to do it, see these [surprise trip reveal ideas](/blog/surprise-trip-reveal-ideas)):",
         },
         {
           type: "list",
@@ -226,7 +226,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Revelar un viaje sorpresa con un rasca y gana" },
         {
           type: "p",
-          text: "Un viaje es perfecto para tarjetas con pistas, porque cada detalle dice algo. Ve de lo vago a lo concreto:",
+          text: "Un viaje es perfecto para tarjetas con pistas, porque cada detalle dice algo. Ve de lo vago a lo concreto (para otras formas de hacerlo, mira estas [ideas para revelar un viaje sorpresa](/blog/surprise-trip-reveal-ideas)):",
         },
         {
           type: "list",
