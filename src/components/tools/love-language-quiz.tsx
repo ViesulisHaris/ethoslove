@@ -371,6 +371,8 @@ export function LoveLanguageQuiz({
                   key={option}
                   type="button"
                   aria-pressed={on}
+                  // Until the page has hydrated a tap would go nowhere; disabled, it can't be lost (and tests wait for it).
+                  disabled={!ready}
                   onClick={() => choose(option)}
                   className={cn(
                     "flex min-h-[4.5rem] w-full items-center gap-4 rounded-2xl border px-4 py-3.5 text-left text-[16px] leading-snug text-forest transition-[background-color,border-color] duration-150 sm:px-5 sm:text-[17px]",
