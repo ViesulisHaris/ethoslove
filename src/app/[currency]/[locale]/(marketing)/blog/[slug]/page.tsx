@@ -5,7 +5,7 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
 import { BLOG_POSTS, getPost, postContent, postLocales, postModified, relatedPosts } from "@/content/blog";
-import { plainText, readingMinutes } from "@/content/blog/text";
+import { plainText, postSections, readingMinutes } from "@/content/blog/text";
 import { blogPostingNode, breadcrumbNode, faqNode, localizedUrl, ogImageUrl, organizationNode, pageMetadata } from "@/lib/seo";
 import { getManifest } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -48,6 +48,7 @@ export default async function BlogPostPage({ params }: PageProps<"/[currency]/[l
   const path = `/blog/${post.slug}`;
   const lead = getManifest(post.templates[0] ?? "");
   const related = relatedPosts(post);
+  const sections = postSections(content.body);
 
   return (
     <>
@@ -85,6 +86,15 @@ export default async function BlogPostPage({ params }: PageProps<"/[currency]/[l
               <time dateTime={post.published} className="whitespace-nowrap">
                 {format.dateTime(new Date(`${post.published}T12:00:00Z`), { dateStyle: "long" })}
               </time>
+              {/* A post the SEO routine improved says so: the date readers and search engines both see. */}
+              {post.updated && post.updated > post.published ? (
+                <>
+                  <span aria-hidden="true">{" · "}</span>
+                  <span className="whitespace-nowrap">
+                    {t("blog.updated")} <time dateTime={post.updated}>{format.dateTime(new Date(`${post.updated}T12:00:00Z`), { dateStyle: "long" })}</time>
+                  </span>
+                </>
+              ) : null}
               <span aria-hidden="true">{" · "}</span>
               <span className="whitespace-nowrap">{t("blog.minutes", { minutes: readingMinutes(content) })}</span>
             </p>
@@ -121,6 +131,24 @@ export default async function BlogPostPage({ params }: PageProps<"/[currency]/[l
               </ul>
             </aside>
   
+            {/* A long post gets a list of its sections to jump to; a short one reads fine without. */}
+            {sections.length >= 4 ? (
+              <nav className="mt-8" aria-labelledby="contents">
+                <p id="contents" className="text-eyebrow text-ink-soft">
+                  {t("blog.contents")}
+                </p>
+                <ol className="mt-2 flex flex-col text-[15.5px] leading-snug">
+                  {sections.map((s) => (
+                    <li key={s.id}>
+                      <a href={`#${s.id}`} className="block py-1.5 text-ink-soft underline-offset-4 hover:text-ink hover:underline">
+                        {s.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            ) : null}
+
             <PostBody blocks={content.body} locale={contentLocale} />
   
             {/* Questions in full, not folded: an answer behind an accordion isn't in the HTML until it's opened. */}

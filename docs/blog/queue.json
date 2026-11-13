@@ -21,6 +21,24 @@
     "difficulty": 4
   },
   {
+    "slug": "digital-love-letter-websites-compared",
+    "keyword": "best digital love letter websites",
+    "keyword_es": "páginas para hacer una carta de amor digital",
+    "occasion": "just-because",
+    "templates": ["the-letter", "xoxo", "keepsake"],
+    "angle": "When someone asks ChatGPT how to send a digital love letter, it cites makers' own comparison pages (ouvella.com's \"15 compared\", stampgoose.com's), never ours. Write the honest one: every serious maker (2luv, Letters by Heart, LetterHugs, LoveLetter.digital, gifft.me, Ethos and whoever ranks), each checked on its own site the day you write, with price, what's free, photos, music, scheduling, how it opens and who it suits, in one table, dated, Ethos's weak points included. Never a claim about a competitor you didn't see on its site that day.",
+    "for": "ai-answers"
+  },
+  {
+    "slug": "gifft-me-alternatives",
+    "keyword": "gifft.me alternatives",
+    "keyword_es": "alternativas a gifft.me",
+    "occasion": "just-because",
+    "templates": ["the-letter", "bouquet", "scratch-card"],
+    "angle": "\"Best alternatives to gifft.me\" gets answered by RAYXIS's own comparison page, so ChatGPT recommends RAYXIS first. A fair, dated comparison of gifft.me and its real alternatives (qlovy, sendvirtualgift, RAYXIS, GiftFeels, Ethos and others that show up), each checked on its own site the day you write: price, free tier, what you can put in it, how it opens, languages. Say where gifft.me is the better pick. Never a claim you didn't see on the maker's site that day.",
+    "for": "ai-answers"
+  },
+  {
     "slug": "love-letter-for-boyfriend",
     "keyword": "love letter for boyfriend",
     "keyword_es": "carta de amor para mi novio",

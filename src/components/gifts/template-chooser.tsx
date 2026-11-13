@@ -206,7 +206,8 @@ function ChooserCard({
   return (
     <button type="button" onClick={onPick} disabled={disabled || busy} aria-label={pickLabel} aria-busy={busy} className="group block w-full text-left disabled:opacity-45" data-testid={`chooser-${manifest.slug}`}>
       <span className="relative block aspect-[390/600] overflow-hidden rounded-[22px] bg-ink/10 shadow-[0_18px_40px_-26px_rgba(23,19,15,0.7)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-1 group-hover:shadow-[0_28px_56px_-28px_rgba(23,19,15,0.75)] group-focus-visible:ring-4 group-focus-visible:ring-rose/50">
-        <Image src={manifest.thumbnail.poster} alt="" fill sizes="(min-width: 1280px) 200px, (min-width: 1024px) 240px, (min-width: 640px) 30vw, 46vw" quality={70} priority={eager} className="object-cover" />
+        {/* The button's label is what a screen reader says; the alt text is what image search reads. */}
+        <Image src={manifest.thumbnail.poster} alt={`${manifest.name[locale]}: ${manifest.tagline[locale]}`} fill sizes="(min-width: 1280px) 200px, (min-width: 1024px) 240px, (min-width: 640px) 30vw, 46vw" quality={70} priority={eager} className="object-cover" />
         <span className={cn("absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur", manifest.tier === "free" ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream")}>{price}</span>
         {/* A heart, not a word: two labels side by side ran into each other on a phone's narrow card. */}
         {badge ? (

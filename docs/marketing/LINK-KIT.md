@@ -120,4 +120,5 @@ in the owner's name; Claude can draft the answers.
 
 | Date | Where | What | Link |
 |---|---|---|---|
-| | | | |
+| 13 Nov 2026 | stampgoose.com, "The best ways to send a digital letter in 2026" (Jake Powney, who makes Stampgoose; followed links; ChatGPT reads it) | Pitch from support@secuora.xyz to hello@stampgoose.com: add The Letter (free, 10 photos and a song; $8.99 extras), with their table's three lines and the demo. A code for the extras offered, not made. | https://stampgoose.com/articles/comparisons/best-ways-to-send-a-digital-letter |
+| 13 Nov 2026 | peekwire.com, "5 Digital Open-When Letter Services Worth Knowing in the US" (no author; followed links) | Pitch from support@secuora.xyz to editorial@peekwire.com, answering their four factors: scheduled unlock in their time zone and a password, Midnight Countdown, the 100-note jar, prices, link or QR with no app. A code offered, not made. | https://peekwire.com/article/5-digital-open-when-letter-services-worth-knowing-in-the-us |

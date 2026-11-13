@@ -40,7 +40,8 @@ export async function GiftIdeaList({
       {ideas.map((idea, i) => (
         <li key={idea.template} className="flex gap-5 border-b border-line py-7">
           <Link href={`/templates/${idea.template}`} className="shrink-0" tabIndex={-1} aria-hidden="true">
-            <Image src={idea.manifest.thumbnail.poster} alt="" width={96} height={148} sizes="96px" className="h-[148px] w-24 rounded-xl bg-muted object-cover" />
+            {/* The link is hidden from screen readers (the name below is the real one), so this alt text is for image search alone. */}
+            <Image src={idea.manifest.thumbnail.poster} alt={`${idea.manifest.name[locale]}: ${idea.manifest.tagline[locale]}`} width={96} height={148} sizes="96px" className="h-[148px] w-24 rounded-xl bg-muted object-cover" />
           </Link>
           <div className="min-w-0">
             <p className="text-mono-meta text-muted-foreground">

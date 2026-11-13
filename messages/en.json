@@ -41,9 +41,9 @@
   "meta": {
     "defaultTitle": "Ethos — Digital gifts that open like a story",
     "titleTemplate": "%s · Ethos",
-    "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two.",
+    "description": "Make a digital gift in ten minutes: a love letter, bouquet or scrapbook with your photos and song, sent as a link. Free to start, with date ideas and games.",
     "giftsTitle": "Digital Gifts and Virtual Gifts: Make a Free, Personal One · Ethos",
-    "giftsDescription": "Make a digital gift in ten minutes: a love letter, a bouquet, a scrapbook or a small game from your photos, your words and their song, sent as a link. 30 ideas, two free."
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free."
   },
   "nav": {
     "templates": "Templates",
@@ -902,6 +902,8 @@
     "takeaways": "Key takeaways",
     "faqTitle": "Questions people ask",
     "minutes": "{minutes} min read",
+    "updated": "Updated",
+    "contents": "In this post",
     "related": "Keep reading",
     "makeThis": "Make this gift",
     "seeIt": "See the template",
@@ -1469,7 +1471,7 @@
       },
       "anniversary": {
         "title": "Digital anniversary gifts",
-        "metaTitle": "Anniversary Gift Ideas: 12 Digital Gifts From Your Photos",
+        "metaTitle": "Digital Anniversary Gifts: 12 Gift Ideas From Your Photos",
         "description": "An anniversary gift made from your own story: your photos, your song and a letter in your words, animated and sent as a link. Try every template free.",
         "intro": "One year or twenty: tell the story of the two of you with the photos only you have, the song that's yours and a note that says what a card can't. Walk them down Our Timeline, hang your photos in a Museum or seal it all in The Letter."
       },
@@ -2018,7 +2020,7 @@
   "platform": {
     "meta": {
       "title": "Ethos — Digital gifts that open like a story",
-      "description": "Make a digital gift in ten minutes: a love letter, a bouquet or a scrapbook with your photos and their song, sent as a link. Free to start, with date ideas and games for two."
+      "description": "Make a digital gift in ten minutes: a love letter, bouquet or scrapbook with your photos and song, sent as a link. Free to start, with date ideas and games."
     },
     "hero": {
       "eyebrow": "For the two of you",

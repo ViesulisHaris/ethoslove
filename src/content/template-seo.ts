@@ -77,8 +77,8 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "scratch-card": {
     en: {
       keyword: "Digital scratch card maker",
-      title: "Custom Digital Scratch Card Maker: Scratch to Reveal",
-      description: "Make a custom digital scratch card: they scratch off each card to reveal your photos and words, and the last one hides the big news. For proposals and birthdays.",
+      title: "Digital Scratch Card Maker: Scratch to Reveal",
+      description: "Make a digital scratch card: they scratch with a finger to reveal your photos and messages, and the last card hides the big one. For proposals, birthdays and news.",
       howTo: "How to make a digital scratch card",
     },
     es: {

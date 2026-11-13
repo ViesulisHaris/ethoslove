@@ -53,7 +53,10 @@ ask"). Skip the entry, moving it to the end of the queue with a `"note"` saying 
 - the people searching want something else: the top 10 are shops, gift cards or tools, not pages
   that help someone make or write something;
 - the difficulty is over 50 and the top five are big publishers;
-- neither language has any monthly searches, unless it is a dated occasion within ten weeks.
+- neither language has any monthly searches, unless it is a dated occasion within ten weeks, or
+  the entry has `"for": "ai-answers"`: a page written to be what ChatGPT and Google's AI answers cite
+  for a buyer's question (`docs/marketing/KEYWORDS.md`, "AI answers"), where the search volume
+  doesn't measure what the page is worth.
 Keep the numbers and the top 10 (titles, domains, the AI overview's cited pages, the "People also
 ask" questions): steps 2 and 5 use them. If the data step can't run (the script exits 2), carry on
 without it and say "search data skipped" in the report.
