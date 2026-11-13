@@ -160,6 +160,27 @@ describe("blog posts", () => {
     }
   });
 
+  it("every change to a published post passed the panel at 10/10/10", () => {
+    // The daily SEO routine (docs/blog/SEO-AGENT.md) records each post it improves here, one file a change.
+    const dir = path.join(__dirname, "../../docs/blog/reviews/refresh");
+    const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith(".json")) : [];
+    for (const file of files) {
+      const record = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8")) as ReviewRecord;
+      expect(slugs.has(record.slug), `${file}: ${record.slug} is not a published post`).toBe(true);
+      expect(file, `${file} is named <slug>-<YYYY-MM-DD>.json`).toMatch(new RegExp(`^${record.slug}-\\d{4}-\\d{2}-\\d{2}\\.json$`));
+      expect(record.rounds.length, `${file} rounds`).toBeGreaterThanOrEqual(1);
+      expect(record.rounds.length, `${file}: at most five rounds`).toBeLessThanOrEqual(5);
+      const last = record.rounds[record.rounds.length - 1];
+      for (const [name, criteria] of Object.entries(PANEL)) {
+        const review = last?.reviews.find((r) => r.reviewer === name);
+        expect(review, `${file}: the last round has no ${name} review`).toBeTruthy();
+        expect(review?.overall, `${file}: ${name} overall`).toBe(10);
+        for (const c of criteria) expect(review?.scores[c], `${file}: ${name}: ${c}`).toBeGreaterThanOrEqual(9);
+        expect(review?.dealbreakers ?? [], `${file}: ${name} dealbreakers`).toEqual([]);
+      }
+    }
+  });
+
   for (const post of BLOG_POSTS) {
     describe(post.slug, () => {
       it("has a usable slug, dates and templates", () => {

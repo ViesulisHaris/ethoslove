@@ -45,6 +45,18 @@ Take the first entry in `docs/blog/queue.json`. Before using it, check:
 
 If the entry fails a check, delete it from the queue and take the next one.
 
+**Then check it with real search data** (`docs/blog/SEO-DATA.md`; budget for the whole run: $0.10).
+Check the balance, then get the volume, difficulty and intent of the entry's `keyword` (US) and
+`keyword_es` (Spain), and the top 10 for the English keyword (with the AI overview and "People also
+ask"). Skip the entry, moving it to the end of the queue with a `"note"` saying why, when:
+- the people searching want something else: the top 10 are shops, gift cards or tools, not pages
+  that help someone make or write something;
+- the difficulty is over 50 and the top five are big publishers;
+- neither language has any monthly searches, unless it is a dated occasion within ten weeks.
+Keep the numbers and the top 10 (titles, domains, the AI overview's cited pages, the "People also
+ask" questions): steps 2 and 5 use them. If the data step can't run (the script exits 2), carry on
+without it and say "search data skipped" in the report.
+
 ### Refill the queue when it has fewer than 10 entries, and every Monday
 
 Add topics until it has 30. Each one is a search someone types when they are about to make, write
@@ -66,15 +78,24 @@ boyfriend", "open when letter ideas", "6 month anniversary ideas". Use the WebSe
   `src/templates/<slug>/manifest.ts` and never stretch what it does.
 - One search, one post. If two topics would answer the same search, keep one.
 
+When the search data works, choose refill topics with it rather than by feel: ask for keyword ideas
+around three or four seeds next to what Ethos makes (`docs/blog/SEO-DATA.md`), and prefer phrases
+with real monthly searches, difficulty under 30 and an intent that fits a post. `docs/marketing/KEYWORDS.md`,
+when it exists, lists the opportunities already found: take from it first.
+
 An entry is
 `{ "slug", "keyword", "keyword_es", "occasion", "templates": [...], "angle" }`, where the angle is
-what this post gives that the current results don't. A topic for a dated occasion more than ten
+what this post gives that the current results don't. With search data, also add `"volume"`,
+`"volume_es"` and `"difficulty"` (the numbers when you added it). A topic for a dated occasion more than ten
 weeks away also gets `"not_before": "YYYY-MM-DD"`, the day ten weeks before it.
 
 ## 2. Research (about fifteen minutes)
 
-Search the keyword and one or two variants with WebSearch. Note what the top results cover, what
-they leave out, and the questions people ask around it. Those questions become the FAQ.
+Start from step 1's top 10: read the best three or four of those pages (WebFetch), and search one or
+two variants with WebSearch. Note what the top results cover, what they leave out, and the questions
+people ask around it. Google's own "People also ask" questions come first in the FAQ, and the post
+must answer each of them better than the page Google shows for it. Where the AI overview cites
+pages, find what those pages say that the overview quotes: first-hand specifics are what it picks.
 
 Facts: state only what you can stand behind. A statistic needs a named source you found, linked.
 No invented quotes, customers, reviews, studies or numbers. Facts about Ethos come only from the
@@ -154,7 +175,10 @@ Then run the panel in `docs/blog/RUBRIC.md`. Three fresh reviewer subagents read
 parallel, each told not to edit any file:
 - the reader who searched for it;
 - the editor and fact-checker;
-- the search competitor, who compares the post with what ranks now.
+- the search competitor, who compares the post with what ranks now. Give this reviewer step 1's
+  data: the volume and difficulty, the top 10's titles and domains, the AI overview's cited pages
+  and the "People also ask" questions. A post that leaves one of those questions unanswered, or
+  gives the searcher less than the page ranking first, can't score 10.
 
 Apply their fixes, then rerun the checks above. Then run a fresh panel on the new version, and give
 each new reviewer the last round's review from its role so it checks those fixes. Repeat until all
@@ -174,6 +198,7 @@ In one commit, add:
 - its review record `docs/blog/reviews/<slug>.json`;
 - any older posts you linked from;
 - `docs/blog/queue.json` with today's entry removed;
+- `docs/blog/seo-log.md`, if the search data ran;
 - `public/blog/<slug>/`, if you added images.
 
 Use the message `blog: <English title>`, and commit as the team's author: Vercel blocks the deploy
@@ -242,8 +267,9 @@ Send one push notification: `New on tryethos.io: <English title>`, or, when it w
 The final message is what the owner reads on their phone. Write only:
 - the title;
 - the link, https://tryethos.io/blog/<slug>;
-- the search it targets;
+- the search it targets, with its monthly searches and difficulty when the data ran;
 - the templates it recommends;
+- what the search data cost this run (the sum of this run's rows in `docs/blog/seo-log.md`);
 - the panel's verdict, for example `Panel 10/10/10 after 2 rounds`;
 - "Live and sent to IndexNow", or "Live check skipped (no network)", or "Queued on the mirror's
   main; the live repository publishes it at the next of 07:43, 10:43, 13:43 or 16:43 UTC";
