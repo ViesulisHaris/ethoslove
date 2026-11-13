@@ -91,4 +91,5 @@ sale). Codes go only in the email, never in this file: the mirror of this reposi
 | Date | Request | Outlet | Sent | Published |
 |---|---|---|---|---|
 | 10 Nov 2026 | Holiday gift guide: Gifts for Avid Travelers, Stocking Stuffers (HARO, deadline 19 Nov) | Lizz Spano (lizzspano.com and her social accounts) | 10 Nov, with a free code | |
-| 10 Nov 2026 | Holiday gifts under $100 (HARO via Featured, deadline 11 Nov) | Posh Lifestyle & Beauty Blog (Carla Snuggs) | 10 Nov, with a free code | |
+| 10 Nov 2026 | Holiday gifts under $100 (HARO via Featured, deadline 11 Nov) | Posh Lifestyle & Beauty Blog (Carla Snuggs) | 10 Nov, with a free code; accepted 10 Nov for free inclusion (paid extras declined) | |
+| 13 Nov 2026 | Valentine's Day gifts from independent businesses, one standout gift (HARO via Featured, deadline 18 Nov) | Posh Lifestyle & Beauty Blog (Carla Snuggs) | 13 Nov, the Passport | |
