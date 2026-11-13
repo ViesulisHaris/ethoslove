@@ -104,6 +104,20 @@ Push one notification: `SEO: <the change in a few words>`. The final message, fo
 phone: the change, the page, why (one line with the numbers), the cost and the balance, and one line
 if anything was skipped or failed.
 
+## The routine
+
+"Daily SEO change · tryethos.io", `trig_01Kxk3N29yi2z3RiR6oqc3qz`
+(claude.ai/code/routines/trig_01Kxk3N29yi2z3RiR6oqc3qz), created 13 Nov 2026: cron `40 4 * * *` UTC
+(an hour before the first Publish blog run at 07:43), cloud environment `env_01UBHAFBBGo6aRJ57b9E4GRW`
+("Default"), model claude-opus-5-5, tools Bash, Read, Edit, Write, Glob, Grep, Task, WebFetch,
+WebSearch and PushNotification, source `ViesulisHaris/ethoslove` (the mirror). Its prompt points
+here and sums up the rules above, so changing this file changes the routine.
+
+The environment needs, besides what the other routines use: `api.dataforseo.com` in its allowed
+domains, and a network secret for that host, header `Authorization`, value `Basic <the base64 key
+from DataForSEO's API Access page>`. Without them `scripts/seo/dfs.sh` exits 2 and the routine
+stops with a notification.
+
 ## Never
 
 - Never more than one change a day, never anything outside the three blog folders, never a post
