@@ -22,7 +22,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 const isDay = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && new Date(`${s}T00:00:00Z`).toISOString().startsWith(s);
 const slugs = new Set(BLOG_POSTS.map((p) => p.slug));
-const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy", "/gifts", "/games", "/long-distance", "/dates", "/trips"]);
+const STATIC_PATHS = new Set(["/", "/templates", "/occasions", "/pricing", "/blog", "/legal/terms", "/legal/privacy", "/gifts", "/games", "/long-distance", "/dates", "/trips", "/tools/how-long-have-we-been-together"]);
 const GAMES = new Set(["know", "rather", "draw", "memory", "deck", "dare", "roulette"]);
 
 /** A link inside a post goes to a page that exists. Site paths are written without the locale. */
