@@ -14,7 +14,8 @@ const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 /**
  * Development only: the success page after a single, a pick three or "make it special", with the
  * upgrade card in each of its states (?state=single|pick3|extras|birthday|earlier|until,
- * ?currency=eur|usd|gbp, and ?guest=1 for a guest's way back to the gift), for screenshots and the e2e tests, which never finish a real checkout (the
+ * ?currency=eur|usd|gbp, ?guest=1 for a guest's way back to the gift, and ?auto=<ms> for that way
+ * back going by itself), for screenshots and the e2e tests, which never finish a real checkout (the
  * dev server's database is production). The card's button talks to the real route, which a test
  * answers itself. NODE_ENV is inlined at build: in production this page is a 404.
  */
@@ -30,6 +31,9 @@ export default async function UpgradePreviewPage({ params, searchParams }: PageP
   const tm = await getTranslations("money.success");
   const returnTo = "/create/bouquet?resume=publish";
   const sessionId = "cs_test_previewpreviewpreview";
+  // ?auto=<ms>: the guest's way back goes by itself after that long, as on the real page (900).
+  const auto = Number(one(query.auto));
+  const autoAfterMs = Number.isFinite(auto) && auto > 0 ? auto : undefined;
 
   return (
     <div className="container-narrow flex flex-col items-center py-24 text-center">
@@ -39,7 +43,7 @@ export default async function UpgradePreviewPage({ params, searchParams }: PageP
       <h1 className="mt-6 display-lg">{t("paid.title")}</h1>
       <p className="mt-3 max-w-md text-muted-foreground">{t("paid.detail")}</p>
       {one(query.guest) === "1" ? (
-        <BackToGift sessionId={sessionId} returnTo={returnTo} label={tm("toGift")} />
+        <BackToGift sessionId={sessionId} returnTo={returnTo} label={tm("toGift")} autoAfterMs={autoAfterMs} />
       ) : (
         <Button asChild className="mt-8 h-12 rounded-full px-6">
           <Link href={returnTo}>{tm("toGift")}</Link>

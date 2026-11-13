@@ -87,6 +87,26 @@ test.describe("every template for the difference, on the success page", () => {
     expect(asked).toEqual([{ sessionId: "cs_test_previewpreviewpreview", returnTo: "/create/bouquet?resume=publish", locale: "en" }]);
   });
 
+  test("a guest who paid for a gift goes back to it by themselves, signed in on the way", async ({ page }) => {
+    // Waiting for a tap under the offer left 41 of 523 guests' gifts unsent for 15 minutes or more
+    // (three weeks to 13 Nov 2026): the gift is only on their device until the editor opens again.
+    const asked = await answer(page, "**/api/checkout/continue", { status: 200, body: { url: "/pricing?from=auto-continue" } });
+    await page.goto("/checkout/success/preview?state=single&guest=1&auto=400");
+    await expect(page.getByTestId("back-to-gift-auto")).toHaveText("Taking you back to your gift…");
+    await page.waitForURL(/\/pricing\?from=auto-continue/);
+    expect(asked).toEqual([{ sessionId: "cs_test_previewpreviewpreview", returnTo: "/create/bouquet?resume=publish", locale: "en" }]);
+  });
+
+  test("tapping the offer before then stays with the offer", async ({ page }) => {
+    const back = await answer(page, "**/api/checkout/continue", { status: 200, body: { url: "/pricing?from=went-back" } });
+    const bought = await answer(page, "**/api/money/upgrade/after-checkout", { status: 200, body: { url: "/pricing?from=upgrade-first" } }, 2500);
+    await page.goto("/checkout/success/preview?state=single&guest=1&auto=1500");
+    await page.getByTestId("upgrade-after-buy").click();
+    await page.waitForURL(/\/pricing\?from=upgrade-first/);
+    expect(bought).toHaveLength(1);
+    expect(back).toEqual([]);
+  });
+
   test("a guest's way back to the gift signs them in when tapped, not with a link drawn with the page", async ({ page }) => {
     const asked = await answer(page, "**/api/checkout/continue", { status: 200, body: { url: "/pricing?from=continue-test" } });
     await page.goto("/checkout/success/preview?state=single&guest=1");

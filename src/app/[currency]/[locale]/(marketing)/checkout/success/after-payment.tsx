@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation";
 import { Check, Copy, Loader2, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { track } from "@/lib/analytics/track";
+import { upgradeStarting } from "@/components/pricing/upgrade-after-purchase";
+// Long enough for "Unlocked." to be read, and for the analytics script to send the purchase before
+// the page goes; short enough that the gift is still the next thing they see.
+import { CONTINUE_AFTER_MS } from "./continue-timing";
 
 const TRACKED_KEY = "ethos:purchase-tracked";
-/**
- * Long enough for "Unlocked." to be read, and for the analytics script to send the purchase before
- * the page goes; short enough that the gift is still the next thing they see.
- */
-const CONTINUE_AFTER_MS = 900;
 /**
  * Ethos for Two still being switched on when the page was drawn: the page asks the server again this
  * often, this many times, then stops and says where it will be (the server already waited a moment).
@@ -44,7 +43,10 @@ export function TrackPurchase({ sessionId, product, bump }: { sessionId: string;
 export function AutoContinue({ href }: { href: string }) {
   const t = useTranslations("money.success");
   useEffect(() => {
-    const id = window.setTimeout(() => window.location.replace(href), CONTINUE_AFTER_MS);
+    // Not while the upgrade's own checkout is opening: whoever tapped it stays with it.
+    const id = window.setTimeout(() => {
+      if (!upgradeStarting()) window.location.replace(href);
+    }, CONTINUE_AFTER_MS);
     return () => window.clearTimeout(id);
   }, [href]);
   return (

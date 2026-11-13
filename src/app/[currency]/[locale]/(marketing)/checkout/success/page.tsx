@@ -14,6 +14,7 @@ import { BackToGift, SignInWhileHere, UpgradeAfterPurchase } from "@/components/
 import { membershipSuccess, readStartedMembership, type StartedRead } from "@/components/membership/success";
 import { isFresh, settledSession, upgradeAfterCheckout, type UpgradeAfter } from "@/lib/commerce/after-checkout";
 import { AutoContinue, GiftCardCode, RefreshWhileArriving, TrackPurchase } from "./after-payment";
+import { CONTINUE_AFTER_MS } from "./continue-timing";
 import { HoldAdPurchase } from "@/components/shared/ad-pixels";
 import { adPurchaseOf } from "@/lib/ads/purchase";
 import type { AdPurchase } from "@/lib/analytics/ads";
@@ -157,15 +158,20 @@ export default async function CheckoutSuccessPage({
   })();
   // Whoever bought for a gift goes straight back to it, where it publishes itself: a guest through
   // the one-time sign-in, a signed-in buyer directly. A pass, a membership or a gift card has
-  // something to hand over here first (the invite link, the code), and the upgrade has something to
-  // say, so those pages wait for a tap, with the way back to the gift first.
+  // something to hand over here first (the invite link, the code), so those pages wait for a tap.
+  // The upgrade offer no longer holds a gift back: waiting for a tap under it, 41 of 523 guests in
+  // the three weeks to 13 Nov 2026 took over 15 minutes to publish or never did, while one buyer in
+  // 601 took the offer. A guest with the offer goes back by BackToGift (a sign-in by request); a
+  // signed-in buyer with it, by this redirect; tapping the offer first stops either.
+  const toEditor = returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo);
+  const guestWithOffer = Boolean(upgrade) && signInUrl !== null && typeof session_id === "string";
   const autoContinue =
     state === "paid" &&
-    !upgrade &&
+    (!upgrade || (toEditor && !guestWithOffer)) &&
     outcome !== "pass" &&
     outcome !== "membership" &&
     outcome !== "giftcard" &&
-    (signInUrl !== null || returnTo.startsWith("/create/") || /^\/es\/create\//.test(returnTo));
+    (signInUrl !== null || toEditor);
   const giftCardUrl = paid && outcome === "giftcard" && giftCardCode ? new URL(redeemUrl(giftCardCode, lang)) : null;
   const continueLabel = returnTo.startsWith("/create/") ? tm("toGift") : returnTo.startsWith("/account") ? tm("toAccount") : t("continue");
   // Ethos for Two's two ways on: the first date, or the account (where the partner's link also is).
@@ -229,10 +235,11 @@ export default async function CheckoutSuccessPage({
         </div>
       ) : upgrade && signInUrl && typeof session_id === "string" ? (
         // A guest with the card: signed in by a request, not by the page's own link, straight away in
-        // the background (SignInWhileHere) and again at the tap (BackToGift).
+        // the background (SignInWhileHere) and again on the way back (BackToGift), which a gift waiting
+        // in the editor takes by itself.
         <>
           <SignInWhileHere sessionId={session_id} returnTo={returnTo} />
-          <BackToGift sessionId={session_id} returnTo={returnTo} label={continueLabel} />
+          <BackToGift sessionId={session_id} returnTo={returnTo} label={continueLabel} autoAfterMs={state === "paid" && toEditor ? CONTINUE_AFTER_MS : undefined} />
         </>
       ) : (
         <Button asChild className="mt-8 h-12 rounded-full px-6">

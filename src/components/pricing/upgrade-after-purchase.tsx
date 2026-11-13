@@ -13,6 +13,10 @@ import { useCheckoutError } from "./checkout";
 import { checkoutErrorKey } from "./offers";
 import { errorOf, postJson } from "./requests";
 
+/** Set while the card's checkout is opening: the way back to the gift doesn't go by itself then. */
+let upgradeStarted = false;
+export const upgradeStarting = () => upgradeStarted;
+
 /** What the success page knows about the upgrade it offers (lib/commerce/after-checkout.ts UpgradeAfter). */
 export type UpgradeAfterCard = {
   amount: number;
@@ -71,12 +75,14 @@ export function UpgradeAfterPurchase({ sessionId, returnTo, upgrade }: { session
   const buy = async () => {
     if (going.current) return;
     going.current = true;
+    upgradeStarted = true;
     setBusy(true);
     track("pay_clicked", { product: "upgrade", source: "success" });
     const result = await postJson("/api/money/upgrade/after-checkout", { sessionId, returnTo, locale });
     const url = result.json.url;
     if (typeof url === "string" && url.length > 0) return void window.location.assign(url);
     going.current = false;
+    upgradeStarted = false;
     setBusy(false);
     const error = errorOf(result) ?? (result.status === 0 ? "network" : "checkout");
     // Everything is theirs already (another tab, another device): nothing left to offer.
@@ -138,7 +144,16 @@ export function SignInWhileHere({ sessionId, returnTo }: { sessionId: string; re
   return null;
 }
 
-export function BackToGift({ sessionId, returnTo, label }: { sessionId: string; returnTo: string; label: string }) {
+/**
+ * The way back to the gift. With `autoAfterMs` it also goes by itself that long after the page
+ * opens, as the success page without an offer always has: the gift is still only on this device, and
+ * it publishes itself once the editor is open again. Waiting for a tap here left a guest's gift
+ * unsent: in the three weeks to 13 Nov 2026, 41 of 523 guests who paid for one template took over
+ * 15 minutes to publish or never did, nearly all of them on the very browser that had the gift, while
+ * one buyer in 601 took the offer below. Tapping the offer first keeps them with it.
+ */
+export function BackToGift({ sessionId, returnTo, label, autoAfterMs }: { sessionId: string; returnTo: string; label: string; autoAfterMs?: number }) {
+  const t = useTranslations("money.success");
   const locale = useLocale() === "es" ? "es" : "en";
   const [busy, setBusy] = useState(false);
   const going = useRef(false);
@@ -151,10 +166,26 @@ export function BackToGift({ sessionId, returnTo, label }: { sessionId: string; 
     // Without an answer, the gift's own page: its draft is on this device, and it asks for a sign-in itself.
     window.location.assign(typeof url === "string" && url.startsWith("/") ? url : returnTo);
   };
+  useEffect(() => {
+    if (autoAfterMs === undefined) return;
+    const id = window.setTimeout(() => {
+      if (!upgradeStarted) void go();
+    }, autoAfterMs);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- go reads only this page's props, which don't change
+  }, [autoAfterMs]);
   return (
-    <Button onClick={go} disabled={busy} className="mt-8 h-12 rounded-full px-6" data-testid="back-to-gift">
-      {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-      <span>{label}</span>
-    </Button>
+    <>
+      <Button onClick={go} disabled={busy} className="mt-8 h-12 rounded-full px-6" data-testid="back-to-gift">
+        {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+        <span>{label}</span>
+      </Button>
+      {autoAfterMs !== undefined ? (
+        <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground" role="status" data-testid="back-to-gift-auto">
+          <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+          {t("redirecting")}
+        </p>
+      ) : null}
+    </>
   );
 }
