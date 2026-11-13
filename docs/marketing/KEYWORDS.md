@@ -895,9 +895,10 @@ log of every DataForSEO call (`seo-log.md`). Its first change, the same day, aim
 "monthiversary" for $0.03. At 3–5¢ a day, the $3.09 left lasts two to three months; the video's agent
 ran at about 4¢ a day.
 
-It can only fetch data once the owner adds `api.dataforseo.com` and the API key to the cloud
-environment's allowed domains and network secrets ("The routine" in SEO-AGENT.md); until then each run
-stops with a notification. The other way is a scheduled task on this PC, which needs the PC on.
+It runs in the cloud with every computer off: the owner added the API key as a network secret for
+`api.dataforseo.com` on 13 Nov, and a run by hand that day read the balance, pulled ranks, a top 10 and
+volumes for $0.03, and published its change. Should the secret ever go, a run stops with a notification
+instead of guessing ("The routine" in SEO-AGENT.md).
 
 What this research adds to it (suggestions; SEO-AGENT.md is unchanged):
 
@@ -949,7 +950,7 @@ What this research adds to it (suggestions; SEO-AGENT.md is unchanged):
    lighten /gifts.
 8. **Decide on Latin American Spanish.** gifft.me's Spanish traffic is in Mexico, Peru and Chile; ours is
    written for Spain.
-9. **Re-measure monthly** against the day-0 baseline (Appendix A), once the routine can reach DataForSEO.
+9. **Re-measure monthly** against the day-0 baseline (Appendix A); the routine can run it from the cloud.
 
 ## What was spent
 
