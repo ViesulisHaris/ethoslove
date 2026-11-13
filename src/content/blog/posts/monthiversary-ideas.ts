@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "monthiversary-ideas",
   published: "2026-10-31",
+  updated: "2026-11-13",
   occasion: "anniversary",
   templates: ["fortune-cookie", "sticker-bomb", "the-letter"],
   content: {
     en: {
-      title: "12 monthiversary ideas that stay fun, not a chore",
-      description: "Monthiversary ideas for the whole first year: twelve small, cheap plans, how to keep the monthly date light, what to send, and when to stop counting.",
+      title: "Monthiversary: what it means, 12 ideas and what to say",
+      description: "What a monthiversary (or monthsary) is and what to call it, 1 month anniversary ideas, a plan for each month of the first year and happy monthiversary messages.",
       keyword: "monthiversary ideas",
-      lead: "The best monthiversary ideas cost little and change every month, so the date stays a treat instead of a test. Below is a rotation of twelve, one for each month of the first year, most taking between ten minutes and one evening.",
+      lead: "A monthiversary (or monthsary) is the same date each month as the day you got together. The best monthiversary ideas cost little and change every month, so the date stays a treat instead of a test. Below is a rotation of twelve, one for each month of the first year, most taking between ten minutes and one evening, and lines to send on the day.",
       takeaways: [
         "Keep each month small: ten minutes to one evening, no presents required.",
         "Take turns planning, so it's a game and not one person's job.",
@@ -18,10 +19,14 @@ export const post: BlogPost = {
         "At a year, switch to counting years. Most couples do.",
       ],
       body: [
-        { type: "h2", text: "What a monthiversary is, and whether to mark it" },
+        { type: "h2", text: "What a monthiversary is, and what else it's called" },
         {
           type: "p",
           text: "A monthiversary (or monthsary) is the same date each month as the day you got together: the 14th, if it started on the 14th. If it started on the 29th, 30th or 31st, use the last day of any month that's shorter. Plenty of couples mark it in the first year, when every month still feels like a milestone, and quietly stop after that. It only works if you both enjoy it. If one of you thinks it's sweet and the other thinks it's a lot, keep it to a text and save the plans for the half-year and the year.",
+        },
+        {
+          type: "p",
+          text: "The word is informal, a blend of month and anniversary. Purists object that anniversary comes from the Latin for a year turning (*annus*, year), so a month can't have one. The Latin-correct version, mensiversary (*mensis*, month), exists, but almost nobody uses it. In practice people say monthiversary, monthsary (the everyday word in the Philippines) or simply one-month anniversary, and all three are understood. On a card, \"Happy one month\" sidesteps the argument.",
         },
         { type: "h2", text: "Twelve monthiversary ideas, from 1 month to 12 months" },
         {
@@ -39,12 +44,30 @@ export const post: BlogPost = {
             ["9", "Be tourists at home: one museum or landmark neither of you has visited", "An afternoon"],
             ["10", "Write each other a letter to open at a year, and seal it", "Twenty minutes"],
             ["11", "Read your first messages to each other out loud, from the very first one", "Half an hour"],
-            ["12", "The first anniversary: start counting years", "As big as you like"],
+            ["12", "The first anniversary: open the month-ten letters, read them to each other, then start counting years", "As big as you like"],
           ],
         },
         {
           type: "p",
-          text: "The months are only an order to try them in. If month three is tomorrow and you're only starting now, take whichever row suits the week. Month six is the first real milestone and gets a fuller plan: our [6 month anniversary ideas](/blog/6-month-anniversary-ideas) sort the options by how much time you have. Month ten's sealed letters pay off at the year: open them on the day and read them to each other.",
+          text: "The months are only an order to try them in. If month three is tomorrow and you're only starting now, take whichever row suits the week. Month six is the first real milestone and gets a fuller plan: our [6 month anniversary ideas](/blog/6-month-anniversary-ideas) sort the options by how much time you have.",
+        },
+        { type: "h2", text: "1 month anniversary ideas for your first monthiversary" },
+        {
+          type: "p",
+          text: "One month is early, so the right size is small and easy to say no to. Pick one:",
+        },
+        {
+          type: "list",
+          items: [
+            "**The swap from the table.** Each write down the first three things you noticed about the other, and read them out over a drink.",
+            "**Back to the start.** One drink or one coffee at the place of your first date, at about the same time of day.",
+            "**The thing from the first date.** If either of you mentioned a film, a dish or a place that night, that's the plan.",
+            "**Just the text.** If you haven't talked about counting months, a morning message that names one thing from the month is exactly enough.",
+          ],
+        },
+        {
+          type: "p",
+          text: "If they don't mark it, it doesn't mean they care less. Plenty of people never count months, and asking \"do we do monthiversaries?\" with a smile settles it for the rest of the year.",
         },
         { type: "h2", text: "How to keep a monthiversary from turning into a chore" },
         {
@@ -57,10 +80,14 @@ export const post: BlogPost = {
             "**Don't keep score.** If one of you forgets, laugh about it and do the next one. A forgotten monthiversary isn't a sign of anything.",
           ],
         },
-        { type: "h2", text: "What to send on a monthiversary" },
+        { type: "h2", text: "Happy monthiversary messages to send" },
         {
           type: "p",
           text: "One line about something from this month, not about the relationship as a whole. It keeps every message different, and it shows you were paying attention:",
+        },
+        {
+          type: "quote",
+          text: "One month today. I still have the receipt from our first coffee in my wallet, and I'm keeping it.",
         },
         {
           type: "quote",
@@ -72,17 +99,21 @@ export const post: BlogPost = {
         },
         {
           type: "quote",
-          text: "Happy month eight. You still make the best toast in the world, and you still won't tell me what you do differently.",
+          text: "Happy monthiversary. Eight months, and you still make the best toast in the world, and you still won't tell me what you do differently.",
+        },
+        {
+          type: "quote",
+          text: "Eleven months. Next month we start counting in years, so tonight is the last monthly dinner, and it's on me.",
         },
         { type: "h2", text: "When to stop counting months" },
         {
           type: "p",
-          text: "Most couples switch to years after the first anniversary, and that's a natural place to stop. If you both like the monthly date, keep it, but let it become smaller: a standing dinner on the date, or simply saying it out loud when you wake up. Mark the first anniversary with a real letter: then, now and next, as our [anniversary letter guide](/blog/anniversary-letter-to-boyfriend) sets out. For the day itself, here are [1 year anniversary ideas for your boyfriend](/blog/first-anniversary-ideas-for-boyfriend) built from the twelve months you've had.",
+          text: "Most couples switch to years after the first anniversary, and that's a natural place to stop. From then on the years have their own names on the traditional gift list: paper for the first, leather for the third. If you both like the monthly date, keep it, but let it become smaller: a standing dinner on the date, or simply saying it out loud when you wake up. Mark the first anniversary with a real letter: then, now and next, as our [anniversary letter guide](/blog/anniversary-letter-to-boyfriend) sets out. For the day itself, here are [1 year anniversary ideas for your boyfriend](/blog/first-anniversary-ideas-for-boyfriend) built from the twelve months you've had.",
         },
         { type: "h2", text: "If you can't be together on the date" },
         {
           type: "p",
-          text: "Most of the table still works over a video call: swap songs and press play at the same moment for month three, or each order the same dessert for month four. Before the call, send something that takes a minute to open. Fortune Cookie and Sticker Bomb are [premium](/pricing), and The Letter is free. For the half-year and the year, when it deserves more than a minute, the [digital anniversary gifts](/occasions/anniversary) use your photos and your song; for any other day, browse all our [digital gifts](/gifts).",
+          text: "Most of the table still works over a video call: swap songs and press play at the same moment for month three, or each order the same dessert for month four. Before the call, send something that takes a minute to open, like one of the three gifts below: The Letter is free, and the other two are [premium](/pricing). For the half-year and the year, when it deserves more than a minute, the [digital anniversary gifts](/occasions/anniversary) use your photos and your song; for any other day, browse all our [digital gifts](/gifts).",
         },
         {
           type: "template",
@@ -92,7 +123,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "sticker-bomb",
-          note: "A blank page and one instruction: tap anywhere. Wherever their finger lands, a sticker slaps down: some are your photos as polaroids, some sit on label-maker strips with what you wrote. After twelve stickers the confetti goes and your card opens. Twelve stickers, one for each month.",
+          note: "A blank page and one instruction: tap anywhere. Wherever their finger lands, a sticker slaps down: some are your photos as polaroids, some sit on label-maker strips with what you wrote. After twelve stickers the confetti goes and your card opens. Twelve taps for twelve months, with up to six label strips of your own to name the ones you'd pick.",
         },
         {
           type: "template",
@@ -103,7 +134,11 @@ export const post: BlogPost = {
       faq: [
         {
           q: "What is a monthiversary?",
-          a: "The same date each month as the day you got together. If you started dating on the 14th, every 14th is a monthiversary. Couples usually mark them in the first year and switch to counting years after that.",
+          a: "The same date each month as the day you got together. If you started dating on the 14th, every 14th is a monthiversary. It's also called a monthsary or a one-month (two-month, three-month) anniversary. Couples usually mark them in the first year and switch to counting years after that.",
+        },
+        {
+          q: "How do you say one month anniversary?",
+          a: "Monthiversary and monthsary are the usual words, and one-month anniversary is fine too, even though anniversary strictly means a year. The Latin-correct mensiversary exists but is rarely used. In a message or on a card, \"Happy one month\" is the simplest.",
         },
         {
           q: "Is it weird to celebrate monthiversaries?",
@@ -117,13 +152,17 @@ export const post: BlogPost = {
           q: "When do you stop celebrating monthiversaries?",
           a: "Usually at the first anniversary, when couples start counting years instead. If you both like the monthly date, keep it as something smaller, like a standing dinner on the date.",
         },
+        {
+          q: "How often should couples go on dates?",
+          a: "There's no right number. What matters is that it's regular enough that you both look forward to it. A monthiversary is one built-in excuse: twelve small dates a year that nobody has to remember to suggest.",
+        },
       ],
     },
     es: {
       title: "Ideas para celebrar los meses con tu pareja sin agobios",
-      description: "Ideas para celebrar los meses con tu pareja todo el primer año: doce planes pequeños y baratos, cómo mantenerlo ligero, qué mandar y cuándo dejar de contar.",
+      description: "Ideas para celebrar los meses con tu pareja todo el primer año: doce planes pequeños y baratos, el primer mes, mensajes para mandar y cuándo dejar de contar.",
       keyword: "ideas para celebrar meses con tu pareja",
-      lead: "Las mejores ideas para celebrar los meses con tu pareja cuestan poco y cambian cada mes, para que la fecha siga siendo un capricho y no un examen. Abajo tienes doce, una para cada mes del primer año, casi todas de diez minutos a una noche.",
+      lead: "Las mejores ideas para celebrar los meses con tu pareja cuestan poco y cambian cada mes, para que la fecha siga siendo un capricho y no un examen. Abajo tienes doce, una para cada mes del primer año, casi todas de diez minutos a una noche, y frases para mandar ese día.",
       takeaways: [
         "Que cada mes sea pequeño: de diez minutos a una noche, sin regalos obligatorios.",
         "Turnaos para organizarlo, para que sea un juego y no el trabajo de uno solo.",
@@ -131,10 +170,14 @@ export const post: BlogPost = {
         "Al año, pasad a contar años. Casi todas las parejas lo hacen.",
       ],
       body: [
-        { type: "h2", text: "Qué es celebrar los meses y si merece la pena" },
+        { type: "h2", text: "Qué es celebrar los meses y cómo se llama" },
         {
           type: "p",
           text: "Celebrar los meses es marcar cada mes la misma fecha del día en que empezasteis: el 14, si empezó un 14. Si empezó un 29, un 30 o un 31, en los meses más cortos se celebra el último día. Muchas parejas lo hacen el primer año, cuando cada mes todavía parece un hito, y después lo van dejando sin más. Solo funciona si os gusta a los dos. Si a uno le parece tierno y al otro le parece demasiado, dejadlo en un mensaje y guardad los planes para el medio año y el año.",
+        },
+        {
+          type: "p",
+          text: "En español lo normal es decir «cumplir meses»; también se oyen cumplemes y mesiversario, aunque son palabras informales. Los puristas recuerdan que aniversario viene del latín *anniversarius*, «que vuelve cada año», de *annus*, año, así que en rigor un mes no tiene aniversario. En la práctica todo el mundo lo entiende, y en una tarjeta «Feliz primer mes» evita la discusión.",
         },
         { type: "h2", text: "Doce ideas para celebrar los meses, del primero al duodécimo" },
         {
@@ -152,12 +195,30 @@ export const post: BlogPost = {
             ["9", "Haced de turistas en vuestra ciudad: un museo o un monumento que ninguno haya visitado", "Una tarde"],
             ["10", "Escribíos una carta cada uno para abrir al año, y cerradlas", "Veinte minutos"],
             ["11", "Leed en voz alta vuestros primeros mensajes, desde el primero de todos", "Media hora"],
-            ["12", "El primer aniversario: empezad a contar años", "Lo grande que queráis"],
+            ["12", "El primer aniversario: abrid las cartas del décimo mes, leéoslas en voz alta y empezad a contar años", "Lo grande que queráis"],
           ],
         },
         {
           type: "p",
-          text: "Los meses son solo un orden para probarlas. Si mañana cumplís tres meses y es el primero que celebráis, elegid la fila que mejor os venga esa semana. El sexto mes es el primer hito de verdad y pide un plan más completo: nuestras [ideas para celebrar 6 meses de novios](/blog/6-month-anniversary-ideas) están ordenadas según el tiempo que tengas. Las cartas cerradas del décimo mes se disfrutan al año: abridlas ese día y leéoslas en voz alta.",
+          text: "Los meses son solo un orden para probarlas. Si mañana cumplís tres meses y es el primero que celebráis, elegid la fila que mejor os venga esa semana. El sexto mes es el primer hito de verdad y pide un plan más completo: nuestras [ideas para celebrar 6 meses de novios](/blog/6-month-anniversary-ideas) están ordenadas según el tiempo que tengas.",
+        },
+        { type: "h2", text: "Vuestro primer mes: ideas para celebrarlo" },
+        {
+          type: "p",
+          text: "Un mes es poco tiempo, así que lo suyo es algo pequeño y fácil de rechazar. Elegid una:",
+        },
+        {
+          type: "list",
+          items: [
+            "**El intercambio de la tabla.** Que cada uno apunte las tres primeras cosas en las que se fijó del otro, y leedlas tomando algo.",
+            "**Volver al principio.** Una copa o un café en el sitio de vuestra primera cita, más o menos a la misma hora.",
+            "**Lo de la primera cita.** Si aquella noche alguno mencionó una película, un plato o un sitio, ese es el plan.",
+            "**Solo el mensaje.** Si no habéis hablado de contar meses, un mensaje por la mañana que nombre algo de este mes es justo lo que hace falta.",
+          ],
+        },
+        {
+          type: "p",
+          text: "Si el otro no lo celebra, no quiere decir que le importe menos. Mucha gente no cuenta los meses nunca, y preguntar con una sonrisa «¿nosotros celebramos los meses?» lo deja resuelto para el resto del año.",
         },
         { type: "h2", text: "Cómo evitar que celebrar los meses se convierta en una obligación" },
         {
@@ -170,32 +231,40 @@ export const post: BlogPost = {
             "**No llevéis la cuenta.** Si a uno se le olvida, reíos y haced el siguiente. Un mes olvidado no significa nada.",
           ],
         },
-        { type: "h2", text: "Qué mandar el día que cumplís meses" },
+        { type: "h2", text: "Mensajes para el día que cumplís meses" },
         {
           type: "p",
           text: "Una frase sobre algo de este mes, no sobre la relación entera. Así cada mensaje es distinto, y demuestra que estabas atenta:",
         },
         {
           type: "quote",
-          text: "Tres meses hoy. Mi mejor momento de este mes: tú intentando aparcar en línea mientras toda la terraza miraba.",
+          text: "Hoy hacemos un mes. Sigo teniendo en la cartera el ticket de nuestro primer café, y no pienso tirarlo.",
         },
         {
           type: "quote",
-          text: "Siete meses hoy. Tu cepillo de dientes lleva un mes entero en mi baño y ya he dejado de fingir que es provisional.",
+          text: "Hoy hacemos tres meses. Mi mejor momento de este mes: tú intentando aparcar en línea mientras toda la terraza miraba.",
+        },
+        {
+          type: "quote",
+          text: "Hoy hacemos siete meses. Tu cepillo de dientes lleva un mes entero en mi baño y ya he dejado de fingir que es provisional.",
         },
         {
           type: "quote",
           text: "Feliz octavo mes. Sigues haciendo las mejores tostadas del mundo, y sigues sin decirme qué haces distinto.",
         },
+        {
+          type: "quote",
+          text: "Once meses. El mes que viene empezamos a contar en años, así que esta es la última cena de mes, y la pago yo.",
+        },
         { type: "h2", text: "Cuándo dejar de contar meses" },
         {
           type: "p",
-          text: "Casi todas las parejas pasan a contar años después del primer aniversario, y es un buen sitio para parar. Si a los dos os gusta la fecha de cada mes, mantenedla, pero que se haga más pequeña: una cena fija ese día, o simplemente decirlo en voz alta al despertaros. Marcad el primer aniversario con una carta de verdad: antes, ahora y después, como explica nuestra [guía de carta de aniversario](/blog/anniversary-letter-to-boyfriend). Para el día en sí, aquí tienes [ideas para el primer aniversario con tu novio](/blog/first-anniversary-ideas-for-boyfriend) hechas con los doce meses que habéis vivido.",
+          text: "Casi todas las parejas pasan a contar años después del primer aniversario, y es un buen sitio para parar. A partir de ahí los años tienen nombre propio en la lista tradicional: bodas de papel el primero, de cuero el tercero. Si a los dos os gusta la fecha de cada mes, mantenedla, pero que se haga más pequeña: una cena fija ese día, o simplemente decirlo en voz alta al despertaros. Marcad el primer aniversario con una carta de verdad: antes, ahora y después, como explica nuestra [guía de carta de aniversario](/blog/anniversary-letter-to-boyfriend). Para el día en sí, aquí tienes [ideas para el primer aniversario con tu novio](/blog/first-anniversary-ideas-for-boyfriend) hechas con los doce meses que habéis vivido.",
         },
         { type: "h2", text: "Si no podéis estar juntos ese día" },
         {
           type: "p",
-          text: "Casi toda la tabla funciona por videollamada: para el tercer mes, intercambiad canciones y dadle al play a la vez; para el cuarto, pedid cada uno el mismo postre. Y antes de la llamada, mandad algo que se abra en un minuto. Galleta de la fortuna y Bomba de Stickers son [premium](/pricing), y La carta es gratis. Para el medio año y el año, cuando merece algo más que un minuto, los [regalos digitales de aniversario](/occasions/anniversary) llevan vuestras fotos y vuestra canción; para cualquier otro día, mira todos nuestros [regalos digitales](/gifts).",
+          text: "Casi toda la tabla funciona por videollamada: para el tercer mes, intercambiad canciones y dadle al play a la vez; para el cuarto, pedid cada uno el mismo postre. Y antes de la llamada, mandad algo que se abra en un minuto, como uno de los tres regalos de abajo: La carta es gratis, y los otros dos son [premium](/pricing). Para el medio año y el año, cuando merece algo más que un minuto, los [regalos digitales de aniversario](/occasions/anniversary) llevan vuestras fotos y vuestra canción; para cualquier otro día, mira todos nuestros [regalos digitales](/gifts).",
         },
         {
           type: "template",
@@ -205,7 +274,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "sticker-bomb",
-          note: "Una página en blanco y una sola instrucción: toca donde quieras. Donde cae el dedo, se planta una pegatina: algunas son tus fotos como polaroids, otras llevan tiras de rotuladora con lo que escribiste. A las doce pegatinas sale el confeti y se abre tu tarjeta. Doce pegatinas, una para cada mes.",
+          note: "Una página en blanco y una sola instrucción: toca donde quieras. Donde cae el dedo, se planta una pegatina: algunas son tus fotos como polaroids, otras llevan tiras de rotuladora con lo que escribiste. A las doce pegatinas sale el confeti y se abre tu tarjeta. Doce toques para doce meses, con hasta seis tiras de rotuladora tuyas para nombrar los que elijas.",
         },
         {
           type: "template",
@@ -216,7 +285,11 @@ export const post: BlogPost = {
       faq: [
         {
           q: "¿Qué es celebrar los meses con tu pareja?",
-          a: "Marcar cada mes la misma fecha del día en que empezasteis. Si empezasteis un 14, cada día 14 cumplís meses. Las parejas suelen hacerlo el primer año y después pasan a contar años.",
+          a: "Marcar cada mes la misma fecha del día en que empezasteis. Si empezasteis un 14, cada día 14 cumplís meses. Hay quien lo llama cumplemes o mesiversario. Las parejas suelen hacerlo el primer año y después pasan a contar años.",
+        },
+        {
+          q: "¿Cómo se dice aniversario de un mes?",
+          a: "Lo más natural es «cumplir un mes»: «hoy cumplimos un mes». También se oye cumplemes o mesiversario, y en una tarjeta «Feliz primer mes» es lo más sencillo.",
         },
         {
           q: "¿Es raro celebrar los meses?",
@@ -229,6 +302,10 @@ export const post: BlogPost = {
         {
           q: "¿Cuándo se dejan de celebrar los meses?",
           a: "Normalmente en el primer aniversario, cuando las parejas empiezan a contar años. Si a los dos os gusta la fecha de cada mes, mantenedla como algo más pequeño, como una cena fija ese día.",
+        },
+        {
+          q: "¿Cada cuánto deberían tener citas las parejas?",
+          a: "No hay un número correcto. Lo importante es que sea lo bastante a menudo como para que a los dos os haga ilusión. Celebrar los meses es una excusa ya puesta: doce citas pequeñas al año que nadie tiene que acordarse de proponer.",
         },
       ],
     },

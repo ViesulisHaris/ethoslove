@@ -6,7 +6,7 @@ numbers are from Google Search Console, 4–10 Nov 2026 (position = average plac
 
 ## For the routine (blog files only)
 
-- [ ] **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
+- [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.
 - [ ] **how-to-apologize-to-your-boyfriend** (Spanish version): Spanish searches like "como pedir
@@ -22,5 +22,9 @@ numbers are from Google Search Console, 4–10 Nov 2026 (position = average plac
 - [ ] **/templates/scratch-card**: "scratch card maker" at 10.6 and "digital scratch card" at 23.5
   (35 impressions a week). The template page decides these, not a post.
 - [ ] **/templates/bouquet**: "digital bouquet" at 11.8 (22 impressions a week).
+- [ ] **Blog link check (`tests/unit/blog-posts.test.ts`, `STATIC_PATHS`)**: add
+  `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of
+  monthiversary-ideas (13 Nov) wanted it beside the 29th–31st rule, since the tool shows the next
+  monthiversary date; the test rejects any `/tools` link today.
 - [ ] **/templates/fortune-cookie**: "digital fortune cookie" at 5.6 with its first clicks: protect it
   and aim for the top three.

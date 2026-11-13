@@ -1,0 +1,104 @@
+{
+  "slug": "monthiversary-ideas",
+  "keyword": "monthiversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The new definition lead, naming paragraph, first-month section and 'do we do monthiversaries?' line work, but row 12 wasn't a plan, the Sticker Bomb note implied twelve custom stickers when the schema allows six labels, and the long-distance tip named two products before the reader had seen them."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every claim checked out (last-day rule in src/lib/lifecycle/monthsaries.ts, templates against their manifests, etymology), but the leather aside in the FAQ was bolted on, «Un mes hoy» copied English word order, and «palabras informales» read as translated."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The month-by-month table and the naming paragraph beat the Q&A threads ranking now, but the title promised only ideas for a definition-intent search, mensiversary (named by the AI overview) was missing, 'How do you say one month anniversary?' had no FAQ of its own, and the first-month heading didn't use '1 month anniversary ideas'."
+        }
+      ],
+      "applied": [
+        "Title 'Monthiversary: what it means, 12 ideas and what to say'; description names monthsary, 1 month anniversary ideas and happy monthiversary messages.",
+        "Mensiversary (*mensis*, month) added to the naming paragraph; new FAQ 'How do you say one month anniversary?' (ES: '¿Cómo se dice aniversario de un mes?').",
+        "Heading '1 month anniversary ideas for your first monthiversary'.",
+        "Row 12 is now a plan (open the month-ten letters, then count years), and the duplicate sentence under the table went (EN and ES).",
+        "Sticker Bomb note: twelve taps, up to six label strips of your own (schema: labels max 6).",
+        "Long-distance tip points to the three gifts below instead of naming two premium ones first.",
+        "Leather moved out of the FAQ into 'When to stop counting months' (paper for the first, leather for the third), which also answers the PAA 'What do you call a 3 year anniversary?'.",
+        "Samples: 'Happy monthiversary. Eight months, and…'; the eleven-month line's logic fixed; ES 'Hoy hacemos un mes / tres meses / siete meses', 'ticket'.",
+        "ES: «también se oyen cumplemes y mesiversario, aunque son palabras informales»; *anniversarius*, «que vuelve cada año»."
+      ],
+      "rejected": [
+        "Search polish: link to /tools/how-long-have-we-been-together. The blog test's link check doesn't know /tools yet (a person's change, added to the backlog).",
+        "Search polish: a separate FAQ for the 3-year anniversary. The editor flagged it as off-subject in the FAQ; it now sits in the body where couples switch to years.",
+        "Reader polish: a concrete month-six row and gift examples for the cap. Not needed for a fix, and month six links to its own post."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes made correctly. It beats the top results because they are Q&A threads arguing about whether the word is correct, while this page settles the word in two sentences, then gives a month-by-month plan with times and lines to send."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product claim matches the manifests and schemas, the 29th–31st rule matches the code, the word-origin and gift-list facts are right in both languages, and the post answers both 'what is it' and 'what do we do each month' with specific plans and lines to send."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every People-also-ask question is answered; the first page is Q&A threads, Reddit opinions and an etymology column, and this post settles the word and the 'is it worth it' question in two paragraphs, then gives a 12-month table with times, a first-month section, lines to borrow and when to stop."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader/editor: 'name the ones you'd pick' could be 'name the months you'd pick'.",
+        "Editor: ES «la última cena por los meses»; drop 'From then on' before the gift-list names.",
+        "Search: 'monthsary' in the first heading; 'men especially' in the first-month paragraph.",
+        "Reader: point row 10 at The Letter."
+      ]
+    }
+  ]
+}
