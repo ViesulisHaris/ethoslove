@@ -146,7 +146,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "bouquet",
-          note: "Flowers that show up for no reason are one of the oldest surprises there is. Here you pick every stem yourself, flower by flower, and she watches the bouquet come together before she opens the card inside.",
+          note: "Flowers that show up for no reason are one of the oldest surprises there is. Here you pick every stem yourself, flower by flower, and she watches the bouquet come together before she opens the card inside. To pick the flowers and the words, see [virtual flowers for your girlfriend](/blog/virtual-flowers-for-girlfriend).",
         },
         {
           type: "template",
@@ -318,7 +318,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "bouquet",
-          note: "Las flores que llegan sin motivo son de las sorpresas más antiguas que hay. Aquí eliges tú cada tallo, flor a flor, y ella ve cómo se forma el ramo antes de abrir la tarjeta de dentro.",
+          note: "Las flores que llegan sin motivo son de las sorpresas más antiguas que hay. Aquí eliges tú cada tallo, flor a flor, y ella ve cómo se forma el ramo antes de abrir la tarjeta de dentro. Para elegir las flores y las palabras, mira estas [flores virtuales para tu novia](/blog/virtual-flowers-for-girlfriend).",
         },
         {
           type: "template",
