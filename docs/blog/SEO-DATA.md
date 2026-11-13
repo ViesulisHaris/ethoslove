@@ -64,6 +64,24 @@ plenty; it sees little of a young site, so the check above is the real one):
 → `items[]`: `keyword_data.keyword`, `keyword_data.keyword_info.search_volume`,
 `ranked_serp_element.serp_item.rank_absolute`, `ranked_serp_element.serp_item.url`.
 
+**How a page that outranks us is built** (a fraction of a cent): `on_page/content_parsing/live`,
+`[{"url":"https://<their page>","markdown_view":true}]` → `items[0].page_content`: its headings
+(`main_topic[].h_title` / `main_title`), the text under each, tables, and `page_as_markdown` for
+the whole page in order. Read what they cover that we don't; never copy their sentences.
+
+**New links to a competitor** (~$0.024 a call + $0.000036 a row; the weekly link-prospect job):
+`backlinks/backlinks/live`,
+`[{"target":"2-luv.com","mode":"one_per_domain","filters":[["dofollow","=",true],"and",["first_seen",">","2026-11-01 00:00:00 +00:00"],"and",["backlink_spam_score","<",30]],"order_by":["domain_from_rank,desc"],"limit":100}]`
+→ `items[]`: `url_from` (the page that links), `page_from_title`, `domain_from`, `anchor`,
+`first_seen`, `page_from_language`. Set `first_seen` to 14 days before the run.
+
+**What ChatGPT answers, and whom it names** (~$0.004 a question; the weekly AI-answer job):
+`ai_optimization/chat_gpt/llm_scraper/live/advanced`,
+`[{"keyword":"how to send a digital love letter","location_code":2840,"language_code":"en","force_web_search":true}]`
+→ `brand_entities[].title` (the brands it names), `sources[]` (`domain`, `url`, `title`: the pages
+it cites), `markdown` (the whole answer). Ethos is named if a brand entity or the text says "Ethos"
+or links tryethos.io.
+
 **A page audit** (a fraction of a cent): `on_page/instant_pages`,
 `[{"url":"https://tryethos.io/blog/<slug>","enable_javascript":false}]` → `items[0].onpage_score`,
 `items[0].checks` (true means the problem is there: missing alt text, no description, slow CSS, …).
@@ -81,7 +99,8 @@ plenty; it sees little of a young site, so the check above is the real one):
   Google lists, with first-hand specifics (what a template actually does, real sample lines), is
   what gets cited. When the overview cites videos or Reddit, note it in the report: those are
   places Ethos could appear too.
-- **Spend like it's ours, but spend.** Check the balance first, keep a run under the budget its
-  playbook gives, and never call the same thing twice in one run. Within the budget, buy the data
-  that makes the decision better (the owner, 13 Nov: at least $1 a day where it helps): a second
-  phrase's top 10, the questions, the UK or Spain as well.
+- **Spend where it helps; cost is not the limit.** The owner, 13 Nov: search data is not a limit
+  when it helps. Check the balance first, stay within the budget the playbook gives (generous now),
+  and never call the same thing twice in one run. Buy the data that makes the decision better: a
+  second and third phrase's top 10, the questions, the UK or Spain as well, the structure of the
+  pages above ours. Below a $1 balance, make no paid calls: the account must hold the money.

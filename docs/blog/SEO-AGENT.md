@@ -11,9 +11,13 @@ Steady: one change a run, nothing rushed, nothing that can break the site. The b
 (`docs/blog/PLAYBOOK.md`) writes new posts; this one makes what already exists rank better.
 
 Read `docs/blog/SEO-DATA.md` (how to get search data and what the numbers mean), `docs/blog/VOICE.md`
-and `docs/blog/RUBRIC.md` before starting. Budget for a run: $0.50 of DataForSEO credit, plus $1 for
-the weekly rank check in step 1. Spend it where it buys a better decision (more of the top 10, the
-questions, a second phrase), never on calls whose answer you already have.
+and `docs/blog/RUBRIC.md` before starting.
+
+Budget: the owner said on 13 Nov that search-data cost is not a limit when it helps. So buy every
+call that makes this run's decision better (the top 10 and questions for a second and third
+phrase, the UK and Spain as well, the structure of the pages above ours), up to about $3 a run plus
+the weekly jobs in step 1. Never buy what you already have, and below a $1 balance make no paid
+calls at all (step 0): the routines can't spend money the account doesn't hold.
 
 ## 0. Start clean
 
@@ -25,20 +29,43 @@ Check the balance (`appendix/user_data`). Under $1: make no paid calls, push the
 script exits 2 (no access), push `SEO: no search data (DataForSEO unreachable from the cloud)` and
 end: without data this routine has nothing to go on.
 
-## 1. Know where we stand (Mondays, or when `docs/blog/seo-ranks.md` is over 7 days old)
+## 1. Know where we stand, and find links (the first run of a Monday or a Thursday)
 
-DataForSEO's own ranking database barely sees a young site (4 US keywords on 13 Nov), so check the
-real results page instead. Make the list: every keyword in `docs/marketing/KEYWORDS.md`'s target
-table whose page is ours (not "skip", not "new page needed"), plus every blog post's `keyword`
-(about 120 phrases). For each, get the US mobile top 30 (`serp/google/organic/live/regular`, depth
-30, about $0.006; see SEO-DATA.md) and note where tryethos.io is, with the URL that ranks, or "not
-in the top 30". Keep it under $1: if the list is longer, check the phrases with the most searches.
-Also pull `ranked_keywords` (cheap) for anything it finds that the list missed.
+**Rank check (Mondays and Thursdays, or when the newest section of `docs/blog/seo-ranks.md` is over
+4 days old).** DataForSEO's own ranking database barely sees a young site (4 US keywords on 13 Nov),
+so check the real results page instead. Make the list: every keyword in
+`docs/marketing/KEYWORDS.md`'s target table whose page is ours (not "skip", not "new page
+needed"), plus every blog post's `keyword` (about 120 phrases, growing with the blog). For each, get
+the US mobile top 30 (`serp/google/organic/live/regular`, depth 30, about $0.006; see SEO-DATA.md)
+and note where tryethos.io is, with the URL that ranks, or "not in the top 30". Check the UK too
+for the product phrases (flowers, letters, fortune cookie, scratch card) and Spain for the Spanish
+targets with the most searches. About $1.50 a check. Also pull `ranked_keywords` (cheap) for
+anything it finds that the list missed.
 
 Add a dated section to `docs/blog/seo-ranks.md`: every phrase where we're in the top 30 (position,
 page, monthly searches), how many of the list we're in the top 10 / 30 for, and what moved since
 the last section (new on page one, up or down five or more). Read it before choosing, every run: a
 phrase at 4 to 20 is the best kind of change there is.
+
+**Link prospects (Mondays).** Links are what holds the site back most: the makers that rank for our
+phrases have 49–111 linking sites, we have 1 (KEYWORDS.md, "Link gap"). For each maker in that
+section's list (2-luv.com, lettersbyheart.com, qlovy.com, digitalloveletters.com, lovepaper.app,
+surprises.gift, aiskyla.com, giftsqr.com, lovepage.io, giftfeels.com, gifft.me, digibouquet.org,
+sendvirtualgift.com, and any maker that has started outranking us), get the followed backlinks first
+seen in the last 14 days (`backlinks/backlinks/live`, SEO-DATA.md; about $0.03 a maker). Keep the
+pages a person could ask to be added to: comparisons, gift guides, roundups, "best X" lists and
+resource pages in English or Spanish, spam score under 30. Skip directories, automatic profiles,
+forums, link farms and anything that asks for payment. Add each new one at the top of
+`docs/blog/link-prospects.md`: the date, the page and its title, which makers it links to, why
+Ethos belongs there in one line, and a contact if the page shows one. Never list a page twice. This
+routine never contacts anyone: a person drafts each pitch, and it goes out only with the owner's yes.
+
+**AI answers (Thursdays).** For the ten buyer questions in KEYWORDS.md's "AI answers" table, ask
+ChatGPT with web search, as a US user would (`ai_optimization/chat_gpt/llm_scraper/live/advanced`,
+about $0.004 a question). Add a dated section to `docs/blog/ai-answers.md`: per question, whether
+Ethos is named (and where in the list), the brands named, and the pages cited. A cited page that
+compares makers and leaves Ethos out goes to `link-prospects.md` too. When an answer cites a page of
+ours, note which: those pages are worth keeping sharp.
 
 ## 2. Choose this run's one change
 
@@ -136,4 +163,5 @@ stops with a notification.
 - Never chase a phrase whose searchers want something Ethos doesn't make, and never stuff a phrase
   into a post: write for the person searching.
 - Never invent facts, numbers, reviews or customers, and never claim something Ethos doesn't do.
-- Never spend past the run's budget, and never top up or buy anything.
+- Never spend past the run's budget, never top up or buy anything, and never contact a site or a
+  person: link prospects are a list for the owner.

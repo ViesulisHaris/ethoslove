@@ -46,7 +46,10 @@ Take the first entry in `docs/blog/queue.json`. Before using it, check:
 
 If the entry fails a check, delete it from the queue and take the next one.
 
-**Then check it with real search data** (`docs/blog/SEO-DATA.md`; budget for the whole run: $0.25).
+**Then check it with real search data** (`docs/blog/SEO-DATA.md`; up to about $1 for the whole run:
+the owner said on 13 Nov that search-data cost is not a limit when it helps, so also get the top 10
+of the keyword's two closest variants and read the structure of the top three pages with
+`on_page/content_parsing/live` before writing).
 Check the balance, then get the volume, difficulty and intent of the entry's `keyword` (US) and
 `keyword_es` (Spain), and the top 10 for the English keyword (with the AI overview and "People also
 ask"). Skip the entry, moving it to the end of the queue with a `"note"` saying why, when:
