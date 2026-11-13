@@ -1,21 +1,24 @@
 # The daily SEO improvement
 
-A cloud routine runs this once a day, with every computer off: **one** change to tryethos.io that
-real search data says will help it rank, made carefully, checked like a new post, written down with
-the reason, and live within hours. It is the owner's answer to "each day new things, so we finally
-start ranking" (13 Nov 2026), modelled on an agent that made one small change a night and kept a
-decision diary.
+A cloud routine runs this twice a day, with every computer off: **one** change to tryethos.io each
+run that real search data says will help it rank, made carefully, checked like a new post, written
+down with the reason, and live within hours. It is the owner's answer to "each day new things, so we
+finally start ranking" (13 Nov 2026), modelled on an agent that made one small change a night and
+kept a decision diary. The same day the owner asked to go faster ("maximize to the max", spending at
+least $1 a day of search data where it helps), hence two runs a day and the budgets below.
 
-Small and steady: one change a day, nothing rushed, nothing that can break the site. The blog
-routine (`docs/blog/PLAYBOOK.md`) writes new posts; this one makes what already exists rank better.
+Steady: one change a run, nothing rushed, nothing that can break the site. The blog routine
+(`docs/blog/PLAYBOOK.md`) writes new posts; this one makes what already exists rank better.
 
 Read `docs/blog/SEO-DATA.md` (how to get search data and what the numbers mean), `docs/blog/VOICE.md`
-and `docs/blog/RUBRIC.md` before starting. Budget for a run: $0.25 of DataForSEO credit.
+and `docs/blog/RUBRIC.md` before starting. Budget for a run: $0.50 of DataForSEO credit, plus $1 for
+the weekly rank check in step 1. Spend it where it buys a better decision (more of the top 10, the
+questions, a second phrase), never on calls whose answer you already have.
 
 ## 0. Start clean
 
 Exactly as in `docs/blog/PLAYBOOK.md` step 0 (fetch, reset to `origin/main`, `npm ci`). If
-`docs/blog/seo-diary.md` already has an entry for today (UTC), stop: today's change is made.
+`docs/blog/seo-diary.md` already has two entries for today (UTC), stop: today's changes are made.
 
 Check the balance (`appendix/user_data`). Under $1: make no paid calls, push the notification
 `SEO: DataForSEO balance is $<balance>, top it up to keep the daily changes going`, and end. If the
@@ -24,12 +27,20 @@ end: without data this routine has nothing to go on.
 
 ## 1. Know where we stand (Mondays, or when `docs/blog/seo-ranks.md` is over 7 days old)
 
-Get where tryethos.io ranks in the US (`ranked_keywords`, 200 keywords). Add a dated section to
-`docs/blog/seo-ranks.md`: the 40 keywords with the most searches, with position, page and monthly
-searches, and what moved since the last section (new on page one, up or down five or more). Read
-it before choosing, every day.
+DataForSEO's own ranking database barely sees a young site (4 US keywords on 13 Nov), so check the
+real results page instead. Make the list: every keyword in `docs/marketing/KEYWORDS.md`'s target
+table whose page is ours (not "skip", not "new page needed"), plus every blog post's `keyword`
+(about 120 phrases). For each, get the US mobile top 30 (`serp/google/organic/live/regular`, depth
+30, about $0.006; see SEO-DATA.md) and note where tryethos.io is, with the URL that ranks, or "not
+in the top 30". Keep it under $1: if the list is longer, check the phrases with the most searches.
+Also pull `ranked_keywords` (cheap) for anything it finds that the list missed.
 
-## 2. Choose today's one change
+Add a dated section to `docs/blog/seo-ranks.md`: every phrase where we're in the top 30 (position,
+page, monthly searches), how many of the list we're in the top 10 / 30 for, and what moved since
+the last section (new on page one, up or down five or more). Read it before choosing, every run: a
+phrase at 4 to 20 is the best kind of change there is.
+
+## 2. Choose this run's one change
 
 Take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
 pick from the data, in this order of value:
@@ -50,7 +61,7 @@ pick from the data, in this order of value:
 5. **A page audit.** Audit two recent posts (`on_page/instant_pages`) and fix what it finds inside
    the post: alt text, a description that's too long, a missing link.
 
-Never two of these in one day, and never the same post twice within 14 days (the diary says when
+Never two of these in one run, and never the same post twice within 14 days (the diary says when
 each was last touched).
 
 ## 3. Make the change
@@ -107,8 +118,8 @@ if anything was skipped or failed.
 ## The routine
 
 "Daily SEO change · tryethos.io", `trig_01Kxk3N29yi2z3RiR6oqc3qz`
-(claude.ai/code/routines/trig_01Kxk3N29yi2z3RiR6oqc3qz), created 13 Nov 2026: cron `40 4 * * *` UTC
-(an hour before the first Publish blog run at 07:43), cloud environment `env_01UBHAFBBGo6aRJ57b9E4GRW`
+(claude.ai/code/routines/trig_01Kxk3N29yi2z3RiR6oqc3qz), created 13 Nov 2026: cron `40 4,16 * * *` UTC
+(between the blog routine's runs at 06:17, 10:17, 14:17 and 18:17, so the two rarely push at once), cloud environment `env_01UBHAFBBGo6aRJ57b9E4GRW`
 ("Default"), model claude-opus-5-5, tools Bash, Read, Edit, Write, Glob, Grep, Task, WebFetch,
 WebSearch and PushNotification, source `ViesulisHaris/ethoslove` (the mirror). Its prompt points
 here and sums up the rules above, so changing this file changes the routine.
@@ -120,7 +131,7 @@ stops with a notification.
 
 ## Never
 
-- Never more than one change a day, never anything outside the three blog folders, never a post
+- Never more than one change a run, never anything outside the three blog folders, never a post
   deleted or renamed (its address is what ranks).
 - Never chase a phrase whose searchers want something Ethos doesn't make, and never stuff a phrase
   into a post: write for the person searching.

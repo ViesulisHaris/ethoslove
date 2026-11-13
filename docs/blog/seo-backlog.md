@@ -10,20 +10,15 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.
-- [ ] **The queue.** The blog routine writes two posts a day from `docs/blog/queue.json`, and none of
-  its 24 topics has a measured volume. Get US and Spain volumes and difficulty for every queued
-  keyword (one keyword_overview call per market), order the queue by searches × how winnable for
-  the right intent, drop topics with no measurable searches in either language (keep a dated
-  occasion within ten weeks), and add the posts from KEYWORDS.md's "Blog: ten proposed topics":
-  questions to ask your boyfriend (74,000, KD 0) and your girlfriend (40,500, KD 4) at the top, then
-  virtual hug (8,100), love letter for girlfriend (2,400), long distance relationship tips (1,900),
-  love coupons (1,300 a month, 4,400 in February, so live by early January), what to write in an
-  anniversary card (880), happy monthiversary messages (590), paragraphs for your boyfriend (590)
-  and birthday letter to boyfriend (590). Give **love-letter-to-my-boyfriend** the keyword "love
-  letter for boyfriend" (2,400, UK 390), with "love letter message for him" (4,400) in its angle.
-  Record `volume`, `volume_es` and `difficulty` on every entry. (KEYWORDS.md calls its topics a
-  proposal only because the research session wasn't allowed to touch the queue; changing the queue
-  is this routine's job, step 2.4 of SEO-AGENT.md.)
+- [ ] **The rest of the queue.** On 13 Nov the eight measured topics from KEYWORDS.md went to the top
+  of `docs/blog/queue.json` (questions to ask your boyfriend 74,000 and girlfriend 40,500, the two
+  love letters, long distance relationship tips, the anniversary card, paragraphs for your boyfriend,
+  the birthday letter) and love coupons joined the Valentine's batch. The other 20 topics were never
+  measured. Get US and Spain volumes and difficulty for them (one keyword_overview call per market),
+  slot each by searches × how winnable for the right intent (below the top eight unless it beats
+  them), drop topics with no measurable searches in either language (keep a dated occasion within
+  ten weeks), and record `volume`, `volume_es` and `difficulty` on every entry. Leave out "virtual
+  hug" and "happy monthiversary messages": a hug page and monthiversary-ideas own those searches.
 - [ ] **virtual-date-ideas-long-distance** aims at "virtual date ideas for long distance couples" (70
   a month). People search "date ideas for long distance" (5,400) and "virtual date ideas" (1,600, UK
   140). Get both top 10s, then aim the title, description and headings at them.
@@ -55,21 +50,31 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 
 Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
 
-- [ ] **/occasions/christmas, before December**: "virtual christmas card" (1,600 a month, 14,800 last
-  December) and "digital christmas card" (UK 720, 6,600 in December) are in neither its title nor
-  its text.
-- [ ] **/occasions/valentines, by early January**: add "virtual valentine" (2,900 a month, 33,100 in
-  February).
-- [ ] **/long-distance**: its title, "Long distance: meet halfway, date across time zones", matches
-  nothing people search. "Long-Distance Relationship Gifts and Date Ideas" would cover "gift for
-  long distance love" (2,900) and "date ideas for long distance" (5,400).
-- [ ] **/templates/the-letter**: add "template", "generator" or "online" ("love letter template" 880,
-  "love letter generator" 390, "online love letter" 260).
-- [ ] **/templates/fortune-cookie**: "digital fortune cookie" at 5.6 with its first clicks: protect it
-  and aim for the top three. "virtual fortune cookie" (320, UK 210) is searched more than "digital"
-  (140); the title has only "digital".
-- [ ] **/templates/scratch-card**: "scratch card maker" at 10.6 and "digital scratch card" at 23.5
-  (35 impressions a week). The template page decides these, not a post.
+- [x] (2026-11-13) **/occasions/christmas, before December**: "virtual christmas card" (1,600 a month,
+  14,800 last December) and "digital christmas card" (UK 720, 6,600 in December). Done: title
+  "Virtual Christmas Cards and Digital Gifts That Arrive on Time", heading, description, intro and a
+  "send it as a virtual Christmas card" question, in both languages.
+- [x] (2026-11-13) **/occasions/valentines, by early January**: "virtual valentine" (2,900 a month,
+  33,100 in February). Done: title "Virtual Valentines and Digital Gifts: 12 Ideas Beyond Roses",
+  heading, description and a "what is a virtual valentine" question.
+- [x] (2026-11-13) **Long distance**: /occasions/long-distance now owns the gift searches ("Long-Distance
+  Relationship Gifts That Arrive the Moment You Send"), /long-distance is the hub ("Long-Distance
+  Relationship Ideas: Meet Halfway, Dates, Gifts"; Spanish "Relación a distancia: …"), and the date
+  ideas are left to virtual-date-ideas-long-distance (above).
+- [x] (2026-11-13) **/templates/the-letter**: "Digital Love Letter Template, Free with Photos and Music",
+  "online love letter" in the description.
+- [x] (2026-11-13) **/templates/fortune-cookie**: "Digital Fortune Cookie Maker: Send a Virtual Fortune
+  Cookie" keeps the "digital" phrase it ranks 5.6 for and adds "virtual" (320, UK 210).
+- [x] (2026-11-13) **/templates/scratch-card**: "Custom Digital Scratch Card Maker: Scratch to Reveal",
+  "scratch off" in the description.
+- [x] (2026-11-13) **Also retitled**: /gifts ("Digital Gifts and Virtual Gifts"), /games ("Couple
+  Games Online", 6,600 + UK 1,600), /games/dare ("Truth or Dare Questions for Couples", 4,400),
+  /occasions/anniversary ("Anniversary Gift Ideas", 9,900), /occasions/birthday ("Digital and
+  Virtual Birthday Gifts"), /es/games/deck ("Preguntas para parejas", 1,600 in Spain), /es/games.
+  Check on 4 Dec whether each moved (the weekly rank check covers them).
+- [ ] **Refreshed posts and IndexNow**: the Publish blog workflow tells IndexNow (Bing, which feeds
+  ChatGPT search) only about new posts. Changed posts reach Google through the sitemap's lastmod,
+  but Bing waits. Ping changed posts too, once the deploy shows their new `dateModified`.
 - [ ] **/templates/bouquet**: "digital bouquet" at 11.8 (22 impressions a week). The flowers searches
   add up to 4,480 a month in the US and UK, "digital bouquet" is up 488% in a year, and its biggest
   month is February (3,600).

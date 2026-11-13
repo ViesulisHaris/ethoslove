@@ -1,6 +1,6 @@
 # The daily blog post
 
-A routine runs this twice a day: a new post on tryethos.io/blog each time, in English and Spanish, live
+A routine runs this four times a day: a new post on tryethos.io/blog each time, in English and Spanish, live
 within hours (step 6). Nobody reads it before it goes out, so this file and
 `tests/unit/blog-posts.test.ts` are the editor.
 
@@ -22,8 +22,9 @@ git fetch origin main && git checkout main && git reset --hard origin/main
 npm ci --no-audit --no-fund
 ```
 
-The routine runs twice a day (06:17 and 12:17 UTC). If two posts in `src/content/blog/posts/` already
-have today's date (UTC) as `published`, stop: today's posts are out. Say so in one line and end the
+The routine runs four times a day (06:17, 10:17, 14:17 and 18:17 UTC; four since 13 Nov 2026, when the
+owner asked to cover every searched topic as fast as quality allows). If four posts in
+`src/content/blog/posts/` already have today's date (UTC) as `published`, stop: today's posts are out. Say so in one line and end the
 run.
 
 On the mirror, earlier posts may still be waiting for the live repository's next publish run
@@ -45,7 +46,7 @@ Take the first entry in `docs/blog/queue.json`. Before using it, check:
 
 If the entry fails a check, delete it from the queue and take the next one.
 
-**Then check it with real search data** (`docs/blog/SEO-DATA.md`; budget for the whole run: $0.10).
+**Then check it with real search data** (`docs/blog/SEO-DATA.md`; budget for the whole run: $0.25).
 Check the balance, then get the volume, difficulty and intent of the entry's `keyword` (US) and
 `keyword_es` (Spain), and the top 10 for the English keyword (with the AI overview and "People also
 ask"). Skip the entry, moving it to the end of the queue with a `"note"` saying why, when:
@@ -283,6 +284,6 @@ The final message is what the owner reads on their phone. Write only:
 - Never invent facts, statistics, reviews, quotes or customers, and never claim something Ethos
   doesn't do.
 - Never copy sentences from another site.
-- Never publish more than two posts in one day, and never publish a post that failed a check or
+- Never publish more than four posts in one day, and never publish a post that failed a check or
   that the panel hasn't rated 10/10.
 - Never present a made-up couple as real (the TikTok account's couple stays on TikTok).

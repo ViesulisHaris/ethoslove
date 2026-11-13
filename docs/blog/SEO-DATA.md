@@ -51,7 +51,14 @@ contain the seed.
 for its `references[]`: the pages it cites), `people_also_ask` (`items[].title`: the questions),
 and video, Reddit or shopping blocks.
 
-**Where tryethos.io ranks** (~$0.012 + $0.00012 a keyword; once a week is plenty):
+**Where we really rank for one phrase** (~$0.006 for the top 30; the weekly rank check runs this
+for every phrase in its list): `serp/google/organic/live/regular`,
+`[{"keyword":"digital bouquet","location_code":2840,"language_code":"en","device":"mobile","depth":30}]`
+→ the `items[]` of type `organic` whose `domain` is `tryethos.io`: `rank_group` is its place among
+the organic results, `url` the page that ranks. None of them means not in the top 30.
+
+**What DataForSEO's database has us ranking for** (~$0.012 + $0.00012 a keyword; once a week is
+plenty; it sees little of a young site, so the check above is the real one):
 `dataforseo_labs/google/ranked_keywords/live`,
 `[{"target":"tryethos.io","location_code":2840,"language_code":"en","limit":200,"order_by":["keyword_data.keyword_info.search_volume,desc"]}]`
 → `items[]`: `keyword_data.keyword`, `keyword_data.keyword_info.search_volume`,
@@ -74,5 +81,7 @@ and video, Reddit or shopping blocks.
   Google lists, with first-hand specifics (what a template actually does, real sample lines), is
   what gets cited. When the overview cites videos or Reddit, note it in the report: those are
   places Ethos could appear too.
-- **Spend like it's ours.** Check the balance first, keep a run under the budget its playbook gives,
-  and never call the same thing twice in one run.
+- **Spend like it's ours, but spend.** Check the balance first, keep a run under the budget its
+  playbook gives, and never call the same thing twice in one run. Within the budget, buy the data
+  that makes the decision better (the owner, 13 Nov: at least $1 a day where it helps): a second
+  phrase's top 10, the questions, the UK or Spain as well.

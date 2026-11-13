@@ -1,11 +1,86 @@
 [
   {
-    "slug": "love-letter-to-my-boyfriend",
-    "keyword": "love letter to my boyfriend",
+    "slug": "questions-to-ask-your-boyfriend",
+    "keyword": "questions to ask your boyfriend",
+    "keyword_es": "preguntas para mi novio",
+    "occasion": "just-because",
+    "templates": ["fortune-cookie", "scratch-card", "text-thread"],
+    "angle": "The biggest search in our niche (74,000 a month in the US, 9,900 in the UK), led by long lists: Candle's couples app holds a top spot with 150 questions. Give more and better ones, 150+ in sections he would actually answer (fun, deep, about the future, about the two of you, for long distance, flirty but not crude), which to start with three dates in versus three years in, how to ask without it feeling like an interview, and how to play them as a game (/games/deck, /games/know). 'Deep questions to ask your boyfriend' (4,400) belongs in it.",
+    "volume": 74000,
+    "volume_es": 390,
+    "difficulty": 0
+  },
+  {
+    "slug": "questions-to-ask-your-girlfriend",
+    "keyword": "questions to ask your girlfriend",
+    "keyword_es": "preguntas para mi novia",
+    "occasion": "just-because",
+    "templates": ["fortune-cookie", "scratch-card", "text-thread"],
+    "angle": "40,500 searches a month in the US and a top 10 of magazines and dating sites. Not the boyfriend list with the pronouns swapped: 150+ questions she'd enjoy answering, in sections (fun, deep, about the future, about the two of you, long distance, flirty), which ones work early and which need years, how to ask so it feels like a conversation, and the free question games to play them (/games/deck, /games/know).",
+    "volume": 40500,
+    "difficulty": 4
+  },
+  {
+    "slug": "love-letter-for-boyfriend",
+    "keyword": "love letter for boyfriend",
     "keyword_es": "carta de amor para mi novio",
     "occasion": "just-because",
     "templates": ["the-letter", "keepsake"],
-    "angle": "Three full letters for a boyfriend (a new relationship, three years in, far away) with the parts marked, the specific line that beats the pretty one, and a Spanish version written for Spain, not translated."
+    "angle": "Three full letters for a boyfriend (a new relationship, three years in, far away) with the parts marked, the specific line that beats the pretty one, and a Spanish version written for Spain, not translated. 'Love letter message for him' (4,400 a month) belongs in it: short love letter messages as well as the full letters.",
+    "volume": 2400,
+    "volume_es": 1000,
+    "difficulty": 5
+  },
+  {
+    "slug": "love-letter-for-girlfriend",
+    "keyword": "love letter for girlfriend",
+    "keyword_es": "carta de amor para mi novia",
+    "occasion": "just-because",
+    "templates": ["the-letter", "keepsake", "bouquet"],
+    "angle": "Three full letters for a girlfriend (a new relationship, years in, far away) with the parts marked and the specific line that beats the pretty one, short love letter messages for her as well, and a Spanish version written for Spain. The UK searches it too (480 a month).",
+    "volume": 2400,
+    "volume_es": 880,
+    "difficulty": 2
+  },
+  {
+    "slug": "long-distance-relationship-tips",
+    "keyword": "long distance relationship tips",
+    "keyword_es": "consejos para una relación a distancia",
+    "occasion": "long-distance",
+    "templates": ["halfway", "passport", "midnight-countdown"],
+    "angle": "Specific tips instead of 'communicate more': a call rhythm that survives time zones, what to do in the first hour of a visit, how to argue well by text, money and the plan to close the distance, and the free tools on /long-distance (the city halfway between you, the hours you're both awake).",
+    "volume": 1900,
+    "difficulty": 24
+  },
+  {
+    "slug": "what-to-write-in-an-anniversary-card",
+    "keyword": "what to write in an anniversary card",
+    "keyword_es": "qué escribir en una tarjeta de aniversario",
+    "occasion": "anniversary",
+    "templates": ["the-letter", "our-timeline", "museum"],
+    "angle": "Lines for every kind of anniversary card (one year, ten, a partner, parents, friends), funny or soft, how long it should be, and the one specific memory that turns a card into the thing they keep.",
+    "volume": 880,
+    "difficulty": 3
+  },
+  {
+    "slug": "paragraphs-for-your-boyfriend",
+    "keyword": "paragraphs for your boyfriend",
+    "keyword_es": "textos largos para mi novio",
+    "occasion": "just-because",
+    "templates": ["the-letter", "text-thread"],
+    "angle": "The partner of paragraphs-for-your-girlfriend: long paragraphs to send him, sorted by moment (good morning, after a fight, when he's far away, his birthday: 'birthday paragraph for boyfriend' has 390 searches), each with what makes it his and not anyone's.",
+    "volume": 590,
+    "difficulty": 0
+  },
+  {
+    "slug": "birthday-letter-to-boyfriend",
+    "keyword": "birthday letter to boyfriend",
+    "keyword_es": "carta de cumpleaños para mi novio",
+    "occasion": "birthday",
+    "templates": ["the-letter", "birthday-cinema", "midnight-countdown"],
+    "angle": "A birthday letter for him built from the year you've had, with three sample letters (new relationship, years in, long distance), how to time it for midnight, and how a letter differs from the card line (what-to-write-in-boyfriends-birthday-card covers the card).",
+    "volume": 590,
+    "difficulty": 0
   },
   {
     "slug": "how-to-say-i-love-you-for-the-first-time",
@@ -192,6 +267,17 @@
     "occasion": "valentines",
     "templates": ["the-letter", "xoxo"],
     "angle": "Lines for every stage, from three dates in to twenty years married, funny or soft, how long a card message should be, and what to write when you can't say it out loud.",
+    "not_before": "2026-12-06"
+  },
+  {
+    "slug": "love-coupons",
+    "keyword": "love coupons",
+    "keyword_es": "vales de amor",
+    "occasion": "valentines",
+    "templates": ["scratch-card", "fortune-cookie", "the-letter"],
+    "angle": "Love coupon ideas they will actually redeem (by budget, for long distance, funny ones), how to word the fine print so it's a promise and not a joke, and how to hide each one under a scratch card so every coupon is a reveal. 1,300 searches a month, 4,400 in February.",
+    "volume": 1300,
+    "difficulty": 7,
     "not_before": "2026-12-06"
   }
 ]
