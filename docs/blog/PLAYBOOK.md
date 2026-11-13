@@ -90,6 +90,15 @@ around three or four seeds next to what Ethos makes (`docs/blog/SEO-DATA.md`), a
 with real monthly searches, difficulty under 30 and an intent that fits a post. `docs/marketing/KEYWORDS.md`,
 when it exists, lists the opportunities already found: take from it first.
 
+Then mine the competitors (on the Monday refill, about $0.10): what the couples apps and gift makers
+that hold the searches we want already rank for, and we don't. Take the two or three domains that
+show up most in the newest section of `docs/blog/seo-ranks.md` and the top 10s you've seen
+(trycandle.app, connectedcouples.app, gifft.me, 2-luv.com and the like), and pull each one's
+`ranked_keywords` (US, positions 1–20, 100 or more searches a month; SEO-DATA.md). Drop what a post
+of ours already answers, what's already queued, and anything whose searchers want a product we don't
+make. What's left are searches proven winnable by a small site with our kind of content: queue the
+best of them, with their volumes.
+
 An entry is
 `{ "slug", "keyword", "keyword_es", "occasion", "templates": [...], "angle" }`, where the angle is
 what this post gives that the current results don't. With search data, also add `"volume"`,
