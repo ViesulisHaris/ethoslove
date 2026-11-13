@@ -1494,7 +1494,7 @@
       "christmas": {
         "title": "Regalos digitales de Navidad",
         "metaTitle": "Regalos digitales de Navidad: 12 ideas que llegan a tiempo",
-        "description": "Un regalo de Navidad que no se pierde en el correo: un regalo animado con tus fotos, una canción navideña y tu mensaje, programado para abrirse la mañana de Navidad.",
+        "description": "Una felicitación de Navidad virtual que también es un regalo: tus fotos, una canción navideña y tu mensaje, en un enlace que se abre la mañana de Navidad.",
         "intro": "Para quienes no verás este año, y para quienes sí: un regalo que se abre la mañana de Navidad estén donde estén, sin plazos de envío que se te pasen. Agita tus fotos en la nieve con Bola de nieve, o deja una carta a la luz de una vela con Junto al fuego."
       },
       "mothers-day": {
@@ -1515,7 +1515,7 @@
       "long-distance": {
         "title": "Regalos para relaciones a distancia",
         "metaTitle": "Regalos para una relación a distancia que llegan al instante",
-        "description": "Regalos para relaciones a distancia que llegan en cuanto los envías: un pasaporte que vuela de tu ciudad a la suya, un cielo con tus fotos o una carta de amor con vuestra canción.",
+        "description": "Regalos para una relación a distancia que llegan en cuanto los envías: un pasaporte de tu ciudad a la suya, un cielo de fotos o una carta con vuestra canción.",
         "intro": "Lejos, pero cerca. Envía algo que pueda abrir en cuanto esté listo, programado para su zona horaria, con los lugares y las canciones que son de los dos."
       },
       "halloween": {
@@ -2019,7 +2019,7 @@
   "platform": {
     "meta": {
       "title": "Ethos — Regalos digitales que se abren como una historia",
-      "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, enviado en un enlace. Gratis para empezar, con ideas para citas y juegos."
+      "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, en un enlace. Gratis, con citas y juegos."
     },
     "hero": {
       "eyebrow": "Para vosotros dos",
@@ -2108,7 +2108,7 @@
   "ldr": {
     "meta": {
       "title": "Relación a distancia: ideas, citas y un punto a medio camino",
-      "description": "Encuentra la ciudad a medio camino entre los dos, mira a qué horas estáis ambos despiertos y descubre ideas de citas para dos pantallas. Herramientas gratis para parejas a distancia."
+      "description": "Herramientas gratis para una relación a distancia: la ciudad a medio camino, las horas en que estáis despiertos, citas para dos pantallas y regalos al instante."
     },
     "eyebrow": "A distancia",
     "h1a": "Estar separados no es",
@@ -2312,7 +2312,7 @@
   "games": {
     "meta": {
       "title": "Juegos para parejas online: siete juegos gratis para dos",
-      "description": "Juegos de cartas para parejas: ¿Cuánto me conoces?, ¿Qué prefieres?, Dibuja y adivina, Memory con vuestras fotos, cartas de preguntas, verdad o reto y una ruleta para las tareas. Un móvil o dos, sin descargas."
+      "description": "Juegos para parejas online y gratis: ¿Cuánto me conoces?, ¿Qué prefieres?, verdad o reto, cartas de preguntas, Memory con vuestras fotos y más. Sin descargas."
     },
     "h1a": "Juegos para",
     "h1b": "exactamente dos.",
