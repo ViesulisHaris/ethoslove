@@ -8,22 +8,26 @@ import { getManifest } from "@/templates/manifests";
 /**
  * A template paid for and not sent yet (lib/commerce/unsent.ts), at the top of My gifts: the way back
  * to it with the publish step already open. The gift itself is still only on the device it was made
- * on, so the card says to open it there.
+ * on, so the card says to open it there. Drawn as the account page's upgrade card is, the site's one
+ * call to act in a list of sections.
  */
 export async function UnsentGift({ slug }: { slug: string }) {
   const t = await getTranslations("dashboard");
   const locale = (await getLocale()) === "es" ? "es" : "en";
   const name = getManifest(slug)?.name[locale] ?? slug;
   return (
-    <div className="rounded-3xl border border-coral/30 bg-accent p-6 sm:p-7" data-testid="unsent-gift">
-      <p className="font-display text-xl sm:text-2xl">{t("unsentTitle", { template: name })}</p>
-      <p className="mt-2 max-w-prose text-sm text-muted-foreground">{t("unsentBody")}</p>
-      <Button asChild className="mt-5 rounded-full">
+    <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-coral/30 bg-coral/5 p-6" data-testid="unsent-gift">
+      <div className="min-w-0 flex-1 basis-64">
+        <h2 className="font-display text-xl">{t("unsentTitle", { template: name })}</h2>
+        {/* My gifts' own grey (text-muted-foreground): ink-soft keeps its light-theme colour in dark, 2.2:1. */}
+        <p className="mt-1 text-sm text-muted-foreground">{t("unsentBody")}</p>
+      </div>
+      <Button asChild className="h-11 rounded-full px-5">
         <Link href={resumePath(slug)}>
           {t("unsentCta")}
           <ArrowRight aria-hidden="true" className="size-4" />
         </Link>
       </Button>
-    </div>
+    </section>
   );
 }
