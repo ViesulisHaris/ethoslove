@@ -2,6 +2,7 @@ import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { BLOG_POSTS } from "@/content/blog";
+import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { templateSeo } from "@/content/template-seo";
 import { CITY_SLUGS } from "@/lib/cities/cities";
@@ -55,6 +56,7 @@ export function GET() {
     `- Date ideas by city: ${CITY_SLUGS.length} city pages (for example ${localizedUrl("en", `/dates/${CITY_SLUGS[0]}`)}), each with ideas ordered for that city and real places from the map.`,
     `- [Long distance](${localizedUrl("en", "/long-distance")}): for two towns, the distance between them, the city halfway along the great circle, how many hours apart their clocks are and when both people are awake; plus date ideas for two screens.`,
     `- [Games](${localizedUrl("en", "/games")}): seven card games for two. How well do you know me?, Would you rather? and Draw it, guess it play on one phone passed back and forth or on two phones joined by a four-letter room code; Memory (dealt from stickers or the couple's own photos, which never leave the phone), question cards, truth or dare (soft edition) and a roulette for the chores play on one phone. No downloads, no accounts. Optional game packs add more cards to four of them (see Pricing).`,
+    `- [Love language quiz](${localizedUrl("en", LOVE_QUIZ_PATH)}): a free love language quiz, in English and Spanish: 30 either/or questions, about 3 minutes, no email or account. It shows how the five love languages rank for the person taking it, then gives a link: the partner takes the same quiz and both see their results side by side, with what each needs from the other and a gift template that speaks each language. Answers stay in the browser. The five love languages are Gary Chapman's idea (The 5 Love Languages, 1992); the quiz and its questions are Ethos's own, not affiliated with him.`,
     "",
     "## Trips",
     "",

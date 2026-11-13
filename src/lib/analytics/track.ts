@@ -38,7 +38,12 @@ export type FunnelEvent =
   | "maps_opened"
   // "Keep this gift": the end screen's tap (the template), and the keep page sent (how many reminders were asked for). No ids, no addresses.
   | "keep_tapped"
-  | "keep_requested";
+  | "keep_requested"
+  // The love language quiz: begun, finished (which language came first, nothing else), its link sent, and a gift opened from a result.
+  | "quiz_started"
+  | "quiz_finished"
+  | "quiz_shared"
+  | "quiz_gift_click";
 
 type Props = Record<string, string | number | boolean | null>;
 

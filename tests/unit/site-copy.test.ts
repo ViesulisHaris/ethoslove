@@ -11,6 +11,7 @@ import { PACK_CARDS } from "@/lib/games/pack-cards";
 import { DECKS } from "@/lib/games/questions";
 import { listManifests } from "@/templates/manifests";
 import { TOGETHER_GUIDE } from "@/content/together-guide";
+import { LOVE_QUIZ, QUESTIONS as LOVE_QUIZ_QUESTIONS } from "@/content/love-language-quiz";
 import { fillerIn } from "./filler";
 
 type Locale = "en" | "es";
@@ -36,6 +37,7 @@ const SOURCES: Record<string, unknown> = {
   "template search entries": TEMPLATE_SEO,
   "template guides": TEMPLATE_GUIDES,
   "days-together counter": TOGETHER_GUIDE,
+  "love language quiz": { LOVE_QUIZ, LOVE_QUIZ_QUESTIONS },
   games: { TRUTHS, DARES, KNOW_QUESTIONS, RATHER_PAIRS, DECKS },
   "game packs": PACK_CARDS,
   templates: listManifests().map((m) => ({ name: m.name, tagline: m.tagline, description: m.description })),
