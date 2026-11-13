@@ -40,6 +40,19 @@ query, page, country, device, date; filters `page=/blog/<slug>`, `query=<words>`
 `limit` (up to 25000) and `offset`. A 401 or 503 means it isn't connected yet: say "Search
 Console not connected" in the report and carry on with DataForSEO alone.
 
+**Sales: which pages sell** (free; our own numbers, since 14 Nov 2026). Website sales of the last 7
+and 28 days, split by where each buyer first came from:
+`curl -s "https://tryethos.io/api/internal/sales"` (the same network secret: pass nothing).
+→ `windows[]`, one for 7 days and one for 28: `orders`, `revenueEur`, `recorded` (sales that know
+where they came from), `checkouts` (checkouts started), and lists sorted by revenue: `byChannel[]`,
+`byLanding[]` (`landing` is the first page of the visit, with `channels` saying how many of its
+sales came from each channel) and `bySource[]` (`google`, `tiktok`, `chatgpt`, a ref…). The
+channels: `search` is a search engine that sent someone to any page but the home page, the work of
+this routine; `tiktok_brand` is TikTok and searches for the name (they land on the home page);
+`direct` is nothing known; `other` is everything else. `recordedSince` says when the records
+start: until then sales show as "(not recorded)". Use it to choose, never to publish: no sales
+figures in the repository. A 401 or 503 means it isn't connected: carry on without it.
+
 **Balance** (free; check it first in every run):
 `appendix/user_data`, no body → `tasks[0].result[0].money.balance` (USD). Under $1: make no paid
 calls, and say so in the report.

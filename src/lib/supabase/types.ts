@@ -660,6 +660,41 @@ export interface Database {
         Update: { shop_id?: number; access_token?: string; refresh_token?: string; expires_at?: string; updated_at?: string };
         Relationships: [];
       };
+      /** Where each checkout's buyer first came from, by purchase id (0019, lib/attribution). Service role only. */
+      checkout_sources: {
+        Row: {
+          purchase_id: string;
+          created_at: string;
+          landing: string | null;
+          referrer: string | null;
+          utm_source: string | null;
+          utm_medium: string | null;
+          utm_campaign: string | null;
+          click: string | null;
+          ref: string | null;
+          channel: string;
+          source: string;
+          remembered: boolean;
+          first_seen_at: string | null;
+        };
+        Insert: {
+          purchase_id: string;
+          created_at?: string;
+          landing?: string | null;
+          referrer?: string | null;
+          utm_source?: string | null;
+          utm_medium?: string | null;
+          utm_campaign?: string | null;
+          click?: string | null;
+          ref?: string | null;
+          channel: string;
+          source: string;
+          remembered?: boolean;
+          first_seen_at?: string | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
       /** A gift card's name and note between checkout and fulfilment, never sent to Stripe (0012). Service role only. */
       gift_card_details: {
         Row: { purchase_id: string; recipient_name: string | null; note: string | null; created_at: string };
@@ -705,6 +740,8 @@ export interface Database {
       gift_storage_refs: { Args: Record<string, never>; Returns: { path: string }[] };
       storage_orphans: { Args: { p_limit?: number }; Returns: { name: string; bytes: number }[] };
       purge_stale_drafts: { Args: { p_days?: number }; Returns: number };
+      /** Deletes checkout_sources rows of checkouts never paid once older than p_days (0019). Service role only. */
+      forget_unpaid_checkout_sources: { Args: { p_days?: number }; Returns: number };
       /** Gifts opened and opens counted, for the numbers on the site (0017). Service role only. */
       proof_numbers: { Args: Record<string, never>; Returns: Json };
       get_public_gift: { Args: { p_short_id: string; p_password?: string | null }; Returns: Json };

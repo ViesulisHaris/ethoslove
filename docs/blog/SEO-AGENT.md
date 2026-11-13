@@ -72,7 +72,11 @@ ours, note which: those pages are worth keeping sharp.
 Take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
 pick from the data, in this order of value. Start every run by pulling Search Console for the last
 28 days, query by page (SEO-DATA.md, free): it is Google's own record of how our pages do, and it
-comes before any estimate.
+comes before any estimate. Then pull the sales report (`/api/internal/sales`, SEO-DATA.md, free):
+which pages the buyers of the last 7 and 28 days first landed on, and from where. Between two
+candidates of the same kind, take the one on a page that sells to searchers (channel `search`), or
+one that can send searchers to such a page. Never write sales, orders or money into the repository,
+the diary included (the mirror is public): say that a page "sells to searchers" and leave it there.
 
 1. **Seen but not clicked (Search Console).** A blog post with 100 or more impressions whose click
    rate is far below what its position usually earns (as a rough guide: under 10% at positions 1

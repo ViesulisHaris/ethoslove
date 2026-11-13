@@ -1,11 +1,12 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, after, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { REF_PATTERN } from "@/lib/attribution/ref";
+import { checkoutSourceInput, checkoutSourceRow, saveCheckoutSource } from "@/lib/attribution/checkout-source";
 import { AD_FBC, AD_FBP, AD_TTCLID, AD_TTP } from "@/lib/ads/purchase";
 import { CHARGED_CURRENCIES, giftCardsOnSale, isProductId, subscriptionsEnabled, visitorCurrency, type Currency } from "@/lib/pricing/products";
 import { getStripe, stripeProductIds } from "@/lib/stripe/server";
-import { RETURN_PATH, membershipSessionParams, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
+import { RETURN_PATH, membershipSessionParams, metadataRef, oneTapSessionParams, sellsInOneTap, sessionParams, withdrawalNotice } from "@/lib/stripe/line-items";
 import { createCheckoutSession } from "@/lib/stripe/create-session";
 import { ethosCustomerFor } from "@/lib/stripe/subscriptions";
 import { membershipContextOf } from "@/lib/commerce/memberships";
@@ -38,6 +39,9 @@ const input = z.object({
   // Where the buyer came from (lib/attribution/ref.ts); a creator's personal link is "c-<code>".
   // A malformed one is dropped, never an error.
   ref: z.string().trim().toLowerCase().regex(REF_PATTERN).optional().catch(undefined),
+  // Where the buyer first came from (lib/attribution/first-visit.ts): kept in our database with the
+  // purchase id, never sent to Stripe. Checked again field by field; a malformed one is dropped.
+  source: checkoutSourceInput,
   // A gift card's optional personal touch, printed in the email with the code. Kept in our database
   // until fulfilment, never sent to Stripe.
   giftCard: z
@@ -174,6 +178,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
   }
   if (user) await admin.from("purchases").update({ stripe_session_id: session.id }).eq("id", purchaseId);
+  // Where the buyer came from, stored once the buyer has their answer: it can't slow or fail checkout.
+  const source = checkoutSourceRow(purchaseId, body.source, metadataRef(body.ref), now);
+  if (source) after(() => saveCheckoutSource(admin, source));
   if (body.oneTap) return NextResponse.json({ clientSecret: session.client_secret });
   return NextResponse.json({ url: session.url });
 }
