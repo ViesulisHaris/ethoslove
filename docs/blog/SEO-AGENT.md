@@ -70,23 +70,36 @@ ours, note which: those pages are worth keeping sharp.
 ## 2. Choose this run's one change
 
 Take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
-pick from the data, in this order of value:
+pick from the data, in this order of value. Start every run by pulling Search Console for the last
+28 days, query by page (SEO-DATA.md, free): it is Google's own record of how our pages do, and it
+comes before any estimate.
 
-1. **Close to page one.** A blog post ranking 4 to 20 for a phrase with real searches. Get that
+1. **Seen but not clicked (Search Console).** A blog post with 100 or more impressions whose click
+   rate is far below what its position usually earns (as a rough guide: under 10% at positions 1
+   to 3, under 2% at 4 to 10). The page is shown and passed over: rewrite its title and description
+   so they say what the searchers typed and why this page answers it better, keeping its keyword.
+2. **Striking distance (Search Console).** A search with 20 or more impressions in 28 days where our
+   post averages 4 to 20: give that post what the pages above it give, for that exact search (the
+   same work as "close to page one" below, chosen from Google's own numbers).
+3. **Close to page one.** A blog post ranking 4 to 20 for a phrase with real searches. Get that
    phrase's top 10 (with the AI overview and "People also ask"), see what the pages above ours give
    that ours doesn't, and give it: a missing section, every "People also ask" question answered in
    the FAQ, a table or sample lines, a title and description that say the phrase the way people
    type it.
-2. **The wrong target.** A post with many impressions but no clicks, or ranking for a phrase other
-   than its keyword: aim it at what people actually search (keyword ideas around it), without
-   repeating another post's search.
-3. **The web of links.** A post that few others link to: add genuinely useful links to it from two
+4. **The wrong target.** A post Search Console shows getting impressions for searches other than its
+   keyword: aim it at what people actually search (keyword ideas around it), without repeating
+   another post's search. Searches with impressions that no post answers well go into the queue.
+5. **The web of links.** A post that few others link to: add genuinely useful links to it from two
    or three related posts, and from it to the template and occasion pages it mentions.
-4. **The queue.** Re-order `docs/blog/queue.json` by real searches, difficulty and intent, add the
+6. **The queue.** Re-order `docs/blog/queue.json` by real searches, difficulty and intent, add the
    best opportunities from `docs/marketing/KEYWORDS.md`, and drop topics whose searchers want
    something else. (This counts as the day's change.)
-5. **A page audit.** Audit two recent posts (`on_page/instant_pages`) and fix what it finds inside
+7. **A page audit.** Audit two recent posts (`on_page/instant_pages`) and fix what it finds inside
    the post: alt text, a description that's too long, a missing link.
+
+Site pages (templates, occasions, `/gifts`) that Search Console shows seen but not clicked, or in
+striking distance, go to the backlog's "For a person" with the numbers: this routine changes only
+the blog.
 
 Never two of these in one run, and never the same post twice within 14 days (the diary says when
 each was last touched).
@@ -127,7 +140,11 @@ Add today's entry at the top of `docs/blog/seo-diary.md`:
 - **Check on:** <date two to three weeks out> whether <the phrase> moved
 ```
 
-On the "check on" date, the routine that reads it says in that day's entry whether it worked.
+On the "check on" date, the routine that reads it says in that day's entry whether it worked, with
+Search Console's numbers for that page: the 14 days before the change against the latest 14
+(`page=/blog/<slug>`, `start` and `end`), for its target search and in total: impressions, clicks,
+average position. A change that didn't move anything is worth knowing too: say so, and what to try
+next.
 
 ## 6. Publish
 
@@ -154,7 +171,11 @@ here and sums up the rules above, so changing this file changes the routine.
 The environment needs, besides what the other routines use: `api.dataforseo.com` in its allowed
 domains, and a network secret for that host, header `Authorization`, value `Basic <the base64 key
 from DataForSEO's API Access page>`. Without them `scripts/seo/dfs.sh` exits 2 and the routine
-stops with a notification.
+stops with a notification. For Search Console it also needs a Bearer network secret for
+`tryethos.io` holding the same value as Vercel's `GSC_EXPORT_KEY` (the owner's helper
+`setup-gsc-key.cmd` makes one); Vercel also needs `GSC_SERVICE_ACCOUNT_JSON`, the key file of a
+service account added to the Search Console property as a restricted user. Without them
+`/api/internal/gsc` answers 401 or 503 and the routine goes on without Search Console.
 
 ## Never
 

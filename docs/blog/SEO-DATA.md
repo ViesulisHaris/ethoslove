@@ -28,6 +28,18 @@ The English posts target the US first; the Spanish versions Spain.
 Responses wrap everything in `tasks[0].result[0]`. Read the JSON you get rather than trusting the field
 paths below blindly: if one isn't there, look for it.
 
+**Search Console: our own numbers** (free, and the best source for where *we* stand). Google's
+figures for tryethos.io: every search we were shown for, including ones DataForSEO's database has
+never seen, with clicks, impressions, click rate and average position per page:
+`curl -s "https://tryethos.io/api/internal/gsc?days=28&dimensions=query,page&limit=5000"`
+The cloud proxy adds the key (a network secret for tryethos.io): pass nothing. → `rows[]`: `keys`
+(in the order of `dimensions`), `clicks`, `impressions`, `ctr` (0–1), `position` (the average place;
+1 is the top). Parameters: `days` (default 28, ending two days ago, because the last two days are
+still filling in), or `start` and `end` (YYYY-MM-DD) for a before-and-after; `dimensions` from
+query, page, country, device, date; filters `page=/blog/<slug>`, `query=<words>`, `country=usa`;
+`limit` (up to 25000) and `offset`. A 401 or 503 means it isn't connected yet: say "Search
+Console not connected" in the report and carry on with DataForSEO alone.
+
 **Balance** (free; check it first in every run):
 `appendix/user_data`, no body → `tasks[0].result[0].money.balance` (USD). Under $1: make no paid
 calls, and say so in the report.

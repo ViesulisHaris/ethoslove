@@ -90,6 +90,10 @@ around three or four seeds next to what Ethos makes (`docs/blog/SEO-DATA.md`), a
 with real monthly searches, difficulty under 30 and an intent that fits a post. `docs/marketing/KEYWORDS.md`,
 when it exists, lists the opportunities already found: take from it first.
 
+Then ask Search Console (free; SEO-DATA.md) for the searches we were shown for in the last 28 days
+(`dimensions=query`): a search with impressions that no post of ours answers is one Google already
+connects with us. Queue the ones that fit, before anything else.
+
 Then mine the competitors (on the Monday refill, about $0.10): what the couples apps and gift makers
 that hold the searches we want already rank for, and we don't. Take the two or three domains that
 show up most in the newest section of `docs/blog/seo-ranks.md` and the top 10s you've seen
