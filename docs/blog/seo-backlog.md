@@ -19,9 +19,12 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   them), drop topics with no measurable searches in either language (keep a dated occasion within
   ten weeks), and record `volume`, `volume_es` and `difficulty` on every entry. Leave out "virtual
   hug" and "happy monthiversary messages": a hug page and monthiversary-ideas own those searches.
-- [ ] **virtual-date-ideas-long-distance** aims at "virtual date ideas for long distance couples" (70
+- [x] (2026-11-14) **virtual-date-ideas-long-distance** aimed at "virtual date ideas for long distance couples" (70
   a month). People search "date ideas for long distance" (5,400) and "virtual date ideas" (1,600, UK
   140). Get both top 10s, then aim the title, description and headings at them.
+- [ ] **virtual-date-ideas-long-distance, Spanish** (not before 28 Nov): "juegos para parejas a
+  distancia" is Spain's biggest phrase near this post (110 a month, KD 0) and the post already answers
+  it (the two-phone games, the games FAQ). Work it into a Spanish heading or the games FAQ question.
 - [ ] **fortune-cookie-messages** (published 13 Nov) aims at "funny fortune cookie messages" (390).
   The head, "fortune cookie messages", gets 1,900 (UK 320): aim the title and description at it and
   keep the funny ones as a section. Link to it from the related posts.

@@ -1,0 +1,98 @@
+{
+  "slug": "virtual-date-ideas-long-distance",
+  "keyword": "long distance date ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The set-up list, the 8pm/1pm sample line and the time-difference table work, but the People-also-ask question on fun websites for couples to play online had no direct answer, and 'holiday' and 'leave' in the 777 answer are UK words."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template and game claim checked out against the code, but 'our free couple games play from two phones' overstated it (only know, rather and draw do, src/lib/games/catalogue.ts), and 'holiday', 'leave' and 'post them' are UK usage."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The energy sorting and time-zone table beat the top listicles, but the post left out the watch-party sync tool and the virtual escape room the AI overview leads with, never answered the 'fun websites for couples' question directly, and didn't link the /long-distance hub whose clock tool shows the hours you're both awake."
+        }
+      ],
+      "applied": [
+        "Three of the free couple games play from two phones (EN and ES)",
+        "777 answer: 'a longer trip every seven months' and 'time off'; Spanish 'días libres'",
+        "'Send them' a date in a box, in the body and the FAQ",
+        "Teleparty-style watch-party extension added to the film date (EN and ES)",
+        "New FAQ 'What are some fun websites for couples to play online?' (EN and ES)",
+        "Link to /long-distance for the hours you're both awake, in the time-difference section (EN and ES)",
+        "An escape room for two (We Were Here) added to the occasion dates (EN and ES)",
+        "Polish taken: It Takes Two and Stardew Valley named; heading 'Long distance date night ideas for an occasion'; 'long distance' without a hyphen in a heading; 'A virtual date usually goes wrong in the first ten minutes, if it's going to'; Spanish 'se viven', 'online'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both fixes made. It sorts dates by the energy you have tonight and gives the set-up that makes a call a date, a line to copy and a time-difference table, where the top results pile up interchangeable ideas."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the code and the tools named, the energy-sorted dates come with a time-zone table whose arithmetic holds, and both languages read like a friend who has done this, which the generic listicles on page one don't."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page sorted by the energy you have that night, with a set-up checklist, a line to send, a time-difference table and free games that work from two phones; the ranking pages are longer lists of the same ideas with no how-to."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: name Would you rather in the body's games item; Teleparty in the movie FAQ (also the search reviewer)",
+        "Search: a question-cards item for the long-distance deck; work 'juegos para parejas a distancia' (Spain 110, KD 0) into a Spanish heading or FAQ",
+        "Editor: Spanish wording of the Halfway note and the Gartic Phone FAQ line"
+      ]
+    }
+  ]
+}

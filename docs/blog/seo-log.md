@@ -14,3 +14,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
 | 2026-11-13T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: queue intent |
 | 2026-11-13T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | seo: queue (countdown variants) |
+| 2026-11-14T04:41Z | dataforseo_labs/google/keyword_overview/live | 0.0138 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T04:41Z | dataforseo_labs/google/keyword_overview/live | 0.0132 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T04:41Z | dataforseo_labs/google/keyword_overview/live | 0.01296 | seo: virtual-date-ideas-long-distance (es) |
+| 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |

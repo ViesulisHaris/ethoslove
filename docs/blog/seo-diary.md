@@ -3,6 +3,33 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-14: virtual-date-ideas-long-distance aimed at "long distance date ideas"
+- **Page:** /blog/virtual-date-ideas-long-distance
+- **Why:** First open backlog item. The post targeted "virtual date ideas for long distance couples"
+  (US 70 a month, KD 19), while DataForSEO (US) has "date ideas for long distance" at 5,400 (KD 3),
+  "long distance date ideas" 4,400 (KD 3), "virtual date ideas" 1,600 (KD 5), "long distance date
+  night ideas" 590; UK 390 / 390 / 140. All informational. Search Console had it barely seen in
+  English (position 98 for one variant); the Spanish page sits at 8.5 for "citas virtuales". The top
+  10s are numbered listicles (15 to 101 ideas) and Reddit threads; the AI overview leads with surprise
+  takeout, synced cooking, Teleparty movie nights, co-op games (It Takes Two, Stardew Valley) and
+  virtual escape rooms, citing Reddit, Match, Candle, USU and YouTube Shorts (a place Ethos could
+  appear). People also ask: the 777 rule for long distance, how to go on a date with someone long
+  distance, what is a virtual date, fun websites for couples to play online. The post answered none
+  of them directly and never linked the free games or the /long-distance clock tool.
+- **What changed:** Title "Long distance date ideas, sorted by how tired you are", keyword "long
+  distance date ideas", new description and lead; the first heading is now the PAA question with a
+  short answer; new section "Long distance dates that aren't on a screen" (book club, same sky, date
+  in a box, shared playlist, voice-note walk); our three two-phone games, co-op video games, an escape
+  room for two and Teleparty added; links to /games and /long-distance; FAQs for the 777 rule, what a
+  virtual date is and websites to play on. Spanish to match ("Citas virtuales y planes para parejas a
+  distancia"). `updated` 2026-11-14.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/virtual-date-ideas-long-distance-2026-11-14.json`)
+- **Cost:** $0.06 (three keyword overviews US/UK/Spain, four SERPs with AI overview and PAA); balance $52.59
+- **Note:** Search Console's sales endpoint answered 503 (not ready); the decision used Search Console
+  and DataForSEO only. Desktop SERPs also return google.com redirect links in place of domains now.
+- **Check on:** 2026-12-01 whether "long distance date ideas" and "date ideas for long distance" show
+  for the post in Search Console and the rank check, and whether "citas virtuales" moved from 8.5
+
 ## 2026-11-13: the queue measured and re-ordered by real searches
 - **Page:** the queue (`docs/blog/queue.json`)
 - **Why:** 25 of its 34 topics had never been measured. DataForSEO, US and Spain (keyword_overview):
