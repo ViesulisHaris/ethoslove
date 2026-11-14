@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "fortune-cookie-messages",
   published: "2026-11-12",
+  updated: "2026-11-14",
   occasion: "just-because",
   templates: ["fortune-cookie"],
   content: {
     en: {
-      title: "Funny fortune cookie messages for someone you know",
-      description: "Funny fortune cookie messages for a partner, a friend or a party, sweet ones to end on, and how to turn your own in-jokes into fortunes.",
-      keyword: "funny fortune cookie messages",
-      lead: "The funniest fortune cookie messages sound like an ancient prophecy and turn out to be about something small and true: the snooze button, the last slice, the group chat. Below are ready-to-use fortunes for a party, a partner and a friend, sweet ones to finish on, and a three-step way to turn your own in-jokes into fortunes.",
+      title: "Fortune cookie messages: funny, sweet and classic",
+      description: "Fortune cookie messages to borrow: classic ones for any table, funny ones for a partner or a friend, sayings about love, and how to write your own.",
+      keyword: "fortune cookie messages",
+      lead: "A fortune cookie message is one short line in the voice of fate: a prediction, a piece of advice or a compliment, like \"The door you keep walking past is not locked.\" The funny ones aim that solemn voice at something small and true, like the snooze button or the last slice. Below are classic fortunes for any table, funny ones for a party, a partner and a friend, sayings about love to finish on, and a three-step way to turn your own in-jokes into fortunes.",
       takeaways: [
         "Write in the solemn voice of a fortune and aim it at something tiny and specific. The gap between the two is the joke.",
         "Keep each one to a sentence or two. A slip is small, and a fortune that needs explaining isn't funny.",
@@ -18,10 +19,34 @@ export const post: BlogPost = {
         "Mix in one sweet fortune and save it for the end, so the laugh lands somewhere warm.",
       ],
       body: [
+        { type: "h2", text: "Classic fortune cookie messages and quotes" },
+        {
+          type: "p",
+          text: "Most real fortunes are one of three things: a prediction, a piece of advice or a compliment, written so they fit whoever opens them. These keep that shape, for a party, a classroom or a plate after dinner:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"A small kindness you have forgotten is still remembered by someone else.\"",
+            "\"The door you keep walking past is not locked.\"",
+            "\"Good news will arrive before the week is out.\"",
+            "\"You already know the answer. Wait for the right question.\"",
+            "\"Someone you have not met yet will be glad you said yes.\"",
+            "\"Your patience this month will pay for itself.\"",
+            "\"A journey is in your future. It begins closer than you think.\"",
+            "\"The work you do quietly will be noticed loudly.\"",
+            "\"Luck is on its way to you. Be home when it arrives.\"",
+            "\"You are about to be very good at something new.\"",
+          ],
+        },
+        {
+          type: "p",
+          text: "Every line in this list works as it is for a children's party or a classroom. Classic fortunes are vague on purpose, because nobody knows who will crack which cookie, and the cookies themselves aren't Chinese: historians trace them to Japanese-run bakeries in California in the early 1900s, and they spread through Chinese restaurants in the US after the Second World War. In China they're still rare. Once you know who's opening it, you can be far more specific, and that's where the jokes start.",
+        },
         { type: "h2", text: "What makes a fortune cookie message funny" },
         {
           type: "p",
-          text: "Real fortunes are written so that anyone at any table can read them. That's why they're vague, and it's why yours can be funnier: you know exactly who is opening it. Most funny fortunes use one of four shapes:",
+          text: "Most funny fortunes use one of four shapes:",
         },
         {
           type: "table",
@@ -37,7 +62,7 @@ export const post: BlogPost = {
           type: "p",
           text: "Keep the fortune's voice: short sentences, the present or future tense, no emoji, no \"lol\". The deadpan is what makes it work.",
         },
-        { type: "h2", text: "Funny fortune cookie messages for anyone" },
+        { type: "h2", text: "Funny fortune cookie sayings for anyone" },
         {
           type: "p",
           text: "These work for a party, a plate at the office or a family dinner, where you don't know who'll get which cookie:",
@@ -95,10 +120,10 @@ export const post: BlogPost = {
             "\"You will finally reply to my message. The cookie believes in miracles.\"",
           ],
         },
-        { type: "h2", text: "Sweet and romantic fortune cookie messages to finish on" },
+        { type: "h2", text: "Fortune cookie sayings about love" },
         {
           type: "p",
-          text: "A plate of jokes needs one that isn't. Hand it over last, keep it short, and keep the fortune voice so it still sounds like it came out of a cookie:",
+          text: "Love fortunes work on their own, or as the one serious line on a plate of jokes. Hand that one over last, keep it short, and keep the fortune voice so it still sounds like it came out of a cookie:",
         },
         {
           type: "quote",
@@ -164,7 +189,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Bake them.** Homemade fortune cookies have to be folded while they're hot from the oven, a few at a time, so print and cut the slips before you start. Try two or three first; the first batch rarely folds well.",
+            "**Bake them.** Homemade fortune cookies have to be folded while they're hot from the oven, a few at a time, so print and cut the slips before you start: a small font, one fortune per strip, each strip about 6 by 1.5 cm (2¼ by ⅝ inches), the size of a bought slip. Try two or three first; the first batch rarely folds well.",
             "**Swap the slips in bought ones.** Ease the paper out of the open end with tweezers and slide yours in, folded small. It's fiddly and some cookies will crack, so buy more than you need.",
             "**Send them.** If they're far away, or you'd rather spend the evening writing than baking, a [digital gift](/gifts) skips the oven completely and still has the crack-open moment.",
           ],
@@ -186,6 +211,10 @@ export const post: BlogPost = {
       ],
       faq: [
         {
+          q: "What are some good fortune cookie messages?",
+          a: "Classic ones are a short prediction, piece of advice or compliment that fits anyone: \"The door you keep walking past is not locked.\" \"Luck is on its way to you. Be home when it arrives.\" For someone you know, write a prediction about them in particular, then end on one about love: \"A long and happy future awaits you. I would like to be in it.\"",
+        },
+        {
           q: "What are some funny fortune cookie messages?",
           a: "Good ones use a fortune's grand voice for something small: \"A great journey awaits you. It is to the fridge.\" \"You will find what you are looking for. It was in your pocket.\" \"Beware the second episode. There is always a third.\" For someone you know, aim the prediction at a habit of theirs they'll recognise instantly.",
         },
@@ -194,20 +223,24 @@ export const post: BlogPost = {
           a: "One or two short sentences. A real slip has room for about a line, and the joke works best when it can be read in one breath. If you're writing for the Ethos Fortune Cookie template, each fortune can be up to 140 characters.",
         },
         {
-          q: "What do you write in a fortune cookie for a boyfriend or girlfriend?",
-          a: "A prediction about something they really do, said like fate: \"You will say you're not hungry. You will then eat half of my dinner.\" Write several of those, then finish with one that isn't a joke, such as \"A long and happy future awaits you. I would like to be in it.\"",
+          q: "What do you say after you read a fortune cookie?",
+          a: "In the US, the running joke is to read it out loud and add \"in bed\" to the end. It works on most real fortunes, which is why it never quite dies. If you're writing fortunes for a group, read yours through with \"in bed\" on the end before you print them.",
         },
         {
-          q: "What should the lucky numbers be?",
-          a: "Anything they can decode: the time something happened, a score, a bus number, a count of a shared mishap. Write five or six of them with dots or spaces between, and don't explain them on the slip.",
+          q: "Are you supposed to tell anyone your fortune?",
+          a: "There's no rule. Some people keep it to themselves, like a birthday wish, and a common superstition says you have to eat the cookie for the fortune to come true. At a table, most people read theirs out loud, and the fortunes in this post are written to be read out.",
+        },
+        {
+          q: "What does it mean if a fortune cookie has no message?",
+          a: "Only that the slip didn't make it in: the cookies are folded by machine, and now and then one comes out empty. No tradition gives it a meaning, so the usual answer is a joke about writing your own future. If you're filling the cookies yourself, count the slips before you start.",
         },
       ],
     },
     es: {
-      title: "Frases para galletas de la fortuna: graciosas y tiernas",
-      description: "Frases para galletas de la fortuna: graciosas para tu pareja, un amigo o una fiesta, unas tiernas para el final y cómo convertir vuestras bromas en fortunas.",
+      title: "Frases para galletas de la fortuna: graciosas y clásicas",
+      description: "Frases para galletas de la fortuna: clásicas para cualquier mesa, graciosas para tu pareja o un amigo, frases de amor y cómo escribir las tuyas.",
       keyword: "frases para galletas de la fortuna",
-      lead: "Las frases para galletas de la fortuna más graciosas suenan a profecía antigua y acaban hablando de algo pequeño y verdadero: el despertador, el último trozo, el grupo de WhatsApp. Aquí tienes fortunas listas para una fiesta, para tu pareja y para un amigo, unas tiernas para cerrar y tres pasos para convertir vuestras bromas en fortunas.",
+      lead: "Una frase para galleta de la fortuna es una línea corta con voz de destino: una predicción, un consejo o un piropo, como «La puerta por la que siempre pasas de largo no está cerrada con llave». Las graciosas usan esa voz solemne para algo pequeño y verdadero, como el despertador o el último trozo. Aquí tienes fortunas clásicas para cualquier mesa, graciosas para una fiesta, para tu pareja y para un amigo, frases de amor para cerrar y tres pasos para convertir vuestras bromas en fortunas.",
       takeaways: [
         "Escribe con la voz solemne de una fortuna y apunta a algo diminuto y concreto. La distancia entre las dos cosas es el chiste.",
         "Una o dos frases como mucho. La tira es pequeña, y una fortuna que hay que explicar no hace gracia.",
@@ -215,10 +248,34 @@ export const post: BlogPost = {
         "Mete una fortuna tierna y guárdala para el final, para que la risa acabe en algo cálido.",
       ],
       body: [
+        { type: "h2", text: "Frases clásicas para galletas de la fortuna" },
+        {
+          type: "p",
+          text: "Casi todas las fortunas de verdad son una de tres cosas: una predicción, un consejo o un piropo, escritos para que le sirvan a cualquiera que abra la galleta. Estas mantienen esa forma, para una fiesta, una clase o el plato de después de cenar:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Un pequeño favor que tú ya has olvidado alguien lo sigue recordando.»",
+            "«La puerta por la que siempre pasas de largo no está cerrada con llave.»",
+            "«Una buena noticia llegará antes de que acabe la semana.»",
+            "«Ya sabes la respuesta. Espera a la pregunta adecuada.»",
+            "«Alguien a quien aún no conoces se alegrará de que dijeras que sí.»",
+            "«La paciencia de este mes te saldrá a cuenta.»",
+            "«Hay un viaje en tu futuro. Empieza más cerca de lo que crees.»",
+            "«Lo que haces en silencio se notará a lo grande.»",
+            "«La suerte viene de camino. Que te pille en casa.»",
+            "«Estás a punto de hacer muy bien algo nuevo.»",
+          ],
+        },
+        {
+          type: "p",
+          text: "Todas las frases de esta lista sirven tal cual para una fiesta infantil o una clase. Las fortunas clásicas son vagas a propósito, porque nadie sabe a quién le tocará cada galleta, y las galletas ni siquiera son chinas: los historiadores las sitúan en pastelerías japonesas de California a principios del siglo XX, y se extendieron por los restaurantes chinos de Estados Unidos después de la Segunda Guerra Mundial. En China siguen siendo raras. Cuando sabes quién la va a abrir, puedes ser mucho más concreto, y ahí empiezan los chistes.",
+        },
         { type: "h2", text: "Qué hace graciosa una frase de galleta de la fortuna" },
         {
           type: "p",
-          text: "Las fortunas de verdad se escriben para que las lea cualquiera en cualquier mesa. Por eso son vagas, y por eso las tuyas pueden ser más graciosas: sabes exactamente quién va a abrir cada una. Casi todas las fortunas graciosas tienen una de estas cuatro formas:",
+          text: "Casi todas las fortunas graciosas tienen una de estas cuatro formas:",
         },
         {
           type: "table",
@@ -272,7 +329,7 @@ export const post: BlogPost = {
             "«Oirás una canción y dirás “esta es mi canción”. Tienes once.»",
             "«La galleta te ve eligiendo **una peli** durante cuarenta minutos. La galleta está cansada.»",
             "«Tu futuro tiene muchas mantas. Casi todas eran mías.»",
-            "«Una desconocida misteriosa te escribirá. Soy yo, desde la habitación de al lado.»",
+            "«Alguien misterioso te escribirá. Soy yo, desde la habitación de al lado.»",
           ],
         },
         {
@@ -292,10 +349,10 @@ export const post: BlogPost = {
             "«Por fin contestarás mi mensaje. La galleta cree en los milagros.»",
           ],
         },
-        { type: "h2", text: "Frases de amor para galletas de la fortuna, para terminar" },
+        { type: "h2", text: "Frases de amor para galletas de la fortuna" },
         {
           type: "p",
-          text: "Un plato de bromas necesita una que no lo sea. Dásela la última, que sea corta y que mantenga la voz de fortuna, para que siga pareciendo salida de una galleta:",
+          text: "Las fortunas de amor funcionan solas, o como la única frase seria en un plato de bromas. Esa, dásela la última, que sea corta y que mantenga la voz de fortuna, para que siga pareciendo salida de una galleta:",
         },
         {
           type: "quote",
@@ -361,7 +418,7 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
-            "**Hornéalas.** Las galletas de la fortuna caseras se doblan recién salidas del horno, dos o tres cada vez, así que imprime y recorta las tiras antes de empezar. Haz una tanda de prueba; la primera casi nunca sale bien.",
+            "**Hornéalas.** Las galletas de la fortuna caseras se doblan recién salidas del horno, dos o tres cada vez, así que imprime y recorta las tiras antes de empezar: letra pequeña, una fortuna por tira y cada tira de unos 6 por 1,5 cm, el tamaño de las de las galletas compradas. Haz una tanda de prueba; la primera casi nunca sale bien.",
             "**Cambia las tiras de unas compradas.** Saca el papel por el extremo abierto con unas pinzas y mete el tuyo bien doblado. Es laborioso y alguna se romperá, así que compra de más.",
             "**Envíalas.** Si estáis lejos, o prefieres pasar la tarde escribiendo y no horneando, un [regalo digital](/gifts) se salta el horno y conserva el momento de partir la galleta.",
           ],
@@ -383,6 +440,10 @@ export const post: BlogPost = {
       ],
       faq: [
         {
+          q: "¿Qué frases bonitas puedo poner en una galleta de la fortuna?",
+          a: "Las clásicas son una predicción, un consejo o un piropo cortos que le sirven a cualquiera: «La puerta por la que siempre pasas de largo no está cerrada con llave». «La suerte viene de camino. Que te pille en casa». Para alguien a quien conoces, escribe una predicción sobre esa persona en concreto y termina con una de amor: «Te espera un futuro largo y feliz. Me gustaría estar en él».",
+        },
+        {
           q: "¿Qué frases graciosas puedo poner en una galleta de la fortuna?",
           a: "Las buenas usan la voz grandiosa de una fortuna para algo pequeño: «Te espera un gran viaje. Es hasta la nevera.» «Encontrarás lo que buscas. Estaba en tu bolsillo.» «Cuidado con el segundo capítulo. Siempre hay un tercero.» Para alguien a quien conoces, apunta la predicción a una costumbre suya que reconozca al instante.",
         },
@@ -391,12 +452,16 @@ export const post: BlogPost = {
           a: "Una o dos frases cortas. En una tira de verdad cabe más o menos una línea, y el chiste funciona mejor si se lee de un tirón. Si escribes para la plantilla Galleta de la fortuna de Ethos, cada fortuna puede tener hasta 140 caracteres.",
         },
         {
-          q: "¿Qué escribo en una galleta de la fortuna para mi novio o mi novia?",
-          a: "Una predicción sobre algo que hace de verdad, dicha como si fuera el destino: «Dirás que no tienes hambre. Después te comerás la mitad de mi cena.» Escribe varias así y termina con una que no sea broma, como «Te espera un futuro largo y feliz. Me gustaría estar en él.»",
+          q: "¿Qué se dice después de leer una galleta de la fortuna?",
+          a: "En Estados Unidos, la broma de siempre es leerla en voz alta y añadir «en la cama» al final. Funciona con casi todas las fortunas de verdad, y por eso no muere nunca. Si escribes fortunas para un grupo, léelas con «en la cama» al final antes de imprimirlas.",
         },
         {
-          q: "¿Qué números de la suerte pongo?",
-          a: "Cualquiera que pueda descifrar: la hora en que pasó algo, un resultado, un número de autobús, la cuenta de un desastre compartido. Pon cinco o seis separados por puntos o espacios, y no los expliques en la tira.",
+          q: "¿Hay que contarle a alguien tu fortuna?",
+          a: "No hay ninguna regla. Hay quien se la guarda, como un deseo de cumpleaños, y una superstición muy extendida dice que tienes que comerte la galleta para que se cumpla. En la mesa, casi todo el mundo lee la suya en voz alta, y las fortunas de este artículo están escritas para leerse en voz alta.",
+        },
+        {
+          q: "¿Qué significa que una galleta de la fortuna no tenga mensaje?",
+          a: "Solo que la tira no entró: las galletas se doblan a máquina y de vez en cuando sale una vacía. Ninguna tradición le da un significado, así que la respuesta habitual es una broma sobre escribir tu propio futuro. Si rellenas tú las galletas, cuenta las tiras antes de empezar.",
         },
       ],
     },

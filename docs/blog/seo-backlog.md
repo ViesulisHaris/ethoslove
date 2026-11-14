@@ -25,7 +25,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [ ] **virtual-date-ideas-long-distance, Spanish** (not before 28 Nov): "juegos para parejas a
   distancia" is Spain's biggest phrase near this post (110 a month, KD 0) and the post already answers
   it (the two-phone games, the games FAQ). Work it into a Spanish heading or the games FAQ question.
-- [ ] **fortune-cookie-messages** (published 13 Nov) aims at "funny fortune cookie messages" (390).
+- [x] (2026-11-14) **fortune-cookie-messages** (published 13 Nov) aims at "funny fortune cookie messages" (390).
   The head, "fortune cookie messages", gets 1,900 (UK 320): aim the title and description at it and
   keep the funny ones as a section. Link to it from the related posts.
 - [ ] **reasons-why-i-love-you**: "reasons why i love you" (5,400) and "things i love about you" (1,600,

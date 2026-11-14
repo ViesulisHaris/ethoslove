@@ -133,7 +133,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "fortune-cookie",
-          note: "A plate of fortune cookies. They tap one, it cracks in two and a paper slip slides out with a line you wrote. Some slips carry a photo. Write a short open-when line on each slip, up to twenty of them, and the last cookie holds your message. Premium.",
+          note: "A plate of fortune cookies. They tap one, it cracks in two and a paper slip slides out with a line you wrote. Some slips carry a photo. Write a short open-when line on each slip, up to twenty of them, and the last cookie holds your message. For wording in the fortune voice, borrow from these [fortune cookie messages](/blog/fortune-cookie-messages). Premium.",
         },
         {
           type: "template",
@@ -287,7 +287,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "fortune-cookie",
-          note: "Un plato de galletas de la fortuna. Al tocar una, se parte en dos y sale una tira de papel con una frase escrita por ti, algunas con foto. Escribe una frase corta de «ábrela cuando» en cada tira, hasta veinte, y la última galleta guarda tu mensaje. Premium.",
+          note: "Un plato de galletas de la fortuna. Al tocar una, se parte en dos y sale una tira de papel con una frase escrita por ti, algunas con foto. Escribe una frase corta de «ábrela cuando» en cada tira, hasta veinte, y la última galleta guarda tu mensaje. Para darles voz de fortuna, inspírate en estas [frases para galletas de la fortuna](/blog/fortune-cookie-messages). Premium.",
         },
         {
           type: "template",

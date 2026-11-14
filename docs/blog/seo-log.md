@@ -38,3 +38,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-14T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-boyfriend |
 | 2026-11-14T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-boyfriend |
 | 2026-11-14T14:19Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-boyfriend |
+| 2026-11-14T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01404 | seo: fortune-cookie-messages |
+| 2026-11-14T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01368 | seo: fortune-cookie-messages |
+| 2026-11-14T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: fortune-cookie-messages |
+| 2026-11-14T16:42Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
+| 2026-11-14T16:42Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
+| 2026-11-14T16:42Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
+| 2026-11-14T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |

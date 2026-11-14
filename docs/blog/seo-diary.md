@@ -3,6 +3,33 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-14: fortune-cookie-messages aimed at "fortune cookie messages"
+- **Page:** /blog/fortune-cookie-messages
+- **Why:** Next open backlog item. The post targeted "funny fortune cookie messages" (US 390 a month,
+  UK 50), while DataForSEO (US) has "fortune cookie sayings" and "fortune cookie quotes" at 2,400
+  each, "fortune cookie messages" 1,900 (UK 320), "fortune cookie fortunes" 1,600 and "funny fortune
+  cookie sayings" 1,000, all KD 0 to 3 and informational. Spain is thin ("frases galletas de la
+  fortuna" 50). Search Console has no impressions for the post yet (published 12 Nov). The top 10s
+  are printables, quote lists, a Bored Panda/BuzzFeed-style roundup, a "real history" list and two
+  shops; the AI overview splits classic/inspirational from funny fortunes and cites
+  fortuneandframe.com, Reddit and BuzzFeed. People also ask: what if there's no message, sayings
+  about love, should you tell your fortune, what do you say after reading one. The post had no
+  classic fortunes, no love heading under that name and none of those answers. "Custom fortune
+  cookie messages" (590) is a shop search: left alone.
+- **What changed:** Title "Fortune cookie messages: funny, sweet and classic", keyword "fortune
+  cookie messages", new description and lead; new first section "Classic fortune cookie messages and
+  quotes" (ten original classic-style lines, kid-safe, one line on the cookies' Japanese-Californian
+  origin); "Funny fortune cookie sayings" and "Fortune cookie sayings about love" headings; slip size
+  for homemade cookies; FAQs for good messages, the "in bed" joke, telling your fortune and the empty
+  cookie. Spanish to match. Linked from good-morning-messages-for-him and open-when-letter-ideas.
+  `updated` 2026-11-14.
+- **Panel:** 10/10/10 after 3 rounds (`docs/blog/reviews/refresh/fortune-cookie-messages-2026-11-14.json`)
+- **Cost:** $0.06 (three keyword overviews US/UK/Spain, four top-30 SERPs with AI overview and PAA); balance $52.43
+- **Note:** Sales endpoint answered 503 again; Search Console worked. No weekly job today (Saturday;
+  ranks checked 13 Nov).
+- **Check on:** 2026-12-01 whether "fortune cookie messages", "fortune cookie sayings" and "funny
+  fortune cookie sayings" show for the post in Search Console and the rank check
+
 ## 2026-11-14: virtual-date-ideas-long-distance aimed at "long distance date ideas"
 - **Page:** /blog/virtual-date-ideas-long-distance
 - **Why:** First open backlog item. The post targeted "virtual date ideas for long distance couples"

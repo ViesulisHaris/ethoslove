@@ -131,7 +131,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Make one morning stand out" },
         {
           type: "p",
-          text: "Once a month or on a day that matters, turn the good morning into something he opens. Write him a handful of fortunes for the day ahead, half sweet and half ridiculous, and send the link the night before. You can also set it to open when his alarm goes off, in his time zone. It's one of our [digital gifts for your boyfriend](/gifts/for-boyfriend); both templates below are [premium](/pricing), which is what makes the timing possible.",
+          text: "Once a month or on a day that matters, turn the good morning into something he opens. Write him a handful of [fortunes](/blog/fortune-cookie-messages) for the day ahead, half sweet and half ridiculous, and send the link the night before. You can also set it to open when his alarm goes off, in his time zone. It's one of our [digital gifts for your boyfriend](/gifts/for-boyfriend); both templates below are [premium](/pricing), which is what makes the timing possible.",
         },
         {
           type: "template",
@@ -288,7 +288,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Haz que una mañana sea distinta" },
         {
           type: "p",
-          text: "Una vez al mes o en un día que importe, convierte los buenos días en algo que abrir. Escríbele unas cuantas fortunas para el día que tiene por delante, la mitad tiernas y la mitad absurdas, y mándale el enlace la noche antes. También puedes programarlo para que se abra cuando le suene el despertador, en su zona horaria. Es uno de nuestros [regalos digitales para tu novio](/gifts/for-boyfriend); las dos plantillas de abajo son [premium](/pricing), y eso es lo que permite elegir la hora.",
+          text: "Una vez al mes o en un día que importe, convierte los buenos días en algo que abrir. Escríbele unas cuantas [fortunas](/blog/fortune-cookie-messages) para el día que tiene por delante, la mitad tiernas y la mitad absurdas, y mándale el enlace la noche antes. También puedes programarlo para que se abra cuando le suene el despertador, en su zona horaria. Es uno de nuestros [regalos digitales para tu novio](/gifts/for-boyfriend); las dos plantillas de abajo son [premium](/pricing), y eso es lo que permite elegir la hora.",
         },
         {
           type: "template",

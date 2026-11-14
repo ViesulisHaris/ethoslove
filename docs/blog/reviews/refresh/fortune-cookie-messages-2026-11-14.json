@@ -1,0 +1,142 @@
+{
+  "slug": "fortune-cookie-messages",
+  "keyword": "fortune cookie messages",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The lead was still about the funny ones and gave no classic message; 'the one line that isn't' needed rereading; 'print and cut the slips' didn't say how, though two of the top ten are printables."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every template claim matches schema.ts and Template.tsx, down to the sparkle cookie that can be opened first, and the Spanish reads like Spain; the sample lines are original and deadpan where the top results recycle the same lists."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Answers all four People-also-ask questions and explains how to write a fortune, which no top result does, but says nothing about where fortune cookies come from (result 9 and a PAA cover it) and gives no slip size for the printable searchers."
+        }
+      ],
+      "applied": [
+        "Lead now opens with what a fortune cookie message is and a real classic line, in both languages",
+        "Love section lead-in reworded ('the one serious line on a plate of jokes')",
+        "Slip size and font for homemade cookies (about 6 by 1.5 cm, 2¼ by ½ inches)",
+        "One sentence on where fortune cookies come from (Japanese-run bakeries in California, spread through US Chinese restaurants after the Second World War, rare in China) and that the classic list suits a children's party or classroom",
+        "Polish: 'Most real fortunes', H2 'Classic fortune cookie messages and quotes', two classic lines changed to avoid echoing the door and phone jokes, 'Alguien misterioso' instead of 'Una desconocida misteriosa'"
+      ],
+      "rejected": [
+        "Spanish title 'graciosas, de amor y clásicas' (polish): 65 characters, over the 60 the test allows"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All three fixes made. Lists stop at 'here are 100 quotes'; this post gives classic, funny and love fortunes, the shapes behind them, a method for in-jokes, meaningful lucky numbers and three ways to get slips into cookies tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The new passages are right, but the slip size's two units disagree: 1.5 cm is about 5/8 inch, not 1/2."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both fixes made. It is the only first-page result that shows how to write a funny or tender fortune for one person, and it still has the classic and funny lists, love lines, all four People-also-ask answers, the history and the slip size."
+        }
+      ],
+      "applied": [
+        "Slip size now 2¼ by ⅝ inches to match 6 by 1.5 cm",
+        "Polish: Spanish 'a cualquiera que abra la galleta' (no antecedent for 'la'); full stops after closing guillemets in the Spanish lead and first FAQ answer"
+      ],
+      "rejected": [
+        "Naming Yasuko Nakamachi as the historian (polish): the claim stands as written and a name adds nothing the reader acts on",
+        "Reader polish (font point size, first takeaway, a 'real' bought fortune in the lead) and search polish (a printable sheet): optional, kept out to avoid unreviewed new text"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are shops or numbered lists of pasted fortunes; this one gives classic, funny and love lines plus the method behind them, so you can write a plate of fortunes for one particular person tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The slip-size fix is right (1.5 cm is about 5/8 inch), every template claim matches schema.ts and Template.tsx, and the Spanish reads like Spain; the origin note is the established account with nothing invented."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Original lines, the four-shapes table, personalisable lines, the in-joke method, meaningful lucky numbers and practical slip advice beat the shops, printable dumps and 40-to-100-line listicles, and all four People-also-ask questions are answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: full stops after the guillemets in the second Spanish FAQ answer too; Spanish title 'graciosas, tiernas y clásicas' if within 60 characters",
+        "Reader: 2⅜ instead of 2¼ inches, a point size for the font",
+        "Search: a printable sheet of the lines at slip size"
+      ]
+    }
+  ]
+}
