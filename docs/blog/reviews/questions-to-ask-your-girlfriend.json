@@ -1,0 +1,188 @@
+{
+  "slug": "questions-to-ask-your-girlfriend",
+  "keyword": "questions to ask your girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Two of the five rows ('The first month', 'After a hard week') are times, not places, so the 'Where you are' column header doesn't fit them. 'When' fits all five rows.; The table also sorts by how long you've been together (first month, after a hard week). The intro should say so.; 'From fun to flirty' is wrong, because texting and long distance come after flirty. 'With which suit' trips the reader. Naming the groups shows a phone reader the post has the kind she came for."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 7
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "text-thread/schema.ts caps `lines` at 40 and a photo is a \"[photo]\" line (Template.tsx buildItems), so photos count toward the forty. The current line reads as 40 + 12.; Same schema fact as the English fix.; Asks the same thing in near-identical words as the pack-cards.ts card \"When have you been proudest to be with me?\"; Matches the English fix; the current line is the same question as the pack-cards.ts card \"¿Cuándo te ha dado más orgullo estar conmigo?\"; Near-copy of the long-distance deck card in questions.ts: \"What part of your day do you most wish I'd been there for?\"; Matches the English fix. The current line is also a copy, of the questions.ts card \"¿En qué momento de tu día te habría gustado más que yo estuviera?\"; Same question in near-same words as the pack-cards.ts long-distanc"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The main PAA \"What are 10 good questions?\" is answered nowhere; the FAQ is already at five, so this answer takes it on alongside \"What kind of question to ask your girlfriend?\", using questions already in the post.; Keeps the Spanish the same post as the English after the fix above.; The PAA \"How to win girl heart by chatting?\" is left unanswered. This answers it in one line, where a texter will be reading.; Mirrors the English fix."
+        }
+      ],
+      "applied": [
+        "Text Thread note: photos count toward the forty bubbles (EN+ES)",
+        "Three near-copies of game cards replaced (proud to be with me, hour of your week, small thing to send) (EN+ES)",
+        "ES: hand-holding, 'de qué se discute', bucket list, swap lives, trend, 'meta persigues', 'házsela', 'regalo digital' sentence",
+        "Reader: table header 'When', intro, lead names the eight groups",
+        "Search: 'What are 10 good questions?' answered in FAQ 1; texting intro answers how to keep a chat going; heading 'Romantic questions to ask your girlfriend'",
+        "Polish taken: five-years question, Would you rather link, ES description, intro wording, ES phrasing, 'come around', neutral 'estoy mejor'"
+      ],
+      "rejected": [
+        "Replacing 'What are your expectations in a relationship?': it is a People-also-ask question the post answers",
+        "'Guarrería' for snack: used 'aperitivo' instead",
+        "'Coquetas' heading: 'atrevidas' kept to match the description and FAQ"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Adding the Would you rather link last round left one sentence holding three clauses joined by 'and ... and', with three links. On a phone it's hard to tell which game does what, and it breaks VOICE.md's short sentences. Splitting it gives each game its own clause.; Same fix in Spanish, so the two versions stay the same post."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'Asks for you' reads as 'requests you' or 'asks after you'. Round 1 fixed the Spanish for the same confusion, but not the English.; The Greater Good instructions have both partners answer every question. 'Take turns on every question' can read as alternating who answers. The Spanish ('contestad los dos cada pregunta por turnos') already says it correctly.; '¿Por qué…?' reads as 'why would you like to be remembered?', not 'what do you want to be remembered for?'. This is the same trap as round 1's 'Por qué se discute'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Last round's fix was added on to the old answer instead of replacing it, so the same two questions now appear twice in one answer, the snippet Google is most likely to lift for \"What are 10 good questions?\". The rest of the answer stays as it is.; Same duplication in Spanish: both questions are quoted and then repeated straight after in «Diez buenas para empezar».; Last round's polish was applied as \"X, and Y, and Z\", a run-on that buries the quiz link. That link is the post's answer to the PAA about couples' quizzes.; Matches the English fix. Removes the \"y… y… Y\" chain, which reads as translated."
+        }
+      ],
+      "applied": [
+        "Games paragraph split into two sentences (EN+ES)",
+        "FAQ 1 no longer repeats two questions (EN+ES)",
+        "'asks the questions for you'; 36 questions: both answer every question; ES '¿Cómo te gustaría que te recordaran?'",
+        "Polish taken: weeknight question, 'Both are premium templates', 'Ten to start with', ES 'Desconocidos, de dos en dos', 'ir pasándoos el móvil'"
+      ],
+      "rejected": [
+        "'Coquetas' heading: kept 'atrevidas' for consistency with the description and FAQ",
+        "ES 'aceptar' rewording of the first deep question: optional"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In a post about couples, and with the next paragraph using 'Las parejas' to mean couples, this reads as strangers ending up closer than couples, which is not what the study found. The comparison group was also strangers.; Same misreading as fix 1, and the FAQ has no 'de dos en dos' before it, so 'las parejas' here reads plainly as couples."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        }
+      ],
+      "applied": [
+        "ES 36 questions: the comparison group is 'otros desconocidos', not 'parejas' (body and FAQ)",
+        "Polish taken: 'a photo after some of them' (twelve-photo cap), 'questions for her', ES '¿Qué hay de nosotros…?'"
+      ],
+      "rejected": [
+        "'Coquetas' heading: kept 'atrevidas' for consistency"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: 'Look ahead' can read as 'think about the future', which is a different row's job. The point is that side by side, nobody has to hold eye contact. The current line still works."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: Last round the EN changed 'about her' to 'for her'. This brings the ES into line. The current line isn't wrong.; 'Estar mejor' can also mean 'feel better' or 'be in a better mood'. 'Más guapo' matches EN 'look my best' without that reading, and the person asking is him. Colloquially the current line works.; In Spain you say 'jugar a un concurso'. A small grammar point."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: "
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: table wording 'look ahead', ES 'para ella', ES 'más guapo', ES 'al que podéis jugar'"
+      ]
+    }
+  ]
+}

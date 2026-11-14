@@ -131,7 +131,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "For the nights you want to say more than a line, our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend) include one to send her at night.",
+          text: "For the nights you want to say more than a line, our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend) include one to send her at night, and for a conversation instead of a message, try these [questions to ask your girlfriend](/blog/questions-to-ask-your-girlfriend).",
         },
         { type: "h2", text: "Add one detail and the line is yours" },
         {
@@ -316,7 +316,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Para las noches en que quieras decir algo más que una frase, nuestros [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend) incluyen uno para mandarle por la noche.",
+          text: "Para las noches en que quieras decir algo más que una frase, nuestros [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend) incluyen uno para mandarle por la noche, y para una conversación en vez de un mensaje, prueba estas [preguntas para tu novia](/blog/questions-to-ask-your-girlfriend).",
         },
         { type: "h2", text: "Con un detalle tuyo, cualquier frase suena a ti" },
         {
