@@ -1,0 +1,200 @@
+{
+  "slug": "love-letter-for-girlfriend",
+  "keyword": "love letter for girlfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"That rank online\" is SEO talk aimed at the writer, not the reader. It jolts someone reading on their phone out of the post.; The link goes to a guide, not a product, so \"does this digitally\" doesn't make sense and misdescribes what you get when you tap it.; \"Her page\" reads as if the girlfriend has a page. The line is confusing as written."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "'Her page' reads as the girlfriend's page; it is confusing.; 'Our virtual flowers ... does' is ungrammatical, and it reads as if Ethos sells a product called virtual flowers.; Same problem as the English: it presents a blog post as flowers we sell.; This line would fit any post and sounds like a greeting card (VOICE.md). It pads the list to 20.; Keeps the Spanish in step with the English fix.; A stock greeting-card line with no detail, padding the round number (VOICE.md: sample lines are specific).; Keeps the Spanish in step with the English fix ('solo' is masculine, for the writer).; The list doesn't hold together: 'para cuando ya lleváis años y a distancia' reads as one case.; 'Pasar de largo' doesn't take a direct object like this, so the sentence is ungrammatical.; 'Conocerte en person"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "This is nearly the same sentence as the second sentence of the lead in love-letter-for-boyfriend, published today (\"Below are three full letters, for a new relationship, three years in and long distance, ... plus twenty short love messages for days when a letter is too much\"). The brief says the two posts must not share lines or structural wording.; The Spanish version of the same fix. It mirrors the sibling's Spanish lead.; Apart from him/her, this is word for word the same as an item in love-letter-for-boyfriend's \"How to give him the letter\".; This is word for word the same as line 420 of love-letter-for-boyfriend.ts.; The sibling post has the same idea in nearly the same words: \"If he's the one leaving, write it before he goes and hide it in his bag, to open on the first night apart.\";"
+        }
+      ],
+      "applied": [
+        "Lead, digital-letter item, 'she's leaving' tip, two-line note and short-notes heading reworded so they don't mirror love-letter-for-boyfriend (EN+ES)",
+        "Added a 'not together yet?' paragraph for declaring feelings (EN+ES)",
+        "'100 romantic messages' PAA answered with links to reasons-why-i-love-you and good-morning-messages-for-her (EN+ES)",
+        "'that rank online' removed; virtual-flowers link described as a guide; 'Our page of digital gifts' (EN+ES)",
+        "Stock note lines replaced with specific ones (Tuesdays, laugh, bravest); kitchen-dance and shopping-list notes changed (they echoed reasons-why-i-love-you)",
+        "ES: 'pasa por alto', 'teniéndote delante', 'ocupar tu lugar… lo que falta para veros', 'se te han quedado', 'Pegaste en la nevera', 'un «para siempre»', 'dejárselos escritos'",
+        "Polish taken: 'how long until you see her', 'more dogs in raincoats', takeaway on length reworded"
+      ],
+      "rejected": [
+        "Description rewrite: current one already names the three letters and 20 notes",
+        "Showing one letter complete with greeting and sign-off: the FAQ covers openings and links the how-to post",
+        "Apology link: kept the related-links paragraph short"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'Washbag' is UK-only. US readers say toiletry bag, and VOICE.md asks for wording that works in both. The ES 'neceser' is; You can't do the crossword before opening the paper it's printed in. That undercuts a post whose whole point is details ; Keeps the Spanish in step with the English fix."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The SERP snippet uses the same template as love-letter-for-boyfriend's, published today: \"Three love letters for your bo; It mirrors the sibling's \"Tres cartas de amor para tu novio (al empezar, a los tres años y a distancia) con cada parte e; This still mirrors the sibling's first item: \"Handwritten, somewhere he'll find it alone: in his coat pocket, inside the; The sibling's item reads \"Escrita a mano, donde la encuentre a solas: ... dentro del libro que está leyendo\". The label ; Round 1's fix was applied in a different form. The new line keeps the sibling's move (write it before they go an"
+        }
+      ],
+      "applied": [
+        "New EN and ES descriptions not mirroring the boyfriend sibling",
+        "Reworded the where-she-reads-it-alone item (EN+ES)",
+        "She-is-leaving tip: give it at the station, open on landing (drops washbag and the sibling overlap)",
+        "ES FAQ question now matches People also ask: ¿Cómo hacer una carta de amor a mi novia?, fuller answer",
+        "Crossword before picking up a pen (EN+ES)",
+        "Title reshaped: 3 real letters, 20 notes for her",
+        "Blankets note replacing cold feet (overlap with reasons-why-i-love-you)",
+        "Stand-in, notes intro, boyfriend link and Further-in lines reworded away from siblings",
+        "ES: desbloqueo premium, no me sales de la cabeza, todavía no hemos hecho, relicario, sale tu carta",
+        "Takeaway adds handwrite it if together (reader polish)"
+      ],
+      "rejected": [
+        "Reader polish to rewrite the no-reason note: editor fixed the Spanish calque instead and the reader said it works as the closing note",
+        "Editor toiletry-bag fix superseded by the search reviewer's station line"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; My round 2 review had no fixes. Its handwriting polish went in correctly: the takeaway now reads \"Handwrite it if you'll be together, and give it to her somewhere she can read it alone.\" The rejected polish on the no-reason note was rejected for a sound reason."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; Round-2 editor fixes are resolved correctly. The washbag line was replaced by the station line, so 'washbag' and the overlap with the sibling are both gone. The crossword now reads 'before you'd even picked up a pen' and the ES matches with 'antes de coger siquiera el boli'. The applied round-2 poli"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This has the same shape as the closing quote in love-letter-for-boyfriend, published today: \"Forty-one days. I've booked us a table at the p; Same fix in Spanish. It mirrors the sibling's «Cuarenta y un días...» countdown line.; It mirrors the sibling's intro: \"When you're apart, the letter has to do the job of being in the room. Put him back in a day you spent toget; It mirrors the sibling's «Cuando estáis lejos, la carta tiene que hacer las veces de estar juntos. Llévale a un día que pasasteis los dos...; \"She's heard them. What she hasn't heard is...\" is word for word from christmas-letter-"
+        }
+      ],
+      "applied": [
+        "Long-distance closing line: hair tie on the wrist instead of the sibling's day-count-and-bring shape (EN+ES)",
+        "Long-distance intro rewritten around the found object (EN+ES)",
+        "Adjective-table intro rewritten away from christmas-letter-to-mom and the sibling (EN+ES)",
+        "Beach line punchline: holding your towel (echo of reasons-why-i-love-you removed, EN+ES)",
+        "Editor polish: arrived not landed; mandarle lo mismo; dropped the repeated media página; billete; Keepsake note reshaped (EN+ES)"
+      ],
+      "rejected": [
+        "Reader polish on the third-date line: the reader called it optional and it works as written",
+        "Search polish on H2s and an apology link: the reviewer said the headings are fine as they are and the link is optional",
+        "Editor polish on the digital gift sentence: a shared product fact, current wording correct"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. My round 3 review had no fixes. Its one optional polish (the third-date line) was rejected for a sound reason: I called it optional, and it works as written."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Round 3 had no editor fixes. All the round-3 editor polish that was applied went in correctly. EN 'until she's arrived' (no longer 'landed'). ES 'cómo mandarle lo mismo al móvil'. ES FAQ no longer repeats 'con media página basta' before the length answer. ES Keepsake uses 'billete', which matches field-meta 'El billete'. The Keepsake note was reshaped in both languages ('She breaks a wax seal and "
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. All round 3 search fixes are in the post exactly as asked, in EN and ES. (1) The long-distance closing quote now reads \"The hair tie is on my wrist now, and it stays there until I can give it back to you in person. The twelfth can't come soon enough. I've already found us another waterfall.\" / «Me he puesto la goma en la muñeca... Ya he encontrado otra cascada.» The sibling's day-count-and-\"Bring "
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final round polish recorded, not applied: reader \"puts her back in the room\" for the long-distance intro; editor \"ask how my interview went\" to avoid repeating ask-about-my-day; search optional swap for the blankets note"
+      ]
+    }
+  ]
+}

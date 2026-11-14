@@ -45,3 +45,6 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-14T16:42Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
 | 2026-11-14T16:42Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
 | 2026-11-14T16:43Z | serp/google/organic/live/advanced | 0.006 | seo: fortune-cookie-messages |
+| 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |
+| 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |
+| 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |

@@ -113,7 +113,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Then say the real thing in the letter behind it. Two or three sentences are enough, as long as one of them is about her and nobody else:",
+          text: "Then say the real thing in the letter behind it. Two or three sentences are enough, as long as one of them is about her and nobody else (for a full letter, see our [love letter for your girlfriend](/blog/love-letter-for-girlfriend)):",
         },
         {
           type: "quote",
@@ -277,7 +277,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Luego di lo de verdad en la carta. Bastan dos o tres frases, siempre que una sea sobre ella y nadie más:",
+          text: "Luego di lo de verdad en la carta. Bastan dos o tres frases, siempre que una sea sobre ella y nadie más (para una carta entera, mira nuestra [carta de amor para tu novia](/blog/love-letter-for-girlfriend)):",
         },
         {
           type: "quote",
