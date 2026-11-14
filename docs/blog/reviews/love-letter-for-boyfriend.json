@@ -1,0 +1,142 @@
+{
+  "slug": "love-letter-for-boyfriend",
+  "keyword": "love letter for boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This is the one greeting-card line in the list. It could go to anyone, which breaks VOICE.md's rule on sincere, specific sample lines, and it's the line in the list that looks like padding to reach 20.; The very next block is the free Letter template, so a reader would assume the free letter can be scheduled. Scheduling is premium only (messages/en.json scheduleHelp: \"Premium.\")."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Scheduling is premium only (publish.ts: options.schedule forces needsUnlock; en.json scheduleHelp ends 'Premium.'). Placed just above The Letter's 'free, tonight, without paying', the current line implies the free letter can be timed.; The same scheduling fix, in Spanish.; 'He's noticed' reads first as 'he has noticed', which flips the meaning.; This matches the English fix. Without 'en él', the reader can't tell what you've noticed.; The English wordplay doesn't survive. In Spanish, 'lo intenta' refers back to 'impresionarme', so the line says he isn't trying to impress you and then that he is. 'Recuerdo pensar' is also a calque.; This is a different question from the English ('How can I tell my boyfriend how I feel in a letter?'), and the answer doesn't fit it: he's already her boyfriend"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "\"Make him cry\" is in four of the six top-ranking titles (marriage.com, LoverJournal and others). That's the emotional intent behind the search, and the post never names it.; Answers the \"make him cry\" intent directly with the post's own method, so it gives more than the lists that only promise tears.; Spanish PAA asks twice for a letter \"que lo haga llorar\". The heading should use the words people search with.; Mirrors the English fix.; Spanish PAA \"¿Cómo puedo escribir una carta de cumpleaños para mi pareja que lo haga llorar?\" is unanswered, and top results cover birthday letters. The right post already exists.; Answers the Spanish birthday PAA, which is the one that matters most in Spain.; Spanish PAA \"carta de despedida para mi novio\" is unanswered. The farewell-before-distance reading"
+        }
+      ],
+      "applied": [
+        "Scheduling is premium: the digital-letter line now says so (EN+ES)",
+        "Greeting-card line replaced with a specific one (charger); kitchen line replaced (milk) (EN+ES)",
+        "Umbrella example replaced (it echoed reasons-why-i-love-you) (EN+ES)",
+        "'you've noticed him' / 'te has fijado en él'; ES calques fixed ('Recuerdo que pensé…', 'hacer las veces de estar juntos', 'lo que más me gusta'); ES FAQ question now matches the English",
+        "Search: 'make him cry' named in a heading and intro (EN+ES); birthday letter line linked to the birthday-card post; farewell letter paragraph linked to open-when ideas; girlfriend PAA linked to paragraphs-for-your-girlfriend; apology item linked to how-to-apologize",
+        "Polish taken: 'reservation', Keepsake note reworded away from the anniversary post's"
+      ],
+      "rejected": [
+        "Opening/sign-off sentence: how-to-write-a-love-letter covers it and is linked",
+        "Title hook 'to steal': current title is clear",
+        "An extra birthday letter: the birthday line and link cover it"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In Spain 'te dejaste X' means 'you forgot X'. Item 13 uses that sense ('Sabía que te lo ibas a dejar'), so here it reads as 'you forgot the last of the milk' and the kindness is lost. 'La última leche' is also not idiomatic.; The English says 'He taps'. The Spanish imperative 'Toca' is addressed to the reader, so it reads as an instruction to her rather than a description of what he sees.; 'Eras tú' reads as 'the stranger was you'. The English 'That was you' means he was the reason, and 'Fue culpa tuya' says that in natural Spain Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Mirrors the Spanish fix so EN and ES stay in step, and speaks to the 'express my feelings to a guy I love' reader who isn't settled with him yet.; The Spanish PAA '¿Cómo enamorar a un hombre con una carta?' is the only one of the 11 questions (EN and ES) still not answered in the body, the FAQ or by a link. The new-boyfriend letter is already the answer; the page just needs to say so in the words people search with."
+        }
+      ],
+      "applied": [
+        "ES milk line ('Me dejaste lo que quedaba de leche…'), ES Letter note 'Él rompe…', ES 'Fue culpa tuya'",
+        "Search: new-boyfriend intro answers 'make him fall for you' / '¿Cómo enamorar a un hombre con una carta?' (EN+ES)",
+        "Polish taken: one fewer 'I love you' ending, ES Keepsake note wording, 'los dos', 'noodles', FAQ 'what it looks like day to day', softer first-dates line (EN+ES)"
+      ],
+      "rejected": [
+        "'Good luck today…' swap: a common idea, kept"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: 'it all' lands the joke a little more cleanly. Optional."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: The sentence before has «Tu carta» as its subject, so for a moment the letter seems to be what finds things. The English says 'he finds'. Context resolves it, so this is not an error.; «enamorarle... enamora» in the same sentence.; «construir una vida» is the more usual collocation in Spain. «hecho» is still correct.; A light echo of what-to-write-in-boyfriends-birthday-card ('You make me braver than I am on my own'). It's a common idea, not a copy.; A light echo of the birthday-card post's sample ('you sing in the shower, badly, every morning')"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: "
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: 'it all makes sense', ES 'él encuentra', ES 'puede más', ES 'construido', light echoes of common ideas"
+      ]
+    }
+  ]
+}

@@ -34,7 +34,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "End with \"Happy anniversary\", \"I love you\" and your name. The *then* is what makes it an anniversary letter rather than any love letter, and the *next* keeps it from turning into a eulogy for the early days. If you've never written him a letter at all, our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) covers openings and sign-offs; this one is about the anniversary part.",
+          text: "End with \"Happy anniversary\", \"I love you\" and your name. The *then* is what makes it an anniversary letter rather than any love letter, and the *next* keeps it from turning into a eulogy for the early days. If you've never written him a letter at all, our guide on [how to write a love letter](/blog/how-to-write-a-love-letter) covers openings and sign-offs; this one is about the anniversary part. For a letter on an ordinary day, see our [love letter for your boyfriend](/blog/love-letter-for-boyfriend).",
         },
         {
           type: "quote",
@@ -169,7 +169,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Termina con «Feliz aniversario», «Te quiero» y tu nombre. El *antes* es lo que la convierte en una carta de aniversario y no en una carta de amor cualquiera, y el *después* evita que se quede en un homenaje póstumo a los primeros tiempos. Si nunca le has escrito una carta, nuestra guía de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) explica cómo empezar y cómo despedirte; esta va de la parte del aniversario.",
+          text: "Termina con «Feliz aniversario», «Te quiero» y tu nombre. El *antes* es lo que la convierte en una carta de aniversario y no en una carta de amor cualquiera, y el *después* evita que se quede en un homenaje póstumo a los primeros tiempos. Si nunca le has escrito una carta, nuestra guía de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter) explica cómo empezar y cómo despedirte; esta va de la parte del aniversario. Para una carta un día cualquiera, mira nuestra [carta de amor para tu novio](/blog/love-letter-for-boyfriend).",
         },
         {
           type: "quote",
