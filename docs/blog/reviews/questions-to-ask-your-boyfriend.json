@@ -1,0 +1,238 @@
+{
+  "slug": "questions-to-ask-your-boyfriend",
+  "keyword": "questions to ask your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "As written it's unclear what is being asked (swap into? swap with me?), and he'd have to ask what you mean before he can answer.; The current line is tangled and hard to say out loud. The replacement asks the same thing about the future in a form he can answer with a story."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Factual error about Ethos: \"Both work on one phone or two.\" (ES: \"Los dos funcionan con un móvil o con dos.\") The question cards are one phone only. src/lib/games/catalogue.ts gives deck `phones: \"one\"`, and src/components/games/question-deck.tsx says \"a deck of questions, one phone, two people\" and has no lobby or room. Only /games/know has the two-phone lobby (know-game.tsx uses Lobby/useRoom; catalogue `phones: \"two\"`)."
+          ],
+          "summary": "The question deck is one phone only (catalogue.ts phones: \"one\"; question-deck.tsx has no room or lobby). Dealbreaker.; Same factual error in Spanish.; Misleading. Fortune Cookie keeps opened cookies only in React state (no storage), so every visit starts with all cookies closed and unmarked. He can't pick up where he left off \"one a night\".; Same misleading claim in Spanish.; Word-for-word copy of a line in the site's own deck (src/lib/games/content.ts line 262).; Copies content.ts line 262 (ES: \"¿Cuál es el mejor regalo que te he hecho y por qué?\") apart from one comma.; Ungrammatical: \"the most you've ever laughed\" asks for an amount, not a story.; \"De qué es de lo que\" is clumsy and reads like a translation.; \"Comer una cocina\" is a calque of \"cuisine\". In Spain it reads as eating a ki"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The \"People also ask\" box for the main keyword includes \"What are 20 random questions?\" and the post never answers it. Under the playbook, an unanswered PAA question blocks a 10.; Keeps the Spanish the same post as the English and answers the same PAA question.; \"What are romantic questions to ask your boyfriend?\" is a PAA question for the deep variant. Every other section heading uses the words people search with, and this one uses none."
+        }
+      ],
+      "applied": [
+        "Dealbreaker fixed: question cards are one phone passed between you; the quiz works on two phones (EN+ES)",
+        "Fortune Cookie note: he opens them on a call and answers out loud (opened cookies aren't saved between visits) (EN+ES)",
+        "Replaced a question copied from the site's own deck (best present) and other close paraphrases of deck lines",
+        "Grammar: 'laugh hardest at the wrong moment', several ES fixes (comida de un país, tontería, hiciera más, será, sensación, se la salte)",
+        "Reader: two unclear questions rewritten; flirty opener no longer repeats; city question no longer yes/no",
+        "Search: random-questions PAA answered in the funny FAQ; headings 'Romantic questions about the two of you', 'Serious questions about the future'; Would you rather linked; ES names 'preguntas incómodas'",
+        "Polish taken: ES wording, 'a year or more' to match the table"
+      ],
+      "rejected": [
+        "A sixth FAQ: the playbook allows three to five, so the random-questions answer joined the funny one",
+        "Linking the deck page back to the post: outside the folders the routine may change",
+        "Flirty intro naming which numbers work over text: optional"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Near-verbatim copy of the free deck this post links to (src/lib/games/questions.ts line 98: \"What's a tradition you'd like us to start?\"). A reader who taps through gets the same card.; Same copy in Spanish: questions.ts line 98 is \"¿Qué tradición te gustaría que empezáramos?\".; The site's own after-dark pack has it with one word more (src/lib/games/pack-cards.ts line 124: \"When exactly did you first want to kiss me?\"). Also change it in the juicy FAQ: \"\\\"When did you first want to kiss me?\\\", \" becomes \"\\\"What were you thinking the first time we kissed?\\\", \".; Keeps ES matching EN, and it's close to pack-cards.ts line 124. Also change it in the «picantes» FAQ: «¿Cuándo tuviste ganas de besarme por primera vez?» becomes «¿En qué pensabas la primera vez que nos besamos?».; One word away fro"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Replaced near-copies of the site's game cards: tradition, first kiss, 'upset before I say anything' (EN+ES), and reworked the flirty list away from the after-dark pack (best kiss, what I wear, attractive without thinking, unexpected place, whisper)",
+        "'queue' -> 'wait'",
+        "ES: 'Hubo algún momento…', 'discusión nuestra', 'concurso'",
+        "Polish taken: job off your plate, ES wording, FAQ quote matches the list, habit you'd miss, regret question no longer yes/no"
+      ],
+      "rejected": [
+        "Linking the deck page back here: outside the routine's folders"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "This arrived as round-2 polish and is one word away from a card in the free deck the post links to (src/lib/games/questions.ts line 83: \"What's a habit of mine you'd miss if it stopped?\"). The replacement is the table's own 'A year or more' starter, so all five table starters now come from the lists. pack-cards.ts line 39 ('routine… protect at all costs') rules out a 'routine' rewording.; Same copy in Spanish (questions.ts line 83: «¿Qué manía mía echarías de menos si desapareciera?»). This also matches the ES table starter.; Close paraphrase of the site's long-distance pack (src/lib/games/pack-cards.ts line 87: \"What should we watch, read or cook at the same time this week?\"). The replacement fits the section intro ('They pull the other city into the conversation').; Same in Spanish (pack"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        }
+      ],
+      "applied": [
+        "Replaced four more near-copies of the site's game cards (habit you'd miss, watch at the same time, date you'd repeat, understood later) in EN+ES and the FAQ",
+        "Self-check against all game files: also replaced 'question you're scared of being asked' and the money question, which tracked deck lines",
+        "Polish taken: romantic FAQ quotes the list exactly, ES 'dar caña', 'no hayamos hecho nunca'",
+        "Reader polish taken: two yes/no-able questions reworded (EN+ES)"
+      ],
+      "rejected": [
+        "Deck-page link: outside the routine's folders"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The round-3 fix brought in a new copy. This is the same question as the long-distance pack card (src/lib/games/pack-cards.ts line 84: \"Which place where you live do you most want to show me?\"). The replacement still pulls his city into the call, as the section intro says.; Same copy in Spanish (pack-cards.ts line 84: «¿Qué sitio de donde vives es el que más ganas tienes de enseñarme?»).; This is the round-2 replacement, and it asks the same thing as a Truth card in the dare game (src/lib/games/content.ts line 253: \"What was going through your head during our first kiss?\"). Make the same change in the juicy FAQ: \"\\\"What were you thinking the first time we kissed?\\\", \" becomes \"\\\"Which kiss of ours do you still think about?\\\", \".; Same in Spanish (content.ts line 253: «¿Qué se te pasaba por "
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed."
+        }
+      ],
+      "applied": [
+        "Replaced the remaining near-copies of game cards found by meaning: city place, first kiss, first impression, favourite photo (EN+ES, FAQ too)",
+        "Future intro now names the serious ones (money, children, marriage) instead of 'the last few' (EN+ES)",
+        "Own word-overlap scan against every game card: also replaced 'learned from me', 'message read more than once', 'thinking of me at work' and 'job off your plate'; no kiss questions left that track the after-dark pack"
+      ],
+      "rejected": [
+        "'What makes you feel loved?' kept: it is a People-also-ask question the post must answer, and a common question rather than a copy of the quiz prompt",
+        "Lead 'a few dates in' polish: optional"
+      ]
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: The table's first row says 'A few dates in', so the lead would use the same words. This was optional last round and it still is. Nothing is wrong as it stands."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: This is the round-4 replacement for 'learned from me'. It isn't a copy, because it asks about an opinion and the card asks about a habit, but it uses the same frame as the visible pack sample in src/lib/games/packs.ts line 47 (\"What's a habit of mine you've quietly adopted?\"). Changing it now heads off a future near-copy flag. ES: «¿Qué opinión mía has acabado compartiendo sin decírmelo?» could become «¿En qué opinión mía me has acabado dando la razón sin decírmelo?», away from «¿Qué costumbre mía has adoptado sin darte cuenta?».; In the same fl"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes; previous round confirmed. Polish only: This is the only overlap left. It is outside the folders this routine may change, and rounds 1 to 4 rejected it for that reason.; VOICE.md forbids padding a list to a round number, and the juicy FAQ answers what those searches mean."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: 'a few dates in', opinion-question frame, plan question, 'private jokes', ES 'más que somos un equipo', ES house line, chore questions; deck-page link is outside the routine's folders"
+      ]
+    }
+  ]
+}

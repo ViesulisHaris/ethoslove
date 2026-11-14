@@ -21,3 +21,9 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
 | 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
 | 2026-11-14T04:42Z | serp/google/organic/live/advanced | 0.00415 | seo: virtual-date-ideas-long-distance |
+| 2026-11-14T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: questions-to-ask-your-boyfriend |
+| 2026-11-14T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: questions-to-ask-your-boyfriend |
+| 2026-11-14T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-boyfriend |
+| 2026-11-14T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-boyfriend |
+| 2026-11-14T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-boyfriend |
+| 2026-11-14T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: questions-to-ask-your-boyfriend |

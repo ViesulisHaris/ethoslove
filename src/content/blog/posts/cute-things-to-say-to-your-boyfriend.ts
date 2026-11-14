@@ -158,7 +158,7 @@ export const post: BlogPost = {
         { type: "h2", text: "When he's far away" },
         {
           type: "p",
-          text: "Messages carry more weight across a distance, so make them about him and the two of you rather than about how far apart you are. Our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) works on the same rule.",
+          text: "Messages carry more weight across a distance, so make them about him and the two of you rather than about how far apart you are. Our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) works on the same rule, and when the news runs out on a call, try these [questions to ask your boyfriend](/blog/questions-to-ask-your-boyfriend).",
         },
         {
           type: "list",
@@ -389,7 +389,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cuando está lejos" },
         {
           type: "p",
-          text: "Los mensajes pesan más a distancia, así que haz que hablen de él y de vosotros, no de lo lejos que estáis. Nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) sigue la misma regla.",
+          text: "Los mensajes pesan más a distancia, así que haz que hablen de él y de vosotros, no de lo lejos que estáis. Nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) sigue la misma regla, y cuando en una llamada ya no quede nada que contar, prueba estas [preguntas para tu novio](/blog/questions-to-ask-your-boyfriend).",
         },
         {
           type: "list",
