@@ -21,7 +21,8 @@ with a strong group; hundreds means links first.
    Links alone don't change the hub's `updated`.
 3. **Hubs the routines can't edit.** The quiz, the games, `/long-distance` and the template pages
    live outside the blog folders. When a member goes live, add a line under "For a person" in
-   `docs/blog/seo-backlog.md`: "link /blog/<slug> from <hub>".
+   `docs/blog/seo-backlog.md`: "link /blog/<slug> from <hub>". The five language posts need no line:
+   the quiz links each one by itself the day it's published (group 2).
 4. **Use the free thing where it helps.** The questions are better played on two phones than read in
    a list; a language is better found with the quiz than guessed. Say so plainly, once, where it fits.
    Never as an ad.
@@ -53,12 +54,17 @@ with a strong group; hundreds means links first.
 - **Free thing:** the quiz, and the template it gives each language (`LANGUAGE_GIFTS` in
   `src/content/love-language-quiz.ts`): words → the-letter, time → picnic, gifts → bouquet, service →
   scratch-card, touch → xoxo. A member names the template its language gets and why it fits.
-- **Members to write:** words of affirmation 49,500, KD 5, ~42 sites (also answers "words of
-  affirmation examples" 6,600) · acts of service love language 9,900, KD 16 · physical touch love
-  language 4,400, KD 4 · quality time love language 3,600, KD 8 · gift giving love language 1,900,
-  KD 2 (and "receiving gifts" 480: the search closest to what Ethos makes).
-- **For a person, once members are live:** the quiz's reading list (`LOVE_QUIZ_READING`) should point
-  at them.
+- **Members live:** words-of-affirmation (15 Nov; 49,500, KD 5, ~42 sites, also answers "words of
+  affirmation examples" 6,600).
+- **Members to write:** acts of service love language 9,900, KD 16 · physical touch love language
+  4,400, KD 4 · quality time love language 3,600, KD 8 · gift giving love language 1,900, KD 2 (and
+  "receiving gifts" 480: the search closest to what Ethos makes).
+- **The quiz links them by itself:** each language's card on the quiz page, and the result for that
+  language, link its post as soon as one is published under the slug in `LANGUAGE_POSTS`
+  (`src/content/love-language-quiz.ts`): words-of-affirmation, quality-time-love-language,
+  gift-giving-love-language, acts-of-service-love-language, physical-touch-love-language. Keep those
+  slugs in the queue: a post under another slug gets no link. The blog hub (the 5 love languages)
+  still needs a "For a person" line when it goes live.
 
 ## 3. Long distance
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LANGUAGE_GIFTS, LOVE_QUIZ, LOVE_QUIZ_READING, QUESTIONS } from "@/content/love-language-quiz";
+import { LANGUAGE_GIFTS, LANGUAGE_POSTS, LOVE_QUIZ, LOVE_QUIZ_READING, QUESTIONS } from "@/content/love-language-quiz";
 import { getPost } from "@/content/blog";
 import {
   LANGUAGES,
@@ -174,5 +174,12 @@ describe("love language quiz: the page", () => {
       for (const loc of ["en", "es"] as const) expect(LOVE_QUIZ[loc].languages[l].gift.startsWith(`${m!.name[loc]}:`), `${l} ${loc}`).toBe(true);
     }
     for (const slug of LOVE_QUIZ_READING) expect(getPost(slug), slug).not.toBeNull();
+  });
+
+  it("links each language to its own post, a different one each, the words post already live", () => {
+    const slugs = LANGUAGES.map((l) => LANGUAGE_POSTS[l]);
+    for (const slug of slugs) expect(slug, slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+    expect(new Set(slugs).size).toBe(LANGUAGES.length);
+    expect(getPost(LANGUAGE_POSTS.words), "words-of-affirmation").not.toBeNull();
   });
 });

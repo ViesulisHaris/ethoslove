@@ -23,7 +23,21 @@ export const LANGUAGE_GIFTS: Record<LoveLanguage, string> = {
   touch: "xoxo",
 };
 
-/** Posts for each language: words, time, gifts, service, and reasons for the rest. */
+/**
+ * The blog post that explains each language, linked from its card on the page and from the result.
+ * A slug with no published post shows no link, so each one appears the day the blog routine
+ * publishes it: these are the love-language members queued in docs/blog/TOPIC-GROUPS.md, and the
+ * queue must keep these slugs.
+ */
+export const LANGUAGE_POSTS: Record<LoveLanguage, string> = {
+  words: "words-of-affirmation",
+  time: "quality-time-love-language",
+  gifts: "gift-giving-love-language",
+  service: "acts-of-service-love-language",
+  touch: "physical-touch-love-language",
+};
+
+/** More to read under the FAQ: stand-ins for each language (words, time, gifts, service) and reasons for the rest. */
 export const LOVE_QUIZ_READING = ["reasons-why-i-love-you", "cute-things-to-say-to-your-boyfriend", "virtual-date-ideas-long-distance", "what-to-get-a-boyfriend-who-wants-nothing", "scratch-card-ideas"] as const;
 
 type Side = { lang: LoveLanguage; en: string; es: string };

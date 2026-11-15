@@ -32,6 +32,8 @@ import { cn } from "@/lib/utils";
 
 export type QuizQuestionView = { prompt: string; a: { lang: LoveLanguage; text: string }; b: { lang: LoveLanguage; text: string } };
 export type QuizGift = { slug: string; name: string; poster: string };
+/** A language's own blog post (LANGUAGE_POSTS), once it's published. */
+export type QuizPost = { slug: string; title: string };
 
 /** Where this device keeps the answers, the result and the partner's. Nothing leaves the browser. */
 const KEY = "ethos.loveQuiz.v1";
@@ -72,11 +74,13 @@ export function LoveLanguageQuiz({
   ui,
   languages,
   gifts,
+  posts,
 }: {
   questions: QuizQuestionView[];
   ui: QuizUi;
   languages: Record<LoveLanguage, LanguageCopy>;
   gifts: Record<LoveLanguage, QuizGift>;
+  posts: Partial<Record<LoveLanguage, QuizPost>>;
 }) {
   const pairs = useMemo(() => questions.map((q): Pair => [q.a.lang, q.b.lang]), [questions]);
   const [s, setS] = useState<State>(START);
@@ -485,6 +489,7 @@ export function LoveLanguageQuiz({
     const first = top[0]!;
     const even = top.length === LANGUAGES.length;
     const pct = shares(mine);
+    const post = even ? undefined : posts[first];
     body = (
       <div>
         {s.note === "own" ? <p className="mb-6 rounded-2xl bg-rose-soft px-4 py-3 text-[14.5px] leading-snug text-forest">{ui.ownLink}</p> : null}
@@ -500,6 +505,12 @@ export function LoveLanguageQuiz({
               </p>
             ))}
             <p className="mt-3 leading-relaxed text-forest/70">{languages[first].body}</p>
+            {post ? (
+              <Link href={`/blog/${post.slug}`} className="group -mb-2.5 mt-0.5 inline-block py-2.5 text-[14px] leading-snug font-semibold text-rose-deep underline-offset-4 hover:underline">
+                {post.title}
+                <ArrowRight aria-hidden="true" className="ml-1.5 inline-block size-3.5 align-[-0.15em] transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            ) : null}
           </>
         )}
 

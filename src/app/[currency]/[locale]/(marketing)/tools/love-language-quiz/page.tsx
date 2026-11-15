@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ClientMessages } from "@/i18n/client-messages";
@@ -8,13 +8,13 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { LANGUAGES, type LoveLanguage } from "@/lib/love-quiz/score";
 import { breadcrumbNode, faqNode, localizedUrl, pageMetadata } from "@/lib/seo";
 import { getPost, postContent } from "@/content/blog";
-import { LANGUAGE_GIFTS, LOVE_QUIZ, LOVE_QUIZ_PATH, LOVE_QUIZ_READING, QUESTIONS } from "@/content/love-language-quiz";
+import { LANGUAGE_GIFTS, LANGUAGE_POSTS, LOVE_QUIZ, LOVE_QUIZ_PATH, LOVE_QUIZ_READING, QUESTIONS } from "@/content/love-language-quiz";
 import { getManifest } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
 import { FaqList } from "@/components/shared/faq-list";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateCard } from "@/components/templates/template-card";
-import { LoveLanguageQuiz, type QuizGift, type QuizQuestionView } from "@/components/tools/love-language-quiz";
+import { LoveLanguageQuiz, type QuizGift, type QuizPost, type QuizQuestionView } from "@/components/tools/love-language-quiz";
 
 type Props = PageProps<"/[currency]/[locale]/tools/love-language-quiz">;
 
@@ -51,6 +51,13 @@ export default async function LoveLanguageQuizPage({ params }: Props) {
     const post = getPost(slug);
     return post ? [{ slug, title: postContent(post, lang).content.title }] : [];
   });
+  // Each language's own post, once the blog has published it (LANGUAGE_POSTS).
+  const posts: Partial<Record<LoveLanguage, QuizPost>> = Object.fromEntries(
+    LANGUAGES.flatMap((l): [LoveLanguage, QuizPost][] => {
+      const post = getPost(LANGUAGE_POSTS[l]);
+      return post ? [[l, { slug: post.slug, title: postContent(post, lang).content.title }]] : [];
+    }),
+  );
 
   return (
     <ClientMessages scope="(marketing)/tools/love-language-quiz/page" locale={locale}>
@@ -66,7 +73,7 @@ export default async function LoveLanguageQuizPage({ params }: Props) {
       <PageHeader eyebrow={guide.eyebrow} title={guide.h1} subtitle={guide.intro} />
 
       <section className="container-narrow pb-16">
-        <LoveLanguageQuiz questions={questions} ui={guide.ui} languages={guide.languages} gifts={gifts} />
+        <LoveLanguageQuiz questions={questions} ui={guide.ui} languages={guide.languages} gifts={gifts} posts={posts} />
         <p className="mt-5 max-w-2xl text-[13px] leading-relaxed text-ink-soft">{guide.credit}</p>
       </section>
 
@@ -78,6 +85,7 @@ export default async function LoveLanguageQuizPage({ params }: Props) {
         <div className="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2">
           {LANGUAGES.map((l) => {
             const c = guide.languages[l];
+            const post = posts[l];
             return (
               <div key={l}>
                 <h3 className="font-display text-2xl">{c.name}</h3>
@@ -91,6 +99,12 @@ export default async function LoveLanguageQuizPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
+                {post ? (
+                  <Link href={`/blog/${post.slug}`} className="group -mb-2.5 mt-0.5 inline-block py-2.5 text-[14px] leading-snug font-semibold text-rose-deep underline-offset-4 hover:underline">
+                    {post.title}
+                    <ArrowRight aria-hidden="true" className="ml-1.5 inline-block size-3.5 align-[-0.15em] transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                ) : null}
               </div>
             );
           })}
