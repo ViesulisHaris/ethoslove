@@ -16,7 +16,7 @@ import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
 import { HolidayPage, type HolidayTheme } from "../_shared/holiday/page";
 import { PhotoStack } from "../_shared/holiday/stack";
-import { down, Plate, WIDE_PLATE, Snowfall as PageSnow, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { down, Plate, WIDE_PLATE, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
 import { ANCHORS, ART_BASE, BOARD, BULBS, SPRITES } from "./art-map";
 import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wipedIn, type FrostGrid } from "./frost";
@@ -67,7 +67,7 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-${size}`, `frost-${lookId}`];
-  const note = ["street", "envelope", "envelope-open"];
+  const note = ["envelope", "envelope-back", "envelope-letter", "envelope-front"];
   return [...[...scene, ...note].map((n) => `${ART_BASE}${n}.webp`), ...["top", "mid", "bottom"].map((n) => `${PAPER_BASE}sheet-letter-${n}.webp`)];
 }
 
@@ -104,7 +104,6 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   const [phase, setPhase] = useState<Phase>(preview ? "clear" : "frost");
   const [canRead, setCanRead] = useState(false);
-  const [sceneGone, setSceneGone] = useState(false);
   const [run, setRun] = useState(0);
   const { after, clear } = useTimers();
 
@@ -153,7 +152,6 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       return "open";
     });
     clear();
-    after(1400, () => setSceneGone(true));
   };
 
   const replay = () => {
@@ -161,7 +159,6 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     begun.current = false;
     setPhase("frost");
     setCanRead(false);
-    setSceneGone(false);
     setRun((r) => r + 1);
   };
 
@@ -171,7 +168,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
   return (
     <div className="absolute inset-0 overflow-hidden select-none" style={{ ...COVER_VARS, background: look.floor, color: INK.ink, fontFamily: "var(--gift-font-body)" } as CSSProperties}>
-      {!sceneGone && !preview ? (
+      {/* the window is never taken away: the letter is read in front of it */}
+      {preview ? (
+        <Scene lookId={f.look} s={s} title={title} sign={sign} from={data.senderName} to={data.recipientName} seed={seed} phase="clear" canRead={false} reduce leaving inert onBegin={() => {}} onWipe={() => {}} onMelt={() => {}} onRead={() => {}} />
+      ) : (
         <Scene
           key={`scene-${run}`}
           lookId={f.look}
@@ -190,7 +190,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
           onMelt={melted}
           onRead={openPage}
         />
-      ) : null}
+      )}
       {phase === "open" || preview ? (
         <Page key={`page-${run}`} lookId={f.look} s={s} data={data} sign={sign} seed={seed} mode={mode} still={preview || reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} />
       ) : null}
@@ -238,7 +238,8 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, canRead, reduce,
   const rect = frostRect(lookId);
   const boardMiddle = { x: BOARD_BOX.x + BOARD_BOX.w / 2, y: BOARD_BOX.y + BOARD_BOX.h / 2 };
   return (
-    <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
+    // while the letter is read the window stays where it is, behind it, out of reach of finger and keyboard
+    <div className="absolute inset-0" inert={leaving} aria-hidden={leaving || undefined}>
       <style>{`${STAGE_KEYFRAMES}${FOIL_KEYFRAMES}${SNOW_KEYFRAMES}`}</style>
       <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} width={WIDE_PLATE} />
 
@@ -490,8 +491,16 @@ function FrostPane({ src, rect, title, label, reduce, onStart, onWipe, onReveal 
  * The note, as a letter that has to be opened. A red envelope sealed with gold wax comes up in
  * front of the window; breaking the seal lifts the flap, the letter slides out and unfolds, and the
  * rest is read as a letter is: the page, then the photos that were in with it, as a small stack to
- * turn through. The street is behind it all, the snow still falling.
+ * turn through. The window it came through stays behind it all, dimmed, its frost as it was left.
  */
+/** How far down inside the envelope the letter starts, as a share of its own height: all of it behind the front. */
+const LETTER_DOWN = 56;
+/** Where a piece of the opened envelope lies over the sealed one: each was rendered in the same place and cut to its own edges. */
+function over(name: "envelope-back" | "envelope-letter" | "envelope-front"): CSSProperties {
+  const base = SPRITES.envelope;
+  const piece = SPRITES[name];
+  return { left: `${((piece.x - base.x) / base.w) * 100}%`, top: `${((piece.y - base.y) / base.h) * 100}%`, width: `${(piece.w / base.w) * 100}%`, height: `${(piece.h / base.h) * 100}%` };
+}
 function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<FrostedWindowFields>["data"]; sign: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
   const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
@@ -502,16 +511,12 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
     if (stage !== "sealed") return;
     setStage("opening");
     buzz(18);
-    after(still ? 60 : 1500, () => setStage("read"));
+    after(still ? 60 : 1950, () => setStage("read"));
   };
-  const lit = "brightness(1.55) saturate(1.08)";
   return (
     <motion.div className="absolute inset-0 z-[20] overflow-hidden" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: "#0a1024" }}>
-        <img src={`${ART_BASE}street.webp`} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: "50% 30%" }} />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(4,8,24,.4), rgba(4,8,24,.62))" }} />
-        <PageSnow seed={seed} still={still} />
-      </div>
+      {/* the window it came through is still there behind it: dimmed and a little out of focus, the frost as it was left */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(6,8,20,.5), rgba(6,8,20,.68))", backdropFilter: "blur(2.5px)", WebkitBackdropFilter: "blur(2.5px)" }} />
 
       {stage === "read" ? (
         // the letter, out of its envelope: it opens downward from its first fold
@@ -550,13 +555,14 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
         </motion.div>
       ) : (
         <div className="absolute inset-0 grid place-items-center">
-          <motion.div className="relative w-[min(78cqw,400px)]" initial={still ? false : { y: "70cqh", rotate: 14, scale: 0.5 }} animate={stage === "opening" ? { y: "26cqh", rotate: 0, scale: 1, opacity: 0 } : { y: 0, rotate: -3, scale: 1, opacity: 1 }} transition={stage === "opening" ? { duration: 0.9, delay: 0.75, ease: "easeIn" } : { type: "spring", stiffness: 70, damping: 14, delay: 0.35 }}>
-            {/* the letter, folded, coming up out of the open envelope */}
-            <div aria-hidden="true" className="absolute inset-x-[9%] overflow-hidden" style={{ top: "18%", height: "58%", transform: stage === "opening" ? "translateY(-92%)" : "translateY(0)", opacity: stage === "opening" ? 1 : 0, transition: "transform .8s cubic-bezier(.3,.7,.3,1) .25s, opacity .2s ease .2s" }}>
-              <img src={`${PAPER_BASE}sheet-letter-top.webp`} alt="" draggable={false} className="block w-full max-w-none" />
+          <motion.div className="relative w-[min(78cqw,400px)]" initial={still ? false : { y: "70cqh", rotate: 14, scale: 0.5 }} animate={stage === "opening" ? { y: "30cqh", rotate: 0, scale: 1, opacity: 0 } : { y: 0, rotate: -3, scale: 1, opacity: 1 }} transition={stage === "opening" ? { duration: 0.7, delay: 1.3, ease: "easeIn" } : { type: "spring", stiffness: 70, damping: 14, delay: 0.35 }}>
+            {/* sealed; and opened, as its three pieces one on another: its back with the flap up, the letter, its front. The letter starts down inside and comes up between them. */}
+            <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} className="relative block w-full max-w-none" style={{ opacity: stage === "opening" ? 0 : 1, transition: "opacity .22s ease .05s" }} />
+            <div aria-hidden="true" className="absolute inset-0" style={{ opacity: stage === "opening" ? 1 : 0, transition: "opacity .22s ease" }}>
+              <img src={`${ART_BASE}envelope-back.webp`} alt="" draggable={false} className="absolute max-w-none" style={over("envelope-back")} />
+              <img src={`${ART_BASE}envelope-letter.webp`} alt="" draggable={false} className="absolute max-w-none" style={{ ...over("envelope-letter"), transform: stage === "opening" ? "translateY(0)" : `translateY(${LETTER_DOWN}%)`, transition: "transform .75s cubic-bezier(.3,.7,.3,1) .28s" }} />
+              <img src={`${ART_BASE}envelope-front.webp`} alt="" draggable={false} className="absolute max-w-none" style={over("envelope-front")} />
             </div>
-            <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} className="relative block w-full max-w-none" style={{ filter: lit, opacity: stage === "opening" ? 0 : 1, transition: "opacity .25s ease" }} />
-            <img src={`${ART_BASE}envelope-open.webp`} alt="" draggable={false} aria-hidden="true" className="absolute bottom-0 left-0 block w-full max-w-none" style={{ filter: lit, opacity: stage === "opening" ? 1 : 0, transition: "opacity .25s ease" }} />
             {stage === "sealed" ? <button type="button" aria-label={s.openEnvelope} onClick={open} className="absolute inset-0 cursor-pointer rounded-[calc(2*var(--u))] outline-none focus-visible:ring-4 focus-visible:ring-white/60" /> : null}
           </motion.div>
           <p aria-hidden="true" className="pointer-events-none absolute inset-x-0 text-center text-[calc(2.6*var(--u))] font-semibold tracking-[0.3em] uppercase" style={{ top: "calc(50% + min(34cqw, 175px))", color: "#fff6ea", textShadow: "0 1px calc(2*var(--u)) rgba(0,0,0,.6)", opacity: stage === "sealed" ? 0.9 : 0, transition: "opacity .3s ease" }}>

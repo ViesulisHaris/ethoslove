@@ -124,7 +124,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     begin();
     setMarks(next);
     if (sound) {
-      playTink(mutedRef.current, next.length % 8, "rise");
+      playTink(mutedRef.current, next.length % 8, "rise", 0.35);
       buzz(6);
     }
     eventRef.current?.({ type: "progress", pct: Math.min(20, next.length * 3) });

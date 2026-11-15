@@ -129,9 +129,10 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     for (const i of hooks) next.add(i);
     setHung(next);
     const now = clockNow();
-    if (now - tinked.current > 90) {
+    if (now - tinked.current > 150) {
       tinked.current = now;
-      playTink(mutedRef.current, next.size % 8, "walk");
+      // quiet: a finger run along the roof hangs a dozen in a second, and each rings on under the next
+      playTink(mutedRef.current, next.size % 8, "walk", 0.3);
       buzz(5);
     }
     eventRef.current?.({ type: "progress", pct: Math.round((next.size / TOTAL) * 20) });

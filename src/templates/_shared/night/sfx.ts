@@ -192,9 +192,10 @@ const scrape = (v: Voice, ms = 450) => {
  * A fingertip on a wine glass: a letter lighting up. The pitch follows a pentatonic scale, so a word
  * of them plays a small tune; `rise` climbs it instead, for things lighting one after another.
  */
-const tink = (v: Voice, step = 0, mode: "walk" | "rise" = "walk") => {
+const tink = (v: Voice, step = 0, mode: "walk" | "rise" = "walk", level = 1) => {
   const { t, rnd } = v;
-  const k = dB(MIX.tink);
+  // `level` under 1 is for tinks that come one on another (a string of bulbs, a row of sweets): each rings on under the next.
+  const k = dB(MIX.tink) * level;
   const hz = glassHz(step, mode) * between(rnd, 0.998, 1.002);
   const pan = between(rnd, -0.3, 0.3);
   ring(v, t, hz, GLASS, { level: 0.09 * k, decay: 1.15, attack: 0.004, wet: 0.45, pan });
@@ -680,7 +681,7 @@ export const playThunder = play(thunder);
 export const playCreak = play(creak);
 /** Wood sliding on wood: the planchette moving, for `ms` milliseconds. */
 export const playScrape = play(scrape);
-/** A fingertip on glass: a letter lighting up. `step` picks the note along the word. */
+/** A fingertip on glass: a letter lighting up. `step` picks the note along the word; `level` (1 by default) turns it down where many come close together. */
 export const playTink = play(tink);
 /** Air moving through a room, over `ms`, loudest `peak` of the way through. */
 export const playWhoosh = play(whoosh);

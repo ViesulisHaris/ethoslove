@@ -530,7 +530,7 @@ def stockings(look, sill_top):
         anchor("cuffLeft" if side < 0 else "cuffRight", top + Vector((0.0, -0.31, 0.4)))
 
 
-NOTE = ("sheet", "catch_sheet", "ribbon", "envelope", "envelope_open", "catch_env", "catch_env_open")
+NOTE = ("sheet", "catch_sheet", "ribbon", "envelope", "env_back", "env_letter", "env_front", "catch_env", "catch_env_open")
 
 
 def stationery():
@@ -553,26 +553,65 @@ def stationery():
     stripes = lining.math("GREATER_THAN", lining.math("SINE", lining.math("MULTIPLY", lining.math("ADD", lx, ly), 14.0)), 0.0)
     lining.set(base=lining.mix(stripes, "#f6ecd6", "#e3c98a"), rough=0.6)
     w, h, t = 6.6, 4.5, 0.05
-    for name, opened, y in (("envelope", False, -8.0), ("envelope_open", True, -8.0)):   # in the same place: each is rendered alone
-        layer(name)
-        parts = [kit.prism(name + "_body", kit.rounded_rect(w, h, 0.12), t, red.mat, 0.0, 0.012, 2)]
-        if opened:
-            # the flap standing up above the mouth, seen from its lined side, and the dark of the mouth under it
-            parts.append(mesh_obj(name + "_flap", [(-w / 2 + 0.05, h / 2 - 0.02, t), (w / 2 - 0.05, h / 2 - 0.02, t), (0.0, h / 2 + h * 0.5, t + 0.03)], [(0, 1, 2)], lining.mat, False))
-            parts.append(mesh_obj(name + "_mouth", [(-w / 2 + 0.12, h / 2 - 0.5, t + 0.004), (w / 2 - 0.12, h / 2 - 0.5, t + 0.004), (w / 2 - 0.12, h / 2 - 0.04, t + 0.004), (-w / 2 + 0.12, h / 2 - 0.04, t + 0.004)], [(0, 1, 2, 3)], lining.mat, False))
-        else:
-            flap = mesh_obj(name + "_flap", [(-w / 2 + 0.03, h / 2 - 0.03, t + 0.001), (w / 2 - 0.03, h / 2 - 0.03, t + 0.001), (0.0, -h * 0.1, t + 0.02)], [(0, 2, 1)], red.mat, False)
-            kit.solidify(flap, 0.014, 1.0)
-            parts.append(flap)
-            seal = desk.wax_seal(name + "_seal", kit.gold("seal_gold", "#e0b04a", 0.32), 0.62)
-            for ob in seal:
-                ob.location = (0.0, -h * 0.1, t + 0.02)
-            parts += seal
-        # the two folds that meet under the flap
-        for sgn in (-1, 1):
-            parts.append(tube(name + "_fold%d" % sgn, [Vector((sgn * (w / 2 - 0.05), -h / 2 + 0.05, t + 0.004)), Vector((0.0, -h * 0.06, t + 0.004))], 0.012, 4, plain(name + "_crease", "#7a1612", 0.7)))
-        parent(parts, name + "_pivot", Vector((0, y, 3.0)))
-        catcher(3.0, 6.0, "catch_env" + ("_open" if opened else ""), (0, y))
+    crease = plain("envelope_crease", "#7a1612", 0.7)
+    cream = desk.letter_paper("envelope_letter_paper", "#fcf7ec", "#f2e8d2")
+    ink = plain("envelope_ink", "#b9a888", 0.8)
+    # how far down the middle of the pocket's mouth dips, and how far the letter stands out of it
+    dip, out = h * 0.4, h * 0.42
+
+    def pocket(name, z):
+        """The front of the envelope: its two side flaps and its bottom one, meeting in a V below the mouth."""
+        outline = [(-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2 - 0.02), (0.0, h / 2 - dip), (-w / 2, h / 2 - 0.02)]
+        front = kit.prism(name, outline, 0.016, red.mat, z, 0.006, 2)
+        folds = [tube(name + "_fold%d" % sgn, [Vector((sgn * (w / 2 - 0.05), -h / 2 + 0.05, z + 0.018)), Vector((0.0, h / 2 - dip - 0.25, z + 0.018))], 0.011, 4, crease) for sgn in (-1, 1)]
+        return [front] + folds
+
+    # sealed
+    layer("envelope")
+    parts = [kit.prism("envelope_body", kit.rounded_rect(w, h, 0.12), t, red.mat, 0.0, 0.012, 2)]
+    parts += pocket("envelope_pocket", t)
+    flap = mesh_obj("envelope_flap", [(-w / 2 + 0.03, h / 2 - 0.03, t + 0.02), (w / 2 - 0.03, h / 2 - 0.03, t + 0.02), (0.0, -h * 0.1, t + 0.04)], [(0, 2, 1)], red.mat, False)
+    kit.solidify(flap, 0.014, 1.0)
+    parts.append(flap)
+    seal = desk.wax_seal("envelope_seal", kit.gold("seal_gold", "#e0b04a", 0.32), 0.62)
+    for ob in seal:
+        ob.location = (0.0, -h * 0.1, t + 0.04)
+    parts += seal
+    parent(parts, "envelope_pivot", Vector((0, -8.0, 3.0)))
+    catcher(3.0, 6.0, "catch_env", (0, -8.0))
+
+    # opened, in three pieces drawn one over another on the page: all three in the same place
+    layer("env_back")
+    back = [kit.prism("env_back_body", kit.rounded_rect(w, h, 0.12), t, red.mat, 0.0, 0.012, 2)]
+    # its inside, lined; and the flap standing up above the mouth, a rim of red round its lining
+    back.append(mesh_obj("env_back_inside", [(-w / 2 + 0.1, -h / 2 + 0.1, t + 0.003), (w / 2 - 0.1, -h / 2 + 0.1, t + 0.003), (w / 2 - 0.1, h / 2 - 0.02, t + 0.003), (-w / 2 + 0.1, h / 2 - 0.02, t + 0.003)], [(0, 1, 2, 3)], lining.mat, False))
+    tip = h / 2 + h * 0.52
+    rim = mesh_obj("env_back_flap", [(-w / 2 + 0.02, h / 2 - 0.03, 0.0), (w / 2 - 0.02, h / 2 - 0.03, 0.0), (0.0, tip, 0.0)], [(0, 1, 2)], red.mat, False)
+    kit.solidify(rim, t, 1.0)
+    back.append(rim)
+    back.append(mesh_obj("env_back_flap_lining", [(-w / 2 + 0.3, h / 2 - 0.02, t + 0.003), (w / 2 - 0.3, h / 2 - 0.02, t + 0.003), (0.0, tip - 0.2, t + 0.003)], [(0, 1, 2)], lining.mat, False))
+    parent(back, "env_back_pivot", Vector((0, -8.0, 3.0)))
+    catcher(3.0, 9.0, "catch_env_open", (0, -8.0))
+
+    layer("env_letter")
+    lw, ll = w - 0.9, h - 0.5
+    top = h / 2 + out
+    sheet = [kit.prism("env_letter_sheet", kit.rounded_rect(lw, ll, 0.04), 0.03, cream, t + 0.01, 0.006, 2)]
+    for ob in sheet:
+        ob.location = (0.0, top - ll / 2, 0.0)
+    # a few lines of writing, and the fold across it
+    rnd = random.Random(5)
+    for i in range(5):
+        y = top - 0.55 - i * 0.36
+        x1 = -lw / 2 + 0.5 + (1.6 if i == 0 else 0.0)
+        x2 = lw / 2 - 0.5 - (rnd.random() * 1.4 if i else 2.6)
+        if i == 0:
+            x1, x2 = -lw / 2 + 0.5, -lw / 2 + 2.3
+        sheet.append(tube("env_letter_line%d" % i, [Vector((x1, y, t + 0.043)), Vector((x2, y, t + 0.043))], 0.018, 4, ink, flat=0.3))
+    parent(sheet, "env_letter_pivot", Vector((0, -8.0, 3.0)))
+
+    layer("env_front")
+    parent(pocket("env_front_pocket", t + 0.06), "env_front_pivot", Vector((0, -8.0, 3.0)))
 
 
 WIDE = (360.0, 240.0, 7.0)   # wide enough for a 16:9 screen without a mirrored copy at its sides
@@ -624,10 +663,17 @@ def main():
                 kit.render_soft(os.path.join(out, "soft-%s-%s.png" % (look, tag_)), hide=("catch",) + NOTE, lift=20.0)
     if "note" in only:
         build(looks[0], street_png, SPRITE_VIEW)
+        # a light of the envelope's own, for these renders only: the room's lamp is turned to the window
+        layer("note_light")
+        kit.lamp("envelope_lamp", (-2.5, -5.5, 14.0), 900.0, color=(1.0, 0.93, 0.84), radius=3.0)
         render_sprite("sheet", os.path.join(out, "sheet.png"), ["sheet"], catch=("catch_sheet",), pad=(1.5, 1.5, 3.0, 3.0), density=1.3)
         render_sprite("ribbon", os.path.join(out, "ribbon.png"), ["ribbon"], catch=(), pad=(0.5, 0.5, 0.5, 0.5), density=1.6)
-        render_sprite("envelope", os.path.join(out, "envelope.png"), ["envelope"], catch=("catch_env",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4)
-        render_sprite("envelope-open", os.path.join(out, "envelope-open.png"), ["envelope_open"], catch=("catch_env_open",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4)
+        render_sprite("envelope", os.path.join(out, "envelope.png"), ["envelope"], catch=("catch_env", "note_light"), pad=(1.5, 1.5, 3.0, 3.0), density=1.4)
+        # the opened one's three pieces, each alone but all cut to the same rectangle, so they lie exactly on one another
+        whole = ["env_back", "env_letter", "env_front"]
+        render_sprite("envelope-back", os.path.join(out, "envelope-back.png"), ["env_back"], catch=("catch_env_open", "note_light"), pad=(1.5, 1.5, 3.0, 3.0), density=1.4, bounds_of=whole)
+        render_sprite("envelope-letter", os.path.join(out, "envelope-letter.png"), ["env_letter"], catch=("note_light",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4, bounds_of=whole)
+        render_sprite("envelope-front", os.path.join(out, "envelope-front.png"), ["env_front"], catch=("note_light",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4, bounds_of=whole)
     kit.MANIFEST["sheets"] = {"letter": {"sprite": "sheet", "top": 0.12, "mid": 0.5, "bottom": 0.1, "gain": 1.05}}
     save_manifest(os.path.join(out, "manifest.json"))
 
