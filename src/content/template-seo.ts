@@ -816,6 +816,48 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       howTo: "Cómo hacer un regalo con una espoleta",
     },
   },
+  "thankful-pie": {
+    en: {
+      keyword: "What I'm thankful for about you",
+      title: "Thankful Pie: What I'm Thankful For About You",
+      description: "A pumpkin pie cut in six: every slice they lift writes one thing you're thankful for onto a recipe card. A digital Thanksgiving gift.",
+      howTo: "How to make a thankful pie gift",
+    },
+    es: {
+      keyword: "Por qué doy gracias por ti",
+      title: "La tarta de gracias: por qué doy gracias por ti",
+      description: "Una tarta de calabaza en seis trozos: cada uno que levantan escribe en una receta algo por lo que das gracias. Acción de Gracias, digital.",
+      howTo: "Cómo hacer una tarta de gracias",
+    },
+  },
+  "leaf-pile": {
+    en: {
+      keyword: "Thankful for you card",
+      title: "Leaf Pile: A Thankful For You Card Under the Leaves",
+      description: "A card left out in autumn, buried in leaves: they brush them off with a finger to read \"thankful for you\". A digital Thanksgiving card.",
+      howTo: "How to make a leaf pile card",
+    },
+    es: {
+      keyword: "Tarjeta doy gracias por ti",
+      title: "El montón de hojas: una tarjeta bajo las hojas",
+      description: "Una tarjeta olvidada en otoño, cubierta de hojas: las apartan con el dedo para leer \"doy gracias por ti\". Una tarjeta digital de otoño.",
+      howTo: "Cómo hacer una tarjeta bajo las hojas",
+    },
+  },
+  "frosted-window": {
+    en: {
+      keyword: "Interactive Christmas card",
+      title: "Frosted Window: An Interactive Christmas Card",
+      description: "A window frosted over on Christmas Eve: they wipe the frost away with a finger, and a snowman outside holds up your words. A digital Christmas card.",
+      howTo: "How to make a frosted window Christmas card",
+    },
+    es: {
+      keyword: "Tarjeta de Navidad interactiva",
+      title: "La ventana helada: una tarjeta de Navidad interactiva",
+      description: "Una ventana helada en Nochebuena: limpian la escarcha con el dedo y fuera un muñeco de nieve sujeta tus palabras. Una tarjeta de Navidad digital.",
+      howTo: "Cómo hacer una tarjeta de Navidad con ventana helada",
+    },
+  },
 };
 
 export function templateSeo(slug: string, locale: GiftLocale): TemplateSeo | null {

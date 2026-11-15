@@ -206,5 +206,12 @@ if (Object.keys(sheets).length) {
     "",
   );
 }
+if (manifest.board) {
+  lines.push(
+    "/** A board in the picture seen through the window: its corners (top left, top right, bottom right, bottom left) as shares of the picture across and down. */",
+    `export const BOARD = ${JSON.stringify(manifest.board)} as const;`,
+    "",
+  );
+}
 writeFileSync(join("src", "templates", slug, "art-map.ts"), lines.join("\n"));
 console.log(`\n${Object.keys(sprites).length} sprites, ${(bytes / 1024 / 1024).toFixed(2)} MB in ${out}`);

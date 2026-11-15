@@ -664,6 +664,60 @@ const SCRIPTS = {
     await page.waitForTimeout(2600);
     return poster;
   },
+  "thankful-pie": async (page) => {
+    await hideControls(page);
+    const pie = page.getByRole("button", { name: /lift a slice/i });
+    await pie.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    const poster = await page.screenshot();
+    for (let i = 0; i < 3; i++) {
+      await pie.click({ force: true });
+      await page.waitForTimeout(1300);
+    }
+    return poster;
+  },
+  "leaf-pile": async (page) => {
+    await hideControls(page);
+    const pile = page.getByRole("button", { name: /brush the leaves away/i });
+    await pile.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    const poster = await page.screenshot();
+    const box = await pile.boundingBox();
+    // a finger sweeping back and forth across the card
+    for (let pass = 0; pass < 4; pass++) {
+      const y = box.y + box.height * (0.38 + pass * 0.06);
+      await page.mouse.move(box.x + box.width * 0.15, y);
+      await page.mouse.down();
+      for (let i = 0; i <= 20; i++) {
+        await page.mouse.move(box.x + box.width * (0.15 + 0.7 * (pass % 2 ? 1 - i / 20 : i / 20)), y + Math.sin(i / 3) * 12);
+        await page.waitForTimeout(16);
+      }
+      await page.mouse.up();
+    }
+    await page.waitForTimeout(1600);
+    return poster;
+  },
+  "frosted-window": async (page) => {
+    await hideControls(page);
+    const glass = page.getByRole("button", { name: /wipe the frost away/i });
+    await glass.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1600);
+    const poster = await page.screenshot();
+    const box = await glass.boundingBox();
+    // a finger wiping the glass in wide sweeps, top to bottom
+    for (let pass = 0; pass < 6; pass++) {
+      const y = box.y + box.height * (0.15 + pass * 0.14);
+      await page.mouse.move(box.x + box.width * 0.1, y);
+      await page.mouse.down();
+      for (let i = 0; i <= 18; i++) {
+        await page.mouse.move(box.x + box.width * (0.1 + 0.8 * (pass % 2 ? 1 - i / 18 : i / 18)), y + Math.sin(i / 2) * 10);
+        await page.waitForTimeout(16);
+      }
+      await page.mouse.up();
+    }
+    await page.waitForTimeout(2200);
+    return poster;
+  },
   "haunted-house": async (page) => {
     await hideControls(page);
     const gate = page.getByRole("button", { name: /open the gate/i });
