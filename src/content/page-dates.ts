@@ -31,11 +31,11 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/templates/nice-list": "2026-11-11",
   "/templates/unwrapped": "2026-11-11",
   "/templates/wishbone": "2026-11-11",
-  // The second holiday batch, live 16 Nov.
-  "/templates/frosted-window": "2026-11-16",
-  "/templates/gingerbread-house": "2026-11-16",
-  "/templates/light-the-candles": "2026-11-16",
-  "/templates/string-the-lights": "2026-11-16",
+  // The second holiday batch, live on the night of 15 Nov (UTC).
+  "/templates/frosted-window": "2026-11-15",
+  "/templates/gingerbread-house": "2026-11-15",
+  "/templates/light-the-candles": "2026-11-15",
+  "/templates/string-the-lights": "2026-11-15",
   "/occasions/*": "2026-10-25",
   "/occasions/birthday": "2026-11-13",
   "/occasions/anniversary": "2026-11-13",
