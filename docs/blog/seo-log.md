@@ -86,3 +86,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-15T14:20Z | on_page/content_parsing/live | 0.00015 | blog: words-of-affirmation |
 | 2026-11-15T14:20Z | on_page/content_parsing/live | 0.00015 | blog: words-of-affirmation |
 | 2026-11-15T14:20Z | on_page/content_parsing/live | 0.00015 | blog: words-of-affirmation |
+| 2026-11-15T16:42Z | dataforseo_labs/google/keyword_ideas/live | 0.0192 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.0132 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | dataforseo_labs/google/keyword_suggestions/live | 0.024 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.0144 | seo: open-when-letter-ideas |
+| 2026-11-15T16:42Z | serp/google/organic/live/advanced | 0.002 | seo: open-when-letter-ideas |

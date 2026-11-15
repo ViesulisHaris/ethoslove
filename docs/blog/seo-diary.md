@@ -3,6 +3,30 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-15: open-when-letter-ideas aimed at "open when letters"
+- **Page:** /blog/open-when-letter-ideas
+- **Why:** Next open backlog item. DataForSEO (US, all KD 0, informational): "open when letters",
+  "open when letter" and "open me when letters" 3,600 a month each, "open when letter ideas" 2,900,
+  "open when cards" 480, "for boyfriend" 390, "envelopes" 210, "for best friend" and "long distance"
+  140; UK "open when letters" 880, "open when letter ideas" 390; Spain thin. Search Console: only a
+  handful of impressions at 68 to 95. The top 10s are Pinterest boards, social accounts, long title-only
+  lists and online open-when apps; the AI overview splits emotional support, milestones (birthday,
+  graduation, New Year's, anniversary), handmade and digital collections. People also ask: what are
+  open when notes, how to do open when letters online, examples for a boyfriend. The post had none
+  of the online answer, no boyfriend or best friend letters and no definition.
+- **What changed:** Title "Open when letters: ideas by moment, and what to put inside", new
+  description; new sections "Open when letters for a boyfriend, girlfriend or best friend" (with a
+  quote) and "How to send open when letters online" (one free gift per letter, scheduled ones locked
+  behind a countdown); New Year's Eve and graduation letters, a miss-me sample line, FAQs "What are
+  open when letters?" and "Can you do open when letters online?". Spanish to match. `updated` 2026-11-15.
+- **Panel:** 10/10/10 after 3 rounds (`docs/blog/reviews/refresh/open-when-letter-ideas-2026-11-15.json`)
+- **Cost:** $0.09 (keyword overviews US/UK/Spain, keyword ideas and suggestions, four SERPs with AI overview and PAA); balance $51.98
+- **Note:** Sales endpoint 503 again; Search Console worked. No weekly job (Sunday; ranks from 13 Nov).
+  keyword_ideas and keyword_suggestions on "open when" seeds returned unrelated phrases (business
+  letters, store hours): use keyword_overview with a list for this kind of phrase.
+- **Check on:** 2026-12-03 whether "open when letters" and "open when letter ideas" show for the post
+  in Search Console and the rank check
+
 ## 2026-11-15: reasons-why-i-love-you answers "things I love about you"
 - **Page:** /blog/reasons-why-i-love-you
 - **Why:** Next open backlog item. DataForSEO (US): "100 reasons why i love you" 8,100 a month (KD 0,
