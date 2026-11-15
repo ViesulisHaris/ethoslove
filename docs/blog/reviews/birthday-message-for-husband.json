@@ -1,0 +1,230 @@
+{
+  "slug": "birthday-message-for-husband",
+  "keyword": "birthday message for husband",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "As written the joke is backwards: thinking five minutes means five minutes is correct, so 'You're wrong' confuses the reader instead of landing. Mirro; It's an age joke, and the paragraph right after it tells the reader to leave out age jokes unless he makes them first, so the post contradicts itself."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "\"Hacer caso\" means to listen to or obey someone, not to make a fuss of them. As written it says he hates being listened to. The same error appears in ; Same misuse of \"hacer caso\".; Same misuse. This also pairs it with the next H3, \"Si le encanta ser el centro\".; In Spain people say \"felices cuarenta\". \"Feliz cuarenta\" reads like a translation of \"Happy fortieth\".; As written it says to put a sticky note on the cake.; Same problem as the Spanish: the sentence can be read as a sticky note on top of the cake.; This sample line appears word for word, in both languages, in what-to-write-in-boyfriends-birthday-card.ts (lines 77 and 257). A post whose value is l; \"School run\" is a UK-only idiom. V"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Romantic is the first H2 on the page ranking first (RecoCards) and in the AI overview's cited titles (\"Romantic & Funny\"), and it answers the PAA \"How; Same gap in Spanish: Bodas.net (cited in the AI overview) has a section of love phrases, and \"frases románticas\" is how people search for these.; The count has to stay true once the five romantic lines go in (30 + 5).; Same count fix in Spanish."
+        }
+      ],
+      "applied": [
+        "Romantic section with five lines (EN+ES); titles now 35 lines/frases",
+        "Five-minutes joke turned the right way round; chair line no longer an age joke (EN+ES)",
+        "ES: ser el centro de atención instead of hacer caso (lead, takeaway, h3); felices cuarenta; sticky note vs cake wording (EN+ES)",
+        "Lucky me line replaced (verbatim in the boyfriend card post); school run -> school drop-off",
+        "Polish: calls the helpline; taking the bins out; The Letter note reworded; te hiciste; llevar a los niños al cole; rastro de pistas; atascada en el tráfico; cuarenta años hoy; Papá es el que mejor; has sido",
+        "Laundry-basket joke replaced (echo of the boyfriend card post); one favourite-person line replaced; midnight surprise post linked; descriptions mention wishes and romantic",
+        "Digital gift sentence and takeaway reworded away from older posts"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page I'd send a friend because it doesn't just list lines: it fits the message to the year he's had and to how he takes attention, then shows where to leave it, and every sample line has a real noun in it you can swap for your own."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The round-1 fix was applied with different words. \"Las fiestas\" means parties, so \"if he loves parties, post a story\" doesn't follow, and it no longer; Since the round-1 polish, the second example is a verb phrase, right after a sentence promising a noun. A reader will notice.; Counted: 7 of the 11 Spanish lines are under ten words. Four have 11 to 14, so \"casi todas\" (almost all) isn't true. The EN says \"most\", which is corr; The round-1 rewording was applied to EN only. The ES drops \"three paragraphs fit easily\", and \"rompe un sello de lacre con tu inicial y el papel se ab; \"Bins\" is British (US readers say trash), the same kind of pair as mum/mom in VOICE.md. \"Recycling\" works in both."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The page ranking first for the exact keyword in this run's data is \"24 Long Distance Birthday Wishes For Husband\", and the post says nothing about a h; Same gap in Spanish; keeps the two languages the same post."
+        }
+      ],
+      "applied": [
+        "If-he-is-away item with a midnight-in-his-time-zone line and a link to the long-distance birthday post (EN+ES)",
+        "ES takeaway back to ser el centro de atención; madrugones keeps the noun list; La mayoría instead of casi todas",
+        "ES The Letter note reworded to match EN and stop echoing love-letter-for-girlfriend",
+        "Recycling instead of bins",
+        "Polish: leads mention romantic; ES description has de cumpleaños and 40, 50 o 60; Él sopla; compañero favorito de atascos; de todas formas; persona con la que más me gusta despertarme; feeding; Romantic birthday wishes heading"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page I'd send a friend because it doesn't just list lines: it fits the message to the year he's had and to how he takes attention, then shows where to leave it (including when he's away), and every sample line has a real noun in it you can swap for your own."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The FAQ quotes a line that's no longer in the list (it was rewritten in round 2), and the old wording is the calque that was meant to go. Readers who "
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 2 polish rewrote this short line in the ES list but not in the FAQ, so the FAQ (which goes into the FAQ schema and can show in results) still qu"
+        }
+      ],
+      "applied": [
+        "ES FAQ now quotes the rewritten short line (editor and search)",
+        "Away item label shortened to If he is away",
+        "Armchair errand changed to all Saturday (EN+ES) to avoid anniversary-letter-to-boyfriend's drove four hours"
+      ],
+      "rejected": [
+        "ES title \"y una carta\": would exceed 60 characters",
+        "Title count 36: 35 already understates and stays true",
+        "Reader polish naming the time-zone picker in the away item: scheduling is already explained one item up"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page I'd send a friend because it doesn't just list lines. It fits the message to the year he's had and to how he takes attention, then shows where to leave it so he finds it, including when he's away, and every sample line has a real detail you can swap for your own."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "\"The boiler broke\" is the UK way to say it. US readers say furnace or water heater. Same kind of pair as bins/recycling, which this role flagged in ro; The answer says to keep it under ten words, but the line it quotes has 11. The EN line has 9. Change ES short list item 2 to match, so the list and th; Keeps the list and the FAQ identical after the fix above. It's also shorter and more natural. «La mayoría caben en menos de diez palabras» is still tr; «Preparar toda la noche» reads first as \"spend the whole night preparing\", not \"plan the whole night\" as the EN means.; «Nuestra carta de amor para mi marido» mixes Ethos's \"we\" with a first-person \"my husband\", so it reads like a letter to som"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Round 3 fix made correctly: the ES FAQ short-lines answer now quotes «Sigues siendo la persona con la que más me gusta despertarme», which matches item 2 of the ES short list word for word. The other round 3 changes also went in cleanly and add no new search problems: the away item's label is shorte"
+        }
+      ],
+      "applied": [
+        "Heating instead of boiler (EN)",
+        "ES short line 2 and its FAQ quote now Sigo prefiriendo despertarme a tu lado (under ten words)",
+        "ES: organizarle la noche entera; carta de amor para tu marido link wording",
+        "Polish: without being asked (EN+ES); typographic quotes; Mándaselo; sin mala intención; parking-spaces joke replaces the fourth dishwasher joke on the site (EN+ES); from all of us (EN+ES)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page I'd send a friend because it doesn't just list lines. It fits the message to the year he's had and to how he takes attention, then shows where to leave it so he finds it, and every sample line has a real detail you can swap for your own."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. The three-part table, and \"proof that you saw what he did is the line he'll come back to\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Round 4 check: my role asked for no fixes in round 4. Its one polish item went in correctly in both languages. The dishwasher joke is now \"the way you defend your parking spaces like a lawyer\" / «cómo defiendes cada sitio para aparcar, como si fuera un juicio». No dishwasher line is left in the post. The other round 4 changes cause no search problems. The ES short line 2 is now «Sigo prefiriendo d"
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final round polish recorded, not applied: reader and editor on the parking-spaces joke (singular, or a sat-nav joke); search on a fourth parallel-park joke on the site; editor on message vs letter in the midnight item, apagado, le va a llegar, la felicitación in the ES FAQ, show up and planned, the red-light line and how he feels about a fuss"
+      ]
+    }
+  ]
+}

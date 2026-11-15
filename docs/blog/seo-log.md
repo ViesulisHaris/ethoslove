@@ -55,3 +55,13 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
 | 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
 | 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
+| 2026-11-15T06:18Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: birthday-message-for-husband |
+| 2026-11-15T06:18Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |
+| 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |

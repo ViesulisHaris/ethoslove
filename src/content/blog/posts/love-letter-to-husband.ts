@@ -116,7 +116,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "For his birthday, an anniversary or when he's away, a [digital gift](/gifts) can carry the letter with a few photos from the years. There's more on the [anniversary page](/occasions/anniversary) and among the [digital gifts for your husband](/gifts/for-husband).",
+          text: "For his birthday, an anniversary or when he's away, a [digital gift](/gifts) can carry the letter with a few photos from the years. There's more on the [anniversary page](/occasions/anniversary) and among the [digital gifts for your husband](/gifts/for-husband). If it's for his birthday, our [birthday messages for your husband](/blog/birthday-message-for-husband) include a letter for a round number.",
         },
         {
           type: "template",
@@ -258,7 +258,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Para su cumpleaños, un aniversario o cuando está fuera, un [regalo digital](/gifts) puede llevar la carta con unas cuantas fotos de estos años. Tienes más en la [página de aniversario](/occasions/anniversary) y entre los [regalos digitales para tu marido](/gifts/for-husband).",
+          text: "Para su cumpleaños, un aniversario o cuando está fuera, un [regalo digital](/gifts) puede llevar la carta con unas cuantas fotos de estos años. Tienes más en la [página de aniversario](/occasions/anniversary) y entre los [regalos digitales para tu marido](/gifts/for-husband). Si es para su cumpleaños, en nuestras [felicitaciones de cumpleaños para mi marido](/blog/birthday-message-for-husband) hay una carta para un número redondo.",
         },
         {
           type: "template",
