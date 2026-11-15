@@ -65,3 +65,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |
 | 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |
 | 2026-11-15T06:19Z | on_page/content_parsing/live | 0.00015 | blog: birthday-message-for-husband |
+| 2026-11-15T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:18Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:18Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:18Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:18Z | serp/google/organic/live/advanced | 0.002 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-say-when-you-propose |
+| 2026-11-15T10:19Z | on_page/content_parsing/live | 0.00015 | blog: what-to-say-when-you-propose |

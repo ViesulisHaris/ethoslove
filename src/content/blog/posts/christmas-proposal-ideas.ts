@@ -108,7 +108,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the words come easier in writing, put the long version in a letter and give it to them after the yes. For the structure, borrow from [how to write a love letter](/blog/how-to-write-a-love-letter).",
+          text: "If the words come easier in writing, put the long version in a letter and give it to them after the yes. For the structure, borrow from [how to write a love letter](/blog/how-to-write-a-love-letter). For the words themselves, with examples for other kinds of couple, see [what to say when you propose](/blog/what-to-say-when-you-propose).",
         },
         { type: "h2", text: "Have these ready" },
         {
@@ -263,7 +263,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si las palabras te salen mejor por escrito, pon la versión larga en una carta y dásela después del sí. Para la estructura, tira de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter).",
+          text: "Si las palabras te salen mejor por escrito, pon la versión larga en una carta y dásela después del sí. Para la estructura, tira de [cómo escribir una carta de amor](/blog/how-to-write-a-love-letter). Para las palabras en sí, con ejemplos para otros tipos de pareja, mira nuestras [frases para pedir matrimonio](/blog/what-to-say-when-you-propose).",
         },
         { type: "h2", text: "Ten esto preparado" },
         {

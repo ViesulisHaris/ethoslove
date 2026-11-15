@@ -1,0 +1,188 @@
+{
+  "slug": "what-to-say-when-you-propose",
+  "keyword": "what to say when you propose",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The example tacks a second question onto the proposal, which is exactly what 'What to leave out' says not to do ('Questions stacked on the question').; Same stacked-question contradiction as the English (it breaks 'Preguntas encadenadas'). This keeps the two languages matched.; The table asks for 'one specific sentence' for the 'one thing you're sure of' line. 'I'm sure about you' is the generic line the post tells readers to; Matches the English fix. It also removes the masculine 'seguro', which is wrong for the blog's most common reader (a woman proposing)."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The sample adds a second ask to the question, which the post's own 'What to leave out' list says not to do ('Questions stacked on the question'). The ; Same stacked-question contradiction as in the English, and it keeps the Spanish matching the English.; Not true as written: the Jo, Chris and Pat examples have no 'why here' line, so a reader who tries to match them to the table won't find all four.; Same inaccuracy as in the English.; 'seguro' shows the writer as male. The proposer's gender is unknown, and the new line also echoes the post's own 'lo tengo claro' wording.; 'no he tenido ni un día pocas ganas de volver' is clumsy and reads like a translation of 'never once dreaded coming home'"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The PAA \"Can I propose to my crush?\" (proposal speech examples SERP) is unanswered, and no post on the site covers it, so it has to be answered here.; Keeps the Spanish the same post as the English after the crush addition.; The ES PAA \"¿Cuáles son 10 formas originales de pedir matrimonio?\" is unanswered: the current answer gives no actual ways and doesn't link to the post; No H2 uses the searched phrase, and \"What not to say when proposing\" is a ranking title (Heart Bandits, Clean Origin AIO ref \"What To Say At The Propo; Same fix for Spanish, using how people search it."
+        }
+      ],
+      "applied": [
+        "Long-distance example no longer stacks a second question (front door line, EN+ES)",
+        "Quiet-couple example gets a specific reason instead of I am sure about you; ES drops masculine seguro",
+        "Examples intro now says what each example actually keeps",
+        "ES table and FAQ line rewritten (Desde que estás tú…); ES videollamada grammar",
+        "Unsupported most couples claim removed (EN+ES)",
+        "Crush paragraph answers the PAA about proposing to a crush (EN+ES)",
+        "ES original-ways FAQ gives concrete ways and links the Christmas proposal post",
+        "H2s: What not to say when you propose, Qué no decir al pedir matrimonio, Short proposal lines",
+        "Polish: After they say yes section; people-watching line; first-line wording; no gran momento; no deja claro; since you moved in; scratch card ideas link"
+      ],
+      "rejected": [
+        "Editor polish to vary The Letter note further: already reworded, accurate"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page you'd send a friend because it gives a four-line speech you can learn tonight, with real examples for your kind of couple and a plan for when your mind goes blank, where the top results mostly offer lists of generic lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Last round's polish was only half made. The table now says 'since you moved in', but the first FAQ answer still has the old line, where 'there' has no; 'las tuyas' has no feminine noun to refer to. The only noun nearby is 'los detalles', so it reads as an error. The English says 'your own lines'.; The Spanish FAQ '¿Cómo pedir matrimonio de una forma original?' has three concrete ideas and a Christmas link that the English doesn't. The rubric say"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Round 1 fixes are all in and correct. The EN crush paragraph answers \"Can I propose to my crush?\" with the same shape and a smaller question, and the ES version matches it. The ES original-ways FAQ now gives three actual ways plus a link to christmas-proposal-ideas, which covers \"¿Cuáles son 10 form"
+        }
+      ],
+      "applied": [
+        "EN FAQ example line now matches the table (since you moved in)",
+        "ES: dónde van tus frases",
+        "Original-ways content added to the EN body (closing paragraph with three ways and the Christmas link), matching the ES FAQ; a sixth EN FAQ was not added because the FAQ is capped at five",
+        "Line two named consistently: why here (or why now) in FAQs (EN+ES)",
+        "Polish: Toast note order matches the template (EN+ES); scratch-card note reworded away from the Christmas post (EN+ES); ask the question; Ponle; prometidos; buscando a nadie; te pilla por sorpresa; Same team line no longer a stacked question (EN+ES); days until this airport"
+      ],
+      "rejected": [
+        "Search polish on pedida de mano (family event): different intent, not a PAA",
+        "Search polish to edit christmas-proposal-ideas three parts: outside this post; its three parts are compatible with the four lines"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page you'd send a friend because it gives you a four-line speech you can learn tonight, real example speeches for your kind of couple, and a plan for when your mind goes blank or they say 'can we talk about it?'. Most of the top results only offer lists of generic lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In the English, 'sudden' means rushed or premature, so the speech can't make up for it. Last round's polish changed the Spanish to 'te pilla por sorpr"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Last round's review from this role had no fixes. Its first polish item was made correctly: the FAQs now say \"why here (or why now)\" in EN (\"What words should I use in a proposal?\" and \"How do I propose over chat or from far away?\") and \"por qué aquí (o por qué ahora)\" in ES. The other two polish ite"
+        }
+      ],
+      "applied": [
+        "ES what-not-to-say item back to the English meaning: muy precipitado",
+        "Polish: a few ways (not places); scratch-card link sentence no longer copies the Christmas post (EN+ES); sobrevivir a ellos; al mismo volumen; que lo abra; le darás; greeting card"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the page you'd send a friend because it gives you a four-line speech you can learn tonight, example speeches for your kind of couple, and a plan for when your mind goes blank or they say 'can we talk about it?'. Most top results only offer lists of generic lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. All of last round's fixes and polish were made correctly. The ES what-not-to-say item now reads «Ya sé que esto es muy precipitado», so it means what the English 'sudden' means and 'Si lo es' agrees. Also made: 'a few ways work well'; the scratch-card link sentence no longer copies the Christmas post (EN 'Our [scratch card ideas] have more ways to fill the cards', ES 'tienen más formas de llenar l"
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No fixes. Round 3 from this role had no fixes, and the record shows nothing in this post's SERP coverage was undone. The round 3 changes (\"a few ways\", the scratch-card link sentence, the ES wording) left the closing original-ways paragraph and the ES FAQ with the same three concrete ways and the Christmas link, so EN and ES still match."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final round polish recorded, not applied: reader \"settings\" for the original-ways list; editor ES \"nuestra puerta de casa sea la misma\", \"Las palabras no cambian\", \"Arrodillarte primero\"; search noted asking family first is a planning question, not the words"
+      ]
+    }
+  ]
+}
