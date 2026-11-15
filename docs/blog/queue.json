@@ -1,21 +1,425 @@
 [
   {
+    "slug": "words-of-affirmation",
+    "keyword": "words of affirmation",
+    "keyword_es": "palabras de afirmación",
+    "occasion": "just-because",
+    "templates": [
+      "the-letter",
+      "jar-of-reasons"
+    ],
+    "angle": "What words of affirmation means as a love language, then real examples sorted by moment (a morning, after a hard day, before something big, in front of others, in writing), what lands flat, and how to tell it's theirs: the free quiz at /tools/love-language-quiz, and The Letter, the template the quiz gives this language. Also answers \"words of affirmation examples\" (6,600).",
+    "volume": 49500,
+    "difficulty": 5,
+    "group": "love-languages"
+  },
+  {
+    "slug": "questions-to-ask-your-partner",
+    "keyword": "questions to ask your partner",
+    "keyword_es": "preguntas para hacerle a tu pareja",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "scratch-card"
+    ],
+    "angle": "The gender-neutral version of our two biggest posts: questions sorted by where you are together (new, a year in, living together, apart), the ones that start real conversations instead of interviews, and how to play them on two phones with the free Question cards at /games/deck. Link up to both hubs early.",
+    "volume": 22200,
+    "group": "questions"
+  },
+  {
+    "slug": "would-you-rather-questions-for-couples",
+    "keyword": "would you rather questions for couples",
+    "keyword_es": "preguntas de qué prefieres para parejas",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "text-thread"
+    ],
+    "angle": "Would you rather questions for couples by mood (funny, deep, spicy but not crude, long distance), with the follow-up that turns each into a conversation, and the free two-phone game at /games/rather where you both answer before you see the other's pick. Link up to the questions hubs early.",
+    "volume": 12100,
+    "group": "questions"
+  },
+  {
+    "slug": "long-distance-relationship-gifts",
+    "keyword": "long distance relationship gifts",
+    "keyword_es": "regalos para relaciones a distancia",
+    "occasion": "long-distance",
+    "templates": [
+      "halfway",
+      "passport",
+      "midnight-countdown"
+    ],
+    "angle": "People buying: gifts that work across the distance all year (not only Christmas), sorted by what the gift does (shrinks the distance, marks the countdown, arrives at the same moment), honest about shipping times abroad, with Halfway, Passport and Midnight Countdown where they fit. Link up to /long-distance and the date-ideas post.",
+    "volume": 2400,
+    "group": "long-distance"
+  },
+  {
+    "slug": "questions-for-couples",
+    "keyword": "questions for couples",
+    "keyword_es": "preguntas para conocer a tu pareja",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "scratch-card"
+    ],
+    "angle": "One post for \"questions for couples\", \"relationship questions\" (12,100) and \"couples questions game\" (9,900): question sets by stage and by purpose (closer, funnier, before a big decision), then the free games that turn them into play on two phones (/games/deck, /games/know). Spanish: not \"preguntas para parejas\", which is the Question cards page's own title.",
+    "volume": 12100,
+    "difficulty": 8,
+    "group": "questions"
+  },
+  {
+    "slug": "gift-giving-love-language",
+    "keyword": "gift giving love language",
+    "keyword_es": "lenguaje del amor regalos",
+    "occasion": "just-because",
+    "templates": [
+      "bouquet",
+      "scrapbook"
+    ],
+    "angle": "What the gift-giving language actually wants (proof you were thinking of them, not a price), small gifts that land by budget and by distance, why a made thing beats a bought one, and Bouquet, the template the quiz gives this language. Also answers \"receiving gifts love language\" (480). Links to the quiz early.",
+    "volume": 1900,
+    "difficulty": 2,
+    "group": "love-languages"
+  },
+  {
+    "slug": "acts-of-service-love-language",
+    "keyword": "acts of service love language",
+    "keyword_es": "actos de servicio lenguaje del amor",
+    "occasion": "just-because",
+    "templates": [
+      "scratch-card"
+    ],
+    "angle": "Acts of service explained by what counts (small, specific, unasked) and what doesn't, ideas sorted by effort and by distance, how to ask for it without keeping score, and Scratch Card, the template the quiz gives this language, as IOUs they scratch off. Links to the quiz early.",
+    "volume": 9900,
+    "difficulty": 16,
+    "group": "love-languages"
+  },
+  {
+    "slug": "deep-questions-to-ask-your-boyfriend",
+    "keyword": "deep questions to ask your boyfriend",
+    "keyword_es": "preguntas profundas para mi novio",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "the-letter"
+    ],
+    "angle": "Deep questions for your boyfriend that don't feel like an interview: sorted by how deep (warm-up to the ones you ask once), when to ask them (a drive, a late call), how to answer your own first, and what to do when he goes quiet. Link up to the boyfriend questions hub early.",
+    "volume": 4400,
+    "difficulty": 8,
+    "group": "questions"
+  },
+  {
+    "slug": "paragraphs-for-him",
+    "keyword": "paragraphs for him",
+    "keyword_es": "textos largos para mi novio",
+    "occasion": "just-because",
+    "templates": [
+      "the-letter",
+      "text-thread"
+    ],
+    "angle": "The partner of paragraphs-for-your-girlfriend: long paragraphs to send him, sorted by moment (good morning, after a fight, when he's far away, his birthday: 'birthday paragraph for boyfriend' has 390 searches), each with what makes it his and not anyone's.",
+    "volume": 1900,
+    "volume_es": 10,
+    "group": "letters"
+  },
+  {
+    "slug": "physical-touch-love-language",
+    "keyword": "physical touch love language",
+    "keyword_es": "contacto físico lenguaje del amor",
+    "occasion": "just-because",
+    "templates": [
+      "xoxo"
+    ],
+    "angle": "Physical touch explained without making it only about sex: everyday touch, what to do when one of you isn't a hugger, and what it means across a distance (a voice note at night, a hoodie that smells of them). XOXO is the template the quiz gives it. Links to the quiz early.",
+    "volume": 4400,
+    "difficulty": 4,
+    "group": "love-languages"
+  },
+  {
+    "slug": "long-distance-relationship-quotes",
+    "keyword": "long distance relationship quotes",
+    "keyword_es": "frases para relaciones a distancia",
+    "occasion": "long-distance",
+    "templates": [
+      "halfway",
+      "text-thread"
+    ],
+    "angle": "Lines to send someone far away, sorted by moment (goodnight across time zones, the day before a visit, the airport, a bad week), mostly original; a quote from a real person only with their name and checked. Then what to send with the words: Halfway and Text Thread. Link up to /long-distance and the date-ideas post.",
+    "volume": 2900,
+    "difficulty": 9,
+    "group": "long-distance"
+  },
+  {
     "slug": "long-distance-relationship-tips",
     "keyword": "long distance relationship tips",
     "keyword_es": "consejos para una relación a distancia",
     "occasion": "long-distance",
-    "templates": ["halfway", "passport", "midnight-countdown"],
+    "templates": [
+      "halfway",
+      "passport",
+      "midnight-countdown"
+    ],
     "angle": "Specific tips instead of 'communicate more': a call rhythm that survives time zones, what to do in the first hour of a visit, how to argue well by text, money and the plan to close the distance, and the free tools on /long-distance (the city halfway between you, the hours you're both awake).",
     "volume": 1900,
     "difficulty": 24,
-    "volume_es": 10
+    "volume_es": 10,
+    "group": "long-distance"
+  },
+  {
+    "slug": "love-notes-for-him",
+    "keyword": "love notes for him",
+    "keyword_es": "notas de amor para él",
+    "occasion": "just-because",
+    "templates": [
+      "jar-of-reasons",
+      "the-letter"
+    ],
+    "angle": "Short love notes for him by where he'll find them (lunch box, mirror, wallet, a coat pocket, his phone), the line that makes a note feel like you, and Jar of Reasons for a whole jar of them. Link up to the reasons-why-I-love-you hub early.",
+    "volume": 2900,
+    "difficulty": 15,
+    "group": "reasons"
+  },
+  {
+    "slug": "truth-or-dare-questions-for-couples",
+    "keyword": "truth or dare questions for couples",
+    "keyword_es": "verdad o reto para parejas",
+    "occasion": "just-because",
+    "templates": [
+      "scratch-card",
+      "fortune-cookie"
+    ],
+    "angle": "Truth or dare for couples that stays fun: truths and dares by mood (sweet, silly, a little daring, long distance by video), house rules so nobody is put on the spot, and the free soft edition at /games/dare. Link up to the questions hubs early.",
+    "volume": 4400,
+    "group": "questions"
+  },
+  {
+    "slug": "quality-time-love-language",
+    "keyword": "quality time love language",
+    "keyword_es": "tiempo de calidad lenguaje del amor",
+    "occasion": "just-because",
+    "templates": [
+      "picnic",
+      "our-timeline"
+    ],
+    "angle": "Quality time explained as attention, not hours: what counts and what doesn't (phones out), ideas by budget and by distance, a weekly ritual that survives busy weeks, and Picnic, the template the quiz gives this language. Links to the quiz early.",
+    "volume": 3600,
+    "difficulty": 8,
+    "group": "love-languages"
+  },
+  {
+    "slug": "questions-to-ask-your-crush",
+    "keyword": "questions to ask your crush",
+    "keyword_es": "preguntas para hacerle a tu crush",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "text-thread"
+    ],
+    "angle": "Questions to ask your crush by channel (text, in person, at a party) and by how well you know each other, the ones that show interest without pressure, and how to read the answers; when it turns into something, the couple questions hubs are next. Link up to them.",
+    "volume": 14800,
+    "difficulty": 1,
+    "group": "questions"
+  },
+  {
+    "slug": "funny-questions-to-ask-your-boyfriend",
+    "keyword": "funny questions to ask your boyfriend",
+    "keyword_es": "preguntas graciosas para mi novio",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "scratch-card"
+    ],
+    "angle": "Funny questions for your boyfriend that get a story, not a yes or no: hypotheticals, ranking games, would-you-rathers, and the ones to save for a long drive. Play them on two phones with the free Question cards (/games/deck). Link up to the boyfriend questions hub early.",
+    "volume": 3600,
+    "group": "questions"
+  },
+  {
+    "slug": "the-5-love-languages",
+    "keyword": "5 love languages",
+    "keyword_es": "los 5 lenguajes del amor",
+    "occasion": "just-because",
+    "templates": [
+      "the-letter",
+      "picnic",
+      "bouquet",
+      "scratch-card",
+      "xoxo"
+    ],
+    "angle": "The blog hub for the love-language group: the five languages in plain words, how to find yours and theirs (the free quiz), what to do when yours differ, and the members on each language. Write it once three members are live and link every one of them. Hard search (~354 sites): it grows with links.",
+    "volume": 90500,
+    "difficulty": 26,
+    "group": "love-languages"
+  },
+  {
+    "slug": "deep-questions-to-ask-your-girlfriend",
+    "keyword": "deep questions to ask your girlfriend",
+    "keyword_es": "preguntas profundas para mi novia",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "the-letter"
+    ],
+    "angle": "Deep questions for your girlfriend sorted by how deep, when to ask them, how to answer your own first, and how to listen to the answer rather than wait for your turn. Link up to the girlfriend questions hub early.",
+    "volume": 2900,
+    "group": "questions"
+  },
+  {
+    "slug": "long-distance-relationship-games",
+    "keyword": "long distance relationship games",
+    "keyword_es": "juegos para jugar a distancia con tu pareja",
+    "occasion": "long-distance",
+    "templates": [
+      "arcade",
+      "halfway"
+    ],
+    "angle": "Games to play long distance (also \"games to play long distance\", 480): our free two-phone games first (/games), then video-call games and co-op games, sorted by how much time you have. Spanish: not \"juegos para parejas a distancia\", which the date-ideas post owns (seo-backlog). Link up to /long-distance and the date-ideas post.",
+    "volume": 1000,
+    "group": "long-distance"
+  },
+  {
+    "slug": "21-questions-for-couples",
+    "keyword": "21 questions for couples",
+    "keyword_es": "21 preguntas para parejas",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "text-thread"
+    ],
+    "angle": "The 21 questions game for couples: how it's played, three ready sets of 21 (new couple, a year in, deep), the rule that you both answer, and the free two-phone version (/games/know). Link up to the questions hubs.",
+    "volume": 1900,
+    "difficulty": 1,
+    "group": "questions"
+  },
+  {
+    "slug": "flirty-questions-to-ask-your-boyfriend",
+    "keyword": "flirty questions to ask your boyfriend",
+    "keyword_es": "preguntas coquetas para mi novio",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "xoxo"
+    ],
+    "angle": "Flirty questions for your boyfriend by setting (text, date night, long distance), playful rather than crude, with the follow-ups that keep it going. Link up to the boyfriend questions hub early.",
+    "volume": 1900,
+    "group": "questions"
+  },
+  {
+    "slug": "funny-questions-to-ask-your-girlfriend",
+    "keyword": "funny questions to ask your girlfriend",
+    "keyword_es": "preguntas graciosas para mi novia",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "text-thread"
+    ],
+    "angle": "Funny questions for your girlfriend that get stories: hypotheticals, rankings, would-you-rathers, the ones for a road trip, and the free Question cards (/games/deck) to play them. Link up to the girlfriend questions hub early.",
+    "volume": 1900,
+    "group": "questions"
+  },
+  {
+    "slug": "this-or-that-questions-for-couples",
+    "keyword": "this or that questions for couples",
+    "keyword_es": "preguntas de esto o aquello para parejas",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "scratch-card"
+    ],
+    "angle": "This or that for couples: quick pairs by theme (dates, home, food, travel, the future), how to turn a pick into a conversation, and the would-you-rather game (/games/rather) when you want more. Link up to the questions hubs.",
+    "volume": 1600,
+    "group": "questions"
+  },
+  {
+    "slug": "date-night-questions",
+    "keyword": "date night questions",
+    "keyword_es": "preguntas para una cita",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "picnic"
+    ],
+    "angle": "Questions for date night by the kind of date (dinner out, a night in, a walk, a first date), a three-question rule that keeps it from becoming an interview, and the free Question cards (/games/deck). Link up to the questions hubs.",
+    "volume": 1300,
+    "group": "questions"
+  },
+  {
+    "slug": "love-notes-for-her",
+    "keyword": "love notes for her",
+    "keyword_es": "notas de amor para ella",
+    "occasion": "just-because",
+    "templates": [
+      "jar-of-reasons",
+      "the-letter"
+    ],
+    "angle": "Short love notes for her by where she'll find them (a book, the mirror, her bag, a lunch box, her phone), the detail that makes a note sound like you, and Jar of Reasons for a jar of them. Link up to the reasons-why-I-love-you hub early.",
+    "volume": 1900,
+    "difficulty": 33,
+    "group": "reasons"
+  },
+  {
+    "slug": "questions-to-ask-your-husband",
+    "keyword": "questions to ask your husband",
+    "keyword_es": "preguntas para mi marido",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "the-letter"
+    ],
+    "angle": "Questions to ask your husband years in: about the early days, what's changed, what you still don't know, and the future, with how to ask them on an ordinary night. Link up to the questions hubs.",
+    "volume": 1000,
+    "group": "questions"
+  },
+  {
+    "slug": "long-distance-gifts-for-boyfriend",
+    "keyword": "long distance gifts for boyfriend",
+    "keyword_es": "regalos para mi novio a distancia",
+    "occasion": "long-distance",
+    "templates": [
+      "halfway",
+      "passport",
+      "arcade"
+    ],
+    "angle": "People buying: gifts for a boyfriend far away, sorted by when he'll open it and by budget, honest about delivery abroad, and the ones that arrive on the minute (a link). Link up to the long distance gifts post and /long-distance.",
+    "volume": 1000,
+    "group": "long-distance"
+  },
+  {
+    "slug": "questions-to-ask-your-wife",
+    "keyword": "questions to ask your wife",
+    "keyword_es": "preguntas para mi mujer",
+    "occasion": "just-because",
+    "templates": [
+      "fortune-cookie",
+      "the-letter"
+    ],
+    "angle": "Questions to ask your wife years in: the early days, what's changed, what you still don't know, and the future, with how to ask them so it isn't an interview. Link up to the questions hubs.",
+    "volume": 720,
+    "group": "questions"
+  },
+  {
+    "slug": "long-distance-gifts-for-girlfriend",
+    "keyword": "long distance gifts for girlfriend",
+    "keyword_es": "regalos para mi novia a distancia",
+    "occasion": "long-distance",
+    "templates": [
+      "halfway",
+      "bouquet",
+      "passport"
+    ],
+    "angle": "People buying: gifts for a girlfriend far away, sorted by when she'll open it and by budget, honest about delivery abroad, and the ones that arrive on the minute (a link). Link up to the long distance gifts post and /long-distance.",
+    "volume": 590,
+    "group": "long-distance"
   },
   {
     "slug": "what-to-write-in-an-anniversary-card",
     "keyword": "what to write in an anniversary card",
     "keyword_es": "qué escribir en una tarjeta de aniversario",
     "occasion": "anniversary",
-    "templates": ["the-letter", "our-timeline", "museum"],
+    "templates": [
+      "the-letter",
+      "our-timeline",
+      "museum"
+    ],
     "angle": "Lines for every kind of anniversary card (one year, ten, a partner, parents, friends), funny or soft, how long it should be, and the one specific memory that turns a card into the thing they keep.",
     "volume": 880,
     "difficulty": 3,
@@ -26,7 +430,11 @@
     "keyword": "birthday letter to best friend",
     "keyword_es": "carta de cumpleaños para mi mejor amiga",
     "occasion": "birthday",
-    "templates": ["the-letter", "scrapbook", "photo-booth"],
+    "templates": [
+      "the-letter",
+      "scrapbook",
+      "photo-booth"
+    ],
     "angle": "A birthday letter to your best friend built from the friendship's actual history, with example letters for old friends, new ones and friends far away, instead of the keyword-stuffed templates that rank now.",
     "volume": 880,
     "volume_es": 50,
@@ -37,40 +445,42 @@
     "keyword": "birthday message for girlfriend",
     "keyword_es": "mensaje de cumpleaños para mi novia",
     "occasion": "birthday",
-    "templates": ["birthday-cinema", "popup-card", "the-letter"],
+    "templates": [
+      "birthday-cinema",
+      "popup-card",
+      "the-letter"
+    ],
     "angle": "Birthday messages for her by relationship stage (new, a few years in, long distance), when to send so she wakes up to it, and a short formula that keeps it from sounding like a card.",
     "volume": 720,
     "volume_es": 40,
     "difficulty": 0
   },
   {
-    "slug": "paragraphs-for-your-boyfriend",
-    "keyword": "paragraphs for your boyfriend",
-    "keyword_es": "textos largos para mi novio",
-    "occasion": "just-because",
-    "templates": ["the-letter", "text-thread"],
-    "angle": "The partner of paragraphs-for-your-girlfriend: long paragraphs to send him, sorted by moment (good morning, after a fight, when he's far away, his birthday: 'birthday paragraph for boyfriend' has 390 searches), each with what makes it his and not anyone's.",
-    "volume": 590,
-    "difficulty": 0,
-    "volume_es": 10
-  },
-  {
     "slug": "birthday-letter-to-boyfriend",
     "keyword": "birthday letter to boyfriend",
     "keyword_es": "carta de cumpleaños para mi novio",
     "occasion": "birthday",
-    "templates": ["the-letter", "birthday-cinema", "midnight-countdown"],
+    "templates": [
+      "the-letter",
+      "birthday-cinema",
+      "midnight-countdown"
+    ],
     "angle": "A birthday letter for him built from the year you've had, with three sample letters (new relationship, years in, long distance), how to time it for midnight, and how a letter differs from the card line (what-to-write-in-boyfriends-birthday-card covers the card).",
     "volume": 590,
     "difficulty": 0,
-    "volume_es": 90
+    "volume_es": 90,
+    "group": "letters"
   },
   {
     "slug": "graduation-message-for-daughter",
     "keyword": "graduation message for daughter",
     "keyword_es": "mensaje de graduación para mi hija",
     "occasion": "graduation",
-    "templates": ["cap-toss", "the-letter", "our-timeline"],
+    "templates": [
+      "cap-toss",
+      "the-letter",
+      "our-timeline"
+    ],
     "angle": "Graduation messages from a parent to a daughter for high school or university, sorted by tone, with a longer letter structure that looks back and forward without a lecture.",
     "volume": 590,
     "volume_es": 0,
@@ -81,18 +491,26 @@
     "keyword": "love letter to wife",
     "keyword_es": "carta de amor para mi esposa",
     "occasion": "anniversary",
-    "templates": ["keepsake", "the-letter", "music-box"],
+    "templates": [
+      "keepsake",
+      "the-letter",
+      "music-box"
+    ],
     "angle": "A love letter to your wife years in, about the ordinary married life you share rather than the wedding, with prompts, three sample letters (an anniversary, a hard year, no reason) and how to give it.",
     "volume": 590,
     "volume_es": 40,
-    "difficulty": 0
+    "difficulty": 0,
+    "group": "letters"
   },
   {
     "slug": "pregnancy-announcement-to-husband",
     "keyword": "how to tell your husband you're pregnant",
     "keyword_es": "cómo decirle a mi marido que estoy embarazada",
     "occasion": "just-because",
-    "templates": ["scratch-card", "the-letter"],
+    "templates": [
+      "scratch-card",
+      "the-letter"
+    ],
     "angle": "Ways to tell your husband you're pregnant that fit the couple: quiet, funny, from far away or after a long wait, with what to say in the first minute and how to capture his reaction.",
     "volume": 480,
     "volume_es": 0,
@@ -103,7 +521,11 @@
     "keyword": "anniversary message for parents",
     "keyword_es": "mensaje de aniversario para mis padres",
     "occasion": "anniversary",
-    "templates": ["the-toast", "our-timeline", "the-letter"],
+    "templates": [
+      "the-toast",
+      "our-timeline",
+      "the-letter"
+    ],
     "angle": "What to write to your parents on their anniversary, from a card line to a toast at a milestone party, with how to gather family memories and photos into one gift from all the children.",
     "volume": 390,
     "volume_es": 0,
@@ -114,7 +536,11 @@
     "keyword": "letter to dad from daughter",
     "keyword_es": "carta para mi padre de su hija",
     "occasion": "fathers-day",
-    "templates": ["keepsake", "the-letter", "front-page"],
+    "templates": [
+      "keepsake",
+      "the-letter",
+      "front-page"
+    ],
     "angle": "How to write a letter to your father that he'll actually read to the end: what to say for gratitude, for a dad who isn't good with feelings, and for a complicated relationship, with sample letters and when to give it.",
     "volume": 320,
     "volume_es": 10,
@@ -125,7 +551,11 @@
     "keyword": "what to get a girlfriend who has everything",
     "keyword_es": "qué regalar a una novia que lo tiene todo",
     "occasion": "just-because",
-    "templates": ["museum", "jar-of-reasons", "front-page"],
+    "templates": [
+      "museum",
+      "jar-of-reasons",
+      "front-page"
+    ],
     "angle": "Gifts for a girlfriend who buys herself what she wants: things only you can give, built from shared memories and inside jokes, with how to make one in an evening.",
     "volume": 320,
     "volume_es": 0,
@@ -136,7 +566,10 @@
     "keyword": "how to say i love you for the first time",
     "keyword_es": "cómo decir te quiero por primera vez",
     "occasion": "just-because",
-    "templates": ["the-letter", "text-thread"],
+    "templates": [
+      "the-letter",
+      "text-thread"
+    ],
     "angle": "When it's time, where to say it, the exact words in plain language, what to do if they don't say it back, and whether a text or a letter counts.",
     "volume": 260,
     "volume_es": 0,
@@ -147,7 +580,11 @@
     "keyword": "letter to mom from daughter",
     "keyword_es": "carta para mi madre de su hija",
     "occasion": "mothers-day",
-    "templates": ["keepsake", "recipe-box", "the-letter"],
+    "templates": [
+      "keepsake",
+      "recipe-box",
+      "the-letter"
+    ],
     "angle": "A letter to your mother made of specific memories rather than greeting-card lines, with a structure, sample letters for different moments (a birthday, leaving home, a hard year) and ways to give it.",
     "volume": 260,
     "volume_es": 30,
@@ -158,7 +595,10 @@
     "keyword": "how to ask her to be your girlfriend",
     "keyword_es": "cómo pedirle a una chica que sea tu novia",
     "occasion": "valentines",
-    "templates": ["scratch-card", "the-letter"],
+    "templates": [
+      "scratch-card",
+      "the-letter"
+    ],
     "angle": "Reading whether she's ready, low-pressure ways to ask (in person, over text, with a small gesture), the words to use, and how to make a no easy for both of you.",
     "volume": 140,
     "volume_es": 0,
@@ -169,7 +609,11 @@
     "keyword": "thank you message for boyfriend",
     "keyword_es": "mensaje de agradecimiento para mi novio",
     "occasion": "just-because",
-    "templates": ["the-letter", "jar-of-reasons", "text-thread"],
+    "templates": [
+      "the-letter",
+      "jar-of-reasons",
+      "text-thread"
+    ],
     "angle": "Thank-you messages for a boyfriend that name the specific thing: after a hard month, for a gift, for the small daily stuff, with how to say it so it does not sound like a work email.",
     "volume": 110,
     "volume_es": 10,
@@ -180,18 +624,26 @@
     "keyword": "long distance messages for him",
     "keyword_es": "mensajes para mi novio a distancia",
     "occasion": "long-distance",
-    "templates": ["text-thread", "halfway"],
+    "templates": [
+      "text-thread",
+      "halfway"
+    ],
     "angle": "Messages for the hard hours of a long-distance week (his morning, your night, the day before a visit, the airport after), short enough to send, and how to schedule one to arrive as he wakes.",
     "volume": 90,
     "volume_es": 10,
-    "difficulty": 24
+    "difficulty": 24,
+    "group": "long-distance"
   },
   {
     "slug": "new-year-message-for-girlfriend",
     "keyword": "new year message for girlfriend",
     "keyword_es": "mensaje de año nuevo para mi novia",
     "occasion": "just-because",
-    "templates": ["midnight-countdown", "fortune-cookie", "the-letter"],
+    "templates": [
+      "midnight-countdown",
+      "fortune-cookie",
+      "the-letter"
+    ],
     "angle": "New Year messages for a girlfriend sorted by moment: the midnight text, the one for when you're apart, the look back at your year and the plans for the next, with how to time it to the minute.",
     "volume": 50,
     "volume_es": 0,
@@ -202,7 +654,11 @@
     "keyword": "1 year anniversary message for girlfriend",
     "keyword_es": "mensaje de un año de novios para mi novia",
     "occasion": "anniversary",
-    "templates": ["our-timeline", "the-letter", "museum"],
+    "templates": [
+      "our-timeline",
+      "the-letter",
+      "museum"
+    ],
     "angle": "One-year anniversary messages built on the year's real moments, with a month-by-month prompt list to find them, sample messages at three lengths, and how to send it on the day.",
     "volume": 30,
     "volume_es": 0,
@@ -213,7 +669,11 @@
     "keyword": "graduation message for boyfriend",
     "keyword_es": "mensaje de graduación para mi novio",
     "occasion": "graduation",
-    "templates": ["cap-toss", "front-page", "the-letter"],
+    "templates": [
+      "cap-toss",
+      "front-page",
+      "the-letter"
+    ],
     "angle": "Graduation messages that name what he actually did to get there (the late nights, the exam he nearly quit over), for the card, the text on the day and the speech at dinner, instead of 200 interchangeable lines.",
     "volume": 20,
     "volume_es": 0,
@@ -224,7 +684,11 @@
     "keyword": "what to say to your boyfriend when he's stressed",
     "keyword_es": "qué decirle a tu novio cuando está estresado",
     "occasion": "just-because",
-    "templates": ["text-thread", "the-letter", "paper-crane"],
+    "templates": [
+      "text-thread",
+      "the-letter",
+      "paper-crane"
+    ],
     "angle": "What to say depending on whether he wants to talk, wants fixing or wants distraction, texts for when you're apart, what not to say, and small things to do instead of saying anything.",
     "volume": 10,
     "volume_es": 0,
@@ -235,18 +699,26 @@
     "keyword": "long distance countdown",
     "keyword_es": "ideas de cuenta atrás para vernos",
     "occasion": "long-distance",
-    "templates": ["midnight-countdown", "halfway", "pack-your-bags"],
+    "templates": [
+      "midnight-countdown",
+      "halfway",
+      "pack-your-bags"
+    ],
     "angle": "Long-distance countdown ideas that are more than an app number: something to open each day, a shared list, plans for the first hour together, and what to do with the last night before the flight.",
     "volume": 10,
     "volume_es": 0,
-    "difficulty": null
+    "difficulty": null,
+    "group": "long-distance"
   },
   {
     "slug": "what-to-write-in-a-valentines-card",
     "keyword": "what to write in a valentine's card",
     "keyword_es": "qué escribir en una tarjeta de san valentín",
     "occasion": "valentines",
-    "templates": ["the-letter", "xoxo"],
+    "templates": [
+      "the-letter",
+      "xoxo"
+    ],
     "angle": "Lines for every stage, from three dates in to twenty years married, funny or soft, how long a card message should be, and what to write when you can't say it out loud.",
     "not_before": "2026-12-06",
     "volume": 3600,
@@ -258,7 +730,11 @@
     "keyword": "love coupons",
     "keyword_es": "vales de amor",
     "occasion": "valentines",
-    "templates": ["scratch-card", "fortune-cookie", "the-letter"],
+    "templates": [
+      "scratch-card",
+      "fortune-cookie",
+      "the-letter"
+    ],
     "angle": "Love coupon ideas they will actually redeem (by budget, for long distance, funny ones), how to word the fine print so it's a promise and not a joke, and how to hide each one under a scratch card so every coupon is a reveal. 1,300 searches a month, 4,400 in February.",
     "volume": 1300,
     "difficulty": 7,
@@ -270,24 +746,34 @@
     "keyword": "long distance valentines day ideas",
     "keyword_es": "ideas de san valentín a distancia",
     "occasion": "valentines",
-    "templates": ["xoxo", "bouquet", "halfway"],
+    "templates": [
+      "xoxo",
+      "bouquet",
+      "halfway"
+    ],
     "angle": "Valentine's apart: flowers that arrive on the day, a midnight letter in their time zone, and a shared evening.",
     "not_before": "2026-12-06",
     "volume": 590,
     "volume_es": 0,
-    "difficulty": 0
+    "difficulty": 0,
+    "group": "long-distance"
   },
   {
     "slug": "valentines-letter-to-boyfriend",
     "keyword": "valentines letter to boyfriend",
     "keyword_es": "carta de san valentín para mi novio",
     "occasion": "valentines",
-    "templates": ["xoxo", "the-letter", "bouquet"],
+    "templates": [
+      "xoxo",
+      "the-letter",
+      "bouquet"
+    ],
     "angle": "A Valentine's letter to a boyfriend that skips greeting-card lines: prompts by stage of the relationship, sample letters, and how to give it on the day if you are apart.",
     "not_before": "2026-12-06",
     "volume": 70,
     "volume_es": 140,
-    "difficulty": 5
+    "difficulty": 5,
+    "group": "letters"
   },
   {
     "note": "Skipped 14 Nov 2026: docs/blog/VOICE.md says 'Don't name competitors', and this entry exists to name them. The owner needs to decide which rule wins before it is written.",
@@ -295,7 +781,11 @@
     "keyword": "best digital love letter websites",
     "keyword_es": "páginas para hacer una carta de amor digital",
     "occasion": "just-because",
-    "templates": ["the-letter", "xoxo", "keepsake"],
+    "templates": [
+      "the-letter",
+      "xoxo",
+      "keepsake"
+    ],
     "angle": "When someone asks ChatGPT how to send a digital love letter, it cites makers' own comparison pages (ouvella.com's \"15 compared\", stampgoose.com's), never ours. Write the honest one: every serious maker (2luv, Letters by Heart, LetterHugs, LoveLetter.digital, gifft.me, Ethos and whoever ranks), each checked on its own site the day you write, with price, what's free, photos, music, scheduling, how it opens and who it suits, in one table, dated, Ethos's weak points included. Never a claim about a competitor you didn't see on its site that day.",
     "for": "ai-answers",
     "volume": 0,
@@ -308,7 +798,11 @@
     "keyword": "gifft.me alternatives",
     "keyword_es": "alternativas a gifft.me",
     "occasion": "just-because",
-    "templates": ["the-letter", "bouquet", "scratch-card"],
+    "templates": [
+      "the-letter",
+      "bouquet",
+      "scratch-card"
+    ],
     "angle": "\"Best alternatives to gifft.me\" gets answered by RAYXIS's own comparison page, so ChatGPT recommends RAYXIS first. A fair, dated comparison of gifft.me and its real alternatives (qlovy, sendvirtualgift, RAYXIS, GiftFeels, Ethos and others that show up), each checked on its own site the day you write: price, free tier, what you can put in it, how it opens, languages. Say where gifft.me is the better pick. Never a claim you didn't see on the maker's site that day.",
     "for": "ai-answers",
     "volume": 0,

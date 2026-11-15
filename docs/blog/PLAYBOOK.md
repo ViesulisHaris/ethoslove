@@ -46,6 +46,11 @@ Take the first entry in `docs/blog/queue.json`. Before using it, check:
 
 If the entry fails a check, delete it from the queue and take the next one.
 
+An entry with a `"group"` is a member of one of the five topic groups in `docs/blog/TOPIC-GROUPS.md`
+(the owner's plan for the big searches, 15 Nov 2026): read its group before writing. Its hub, its
+free thing and its link rules apply in steps 3 and 4. Keep the groups' order in the queue unless the
+topic check shows a topic's searchers want something else.
+
 **Then check it with real search data** (`docs/blog/SEO-DATA.md`; up to about $1 for the whole run:
 the owner said on 13 Nov that search-data cost is not a limit when it helps, so also get the top 10
 of the keyword's two closest variants and read the structure of the top three pages with
@@ -66,7 +71,9 @@ without it and say "search data skipped" in the report.
 
 ### Refill the queue when it has fewer than 10 entries, and every Monday
 
-Add topics until it has 30. Each one is a search someone types when they are about to make, write
+Add topics until it has 30, taking them first from the "Members to write" lists in
+`docs/blog/TOPIC-GROUPS.md` that are neither queued nor published, each with its `"group"`. Each one
+is a search someone types when they are about to make, write
 or send something for a person they love: "what to write in an anniversary letter to your
 boyfriend", "open when letter ideas", "6 month anniversary ideas". Use the WebSearch tool:
 
@@ -163,6 +170,11 @@ Create `src/content/blog/posts/<slug>.ts` (one `export const post: BlogPost`) an
 Add a sentence linking to the new post in one or two older posts where it genuinely helps their
 reader, in both languages. Leave their `updated` alone for that. Every post must link to at least
 one other post; the test checks it.
+
+A member of a topic group (`docs/blog/TOPIC-GROUPS.md`) also links up to its hub in its first third
+and to one or two other members, and when the hub is a blog post, this same commit adds the new post
+to the hub (rules 1 to 3 there). When the hub is a site page, add the "For a person" line to
+`docs/blog/seo-backlog.md` instead.
 
 ## 5. Check
 

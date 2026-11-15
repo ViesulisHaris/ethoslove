@@ -35,7 +35,8 @@ end: without data this routine has nothing to go on.
 4 days old).** DataForSEO's own ranking database barely sees a young site (4 US keywords on 13 Nov),
 so check the real results page instead. Make the list: every keyword in
 `docs/marketing/KEYWORDS.md`'s target table whose page is ours (not "skip", not "new page
-needed"), plus every blog post's `keyword` (about 120 phrases, growing with the blog). For each, get
+needed"), plus every blog post's `keyword` and every hub search in `docs/blog/TOPIC-GROUPS.md`
+(about 120 phrases, growing with the blog). For each, get
 the US mobile top 30 (`serp/google/organic/live/regular`, depth 30, about $0.006; see SEO-DATA.md)
 and note where tryethos.io is, with the URL that ranks, or "not in the top 30". Check the UK too
 for the product phrases (flowers, letters, fortune cookie, scratch card) and Spain for the Spanish
@@ -95,11 +96,13 @@ the diary included (the mirror is public): say that a page "sells to searchers" 
 4. **The wrong target.** A post Search Console shows getting impressions for searches other than its
    keyword: aim it at what people actually search (keyword ideas around it), without repeating
    another post's search. Searches with impressions that no post answers well go into the queue.
-5. **The web of links.** A post that few others link to: add genuinely useful links to it from two
-   or three related posts, and from it to the template and occasion pages it mentions.
-6. **The queue.** Re-order `docs/blog/queue.json` by real searches, difficulty and intent, add the
-   best opportunities from `docs/marketing/KEYWORDS.md`, and drop topics whose searchers want
-   something else. (This counts as the day's change.)
+5. **The web of links.** Inside a topic group first (`docs/blog/TOPIC-GROUPS.md`): a member that
+   doesn't link up to its hub, or a blog hub that's missing a member. Otherwise a post that few
+   others link to: add genuinely useful links to it from two or three related posts, and from it to
+   the template and occasion pages it mentions.
+6. **The queue.** Re-order `docs/blog/queue.json` by real searches, difficulty and intent, keeping
+   the topic groups' members first, add the best opportunities from `docs/marketing/KEYWORDS.md`,
+   and drop topics whose searchers want something else. (This counts as the day's change.)
 7. **A page audit.** Audit two recent posts (`on_page/instant_pages`) and fix what it finds inside
    the post: alt text, a description that's too long, a missing link.
 
