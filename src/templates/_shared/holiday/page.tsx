@@ -128,6 +128,8 @@ type Props<T extends Record<string, unknown>> = {
    * out towards the foot of the screen so that something there stays in view (`fadeFoot`, a share of its height).
    */
   backdrop?: ReactNode;
+  /** The photos, drawn the gift's own way (a stack to turn through) where a grid of prints is not it. */
+  galleryAs?: ReactNode;
   block?: (kind: BlockKind, children: ReactNode) => ReactNode;
   tone?: "light" | "dark";
   fadeFoot?: number;
@@ -137,7 +139,7 @@ type Props<T extends Record<string, unknown>> = {
   onReplay?: () => void;
 };
 
-export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, paperBase, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, backdrop, block, tone = "light", fadeFoot, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
+export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, paperBase, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, backdrop, galleryAs, block, tone = "light", fadeFoot, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
   const scroller = useRef<HTMLDivElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<GiftPhoto | null>(null);
@@ -178,13 +180,15 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
           {data.photos.length ? (
             <section aria-label={gallery} className="flex flex-col gap-[calc(7*var(--u))]">
               {gallery ? <Label color={theme.label}>{gallery}</Label> : null}
-              <div className={columns === 2 ? "grid grid-cols-2 gap-x-[calc(5*var(--u))] gap-y-[calc(9*var(--u))] px-[calc(2*var(--u))]" : "flex flex-col gap-[calc(10*var(--u))] px-[calc(6*var(--u))]"}>
-                {data.photos.map((p, index) => (
-                  <Reveal key={p.id} still={still} delay={columns === 2 ? (index % 2) * 0.12 : 0}>
-                    {photo({ photo: p, index, still, open: () => setOpen(p) })}
-                  </Reveal>
-                ))}
-              </div>
+              {galleryAs ?? (
+                <div className={columns === 2 ? "grid grid-cols-2 gap-x-[calc(5*var(--u))] gap-y-[calc(9*var(--u))] px-[calc(2*var(--u))]" : "flex flex-col gap-[calc(10*var(--u))] px-[calc(6*var(--u))]"}>
+                  {data.photos.map((p, index) => (
+                    <Reveal key={p.id} still={still} delay={columns === 2 ? (index % 2) * 0.12 : 0}>
+                      {photo({ photo: p, index, still, open: () => setOpen(p) })}
+                    </Reveal>
+                  ))}
+                </div>
+              )}
             </section>
           ) : null}
 
@@ -263,11 +267,14 @@ export function Print({ slot, rot, holder, ink = "#3a2410" }: { slot: PhotoSlot;
   );
 }
 
-/** A block that rises into place as it scrolls into view. Plain when the page is still. */
+/**
+ * A block that rises into place as it scrolls into view. Plain when the page is still.
+ * Any part of it in view counts: a share of its height would never be reached by a letter several screens long.
+ */
 function Reveal({ still, delay = 0, children }: { still: boolean; delay?: number; children: ReactNode }) {
   if (still) return <div>{children}</div>;
   return (
-    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}>
+    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: "some" }} transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}>
       {children}
     </motion.div>
   );

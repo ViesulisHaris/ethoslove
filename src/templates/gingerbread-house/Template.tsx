@@ -14,9 +14,9 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
-import { HolidayPage, PaperSheet, Print, type HolidayTheme } from "../_shared/holiday/page";
-import { down, Plate, Sparks, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
-import { ANCHORS, ART_BASE, SHEETS, SPRITES } from "./art-map";
+import { StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
+import { down, Plate, SoftTable, Sparks, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
+import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
 import { ENOUGH, inside, readyMade, SPACING, SWEETS, type Mark, type Pt, type Sweet, type Tool } from "./decorate";
 import { INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type GingerbreadHouseFields } from "./schema";
@@ -66,7 +66,7 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-closed-${size}`, `plate-${lookId}-open-${size}`, `soft-${lookId}-open-${size}`, ...SWEETS];
-  return [...scene, "sheet-letter-top", "sheet-letter-mid", "sheet-letter-bottom"].map((n) => `${ART_BASE}${n}.webp`);
+  return [...scene, "sheet"].map((n) => `${ART_BASE}${n}.webp`);
 }
 
 /* The house's front, in stage units (100 across, 170 down), through the scene's lens: where a sweet may be stuck. */
@@ -414,57 +414,117 @@ function Scene({ lookId, s, title, from, to, seed, phase, marks, canRead, reduce
   );
 }
 
+const GINGHAM = "repeating-linear-gradient(0deg, rgba(196,32,42,.5) 0 calc(1.1*var(--u)), transparent calc(1.1*var(--u)) calc(2.2*var(--u))), repeating-linear-gradient(90deg, rgba(196,32,42,.5) 0 calc(1.1*var(--u)), transparent calc(1.1*var(--u)) calc(2.2*var(--u))), #fbf1e2";
+
 /**
- * The note, inside the little house: everything is written in icing on slabs of gingerbread, piped
- * round their edges, over the warm blur of the kitchen.
+ * The note, found inside the little house: a recipe book with a gingerbread cover. The cover opens
+ * by itself and after that every part of the note is a page, turned over its spine like a real one:
+ * the letter over a few pages, a photo to a page, the surprise, the end.
  */
 function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<GingerbreadHouseFields>["data"]; title: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: "#fff8ea", soft: "#f0d2a8", accent: "#ffd9a0", rule: "rgba(255,246,226,.4)", label: "#fff6ea", face: "serif" };
+  const steps = useNoteSteps(data, 200);
+  const at = useSteps(steps.length, mode, onEvent);
+  const keys = useStepKeys(at.next, at.back);
+  const [open, setOpen] = useState(still);
+  useEffect(() => {
+    if (still) return;
+    const t = setTimeout(() => setOpen(true), 1500);
+    return () => clearTimeout(t);
+  }, [still]);
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
-    return data.photos.map(() => (rng() - 0.5) * 6);
+    return data.photos.map(() => (rng() - 0.5) * 5);
   }, [data.photos, seed]);
+  const turn = still ? undefined : "transform .95s cubic-bezier(.45,.05,.3,1)";
+  // A leaf turned past upright is gone, and comes back at once when turned back. Its hidden back face
+  // is not enough by itself: Safari shows the turned cover as a strip down the left of every page.
+  const gone = (turned: boolean, at = 0.47) => `opacity .12s linear ${turned ? at : 0}s`;
+  const round = "grid place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/70 disabled:opacity-0";
+  const leaf = "absolute inset-0 [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform-origin:0%_50%]";
   return (
-    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.5 }}>
-      <HolidayPage
-        data={data}
-        mode={mode}
-        still={still}
-        base={ART_BASE}
-        look={`${lookId}-open`}
-        floor={look.floor}
-        shade="linear-gradient(180deg, rgba(60,26,6,.5), rgba(40,16,4,.68))"
-        sheet={SHEETS.letter}
-        frame={0.07}
-        theme={theme}
-        tone="dark"
-        hero={
-          <div className="mx-auto w-[min(80cqw,410px)]" style={{ rotate: "-1.5deg" }}>
-            <PaperSheet base={ART_BASE} art={SHEETS.letter} margin={0.14} head={0.15} tail={0.14}>
-              <div className="text-center" style={{ color: theme.ink }}>
-                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: theme.soft }}>
-                  {s.inside}
+    <motion.div {...keys} className="absolute inset-0 z-[20] overflow-hidden outline-none" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.5 }}>
+      <SoftTable base={ART_BASE} look={`${lookId}-open`} floor={look.floor} shade="linear-gradient(180deg, rgba(60,26,6,.5), rgba(40,16,4,.7))" />
+
+      {/* the book: its pages lie one on another, and each turns over the spine on its left */}
+      <div className="absolute inset-x-0 mx-auto w-[min(80cqw,420px)]" style={{ top: "calc(15*var(--u))", bottom: "calc(27*var(--u))", perspective: "calc(260*var(--u))" }}>
+        {/* the block of pages under the one that shows */}
+        <div aria-hidden="true" className="absolute inset-0 rounded-r-[calc(1*var(--u))]" style={{ background: "#efe2c8", boxShadow: "calc(.5*var(--u)) calc(.5*var(--u)) 0 #e3d4b6, calc(1*var(--u)) calc(1*var(--u)) 0 #d6c6a6, calc(1.5*var(--u)) calc(1.5*var(--u)) 0 #c9b896, calc(2*var(--u)) calc(3*var(--u)) calc(7*var(--u)) rgba(0,0,0,.55)" }} />
+        {steps.map((step, i) => {
+          // only the page that shows and its neighbours are worth drawing
+          if (Math.abs(i - at.index) > 1) return null;
+          const turned = i < at.index;
+          return (
+            <div key={i} className={leaf} style={{ zIndex: steps.length - i, transform: turned ? "rotateY(-178deg)" : "rotateY(0deg)", opacity: turned ? 0 : 1, transition: turn && `${turn}, ${gone(turned)}` }}>
+              <div className="absolute inset-0 flex flex-col justify-center overflow-hidden rounded-r-[calc(1*var(--u))]" style={{ background: "linear-gradient(90deg, #e9dcc0 0%, #fbf4e6 7%, #fdf8ee 60%, #f7efdf 100%)", color: INK.ink, padding: "calc(8*var(--u)) calc(7*var(--u)) calc(9*var(--u)) calc(11*var(--u))", boxShadow: "inset calc(1.5*var(--u)) 0 calc(3*var(--u)) rgba(90,50,20,.18)" }}>
+                {/* a strip of gingham down the spine */}
+                <span aria-hidden="true" className="absolute inset-y-0 left-0 w-[calc(4.4*var(--u))]" style={{ background: GINGHAM, boxShadow: "inset calc(-.6*var(--u)) 0 calc(1*var(--u)) rgba(90,30,10,.25)" }} />
+                {step.kind === "words" ? (
+                  <div className="max-h-full overflow-y-auto scrollbar-none">
+                    {step.first ? (
+                      <p className="mb-[calc(2.4*var(--u))] text-[calc(2.2*var(--u))] font-semibold tracking-[0.26em] uppercase" style={{ color: INK.soft }}>
+                        {fill(s.note, { name: data.senderName })}
+                      </p>
+                    ) : null}
+                    <StepWords data={data} step={step} accent={look.accent} size="calc(4.5*var(--u))" still={still} />
+                  </div>
+                ) : step.kind === "photo" ? (
+                  <figure className="m-0 mx-auto w-[88%]" style={{ rotate: `${(tilt[step.index] ?? 0).toFixed(1)}deg` }}>
+                    {/* stuck in with a strip of tape, the way a photo is kept in a recipe book */}
+                    <span aria-hidden="true" className="absolute left-1/2 z-[1] h-[calc(3.4*var(--u))] w-[34%] -translate-x-1/2 -translate-y-1/2 -rotate-2" style={{ background: "rgba(246,212,136,.82)", boxShadow: "0 1px 2px rgba(0,0,0,.2)" }} />
+                    <div className="bg-white p-[5%] pb-[6%]" style={{ boxShadow: "0 calc(.6*var(--u)) calc(2.4*var(--u)) rgba(60,30,10,.4)" }}>
+                      <img src={step.photo.url} alt={step.photo.alt ?? ""} draggable={false} className="block aspect-square w-full object-cover" />
+                    </div>
+                    {step.photo.caption ? (
+                      <figcaption className="mt-[calc(2.6*var(--u))] text-center leading-[1.15] text-balance" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.4*var(--u))" }}>
+                        {step.photo.caption}
+                      </figcaption>
+                    ) : null}
+                  </figure>
+                ) : (
+                  <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                )}
+                <p aria-hidden="true" className="absolute right-[calc(5*var(--u))] bottom-[calc(3*var(--u))] text-[calc(2.2*var(--u))] tracking-[0.2em]" style={{ color: INK.soft }}>
+                  {i + 1}
                 </p>
-                <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ marginTop: "calc(1.4*var(--u))", fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(7*var(--u))", textShadow: "0 calc(.3*var(--u)) calc(.5*var(--u)) rgba(60,26,6,.5)" }}>
-                  {title}
-                </p>
-                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
-                  {data.senderName} → {data.recipientName}
-                </p>
+                {/* a page of words or a photo is turned by tapping it: its right side for the next, its left for the last */}
+                {i === at.index && (step.kind === "words" || step.kind === "photo") ? (
+                  <>
+                    <button type="button" tabIndex={-1} aria-hidden="true" onClick={at.back} className="absolute inset-y-0 left-0 w-[30%] cursor-pointer outline-none" />
+                    <button type="button" tabIndex={-1} aria-hidden="true" onClick={at.next} className="absolute inset-y-0 right-0 w-[70%] cursor-pointer outline-none" />
+                  </>
+                ) : null}
               </div>
-            </PaperSheet>
+            </div>
+          );
+        })}
+        {/* the cover: a slab of gingerbread, its title piped in icing. It opens by itself. */}
+        <div aria-hidden={open} className={leaf} style={{ zIndex: steps.length + 2, transform: open ? "rotateY(-178deg)" : "rotateY(0deg)", opacity: open ? 0 : 1, transition: still ? undefined : `transform 1.25s cubic-bezier(.45,.05,.3,1), ${gone(open, 0.62)}` }}>
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-[14%] text-center" style={{ backgroundImage: `url(${ART_BASE}sheet.webp)`, backgroundSize: "100% 100%", color: "#fff8ea" }}>
+            <p className="text-[calc(2.2*var(--u))] tracking-[0.3em] uppercase" style={{ color: "#f0d2a8" }}>
+              {s.inside}
+            </p>
+            <p className="mt-[calc(2*var(--u))] leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(8.6*var(--u))", textShadow: "0 calc(.3*var(--u)) calc(.6*var(--u)) rgba(60,26,6,.55)" }}>
+              {title}
+            </p>
+            <p className="mt-[calc(2.4*var(--u))] text-[calc(2.2*var(--u))] tracking-[0.3em] uppercase" style={{ color: "#f0d2a8" }}>
+              {data.senderName} → {data.recipientName}
+            </p>
           </div>
-        }
-        eyebrow={fill(s.note, { name: data.senderName })}
-        gallery={s.gallery}
-        columns={2}
-        photo={(slot) => <Print slot={slot} rot={tilt[slot.index] ?? 0} />}
-        onEvent={onEvent}
-        onReact={onReact}
-        onMakeOne={onMakeOne}
-        onReplay={onReplay}
-      />
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 mx-auto flex w-[min(80cqw,420px)] items-center justify-between" style={{ bottom: "calc(9*var(--u))", opacity: open ? 1 : 0, transition: "opacity .6s ease .8s" }}>
+        <button type="button" aria-label={stepLabel(data.locale, "back")} disabled={at.first} onClick={at.back} className={round} style={{ width: "calc(10*var(--u))", height: "calc(10*var(--u))", background: "rgba(255,246,226,.18)", color: "#fff6e2", fontSize: "calc(5.4*var(--u))", backdropFilter: "blur(4px)" }}>
+          ‹
+        </button>
+        <p className="text-[calc(2.4*var(--u))] tracking-[0.3em] uppercase" style={{ color: "rgba(255,246,226,.85)" }}>
+          {at.index + 1} / {steps.length}
+        </p>
+        <button type="button" aria-label={stepLabel(data.locale, "next")} disabled={at.last} onClick={at.next} className={round} style={{ width: "calc(12*var(--u))", height: "calc(12*var(--u))", background: "linear-gradient(180deg, #fbe9bd, #e9c777 55%, #c99a3e)", color: "#3a2410", fontSize: "calc(6.4*var(--u))", boxShadow: "0 calc(1*var(--u)) calc(3*var(--u)) rgba(0,0,0,.5)" }}>
+          ›
+        </button>
+      </div>
     </motion.div>
   );
 }

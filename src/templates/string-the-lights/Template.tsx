@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { hashString, mulberry32 } from "../_shared/random";
@@ -13,8 +13,8 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
-import { HolidayPage, PaperSheet, Print, type HolidayTheme } from "../_shared/holiday/page";
-import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
+import { PAPER_BASE } from "../_shared/holiday/paper";
+import { StepExtra, stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
 import { down, Plate, Snowfall, SoftTable, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BULBS } from "./art-map";
 import { BULB_COLORS, INK, LOOKS, type LookId } from "./looks";
@@ -63,7 +63,7 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-dark-${size}`, `plate-${lookId}-lit-${size}`, `soft-${lookId}-lit-${size}`];
-  return [...scene.map((n) => `${ART_BASE}${n}.webp`), ...["top", "mid", "bottom"].map((n) => `${PAPER_BASE}sheet-letter-${n}.webp`)];
+  return [...scene.map((n) => `${ART_BASE}${n}.webp`), `${PAPER_BASE}sheet.webp`];
 }
 
 /* The hooks along the roof, in stage units (100 across, 170 down), in the order of the string; and the board in the garden. */
@@ -257,7 +257,10 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, hung, canRead, r
     held.current = null;
     const p = at(e);
     // a tap, with no drag, reaches a little further
-    if (h && !h.moved && p) onHang(hooksNear(p, HOOKS, hung, TAP_REACH));
+    if (!h || h.moved || !p) return;
+    const near = hooksNear(p, HOOKS, hung, TAP_REACH);
+    // and one that lands on no hook at all still hangs the next few: nobody is left hunting for them
+    onHang(near.length ? near : nextHooks(TOTAL, hung).slice(0, 4));
   };
 
   const left = TOTAL - hung.size;
@@ -375,89 +378,122 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, hung, canRead, r
   );
 }
 
-/** A length of the string of bulbs along the top edge of a sheet of the note, lit. */
-function BulbRow({ seed, still }: { seed: number; still: boolean }) {
-  const bulbs = useMemo(() => {
-    const rnd = mulberry32(seed);
-    return Array.from({ length: 9 }, (_, i) => ({ color: BULB_COLORS[(i + seed) % BULB_COLORS.length], drop: 0.6 + rnd() * 0.9, d: 2 + rnd() * 3, o: -rnd() * 5 }));
-  }, [seed]);
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-x-[5%] top-0 flex justify-between" style={{ transform: "translateY(-30%)" }}>
-      <span className="absolute inset-x-0 top-[calc(.9*var(--u))] h-px" style={{ background: "#0c120c", boxShadow: "0 1px 0 rgba(255,255,255,.12)" }} />
-      {bulbs.map((b, i) => (
-        <span key={i} className="relative block" style={{ width: "calc(2.2*var(--u))", height: "calc(2.8*var(--u))", marginTop: `calc(${b.drop.toFixed(2)}*var(--u))` }}>
-          <span className={still ? "absolute" : "stl-on absolute"} style={{ inset: "calc(-3*var(--u))", borderRadius: "50%", background: `radial-gradient(circle, #ffffff 0%, ${b.color} 15%, ${b.color}66 32%, ${b.color}00 62%)`, "--d": `${b.d}s`, "--o": `${b.o}s` } as CSSProperties} />
-        </span>
-      ))}
-    </div>
-  );
-}
-
-const ORDER: Record<string, number> = { letter: 1, countdown: 2, surprise: 3, end: 4 };
-
 /**
- * The note, out in the snow: every sheet has a length of the lights strung along its top, lit, and
- * the snow keeps falling past the house behind it.
+ * The note, as a deck of Christmas cards out in the snow: one card at a time, the next sliding in
+ * from the right as the last is put aside. Along the top runs the string, a bulb for every card,
+ * each coming on as its card is reached. A tap on the right of a card (or the arrow, a swipe, an
+ * arrow key) goes on; on the left, back.
  */
 function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<StringTheLightsFields>["data"]; sign: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
+  const steps = useNoteSteps(data, 210);
+  const at = useSteps(steps.length, mode, onEvent);
+  const keys = useStepKeys(at.next, at.back);
+  const [way, setWay] = useState(1);
+  const step = steps[at.index];
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
-    return data.photos.map(() => (rng() - 0.5) * 6);
-  }, [data.photos, seed]);
+    return steps.map(() => (rng() - 0.5) * 3.2);
+  }, [steps, seed]);
+  const next = () => {
+    setWay(1);
+    at.next();
+  };
+  const back = () => {
+    setWay(-1);
+    at.back();
+  };
+  const plain = step.kind === "words" || step.kind === "photo";
+  const card: CSSProperties = { backgroundImage: `url(${PAPER_BASE}sheet.webp)`, backgroundSize: "100% 100%" };
+  const round = "grid place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/70 disabled:opacity-0";
   return (
-    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+    <motion.div {...keys} className="absolute inset-0 z-[20] overflow-hidden outline-none" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
       <style>{KEYFRAMES}</style>
-      <HolidayPage
-        data={data}
-        mode={mode}
-        still={still}
-        base={ART_BASE}
-        paperBase={PAPER_BASE}
-        look={`${lookId}-lit`}
-        floor={look.floor}
-        shade={look.veil}
-        sheet={PAPER}
-        frame={0.05}
-        theme={theme}
-        backdrop={
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: look.floor }}>
-            <SoftTable base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} shade={look.veil} />
-            <Snowfall seed={seed} still={still} />
-          </div>
-        }
-        block={(kind, children) => (
-          <PaperSheet base={PAPER_BASE} art={PAPER} head={0.16} tail={0.11} margin={0.125} crown={<BulbRow seed={seed + ORDER[kind]} still={still} />}>
-            {children}
-          </PaperSheet>
+      <SoftTable base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} shade={look.veil} />
+      <Snowfall seed={seed} still={still} />
+
+      {/* the string across the top: a bulb for each card, lit up to the one that is showing */}
+      <div aria-hidden="true" className="absolute inset-x-[7%] flex items-start justify-between" style={{ top: "calc(11*var(--u))" }}>
+        <span className="absolute inset-x-0 top-[calc(.3*var(--u))] h-px" style={{ background: "#0c120c", boxShadow: "0 1px 0 rgba(255,255,255,.14)" }} />
+        {steps.map((_, i) => {
+          const color = BULB_COLORS[i % BULB_COLORS.length];
+          const on = i <= at.index;
+          return (
+            <span key={i} className="relative block" style={{ width: "calc(1.9*var(--u))", height: "calc(2.5*var(--u))", marginTop: `calc(${(0.5 + 0.5 * (i % 2)).toFixed(1)}*var(--u))`, borderRadius: "50% 50% 50% 50% / 42% 42% 58% 58%", background: color, filter: on ? undefined : "brightness(.4) saturate(.7)", transition: "filter .4s ease" }}>
+              <span className="absolute" style={{ inset: "calc(-2.4*var(--u))", borderRadius: "50%", background: `radial-gradient(circle, #ffffff 0%, ${color} 16%, ${color}66 34%, ${color}00 64%)`, opacity: on ? 1 : 0, transition: "opacity .4s ease" }} />
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="absolute inset-x-0 mx-auto w-[min(84cqw,440px)]" style={{ top: "calc(21*var(--u))", bottom: "calc(26*var(--u))" }}>
+        {/* the cards still to come, under the one in hand */}
+        {[2, 1].map((n) =>
+          at.index + n < steps.length ? <div key={n} aria-hidden="true" className="absolute inset-0 rounded-[calc(1.2*var(--u))]" style={{ ...card, rotate: `${n * 2.4}deg`, translate: `calc(${n * 1.3}*var(--u)) calc(${n * 1.1}*var(--u))`, filter: "brightness(.86)", boxShadow: "0 calc(1*var(--u)) calc(3*var(--u)) rgba(0,0,0,.4)" }} /> : null,
         )}
-        hero={
-          <div className="mx-auto w-[min(80cqw,410px)]" style={{ rotate: "-1.5deg" }}>
-            <PaperSheet base={PAPER_BASE} art={PAPER} margin={0.11} head={0.16} tail={0.1} crown={<BulbRow seed={seed} still={still} />}>
-              <div className="text-center" style={{ color: INK.ink }}>
-                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: INK.soft }}>
-                  {s.inLights}
-                </p>
-                <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), marginTop: "calc(1.4*var(--u))", fontFamily: POSTER_FONT, fontWeight: 600, fontSize: sign.length > 20 ? "calc(5.4*var(--u))" : "calc(6.8*var(--u))" }}>
-                  {sign.toLowerCase()}
-                </p>
-                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: INK.soft }}>
-                  {data.senderName} → {data.recipientName}
-                </p>
+        <AnimatePresence mode="popLayout" custom={way} initial={false}>
+          <motion.div
+            key={at.index}
+            custom={way}
+            variants={{ enter: (w: number) => (still ? { opacity: 0 } : { x: `${w * 115}%`, rotate: w * 9, opacity: 1 }), show: { x: 0, rotate: tilt[at.index] ?? 0, opacity: 1 }, exit: (w: number) => (still ? { opacity: 0 } : { x: `${w * -120}%`, rotate: w * -12, opacity: 0.6 }) }}
+            initial="enter"
+            animate="show"
+            exit="exit"
+            transition={{ type: "spring", stiffness: 210, damping: 24 }}
+            className="absolute inset-0 flex flex-col justify-center overflow-hidden rounded-[calc(1.2*var(--u))]"
+            style={{ ...card, color: INK.ink, padding: "calc(11*var(--u)) calc(9.5*var(--u))", boxShadow: "0 calc(2*var(--u)) calc(7*var(--u)) rgba(0,0,0,.55)" }}
+          >
+            {step.kind === "words" ? (
+              <div className="max-h-full overflow-y-auto scrollbar-none">
+                {step.first ? (
+                  <p className="mb-[calc(2.4*var(--u))] text-[calc(2.2*var(--u))] font-semibold tracking-[0.26em] uppercase" style={{ color: INK.soft }}>
+                    {fill(s.note, { name: data.senderName })}
+                  </p>
+                ) : null}
+                <StepWords data={data} step={step} accent={look.accent} size="calc(4.7*var(--u))" still={still} />
               </div>
-            </PaperSheet>
-          </div>
-        }
-        eyebrow={fill(s.note, { name: data.senderName })}
-        gallery={s.gallery}
-        columns={2}
-        photo={(slot) => <Print slot={slot} rot={tilt[slot.index] ?? 0} />}
-        onEvent={onEvent}
-        onReact={onReact}
-        onMakeOne={onMakeOne}
-        onReplay={onReplay}
-      />
+            ) : step.kind === "photo" ? (
+              <figure className="m-0 flex min-h-0 flex-1 flex-col">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={step.photo.url} alt={step.photo.alt ?? ""} draggable={false} className="block min-h-0 w-full flex-1 object-cover" style={{ boxShadow: "inset 0 0 0 1px rgba(0,0,0,.2), 0 calc(.6*var(--u)) calc(2*var(--u)) rgba(0,0,0,.35)" }} />
+                {step.photo.caption ? (
+                  <figcaption className="mt-[calc(2.4*var(--u))] text-center leading-[1.15] text-balance" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.6*var(--u))" }}>
+                    {step.photo.caption}
+                  </figcaption>
+                ) : null}
+              </figure>
+            ) : (
+              <div>
+                {step.kind === "end" ? (
+                  <p className="mb-[calc(3*var(--u))] text-center leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(5.4*var(--u))" }}>
+                    {sign.toLowerCase()}
+                  </p>
+                ) : null}
+                <StepExtra step={step} data={data} tone="light" onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+              </div>
+            )}
+            {/* a card of words or a photo is turned by tapping it: its right side for the next, its left for the last */}
+            {plain ? (
+              <>
+                <button type="button" tabIndex={-1} aria-hidden="true" onClick={back} className="absolute inset-y-0 left-0 w-[34%] cursor-pointer outline-none" />
+                <button type="button" tabIndex={-1} aria-hidden="true" onClick={next} className="absolute inset-y-0 right-0 w-[66%] cursor-pointer outline-none" />
+              </>
+            ) : null}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="absolute inset-x-0 mx-auto flex w-[min(84cqw,440px)] items-center justify-between" style={{ bottom: "calc(9*var(--u))" }}>
+        <button type="button" aria-label={stepLabel(data.locale, "back")} disabled={at.first} onClick={back} className={round} style={{ width: "calc(10*var(--u))", height: "calc(10*var(--u))", background: "rgba(255,246,226,.16)", color: "#fff6e2", fontSize: "calc(5.4*var(--u))", backdropFilter: "blur(4px)" }}>
+          ‹
+        </button>
+        <p className="text-[calc(2.4*var(--u))] tracking-[0.3em] uppercase" style={{ color: "rgba(255,246,226,.8)" }}>
+          {at.index + 1} / {steps.length}
+        </p>
+        <button type="button" aria-label={stepLabel(data.locale, "next")} disabled={at.last} onClick={next} className={round} style={{ width: "calc(12*var(--u))", height: "calc(12*var(--u))", background: "linear-gradient(180deg, #ff5a4a 0%, #d42a20 60%, #a81a14 100%)", color: "#fff6ea", fontSize: "calc(6.4*var(--u))", boxShadow: "0 calc(1*var(--u)) calc(3*var(--u)) rgba(0,0,0,.5)" }}>
+          ›
+        </button>
+      </div>
     </motion.div>
   );
 }

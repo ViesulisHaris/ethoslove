@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getManifest } from "@/templates/manifests";
+import { parseRichText } from "@/lib/gift/rich-text";
+import { breakBlock, MOST_PARTS, noteSteps, partLimit, splitWords } from "@/templates/_shared/holiday/steps";
 import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wiped, wipedIn } from "@/templates/frosted-window/frost";
 import { fieldsSchema as windowSchema } from "@/templates/frosted-window/schema";
 import { candleAt, CANDLES, CATCH, nextUnlit, wickAt } from "@/templates/light-the-candles/wicks";
@@ -121,5 +123,53 @@ describe("Gingerbread House", () => {
   it("defaults to the cream kitchen", () => {
     expect(houseSchema.parse({})).toEqual({ look: "cosy" });
     expect(getManifest("gingerbread-house")?.occasions).toEqual(["christmas"]);
+  });
+});
+
+describe("A note gone through a step at a time", () => {
+  const para = (n: number) => "word ".repeat(n / 5).trim();
+
+  it("keeps whole paragraphs together up to the limit", () => {
+    const blocks = parseRichText([para(100), para(100), para(100), para(200), para(50)].join("\n\n"));
+    const parts = splitWords(blocks, 230);
+    expect(parts.map((p) => p.length)).toEqual([2, 1, 1, 1]);
+    expect(parts.flat()).toEqual(blocks);
+  });
+
+  it("breaks a paragraph too long for one screen after a sentence, losing no words and no bold", () => {
+    const text = "One short sentence here. **A second one that is bold, all of it.** A third, plain again, to finish with! And a fourth?";
+    const [block] = parseRichText(text);
+    const pieces = breakBlock(block, 60);
+    expect(pieces.length).toBeGreaterThan(1);
+    for (const piece of pieces) expect(piece.reduce((n, r) => n + r.text.length, 0)).toBeLessThanOrEqual(60);
+    expect(pieces[0].map((r) => r.text).join("")).toBe("One short sentence here.");
+    expect(pieces.flat().filter((r) => r.bold).map((r) => r.text).join("").trim()).toBe("A second one that is bold, all of it.");
+    const words = (s: string) => s.split(/\s+/).filter(Boolean);
+    expect(words(pieces.map((p) => p.map((r) => r.text).join("")).join(" "))).toEqual(words(block.map((r) => r.text).join("")));
+    // one endless sentence is broken between words
+    const endless = breakBlock(parseRichText(para(400))[0], 230);
+    expect(endless.length).toBe(2);
+    for (const piece of endless) expect(piece[0].text.endsWith(" ")).toBe(false);
+  });
+
+  it("goes through the longest letter in a dozen parts or so, not thirty", () => {
+    const long = Array.from({ length: 30 }, () => para(130)).join("\n\n");
+    const steps = noteSteps({ message: long, photos: [], countdown: undefined, surprise: undefined }, 170);
+    expect(steps.filter((s) => s.kind === "words").length).toBeLessThanOrEqual(MOST_PARTS + 4);
+    expect(partLimit(parseRichText("short"), 170)).toBe(170);
+  });
+
+  it("goes words, then every photo, the countdown, the surprise, and always ends on the end", () => {
+    const photo = (id: string) => ({ id, url: `/demo/${id}.jpg`, width: 1, height: 1 });
+    const steps = noteSteps({ message: `${para(200)}\n\n${para(200)}`, photos: [photo("a"), photo("b")] as never, countdown: undefined, surprise: { text: "x", reveal: "tap" } as never }, 230);
+    expect(steps.map((s) => s.kind)).toEqual(["words", "words", "photo", "photo", "surprise", "end"]);
+    expect(steps[0]).toMatchObject({ first: true, last: false });
+    expect(steps[1]).toMatchObject({ first: false, last: true });
+  });
+
+  it("still greets and signs when there is no message at all", () => {
+    const steps = noteSteps({ message: "", photos: [], countdown: undefined, surprise: undefined });
+    expect(steps.map((s) => s.kind)).toEqual(["words", "end"]);
+    expect(steps[0]).toMatchObject({ first: true, last: true, blocks: [] });
   });
 });

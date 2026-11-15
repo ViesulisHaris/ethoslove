@@ -530,7 +530,7 @@ def stockings(look, sill_top):
         anchor("cuffLeft" if side < 0 else "cuffRight", top + Vector((0.0, -0.31, 0.4)))
 
 
-NOTE = ("sheet", "catch_sheet", "ribbon")
+NOTE = ("sheet", "catch_sheet", "ribbon", "envelope", "envelope_open", "catch_env", "catch_env_open")
 
 
 def stationery():
@@ -544,6 +544,35 @@ def stationery():
     path = [Vector((-1.4 + 2.8 * i / 16, 0.05 * math.sin(i * 0.8), 3.0)) for i in range(17)]
     r = tube("ribbon", path, 0.05, 4, vel, flat=6.0)
     place(r, (0, -4.0, 0))
+    # the envelope the note comes in: red, its flap sealed with gold wax; and the same one opened, its flap up, its lining showing
+    red = kit.Mat("envelope_paper")
+    en, _ = red.noise(red.coords("Object"), 30.0, 3.0, 0.6)
+    red.set(base="#a8221e", rough=0.62, normal=red.bump(en, 0.08, 0.004))
+    lining = kit.Mat("envelope_lining")
+    lx, ly, lz = lining.sep(lining.coords("Object"))
+    stripes = lining.math("GREATER_THAN", lining.math("SINE", lining.math("MULTIPLY", lining.math("ADD", lx, ly), 14.0)), 0.0)
+    lining.set(base=lining.mix(stripes, "#f6ecd6", "#e3c98a"), rough=0.6)
+    w, h, t = 6.6, 4.5, 0.05
+    for name, opened, y in (("envelope", False, -8.0), ("envelope_open", True, -8.0)):   # in the same place: each is rendered alone
+        layer(name)
+        parts = [kit.prism(name + "_body", kit.rounded_rect(w, h, 0.12), t, red.mat, 0.0, 0.012, 2)]
+        if opened:
+            # the flap standing up above the mouth, seen from its lined side, and the dark of the mouth under it
+            parts.append(mesh_obj(name + "_flap", [(-w / 2 + 0.05, h / 2 - 0.02, t), (w / 2 - 0.05, h / 2 - 0.02, t), (0.0, h / 2 + h * 0.5, t + 0.03)], [(0, 1, 2)], lining.mat, False))
+            parts.append(mesh_obj(name + "_mouth", [(-w / 2 + 0.12, h / 2 - 0.5, t + 0.004), (w / 2 - 0.12, h / 2 - 0.5, t + 0.004), (w / 2 - 0.12, h / 2 - 0.04, t + 0.004), (-w / 2 + 0.12, h / 2 - 0.04, t + 0.004)], [(0, 1, 2, 3)], lining.mat, False))
+        else:
+            flap = mesh_obj(name + "_flap", [(-w / 2 + 0.03, h / 2 - 0.03, t + 0.001), (w / 2 - 0.03, h / 2 - 0.03, t + 0.001), (0.0, -h * 0.1, t + 0.02)], [(0, 2, 1)], red.mat, False)
+            kit.solidify(flap, 0.014, 1.0)
+            parts.append(flap)
+            seal = desk.wax_seal(name + "_seal", kit.gold("seal_gold", "#e0b04a", 0.32), 0.62)
+            for ob in seal:
+                ob.location = (0.0, -h * 0.1, t + 0.02)
+            parts += seal
+        # the two folds that meet under the flap
+        for sgn in (-1, 1):
+            parts.append(tube(name + "_fold%d" % sgn, [Vector((sgn * (w / 2 - 0.05), -h / 2 + 0.05, t + 0.004)), Vector((0.0, -h * 0.06, t + 0.004))], 0.012, 4, plain(name + "_crease", "#7a1612", 0.7)))
+        parent(parts, name + "_pivot", Vector((0, y, 3.0)))
+        catcher(3.0, 6.0, "catch_env" + ("_open" if opened else ""), (0, y))
 
 
 WIDE = (360.0, 240.0, 7.0)   # wide enough for a 16:9 screen without a mirrored copy at its sides
@@ -597,6 +626,8 @@ def main():
         build(looks[0], street_png, SPRITE_VIEW)
         render_sprite("sheet", os.path.join(out, "sheet.png"), ["sheet"], catch=("catch_sheet",), pad=(1.5, 1.5, 3.0, 3.0), density=1.3)
         render_sprite("ribbon", os.path.join(out, "ribbon.png"), ["ribbon"], catch=(), pad=(0.5, 0.5, 0.5, 0.5), density=1.6)
+        render_sprite("envelope", os.path.join(out, "envelope.png"), ["envelope"], catch=("catch_env",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4)
+        render_sprite("envelope-open", os.path.join(out, "envelope-open.png"), ["envelope_open"], catch=("catch_env_open",), pad=(1.5, 1.5, 3.0, 3.0), density=1.4)
     kit.MANIFEST["sheets"] = {"letter": {"sprite": "sheet", "top": 0.12, "mid": 0.5, "bottom": 0.1, "gain": 1.05}}
     save_manifest(os.path.join(out, "manifest.json"))
 

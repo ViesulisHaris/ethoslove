@@ -13,8 +13,10 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
-import { HolidayPage, Print, type HolidayTheme } from "../_shared/holiday/page";
-import { PAPER } from "../_shared/holiday/paper";
+import { stepLabel, StepWords, useNoteSteps, useStepKeys, useSteps } from "../_shared/holiday/steps";
+import { Countdown } from "../_shared/Countdown";
+import { EndScreen } from "../_shared/EndScreen";
+import { SurpriseReveal } from "../_shared/SurpriseReveal";
 import { down, Plate, Sprite, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
 import { INK, LOOKS, type LookId } from "./looks";
@@ -168,7 +170,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
         <Scene key={`scene-${run}`} lookId={f.look} s={s} title={title} from={data.senderName} to={data.recipientName} thanks={f.thanks} seed={seed} phase={phase} lit={lit} canRead={canRead && phase === "glow"} reduce={reduce} leaving={phase === "open"} onStrike={strike} onLight={light} onRead={openPage} />
       ) : null}
       {phase === "open" || preview ? (
-        <Page key={`page-${run}`} lookId={f.look} s={s} data={data} title={title} thanks={f.thanks} seed={seed} mode={mode} still={preview || reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} />
+        <Page key={`page-${run}`} lookId={f.look} s={s} data={data} title={title} seed={seed} mode={mode} still={preview || reduce} onEvent={onEvent} onReact={onReact} onMakeOne={onMakeOne} onReplay={preview ? undefined : replay} />
       ) : null}
       {audio.hasMusic && !preview ? <SoundToggle audio={audio} locale={data.locale} /> : null}
     </div>
@@ -390,78 +392,85 @@ function Scene({ lookId, s, title, from, to, thanks, seed, phase, lit, canRead, 
 }
 
 /**
- * The note, read by candlelight: no paper at all. The room stays as it is, all five candles burning
- * low on the screen, and the words are written in their light on the dark above them, fading out as
- * they scroll down towards the flames.
+ * The note, written into the room itself. There is no page: the table stays as it is, all five
+ * candles burning, and the letter appears in their light on the dark above them, a part at a time,
+ * then each photo, then the rest. A tap on the arrow (or a swipe, or an arrow key) brings the next.
  */
-function Page({ lookId, s, data, title, thanks, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<LightTheCandlesFields>["data"]; title: string; thanks: string[]; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
+function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<LightTheCandlesFields>["data"]; title: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: "#f8ecd4", soft: "#d9b98a", accent: "#ffcf7a", rule: "rgba(255,214,150,.3)", label: "#ffe2a8", face: "serif" };
+  const steps = useNoteSteps(data, 170);
+  const at = useSteps(steps.length, mode, onEvent);
+  const keys = useStepKeys(at.next, at.back);
+  const step = steps[at.index];
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
-    return data.photos.map(() => (rng() - 0.5) * 6);
+    return data.photos.map(() => (rng() - 0.5) * 7);
   }, [data.photos, seed]);
-  const glow = "0 0 calc(3*var(--u)) rgba(255,190,110,.28)";
+  const glow = "0 0 calc(2.6*var(--k)) rgba(255,186,104,.34), 0 0 calc(1*var(--k)) rgba(8,4,14,.9)";
+  const round = "grid place-items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/70 disabled:opacity-0";
   return (
-    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
-      <HolidayPage
-        data={data}
-        mode={mode}
-        still={still}
-        base={ART_BASE}
-        look={`${lookId}-lit`}
-        floor={look.floor}
-        shade={look.veil}
-        sheet={PAPER}
-        theme={theme}
-        tone="dark"
-        fadeFoot={0.34}
-        backdrop={
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: look.floor }}>
-            {/* the table, moved down the screen and a little nearer, so the flames burn along its foot */}
-            <div className="absolute inset-0" style={{ transform: "translateY(21%) scale(1.22)", transformOrigin: "50% 60%" }}>
-              <Plate base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} still={still} width={WIDE_PLATE} />
-            </div>
-            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(7,4,10,.93) 0%, rgba(7,4,10,.88) 48%, rgba(7,4,10,.5) 70%, rgba(7,4,10,.08) 92%)" }} />
+    <motion.div {...keys} className="absolute inset-0 z-[20] outline-none" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+      <style>{KEYFRAMES}</style>
+      <Plate base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} still={still} width={WIDE_PLATE} />
+      {/* the dark the words are written on: deepest at the top, gone by the time it reaches the flames (and all the way down behind the end, which is taller) */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: step.kind === "end" ? "linear-gradient(180deg, rgba(7,4,12,.9) 0%, rgba(7,4,12,.86) 62%, rgba(7,4,12,.45) 100%)" : "linear-gradient(180deg, rgba(7,4,12,.9) 0%, rgba(7,4,12,.82) 38%, rgba(7,4,12,.2) 58%, rgba(7,4,12,0) 70%)", transition: "background .8s ease" }} />
+
+      <div style={STAGE}>
+        <div className="absolute inset-x-[7%] flex items-center justify-center" style={{ top: down(step.kind === "end" ? 4 : 6), height: down(step.kind === "end" ? 143 : 84), color: "#f8ecd4", textShadow: glow }}>
+          <AnimatePresence mode="wait">
+            <motion.div key={at.index} className="max-h-full w-full overflow-y-auto scrollbar-none" initial={still ? false : { opacity: 0, y: "6%", filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} exit={still ? undefined : { opacity: 0, filter: "blur(4px)", transition: { duration: 0.3 } }} transition={{ duration: 0.7, ease: "easeOut" }}>
+              {step.kind === "words" ? (
+                <>
+                  {step.first ? (
+                    <p className="mb-[calc(2.4*var(--k))] text-center text-[calc(2*var(--k))] tracking-[0.3em] uppercase" style={{ color: "#d9b98a" }}>
+                      {fill(s.note, { name: data.senderName })}
+                    </p>
+                  ) : null}
+                  <StepWords data={data} step={step} accent="#ffcf7a" size="calc(4.5*var(--k))" still={still} />
+                </>
+              ) : step.kind === "photo" ? (
+                <figure className="mx-auto w-[62%]" style={{ rotate: `${(tilt[step.index] ?? 0).toFixed(1)}deg`, textShadow: "none" }}>
+                  <div className="bg-[#fffdf8] p-[5%] pb-[20%]" style={{ boxShadow: "0 calc(1.5*var(--k)) calc(5*var(--k)) rgba(0,0,0,.6), 0 0 calc(9*var(--k)) rgba(255,180,90,.28)" }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={step.photo.url} alt={step.photo.alt ?? ""} draggable={false} className="block aspect-square w-full object-cover" />
+                    {step.photo.caption ? (
+                      <figcaption className="absolute inset-x-[7%] bottom-[4%] line-clamp-2 text-center leading-[1.1]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(3.6*var(--k))", color: "#3a2410" }}>
+                        {step.photo.caption}
+                      </figcaption>
+                    ) : null}
+                  </div>
+                </figure>
+              ) : step.kind === "countdown" && data.countdown ? (
+                <Countdown countdown={data.countdown} locale={data.locale} tone="dark" />
+              ) : step.kind === "surprise" && data.surprise ? (
+                <SurpriseReveal surprise={data.surprise} locale={data.locale} tone="dark" onReveal={() => onEvent?.({ type: "surprise" })} />
+              ) : (
+                <div style={{ textShadow: "none" }}>
+                  <p className="mb-[calc(2*var(--k))] text-center leading-[1.04] text-balance italic" style={{ fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(6*var(--k))", color: "#ffe9bd", textShadow: glow }}>
+                    {title}
+                  </p>
+                  <EndScreen data={data} tone="dark" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* back, a small flame for every step, next: on the table, under the candles */}
+        <div className="absolute inset-x-[5%] z-[5] flex items-center justify-between" style={{ top: down(151) }}>
+          <button type="button" aria-label={stepLabel(data.locale, "back")} disabled={at.first} onClick={at.back} className={round} style={{ width: "calc(9*var(--k))", height: "calc(9*var(--k))", background: "rgba(20,10,6,.5)", color: "#ffe2a8", fontSize: "calc(5*var(--k))", backdropFilter: "blur(4px)" }}>
+            ‹
+          </button>
+          <div aria-hidden="true" className="flex items-center gap-[calc(1.1*var(--k))]" style={{ opacity: step.kind === "end" ? 0 : 1 }}>
+            {steps.map((_, i) => (
+              <span key={i} className="rounded-full" style={{ width: "calc(1.2*var(--k))", height: "calc(1.2*var(--k))", background: i <= at.index ? "#ffcf7a" : "rgba(255,226,168,.28)", boxShadow: i === at.index ? "0 0 calc(1.6*var(--k)) #ffb04a" : undefined, transition: "background .4s ease" }} />
+            ))}
           </div>
-        }
-        block={(kind, children) => (
-          <div className="relative px-[calc(5*var(--u))]" style={{ textShadow: glow }}>
-            {kind === "letter" ? null : <span aria-hidden="true" className="mx-auto mb-[calc(5*var(--u))] block h-px w-[calc(16*var(--u))]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,214,150,.7), transparent)" }} />}
-            {children}
-          </div>
-        )}
-        hero={
-          <div className="px-[calc(5*var(--u))] text-center" style={{ color: theme.ink, textShadow: glow }}>
-            <p className="leading-[1.04] text-balance italic [overflow-wrap:anywhere]" style={{ fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(8*var(--u))", color: "#ffe9bd" }}>
-              {title}
-            </p>
-            {thanks.length ? (
-              <>
-                <p className="font-semibold tracking-[0.22em] text-balance uppercase" style={{ marginTop: "calc(3*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
-                  {fill(s.heading, { name: data.senderName })}
-                </p>
-                <ul style={{ marginTop: "calc(1.6*var(--u))" }}>
-                  {thanks.map((t, i) => (
-                    <li key={i} className="text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.6*var(--u))", lineHeight: 1.25, paddingTop: "calc(1*var(--u))", color: INK.light }}>
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-                <span aria-hidden="true" className="mx-auto mt-[calc(6*var(--u))] block h-px w-[calc(16*var(--u))]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,214,150,.7), transparent)" }} />
-              </>
-            ) : null}
-          </div>
-        }
-        eyebrow={fill(s.note, { name: data.senderName })}
-        gallery={s.gallery}
-        columns={2}
-        photo={(slot) => <Print slot={slot} rot={tilt[slot.index] ?? 0} />}
-        onEvent={onEvent}
-        onReact={onReact}
-        onMakeOne={onMakeOne}
-        onReplay={onReplay}
-      />
+          <button type="button" aria-label={stepLabel(data.locale, "next")} disabled={at.last} onClick={at.next} className={round} style={{ width: "calc(11*var(--k))", height: "calc(11*var(--k))", background: "linear-gradient(180deg, #fbe9bd, #e9c777 55%, #c99a3e)", color: "#3a2410", fontSize: "calc(6*var(--k))", boxShadow: "0 calc(1*var(--k)) calc(3*var(--k)) rgba(0,0,0,.5)" }}>
+            ›
+          </button>
+        </div>
+      </div>
     </motion.div>
   );
 }

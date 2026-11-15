@@ -57,6 +57,19 @@ const middle = async (page: Page, selector: string) => {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 };
 
+/**
+ * A note that is gone through a step at a time (the words in the candlelit room, the cards under
+ * the lights, the gingerbread book) is stepped to its last; one that scrolls needs nothing.
+ */
+async function toTheEnd(page: Page) {
+  const next = page.getByRole("button", { name: /^(next|siguiente)$/ });
+  for (let i = 0; i < 30; i++) {
+    if (!(await next.count()) || !(await next.isVisible()) || !(await next.isEnabled())) return;
+    await next.click();
+    await page.waitForTimeout(350);
+  }
+}
+
 const GIFTS: Gift[] = [
   {
     slug: "frosted-window",
@@ -65,6 +78,8 @@ const GIFTS: Gift[] = [
     finish: async (page, lang) => {
       await page.getByRole("button", { name: lang === "es" ? /limpia la escarcha/i : /wipe the frost away/i }).press("Enter");
       await page.getByRole("button", { name: READ }).click({ timeout: 20000 });
+      // the letter comes in an envelope, which has to be opened
+      await page.getByRole("button", { name: lang === "es" ? /abre el sobre/i : /open the envelope/i }).click({ timeout: 15000 });
     },
   },
   {
@@ -121,7 +136,10 @@ for (const gift of GIFTS) {
         await arrive(page, gift, lang);
         await gift.finish(page, lang);
         await expect(page.getByText(gift.dear[lang]).last()).toBeVisible({ timeout: 30000 });
-        if (lang === "en") await expect(page.getByRole("button", { name: /send .* a reaction/i })).toBeVisible({ timeout: 60000 });
+        if (lang === "en") {
+          await toTheEnd(page);
+          await expect(page.getByRole("button", { name: /send .* a reaction/i })).toBeVisible({ timeout: 60000 });
+        }
         expect(errors).toEqual([]);
       });
     }
@@ -241,4 +259,90 @@ test.describe("the editor", () => {
       expect(await tile.locator("button, [role=button]").count()).toBe(0);
     });
   }
+});
+
+test.describe("the note, each gift its own way", () => {
+  test.setTimeout(120_000);
+
+  test("Light the Candles: the letter is written into the room a part at a time, forward and back", async ({ page }) => {
+    const errors = watch(page);
+    await arrive(page, GIFTS[1], "en");
+    await GIFTS[1].finish(page, "en");
+    await expect(page.getByText(/dear june/i)).toBeVisible({ timeout: 20000 });
+    await expect(page.getByRole("button", { name: "back", exact: true })).toBeDisabled();
+    await page.getByRole("button", { name: "next", exact: true }).click();
+    await expect(page.getByText(/dear june/i)).toBeHidden({ timeout: 5000 });
+    await page.getByRole("button", { name: "back", exact: true }).click();
+    await expect(page.getByText(/dear june/i)).toBeVisible({ timeout: 5000 });
+    // the arrow keys do the same
+    await page.keyboard.press("ArrowRight");
+    await expect(page.getByText(/dear june/i)).toBeHidden({ timeout: 5000 });
+    await toTheEnd(page);
+    await expect(page.getByRole("button", { name: "next", exact: true })).toBeDisabled();
+    await expect(page.getByRole("button", { name: /watch again/i })).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test("String the Lights: cards are turned by tapping them, and every photo has a card", async ({ page }) => {
+    const errors = watch(page);
+    await arrive(page, GIFTS[2], "en");
+    await GIFTS[2].finish(page, "en");
+    await expect(page.getByText(/dear mia/i)).toBeVisible({ timeout: 20000 });
+    await expect(page.getByText("1 / 9")).toBeVisible();
+    // a tap on the right of the card goes on, on its left goes back
+    const vp = page.viewportSize()!;
+    await page.mouse.click(vp.width * 0.7, vp.height * 0.5);
+    await expect(page.getByText("2 / 9")).toBeVisible({ timeout: 5000 });
+    await page.mouse.click(vp.width * 0.16, vp.height * 0.5);
+    await expect(page.getByText("1 / 9")).toBeVisible({ timeout: 5000 });
+    await toTheEnd(page);
+    await expect(page.getByText("9 / 9")).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test("Gingerbread House: the book opens by itself and its pages turn", async ({ page }) => {
+    const errors = watch(page);
+    await arrive(page, GIFTS[3], "en");
+    await GIFTS[3].finish(page, "en");
+    await expect(page.getByText(/dear lena/i)).toBeVisible({ timeout: 20000 });
+    await page.getByRole("button", { name: "next", exact: true }).click({ timeout: 10000 });
+    await expect(page.getByText("2 / 9")).toBeVisible({ timeout: 5000 });
+    await page.keyboard.press("ArrowLeft");
+    await expect(page.getByText("1 / 9")).toBeVisible({ timeout: 5000 });
+    await toTheEnd(page);
+    await expect(page.getByRole("button", { name: /watch again/i })).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test("Frosted Window: the envelope is opened, the letter unfolds, and the photos turn as a stack", async ({ page }) => {
+    const errors = watch(page);
+    await arrive(page, GIFTS[0], "en");
+    await page.getByRole("button", { name: /wipe the frost away/i }).press("Enter");
+    await page.getByRole("button", { name: READ }).click({ timeout: 20000 });
+    await expect(page.getByText(/dear ava/i)).toBeHidden();
+    await page.getByRole("button", { name: /open the envelope/i }).click({ timeout: 15000 });
+    await expect(page.getByText(/dear ava/i)).toBeVisible({ timeout: 15000 });
+    const stack = page.getByRole("button", { name: "next photo" });
+    await stack.scrollIntoViewIfNeeded();
+    await expect(page.getByText("1 / 4")).toBeVisible();
+    await stack.click();
+    await expect(page.getByText("2 / 4")).toBeVisible({ timeout: 5000 });
+    for (let i = 0; i < 3; i++) {
+      await stack.click();
+      await page.waitForTimeout(700);
+    }
+    await expect(page.getByText("1 / 4")).toBeVisible({ timeout: 5000 });
+    expect(errors).toEqual([]);
+  });
+
+  test("Watch again starts the gift over", async ({ page }) => {
+    const errors = watch(page);
+    await arrive(page, GIFTS[3], "en");
+    await GIFTS[3].finish(page, "en");
+    await toTheEnd(page);
+    await page.getByRole("button", { name: /watch again/i }).click();
+    await expect(page.getByRole("button", { name: /decorate the house/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator("img[src*='gumdrop-red']").filter({ visible: true })).toHaveCount(1);
+    expect(errors).toEqual([]);
+  });
 });

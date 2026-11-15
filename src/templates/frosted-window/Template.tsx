@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
@@ -14,9 +14,11 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
-import { HolidayPage, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
+import { HolidayPage, type HolidayTheme } from "../_shared/holiday/page";
+import { PhotoStack } from "../_shared/holiday/stack";
 import { down, Plate, WIDE_PLATE, Snowfall as PageSnow, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
-import { ANCHORS, ART_BASE, BOARD, BULBS, SHEETS, SPRITES } from "./art-map";
+import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
+import { ANCHORS, ART_BASE, BOARD, BULBS, SPRITES } from "./art-map";
 import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wipedIn, type FrostGrid } from "./frost";
 import { INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type FrostedWindowFields } from "./schema";
@@ -30,6 +32,9 @@ const S = {
     note: "a note from {name}",
     outside: "outside the window",
     gallery: "this winter",
+    openEnvelope: "open the envelope",
+    breakSeal: "break the seal",
+    nextPhoto: "next photo",
   },
   es: {
     title: "mira fuera",
@@ -39,6 +44,9 @@ const S = {
     note: "una nota de {name}",
     outside: "al otro lado de la ventana",
     gallery: "este invierno",
+    openEnvelope: "abre el sobre",
+    breakSeal: "rompe el sello",
+    nextPhoto: "siguiente foto",
   },
 };
 type Copy = (typeof S)["en"];
@@ -59,8 +67,8 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-${size}`, `frost-${lookId}`];
-  const note = ["street", "ribbon"];
-  return [...scene, ...note].map((n) => `${ART_BASE}${n}.webp`);
+  const note = ["street", "envelope", "envelope-open"];
+  return [...[...scene, ...note].map((n) => `${ART_BASE}${n}.webp`), ...["top", "mid", "bottom"].map((n) => `${PAPER_BASE}sheet-letter-${n}.webp`)];
 }
 
 /* The glass, in stage units (100 across, 170 down), and the snowman's board seen through it. */
@@ -479,91 +487,107 @@ function FrostPane({ src, rect, title, label, reduce, onStart, onWipe, onReveal 
 }
 
 /**
- * The note, on the window itself: the street fills the screen, snow falling, and every part of the
- * note is written on a pane of frosted glass.
+ * The note, as a letter that has to be opened. A red envelope sealed with gold wax comes up in
+ * front of the window; breaking the seal lifts the flap, the letter slides out and unfolds, and the
+ * rest is read as a letter is: the page, then the photos that were in with it, as a small stack to
+ * turn through. The street is behind it all, the snow still falling.
  */
 function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<FrostedWindowFields>["data"]; sign: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: "#14233f", soft: "#4d5f80", accent: "#a8221e", rule: "rgba(20,35,63,.25)", label: "#f4f8ff", face: "serif" };
-  const tilt = useMemo(() => {
-    const rng = mulberry32(seed + 11);
-    return data.photos.map(() => ({ print: (rng() - 0.5) * 6, ribbon: (rng() - 0.5) * 10, shift: (rng() - 0.5) * 14 }));
-  }, [data.photos, seed]);
-  const pane = (children: ReactNode, pad = 7) => (
-    <div
-      className="relative overflow-hidden rounded-[calc(2.4*var(--u))]"
-      style={{ backgroundImage: `linear-gradient(rgba(244,248,255,.5), rgba(236,243,252,.42)), url(${ART_BASE}frost-${lookId}.webp)`, backgroundSize: "auto, 400% 400%", backgroundPosition: "center, 8% 62%", border: "calc(.5*var(--u)) solid rgba(255,255,255,.7)", boxShadow: "inset 0 0 calc(7*var(--u)) rgba(255,255,255,.75), 0 calc(2*var(--u)) calc(6*var(--u)) rgba(2,6,24,.5)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", padding: `calc(${pad}*var(--u)) calc(6.5*var(--u))`, color: theme.ink }}
-    >
-      {children}
-    </div>
-  );
+  const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
+  /** sealed: the envelope, shut. opening: its flap up, the letter coming out. read: the letter, unfolded. */
+  const [stage, setStage] = useState<"sealed" | "opening" | "read">(mode === "preview" ? "read" : "sealed");
+  const { after } = useTimers();
+  const open = () => {
+    if (stage !== "sealed") return;
+    setStage("opening");
+    buzz(18);
+    after(still ? 60 : 1500, () => setStage("read"));
+  };
+  const lit = "brightness(1.55) saturate(1.08)";
   return (
-    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
-      <HolidayPage
-        data={data}
-        mode={mode}
-        still={still}
-        base={ART_BASE}
-        look={lookId}
-        floor="#0a1024"
-        shade={look.veil}
-        sheet={SHEETS.letter}
-        theme={theme}
-        backdrop={
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: "#0a1024" }}>
-            <img src={`${ART_BASE}street.webp`} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: "50% 30%" }} />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(4,8,24,.28), rgba(4,8,24,.5))" }} />
-            <PageSnow seed={seed} still={still} />
-          </div>
-        }
-        block={(_, children) => pane(children)}
-        hero={
-          <div className="mx-auto w-[min(82cqw,420px)]">
-            {pane(
-              <div className="text-center">
-                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: theme.soft }}>
-                  {s.outside}
-                </p>
-                <p className="leading-[1.1] text-balance [overflow-wrap:anywhere]" style={{ marginTop: "calc(1.4*var(--u))", fontFamily: "var(--gift-font-hand)", fontSize: sign.length > 22 ? "calc(7*var(--u))" : "calc(8.6*var(--u))" }}>
+    <motion.div className="absolute inset-0 z-[20] overflow-hidden" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: "#0a1024" }}>
+        <img src={`${ART_BASE}street.webp`} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: "50% 30%" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(4,8,24,.4), rgba(4,8,24,.62))" }} />
+        <PageSnow seed={seed} still={still} />
+      </div>
+
+      {stage === "read" ? (
+        // the letter, out of its envelope: it opens downward from its first fold
+        <motion.div className="absolute inset-0" style={{ transformOrigin: "50% 16%" }} initial={still ? false : { opacity: 0.4, scaleY: 0.3 }} animate={{ opacity: 1, scaleY: 1 }} transition={{ duration: 0.85, ease: [0.2, 0.8, 0.25, 1] }}>
+          <HolidayPage
+            data={data}
+            mode={mode}
+            still={still}
+            base={ART_BASE}
+            paperBase={PAPER_BASE}
+            look={lookId}
+            floor="#0a1024"
+            shade={look.veil}
+            sheet={PAPER}
+            frame={0.05}
+            theme={theme}
+            backdrop={<span />}
+            header={
+              <div className="relative mb-[calc(5*var(--u))] pr-[calc(19*var(--u))]">
+                {/* what the snowman held up, as the heading of the letter, and a postmark where a stamp would be */}
+                <p className="leading-[1.08] text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(5.6*var(--u))", color: look.accent }}>
                   {sign}
                 </p>
-                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
-                  {data.senderName} → {data.recipientName}
-                </p>
-              </div>,
-              6,
-            )}
-          </div>
-        }
-        eyebrow={fill(s.note, { name: data.senderName })}
-        gallery={s.gallery}
-        columns={2}
-        photo={(slot) => <Ribboned slot={slot} tilt={tilt[slot.index]} />}
-        onEvent={onEvent}
-        onReact={onReact}
-        onMakeOne={onMakeOne}
-        onReplay={onReplay}
-      />
+                <Postmark from={data.senderName} color={look.accent} />
+              </div>
+            }
+            eyebrow={fill(s.note, { name: data.senderName })}
+            gallery={s.gallery}
+            galleryAs={<PhotoStack photos={data.photos} seed={seed} still={still} label={s.nextPhoto} />}
+            photo={() => null}
+            onEvent={onEvent}
+            onReact={onReact}
+            onMakeOne={onMakeOne}
+            onReplay={onReplay}
+          />
+        </motion.div>
+      ) : (
+        <div className="absolute inset-0 grid place-items-center">
+          <motion.div className="relative w-[min(78cqw,400px)]" initial={still ? false : { y: "70cqh", rotate: 14, scale: 0.5 }} animate={stage === "opening" ? { y: "26cqh", rotate: 0, scale: 1, opacity: 0 } : { y: 0, rotate: -3, scale: 1, opacity: 1 }} transition={stage === "opening" ? { duration: 0.9, delay: 0.75, ease: "easeIn" } : { type: "spring", stiffness: 70, damping: 14, delay: 0.35 }}>
+            {/* the letter, folded, coming up out of the open envelope */}
+            <div aria-hidden="true" className="absolute inset-x-[9%] overflow-hidden" style={{ top: "18%", height: "58%", transform: stage === "opening" ? "translateY(-92%)" : "translateY(0)", opacity: stage === "opening" ? 1 : 0, transition: "transform .8s cubic-bezier(.3,.7,.3,1) .25s, opacity .2s ease .2s" }}>
+              <img src={`${PAPER_BASE}sheet-letter-top.webp`} alt="" draggable={false} className="block w-full max-w-none" />
+            </div>
+            <img src={`${ART_BASE}envelope.webp`} alt="" draggable={false} className="relative block w-full max-w-none" style={{ filter: lit, opacity: stage === "opening" ? 0 : 1, transition: "opacity .25s ease" }} />
+            <img src={`${ART_BASE}envelope-open.webp`} alt="" draggable={false} aria-hidden="true" className="absolute bottom-0 left-0 block w-full max-w-none" style={{ filter: lit, opacity: stage === "opening" ? 1 : 0, transition: "opacity .25s ease" }} />
+            {stage === "sealed" ? <button type="button" aria-label={s.openEnvelope} onClick={open} className="absolute inset-0 cursor-pointer rounded-[calc(2*var(--u))] outline-none focus-visible:ring-4 focus-visible:ring-white/60" /> : null}
+          </motion.div>
+          <p aria-hidden="true" className="pointer-events-none absolute inset-x-0 text-center text-[calc(2.6*var(--u))] font-semibold tracking-[0.3em] uppercase" style={{ top: "calc(50% + min(34cqw, 175px))", color: "#fff6ea", textShadow: "0 1px calc(2*var(--u)) rgba(0,0,0,.6)", opacity: stage === "sealed" ? 0.9 : 0, transition: "opacity .3s ease" }}>
+            {s.breakSeal}
+          </p>
+        </div>
+      )}
     </motion.div>
   );
 }
 
-/** A photo with a length of red velvet ribbon laid across its top. */
-function Ribboned({ slot, tilt }: { slot: PhotoSlot; tilt?: { print: number; ribbon: number; shift: number } }) {
+/** A round postmark in the corner of the letter: two rings, the name of who sent it round the top, wavy lines running off it. */
+function Postmark({ from, color }: { from: string; color: string }) {
+  const name = from.slice(0, 16).toUpperCase();
   return (
-    <Print
-      slot={slot}
-      rot={tilt?.print ?? 0}
-      holder={
-        <img
-          src={`${ART_BASE}ribbon.webp`}
-          alt=""
-          aria-hidden="true"
-          draggable={false}
-          className="pointer-events-none absolute top-0 max-w-none select-none"
-          style={{ left: `${(50 + (tilt?.shift ?? 0)).toFixed(1)}%`, width: "70%", transform: `translate(-50%, -50%) rotate(${(tilt?.ribbon ?? -4).toFixed(1)}deg)` }}
-        />
-      }
-    />
+    <svg aria-hidden="true" viewBox="0 0 150 90" className="absolute top-[calc(-2.5*var(--u))] right-[calc(-2*var(--u))] w-[calc(22*var(--u))] -rotate-[9deg]" style={{ color, opacity: 0.62 }} fill="none" stroke="currentColor">
+      <circle cx="45" cy="45" r="38" strokeWidth="2.2" />
+      <circle cx="45" cy="45" r="27" strokeWidth="1.1" />
+      <path id="fw-ring" d="M45 45 m-32.5 0 a32.5 32.5 0 1 1 65 0" stroke="none" />
+      <text fontSize="8.6" letterSpacing="2.4" fill="currentColor" stroke="none" style={{ fontFamily: "var(--gift-font-body)", fontWeight: 600 }}>
+        <textPath href="#fw-ring" startOffset="50%" textAnchor="middle">
+          {name}
+        </textPath>
+      </text>
+      <path d="M45 34.5l3.1 6.6 7.2.8-5.4 4.9 1.6 7.1-6.5-3.7-6.5 3.7 1.6-7.1-5.4-4.9 7.2-.8z" fill="currentColor" stroke="none" />
+      <text x="45" y="66" fontSize="7" letterSpacing="1.6" textAnchor="middle" fill="currentColor" stroke="none" style={{ fontFamily: "var(--gift-font-body)", fontWeight: 600 }}>
+        24 · XII
+      </text>
+      {[30, 40, 50, 60].map((y) => (
+        <path key={y} d={`M86 ${y}c8-5 14 5 22 0s14 5 22 0 12 4 18 1`} strokeWidth="1.6" strokeLinecap="round" />
+      ))}
+    </svg>
   );
 }
