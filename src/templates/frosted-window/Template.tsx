@@ -1,21 +1,21 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import type { OpeningProps, TemplateProps } from "../types";
 import { useGiftAudio } from "../_shared/hooks/use-gift-audio";
 import { hashString, mulberry32 } from "../_shared/random";
 import { SoundToggle } from "../_shared/SoundToggle";
-import { COVER_VARS, POSTER_FONT, TapPill } from "../_shared/cover-kit";
+import { COVER_VARS, TapPill } from "../_shared/cover-kit";
 import { buzz, prime } from "../_shared/synth";
 import { playChime, playScrape, playSparkle } from "../_shared/night/sfx";
 import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
-import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
-import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
-import { down, Plate, WIDE_PLATE, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
+import { HolidayPage, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
+import { down, Plate, WIDE_PLATE, Snowfall as PageSnow, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BOARD, BULBS, SHEETS, SPRITES } from "./art-map";
 import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wipedIn, type FrostGrid } from "./frost";
 import { INK, LOOKS, type LookId } from "./looks";
@@ -59,7 +59,7 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-${size}`, `frost-${lookId}`];
-  const note = [`soft-${lookId}-${size}`, "sheet-letter-top", "sheet-letter-mid", "sheet-letter-bottom", "ribbon"];
+  const note = ["street", "ribbon"];
   return [...scene, ...note].map((n) => `${ART_BASE}${n}.webp`);
 }
 
@@ -478,14 +478,25 @@ function FrostPane({ src, rect, title, label, reduce, onStart, onWipe, onReveal 
   );
 }
 
-/** The note: the snowman's words on a card, the letter under it, then the photos, each with a red velvet ribbon across a corner. */
+/**
+ * The note, on the window itself: the street fills the screen, snow falling, and every part of the
+ * note is written on a pane of frosted glass.
+ */
 function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<FrostedWindowFields>["data"]; sign: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
+  const theme: HolidayTheme = { ink: "#14233f", soft: "#4d5f80", accent: "#a8221e", rule: "rgba(20,35,63,.25)", label: "#f4f8ff", face: "serif" };
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
     return data.photos.map(() => ({ print: (rng() - 0.5) * 6, ribbon: (rng() - 0.5) * 10, shift: (rng() - 0.5) * 14 }));
   }, [data.photos, seed]);
+  const pane = (children: ReactNode, pad = 7) => (
+    <div
+      className="relative overflow-hidden rounded-[calc(2.4*var(--u))]"
+      style={{ backgroundImage: `linear-gradient(rgba(244,248,255,.5), rgba(236,243,252,.42)), url(${ART_BASE}frost-${lookId}.webp)`, backgroundSize: "auto, 400% 400%", backgroundPosition: "center, 8% 62%", border: "calc(.5*var(--u)) solid rgba(255,255,255,.7)", boxShadow: "inset 0 0 calc(7*var(--u)) rgba(255,255,255,.75), 0 calc(2*var(--u)) calc(6*var(--u)) rgba(2,6,24,.5)", backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)", padding: `calc(${pad}*var(--u)) calc(6.5*var(--u))`, color: theme.ink }}
+    >
+      {children}
+    </div>
+  );
   return (
     <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
       <HolidayPage
@@ -494,26 +505,34 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
         still={still}
         base={ART_BASE}
         look={lookId}
-        floor={look.floor}
+        floor="#0a1024"
         shade={look.veil}
         sheet={SHEETS.letter}
-        frame={0.05}
         theme={theme}
+        backdrop={
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: "#0a1024" }}>
+            <img src={`${ART_BASE}street.webp`} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: "50% 30%" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(4,8,24,.28), rgba(4,8,24,.5))" }} />
+            <PageSnow seed={seed} still={still} />
+          </div>
+        }
+        block={(_, children) => pane(children)}
         hero={
-          <div className="mx-auto w-[min(80cqw,410px)]" style={{ rotate: "-1.5deg" }}>
-            <PaperSheet base={ART_BASE} art={SHEETS.letter} margin={0.11} head={0.11} tail={0.1}>
-              <div className="text-center" style={{ color: INK.ink }}>
-                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: INK.soft }}>
+          <div className="mx-auto w-[min(82cqw,420px)]">
+            {pane(
+              <div className="text-center">
+                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: theme.soft }}>
                   {s.outside}
                 </p>
-                <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), marginTop: "calc(1.4*var(--u))", fontFamily: POSTER_FONT, fontWeight: 600, fontSize: sign.length > 22 ? "calc(5.6*var(--u))" : "calc(7*var(--u))" }}>
+                <p className="leading-[1.1] text-balance [overflow-wrap:anywhere]" style={{ marginTop: "calc(1.4*var(--u))", fontFamily: "var(--gift-font-hand)", fontSize: sign.length > 22 ? "calc(7*var(--u))" : "calc(8.6*var(--u))" }}>
                   {sign}
                 </p>
-                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: INK.soft }}>
+                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
                   {data.senderName} → {data.recipientName}
                 </p>
-              </div>
-            </PaperSheet>
+              </div>,
+              6,
+            )}
           </div>
         }
         eyebrow={fill(s.note, { name: data.senderName })}

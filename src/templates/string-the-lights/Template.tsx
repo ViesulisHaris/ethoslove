@@ -15,7 +15,7 @@ import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme } from "../_shared/holiday/page";
 import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
-import { down, Plate, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
+import { down, Plate, Snowfall, SoftTable, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BULBS } from "./art-map";
 import { BULB_COLORS, INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type StringTheLightsFields } from "./schema";
@@ -375,7 +375,30 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, hung, canRead, r
   );
 }
 
-/** The note: the words that came on in lights, the letter under them, then the photos. */
+/** A length of the string of bulbs along the top edge of a sheet of the note, lit. */
+function BulbRow({ seed, still }: { seed: number; still: boolean }) {
+  const bulbs = useMemo(() => {
+    const rnd = mulberry32(seed);
+    return Array.from({ length: 9 }, (_, i) => ({ color: BULB_COLORS[(i + seed) % BULB_COLORS.length], drop: 0.6 + rnd() * 0.9, d: 2 + rnd() * 3, o: -rnd() * 5 }));
+  }, [seed]);
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-[5%] top-0 flex justify-between" style={{ transform: "translateY(-30%)" }}>
+      <span className="absolute inset-x-0 top-[calc(.9*var(--u))] h-px" style={{ background: "#0c120c", boxShadow: "0 1px 0 rgba(255,255,255,.12)" }} />
+      {bulbs.map((b, i) => (
+        <span key={i} className="relative block" style={{ width: "calc(2.2*var(--u))", height: "calc(2.8*var(--u))", marginTop: `calc(${b.drop.toFixed(2)}*var(--u))` }}>
+          <span className={still ? "absolute" : "stl-on absolute"} style={{ inset: "calc(-3*var(--u))", borderRadius: "50%", background: `radial-gradient(circle, #ffffff 0%, ${b.color} 15%, ${b.color}66 32%, ${b.color}00 62%)`, "--d": `${b.d}s`, "--o": `${b.o}s` } as CSSProperties} />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const ORDER: Record<string, number> = { letter: 1, countdown: 2, surprise: 3, end: 4 };
+
+/**
+ * The note, out in the snow: every sheet has a length of the lights strung along its top, lit, and
+ * the snow keeps falling past the house behind it.
+ */
 function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<StringTheLightsFields>["data"]; sign: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
   const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
@@ -385,6 +408,7 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
   }, [data.photos, seed]);
   return (
     <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+      <style>{KEYFRAMES}</style>
       <HolidayPage
         data={data}
         mode={mode}
@@ -397,9 +421,20 @@ function Page({ lookId, s, data, sign, seed, mode, still, onEvent, onReact, onMa
         sheet={PAPER}
         frame={0.05}
         theme={theme}
+        backdrop={
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: look.floor }}>
+            <SoftTable base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} shade={look.veil} />
+            <Snowfall seed={seed} still={still} />
+          </div>
+        }
+        block={(kind, children) => (
+          <PaperSheet base={PAPER_BASE} art={PAPER} head={0.16} tail={0.11} margin={0.125} crown={<BulbRow seed={seed + ORDER[kind]} still={still} />}>
+            {children}
+          </PaperSheet>
+        )}
         hero={
           <div className="mx-auto w-[min(80cqw,410px)]" style={{ rotate: "-1.5deg" }}>
-            <PaperSheet base={PAPER_BASE} art={PAPER} margin={0.11} head={0.11} tail={0.1}>
+            <PaperSheet base={PAPER_BASE} art={PAPER} margin={0.11} head={0.16} tail={0.1} crown={<BulbRow seed={seed} still={still} />}>
               <div className="text-center" style={{ color: INK.ink }}>
                 <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: INK.soft }}>
                   {s.inLights}

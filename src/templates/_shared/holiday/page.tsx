@@ -82,6 +82,9 @@ export function PaperSheet({ base, art, children, crown, foot, margin = 0.075, h
   );
 }
 
+/** The blocks of the note that are written on something: its letter, its countdown, its surprise, its end. */
+export type BlockKind = "letter" | "countdown" | "surprise" | "end";
+
 type Props<T extends Record<string, unknown>> = {
   data: GiftData<T>;
   mode: TemplateMode;
@@ -118,13 +121,23 @@ type Props<T extends Record<string, unknown>> = {
   greeting?: string | null;
   /** The small caps line over the words, such as "a note from Theo". */
   eyebrow?: string;
+  /**
+   * How this gift hands its letter over, when not on sheets of paper over the soft table: what is behind
+   * the page instead (`backdrop`), what each block is written on (`block`: the letter, the countdown, the
+   * surprise, the end), whether the words on it are dark or light (`tone`), and whether the page fades
+   * out towards the foot of the screen so that something there stays in view (`fadeFoot`, a share of its height).
+   */
+  backdrop?: ReactNode;
+  block?: (kind: BlockKind, children: ReactNode) => ReactNode;
+  tone?: "light" | "dark";
+  fadeFoot?: number;
   onEvent?: (event: TemplateEvent) => void;
   onReact?: () => void;
   onMakeOne?: () => void;
   onReplay?: () => void;
 };
 
-export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, paperBase, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
+export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, paperBase, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, backdrop, block, tone = "light", fadeFoot, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
   const scroller = useRef<HTMLDivElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<GiftPhoto | null>(null);
@@ -132,24 +145,34 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
   useReadProgress(scroller, end, mode, onEvent);
   const small = "text-[calc(2.7*var(--u))] font-semibold tracking-[0.24em] uppercase";
   const paper: CSSProperties = { width: pct(sheetWidth), marginInline: "auto" };
+  /** What a block is written on: the gift's own surface if it brings one, a sheet of its paper otherwise. */
+  const on = (kind: BlockKind, sheetProps: { crown?: ReactNode; foot?: ReactNode; head: number; tail: number; margin: number }, children: ReactNode) =>
+    block ? (
+      block(kind, children)
+    ) : (
+      <PaperSheet base={paperBase ?? base} art={sheet} {...sheetProps} style={paper}>
+        {children}
+      </PaperSheet>
+    );
+  const fade: CSSProperties | undefined = fadeFoot ? { maskImage: `linear-gradient(to bottom, #000 0, #000 ${Math.round((1 - fadeFoot) * 100)}%, transparent ${Math.round((1 - fadeFoot * 0.25) * 100)}%)`, WebkitMaskImage: `linear-gradient(to bottom, #000 0, #000 ${Math.round((1 - fadeFoot) * 100)}%, transparent ${Math.round((1 - fadeFoot * 0.25) * 100)}%)` } : undefined;
 
   return (
     <div className="absolute inset-0">
-      <SoftTable base={base} look={look} floor={floor} shade={shade} />
-      <div ref={scroller} data-scroller className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none">
-        <div className="relative mx-auto flex w-[min(94cqw,600px)] flex-col gap-[calc(8*var(--u))] pt-[calc(19*var(--u))] pb-[calc(72px+env(safe-area-inset-bottom))]" style={{ color: theme.ink }}>
+      {backdrop ?? <SoftTable base={base} look={look} floor={floor} shade={shade} />}
+      <div ref={scroller} data-scroller className="absolute inset-0 overflow-x-hidden overflow-y-auto overscroll-contain scrollbar-none" style={fade}>
+        <div className="relative mx-auto flex w-[min(94cqw,600px)] flex-col gap-[calc(8*var(--u))] pt-[calc(19*var(--u))] pb-[calc(72px+env(safe-area-inset-bottom))]" style={{ color: theme.ink, paddingBottom: fadeFoot ? `calc(${Math.round(fadeFoot * 100)}cqh + 72px)` : undefined }}>
           {hero ? <Reveal still={still}>{hero}</Reveal> : null}
           <Reveal still={still}>
-            <PaperSheet base={paperBase ?? base} art={sheet} crown={crown} foot={foot} head={0.08 + frame} tail={(foot ? 0.13 : 0.07) + frame} margin={(sheetWidth < 0.9 ? 0.06 : 0.075) + frame} style={paper}>
+            {on("letter", { crown, foot, head: 0.08 + frame, tail: (foot ? 0.13 : 0.07) + frame, margin: (sheetWidth < 0.9 ? 0.06 : 0.075) + frame }, <>
               {header}
               {eyebrow ? (
                 <p className={cn(small, "mb-[calc(3*var(--u))]")} style={{ color: theme.soft }}>
                   {eyebrow}
                 </p>
               ) : null}
-              <MessageBody data={data} blocks={blocks} mode={mode} tone="light" face={theme.face ?? "serif"} accent={theme.accent} greeting={greeting} />
+              <MessageBody data={data} blocks={blocks} mode={mode} tone={tone} face={theme.face ?? "serif"} accent={theme.accent} greeting={greeting} />
               {footer}
-            </PaperSheet>
+            </>)}
           </Reveal>
 
           {data.photos.length ? (
@@ -167,27 +190,23 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
 
           {data.countdown ? (
             <Reveal still={still}>
-              <PaperSheet base={paperBase ?? base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
-                <Countdown countdown={data.countdown} locale={data.locale} tone="light" />
-              </PaperSheet>
+              {on("countdown", { head: 0.06 + frame, tail: 0.05 + frame, margin: 0.075 + frame }, <Countdown countdown={data.countdown} locale={data.locale} tone={tone} />)}
             </Reveal>
           ) : null}
 
           {data.surprise ? (
             <Reveal still={still}>
-              <PaperSheet base={paperBase ?? base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
+              {on("surprise", { head: 0.06 + frame, tail: 0.05 + frame, margin: 0.075 + frame }, <>
                 <p className={cn(small, "mb-[calc(3*var(--u))] text-center")} style={{ color: theme.soft }}>
                   {giftString(data.locale, "ps")}
                 </p>
-                <SurpriseReveal surprise={data.surprise} locale={data.locale} tone="light" onReveal={() => onEvent?.({ type: "surprise" })} />
-              </PaperSheet>
+                <SurpriseReveal surprise={data.surprise} locale={data.locale} tone={tone} onReveal={() => onEvent?.({ type: "surprise" })} />
+              </>)}
             </Reveal>
           ) : null}
 
           <div ref={end}>
-            <PaperSheet base={paperBase ?? base} art={sheet} head={0.05 + frame} tail={0.04 + frame} margin={0.05 + frame} style={paper}>
-              <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
-            </PaperSheet>
+            {on("end", { head: 0.05 + frame, tail: 0.04 + frame, margin: 0.05 + frame }, <EndScreen data={data} tone={tone} onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />)}
           </div>
         </div>
       </div>

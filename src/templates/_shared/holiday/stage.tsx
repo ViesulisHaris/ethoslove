@@ -156,3 +156,26 @@ export function SoftTable({ base, look, floor, shade }: { base: string; look: st
     </div>
   );
 }
+
+const SNOW_KEYFRAMES = `
+.hol-flake{position:absolute;top:-3%;border-radius:50%;background:#fff;animation:hol-fall var(--d) linear var(--o) infinite}
+@keyframes hol-fall{from{transform:translate(0,0)}to{transform:translate(var(--dx),108cqh)}}
+@media (prefers-reduced-motion: reduce){.hol-flake{animation:none;opacity:0}}
+`;
+
+/** Snow falling down the whole of whatever it is put in: small, slow, a little sideways. Nothing when `still`. */
+export function Snowfall({ seed, count = 46, still }: { seed: number; count?: number; still?: boolean }) {
+  const flakes = useMemo(() => {
+    const rnd = mulberry32(seed + 5);
+    return Array.from({ length: count }, () => ({ x: rnd() * 100, size: 0.35 + rnd() * 0.75, d: 9 + rnd() * 9, o: -rnd() * 18, dx: (rnd() - 0.3) * 14, a: 0.5 + rnd() * 0.45 }));
+  }, [seed, count]);
+  if (still) return null;
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <style>{SNOW_KEYFRAMES}</style>
+      {flakes.map((f, i) => (
+        <span key={i} className="hol-flake" style={{ left: `${f.x}%`, width: `calc(${f.size} * var(--u))`, height: `calc(${f.size} * var(--u))`, opacity: f.a, filter: f.size < 0.6 ? "blur(.5px)" : undefined, "--d": `${f.d}s`, "--o": `${f.o}s`, "--dx": `calc(${f.dx.toFixed(1)} * var(--u))` } as CSSProperties} />
+      ))}
+    </div>
+  );
+}

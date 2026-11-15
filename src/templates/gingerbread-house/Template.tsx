@@ -13,11 +13,10 @@ import { playChime, playKnock, playSparkle, playTink } from "../_shared/night/sf
 import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
-import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
+import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme } from "../_shared/holiday/page";
-import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
 import { down, Plate, Sparks, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
-import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
+import { ANCHORS, ART_BASE, SHEETS, SPRITES } from "./art-map";
 import { ENOUGH, inside, readyMade, SPACING, SWEETS, type Mark, type Pt, type Sweet, type Tool } from "./decorate";
 import { INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type GingerbreadHouseFields } from "./schema";
@@ -67,7 +66,7 @@ export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
   const scene = [`plate-${lookId}-closed-${size}`, `plate-${lookId}-open-${size}`, `soft-${lookId}-open-${size}`, ...SWEETS];
-  return [...scene.map((n) => `${ART_BASE}${n}.webp`), ...["top", "mid", "bottom"].map((n) => `${PAPER_BASE}sheet-letter-${n}.webp`)];
+  return [...scene, "sheet-letter-top", "sheet-letter-mid", "sheet-letter-bottom"].map((n) => `${ART_BASE}${n}.webp`);
 }
 
 /* The house's front, in stage units (100 across, 170 down), through the scene's lens: where a sweet may be stuck. */
@@ -270,7 +269,15 @@ function Scene({ lookId, s, title, from, to, seed, phase, marks, canRead, reduce
   const shown = open ? marks.filter((m) => m.kind !== "sweet" || !onDoor(m.at)) : marks;
   const doorMiddle = { x: (DOOR.x0 + DOOR.x1) / 2, y: (DOOR.y0 + DOOR.y1) / 2 };
   return (
-    <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
+    <div
+      className="absolute inset-0"
+      style={
+        leaving && !reduce
+          ? // in through the little door: the kitchen grows round the doorway until its light is all there is
+            { transform: "scale(9)", transformOrigin: `calc(50% + ${(doorMiddle.x - 50).toFixed(2)} * var(--k)) calc(50% + ${(doorMiddle.y - 85 + 4).toFixed(2)} * var(--k))`, opacity: 0, transition: "transform 1.3s cubic-bezier(.6,0,.9,.6), opacity .5s ease .85s" }
+          : { opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }
+      }
+    >
       <style>{`${STAGE_KEYFRAMES}${FOIL_KEYFRAMES}${KEYFRAMES}`}</style>
       <Plate base={ART_BASE} look={`${lookId}-closed`} floor={look.floor} still={reduce} width={WIDE_PLATE} />
       {/* the same kitchen with the little door open and a light on inside, rendered whole */}
@@ -407,39 +414,42 @@ function Scene({ lookId, s, title, from, to, seed, phase, marks, canRead, reduce
   );
 }
 
-/** The note: a card from inside the little house, the letter under it, then the photos. */
+/**
+ * The note, inside the little house: everything is written in icing on slabs of gingerbread, piped
+ * round their edges, over the warm blur of the kitchen.
+ */
 function Page({ lookId, s, data, title, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<GingerbreadHouseFields>["data"]; title: string; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
+  const theme: HolidayTheme = { ink: "#fff8ea", soft: "#f0d2a8", accent: "#ffd9a0", rule: "rgba(255,246,226,.4)", label: "#fff6ea", face: "serif" };
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
     return data.photos.map(() => (rng() - 0.5) * 6);
   }, [data.photos, seed]);
   return (
-    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
+    <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.5 }}>
       <HolidayPage
         data={data}
         mode={mode}
         still={still}
         base={ART_BASE}
-        paperBase={PAPER_BASE}
         look={`${lookId}-open`}
         floor={look.floor}
-        shade={look.veil}
-        sheet={PAPER}
-        frame={0.05}
+        shade="linear-gradient(180deg, rgba(60,26,6,.5), rgba(40,16,4,.68))"
+        sheet={SHEETS.letter}
+        frame={0.07}
         theme={theme}
+        tone="dark"
         hero={
           <div className="mx-auto w-[min(80cqw,410px)]" style={{ rotate: "-1.5deg" }}>
-            <PaperSheet base={PAPER_BASE} art={PAPER} margin={0.11} head={0.11} tail={0.1}>
-              <div className="text-center" style={{ color: INK.ink }}>
-                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: INK.soft }}>
+            <PaperSheet base={ART_BASE} art={SHEETS.letter} margin={0.14} head={0.15} tail={0.14}>
+              <div className="text-center" style={{ color: theme.ink }}>
+                <p className="tracking-[0.3em] uppercase" style={{ fontSize: "calc(2*var(--u))", color: theme.soft }}>
                   {s.inside}
                 </p>
-                <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), marginTop: "calc(1.4*var(--u))", fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(7*var(--u))" }}>
+                <p className="leading-[1.05] text-balance italic [overflow-wrap:anywhere]" style={{ marginTop: "calc(1.4*var(--u))", fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(7*var(--u))", textShadow: "0 calc(.3*var(--u)) calc(.5*var(--u)) rgba(60,26,6,.5)" }}>
                   {title}
                 </p>
-                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: INK.soft }}>
+                <p className="tracking-[0.3em] uppercase" style={{ marginTop: "calc(1.6*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
                   {data.senderName} → {data.recipientName}
                 </p>
               </div>

@@ -267,6 +267,12 @@ if (Object.keys(sheets).length) {
     "",
   );
 }
+// A picture that hangs behind a window (the street, for Frosted Window) is also kept by itself, for the note to be read over.
+if (existsSync(join(raw, "street.png"))) {
+  const res = await sharp(join(raw, "street.png")).webp({ quality: 80, effort: 6 }).toFile(join(out, "street.webp"));
+  bytes += res.size;
+  console.log(`street.webp  ${res.width}x${res.height}  ${(res.size / 1024).toFixed(0)} KB`);
+}
 if (manifest.board) {
   lines.push(
     "/** A board in the picture seen through the window: its corners (top left, top right, bottom right, bottom left) as shares of the picture across and down. */",

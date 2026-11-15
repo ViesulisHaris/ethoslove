@@ -12,9 +12,9 @@ import { playChime, playIgnite, playSparkle } from "../_shared/night/sfx";
 import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
-import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
-import { HolidayPage, PaperSheet, Print, type HolidayTheme } from "../_shared/holiday/page";
-import { PAPER, PAPER_BASE } from "../_shared/holiday/paper";
+import { FOIL_KEYFRAMES } from "../_shared/holiday/materials";
+import { HolidayPage, Print, type HolidayTheme } from "../_shared/holiday/page";
+import { PAPER } from "../_shared/holiday/paper";
 import { down, Plate, Sprite, STAGE, STAGE_KEYFRAMES, WIDE_PLATE } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, SPRITES } from "./art-map";
 import { INK, LOOKS, type LookId } from "./looks";
@@ -63,8 +63,8 @@ export const readLook = (fields: unknown): LookId => readFields(fields).look;
 export function artFor(lookId: LookId): string[] {
   const wide = typeof window !== "undefined" && window.matchMedia("(min-width: 700px)").matches;
   const size = wide ? "wide" : "phone";
-  const scene = [`plate-${lookId}-dark-${size}`, `plate-${lookId}-lit-${size}`, ...Array.from({ length: CANDLES }, (_, i) => `glow-${lookId}-${i}-${size}`), `soft-${lookId}-lit-${size}`];
-  return [...scene.map((n) => `${ART_BASE}${n}.webp`), ...["top", "mid", "bottom"].map((n) => `${PAPER_BASE}sheet-letter-${n}.webp`)];
+  const scene = [`plate-${lookId}-dark-${size}`, `plate-${lookId}-lit-${size}`, ...Array.from({ length: CANDLES }, (_, i) => `glow-${lookId}-${i}-${size}`)];
+  return scene.map((n) => `${ART_BASE}${n}.webp`);
 }
 
 /* The wicks and the candles' feet, in stage units (100 across, 170 down), through the scene's lens. */
@@ -389,14 +389,19 @@ function Scene({ lookId, s, title, from, to, thanks, seed, phase, lit, canRead, 
   );
 }
 
-/** The note: what the candles were for on a card, the letter under it, then the photos. */
+/**
+ * The note, read by candlelight: no paper at all. The room stays as it is, all five candles burning
+ * low on the screen, and the words are written in their light on the dark above them, fading out as
+ * they scroll down towards the flames.
+ */
 function Page({ lookId, s, data, title, thanks, seed, mode, still, onEvent, onReact, onMakeOne, onReplay }: { lookId: LookId; s: Copy; data: TemplateProps<LightTheCandlesFields>["data"]; title: string; thanks: string[]; seed: number; mode: TemplateProps["mode"]; still: boolean; onEvent?: TemplateProps["onEvent"]; onReact?: () => void; onMakeOne?: () => void; onReplay?: () => void }) {
   const look = LOOKS[lookId];
-  const theme: HolidayTheme = { ink: INK.ink, soft: INK.soft, accent: look.accent, rule: "rgba(120,84,30,.3)", label: "#fff6ea", face: "serif" };
+  const theme: HolidayTheme = { ink: "#f8ecd4", soft: "#d9b98a", accent: "#ffcf7a", rule: "rgba(255,214,150,.3)", label: "#ffe2a8", face: "serif" };
   const tilt = useMemo(() => {
     const rng = mulberry32(seed + 11);
     return data.photos.map(() => (rng() - 0.5) * 6);
   }, [data.photos, seed]);
+  const glow = "0 0 calc(3*var(--u)) rgba(255,190,110,.28)";
   return (
     <motion.div className="absolute inset-0 z-[20]" initial={still ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.2 }}>
       <HolidayPage
@@ -404,36 +409,48 @@ function Page({ lookId, s, data, title, thanks, seed, mode, still, onEvent, onRe
         mode={mode}
         still={still}
         base={ART_BASE}
-        paperBase={PAPER_BASE}
         look={`${lookId}-lit`}
         floor={look.floor}
         shade={look.veil}
         sheet={PAPER}
-        frame={0.05}
         theme={theme}
+        tone="dark"
+        fadeFoot={0.34}
+        backdrop={
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: look.floor }}>
+            {/* the table, moved down the screen and a little nearer, so the flames burn along its foot */}
+            <div className="absolute inset-0" style={{ transform: "translateY(21%) scale(1.22)", transformOrigin: "50% 60%" }}>
+              <Plate base={ART_BASE} look={`${lookId}-lit`} floor={look.floor} still={still} width={WIDE_PLATE} />
+            </div>
+            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(7,4,10,.93) 0%, rgba(7,4,10,.88) 48%, rgba(7,4,10,.5) 70%, rgba(7,4,10,.08) 92%)" }} />
+          </div>
+        }
+        block={(kind, children) => (
+          <div className="relative px-[calc(5*var(--u))]" style={{ textShadow: glow }}>
+            {kind === "letter" ? null : <span aria-hidden="true" className="mx-auto mb-[calc(5*var(--u))] block h-px w-[calc(16*var(--u))]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,214,150,.7), transparent)" }} />}
+            {children}
+          </div>
+        )}
         hero={
-          <div className="mx-auto w-[min(84cqw,430px)]" style={{ rotate: "-1.2deg" }}>
-            <PaperSheet base={PAPER_BASE} art={PAPER} margin={0.11} head={0.11} tail={0.1}>
-              <div className="text-center" style={{ color: INK.ink }}>
-                <p className="leading-[1.04] text-balance italic [overflow-wrap:anywhere]" style={{ ...(still ? { ...FOIL_ON_LIGHT, animation: "none" } : FOIL_ON_LIGHT), fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(6.8*var(--u))" }}>
-                  {title}
+          <div className="px-[calc(5*var(--u))] text-center" style={{ color: theme.ink, textShadow: glow }}>
+            <p className="leading-[1.04] text-balance italic [overflow-wrap:anywhere]" style={{ fontFamily: POSTER_FONT, fontWeight: 600, fontSize: "calc(8*var(--u))", color: "#ffe9bd" }}>
+              {title}
+            </p>
+            {thanks.length ? (
+              <>
+                <p className="font-semibold tracking-[0.22em] text-balance uppercase" style={{ marginTop: "calc(3*var(--u))", fontSize: "calc(2*var(--u))", color: theme.soft }}>
+                  {fill(s.heading, { name: data.senderName })}
                 </p>
-                {thanks.length ? (
-                  <>
-                    <p className="font-semibold tracking-[0.22em] text-balance uppercase" style={{ marginTop: "calc(2.2*var(--u))", fontSize: "calc(2*var(--u))", color: INK.soft }}>
-                      {fill(s.heading, { name: data.senderName })}
-                    </p>
-                    <ul style={{ marginTop: "calc(1.4*var(--u))" }}>
-                      {thanks.map((t, i) => (
-                        <li key={i} className="text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4*var(--u))", lineHeight: 1.25, paddingTop: "calc(.9*var(--u))" }}>
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : null}
-              </div>
-            </PaperSheet>
+                <ul style={{ marginTop: "calc(1.6*var(--u))" }}>
+                  {thanks.map((t, i) => (
+                    <li key={i} className="text-balance [overflow-wrap:anywhere]" style={{ fontFamily: "var(--gift-font-hand)", fontSize: "calc(4.6*var(--u))", lineHeight: 1.25, paddingTop: "calc(1*var(--u))", color: INK.light }}>
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+                <span aria-hidden="true" className="mx-auto mt-[calc(6*var(--u))] block h-px w-[calc(16*var(--u))]" style={{ background: "linear-gradient(90deg, transparent, rgba(255,214,150,.7), transparent)" }} />
+              </>
+            ) : null}
           </div>
         }
         eyebrow={fill(s.note, { name: data.senderName })}

@@ -65,6 +65,8 @@ def house(door_open):
         wall.rotation_euler = (math.radians(90), 0, 0)
         wall.location = (0, yy + t, 0)
         parts.append(wall)
+        if nm == "front":
+            front_wall = wall
     for s in (-1, 1):
         sd = box("wall_side%d" % s, (t, DEPTH - 2 * t, WALL), cookie, 0.0, 0.012, 2)
         sd.location = (s * (HW - t / 2), 0, 0)
@@ -101,21 +103,41 @@ def house(door_open):
     arch += [Vector((-DOOR_W / 2 * math.cos(math.pi * i / 10), FRONT_Y - 0.015, DOOR_H - DOOR_W / 2 + DOOR_W / 2 * math.sin(math.pi * i / 10))) for i in range(1, 10)]
     arch += [Vector((DOOR_W / 2, FRONT_Y - 0.015, DOOR_H - DOOR_W / 2 - (DOOR_H - DOOR_W / 2 - 0.02) * i / 6)) for i in range(7)]
     parts.append(piping("door_icing", arch, white, 0.028))
-    # the doorway: dark inside when shut behind its door, lit when open
-    hole = mesh_obj("doorway", [(-DOOR_W / 2 + 0.03, FRONT_Y - 0.004, 0.0), (DOOR_W / 2 - 0.03, FRONT_Y - 0.004, 0.0), (DOOR_W / 2 - 0.03, FRONT_Y - 0.004, DOOR_H - 0.08), (-DOOR_W / 2 + 0.03, FRONT_Y - 0.004, DOOR_H - 0.08)], [(0, 1, 2, 3)],
-                    emissive("inside", "#ffb04a", 9.0) if door_open else plain("inside_dark", "#2a1608", 0.9), smooth=False)
-    parts.append(hole)
-    door = kit.prism("door", [(0.0, 0.0), (DOOR_W - 0.07, 0.0), (DOOR_W - 0.07, DOOR_H - 0.12), (0.0, DOOR_H - 0.12)], 0.05, props.cookie_material("door_cookie", "#8f5228"), 0.0, 0.01, 2)
-    door.rotation_euler = (math.radians(90), 0, math.radians(-112) if door_open else 0.0)
-    door.location = (-DOOR_W / 2 + 0.035, FRONT_Y - 0.01, 0.0)
-    parts.append(door)
+    # the doorway: a real opening cut through the front wall, arched like the icing round it, so that what is
+    # inside is seen through it and the light comes from within, not from a pane laid over the frame
+    def arch(w, h, inset=0.0, n=12):
+        r = w / 2 - inset
+        pts = [(-r, inset), (r, inset)]
+        pts += [(r * math.cos(math.pi * i / n), h - w / 2 + r * math.sin(math.pi * i / n)) for i in range(n + 1)]
+        return pts
+
+    cutter = kit.prism("door_cutter", arch(DOOR_W - 0.06, DOOR_H - 0.03), 0.6, None)
+    cutter.rotation_euler = (math.radians(90), 0, 0)
+    cutter.location = (0, FRONT_Y + 0.3, -0.02)
+    cutter.hide_render = True
+    cut = front_wall.modifiers.new("doorway", "BOOLEAN")
+    cut.operation = "DIFFERENCE"
+    cut.object = cutter
+    parts.append(cutter)
+    # inside: a floor and a back wall of the same gingerbread, lit warm when the door is open
+    inner = props.cookie_material("inside_cookie", "#b06a36")
+    parts.append(mesh_obj("inside_back", [(-HW + t, 0.35, 0.0), (HW - t, 0.35, 0.0), (HW - t, 0.35, WALL), (-HW + t, 0.35, WALL)], [(0, 1, 2, 3)], inner, smooth=False))
+    parts.append(mesh_obj("inside_floor", [(-HW + t, FRONT_Y + t, 0.004), (HW - t, FRONT_Y + t, 0.004), (HW - t, 0.35, 0.004), (-HW + t, 0.35, 0.004)], [(0, 1, 2, 3)], inner, smooth=False))
+    leaf = kit.prism("door", [(x + (DOOR_W - 0.1) / 2, z) for (x, z) in arch(DOOR_W - 0.1, DOOR_H - 0.05)], 0.05, props.cookie_material("door_cookie", "#8f5228"), 0.0, 0.01, 2)
+    leaf.rotation_euler = (math.radians(90), 0, math.radians(-118) if door_open else 0.0)
+    leaf.location = (-(DOOR_W - 0.1) / 2, FRONT_Y - 0.005, 0.0)
+    parts.append(leaf)
     knob = sphere("door_knob", 0.028, plain("knob", "#f2c84a", 0.3, 0.9), 10, 6)
     if not door_open:
-        knob.location = (DOOR_W / 2 - 0.1, FRONT_Y - 0.07, DOOR_H * 0.42)
+        knob.location = (DOOR_W / 2 - 0.12, FRONT_Y - 0.07, DOOR_H * 0.42)
         parts.append(knob)
     else:
         bpy.data.objects.remove(knob, do_unlink=True)
-        persp.point("inside_light", base + Vector((0, FRONT_Y - 0.35, 0.4)), 26.0, (1.0, 0.66, 0.3), 0.08)
+        # a small lamp inside, out of sight above the doorway: it lights the room and spills out over the step
+        persp.point("inside_light", base + Vector((0.0, FRONT_Y + 0.42, 0.62)), 34.0, (1.0, 0.62, 0.26), 0.06)
+        ember = lathe("inside_glow", [(0.0, 0.0), (0.022, 0.02), (0.03, 0.06), (0.016, 0.11), (0.0, 0.14)], 12, emissive("inside_ember", "#ffc060", 22.0))
+        ember.location = (0.06, 0.1, 0.1)
+        parts.append(ember)
     parent(parts, "house_pivot", base)
     # the front, as the gift needs it: the wall's five corners and the roof's two outer corners
     f = base + Vector((0, FRONT_Y, 0))
@@ -291,7 +313,25 @@ def sweets(out):
     layer("cane")
     c = props.candy_cane("cane", props.candy_material("cane_stripes"), 0.62, 0.05, 0.15)
     place(c, (-0.15, -0.35, 0.0))
+    # the note's "paper": a slab of gingerbread, a line of icing piped down each side and scalloped along its top and bottom
+    layer("sheet")
+    w, length = 7.6, 12.0
+    slab = box("slab", (w, length, 0.16), props.cookie_material("slab_cookie", "#96592e"), 0.0, 0.07, 3)
+    kit.displace(slab, 0.012, 1.4)
+    white = icing("slab_icing")
+    inset = 0.42
+    for sgn in (-1, 1):
+        tube("slab_side%d" % sgn, [Vector((sgn * (w / 2 - inset), length / 2 - inset - 0.25 - (length - 2 * inset - 0.5) * i / 40, 0.17)) for i in range(41)], 0.085, 10, white)
+        pts = []
+        for i in range(61):
+            u = i / 60
+            pts.append(Vector((-(w / 2 - inset) + (w - 2 * inset) * u, sgn * (length / 2 - inset) - sgn * 0.16 * abs(math.sin(u * math.pi * 9)), 0.17)))
+        tube("slab_scallop%d" % sgn, pts, 0.085, 10, white)
+        for sx in (-1, 1):
+            place(sphere("slab_dot%d_%d" % (sgn, sx), 0.11, white, 12, 8, 0.7), (sx * (w / 2 - inset), sgn * (length / 2 - inset), 0.17))
     catcher()
+    render_sprite("sheet", os.path.join(out, "sheet.png"), ["sheet"], catch=("catch",), pad=(1.5, 1.5, 3.0, 3.0), density=1.3)
+    kit.MANIFEST["sheets"] = {"letter": {"sprite": "sheet", "top": 0.14, "mid": 0.5, "bottom": 0.14, "gain": 1.0}}
     for name in SWEETS:
         render_sprite(name, os.path.join(out, name + ".png"), [name], catch=("catch",), pad=(1.2, 1.0, 1.8, 1.8), density=1.6)
 
