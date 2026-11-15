@@ -85,7 +85,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Sweet compliments and thank-yous to tell him" },
         {
           type: "p",
-          text: "Compliments are the easy part, and most could be about anyone. Praise something he does or chose, not only how he looks, and thank him for the small things he thinks you didn't notice.",
+          text: "Compliments are the easy part, and most could be about anyone. Praise something he does or chose, not only how he looks, and thank him for the small things he thinks you didn't notice. If compliments are what make him light up, he may speak [words of affirmation](/blog/words-of-affirmation), and that post has the three-part line that makes praise stick.",
         },
         {
           type: "list",
@@ -316,7 +316,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Piropos para tu novio y cosas que agradecerle" },
         {
           type: "p",
-          text: "Los piropos son lo fácil, y casi todos valdrían para cualquiera. Elogia algo que hace o que ha elegido, no solo cómo es por fuera, y dale las gracias por esos detalles que cree que te pasan desapercibidos.",
+          text: "Los piropos son lo fácil, y casi todos valdrían para cualquiera. Elogia algo que hace o que ha elegido, no solo cómo es por fuera, y dale las gracias por esos detalles que cree que te pasan desapercibidos. Si lo que más le llega son los elogios, puede que su lenguaje sean las [palabras de afirmación](/blog/words-of-affirmation), y ahí tienes la frase en tres partes que hace que un elogio se quede.",
         },
         {
           type: "list",

@@ -1,0 +1,95 @@
+{
+  "slug": "words-of-affirmation",
+  "keyword": "words of affirmation",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The dinner line in 'In front of other people' was unclear and could read as a dig; three sample lines used UK-only words (organised, rang, colour) a US reader would send; the him/her paragraph stated unsourced generalisations about all men and all women as fact."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The research FAQ said 'matching love languages' where the 2022 study measured being loved the way you prefer (English and Spanish); 'rang' is British; several Spanish fixes: the Jar of Reasons note told the reader to shake the jar, 'preséntale bien' meant 'introduce him', an ungrammatical 'A quien le encantan… quiere', a partner made female against the rest, a 'dejarle' with no antecedent, 'picarse' (to take offence) for teasing, the calque 'se lee como', and a 'la que' with no noun."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Top results are built on quick lines to copy and a Reddit thread asks for short ones: add a short list to text. The 'People also ask' question 'What are all the words of affirmation?' had no direct answer: add it to the FAQ. The 2-2-2 rule and '7 new love languages' questions, seen only for a variant, don't need answering."
+        }
+      ],
+      "applied": [
+        "Dinner line rewritten as 'They cooked all of this, by the way. I just set the table.' (and Spanish)",
+        "organised → planned, rang → called, 'That green is your colour' → 'That green looks so good on you' (and Spanish)",
+        "Him/her paragraph reframed around the particular person (and Spanish, fixing 'dejarle' and keeping 'buen hombre')",
+        "Research FAQ: 'being loved in the way you prefer' (and Spanish)",
+        "All Spanish fixes from the editor: Jar of Reasons note in third person, 'habla bien de él', 'Quien adora las palabras…', neutral 'Cuando siente que no le quieres', 'Chinchar', 'Lo que le llega es', 'Es el momento que más se olvida'",
+        "New h3 'Short words of affirmation to text' with ten lines (and Spanish)",
+        "New FAQ 'What are all the words of affirmation?' (and Spanish)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix is in. Better than the top results because the examples are sorted by the moment you'd send them, with a three-part line and a lands-flat table that show how to make any of them yours. Polish only: soften 'counts double' in a takeaway; a 'send one tonight' line."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All eleven round-1 fixes are in and correct; every product, quiz and research claim checks out against the code and the two sources, and 'more than thirty' holds (31). Polish only: Spanish FAQ series as nouns, one short line that echoes a longer one, 'recomienda para' in the Letter note."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes are in and mirrored in Spanish; it beats the type-sorted lists that rank now by sorting real lines by moment, explaining why praise lands, and treating the research honestly, while answering every relevant People-also-ask question. Polish only: a slightly shorter description."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Final-round polish stays in the record, not the post (RUBRIC.md loop step 4)."
+      ]
+    }
+  ]
+}

@@ -84,6 +84,9 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
 - [ ] **The owner's call: question pages.** "Questions to ask your boyfriend" (74,000) and
   "…girlfriend" (40,500) can be posts (the queue item above) or pages that open the deck game, but
   not both: they would compete for the same search.
+- [ ] (2026-11-15) **Love languages group: link /blog/words-of-affirmation from /tools/love-language-quiz**
+  (the hub, TOPIC-GROUPS.md rule 3): add it to `LOVE_QUIZ_READING` and the words result, the first
+  member of the group to go live ("words of affirmation" 49,500, KD 5).
 - [ ] **A free virtual hug page** (8,100, UK 1,300): people searching it want something to send.
 - [x] (2026-11-13) **Blog link check (`tests/unit/blog-posts.test.ts`, `STATIC_PATHS`)**: add
   `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of

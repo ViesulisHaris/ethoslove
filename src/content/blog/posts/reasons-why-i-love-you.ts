@@ -22,7 +22,7 @@ export const post: BlogPost = {
         { type: "h2", text: "100 reasons why I love you" },
         {
           type: "p",
-          text: "Each one is written as a small, real thing rather than a compliment, because that's what makes a reason sound true. Take the ones that already fit, change the details on the ones that nearly do, and skip the rest.",
+          text: "Each one is written as a small, real thing rather than a compliment, because that's what makes a reason sound true. Take the ones that already fit, change the details on the ones that nearly do, and skip the rest. If the person you are writing for keeps every card you have ever sent, their love language is probably [words of affirmation](/blog/words-of-affirmation), and a list like this is exactly what they want.",
         },
         { type: "h3", text: "The small, everyday things" },
         {
@@ -362,7 +362,7 @@ export const post: BlogPost = {
         { type: "h2", text: "100 razones por las que te quiero" },
         {
           type: "p",
-          text: "Cada una está escrita como algo pequeño y real en vez de como un piropo, porque eso es lo que hace que una razón suene verdadera. Quédate con las que ya encajan, cambia los detalles de las que casi encajan y sáltate el resto. Están escritas pensando en él; si son para ella, cambia las terminaciones que hagan falta («dormida», «orgullosa»).",
+          text: "Cada una está escrita como algo pequeño y real en vez de como un piropo, porque eso es lo que hace que una razón suene verdadera. Quédate con las que ya encajan, cambia los detalles de las que casi encajan y sáltate el resto. Están escritas pensando en él; si son para ella, cambia las terminaciones que hagan falta («dormida», «orgullosa»). Si esa persona guarda todas las tarjetas que le has mandado, su lenguaje del amor seguramente son las [palabras de afirmación](/blog/words-of-affirmation), y una lista así es justo lo que quiere.",
         },
         { type: "h3", text: "Los detalles de cada día" },
         {
