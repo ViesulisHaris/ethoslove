@@ -320,7 +320,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you'd rather say something than ask, try our [cute things to say to your girlfriend](/blog/cute-things-to-say-to-your-girlfriend), and for more ideas for her, the [digital gifts for your girlfriend](/gifts/for-girlfriend).",
+          text: "Once you live together, or want a short weekly check-in, our [questions to ask your partner](/blog/questions-to-ask-your-partner) are sorted by stage, with a set for each. If you'd rather say something than ask, try our [cute things to say to your girlfriend](/blog/cute-things-to-say-to-your-girlfriend), and for more ideas for her, the [digital gifts for your girlfriend](/gifts/for-girlfriend).",
         },
       ],
       faq: [
@@ -660,7 +660,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si prefieres decirle algo en lugar de preguntarle, mira nuestras [cosas bonitas para decirle a tu novia](/blog/cute-things-to-say-to-your-girlfriend), y para más ideas para ella, los [regalos digitales para tu novia](/gifts/for-girlfriend).",
+          text: "Cuando ya viváis juntos, o queráis una revisión corta cada semana, nuestras [preguntas para hacerle a tu pareja](/blog/questions-to-ask-your-partner) van por etapas, con una tanda para cada una. Si prefieres decirle algo en lugar de preguntarle, mira nuestras [cosas bonitas para decirle a tu novia](/blog/cute-things-to-say-to-your-girlfriend), y para más ideas para ella, los [regalos digitales para tu novia](/gifts/for-girlfriend).",
         },
       ],
       faq: [

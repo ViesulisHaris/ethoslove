@@ -32,7 +32,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   5,400 in February). Its top 10 is the weakest of the big ones (Pinterest, an old personal page, a
   song, Reddit, one 2025 listicle). Make it clearly the best page there before February, with
   "things I love about you" answered in it.
-- [ ] **open-when-letter-ideas**: the target is right (2,900); add "open when letters" (3,600, UK 880)
+- [x] (2026-11-15) **open-when-letter-ideas**: the target is right (2,900); add "open when letters" (3,600, UK 880)
   to the title or description and the body.
 - [ ] **how-to-write-a-love-letter**: 4,400, KD 1, plus "what to write in a love letter" (590). Get the
   top 10 and give the post what the top three have. Its Spanish side should lead with what Spain

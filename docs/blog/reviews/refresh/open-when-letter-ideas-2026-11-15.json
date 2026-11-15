@@ -1,0 +1,47 @@
+{
+  "slug": "open-when-letter-ideas",
+  "keyword": "open when letter ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 9, "usable": 9, "trust": 9 }, "overall": 9, "dealbreakers": [], "summary": "The boyfriend and miss-me letters were described but had no line to borrow; add a sample for the miss-me letter and one for the nervous letter." },
+        { "reviewer": "editor", "scores": { "accuracy": 9, "voice": 9, "spanish": 8 }, "overall": 8, "dealbreakers": [], "summary": "The online FAQ read as if scheduling were free; 'the post' means mail only in the UK; six Spanish lines read as translated ('Con seis a doce', 'para pasarlo', 'No sobre', 'días grandes', 'darles voz de fortuna')." },
+        { "reviewer": "search", "scores": { "better": 9, "search": 9 }, "overall": 9, "dealbreakers": [], "summary": "Add a written example for the boyfriend letters (PAA), name 'open when notes' and 'open me when letters' in the definition FAQ, and add the New Year's and graduation milestones the AI overview lists." }
+      ],
+      "applied": [
+        "Sample line in 'Open when you miss me' (EN and ES)",
+        "Quote block for 'Open when you're about to do the thing you're nervous about' under the boyfriend/girlfriend/best friend list (EN and ES)",
+        "Definition FAQ names open when notes and open me when letters (ES: notas para abrir cuando)",
+        "New Year's Eve and graduation letters in the milestones list (EN and ES)",
+        "Online FAQ says scheduling is a one-time paid extra (EN and ES); 'a parcel won't get there in time'",
+        "Spanish: 'Con entre seis y doce', 'peli de sofá y manta', 'Que no vaya de', 'días señalados', 'Para que suenen a galleta de la fortuna'",
+        "Polish: 'Open it early' / 'Si la abre antes', 'una misión en el extranjero', 'bromas de siempre', lead commas"
+      ],
+      "rejected": [
+        "Reader's inline nervous line ('we're getting chips'): replaced by the search reviewer's quote block, since 'chips' means different things in the US and the UK"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "Both fixes are in; the fight letter, the miss-me example and the nervous quote are lines a reader would borrow tonight, with honest notes on what is free." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 9, "spanish": 10 }, "overall": 9, "dealbreakers": [], "summary": "Round 1 fixes all made; the graduation letter's 'whatever the result' (and 'salga como salga') makes no sense once they've graduated." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "Every relevant People-also-ask question is answered, with a what-to-put-inside table, sample lines and a send-online route the top lists lack." }
+      ],
+      "applied": ["Graduation letter: 'the weekend after to celebrate' / 'el fin de semana siguiente para celebrarlo'"],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "It follows the order a planner needs, ideas by moment, then for whom, what to put inside, how to give them and how to send them online, with lines to borrow that the top lists don't give." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 10 }, "overall": 10, "dealbreakers": [], "summary": "Accurate in both languages, and every Ethos claim checks out against the code; unlike the generic top lists, it pairs each moment with what to write, what to tuck inside and a sample line." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "Real quotes, the what-to-put-inside table, the posting lead time and the online route beat the title-only lists ranking now, and every relevant People-also-ask question is answered." }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": ["A count in the description ('about 30 moments')", "'What are open when letters (or open when notes)?' as the FAQ question", "A sample line for a funny letter", "'malo o mala' in the Spanish topics FAQ"]
+    }
+  ]
+}
