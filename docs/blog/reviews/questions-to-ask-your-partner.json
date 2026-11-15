@@ -1,0 +1,137 @@
+{
+  "slug": "questions-to-ask-your-partner",
+  "keyword": "questions to ask your partner",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The table intro promised to 'jump to its section' though two rows had no section of that name, and 'which of you you're asking' was hard to parse: rewrite it to give the order of the lists. Polish: US/UK-neutral wording ('washing up', 'bins')."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All product, game and study claims verified against the code and the source. Spanish fixes: the description dropped 'a year in' and 'how to ask'; 'es la favorita' claimed a ranking; 'lo que carga', 'déjale pasar', 'van bien cansados', 'a los ochenta', 'se sienta como casa' and 'jugarlas como un juego' read as translated or ungrammatical. English: 'washing up' is British."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "No romantic or flirty set, though the AI overview groups the search into playful, flirty and romantic, deep, and future, and first-page titles promise romance: add a section of ten, a table row, and update the count to 104. All four People also ask questions are answered."
+        }
+      ],
+      "applied": [
+        "Added 'Romantic and flirty questions to ask your partner' (10) in both languages, a table row, and the count 104 in title, description and lead",
+        "Rewrote the table intro to give the order of the lists and say 'sorted by type and moment'",
+        "'washing up' to 'doing the dishes'; 'the queue' to 'the waiting room'; 'the bins taken out' to 'the dishes done'",
+        "Spanish: description now names a year in, check-ins and how to ask; 'suele funcionar bien'; 'lo que le pesa'; 'Deja que se la salte'; 'cuando estáis cansados'; 'cuando tengas ochenta años'; 'te parezca tu casa'; 'Convertirlas en un juego'; polish: 'Elige bien el momento', 'te entristece por dentro', 'tenga que enterarme', 'preguntas triviales', 'los móviles y las pantallas'"
+      ],
+      "rejected": [
+        "Editor's exact Spanish description (176 characters, over the 160 limit): shortened to keep the same content within the limit"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes made. Beats the top results because a table by stage hands you a first question for tonight, then the post says how to ask it, with lines to say out loud."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round 1 fixes made correctly and every claim re-verified. Two Spanish fixes: 'decir algo bonito de vuelta' copies the English ('decirse algo bonito'), and 'funciona a muchas parejas' needs 'les'. Polish: 'no hemos hecho', 'de los dos', 'sin darme cuenta y a ti te encanta'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Romantic section, table row and count of 104 verified. The only page found that sorts 104 questions by relationship stage, with how to ask, a check-in routine and a sourced method, where the top results are flat lists."
+        }
+      ],
+      "applied": [
+        "Spanish: 'decirse algo bonito'; 'les funciona a muchas parejas'; polish that heads off a likely fix: 'todavía no hemos hecho', 'de los dos', 'sin darme cuenta y a ti te encanta'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Most top results are one long list; this sorts the questions by stage with a starter for each, lines to say, a weekly check-in routine and playable cards, so a reader can use it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 2 fixes made. Other posts just list questions; this one sorts 104 by stage, starts each with a question and shows how to ask them, with every claim about Ethos checked against the code."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Sorts 104 questions by relationship stage with a start-here table, teaches how to ask and run a check-in, and answers every People also ask question, where the top results are generic lists."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: 'es de los más habituales' for the Sunday line; 'que le demuestren el cariño' instead of 'que le quieran'",
+        "Search: Spanish h2 'y coquetas'; '50 random questions' in the FAQ; 'fun, deep and flirty' or 'significant other' in the description",
+        "Reader: 'movie' for 'film'"
+      ]
+    }
+  ]
+}

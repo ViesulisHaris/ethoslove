@@ -301,7 +301,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you'd rather tell him something than ask, try our [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend), and for more ideas for him, the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
+          text: "Once you live together, or want a short weekly check-in, our [questions to ask your partner](/blog/questions-to-ask-your-partner) are sorted by stage, with a set for each. If you'd rather tell him something than ask, try our [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend), and for more ideas for him, the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
         },
       ],
       faq: [
@@ -622,7 +622,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si prefieres decirle algo en vez de preguntarle, mira nuestras [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend), y para más ideas para él, los [regalos digitales para tu novio](/gifts/for-boyfriend).",
+          text: "Cuando ya viváis juntos, o queráis una revisión corta cada semana, nuestras [preguntas para hacerle a tu pareja](/blog/questions-to-ask-your-partner) van por etapas, con una tanda para cada una. Si prefieres decirle algo en vez de preguntarle, mira nuestras [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend), y para más ideas para él, los [regalos digitales para tu novio](/gifts/for-boyfriend).",
         },
       ],
       faq: [
