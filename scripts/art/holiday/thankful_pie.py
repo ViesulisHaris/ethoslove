@@ -287,6 +287,13 @@ def dressing(look, seed=5):
     parent(cup_parts[:3], "cup_pivot", at(66, 50), math.radians(30))
     for extra in cup_parts[3:]:
         bpy.data.objects.remove(extra, do_unlink=True)
+    # further out, for wide screens: more leaves, pumpkins and acorns along both sides of the table
+    for k in range(40):
+        side = -1 if k % 2 else 1
+        sx, sy = side * rnd.uniform(95, 175), rnd.uniform(-110, 110)
+        parent(desk.maple_leaf("wleaf%d" % k, leaves[k % len(leaves)], rnd.uniform(1.0, 1.4), k + 40), "wleaf_pivot%d" % k, at(sx, sy, 0.01 * (k % 3)), rnd.uniform(0, TAU))
+    for k, (sx, sy, r) in enumerate(((-120, 40, 1.3), (128, -30, 1.1), (-140, -70, 0.9), (150, 70, 1.2), (-160, 95, 0.8), (110, 95, 0.75))):
+        parent(desk.pumpkin("wpumpkin%d" % k, skins[k % len(skins)], stem, r, 9, 0.72, k + 30), "wpumpkin_pivot%d" % k, at(sx, sy), rnd.uniform(0, TAU))
     lit = [(-24, -86), (28, -88), (-64, 60), (64, 64)]
     tin = plain("tea_cup", "#d9dde2", 0.25, 1.0)
     wax = plain("tea_wax", "#fbf1de", 0.5, sss=0.5, sss_scale=0.2)
@@ -327,8 +334,9 @@ def washi_material():
     return m.mat
 
 
-WIDE = (160.0, 240.0, 10.0)
+WIDE = (360.0, 240.0, 7.0)   # wide enough for a 16:9 screen without a mirrored copy at its sides
 PHONE = (100.0, 240.0, 12.0)
+SPRITE_VIEW = (160.0, 240.0, 10.0)   # sprites keep the sharpness they were tuned at
 OPT = kit.cli()
 SLICE_LAYERS = tuple("slice%d" % i for i in range(SLICES))
 MOVING = SLICE_LAYERS + NOTE
@@ -357,7 +365,7 @@ def note_sprites(out):
 
 
 def sprites(out):
-    build("linen", WIDE, dress=False)
+    build("linen", SPRITE_VIEW, dress=False)
     # the whole pie in one picture, its shadow as it really falls: the gift cuts it into wedges, and only a slice on its way out is drawn by itself
     render_sprite("pie", os.path.join(out, "pie.png"), list(SLICE_LAYERS), catch=("catch_tin",), pad=(3.0, 3.0, 6.0, 6.0), density=1.4)
     for i in range(SLICES):
@@ -376,7 +384,7 @@ def main():
     if "sprites" in only:
         sprites(out)
     elif "note" in only:
-        build("linen", WIDE, dress=False)
+        build("linen", SPRITE_VIEW, dress=False)
         note_sprites(out)
     if "plates" in only:
         for look in looks:

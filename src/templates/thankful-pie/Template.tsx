@@ -14,7 +14,7 @@ import { MUSIC_CEILING } from "../_shared/night/sound-math";
 import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
-import { down, Plate, Sparks, Sprite, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { down, Plate, WIDE_PLATE, Sparks, Sprite, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BULBS, SHEETS, SPRITES } from "./art-map";
 import { CARD, LOOKS, type LookId } from "./looks";
 import { pickSlice, SLICES, sliceAt, takeSlice, wedgeClip, type Pie } from "./pie";
@@ -248,7 +248,7 @@ function Scene({ lookId, s, title, from, to, ingredients, pie, phase, canRead, r
   return (
     <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
       <style>{STAGE_KEYFRAMES}</style>
-      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} />
+      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} width={WIDE_PLATE} />
 
       <div style={STAGE}>
         <p className="absolute inset-x-0 truncate text-center text-[calc(2.2*var(--k))] tracking-[0.34em] uppercase" style={{ top: down(CARD_TL.y - 6), color: look.label, opacity: 0.85 }}>

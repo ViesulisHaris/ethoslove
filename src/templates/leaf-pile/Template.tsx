@@ -15,7 +15,7 @@ import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
-import { down, Plate, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { down, Plate, WIDE_PLATE, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BULBS, SHEETS, SPRITES } from "./art-map";
 import { brush, gust, LEAF_SPRITES, onCard, scatter, step, type Box, type Leaf } from "./leaves";
 import { INK, LOOKS, type LookId } from "./looks";
@@ -334,7 +334,7 @@ function Scene({ lookId, s, title, line, from, to, seed, phase, canRead, reduce,
   return (
     <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
       <style>{`${STAGE_KEYFRAMES}${FOIL_KEYFRAMES}`}</style>
-      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} />
+      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} width={WIDE_PLATE} />
 
       <div ref={stageRef} style={STAGE}>
         <CardWords title={title} line={line} from={from} to={to} reduce={reduce} lit={clearNow} />

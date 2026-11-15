@@ -33,6 +33,8 @@ export const STAGE_KEYFRAMES = `
 `;
 
 const PLATE_W = 160;
+/** How wide the newer gifts' wide plates are rendered: enough for a 16:9 screen with nothing mirrored. */
+export const WIDE_PLATE = 360;
 const PLATE_H = 240;
 
 /**
@@ -40,29 +42,29 @@ const PLATE_H = 240;
  * edges a mirrored copy either side, so the table runs to the edge of any screen. The fairy
  * lights in the picture are still; a small glow over each one breathes.
  */
-export function Plate({ base, look, floor, bulbs, still, shade, glow = "255,208,138" }: { base: string; look: string; floor: string; bulbs?: readonly (readonly [number, number])[]; still?: boolean; shade?: string; glow?: string }) {
+export function Plate({ base, look, floor, bulbs, still, shade, glow = "255,208,138", width = PLATE_W }: { base: string; look: string; floor: string; bulbs?: readonly (readonly [number, number])[]; still?: boolean; shade?: string; glow?: string; width?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const size = useContainerSize(ref);
   const k = Math.min(size.width / 100, size.height * 0.006, size.height * 0.005);
   const wide = size.ready && size.width > 100 * k + 2;
-  const beyond = size.ready && size.width > PLATE_W * k + 2;
-  const box: CSSProperties = { position: "absolute", top: down((170 - PLATE_H) / 2), height: down(PLATE_H), width: `${PLATE_W}%`, maxWidth: "none" };
+  const beyond = size.ready && size.width > width * k + 2;
+  const box: CSSProperties = { position: "absolute", top: down((170 - PLATE_H) / 2), height: down(PLATE_H), width: `${width}%`, maxWidth: "none" };
   const lit = useMemo(() => {
     const rnd = mulberry32(11);
     return (bulbs ?? []).map(([x, y]) => ({ x, y, d: 4.5 + rnd() * 4, o: -rnd() * 8 }));
   }, [bulbs]);
-  const reach = wide ? (PLATE_W - 100) / 2 + 4 : 4;
+  const reach = wide ? (width - 100) / 2 + 4 : 4;
   return (
     <div ref={ref} aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden" style={{ background: floor }}>
       <div style={STAGE}>
         {beyond
           ? [-1, 1].map((side) => (
-              <img key={side} src={`${base}plate-${look}-wide.webp`} alt="" draggable={false} style={{ ...box, left: side < 0 ? `${-(PLATE_W - 100) / 2 - PLATE_W}%` : `${100 + (PLATE_W - 100) / 2}%`, transform: "scaleX(-1)" }} />
+              <img key={side} src={`${base}plate-${look}-wide.webp`} alt="" draggable={false} style={{ ...box, left: side < 0 ? `${-(width - 100) / 2 - width}%` : `${100 + (width - 100) / 2}%`, transform: "scaleX(-1)" }} />
             ))
           : null}
         <picture>
           <source media="(min-width: 700px)" srcSet={`${base}plate-${look}-wide.webp`} />
-          <img src={`${base}plate-${look}-phone.webp`} alt="" draggable={false} style={{ ...box, left: `${-(PLATE_W - 100) / 2}%`, objectFit: "contain" }} />
+          <img src={`${base}plate-${look}-phone.webp`} alt="" draggable={false} style={{ ...box, left: `${-(width - 100) / 2}%`, objectFit: "contain" }} />
         </picture>
         {lit
           .filter((b) => b.x > -reach && b.x < 100 + reach)

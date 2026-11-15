@@ -15,7 +15,7 @@ import { TILE_VARS } from "../_shared/night/tile";
 import { useTimers } from "../_shared/night/use-timers";
 import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
-import { down, Plate, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
+import { down, Plate, WIDE_PLATE, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BOARD, BULBS, SHEETS, SPRITES } from "./art-map";
 import { frostGrid, MELT_AT, strokePoints, wipeAt, wiped, type FrostGrid } from "./frost";
 import { INK, LOOKS, type LookId } from "./looks";
@@ -231,7 +231,7 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, canRead, reduce,
   return (
     <div className="absolute inset-0" style={{ opacity: leaving ? 0 : 1, transition: "opacity .7s ease" }}>
       <style>{`${STAGE_KEYFRAMES}${FOIL_KEYFRAMES}${SNOW_KEYFRAMES}`}</style>
-      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} />
+      <Plate base={ART_BASE} look={lookId} floor={look.floor} bulbs={BULBS} still={reduce} shade={look.vignette} glow={look.glow} width={WIDE_PLATE} />
 
       <div style={STAGE}>
         {/* outside: snow falling past the glass, and the snowman's board with the words chalked on it */}
@@ -396,7 +396,6 @@ function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, o
       ctx.strokeStyle = "rgba(0,0,0,.85)";
       ctx.fillStyle = "rgba(0,0,0,.85)";
       const max = el.width * 0.86;
-      ctx.strokeText(title, 0, 0, max);
       ctx.fillText(title, 0, 0, max);
       ctx.restore();
       for (const p of strokes.current) dab(ctx, el, p);

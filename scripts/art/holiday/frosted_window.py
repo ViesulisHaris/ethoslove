@@ -528,8 +528,9 @@ def stationery():
     place(r, (0, -4.0, 0))
 
 
-WIDE = (160.0, 240.0, 10.0)
+WIDE = (360.0, 240.0, 7.0)   # wide enough for a 16:9 screen without a mirrored copy at its sides
 PHONE = (100.0, 240.0, 12.0)
+SPRITE_VIEW = (160.0, 240.0, 10.0)   # sprites keep the sharpness they were tuned at
 OPT = kit.cli()
 
 
@@ -568,14 +569,14 @@ def main():
                 build(look, street_png, view)
                 render_plate(os.path.join(out, "plate-%s-%s.png" % (look, tag_)), hide=("catch",) + NOTE)
             # the frost, the glass alone: what the finger wipes away
-            build(look, street_png, WIDE, with_frost=True)
+            build(look, street_png, SPRITE_VIEW, with_frost=True)
             render_sprite("frost-%s" % look, os.path.join(out, "frost-%s.png" % look), ["table", "props", "frost"], catch=(), pad=(0, 0, 0, 0), density=1.2, bounds_of=["frost"])
         if "soft" in only:
             for (tag_, view) in (("wide", WIDE), ("phone", PHONE)):
                 build(look, street_png, view)
                 kit.render_soft(os.path.join(out, "soft-%s-%s.png" % (look, tag_)), hide=("catch",) + NOTE, lift=20.0)
     if "note" in only:
-        build(looks[0], street_png, WIDE)
+        build(looks[0], street_png, SPRITE_VIEW)
         render_sprite("sheet", os.path.join(out, "sheet.png"), ["sheet"], catch=("catch_sheet",), pad=(1.5, 1.5, 3.0, 3.0), density=1.3)
         render_sprite("ribbon", os.path.join(out, "ribbon.png"), ["ribbon"], catch=(), pad=(0.5, 0.5, 0.5, 0.5), density=1.6)
     kit.MANIFEST["sheets"] = {"letter": {"sprite": "sheet", "top": 0.12, "mid": 0.5, "bottom": 0.1, "gain": 1.05}}

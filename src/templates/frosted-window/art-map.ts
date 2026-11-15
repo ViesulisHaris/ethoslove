@@ -86,4 +86,4 @@ export const SHEETS = {
 } as const;
 
 /** A board in the picture seen through the window: its corners (top left, top right, bottom right, bottom left) as shares of the picture across and down. */
-export const BOARD = [[0.4969,0.3938],[0.6885,0.3938],[0.6871,0.4844],[0.4969,0.4844]] as const;
+export const BOARD = [[0.3903,0.3361],[0.7439,0.3361],[0.7407,0.4937],[0.3918,0.4937]] as const;

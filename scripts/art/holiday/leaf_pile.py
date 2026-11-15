@@ -178,10 +178,10 @@ def dressing(look, seed=4):
     layer("props")
     skins = [leaf_skin("ground_leaf%d" % i, *PALETTE[k]) for i, k in enumerate(PALETTE)]
     spots = []
-    for i in range(70):
-        # a ring round the edges of the view, thicker in the corners, clear of the card
+    for i in range(150):
+        # a ring round the edges of the view, thicker in the corners, clear of the card; further out for wide screens
         a = rnd.uniform(0, TAU)
-        sx = math.cos(a) * rnd.uniform(48, 82)
+        sx = math.cos(a) * rnd.uniform(48, 82) * (1.0 if i < 70 else 2.1)
         sy = math.sin(a) * rnd.uniform(70, 118)
         if abs(sx) < 46 and abs(sy - CARD_AT[1]) < 60:
             continue
@@ -265,8 +265,9 @@ def stationery():
     parent(twig, "twig_pivot", mid)
 
 
-WIDE = (160.0, 240.0, 10.0)
+WIDE = (360.0, 240.0, 7.0)   # wide enough for a 16:9 screen without a mirrored copy at its sides
 PHONE = (100.0, 240.0, 12.0)
+SPRITE_VIEW = (160.0, 240.0, 10.0)   # sprites keep the sharpness they were tuned at
 OPT = kit.cli()
 MOVING = tuple(LEAF_NAMES) + NOTE
 
@@ -295,10 +296,10 @@ def note_sprites(out):
 
 
 def sprites(out):
-    build("deck", WIDE, dress=False, overhead=True)
+    build("deck", SPRITE_VIEW, dress=False, overhead=True)
     for name in LEAF_NAMES:
         render_sprite(name, os.path.join(out, name + ".png"), [name], catch=("catch",), pad=(2.0, 2.0, 2.0, 2.0), density=1.5)
-    build("deck", WIDE, dress=False)
+    build("deck", SPRITE_VIEW, dress=False)
     note_sprites(out)
 
 
