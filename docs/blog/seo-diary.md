@@ -3,6 +3,30 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-15: reasons-why-i-love-you answers "things I love about you"
+- **Page:** /blog/reasons-why-i-love-you
+- **Why:** Next open backlog item. DataForSEO (US): "100 reasons why i love you" 8,100 a month (KD 0,
+  18,100 at its February peak), "reasons why i love you" 5,400 (KD 0), "things i love about you"
+  1,600 (KD 0, 5,400 in February), "10" and "50 reasons" 1,000 each, the jar 720, "365 reasons" 480;
+  UK 1,600 / 1,600 / 390; Spain "razones por las que te quiero" 390, "cosas que me gustan de ti" 110.
+  Search Console: no impressions for the post in 28 days. The top 10s are Tumblr, Reddit, Medium,
+  printables, Amazon books and long generic lists; the AI overviews cite Tumblr, Reddit, Medium,
+  Zoosk and dateyourspouse. People also ask: 20 reasons, 52 things I love about you, 40 things about
+  my husband, what's a good answer to "why do you love me". The post answered none of them and never
+  said "things I love about you".
+- **What changed:** New section "Things I love about you: for him, for her, or on 52 cards" (the
+  difference, him/her/husband/wife, how to make the 52-card deck with a theme per suit), "Ten",
+  "Twenty" and "365" in the how-many list, a "Why do you love me?" section with three sample lines,
+  two FAQs, new description. Spanish to match ("Cosas que me gustan de ti", "baraja de póker").
+  `updated` 2026-11-15.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/reasons-why-i-love-you-2026-11-15.json`)
+- **Cost:** $0.07 (three keyword overviews US/UK/Spain, Spanish keyword ideas, three SERPs with AI overview and PAA); balance $52.36
+- **Note:** Sales endpoint answered 503 again; Search Console worked. No weekly job (Sunday; ranks
+  section from 13 Nov). Spanish keyword ideas for "razones por las que te quiero" came back as
+  celebrity searches: use keyword_overview with a list for Spain.
+- **Check on:** 2026-12-03 whether "reasons why i love you", "100 reasons why i love you" and
+  "things i love about you" show for the post in Search Console and the rank check
+
 ## 2026-11-14: fortune-cookie-messages aimed at "fortune cookie messages"
 - **Page:** /blog/fortune-cookie-messages
 - **Why:** Next open backlog item. The post targeted "funny fortune cookie messages" (US 390 a month,

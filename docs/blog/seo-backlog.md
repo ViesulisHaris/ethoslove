@@ -28,7 +28,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [x] (2026-11-14) **fortune-cookie-messages** (published 13 Nov) aims at "funny fortune cookie messages" (390).
   The head, "fortune cookie messages", gets 1,900 (UK 320): aim the title and description at it and
   keep the funny ones as a section. Link to it from the related posts.
-- [ ] **reasons-why-i-love-you**: "reasons why i love you" (5,400) and "things i love about you" (1,600,
+- [x] (2026-11-15) **reasons-why-i-love-you**: "reasons why i love you" (5,400) and "things i love about you" (1,600,
   5,400 in February). Its top 10 is the weakest of the big ones (Pinterest, an old personal page, a
   song, Reddit, one 2025 listicle). Make it clearly the best page there before February, with
   "things I love about you" answered in it.

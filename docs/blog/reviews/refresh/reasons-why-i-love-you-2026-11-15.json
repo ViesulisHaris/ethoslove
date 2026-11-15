@@ -1,0 +1,35 @@
+{
+  "slug": "reasons-why-i-love-you",
+  "keyword": "reasons why i love you",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 9, "usable": 10, "trust": 10 }, "overall": 9, "dealbreakers": [], "summary": "Someone who searched \"things I love about you\" got the format defined but no list of things to take; point them to the twenty single-detail lines already on the page." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 9 }, "overall": 9, "dealbreakers": [], "summary": "Every template claim checks out against manifest, schema and Template.tsx; four Spanish lines needed work: 'sirven para él o para ella' contradicted the intro's note on endings, and 'pocas como para', 've unos días por delante' and 'llegar ... de alguien' read as translated." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 9 }, "overall": 9, "dealbreakers": [], "summary": "Beats the generic lists with moment-based reasons, a method, the 52-card how-to and the 'Why do you love me?' answers, but the People-also-ask question \"What are 20 reasons why I love you?\" went unanswered." }
+      ],
+      "applied": [
+        "Pointer from the 'things I love about you' section to 'Things only I get to see' and 'The way you look and feel' (twenty single details), both languages",
+        "Spanish: 'cambiando alguna terminación si hace falta'; 'Diez, las justas para…'; 'escríbelas mes a mes, lleva siempre unos días de ventaja'; 'Suele salir en un mal día, medio en broma, y quien lo pregunta quiere oírlo de verdad'",
+        "'Twenty' added to the how-many list (the first two from each of the ten categories), both languages",
+        "Polish: 'a husband or a wife'; 'the days I get to spend with you' (quote and FAQ); 'reasons are the ones that get reread'; Spanish 'más rápido' and 'Pero sobre todo, los días que paso contigo soy más feliz'"
+      ],
+      "rejected": [
+        "Polish not taken: a printing tip for the jar, a short-lines note in the 52-card step (the reader's fix covers it), 'properly' rewording, the Spanish description ending, a girlfriend link beside the boyfriend one"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "It gives the hundred and then makes them yours: a method, a before-and-after table, ten tonight or twenty from the categories, 52 themed cards, and three plain answers for when they ask why." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 10 }, "overall": 10, "dealbreakers": [], "summary": "All round-one fixes made correctly; every product claim matches the code, and the Spanish (baraja de póker, figuras, comodines) reads like Spain, which the scraped lists that rank don't come close to." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "Every on-intent People-also-ask question is answered (20, 52, husband, 'why do you love me'), which none of the generic 125-to-180-item lists ranking now combine with a method and a how-many guide." }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish kept out of the post as the rubric says: a time estimate for ten, a girlfriend link, the long-distance anniversary link, 'para tu marido o tu mujer' in Spanish"
+      ]
+    }
+  ]
+}

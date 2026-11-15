@@ -3,12 +3,13 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "reasons-why-i-love-you",
   published: "2026-10-24",
+  updated: "2026-11-15",
   occasion: "valentines",
   templates: ["jar-of-reasons", "the-letter"],
   content: {
     en: {
       title: "100 reasons why I love you, and how to write your own",
-      description: "100 reasons why I love you in ten categories, from small daily habits to the future, plus a simple way to write your own so they sound like the two of you.",
+      description: "100 reasons why I love you in ten categories, things I love about you on a deck of 52 cards, and a simple way to write your own so they sound like you.",
       keyword: "reasons why i love you",
       lead: "Here are 100 reasons why I love you, sorted into ten categories, to borrow as they are or rewrite as your own. The ones that land are specific: not \"you're kind\" but \"you were kind to the waiter who got our order wrong\". Use the list for ideas, then swap in the moments only the two of you know.",
       takeaways: [
@@ -225,6 +226,28 @@ export const post: BlogPost = {
           title: "Stuck at twenty?",
           text: "Ask yourself three questions and write down every answer: what do they do that nobody else notices, what did they do this year that you'll still remember in ten years, and what would you miss first if they weren't there.",
         },
+        { type: "h2", text: "Things I love about you: for him, for her, or on 52 cards" },
+        {
+          type: "p",
+          text: "\"Things I love about you\" is the same list in shorter lines. A reason usually tells a moment (\"you text me when you get home\"); a thing can be a single detail (\"your laugh\", \"your terrible singing in the car\"). Things are quicker to write and easier to fit on a card; reasons are the ones that get reread. Most good lists mix both.",
+        },
+        {
+          type: "p",
+          text: "Every line in the hundred above works for him or for her, a husband or a wife. Only the odd detail, like the hoodie, depends on the two of you: swap it for one of yours. If you want a list of things rather than reasons, start with \"Things only I get to see\" and \"The way you look and feel\": those twenty are already single details, ready to copy onto a card.",
+        },
+        {
+          type: "p",
+          text: "The best-known version is **52 things I love about you**: a deck of playing cards with one thing written on each. To make one:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**Give each suit a theme**, so 52 is four lists of 13 rather than one long one: hearts for how they make you feel, diamonds for memories, clubs for what makes you laugh, spades for what's still to come.",
+            "**Write the 52 on paper first**, then copy them onto the cards with a fine permanent pen in the white space. The picture cards have less room: keep those lines short or stick a small label on them.",
+            "**Punch a hole in one corner** of every card and put the deck on a binder ring, so it flips like a little book. The two jokers make a cover and a last card signed with your name.",
+          ],
+        },
         { type: "h2", text: "How many reasons should you write?" },
         {
           type: "p",
@@ -233,10 +256,13 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
+            "**Ten**, short enough to send in one message tonight.",
+            "**Twenty**, a good first list: take the first two from each of the ten categories above, then change the details so they're yours.",
             "**One for every year you've been together**, or one for every month in a first year.",
             "**Their age**, for a birthday.",
             "**Seven**, one to open each day for a week.",
             "**A hundred**, if you've got time to write a few a night for a couple of weeks before you give it.",
+            "**365**, one a day for a year. Nobody writes that many in one sitting: write a month at a time, stay a few days ahead, and let some of them be tiny.",
           ],
         },
         { type: "h2", text: "Ways to give someone your reasons" },
@@ -266,6 +292,18 @@ export const post: BlogPost = {
           type: "template",
           slug: "the-letter",
           note: "A wax-sealed envelope they open with a tap. The letter unfolds on a candle-lit desk, your words appear in handwriting and your photos drop in as polaroids. Free.",
+        },
+        { type: "h2", text: "What to say when they ask \"Why do you love me?\"" },
+        {
+          type: "p",
+          text: "It often comes on a low day, half as a joke, from someone who wants to hear it. Don't reach for a list. Give one specific reason out loud, then a second if they're still looking at you. Three answers that work because they're plain:",
+        },
+        { type: "quote", text: "Because you're the person I want to tell everything to, even the boring parts of my day." },
+        { type: "quote", text: "Because last week you noticed I was tired before I did, and made dinner without saying a word." },
+        { type: "quote", text: "I could give you a list. Mostly it's that I'm happier on the days I get to spend with you." },
+        {
+          type: "p",
+          text: "If you'd rather answer properly, that's what the list is for: write ten reasons, or a hundred, and give them the next time they ask.",
         },
         { type: "h2", text: "Mistakes that make a list of reasons sound generic" },
         {
@@ -299,11 +337,19 @@ export const post: BlogPost = {
           q: "Is a list of reasons why I love you cheesy?",
           a: "Only when the reasons are generic. A list of specific things they did, written in the way you'd actually say them, reads as honest rather than cheesy. If a line sounds like a greeting card when you read it out loud, rewrite it in your own words.",
         },
+        {
+          q: "What are 52 things I love about you?",
+          a: "It's a gift made from a deck of playing cards: you write one thing you love about the person on each of the 52 cards, punch a hole in one corner and put them on a ring. Giving each suit a theme, such as feelings, memories, funny things and the future, makes 52 much easier to fill.",
+        },
+        {
+          q: "What should I say when they ask why I love them?",
+          a: "One specific reason said plainly, rather than a list or a compliment. Name something they did recently and what it meant, such as \"because you noticed I was tired before I did and made dinner\", then add a bigger one if the moment allows: \"I'm happier on the days I get to spend with you.\"",
+        },
       ],
     },
     es: {
       title: "100 razones por las que te quiero y cómo escribir las tuyas",
-      description: "100 razones por las que te quiero en diez categorías, de los detalles de cada día al futuro, y una forma sencilla de escribir las vuestras.",
+      description: "100 razones por las que te quiero en diez categorías, cosas que me gustan de ti en una baraja de 52 cartas y una forma sencilla de escribir las vuestras.",
       keyword: "razones por las que te quiero",
       lead: "Aquí tienes 100 razones por las que te quiero, ordenadas en diez categorías, para copiarlas tal cual o reescribirlas a tu manera. Las que llegan son concretas: no «eres buena persona», sino «fuiste amable con el camarero que se equivocó con lo que pedimos». Usa la lista para coger ideas y luego cambia los detalles por los momentos que solo conocéis vosotros.",
       takeaways: [
@@ -520,6 +566,28 @@ export const post: BlogPost = {
           title: "¿Te has atascado en veinte?",
           text: "Hazte tres preguntas y apunta todas las respuestas: qué hace que nadie más nota, qué hizo este año que seguirás recordando dentro de diez, y qué echarías de menos primero si no estuviera.",
         },
+        { type: "h2", text: "Cosas que me gustan de ti: para él, para ella o en una baraja" },
+        {
+          type: "p",
+          text: "Una lista de «cosas que me gustan de ti» es la misma idea en frases más cortas. Una razón suele contar un momento («me escribes al llegar a casa»); una cosa puede ser un solo detalle («tu risa», «lo mal que cantas en el coche»). Las cosas se escriben más rápido y caben mejor en una tarjeta; las razones son las que se releen. Las mejores listas mezclan las dos.",
+        },
+        {
+          type: "p",
+          text: "Todas las frases de las cien de arriba sirven para él o para ella, cambiando alguna terminación si hace falta. Solo algún detalle, como la sudadera, depende de vosotros: cámbialo por uno vuestro. Si quieres una lista de cosas en vez de razones, empieza por «Lo que solo veo yo» y «Cómo eres por fuera»: esas veinte ya son detalles sueltos, listos para copiarlos en una tarjeta.",
+        },
+        {
+          type: "p",
+          text: "La versión más conocida son **52 cosas que me gustan de ti**: una baraja de póker con una cosa escrita en cada carta. Para hacerla:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**Dale un tema a cada palo**, para que 52 sean cuatro listas de 13 y no una sola muy larga: corazones para cómo te hace sentir, diamantes para los recuerdos, tréboles para lo que te hace reír y picas para lo que está por venir.",
+            "**Escribe las 52 primero en un papel** y luego pásalas a las cartas con un rotulador permanente fino, en el espacio en blanco. Las figuras tienen menos sitio: ahí pon frases cortas o pega una etiqueta pequeña.",
+            "**Haz un agujero en una esquina** de cada carta y pasa la baraja por una anilla, para que se hojee como un librito. Los dos comodines sirven de portada y de última carta firmada con tu nombre.",
+          ],
+        },
         { type: "h2", text: "¿Cuántas razones hay que escribir?" },
         {
           type: "p",
@@ -528,10 +596,13 @@ export const post: BlogPost = {
         {
           type: "list",
           items: [
+            "**Diez**, las justas para mandarlas en un solo mensaje esta noche.",
+            "**Veinte**, una buena primera lista: coge las dos primeras de cada una de las diez categorías de arriba y cambia los detalles para que sean tuyas.",
             "**Una por cada año que lleváis juntos**, o una por cada mes si es el primer año.",
             "**Los años que cumple**, para un cumpleaños.",
             "**Siete**, una para abrir cada día de una semana.",
             "**Cien**, si tienes tiempo de escribir unas cuantas cada noche durante un par de semanas antes de darlas.",
+            "**365**, una al día durante un año. Nadie escribe tantas de una sentada: escríbelas mes a mes, lleva siempre unos días de ventaja y deja que algunas sean diminutas.",
           ],
         },
         { type: "h2", text: "Formas de regalarle tus razones" },
@@ -561,6 +632,18 @@ export const post: BlogPost = {
           type: "template",
           slug: "the-letter",
           note: "Un sobre lacrado que se abre con un toque. La carta se despliega sobre un escritorio a la luz de una vela, tus palabras aparecen escritas a mano y tus fotos caen como polaroids. Gratis.",
+        },
+        { type: "h2", text: "Qué decir cuando te pregunta «¿Por qué me quieres?»" },
+        {
+          type: "p",
+          text: "Suele salir en un mal día, medio en broma, y quien lo pregunta quiere oírlo de verdad. No saques una lista. Dile una razón concreta en voz alta, y una segunda si te sigue mirando. Tres respuestas que funcionan porque son sencillas:",
+        },
+        { type: "quote", text: "Porque eres la persona a la que quiero contárselo todo, hasta lo aburrido de mi día." },
+        { type: "quote", text: "Porque la semana pasada te diste cuenta antes que yo de que no podía más, e hiciste la cena sin decir nada." },
+        { type: "quote", text: "Podría darte una lista. Pero sobre todo, los días que paso contigo soy más feliz." },
+        {
+          type: "p",
+          text: "Si prefieres contestar como es debido, para eso está la lista: escribe diez razones, o cien, y dáselas la próxima vez que te lo pregunte.",
         },
         { type: "h2", text: "Errores que hacen que una lista de razones suene genérica" },
         {
@@ -593,6 +676,14 @@ export const post: BlogPost = {
         {
           q: "¿Es cursi una lista de razones por las que te quiero?",
           a: "Solo cuando las razones son genéricas. Una lista de cosas concretas que hizo, escritas como las dirías de verdad, suena sincera y no cursi. Si una frase suena a tarjeta de felicitación al leerla en voz alta, reescríbela con tus palabras.",
+        },
+        {
+          q: "¿Qué son las 52 cosas que me gustan de ti?",
+          a: "Es un regalo hecho con una baraja de póker: escribes una cosa que te gusta de esa persona en cada una de las 52 cartas, haces un agujero en una esquina y las pasas por una anilla. Dar un tema a cada palo, como sentimientos, recuerdos, cosas graciosas y el futuro, hace mucho más fácil llenar las 52.",
+        },
+        {
+          q: "¿Qué responder a «por qué me quieres»?",
+          a: "Una razón concreta dicha con sencillez, en vez de una lista o un piropo. Nombra algo que hizo hace poco y lo que significó, como «porque te diste cuenta antes que yo de que no podía más e hiciste la cena», y añade una más grande si el momento lo pide: «los días que paso contigo soy más feliz».",
         },
       ],
     },

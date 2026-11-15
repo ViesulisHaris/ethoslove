@@ -48,3 +48,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |
 | 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |
 | 2026-11-14T18:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-letter-for-girlfriend |
+| 2026-11-15T04:41Z | dataforseo_labs/google/keyword_overview/live | 0.01368 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:41Z | dataforseo_labs/google/keyword_overview/live | 0.01272 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:41Z | dataforseo_labs/google/keyword_ideas/live | 0.0168 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.01308 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
+| 2026-11-15T04:42Z | serp/google/organic/live/advanced | 0.004 | seo: reasons-why-i-love-you |
