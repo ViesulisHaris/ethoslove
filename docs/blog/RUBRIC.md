@@ -8,6 +8,13 @@ There are three readers. Each is a fresh subagent that hasn't seen the drafting,
 job. They score, the writer fixes, then a new panel reads it again and checks the last round's
 fixes. A post goes live only when all three give it 10.
 
+**Which model each reader runs on** (the owner, 15 Nov 2026: keep the quality, spend as little of
+the plan as possible). Spawn the editor and fact-checker on the writer's own model (Opus): it checks
+every claim against the code and judges the Spanish, the two jobs where a stronger model catches
+what a lighter one misses. Spawn the reader and the search competitor with `model: "sonnet"`: they
+read the post as a person and as a rival page would, against the data you hand them. If a Sonnet
+reviewer returns something unusable (no scores, the wrong post), rerun that one on Opus.
+
 ## What the scores mean
 
 - **10:** Nothing has to change. For this search, it's the page you'd send a friend instead of
