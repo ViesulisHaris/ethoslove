@@ -172,11 +172,14 @@ for (const [name, spec] of Object.entries(specs)) {
 // of bulbs) is rendered alone over the dark plate: what it adds is kept as a picture of its own,
 // black where it adds nothing, for the gift to lay over the dark plate with "screen".
 const PLATE_UNITS = { w: 360, h: 240 };
+// A phone's plate is cut a good way wider than the stage, for the short wide screens (a folded-out phone, a
+// small tablet held upright) that show more than 100 units across but are too narrow for the wide plate.
+const PHONE_UNITS = 150;
 if (manifest.persp) {
   for (const f of readdirSync(raw).filter((n) => /^plate-.*-wide\.png$/.test(n))) {
     const phone = join(raw, f.replace(/-wide\.png$/, "-phone.png"));
     const meta = await sharp(join(raw, f)).metadata();
-    const w = Math.round((meta.width * 100) / PLATE_UNITS.w);
+    const w = Math.round((meta.width * PHONE_UNITS) / PLATE_UNITS.w);
     await sharp(join(raw, f)).extract({ left: Math.round((meta.width - w) / 2), top: 0, width: w, height: meta.height }).png().toFile(phone);
   }
   for (const [look, names] of Object.entries(manifest.lights ?? {})) {
@@ -211,7 +214,7 @@ if (manifest.persp) {
       // Twice over: for a phone, only what falls on its screen (the stage and a little either side), sharp;
       // for a wide screen, all of it at half size, since most of it is soft light. A picture is held in
       // memory at its full size, and five of the whole plate would be more than a phone has to spare.
-      const edge = Math.round(((PLATE_UNITS.w - 100) / 2 - 12) * perK);
+      const edge = Math.round(((PLATE_UNITS.w - PHONE_UNITS) / 2) * perK);
       for (const [size, cut, scale] of [["phone", { left: Math.max(x0, edge), right: Math.min(x1, W - 1 - edge) }, 1], ["wide", { left: x0, right: x1 }, 0.5]]) {
         if (cut.right <= cut.left) continue;
         const box = { left: cut.left, top: y0, width: cut.right - cut.left + 1, height: y1 - y0 + 1 };

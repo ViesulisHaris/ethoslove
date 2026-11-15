@@ -357,7 +357,7 @@ function Scene({ lookId, s, title, from, to, thanks, seed, phase, lit, canRead, 
                 onKey();
               }
             }}
-            className="absolute inset-0 z-[5] cursor-pointer touch-none outline-none focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:ring-inset"
+            className="absolute inset-0 z-[5] cursor-pointer touch-none outline-none"
           />
         ) : null}
 

@@ -330,7 +330,7 @@ function Scene({ lookId, s, title, from, to, seed, phase, marks, canRead, reduce
                 onKey();
               }
             }}
-            className="absolute inset-0 z-[5] cursor-crosshair touch-none outline-none focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:ring-inset"
+            className="absolute inset-0 z-[5] cursor-crosshair touch-none outline-none"
           />
         ) : null}
 

@@ -307,7 +307,7 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, hung, canRead, r
         {/* the words on the board in the garden, made of small lights */}
         <p
           className="pointer-events-none absolute flex items-center justify-center text-center leading-[1.02] font-extrabold tracking-[0.08em] text-balance uppercase [overflow-wrap:anywhere]"
-          style={{ left: `${BOARD.x}%`, top: down(BOARD.y), width: `${BOARD.w}%`, height: down(BOARD.h), padding: "0 calc(1*var(--k))", fontSize: `calc(${sign.length <= 12 ? 6.2 : sign.length <= 20 ? 5 : 4}*var(--k))`, color: "transparent", backgroundImage: "radial-gradient(circle, #fff7d6 0 34%, #ffc24a 36% 46%, rgba(255,170,60,0) 50%)", backgroundSize: "calc(.56*var(--k)) calc(.56*var(--k))", WebkitBackgroundClip: "text", backgroundClip: "text", filter: "drop-shadow(0 0 calc(.9*var(--k)) rgba(255,190,90,.95))", opacity: on ? 1 : 0, transition: reduce ? undefined : "opacity 1.2s ease 2s" }}
+          style={{ left: `${BOARD.x}%`, top: down(BOARD.y), width: `${BOARD.w}%`, height: down(BOARD.h), padding: "0 calc(1*var(--k))", fontSize: `calc(${sign.length <= 12 ? 6.2 : sign.length <= 20 ? 4.3 : 3.6}*var(--k))`, color: "transparent", backgroundImage: "radial-gradient(circle, #fff7d6 0 34%, #ffc24a 36% 46%, rgba(255,170,60,0) 50%)", backgroundSize: "calc(.56*var(--k)) calc(.56*var(--k))", WebkitBackgroundClip: "text", backgroundClip: "text", filter: "drop-shadow(0 0 calc(.9*var(--k)) rgba(255,190,90,.95))", opacity: on ? 1 : 0, transition: reduce ? undefined : "opacity 1.2s ease 2s" }}
         >
           {sign}
         </p>
@@ -327,7 +327,7 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, hung, canRead, r
                 onHang(nextHooks(TOTAL, hung));
               }
             }}
-            className="absolute inset-0 z-[5] cursor-pointer touch-none outline-none focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:ring-inset"
+            className="absolute inset-0 z-[5] cursor-pointer touch-none outline-none"
           />
         ) : null}
 

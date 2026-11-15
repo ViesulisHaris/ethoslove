@@ -6,9 +6,9 @@ export const ART_BASE = "/art/light-the-candles/";
 /** Each sprite's place on the stage: its top left corner and its size, in stage units (100 across, 170 down). */
 export const SPRITES = {
   "glow-harvest-0-phone": {
-    "x": -12,
+    "x": -25,
     "y": 62.7,
-    "w": 124,
+    "w": 150,
     "h": 111.9
   },
   "glow-harvest-0-wide": {
@@ -18,9 +18,9 @@ export const SPRITES = {
     "h": 111.9
   },
   "glow-harvest-1-phone": {
-    "x": -12,
+    "x": -25,
     "y": 16.8,
-    "w": 124,
+    "w": 150,
     "h": 157.9
   },
   "glow-harvest-1-wide": {
@@ -30,9 +30,9 @@ export const SPRITES = {
     "h": 157.9
   },
   "glow-harvest-2-phone": {
-    "x": -12,
+    "x": -25,
     "y": -23.8,
-    "w": 124,
+    "w": 150,
     "h": 198.4
   },
   "glow-harvest-2-wide": {
@@ -42,9 +42,9 @@ export const SPRITES = {
     "h": 198.4
   },
   "glow-harvest-3-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30.1,
-    "w": 124,
+    "w": 150,
     "h": 144.6
   },
   "glow-harvest-3-wide": {
@@ -54,9 +54,9 @@ export const SPRITES = {
     "h": 144.6
   },
   "glow-harvest-4-phone": {
-    "x": -12,
+    "x": -25,
     "y": -35,
-    "w": 124,
+    "w": 150,
     "h": 209.6
   },
   "glow-harvest-4-wide": {
@@ -66,9 +66,9 @@ export const SPRITES = {
     "h": 209.6
   },
   "glow-linen-0-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30,
-    "w": 124,
+    "w": 150,
     "h": 144.6
   },
   "glow-linen-0-wide": {
@@ -78,9 +78,9 @@ export const SPRITES = {
     "h": 144.6
   },
   "glow-linen-1-phone": {
-    "x": -12,
+    "x": -25,
     "y": 57.8,
-    "w": 124,
+    "w": 150,
     "h": 116.9
   },
   "glow-linen-1-wide": {
@@ -90,9 +90,9 @@ export const SPRITES = {
     "h": 116.9
   },
   "glow-linen-2-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30.8,
-    "w": 124,
+    "w": 150,
     "h": 143.8
   },
   "glow-linen-2-wide": {
@@ -102,9 +102,9 @@ export const SPRITES = {
     "h": 143.8
   },
   "glow-linen-3-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30.1,
-    "w": 124,
+    "w": 150,
     "h": 144.6
   },
   "glow-linen-3-wide": {
@@ -114,9 +114,9 @@ export const SPRITES = {
     "h": 144.6
   },
   "glow-linen-4-phone": {
-    "x": -12,
+    "x": -25,
     "y": -35,
-    "w": 124,
+    "w": 150,
     "h": 209.6
   },
   "glow-linen-4-wide": {
@@ -126,9 +126,9 @@ export const SPRITES = {
     "h": 209.6
   },
   "glow-plum-0-phone": {
-    "x": -12,
+    "x": -25,
     "y": 62.7,
-    "w": 124,
+    "w": 150,
     "h": 111.9
   },
   "glow-plum-0-wide": {
@@ -138,9 +138,9 @@ export const SPRITES = {
     "h": 111.9
   },
   "glow-plum-1-phone": {
-    "x": -12,
+    "x": -25,
     "y": 57.8,
-    "w": 124,
+    "w": 150,
     "h": 116.9
   },
   "glow-plum-1-wide": {
@@ -150,9 +150,9 @@ export const SPRITES = {
     "h": 116.9
   },
   "glow-plum-2-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30.5,
-    "w": 124,
+    "w": 150,
     "h": 144.1
   },
   "glow-plum-2-wide": {
@@ -162,9 +162,9 @@ export const SPRITES = {
     "h": 144.1
   },
   "glow-plum-3-phone": {
-    "x": -12,
+    "x": -25,
     "y": 30.7,
-    "w": 124,
+    "w": 150,
     "h": 144
   },
   "glow-plum-3-wide": {
@@ -174,9 +174,9 @@ export const SPRITES = {
     "h": 144
   },
   "glow-plum-4-phone": {
-    "x": -12,
+    "x": -25,
     "y": -35,
-    "w": 124,
+    "w": 150,
     "h": 209.6
   },
   "glow-plum-4-wide": {
