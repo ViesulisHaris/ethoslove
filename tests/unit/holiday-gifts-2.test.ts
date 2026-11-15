@@ -1,126 +1,125 @@
 import { describe, expect, it } from "vitest";
 import { getManifest } from "@/templates/manifests";
-import { pickSlice, SLICES, sliceAt, takeSlice, wedgeClip, type Pie } from "@/templates/thankful-pie/pie";
-import { DEFAULT_INGREDIENTS, fieldsSchema as pieSchema } from "@/templates/thankful-pie/schema";
-import { brush, gust, onCard, scatter, step, type Box } from "@/templates/leaf-pile/leaves";
-import { fieldsSchema as leafSchema } from "@/templates/leaf-pile/schema";
-import { frostGrid, MELT_AT, strokePoints, wipeAt, wiped } from "@/templates/frosted-window/frost";
+import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wiped, wipedIn } from "@/templates/frosted-window/frost";
 import { fieldsSchema as windowSchema } from "@/templates/frosted-window/schema";
-
-describe("Thankful Pie", () => {
-  const empty: Pie = { taken: [], written: 0 };
-
-  it("writes one ingredient for each slice lifted, then takes the rest of the pie in one go", () => {
-    let pie = empty;
-    pie = takeSlice(pie, 2, 3);
-    expect(pie).toEqual({ taken: [2], written: 1 });
-    pie = takeSlice(pie, 2, 3); // already out: the next one left comes instead
-    expect(pie.taken).toHaveLength(2);
-    expect(pie.written).toBe(2);
-    pie = takeSlice(pie, 5, 3);
-    expect(pie.written).toBe(3);
-    pie = takeSlice(pie, 0, 3);
-    expect(pie.taken).toHaveLength(SLICES);
-    expect(new Set(pie.taken).size).toBe(SLICES);
-    expect(pie.written).toBe(3);
-    expect(takeSlice(pie, 1, 3)).toBe(pie);
-  });
-
-  it("with six ingredients, every slice writes one; with none, the first tap empties the tin", () => {
-    let pie = empty;
-    for (let i = 0; i < SLICES; i++) pie = takeSlice(pie, i, SLICES);
-    expect(pie).toEqual({ taken: [0, 1, 2, 3, 4, 5], written: 6 });
-    expect(takeSlice(empty, 3, 0).taken).toHaveLength(SLICES);
-  });
-
-  it("picks the slice under the finger, starting at twelve o'clock and going round anticlockwise", () => {
-    // just left of straight up is the first slice, just right of it the last
-    expect(pickSlice(-0.1, -0.9, [])).toBe(0);
-    expect(pickSlice(0.1, -0.9, [])).toBe(SLICES - 1);
-    expect(pickSlice(0.1, 0.9, [])).toBe(3);
-    // a slice already out gives way to its nearest neighbour
-    expect([2, 4]).toContain(pickSlice(0.1, 0.9, [3]));
-    expect(pickSlice(0, 0.9, [0, 1, 2, 3, 4, 5])).toBe(-1);
-  });
-
-  it("moves every slice outwards, away from the middle of the pie", () => {
-    for (let i = 0; i < SLICES; i++) {
-      const s = sliceAt(i);
-      expect(Math.hypot(s.dx, s.dy)).toBeGreaterThan(5);
-    }
-    expect(wedgeClip(0, { x: 0, y: 0, w: 100, h: 100 }, { x: 50, y: 50 }, 30, 0.94)).toMatch(/^polygon\(50\.00% 50\.00%, /);
-  });
-
-  it("starts from a full recipe, and keeps no more than six", () => {
-    expect(pieSchema.parse({})).toEqual({ ingredients: DEFAULT_INGREDIENTS, look: "linen" });
-    expect(pieSchema.safeParse({ ingredients: Array(7).fill("x") }).success).toBe(false);
-    expect(getManifest("thankful-pie")?.occasions[0]).toBe("thanksgiving");
-  });
-});
-
-describe("Leaf Pile", () => {
-  const card: Box = { x0: 14, y0: 54, x1: 86, y1: 103 };
-
-  it("covers the card, and is the same pile every time for the same names", () => {
-    const a = scatter(42, card);
-    expect(a).toEqual(scatter(42, card));
-    expect(onCard(a, card)).toBeGreaterThan(50);
-  });
-
-  it("pushes the leaves near a finger away from it, and leaves the far ones alone", () => {
-    const leaves = scatter(7, card);
-    const far = leaves.map((l) => Math.hypot(l.x - 50, l.y - 78) > 11);
-    const moved = brush(leaves, { x: 50, y: 78 }, { x: 0, y: 0 });
-    expect(moved).toBeGreaterThan(0);
-    leaves.forEach((l, i) => {
-      if (far[i]) expect(l.vx).toBe(0);
-      else expect(Math.hypot(l.vx, l.vy)).toBeGreaterThan(0);
-    });
-  });
-
-  it("slides and comes to rest", () => {
-    const leaves = scatter(3, card);
-    brush(leaves, { x: 50, y: 78 }, { x: 200, y: 0 });
-    let moving = true;
-    for (let i = 0; i < 600 && moving; i++) moving = step(leaves, 1 / 60);
-    expect(moving).toBe(false);
-  });
-
-  it("is blown clear of the card by the wind", () => {
-    const leaves = scatter(9, card);
-    gust(leaves, { x: 50, y: 78 });
-    for (let i = 0; i < 120; i++) step(leaves, 1 / 60);
-    expect(onCard(leaves, card)).toBe(0);
-  });
-
-  it("defaults to the garden deck", () => {
-    expect(leafSchema.parse({})).toEqual({ look: "deck" });
-    expect(getManifest("leaf-pile")?.occasions[0]).toBe("thanksgiving");
-  });
-});
+import { candleAt, CANDLES, CATCH, nextUnlit, wickAt } from "@/templates/light-the-candles/wicks";
+import { DEFAULT_THANKS, fieldsSchema as candlesSchema } from "@/templates/light-the-candles/schema";
+import { hooksNear, nextHooks, PER_KEY, REACH, wires } from "@/templates/string-the-lights/string";
+import { fieldsSchema as lightsSchema } from "@/templates/string-the-lights/schema";
+import { ENOUGH, inside, readyMade } from "@/templates/gingerbread-house/decorate";
+import { fieldsSchema as houseSchema } from "@/templates/gingerbread-house/schema";
 
 describe("Frosted Window", () => {
-  it("counts what a finger has wiped, and a stroke leaves no gaps", () => {
+  const board = { u0: 0.4, v0: 0.3, u1: 0.75, v1: 0.5 };
+
+  it("clears only what the finger passes over, and a stroke leaves no gaps", () => {
     const grid = frostGrid(30, 40);
     expect(wiped(grid)).toBe(0);
-    const pts = strokePoints({ u: 0, v: 0.5 }, { u: 1, v: 0.5 }, 0.1, 1.3);
-    for (const p of pts) wipeAt(grid, p.u, p.v, 0.1, 1.3);
-    // a band right across the glass, and every cell along its middle row is clear
-    const row = Math.floor(0.5 * 40);
+    for (const p of strokePoints({ u: 0, v: 0.8 }, { u: 1, v: 0.8 }, 0.1, 1.3)) wipeAt(grid, p.u, p.v, 0.1, 1.3);
+    // a band right across the glass near its foot: every cell along its middle row is clear
+    const row = Math.floor(0.8 * 40);
     for (let c = 0; c < 30; c++) expect(grid.cells[row * 30 + c]).toBe(1);
-    expect(wiped(grid)).toBeGreaterThan(0.1);
-    expect(wiped(grid)).toBeLessThan(MELT_AT);
+    // and nothing anywhere else has melted by itself: the snowman's board is still under frost
+    expect(wipedIn(grid, board)).toBe(0);
+    expect(wiped(grid)).toBeLessThan(0.3);
   });
 
-  it("melts once enough is wiped", () => {
+  it("knows when the snowman's board shows through", () => {
     const grid = frostGrid();
-    for (let v = 0.05; v < 1; v += 0.12) for (const p of strokePoints({ u: 0, v }, { u: 1, v }, 0.1, 1.3)) wipeAt(grid, p.u, p.v, 0.1, 1.3);
-    expect(wiped(grid)).toBeGreaterThanOrEqual(MELT_AT);
+    for (const v of [0.34, 0.42, 0.48]) for (const p of strokePoints({ u: 0.35, v }, { u: 0.8, v }, 0.1, 1.3)) wipeAt(grid, p.u, p.v, 0.1, 1.3);
+    expect(wipedIn(grid, board)).toBeGreaterThanOrEqual(REVEAL_AT);
+    // the rest of the glass is still frosted
+    expect(wiped(grid)).toBeLessThan(0.5);
   });
 
   it("defaults to the cottage, and keeps the sign short enough for the board", () => {
     expect(windowSchema.parse({})).toEqual({ look: "cottage" });
     expect(windowSchema.safeParse({ sign: "x".repeat(37) }).success).toBe(false);
     expect(getManifest("frosted-window")?.occasions).toEqual(["christmas"]);
+  });
+});
+
+describe("Light the Candles", () => {
+  const wicks = [10, 30, 50, 70, 90].map((x, i) => ({ x, y: 60 + (i % 2) * 10 }));
+  const feet = wicks.map((w) => ({ x: w.x, y: 110 }));
+
+  it("lights the wick the flame touches, and no other", () => {
+    expect(wickAt({ x: 50, y: 61 }, wicks, [])).toBe(2);
+    expect(wickAt({ x: 50, y: 60 + CATCH + 0.5 }, wicks, [])).toBe(-1);
+    expect(wickAt({ x: 40, y: 65 }, wicks, [])).toBe(-1);
+    // a candle already burning is not lit twice
+    expect(wickAt({ x: 50, y: 61 }, wicks, [2])).toBe(-1);
+  });
+
+  it("takes a tap anywhere on a candle to mean that candle", () => {
+    expect(candleAt({ x: 31, y: 100 }, wicks, feet, [])).toBe(1);
+    expect(candleAt({ x: 31, y: 100 }, wicks, feet, [1])).toBe(-1);
+    expect(candleAt({ x: 20, y: 30 }, wicks, feet, [])).toBe(-1);
+  });
+
+  it("lights them left to right from the keyboard", () => {
+    expect(nextUnlit([])).toBe(0);
+    expect(nextUnlit([0, 2])).toBe(1);
+    expect(nextUnlit([0, 1, 2, 3, 4])).toBe(-1);
+    expect(CANDLES).toBe(5);
+  });
+
+  it("starts with five things to be thankful for, and keeps no more", () => {
+    expect(candlesSchema.parse({})).toEqual({ thanks: DEFAULT_THANKS, look: "harvest" });
+    expect(candlesSchema.safeParse({ thanks: Array(6).fill("x") }).success).toBe(false);
+    expect(getManifest("light-the-candles")?.occasions[0]).toBe("thanksgiving");
+  });
+});
+
+describe("String the Lights", () => {
+  const hooks = Array.from({ length: 10 }, (_, i) => [10 + i * 8, 50] as const);
+
+  it("hangs a bulb on each hook the finger passes, once", () => {
+    expect(hooksNear({ x: 10, y: 50 }, hooks, new Set())).toEqual([0]);
+    expect(hooksNear({ x: 14, y: 50 }, hooks, new Set())).toEqual([0, 1]);
+    expect(hooksNear({ x: 14, y: 50 }, hooks, new Set([0]))).toEqual([1]);
+    expect(hooksNear({ x: 14, y: 50 + REACH + 1 }, hooks, new Set())).toEqual([]);
+  });
+
+  it("runs wire only between neighbours that are both up, and not from one string to the next", () => {
+    expect(wires(10, new Set([0, 1, 3]), [])).toEqual([[0, 1]]);
+    expect(wires(10, new Set([4, 5, 6]), [5])).toEqual([[5, 6]]);
+  });
+
+  it("hangs the next few from the keyboard until none are left", () => {
+    const hung = new Set<number>();
+    let presses = 0;
+    for (; hung.size < 46 && presses < 20; presses++) for (const i of nextHooks(46, hung)) hung.add(i);
+    expect(hung.size).toBe(46);
+    expect(presses).toBe(Math.ceil(46 / PER_KEY));
+  });
+
+  it("defaults to the red house, and keeps the sign short enough for the board", () => {
+    expect(lightsSchema.parse({})).toEqual({ look: "red" });
+    expect(lightsSchema.safeParse({ sign: "x".repeat(29) }).success).toBe(false);
+    expect(getManifest("string-the-lights")?.occasions).toEqual(["christmas"]);
+  });
+});
+
+describe("Gingerbread House", () => {
+  const corners = { bl: { x: 20, y: 120 }, br: { x: 80, y: 120 }, tl: { x: 20, y: 80 }, tr: { x: 80, y: 80 }, peak: { x: 50, y: 45 }, doorTop: { x: 50, y: 98 } };
+  const shape = [corners.bl, corners.br, corners.tr, corners.peak, corners.tl];
+
+  it("knows the house's front from the kitchen round it", () => {
+    expect(inside({ x: 50, y: 100 }, shape)).toBe(true);
+    expect(inside({ x: 50, y: 60 }, shape)).toBe(true);
+    expect(inside({ x: 22, y: 60 }, shape)).toBe(false);
+    expect(inside({ x: 50, y: 130 }, shape)).toBe(false);
+  });
+
+  it("can dress a house by itself, every mark on the house and enough of them to open the door", () => {
+    const marks = readyMade(corners);
+    expect(marks.length).toBeGreaterThanOrEqual(ENOUGH);
+    for (const m of marks) for (const p of m.kind === "sweet" ? [m.at] : m.path) expect(inside(p, shape), JSON.stringify(p)).toBe(true);
+  });
+
+  it("defaults to the cream kitchen", () => {
+    expect(houseSchema.parse({})).toEqual({ look: "cosy" });
+    expect(getManifest("gingerbread-house")?.occasions).toEqual(["christmas"]);
   });
 });

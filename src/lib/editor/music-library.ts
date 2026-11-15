@@ -30,6 +30,7 @@ export const LIBRARY_TRACKS: LibraryTrack[] = [
   { id: "waltz-of-the-flowers", title: "Waltz of the Flowers", mood: "romantic", url: "/audio/library/waltz-of-the-flowers.mp3", duration: 66, note: "Tchaikovsky · U.S. Army Band" },
   { id: "simple-gifts", title: "Simple Gifts", mood: "warm", url: "/audio/library/simple-gifts.mp3", duration: 70, note: "U.S. Air Force Band · a quiet hymn" },
   { id: "bleak-midwinter", title: "In the Bleak Midwinter", mood: "calm", url: "/audio/library/bleak-midwinter.mp3", duration: 75, note: "U.S. Air Force brass · a snowy carol" },
+  { id: "o-christmas-tree", title: "O Christmas Tree", mood: "playful", url: "/audio/library/o-christmas-tree.mp3", duration: 72, note: "U.S. Air Force Airmen of Note · big band swing" },
 ];
 
 export const TRACK_MOODS: TrackMood[] = ["warm", "romantic", "dreamy", "calm", "hopeful", "playful", "cinematic"];

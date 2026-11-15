@@ -816,34 +816,6 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       howTo: "Cómo hacer un regalo con una espoleta",
     },
   },
-  "thankful-pie": {
-    en: {
-      keyword: "What I'm thankful for about you",
-      title: "Thankful Pie: What I'm Thankful For About You",
-      description: "A pumpkin pie cut in six: every slice they lift writes one thing you're thankful for onto a recipe card. A digital Thanksgiving gift.",
-      howTo: "How to make a thankful pie gift",
-    },
-    es: {
-      keyword: "Por qué doy gracias por ti",
-      title: "La tarta de gracias: por qué doy gracias por ti",
-      description: "Una tarta de calabaza en seis trozos: cada uno que levantan escribe en una receta algo por lo que das gracias. Acción de Gracias, digital.",
-      howTo: "Cómo hacer una tarta de gracias",
-    },
-  },
-  "leaf-pile": {
-    en: {
-      keyword: "Thankful for you card",
-      title: "Leaf Pile: A Thankful For You Card Under the Leaves",
-      description: "A card left out in autumn, buried in leaves: they brush them off with a finger to read \"thankful for you\". A digital Thanksgiving card.",
-      howTo: "How to make a leaf pile card",
-    },
-    es: {
-      keyword: "Tarjeta doy gracias por ti",
-      title: "El montón de hojas: una tarjeta bajo las hojas",
-      description: "Una tarjeta olvidada en otoño, cubierta de hojas: las apartan con el dedo para leer \"doy gracias por ti\". Una tarjeta digital de otoño.",
-      howTo: "Cómo hacer una tarjeta bajo las hojas",
-    },
-  },
   "frosted-window": {
     en: {
       keyword: "Interactive Christmas card",
@@ -856,6 +828,48 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       title: "La ventana helada: una tarjeta de Navidad interactiva",
       description: "Una ventana helada en Nochebuena: limpian la escarcha con el dedo y fuera un muñeco de nieve sujeta tus palabras. Una tarjeta de Navidad digital.",
       howTo: "Cómo hacer una tarjeta de Navidad con ventana helada",
+    },
+  },
+  "light-the-candles": {
+    en: {
+      keyword: "Thanksgiving message for her or him",
+      title: "Light the Candles: A Thanksgiving Message in Candlelight",
+      description: "A Thanksgiving table at dusk: they light five candles with a match, and each lights up one thing you are thankful for. A digital Thanksgiving gift.",
+      howTo: "How to make a candlelit Thanksgiving gift",
+    },
+    es: {
+      keyword: "Mensaje de Acción de Gracias para mi pareja",
+      title: "Enciende las velas: un mensaje de Acción de Gracias",
+      description: "Una mesa de Acción de Gracias al anochecer: encienden cinco velas con una cerilla y cada una ilumina algo por lo que das las gracias.",
+      howTo: "Cómo hacer un regalo de Acción de Gracias con velas",
+    },
+  },
+  "string-the-lights": {
+    en: {
+      keyword: "Digital Christmas card for boyfriend or girlfriend",
+      title: "String the Lights: A Digital Christmas Card They Light Up",
+      description: "A dark house in the snow: they hang the Christmas lights with a finger, throw the switch, and your words come on in bulbs. A digital Christmas card.",
+      howTo: "How to make a Christmas lights card",
+    },
+    es: {
+      keyword: "Tarjeta de Navidad digital para mi pareja",
+      title: "Cuelga las luces: una tarjeta de Navidad que se enciende",
+      description: "Una casa a oscuras en la nieve: cuelgan las luces de Navidad con el dedo, dan al interruptor y tus palabras se encienden con bombillas.",
+      howTo: "Cómo hacer una tarjeta de Navidad con luces",
+    },
+  },
+  "gingerbread-house": {
+    en: {
+      keyword: "Virtual gingerbread house",
+      title: "Gingerbread House: A Virtual One to Decorate",
+      description: "A virtual gingerbread house they decorate themselves: sweets and piped icing with a finger, then the little door opens on your letter. A Christmas gift.",
+      howTo: "How to send a virtual gingerbread house",
+    },
+    es: {
+      keyword: "Casita de jengibre virtual",
+      title: "La casita de jengibre: una virtual para decorar",
+      description: "Una casita de jengibre virtual que decoran ellos: dulces y glaseado con el dedo, y luego la puertecita se abre con tu carta. Un regalo de Navidad.",
+      howTo: "Cómo enviar una casita de jengibre virtual",
     },
   },
 };

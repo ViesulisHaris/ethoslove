@@ -4,8 +4,8 @@
  */
 export type FrostGrid = { cols: number; rows: number; cells: Uint8Array };
 
-/** The share of the glass that must be clear before the rest melts by itself. */
-export const MELT_AT = 0.55;
+/** The share of the snowman's board that must show through before the letter is offered. Nothing melts by itself: only what the finger wipes goes. */
+export const REVEAL_AT = 0.7;
 
 export function frostGrid(cols = 30, rows = 40): FrostGrid {
   return { cols, rows, cells: new Uint8Array(cols * rows) };
@@ -43,4 +43,20 @@ export function wiped(grid: FrostGrid): number {
   let n = 0;
   for (const c of grid.cells) n += c;
   return n / grid.cells.length;
+}
+
+/** The share wiped clear of one part of the glass, given by its corners as shares of the glass (u across, v down). */
+export function wipedIn(grid: FrostGrid, box: { u0: number; v0: number; u1: number; v1: number }): number {
+  const { cols, rows, cells } = grid;
+  let n = 0;
+  let all = 0;
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      const u = (c + 0.5) / cols;
+      const v = (r + 0.5) / rows;
+      if (u < box.u0 || u > box.u1 || v < box.v0 || v > box.v1) continue;
+      all++;
+      n += cells[r * cols + c];
+    }
+  return all ? n / all : 1;
 }

@@ -252,9 +252,27 @@ def street(path):
     kit.displace(g, 0.25, 2.5)
     road = box("road", (80, 3.2, 0.02), plain("road_snow", "#c9d2de", 0.6), 0.03)
     place(road, (0, 15.5, 0))
-    # houses across the road
-    for k, (hx, w_, d_, h_, wall, roof) in enumerate(((-9.5, 6.0, 5.0, 4.2, "#7a2a22", "#ffffff"), (-1.5, 5.2, 5.0, 5.0, "#2f4a5a", "#ffffff"), (6.0, 6.4, 5.0, 4.4, "#d9c7a0", "#ffffff"), (13.5, 5.6, 5.0, 4.8, "#4a5a3a", "#ffffff"))):
-        house("house%d" % k, hx, 22.0 + (k % 2) * 1.5, w_, d_, h_, wall, roof, rnd)
+    # houses across the road: clapboard cottages, every window lit, a string of bulbs along each gable
+    from cottage import cottage
+    bulb_colors = ["#ff3b30", "#ffd23a", "#34c759", "#3a8dff", "#ff9a2a"]
+    bulb_mats = [emissive("street_bulb%d" % k, c, 30.0) for k, c in enumerate(bulb_colors)]
+    for k, (hx, hy, colors, w_, wall_h) in enumerate(((-10.5, 23.0, ("#8a2620", "#f2ece0", "#1f3a2c", "#1f3a2c"), 5.6, 4.6), (-2.6, 25.0, ("#26384e", "#f2ece0", "#a8261e", "#e9e2d2"), 5.2, 5.4),
+                                                      (5.6, 23.5, ("#d9c7a0", "#f6f1e4", "#7a2a22", "#3a4a34"), 5.8, 4.4), (13.8, 25.5, ("#6a7a5c", "#f6f1e4", "#7a2a22", "#3a4a34"), 5.4, 5.0))):
+        _, _, info = cottage("house%d" % k, (hx, hy, 0.0), colors, w_, wall_h, w_ * 0.5, 6.0)
+        a_, b_, c_ = info["gable"]
+        for q in range(34):
+            t = (q + 0.5) / 17
+            pt = a_.lerp(b_, t) if q < 17 else b_.lerp(c_, t - 1.0)
+            place(sphere("house%d_bulb%d" % (k, q), 0.07, bulb_mats[q % 5], 8, 6), pt)
+        for (wx, wy, wz) in info["windows"]:
+            lamp = bpy.data.lights.new("house%d_spill%d" % (k, int(wx * 10 + wz * 100)), "AREA")
+            lamp.energy = 160.0
+            lamp.size = 0.9
+            lamp.color = (1.0, 0.7, 0.4)
+            lo = bpy.data.objects.new(lamp.name, lamp)
+            kit.link(lo)
+            lo.location = (wx, wy - 0.3, wz)
+            lo.rotation_euler = (math.radians(70), 0, 0)
     # firs, one of them lit
     for k, (fx, fy, fh, lit) in enumerate(((-6.0, 12.0, 4.2, False), (4.2, 9.5, 3.4, True), (-13.0, 9.0, 5.0, False), (11.0, 13.0, 4.0, False), (-3.0, 30.0, 6.0, False), (18.0, 28.0, 6.5, False))):
         snowy_fir("fir%d" % k, fx, fy, fh, rnd, lit)

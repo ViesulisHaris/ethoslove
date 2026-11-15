@@ -664,39 +664,6 @@ const SCRIPTS = {
     await page.waitForTimeout(2600);
     return poster;
   },
-  "thankful-pie": async (page) => {
-    await hideControls(page);
-    const pie = page.getByRole("button", { name: /lift a slice/i });
-    await pie.waitFor({ timeout: 20000 });
-    await page.waitForTimeout(1400);
-    const poster = await page.screenshot();
-    for (let i = 0; i < 3; i++) {
-      await pie.click({ force: true });
-      await page.waitForTimeout(1300);
-    }
-    return poster;
-  },
-  "leaf-pile": async (page) => {
-    await hideControls(page);
-    const pile = page.getByRole("button", { name: /brush the leaves away/i });
-    await pile.waitFor({ timeout: 20000 });
-    await page.waitForTimeout(1400);
-    const poster = await page.screenshot();
-    const box = await pile.boundingBox();
-    // a finger sweeping back and forth across the card
-    for (let pass = 0; pass < 4; pass++) {
-      const y = box.y + box.height * (0.38 + pass * 0.06);
-      await page.mouse.move(box.x + box.width * 0.15, y);
-      await page.mouse.down();
-      for (let i = 0; i <= 20; i++) {
-        await page.mouse.move(box.x + box.width * (0.15 + 0.7 * (pass % 2 ? 1 - i / 20 : i / 20)), y + Math.sin(i / 3) * 12);
-        await page.waitForTimeout(16);
-      }
-      await page.mouse.up();
-    }
-    await page.waitForTimeout(1600);
-    return poster;
-  },
   "frosted-window": async (page) => {
     await hideControls(page);
     const glass = page.getByRole("button", { name: /wipe the frost away/i });
@@ -716,6 +683,54 @@ const SCRIPTS = {
       await page.mouse.up();
     }
     await page.waitForTimeout(2200);
+    return poster;
+  },
+  "light-the-candles": async (page) => {
+    await hideControls(page);
+    const table = page.getByRole("button", { name: /strike a match/i });
+    await table.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    // Two candles lit is the poster: the room half dark, half warm.
+    for (let i = 0; i < 2; i++) {
+      await page.getByRole("button", { name: /strike a match|light the candles/i }).press("Enter");
+      await page.waitForTimeout(1300);
+    }
+    const poster = await page.screenshot();
+    for (let i = 0; i < 3; i++) {
+      await page.getByRole("button", { name: /light the candles/i }).press("Enter");
+      await page.waitForTimeout(1300);
+    }
+    await page.waitForTimeout(2600);
+    return poster;
+  },
+  "string-the-lights": async (page) => {
+    await hideControls(page);
+    const roof = page.getByRole("button", { name: /hang the lights/i });
+    await roof.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    for (let i = 0; i < 8 && (await roof.isVisible()); i++) {
+      await roof.press("Enter");
+      await page.waitForTimeout(350);
+    }
+    await page.getByRole("button", { name: /flip the switch/i }).click();
+    // Everything on, the words lit on the board: that is the poster.
+    await page.waitForTimeout(4000);
+    return page.screenshot();
+  },
+  "gingerbread-house": async (page) => {
+    await hideControls(page);
+    const house = page.getByRole("button", { name: /decorate the house/i });
+    await house.waitFor({ timeout: 20000 });
+    await page.waitForTimeout(1400);
+    for (let i = 0; i < 3; i++) {
+      await house.press("Enter");
+      await page.waitForTimeout(700);
+    }
+    // Dressed, the door still shut: that is the poster.
+    await page.waitForTimeout(500);
+    const poster = await page.screenshot();
+    await page.getByRole("button", { name: /open the door/i }).click();
+    await page.waitForTimeout(3000);
     return poster;
   },
   "haunted-house": async (page) => {

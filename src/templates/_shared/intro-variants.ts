@@ -104,9 +104,10 @@ const BY_SLUG: Record<string, IntroVariant> = {
   "jack-o-lantern": "paper",
   "haunted-house": "starlight",
   wishbone: "paper",
+  "gingerbread-house": "paper",
+  "string-the-lights": "starlight",
+  "light-the-candles": "starlight",
   "frosted-window": "starlight",
-  "leaf-pile": "paper",
-  "thankful-pie": "paper",
   unwrapped: "paper",
   "nice-list": "paper",
 };

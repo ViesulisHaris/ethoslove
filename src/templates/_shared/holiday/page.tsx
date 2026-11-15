@@ -89,6 +89,8 @@ type Props<T extends Record<string, unknown>> = {
   still: boolean;
   /** Where the gift's pictures are, which look it is in, and the table's own colour for before they arrive. */
   base: string;
+  /** Where the letter's paper is served from, when it is not this gift's own (a scene seen through a lens renders no paper). */
+  paperBase?: string;
   look: string;
   floor: string;
   /** Laid over the soft table so the papers stand out from it. */
@@ -122,7 +124,7 @@ type Props<T extends Record<string, unknown>> = {
   onReplay?: () => void;
 };
 
-export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
+export function HolidayPage<T extends Record<string, unknown>>({ data, mode, still, base, paperBase, look, floor, shade, sheet, sheetWidth = 1, frame = 0, theme, hero, crown, foot, header, footer, gallery, columns = 2, photo, greeting, eyebrow, onEvent, onReact, onMakeOne, onReplay }: Props<T>) {
   const scroller = useRef<HTMLDivElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState<GiftPhoto | null>(null);
@@ -138,7 +140,7 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
         <div className="relative mx-auto flex w-[min(94cqw,600px)] flex-col gap-[calc(8*var(--u))] pt-[calc(19*var(--u))] pb-[calc(72px+env(safe-area-inset-bottom))]" style={{ color: theme.ink }}>
           {hero ? <Reveal still={still}>{hero}</Reveal> : null}
           <Reveal still={still}>
-            <PaperSheet base={base} art={sheet} crown={crown} foot={foot} head={0.08 + frame} tail={(foot ? 0.13 : 0.07) + frame} margin={(sheetWidth < 0.9 ? 0.06 : 0.075) + frame} style={paper}>
+            <PaperSheet base={paperBase ?? base} art={sheet} crown={crown} foot={foot} head={0.08 + frame} tail={(foot ? 0.13 : 0.07) + frame} margin={(sheetWidth < 0.9 ? 0.06 : 0.075) + frame} style={paper}>
               {header}
               {eyebrow ? (
                 <p className={cn(small, "mb-[calc(3*var(--u))]")} style={{ color: theme.soft }}>
@@ -165,7 +167,7 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
 
           {data.countdown ? (
             <Reveal still={still}>
-              <PaperSheet base={base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
+              <PaperSheet base={paperBase ?? base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
                 <Countdown countdown={data.countdown} locale={data.locale} tone="light" />
               </PaperSheet>
             </Reveal>
@@ -173,7 +175,7 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
 
           {data.surprise ? (
             <Reveal still={still}>
-              <PaperSheet base={base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
+              <PaperSheet base={paperBase ?? base} art={sheet} head={0.06 + frame} tail={0.05 + frame} margin={0.075 + frame} style={paper}>
                 <p className={cn(small, "mb-[calc(3*var(--u))] text-center")} style={{ color: theme.soft }}>
                   {giftString(data.locale, "ps")}
                 </p>
@@ -183,7 +185,7 @@ export function HolidayPage<T extends Record<string, unknown>>({ data, mode, sti
           ) : null}
 
           <div ref={end}>
-            <PaperSheet base={base} art={sheet} head={0.05 + frame} tail={0.04 + frame} margin={0.05 + frame} style={paper}>
+            <PaperSheet base={paperBase ?? base} art={sheet} head={0.05 + frame} tail={0.04 + frame} margin={0.05 + frame} style={paper}>
               <EndScreen data={data} tone="light" onReact={onReact} onMakeOne={onMakeOne} onReplay={onReplay} />
             </PaperSheet>
           </div>

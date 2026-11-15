@@ -17,7 +17,7 @@ import { FOIL_KEYFRAMES, FOIL_ON_LIGHT } from "../_shared/holiday/materials";
 import { HolidayPage, PaperSheet, Print, type HolidayTheme, type PhotoSlot } from "../_shared/holiday/page";
 import { down, Plate, WIDE_PLATE, Sparks, STAGE, STAGE_KEYFRAMES } from "../_shared/holiday/stage";
 import { ANCHORS, ART_BASE, BOARD, BULBS, SHEETS, SPRITES } from "./art-map";
-import { frostGrid, MELT_AT, strokePoints, wipeAt, wiped, type FrostGrid } from "./frost";
+import { frostGrid, REVEAL_AT, strokePoints, wipeAt, wipedIn, type FrostGrid } from "./frost";
 import { INK, LOOKS, type LookId } from "./looks";
 import { fieldsSchema, type FrostedWindowFields } from "./schema";
 
@@ -74,6 +74,8 @@ const BOARD_BOX = (() => {
   const ys = pts.map((p) => p.y);
   return { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) };
 })();
+/** The board again, as shares of the glass, with a little room round it. */
+const BOARD_SHARE = { u0: Math.min(...BOARD.map((p) => p[0])) - 0.02, v0: Math.min(...BOARD.map((p) => p[1])) - 0.02, u1: Math.max(...BOARD.map((p) => p[0])) + 0.02, v1: Math.max(...BOARD.map((p) => p[1])) + 0.02 };
 const frostRect = (look: LookId) => (SPRITES as unknown as Record<string, { x: number; y: number; w: number; h: number }>)[`frost-${look}`] ?? { x: GLASS.x0, y: GLASS.y0, w: GW, h: GH };
 /** The brush, as a share of the glass's width. */
 const BRUSH = 0.1;
@@ -81,7 +83,7 @@ const BRUSH = 0.1;
 /** The time: kept outside the component, since it is only ever read in a handler or a frame. */
 const clockNow = () => performance.now();
 
-/** frost: the glass is frosted over. clear: wiped and melted, the snowman's board reads. open: the letter. */
+/** frost: the glass is frosted over. clear: enough is wiped for the snowman's board to read (the rest of the frost stays until it is wiped too). open: the letter. */
 type Phase = "frost" | "clear" | "open";
 
 export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplateProps<FrostedWindowFields>) {
@@ -133,8 +135,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
       playSparkle(mutedRef.current, { delay: 0.1, ms: 1300 });
       eventRef.current?.({ type: "surprise" });
     });
-    after(reduce ? 200 : 2600, () => setCanRead(true));
-    after(13000, openPage);
+    after(reduce ? 200 : 1800, () => setCanRead(true));
   };
 
   const openPage = () => {
@@ -248,7 +249,7 @@ function Scene({ lookId, s, title, sign, from, to, seed, phase, canRead, reduce,
             </p>
           </>
         ) : (
-          <FrostPane key="frost" src={`${ART_BASE}frost-${lookId}.webp`} rect={rect} title={title} label={s.wipe} melted={clearNow} reduce={reduce} onStart={() => { onBegin(); setTouched(true); }} onWipe={onWipe} onMelt={onMelt} />
+          <FrostPane key="frost" src={`${ART_BASE}frost-${lookId}.webp`} rect={rect} title={title} label={s.wipe} reduce={reduce} onStart={() => { onBegin(); setTouched(true); }} onWipe={onWipe} onReveal={onMelt} />
         )}
         {clearNow && !reduce ? <Sparks at={boardMiddle} count={14} reach={22} colors={["#ffffff", "#e8f2ff", "#fff6dc", "#cfe2ff"]} seed={4} /> : null}
 
@@ -346,9 +347,12 @@ function dab(ctx: CanvasRenderingContext2D, el: HTMLCanvasElement, p: { u: numbe
 /**
  * The frost on the glass: its rendered picture drawn into a canvas, the words already cut into it
  * as if by a finger, and every stroke of the recipient's finger wiping it clear with a soft edge.
- * How much is wiped is kept on a coarse grid; past MELT_AT the rest melts away by itself.
+ * Only what the finger passes over goes: nothing melts by itself. How much is wiped is kept on a
+ * coarse grid, and once most of the snowman's board shows through, the gift is told (`onReveal`).
+ * From the keyboard, where there is no finger, Enter clears the whole pane.
  */
-function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, onMelt }: { src: string; rect: { x: number; y: number; w: number; h: number }; title: string; label: string; melted: boolean; reduce: boolean; onStart: () => void; onWipe: () => void; onMelt: () => void }) {
+function FrostPane({ src, rect, title, label, reduce, onStart, onWipe, onReveal }: { src: string; rect: { x: number; y: number; w: number; h: number }; title: string; label: string; reduce: boolean; onStart: () => void; onWipe: () => void; onReveal: () => void }) {
+  const [gone, setGone] = useState(false);
   const canvas = useRef<HTMLCanvasElement>(null);
   const strokes = useRef<{ u: number; v: number }[]>([]);
   const grid = useRef<FrostGrid>(frostGrid());
@@ -428,17 +432,18 @@ function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, o
       if (ctx && el) dab(ctx, el, q);
     }
     onWipe();
-    if (!done.current && wiped(grid.current) >= MELT_AT) {
+    if (!done.current && wipedIn(grid.current, BOARD_SHARE) >= REVEAL_AT) {
       done.current = true;
-      onMelt();
+      onReveal();
     }
   };
 
   const meltNow = () => {
-    if (done.current) return;
     onStart();
+    setGone(true);
+    if (done.current) return;
     done.current = true;
-    onMelt();
+    onReveal();
   };
 
   return (
@@ -448,7 +453,6 @@ function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, o
       tabIndex={0}
       aria-label={label}
       onPointerDown={(e) => {
-        if (done.current) return;
         onStart();
         e.currentTarget.setPointerCapture?.(e.pointerId);
         const p = at(e);
@@ -456,7 +460,7 @@ function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, o
         if (p) wipeTo(p);
       }}
       onPointerMove={(e) => {
-        if (!last.current || done.current) return;
+        if (!last.current) return;
         const p = at(e);
         if (p) wipeTo(p);
       }}
@@ -469,7 +473,7 @@ function FrostPane({ src, rect, title, label, melted, reduce, onStart, onWipe, o
         }
       }}
       className="absolute z-[4] cursor-crosshair touch-none outline-none focus-visible:ring-4 focus-visible:ring-white/60"
-      style={{ left: `${rect.x}%`, top: down(rect.y), width: `${rect.w}%`, height: down(rect.h), opacity: melted ? 0 : 1, transition: reduce ? undefined : "opacity 1.6s ease", pointerEvents: melted ? "none" : undefined }}
+      style={{ left: `${rect.x}%`, top: down(rect.y), width: `${rect.w}%`, height: down(rect.h), opacity: gone ? 0 : 1, transition: reduce ? undefined : "opacity 1.6s ease", pointerEvents: gone ? "none" : undefined }}
     />
   );
 }

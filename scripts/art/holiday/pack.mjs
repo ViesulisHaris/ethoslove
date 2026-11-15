@@ -167,6 +167,64 @@ for (const [name, spec] of Object.entries(specs)) {
   sheets[name] = { name, top: round(topH / w), mid: round((segH * 2) / w), bottom: round((h - b0) / w), fade: round(fade / w), inset: { left: round(l / w), right: round((w - 1 - r) / w), top: round(t / w), bottom: round((h - 1 - b) / w) } };
 }
 
+// A scene seen through a lens (scripts/art/holiday/persp.py) is rendered once, 360 units wide: a
+// phone's plate is the middle 100 of it. And a light that can be lit by itself (a candle, a string
+// of bulbs) is rendered alone over the dark plate: what it adds is kept as a picture of its own,
+// black where it adds nothing, for the gift to lay over the dark plate with "screen".
+const PLATE_UNITS = { w: 360, h: 240 };
+if (manifest.persp) {
+  for (const f of readdirSync(raw).filter((n) => /^plate-.*-wide\.png$/.test(n))) {
+    const phone = join(raw, f.replace(/-wide\.png$/, "-phone.png"));
+    const meta = await sharp(join(raw, f)).metadata();
+    const w = Math.round((meta.width * 100) / PLATE_UNITS.w);
+    await sharp(join(raw, f)).extract({ left: Math.round((meta.width - w) / 2), top: 0, width: w, height: meta.height }).png().toFile(phone);
+  }
+  for (const [look, names] of Object.entries(manifest.lights ?? {})) {
+    const darkFile = join(raw, `plate-${look}-dark-wide.png`);
+    if (!existsSync(darkFile)) continue;
+    const dark = await sharp(darkFile).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const { width: W, height: H } = dark.info;
+    for (const [i, only] of names.entries()) {
+      const file = join(raw, `${only}.png`);
+      if (!existsSync(file)) continue;
+      const lit = await sharp(file).removeAlpha().raw().toBuffer();
+      const diff = Buffer.alloc(W * H * 3);
+      let x0 = W, y0 = H, x1 = 0, y1 = 0;
+      for (let p = 0, y = 0; y < H; y++)
+        for (let x = 0; x < W; x++, p += 3) {
+          let most = 0;
+          for (let c = 0; c < 3; c++) {
+            // a couple of levels of render noise are not light
+            const d = Math.max(0, lit[p + c] - dark.data[p + c] - 3);
+            diff[p + c] = d;
+            if (d > most) most = d;
+          }
+          if (most > 8) {
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+          }
+        }
+      if (x1 <= x0 || y1 <= y0) continue;
+      const perK = W / PLATE_UNITS.w;
+      // Twice over: for a phone, only what falls on its screen (the stage and a little either side), sharp;
+      // for a wide screen, all of it at half size, since most of it is soft light. A picture is held in
+      // memory at its full size, and five of the whole plate would be more than a phone has to spare.
+      const edge = Math.round(((PLATE_UNITS.w - 100) / 2 - 12) * perK);
+      for (const [size, cut, scale] of [["phone", { left: Math.max(x0, edge), right: Math.min(x1, W - 1 - edge) }, 1], ["wide", { left: x0, right: x1 }, 0.5]]) {
+        if (cut.right <= cut.left) continue;
+        const box = { left: cut.left, top: y0, width: cut.right - cut.left + 1, height: y1 - y0 + 1 };
+        const name = `glow-${look}-${i}-${size}`;
+        const res = await sharp(diff, { raw: { width: W, height: H, channels: 3 } }).extract(box).resize({ width: Math.round(box.width * scale) }).webp({ quality: 80, effort: 6 }).toFile(join(out, `${name}.webp`));
+        bytes += res.size;
+        sprites[name] = { x: round(box.left / perK - (PLATE_UNITS.w - 100) / 2), y: round(box.top / perK - (PLATE_UNITS.h - 170) / 2), w: round(box.width / perK), h: round(box.height / perK) };
+        console.log(`${name}.webp  ${res.width}x${res.height}  ${(res.size / 1024).toFixed(0)} KB`);
+      }
+    }
+  }
+}
+
 for (const f of readdirSync(raw).filter((n) => /^plate-.*\.png$/.test(n))) {
   const name = f.replace(/\.png$/, "");
   const res = await sharp(join(raw, f)).webp({ quality: 80, effort: 6, smartSubsample: true }).toFile(join(out, `${name}.webp`));

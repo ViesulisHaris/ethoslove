@@ -67,9 +67,10 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
   "jack-o-lantern": () => import("./jack-o-lantern"),
   "haunted-house": () => import("./haunted-house"),
   wishbone: () => import("./wishbone"),
+  "gingerbread-house": () => import("./gingerbread-house"),
+  "string-the-lights": () => import("./string-the-lights"),
+  "light-the-candles": () => import("./light-the-candles"),
   "frosted-window": () => import("./frosted-window"),
-  "leaf-pile": () => import("./leaf-pile"),
-  "thankful-pie": () => import("./thankful-pie"),
   unwrapped: () => import("./unwrapped"),
   "nice-list": () => import("./nice-list"),
 };

@@ -65,9 +65,10 @@ const schemaLoaders: Record<string, () => Promise<{ fieldsSchema: z.ZodType }>> 
   "jack-o-lantern": () => import("./jack-o-lantern/schema"),
   "haunted-house": () => import("./haunted-house/schema"),
   wishbone: () => import("./wishbone/schema"),
+  "gingerbread-house": () => import("./gingerbread-house/schema"),
+  "string-the-lights": () => import("./string-the-lights/schema"),
+  "light-the-candles": () => import("./light-the-candles/schema"),
   "frosted-window": () => import("./frosted-window/schema"),
-  "leaf-pile": () => import("./leaf-pile/schema"),
-  "thankful-pie": () => import("./thankful-pie/schema"),
   unwrapped: () => import("./unwrapped/schema"),
   "nice-list": () => import("./nice-list/schema"),
 };
