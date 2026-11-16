@@ -1,0 +1,196 @@
+{
+  "slug": "how-to-apologize-to-your-boyfriend",
+  "keyword": "how to apologize to your boyfriend",
+  "keyword_es": "cómo pedir perdón a mi novio",
+  "refresh": "2026-11-16",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead answers in its first sentence, there are lines for a slip, a big hurt and a bad stretch, plus a letter, and the product comes only after the advice."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Spanish: 'lastimarlo' is Latin American (use 'hacerle daño'), the message FAQ switched to 'tu novio', 'ir de puntillas a mi alrededor' and 'quedes libre' read as calques, and 'La carta de abajo' now reads as the sample letter."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "No Spanish heading says 'frases', the PAA '¿Qué hacer para pedir perdón a tu pareja?' and '¿Qué ideas hay para pedir perdón a un hombre?' go unanswered, and the lead ends on a table of contents."
+        }
+      ],
+      "applied": [
+        "ES FAQ '¿Cómo le pido perdón a mi novio por hacerle daño?' and '...por mensaje?'",
+        "ES 'andar con pies de plomo conmigo', 'no para librarte tú', 'La plantilla La carta, aquí abajo, es gratis'",
+        "ES H2 'Frases para pedirle perdón a tu novio por un error pequeño'",
+        "ES first FAQ reworded to '¿Qué hago para pedirle perdón a mi pareja después de una pelea?'",
+        "New FAQ in both languages: ways to apologize to a man",
+        "Shorter leads in both languages; EN description names the attitude section and the letter",
+        "Polish: 'contestar mal tras un día largo', 'distante', 'apartado', 'las tres me han fallado los nervios', 'no se cura', 'fair to you'"
+      ],
+      "rejected": [
+        "Search: keep 'lastimarlo' in the FAQ (note only): the editor's 'hacerle daño' is Spain's usage and the H2 already says it",
+        "Search: two new ES FAQs: the test caps FAQs at six and the Spanish must match the English, so one existing FAQ was reworded to answer the 'pareja' question instead"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes are in; the specific sendable lines and the situation table make it the page to act on tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "'pedir perdón explícitamente' reads as 'apologizing matters least'; 'dejarte entrar' and 'racha de actitud' are calques; future temporal clauses need the subjunctive; the EN description needs 'and'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The ranking Spanish pages win on stacks of short copy-paste lines; add a few one-line texts so '¿Qué frases puedo usar?' is answered in full."
+        }
+      ],
+      "applied": [
+        "ES 'pedir que te perdonen', 'abrirme más contigo', 'una temporada de mal humor', subjunctives 'hayáis hablado' and 'os hayáis calmado'",
+        "EN description '..., and a sample letter.'",
+        "Five one-line texts after the small-mistake quotes, in both languages",
+        "Polish: 'un trabajo para él', 'lo he ido pagando en casa', 'un trámite', Text Thread note, 'pedirle a domicilio su comida favorita', 'cuando os veáis'"
+      ],
+      "rejected": [
+        "Reader polish: first ES FAQ back to 'novio' (it answers the PAA with 'pareja')"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The five short texts are screenshot-ready and each names the thing; the attitude section and letter match the Spanish searches."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "In the new short texts: the intro piles up clauses, 'Yesterday was on me' names nothing, 'I don't mean it' should be 'didn't', and 'cada una nombrando' is a gerund calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every Spain PAA is answered, with complete four-part examples, a situation table and a sample letter that the generic Spanish frases lists don't give."
+        }
+      ],
+      "applied": [
+        "Short-texts intro split in both languages",
+        "'I was rude to your friend yesterday, and that was on me.' / «Ayer fui borde con tu amigo, y fue culpa mía.»",
+        "'I didn't mean it'",
+        "Polish: the boss line opens differently in both languages"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It answers the search at once and gives lines for every case, a letter and a text for when you can't meet, with the templates offered only after the advice."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the template code, it gives real lines for a slip, a big hurt and a bad stretch plus a letter, and the Spanish is the same post written as someone from Spain would write it."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Against the Spanish results (generic frases lists and advice pages) it has complete four-part apologies, a text/in person/letter table, a full letter and every PAA answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Editor: ES first FAQ back to 'novio'; 'en su móvil' in the Text Thread note; 'La carta, aquí abajo' without 'La plantilla'",
+        "Search: 'carta de perdón' in the letter intro; a count in the ideas FAQ",
+        "Reader: a short text for when he's asked for space"
+      ]
+    }
+  ],
+  "data": {
+    "search_console_28d": "Spain only: 69 impressions, 0 clicks, average position 52.8; 'como pedir perdon a mi novio por lastimarlo' at 4.9",
+    "dataforseo_spain": "'como pedir perdon a mi pareja' 50 a month (KD 47); the novio phrasings about 10 each"
+  }
+}

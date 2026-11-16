@@ -423,3 +423,8 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T14:39Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
 | 2026-11-16T14:45Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
 | 2026-11-16T14:46Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
+| 2026-11-16T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01344 | seo: how-to-apologize-to-your-boyfriend es |
+| 2026-11-16T16:42Z | dataforseo_labs/google/keyword_ideas/live | 0.024 | seo: how-to-apologize-to-your-boyfriend es |
+| 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |
+| 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |
+| 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |

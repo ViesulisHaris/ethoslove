@@ -3,6 +3,30 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-16: how-to-apologize-to-your-boyfriend speaks Spain's words, adds attitude, a letter and short texts
+- **Page:** /es/blog/how-to-apologize-to-your-boyfriend (and the English to match)
+- **Why:** Next open backlog item. Search Console (28 days): the Spanish page had 69 impressions,
+  all from Spain, 0 clicks, average 52.8; "como pedir perdon a mi novio por lastimarlo" at 4.9,
+  "como pedir perdon a tu novio" 38.8, "como pedirle perdon a tu novio" 27.4, the rest 56 to 99.
+  DataForSEO (Spain, informational): "como pedir perdon a mi pareja" 50 a month (KD 47); the novio
+  phrasings, "carta para pedir perdon a mi novio" and "frases para pedir perdon a mi novio" about 10
+  each. The Spain top 10s are stacks of "frases" and "cartas de perdón por mi actitud"; People also
+  ask: por mensaje, qué hacer para pedir perdón a tu pareja, ideas para pedir perdón a un hombre,
+  por mi actitud, qué frases usar, cuando le hiciste daño. The post had no attitude case, no letter,
+  no short lines and none of those questions in Spain's words.
+- **What changed:** Spanish title "Cómo pedir perdón a tu novio: frases, carta y qué evitar", new
+  description and keyword ("cómo pedir perdón a mi novio"); headings with "frases" and "por hacerle
+  daño". In both languages: a section on apologizing for your attitude, a short apology letter, five
+  one-line texts, FAQs on hurting him and on ways to apologize to a man, the "pareja" question, shorter
+  leads; Spanish polished (subjunctives, calques). `updated` 2026-11-16.
+- **Panel:** 10/10/10 after 4 rounds (`docs/blog/reviews/refresh/how-to-apologize-to-your-boyfriend-2026-11-16.json`)
+- **Cost:** $0.04 (keyword overview and ideas for Spain, three Spain SERPs with AI overview and PAA); balance $49.68
+- **Note:** Second run today; the Monday jobs ran this morning. Search Console and the sales endpoint
+  both answered. keyword_ideas on "pedir perdon a mi novio" returned unrelated Spanish phrases
+  (amigo invisible, Reyes Magos): use keyword_overview with a list here too.
+- **Check on:** 2026-12-04 whether "como pedir perdon a mi novio", "pedir perdon a mi novio" and
+  "...por lastimarlo" moved for /es/blog/how-to-apologize-to-your-boyfriend in Search Console
+
 ## 2026-11-16: how-to-write-a-love-letter gets the format, ideas and examples people search
 - **Page:** /blog/how-to-write-a-love-letter
 - **Why:** Next open backlog item. DataForSEO (US, all informational): "how to write a love letter"

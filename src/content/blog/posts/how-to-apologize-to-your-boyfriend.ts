@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "how-to-apologize-to-your-boyfriend",
   published: "2026-10-31",
+  updated: "2026-11-16",
   occasion: "apology",
   templates: ["paper-crane", "the-letter", "text-thread"],
   content: {
     en: {
       title: "How to apologize to your boyfriend and mean it",
-      description: "How to apologize to your boyfriend: the four parts that make it land, what to say after a small or big mistake, what not to say, and when a gesture helps.",
+      description: "How to apologize to your boyfriend: the four parts that make it land, what to say after a small mistake, a big one or a bad attitude, and a sample letter.",
       keyword: "how to apologize to your boyfriend",
-      lead: "To apologize to your boyfriend, say exactly what you did, say it was on you with no \"but\", and say what you'll do differently. Then give him room to answer. Below are the four parts in order, example messages for small and big mistakes, what to do if he isn't ready to forgive you, and when a gesture helps or makes it worse.",
+      lead: "To apologize to your boyfriend, say exactly what you did, say it was on you with no \"but\", and say what you'll do differently. Then give him room to answer. Below are the four parts, lines for a small mistake, a big one and a stretch of bad moods, a short letter, and what to do if he isn't ready to forgive you.",
       takeaways: [
         "Name what you did in one sentence. \"I'm sorry you're upset\" isn't an apology.",
         "Drop the \"but\". Everything after it cancels what came before.",
@@ -50,6 +51,20 @@ export const post: BlogPost = {
           type: "quote",
           text: "I was forty minutes late and didn't text. I know you waited. Next time I'll message before I leave, not after.",
         },
+        {
+          type: "p",
+          text: "Shorter ones to send as a text, for when it was small and you want it said before the day ends. Each still names what happened:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"I'm sorry about what I said in the car. It wasn't fair, and I didn't mean it.\"",
+            "\"I wasn't listening when you told me about your boss, and I'm sorry.\"",
+            "\"I should have told you I'd be late. I hate that you waited.\"",
+            "\"I'm sorry I spoke to you like that. My bad day wasn't your fault.\"",
+            "\"I was rude to your friend yesterday, and that was on me. Can we talk tonight?\"",
+          ],
+        },
         { type: "h2", text: "How to apologize after a big fight or when you've really hurt him" },
         {
           type: "p",
@@ -79,6 +94,23 @@ export const post: BlogPost = {
           type: "quote",
           text: "I keep thinking about what I said last night about your family. It was cruel and I'm sorry. Can I come over tonight and say it properly?",
         },
+        { type: "h2", text: "How to apologize to your boyfriend for your attitude" },
+        {
+          type: "p",
+          text: "Sometimes there's no single moment to name. You've been short with him for a week, or quiet and far away for a month. Then name the stretch instead of an event, say how long it's been, and if you know what's behind it, say that too, as a reason and not an excuse:",
+        },
+        {
+          type: "quote",
+          text: "I've been short with you all week, and you've had to tiptoe around me. That isn't fair to you. Work has me wound up and I've been bringing it home. From now on I'll tell you when it's a bad day instead of making you guess.",
+        },
+        {
+          type: "quote",
+          text: "I've been distant since things got hard with my family, and I know you've felt shut out. I'm sorry. It isn't you. I want to let you in more, even when I don't have the words yet.",
+        },
+        {
+          type: "p",
+          text: "A mood apology is judged by the mood that follows it, so the change has to be something he'll notice in the next few days.",
+        },
         { type: "h2", text: "Apologize over text, in person or in a letter?" },
         {
           type: "table",
@@ -90,6 +122,14 @@ export const post: BlogPost = {
             ["He's asked for space", "One message, then wait", "More messages turn it into pressure"],
             ["You're far apart", "A call, not a text", "Your voice carries what a text can't"],
           ],
+        },
+        {
+          type: "p",
+          text: "If a letter is your way in, keep it to the four parts and stop. Something like:",
+        },
+        {
+          type: "quote",
+          text: "I've tried to say this out loud three times and lost my nerve every time, so here it is written down. On Saturday I told your sister about the interview you'd asked me to keep to myself. That was yours to share, and I took it from you. I know it made you wonder what else you can tell me. From now on, if you say something stays between us, it does. I'm sorry. I'd like to talk tonight, whenever you're ready.",
         },
         {
           type: "p",
@@ -143,8 +183,16 @@ export const post: BlogPost = {
           a: "Use text for small mistakes or to open the door to a talk. Name what you did in one or two sentences, skip the \"but\", and send it once. For anything big, follow it with a call or a conversation in person.",
         },
         {
+          q: "How do I apologize to my boyfriend for hurting him?",
+          a: "Say exactly what you did and that it hurt him, without softening it, then what you'll do so it doesn't happen again. Do it in person if you can, let him ask why, and give him time: real hurt doesn't pass in one conversation.",
+        },
+        {
           q: "What if my boyfriend won't accept my apology?",
           a: "Give him time. Tell him once that you're there when he wants to talk, then stop chasing and do what you said would change. Forgiveness comes from seeing you keep your word, not from hearing sorry again.",
+        },
+        {
+          q: "What are some ways to apologize to a man?",
+          a: "Fewer than the long lists suggest: say it in person, send a short text if it was small, write a letter if you'd lose your nerve out loud, and after you've talked, a small gesture that shows you listened, like the food he loves, ordered in. None of them replaces the words.",
         },
         {
           q: "Should I give my boyfriend a gift to say sorry?",
@@ -153,15 +201,15 @@ export const post: BlogPost = {
       ],
     },
     es: {
-      title: "Cómo pedirle perdón a tu novio de verdad",
-      description: "Cómo pedirle perdón a tu novio: las cuatro partes que hacen que funcione, qué decir tras un error pequeño o grande, qué no decir y cuándo ayuda un detalle.",
-      keyword: "cómo pedirle perdón a mi novio",
-      lead: "Para pedirle perdón a tu novio, di exactamente lo que hiciste, di que fue culpa tuya sin ningún «pero» y di qué vas a hacer distinto. Después, déjale espacio para contestar. Abajo tienes las cuatro partes en orden, mensajes de ejemplo para errores pequeños y grandes, qué hacer si todavía no está listo para perdonarte y cuándo un detalle ayuda o lo empeora.",
+      title: "Cómo pedir perdón a tu novio: frases, carta y qué evitar",
+      description: "Cómo pedir perdón a tu novio por hacerle daño, por tu actitud o por un despiste: las cuatro partes, frases y una carta para mandarle, y qué no decir.",
+      keyword: "cómo pedir perdón a mi novio",
+      lead: "Para pedirle perdón a tu novio, di exactamente lo que hiciste, di que fue culpa tuya sin ningún «pero» y di qué vas a hacer distinto. Después, déjale espacio para contestar. Abajo tienes las cuatro partes, frases para un error pequeño, uno grande y una temporada de mal humor, una carta corta y qué hacer si todavía no está listo para perdonarte.",
       takeaways: [
         "Nombra lo que hiciste en una frase. «Siento que estés molesto» no es pedir perdón.",
         "Quita el «pero». Todo lo que viene detrás borra lo de antes.",
         "Di qué cambia y luego hazlo. Eso es lo que recordará.",
-        "Deja que se tome su tiempo. Presionar para que te perdone convierte tu disculpa en su trabajo.",
+        "Deja que se tome su tiempo. Presionar para que te perdone convierte tu disculpa en un trabajo para él.",
       ],
       body: [
         { type: "h2", text: "Las cuatro partes de una disculpa que funciona" },
@@ -177,12 +225,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Hay estudios sobre qué partes pesan más. En un [estudio de la Universidad Estatal de Ohio de 2016](https://news.osu.edu/the-6-elements-of-an-effective-apology-according-to-science/) que pedía a la gente valorar disculpas, lo que más contaba era reconocer la responsabilidad, después ofrecer una reparación, y lo que menos, pedir perdón explícitamente. El estudio usaba situaciones de trabajo, no de pareja, pero la idea sirve igual: asúmelo y ofrece arreglarlo antes de pedir nada a cambio.",
+          text: "Hay estudios sobre qué partes pesan más. En un [estudio de la Universidad Estatal de Ohio de 2016](https://news.osu.edu/the-6-elements-of-an-effective-apology-according-to-science/) que pedía a la gente valorar disculpas, lo que más contaba era reconocer la responsabilidad, después ofrecer una reparación, y lo que menos, pedir que te perdonen. El estudio usaba situaciones de trabajo, no de pareja, pero la idea sirve igual: asúmelo y ofrece arreglarlo antes de pedir nada a cambio.",
         },
-        { type: "h2", text: "Cómo pedirle perdón a tu novio por un error pequeño" },
+        { type: "h2", text: "Frases para pedirle perdón a tu novio por un error pequeño" },
         {
           type: "p",
-          text: "Para los de cada día (llegar tarde otra vez, olvidar un plan, saltar después de un día largo) que sea corto, y dilo pronto. Un error pequeño crece cuanto más tiempo pasa:",
+          text: "Para los de cada día (llegar tarde otra vez, olvidar un plan, contestar mal tras un día largo) que sea corto, y dilo pronto. Un error pequeño crece cuanto más tiempo pasa:",
         },
         {
           type: "quote",
@@ -196,7 +244,21 @@ export const post: BlogPost = {
           type: "quote",
           text: "Llegué cuarenta minutos tarde y no te escribí. Sé que me estuviste esperando. La próxima vez te escribo antes de salir, no después.",
         },
-        { type: "h2", text: "Cómo pedirle perdón después de una pelea fuerte o cuando le has hecho daño de verdad" },
+        {
+          type: "p",
+          text: "Frases más cortas para mandarle por mensaje, para cuando fue algo pequeño y quieres decirlo antes de que acabe el día. Cada una dice qué pasó:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Siento lo que te dije en el coche. Fue injusto y no lo pienso de verdad».",
+            "«No te estaba escuchando cuando me contabas lo de tu jefe, y lo siento».",
+            "«Tenía que haberte avisado de que llegaba tarde. Me sabe fatal que me esperaras».",
+            "«Siento haberte hablado así. Tú no tenías la culpa de mi mal día».",
+            "«Ayer fui borde con tu amigo, y fue culpa mía. ¿Hablamos esta noche?»",
+          ],
+        },
+        { type: "h2", text: "Cómo pedirle perdón a tu novio por hacerle daño o tras una pelea fuerte" },
         {
           type: "p",
           text: "Una promesa rota, algo cruel dicho en una pelea, una mentira. Esto hay que decirlo en persona si puedes, y necesita más de una frase. Dale una línea a cada una de las cuatro partes, y no corras hacia el final:",
@@ -211,7 +273,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si te pregunta por qué lo hiciste, contesta con sinceridad y en pocas palabras, y para ahí. La explicación es para que él entienda, no para que tú quedes libre.",
+          text: "Si te pregunta por qué lo hiciste, contesta con sinceridad y en pocas palabras, y para ahí. La explicación es para que él entienda, no para librarte tú.",
         },
         {
           type: "p",
@@ -219,11 +281,28 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si no puedes verle hasta más tarde, no lo guardes todo para la noche. Mándale ahora un mensaje que lo nombre y pida hablar, y deja el resto para en persona:",
+          text: "Si no puedes verle hasta más tarde, no lo guardes todo para la noche. Mándale ahora un mensaje que lo nombre y pida hablar, y deja el resto para cuando os veáis:",
         },
         {
           type: "quote",
           text: "No dejo de pensar en lo que dije anoche de tu familia. Fue cruel y lo siento. ¿Puedo ir esta noche y decírtelo como es debido?",
+        },
+        { type: "h2", text: "Cómo pedirle perdón a tu novio por tu actitud" },
+        {
+          type: "p",
+          text: "A veces no hay un momento concreto que nombrar. Llevas una semana contestándole mal, o un mes callada y distante. Entonces nombra la racha en lugar de un hecho, di cuánto tiempo lleva así y, si sabes qué hay detrás, dilo también, como motivo y no como excusa:",
+        },
+        {
+          type: "quote",
+          text: "Llevo toda la semana contestándote mal, y has tenido que andar con pies de plomo conmigo. No es justo para ti. El trabajo me tiene de los nervios y lo he ido pagando en casa. A partir de ahora te diré cuándo tengo un mal día en vez de hacerte adivinarlo.",
+        },
+        {
+          type: "quote",
+          text: "He estado distante desde que las cosas se complicaron con mi familia, y sé que te has sentido apartado. Lo siento. No es por ti. Quiero abrirme más contigo, aunque todavía no encuentre las palabras.",
+        },
+        {
+          type: "p",
+          text: "Una disculpa por tu actitud se juzga por la actitud que viene después, así que el cambio tiene que ser algo que note en los próximos días.",
         },
         { type: "h2", text: "¿Pedir perdón por mensaje, en persona o por carta?" },
         {
@@ -239,6 +318,14 @@ export const post: BlogPost = {
         },
         {
           type: "p",
+          text: "Si lo tuyo es empezar por una carta, cíñete a las cuatro partes y para ahí. Algo así:",
+        },
+        {
+          type: "quote",
+          text: "He intentado decírtelo en voz alta tres veces y las tres me han fallado los nervios, así que te lo dejo por escrito. El sábado le conté a tu hermana lo de la entrevista que me habías pedido que me guardara. Eso te tocaba contarlo a ti, y te lo quité. Sé que te ha hecho pensar qué más puedes contarme. A partir de ahora, si me dices que algo queda entre nosotros, queda entre nosotros. Lo siento. Me gustaría que habláramos esta noche, cuando tú quieras.",
+        },
+        {
+          type: "p",
           text: "Si eres tú quien le escribe a una novia, tienes [mensajes de perdón para tu novia](/blog/sorry-message-for-girlfriend) ordenados según lo que pasó.",
         },
         { type: "h2", text: "Lo que no hay que decir" },
@@ -247,7 +334,7 @@ export const post: BlogPost = {
           items: [
             "**«Siento que te sientas así».** Pide perdón por lo que siente él, no por lo que hiciste tú.",
             "**«Lo siento, pero…».** Lo que va detrás del «pero» es lo que va a oír.",
-            "**«Ya te he pedido perdón, ¿qué más quieres?».** Una disculpa no es un billete que da por cerrada la conversación.",
+            "**«Ya te he pedido perdón, ¿qué más quieres?».** Una disculpa no es un trámite que da por cerrada la conversación.",
             "**Sus errores antiguos.** Sacar lo que hizo él la primavera pasada convierte una disculpa en un intercambio.",
             "**Lo que dijo él en la misma pelea.** Si él también te debe una disculpa, eso es otra conversación, otro día.",
             "**Tantos «lo siento» que acaba consolándote él.** Si lloras más que él, tómate un minuto y vuelve a lo que siente él.",
@@ -256,12 +343,12 @@ export const post: BlogPost = {
         { type: "h2", text: "Si todavía no está listo para perdonarte" },
         {
           type: "p",
-          text: "Es su derecho. Dilo una vez, bien, y luego déjale espacio: «No voy a seguir insistiendo. Aquí estoy cuando quieras hablar». No le mandes un mensaje cada hora, no pidas a sus amigos que intercedan y no montes una escena para demostrar que lo sientes. Mientras tanto, haz eso que dijiste que iba a cambiar. Una semana cumpliendo tu palabra vale más que una segunda disculpa. Para la conversación de después, nuestra guía de [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tiene una sección sobre qué decir cuando ya os habéis calmado los dos.",
+          text: "Es su derecho. Dilo una vez, bien, y luego déjale espacio: «No voy a seguir insistiendo. Aquí estoy cuando quieras hablar». No le mandes un mensaje cada hora, no pidas a sus amigos que intercedan y no montes una escena para demostrar que lo sientes. Mientras tanto, haz eso que dijiste que iba a cambiar. Una semana cumpliendo tu palabra vale más que una segunda disculpa. Para la conversación de después, nuestra guía de [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tiene una sección sobre qué decir cuando ya os hayáis calmado los dos.",
         },
         { type: "h2", text: "Cuándo ayuda un detalle y cuándo lo empeora" },
         {
           type: "p",
-          text: "El detalle va después de las palabras, nunca en su lugar. Unas flores sin disculpa parecen un intento de saltarte la conversación. Un detalle pequeño que demuestre que le escuchaste (pedirle a domicilio su comida favorita la noche en que te tocaba cocinar, o una versión escrita de lo que le dijiste) puede funcionar bien una vez que habéis hablado. Si prefieres que tenga la disculpa por escrito, nuestros [regalos digitales para pedir perdón](/occasions/apology) te ayudan a decirlo con cuidado. La carta de abajo es gratis; Grulla de papel e Hilo de mensajes son [premium](/pricing).",
+          text: "El detalle va después de las palabras, nunca en su lugar. Unas flores sin disculpa parecen un intento de saltarte la conversación. Un detalle pequeño que demuestre que le escuchaste (pedirle a domicilio su comida favorita la noche en que te tocaba cocinar, o una versión escrita de lo que le dijiste) puede funcionar bien una vez que hayáis hablado. Si prefieres que tenga la disculpa por escrito, nuestros [regalos digitales para pedir perdón](/occasions/apology) te ayudan a decirlo con cuidado. La plantilla La carta, aquí abajo, es gratis; Grulla de papel e Hilo de mensajes son [premium](/pricing).",
         },
         {
           type: "template",
@@ -276,12 +363,12 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "text-thread",
-          note: "Tus frases le llegan a un chat en la pantalla, burbuja a burbuja, y terminan en tu mensaje. Úsalo cuando ya hayáis hablado: unos cuantos de los mensajes bonitos de antes de la pelea, escritos otra vez, con tu disculpa, con tus palabras, como última burbuja.",
+          note: "Tus frases le van llegando en un chat, burbuja a burbuja, y terminan en tu mensaje. Úsalo cuando ya hayáis hablado: unos cuantos de los mensajes bonitos de antes de la pelea, escritos otra vez, y tu disculpa, con tus palabras, como última burbuja.",
         },
       ],
       faq: [
         {
-          q: "¿Cómo le pido perdón a mi novio después de una pelea?",
+          q: "¿Qué hago para pedirle perdón a mi pareja después de una pelea?",
           a: "Espera a que estéis los dos tranquilos y luego di lo que hiciste, que fue culpa tuya, por qué le dolió y qué vas a hacer distinto. Que la explicación sea corta y deja fuera lo que hizo él. Después, deja que conteste a su ritmo.",
         },
         {
@@ -289,8 +376,16 @@ export const post: BlogPost = {
           a: "Usa el mensaje para errores pequeños o para abrir la puerta a hablar. Nombra lo que hiciste en una o dos frases, sin «pero», y mándalo una vez. Si es algo grande, que después venga una llamada o una conversación en persona.",
         },
         {
+          q: "¿Cómo le pido perdón a mi novio por hacerle daño?",
+          a: "Dile exactamente qué hiciste y que le dolió, sin suavizarlo, y qué vas a hacer para que no vuelva a pasar. Si puedes, hazlo en persona, deja que te pregunte por qué y dale tiempo: un daño de verdad no se cura en una sola conversación.",
+        },
+        {
           q: "¿Y si mi novio no acepta mis disculpas?",
           a: "Dale tiempo. Dile una vez que estás ahí cuando quiera hablar, deja de perseguirle y haz lo que dijiste que iba a cambiar. El perdón llega al verte cumplir tu palabra, no al oír otro «lo siento».",
+        },
+        {
+          q: "¿Qué ideas hay para pedir perdón a un hombre?",
+          a: "Menos de las que prometen las listas largas: decírselo en persona, mandarle un mensaje corto si fue algo pequeño, escribirle una carta si te fallarían los nervios en voz alta y, cuando ya hayáis hablado, un detalle que demuestre que le escuchaste, como pedirle a domicilio su comida favorita. Ninguna sustituye a las palabras.",
         },
         {
           q: "¿Le hago un regalo a mi novio para pedirle perdón?",
