@@ -1,0 +1,184 @@
+{
+  "slug": "would-you-rather-questions-for-couples",
+  "keyword": "would you rather questions for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to fix the funny-section intro, which claimed each listed question starts with \"Would you rather\" when the items don't, and the template paragraph's \"They answer by text\", which overpromised what a gift link does. Polish: US/UK neutral words (film, parcel)."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product claim checked out against the game, template and pricing files. Asked for: a muddled spicy intro (\"them reading over your shoulder\"); \"answers first\" contradicting the secret pick; \"hubs\" jargon; \"turn the phones round\"; section intros that repeated the table's 'When it works' column. In Spanish: \"104 por momento\", \"Esto es qué bloque\", \"se enseña\", \"exs\" (should be \"los ex\"), \"nada que registrarse\" and \"noche de cita\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the long bare lists because it sorts 104 questions by mood, says which set fits tonight, gives the actual follow-up for specific picks and adds a free two-phone game that handles the secret pick."
+        }
+      ],
+      "applied": [
+        "Funny intro now says \"Start each one with 'Would you rather'\" (ES: \"Empieza cada una con...\")",
+        "Template paragraph: they read the questions on their phone and answer by message or in person",
+        "Spicy intro: \"nothing you'd mind someone reading over their shoulder\"",
+        "Take turns reading: the reader explains their pick first (EN and ES)",
+        "\"hubs\" became \"lists\"; \"turn the phones round\" became \"show your screens\"",
+        "Romantic and long-distance intros no longer repeat the table (EN and ES)",
+        "Spanish: title \"104 para cada plan\" (\"para cada momento\" ran to 62 characters, over the 60 limit), description \"según el momento\", lead \"ordenadas por momento\", the table intro, \"las enseñáis\", \"los ex\" (twice), \"No hay que descargar nada ni registrarse\", \"una cita\" for date night (twice)",
+        "Polish that heads off likely fixes: \"surprise delivery\" for parcel; Spanish \"montar muebles\", \"mensaje mío con chispa\", \"en broma\", \"a quien más quieren\", \"cuánto tiempo llevéis\", \"juego gratis [¿Qué prefieres?]\", \"te dé corte\"; the boyfriend hub's added link sentence split in two"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes made. Better than the top lists, which are mostly bare questions: 104 mood-sorted questions, a table for choosing a set, rules for the secret pick, follow-ups, ground rules for the risky set and a free two-phone game to play tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix made and every claim verified against the code. Asked for \"at weekends\" (British) to become \"every weekend\", and the Spanish pact line (\"acordad antes que nada de lo que se diga...\") to be rephrased so \"antes que nada\" doesn't read as \"first of all\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Nothing broken by the edits. It's the page to send a friend over the 150-to-285-question walls of text, because it sorts 104 questions by mood, says which set suits tonight, gives a real follow-up for each pick and links a free two-phone game that does the secret pick."
+        }
+      ],
+      "applied": [
+        "\"Get up early every weekend\"",
+        "Spanish: \"y antes de empezar acordad que nada de lo que se diga en el juego saldrá luego\"",
+        "Polish that heads off a likely fix: \"apologizes/apologized\" to match the site's -ize spelling; Spanish \"Pasaos el móvil\""
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Nothing broken. Beats the top lists: the lead answers at once, the mood table picks tonight's set, the follow-ups and the 'When the answer surprises you' line are worth screenshotting, and the product appears only where it helps."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Both round-2 fixes made, and every claim verified again. Asked for \"at yours\" (British) to become \"at your place\", and for the hub posts' new link sentences to fix \"[would you rather questions for couples] has\" (plural noun, singular verb) by saying \"Our list of ...\"."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers every main-keyword People also ask question and beats the 150-to-285-question top results with a mood-sorted list, when-to-use guidance, follow-ups and a playable version that does the secret pick."
+        }
+      ],
+      "applied": [
+        "\"Spend the next visit at your place\"",
+        "Hub posts (EN): \"Our list of [would you rather questions for couples] has 104 more...\" in both questions-to-ask-your-boyfriend and questions-to-ask-your-girlfriend",
+        "Polish that heads off a likely fix (raised in all three rounds): \"film\" became \"movie\" twice; Spanish \"lo que digas\" to match the subjunctive, \"antes de ti\""
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The one page for this search with a tested way to play (secret pick, reveal, follow-up), a mood table for choosing tonight's set, 104 plain-worded questions and a follow-up table, with the free game offered before any paid template."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-3 fixes in and correct. Beats the top results: questions sorted by mood with a table for which night each set suits, a ready follow-up for every hard pick, and the secret-pick-then-reveal rule (done for you by a free one-or-two-phone game) turn a list into an evening."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page with 104 questions by mood, a when-to-use table, a follow-up for each pick and a spicy set that isn't crude, and it answers every on-topic People also ask question, so it gives the searcher more than the first-page lists."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "\"on their phone\" repeated in two sentences of the gift paragraph (editor)",
+        "\"Have dinner with my ex, or have me have dinner with yours?\" doubled 'have' (reader)",
+        "Optional FAQ \"What are 20 questions for couples?\" (search)"
+      ]
+    }
+  ]
+}

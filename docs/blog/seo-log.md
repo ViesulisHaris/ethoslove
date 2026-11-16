@@ -376,3 +376,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T04:49Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-write-a-love-letter |
 | 2026-11-16T04:49Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-write-a-love-letter |
 | 2026-11-16T04:49Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-write-a-love-letter |
+| 2026-11-16T06:18Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:18Z | dataforseo_labs/google/keyword_overview/live | 0.01224 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |

@@ -306,7 +306,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Play them, or send them" },
         {
           type: "p",
-          text: "Our free [question cards](/games/deck) are a deck to pass around on one phone. [How well do you know me?](/games/know) turns her answers into a quiz you can play on two phones from different places, and [Would you rather?](/games/rather) is there for a lighter round. For a [digital gift](/gifts) that asks the questions for you:",
+          text: "Our free [question cards](/games/deck) are a deck to pass around on one phone. [How well do you know me?](/games/know) turns her answers into a quiz you can play on two phones from different places, and [Would you rather?](/games/rather) is there for a lighter round; our list of [would you rather questions for couples](/blog/would-you-rather-questions-for-couples) has 104 more, from funny to juicy. For a [digital gift](/gifts) that asks the questions for you:",
         },
         {
           type: "template",
@@ -646,7 +646,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Para jugar, o para mandárselas" },
         {
           type: "p",
-          text: "Nuestras [cartas de preguntas](/games/deck) gratis son una baraja para ir pasándoos el móvil. [¿Cuánto me conoces?](/games/know) convierte sus respuestas en un concurso que podéis jugar en dos móviles desde sitios distintos, y [¿Qué prefieres?](/games/rather) sirve para una ronda más ligera. Si quieres que las preguntas le lleguen como [regalo digital](/gifts):",
+          text: "Nuestras [cartas de preguntas](/games/deck) gratis son una baraja para ir pasándoos el móvil. [¿Cuánto me conoces?](/games/know) convierte sus respuestas en un concurso que podéis jugar en dos móviles desde sitios distintos, y [¿Qué prefieres?](/games/rather) sirve para una ronda más ligera; nuestras [preguntas de qué prefieres para parejas](/blog/would-you-rather-questions-for-couples) tienen 104 más, de divertidas a comprometidas. Si quieres que las preguntas le lleguen como [regalo digital](/gifts):",
         },
         {
           type: "template",
