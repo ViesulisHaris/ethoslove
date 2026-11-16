@@ -91,14 +91,18 @@ export function pageIsTranslated(): boolean {
  * Whether an error that reached `window` is one of ours to report. Most of what lands there isn't:
  * "Script error." is a script on another origin that the browser won't describe; extensions and
  * in-app browsers inject their own code ("Java object is gone" is Android's WebView bridge); and
- * the ResizeObserver loop notice is harmless by definition. Ours come from a file on this origin,
- * or show one in their stack.
+ * the ResizeObserver loop notice is harmless by definition. Ours come from a .js file on this
+ * origin, or show one in their stack. Code a browser or app injects into the page (an in-app crypto
+ * wallet's `window.ethereum`, Firefox for iOS's `__firefox__`, the Google app's translator, whose
+ * own recursion was "Maximum call stack size exceeded" on iPhones) is attributed to the page's
+ * address instead, which never ends in .js.
  */
 export function isOwnError(input: { message?: string; filename?: string; stack?: string }, origin: string): boolean {
   const message = input.message ?? "";
   if (!message || message === "Script error." || message === "Script error") return false;
   if (/ResizeObserver loop|Java object is gone|invoking postMessage/i.test(message)) return false;
-  const own = (s: string | undefined) => Boolean(s) && s!.includes(origin);
+  const ownScript = new RegExp(`${origin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}/[^\\s:?#)]*\\.js\\b`);
+  const own = (s: string | undefined) => Boolean(s) && ownScript.test(s!);
   return own(input.filename) || own(input.stack);
 }
 

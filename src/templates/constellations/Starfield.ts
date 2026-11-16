@@ -168,7 +168,9 @@ export class Starfield {
 
   private loop = (now: number) => {
     if (!this.running) return;
-    const dt = Math.min(0.05, (now - this.last) / 1000);
+    // rAF's timestamp is the frame's start, which can be a moment before the performance.now() in
+    // start(): a negative step would run time backwards and draw a ring with a negative radius.
+    const dt = Math.min(0.05, Math.max(0, (now - this.last) / 1000));
     this.last = now;
     this.time += dt;
     this.draw(this.time, dt);
@@ -319,7 +321,7 @@ export class Starfield {
       ctx.globalAlpha = 1;
       ctx.drawImage(this.coreSprite, n.x - core / 2, n.y - core / 2, core, core);
       if (isNext && !visited) {
-        const ring = ((t * 0.9 + i * 0.3) % 1);
+        const ring = (((t * 0.9 + i * 0.3) % 1) + 1) % 1;
         ctx.globalAlpha = (1 - ring) * 0.7;
         ctx.strokeStyle = "rgba(255,255,255,0.9)";
         ctx.lineWidth = 1.2 / scale;

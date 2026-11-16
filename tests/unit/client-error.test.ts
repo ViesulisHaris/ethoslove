@@ -70,6 +70,16 @@ describe("errors that never reach an error screen", () => {
     expect(isOwnError({ message: "", filename: `${origin}/x.js` }, origin)).toBe(false);
   });
 
+  it("leaves alone code the browser injected, which shows the page's own address", () => {
+    // The Google app's translator on an iPhone, 16 Nov: our HTML is one line, so line 230 isn't ours.
+    const translator = `@${origin}/templates:194:68\n@${origin}/templates:191:249\nxk@${origin}/dashboard:230:389\nvk@${origin}/dashboard:230:69`;
+    expect(isOwnError({ message: "Maximum call stack size exceeded.", filename: `${origin}/templates`, stack: translator }, origin)).toBe(false);
+    expect(isOwnError({ message: "undefined is not an object (evaluating 'window.ethereum.selectedAddress = undefined')", filename: `${origin}/`, stack: `@${origin}/:2:31` }, origin)).toBe(false);
+    expect(isOwnError({ message: "Can't find variable: __firefox__", filename: `${origin}/g/abc`, stack: `@${origin}/g/abc:1:1` }, origin)).toBe(false);
+    // A lookalike host is not our origin.
+    expect(isOwnError({ message: "boom", stack: `at f (https://tryethos.io.evil.example/_next/x.js:1:1)` }, origin)).toBe(false);
+  });
+
   it("never logs a gift's link, in either language", () => {
     expect(redactGiftPath("/g/x2x2x2x2x")).toBe("/g/[shortId]");
     expect(redactGiftPath("/es/g/x2x2x2x2x/reply")).toBe("/es/g/[shortId]/reply");
