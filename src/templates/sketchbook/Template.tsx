@@ -92,6 +92,13 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, index, pages.length]);
 
+  // The editor can take photos away under a book that's already open: a page past the new end
+  // becomes the last one, before anything reads a page that's gone.
+  if (index > pages.length - 1) {
+    setIndex(pages.length - 1);
+    return null;
+  }
+
   const tone: CoverTone = { page: theme.paper, glow: ["transparent", "transparent"], accent: theme.accent, dark: theme.dark };
   const vars = { "--k": "min(var(--u), 0.5cqh)", "--p": "min(0.92cqw, 0.6cqh)" } as CSSProperties;
   const last = index === pages.length - 1;

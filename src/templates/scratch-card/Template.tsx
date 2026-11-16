@@ -59,6 +59,16 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
   const [burst, setBurst] = useState(0);
   const [run, setRun] = useState(0);
   const blocks = useMemo(() => parseRichText(data.message), [data.message]);
+
+  // The editor can take photos away under a gift that's already on screen (its preview opens on
+  // the last card). A card past the new end becomes the last one, keeping whether that was
+  // scratched, before anything reads a card that's gone.
+  if (index > total - 1) {
+    setIndex(total - 1);
+    setRevealed((r) => [...r.slice(0, total - 1), r[r.length - 1] ?? false]);
+    return null;
+  }
+
   const isFinal = index === total - 1;
   const label = data.fields.foilText || s.scratch;
 
