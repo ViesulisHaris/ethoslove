@@ -48,6 +48,9 @@ Any one of these fails the post, whatever the scores:
 - Advice that would mislead or embarrass the reader if they followed it.
 - Sentences copied from another site.
 - Spanish that reads like a machine translation.
+- In a comparison post (`docs/blog/VOICE.md`, "Comparison posts"): a claim about another maker that
+  the pages in the review record's `sources` don't show, a missing line saying we make Ethos, or a
+  line that knocks a maker instead of comparing.
 
 ## The three readers
 
@@ -73,7 +76,9 @@ Read both languages. Check every factual claim against the code, not against the
 - scheduling and countdowns against `src/app/[locale]/(gift)/g/[shortId]/page.tsx`,
   `src/components/gift/scheduled-screen.tsx` and `src/components/editor/sections/extras.tsx`;
 - that every link resolves;
-- dates, times and anything else that can be checked.
+- dates, times and anything else that can be checked;
+- in a comparison post, every claim about another maker against the pages in the review record's
+  `sources`: open each one again, today.
 
 Return the claims you checked in a `verified` list, each with the file that settles it.
 

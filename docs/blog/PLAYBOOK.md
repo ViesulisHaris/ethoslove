@@ -129,6 +129,10 @@ Facts: state only what you can stand behind. A statistic needs a named source yo
 No invented quotes, customers, reviews, studies or numbers. Facts about Ethos come only from the
 files listed in `docs/blog/VOICE.md`.
 
+A comparison post (a queue entry with `"for": "ai-answers"`) follows `docs/blog/VOICE.md`,
+"Comparison posts": open every maker's own pages today, write down each page you used, and put that
+list in the review record as `sources`, so the editor can open the same pages.
+
 ## 3. Write it
 
 Create `src/content/blog/posts/<slug>.ts` (one `export const post: BlogPost`) and add it to

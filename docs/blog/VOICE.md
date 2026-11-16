@@ -47,23 +47,57 @@ Check these files before stating any fact. If a file disagrees with this list, t
   name, your message, photos and music. They get a link or a printable QR code, and the gift opens
   on their phone as a short interactive experience. There's no app to install, and it works in
   English and Spanish.
-- **Templates.** There are 36. Each has a name, tagline and description in its manifest. Describe
-  a template only by what its manifest says it does.
-- **Free.** The Letter and Constellations are free:
+- **Templates.** There are 61 (16 Nov 2026; count the folders in `src/templates`). Each has a name,
+  tagline and description in its manifest. Describe a template only by what its manifest says it
+  does.
+- **Free.** The Letter and Constellations are free (`pricing.freeNote` in `messages/en.json`):
   - unlimited gifts
   - up to 10 photos
-  - the music library
-  - a countdown and a hidden final surprise
+  - the music library, and a 30-second preview of a real song they can tap to hear
   - a small "Made with Ethos" footer
-- **Premium.** Every other template is a one-time payment, never a subscription:
-  - One template: $7.99 / €7.49 / £6.49.
-  - Pick three: $11.99 / €10.99 / £9.49.
-  - Everything: $24.99 / €22.99 / £19.99.
-  - Any unlock adds real songs (a 30-second preview of the actual track), video clips, voice
-    messages, scheduling and a password, and allows up to 20 photos with no footer.
+- **Premium.** Every other template is a one-time payment, never a subscription. Prices follow the
+  reader's country: US dollars in the US, pounds in the UK, euros elsewhere
+  (`src/lib/pricing/products.ts`, checked 16 Nov 2026):
+  - One template: $11.99 / £8.99 / €9.99.
+  - Pick three: $17.99 / £12.99 / €14.99.
+  - Every template, now and future: $29.99 / £21.99 / €24.99.
+  - Any unlock adds video clips, voice messages, up to 20 photos, a surprise inside (a date or a
+    trip, wrapped at the end), scheduling and a password, with no footer.
+- **Make it special.** The same extras for a free template (The Letter or Constellations), once:
+  $8.99 / £6.49 / €7.49. Ethos for Two and the game packs exist too: describe them only from
+  `pricing.faq` in `messages/en.json`.
 - **Scheduling.** A premium gift can unlock at a set time. You choose the time zone, so it can
   open at midnight where they are.
 - **After sending.** Links are meant to be permanent, and edits go live at the same link. The
   recipient can send a reaction back, and "send one back" lets them reply with a gift of their own.
 - **Trying it.** Every template has a free live demo, and the editor works on a phone.
-- **Don't mention.** Promo codes and discounts change, so leave them out. Don't name competitors.
+- **Don't mention.** Promo codes and discounts change, so leave them out. Don't name other gift
+  makers, except in a comparison post (below).
+
+## Comparison posts
+
+The owner allowed them on 16 Nov 2026. When someone asks ChatGPT which site to use for a digital
+gift or letter, it answers from comparison pages that other makers wrote, and Ethos is rarely in
+them. A queue entry with `"for": "ai-answers"` is a comparison post, and it names other makers.
+Write it so that a reader who never picks Ethos still finds it the most useful page on the subject:
+
+- **Say who wrote it.** Near the top, one plain line: we make Ethos, one of the sites compared, and
+  everything about the others comes from their own sites on the date given.
+- **Only what you saw on each maker's own site, the day you write:** price and currency, what's
+  free, what you can add (photos, music, video, voice), how it opens, scheduling, languages. Open the
+  maker's own pages (WebFetch, or DataForSEO's page reader when a site blocks it). A fact you can't
+  see there stays out: never from another comparison, a review, an AI answer or memory. A cell you
+  can't check says "not stated", never a guess. Every page you used goes in the post's review record
+  (`docs/blog/reviews/<slug>.json`) as a `sources` list of `{ "maker", "url", "checked" }`.
+- **Ethos by the same rules.** Its row comes from the files above and the live /pricing page, in the
+  reader's currency (dollars in the English post, euros in the Spanish one), weak points included:
+  what costs extra and what it doesn't do.
+- **Fair.** Every maker gets the same columns, in an order a reader can check (price, or A to Z),
+  not Ethos first. Say what each one does well and who it suits, and say plainly where another is
+  the better pick.
+- **Facts, not knocks.** Compare features and prices. Never call another maker cheap, scammy,
+  outdated or unsafe, never guess at their quality, motives or customers, and never use their logos
+  or screenshots.
+- **Dated and kept true.** The intro and the table say when the facts were checked ("Checked on
+  16 Nov 2026"). Every 60 days the SEO routine checks every row again (`docs/blog/SEO-AGENT.md`), and
+  a maker that has closed comes out.

@@ -70,7 +70,12 @@ ours, note which: those pages are worth keeping sharp.
 
 ## 2. Choose this run's one change
 
-Take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
+A comparison post (`docs/blog/VOICE.md`, "Comparison posts") whose facts were last checked 60 or
+more days ago comes before anything else: check every row again on the makers' own sites, update
+the table, the "Checked on" date and `updated`, list the pages in the refresh record's `sources`,
+and run the panel. That is the run's change.
+
+Otherwise take the first open item in `docs/blog/seo-backlog.md` that this routine can do. If there is none,
 pick from the data, in this order of value. Start every run by pulling Search Console for the last
 28 days, query by page (SEO-DATA.md, free): it is Google's own record of how our pages do, and it
 comes before any estimate. Leave the brand searches out first (SEO-DATA.md): the name and its typos
