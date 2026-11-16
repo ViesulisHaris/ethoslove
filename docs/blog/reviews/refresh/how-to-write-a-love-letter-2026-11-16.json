@@ -1,0 +1,40 @@
+{
+  "slug": "how-to-write-a-love-letter",
+  "keyword": "how to write a love letter",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "The lead answers the search at once and the same rain-and-umbrella memory runs through the steps, the finished letter and the format; the short letters for him, her and a crush are lines a reader would borrow tonight." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 9, "spanish": 9 }, "overall": 9, "dealbreakers": [], "summary": "The sign-off intro said 'from simplest to most romantic' but the table now ends on 'Yours truly' (EN and ES); in Spanish «atentamente» is not old-fashioned and «suena juguetona» reads translated." },
+        { "reviewer": "search", "scores": { "better": 9, "search": 9 }, "overall": 9, "dealbreakers": [], "summary": "Answer the People-also-ask 'What is the most beautiful love letter ever written?' (and Spain's '¿Cuál es la carta de amor más bonita?'), and say the linked letters are the longer, romantic ones (PAA: a long and romantic message for my girlfriend)." }
+      ],
+      "applied": [
+        "Sign-off intro: 'from simplest to most romantic, and one to save for a joke' (ES 'y una solo para hacer gracia')",
+        "ES FAQ: «atentamente» 'suena a guiño o a carta del banco'",
+        "New FAQ on Beethoven's 'Immortal Beloved' letter (July 1812, found among his papers after his death, recipient unknown), EN and ES",
+        "'For longer, romantic ones' (ES 'más largas y más románticas')",
+        "Polish: ES 'guardada o guardado'"
+      ],
+      "rejected": [
+        "Adding a seventh FAQ: the tests cap the FAQ at six, so the 'How long should a love letter be?' FAQ made way; the post keeps its full section and table on length"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        { "reviewer": "reader", "scores": { "answers": 10, "usable": 10, "trust": 10 }, "overall": 10, "dealbreakers": [], "summary": "Every fix is in; the format, the nine ideas and the three short letters give a stuck writer something to do tonight, with the free template first and premium labelled honestly." },
+        { "reviewer": "editor", "scores": { "accuracy": 10, "voice": 10, "spanish": 10 }, "overall": 10, "dealbreakers": [], "summary": "Fixes made correctly; the Beethoven FAQ is accurate and hedged in both languages, every template note matches its manifest and the Spanish reads as Spain's own." },
+        { "reviewer": "search", "scores": { "better": 10, "search": 10 }, "overall": 10, "dealbreakers": [], "summary": "Unlike the tip lists ranking now, it builds one real letter step by step, then answers every People-also-ask (format, yours truly, most beautiful letter, start, end) with headings in the searched words." }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "realise -> notice (US/UK spelling split)",
+        "P.S. 'remember longest' -> 'the last thing they read'",
+        "'longer, romantic ones' -> 'longer letters'",
+        "A line for 'carta de amor bonita' (Spain 140)"
+      ]
+    }
+  ]
+}

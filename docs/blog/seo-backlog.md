@@ -34,7 +34,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
   "things I love about you" answered in it.
 - [x] (2026-11-15) **open-when-letter-ideas**: the target is right (2,900); add "open when letters" (3,600, UK 880)
   to the title or description and the body.
-- [ ] **how-to-write-a-love-letter**: 4,400, KD 1, plus "what to write in a love letter" (590). Get the
+- [x] (2026-11-16) **how-to-write-a-love-letter**: 4,400, KD 1, plus "what to write in a love letter" (590). Get the
   top 10 and give the post what the top three have. Its Spanish side should lead with what Spain
   searches: "carta de amor" (5,400 in Spain), "cómo escribir una carta de amor" (170).
 - [ ] **how-to-apologize-to-your-boyfriend** (Spanish version): Spanish searches like "como pedir

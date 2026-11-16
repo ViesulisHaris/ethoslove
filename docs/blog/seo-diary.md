@@ -3,6 +3,36 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-16: how-to-write-a-love-letter gets the format, ideas and examples people search
+- **Page:** /blog/how-to-write-a-love-letter
+- **Why:** Next open backlog item. DataForSEO (US, all informational): "how to write a love letter"
+  4,400 a month (KD 1), "love letter ideas" 2,900 (KD 0), "how to end a love letter" 1,900, "how to
+  start" and "love letter examples" 1,600 each, "love letter format" 720, "what to write in a love
+  letter" 590; UK "how to write a love letter" 590. Spain: "carta de amor" 5,400 (KD 0), "como
+  empezar una carta de amor" 260, "cómo escribir una carta de amor" 170. Search Console: no
+  impressions for the post in 28 days; not in the US mobile top 30 today. The top 10s are tip lists
+  (loverjournal, enotalone, bridesmaidforhire), forums, Pinterest and Adobe/Canva templates; the AI
+  overview steps through greeting, memories, hopes and closing. People also ask: is "yours truly"
+  flirty, how do you format a love letter, the most beautiful love letter ever written, an example.
+  The post had no format, no ideas list, one example and none of those answers.
+- **What changed:** Title "How to write a love letter: 5 steps, ideas and examples", new
+  description; new sections "Love letter format", "Love letter ideas: what to write about when
+  nothing comes" and three short letters (him, her, a crush, linking the boyfriend and girlfriend
+  posts); last-line examples, a "Yours truly" row, a decorating line; FAQs on the format, "yours
+  truly" and Beethoven's "Immortal Beloved" letter (the length FAQ made way; its section stays).
+  Spanish to match ("Las partes de una carta de amor", «Atentamente»). `updated` 2026-11-16.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/how-to-write-a-love-letter-2026-11-16.json`)
+- **Cost:** $0.05 for the change; with the Monday jobs $1.85 in all (rank check $1.48 for 249
+  mobile top-30s and ranked_keywords, link prospects $0.31); balance $50.10
+- **Weekly jobs:** Rank check (`seo-ranks.md`): 2 of 249 in the top 10 ("scratch card ideas" 9, up
+  from 18; "carta de navidad para mi novio" 10 in Spain), 3 in the top 30. Link prospects: 2 new
+  (an anniversary-calculator comparison on onlinetoolstore.io, live again; a hands-on review of
+  long-distance apps on lyrical-muse.com). Sales endpoint 503 again; Search Console worked.
+- **Note:** On mobile, `serp/google/organic/live/regular` returns most organic links as
+  google.com/goto redirects: find our site in `breadcrumb` (written into seo-ranks.md).
+- **Check on:** 2026-12-04 whether "how to write a love letter", "love letter ideas", "how to end a
+  love letter" and "carta de amor" show for the post in Search Console and the rank check
+
 ## 2026-11-15: open-when-letter-ideas aimed at "open when letters"
 - **Page:** /blog/open-when-letter-ideas
 - **Why:** Next open backlog item. DataForSEO (US, all KD 0, informational): "open when letters",

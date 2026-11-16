@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "how-to-write-a-love-letter",
   published: "2026-10-26",
+  updated: "2026-11-16",
   occasion: "valentines",
   templates: ["the-letter", "xoxo", "coquette"],
   content: {
     en: {
-      title: "How to write a love letter when you freeze at a blank page",
-      description: "How to write a love letter in five steps: one memory, what it meant, what's true now and what you want next, plus a finished example and ways to open and close.",
+      title: "How to write a love letter: 5 steps, ideas and examples",
+      description: "How to write a love letter in five steps, with a finished example, the format, ideas for what to say when nothing comes, and lines to start and end it.",
       keyword: "how to write a love letter",
-      lead: "To write a love letter, start with one memory, not your whole relationship. Say what happened, then what it meant to you, then something true about now, and end with what you want next. That's the whole structure. Below are the five steps with an example for each, a finished letter built from them, and ways to open and close that don't sound borrowed.",
+      lead: "To write a love letter, start with one memory, not your whole relationship. Say what happened, then what it meant to you, then something true about now, and end with what you want next. That's the whole structure. Below: the five steps, a finished letter, the format, ideas for when you're stuck, and ways to open and close that don't sound borrowed.",
       takeaways: [
         "One specific memory carries a letter further than ten compliments.",
         "Write it the way you'd say it out loud, then cut the sentences you'd never say.",
@@ -61,6 +62,65 @@ export const post: BlogPost = {
           type: "p",
           text: "Notice what it doesn't do: it never says \"you're amazing\" or \"I can't live without you\". The memory says it for you. For more on turning moments into lines, our [100 reasons why I love you](/blog/reasons-why-i-love-you) uses the same method on a list, and if you're writing after years of marriage, here are examples of a [love letter to your husband](/blog/love-letter-to-husband).",
         },
+        { type: "h2", text: "Love letter format" },
+        {
+          type: "p",
+          text: "A love letter has no official format, but most good ones fall into the same order. You don't need an address block or a subject: this isn't a cover letter.",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**The date**, top right or top left. In ten years it will be the line they look at first.",
+            "**The greeting**: their name or the nickname you actually use.",
+            "**The opening line**, straight into a memory or the reason you're writing.",
+            "**The middle**: the memory, what it meant, and something true about now. This is the five steps above.",
+            "**The last line**: what you want next.",
+            "**The sign-off and your name.**",
+            "**A P.S.**, if you have a small joke or a plan to leave them with.",
+          ],
+        },
+        { type: "h2", text: "Love letter ideas: what to write about when nothing comes" },
+        {
+          type: "p",
+          text: "If no memory jumps out, pick one of these and write the first sentence before you think too hard about it:",
+        },
+        {
+          type: "list",
+          items: [
+            "**The first time you noticed them**, and what they were doing. Not how they looked: what they were doing.",
+            "**A habit only you would notice.** The way they read the last page of a book first, or say goodnight to the dog.",
+            "**The day they got you through something hard**, and the exact thing they did, down to the tea they made.",
+            "**Something they taught you** that you now do without thinking.",
+            "**An ordinary Sunday together**, from the first coffee to the last episode. Ordinary is the point.",
+            "**What you'd tell yourself before your first date**, knowing what you know now.",
+            "**Three things they did this year that they think you didn't see.**",
+            "**A letter for later**: one to open on a bad day, a birthday or a flight, like a set of [open when letters](/blog/open-when-letter-ideas).",
+            "**For a crush**: one thing you noticed about them and an invitation, such as coffee on Thursday. Save the big feelings for the second letter.",
+          ],
+        },
+        { type: "h2", text: "Short love letter examples for him, her and a crush" },
+        {
+          type: "p",
+          text: "Three short letters built the same way, one memory and one plan each. For longer, romantic ones, there are three full letters in our [love letter for your boyfriend](/blog/love-letter-for-boyfriend) and three in the [love letter for your girlfriend](/blog/love-letter-for-girlfriend).",
+        },
+        { type: "h3", text: "For him" },
+        {
+          type: "quote",
+          text: "You drove four hours on a Friday night because I said the week had been bad, and then you fell asleep on my sofa before you'd taken your coat off. I sat there and watched you snore and thought: that's what love looks like, a man asleep in his coat. Next time, I'm driving to you.",
+          cite: "Love, me",
+        },
+        { type: "h3", text: "For her" },
+        {
+          type: "quote",
+          text: "You laughed so hard at the wedding that you had to leave the speeches, and I followed you out and we missed the cake. I've been to a lot of weddings. That's the only one I remember. Come and miss the cake with me at every wedding we're ever invited to.",
+          cite: "All my love",
+        },
+        { type: "h3", text: "For a crush" },
+        {
+          type: "quote",
+          text: "On Tuesday you lent me your pen and then pretended you didn't want it back. I've still got it. I'd like to return it over coffee, if you're free on Thursday.",
+        },
         { type: "h2", text: "How to start a love letter" },
         {
           type: "p",
@@ -79,7 +139,7 @@ export const post: BlogPost = {
         { type: "h2", text: "How to end a love letter" },
         {
           type: "p",
-          text: "End on what you want next, then sign off in your own voice. Avoid anything you'd put on a work email. Some sign-offs that work, from simplest to most romantic:",
+          text: "End on what you want next, in one sentence: \"I can't wait for Saturday.\" \"Come home soon.\" \"Let's do it all again next year.\" Then sign off in your own voice, and avoid anything you'd put on a work email. Some sign-offs that work, from simplest to most romantic, and one to save for a joke:",
         },
         {
           type: "table",
@@ -90,6 +150,7 @@ export const post: BlogPost = {
             ["Yours", "When you want it to feel like a promise."],
             ["The name you're saved under in their phone", "When you share a joke and want the letter to end on it."],
             ["Forever yours", "For a big moment: an anniversary, a proposal, a goodbye at the airport."],
+            ["Yours truly", "Only as a joke. It's the stiff sign-off of formal letters, so it reads as a wink, not as romance."],
           ],
         },
         {
@@ -125,7 +186,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Handwritten or digital?" },
         {
           type: "p",
-          text: "Handwritten, if you'll see them: your handwriting is part of the letter, crossings-out included. Write a draft first, copy it out once, and date it, so years from now they know when you wrote it. If they're far away, send it as a [digital gift](/gifts) instead, and add the photo from the memory you wrote about. Having it open at a set moment, such as midnight where they are, is a paid extra on any template.",
+          text: "Handwritten, if you'll see them: your handwriting is part of the letter, crossings-out included. Write a draft first, copy it out once, and date it, so years from now they know when you wrote it. If you want to decorate it, add one thing from the memory, such as a ticket stub or a photo, rather than stickers. If they're far away, send it as a [digital gift](/gifts) instead, and add the photo from the memory you wrote about. Having it open at a set moment, such as midnight where they are, is a paid extra on any template.",
         },
         {
           type: "template",
@@ -157,20 +218,28 @@ export const post: BlogPost = {
           a: "One memory told plainly, what it meant to you, something true about them now, and what you want next. That structure works for any relationship and any length. Leave out grievances, exes and promises you can't keep.",
         },
         {
-          q: "How long should a love letter be?",
-          a: "Usually 100 to 400 words. A just-because letter can be half a page; an anniversary letter can be a full page. Length matters less than whether each sentence could only be about them, so cut anything that could go in anyone's letter.",
-        },
-        {
           q: "How do you end a love letter?",
           a: "End with what you want next, such as a plan, a hope or a small promise, then sign off in your own voice: \"Love\", \"All my love\" or \"Yours\" followed by your name. A short P.S. with an inside joke is the line they'll often remember longest.",
+        },
+        {
+          q: "What is the format of a love letter?",
+          a: "The date, a greeting with their name or nickname, an opening line that goes straight into a memory, the middle (what happened, what it meant, what's true now), one line about what you want next, a sign-off with your name, and an optional P.S. There's no address block or formal layout.",
+        },
+        {
+          q: "Is \"yours truly\" flirty?",
+          a: "Not really. \"Yours truly\" is the polite sign-off from formal letters, so in a love letter it reads as playful or old-fashioned. If you want the sign-off to feel romantic, \"Yours\" on its own or \"All my love\" does it better.",
+        },
+        {
+          q: "What is the most beautiful love letter ever written?",
+          a: "The one most often named is Beethoven's letter to his \"Immortal Beloved\", written in July 1812 and found among his papers after he died. Nobody knows for certain who it was for. It works for the same reason a good letter does: it was written to one person, about real things, never for anyone else to read. Yours doesn't need to be the most beautiful ever, just the one only you could have written.",
         },
       ],
     },
     es: {
-      title: "Cómo escribir una carta de amor si te bloqueas al empezar",
-      description: "Cómo escribir una carta de amor en cinco pasos: un recuerdo, qué significó, qué es verdad hoy y qué quieres después, con un ejemplo y cómo empezar y acabar.",
+      title: "Cómo escribir una carta de amor: 5 pasos, ideas y ejemplos",
+      description: "Cómo escribir una carta de amor en cinco pasos, con una carta de ejemplo, sus partes, ideas para cuando no sale nada y frases para empezarla y terminarla.",
       keyword: "cómo escribir una carta de amor",
-      lead: "Para escribir una carta de amor, empieza por un recuerdo, no por toda la relación. Cuenta qué pasó, luego qué significó para ti, después algo que sea verdad ahora, y termina con lo que quieres que pase después. Esa es toda la estructura. Aquí tienes los cinco pasos con un ejemplo de cada uno, una carta terminada a partir de ellos y formas de empezar y acabar que no suenan prestadas.",
+      lead: "Para escribir una carta de amor, empieza por un recuerdo, no por toda la relación. Cuenta qué pasó, luego qué significó para ti, después algo que sea verdad ahora, y termina con lo que quieres que pase después. Esa es toda la estructura. Aquí tienes los cinco pasos, una carta terminada, sus partes, ideas para cuando te atascas y formas de empezar y acabar que no suenan prestadas.",
       takeaways: [
         "Un recuerdo concreto llega más lejos que diez piropos.",
         "Escríbela como la dirías en voz alta, y luego quita las frases que nunca dirías.",
@@ -221,6 +290,65 @@ export const post: BlogPost = {
           type: "p",
           text: "Fíjate en lo que no hace: nunca dice «eres increíble» ni «no puedo vivir sin ti». El recuerdo lo dice por ti. Para convertir momentos en frases, nuestras [100 razones por las que te quiero](/blog/reasons-why-i-love-you) usan el mismo método en una lista, y si escribes después de años casada, aquí tienes ejemplos de [carta de amor para tu marido](/blog/love-letter-to-husband).",
         },
+        { type: "h2", text: "Las partes de una carta de amor" },
+        {
+          type: "p",
+          text: "Una carta de amor no tiene un formato oficial, pero casi todas las buenas siguen el mismo orden. No hace falta poner direcciones ni asunto: no es una carta de presentación.",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**La fecha**, arriba a la derecha o a la izquierda. Dentro de diez años será lo primero que mire.",
+            "**El saludo**: su nombre o el mote que usas de verdad.",
+            "**La primera frase**, directa a un recuerdo o al motivo por el que escribes.",
+            "**El cuerpo**: el recuerdo, qué significó y algo que sea verdad ahora. Son los cinco pasos de arriba.",
+            "**La última frase**: lo que quieres que pase después.",
+            "**La despedida y tu nombre.**",
+            "**Una posdata**, si tienes una broma pequeña o un plan con el que dejarle.",
+          ],
+        },
+        { type: "h2", text: "Ideas para una carta de amor: de qué escribir cuando no sale nada" },
+        {
+          type: "p",
+          text: "Si no te viene ningún recuerdo, elige uno de estos y escribe la primera frase antes de pensarlo demasiado:",
+        },
+        {
+          type: "list",
+          items: [
+            "**La primera vez que te fijaste en esa persona**, y qué estaba haciendo. No cómo iba: qué hacía.",
+            "**Una costumbre que solo notas tú.** Que lea la última página de un libro antes que la primera, o que le dé las buenas noches al perro.",
+            "**El día que te sacó de un mal momento**, y qué hizo exactamente, hasta la infusión que te preparó.",
+            "**Algo que te enseñó** y que ahora haces sin pensar.",
+            "**Un domingo cualquiera juntos**, del primer café al último capítulo. Que sea cualquiera es lo importante.",
+            "**Lo que te dirías antes de vuestra primera cita**, sabiendo lo que sabes ahora.",
+            "**Tres cosas que hizo este año y que cree que no viste.**",
+            "**Una carta para más adelante**: para un mal día, un cumpleaños o un vuelo, como una serie de [cartas para abrir cuando](/blog/open-when-letter-ideas).",
+            "**Para alguien que te gusta**: una cosa que te llamó la atención y una invitación, como un café el jueves. Lo grande, para la segunda carta.",
+          ],
+        },
+        { type: "h2", text: "Cartas de amor cortas de ejemplo: para él, para ella y para quien te gusta" },
+        {
+          type: "p",
+          text: "Tres cartas cortas hechas igual, con un recuerdo y un plan cada una. Si buscas cartas más largas y más románticas, hay tres enteras en nuestra [carta de amor para tu novio](/blog/love-letter-for-boyfriend) y otras tres en la [carta de amor para tu novia](/blog/love-letter-for-girlfriend).",
+        },
+        { type: "h3", text: "Para él" },
+        {
+          type: "quote",
+          text: "Condujiste cuatro horas un viernes por la noche porque te dije que había tenido una semana horrible, y te quedaste dormido en mi sofá antes de quitarte el abrigo. Me senté a verte roncar y pensé: así es el amor, un hombre dormido con el abrigo puesto. La próxima vez conduzco yo.",
+          cite: "Te quiero",
+        },
+        { type: "h3", text: "Para ella" },
+        {
+          type: "quote",
+          text: "Te dio tal ataque de risa en la boda que tuviste que salir en mitad de los discursos, y yo salí detrás y nos perdimos la tarta. He ido a muchas bodas. Es la única que recuerdo. Ven a perderte la tarta conmigo en todas las bodas a las que nos inviten.",
+          cite: "Con todo mi amor",
+        },
+        { type: "h3", text: "Para alguien que te gusta" },
+        {
+          type: "quote",
+          text: "El martes me prestaste tu boli y luego hiciste como que no lo querías de vuelta. Todavía lo tengo. Me gustaría devolvértelo con un café, si el jueves te viene bien.",
+        },
         { type: "h2", text: "Cómo empezar una carta de amor" },
         {
           type: "p",
@@ -239,7 +367,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cómo terminar una carta de amor" },
         {
           type: "p",
-          text: "Termina con lo que quieres que pase después y despídete con tu propia voz. Evita cualquier cosa que pondrías en un correo del trabajo. Algunas despedidas que funcionan, de la más sencilla a la más romántica:",
+          text: "Termina con lo que quieres que pase después, en una frase: «Tengo unas ganas enormes de que llegue el sábado». «Vuelve pronto». «Repitamos todo esto el año que viene». Luego despídete con tu propia voz y evita cualquier cosa que pondrías en un correo del trabajo. Algunas despedidas que funcionan, de la más sencilla a la más romántica, y una solo para hacer gracia:",
         },
         {
           type: "table",
@@ -248,8 +376,9 @@ export const post: BlogPost = {
             ["Te quiero, y tu nombre", "Siempre. Lo sencillo nunca falla."],
             ["Con todo mi amor", "Cuando la carta es cálida pero no dramática."],
             ["Tuya o tuyo", "Cuando quieres que suene a promesa."],
-            ["El nombre con el que te tiene guardada en el móvil", "Cuando compartís una broma y quieres que la carta acabe con ella."],
+            ["El nombre con el que te tiene guardada o guardado en el móvil", "Cuando compartís una broma y quieres que la carta acabe con ella."],
             ["Tuya para siempre", "Para un momento grande: un aniversario, una pedida, una despedida en el aeropuerto."],
+            ["Atentamente", "Solo en broma. Es la despedida de las cartas formales, así que suena a guiño, no a romance."],
           ],
         },
         {
@@ -285,7 +414,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿A mano o digital?" },
         {
           type: "p",
-          text: "A mano, si vas a verle: tu letra es parte de la carta, tachones incluidos. Haz primero un borrador, pásalo a limpio una vez y ponle la fecha, para que dentro de unos años sepa cuándo la escribiste. Si está lejos, mándala como [regalo digital](/gifts) y añade la foto del recuerdo del que hablas. Que se abra en un momento concreto, como la medianoche donde esté, es un extra de pago en cualquier plantilla.",
+          text: "A mano, si vas a verle: tu letra es parte de la carta, tachones incluidos. Haz primero un borrador, pásalo a limpio una vez y ponle la fecha, para que dentro de unos años sepa cuándo la escribiste. Si quieres decorarla, añade una sola cosa del recuerdo, como una entrada o una foto, en vez de pegatinas. Si está lejos, mándala como [regalo digital](/gifts) y añade la foto del recuerdo del que hablas. Que se abra en un momento concreto, como la medianoche donde esté, es un extra de pago en cualquier plantilla.",
         },
         {
           type: "template",
@@ -313,16 +442,24 @@ export const post: BlogPost = {
           a: "Usa el nombre o el mote con el que le llamas de verdad y entra directamente en un recuerdo: «No dejo de pensar en aquella noche…» o «¿Te acuerdas de…?». Empezar por un momento concreto es más fácil que empezar por lo que sientes, y arrastra el resto de la carta.",
         },
         {
-          q: "¿Qué se pone en una carta de amor?",
+          q: "¿Qué le puedo decir en una carta de amor?",
           a: "Un recuerdo contado tal cual, qué significó para ti, algo que sea verdad de esa persona ahora y lo que quieres que pase después. Esa estructura vale para cualquier relación y cualquier extensión. Deja fuera los reproches, los ex y las promesas que no vas a cumplir.",
-        },
-        {
-          q: "¿Cuánto tiene que ocupar una carta de amor?",
-          a: "Normalmente entre 100 y 400 palabras. Una carta sin motivo puede ocupar media página; una de aniversario, una página entera. Importa menos la extensión que el que cada frase solo pueda hablar de esa persona, así que quita lo que valdría para la carta de cualquiera.",
         },
         {
           q: "¿Cómo se termina una carta de amor?",
           a: "Con lo que quieres que pase después, como un plan, un deseo o una promesa pequeña, y luego despídete con tu propia voz: «Te quiero», «Con todo mi amor» o «Tuya», y tu nombre. Una posdata corta con una broma privada suele ser la línea que más tiempo se recuerda.",
+        },
+        {
+          q: "¿Cuáles son las partes de una carta de amor?",
+          a: "La fecha, un saludo con su nombre o su mote, una primera frase que entre directa en un recuerdo, el cuerpo (qué pasó, qué significó, qué es verdad ahora), una frase sobre lo que quieres que pase después, la despedida con tu nombre y, si quieres, una posdata. No lleva direcciones ni un formato formal.",
+        },
+        {
+          q: "¿Es «atentamente» una buena despedida para una carta de amor?",
+          a: "Solo si es en broma. «Atentamente» es la despedida de las cartas formales, así que en una carta de amor suena a guiño o a carta del banco. Si quieres que la despedida sea romántica, «Tuya» o «Con todo mi amor» funcionan mejor.",
+        },
+        {
+          q: "¿Cuál es la carta de amor más bonita?",
+          a: "La que más se cita es la carta de Beethoven a su «Amada inmortal», escrita en julio de 1812 y encontrada entre sus papeles después de su muerte. Nadie sabe con certeza a quién iba dirigida. Funciona por lo mismo que funciona una buena carta: está escrita para una sola persona, sobre cosas reales, sin pensar en que la leyera nadie más. La tuya no tiene que ser la más bonita de la historia, solo la que nadie más podría haber escrito.",
         },
       ],
     },
