@@ -396,3 +396,30 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
 | 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
 | 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
+| 2026-11-16T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01272 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:20Z | serp/google/organic/live/advanced | 0.002 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:20Z | serp/google/organic/live/advanced | 0.002 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:20Z | serp/google/organic/live/advanced | 0.002 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | ai_optimization/chat_gpt/llm_scraper/live/advanced | 0.004 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:21Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.0015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.0015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.0015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:22Z | on_page/content_parsing/live | 0.0015 | blog: digital-love-letter-websites-compared |
+| 2026-11-16T14:28Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
+| 2026-11-16T14:28Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
+| 2026-11-16T14:39Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
+| 2026-11-16T14:45Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |
+| 2026-11-16T14:46Z | on_page/content_parsing/live | 0.00015 | blog: digital-love-letter-websites-compared review |

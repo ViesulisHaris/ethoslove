@@ -1,0 +1,285 @@
+{
+  "slug": "digital-love-letter-websites-compared",
+  "keyword": "best digital love letter websites",
+  "sources": [
+    {
+      "maker": "2luv",
+      "url": "https://2-luv.com/en",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "Letters by Heart",
+      "url": "https://lettersbyheart.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "LetterHugs",
+      "url": "https://letterhugs.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "LoveLetter.digital",
+      "url": "https://loveletter.digital/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "LovePaper",
+      "url": "https://lovepaper.app/en",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "LovePaper",
+      "url": "https://lovepaper.app/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "OpenWhen",
+      "url": "https://www.openwhen.cards/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "OpenYourLetter",
+      "url": "https://openyourletter.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "gifft.me",
+      "url": "https://gifft.me/",
+      "checked": "2026-11-16"
+    }
+  ],
+  "sources_note": "WebFetch could not reach the makers' sites from the cloud box, so each page was read on 16 Nov 2026 with DataForSEO's page reader (on_page/content_parsing/live), as VOICE.md allows; the editor re-read several live in later rounds. Ethos's row comes from messages/en.json, messages/es.json, src/lib/pricing/products.ts, src/config/site.ts and the template manifests.",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: nine real sites in dated side-by-side tables, 'not stated' instead of guesses, its own maker's weak points admitted, then which to pick for free tonight, voice or video, or midnight in their time zone. Polish only."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "Claim about another maker the sources don't show: 2luv is recommended for writing in 'Spanish, German or Portuguese'. Its page (sources/2luv.txt, and a live re-read today) only says 'In 12 languages, from English to Japanese' and doesn't list the languages.",
+            "Claim about another maker the sources don't show: LovePaper is listed for opening 'at midnight' and 'Opens at a set time: Yes'. Its page only offers 'a scheduled opening date' / 'schedule the letter to open on a special date', with no time.",
+            "Claim about another maker the sources don't show: LetterHugs 'let you build and preview before paying'. Its page says 'Create unlimited drafts for free... Pay only at send step'. The only mention of a preview is in a customer quote.",
+            "Claim about another maker the sources don't show: gifft.me photos 'One'. The page says 'choose your own photo or select from our collection' and gives no number.",
+            "Claim about Ethos the files don't support as worded: 'Video clips ... with any paid option'. Only 5 of 61 manifests have features.video: true (the-letter, birthday-cinema, garden, museum, our-timeline), and editor-shell.tsx only shows VideoSection when manifest.features.video is set. Both premium templates the post features (xoxo, keepsake) have video: false. pricing.freeNote uses the same wording, but the manifests settle it per template. '20 photos with any paid option' has the same problem: xoxo and keepsake allow 9, and only 6 templates allow 20."
+          ],
+          "summary": "Five claims went beyond the sources (2luv languages, LovePaper time, LetterHugs preview, gifft.me photo count, Ethos video and photo caps per template). Also asked: the check date above the first table, a truer link-in sentence, varied 'It suits' closers, and Spanish fixes ('pregunta de seguridad', a calqued takeaway, the description)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Asked for a line naming the sites that rank but weren't checked (Just Meant For You, Qlovy, LoveTale, WithLove), and the decision heading to carry the searched phrase."
+        }
+      ],
+      "applied": [
+        "All five dealbreaker claims narrowed to what the sources and manifests show, in EN and ES (table rows, pick list, checklist, FAQ)",
+        "Check date added above the first table",
+        "Link-in sentence in how-to-write-a-love-letter now says 'price, what's free and what you can add'",
+        "Maker-paragraph closers varied in EN and ES",
+        "Spanish: 'La que más ofrece por su precio', 'pregunta de seguridad', 'hora de apertura' in the description",
+        "Sentence naming the ranking sites not checked (without promising a later check)",
+        "H2 'Which digital love letter website should you pick?' / '¿Qué página para hacer una carta de amor digital te conviene?'",
+        "Polish: takeaway on set opening times, 'pie de foto', small Spanish word-order fixes, 'Like 2luv, it's built from eight moments'"
+      ],
+      "rejected": [
+        "Search fix 1's stronger option (reading LoveTale and WithLove and adding them as rows): taken in its safer form, a sentence naming them as unchecked, so no unchecked facts enter the tables"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the narrowed claims read cleanly and honestly; still the page to send a friend over any top result."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes confirmed. Asked to soften the set-opening-time takeaway to 'usually', reword the writing advice and one sample line that echoed LovePaper's page, vary one more closer, and fix 'cualquiera que tenga el enlace' in the Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the ranking pages are AI generators, templates and single-vendor blogs, undated and unsourced; this puts nine real senders in dated tables and says where a rival is the better pick."
+        }
+      ],
+      "applied": [
+        "Takeaway 'A set opening time usually costs extra' (EN/ES)",
+        "Writing advice reworded to memory, habit, plan (EN/ES)",
+        "Plane-landing sample line replaced with the goodnight-to-the-dog line (EN/ES)",
+        "LoveLetter.digital closer varied (EN/ES)",
+        "ES 'a cualquier otra persona que tenga el enlace'",
+        "Polish: receipt to napkin, 'in searches like this one'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the reworded advice and sample lines are specific and follow the advice; nine sites compared from their own pages on a stated date."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-2 fixes confirmed. One fix: the Ethos video/voice table cell read as if video were free on The Letter."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page putting nine real senders in dated, sourced tables, with 'not stated' where a site didn't say."
+        }
+      ],
+      "applied": [
+        "Ethos video/voice cell: 'A voice message up to 60 seconds and video clips (on five templates, The Letter included), both with any paid option' (EN/ES)",
+        "Polish: 'The free letter is The Letter' (EN/ES); ES 'solo sabe responder esa persona'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the two changes read cleanly and the table and FAQ agree."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-3 fix confirmed. One fix: the FAQ on voice and video had the same wording slip, putting video outside 'with any paid option'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: today's results are roundups, templates and generators with no independent side-by-side; this has dated tables, a pick-by-need list and a checklist."
+        }
+      ],
+      "applied": [
+        "FAQ: 'Ethos adds a voice message and video clips (on The Letter and four other templates) with any paid option' (EN/ES)",
+        "Polish: XOXO note 'A premium letter in a collage, not on stationery' (EN/ES)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that puts nine real sites in three same-column tables dated 16 Nov 2026, says 'not stated' instead of guessing, admits the publisher's own weak points, and ends with a pick-by-need list and a 'whose midnight' check."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: round-4 fix and polish made in both languages; every claim about Ethos and the eight other makers checks against the code and the source pages, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: neither search returned a real comparison; this is the only page with dated per-maker tables, a pick-by-situation list and a pre-payment checklist, leading with the makers ChatGPT cites."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: Keepsake note 'pressed flowers' could say 'dried flowers' to match the manifest",
+        "Search: name Canva, Adobe Express and Paperless Post in the scope line",
+        "Search (rounds 2-5): add Just Meant For You and Qlovy as rows at the 60-day recheck",
+        "Reader: an optional one-line default pick for someone with ten minutes"
+      ]
+    }
+  ]
+}
