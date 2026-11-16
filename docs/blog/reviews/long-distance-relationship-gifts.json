@@ -1,0 +1,102 @@
+{
+  "slug": "long-distance-relationship-gifts",
+  "keyword": "long distance relationship gifts",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The customs line said to leave out anything with a battery right after recommending touch bracelets and a photo frame; 'These three' after a sentence about The Letter was ambiguous and the link sentence clumsy."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Halfway template note says the plane turns into a heart; per src/templates/halfway/manifest.ts and art.tsx it is the path that becomes the heart. Same error in ES."
+          ],
+          "summary": "Fix the Halfway note (path, not plane; distance instead of kilometres); 'holiday' to 'trip away together' for US readers; two Spanish phrasings ('Para qué hacer juntos', 'muchos países principales'); in the hub post, two near-identical anchors pointed to different pages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every top result and the AI overview's 'sentimental keepsakes' group covers personalised keepsakes (photo books, map prints); the post had none. Add one item in both languages."
+        }
+      ],
+      "applied": [
+        "Battery advice rewritten: restricted on many routes, check rules before sending touch bracelets or a photo frame, or order them locally (EN and ES).",
+        "Template paragraph: 'The three below are made for the distance', with clearer link anchors (EN and ES).",
+        "Halfway note: the paper plane flies along the dotted path, the distance counting down, until the path turns into a heart (EN and ES).",
+        "777 rule FAQ: 'a trip away together every seven months'.",
+        "Spanish: 'Para saber qué hacer juntos', 'a muchos de los principales países'.",
+        "Hub post virtual-date-ideas-long-distance: the occasion link now reads 'long-distance gift templates' / 'plantillas para relaciones a distancia'.",
+        "Added a photo book or printed map of your two places to the everyday list (EN and ES).",
+        "Polish taken: the lead's table-of-contents sentence replaced with the two-week shipping fact; 'post' to 'send' in two places; table header 'Days until it should arrive'; Spanish digital heading adds 'o virtual' for the Spanish People-also-ask wording."
+      ],
+      "rejected": [
+        "Editor polish 'With any unlock you can schedule it': not taken; 'premium template' is accurate and the editor rated it true."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes made correctly. Better than the top results because it answers the search in the lead with three jobs and a parcel-timing warning, then gives a days-left table and lines worth screenshotting, with the product only at the end."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All seven round-1 fixes made correctly; every product claim checks against the code and the cited figures match their sources. The three-jobs framing, the days-left shipping table and the borrowable notes make it more useful than the product-pile lists that rank."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Keepsake fix made in both languages. Beats the first-page listicles with a way to choose by what the gift does, a parcel-timing table with the real USPS window and lines to borrow, and it answers every People also ask question in English and Spanish."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: link Midnight Countdown in the countdown list too; price bands per budget tier.",
+        "Editor: ES 'Algo para cuando se despierte'; drop 'o virtual' from the ES heading.",
+        "Search: add a shared online class to the shared-moment list; shorten the description."
+      ]
+    }
+  ]
+}

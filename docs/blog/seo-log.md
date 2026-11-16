@@ -385,3 +385,14 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |
 | 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |
 | 2026-11-16T06:20Z | on_page/content_parsing/live | 0.00015 | blog: would-you-rather-questions-for-couples |
+| 2026-11-16T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01272 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01272 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |
+| 2026-11-16T10:21Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-gifts |

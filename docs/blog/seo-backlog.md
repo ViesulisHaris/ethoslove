@@ -90,6 +90,10 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   card in "The five love languages, in plain words" (in the page's HTML, where Google sees it) and
   from the words result, not the reading list, so the page links it once. The other four language
   posts link themselves the day they go live (`LANGUAGE_POSTS`, TOPIC-GROUPS.md group 2).
+- [ ] **Long distance group: link /blog/long-distance-relationship-gifts from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship gifts" 2,400, KD 0, published
+  16 Nov): a line under "Gifts for the distance" on the page, next to "All long-distance gifts", in
+  both languages ("Regalos para parejas a distancia").
 - [ ] **A free virtual hug page** (8,100, UK 1,300): people searching it want something to send.
 - [x] (2026-11-13) **Blog link check (`tests/unit/blog-posts.test.ts`, `STATIC_PATHS`)**: add
   `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of
