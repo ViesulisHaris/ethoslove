@@ -428,3 +428,27 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |
 | 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |
 | 2026-11-16T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-apologize-to-your-boyfriend es |
+| 2026-11-16T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01212 | blog: gifft-me-alternatives |
+| 2026-11-16T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01212 | blog: gifft-me-alternatives |
+| 2026-11-16T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: gifft-me-alternatives |
+| 2026-11-16T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: gifft-me-alternatives |
+| 2026-11-16T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:20Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:21Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:21Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:21Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:21Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:21Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:22Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:22Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:22Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:22Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
+| 2026-11-16T18:29Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives review |
+| 2026-11-16T18:30Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives review |

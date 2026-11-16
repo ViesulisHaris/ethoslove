@@ -94,7 +94,7 @@ export const post: BlogPost = {
         { type: "h3", text: "gifft.me" },
         {
           type: "p",
-          text: "Free virtual gifts: a surprise gift box wrapped around a photo, yours or one from its collection, with a personal message, plus free e-cards. Its home page didn't list music, scheduling or letter length. It suits a quick, free note with a picture more than a long letter.",
+          text: "Free virtual gifts: a surprise gift box wrapped around a photo, yours or one from its collection, with a personal message, plus free e-cards. Its home page didn't list music, scheduling or letter length. It suits a quick, free note with a picture more than a long letter. If it's that kind of gift box you're after, our [gifft.me alternatives](/blog/gifft-me-alternatives) compare seven sites that make them.",
         },
         { type: "h3", text: "LetterHugs" },
         {
@@ -284,7 +284,7 @@ export const post: BlogPost = {
         { type: "h3", text: "gifft.me" },
         {
           type: "p",
-          text: "Regalos virtuales gratis: una caja sorpresa con una foto, tuya o de su colección, y un mensaje personal, además de tarjetas digitales gratis. Su portada no hablaba de música, de programar el envío ni de la extensión del texto. Encaja mejor con una nota rápida y gratis con una foto que con una carta larga.",
+          text: "Regalos virtuales gratis: una caja sorpresa con una foto, tuya o de su colección, y un mensaje personal, además de tarjetas digitales gratis. Su portada no hablaba de música, de programar el envío ni de la extensión del texto. Encaja mejor con una nota rápida y gratis con una foto que con una carta larga. Si buscas ese tipo de caja regalo, nuestras [alternativas a gifft.me](/blog/gifft-me-alternatives) comparan siete webs que las hacen.",
         },
         { type: "h3", text: "LetterHugs" },
         {

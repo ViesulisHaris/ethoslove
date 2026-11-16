@@ -1,0 +1,309 @@
+{
+  "slug": "gifft-me-alternatives",
+  "keyword": "gifft.me alternatives",
+  "sources": [
+    {
+      "maker": "2luv",
+      "url": "https://2-luv.com/en",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "AIskyla Gifting",
+      "url": "https://aiskyla.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "GiftFeels",
+      "url": "https://giftfeels.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "GiftFeels",
+      "url": "https://giftfeels.com/pricing",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "GiftsQR",
+      "url": "https://giftsqr.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "GiftsQR",
+      "url": "https://giftsqr.com/en/pricing",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "gifft.me",
+      "url": "https://gifft.me/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "gifft.me",
+      "url": "https://gifft.me/create/happy-birthday",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "gifft.me",
+      "url": "https://gifft.me/create/love-letter",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "QLovy",
+      "url": "https://qlovy.com/en",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "QLovy",
+      "url": "https://qlovy.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "Surprises.Gift",
+      "url": "https://surprises.gift/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "Sugarwish",
+      "url": "https://www.sugarwish.com/",
+      "checked": "2026-11-16"
+    },
+    {
+      "maker": "Semrush (gifft.me competitor list; only for naming JibJab and Mewtru as unchecked)",
+      "url": "https://www.semrush.com/website/gifft.me/competitors/",
+      "checked": "2026-11-16"
+    }
+  ],
+  "sources_note": "WebFetch could not reach the makers' sites from the cloud box, so each page was read on 16 Nov 2026 with DataForSEO's page reader (on_page/content_parsing/live), as VOICE.md allows. creativegift.site returned empty content and is named only as unchecked; JibJab and Mewtru are named only as appearing in Semrush's competitor list, unchecked. Ethos's row comes from messages/en.json, messages/es.json, src/lib/pricing/products.ts, src/config/site.ts and the template manifests. The JibJab/Mewtru line rests on Semrush's result in the 16 Nov 2026 top 10 for 'gifft.me alternatives' (title 'Top 2 gifft.me Alternatives & Competitors', snippet naming jibjab.com and mewtru.com).",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for a lead that doesn't say QLovy and Ethos always charge, a takeaway on opening dates that matches the body, and plainer AIskyla closer than 'the same price: nothing'. Polish: say the scratch-card and bouquet templates are paid, move QLovy branding out of the lock column."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "'None of the sites compared here ship anything' contradicts QLovy's shop of gift baskets.",
+            "'No site except Ethos showed an amount' ignores GiftFeels's $5 AI image; must say the price of a gift.",
+            "GiftFeels 'the time isn't stated' contradicts its home page scene opening 'at midnight his time'.",
+            "'CreativeGift also calls itself a gifft.me alternative' isn't shown by any page read."
+          ],
+          "summary": "Four dealbreakers on claims about other makers (QLovy baskets, GiftFeels $5 and midnight, CreativeGift). Also: 'other seven' miscount, the lead's 'charge to send', 'most of these sites' price by country, video read as free on The Letter, GiftsQR superlatives, which sites offer a password, Surprises.Gift never says 'link', a repeated 'It suits' closer, and a dozen Spanish calques and a subjectless sentence."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for the lead to stop saying QLovy and Ethos always charge, the Sugarwish answer not to say none of the sites ship (QLovy sells baskets), and a line naming JibJab and Mewtru, which Semrush's top-10 competitor list names, as unchecked."
+        }
+      ],
+      "applied": [
+        "Lead in both languages: 2luv, GiftFeels and GiftsQR charge to send; QLovy's free page lasts 24 hours; Ethos has two free templates",
+        "Takeaways: 'the price of a gift' with reasons; opening dates reworded to GiftsQR/GiftFeels date, Ethos time",
+        "'other six' in both languages",
+        "CreativeGift line cut to 'page didn't load'; JibJab and Mewtru named as unchecked from Semrush's list",
+        "GiftFeels opening-time cells and the pick list cite 'locked until a future date' and 'at midnight his time', saying it doesn't explain how the time is set",
+        "Sugarwish FAQ names QLovy's baskets as the physical exception",
+        "Ethos video cell puts video under 'with any paid option'",
+        "GiftsQR superlatives replaced with 'more than 32 surprises'; new GiftsQR closer",
+        "Password/PIN list made specific per site",
+        "Best-app FAQ: every site except Surprises.Gift says it sends a link or QR code",
+        "AIskyla closer 'still free'",
+        "Spanish: every calque and grammar fix the editor listed, plus 'regalos cinematográficos', 'compara nueve webs', 'protegido'",
+        "Polish: 'Premium, with a free demo' on the scratch-card and bouquet notes; QLovy branding moved to 'Worth knowing'; 'For a birthday'",
+        "Spanish lead and one takeaway trimmed to fit the test's word limits"
+      ],
+      "rejected": [
+        "Search fix to say 'We didn't read Sugarwish's own site': it was read (https://www.sugarwish.com/, in sources), so the Sugarwish facts stay; the 'none ship' part was fixed.",
+        "Editor polish 'comparadas' in the Spanish title: it would run to 63 characters, over the 60 limit."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the one gifft.me alternatives page that says who wrote it and when, then puts free, paid, link lifetime, photos, music, voice and opening time for eight sites side by side with 'not stated' where a site didn't say, and tells you which rival to pick for each need. All round-1 fixes confirmed."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes and dealbreakers confirmed. Asked: 'the price of a gift' to become 'what their paid plans cost' (GiftFeels's $5 AI image is sold as gift art), the AIskyla cell not to suggest its mini-sites cost money ('a free and open platform'), and two Spanish calques of 'their time' ('en su hora')."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: every People-also-ask question has its own answer, every maker in Similarweb's list is compared, and no ranking page gives three dated, same-column tables, a pick-by-need list and Ethos's own weak points. All round-1 fixes confirmed."
+        }
+      ],
+      "applied": [
+        "Takeaway and method paragraph, both languages: 'what its/their paid plans cost', with GiftFeels's reason",
+        "AIskyla 'What you pay for' cell: 'Nothing listed; it calls itself \"a free and open platform\"' (ES to match)",
+        "Spanish 'en su hora' fixed in the best-app FAQ and the GiftFeels table cell",
+        "Polish taken to head off fixes: Spanish takeaway 'en la zona horaria de esa persona'; Ethos free templates 'music from our library' instead of 'a song' (both languages); Semrush added to sources for the JibJab/Mewtru line",
+        "Spanish takeaway trimmed to 30 words ('el día de apertura') after the polish made it 31"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that lays out, for seven sites in three scannable tables, what's free, what you pay for, how long the link lasts, what goes inside and whether it opens at a set time, from each maker's own pages, then sends you to a rival when that fits better."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-2 fixes confirmed; every claim checks against code and sources. One Spanish fix: 'a medianoche en la hora de él' in the pick list, the same calque fixed elsewhere. Polish: say GiftFeels's open alert comes with a paid unlock."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: today's results are Semrush and Similarweb name lists, rival pitches and old listicles; this compares seven sites on free tier, link lifespan, opening time and privacy from their own sites on a stated date, and answers all four People-also-ask questions."
+        }
+      ],
+      "applied": [
+        "ES pick list: 'a medianoche, hora de él'",
+        "Polish taken to head off a fix: GiftFeels open alert marked 'with a paid unlock' / 'si pagas' (giftfeels.com/pricing lists it under the One-Time Unlock)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it says in the first paragraph which gifft.me alternatives are actually free, then sorts all seven by what you pay for, what goes inside and when it opens, from the makers' own pages and dated, and says where Ethos is the weaker pick."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-3 fix and polish confirmed. One Spanish fix: 2luv's 'que se abre en las partes que rellenes' copies 'opening onto'. Polish: a clearer object in the Ethos weak-points sentence, 'send it' rather than 'send a link' for Sugarwish, the ES GiftsQR closer matching the English, and 'si lo quieres gratis'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that compares seven makers side by side from their own sites, with link lifetime, opening time and privacy in tables, and answers all four People-also-ask questions."
+        }
+      ],
+      "applied": [
+        "ES 2luv: 'que, al abrirse, muestra las partes que rellenes'",
+        "Polish taken to head off fixes in the last round: ES Ethos weak-points sentence reworded; Sugarwish 'send it' / 'lo mandas' (its page never says 'link'); ES GiftsQR closer matches the English; 'si lo quieres gratis'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 5,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that answers 'gifft.me alternatives' with dated, source-only tables of free vs paid, link lifespan, photos, music, voice and set-time opening for seven sites, saying plainly who the free matches are and where Ethos is weaker."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that compares seven gifft.me alternatives from their own pages on one date, on cost model, link lifetime, opening time and privacy, with Ethos's weak points too. Polish (left in the record): 'caprichos' for 'dulces' in the ES Sugarwish answer; 'que en un martes cualquiera'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page on the search that compares the same-type sites side by side on price, link life, opening time and privacy, dated and sourced, and it answers every People-also-ask question."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}
