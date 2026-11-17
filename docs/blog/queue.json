@@ -1,19 +1,5 @@
 [
   {
-    "slug": "questions-for-couples",
-    "keyword": "questions for couples",
-    "keyword_es": "preguntas para conocer a tu pareja",
-    "occasion": "just-because",
-    "templates": [
-      "fortune-cookie",
-      "scratch-card"
-    ],
-    "angle": "One post for \"questions for couples\", \"relationship questions\" (12,100) and \"couples questions game\" (9,900): question sets by stage and by purpose (closer, funnier, before a big decision), then the free games that turn them into play on two phones (/games/deck, /games/know). Spanish: not \"preguntas para parejas\", which is the Question cards page's own title.",
-    "volume": 12100,
-    "difficulty": 8,
-    "group": "questions"
-  },
-  {
     "slug": "gift-giving-love-language",
     "keyword": "gift giving love language",
     "keyword_es": "lenguaje del amor regalos",

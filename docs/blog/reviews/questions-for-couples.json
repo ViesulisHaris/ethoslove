@@ -1,0 +1,142 @@
+{
+  "slug": "questions-for-couples",
+  "keyword": "questions for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to replace UK-only words (people round, bin, queue, row, comfort film, dream holiday), reword the kiss question so it reads aloud cleanly, and cut the Truth or dare link to keep product links down."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All game, template and link claims verified against the code. Asked to describe the partner post as sorted by stage, replace UK words (family holidays, round, row, holiday in the 7-7-7 answer), and fix three Spanish lines: '¿De qué te faltó más de pequeño?', the dessert joke that repeated 'pediste', and the ungrammatical '¿Se puede volver a enamorarse de tu pareja?'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for an answer to the People Also Ask question 'What are 20 flirty questions?'; polish: more flirty questions and a 'who's most likely to' game."
+        }
+      ],
+      "applied": [
+        "UK-only words replaced in both languages' equivalents (over, waiting rooms, argument, the show they rewatch, dream trip, family get-togethers, a longer trip)",
+        "Partner post described as sorted by where you are as a couple",
+        "Kiss question reworded",
+        "Truth or dare sentence removed in both languages",
+        "Spanish fixes: '¿Qué te hizo falta de pequeño?', 'Pagaste el segundo postre / Porque lo pediste tú', '¿Puedes volver a enamorarte de tu pareja?', plus the editor's Spanish polish (se te ha pegado, se te da bien, os esconde las respuestas, dilemas rápidos)",
+        "Flirty list grown from 10 to 20 in both languages (total 64; title, description and lead updated) and an FAQ 'What are 20 flirty questions?' added",
+        "The 20 question game FAQ replaced to stay within five FAQs; its heading now reads 'The 20 question game for couples'",
+        "'not the words' and 'not in the bin' contrasts rewritten"
+      ],
+      "rejected": [
+        "Search polish 'who's most likely to' game: not taken, to avoid a seventh game and new unreviewed text"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes confirmed. Asked to cut the Would you rather? game link from 'This or that' to keep product links down, keeping the blog link."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes confirmed and every claim re-verified. Asked for two Spanish fixes: 'no os saltéis a la tercera' (reads as 'don't skip the third') and '¿Cómo es un sábado cuando tengamos...' (needs 'será')."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the 120 to 300 question dumps ranking first, it sorts 64 questions by what the couple wants tonight, with times, a two-person answering rule, six games with scoring, every People Also Ask question answered and honest handling of the 36 questions."
+        }
+      ],
+      "applied": [
+        "/games/rather link removed from 'This or that' in both languages; the would-you-rather post link kept",
+        "ES: 'no saltéis directamente a la tercera'; '¿Cómo será un sábado...'",
+        "Polish taken where it heads off a fix: ES 'halago' for 'piropo' in round two; 'most work on a call too' (the old line implied only two games did); round one's smell question changed so it doesn't repeat the boyfriend post's opener; 'night wake-ups' for the UK-leaning 'night feeds'"
+      ],
+      "rejected": [
+        "Editor polish on further 'not X, Y' rewrites and two Spanish phrasing tweaks, and reader polish on a default-evening line: not taken, to keep unreviewed edits to what was asked"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Built for two people answering, with a sorted ladder (easy, personal, the two of you), a decision section based on ordinary days, six games with rules and an honest answer on falling back in love, where the top results are bare lists of 100+ questions for one person to ask. Polish: the games and gifts mentions are borderline against the two-mention rule but each helps the reader."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product, game, link, count and study claim matches the code or the source, it is specific and plain throughout, and the Spanish is the same post in natural Spain Spanish. Polish: 'noches en vela' for 'tomas de noche', 'aunque' in the last FAQ answer, 'coquetean sin llegar a ser explícitas'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the 100 to 300 question dumps on bustle, marriage.com and thecoolist, it sorts 64 questions by what the couple wants tonight, with timings, a both-answer rule, six scored games with playable links and every People Also Ask question answered. Polish: an optional sex-and-intimacy or money group."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded here and not applied, so the post stays the version the panel passed"
+      ]
+    }
+  ]
+}
