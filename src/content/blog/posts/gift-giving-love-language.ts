@@ -203,7 +203,7 @@ export const post: BlogPost = {
         },
         {
           q: "What should I give someone whose love language is acts of service?",
-          a: "Give your time and effort rather than an object: do a chore they dread before they notice, take over a piece of admin, cook on a night they're working late. If you do give a gift, make it one that saves them effort, like a meal delivered on a busy day.",
+          a: "Give your time and effort rather than an object: do a chore they dread before they notice, take over a piece of admin, cook on a night they're working late. If you do give a gift, make it one that saves them effort, like a meal delivered on a busy day. Our guide to the [acts of service love language](/blog/acts-of-service-love-language) has ideas sorted by how much time you have.",
         },
       ],
     },
@@ -404,7 +404,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Qué le regalo a alguien cuyo lenguaje del amor son los actos de servicio?",
-          a: "Dale tu tiempo y tu esfuerzo en lugar de un objeto: haz una tarea que odia antes de que se dé cuenta, encárgate de algún papeleo o cocina una noche en la que trabaja hasta tarde. Si le haces un regalo, que sea uno que le ahorre esfuerzo, como una comida a domicilio un día de mucho lío.",
+          a: "Dale tu tiempo y tu esfuerzo en lugar de un objeto: haz una tarea que odia antes de que se dé cuenta, encárgate de algún papeleo o cocina una noche en la que trabaja hasta tarde. Si le haces un regalo, que sea uno que le ahorre esfuerzo, como una comida a domicilio un día de mucho lío. Nuestra guía de los [actos de servicio como lenguaje del amor](/blog/acts-of-service-love-language) tiene ideas ordenadas según el tiempo que tengas.",
         },
       ],
     },

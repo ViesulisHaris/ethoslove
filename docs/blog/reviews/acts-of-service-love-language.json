@@ -1,0 +1,178 @@
+{
+  "slug": "acts-of-service-love-language",
+  "keyword": "acts of service love language",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to replace UK-only words (bins, the post, lift) with wording US and UK readers both read as normal, including in the sample lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All product, quiz, link and source claims verified. Asked for six Spanish fixes (quejarse de, una de tus fotos, son difíciles de envolver, encárgate por completo, le tiene suspirando, the 11 pm trash line) and for UK-only English words (bins, post, shop, lift, rota) to be replaced."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the counts/doesn't-count table, the mental-load section, the asking script for the person whose language it is and honest research answer every on-topic People-also-ask question and go further than Masterclass and Match."
+        }
+      ],
+      "applied": [
+        "bins -> trash, the post -> letters, weekly shop -> grocery run, lift -> drive, chore rota -> chore list (English, including quotes and FAQ)",
+        "All six Spanish fixes",
+        "Polish that heads off likely fixes: a concrete 'Missing the day it counts' line; Spanish takeaway reworded; «Infórmate tú sobre»; «dale las gracias una vez»; «sentir que me cuidan»; Spanish letters quote matched to the new English"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it gets you from what the term means to a job you can do tonight in one pass, with a counts/doesn't-count table most top results never draw, copy-ready lines and an honest research note."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes confirmed. Asked for «Fíjate en de qué se queja» to become «Fíjate en sus quejas», and for the Spanish 'Fallar el día que te necesita' line to match the new, more specific English (free Saturday versus deadline week)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: against MasterClass, eHarmony, Simply Psychology, Calm and BetterHelp it matches their definition and examples and adds the counts table, time-based ideas, lines to copy and a section for the person who speaks the language."
+        }
+      ],
+      "applied": [
+        "«Fíjate en sus quejas»",
+        "Spanish 'Fallar el día' line matched to the English",
+        "Editor polish that heads off a US/UK fix: boiler -> fridge (es caldera -> nevera), 'booked your car in' -> 'booked your car for a service'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: most top results are generic chore lists; this one says what doesn't count, gives lines to send, and speaks to both the giver and the person who needs to ask."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 2 fixes confirmed. Asked for «toma este como su lenguaje favorito» (no antecedent, and 'favourite' drifts from 'first') to become «tómalo como su lenguaje principal»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it separates what counts from what doesn't, covers the mental load, both sides of the language, the evidence and a ready-to-send gift, and answers every on-topic People-also-ask question."
+        }
+      ],
+      "applied": [
+        "«tómalo como su lenguaje principal»",
+        "Editor polish: «He visto que… Ya está resuelto.»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the counts/doesn't-count table settles what an act of service is straight after the lead, then ideas by time, lines to borrow and a section on asking for it yourself; the template reads as part of the idea, not an ad."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only acts-of-service guide that separates help that counts from help that backfires, with the reason for each, sorts ideas by the time you have, gives lines to send, and backs its claims with sourced research instead of repeating Chapman."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the top pages are generic definitions or padded lists of 50 to 125 examples; this answers every on-topic People-also-ask question and adds the counts table, ideas by time, the mental load, lines to send, sourced research and a gift you can build."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "'trash' could vary once with 'bins' for UK readers (reader, editor)",
+        "Swap the group-chat five-minute item for a more specific one (reader)",
+        "h2 'Acts of service examples and ideas' and a title with 'signs and examples' for the 3,600-a-month variant (search)"
+      ]
+    }
+  ]
+}
