@@ -228,7 +228,7 @@ export const post: BlogPost = {
         },
         {
           q: "Can you give me an example of a love language?",
-          a: "Words of affirmation is one: someone who speaks it feels most loved by a sincere compliment or a written note. The other four are quality time, receiving gifts, acts of service and physical touch. For example, someone whose language is acts of service feels loved when you take a chore off their plate.",
+          a: "Words of affirmation is one: someone who speaks it feels most loved by a sincere compliment or a written note. The other four are quality time, receiving gifts, acts of service and physical touch. For example, someone whose language is [acts of service](/blog/acts-of-service-love-language) feels loved when you take a chore off their plate.",
         },
         {
           q: "What is the most powerful affirmation?",
@@ -462,7 +462,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Me das un ejemplo de lenguaje del amor?",
-          a: "Las palabras de afirmación son uno: quien lo habla se siente más querido con un cumplido sincero o una nota escrita. Los otros cuatro son el tiempo de calidad, los regalos, los actos de servicio y el contacto físico. Por ejemplo, alguien cuyo lenguaje son los actos de servicio se siente querido cuando le quitas una tarea de encima.",
+          a: "Las palabras de afirmación son uno: quien lo habla se siente más querido con un cumplido sincero o una nota escrita. Los otros cuatro son el tiempo de calidad, los regalos, los actos de servicio y el contacto físico. Por ejemplo, alguien cuyo lenguaje son los [actos de servicio](/blog/acts-of-service-love-language) se siente querido cuando le quitas una tarea de encima.",
         },
         {
           q: "¿Cuál es la afirmación más poderosa?",
