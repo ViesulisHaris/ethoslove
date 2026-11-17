@@ -24,6 +24,26 @@ export function shareCardUrl(shortId: string, card: { recipientName: string; loc
   return `${SITE.url}/g/${shortId}/card.jpg?v=${version(`envelope:${paper}:${card.locale}:${card.recipientName}`)}`;
 }
 
+/**
+ * Tries each way of drawing the share card in turn and returns the first that works, so a gift link
+ * always gets a card. Some names can't be drawn at all: an Arabic one with "ال" in it makes the image
+ * generator fetch an Arabic font whose substitution tables it can't read ("lookupType: 5 -
+ * substFormat: 3 is not yet supported"), and one gift's link answered 500 to 140 crawlers in the
+ * week to 17 Nov 2026. Throws the last error only when nothing could be drawn.
+ */
+export async function drawFirst<T>(ways: { label: string; draw: () => Promise<T> }[], onFail: (label: string, error: unknown) => void): Promise<T> {
+  let last: unknown = new Error("share card: nothing to draw");
+  for (const way of ways) {
+    try {
+      return await way.draw();
+    } catch (error) {
+      last = error;
+      onFail(way.label, error);
+    }
+  }
+  throw last;
+}
+
 /** The four papers a share card comes on (src/lib/gift/card-art.ts draws them). */
 export type CardLook = "blush" | "rouge" | "pressed" | "noir";
 export const CARD_LOOKS: CardLook[] = ["blush", "rouge", "pressed", "noir"];

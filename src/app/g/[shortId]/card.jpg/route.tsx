@@ -5,7 +5,7 @@ import sharp from "sharp";
 import { BRAND } from "@/config/brand";
 import { cardArt, cardFiles } from "@/lib/gift/card-art";
 import { fetchPublicGiftMeta } from "@/lib/gift/public";
-import { cardLookFor, SHARE_CARD, type CardLook } from "@/lib/gift/share-card";
+import { cardLookFor, drawFirst, SHARE_CARD, type CardLook } from "@/lib/gift/share-card";
 import { isShortId } from "@/lib/gift/short-id";
 
 export const runtime = "nodejs";
@@ -117,7 +117,8 @@ export async function GET(_request: NextRequest, ctx: RouteContext<"/g/[shortId]
   const [serif, serifItalic] = await Promise.all([serifFont(), italicFont()]);
   const es = gift?.locale === "es";
   // A link whose gift can't be read still gets a card that reads right: "for you".
-  const name = gift?.recipientName || (es ? "ti" : "you");
+  const anyone = es ? "ti" : "you";
+  const name = gift?.recipientName || anyone;
   const options = {
     ...SHARE_CARD,
     fonts: [
@@ -126,15 +127,24 @@ export async function GET(_request: NextRequest, ctx: RouteContext<"/g/[shortId]
     ],
   };
 
-  let png: ArrayBuffer;
-  try {
+  const envelope = (who: string) => async () => {
     const look = cardLookFor(gift?.templateSlug, gift?.look, shortId);
-    png = await new ImageResponse(cardArt({ name, look, locale: es ? "es" : "en", art: await artFor(look) }), options).arrayBuffer();
-  } catch (error) {
-    // A gift link must always show a card: if the envelope can't be drawn, the plain one is.
-    console.error("share card: envelope failed, drawing the plain card", error);
-    png = await new ImageResponse(plainCard(name, es), options).arrayBuffer();
-  }
+    return new ImageResponse(cardArt({ name: who, look, locale: es ? "es" : "en", art: await artFor(look) }), options).arrayBuffer();
+  };
+  const plain = (who: string) => async () => new ImageResponse(plainCard(who, es), options).arrayBuffer();
+  // A gift link must always show a card: the envelope, else the plain one, and if their name itself
+  // can't be drawn (see drawFirst), the same two saying "for you".
+  const ways = [
+    { label: "envelope", draw: envelope(name) },
+    { label: "plain card", draw: plain(name) },
+    ...(name === anyone
+      ? []
+      : [
+          { label: "envelope without the name", draw: envelope(anyone) },
+          { label: "plain card without the name", draw: plain(anyone) },
+        ]),
+  ];
+  const png = await drawFirst(ways, (label, error) => console.error(`share card: the ${label} failed`, error));
 
   const jpeg = await sharp(Buffer.from(png)).flatten({ background: "#F7F1E7" }).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
   return new Response(new Uint8Array(jpeg), {
