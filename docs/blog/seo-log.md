@@ -471,3 +471,11 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-17T06:21Z | on_page/content_parsing/live | 0.00015 | blog: questions-for-couples |
 | 2026-11-17T06:21Z | on_page/content_parsing/live | 0.00015 | blog: questions-for-couples |
 | 2026-11-17T06:21Z | on_page/content_parsing/live | 0.00015 | blog: questions-for-couples |
+| 2026-11-17T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: gift-giving-love-language |
+| 2026-11-17T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01212 | blog: gift-giving-love-language |
+| 2026-11-17T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: gift-giving-love-language |
+| 2026-11-17T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: gift-giving-love-language |
+| 2026-11-17T10:20Z | serp/google/organic/live/advanced | 0.002 | blog: gift-giving-love-language |
+| 2026-11-17T10:20Z | on_page/content_parsing/live | 0.00015 | blog: gift-giving-love-language |
+| 2026-11-17T10:20Z | on_page/content_parsing/live | 0.00015 | blog: gift-giving-love-language |
+| 2026-11-17T10:20Z | on_page/content_parsing/live | 0.00015 | blog: gift-giving-love-language |

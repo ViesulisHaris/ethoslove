@@ -1,0 +1,141 @@
+{
+  "slug": "gift-giving-love-language",
+  "keyword": "gift giving love language",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It answers the search in the first line, then gives tiered ideas, a copy-ready note, a table that turns an overheard remark into a gift, and an honest line on the research: more usable tonight than the generic idea lists and quiz pages at the top. Polish only: plainer tense in one sample line, US/UK-neutral 'favourite'/'Apologise', a 'short on time' next step."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Every product, template, quiz and scheduling claim checked against the code and found true. Asked to cut the signpost sentence closing the lead (both languages), drop the repeated 'the quiz gives this language Bouquet' line, and fix Spanish calques and grammar: 'de gratis a planeadas', a takeaway with no antecedent, 'no que compras', 'son un pago único', 'sentirse como', 'le dice que no miraste', 'ponerse feliz'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked that the FAQ answer the 'What are the 7 gift categories?' PAA question outright (it was only hinted at), checking the list against a source and saying lists differ; same in Spanish. Polish: a shorter description, a line on what to do if they don't seem to like a gift, and meeting the 'gifts shouldn't count' objection."
+        }
+      ],
+      "applied": [
+        "Cut the signpost sentence that closed the lead, in both languages (editor).",
+        "Dropped 'The quiz gives this language Bouquet.' before the Bouquet card, which says the same thing, in both languages (editor).",
+        "Spanish: 'ideas gratis y planeadas' in the description, the takeaway now names who it hurts, 'no uno que compras', 'se desbloquean con un pago único', 'lo puede vivir como un rechazo', 'le confirma que ni te molestaste en buscar', 'llevarse una alegría enorme' (editor).",
+        "FAQ on the 5 gift rule now answers the 7 gift categories question, says lists differ and gives a common list (want, need, wear, read, do, eat, for the family) found by web search, in both languages (search). The reviewer's suggested list ('something to experience') was not used because no source found gave it.",
+        "Polish taken: 'gig' to 'concert'; 'favourite' and 'Apologise' made US/UK neutral; cut 'Each one works because...'; dropped the generic 'Fresh flowers on an ordinary Tuesday' item and one 'Tuesday' repeat; untangled the box-and-letter idea; Spanish 'de materialistas', 'se le queda clavado', 'alguien se siente', 'la receta, después de buscarla', 'Su café de siempre, sin que te lo pida'."
+      ],
+      "rejected": [
+        "Search polish to shorten the English description: it is 150 characters and within the limit, so no change."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round 1's changes held. Tiered ideas, plain note lines, the 'they say / you write down' table and an honest research section make it more usable tonight than the top results, and the product appears only late, as made gifts. Polish only: 'mail' for 'post', a next step for a date this week."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes all made; the 7 gift rule FAQ is hedged enough. Three Spanish fixes: the 'Descuidar los regalos' line didn't parse (needs a 'Si...' clause), the first FAQ answer reversed who noticed whom, and 'lo mismo de vuelta' is a calque."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The 7 gift fix is made and correctly hedged. With tiered ideas, the passing-mention table no top result has, honest research and every PAA question answered, it gives the searcher more than the ranking pages. Polish only: a separate 7-categories FAQ, a line on a gift they don't seem to love, a giving-vs-receiving sentence early."
+        }
+      ],
+      "applied": [
+        "Spanish: 'Si pierdes, vuelves a regalar o nunca usas algo que eligió para ti, lo puede vivir como un rechazo.' (editor).",
+        "Spanish FAQ: 'que te fijaste en algo suyo y actuaste', matching the English (editor).",
+        "Spanish: 'si le gustaría recibir lo mismo' (editor).",
+        "Polish taken to head off fixes: dropped 'most people search for it as gift giving' (talks about search, not the reader); the band tickets are wrapped with a setlist from their last show, since a setlist can't exist before the show (EN and ES)."
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The round 2 edits broke nothing. The first line answers the search, and the tiered ideas, plain note lines and the 'they say / you write down' table make it something to act on tonight, with the templates last as made gifts. Polish only: 'mail' for 'post', a next step for a date this week."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round 2 fixes made correctly; every product, template, quiz, scheduling and link claim checks out against the code, and the studies aren't overstated. It beats the top results by turning 'they feel loved by gifts' into a method for tonight: tiered ideas, a running list from passing mentions, and the note that makes a small thing a gift. Polish only: 'hacer más ilusión'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers everything Calm's and the other ranking pages cover and adds a passing-mention table, copy-ready note lines and an honest research section, answering every PAA question: the page to send a friend over the generic idea lists and quiz pages that rank. Polish only: giving-and-receiving line early, separate 7-categories FAQ, a line on a gift they don't seem to love."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: 'mail' for 'post a handwritten letter'; a next step for a date this week.",
+        "Editor: 'hacer más ilusión' in a Spanish takeaway.",
+        "Search: an early giving-and-receiving line; a separate 7 gift categories FAQ; a line on a gift they don't seem to love. Kept out of the post: the final version is the one the panel passed."
+      ]
+    }
+  ]
+}

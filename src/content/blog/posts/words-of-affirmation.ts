@@ -29,7 +29,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If you're not sure it's their language (or yours), our free [love language quiz](/tools/love-language-quiz) takes about four minutes, asks for no email, and lets you send the link to your partner and compare results.",
+          text: "If you're not sure it's their language (or yours), our free [love language quiz](/tools/love-language-quiz) takes about four minutes, asks for no email, and lets you send the link to your partner and compare results. If it comes out as gifts instead, our guide to the [gift giving love language](/blog/gift-giving-love-language) covers what to give and why the note matters most.",
         },
         { type: "h2", text: "Words of affirmation examples for every moment" },
         {
@@ -263,7 +263,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si no sabes seguro si es su lenguaje (o el tuyo), nuestro [test de los lenguajes del amor](/tools/love-language-quiz) es gratis, dura unos cuatro minutos, no pide email y te deja mandar el enlace a tu pareja para comparar resultados.",
+          text: "Si no sabes seguro si es su lenguaje (o el tuyo), nuestro [test de los lenguajes del amor](/tools/love-language-quiz) es gratis, dura unos cuatro minutos, no pide email y te deja mandar el enlace a tu pareja para comparar resultados. Si sale que lo suyo son los regalos, nuestra guía del [lenguaje del amor de los regalos](/blog/gift-giving-love-language) explica qué regalar y por qué lo que más cuenta es la nota.",
         },
         { type: "h2", text: "Ejemplos de palabras de afirmación para cada momento" },
         {
