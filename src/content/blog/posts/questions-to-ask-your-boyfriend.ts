@@ -170,6 +170,10 @@ export const post: BlogPost = {
             "What's a moment that changed the direction of your life?",
           ],
         },
+        {
+          type: "p",
+          text: "For 48 more, sorted from easy to brave, with how to go first and what to do when he goes quiet, see our [deep questions to ask your boyfriend](/blog/deep-questions-to-ask-your-boyfriend).",
+        },
         { type: "h2", text: "Romantic questions about the two of you" },
         {
           type: "p",
@@ -490,6 +494,10 @@ export const post: BlogPost = {
             "¿Qué crees que entenderás a los cincuenta que ahora no entiendes?",
             "¿Qué momento cambió el rumbo de tu vida?",
           ],
+        },
+        {
+          type: "p",
+          text: "Para 48 más, de las fáciles a las valientes, con cómo contestar tú primero y qué hacer si se queda callado, mira nuestras [preguntas profundas para tu novio](/blog/deep-questions-to-ask-your-boyfriend).",
         },
         { type: "h2", text: "Preguntas románticas sobre vosotros dos" },
         {

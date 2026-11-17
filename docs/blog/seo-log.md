@@ -498,3 +498,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-17T16:44Z | on_page/content_parsing/live | 0.00015 | seo: christmas-letter-to-boyfriend |
 | 2026-11-17T16:44Z | on_page/content_parsing/live | 0.00015 | seo: christmas-letter-to-boyfriend |
 | 2026-11-17T16:44Z | serp/google/organic/live/advanced | 0.004 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |

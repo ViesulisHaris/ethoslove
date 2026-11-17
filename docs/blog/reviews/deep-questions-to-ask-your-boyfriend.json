@@ -1,0 +1,189 @@
+{
+  "slug": "deep-questions-to-ask-your-boyfriend",
+  "keyword": "deep questions to ask your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: unlike lists of 50 interchangeable questions, it sorts 48 new ones by depth and stage, and shows how to go first, handle silence and jokes, and follow up the next day. Polish: soften the claim about what made the Aron study work."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Factual error about a template: the Fortune Cookie note says that questions put 'in order from level 1 to level 4' make 'the easy ones open first'. In src/templates/fortune-cookie/Template.tsx the recipient picks any cookie ('pick a cookie'), crack(i) shows fortunes[i] for whichever cookie he tapped, and nothing makes him open them in order. Even the last cookie, the one with your message, can be opened at any time; it is only marked with a sparkle.",
+            "The post says '48 new questions', but 8 of them repeat existing posts almost word for word, 3 of them the hub (see fixes). That claim misleads, and two of the repeats are reused in the 'blush' FAQ."
+          ],
+          "summary": "Fortune Cookie note wrongly implied the slips open in order; eight questions repeated other posts near-verbatim; three Spanish fixes (va más allá solo en profundidad, haciendo a ti, que hoy ha pasado). All other product, link, study and 7-7-7 claims verified."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: a level-by-timing table, scripts for going first, silence and jokes, and a text-versus-voice rule, answering every People also ask question for the keyword without duplicating the hub."
+        }
+      ],
+      "applied": [
+        "Fortune Cookie note (EN/ES): he picks cookies in any order, so use level 1-3 questions that work in any sequence",
+        "Eight repeated questions replaced, with the blush FAQ updated",
+        "Three Spanish fixes",
+        "Polish: children question reordered; two Spanish wordings; Aron paragraph softened and mentions taking turns",
+        "Writer's own swaps of two more near-repeats ('What makes a life a good one?', 'When do you feel closest to me?')"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the top results because it sorts 48 non-duplicated questions into five levels by when and where to ask each, then gives the lines to say when he goes quiet or jokes, which the question-dump pages skip."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "\"48 new questions\" is still not quite true. Level 5's \"Is there a part of your past you'd want me to understand before we go further?\" is a near-copy of \"What's a part of your past you'd like me to understand?\" in questions-to-ask-your-girlfriend.ts, which uses it twice: in its deep list (line 146) and again in its FAQ (line 329). This is the same kind of error that round 1 counted as a dealbreaker. One line fixes it, in both languages (first fix below)."
+          ],
+          "summary": "Round 1 fixes confirmed. Asked to replace the part-of-your-past question (near the girlfriend post) and 'something I said once that stayed with you' (near words-of-affirmation), update the blush FAQ, and say 'Two things made it work' since the small-talk control also took turns."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: 48 questions in five levels with when and where to ask each, lines to borrow, a section for when he goes quiet and a sourced study, answering every People also ask question, against lists of 75 to 369 sorted by topic or mood."
+        }
+      ],
+      "applied": [
+        "Part-of-your-past question replaced (EN/ES)",
+        "'Something I said once' replaced by 'When did you feel I was really on your side?' in the list and the blush FAQ (EN/ES)",
+        "Aron sentence: 'Two things made it work' (EN/ES)",
+        "Polish: 'quietly good at that you never mention' (echoed the games deck)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the round-2 changes read naturally; the lead, level table, go-first and silence scripts and the honest Aron note make it a page you can act on tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "'48 new questions' (and the hub's new 'For 48 more') is still not true, by the same standard rounds 1 and 2 applied. Two of the 48 are near-copies of questions in existing posts. (1) Level 1 'What's a compliment you got years ago that you still remember?' / «¿Qué cumplido te hicieron hace años y todavía recuerdas?» is the same question as 'What's a compliment you've never forgotten?' / «¿Qué cumplido no has olvidado nunca?» in questions-to-ask-your-boyfriend.ts (lines 115 and 440), the hub that now links here, and again in questions-for-couples.ts line 69. Its short form, 'What's a compliment you still remember?', is the post's lead example, the first FAQ answer and the Fortune Cookie sample slip. A reader who clicks 'For 48 more' from the hub meets the hub's own question in the first sentence. (2) 'What are you quietly good at that you never mention?' repeats 'What's something you're quietly good at?' in questions-for-couples.ts line 60 (ES line 332 «¿Qué se te da bien sin que nadie lo sepa?»). Round 2's polish moved it away from the games deck, but it kept the giveaway phrase 'quietly good at'. Every other one of the 48 was checked by fuzzy match and content-word overlap against all 57 other posts and the games decks: nothing else is near-verbatim."
+          ],
+          "summary": "Round 2 fixes confirmed. Asked to replace the compliment question (also the lead example, first FAQ and Fortune Cookie sample) and the 'quietly good at' question, in both languages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: a five-level structure, delivery and silence scripts and a text-versus-voice section that the flat 75-115 question lists lack, with the People also ask questions answered and no overlap with the hub."
+        }
+      ],
+      "applied": [
+        "Compliment question -> 'What's a bit of luck that got you where you are now?'; lead, first FAQ and Fortune Cookie slip now use the meal question (EN/ES)",
+        "'Quietly good at' -> 'Which place from when you were small could you still walk through with your eyes shut?' (EN/ES)",
+        "Polish taken to head off the same fix: 'proud of that nobody saw' -> 'something you did right that nobody ever found out about'",
+        "Writer's own overlap check: 'a small thing that makes a day good' -> 'the best ordinary hour of your week'; 'what do you need that you've never asked anyone for' -> 'What are you still angry about, if you're honest?' (list and FAQs, EN/ES)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the meal-then-future example shows easy-to-brave in one line, and the level table, go-first and silence scripts and next-day text are things you can use tonight, which the flat question lists don't give."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: every round-3 change is in place in both languages, a scripted overlap check of all 96 list questions against every post, deck and message file found no near-copies, and every product, link, study and 7-7-7 claim checks out against the code. Polish noted only (the future-fear and meal questions share themes with older posts, not wording)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it beats lists of 75 to 115 questions sorted by topic by ordering 48 into five levels with when and how far in, adding scripts for going first and handling silence or jokes, and answering the People also ask questions inline. Polish noted: an optional 3 6 9 FAQ linking to the hub."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: optionally reword the future-fear question for more distance from questions-to-ask-your-partner",
+        "Search: optional 3 6 9 FAQ and a link-through for '50 juicy questions'; both are answered by the hub"
+      ]
+    }
+  ]
+}
