@@ -136,6 +136,28 @@ function refsByUrl(state: Pick<EditorState, "assets">): Record<string, string | 
   return refs;
 }
 
+/**
+ * `photos` with `photo` put in: `batch` holds the ids of the files picked together, in the order
+ * they were picked, and `photo` is number `index` of them. It goes right after the last one picked
+ * before it that is already in, or else right before the first one picked after it, or else at
+ * the end. Photos picked together are prepared side by side and each goes in as soon as it is
+ * ready, but they finish in any order (a big photo or a HEIC takes longer); each used to go to the
+ * end, and the gift took them in the order they finished (Our Timeline, 17 Nov 2026).
+ */
+function placeInBatch(photos: GiftPhoto[], photo: GiftPhoto, batch: string[], index: number): GiftPhoto[] {
+  let after = -1;
+  let before = -1;
+  photos.forEach((p, k) => {
+    const rank = batch.indexOf(p.id);
+    if (rank < 0) return;
+    if (rank < index) after = k;
+    else if (before < 0) before = k;
+  });
+  const next = [...photos];
+  next.splice(after >= 0 ? after + 1 : before >= 0 ? before : photos.length, 0, photo);
+  return next;
+}
+
 /** How long the poster frame may take; past it the clip simply has no poster. */
 export const POSTER_MS = 5000;
 
@@ -536,9 +558,11 @@ export const useEditor = create<EditorState>((set, get) => {
       const { manifest, data } = get();
       const max = manifest?.features.photos.max ?? 20;
       const accepted = files.slice(0, Math.max(0, max - data.photos.length));
+      // Every id up front, in the order the files were picked, so each photo knows its place (placeInBatch).
+      const batch = accepted.map(() => nanoid(10));
       await Promise.all(
-        accepted.map(async (file) => {
-          const id = nanoid(10);
+        accepted.map(async (file, i) => {
+          const id = batch[i];
           set((s) => ({
             assets: {
               ...s.assets,
@@ -563,8 +587,8 @@ export const useEditor = create<EditorState>((set, get) => {
               },
               data: {
                 ...s.data,
-                photos: [
-                  ...s.data.photos,
+                photos: placeInBatch(
+                  s.data.photos,
                   {
                     id,
                     url: objectUrl,
@@ -573,7 +597,9 @@ export const useEditor = create<EditorState>((set, get) => {
                     caption: "",
                     alt: file.name.replace(/\.[^.]+$/, ""),
                   },
-                ],
+                  batch,
+                  i,
+                ),
               },
             }));
             touch();
