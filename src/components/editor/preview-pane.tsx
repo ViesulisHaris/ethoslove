@@ -25,6 +25,10 @@ export function PreviewPane({ slug, className, fullscreen = false }: { slug: str
       mode={playing ? "live" : "preview"}
       replayKey={replayKey}
       onReact={() => setPlaying(false)}
+      // The phone's preview starts at the first Preview tap, with the template loaded long before:
+      // it opens on the gift, as it did when it ran hidden from the start. The laptop's starts with
+      // the page and keeps its loading screen, as it always had.
+      instant={fullscreen}
     />
   );
 

@@ -79,9 +79,19 @@ const loaders: Record<string, () => Promise<{ template: TemplateModule<any> }>> 
 /** Every slug with a loader; tests/unit/templates.test.ts checks it against ./manifests. */
 export const LOADER_SLUGS = Object.keys(loaders);
 
+/** Every template this tab has loaded, so a renderer can draw one at once instead of waiting a turn. */
+const loaded = new Map<string, TemplateModule>();
+
 export async function loadTemplate(slug: string): Promise<TemplateModule | null> {
   const loader = loaders[slug];
   if (!loader) return null;
   const mod = await loader();
-  return mod.template as TemplateModule;
+  const template = mod.template as TemplateModule;
+  loaded.set(slug, template);
+  return template;
+}
+
+/** The template's code if this tab has loaded it already (the editor always has); null if not. */
+export function loadedTemplate(slug: string): TemplateModule | null {
+  return loaded.get(slug) ?? null;
 }

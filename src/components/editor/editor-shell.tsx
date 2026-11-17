@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { defaultCoverFor } from "@/templates/_shared/covers/looks";
 import { useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -45,6 +45,19 @@ export type EditorShellProps = {
   reaction?: ShownReaction | null;
 };
 
+/**
+ * Tailwind's md: from here up the preview sits beside the form; below it (a phone) it is a tab of its
+ * own. In rem, as the stylesheet has it: 768px, until someone sets their browser's text larger, and
+ * then the layout switches later and this has to switch with it, or a tablet would draw no preview.
+ */
+const WIDE = "(min-width: 48rem)";
+const subscribeWide = (onChange: () => void) => {
+  const query = window.matchMedia(WIDE);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+const isWide = () => window.matchMedia(WIDE).matches;
+
 function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: TemplateModule): GiftData {
   let fields: Record<string, unknown> = {};
   try {
@@ -76,6 +89,12 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const search = useSearchParams();
   const [mod, setMod] = useState<TemplateModule | null>(null);
   const [view, setView] = useState<"edit" | "preview">("edit");
+  // Only a preview that can be seen is drawn: the gift running in one is as heavy as the form, and the
+  // page used to start two, the laptop's (hidden on a phone) and the phone's (hidden until its tab is
+  // opened). A laptop draws the one beside the form; a phone draws its own the first time Preview is
+  // tapped, and keeps it after that so switching back and forth stays instant.
+  const wide = useSyncExternalStore(subscribeWide, isWide, () => false);
+  const [phonePreview, setPhonePreview] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
   const [resumeDismissed, setResumeDismissed] = useState(false);
   const resumePublish = search.get("resume") === "publish";
@@ -242,7 +261,10 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const switched = useRef(false);
   const switchView = (next: "edit" | "preview") => {
     if (next === view) return;
-    if (next === "preview") editScroll.current = window.scrollY;
+    if (next === "preview") {
+      editScroll.current = window.scrollY;
+      setPhonePreview(true);
+    }
     switched.current = true;
     setView(next);
   };
@@ -321,7 +343,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
         <div className={view === "preview" ? "block min-w-0" : "hidden min-w-0 md:block"}>
           <div className="md:sticky md:top-14 md:h-[calc(100dvh-3.5rem)]">
             <div className="hidden h-full items-center justify-center bg-[radial-gradient(60%_50%_at_50%_45%,rgba(244,199,195,0.35),transparent)] p-4 md:flex lg:p-8" data-tour="preview">
-              <PreviewPane slug={slug} />
+              {wide ? <PreviewPane slug={slug} /> : null}
             </div>
             {/*
              * Everything under the bar: 3.5rem, its hairline and, in a home-screen app, the notch.
@@ -329,7 +351,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
              * the class compiled to nothing and the gift collapsed to zero height.
              */}
             <div className="md:hidden" style={{ height: "calc(100dvh - 3.5rem - 1px - env(safe-area-inset-top, 0px))" }}>
-              <PreviewPane slug={slug} fullscreen />
+              {!wide && phonePreview ? <PreviewPane slug={slug} fullscreen /> : null}
             </div>
           </div>
         </div>

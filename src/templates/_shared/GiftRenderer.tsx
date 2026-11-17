@@ -5,7 +5,7 @@ import { AnimatePresence, MotionConfig } from "motion/react";
 import type { CoverId, GiftData, GiftLocale } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import type { TemplateEvent, TemplateMode, TemplateModule } from "../types";
-import { loadTemplate } from "../registry";
+import { loadTemplate, loadedTemplate } from "../registry";
 import { giftThemeVars } from "./theme";
 import { usePreloadAssets } from "./hooks/use-preload-assets";
 import { LoadingScreen } from "./LoadingScreen";
@@ -46,6 +46,12 @@ export type GiftRendererProps = {
   lookOverride?: string;
   /** Called when the recipient opens the cover: the moment a view counts. */
   onCoverOpened?: () => void;
+  /**
+   * Draw the gift in the first frame when this tab already has the template's code: the editor's
+   * phone preview, which only starts when Preview is tapped. Without it a gift the page already holds
+   * would still open behind a loading screen fading out.
+   */
+  instant?: boolean;
   className?: string;
 };
 
@@ -68,9 +74,13 @@ export function GiftRenderer({
   coverOverride,
   lookOverride,
   onCoverOpened,
+  instant = false,
   className,
 }: GiftRendererProps) {
-  const [loaded, setLoaded] = useState<{ slug: string; mod: TemplateModule | null }>({ slug: "", mod: null });
+  const [loaded, setLoaded] = useState<{ slug: string; mod: TemplateModule | null }>(() => {
+    const here = instant ? loadedTemplate(slug) : null;
+    return here ? { slug, mod: here } : { slug: "", mod: null };
+  });
   const [minElapsed, setMinElapsed] = useState(mode === "preview");
   // The replay the cover was last opened for; a replay shows the cover again.
   const [openedFor, setOpenedFor] = useState<number | null>(null);
@@ -82,7 +92,8 @@ export function GiftRenderer({
   useEffect(() => {
     let active = true;
     loadTemplate(slug)
-      .then((m) => active && setLoaded({ slug, mod: m }))
+      // Already drawn with this very template (instant): nothing to change, so nothing re-renders.
+      .then((m) => active && setLoaded((was) => (was.slug === slug && was.mod === m ? was : { slug, mod: m })))
       .catch(() => active && setLoaded({ slug, mod: null }));
     return () => {
       active = false;
