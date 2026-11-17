@@ -1,4 +1,5 @@
 import { SITE } from "@/config/site";
+import { nameDrawingTag } from "@/lib/gift/name-scripts";
 
 /**
  * The share card every gift link shows in Messages, WhatsApp and the rest. 2400×1256 because
@@ -21,7 +22,7 @@ function version(text: string): string {
  */
 export function shareCardUrl(shortId: string, card: { recipientName: string; locale: string; templateSlug?: string | null; look?: unknown }): string {
   const paper = cardLookFor(card.templateSlug, card.look, shortId);
-  return `${SITE.url}/g/${shortId}/card.jpg?v=${version(`envelope:${paper}:${card.locale}:${card.recipientName}`)}`;
+  return `${SITE.url}/g/${shortId}/card.jpg?v=${version(`envelope:${paper}:${card.locale}:${card.recipientName}${nameDrawingTag(card.recipientName)}`)}`;
 }
 
 /**

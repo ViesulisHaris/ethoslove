@@ -36,6 +36,8 @@ const SEAL = 230;
 /** The words take the right side, left-aligned from here. */
 const TEXT_X = 1330;
 const TEXT_W = W - TEXT_X - 110;
+/** The room a name drawn as a picture (name-art.ts) gets on the card. */
+export const NAME_ROOM = { width: TEXT_W, height: 620 } as const;
 
 export const CARD_THEMES: Record<CardLook, Theme> = {
   blush: {
@@ -130,9 +132,22 @@ const box = (style: CSSProperties, ...children: Child[]) => h("div", { style: { 
 
 /**
  * The card for `name`, in `look`. `art` maps each file `cardFiles(look)` names to a data URI the
- * caller has read; one that is missing is left out rather than breaking the card.
+ * caller has read; one that is missing is left out rather than breaking the card. `nameArt` is the
+ * name already drawn as a picture, for the scripts the generator can't draw (name-art.ts).
  */
-export function cardArt({ name, look, locale, art }: { name: string; look: CardLook; locale: "en" | "es"; art: Record<string, string> }): ReactElement {
+export function cardArt({
+  name,
+  nameArt,
+  look,
+  locale,
+  art,
+}: {
+  name: string;
+  nameArt?: { src: string; width: number; height: number };
+  look: CardLook;
+  locale: "en" | "es";
+  art: Record<string, string>;
+}): ReactElement {
   const t = CARD_THEMES[look];
   const es = locale === "es";
   const { size, lines } = nameSize(name);
@@ -163,7 +178,9 @@ export function cardArt({ name, look, locale, art }: { name: string; look: CardL
     box(
       { position: "absolute", left: TEXT_X, top: 0, width: TEXT_W, height: H, flexDirection: "column", justifyContent: "center" },
       box({ fontFamily: "Newsreader Italic", fontSize: 120, lineHeight: 1, color: t.soft }, es ? "para" : "for"),
-      box({ marginTop: 10, fontSize: size, lineHeight: lines === 1 ? 1.08 : 1.02, letterSpacing: -Math.round(size * 0.025), color: t.ink, maxWidth: TEXT_W, maxHeight: Math.ceil(size * 1.08 * lines), overflow: "hidden", ...(lines === 1 ? { whiteSpace: "nowrap", textOverflow: "ellipsis" } : { flexWrap: "wrap" }) }, name),
+      nameArt
+        ? h("img", { src: nameArt.src, width: nameArt.width, height: nameArt.height, style: { marginTop: 10, width: nameArt.width, height: nameArt.height } })
+        : box({ marginTop: 10, fontSize: size, lineHeight: lines === 1 ? 1.08 : 1.02, letterSpacing: -Math.round(size * 0.025), color: t.ink, maxWidth: TEXT_W, maxHeight: Math.ceil(size * 1.08 * lines), overflow: "hidden", ...(lines === 1 ? { whiteSpace: "nowrap", textOverflow: "ellipsis" } : { flexWrap: "wrap" }) }, name),
       box({ marginTop: 34, width: 150, height: 4, borderRadius: 2, backgroundColor: t.soft, opacity: 0.55 }),
       box({ marginTop: 40, fontFamily: "Newsreader Italic", fontSize: 76, lineHeight: 1.2, color: t.soft }, es ? "alguien te ha hecho algo" : "someone made you something"),
     ),
