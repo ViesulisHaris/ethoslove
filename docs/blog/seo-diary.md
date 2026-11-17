@@ -3,6 +3,31 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-17: 6-month-anniversary-ideas answers "6 month anniversary gift"
+- **Page:** /blog/6-month-anniversary-ideas
+- **Why:** Next open backlog item. DataForSEO (US): "6 month anniversary gift" 1,600 a month (KD 0,
+  UK 480), "gifts for him" 720, "gifts for her" 320, "gift ideas" 320, against 390 for "6 month
+  anniversary ideas" (UK 50); Spain's phrasings about 10 each. Search Console: no impressions for
+  the post in 28 days. The US top 10s are Pinterest, Reddit, Amazon and 30-55-item gift listicles
+  (anniversarygiftsbyyear, giftingdeer, thegiftyak, garlandsandconfetti); the AI overview lists
+  photo prints, a memory jar, a treats-and-Polaroids basket, an indoor picnic or stargazing, the
+  first date again. People also ask: what to get your partner for 6 months, the 5 gift rule, is 6
+  months a milestone, what it's called, the 6-month rule, making it special at home. The post had
+  five gift lines and none of those answers.
+- **What changed:** Title "6 month anniversary gift and date ideas that don't overdo it" (Spanish
+  "Ideas y regalos para celebrar 6 meses de novios sin pasarse"), new descriptions, a gift pick in
+  the lead; the gifts section now has lists for him, for her and homemade, a late-planning line and
+  the five-gift rule; an at-home line and links to anniversary-ideas-at-home and
+  long-distance-anniversary-ideas; FAQs on the milestone, the 6-month rule, the name and what to
+  get, with a budget ceiling. Spanish to match. `updated` 2026-11-17.
+- **Panel:** 10/10/10 after 3 rounds (`docs/blog/reviews/refresh/6-month-anniversary-ideas-2026-11-17.json`)
+- **Cost:** $0.05 (keyword overviews US/UK/Spain, four SERPs with AI overview and PAA); balance $49.60
+- **Note:** First run today (Tuesday; ranks from 16 Nov, so no weekly job). Search Console and the
+  sales endpoint both answered. Search Console shows /es/blog/halloween-ideas-for-couples at 7.8 to
+  14.8 for "planes para halloween en pareja" (81 impressions): worth a look before October 2027.
+- **Check on:** 2026-12-04 whether "6 month anniversary gift", "6 month anniversary gifts for him"
+  and "6 month anniversary ideas" show for the post in Search Console and the rank check
+
 ## 2026-11-16: how-to-apologize-to-your-boyfriend speaks Spain's words, adds attitude, a letter and short texts
 - **Page:** /es/blog/how-to-apologize-to-your-boyfriend (and the English to match)
 - **Why:** Next open backlog item. Search Console (28 days): the Spanish page had 69 impressions,

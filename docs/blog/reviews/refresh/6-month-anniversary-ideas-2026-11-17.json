@@ -1,0 +1,151 @@
+{
+  "slug": "6-month-anniversary-ideas",
+  "keyword": "6 month anniversary ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 8,
+            "usable": 8,
+            "trust": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Wanted a concrete gift pick in the lead for the 'gift' searcher, a line on what can still be done if you're late, US/UK-neutral wording (crisps, honour, gig, match, cinema, one-off), a clear reference instead of 'the six photos from the table', a budget ceiling in everyday terms, and a link to long-distance-anniversary-ideas."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Product and template claims verified against manifests and pricing. Asked to drop 'crisps', say the five-gift rule is used for Christmas and birthdays (UK 'holidays' differs), and in Spanish present cumplemes and mesiversario as informal, with «cumplir meses» the usual phrase."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Asked for 'gift' first in the title, a gift in the lead, answers to the PAA questions on the 6-month rule, the 5 gift rule and making it special at home, and the AI overview's treats-and-instant-photos basket and stargazing ideas."
+        }
+      ],
+      "applied": [
+        "Title '6 month anniversary gift and date ideas that don't overdo it'; Spanish title adds 'sin pasarse'",
+        "Lead names a small gift and a single pick (first photo with the date on the back), both languages",
+        "Late-planning line (pen-and-printer gifts vs tickets and bookings)",
+        "US/UK-neutral wording: single class, game, concert, screening, coupons you'll actually keep, whatever you ate on the road trip",
+        "Basket of treats and instant photos (him) and a night under the sky (her); her photo and book items made distinct from the shared list",
+        "Five-gift rule: 'usually used for Christmas and birthdays'",
+        "'six photos, one from each month' instead of 'from the table'; link to long-distance-anniversary-ideas",
+        "At-home line with link to anniversary-ideas-at-home after the effort table",
+        "FAQ: 'Do people celebrate' merged into the milestone answer; new 'What is the 6-month rule for dating?'; budget ceiling (a good dinner out for two) in the spend answer",
+        "Spanish name FAQ: «cumpliendo meses» first, cumplemes and mesiversario as what some people say"
+      ],
+      "rejected": [
+        "Search: FAQ items for the 5 gift rule and 'make it special at home' — the test caps FAQs at six; the five-gift rule is answered in the gifts section and 'at home' in a new line after the effort table",
+        "Search polish: moving gifts above the effort table — not taken in round one; the lead now points gift searchers down"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes made except 'film' twice; asked for 'movie' in the tickets and coupons items and US/UK-neutral wording for 'flask' and 'garden' in the night-under-the-sky gift."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes made correctly. Asked to merge the snack box into the basket (two of the four 'for him' gifts were the same), neutral wording for the night under the sky, 'latest' not 'next' book (último, not próximo), and a tú/vosotros switch and calque in a Spanish takeaway."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Covers gifts for him, for her and homemade, plus dates by effort, card lines and what to skip in one honestly scaled post that answers every on-topic People-also-ask question, which no first-page listicle or shop page does."
+        }
+      ],
+      "applied": [
+        "'movie' in the tickets and coupons items",
+        "Snack box merged into the basket of treats and instant photos, both languages",
+        "Night under the sky: 'somewhere dark enough to see the stars, something hot to drink', both languages",
+        "'The latest book' / 'El último libro'",
+        "Spanish takeaway: 'Mirad atrás… vale más que un resumen'",
+        "Polish taken to head off fixes: card line 'talk to every dog you pass' (ES to match); Spanish '¿Lo has dejado para el último momento?', 'algo que sabes de tu pareja', 'el resto de los meses', 'aciertes con un regalo', 'Publicar algo que no ha aprobado'"
+      ],
+      "rejected": [
+        "Search polish: link to photo-gift-ideas-for-boyfriend and an extra item per list — not taken; the reviewer scored 10 and an unrequested edit is new text for the next panel"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the first-page results (Pinterest, Reddit and the 55-gift and 32-gift lists): a sized-to-six-months answer in the lead, a table by effort, separate lists for him, for her and homemade, and card lines you could send tonight, with no padding."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product claim matches its manifest, schema and pricing note, every link resolves, the round-two fixes went in cleanly in both languages, and the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers the 1,600-a-month \"6 month anniversary gift\" search and the him and her variants with a short, specific, sized-for-six-months list, plus dates by effort, card lines, what to skip and every People-also-ask question, where the ranking pages are bare 30-55 item listicles and shop pages."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Reader: a photo of her she loves instead of the one she sent her best friend",
+        "Editor: «cada perro con el que te cruzas»; «una sesión de la película»",
+        "Search: link photo-gift-ideas-for-boyfriend; a fourth item for him"
+      ]
+    }
+  ]
+}

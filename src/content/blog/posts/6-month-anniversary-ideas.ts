@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "6-month-anniversary-ideas",
   published: "2026-10-30",
+  updated: "2026-11-17",
   occasion: "anniversary",
   templates: ["jar-of-reasons", "our-timeline", "the-letter"],
   content: {
     en: {
-      title: "6 month anniversary ideas that don't overdo it",
-      description: "6 month anniversary ideas sized for six months, not a year: dates by effort, small gifts, lines for the card, and what to skip so it isn't too much.",
+      title: "6 month anniversary gift and date ideas that don't overdo it",
+      description: "6 month anniversary ideas and gifts sized for six months, not a year: dates by effort, gifts for him, for her or homemade, card lines, and what to skip.",
       keyword: "6 month anniversary ideas",
-      lead: "The best 6 month anniversary ideas are sized to the moment: enough to say this matters, not so much that it feels like a proposal is coming. One planned evening, something small you made or chose, and a few lines about the six months is the right scale. Below are ideas sorted by effort, small gifts, what to write, and what to skip at this stage.",
+      lead: "The best 6 month anniversary ideas are sized to the moment: enough to say this matters, not so much that it feels like a proposal is coming. One planned evening, a small gift that only makes sense to the two of you, and a few lines about the six months is the right scale. If you only get one thing, make it a print of your first photo together with the date on the back. Below: dates, gifts for him, for her and homemade, card lines, and what to skip.",
       takeaways: [
         "Six months is a nod, not a ceremony. Plan one evening, not a weekend.",
         "Look back once, then do something new together. A first beats a recap.",
@@ -33,18 +34,18 @@ export const post: BlogPost = {
             ["An evening", "Cook the meal from the first time one of you cooked for the other", "Nobody minds if it goes wrong; that's half the story"],
             ["An evening", "Make a playlist with one song from each month and say why it's on there", "It turns the six months into something you can play again"],
             ["An afternoon", "Retake a photo from your first month in the same spot, in the same pose", "Starts a tradition you can repeat at a year"],
-            ["An afternoon", "Take a one-off class together: pottery, cooking, bouldering", "You make a first instead of only remembering old ones"],
+            ["An afternoon", "Take a single class together: pottery, cooking, bouldering", "You make a first instead of only remembering old ones"],
             ["A day", "A day trip somewhere neither of you has been", "A new place gives you a new memory without the cost of a weekend away"],
           ],
         },
         {
           type: "p",
-          text: "Pick one, two at most: a ten-minute idea in the morning and an evening one later. For the other months of the first year, our [monthiversary ideas](/blog/monthiversary-ideas) have a smaller plan for each.",
+          text: "Pick one, two at most: a ten-minute idea in the morning and an evening one later. For the other months of the first year, our [monthiversary ideas](/blog/monthiversary-ideas) have a smaller plan for each. To keep it at home, cook the first-meal idea, put the playlist on and lay a blanket on the floor for a picnic; our [anniversary ideas at home](/blog/anniversary-ideas-at-home) have more.",
         },
-        { type: "h2", text: "Small 6 month anniversary gifts" },
+        { type: "h2", text: "6 month anniversary gifts for him, for her, or homemade" },
         {
           type: "p",
-          text: "A gift at six months should feel thought about, not expensive. If it costs more than you'd spend on their birthday (or would plan to, if you haven't had one together yet), it's too much for now. Ideas that land:",
+          text: "A gift at six months should feel thought about, not expensive. If it costs more than you'd spend on their birthday (or would plan to, if you haven't had one together yet), it's too much for now. What makes a six-month gift land is that nobody else could have chosen it. Leaving it late? The notes, the map and the coupons need only a pen and a printer. Tickets and bookings fill up, so sort those first. Ideas that work for anyone:",
         },
         {
           type: "list",
@@ -55,6 +56,39 @@ export const post: BlogPost = {
             "**Something for a plan you've talked about:** a guidebook for the trip, a cookbook for the dish you keep meaning to try.",
             "**A small thing for your place or theirs** that only makes sense to the two of you: the mug from the café, a magnet from the day trip.",
           ],
+        },
+        { type: "h3", text: "6 month anniversary gifts for him" },
+        {
+          type: "list",
+          items: [
+            "**The better version of something he uses every day** and would never upgrade himself: good beans for the coffee grinder he talks about, proper running socks for his Sunday run.",
+            "**Two tickets:** the game, the concert by the band he played you in month two, a screening of the movie he keeps quoting.",
+            "**A small basket of treats and instant photos:** the snacks from your first road trip, the drink he ordered on your first date and six instant photos, one from each month, with one line written on the back of each.",
+          ],
+        },
+        { type: "h3", text: "6 month anniversary gifts for her" },
+        {
+          type: "list",
+          items: [
+            "**A print of the photo she sent to her best friend**, not the one you posted, in a frame that suits her place.",
+            "**The latest book by the author she keeps quoting**, with today's date and one line written inside the cover.",
+            "**A booked plan from her list:** the exhibition, the restaurant or the class she said she wanted to try, with the booking printed and folded into a card.",
+            "**A night under the sky:** a blanket somewhere dark enough to see the stars, something hot to drink and a star map of that night, with a card saying what you've noticed about her in six months.",
+          ],
+        },
+        { type: "h3", text: "Homemade 6 month anniversary gifts" },
+        {
+          type: "list",
+          items: [
+            "**A jar of 26 notes, one for every week**: a moment, a joke, something you noticed.",
+            "**A small photo book with one page per month** and a caption under each.",
+            "**A map of your six months**: print a map of your town and mark where things happened, from the first date to last week.",
+            "**Coupons you'll actually keep**: breakfast in bed, a movie or show of their choice with no complaints, one evening when you plan everything.",
+          ],
+        },
+        {
+          type: "p",
+          text: "You may have seen the five-gift rule: something they want, something they need, something to wear, something to read and something to do. It's usually used for Christmas and birthdays. At six months, pick one of the five, not all of them.",
         },
         {
           type: "p",
@@ -67,7 +101,7 @@ export const post: BlogPost = {
         },
         {
           type: "quote",
-          text: "Six months ago I didn't know you talk to dogs in the street. Now I'd miss it. Happy six months.",
+          text: "Six months ago I didn't know you talk to every dog you pass. Now I'd miss it. Happy six months.",
         },
         {
           type: "quote",
@@ -95,7 +129,7 @@ export const post: BlogPost = {
         { type: "h2", text: "6 month anniversary ideas when you're apart" },
         {
           type: "p",
-          text: "If you're in different cities, pick a time and make it a date on video: order from the same kind of restaurant at each end, or cook the same recipe at the same time and compare. Send something that arrives on the day (the six photos from the table, a letter by email scheduled for that morning, or the snack they mentioned) and give the call one plan with a start and an end, so it feels like an occasion.",
+          text: "If you're in different cities (our [long-distance anniversary ideas](/blog/long-distance-anniversary-ideas) go further), pick a time and make it a date on video: order from the same kind of restaurant at each end, or cook the same recipe at the same time and compare. Send something that arrives on the day (six photos, one from each month, a letter by email scheduled for that morning, or the snack they mentioned) and give the call one plan with a start and an end, so it feels like an occasion.",
         },
         { type: "h2", text: "Keep the six months in one place" },
         {
@@ -120,31 +154,39 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "Do people celebrate a 6 month anniversary?",
-          a: "Many couples do, usually with something small: a dinner, a card, a date that echoes the first one. It's not universal, so check lightly whether the other person is counting before you plan a whole evening.",
-        },
-        {
           q: "What do you do for a 6 month anniversary?",
-          a: "One planned evening is the right size: go back to where you had your first date, cook the first meal one of you made for the other, or take a one-off class together. Add a short card and you've marked it without overdoing it.",
+          a: "One planned evening is the right size: go back to where you had your first date, cook the first meal one of you made for the other, or take a single class together. Add a short card and you've marked it without overdoing it.",
         },
         {
-          q: "What is a good 6 month anniversary gift?",
-          a: "Something small and specific: a print of your first photo together, the book they mentioned once, or six notes for six months. Thought matters more than price at this stage.",
+          q: "What should I get my partner for 6 months?",
+          a: "Something small and specific: a print of your first photo together, the book they mentioned once, two tickets for something you'll do together, or a jar of notes, one for every week. Thought matters more than price at this stage.",
+        },
+        {
+          q: "Is 6 months a milestone in a relationship?",
+          a: "For many couples it is, and they mark it with something small: a dinner, a card, a date that echoes the first one. By six months the first rush has usually settled and you've seen each other through ordinary weeks, not only dates. It isn't universal, so check lightly whether the other person is counting before you plan a whole evening.",
+        },
+        {
+          q: "What is the 6-month rule for dating?",
+          a: "It isn't a real rule, just a rule of thumb: around six months the first rush settles and you see how the other person is in ordinary weeks, so many people wait until then before big steps like meeting families or moving in. Every couple moves at its own pace, so treat it as a prompt to talk, not a deadline.",
+        },
+        {
+          q: "What is a 6 month anniversary called?",
+          a: "There's no official name. Half-anniversary and half-year anniversary are the usual ones, and some couples just call it their six months. Each month before it is a [monthiversary](/blog/monthiversary-ideas), or a monthsary, the everyday word in the Philippines.",
         },
         {
           q: "How much should I spend on a 6 month anniversary gift?",
-          a: "Less than you'd spend on their birthday. If it starts to feel like a big gift, it probably is one for six months; save it for your first anniversary.",
+          a: "Less than you'd spend on their birthday. A handy ceiling is the cost of a good dinner out for the two of you, and a homemade gift can cost almost nothing. If it starts to feel like a big gift, it probably is one for six months; save it for your first anniversary.",
         },
       ],
     },
     es: {
-      title: "Ideas para celebrar 6 meses de novios sin pasarse",
-      description: "Ideas para celebrar 6 meses de novios a la medida de ese momento: planes según el esfuerzo, regalos pequeños, qué escribir y qué evitar para no pasarse.",
+      title: "Ideas y regalos para celebrar 6 meses de novios sin pasarse",
+      description: "Ideas para celebrar 6 meses de novios sin pasarse: planes según el esfuerzo, regalos para él, para ella o hechos a mano, qué escribir y qué evitar.",
       keyword: "ideas para celebrar 6 meses de novios",
-      lead: "Las mejores ideas para celebrar 6 meses de novios están a la medida del momento: lo bastante para decir que importa, sin que parezca que viene una pedida de mano. Una noche planeada, algo pequeño que hayas hecho o elegido y unas líneas sobre estos seis meses: eso es lo justo. Abajo tienes ideas según el esfuerzo, regalos pequeños, qué escribir y qué evitar a estas alturas.",
+      lead: "Las mejores ideas para celebrar 6 meses de novios están a la medida del momento: lo bastante para decir que importa, sin que parezca una pedida de mano. Una noche planeada, un regalo pequeño que solo tenga sentido para vosotros dos y unas líneas sobre estos seis meses: eso es lo justo. Si solo vas a regalar una cosa, que sea una copia de vuestra primera foto juntos con la fecha escrita detrás. Abajo: planes, regalos para él, para ella y hechos a mano, frases y qué evitar.",
       takeaways: [
         "Seis meses es un guiño, no una ceremonia. Planea una noche, no un fin de semana.",
-        "Mira atrás una vez y luego haced algo nuevo juntos. Una primera vez gana a un resumen.",
+        "Mirad atrás una vez y luego haced algo nuevo juntos. Una primera vez vale más que un resumen.",
         "Algo hecho o elegido con cuidado vale más que algo caro. Guarda el regalo grande para cuando cumpláis un año.",
         "Averigua con disimulo si tu pareja también cuenta los meses antes de montar un plan.",
       ],
@@ -170,12 +212,12 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Elige una, dos como mucho: una de diez minutos por la mañana y otra para la noche. Para el resto de meses del primer año, nuestras [ideas para celebrar los meses con tu pareja](/blog/monthiversary-ideas) tienen un plan más pequeño para cada uno.",
+          text: "Elige una, dos como mucho: una de diez minutos por la mañana y otra para la noche. Para el resto de los meses del primer año, nuestras [ideas para celebrar los meses con tu pareja](/blog/monthiversary-ideas) tienen un plan más pequeño para cada uno. Para celebrarlo en casa, cocina la cena de la primera vez, pon la lista de canciones y extiende una manta en el suelo para hacer un pícnic; nuestras [ideas de aniversario en casa](/blog/anniversary-ideas-at-home) tienen más.",
         },
-        { type: "h2", text: "Regalos pequeños para los 6 meses" },
+        { type: "h2", text: "Regalos para 6 meses de novios: para él, para ella o hechos a mano" },
         {
           type: "p",
-          text: "Un regalo a los seis meses tiene que notarse pensado, no caro. Si cuesta más de lo que gastarías en su cumpleaños (o pensarías gastar, si aún no habéis celebrado ninguno), es demasiado por ahora. Ideas que funcionan:",
+          text: "Un regalo a los seis meses tiene que notarse pensado, no caro. Si cuesta más de lo que gastarías en su cumpleaños (o pensarías gastar, si aún no habéis celebrado ninguno), es demasiado por ahora. Lo que hace que aciertes con un regalo de seis meses es que nadie más podría haberlo elegido. ¿Lo has dejado para el último momento? Las notas, el mapa y los vales solo necesitan un boli y una impresora. Las entradas y las reservas se agotan, así que resuelve eso primero. Ideas que sirven para cualquiera:",
         },
         {
           type: "list",
@@ -187,6 +229,39 @@ export const post: BlogPost = {
             "**Una cosa pequeña para tu casa o la suya** que solo entendáis vosotros: la taza de la cafetería, un imán de la excursión.",
           ],
         },
+        { type: "h3", text: "Regalos de 6 meses para tu novio" },
+        {
+          type: "list",
+          items: [
+            "**La versión buena de algo que usa a diario** y que nunca se compraría: un buen café para el molinillo del que siempre habla, unos calcetines de correr de verdad para su carrera de los domingos.",
+            "**Dos entradas:** el partido, el concierto del grupo que te puso en el segundo mes, una sesión de cine de la película que no para de citar.",
+            "**Una cesta con sus caprichos y fotos instantáneas:** lo que picabais en el primer viaje en coche, lo que pidió en vuestra primera cita y seis fotos instantáneas, una de cada mes, con una frase escrita detrás de cada una.",
+          ],
+        },
+        { type: "h3", text: "Regalos de 6 meses para tu novia" },
+        {
+          type: "list",
+          items: [
+            "**Una copia de la foto que le mandó a su mejor amiga**, no la que subiste, en un marco que pegue con su casa.",
+            "**El último libro del autor al que siempre cita**, con la fecha de hoy y una frase escrita en la primera página.",
+            "**Un plan reservado de su lista:** la exposición, el restaurante o la clase que dijo que quería probar, con la reserva impresa y doblada dentro de una tarjeta.",
+            "**Una noche bajo las estrellas:** una manta en algún sitio lo bastante oscuro para ver las estrellas, algo caliente para beber y un mapa del cielo de esa noche, con una tarjeta que diga en qué te has fijado de ella en estos seis meses.",
+          ],
+        },
+        { type: "h3", text: "Regalos hechos a mano para los 6 meses" },
+        {
+          type: "list",
+          items: [
+            "**Un frasco con 26 notas, una por semana**: un momento, una broma, algo en lo que te fijaste.",
+            "**Un álbum pequeño con una página por mes** y una frase debajo de cada foto.",
+            "**Un mapa de vuestros seis meses**: imprime un mapa de vuestra ciudad y marca dónde pasó cada cosa, de la primera cita a la semana pasada.",
+            "**Vales que de verdad vayas a cumplir**: desayuno en la cama, una película elegida por tu pareja sin protestar, una noche en la que lo organizas tú todo.",
+          ],
+        },
+        {
+          type: "p",
+          text: "Quizá hayas oído hablar de la regla de los 5 regalos: algo que quiera, algo que necesite, algo para ponerse, algo para leer y algo para hacer. Se suele usar en Navidad y en cumpleaños. A los seis meses, elige uno de los cinco, no todos.",
+        },
         {
           type: "p",
           text: "Si prefieres mandar algo en vez de envolverlo, nuestros [regalos digitales de aniversario](/occasions/anniversary) se hacen con vuestras fotos y vuestra canción, y hay más [regalos digitales](/gifts) para cualquier otro día.",
@@ -194,11 +269,11 @@ export const post: BlogPost = {
         { type: "h2", text: "Qué escribir en la tarjeta de los 6 meses" },
         {
           type: "p",
-          text: "Quédate en tres frases: algo que sabes ahora y no sabías hace seis meses, un momento de estos seis meses y una cosa que tienes ganas de hacer. Si todavía no os habéis dicho «te quiero», una tarjeta de seis meses no es el sitio para decirlo por primera vez; dilo en voz alta. Tres que puedes usar tal cual:",
+          text: "Quédate en tres frases: algo que sabes de tu pareja ahora y no sabías hace seis meses, un momento de estos seis meses y una cosa que tienes ganas de hacer. Si todavía no os habéis dicho «te quiero», una tarjeta de seis meses no es el sitio para decirlo por primera vez; dilo en voz alta. Tres que puedes usar tal cual:",
         },
         {
           type: "quote",
-          text: "Hace seis meses no sabía que les hablas a los perros por la calle. Ahora lo echaría de menos. Feliz medio año.",
+          text: "Hace seis meses no sabía que le hablas a cada perro que te cruzas. Ahora lo echaría de menos. Feliz medio año.",
         },
         {
           type: "quote",
@@ -219,14 +294,14 @@ export const post: BlogPost = {
             "**Regalos grandes.** Los relojes caros y cualquier cosa con forma de anillo os presionan a los dos. Pueden esperar.",
             "**Un viaje que necesite días libres.** Un fin de semana fuera es precioso cuando cumpláis un año. A los seis meses, una excursión de un día transmite lo mismo con menos que organizar.",
             "**Una fiesta sorpresa o su familia en la cena.** Los seis meses son para vosotros dos.",
-            "**Una publicación que no ha aceptado.** Pregunta antes de subir el aniversario a redes. Hay a quien le encanta y a quien no le hace ninguna gracia.",
+            "**Publicar algo que no ha aprobado.** Pregunta antes de subir el aniversario a redes. Hay a quien le encanta y a quien no le hace ninguna gracia.",
             "**Medir el cariño por el calendario.** Si se le olvida la fecha, no significa nada. Mucha gente no cuenta los meses.",
           ],
         },
         { type: "h2", text: "Ideas para los 6 meses si estáis a distancia" },
         {
           type: "p",
-          text: "Si vivís en ciudades distintas, elegid una hora y convertidla en una cita por videollamada: pedid comida del mismo tipo cada uno en su casa, o cocinad la misma receta a la vez y comparad. Mándale algo que llegue ese día (las seis fotos de la tabla, una carta por correo electrónico programada para esa mañana o el capricho que mencionó) y que la llamada tenga un solo plan, con principio y final, para que se note que es una ocasión.",
+          text: "Si vivís en ciudades distintas (nuestras [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas) van más allá), elegid una hora y convertidla en una cita por videollamada: pedid comida del mismo tipo cada uno en su casa, o cocinad la misma receta a la vez y comparad. Mándale algo que llegue ese día (seis fotos, una de cada mes, una carta por correo electrónico programada para esa mañana o el capricho que mencionó) y que la llamada tenga un solo plan, con principio y final, para que se note que es una ocasión.",
         },
         { type: "h2", text: "Guarda los seis meses en un solo sitio" },
         {
@@ -251,20 +326,28 @@ export const post: BlogPost = {
       ],
       faq: [
         {
-          q: "¿Se celebran los 6 meses de novios?",
-          a: "Muchas parejas sí, normalmente con algo pequeño: una cena, una tarjeta, una cita que recuerda a la primera. No es universal, así que comprueba con disimulo si tu pareja también los cuenta antes de planear una noche entera.",
-        },
-        {
           q: "¿Qué se hace para celebrar 6 meses de novios?",
           a: "Una noche planeada es el tamaño justo: volver al sitio de la primera cita, cocinar lo primero que uno le preparó al otro o hacer juntos una clase suelta. Añade una tarjeta corta y lo habréis celebrado sin pasaros.",
         },
         {
           q: "¿Qué regalar por los 6 meses de novios?",
-          a: "Algo pequeño y concreto: una copia de vuestra primera foto juntos, el libro que mencionó una vez o seis notas para seis meses. A estas alturas importa más la intención que el precio.",
+          a: "Algo pequeño y concreto: una copia de vuestra primera foto juntos, el libro que mencionó una vez, dos entradas para algo que vayáis a hacer juntos o un frasco de notas, una por semana. A estas alturas importa más la intención que el precio.",
+        },
+        {
+          q: "¿Los 6 meses son un hito en una relación?",
+          a: "Para muchas parejas, sí, y lo celebran con algo pequeño: una cena, una tarjeta, una cita que recuerda a la primera. A los seis meses el primer subidón suele haberse calmado y ya os habéis visto en semanas normales, no solo en citas. No es universal, así que comprueba con disimulo si tu pareja también los cuenta antes de planear una noche entera.",
+        },
+        {
+          q: "¿Qué es la regla de los seis meses en una relación?",
+          a: "No es una regla de verdad, sino una costumbre: hacia los seis meses se calma el primer subidón y ves cómo es la otra persona en semanas normales, así que mucha gente espera hasta entonces para dar pasos grandes como presentar a la familia o irse a vivir juntos. Cada pareja va a su ritmo, así que tómalo como una excusa para hablar, no como una fecha límite.",
+        },
+        {
+          q: "¿Cómo se llaman los 6 meses de novios?",
+          a: "No tienen un nombre oficial. Lo normal es decir «medio año» o «cumplir seis meses»; en inglés se habla de half-anniversary. Cada mes anterior se celebra «cumpliendo meses», y hay quien lo llama [cumplemes o mesiversario](/blog/monthiversary-ideas); en Filipinas se usa la palabra inglesa monthsary.",
         },
         {
           q: "¿Cuánto gastar en un regalo de 6 meses?",
-          a: "Menos de lo que gastarías en su cumpleaños. Si empieza a parecer un regalo grande, probablemente lo es para seis meses; guárdalo para el primer aniversario.",
+          a: "Menos de lo que gastarías en su cumpleaños. Un buen tope es lo que costaría una buena cena fuera para los dos, y un regalo hecho a mano puede costar casi nada. Si empieza a parecer un regalo grande, probablemente lo es para seis meses; guárdalo para el primer aniversario.",
         },
       ],
     },

@@ -40,7 +40,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 - [x] (2026-11-16) **how-to-apologize-to-your-boyfriend** (Spanish version): Spanish searches like "como pedir
   perdon a mi novio por lastimarlo" sit at 4.8, others at 33–73 with many impressions. Make the
   Spanish version answer the exact Spanish phrasings people use.
-- [ ] **6-month-anniversary-ideas**: "6 month anniversary gift" (1,600, UK 480) is searched more than
+- [x] (2026-11-17) **6-month-anniversary-ideas**: "6 month anniversary gift" (1,600, UK 480) is searched more than
   "6 month anniversary ideas" (390). Add a short gifts section that answers it, keeping the ideas.
 - [ ] **The Spanish side of every post**: 30 of the 41 Spanish targets get under 50 searches a month
   in Spain (KEYWORDS.md, "Spanish targets"). One post a day: ask keyword ideas for Spain's own

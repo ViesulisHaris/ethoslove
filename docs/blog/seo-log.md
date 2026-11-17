@@ -452,3 +452,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-16T18:22Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives |
 | 2026-11-16T18:29Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives review |
 | 2026-11-16T18:30Z | on_page/content_parsing/live | 0.00015 | blog: gifft-me-alternatives review |
+| 2026-11-17T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.0144 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:42Z | dataforseo_labs/google/keyword_overview/live | 0.01308 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:42Z | serp/google/organic/live/advanced | 0.002 | seo: 6-month-anniversary-ideas |
+| 2026-11-17T04:43Z | serp/google/organic/live/advanced | 0.002 | seo: 6-month-anniversary-ideas |
