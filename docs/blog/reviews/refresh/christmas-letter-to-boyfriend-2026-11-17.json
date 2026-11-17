@@ -1,0 +1,94 @@
+{
+  "slug": "christmas-letter-to-boyfriend",
+  "keyword": "christmas letter to boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked the template paragraph to say which of the three templates is free and which are a one-time payment, with a link to pricing and the free demo, so the template blocks read as help rather than an ad."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template, scheduling and link claim verified against the manifests, schemas, extras.tsx and the post files. Asked to replace the open-when envelope 'Open when your family gets too much' (and the Spanish), which contradicts the post's own 'no digs at his family' rule."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked the Spanish title to keep Spain's searched phrase 'Carta de Navidad para tu novio' rather than 'Carta de amor de Navidad', which matches no query."
+        }
+      ],
+      "applied": [
+        "Template paragraph (both languages) says The Letter is free, Fireside and Snow Globe are a one-time payment, links /pricing and mentions the free demos; Spanish uses the Spanish template names",
+        "Spanish title back to 'Carta de Navidad para tu novio, con 4 ejemplos'",
+        "Open-when envelope now 'Open when you need five minutes to yourself' / «Abrir cuando necesites cinco minutos para ti»",
+        "Polish taken: Spanish funny heading 'bonita y divertida' to match 'cute, funny'; 'wardrobe' to 'bookcase' (estantería) for US and UK readers; Spanish FAQ 'Más arriba, en la parte de la tarjeta'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Last round's fix is in. Four complete, specific letters to adapt tonight, a repeatable four-part shape, card-length versions and how to hand it over, where the top results are lists of generic paragraphs; the product comes once, at the end, with an honest note on what costs money."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Open-when envelopes fixed in both languages; pricing, free-demo and Spanish template names verified against the manifests, messages/en.json and es.json; every link resolves. Only polish: 'la plantilla La carta' to avoid reading as 'the letter is free'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the Pinterest boards and 20-to-61-item generic letter lists that rank, it teaches a four-part shape, shows it in four distinct full letters, then covers card lines, what to avoid and how to hand it over, linking its neighbours without duplicating them."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Spanish 'la plantilla La carta es gratis' (editor)",
+        "a 'christmas paragraph' line and 'frases de Navidad' in the Spanish card section (search)",
+        "single-template price in three currencies (reader)"
+      ]
+    }
+  ]
+}

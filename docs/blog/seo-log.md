@@ -488,3 +488,13 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-17T14:19Z | on_page/content_parsing/live | 0.00015 | blog: acts-of-service-love-language |
 | 2026-11-17T14:19Z | on_page/content_parsing/live | 0.00015 | blog: acts-of-service-love-language |
 | 2026-11-17T14:20Z | on_page/content_parsing/live | 0.00015 | blog: acts-of-service-love-language |
+| 2026-11-17T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | dataforseo_labs/google/keyword_ideas/live | 0.0192 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01332 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:44Z | on_page/content_parsing/live | 0.00015 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:44Z | on_page/content_parsing/live | 0.00015 | seo: christmas-letter-to-boyfriend |
+| 2026-11-17T16:44Z | serp/google/organic/live/advanced | 0.004 | seo: christmas-letter-to-boyfriend |

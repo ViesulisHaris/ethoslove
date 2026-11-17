@@ -3,6 +3,35 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-17: christmas-letter-to-boyfriend aimed at "christmas love letter", with a funny fourth letter
+- **Page:** /blog/christmas-letter-to-boyfriend (and /es to match)
+- **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov;
+  monthiversary-ideas, the best striking-distance page, was touched on 13 Nov). Search Console's other
+  blog phrase in striking distance, "planes para halloween en pareja" (25 impressions at 7.8), is out
+  of season. The 16 Nov rank check had this post at 10 in Spain for "carta de navidad para mi novio",
+  and Christmas is five weeks out. DataForSEO (US, informational): "christmas love letter" 1,000 a
+  month and 6,600 last December (KD 5), "christmas letter to/for boyfriend" 1,900 each in December
+  (KD 0), "what to write in a christmas card to boyfriend" 590, "christmas love letter to boyfriend"
+  480; Spain "carta de navidad para mi novio" 140 in December, "frases de navidad para mi novio" 90.
+  The top 10s are Pinterest boards, a 2019 TV movie, justmeantforyou.com (a digital-card maker) and
+  20-to-61-item letter lists; desktop adds long, cute-and-funny, husband and open-when variants.
+  People also ask: what to write on a card for a boyfriend, a Christmas message for a husband, a
+  heartfelt letter, romantic Christmas sayings. The post never said "love letter", had no funny
+  letter, no husband or open-when route, and no card or how-to-start question.
+- **What changed:** Title "Christmas love letter to your boyfriend, with 4 examples", new
+  descriptions (Spanish opens with "Carta de Navidad para mi novio"), a cute, funny fourth letter
+  with a sincere last line, an open-when way to give it, a husband link, the template paragraph says
+  which template is free and which are a one-time payment, FAQs on how to start and what to write in
+  the card; Spanish to match. `updated` 2026-11-17.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/christmas-letter-to-boyfriend-2026-11-17.json`)
+- **Cost:** $0.06 (keyword overviews US and Spain, keyword ideas Spain, five SERPs, two page reads
+  that returned nothing because the URLs were guessed); balance $49.44
+- **Note:** Second run today (Tuesday; ranks from 16 Nov, so no weekly job). Search Console and the
+  sales endpoint both answered. justmeantforyou.com ranks for both the English and the Spanish
+  phrase with "digital templates for couples": a maker to add to the link-gap list.
+- **Check on:** 2026-12-04 whether "christmas love letter", "christmas letter to boyfriend" and
+  "carta de navidad para mi novio" show for the post in Search Console and the rank check
+
 ## 2026-11-17: 6-month-anniversary-ideas answers "6 month anniversary gift"
 - **Page:** /blog/6-month-anniversary-ideas
 - **Why:** Next open backlog item. DataForSEO (US): "6 month anniversary gift" 1,600 a month (KD 0,

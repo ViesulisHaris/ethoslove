@@ -3,19 +3,21 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "christmas-letter-to-boyfriend",
   published: "2026-11-06",
+  updated: "2026-11-17",
   occasion: "christmas",
   templates: ["fireside", "snow-globe", "the-letter"],
   content: {
     en: {
-      title: "A Christmas letter to your boyfriend, with 3 examples",
-      description: "How to write a Christmas letter to your boyfriend: a four-part shape, three example letters for different years, what to leave out and how to give it.",
+      title: "Christmas love letter to your boyfriend, with 4 examples",
+      description: "How to write a Christmas love letter to your boyfriend: a four-part shape, four examples (first Christmas, years in, apart, funny), card lines, how to give it.",
       keyword: "christmas letter to boyfriend",
-      lead: "A good Christmas letter to your boyfriend is about this one year, not about love in general. Set the scene in a line, then tell him about one moment from it, one thing you noticed about him, and one small thing you want to do together next year, and keep it to a page. Below is a shape that works for any letter, three examples for a first Christmas, a few years in and a Christmas apart, and how to give it to him.",
+      lead: "A good Christmas love letter to your boyfriend is about this one year, not about love in general. Set the scene in a line, then tell him about one moment from it, one thing you noticed about him, and one small thing you want to do together next year, and keep it to a page. Below are a shape for any letter, four examples (a first Christmas, a few years in, a Christmas apart and a funny one), lines for a card, and how to give it to him.",
       takeaways: [
         "Write about this year only. One evening in detail is worth more than the whole year in outline.",
         "Say one thing you noticed about him this year that he probably thinks nobody saw.",
         "End on a promise small enough to keep, with a date or a place in it.",
         "A page is enough. Any longer and the best line gets lost.",
+        "Funny works too, as long as the last line isn't a joke.",
       ],
       body: [
         { type: "h2", text: "What to write in a Christmas letter to your boyfriend" },
@@ -65,7 +67,16 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference. Writing to a girlfriend instead? Here are [Christmas messages for your girlfriend](/blog/christmas-message-for-girlfriend). And if your mother deserves a letter too, here's how to write a [Christmas letter to your mother](/blog/christmas-letter-to-mom).",
+          text: "If the letter is going in a parcel, send it early: our [long distance Christmas gift ideas](/blog/long-distance-christmas-gift-ideas) have the send-by rule and how to work out his Christmas morning from your side of the time difference. Writing to a girlfriend instead? Here are [Christmas messages for your girlfriend](/blog/christmas-message-for-girlfriend). Writing to your husband? The same four parts work, and there are more examples in our [love letter to your husband](/blog/love-letter-to-husband). And if your mother deserves a letter too, here's how to write a [Christmas letter to your mother](/blog/christmas-letter-to-mom).",
+        },
+        { type: "h2", text: "A cute, funny Christmas letter for your boyfriend" },
+        {
+          type: "p",
+          text: "If the two of you are better at jokes than speeches, let the letter be funny. Make the jokes about things that really happened this year, so he knows you were paying attention, and make the last line sincere:",
+        },
+        {
+          type: "quote",
+          text: "This year you built a bookcase without the instructions, on principle, and it only leans a little. You bought a sixth bottle of hot sauce while we still had five. I counted. You told the seagull story at every dinner we went to, and I laughed at the same part every time. Merry Christmas to the only person I'd happily sit in traffic with. That part isn't a joke.",
         },
         { type: "h2", text: "What to write in a Christmas card to your boyfriend" },
         {
@@ -99,11 +110,12 @@ export const post: BlogPost = {
             "**In his coat pocket.** For the walk on Christmas morning, or the drive to his family's. He'll find it when he reaches for his gloves.",
             "**On Christmas Eve, late.** If your Christmas Day is busy, the night before is the quiet moment. Leave it on his pillow.",
             "**Read aloud.** Only if you both like that kind of thing. Some people can't hear a letter about themselves read out without leaving the room.",
+            "**As open-when letters.** Write three short ones instead of one long one: \"Open on Christmas Eve\", \"Open when you need five minutes to yourself\", \"Open on New Year's Eve\". He opens each when its moment comes. Our [open when letter ideas](/blog/open-when-letter-ideas) have more envelopes to write.",
           ],
         },
         {
           type: "p",
-          text: "If you're apart, or you'd like it to come with your photos and a song, a [digital gift](/gifts) can hold the letter. With a premium template, \"Schedule the reveal\" can set it to open on Christmas morning in his time zone. Below are three that hold a letter well; there are more on the [Christmas page](/occasions/christmas) and among the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
+          text: "If you're apart, or you'd like it to come with your photos and a song, a [digital gift](/gifts) can hold the letter. With a premium template, \"Schedule the reveal\" can set it to open on Christmas morning in his time zone. Below are three that hold a letter well: The Letter is free, Fireside and Snow Globe are a one-time payment (see [pricing](/pricing)), and each has a free demo to try first. There are more on the [Christmas page](/occasions/christmas) and among the [digital gifts for your boyfriend](/gifts/for-boyfriend).",
         },
         {
           type: "template",
@@ -138,18 +150,27 @@ export const post: BlogPost = {
           q: "When should I give my boyfriend a Christmas letter?",
           a: "After the presents, when the room has gone quiet, or late on Christmas Eve. If you're apart, send it early in a parcel or, on a premium template, schedule it to open on his Christmas morning.",
         },
+        {
+          q: "How do I start a Christmas love letter to my boyfriend?",
+          a: "With his name and where you are as you write. \"Writing this with the tree half up\" puts him in the room with you straight away. Leave \"I love you\" for the end, where it lands hardest.",
+        },
+        {
+          q: "What do I write in a Christmas card to my boyfriend?",
+          a: "Two or three lines: one moment from this year and a small promise for next year, then \"Merry Christmas. I love you.\" The card section above has two you can adapt.",
+        },
       ],
     },
     es: {
-      title: "Carta de Navidad para tu novio, con 3 ejemplos",
-      description: "Cómo escribir una carta de Navidad para tu novio: una estructura en cuatro partes, tres cartas de ejemplo para años distintos, qué evitar y cómo dársela.",
+      title: "Carta de Navidad para tu novio, con 4 ejemplos",
+      description: "Carta de Navidad para mi novio, corta o larga: una estructura en cuatro partes y cuatro ejemplos (primera Navidad, años juntos, a distancia, divertida).",
       keyword: "carta de navidad para mi novio",
-      lead: "Una buena carta de Navidad para tu novio habla de este año, no del amor en general. Sitúale en una línea y cuéntale un momento de este año, algo que te ha llamado la atención de él y una cosa pequeña que quieres hacer juntos el año que viene, y que no pase de una página. Aquí tienes una estructura que vale para cualquier carta, tres ejemplos para la primera Navidad, para cuando lleváis unos años y para una Navidad a distancia, y cómo dársela.",
+      lead: "Una buena carta de Navidad para tu novio habla de este año, no del amor en general. Sitúale en una línea y cuéntale un momento de este año, algo que te ha llamado la atención de él y una cosa pequeña que quieres hacer juntos el año que viene, y que no pase de una página. Aquí tienes una estructura para cualquier carta, cuatro ejemplos (la primera Navidad, cuando lleváis unos años, una Navidad a distancia y uno divertido), frases para una tarjeta y cómo dársela.",
       takeaways: [
         "Escribe solo de este año. Una tarde contada con detalle vale más que el año entero en resumen.",
         "Dile algo que te ha llamado la atención de él este año y que seguramente cree que nadie vio.",
         "Termina con una promesa pequeña, que se pueda cumplir, con una fecha o un sitio.",
         "Con una página basta. Si es más larga, la mejor frase se pierde.",
+        "Puede ser divertida, siempre que la última frase no sea una broma.",
       ],
       body: [
         { type: "h2", text: "Qué escribir en una carta de Navidad para tu novio" },
@@ -199,7 +220,16 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria. ¿Le escribes a una novia? Aquí tienes [mensajes de Navidad para tu novia](/blog/christmas-message-for-girlfriend). Y si tu madre también se merece una carta, aquí va cómo escribir una [carta de Navidad para tu madre](/blog/christmas-letter-to-mom).",
+          text: "Si la carta va dentro de un paquete, mándalo pronto: en nuestros [regalos de Navidad para relaciones a distancia](/blog/long-distance-christmas-gift-ideas) tienes la regla para saber cuándo enviarlo y cómo calcular su mañana de Navidad desde tu lado de la diferencia horaria. ¿Le escribes a una novia? Aquí tienes [mensajes de Navidad para tu novia](/blog/christmas-message-for-girlfriend). ¿Y si es para tu marido? Las mismas cuatro partes sirven, y tienes más ejemplos en nuestra [carta de amor para tu marido](/blog/love-letter-to-husband). Y si tu madre también se merece una carta, aquí va cómo escribir una [carta de Navidad para tu madre](/blog/christmas-letter-to-mom).",
+        },
+        { type: "h2", text: "Una carta de Navidad bonita y divertida para tu novio" },
+        {
+          type: "p",
+          text: "Si a vosotros se os dan mejor las bromas que los discursos, que la carta sea divertida. Que las bromas sean sobre cosas que de verdad han pasado este año, para que vea que estabas atenta, y que la última frase vaya en serio:",
+        },
+        {
+          type: "quote",
+          text: "Este año montaste una estantería sin mirar las instrucciones, por principios, y solo se inclina un poco. Compraste un sexto bote de salsa picante cuando todavía quedaban cinco. Los he contado. Contaste lo de la gaviota en todas las cenas, y yo me reí en el mismo momento todas las veces. Feliz Navidad a la única persona con la que me quedaría tan a gusto en un atasco. Esto último no es broma.",
         },
         { type: "h2", text: "Qué escribir en una tarjeta de Navidad para tu novio" },
         {
@@ -233,11 +263,12 @@ export const post: BlogPost = {
             "**En el bolsillo de su abrigo.** Para el paseo de la mañana de Navidad o el viaje a casa de su familia. La encontrará al buscar los guantes.",
             "**En Nochebuena, tarde.** Si el día de Navidad va a ser de mucho jaleo, la noche antes es el momento tranquilo. Déjasela en la almohada. Y si en tu casa los regalos llegan en Reyes, ese día también vale.",
             "**Leída en voz alta.** Solo si a los dos os gusta. Hay gente que no aguanta oír en voz alta una carta sobre sí misma sin salir de la habitación.",
+            "**Como cartas para abrir cuando.** Escribe tres cortas en vez de una larga: «Abrir en Nochebuena», «Abrir cuando necesites cinco minutos para ti», «Abrir en Nochevieja». Él abre cada una cuando llega su momento. En nuestras [ideas de cartas para abrir cuando](/blog/open-when-letter-ideas) tienes más sobres que escribir.",
           ],
         },
         {
           type: "p",
-          text: "Si estáis lejos, o quieres que llegue con tus fotos y una canción, un [regalo digital](/gifts) puede llevar la carta. Con una plantilla premium, «Programar la apertura» hace que se abra la mañana de Navidad en su zona horaria. Abajo tienes tres que van bien para una carta; tienes más en la [página de Navidad](/occasions/christmas) y entre los [regalos digitales para tu novio](/gifts/for-boyfriend).",
+          text: "Si estáis lejos, o quieres que llegue con tus fotos y una canción, un [regalo digital](/gifts) puede llevar la carta. Con una plantilla premium, «Programar la apertura» hace que se abra la mañana de Navidad en su zona horaria. Abajo tienes tres que van bien para una carta: La carta es gratis, Junto al fuego y Bola de nieve se pagan una sola vez (mira los [precios](/pricing)), y cada una tiene una demo gratis para probarla antes. Tienes más en la [página de Navidad](/occasions/christmas) y entre los [regalos digitales para tu novio](/gifts/for-boyfriend).",
         },
         {
           type: "template",
@@ -271,6 +302,14 @@ export const post: BlogPost = {
         {
           q: "¿Cuándo le doy a mi novio la carta de Navidad?",
           a: "Después de los regalos, cuando la habitación se ha quedado en silencio, o tarde en Nochebuena. Si estáis lejos, mándala pronto en un paquete o, con una plantilla premium, prográmala para que se abra su mañana de Navidad.",
+        },
+        {
+          q: "¿Cómo empiezo una carta de amor de Navidad para mi novio?",
+          a: "Con su nombre y dónde estás mientras escribes. «Te escribo con el árbol a medio poner» le mete en la habitación contigo desde la primera línea. Deja el «te quiero» para el final, que es donde más pesa.",
+        },
+        {
+          q: "¿Qué pongo en una tarjeta de Navidad para mi novio?",
+          a: "Dos o tres frases: un momento de este año y una promesa pequeña para el que viene, y después «Feliz Navidad. Te quiero». Más arriba, en la parte de la tarjeta, tienes dos que puedes adaptar.",
         },
       ],
     },
