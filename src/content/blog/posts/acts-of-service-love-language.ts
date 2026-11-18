@@ -21,7 +21,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What is the acts of service love language?" },
         {
           type: "p",
-          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, quality time, receiving gifts and physical touch. Someone who speaks it hears love in what you do for them. To them, “I love you” sounds a lot like “I already booked it”.",
+          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, quality time, receiving gifts and [physical touch](/blog/physical-touch-love-language). Someone who speaks it hears love in what you do for them. To them, “I love you” sounds a lot like “I already booked it”.",
         },
         {
           type: "p",
@@ -222,7 +222,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿Qué son los actos de servicio como lenguaje del amor?" },
         {
           type: "p",
-          text: "Son uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el tiempo de calidad, recibir regalos y el contacto físico. Quien lo habla oye el cariño en lo que haces por él o por ella. Para esta persona, «te quiero» se parece mucho a «ya lo he reservado».",
+          text: "Son uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el tiempo de calidad, recibir regalos y el [contacto físico](/blog/physical-touch-love-language). Quien lo habla oye el cariño en lo que haces por él o por ella. Para esta persona, «te quiero» se parece mucho a «ya lo he reservado».",
         },
         {
           type: "p",

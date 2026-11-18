@@ -1,0 +1,96 @@
+{
+  "slug": "physical-touch-love-language",
+  "keyword": "physical touch love language",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to replace UK-only 'post it' / 'post a hoodie' with 'send'. Polish: 'weighted blanket' to match the FAQ."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All product, quiz, link and source claims verified against the code. Asked for two Spanish fixes: '¿Podría ser lo nuestro?' (reads as 'our relationship' in Spain) and 'Casi nunca va de sexo' (stronger than the English). Polish: 'contacto' for 'cariño' in the lead, 'behind a lot of searches' for 'under most searches'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the Lands/Misses table, the five-step plan for when only one partner likes touch, lines to borrow, a long-distance plan and the research with its limits go well past the definition-plus-list pages that rank now."
+        }
+      ],
+      "applied": [
+        "'post it' and 'post a hoodie' changed to 'send' (EN body and FAQ)",
+        "'heavy blanket' changed to 'weighted blanket' to match the FAQ",
+        "ES: '¿Podría ser lo nuestro?' changed to '¿Lo convertimos en una costumbre nuestra?'",
+        "ES: 'Casi nunca va de sexo' changed to 'Sobre todo, no va de sexo'",
+        "ES lead: 'un cariño' changed to 'un contacto'",
+        "'under most searches' changed to 'behind a lot of searches' (EN and ES)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it answers what to do tonight if one of you isn't a hugger or you're apart, with a table, a three-touch routine, lines to send and a sourced, sceptical research note, where the top results stop at a definition."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: round one's Spanish fixes made correctly; every product, quiz, link and study claim verified against the code and sources; the Spanish reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the only page that lets the searcher act tonight, with examples by moment, lines for both partners, a plan for the not-a-hugger mismatch and honest research; the main People-also-ask questions are all answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "reader: soften the 'pulling away' takeaway; mention a heat pack next to the hot-water bottle",
+        "editor: small Spanish wording polish (se abre, dar un masaje, se van relajando, casi siempre → sobre todo, Semanas sin tiempo para nada)",
+        "search: an explicit consent line after the table; optional FAQs on the rarest love language and the 3-3-3 rule"
+      ]
+    }
+  ]
+}
