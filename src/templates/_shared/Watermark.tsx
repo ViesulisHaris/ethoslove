@@ -53,16 +53,27 @@ export function Watermark({ locale, slug, inline = false, className }: { locale:
  */
 const SETTLE_MS = 1500;
 
+/** Besides its tag, what makes an element one of the gift's controls (GIFT_CONTROLS). */
+const CONTROL_ATTRIBUTES = ["href", "role", "tabindex"];
+
 /**
  * Whether the floating badge should stand down: one of the gift's own controls is under it, or was a
  * moment ago (SETTLE_MS). It starts out as "yes", so the badge never shows over a button that was there
  * first.
  *
  * In sight, it looks under itself every frame, before the frame is drawn, since a CSS animation, a
- * scroll or a resize moves a button in without a word; and at once, before anything else runs, whenever
- * the gift's markup changes (a button mounted, restyled). Standing down, it looks twice a second, which
- * is plenty to see its spot has cleared. It hides itself on the spot rather than at React's next render,
- * so no frame ever shows a button under it.
+ * scroll or a resize moves a button in without a word; and at once whenever a control is mounted or
+ * made one. Standing down, it looks twice a second, which is plenty to see its spot has cleared. It
+ * hides itself on the spot rather than at React's next render, so a button is never under it for more
+ * than a frame.
+ *
+ * A look has to be cheap, as it runs every frame of the gift: it measures the controls it already
+ * found, and looks them up again only when one is mounted or made one, never on a mere restyle, since
+ * an animated gift restyles every frame. Searching the whole gift every frame, and again on every
+ * restyle, cost Bouquet a fifth of its frames with the CPU slowed 4× (18 Nov 2026). And a gift with
+ * no box at all is out of sight (the editor keeps a played gift mounted behind its form): the badge
+ * stands down there and only looks twice a second; looking every frame there had tripled what the
+ * hidden Bouquet cost.
  */
 function useControlUnder(ref: RefObject<HTMLElement | null>, active: boolean): boolean {
   const [under, setUnder] = useState(active);
@@ -75,12 +86,19 @@ function useControlUnder(ref: RefObject<HTMLElement | null>, active: boolean): b
     let blockedAt = shown ? -Infinity : performance.now();
     let frame = 0;
     let wake = 0;
+    // The gift's controls, found again only when the markup brings a new one (below). One taken out of the
+    // gift since has no box, so it can't be under the badge.
+    let controls: Element[] | null = null;
     const look = () => {
       const now = performance.now();
-      // Standing down only hides it, so its box is where it would be.
+      // Standing down only hides it, so its box is where it would be. No box: the gift is out of sight.
       const spot = badge.getBoundingClientRect();
-      const area = gift.getBoundingClientRect();
-      if ([...gift.querySelectorAll(GIFT_CONTROLS)].some((el) => !badge.contains(el) && coversControl(spot, el.getBoundingClientRect(), area) && seen(el))) blockedAt = now;
+      if (spot.width === 0 && spot.height === 0) blockedAt = now;
+      else {
+        const area = gift.getBoundingClientRect();
+        controls ??= [...gift.querySelectorAll(GIFT_CONTROLS)].filter((el) => !badge.contains(el));
+        if (controls.some((el) => coversControl(spot, el.getBoundingClientRect(), area) && seen(el))) blockedAt = now;
+      }
       const show = now - blockedAt >= SETTLE_MS;
       if (show === shown) return;
       shown = show;
@@ -93,10 +111,15 @@ function useControlUnder(ref: RefObject<HTMLElement | null>, active: boolean): b
       if (shown) frame = requestAnimationFrame(tick);
       else wake = window.setTimeout(tick, 500);
     };
-    const changes = new MutationObserver(() => {
+    const changes = new MutationObserver((records) => {
+      const anew = records.some(
+        (r) => r.type === "attributes" || [...r.addedNodes].some((n) => n instanceof Element && (n.matches(GIFT_CONTROLS) || n.querySelector(GIFT_CONTROLS) !== null)),
+      );
+      if (!anew) return;
+      controls = null;
       if (shown) look();
     });
-    changes.observe(gift, { subtree: true, childList: true, attributes: true });
+    changes.observe(gift, { subtree: true, childList: true, attributes: true, attributeFilter: CONTROL_ATTRIBUTES });
     tick();
     return () => {
       changes.disconnect();
