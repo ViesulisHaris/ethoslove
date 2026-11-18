@@ -552,3 +552,10 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-18T14:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-quotes |
 | 2026-11-18T14:23Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-quotes |
 | 2026-11-18T14:23Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-quotes |
+| 2026-11-18T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01392 | seo: choose |
+| 2026-11-18T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T16:43Z | serp/google/organic/live/advanced | 0.002 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.0192 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01296 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T16:43Z | on_page/content_parsing/live | 0.00015 | seo: how-to-make-a-digital-scrapbook |
