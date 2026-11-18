@@ -3,6 +3,38 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-18: scratch-card-ideas answers "diy scratch card", with the steps, small everyday ideas and two new FAQs
+- **Page:** /blog/scratch-card-ideas (and /es to match)
+- **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov).
+  Search Console (28 days, brand left out): monthiversary-ideas is the best striking-distance page
+  ("monthiversary" 68 impressions at 6.6, 118 in all, 0 clicks) but was touched on 13 Nov, so it
+  waits for 27 Nov; "planes para halloween en pareja" (25 at 7.8) is out of season. Close to page
+  one: this post was 9 for "scratch card ideas" in the 16 Nov check and 6 on today's US mobile
+  search, never refreshed. DataForSEO (US): "scratch card ideas" 90 (KD 26), "scratch off card
+  ideas" 90 (KD 0), "diy scratch card" 590 (KD 0, UK 140), "make a scratch card" 110 (UK 110);
+  Spain "rasca y gana casero" 50, "como hacer un rasca y gana" 50, "rasca y gana personalizado" 40
+  against 10 for "ideas para rasca y gana". The top results are Pinterest pins, printables
+  (marysprintables, 123 Homeschool 4 Me) and myscratchoffs.com's guide. The "diy scratch card" AI
+  overview gives the paint-and-soap and sticker methods; the "scratch off ideas" one lists love
+  coupons, reasons I love you, money or gift-card amounts and trip reveals. People also ask: how to
+  make your own, what paint, what to use instead of a coin. The post gave the DIY method in one
+  paragraph (and said two or three coats, where its own source says two), no stickers, no everyday
+  ideas, and neither the paint nor the coin question.
+- **What changed:** Title "Scratch card ideas, and how to make a DIY scratch off card" (Spanish
+  "Ideas para rasca y gana y cómo hacer uno casero"), new descriptions with "make your own" and
+  "rasca y gana casero/personalizado"; a "small ideas for any day" section (love coupons, reasons,
+  money, a lunchbox note); the DIY section is now five steps from 4over4's two pages (2:1 ratio,
+  two crossing coats, test a spare card) plus stickers and what to scratch with; FAQs on what
+  paint and what to use instead of a coin. Spanish to match. `updated` 2026-11-18.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/scratch-card-ideas-2026-11-18.json`)
+- **Cost:** $0.05 (keyword overviews US, UK and Spain, four SERPs with AI overview and PAA, three
+  page reads, one of them a guessed URL that returned nothing); balance $49.36
+- **Note:** First run today (Wednesday; ranks from 16 Nov, so no weekly job). Search Console and the
+  sales endpoint both answered. 4over4.com doesn't resolve from the cloud; DataForSEO's page reader
+  reads it.
+- **Check on:** 2026-12-05 whether "scratch card ideas", "diy scratch card" and "rasca y gana
+  casero" show for the post in Search Console and the rank check
+
 ## 2026-11-17: christmas-letter-to-boyfriend aimed at "christmas love letter", with a funny fourth letter
 - **Page:** /blog/christmas-letter-to-boyfriend (and /es to match)
 - **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov;

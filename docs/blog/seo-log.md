@@ -507,3 +507,13 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
 | 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
 | 2026-11-17T18:20Z | on_page/content_parsing/live | 0.00015 | blog: deep-questions-to-ask-your-boyfriend |
+| 2026-11-18T04:43Z | dataforseo_labs/google/keyword_overview/live | 0.0138 | seo: choose |
+| 2026-11-18T04:44Z | serp/google/organic/live/advanced | 0.002 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | serp/google/organic/live/advanced | 0.002 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | serp/google/organic/live/advanced | 0.002 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | serp/google/organic/live/advanced | 0.002 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | on_page/content_parsing/live | 0.00015 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | dataforseo_labs/google/keyword_overview/live | 0.01284 | seo: scratch-card-ideas |
+| 2026-11-18T04:44Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | seo: scratch-card-ideas |
+| 2026-11-18T04:45Z | on_page/content_parsing/live | 0.00015 | seo: scratch-card-ideas |
+| 2026-11-18T04:45Z | on_page/content_parsing/live | 0.00015 | seo: scratch-card-ideas |

@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "scratch-card-ideas",
   published: "2026-11-11",
+  updated: "2026-11-18",
   occasion: "just-because",
   templates: ["scratch-card"],
   content: {
     en: {
-      title: "Scratch card ideas for proposals, babies, trips and more",
-      description: "Scratch card ideas for a proposal, a pregnancy, a surprise trip, a bridesmaid ask or a birthday, with what to put on each card so the last one lands hardest.",
+      title: "Scratch card ideas, and how to make a DIY scratch off card",
+      description: "Scratch card ideas for a proposal, a pregnancy, a trip or a birthday, card by card, and how to make your own scratch off cards with paint, soap and tape.",
       keyword: "scratch card ideas",
-      lead: "The best scratch card ideas hide one piece of news and build up to it: a proposal, a pregnancy, a trip, a question you want a yes to. The cards before the last one are the drumroll, so each should get a little warmer or a little more obvious. Below are ideas for each kind of reveal, card by card, plus how to make one on paper and when a digital one is easier.",
+      lead: "The best scratch card ideas hide one piece of news and build up to it: a proposal, a pregnancy, a trip, a question you want a yes to. The cards before the last one are the drumroll, so each should get a little warmer or a little more obvious. Below are ideas for each kind of reveal, card by card, smaller ones for any day, and how to make your own scratch off cards at home.",
       takeaways: [
         "One reveal per set of cards. Everything else is build-up.",
         "Two to four cards before the last one is the sweet spot: long enough to tease, short enough to keep scratching.",
@@ -120,10 +121,39 @@ export const post: BlogPost = {
           type: "p",
           text: "For more ways to surprise someone, see [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), or the [just because](/occasions/just-because) ideas for reveals with no date attached.",
         },
+        { type: "h2", text: "Small scratch card ideas for any day" },
+        {
+          type: "p",
+          text: "Not every card needs big news. One card, one small surprise:",
+        },
+        {
+          type: "list",
+          items: [
+            "**Love coupons.** A promise under each foil: \"Breakfast in bed, the Sunday of your choice\", \"I do the dishes all week\", \"You pick the film and I don't complain.\"",
+            "**Reasons I love you.** One reason per card, so they scratch them one at a time. Borrow from these [reasons why I love you](/blog/reasons-why-i-love-you).",
+            "**Money or a gift card.** The amount, or the shop's name, under the foil. The number is the surprise.",
+            "**A note in a child's lunchbox.** \"Pizza for dinner tonight\" or \"Swimming after school.\"",
+          ],
+        },
         { type: "h2", text: "How to make DIY scratch off cards" },
         {
           type: "p",
-          text: "To make physical ones, write or print the message on thick paper or card, cover it with clear packing tape, then paint over it with a mix of metallic acrylic paint and a little dish soap (washing-up liquid). Craft guides such as [this one from 4over4](https://www.4over4.com/faqs/general/what-s-the-best-paint-to-soap-ratio-for-scratch-off-coating) use about two parts paint to one part soap. Give it two or three thin coats and let it dry overnight before testing a corner with a coin.",
+          text: "You need thick paper or card, a permanent marker or a printer, clear packing tape, metallic acrylic paint, liquid dish soap (washing-up liquid) and a small brush or sponge. Then:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**Write the message.** Keep it small and in one place, so one patch of paint hides it.",
+            "**Cover it with clear packing tape**, pressed flat with no bubbles. The tape is what lets the paint lift off cleanly instead of taking the ink with it.",
+            "**Mix two parts metallic acrylic paint to one part dish soap**, the ratio [4over4's guide](https://www.4over4.com/faqs/general/what-s-the-best-paint-to-soap-ratio-for-scratch-off-coating) gives. Too runny, add paint. Too hard to scratch once dry, add a little soap.",
+            "**Paint two thin coats**, the first across and the second up and down, and let the first dry fully before the second. A third coat makes it too thick to scratch, [the same guide](https://www.4over4.com/faqs/general/how-many-coats-of-scratch-off-paint-do-i-need) warns.",
+            "**Test a spare card first.** Make one extra, let it dry, and scratch it to check the message is hidden and comes up clean.",
+          ],
+        },
+        {
+          type: "p",
+          text: "The quicker way is ready-made scratch off stickers from a craft shop: write the message, press a sticker over it, done. Either way, a coin is the classic scratcher, and a guitar pick or a fingernail works too.",
         },
         {
           type: "p",
@@ -151,19 +181,27 @@ export const post: BlogPost = {
         },
         {
           q: "How do I make a scratch off card at home?",
-          a: "Write the message on thick paper or card, cover it with clear packing tape, then paint over it with metallic acrylic paint mixed with a little dish soap, about two parts paint to one part soap. Use two or three thin coats and let it dry overnight before testing with a coin.",
+          a: "Write the message on thick paper or card, cover it with clear packing tape, then paint over it with metallic acrylic paint mixed with dish soap, two parts paint to one part soap. Use two thin coats, the second crosswise, let each dry fully, and test a spare card with a coin first. Or skip the paint and use ready-made scratch off stickers.",
+        },
+        {
+          q: "What paint do you use for scratch off cards?",
+          a: "Metallic acrylic paint mixed with liquid dish soap, two parts paint to one part soap. The soap is what makes it scratch off. Paint it over clear tape, not straight onto the paper, or the paint takes the writing with it.",
         },
         {
           q: "Can I send a scratch card to someone far away?",
           a: "Yes. A digital scratch card arrives as a link and they scratch it on their phone with a finger. Be on a video call while they do, so you see the last card land.",
         },
+        {
+          q: "What can I use instead of a coin to scratch off a card?",
+          a: "A guitar pick, the edge of a spoon or a fingernail. Use something blunt, so you don't tear the tape underneath.",
+        },
       ],
     },
     es: {
-      title: "Ideas para rasca y gana: pedidas, embarazos, viajes y más",
-      description: "Ideas de rasca y gana para una pedida, un embarazo, un viaje, un testigo o un cumpleaños, tarjeta a tarjeta, para que la última sea la que más impacte.",
+      title: "Ideas para rasca y gana y cómo hacer uno casero",
+      description: "Ideas para un rasca y gana personalizado: pedida, embarazo, viaje o cumpleaños, y cómo hacer un rasca y gana casero con pintura, lavavajillas y cinta.",
       keyword: "ideas para rasca y gana",
-      lead: "Las mejores ideas para un rasca y gana esconden una sola noticia y van llegando a ella: una pedida, un embarazo, un viaje, una pregunta a la que quieres que digan que sí. Las tarjetas anteriores a la última son el redoble de tambor, así que cada una debería acercarse un poco más. Aquí tienes ideas para cada tipo de sorpresa, tarjeta a tarjeta, además de cómo hacerlo en papel y cuándo es más fácil uno digital.",
+      lead: "Las mejores ideas para un rasca y gana esconden una sola noticia y van llegando a ella: una pedida, un embarazo, un viaje, una pregunta a la que quieres que digan que sí. Las tarjetas anteriores a la última son el redoble de tambor, así que cada una debería acercarse un poco más. Aquí tienes ideas para cada tipo de sorpresa, tarjeta a tarjeta, otras más pequeñas para cualquier día y cómo hacer un rasca y gana casero.",
       takeaways: [
         "Una sola sorpresa por juego de tarjetas. Todo lo demás es preparación.",
         "Entre dos y cuatro tarjetas antes de la última es lo ideal: suficientes para crear intriga y no tantas como para que dejen de rascar.",
@@ -273,10 +311,39 @@ export const post: BlogPost = {
           type: "p",
           text: "Para más formas de sorprender a alguien, mira [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), o las ideas [porque sí](/occasions/just-because) para sorpresas sin fecha señalada.",
         },
+        { type: "h2", text: "Pequeñas ideas de rasca y gana para cualquier día" },
+        {
+          type: "p",
+          text: "No todas las tarjetas necesitan una gran noticia. Una tarjeta, una pequeña sorpresa:",
+        },
+        {
+          type: "list",
+          items: [
+            "**Vales de amor.** Una promesa debajo de cada metalizado: «Desayuno en la cama, el domingo que tú elijas», «Friego yo toda la semana», «Eliges tú la peli y no me quejo».",
+            "**Razones por las que te quiero.** Una razón por tarjeta, para que las rasque de una en una. Coge alguna de estas [razones por las que te quiero](/blog/reasons-why-i-love-you).",
+            "**Dinero o una tarjeta regalo.** La cantidad, o el nombre de la tienda, bajo el metalizado. La cifra es la sorpresa.",
+            "**Una nota en la fiambrera de un niño.** «Hoy cenamos pizza» o «Después del cole, piscina».",
+          ],
+        },
         { type: "h2", text: "Cómo hacer un rasca y gana casero" },
         {
           type: "p",
-          text: "Para hacer las tarjetas en papel, escribe o imprime el mensaje en cartulina, cúbrelo con cinta de embalar transparente y pinta por encima con una mezcla de pintura acrílica metalizada y un poco de lavavajillas. Guías de manualidades como [esta de 4over4](https://www.4over4.com/faqs/general/what-s-the-best-paint-to-soap-ratio-for-scratch-off-coating) usan unas dos partes de pintura por una de lavavajillas. Da dos o tres capas finas y déjalo secar toda la noche antes de probar una esquina con una moneda.",
+          text: "Necesitas cartulina, un rotulador permanente o una impresora, cinta de embalar transparente, pintura acrílica metalizada, lavavajillas líquido y un pincel pequeño o una esponja. Después:",
+        },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**Escribe el mensaje.** Pequeño y en un solo sitio, para que una sola zona de pintura lo tape.",
+            "**Cúbrelo con cinta de embalar transparente**, bien lisa y sin burbujas. La cinta es lo que hace que la pintura salga limpia sin llevarse la tinta.",
+            "**Mezcla dos partes de pintura acrílica metalizada por una de lavavajillas**, la proporción que da [la guía de 4over4](https://www.4over4.com/faqs/general/what-s-the-best-paint-to-soap-ratio-for-scratch-off-coating). Si queda muy líquida, añade pintura. Si una vez seca cuesta rascarla, un poco más de lavavajillas.",
+            "**Da dos capas finas**, la primera en horizontal y la segunda en vertical, y deja que la primera seque del todo antes de la segunda. Una tercera capa la deja demasiado gruesa para rascar, avisa [la misma guía](https://www.4over4.com/faqs/general/how-many-coats-of-scratch-off-paint-do-i-need).",
+            "**Prueba antes con una de sobra.** Haz una tarjeta de más, deja que seque y ráscala para comprobar que el mensaje no se ve y sale limpio.",
+          ],
+        },
+        {
+          type: "p",
+          text: "Lo más rápido son las pegatinas de rasca y gana que venden en tiendas de manualidades: escribes el mensaje, pegas la pegatina encima y listo. En los dos casos, lo clásico es rascar con una moneda, pero una púa de guitarra o la uña también sirven.",
         },
         {
           type: "p",
@@ -286,7 +353,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "scratch-card",
-          note: "Un montón de tarjetas que rasca con el dedo. Debajo de cada metalizado hay una de tus fotos con su frase, hasta doce, y la última lleva un titular grande de hasta 60 caracteres encima de tu mensaje, como «¿Te casas conmigo?». Eliges el metalizado (plata, oro, oro rosa u holográfico) y el texto impreso encima, y la portada solo promete que lo más grande está en la última. [Premium](/pricing).",
+          note: "Una pila de tarjetas que rasca con el dedo. Debajo de cada metalizado hay una de tus fotos con su frase, hasta doce, y la última lleva un titular grande de hasta 60 caracteres encima de tu mensaje, como «¿Te casas conmigo?». Eliges el metalizado (plata, oro, oro rosa u holográfico) y el texto impreso encima, y la portada solo promete que lo más grande está en la última. [Premium](/pricing).",
         },
         {
           type: "p",
@@ -304,11 +371,19 @@ export const post: BlogPost = {
         },
         {
           q: "¿Cómo se hace un rasca y gana casero?",
-          a: "Escribe el mensaje en cartulina, cúbrelo con cinta de embalar transparente y aplica encima pintura acrílica metalizada mezclada con un poco de lavavajillas, unas dos partes de pintura por una de lavavajillas. Da dos o tres capas finas y deja que seque toda la noche antes de probar con una moneda.",
+          a: "Escribe el mensaje en cartulina, cúbrelo con cinta de embalar transparente y pinta encima con pintura acrílica metalizada mezclada con lavavajillas, dos partes de pintura por una de lavavajillas. Da dos capas finas, la segunda en cruz, deja que cada una seque del todo y prueba antes con una tarjeta de sobra y una moneda. O sáltate la pintura y usa pegatinas de rasca y gana.",
+        },
+        {
+          q: "¿Qué pintura se usa para un rasca y gana?",
+          a: "Pintura acrílica metalizada mezclada con lavavajillas líquido, dos partes de pintura por una de lavavajillas. El lavavajillas es lo que hace que se pueda rascar. Píntala sobre cinta transparente, no directamente sobre el papel, o la pintura se llevará lo que hayas escrito.",
         },
         {
           q: "¿Puedo mandarle un rasca y gana a alguien que está lejos?",
           a: "Sí. Un rasca y gana digital llega como un enlace y lo rasca en el móvil con el dedo. Estate en videollamada mientras lo hace, para verle la cara con la última tarjeta.",
+        },
+        {
+          q: "¿Con qué se puede rascar un rasca y gana si no tengo una moneda?",
+          a: "Con una púa de guitarra, el borde de una cuchara o la uña. Usa algo sin punta, para no rasgar la cinta que hay debajo.",
         },
       ],
     },

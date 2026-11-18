@@ -1,0 +1,92 @@
+{
+  "slug": "scratch-card-ideas",
+  "keyword": "scratch card ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The one page with a card-by-card script for each reveal and a sourced paint-and-soap recipe in the same place; the Pinterest results and the myscratchoffs guide give general ideas or a printable with no wording to borrow."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template and DIY claim checked (manifest, schema, Template.tsx, the 4over4 pages). The new 'mystery date' item repeats the date-night paragraph: cut it in both languages. Polish: a lighter lead, 'zona' for 'mancha', 'pila' for 'montón', lavavajillas in the Spanish description."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The People-also-ask 'what to use instead of a coin' is answered only in the body: add it to the FAQ in both languages."
+        }
+      ],
+      "applied": [
+        "Cut the 'mystery date' item from the everyday list (EN and ES)",
+        "Added the FAQ 'What can I use instead of a coin to scratch off a card?' (EN and ES)",
+        "Polish: lighter lead ending, 'zona de pintura', 'Una pila de tarjetas', lavavajillas in the Spanish description (shortened to fit 160)"
+      ],
+      "rejected": [
+        "Polish not taken: classroom or party-icebreaker ideas and a free printable (off-audience; Ethos has no printable to link)"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The card-by-card sets with the exact line under each photo are what myscratchoffs.com and the Pinterest pins lack, and the DIY steps now answer every People-also-ask question."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes made correctly; every template claim checked against manifest, schema, field-meta and Template.tsx, and the DIY claims against the 4over4 pages; no top result gives this much usable detail. Polish (not applied): '¿Con qué puedo rascar…' for '¿Con qué se puede rascar…'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Scripted reveals for each occasion plus a sourced paint-and-soap method, with the headings and FAQ in the words people search; the top results are pins and a rewards guide with no scripted reveals."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish recorded, not applied: '¿Con qué puedo rascar…', party/classroom ideas, a printable"
+      ]
+    }
+  ]
+}
