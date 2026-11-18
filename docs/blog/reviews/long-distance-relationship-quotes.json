@@ -1,0 +1,150 @@
+{
+  "slug": "long-distance-relationship-quotes",
+  "keyword": "long distance relationship quotes",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Put one sendable line in the lead so the searcher sees a quote at once; give Donne's actual lines so all five famous quotes can be sent tonight. Polish: a clearer time-zone goodnight line."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "Spanish La Rochefoucauld item: \"Es la respuesta, con siglos de ventaja, a «ojos que no ven, corazón que no siente»\" is false. The Spanish proverb is attested by the early 17th century (variant \"corazón que no quiebra\"; refranero tradition up to Correas 1627), so a maxim from 1665 cannot have come centuries ahead of it. It is also a claim the English post does not make."
+          ],
+          "summary": "Remove the false 'centuries ahead' claim in the Spanish; Spain Spanish instead of 'extrañas' in the FAQ; 'cuarenta y una' agreement; 'trip' instead of 'holiday' for US readers. Polish: name Gibran's speakers, 'while they wait', 'dile cuándo abrirlo', a heading that claims only the wrong name, a less stiff word than 'firme'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Add a section for 'long distance love quotes' and the PAA 'make him feel special'; answer the PAA 'how to keep a long-distance relationship alive' and 'lack of physical touch' (short answer plus link to the post that owns it). Boundaries belongs to another post."
+        }
+      ],
+      "applied": [
+        "Lead now quotes one line to send, in both languages",
+        "Donne's lines added (Spanish translated)",
+        "Goodnight line made clearer: 'just as you're waking up'",
+        "Removed the false 'con siglos de ventaja' claim",
+        "FAQ question in Spanish uses 'te echo de menos'; 'cuarenta y una'; 'trip' for 'holiday'",
+        "Gibran's speakers named; 'while they wait'; 'dile cuándo abrirlo'; headings now 'with the wrong name on them'; 'algo que le sostenga'",
+        "New section 'Long distance love quotes to make him or her feel special' in both languages",
+        "FAQ on keeping a long-distance relationship alive (with the 777 rule) replaces the 777 FAQ, which the body's own 777 section answers",
+        "Bad-week section links the physical touch post's long-distance section for missing touch"
+      ],
+      "rejected": [
+        "Two extra FAQ entries as written: the FAQ would exceed five questions, so 'keep it alive' replaced the 777 question (answered in its own section) and physical touch went into the bad-week section as a sentence and link"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It tells you which line to send at which moment, with the one detail to add, instead of a hundred undated lines, and it checks the famous names so you don't embarrass yourself."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1 fixes verified. New section says 'miles'/'kilómetros' against VOICE.md; Spanish FAQ 'La Rochefoucauld lo matizó' implies he answered the Spanish proverb. Polish: Spanish airport line still says 'cola'; the feel-special intro promises something only two lines do; Spanish heading wording."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The page you'd send a friend over a 150-line wall of unsourced quotes: original lines sorted by the moment you're in, and only famous quotes whose source it has checked."
+        }
+      ],
+      "applied": [
+        "'not about the distance' / 'no de lo lejos que estáis' instead of miles and kilometres",
+        "Spanish FAQ: 'La Rochefoucauld lo vio de otra manera en 1665'",
+        "Spanish airport line: 'lo leerá mientras espera'",
+        "Feel-special intro now: 'one thing you'd do if you were together, or one thing only they get from you' (both languages)",
+        "Spanish heading: 'Frases para decir «te echo de menos» en un día normal'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the top results' undated lists of a hundred lines, this page tells you which line to send at which moment, checks famous quotes at the source and names the three popular ones with the wrong name on them."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every product, template, link and literary claim checks out against the code or a source; the voice is specific and plain, and the Spanish is natural Spain Spanish with nothing lost or added."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that tells you which line to send when, with lines written to borrow, and checks every famous attribution, where the first-page lists are undated piles of 40 to 150 quotes that repeat misattributed ones."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_for_later": [
+        "Editor: 777 rule wording 'a night away every seven weeks' to match Gottman's page ('una noche fuera' in Spanish)",
+        "Editor: 'gifts to send between visits' instead of 'post'",
+        "Editor: Spanish 'Por ti merece la pena cada vuelo' instead of 'Mereces cada vuelo'",
+        "Reader: 'Your snacks in the side pocket' to avoid UK spelling; a jump link to the famous quotes; name The Letter as free",
+        "Search: a short FAQ on lack of physical touch; a count in the description"
+      ]
+    }
+  ]
+}

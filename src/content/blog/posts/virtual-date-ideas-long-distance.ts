@@ -115,7 +115,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "When the clocks barely overlap, mix in dates that don't need you awake together: the same film watched on your own and talked about the next day, a voice note recorded on your walk home, a gift that opens at their breakfast. To see which hours you're both awake, put your two towns into our [long distance planner](/long-distance). For birthdays across time zones, our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) sets out what to send and when, and [open when letters](/blog/open-when-letter-ideas) cover the days a call isn't possible.",
+          text: "When the clocks barely overlap, mix in dates that don't need you awake together: the same film watched on your own and talked about the next day, a voice note recorded on your walk home, a gift that opens at their breakfast. To see which hours you're both awake, put your two towns into our [long distance planner](/long-distance). For birthdays across time zones, our [long-distance birthday plan](/blog/long-distance-birthday-ideas-for-boyfriend) sets out what to send and when, and [open when letters](/blog/open-when-letter-ideas) cover the days a call isn't possible. For the goodnight that lands at their breakfast, here are [long distance relationship quotes](/blog/long-distance-relationship-quotes) sorted by moment, from time zones to the airport.",
         },
         { type: "h2", text: "Something to open on date night" },
         {
@@ -273,7 +273,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Cuando los relojes apenas coinciden, mezclad citas que no necesiten que estéis despiertos a la vez: la misma película vista por separado y comentada al día siguiente, una nota de voz grabada de camino a casa, un regalo que se abre a la hora de su desayuno. Para ver en qué horas estáis despiertos los dos, poned vuestras dos ciudades en nuestra [página para parejas a distancia](/long-distance). Para los cumpleaños con zonas horarias distintas, nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) explica qué mandar y cuándo, y las [cartas para abrir cuando](/blog/open-when-letter-ideas) cubren los días en que no podéis llamaros.",
+          text: "Cuando los relojes apenas coinciden, mezclad citas que no necesiten que estéis despiertos a la vez: la misma película vista por separado y comentada al día siguiente, una nota de voz grabada de camino a casa, un regalo que se abre a la hora de su desayuno. Para ver en qué horas estáis despiertos los dos, poned vuestras dos ciudades en nuestra [página para parejas a distancia](/long-distance). Para los cumpleaños con zonas horarias distintas, nuestro [plan para un cumpleaños a distancia](/blog/long-distance-birthday-ideas-for-boyfriend) explica qué mandar y cuándo, y las [cartas para abrir cuando](/blog/open-when-letter-ideas) cubren los días en que no podéis llamaros. Para las buenas noches que le llegan a la hora del desayuno, aquí tienes [frases de amor a distancia](/blog/long-distance-relationship-quotes) según el momento, de la diferencia horaria al aeropuerto.",
         },
         { type: "h2", text: "Algo que abrir en la noche de cita" },
         {
