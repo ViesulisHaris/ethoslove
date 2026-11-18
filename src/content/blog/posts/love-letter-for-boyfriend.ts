@@ -168,7 +168,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "For something sweet to say out loud rather than write, our [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend) has more. If you'd rather list every reason, try [reasons why I love you](/blog/reasons-why-i-love-you). Writing to a girlfriend instead? Our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend) work the same way.",
+          text: "For something sweet to say out loud rather than write, our [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend) has more. If you'd rather list every reason, try [reasons why I love you](/blog/reasons-why-i-love-you). Writing to a girlfriend instead? Our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend) work the same way. And for something shorter to send him today, there are six [paragraphs for him](/blog/paragraphs-for-him), one for each moment, from his birthday to after a fight.",
         },
         { type: "h2", text: "How long a love letter for him should be" },
         {
@@ -394,7 +394,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si buscas algo bonito para decírselo en voz alta en vez de escribirlo, nuestras [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tienen más. Si prefieres enumerar todos los motivos, prueba con las [razones por las que te quiero](/blog/reasons-why-i-love-you). ¿Le escribes a tu novia? Nuestros [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend) funcionan igual.",
+          text: "Si buscas algo bonito para decírselo en voz alta en vez de escribirlo, nuestras [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tienen más. Si prefieres enumerar todos los motivos, prueba con las [razones por las que te quiero](/blog/reasons-why-i-love-you). ¿Le escribes a tu novia? Nuestros [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend) funcionan igual. Y si buscas algo más corto para mandarle hoy, tienes seis [textos para tu novio](/blog/paragraphs-for-him), uno para cada momento, de su cumpleaños a después de una pelea.",
         },
         { type: "h2", text: "Cuánto debe ocupar una carta de amor para él" },
         {

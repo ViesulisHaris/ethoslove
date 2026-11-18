@@ -94,6 +94,10 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship gifts" 2,400, KD 0, published
   16 Nov): a line under "Gifts for the distance" on the page, next to "All long-distance gifts", in
   both languages ("Regalos para parejas a distancia").
+- [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
+  (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
+  beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,
+  how-to-write-a-love-letter, links it already.
 - [ ] **A free virtual hug page** (8,100, UK 1,300): people searching it want something to send.
 - [x] (2026-11-13) **Blog link check (`tests/unit/blog-posts.test.ts`, `STATIC_PATHS`)**: add
   `/tools/how-long-have-we-been-together`, so posts can link the calculator. The SEO review of

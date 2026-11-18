@@ -1,0 +1,140 @@
+{
+  "slug": "paragraphs-for-him",
+  "keyword": "paragraphs for him",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to change the UK-only 'in hospital' to 'in the hospital' in the love paragraph. Polish: sentence counts vs 'five or six', a jump link, a good-night or rough-week paragraph, a line for husbands."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All product claims verified. Asked for: the timing takeaway to match the post (before work too), 'in the hospital' for US readers, an ambiguous 'how much better' line in both languages, and Spanish fixes: 'que más te recuerde a él', a calque of 'make it about you', 'Que sean raros' read as 'weird'. Polish: description, a few Spain phrasings, 'real bread', five-to-seven sentences."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Asked for a set of short copy-and-paste paragraphs (the top results are all volume), the lead to mention them, and a heading with 'love paragraph for him' for the 1,000-a-month variant. Polish: a 'what words touch a man's heart' line, a 'what can I write for my boyfriend' FAQ, a line for husbands."
+        }
+      ],
+      "applied": [
+        "'in the hospital' for US and UK readers",
+        "Timing takeaway now says before work, at lunch or in the evening (EN and ES)",
+        "FAQ line 'shows him how much you love him, better than any measurement could' and its Spanish",
+        "Spanish: 'que más te recuerde a él', 'sin buscar ni una vez ser tú el protagonista', 'Que no sean muy seguidos'",
+        "Added six short copy-and-paste paragraphs (EN and ES) with the part to swap in italics and a link to good night messages for him; the lead mentions them",
+        "Heading 'A love paragraph for him: how much you love him' (ES 'Un texto de amor para tu novio: cuánto le quieres')",
+        "Polish: descriptions list the six sections; 'five to seven sentences'; 'real bread'; Spanish 'tómate algo', 'mala racha', 'la locura'; a line on what words touch a man's heart; a line for husbands linking birthday-message-for-husband"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes confirmed. Beats the top results because every paragraph is built on one borrowable moment with the detail to swap, and the short lines can be sent in two minutes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes made correctly and new links verified. One fix: 'Each is about 30 words' was loose (the short lines run 20 to 29 words); say 'three sentences', which is exact, in both languages."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes in place. The first page is lists of 45 to 200 near-identical compliments; this is the only page that teaches the shape and gives twelve paragraphs to adapt, with timing advice, and it answers every People-also-ask question."
+        }
+      ],
+      "applied": [
+        "'Each is three sentences' / 'Cada uno son tres frases' for the short lines"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It is the page you would send a friend instead of a list of generic compliments: every paragraph is built on one specific, borrowable moment with the detail to swap, a table shows the shape, and the product only turns up at the end."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the code, the round-2 fix is right in both languages, and the post keeps its own length rule, in Spanish that reads as written in Spain."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "A repeatable method, six full worked paragraphs with the detail to swap and six three-sentence lines to copy, where the first page is 50-to-250-item lists of similar praise."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Split the lead into two sentences",
+        "'Last year you were nervous about turning thirty'",
+        "Spanish 'para el jueves' commas; 'entre cinco y siete'; 'Cada uno tiene tres frases'",
+        "Hub line 'five to seven sentences'",
+        "One or two more short lines (anniversary, apology)"
+      ]
+    }
+  ]
+}

@@ -102,7 +102,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Short love letter examples for him, her and a crush" },
         {
           type: "p",
-          text: "Three short letters built the same way, one memory and one plan each. For longer, romantic ones, there are three full letters in our [love letter for your boyfriend](/blog/love-letter-for-boyfriend) and three in the [love letter for your girlfriend](/blog/love-letter-for-girlfriend).",
+          text: "Three short letters built the same way, one memory and one plan each. For longer, romantic ones, there are three full letters in our [love letter for your boyfriend](/blog/love-letter-for-boyfriend) and three in the [love letter for your girlfriend](/blog/love-letter-for-girlfriend). If what you have to say fits in five or six sentences, send it as a paragraph instead: there are six to borrow in our [paragraphs for him](/blog/paragraphs-for-him) and seven in our [paragraphs for your girlfriend](/blog/paragraphs-for-your-girlfriend).",
         },
         { type: "h3", text: "For him" },
         {
@@ -330,7 +330,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Cartas de amor cortas de ejemplo: para él, para ella y para quien te gusta" },
         {
           type: "p",
-          text: "Tres cartas cortas hechas igual, con un recuerdo y un plan cada una. Si buscas cartas más largas y más románticas, hay tres enteras en nuestra [carta de amor para tu novio](/blog/love-letter-for-boyfriend) y otras tres en la [carta de amor para tu novia](/blog/love-letter-for-girlfriend).",
+          text: "Tres cartas cortas hechas igual, con un recuerdo y un plan cada una. Si buscas cartas más largas y más románticas, hay tres enteras en nuestra [carta de amor para tu novio](/blog/love-letter-for-boyfriend) y otras tres en la [carta de amor para tu novia](/blog/love-letter-for-girlfriend). Si lo que quieres decir cabe en cinco o seis frases, mándalo como un texto largo: tienes seis para adaptar en nuestros [textos para tu novio](/blog/paragraphs-for-him) y siete en los [textos largos para tu novia](/blog/paragraphs-for-your-girlfriend).",
         },
         { type: "h3", text: "Para él" },
         {
