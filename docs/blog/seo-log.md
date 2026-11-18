@@ -559,3 +559,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-18T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.0192 | seo: how-to-make-a-digital-scrapbook |
 | 2026-11-18T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01296 | seo: how-to-make-a-digital-scrapbook |
 | 2026-11-18T16:43Z | on_page/content_parsing/live | 0.00015 | seo: how-to-make-a-digital-scrapbook |
+| 2026-11-18T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | serp/google/organic/live/advanced | 0.002 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:19Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-tips |
+| 2026-11-18T18:20Z | on_page/content_parsing/live | 0.00015 | blog: long-distance-relationship-tips |

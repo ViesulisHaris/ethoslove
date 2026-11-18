@@ -99,6 +99,11 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   18 Nov): a line beside the hours-you're-both-awake tool ("what to send when your clocks don't
   meet"), in both languages ("Frases de amor a distancia"). The blog hub,
   virtual-date-ideas-long-distance, links it already.
+- [ ] **Long distance group: link /blog/long-distance-relationship-tips from /long-distance**
+  (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship tips" 1,900, KD 24, published
+  18 Nov): a line under the "Meet in the middle" tool ("a call rhythm for your time difference"),
+  in both languages ("Cómo llevar una relación a distancia"). The blog hub,
+  virtual-date-ideas-long-distance, links it already.
 - [ ] **Love letters group: link /blog/paragraphs-for-him from /templates/the-letter**
   (the hub, TOPIC-GROUPS.md rule 3; "paragraphs for him" 1,900, KD 0, published 18 Nov): a line
   beside the template's ideas, in both languages ("Textos para tu novio"). The blog hub,
