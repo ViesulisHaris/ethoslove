@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { Stripe as StripeJs } from "@stripe/stripe-js";
@@ -102,7 +102,10 @@ export function OneTapPay({ request, locale, disabled, sale }: { request: Checko
           type="checkbox"
           checked={ticked}
           disabled={disabled}
-          onChange={(e) => setTicked(e.target.checked)}
+          onChange={(e) => {
+            setTicked(e.target.checked);
+            if (e.target.checked) track("one_tap_ticked", { template: sale.template, product: sale.product, guest: sale.guest });
+          }}
           className="size-5 shrink-0 accent-coral"
           data-testid="one-tap-consent"
         />
@@ -135,6 +138,18 @@ function Buttons({ sale, onError }: { sale: Sale; onError: () => void }) {
   const checkout = useCheckoutElements();
   // Stripe says, once its button has looked, whether there is one to show here after all.
   const [none, setNone] = useState(false);
+  // Counted once per button: Stripe may say the same thing again as the sheet re-renders.
+  const said = useRef<"shown" | "unavailable" | null>(null);
+  const say = (what: "shown" | "unavailable") => {
+    if (said.current === what) return;
+    said.current = what;
+    track(what === "shown" ? "one_tap_button_shown" : "one_tap_unavailable", { template: sale.template, product: sale.product, guest: sale.guest });
+  };
+  const failedToLoad = checkout.type === "error";
+  useEffect(() => {
+    if (failedToLoad) say("unavailable");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `say` only reads a ref and the sale
+  }, [failedToLoad]);
   if (checkout.type === "error") return <p className="text-center text-sm text-ink">{t("oneTapNone")}</p>;
   return (
     <>
@@ -147,7 +162,11 @@ function Buttons({ sale, onError }: { sale: Sale; onError: () => void }) {
           layout: undefined,
           paymentMethodOrder: undefined,
         }}
-        onAvailablePaymentMethodsChange={(event) => setNone(!event.paymentMethods)}
+        onAvailablePaymentMethodsChange={(event) => {
+          setNone(!event.paymentMethods);
+          say(event.paymentMethods ? "shown" : "unavailable");
+        }}
+        onCancel={() => track("one_tap_cancelled", { template: sale.template, product: sale.product, guest: sale.guest })}
         onConfirm={async (event) => {
           if (checkout.type !== "success") return;
           track("pay_clicked", { template: sale.template, product: sale.product, bump: sale.bump, second: sale.second, reply: sale.reply, guest: sale.guest, oneTap: true });

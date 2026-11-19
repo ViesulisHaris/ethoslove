@@ -17,6 +17,12 @@ export type FunnelEvent =
   | "extras_offer_shown"
   // The free Letter test (lib/gift/free-tier.ts). Vercel's reports count by event name, not by a
   // property, so each version has its own: a Letter started, its send screen opened, its pay tapped.
+  // The one-tap path under the pay button (components/editor/one-tap-pay.tsx): the box ticked, the
+  // wallet's button shown, no wallet to show after all, and the wallet's own sheet closed unpaid.
+  | "one_tap_ticked"
+  | "one_tap_button_shown"
+  | "one_tap_unavailable"
+  | "one_tap_cancelled"
   | "letter_started_note"
   | "letter_started_classic"
   | "letter_sheet_note"
@@ -72,10 +78,27 @@ export function freeTestEvent(slug: string, step: "started" | "sheet" | "pay", a
   return `${slug === "constellations" ? "sky" : "letter"}_${step}_${arm}`;
 }
 
+/**
+ * Vercel's component sets up `window.va` (a queue its script empties once loaded) when it mounts, and
+ * it mounts after the page in the layout. An event counted in a page's first effect, such as a
+ * purchase on the success page, got there first, found nothing to call and was dropped without a
+ * word: purchase_completed never arrived at all. Setting the same queue up here, the way Vercel's
+ * own snippet does, keeps those events until the script takes them.
+ */
+function ensureQueue(): void {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { va?: (...args: unknown[]) => void; vaq?: unknown[][] };
+  if (w.va) return;
+  w.va = (...args: unknown[]) => {
+    (w.vaq = w.vaq ?? []).push(args);
+  };
+}
+
 export function track(event: FunnelEvent, props?: Props): void {
   // Nothing is measured inside the iPhone app, which promises no analytics.
   if (isInApp()) return;
   try {
+    ensureQueue();
     vercelTrack(event, props);
   } catch {
     // Analytics never gets to break a page.

@@ -9,15 +9,14 @@
  * offers these from its own editor, and the "Free" filter and the catalogue below still have it.
  * Keep it to one row of four.
  *
- * NEW is the latest templates: the five Halloween gifts of 19 Oct that play out on their own (The
- * Séance, Bat Swarm, Witch's Brew, Jack-o'-Lantern, Haunted House), then the three Halloween and
- * autumn collages of 14 Oct (Be My Boo, Fall for You, Autumn Reel). A template leaves this list when
- * the next batch ships (Spooky Season, Dark Romance, Favorite Person and On Repeat left with this
- * one, and are in the catalogue below); a slug that no longer exists is simply skipped, and a unit
- * test says so out loud.
+ * NEW is the latest templates: the holiday gifts of 11 and 16 Nov, Christmas first (Nice List,
+ * Unwrapped, Snow Globe, Frosted Window, String the Lights, Gingerbread House), then the two for
+ * Thanksgiving (Light the Candles, Wishbone). A template leaves this list when the next batch ships
+ * (the Halloween and autumn ones left with this one, three weeks after Halloween, and are in the
+ * catalogue below); a slug that no longer exists is simply skipped, and a unit test says so out loud.
  */
 export const POPULAR_SLUGS = ["bouquet", "xoxo", "birthday-cinema", "the-council"] as const;
-export const NEW_SLUGS = ["seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "be-my-boo", "fall-for-you", "autumn-reel"] as const;
+export const NEW_SLUGS = ["nice-list", "unwrapped", "snow-globe", "frosted-window", "string-the-lights", "gingerbread-house", "light-the-candles", "wishbone"] as const;
 
 /**
  * What a free template's editor offers to move the gift into ("Same words, a bigger moment"): best
