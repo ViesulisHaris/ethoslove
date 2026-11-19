@@ -872,3 +872,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
 | 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
 | 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
+| 2026-11-19T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:19Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:20Z | on_page/content_parsing/live | 0.00015 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:20Z | on_page/content_parsing/live | 0.00015 | blog: truth-or-dare-questions-for-couples |
+| 2026-11-19T10:20Z | on_page/content_parsing/live | 0.00015 | blog: truth-or-dare-questions-for-couples |

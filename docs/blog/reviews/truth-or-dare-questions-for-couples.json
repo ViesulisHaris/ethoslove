@@ -1,0 +1,103 @@
+{
+  "slug": "truth-or-dare-questions-for-couples",
+  "keyword": "truth or dare questions for couples",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Swap the 'read me the last message you sent anyone else' dare, which exposes a third party's chat, for a kinder one; make the '20 questions for couples' answer name both games instead of saying it usually means 21 questions. Polish: spelling-neutral wording for favourite/realise, a kinder camera-roll dare."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "The '20 questions' FAQ contradicted our own questions-for-couples post, which defines it as the yes-or-no guessing game; the new hub sentence in questions-to-ask-your-boyfriend sat between the game and '104 more' so the count seemed to point at truth or dare; the Spanish game name is 'versión suave' in messages/es.json. Polish: virtual date ideas are sorted by energy, not one plan per evening; 'echar en cara', 'forma de pensar', 'noche cansada entre semana', 'agree on'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Three People-also-ask questions were unanswered: what dare to give a girlfriend, what are the 100 truth questions, and flirty 20 questions. Polish: link the would-you-rather post, a deep-questions link, a boundaries sentence."
+        }
+      ],
+      "applied": [
+        "Dare 'read me the last message you sent anyone else' replaced with 'the funniest message anyone has sent you this week' (EN and ES)",
+        "FAQ 'good dare for a boyfriend' widened to boyfriend or girlfriend",
+        "New FAQ 'What are the 100 truth questions?' (46 truths here, 160 each in the hub posts)",
+        "FAQ '20 questions for couples' now describes the guessing game first, then 21 questions, matching questions-for-couples, and covers a flirty round of twenty",
+        "FAQ 'How do you play truth or dare over text?' removed to keep five questions; its answer is the long-distance section",
+        "Hub sentence in questions-to-ask-your-boyfriend moved after the '104 more' sentence (EN and ES)",
+        "Spanish game name 'versión suave' and clearer dealing sentence",
+        "Polish taken: virtual date ideas described as sorted by how tired you are; 'echa en cara', 'forma de pensar', 'noche cansada entre semana', 'agree on', spelling-neutral wording, camera-roll dare now 'five photos of us you like best'"
+      ],
+      "rejected": [
+        "Search: three separate new FAQ items would make eight questions, over the playbook's five; the girlfriend dare and flirty questions were folded into existing answers instead",
+        "Editor polish: gender-neutral Spanish truths left as they are; the reader is mostly her asking him, as the editor noted",
+        "Search polish: would-you-rather and deep-questions links and a boundaries rule left out to avoid unreviewed new text"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-one fixes made correctly. Beats the unsorted lists that rank: house rules, a mood order with a first question each, long-distance dares that end in proof, a one-phone game, and honest answers to the 100 and 20 questions searches."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All round-one fixes verified against the code and the linked posts; every count (74, 46, 160) and every game and template claim checks out. The only page with house rules that protect both people, a mood-to-moment table and long-distance dares, all checked against the free game it links."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every People-also-ask question is answered within the five-item FAQ. Beats paired.com and the 200-question lists with short house rules, a mood table and a long-distance section, and complements /games/dare rather than competing with it."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Search and editor: the 'twenty flirty questions' line could point to the 20 flirty questions in questions-for-couples, or count six truths and six dares",
+        "Editor: ES 'tu pareja la descubre rascando', 'antes de la primera pregunta', 'visita guiada' for 'tour', 'y que crees que ganaste'; mention that /games/dare lists all 100 truths and dares",
+        "Search: link deep-questions-to-ask-your-boyfriend and the would-you-rather post; a line on how far to turn up the flirty round",
+        "Reader: kinder 'swap places' question; a round-length line"
+      ]
+    }
+  ]
+}
