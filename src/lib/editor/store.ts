@@ -39,6 +39,12 @@ export type EditorState = {
   giftId: string | null;
   shortId: string | null;
   status: "draft" | "scheduled" | "live";
+  /**
+   * The photos a gift that is already out held when the editor opened it, by stored path; null for
+   * a draft. For the rule that an old free gift takes no new photos once the note is for everyone
+   * (oldFreeGiftAddsPhotos, lib/gift/free-tier.ts).
+   */
+  heldPhotos: string[] | null;
   schedule: ScheduleSettings;
   password: string;
   removeWatermark: boolean;
@@ -367,6 +373,7 @@ export const useEditor = create<EditorState>((set, get) => {
     giftId: null,
     shortId: null,
     status: "draft",
+    heldPhotos: null,
     schedule: { enabled: false, timezone: "UTC" },
     password: "",
     removeWatermark: false,
@@ -536,6 +543,7 @@ export const useEditor = create<EditorState>((set, get) => {
         giftId,
         shortId,
         status,
+        heldPhotos: remote && remote.status !== "draft" ? completeGiftData(initial, remote.data).photos.map((p) => p.url) : null,
         schedule,
         password,
         removeWatermark,

@@ -43,6 +43,15 @@ export function decidePublish(
 }
 
 /**
+ * decidePublish's answer with one more rule on top: once the note is for everyone, a free gift from
+ * before it that is given a new photo needs the unlock (oldFreeGiftAddsPhotos, ./free-tier). The
+ * server refuses that edit; the publish sheet uses this so it shows the pay panel instead of an error.
+ */
+export function withOldGiftRule(decision: PublishDecision, addsPhotosToOldGift: boolean, unlocked: boolean): PublishDecision {
+  return decision.ok && addsPhotosToOldGift && !unlocked ? { ok: false, reason: "payment_required" } : decision;
+}
+
+/**
  * "song" is no longer the real song: Apple's previews may not be sold, so a song from the catalogue
  * is free on every gift (see ./music). It now stands only for music from somewhere that is none of
  * ours — not our library, not the sender's upload, not an Apple preview — which the editor never

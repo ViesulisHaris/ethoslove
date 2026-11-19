@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
+import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems, withOldGiftRule } from "@/lib/gift/publish";
 import { FREE_NOTE_MAX_CHARS, addsPhotos, freeTierAtPublish, noteCanBeFree, noteForEveryone, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
 import { freeTestEvent } from "@/lib/analytics/track";
 import { completeGiftData } from "@/lib/editor/complete-data";
@@ -184,6 +184,16 @@ describe("the server decides the version, so the pay screen can't be gone round"
     expect(oldFreeGiftAddsPhotos(premium, row, added, 1)).toBe(false);
     expect(oldFreeGiftAddsPhotos(letter, { ...row, stored: "note" }, added, 1)).toBe(false);
   });
+
+  it("turns that into the pay panel on the send screen, not an error, and leaves an owner alone", () => {
+    const free = { ok: true as const, watermark: true, isPremium: false };
+    expect(withOldGiftRule(free, true, false)).toEqual({ ok: false, reason: "payment_required" });
+    expect(withOldGiftRule(free, true, true)).toEqual(free);
+    expect(withOldGiftRule(free, false, false)).toEqual(free);
+    // A gift that isn't ready keeps saying what it is missing.
+    const notReady = { ok: false as const, reason: "not_ready" as const, problems: ["message"] };
+    expect(withOldGiftRule(notReady, true, false)).toEqual(notReady);
+  });
 });
 
 describe("which version a new Letter gets", () => {
@@ -276,6 +286,23 @@ describe("which version a new Letter gets", () => {
     // A later visit (a new tab's memory) reads it back, whatever the draw would say now.
     again.forgetFreeTier();
     expect(again.pickFreeTier({ userId: null, share: 0, draw: () => 0.99, inApp: false })).toBe("note");
+  });
+
+  it("forgets the stored version when cookies are refused or taken back", async () => {
+    const { CONSENT_KEY } = await import("@/lib/analytics/consent");
+    device.set(CONSENT_KEY, "granted");
+    const { FREE_TIER_KEY, keepFreeTier, pickFreeTier } = await load();
+    pickFreeTier({ userId: null, share: 1, draw: () => 0, inApp: false });
+    expect(device.get(FREE_TIER_KEY)).toBe("note");
+    keepFreeTier();
+    expect(device.get(FREE_TIER_KEY)).toBe("note");
+
+    // The visitor takes the yes back: a fresh page reads the new choice and removes the entry.
+    vi.resetModules();
+    device.set(CONSENT_KEY, "denied");
+    const later = await load();
+    later.keepFreeTier();
+    expect(device.has(FREE_TIER_KEY)).toBe(false);
   });
 
   it("is always the earlier rules inside the iPhone app", async () => {

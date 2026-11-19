@@ -8,8 +8,8 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { freeTestEvent, track } from "@/lib/analytics/track";
-import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules } from "@/lib/gift/free-tier";
+import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, withOldGiftRule, type FieldProblem } from "@/lib/gift/publish";
+import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
 import { FreeNoteOption } from "./free-note-option";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
@@ -193,8 +193,18 @@ export function PublishSheet({
     schedule: state.schedule.enabled,
     password: state.password.length > 0,
   };
+  // Once the note is for everyone, a free gift from before it takes no new photos without the unlock
+  // (the server checks the same, app/actions/gift.ts): then the sheet shows the pay panel for it.
+  const addsToOldGift = Boolean(
+    serialized &&
+      state.heldPhotos &&
+      state.status !== "draft" &&
+      oldFreeGiftAddsPhotos(manifest, { stored: serialized.freeTier, photos: state.heldPhotos.map((url) => ({ url })) }, serialized.photos),
+  );
   const decision =
-    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }) : null;
+    entitlement && serialized
+      ? withOldGiftRule(decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }), addsToOldGift, entitlement.unlocked)
+      : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -212,6 +222,8 @@ export function PublishSheet({
     options.removeWatermark && "NoWatermark",
     options.schedule && "Schedule",
     options.password && "Password",
+    // New photos on a free gift from before the note: what the pay panel names for it.
+    addsToOldGift && "Photos",
     ...(serialized ? premiumExtras(serialized, { note }) : [])
       // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
       .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply || Boolean(campaign))
@@ -348,6 +360,7 @@ export function PublishSheet({
     options.removeWatermark ||
     options.schedule ||
     options.password ||
+    addsToOldGift ||
     (serialized ? premiumExtras(serialized, { note }).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;

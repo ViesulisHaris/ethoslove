@@ -89,6 +89,20 @@ export function pickFreeTier(options: { userId: string | null; search?: string |
   return arm;
 }
 
+/**
+ * Brings the stored answer in line with the cookie choice: it is only ever kept for a visitor who
+ * said yes, and a no (or taking the yes back) removes it, as the privacy policy says (section 12).
+ * Called on every change of the choice (components/shared/ref-capture.tsx).
+ */
+export function keepFreeTier(): void {
+  try {
+    if (getConsent() !== "granted") storage()?.removeItem(FREE_TIER_KEY);
+    else if (tab) storage()?.setItem(FREE_TIER_KEY, tab);
+  } catch {
+    // Private windows and blocked site data throw: there is nothing stored to bring in line.
+  }
+}
+
 /** For tests: a new tab. */
 export function forgetFreeTier(): void {
   tab = undefined;
