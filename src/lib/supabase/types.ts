@@ -756,6 +756,8 @@ export interface Database {
         Row: { key: string; window_start: string; window_secs: number; total: number };
         Insert: { key: string; window_start?: string; window_secs: number; total?: number };
         Update: never;
+        Relationships: [];
+      };
       /** Who asked for our offer emails, with the sentence they ticked (0021, api/offer/emails). Service role only. */
       offer_emails: {
         Row: { user_id: string; created_at: string; wording: string; source: string; locale: string };
