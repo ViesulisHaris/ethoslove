@@ -1,0 +1,95 @@
+{
+  "slug": "quality-time-love-language",
+  "keyword": "quality time love language",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to cut two product plugs in the prose (the /dates date finder and the /long-distance tools), since VOICE.md allows at most two mentions, and replace them with tips a reader can use. Polish: 'film or show', a neutral word for 'housemate', check the mindbodygreen and YouGov sources."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "All product, template, quiz, scheduling and link claims verified against the code; YouGov 38% and Chapman's ten-minute suggestion checked by search. Asked to fix the confusing 'two-phone games ... on the sofa' (EN and ES) and six Spanish lines: a calque-heavy ritual intro, 'tareas con la cabeza', 'mirándoos a vosotros', 'la mirada arriba', and two gendered words ('callado', 'liado'). Polish: the yougov.com/en-us URL, Picnic's first tap opens the lid, drop 'Many couples find', two smoother Spanish lines."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to link 'receiving gifts' to /blog/gift-giving-love-language like the other three languages (EN and ES). Polish: put 'quality time love language examples' in the examples heading. All four People-also-ask questions answered; table, time ladder, ritual and mismatch section go beyond the top results."
+        }
+      ],
+      "applied": [
+        "Date finder sentence replaced with 'Book it, or at least fix the day, before you tell them...' (EN and ES)",
+        "Long-distance tools sentence replaced with the fixed-slot tip (EN and ES)",
+        "'receiving gifts' / 'recibir regalos' linked to /blog/gift-giving-love-language",
+        "Games line reworded to 'games for two, which work on one phone passed around the sofa or on two' (EN and ES)",
+        "Six Spanish fixes from the editor, as written",
+        "Polish taken: examples heading, 'film or show', 'share an address' for 'housemate', yougov.com/en-us URL, Picnic note's first tap, 'A good starting point is' in the FAQ, two Spanish polish lines"
+      ],
+      "rejected": [
+        "Polish not taken: a sceptical line on love-language research (no source read this run), bolding a 'tonight' pick, a number in the title, a quiz link in the five-types FAQ"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the Counts/Doesn't count table, the ten-minutes-to-a-weekend ladder, a weekly ritual with lines to send and an honest gift section give a reader something to do tonight that the definition-and-list pages don't. Round one's fixes all made correctly. Polish: clarify the series row, drop the games clause, a research caveat, bold a tonight pick."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: every claim checks out against the code or its source, round one's fixes are all in place, and both languages are specific and warm. Polish: 'Se cambia de día, nunca se cancela', closer Spanish for the games line, split the Picnic note's 'and' run, 'canceled' spelling."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: it answers every People-also-ask question and adds a do/don't table, time-tiered ideas, a weekly ritual and lines to borrow that Calm, marriage.com and SimplyPsychology lack. Round one's link fix made in both languages. Polish: a quiz link in the five-types FAQ."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish left out, as the rubric says: it goes in the record, not the post."
+      ]
+    }
+  ]
+}

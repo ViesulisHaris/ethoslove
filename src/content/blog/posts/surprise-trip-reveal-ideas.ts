@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "surprise-trip-reveal-ideas",
   published: "2026-11-13",
+  updated: "2026-11-19",
   occasion: "birthday",
   templates: ["pack-your-bags", "passport"],
   content: {
     en: {
-      title: "Surprise trip reveal ideas, by how long you can keep it",
-      description: "Surprise trip reveal ideas sorted by when they find out: weeks ahead, a week of clues, the night before or at the airport, plus what to tell them to pack.",
+      title: "Surprise trip reveal ideas for a holiday or weekend away",
+      description: "Surprise trip and holiday reveal ideas sorted by when they find out, from weeks ahead to the airport, clever ways to give a trip as a gift, and what to pack.",
       keyword: "surprise trip reveal ideas",
-      lead: "The best surprise trip reveal depends on one thing: how long you can keep the secret, and how long they need to get ready. Weeks ahead, fold a printed booking or a made-up boarding pass into their birthday card. The night before, leave a packed bag by the door with the leaving time on the tag. Below are ideas for every timing, plus what to tell them so they pack the right things.",
+      lead: "The best surprise trip reveal depends on one thing: how long you can keep the secret, and how long they need to get ready. Weeks ahead, fold a printed booking or a made-up boarding pass into their birthday card. The night before, leave a packed bag by the door with the leaving time on the tag. Below are surprise trip and holiday reveal ideas for every timing, for a weekend away or a holiday abroad, plus what to tell them so they pack the right things.",
       takeaways: [
         "Pick the timing first. The reveal idea follows from it, not the other way round.",
         "They can pack without knowing where they're going if you give them the weather, the nights and one dress code.",
@@ -50,6 +51,9 @@ export const post: BlogPost = {
             "**The dinner that hints.** Cook or order food from the destination, play music from there, and hand them the details over dessert.",
             "**The hunt around the house.** Hide four or five notes, each leading to the next: the first in their coat pocket, one in the fridge, one in a shoe. Each carries a clue to the place, and the last sits on top of the printed booking.",
             "**The decoy present.** Give them something small first, a pair of socks or a plug adapter, and let them be polite about it. The envelope comes out after.",
+            "**Something they'll only need there.** Wrap one thing that belongs to the place: sunscreen and flip-flops for a beach, a warm hat for the mountains, a phrasebook for a city abroad. Let them guess from it before the booking comes out.",
+            "**The puzzle.** Turn a photo of the place, or the booking itself, into a jigsaw: many photo-printing services make one from your own picture. They find out as it comes together, so keep the pieces that give it away (the name, or the landmark) in your pocket and hand them over last.",
+            "**The scratch card.** Hide the place, or just the dates, under a silver panel they scratch off. Our [scratch card ideas](/blog/scratch-card-ideas) show how to make one at home in an evening.",
             "**A digital reveal they open.** If you're not in the same room when it happens, send it as a [digital gift](/gifts): they pack a suitcase clue by clue, then a departures board flips to the place.",
           ],
         },
@@ -149,7 +153,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "For more on surprising someone who'll be there in person, see our guide on [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), and for a trip as a gift when you're far apart, the [long-distance anniversary ideas](/blog/long-distance-anniversary-ideas). A trip makes one of the best [birthday gifts](/occasions/birthday), and a [scratch card](/blog/scratch-card-ideas) is the quicker way to reveal one.",
+          text: "For more on surprising someone who'll be there in person, see our guide on [how to surprise your girlfriend](/blog/how-to-surprise-your-girlfriend), and for a trip as a gift when you're far apart, the [long-distance anniversary ideas](/blog/long-distance-anniversary-ideas). A trip makes one of the best [birthday gifts](/occasions/birthday).",
         },
       ],
       faq: [
@@ -169,13 +173,21 @@ export const post: BlogPost = {
           q: "How can I reveal a surprise trip if we live far apart?",
           a: "Reveal it on a video call, ask someone who lives near them to hand over an envelope, or send a gift that's set to unlock at a chosen moment, like midnight on their birthday. Until it opens, they see a countdown, which is half the fun.",
         },
+        {
+          q: "What are some clever ways to give a trip as a gift?",
+          a: "Turn the booking into something they open: a jigsaw of the place, a scratch card with the destination under the panel, a wrapped thing they'll only use there (sunscreen, a warm hat) as a hint, or a hunt of notes around the house that ends at the printed tickets. If you won't be in the same room, send a digital reveal set to open at a moment you choose. If nothing is booked yet, give them the place and let them pick the dates: a card that says \"We're going to Lisbon. You choose when.\" Only promise a hotel or a flight you've already paid for.",
+        },
+        {
+          q: "How do you reveal a surprise holiday?",
+          a: "Work out how much notice they need first. For a holiday abroad, that usually means telling them the dates early so they can book time off, and checking their passport yourself. Keep only the place secret, and save it for the reveal: in a card, a puzzle, a week of clues, or on the departures board at the airport.",
+        },
       ],
     },
     es: {
-      title: "Ideas para revelar un viaje sorpresa, según cuánto aguantes",
-      description: "Ideas para revelar un viaje sorpresa según cuándo se entere: semanas antes, una semana de pistas, la noche antes o en el aeropuerto, y qué decirle que lleve.",
-      keyword: "ideas para revelar un viaje sorpresa",
-      lead: "La mejor forma de revelar un viaje sorpresa depende de una cosa: cuánto tiempo puedes guardar el secreto y cuánto necesita la otra persona para prepararse. Con semanas de antelación, mete la reserva impresa o una tarjeta de embarque inventada en su felicitación de cumpleaños. La noche antes, deja una maleta hecha junto a la puerta con la hora de salida en la etiqueta. Aquí tienes ideas para cada momento, y qué decirle para que haga bien la maleta.",
+      title: "Cómo regalar un viaje sorpresa: ideas para revelarlo",
+      description: "Cómo regalar un viaje sorpresa y revelarlo según cuándo se entere: semanas antes, con una semana de pistas, la noche antes o en el aeropuerto, y qué llevar.",
+      keyword: "cómo regalar un viaje sorpresa",
+      lead: "Para regalar un viaje sorpresa, la mejor forma de revelarlo depende de una cosa: cuánto tiempo puedes guardar el secreto y cuánto necesita la otra persona para prepararse. Con semanas de antelación, mete la reserva impresa o una tarjeta de embarque inventada en su felicitación de cumpleaños. La noche antes, deja una maleta hecha junto a la puerta con la hora de salida en la etiqueta. Aquí tienes ideas para cada momento, para una escapada o unas vacaciones fuera, y qué decirle para que haga bien la maleta.",
       takeaways: [
         "Elige primero el momento. La idea para revelarlo sale de ahí, no al revés.",
         "Puede hacer la maleta sin saber el destino si le das el tiempo que hará, las noches y un código de vestimenta.",
@@ -215,6 +227,9 @@ export const post: BlogPost = {
             "**La cena que da pistas.** Cocina o pide comida del destino, pon música de allí y dale los detalles con el postre.",
             "**La búsqueda del tesoro por casa.** Esconde cuatro o cinco notas, y que cada una lleve a la siguiente: la primera en el bolsillo de su abrigo, otra en la nevera, otra en un zapato. Cada una trae una pista del destino, y la última está encima de la reserva impresa.",
             "**El regalo señuelo.** Dale primero algo pequeño, unos calcetines o un adaptador de enchufe, y deja que finja que le encanta. El sobre llega después.",
+            "**Algo que solo usará allí.** Envuelve una cosa que sea del destino: crema solar y chanclas para una playa, un gorro de lana para la montaña, una guía de conversación para una ciudad extranjera. Deja que adivine con eso antes de que salga la reserva.",
+            "**El puzle.** Convierte una foto del sitio, o la propia reserva, en un puzle: muchos servicios de impresión de fotos lo hacen con tu imagen. Lo descubre a medida que lo monta, así que guárdate en el bolsillo las piezas que lo delatan (el nombre o el monumento) y dáselas al final.",
+            "**El rasca y gana.** Esconde el destino, o solo las fechas, bajo una capa plateada que tenga que rascar. En nuestras [ideas de rasca y gana](/blog/scratch-card-ideas) tienes cómo hacer uno en casa en una tarde.",
             "**Una revelación digital para abrir en el móvil.** Si no vais a estar en la misma habitación, envíaselo como [regalo digital](/gifts): hace una maleta pista a pista y luego un panel de salidas gira hasta el destino.",
           ],
         },
@@ -314,7 +329,7 @@ export const post: BlogPost = {
         },
         {
           type: "p",
-          text: "Si vas a estar en persona, mira nuestra guía sobre [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), y para un viaje como regalo cuando vivís lejos, las [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas). Un viaje es uno de los mejores [regalos de cumpleaños](/occasions/birthday), y un [rasca y gana](/blog/scratch-card-ideas) es la forma más rápida de revelarlo.",
+          text: "Si vas a estar en persona, mira nuestra guía sobre [cómo sorprender a tu novia](/blog/how-to-surprise-your-girlfriend), y para un viaje como regalo cuando vivís lejos, las [ideas de aniversario a distancia](/blog/long-distance-anniversary-ideas). Un viaje es uno de los mejores [regalos de cumpleaños](/occasions/birthday).",
         },
       ],
       faq: [
@@ -333,6 +348,14 @@ export const post: BlogPost = {
         {
           q: "¿Cómo revelo un viaje sorpresa si vivimos lejos?",
           a: "Revélalo por videollamada, pide a alguien que viva cerca que le dé un sobre en persona, o envía un regalo programado para abrirse en un momento concreto, como a medianoche el día de su cumpleaños. Hasta que se abre, ve una cuenta atrás, y eso ya es la mitad de la gracia.",
+        },
+        {
+          q: "¿Qué ideas originales hay para regalar un viaje sorpresa?",
+          a: "Convierte la reserva en algo que tenga que abrir: un puzle del sitio, un rasca y gana con el destino bajo la capa plateada, algo envuelto que solo usará allí (crema solar, un gorro de lana) como pista, o una búsqueda de notas por casa que acaba en los billetes impresos. Si no vais a estar en la misma habitación, envíale una revelación digital programada para abrirse cuando tú elijas.",
+        },
+        {
+          q: "¿Cómo puedo regalar un viaje sin fecha fija?",
+          a: "Regala el destino y dejad las fechas para después: una tarjeta o un sobre con el sitio y «las fechas, cuando tú digas». Así puede pedir los días libres sin prisas. Si aún no has reservado, no escribas en la tarjeta un hotel o un vuelo que todavía no tienes: promete solo lo que vas a poder cumplir.",
         },
       ],
     },

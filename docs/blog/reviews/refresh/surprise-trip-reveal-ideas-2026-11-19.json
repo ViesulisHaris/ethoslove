@@ -1,0 +1,71 @@
+{
+  "slug": "surprise-trip-reveal-ideas",
+  "keyword": "surprise trip reveal ideas",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the generic top results (idea lists with no timing), it starts from when they find out and adds a seven-day clue schedule, a what-to-tell-them-to-pack table and the passport/ESTA/ETA check. Polish: 'sunscreen' and 'warm hat' for US readers; 'holiday' in a heading."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 9, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every Pack Your Bags, Passport, scheduling and link claim checked against the code. Fixes: 'sun cream'/'woolly hat' are British, say 'sunscreen'/'warm hat'; the Spanish lead lacked the English lead's new 'weekend away or holiday abroad'. Polish: the FAQ hides the booking 'inside' sunscreen, say 'turn the booking into something they open … as a hint'; a photo puzzle may have no name on it."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 9, "search": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fixes: the UK phrase 'surprise holiday reveal' (590 a month, we sit near 3) belongs in the English lead; the English lacks the not-yet-booked case the Spanish FAQ covers and the 'gift a surprise vacation' results answer. Polish: smoother description, keyword headings, an exploding box, an answer to '¿Dónde puedo regalar viajes sorpresa?'."
+        }
+      ],
+      "applied": [
+        "EN: 'sunscreen and flip-flops … a warm hat' in the body and FAQ",
+        "EN lead: 'Below are surprise trip and holiday reveal ideas for every timing, for a weekend away or a holiday abroad'",
+        "ES lead: «para una escapada o unas vacaciones fuera» (shorter than the reviewer's wording: the test caps the lead at 90 words)",
+        "EN FAQ on clever ways to give a trip: opens 'Turn the booking into something they open … as a hint' and ends with the unbooked case ('We're going to Lisbon. You choose when.' Only promise a hotel or a flight you've already paid for); ES FAQ opens «Convierte la reserva en algo que tenga que abrir … como pista»",
+        "Puzzle, both languages: 'the pieces that give it away (the name, or the landmark)'"
+      ],
+      "rejected": [
+        "Search polish, a '¿Dónde puedo regalar viajes sorpresa?' answer: it would mean pointing at mystery-trip agencies, and posts name other makers only in comparison posts",
+        "Search polish, an exploding box and keyword-stuffed headings: not needed for the search, and every new line is more for the next panel to clear"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It sorts reveals by how long you can keep the secret and handles the packing and documents that list-style pages skip; the 'You choose when' card is the line to screenshot. Polish only: 'the last idea is the one for you', 'already booked' for 'paid for'."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes and the polish are in and correct in both languages, every template and scheduling claim checks against the code, and the new list items don't fall into a pattern. Polish: «en el extranjero» for «fuera» if words free up."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results are mostly Disney and family reveal lists; this picks the reveal by how much notice they need, then covers the packing and paperwork that make a surprise trip go wrong, and now speaks the UK 'holiday' wording and the unbooked case. Polish: a QR-code card, a balloon or exploding box."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}
