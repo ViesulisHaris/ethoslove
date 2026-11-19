@@ -15,6 +15,16 @@ export type FunnelEvent =
   | "pay_clicked"
   | "purchase_completed"
   | "extras_offer_shown"
+  // The free Letter test (lib/gift/free-tier.ts). Vercel's reports count by event name, not by a
+  // property, so each version has its own: a Letter started, its send screen opened, its pay tapped.
+  | "letter_started_note"
+  | "letter_started_classic"
+  | "letter_sheet_note"
+  | "letter_sheet_classic"
+  | "letter_pay_note"
+  | "letter_pay_classic"
+  | "free_note_chosen"
+  | "free_note_too_long"
   | "bump_toggled"
   | "second_toggled"
   | "etsy_claim_sent"

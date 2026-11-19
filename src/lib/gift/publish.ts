@@ -2,6 +2,7 @@ import type { z } from "zod";
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { isStoragePath } from "./assets";
+import { FREE_NOTE_MAX_CHARS, noteLength, noteRules } from "./free-tier";
 import { isKnownMusic } from "./music";
 
 export type Entitlement = {
@@ -34,7 +35,7 @@ export function decidePublish(
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
 
   const premiumTemplate = manifest.tier === "premium" && !options.freeReply && !options.campaign;
-  const needsUnlock = premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data).length > 0;
+  const needsUnlock = premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data, { note: noteRules(manifest, data) }).length > 0;
 
   if (needsUnlock && !entitlement.unlocked) return { ok: false, reason: "payment_required" };
 
@@ -47,19 +48,28 @@ export function decidePublish(
  * ours — not our library, not the sender's upload, not an Apple preview — which the editor never
  * produces, so hosting someone else's audio behind a free gift still takes an unlock.
  */
-export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos" | "unwrap";
+export type PremiumExtra = "song" | "video" | "voiceNote" | "morePhotos" | "unwrap" | "photos" | "longLetter";
+
+/** What premiumExtras looks at: the content, and for a note the letter itself. */
+export type ExtrasContent = Pick<GiftData, "music" | "video" | "voiceNote" | "photos" | "unwrap"> & { message?: string };
 
 /**
  * Content-level extras that need an unlock on any template (the free tier stays a real gift, these are the upsell).
  * "unwrap" is a date or a trip wrapped inside the gift: on a premium template it comes with the
  * template's unlock like everything else, and on The Letter or Constellations "Make it special" adds it.
+ *
+ * `note` is for a gift whose free version is the short note (noteRules, ./free-tier): there every
+ * photo is "photos" and a letter past the free length is "longLetter", in place of "morePhotos".
  */
-export function premiumExtras(data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos" | "unwrap">): PremiumExtra[] {
+export function premiumExtras(data: ExtrasContent, rules: { note?: boolean } = {}): PremiumExtra[] {
   const extras: PremiumExtra[] = [];
   if (data.music && !isKnownMusic(data.music)) extras.push("song");
   if (data.video) extras.push("video");
   if (data.voiceNote) extras.push("voiceNote");
-  if (data.photos.length > 10) extras.push("morePhotos");
+  if (rules.note) {
+    if (data.photos.length > 0) extras.push("photos");
+    if (noteLength(data.message ?? "") > FREE_NOTE_MAX_CHARS) extras.push("longLetter");
+  } else if (data.photos.length > 10) extras.push("morePhotos");
   if (data.unwrap) extras.push("unwrap");
   return extras;
 }
@@ -71,10 +81,10 @@ export function premiumExtras(data: Pick<GiftData, "music" | "video" | "voiceNot
  */
 export function liveEditNeedsUnlock(
   manifest: TemplateManifest,
-  data: Pick<GiftData, "music" | "video" | "voiceNote" | "photos" | "unwrap">,
+  data: ExtrasContent & { freeTier?: unknown },
   row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean; freeReply?: boolean },
 ): boolean {
-  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
+  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data, { note: noteRules(manifest, data) }).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
 }
 
 /**
@@ -88,7 +98,8 @@ export function readinessProblems(manifest: TemplateManifest, data: GiftData, fi
   if (!data.senderName.trim()) problems.push("senderName");
   if (!data.message.trim()) problems.push("message");
   if (fieldsSchema) problems.push(...fieldProblems(fieldsSchema, data.fields).map((problem) => `fields.${problem.key}`));
-  if (data.photos.length < manifest.features.photos.min) problems.push("photosMin");
+  // A note goes out with no photos at all (./free-tier), whatever the template asks of the full version.
+  if (data.photos.length < (noteRules(manifest, data) ? 0 : manifest.features.photos.min)) problems.push("photosMin");
   if (data.photos.length > manifest.features.photos.max) problems.push("photosMax");
   if (data.photos.some((p) => !isStoragePath(p.url) && !p.url.startsWith("http"))) problems.push("uploadsPending");
   if (data.music?.source === "upload" && !isStoragePath(data.music.url) && !data.music.url.startsWith("http")) problems.push("uploadsPending");

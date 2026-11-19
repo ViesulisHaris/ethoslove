@@ -25,6 +25,9 @@ import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, stuckUploads, type 
 import { processImageFile, transformImage } from "./image";
 import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 import { completeGiftData } from "./complete-data";
+import { armFromSearch, pickFreeTier } from "./free-tier-split";
+import { NOTE_TEMPLATES } from "@/lib/gift/free-tier";
+import { track } from "@/lib/analytics/track";
 
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
@@ -504,6 +507,20 @@ export const useEditor = create<EditorState>((set, get) => {
         schedule = local.schedule.timezone ? local.schedule : { ...local.schedule, timezone };
         password = local.password;
         removeWatermark = local.removeWatermark;
+      }
+
+      // A Letter started now is given the free version it is held to (lib/gift/free-tier.ts): the
+      // short note, or the rules before it. One that exists already keeps its own, except that a
+      // draft still on this device follows `?free=` on the address, for trying a version out.
+      if (manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) && !remote) {
+        const search = typeof window === "undefined" ? "" : window.location.search;
+        if (!local || armFromSearch(search)) {
+          const arm = pickFreeTier({ userId, search });
+          const rest: GiftData = { ...data };
+          delete rest.freeTier;
+          data = arm === "note" ? { ...rest, freeTier: "note" } : rest;
+          if (!local) track(arm === "note" ? "letter_started_note" : "letter_started_classic", { template: slug });
+        }
       }
 
       set({

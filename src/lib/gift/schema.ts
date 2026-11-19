@@ -152,6 +152,12 @@ export const giftDataBaseSchema = z.object({
   showReactionCta: z.boolean().default(true),
   /** Set server-side from entitlements. Client-supplied values are ignored. */
   watermark: z.boolean().default(true),
+  /**
+   * The free version this gift is held to: "note" is words and a song, with photos and a long letter
+   * paid (lib/gift/free-tier.ts). Absent: the rules it was made under. Set when the draft starts and
+   * kept by the server once the gift is live.
+   */
+  freeTier: z.literal("note").optional(),
   fields: z.record(z.string(), z.unknown()).default({}),
 });
 

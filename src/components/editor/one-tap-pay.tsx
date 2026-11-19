@@ -47,7 +47,7 @@ function stripeFor(key: string, locale: GiftLocale): Promise<StripeJs | null> {
   return stripePromise;
 }
 
-type Sale = { template: string; product: string; bump: boolean; second: boolean; reply: boolean; guest: boolean; total: number; category: string; currency: string };
+type Sale = { template: string; product: string; bump: boolean; second: boolean; reply: boolean; guest: boolean; total: number; category: string; currency: string; letterArm?: "note" | "classic" | null };
 
 /**
  * One-tap Apple Pay or Google Pay on the pay sheet, under the pay button that opens Stripe's page.
@@ -151,6 +151,7 @@ function Buttons({ sale, onError }: { sale: Sale; onError: () => void }) {
         onConfirm={async (event) => {
           if (checkout.type !== "success") return;
           track("pay_clicked", { template: sale.template, product: sale.product, bump: sale.bump, second: sale.second, reply: sale.reply, guest: sale.guest, oneTap: true });
+          if (sale.letterArm) track(sale.letterArm === "note" ? "letter_pay_note" : "letter_pay_classic", { guest: sale.guest, oneTap: true });
           adTrack({ name: "InitiateCheckout", contents: [{ id: sale.template, category: sale.category }], value: sale.total / 100, currency: sale.currency.toUpperCase() });
           const result = await checkout.checkout.confirm({ expressCheckoutConfirmEvent: event });
           if (result.type === "error") onError();
