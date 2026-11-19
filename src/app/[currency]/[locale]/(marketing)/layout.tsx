@@ -6,6 +6,7 @@ import { StickyCta } from "@/components/marketing/sticky-cta";
 import { RevealRoot } from "@/components/motion/reveal-root";
 import { SiteMotion } from "@/components/motion/site-motion";
 import { TourMount } from "@/components/tour/tour-mount";
+import { TopNotice } from "@/components/marketing/top-notice";
 
 export default async function MarketingLayout({ children, params }: LayoutProps<"/[currency]/[locale]">) {
   const { locale } = await params;
@@ -17,6 +18,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
       {/* data-header-offset: inside the iPhone app the header is hidden, and its room with it (globals.css). */}
       <div className="flex min-h-dvh flex-col" data-header-offset style={{ "--header-h": "76px" } as React.CSSProperties}>
         <MarketingHeader />
+        <TopNotice />
         <main id="main" className="flex-1 pt-[var(--header-h)]">
           {children}
         </main>

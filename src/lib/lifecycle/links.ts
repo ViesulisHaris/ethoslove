@@ -19,7 +19,8 @@ export type TokenPurpose =
   | "keep-never"
   | "keep-reminder-off"
   | "reaction-private"
-  | "publish-finish";
+  | "publish-finish"
+  | "personal-price";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -47,6 +48,9 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   // when the link stops signing anyone in (Unix seconds), so a forwarded email doesn't open the
   // account for good.
   "publish-finish": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
+  // A personal price, in an offer email (lib/commerce/personal-price.ts): the account it was sent to
+  // and when it ends (Unix seconds). The account id is what makes it once-only, not who uses it.
+  "personal-price": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
 };
 
 const encoder = new TextEncoder();

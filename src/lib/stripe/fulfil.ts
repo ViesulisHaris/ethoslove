@@ -25,6 +25,7 @@ import { notifyReceipt, notifyWelcome, sendGiftCardEmail, sendMembershipWelcome,
 import { iso, inviteUrl, localePath, redeemUrl, siteOrigin, type Locale } from "@/lib/commerce/db";
 import { upgradeOffer } from "@/lib/commerce/entitlements";
 import { deleteGiftCardDetails, giftCardDetails, issueGiftCard } from "@/lib/commerce/gift-cards";
+import { spendPersonalPrice } from "@/lib/commerce/personal-price";
 import { startSubscriptionMembership } from "@/lib/commerce/memberships";
 import { startPass } from "@/lib/commerce/passes";
 import { PURCHASE_CREDIT_COLUMNS, UPGRADE_CREDITED } from "@/lib/commerce/pricing";
@@ -105,6 +106,10 @@ export type Sold = {
   locale: Locale;
   /** Ethos for Two's plan: a membership's from the metadata, a pass's is "yearly"; null otherwise. */
   plan: MembershipPlan | null;
+  /** The personal price's link (its account id) when one was charged (lib/commerce/personal-price.ts); null otherwise. */
+  personalPrice: string | null;
+  /** What the personal price took off the catalogue price, in minor units; null at full price. */
+  personalPriceOff: number | null;
 };
 
 /**
@@ -142,6 +147,8 @@ export function readSession(session: Stripe.Checkout.Session): Sold | null {
     ref: m.ref || null,
     locale: m.locale === "es" ? "es" : "en",
     plan,
+    personalPrice: m.personal_price || null,
+    personalPriceOff: Number.parseInt(m.personal_price_off ?? "", 10) > 0 ? Number.parseInt(m.personal_price_off!, 10) : null,
   };
 }
 
@@ -210,6 +217,8 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
   const buyer = session.metadata?.guest === "1" ? await claimGuest(admin, session, sold) : await claimSignedIn(admin, session, sold);
   if ("reason" in buyer) return { ok: false, reason: buyer.reason };
   const { userId, claimed } = buyer;
+  // Paid at a personal price: that link has bought its one gift (again, harmlessly, on a retry).
+  if (sold.personalPrice) await spendPersonalPrice(sold.personalPrice);
   const now = Date.now();
   const result: Fulfilment = { ok: true, userId, ...(buyer.guest ? { email: buyer.email ?? undefined, createdUser: buyer.createdUser } : {}) };
   const consent = agreedConsent(session, sold);
@@ -398,7 +407,7 @@ const asLocale = (value: string | null | undefined, fallback: Locale): Locale =>
 
 /** The fields that say what a purchase was and who brought it (migration 0009). */
 function commerceColumns(sold: Sold) {
-  return { kind: sold.kind, creator_code: sold.creatorCode, ref: sold.ref };
+  return { kind: sold.kind, creator_code: sold.creatorCode, ref: sold.ref, ...(sold.personalPriceOff ? { discount_amount: sold.personalPriceOff } : {}) };
 }
 
 /**

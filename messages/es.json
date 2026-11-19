@@ -1256,7 +1256,8 @@
       "secondPick": "¿Cuál?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Devolverlo así es gratis, con el pie. Con estos extras, cuesta el precio normal de esta plantilla.",
-      "guarantee": "Si no se abre en su móvil, te devolvemos el dinero."
+      "guarantee": "Si no se abre en su móvil, te devolvemos el dinero.",
+      "personalPrice": "Tu precio personal de nuestro correo, hasta el {ends}."
     },
     "etsy": {
       "title": "Comprado en Etsy",
@@ -1299,7 +1300,8 @@
       "alreadyMember": "Ya tienes Ethos for Two: está en tu cuenta.",
       "paymentIssue": "Tu último pago no se completó: actualiza primero tu tarjeta en tu cuenta.",
       "notOnSale": "Eso no está a la venta ahora mismo. Recarga la página.",
-      "toAccount": "Tu cuenta"
+      "toAccount": "Tu cuenta",
+      "personalPriceEnded": "Tu precio personal ha terminado o ya se ha usado, así que vuelve a verse el precio de siempre."
     },
     "recovery": {
       "optIn": "Si no termino de pagar, enviadme un solo enlace para volver."
@@ -3367,5 +3369,19 @@
     "copied": "Enlace copiado",
     "gift": "Haz un regalo que se abra el {date}",
     "privacy": "Vuestra fecha se queda en este dispositivo. El enlace solo lleva la fecha."
+  },
+  "offerEmails": {
+    "box": "Enviadme por correo las ofertas de Ethos, como los precios de Black Friday antes que nadie. Puedo darme de baja cuando quiera.",
+    "saved": "Hecho. Te enviaremos nuestras ofertas.",
+    "removed": "Hecho. Sin correos de ofertas.",
+    "failed": "No se ha podido guardar. Inténtalo de nuevo en un momento.",
+    "how": "Cómo usamos tu correo"
+  },
+  "notice": {
+    "policy": "Hemos actualizado nuestra Política de privacidad y nuestros Términos.",
+    "policyLink": "Qué ha cambiado",
+    "offer": "Tu precio personal: cualquier regalo por {price}, hasta el {ends}.",
+    "offerLink": "Elige un regalo",
+    "close": "Cerrar"
   }
 }

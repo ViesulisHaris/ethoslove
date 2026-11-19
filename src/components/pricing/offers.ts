@@ -32,12 +32,24 @@ export type CheckoutRequest = {
   ref?: string;
   /** A gift card's personal touch, printed with the code in the buyer's email. */
   giftCard?: { recipientName?: string; note?: string };
+  /** The pay sheet showed a personal price from an offer email and asks checkout for it (lib/commerce/personal-price.ts). */
+  personalPrice?: boolean;
 };
 
 export type CheckoutResult = { url: string } | { error: string };
 
 /** Why checkout didn't open, as a key under money.checkoutErrors. */
-export type CheckoutError = "alreadyOwned" | "alreadyMember" | "paymentIssue" | "notOnSale" | "signIn" | "tooMany" | "unavailable" | "network" | "generic";
+export type CheckoutError =
+  | "alreadyOwned"
+  | "alreadyMember"
+  | "paymentIssue"
+  | "notOnSale"
+  | "signIn"
+  | "tooMany"
+  | "unavailable"
+  | "network"
+  | "personalPriceEnded"
+  | "generic";
 
 export function checkoutErrorKey(error: string): CheckoutError {
   switch (error) {
@@ -58,6 +70,10 @@ export function checkoutErrorKey(error: string): CheckoutError {
       return "tooMany";
     case "payments_not_configured":
       return "unavailable";
+    // The personal price from an offer email ended, or bought its one gift, while the sheet was open.
+    case "personal_price_ended":
+    case "personal_price_unavailable":
+      return "personalPriceEnded";
     case "network":
       return "network";
     default:

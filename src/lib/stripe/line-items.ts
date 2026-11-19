@@ -257,6 +257,9 @@ export function sessionMetadata(plan: CheckoutPlan, options: SessionOptions): Re
     ...(plan.second ? { second: plan.second } : {}),
     ...(plan.packId ? { pack_id: plan.packId } : {}),
     ...(plan.creatorCode ? { creator_code: plan.creatorCode } : {}),
+    // A personal price (lib/commerce/personal-price.ts): which link it was, so fulfilment spends it,
+    // and what it took off, for purchases.discount_amount.
+    ...(plan.personalPrice ? { personal_price: plan.personalPrice.id, personal_price_off: String(plan.personalPrice.discount) } : {}),
     ...(ref ? { ref } : {}),
     ...adsMetadata(options.ads),
   };

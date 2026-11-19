@@ -14,6 +14,7 @@ import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
+import { personalPriceEnds, usePersonalPrice } from "@/components/pricing/use-personal-price";
 import { useInApp } from "@/lib/app/use-bridge";
 import {
   bumpOffered,
@@ -94,10 +95,19 @@ export function Paywall({
   const slug = manifest.slug;
   const forTemplate = templatePlan(manifest.tier);
   const all = everythingPlan(currency, guest ? null : upgrade);
+  // A personal price from an offer email (lib/commerce/personal-price.ts) goes on this gift's own row:
+  // the price shown is the price checkout charges, and checkout refuses rather than charge another.
+  const { price: personal, forget: forgetPersonal } = usePersonalPrice();
+  const listedForTemplate = PRODUCTS[forTemplate].amounts[currency];
+  const personalFor = personal !== null && personal.onto.includes(forTemplate) ? Math.min(listedForTemplate, personal.amounts[currency]) : null;
+  const forTemplateAmount = personalFor ?? listedForTemplate;
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
   const [plan, setPlan] = useState<PaywallPlan | null>(null);
   // A plan that stopped existing (the upgrade quote arrived, or went) falls back to its row.
-  const chosen: PaywallPlan = plan === null ? (note ? forTemplate : defaultPaywallPlan(forTemplate, all, currency)) : plan === forTemplate ? forTemplate : all.plan;
+  const chosen: PaywallPlan =
+    plan === null ? (note || personalFor !== null ? forTemplate : defaultPaywallPlan(forTemplate, all, currency)) : plan === forTemplate ? forTemplate : all.plan;
+  // The personal price is for this one gift: no add-ons with it.
+  const personalOn = personalFor !== null && chosen === forTemplate;
   const [bump, setBump] = useState(false);
   // The second gift: off until ticked; its template is the first suggestion until another is picked.
   const [secondOn, setSecondOn] = useState(false);
@@ -126,12 +136,12 @@ export function Paywall({
       ].filter((text): text is string => Boolean(text))
     : [];
 
-  const planAmount = chosen === forTemplate ? PRODUCTS[forTemplate].amounts[currency] : all.amount;
-  const showBump = bumpOffered(chosen, all);
+  const planAmount = chosen === forTemplate ? forTemplateAmount : all.amount;
+  const showBump = !personalOn && bumpOffered(chosen, all);
   const bumpOn = showBump && bump;
   const suggestions = secondSuggestions(slug, ownedElsewhere.map((m) => m.slug));
   const pick = secondPick && suggestions.includes(secondPick) ? secondPick : (suggestions[0] ?? null);
-  const showSecond = secondOffered(chosen, bumpOn) && pick !== null;
+  const showSecond = !personalOn && secondOffered(chosen, bumpOn) && pick !== null;
   const second = showSecond && secondOn ? pick : null;
   const total = payTotal(chosen, planAmount, bumpOn, currency, second !== null);
 
@@ -161,22 +171,28 @@ export function Paywall({
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
     if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
-    const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }, { total, category: manifest.tier });
+    const result = await startCheckout(
+      { ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) },
+      { total, category: manifest.tier },
+    );
     if ("url" in result) {
       window.location.assign(result.url);
       return;
     }
     going.current = false;
     setPaying(false);
+    // Ended or used since the sheet opened: the usual price shows again, and the next tap pays it.
+    if (result.error.startsWith("personal_price_")) forgetPersonal();
     showCheckoutError(result.error);
   };
 
-  const rows = [
+  const rows: { id: PaywallPlan; name: string; blurb: string; price: string; was?: string }[] = [
     {
       id: forTemplate,
       name: forTemplate === "extras" ? tm("extras") : t("planSingle"),
       blurb: forTemplate === "extras" ? tm(note ? "extrasBlurbNote" : "extrasBlurb") : t("planSingleBlurb"),
-      price: money(PRODUCTS[forTemplate].amounts[currency]),
+      price: money(forTemplateAmount),
+      ...(personalFor !== null ? { was: money(listedForTemplate) } : {}),
     },
     {
       id: all.plan,
@@ -219,7 +235,10 @@ export function Paywall({
                 <span className="min-w-0 flex-1">
                   <span className="flex items-baseline justify-between gap-3 leading-6">
                     <span className="min-w-0 font-medium">{row.name}</span>
-                    <span className="shrink-0 font-semibold">{row.price}</span>
+                    <span className="shrink-0 font-semibold">
+                      {row.was ? <s className="mr-1.5 font-normal text-muted-foreground" data-testid="price-was">{row.was}</s> : null}
+                      {row.price}
+                    </span>
                   </span>
                   <span className="block text-xs text-muted-foreground">{row.blurb}</span>
                 </span>
@@ -331,7 +350,8 @@ export function Paywall({
             {noteHeadline ?? t("payTitle")}
           </p>
           <p className="mt-2 text-base" data-testid="pay-note-price">
-            <span className="font-semibold">{money(PRODUCTS[forTemplate].amounts[currency])}</span> <span className="text-ink-soft">{tm("noteOnce")}</span>
+            {personalFor !== null ? <s className="mr-1.5 text-muted-foreground">{money(listedForTemplate)}</s> : null}
+            <span className="font-semibold">{money(forTemplateAmount)}</span> <span className="text-ink-soft">{tm("noteOnce")}</span>
           </p>
           <ul className="mt-3 grid gap-1.5 text-sm text-ink" data-testid="pay-note-checks">
             {noteChecks.map((text) => (
@@ -374,6 +394,13 @@ export function Paywall({
 
       {note ? null : chooser}
 
+      {personalOn && personal ? (
+        // Said where the price is: it's a personal price, and when it ends (EU law asks for the first).
+        <p className="mt-3 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink" data-testid="personal-price-note">
+          {tm("personalPrice", { ends: personalPriceEnds(personal.endsAt, locale, currency) })}
+        </p>
+      ) : null}
+
       <Button
         className="mt-4 h-12 w-full rounded-full text-base"
         disabled={paying || blocked}
@@ -389,7 +416,7 @@ export function Paywall({
         {tm("guarantee")}
       </p>
       <OneTapPay
-        request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }}
+        request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) }}
         locale={locale}
         disabled={paying || blocked}
         sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm }}
@@ -397,7 +424,7 @@ export function Paywall({
       {note ? (
         <>
           <p className="mt-4 text-center text-[13px] text-balance text-ink-soft" data-testid="pay-note-compare">
-            {tm("noteCompare", { premium: money(PRODUCTS.single.amounts[currency]), price: money(PRODUCTS[forTemplate].amounts[currency]) })}
+            {tm("noteCompare", { premium: money(PRODUCTS.single.amounts[currency]), price: money(forTemplateAmount) })}
           </p>
           <details className="group mt-3 rounded-lg border border-line px-3" data-testid="pay-note-more">
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm text-ink-soft [&::-webkit-details-marker]:hidden">

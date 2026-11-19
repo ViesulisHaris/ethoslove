@@ -1,0 +1,56 @@
+import { NextResponse, type NextRequest } from "next/server";
+import { z } from "zod";
+import { getTranslations } from "next-intl/server";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { getSupabaseAdminClient } from "@/lib/supabase/admin";
+import { rateLimit } from "@/lib/rate-limit";
+import { clientIp } from "@/lib/request-ip";
+
+export const runtime = "nodejs";
+export const maxDuration = 10;
+
+/**
+ * The box "Email me Ethos offers" on the screen a gift is sent from (components/editor/offer-emails-box.tsx).
+ * GET says whether the signed-in account said yes; POST { on, locale } records the yes, with the
+ * sentence they ticked as the server words it (never the page's copy of it), or takes it back.
+ * Signed in only: the address the offers go to is the account's (migration 0020).
+ */
+const input = z.object({ on: z.boolean(), locale: z.enum(["en", "es"]).default("en") });
+
+const noStore = { "cache-control": "no-store" };
+
+export async function GET() {
+  const user = await getCurrentUser();
+  const admin = getSupabaseAdminClient();
+  if (!user || !admin) return NextResponse.json({ on: false }, { headers: noStore });
+  const { data } = await admin.from("offer_emails").select("user_id").eq("user_id", user.id).maybeSingle();
+  return NextResponse.json({ on: Boolean(data) }, { headers: noStore });
+}
+
+export async function POST(request: NextRequest) {
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
+  const admin = getSupabaseAdminClient();
+  if (!admin) return NextResponse.json({ error: "unavailable" }, { status: 503 });
+  if (!(await rateLimit(`offer-emails:${clientIp(request.headers)}`, { limit: 20, windowSeconds: 600 })))
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+  const parsed = input.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ error: "invalid_input" }, { status: 400 });
+  const { on, locale } = parsed.data;
+
+  if (!on) {
+    const { error } = await admin.from("offer_emails").delete().eq("user_id", user.id);
+    if (error) return NextResponse.json({ error: "save_failed" }, { status: 500 });
+    return NextResponse.json({ on: false }, { headers: noStore });
+  }
+  const t = await getTranslations({ locale, namespace: "offerEmails" });
+  const { error } = await admin
+    .from("offer_emails")
+    .upsert({ user_id: user.id, wording: t("box"), source: "send", locale, created_at: new Date().toISOString() }, { onConflict: "user_id" });
+  if (error) {
+    // Before migration 0020 is applied the table isn't there: the box says it couldn't save.
+    console.error("[offer-emails] couldn't save a yes", error.message);
+    return NextResponse.json({ error: "save_failed" }, { status: 500 });
+  }
+  return NextResponse.json({ on: true }, { headers: noStore });
+}

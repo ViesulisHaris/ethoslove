@@ -695,6 +695,13 @@ export interface Database {
         Update: never;
         Relationships: [];
       };
+      /** Who asked for our offer emails, with the sentence they ticked (0020, api/offer/emails). Service role only. */
+      offer_emails: {
+        Row: { user_id: string; created_at: string; wording: string; source: string; locale: string };
+        Insert: { user_id: string; created_at?: string; wording: string; source: string; locale?: string };
+        Update: { wording?: string; source?: string; locale?: string; created_at?: string };
+        Relationships: [];
+      };
       /** A gift card's name and note between checkout and fulfilment, never sent to Stripe (0012). Service role only. */
       gift_card_details: {
         Row: { purchase_id: string; recipient_name: string | null; note: string | null; created_at: string };
