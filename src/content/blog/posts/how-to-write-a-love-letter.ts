@@ -121,6 +121,10 @@ export const post: BlogPost = {
           type: "quote",
           text: "On Tuesday you lent me your pen and then pretended you didn't want it back. I've still got it. I'd like to return it over coffee, if you're free on Thursday.",
         },
+        {
+          type: "p",
+          text: "Not sure yet whether it's mutual? Start with a few of our [questions to ask your crush](/blog/questions-to-ask-your-crush) and write the letter once the answers are warm.",
+        },
         { type: "h2", text: "How to start a love letter" },
         {
           type: "p",
@@ -348,6 +352,10 @@ export const post: BlogPost = {
         {
           type: "quote",
           text: "El martes me prestaste tu boli y luego hiciste como que no lo querías de vuelta. Todavía lo tengo. Me gustaría devolvértelo con un café, si el jueves te viene bien.",
+        },
+        {
+          type: "p",
+          text: "¿Aún no sabes si es mutuo? Empieza por unas cuantas de nuestras [preguntas para hacerle a tu crush](/blog/questions-to-ask-your-crush) y escribe la carta cuando las respuestas vengan con interés.",
         },
         { type: "h2", text: "Cómo empezar una carta de amor" },
         {

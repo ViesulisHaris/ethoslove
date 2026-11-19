@@ -1,4 +1,5 @@
 import { premiumExtras } from "@/lib/gift/publish";
+import { noteRules } from "@/lib/gift/free-tier";
 import type { GiftData } from "@/lib/gift/schema";
 import { EVERY_TEMPLATE, hasUnlock } from "@/lib/pricing/products";
 import type { Json } from "@/lib/supabase/types";
@@ -116,9 +117,10 @@ export async function relockGifts(db: Db, userId: string): Promise<void> {
   for (const gift of gifts ?? []) {
     if (hasUnlock(owned, gift.template_slug)) continue;
     const data = gift.data as unknown as GiftData;
+    const manifest = getManifest(gift.template_slug);
     const paidFeature =
-      getManifest(gift.template_slug)?.tier !== "free" ||
-      premiumExtras({ ...data, photos: Array.isArray(data.photos) ? data.photos : [] }).length > 0 ||
+      manifest?.tier !== "free" ||
+      premiumExtras({ ...data, photos: Array.isArray(data.photos) ? data.photos : [] }, { note: manifest ? noteRules(manifest, data) : false }).length > 0 ||
       gift.password_hash !== null ||
       gift.unlock_at !== null;
     if (paidFeature) await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);

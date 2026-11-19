@@ -192,6 +192,7 @@ test.describe("the paywall in the publish sheet", () => {
     await panel.getByTestId("bump").getByRole("checkbox").check();
     await panel.getByTestId("pay-single").click();
     await expect.poll(() => asked.length).toBe(1);
+    // The request also says where this buyer first landed (lib/attribution/first-visit.ts), never what to charge.
     expect(asked[0]).toEqual({
       product: "single",
       templateSlugs: ["bouquet"],
@@ -199,6 +200,7 @@ test.describe("the paywall in the publish sheet", () => {
       currency: "eur",
       returnTo: "/create/bouquet?resume=publish",
       locale: "en",
+      source: expect.objectContaining({ landing: "/create/bouquet" }),
     });
     await expect(page.getByText("Couldn't open checkout. Please try again.")).toBeVisible();
     await expect(panel.getByTestId("pay-single")).toBeEnabled();

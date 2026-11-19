@@ -7,8 +7,10 @@ import { useSearchParams } from "next/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
-import { track } from "@/lib/analytics/track";
-import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
+import { freeTestEvent, track } from "@/lib/analytics/track";
+import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, withOldGiftRule, type FieldProblem } from "@/lib/gift/publish";
+import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
+import { FreeNoteOption } from "./free-note-option";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
 import { useCurrency } from "@/lib/pricing/use-currency";
@@ -105,9 +107,17 @@ export function PublishSheet({
     void fetchUpgradeQuote(currency).then(setUpgrade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
+  // A gift held to the note's rules (lib/gift/free-tier.ts): its photos and a long letter are paid.
+  // The Letter can still go out free as a short note; Constellations, made of photos, cannot.
+  const note = noteRules(manifest, state.data);
+  const noteFree = noteCanBeFree(manifest);
+  // Which version of the free Letter test this gift is in, for the test's own events; null elsewhere.
+  const letterArm = manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) ? (note ? "note" : "classic") : null;
   useEffect(() => {
-    if (open) track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
-  }, [open, slug, manifest.tier, state.authed]);
+    if (!open) return;
+    track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
+    if (letterArm) track(freeTestEvent(slug, "sheet", letterArm), { guest: !state.authed });
+  }, [open, slug, manifest.tier, state.authed, letterArm]);
   // The app says what this account owns changed (a purchase, a restore, a pass joined): check again.
   useNativeEvents((event) => {
     if (event.type === "entitlements" && open && state.authed) void getEntitlement(slug).then(setFetchedEntitlement);
@@ -183,8 +193,18 @@ export function PublishSheet({
     schedule: state.schedule.enabled,
     password: state.password.length > 0,
   };
+  // Once the note is for everyone, a free gift from before it takes no new photos without the unlock
+  // (the server checks the same, app/actions/gift.ts): then the sheet shows the pay panel for it.
+  const addsToOldGift = Boolean(
+    serialized &&
+      state.heldPhotos &&
+      state.status !== "draft" &&
+      oldFreeGiftAddsPhotos(manifest, { stored: serialized.freeTier, photos: state.heldPhotos.map((url) => ({ url })) }, serialized.photos),
+  );
   const decision =
-    entitlement && serialized ? decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }) : null;
+    entitlement && serialized
+      ? withOldGiftRule(decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }), addsToOldGift, entitlement.unlocked)
+      : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -202,15 +222,53 @@ export function PublishSheet({
     options.removeWatermark && "NoWatermark",
     options.schedule && "Schedule",
     options.password && "Password",
-    ...(serialized ? premiumExtras(serialized) : [])
+    // New photos on a free gift from before the note: what the pay panel names for it.
+    addsToOldGift && "Photos",
+    ...(serialized ? premiumExtras(serialized, { note }) : [])
       // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
       .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply || Boolean(campaign))
       // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
-      .map((extra) => ({ song: "Song", video: "Video", voiceNote: "VoiceNote", morePhotos: "Photos", unwrap: "Unwrap" })[extra]),
+      .map((extra) => ({ song: "Song", video: "Video", voiceNote: "VoiceNote", morePhotos: "Photos", unwrap: "Unwrap", photos: "AllPhotos", longLetter: "FullLetter" })[extra]),
   ].filter(Boolean) as string[];
   const premiumFeatures = premiumKeys.map((key) => t(`feature${key}`));
-  // A premium template and its missing footer say the same for them: once.
-  const premiumBenefits = [...new Set(premiumKeys.map((key) => t(`benefit${key}`)))];
+  // A premium template and its missing footer say the same for them: once. A note's photos and long
+  // letter are the pay panel's own first line (their count), so they aren't listed again under it.
+  const premiumBenefits = [...new Set(premiumKeys.filter((key) => !note || (key !== "AllPhotos" && key !== "FullLetter")).map((key) => t(`benefit${key}`)))];
+  // What the pay panel of a note opens with, and what the free way out has to take away.
+  const noteLetter = noteLength(serialized?.message ?? "");
+  const notePaid = note && serialized ? premiumExtras(serialized, { note }) : [];
+  const noteOffer =
+    note && serialized && notePaid.length > 0
+      ? { photos: serialized.photos.length, longLetter: notePaid.includes("longLetter"), thumbs: (state.data?.photos ?? []).slice(0, 4).map((photo) => photo.url) }
+      : null;
+  const noteOthers = options.removeWatermark || options.schedule || options.password || notePaid.some((extra) => extra !== "photos" && extra !== "longLetter");
+  const [strippingNote, setStrippingNote] = useState(false);
+  /** The free way out of a note's pay panel: everything paid comes out, and the gift goes free. */
+  const sendAsNote = async () => {
+    setStrippingNote(true);
+    track("free_note_chosen", { template: slug, photos: serialized?.photos.length ?? 0, guest: !state.authed });
+    try {
+      for (const photo of [...useEditor.getState().data.photos]) await state.removePhoto(photo.id);
+      if (useEditor.getState().data.video) state.clearVideo();
+      if (useEditor.getState().data.voiceNote) state.clearVoiceNote();
+      if (useEditor.getState().data.unwrap) state.patch({ unwrap: undefined });
+      state.setRemoveWatermark(false);
+      state.setPassword("");
+      state.setSchedule({ enabled: false });
+    } finally {
+      setStrippingNote(false);
+    }
+  };
+  /** A letter over the free length is theirs to shorten: back to the form, at the letter. */
+  const shortenNote = () => {
+    track("free_note_too_long", { template: slug, chars: noteLetter, guest: !state.authed });
+    onOpenChange(false);
+    window.setTimeout(() => {
+      const field = document.getElementById("message");
+      field?.scrollIntoView({ block: "center" });
+      field?.focus();
+    }, 350);
+  };
 
   const publish = async () => {
     setBusy(true);
@@ -302,7 +360,8 @@ export function PublishSheet({
     options.removeWatermark ||
     options.schedule ||
     options.password ||
-    (serialized ? premiumExtras(serialized).length > 0 : false);
+    addsToOldGift ||
+    (serialized ? premiumExtras(serialized, { note }).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;
   // "One payment, no subscription" under a free publish read as if sending it cost something.
@@ -374,7 +433,8 @@ export function PublishSheet({
                 ))}
                 {(["photosMin", "uploadsPending"] as const)
                   // A template that needs no photos has nothing to tick off for them.
-                  .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || manifest.features.photos.min > 0))
+                  // A note goes out without photos (lib/gift/free-tier.ts): it has no photo row to tick.
+                  .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || (manifest.features.photos.min > 0 && !(note && noteFree))))
                   .map((key) => {
                     const bad = problems.includes(key);
                     const stuck = key === "uploadsPending" && bad && lastingProblem;
@@ -443,7 +503,12 @@ export function PublishSheet({
                 upgrade={null}
                 blocked={guestProblems.length > 0}
                 onSignInInstead={() => setShowSignIn(true)}
+                note={noteOffer}
+                letterArm={letterArm}
               />
+            ) : null}
+            {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
+              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
             ) : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
               <section className="mt-7 rounded-xl border border-line bg-card p-5">
@@ -474,12 +539,17 @@ export function PublishSheet({
                   blocked={false}
                   ownedElsewhere={ownedElsewhere}
                   onAppUnlock={unlockInApp}
+                  note={noteOffer}
+                  letterArm={letterArm}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">
                   {t("paymentSoon")}
                 </Notice>
               )
+            ) : null}
+            {noteOffer && noteFree && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
             ) : null}
 
             {/* Only when the reply is what makes it free: someone who owns the template sends it without the footer. */}

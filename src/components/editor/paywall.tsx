@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { ArrowRight, Gift, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, Gift, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
-import { track } from "@/lib/analytics/track";
+import { freeTestEvent, track } from "@/lib/analytics/track";
 import { adTrack } from "@/lib/analytics/ads";
 import { PRODUCTS, SECOND_GIFT, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
@@ -57,6 +57,8 @@ export function Paywall({
   onSignInInstead,
   onAppUnlock,
   reaction = null,
+  note = null,
+  letterArm = null,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -79,6 +81,13 @@ export function Paywall({
   onAppUnlock?: () => Promise<"unlocked" | "cancelled" | "failed">;
   /** A real reaction to an Ethos gift, shown with its writer's agreement and nothing else of theirs. */
   reaction?: ShownReaction | null;
+  /**
+   * A Letter whose free version is the short note (lib/gift/free-tier.ts): the panel opens with what
+   * paying sends, in their own count, and says what the price is next to a premium template's.
+   */
+  note?: { photos: number; longLetter: boolean; /** The first few of their photos, as the editor shows them. */ thumbs?: string[] } | null;
+  /** The free Letter test's version of this gift, so a pay tap is counted to it; null on any other gift. */
+  letterArm?: "note" | "classic" | null;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -88,7 +97,7 @@ export function Paywall({
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
   const [plan, setPlan] = useState<PaywallPlan | null>(null);
   // A plan that stopped existing (the upgrade quote arrived, or went) falls back to its row.
-  const chosen: PaywallPlan = plan === null ? defaultPaywallPlan(forTemplate, all, currency) : plan === forTemplate ? forTemplate : all.plan;
+  const chosen: PaywallPlan = plan === null ? (note ? forTemplate : defaultPaywallPlan(forTemplate, all, currency)) : plan === forTemplate ? forTemplate : all.plan;
   const [bump, setBump] = useState(false);
   // The second gift: off until ticked; its template is the first suggestion until another is picked.
   const [secondOn, setSecondOn] = useState(false);
@@ -98,6 +107,24 @@ export function Paywall({
   const going = useRef(false);
   const showCheckoutError = useCheckoutError();
   const money = (minor: number) => formatAmount(minor, currency, locale);
+  const noteHeadline = !note
+    ? null
+    : note.photos > 0 && note.longLetter
+      ? tm("noteHeadlineBoth", { count: note.photos })
+      : note.photos > 0
+        ? tm("noteHeadlinePhotos", { count: note.photos })
+        : note.longLetter
+          ? tm("noteHeadlineLetter")
+          : null;
+  // What paying sends, as a short ticked list: their photos and letter first, then anything else paid in it.
+  const noteChecks = note
+    ? [
+        note.photos > 0 ? tm("noteCheckPhotos", { count: note.photos }) : null,
+        note.longLetter ? tm("noteCheckLetter") : null,
+        ...features.filter((feature) => feature !== t("benefitNoWatermark")),
+        tm("noteCheckFooter"),
+      ].filter((text): text is string => Boolean(text))
+    : [];
 
   const planAmount = chosen === forTemplate ? PRODUCTS[forTemplate].amounts[currency] : all.amount;
   const showBump = bumpOffered(chosen, all);
@@ -133,6 +160,7 @@ export function Paywall({
     going.current = true;
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
+    if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
     const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }, { total, category: manifest.tier });
     if ("url" in result) {
       window.location.assign(result.url);
@@ -147,7 +175,7 @@ export function Paywall({
     {
       id: forTemplate,
       name: forTemplate === "extras" ? tm("extras") : t("planSingle"),
-      blurb: forTemplate === "extras" ? tm("extrasBlurb") : t("planSingleBlurb"),
+      blurb: forTemplate === "extras" ? tm(note ? "extrasBlurbNote" : "extrasBlurb") : t("planSingleBlurb"),
       price: money(PRODUCTS[forTemplate].amounts[currency]),
     },
     {
@@ -158,9 +186,163 @@ export function Paywall({
     },
   ];
 
+  // The plans and the add-ons. In the panel for most gifts; for a note they fold under "More options",
+  // so the panel is one price and one button (lib/gift/free-tier.ts).
+  const chooser = (
+    <>
+        {/*
+         * One column of controls on the left (radios, then tickboxes) and one of prices on the right, in
+         * the sans: the display serif's old-style numbers sat off the names' baseline. Proportional
+         * figures, as tabular ones leave a figure-wide gap either side of the decimal point.
+         */}
+        <div role="radiogroup" aria-label={t("planLabel")} className="mt-5 grid gap-2">
+          {rows.map((row) => {
+            const on = chosen === row.id;
+            return (
+              <button
+                key={row.id}
+                type="button"
+                role="radio"
+                aria-checked={on}
+                disabled={paying}
+                onClick={() => setPlan(row.id)}
+                data-testid={`plan-${row.id}`}
+                className={cn(
+                  "flex w-full items-start gap-3 rounded-lg border px-3 py-3 text-left transition-colors disabled:opacity-50",
+                  on ? "border-ink bg-ink/5" : "border-line hover:border-ink/40",
+                )}
+              >
+                <span className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-[1.5px]", on ? "border-coral" : "border-ink/30")}>
+                  {on ? <span className="size-2.5 rounded-full bg-coral" /> : null}
+                </span>
+                {/* The blurb runs under the price too: a 320px phone has no room for a price column. */}
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-baseline justify-between gap-3 leading-6">
+                    <span className="min-w-0 font-medium">{row.name}</span>
+                    <span className="shrink-0 font-semibold">{row.price}</span>
+                  </span>
+                  <span className="block text-xs text-muted-foreground">{row.blurb}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {pick3Offered(manifest.tier, currency, all) ? (
+          // Three templates is the better deal for anyone with more than one occasion coming; the
+          // choosing happens on the pricing page, with this one already picked.
+          <Link
+            href={pick3Href(slug, returnTo)}
+            className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline"
+            data-testid="pick3-link"
+          >
+            {tm("pick3", { price: money(PRODUCTS.pick3.amounts[currency]) })}
+            <ArrowRight aria-hidden="true" className="size-3.5" />
+          </Link>
+        ) : null}
+
+        {showBump || showSecond ? (
+          // The add-ons, one group: unticked, always (EU law, and the only honest way to offer them).
+          <div className="mt-2 divide-y divide-dashed divide-line overflow-hidden rounded-lg border border-dashed border-line">
+            {showBump ? (
+              <label className={cn("flex cursor-pointer items-start gap-3 px-3 py-3 transition-colors", bump ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="bump">
+                <input
+                  type="checkbox"
+                  checked={bump}
+                  disabled={paying}
+                  onChange={(e) => {
+                    setBump(e.target.checked);
+                    // Every template includes the second gift: one or the other.
+                    if (e.target.checked) setSecondOn(false);
+                    track("bump_toggled", { template: slug, on: e.target.checked, product: chosen });
+                  }}
+                  className="size-5 shrink-0 accent-coral"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-baseline justify-between gap-3 text-sm leading-5">
+                    <span className="min-w-0 font-medium">{tm("bump")}</span>
+                    <span className="shrink-0 font-semibold">{tm("bumpPrice", { price: money(bumpAmount(chosen, currency)) })}</span>
+                  </span>
+                  <span className="block text-xs text-muted-foreground">{tm("bumpBlurb")}</span>
+                </span>
+              </label>
+            ) : null}
+            {showSecond ? (
+              <div className={cn("px-3 py-3 transition-colors", secondOn ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="second">
+                <label className="flex cursor-pointer items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={secondOn}
+                    disabled={paying}
+                    onChange={(e) => {
+                      setSecondOn(e.target.checked);
+                      track("second_toggled", { template: slug, on: e.target.checked, pick: pick ?? "" });
+                    }}
+                    className="size-5 shrink-0 accent-coral"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-baseline justify-between gap-3 text-sm leading-5">
+                      <span className="min-w-0 font-medium">{tm("second")}</span>
+                      <span className="shrink-0 font-semibold">{tm("secondPrice", { price: money(SECOND_GIFT.amounts[currency]) })}</span>
+                    </span>
+                    <span className="block text-xs text-muted-foreground">{tm("secondBlurb")}</span>
+                  </span>
+                </label>
+                {secondOn ? (
+                  <div role="radiogroup" aria-label={tm("secondPick")} className="mt-2.5 flex flex-wrap gap-1.5 pl-8" data-testid="second-pick">
+                    {suggestions.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        role="radio"
+                        aria-checked={pick === s}
+                        disabled={paying}
+                        onClick={() => setSecondPick(s)}
+                        className={cn("min-h-9 rounded-full border px-3 text-xs font-medium transition-colors", pick === s ? "border-coral bg-coral text-paper" : "border-line bg-card hover:border-ink/40")}
+                      >
+                        {getManifest(s)?.name[locale] ?? s}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+    </>
+  );
+
   return (
     <section className="mt-7 rounded-xl border border-ink bg-card p-4 sm:p-5" data-testid="pay-panel">
-      {reaction ? (
+      {note ? (
+        <div data-testid="pay-note">
+          {note.thumbs?.length ? (
+            <div className="mb-3 flex items-center" aria-hidden="true" data-testid="pay-note-photos">
+              {note.thumbs.slice(0, 4).map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element -- the sender's own photo, as the editor already shows it
+                <img key={src} src={src} alt="" draggable={false} className={cn("size-12 rounded-lg border-2 border-card object-cover shadow-sm", i > 0 && "-ml-2")} />
+              ))}
+              {note.photos > 4 ? (
+                <span className="-ml-2 grid size-12 place-items-center rounded-lg border-2 border-card bg-blush/40 text-sm font-medium text-ink">+{note.photos - 4}</span>
+              ) : null}
+            </div>
+          ) : null}
+          <p className="font-display text-2xl leading-tight text-balance" data-testid="pay-note-headline">
+            {noteHeadline ?? t("payTitle")}
+          </p>
+          <p className="mt-2 text-base" data-testid="pay-note-price">
+            <span className="font-semibold">{money(PRODUCTS[forTemplate].amounts[currency])}</span> <span className="text-ink-soft">{tm("noteOnce")}</span>
+          </p>
+          <ul className="mt-3 grid gap-1.5 text-sm text-ink" data-testid="pay-note-checks">
+            {noteChecks.map((text) => (
+              <li key={text} className="flex items-start gap-2">
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
+                <span>{text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : reaction ? (
         <p className="font-display text-xl leading-snug" data-testid="pay-reaction">
           “{reaction.text}” <span aria-hidden="true">{reaction.emoji}</span>{" "}
           <span className="font-sans text-xs whitespace-nowrap text-muted-foreground">· {t("realReaction")}</span>
@@ -168,14 +350,16 @@ export function Paywall({
       ) : (
         <p className="font-display text-xl leading-snug">{t("payTitle")}</p>
       )}
-      {features.length ? (
+      {features.length && !note ? (
         <p className="mt-1.5 text-sm font-medium text-ink" data-testid="pay-benefits">
           {t("payIncludes", { features: features.join(" · ") })}
         </p>
       ) : null}
-      <p className="mt-1 text-sm text-ink-soft">
-        {manifest.tier === "free" ? tm(guest ? "extrasGuestIntro" : "extrasIntro") : t(guest ? "payGuestBlurb" : "payBlurb")}
-      </p>
+      {note ? null : (
+        <p className="mt-1 text-sm text-ink-soft">
+          {manifest.tier === "free" ? tm(guest ? "extrasGuestIntro" : "extrasIntro") : t(guest ? "payGuestBlurb" : "payBlurb")}
+        </p>
+      )}
       {freeReply ? (
         <p className="mt-3 flex items-start gap-2 rounded-lg bg-blush/30 px-3 py-2.5 text-sm text-ink" data-testid="free-reply-extras">
           <Gift aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-coral" />
@@ -188,125 +372,7 @@ export function Paywall({
         </p>
       ) : null}
 
-      {/*
-       * One column of controls on the left (radios, then tickboxes) and one of prices on the right, in
-       * the sans: the display serif's old-style numbers sat off the names' baseline. Proportional
-       * figures, as tabular ones leave a figure-wide gap either side of the decimal point.
-       */}
-      <div role="radiogroup" aria-label={t("planLabel")} className="mt-5 grid gap-2">
-        {rows.map((row) => {
-          const on = chosen === row.id;
-          return (
-            <button
-              key={row.id}
-              type="button"
-              role="radio"
-              aria-checked={on}
-              disabled={paying}
-              onClick={() => setPlan(row.id)}
-              data-testid={`plan-${row.id}`}
-              className={cn(
-                "flex w-full items-start gap-3 rounded-lg border px-3 py-3 text-left transition-colors disabled:opacity-50",
-                on ? "border-ink bg-ink/5" : "border-line hover:border-ink/40",
-              )}
-            >
-              <span className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-[1.5px]", on ? "border-coral" : "border-ink/30")}>
-                {on ? <span className="size-2.5 rounded-full bg-coral" /> : null}
-              </span>
-              {/* The blurb runs under the price too: a 320px phone has no room for a price column. */}
-              <span className="min-w-0 flex-1">
-                <span className="flex items-baseline justify-between gap-3 leading-6">
-                  <span className="min-w-0 font-medium">{row.name}</span>
-                  <span className="shrink-0 font-semibold">{row.price}</span>
-                </span>
-                <span className="block text-xs text-muted-foreground">{row.blurb}</span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {pick3Offered(manifest.tier, currency, all) ? (
-        // Three templates is the better deal for anyone with more than one occasion coming; the
-        // choosing happens on the pricing page, with this one already picked.
-        <Link
-          href={pick3Href(slug, returnTo)}
-          className="mt-1 inline-flex min-h-11 items-center gap-1.5 text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline"
-          data-testid="pick3-link"
-        >
-          {tm("pick3", { price: money(PRODUCTS.pick3.amounts[currency]) })}
-          <ArrowRight aria-hidden="true" className="size-3.5" />
-        </Link>
-      ) : null}
-
-      {showBump || showSecond ? (
-        // The add-ons, one group: unticked, always (EU law, and the only honest way to offer them).
-        <div className="mt-2 divide-y divide-dashed divide-line overflow-hidden rounded-lg border border-dashed border-line">
-          {showBump ? (
-            <label className={cn("flex cursor-pointer items-start gap-3 px-3 py-3 transition-colors", bump ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="bump">
-              <input
-                type="checkbox"
-                checked={bump}
-                disabled={paying}
-                onChange={(e) => {
-                  setBump(e.target.checked);
-                  // Every template includes the second gift: one or the other.
-                  if (e.target.checked) setSecondOn(false);
-                  track("bump_toggled", { template: slug, on: e.target.checked, product: chosen });
-                }}
-                className="size-5 shrink-0 accent-coral"
-              />
-              <span className="min-w-0 flex-1">
-                <span className="flex items-baseline justify-between gap-3 text-sm leading-5">
-                  <span className="min-w-0 font-medium">{tm("bump")}</span>
-                  <span className="shrink-0 font-semibold">{tm("bumpPrice", { price: money(bumpAmount(chosen, currency)) })}</span>
-                </span>
-                <span className="block text-xs text-muted-foreground">{tm("bumpBlurb")}</span>
-              </span>
-            </label>
-          ) : null}
-          {showSecond ? (
-            <div className={cn("px-3 py-3 transition-colors", secondOn ? "bg-coral/5" : "hover:bg-ink/[0.03]")} data-testid="second">
-              <label className="flex cursor-pointer items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={secondOn}
-                  disabled={paying}
-                  onChange={(e) => {
-                    setSecondOn(e.target.checked);
-                    track("second_toggled", { template: slug, on: e.target.checked, pick: pick ?? "" });
-                  }}
-                  className="size-5 shrink-0 accent-coral"
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-baseline justify-between gap-3 text-sm leading-5">
-                    <span className="min-w-0 font-medium">{tm("second")}</span>
-                    <span className="shrink-0 font-semibold">{tm("secondPrice", { price: money(SECOND_GIFT.amounts[currency]) })}</span>
-                  </span>
-                  <span className="block text-xs text-muted-foreground">{tm("secondBlurb")}</span>
-                </span>
-              </label>
-              {secondOn ? (
-                <div role="radiogroup" aria-label={tm("secondPick")} className="mt-2.5 flex flex-wrap gap-1.5 pl-8" data-testid="second-pick">
-                  {suggestions.map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      role="radio"
-                      aria-checked={pick === s}
-                      disabled={paying}
-                      onClick={() => setSecondPick(s)}
-                      className={cn("min-h-9 rounded-full border px-3 text-xs font-medium transition-colors", pick === s ? "border-coral bg-coral text-paper" : "border-line bg-card hover:border-ink/40")}
-                    >
-                      {getManifest(s)?.name[locale] ?? s}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
+      {note ? null : chooser}
 
       <Button
         className="mt-4 h-12 w-full rounded-full text-base"
@@ -326,11 +392,26 @@ export function Paywall({
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }}
         locale={locale}
         disabled={paying || blocked}
-        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency }}
+        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm }}
       />
+      {note ? (
+        <>
+          <p className="mt-4 text-center text-[13px] text-balance text-ink-soft" data-testid="pay-note-compare">
+            {tm("noteCompare", { premium: money(PRODUCTS.single.amounts[currency]), price: money(PRODUCTS[forTemplate].amounts[currency]) })}
+          </p>
+          <details className="group mt-3 rounded-lg border border-line px-3" data-testid="pay-note-more">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm text-ink-soft [&::-webkit-details-marker]:hidden">
+              <span>{tm("noteMore", { price: money(all.amount) })}</span>
+              <ArrowRight aria-hidden="true" className="size-4 shrink-0 transition-transform group-open:rotate-90" />
+            </summary>
+            <div className="pb-3">{chooser}</div>
+          </details>
+        </>
+      ) : null}
       <p className="mt-4 text-center text-xs text-balance text-muted-foreground">
         {t("payNote")}
         {guest ? ` ${t("uploadsAfterPay")}` : null}
+        {note && guest ? ` ${tm("noteGuest")}` : null}
       </p>
       {guest && onSignInInstead ? (
         <button

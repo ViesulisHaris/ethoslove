@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
+import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
@@ -95,7 +96,7 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
 
   const { data: row } = await ctx.supabase
     .from("gifts")
-    .select("status, template_slug, unlock_at, password_hash, watermark")
+    .select("status, template_slug, unlock_at, password_hash, watermark, free_tier:data->>freeTier, held_photos:data->photos")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -103,7 +104,9 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // An old copy of a draft left on a phone must never land on a gift that went live since.
   if (input.data.expectDraft && row.status !== "draft") return { ok: false, error: "not_draft" };
   // Recipients render whichever template data.templateSlug names, so it always comes from the row.
-  const data = { ...loose.data, templateSlug: row.template_slug };
+  // So does the free version a gift that is already out is held to (lib/gift/free-tier.ts): an edit
+  // can't move a note back to the roomier rules. A draft still says it for itself.
+  const data = { ...loose.data, templateSlug: row.template_slug, ...(row.status === "draft" ? {} : { freeTier: freeTierAtPublish(undefined, { live: true, stored: row.free_tier }) }) };
   const patch = { data: data as unknown as Json, locale: data.locale ?? "en" };
 
   if (row.status === "draft") {
@@ -115,9 +118,11 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   // A live or scheduled gift is what recipients see: edits to it are held to the publish rules.
   const manifest = getManifest(row.template_slug);
   if (!manifest) return { ok: false, error: "unknown_template" };
-  const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [], unwrap: data.unwrap };
+  const content = { music: data.music, video: data.video, voiceNote: data.voiceNote, photos: data.photos ?? [], unwrap: data.unwrap, message: data.message, freeTier: data.freeTier };
   const flags = { hasSchedule: row.unlock_at !== null, hasPassword: row.password_hash !== null, watermark: row.watermark };
-  const needs = liveEditNeedsUnlock(manifest, content, flags);
+  // And once the note is for everyone, a free gift from before it takes no new photos without the
+  // unlock (lib/gift/free-tier.ts): it can't be edited into the next free gift with photos.
+  const needs = liveEditNeedsUnlock(manifest, content, flags) || oldFreeGiftAddsPhotos(manifest, { stored: row.free_tier, photos: row.held_photos }, data.photos ?? []);
   if (needs) {
     const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
     if (!unlocked) {
@@ -126,7 +131,8 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
       const campaign = campaignCoversEdit(parseCampaignGrant(ctx.user.app_metadata), row.template_slug, Date.now());
       const admin = manifest.tier === "premium" && !campaign ? recipientFacingWriter() : null;
       const reply = admin ? await freeReplyFor(admin, { replyGiftId: input.data.giftId, templateSlug: row.template_slug, userId: ctx.user.id }) : null;
-      if (!(campaign || reply?.free) || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true })) return { ok: false, error: "payment_required" };
+      if (!(campaign || reply?.free) || liveEditNeedsUnlock(manifest, content, { ...flags, freeReply: true }) || oldFreeGiftAddsPhotos(manifest, { stored: row.free_tier, photos: row.held_photos }, data.photos ?? []))
+        return { ok: false, error: "payment_required" };
     }
   }
   if (!mediaUrlsAllowed({ photos: data.photos ?? [], video: data.video, voiceNote: data.voiceNote, music: data.music }, { local: true })) return { ok: false, error: "invalid_assets" };
@@ -168,7 +174,7 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const { data: gift, error: giftError } = await ctx.supabase
     .from("gifts")
-    .select("id, template_slug, user_id, status")
+    .select("id, template_slug, user_id, status, free_tier:data->>freeTier, held_photos:data->photos")
     .eq("id", input.data.giftId)
     .eq("user_id", ctx.user.id)
     .single();
@@ -180,8 +186,15 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   const parsed = createGiftSchema(fieldsSchema).safeParse(input.data.data);
   if (!parsed.success) return { ok: false, error: "invalid_data", problems: parsed.error.issues.map((i) => i.path.join(".")) };
-  // Recipients render whichever template data.templateSlug names, so it always comes from the row.
-  const data = { ...(parsed.data as GiftData), templateSlug: gift.template_slug };
+  // Recipients render whichever template data.templateSlug names, so it always comes from the row;
+  // and the free version it is held to is the server's to say too (freeTierAtPublish): a gift already
+  // out keeps its own, and a first publish takes the draft's word only while the test is running.
+  const live = gift.status !== "draft";
+  const data: GiftData = {
+    ...(parsed.data as GiftData),
+    templateSlug: gift.template_slug,
+    freeTier: NOTE_TEMPLATES.includes(gift.template_slug) ? freeTierAtPublish((parsed.data as GiftData).freeTier, { live, stored: gift.free_tier }) : undefined,
+  };
 
   const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: gift.template_slug });
   const writer = recipientFacingWriter();
@@ -207,6 +220,8 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
     freeReply: reply?.free === true,
     campaign,
   });
+  // A free gift from before the note, published again once the note is for everyone: no new photos without the unlock.
+  if (decision.ok && live && !unlocked && oldFreeGiftAddsPhotos(manifest, { stored: gift.free_tier, photos: gift.held_photos }, data.photos)) return { ok: false, error: "payment_required" };
   // A token that doesn't hold (used already, or not for this gift) says so, so the sheet can explain the price.
   if (!decision.ok) return { ok: false, error: decision.reason === "payment_required" && reply && !reply.free && reply.reason ? reply.reason : decision.reason, problems: decision.problems };
   // Media only from the sender's uploads, the demo and library files and Apple previews (lib/gift/media-urls.ts).

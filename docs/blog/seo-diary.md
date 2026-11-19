@@ -3,6 +3,33 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-19: surprise-trip-reveal-ideas speaks the UK's "surprise holiday reveal", answers "clever ways to give a trip as a gift"; Spanish aims at "cómo regalar un viaje sorpresa"
+- **Page:** /blog/surprise-trip-reveal-ideas (and /es to match)
+- **Why:** Second run of the day; no backlog item open (the two left wait for 27 and 28 Nov), and
+  the Search Console candidates (monthiversary-ideas, the Spanish virtual-date and fortune-cookie
+  posts, open-when-letter-ideas) were all touched in the last 14 days or out of season (Halloween).
+  Search Console (28 days, brand left out) had this never-refreshed post at 3 for "surprise holiday
+  reveal" and 10.5 for "surprise trip reveal", few impressions. DataForSEO: the UK says "surprise
+  holiday reveal" (590 a month, KD 0) and "surprise holiday reveal ideas" (210, KD 0), words the post
+  never used; US "surprise trip reveal ideas" 50, "how to surprise someone with a trip" 140. Spain:
+  "regalar un viaje sorpresa" 720 (KD 1), "cómo regalar un viaje sorpresa" 90 (KD 0), against no
+  measurable searches for the old Spanish keyword. The top results are mostly family and Disney
+  reveal lists, Etsy scratch cards and exploding boxes; People also ask: "What are some clever ways to
+  give a trip as a gift?", "How do you reveal a holiday?", and in Spain "¿Qué ideas originales hay
+  para regalar un viaje sorpresa?", "¿Cómo puedo regalar un viaje sin fecha fija?". The post answered
+  none of them.
+- **What changed:** Title "Surprise trip reveal ideas for a holiday or weekend away" (Spanish "Cómo
+  regalar un viaje sorpresa: ideas para revelarlo", keyword "cómo regalar un viaje sorpresa"), new
+  descriptions and leads; three new reveal ideas (something they'll only need there, a jigsaw, a
+  scratch card linking scratch-card-ideas); FAQs on clever ways to give a trip (with the unbooked
+  case) and revealing a surprise holiday, in Spanish ideas originales and a trip without fixed dates.
+  `updated` 2026-11-19.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/surprise-trip-reveal-ideas-2026-11-19.json`)
+- **Cost:** $0.09 (keyword overviews US, UK and Spain, Spanish keyword ideas, seven SERPs, one page
+  read); balance $47.14
+- **Check on:** 2026-12-07 whether "surprise holiday reveal" (UK) and "surprise trip reveal" moved,
+  and whether /es/blog/surprise-trip-reveal-ideas shows for "regalar un viaje sorpresa"
+
 ## 2026-11-19: what-to-write-in-boyfriends-birthday-card gets lines to make him cry, long-distance lines and "31 lines" in the title; Spanish aims at "frases de cumpleaños para mi novio"
 - **Page:** /blog/what-to-write-in-boyfriends-birthday-card (and /es to match)
 - **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov).

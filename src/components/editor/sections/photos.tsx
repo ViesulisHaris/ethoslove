@@ -16,6 +16,7 @@ import { LIMITS } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "../field";
 import { CropDialog } from "../crop-dialog";
+import { useNoteRules } from "../use-note-rules";
 
 const ACCEPT = "image/*,.heic,.heif";
 
@@ -34,6 +35,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   const [dragOver, setDragOver] = useState(false);
   const [cropping, setCropping] = useState<GiftPhoto | null>(null);
   const tSections = useTranslations("editor.sections.photos");
+  const { note, free: noteFree, price: notePrice } = useNoteRules();
 
   const max = manifest.features.photos.max;
   const processing = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "processing");
@@ -93,7 +95,15 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
         <p className="mt-1 text-xs text-muted-foreground">{t("formats", { max })}</p>
         <input ref={inputRef} type="file" accept={ACCEPT} multiple hidden onChange={(e) => { pick(e.target.files); e.target.value = ""; }} />
       </div>
-      {full ? <p className="mt-2 text-xs text-muted-foreground">{t("tooMany", { max })}</p> : photos.length >= LIMITS.free.maxPhotos ? <p className="mt-2 text-xs text-muted-foreground">{t("free10")}</p> : null}
+      {full ? (
+        <p className="mt-2 text-xs text-muted-foreground">{t("tooMany", { max })}</p>
+      ) : note ? (
+        <p className="mt-2 text-xs text-muted-foreground" data-testid="photos-note-hint">
+          {t(noteFree ? "noteHint" : "noteHintPaidOnly", { price: notePrice })}
+        </p>
+      ) : photos.length >= LIMITS.free.maxPhotos ? (
+        <p className="mt-2 text-xs text-muted-foreground">{t("free10")}</p>
+      ) : null}
 
       {failed.length > 0 ? (
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2.5 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm" role="alert">

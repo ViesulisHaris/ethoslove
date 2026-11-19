@@ -5,10 +5,12 @@ import { Bold, Italic, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEditor } from "@/lib/editor/store";
 import { LIMITS } from "@/config/site";
+import { noteLength } from "@/lib/gift/free-tier";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, SectionHeader, Segmented } from "../field";
 import { EmojiPicker } from "../emoji-picker";
 import { WritingHelper } from "../writing-helper";
+import { useNoteRules } from "../use-note-rules";
 
 export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
   const t = useTranslations("editor");
@@ -43,11 +45,21 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
   };
 
   const left = LIMITS.messageMaxChars - data.message.length;
+  // A Letter whose free version is the short note says where free ends while they write, not at the end.
+  // Only where a free note exists: a gift made of photos has no free length to count towards.
+  const { note: held, free: noteFree, max: noteMax, price: notePrice } = useNoteRules();
+  const note = held && noteFree;
+  const length = noteLength(data.message);
 
   return (
     <section>
       <SectionHeader n={t("sections.words.n")} title={t("sections.words.title")} blurb={t("sections.words.blurb")} />
-      <Field id="message" label={t("fields.message")} counter={t("fields.charsLeft", { n: left })}>
+      <Field
+        id="message"
+        label={t("fields.message")}
+        counter={note ? t("fields.noteCount", { n: length, max: noteMax }) : t("fields.charsLeft", { n: left })}
+        help={note ? t(length > noteMax ? "fields.noteOver" : "fields.noteHint", { max: noteMax, price: notePrice }) : undefined}
+      >
         <div className="rounded-xl border border-border bg-card focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30">
           <div className="flex items-center gap-0.5 border-b border-border px-1.5 py-1 md:gap-1 md:px-2 md:py-1.5">
             <button type="button" onClick={() => wrap("**")} aria-label={t("fields.bold")} className="grid size-10 place-items-center rounded-lg text-ink-soft hover:bg-ink/5 md:size-8">

@@ -15,6 +15,23 @@ export type FunnelEvent =
   | "pay_clicked"
   | "purchase_completed"
   | "extras_offer_shown"
+  // The free Letter test (lib/gift/free-tier.ts). Vercel's reports count by event name, not by a
+  // property, so each version has its own: a Letter started, its send screen opened, its pay tapped.
+  | "letter_started_note"
+  | "letter_started_classic"
+  | "letter_sheet_note"
+  | "letter_sheet_classic"
+  | "letter_pay_note"
+  | "letter_pay_classic"
+  // The same six for Constellations, which is in the test too (paid in the note version).
+  | "sky_started_note"
+  | "sky_started_classic"
+  | "sky_sheet_note"
+  | "sky_sheet_classic"
+  | "sky_pay_note"
+  | "sky_pay_classic"
+  | "free_note_chosen"
+  | "free_note_too_long"
   | "bump_toggled"
   | "second_toggled"
   | "etsy_claim_sent"
@@ -46,6 +63,14 @@ export type FunnelEvent =
   | "quiz_gift_click";
 
 type Props = Record<string, string | number | boolean | null>;
+
+/**
+ * The free-version test's event for one of its templates (lib/gift/free-tier.ts): "letter_…" for
+ * The Letter, "sky_…" for Constellations, then the step and the version.
+ */
+export function freeTestEvent(slug: string, step: "started" | "sheet" | "pay", arm: "note" | "classic"): FunnelEvent {
+  return `${slug === "constellations" ? "sky" : "letter"}_${step}_${arm}`;
+}
 
 export function track(event: FunnelEvent, props?: Props): void {
   // Nothing is measured inside the iPhone app, which promises no analytics.

@@ -44,6 +44,7 @@ export function completeGiftData(blank: GiftData, stored: unknown): GiftData {
     fields: isObject(s.fields) ? s.fields : blank.fields,
   };
   if ("cover" in s && !oneOf(COVER_IDS, s.cover)) delete done.cover;
+  if ("freeTier" in s && s.freeTier !== "note") delete done.freeTier;
   for (const key of EXTRAS) if (key in s && !isObject(s[key])) delete done[key];
   return done as GiftData;
 }
