@@ -81,6 +81,13 @@ describe("the personal price's link", () => {
     for (const bad of [null, undefined, "", "x".repeat(300)]) expect(await readPersonalPrice(bad, now)).toBeNull();
   });
 
+  it("is signed with PERSONAL_PRICE_SECRET when that is set, and only with it", async () => {
+    vi.stubEnv("PERSONAL_PRICE_SECRET", "offer-secret");
+    const now = Date.parse("2026-11-25T12:00:00Z");
+    expect(await readPersonalPrice(await personalPriceToken(ID, now + 3_600_000, "offer-secret"), now)).toEqual({ id: ID, endsAt: now + 3_600_000 });
+    expect(await readPersonalPrice(await personalPriceToken(ID, now + 3_600_000, SECRET), now)).toBeNull();
+  });
+
   it("buys one gift: once spent, it no longer holds", async () => {
     const now = Date.now();
     const other = "6a1d7f8e-4b66-4e3c-8b68-1f9b4a2c3d5e";

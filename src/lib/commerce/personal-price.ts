@@ -16,9 +16,18 @@ export const PERSONAL_PRICE_COOKIE = "ethos_offer";
 
 export type PersonalPrice = { id: string; endsAt: number };
 
+/**
+ * What the links are signed with: PERSONAL_PRICE_SECRET, else the other email links' secret
+ * (lib/lifecycle/links.ts). Its own setting, readable where the list is made, so the links for an
+ * email can be signed there; changing it ends every personal price at once, and nothing else.
+ */
+export function personalPriceSecret(): string | null {
+  return process.env.PERSONAL_PRICE_SECRET || linkSecret();
+}
+
 /** The price a link offers, if it is ours and hasn't ended. `endsAt` is in milliseconds. */
 export async function readPersonalPrice(token: string | null | undefined, now: number = Date.now()): Promise<PersonalPrice | null> {
-  const secret = linkSecret();
+  const secret = personalPriceSecret();
   if (!secret || !token) return null;
   const value = await verifyToken("personal-price", token, secret);
   if (!value) return null;

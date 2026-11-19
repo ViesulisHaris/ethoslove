@@ -7,10 +7,10 @@ import { expect, test, type Page } from "@playwright/test";
  * the pay sheet shows it on the gift's own row with the usual price struck through, and the pay
  * button asks checkout for it without ever sending an amount. Checkout itself is answered here.
  *
- * The server signs links with VIEWER_HASH_SECRET (else the service key); this spec signs its own
+ * The server signs links with PERSONAL_PRICE_SECRET (else VIEWER_HASH_SECRET, else the service key); this spec signs its own
  * link with the same secret, so it runs only when the server was started with one it can read.
  */
-const SECRET = process.env.VIEWER_HASH_SECRET ?? "";
+const SECRET = process.env.PERSONAL_PRICE_SECRET || process.env.VIEWER_HASH_SECRET || "";
 const ACCOUNT = "5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d";
 
 function link(endsAt: number): string {
