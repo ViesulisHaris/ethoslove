@@ -7,6 +7,7 @@ import { rememberClickIds } from "@/lib/attribution/click-ids";
 import { keepFirstVisit, rememberVisit } from "@/lib/attribution/first-visit";
 import { keepAdRef, rememberRef } from "@/lib/attribution/ref";
 import { keepFreeTier } from "@/lib/editor/free-tier-split";
+import { keepPaySheet } from "@/lib/editor/pay-sheet-split";
 
 /**
  * Picks up `?ref=` on every navigation, including the client-side one from a gift's "make your own",
@@ -28,6 +29,7 @@ export function RefCapture() {
         keepAdRef();
         keepFirstVisit();
         keepFreeTier();
+        keepPaySheet();
       }),
     [],
   );

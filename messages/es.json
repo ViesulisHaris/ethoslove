@@ -490,6 +490,7 @@
       "title": "¿Listo para enviarlo?",
       "subtitle": "Esto es lo que recibirá <who>{name}</who>.",
       "checklist": "Lista de comprobación",
+      "checklistDone": "{count, plural, =0 {Los nombres y tu mensaje están.} one {Los nombres, tu mensaje y # foto están.} other {Los nombres, tu mensaje y # fotos están.}}",
       "problems": {
         "recipientName": "Añade su nombre",
         "senderName": "Añade tu nombre",
@@ -1245,6 +1246,8 @@
       "noteHeadlineLetter": "Envía tu carta entera",
       "noteCompare": "Las plantillas premium cuestan {premium}. Esta cuesta {price}.",
       "noteOnce": "una sola vez, sin suscripción",
+      "oneHeadline": "{template} para {name}",
+      "oneMore": "Más opciones: todas las plantillas, tres plantillas, un segundo regalo",
       "noteCheckPhotos": "{count, plural, one {Tu foto dentro} other {Tus # fotos, todas}}",
       "noteCheckLetter": "Tu carta entera, palabra por palabra",
       "noteCheckFooter": "Sin pie de Ethos: todo es tuyo",

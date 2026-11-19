@@ -19,6 +19,15 @@ export type FunnelEvent =
   // property, so each version has its own: a Letter started, its send screen opened, its pay tapped.
   // The one-tap path under the pay button (components/editor/one-tap-pay.tsx): the box ticked, the
   // wallet's button shown, no wallet to show after all, and the wallet's own sheet closed unpaid.
+  // A premium gift's pay panel, per panel shown (lib/editor/pay-sheet-split.ts): the send screen
+  // opened with it, pay tapped on it, and a sale that followed a tap on it. Named per panel because
+  // Vercel's reports count by event name.
+  | "pay_sheet_one"
+  | "pay_sheet_classic"
+  | "pay_one_clicked"
+  | "pay_classic_clicked"
+  | "pay_one_paid"
+  | "pay_classic_paid"
   | "one_tap_ticked"
   | "one_tap_button_shown"
   | "one_tap_unavailable"

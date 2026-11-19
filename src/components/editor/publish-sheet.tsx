@@ -11,6 +11,7 @@ import { freeTestEvent, track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, withOldGiftRule, type FieldProblem } from "@/lib/gift/publish";
 import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
 import { FreeNoteOption } from "./free-note-option";
+import { pickPaySheet, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
 import { useCurrency } from "@/lib/pricing/use-currency";
@@ -111,13 +112,18 @@ export function PublishSheet({
   // The Letter can still go out free as a short note; Constellations, made of photos, cannot.
   const note = noteRules(manifest, state.data);
   const noteFree = noteCanBeFree(manifest);
+  // Which pay panel a premium gift shows this visitor (lib/editor/pay-sheet-split.ts): decided once,
+  // when the editor's send screen first exists, and null where there is no premium price to show.
+  const [payPanel] = useState<PayArm>(() => pickPaySheet({ userId: state.userId, search: typeof window === "undefined" ? "" : window.location.search }));
+  const payArm: PayArm | null = manifest.tier === "premium" && !freeReply && !campaign && !inApp ? payPanel : null;
   // Which version of the free Letter test this gift is in, for the test's own events; null elsewhere.
   const letterArm = manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) ? (note ? "note" : "classic") : null;
   useEffect(() => {
     if (!open) return;
     track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
     if (letterArm) track(freeTestEvent(slug, "sheet", letterArm), { guest: !state.authed });
-  }, [open, slug, manifest.tier, state.authed, letterArm]);
+    if (payArm) track(payArm === "one" ? "pay_sheet_one" : "pay_sheet_classic", { template: slug, guest: !state.authed });
+  }, [open, slug, manifest.tier, state.authed, letterArm, payArm]);
   // The app says what this account owns changed (a purchase, a restore, a pass joined): check again.
   useNativeEvents((event) => {
     if (event.type === "entitlements" && open && state.authed) void getEntitlement(slug).then(setFetchedEntitlement);
@@ -243,6 +249,11 @@ export function PublishSheet({
       : null;
   const noteOthers = options.removeWatermark || options.schedule || options.password || notePaid.some((extra) => extra !== "photos" && extra !== "longLetter");
   const [strippingNote, setStrippingNote] = useState(false);
+  // The simpler panel for a premium gift: named for who it is for, with their first photos.
+  const oneOffer =
+    payArm === "one" && serialized
+      ? { name: serialized.recipientName.trim(), photos: serialized.photos.length, thumbs: (state.data?.photos ?? []).slice(0, 4).map((photo) => photo.url) }
+      : null;
   /** The free way out of a note's pay panel: everything paid comes out, and the gift goes free. */
   const sendAsNote = async () => {
     setStrippingNote(true);
@@ -368,6 +379,8 @@ export function PublishSheet({
   const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
   // Guests can't upload before they have an account; those uploads run right after payment.
   const guestProblems = problems.filter((p) => p !== "uploadsPending");
+  // The simpler panel folds a finished checklist into one line; anything still missing opens it again.
+  const checklistDone = payArm === "one" && (state.authed ? problems : guestProblems).length === 0;
 
   // Back from Stripe, signed in, everything in place: one less tap.
   const canAutoPublish =
@@ -423,8 +436,15 @@ export function PublishSheet({
             ) : null}
 
             <section className="mt-7">
-              <p className="mb-3 text-eyebrow text-ink-soft">{t("checklist")}</p>
-              <ul className="divide-y divide-border rounded-2xl border border-border bg-card" data-testid="publish-checklist">
+              {checklistDone ? (
+                <p className="flex items-center gap-2 text-sm text-ink" data-testid="publish-checklist-done">
+                  <Check aria-hidden="true" className="size-4 shrink-0 text-moss" />
+                  {t("checklistDone", { count: serialized?.photos.length ?? 0 })}
+                </p>
+              ) : (
+                <p className="mb-3 text-eyebrow text-ink-soft">{t("checklist")}</p>
+              )}
+              <ul className={cn("divide-y divide-border rounded-2xl border border-border bg-card", checklistDone && "hidden")} data-testid="publish-checklist">
                 {(["recipientName", "senderName", "message"] as const).map((key) => (
                   <ChecklistItem key={key} bad={problems.includes(key)} label={t(`problems.${key}`)} />
                 ))}
@@ -505,6 +525,8 @@ export function PublishSheet({
                 onSignInInstead={() => setShowSignIn(true)}
                 note={noteOffer}
                 letterArm={letterArm}
+                one={oneOffer}
+                payArm={payArm}
               />
             ) : null}
             {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
@@ -541,6 +563,8 @@ export function PublishSheet({
                   onAppUnlock={unlockInApp}
                   note={noteOffer}
                   letterArm={letterArm}
+                  one={oneOffer}
+                  payArm={payArm}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">

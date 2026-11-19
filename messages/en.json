@@ -490,6 +490,7 @@
       "title": "Ready to send?",
       "subtitle": "Here's what <who>{name}</who> will get.",
       "checklist": "Checklist",
+      "checklistDone": "{count, plural, =0 {The names and your message are in.} one {The names, your message and # photo are in.} other {The names, your message and # photos are in.}}",
       "problems": {
         "recipientName": "Add their name",
         "senderName": "Add your name",
@@ -1245,6 +1246,8 @@
       "noteHeadlineLetter": "Send your whole letter",
       "noteCompare": "Premium templates are {premium}. This one is {price}.",
       "noteOnce": "once, no subscription",
+      "oneHeadline": "{template} for {name}",
+      "oneMore": "More options: every template, three templates, a second gift",
       "noteCheckPhotos": "{count, plural, one {Your photo in it} other {All # of your photos}}",
       "noteCheckLetter": "Your whole letter, every word",
       "noteCheckFooter": "No Ethos footer: it's all from you",

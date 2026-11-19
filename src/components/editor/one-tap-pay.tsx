@@ -9,6 +9,7 @@ import { CheckoutElementsProvider, ExpressCheckoutElement, useCheckoutElements }
 import type { GiftLocale } from "@/lib/gift/schema";
 import { env } from "@/lib/env";
 import { freeTestEvent, track } from "@/lib/analytics/track";
+import { rememberPayClick, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { adTrack } from "@/lib/analytics/ads";
 import { consentSentence } from "@/lib/stripe/line-items";
 import { startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
@@ -47,7 +48,7 @@ function stripeFor(key: string, locale: GiftLocale): Promise<StripeJs | null> {
   return stripePromise;
 }
 
-type Sale = { template: string; product: string; bump: boolean; second: boolean; reply: boolean; guest: boolean; total: number; category: string; currency: string; letterArm?: "note" | "classic" | null };
+type Sale = { template: string; product: string; bump: boolean; second: boolean; reply: boolean; guest: boolean; total: number; category: string; currency: string; letterArm?: "note" | "classic" | null; payArm?: PayArm | null };
 
 /**
  * One-tap Apple Pay or Google Pay on the pay sheet, under the pay button that opens Stripe's page.
@@ -171,6 +172,10 @@ function Buttons({ sale, onError }: { sale: Sale; onError: () => void }) {
           if (checkout.type !== "success") return;
           track("pay_clicked", { template: sale.template, product: sale.product, bump: sale.bump, second: sale.second, reply: sale.reply, guest: sale.guest, oneTap: true });
           if (sale.letterArm) track(freeTestEvent(sale.template, "pay", sale.letterArm), { guest: sale.guest, oneTap: true });
+          if (sale.payArm) {
+            track(sale.payArm === "one" ? "pay_one_clicked" : "pay_classic_clicked", { template: sale.template, guest: sale.guest, oneTap: true });
+            rememberPayClick(sale.payArm);
+          }
           adTrack({ name: "InitiateCheckout", contents: [{ id: sale.template, category: sale.category }], value: sale.total / 100, currency: sale.currency.toUpperCase() });
           const result = await checkout.checkout.confirm({ expressCheckoutConfirmEvent: event });
           if (result.type === "error") onError();

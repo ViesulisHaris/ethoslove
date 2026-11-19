@@ -8,6 +8,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { freeTestEvent, track } from "@/lib/analytics/track";
+import { rememberPayClick, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { adTrack } from "@/lib/analytics/ads";
 import { PRODUCTS, SECOND_GIFT, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
@@ -59,6 +60,8 @@ export function Paywall({
   reaction = null,
   note = null,
   letterArm = null,
+  one = null,
+  payArm = null,
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -88,6 +91,13 @@ export function Paywall({
   note?: { photos: number; longLetter: boolean; /** The first few of their photos, as the editor shows them. */ thumbs?: string[] } | null;
   /** The free Letter test's version of this gift, so a pay tap is counted to it; null on any other gift. */
   letterArm?: "note" | "classic" | null;
+  /**
+   * A premium gift's panel in its simpler form (lib/editor/pay-sheet-split.ts): the gift named for
+   * who it is for, one price and one button, with the other plans and the add-ons under "More options".
+   */
+  one?: { name: string; photos: number; thumbs?: string[] } | null;
+  /** Which panel this visitor is shown, so a pay tap is counted to it; null where there is no choice of panel. */
+  payArm?: PayArm | null;
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -97,7 +107,7 @@ export function Paywall({
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
   const [plan, setPlan] = useState<PaywallPlan | null>(null);
   // A plan that stopped existing (the upgrade quote arrived, or went) falls back to its row.
-  const chosen: PaywallPlan = plan === null ? (note ? forTemplate : defaultPaywallPlan(forTemplate, all, currency)) : plan === forTemplate ? forTemplate : all.plan;
+  const chosen: PaywallPlan = plan === null ? (note || one ? forTemplate : defaultPaywallPlan(forTemplate, all, currency)) : plan === forTemplate ? forTemplate : all.plan;
   const [bump, setBump] = useState(false);
   // The second gift: off until ticked; its template is the first suggestion until another is picked.
   const [secondOn, setSecondOn] = useState(false);
@@ -125,6 +135,21 @@ export function Paywall({
         tm("noteCheckFooter"),
       ].filter((text): text is string => Boolean(text))
     : [];
+  // The one-price layout, for a note and for a premium gift shown the simpler panel: what it opens
+  // with, the ticked list under the price, and the line the other plans fold under.
+  const panel = note
+    ? { kind: "note" as const, photos: note.photos, thumbs: note.thumbs, headline: noteHeadline ?? t("payTitle"), checks: noteChecks, more: tm("noteMore", { price: money(all.amount) }) }
+    : one
+      ? {
+          kind: "one" as const,
+          photos: one.photos,
+          thumbs: one.thumbs,
+          headline: one.name ? tm("oneHeadline", { template: manifest.name[locale], name: one.name }) : manifest.name[locale],
+          // Their photos first, then what one payment buys, then anything else paid in this gift.
+          checks: [one.photos > 0 ? tm("noteCheckPhotos", { count: one.photos }) : null, t("planSingleBlurb"), ...features].filter((text): text is string => Boolean(text)),
+          more: tm("oneMore"),
+        }
+      : null;
 
   const planAmount = chosen === forTemplate ? PRODUCTS[forTemplate].amounts[currency] : all.amount;
   const showBump = bumpOffered(chosen, all);
@@ -161,6 +186,10 @@ export function Paywall({
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
     if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
+    if (payArm) {
+      track(payArm === "one" ? "pay_one_clicked" : "pay_classic_clicked", { template: slug, guest });
+      rememberPayClick(payArm);
+    }
     const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }, { total, category: manifest.tier });
     if ("url" in result) {
       window.location.assign(result.url);
@@ -314,27 +343,27 @@ export function Paywall({
 
   return (
     <section className="mt-7 rounded-xl border border-ink bg-card p-4 sm:p-5" data-testid="pay-panel">
-      {note ? (
-        <div data-testid="pay-note">
-          {note.thumbs?.length ? (
+      {panel ? (
+        <div data-testid={panel.kind === "note" ? "pay-note" : "pay-one"}>
+          {panel.thumbs?.length ? (
             <div className="mb-3 flex items-center" aria-hidden="true" data-testid="pay-note-photos">
-              {note.thumbs.slice(0, 4).map((src, i) => (
+              {panel.thumbs.slice(0, 4).map((src, i) => (
                 // eslint-disable-next-line @next/next/no-img-element -- the sender's own photo, as the editor already shows it
                 <img key={src} src={src} alt="" draggable={false} className={cn("size-12 rounded-lg border-2 border-card object-cover shadow-sm", i > 0 && "-ml-2")} />
               ))}
-              {note.photos > 4 ? (
-                <span className="-ml-2 grid size-12 place-items-center rounded-lg border-2 border-card bg-blush/40 text-sm font-medium text-ink">+{note.photos - 4}</span>
+              {panel.photos > 4 ? (
+                <span className="-ml-2 grid size-12 place-items-center rounded-lg border-2 border-card bg-blush/40 text-sm font-medium text-ink">+{panel.photos - 4}</span>
               ) : null}
             </div>
           ) : null}
-          <p className="font-display text-2xl leading-tight text-balance" data-testid="pay-note-headline">
-            {noteHeadline ?? t("payTitle")}
+          <p className="font-display text-2xl leading-tight text-balance" data-testid={panel.kind === "note" ? "pay-note-headline" : "pay-one-headline"}>
+            {panel.headline}
           </p>
           <p className="mt-2 text-base" data-testid="pay-note-price">
             <span className="font-semibold">{money(PRODUCTS[forTemplate].amounts[currency])}</span> <span className="text-ink-soft">{tm("noteOnce")}</span>
           </p>
           <ul className="mt-3 grid gap-1.5 text-sm text-ink" data-testid="pay-note-checks">
-            {noteChecks.map((text) => (
+            {panel.checks.map((text) => (
               <li key={text} className="flex items-start gap-2">
                 <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-moss" />
                 <span>{text}</span>
@@ -350,12 +379,12 @@ export function Paywall({
       ) : (
         <p className="font-display text-xl leading-snug">{t("payTitle")}</p>
       )}
-      {features.length && !note ? (
+      {features.length && !panel ? (
         <p className="mt-1.5 text-sm font-medium text-ink" data-testid="pay-benefits">
           {t("payIncludes", { features: features.join(" · ") })}
         </p>
       ) : null}
-      {note ? null : (
+      {panel ? null : (
         <p className="mt-1 text-sm text-ink-soft">
           {manifest.tier === "free" ? tm(guest ? "extrasGuestIntro" : "extrasIntro") : t(guest ? "payGuestBlurb" : "payBlurb")}
         </p>
@@ -372,7 +401,7 @@ export function Paywall({
         </p>
       ) : null}
 
-      {note ? null : chooser}
+      {panel ? null : chooser}
 
       <Button
         className="mt-4 h-12 w-full rounded-full text-base"
@@ -392,16 +421,18 @@ export function Paywall({
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }}
         locale={locale}
         disabled={paying || blocked}
-        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm }}
+        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm, payArm }}
       />
-      {note ? (
+      {panel ? (
         <>
-          <p className="mt-4 text-center text-[13px] text-balance text-ink-soft" data-testid="pay-note-compare">
-            {tm("noteCompare", { premium: money(PRODUCTS.single.amounts[currency]), price: money(PRODUCTS[forTemplate].amounts[currency]) })}
-          </p>
-          <details className="group mt-3 rounded-lg border border-line px-3" data-testid="pay-note-more">
+          {note ? (
+            <p className="mt-4 text-center text-[13px] text-balance text-ink-soft" data-testid="pay-note-compare">
+              {tm("noteCompare", { premium: money(PRODUCTS.single.amounts[currency]), price: money(PRODUCTS[forTemplate].amounts[currency]) })}
+            </p>
+          ) : null}
+          <details className={cn("group rounded-lg border border-line px-3", note ? "mt-3" : "mt-4")} data-testid={panel.kind === "note" ? "pay-note-more" : "pay-one-more"}>
             <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm text-ink-soft [&::-webkit-details-marker]:hidden">
-              <span>{tm("noteMore", { price: money(all.amount) })}</span>
+              <span>{panel.more}</span>
               <ArrowRight aria-hidden="true" className="size-4 shrink-0 transition-transform group-open:rotate-90" />
             </summary>
             <div className="pb-3">{chooser}</div>
@@ -411,7 +442,7 @@ export function Paywall({
       <p className="mt-4 text-center text-xs text-balance text-muted-foreground">
         {t("payNote")}
         {guest ? ` ${t("uploadsAfterPay")}` : null}
-        {note && guest ? ` ${tm("noteGuest")}` : null}
+        {panel && guest ? ` ${tm("noteGuest")}` : null}
       </p>
       {guest && onSignInInstead ? (
         <button
