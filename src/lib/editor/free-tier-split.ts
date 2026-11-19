@@ -1,5 +1,8 @@
 import { getConsent } from "@/lib/analytics/consent";
 import { isInApp } from "@/lib/app/bridge";
+import { noteShare } from "@/lib/gift/free-tier";
+
+export { noteShare };
 
 /**
  * Which free version a Letter started now is held to (lib/gift/free-tier.ts): "note", the short note
@@ -8,7 +11,9 @@ import { isInApp } from "@/lib/app/bridge";
  * the owner turns it on), and the gift's own data then carries the answer for good.
  *
  * One visitor should meet one version, so the answer is looked for in this order:
- *  1. `?free=note` or `?free=classic` on the editor's address: for trying a version out.
+ *  1. `?free=note` or `?free=classic` on the editor's address: for trying a version out, and only
+ *     where the build allows it (NEXT_PUBLIC_FREE_NOTE_TRYOUT=on: a local or preview build, never
+ *     production, where it would be a way to pick the roomier rules).
  *  2. This tab's memory: every Letter started in one visit matches.
  *  3. The browser's storage (ethos-free-tier), only kept once the visitor allowed cookies, like the
  *     first-visit record (lib/attribution/first-visit.ts): a later visit matches too.
@@ -21,10 +26,9 @@ export type FreeTierArm = "note" | "classic";
 
 const isArm = (value: unknown): value is FreeTierArm => value === "note" || value === "classic";
 
-/** The share of new Letters that get the note, from the build's setting: 0 when unset or unreadable. */
-export function noteShare(raw: string | undefined = process.env.NEXT_PUBLIC_FREE_NOTE_SHARE): number {
-  const n = Number(raw);
-  return raw !== undefined && raw !== "" && Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0;
+/** Whether this build honours `?free=` on the editor's address. Off unless it says "on". */
+export function tryOutAllowed(raw: string | undefined = process.env.NEXT_PUBLIC_FREE_NOTE_TRYOUT): boolean {
+  return raw === "on";
 }
 
 /** A number in [0, 1) that is always the same for one account. */
@@ -38,6 +42,11 @@ export function accountDraw(userId: string): number {
 export function armFromSearch(search: string | null | undefined): FreeTierArm | undefined {
   const asked = new URLSearchParams(search ?? "").get("free");
   return isArm(asked) ? asked : undefined;
+}
+
+/** The version the address asks for, where this build honours the ask. */
+export function askedArm(search: string | null | undefined, allowed: boolean = tryOutAllowed()): FreeTierArm | undefined {
+  return allowed ? armFromSearch(search) : undefined;
 }
 
 let tab: FreeTierArm | undefined;
@@ -68,11 +77,11 @@ function remember(arm: FreeTierArm): void {
   }
 }
 
-export function pickFreeTier(options: { userId: string | null; search?: string | null; share?: number; draw?: () => number; inApp?: boolean }): FreeTierArm {
+export function pickFreeTier(options: { userId: string | null; search?: string | null; share?: number; draw?: () => number; inApp?: boolean; tryOut?: boolean }): FreeTierArm {
   if (options.inApp ?? isInApp()) return "classic";
   const share = options.share ?? noteShare();
   const arm =
-    armFromSearch(options.search) ??
+    askedArm(options.search, options.tryOut ?? tryOutAllowed()) ??
     tab ??
     stored() ??
     ((options.userId ? accountDraw(options.userId) : (options.draw ?? Math.random)()) < share ? "note" : "classic");

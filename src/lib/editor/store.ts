@@ -25,8 +25,8 @@ import { LASTING_FAILURES, groupOf, isVideoItself, reasonOf, stuckUploads, type 
 import { processImageFile, transformImage } from "./image";
 import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeForLocal, writeLocalDraft } from "./persistence";
 import { completeGiftData } from "./complete-data";
-import { armFromSearch, pickFreeTier } from "./free-tier-split";
-import { NOTE_TEMPLATES } from "@/lib/gift/free-tier";
+import { askedArm, pickFreeTier } from "./free-tier-split";
+import { NOTE_TEMPLATES, noteForEveryone } from "@/lib/gift/free-tier";
 import { freeTestEvent, track } from "@/lib/analytics/track";
 
 const LOCAL_DEBOUNCE = 350;
@@ -510,16 +510,21 @@ export const useEditor = create<EditorState>((set, get) => {
       }
 
       // A Letter or a Constellations started now is given the free version it is held to
-      // (lib/gift/free-tier.ts): the note's rules, or the ones before them. One that exists already keeps its own, except that a
-      // draft still on this device follows `?free=` on the address, for trying a version out.
-      if (manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) && !remote) {
+      // (lib/gift/free-tier.ts): the note's rules, or the ones before them. A draft that exists already
+      // keeps its own, with two exceptions: once the note is for everyone every draft follows it, as
+      // the server will at publish (freeTierAtPublish); and a build that allows `?free=` on the
+      // address follows it, for trying a version out. A gift that is already out is never touched.
+      if (manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) && status === "draft") {
         const search = typeof window === "undefined" ? "" : window.location.search;
-        if (!local || armFromSearch(search)) {
-          const arm = pickFreeTier({ userId, search });
+        const asked = askedArm(search);
+        const everyone = noteForEveryone();
+        const fresh = !remote && !local;
+        if (fresh || asked || everyone) {
+          const arm = asked ?? (everyone ? "note" : pickFreeTier({ userId, search }));
           const rest: GiftData = { ...data };
           delete rest.freeTier;
           data = arm === "note" ? { ...rest, freeTier: "note" } : rest;
-          if (!local) track(freeTestEvent(slug, "started", arm), { template: slug });
+          if (fresh) track(freeTestEvent(slug, "started", arm), { template: slug });
         }
       }
 

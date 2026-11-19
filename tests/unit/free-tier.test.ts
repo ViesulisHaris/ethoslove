@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, noteCanBeFree, noteLength, noteRules } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, addsPhotos, freeTierAtPublish, noteCanBeFree, noteForEveryone, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
 import { freeTestEvent } from "@/lib/analytics/track";
 import { completeGiftData } from "@/lib/editor/complete-data";
 import { createGiftSchema } from "@/lib/gift/schema";
@@ -136,6 +136,56 @@ describe("the free Letter as a short note", () => {
   });
 });
 
+describe("the server decides the version, so the pay screen can't be gone round", () => {
+  const paths = (...urls: string[]) => urls.map((url) => ({ url }));
+
+  it("keeps the version a gift went out under, whatever an edit claims", () => {
+    expect(freeTierAtPublish(undefined, { live: true, stored: "note" }, 0.5)).toBe("note");
+    expect(freeTierAtPublish("note", { live: true, stored: null }, 0.5)).toBeUndefined();
+    // A note that is out stays a note even after the test is switched off.
+    expect(freeTierAtPublish(undefined, { live: true, stored: "note" }, 0)).toBe("note");
+  });
+
+  it("takes a draft's word only while the test splits visitors", () => {
+    expect(freeTierAtPublish("note", { live: false, stored: null }, 0.5)).toBe("note");
+    expect(freeTierAtPublish(undefined, { live: false, stored: null }, 0.5)).toBeUndefined();
+    expect(freeTierAtPublish("anything else", { live: false, stored: null }, 0.5)).toBeUndefined();
+  });
+
+  it("holds every new gift to the note once it is for everyone: a draft with the field taken out gains nothing", () => {
+    expect(noteForEveryone(1)).toBe(true);
+    expect(noteForEveryone(0.99)).toBe(false);
+    expect(freeTierAtPublish(undefined, { live: false, stored: null }, 1)).toBe("note");
+    expect(freeTierAtPublish("classic", { live: false, stored: null }, 1)).toBe("note");
+    // And so a Letter with photos and no unlock is refused, whatever its draft said.
+    const sneaked = { ...classic, freeTier: freeTierAtPublish(undefined, { live: false, stored: null }, 1) };
+    expect(decidePublish(letter, sneaked, { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
+  });
+
+  it("knows a new photo from the ones a gift already holds", () => {
+    const held = paths("gifts/g1/a.webp", "gifts/g1/b.webp");
+    expect(addsPhotos(held, paths("gifts/g1/b.webp", "gifts/g1/a.webp"))).toBe(false);
+    expect(addsPhotos(held, paths("gifts/g1/a.webp"))).toBe(false);
+    expect(addsPhotos(held, [])).toBe(false);
+    expect(addsPhotos(held, paths("gifts/g1/a.webp", "gifts/g1/c.webp"))).toBe(true);
+    expect(addsPhotos(null, paths("gifts/g1/a.webp"))).toBe(true);
+    expect(addsPhotos("junk", paths("gifts/g1/a.webp"))).toBe(true);
+  });
+
+  it("once the note is for everyone, an old free gift keeps its photos and takes no new ones", () => {
+    const row = { stored: null, photos: paths("gifts/g1/a.webp", "gifts/g1/b.webp") };
+    const added = paths("gifts/g1/a.webp", "gifts/g1/new.webp");
+    expect(oldFreeGiftAddsPhotos(letter, row, added, 1)).toBe(true);
+    expect(oldFreeGiftAddsPhotos(constellations, row, added, 1)).toBe(true);
+    // Taking one out or reordering is still theirs to do.
+    expect(oldFreeGiftAddsPhotos(letter, row, paths("gifts/g1/b.webp"), 1)).toBe(false);
+    // While the test runs, old gifts are left alone; so are premium templates and notes (held by their own rules).
+    expect(oldFreeGiftAddsPhotos(letter, row, added, 0.5)).toBe(false);
+    expect(oldFreeGiftAddsPhotos(premium, row, added, 1)).toBe(false);
+    expect(oldFreeGiftAddsPhotos(letter, { ...row, stored: "note" }, added, 1)).toBe(false);
+  });
+});
+
 describe("which version a new Letter gets", () => {
   // The unit tests run without a browser: the device's storage is a map standing in for it.
   let device: Map<string, string>;
@@ -196,8 +246,20 @@ describe("which version a new Letter gets", () => {
     expect(armFromSearch("?free=classic&x=1")).toBe("classic");
     expect(armFromSearch("?free=other")).toBeUndefined();
     expect(armFromSearch("")).toBeUndefined();
-    expect(pickFreeTier({ userId: null, search: "?free=note", share: 0, draw: () => 0.99, inApp: false })).toBe("note");
-    expect(pickFreeTier({ userId: null, search: "?free=classic", share: 1, draw: () => 0, inApp: false })).toBe("classic");
+    expect(pickFreeTier({ userId: null, search: "?free=note", share: 0, draw: () => 0.99, inApp: false, tryOut: true })).toBe("note");
+    expect(pickFreeTier({ userId: null, search: "?free=classic", share: 1, draw: () => 0, inApp: false, tryOut: true })).toBe("classic");
+  });
+
+  it("ignores ?free= unless the build turns trying-out on: in production it would be a way to pick the roomier rules", async () => {
+    const { askedArm, pickFreeTier, tryOutAllowed } = await load();
+    expect(tryOutAllowed(undefined)).toBe(false);
+    expect(tryOutAllowed("")).toBe(false);
+    expect(tryOutAllowed("off")).toBe(false);
+    expect(tryOutAllowed("on")).toBe(true);
+    expect(askedArm("?free=classic", false)).toBeUndefined();
+    expect(askedArm("?free=classic", true)).toBe("classic");
+    // With the build's default (off), the address changes nothing: the draw decides.
+    expect(pickFreeTier({ userId: null, search: "?free=classic", share: 1, draw: () => 0, inApp: false, tryOut: false })).toBe("note");
   });
 
   it("writes nothing to the device without a yes to cookies, and remembers with one", async () => {

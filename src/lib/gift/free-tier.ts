@@ -26,6 +26,50 @@ export function noteLength(message: string): number {
   return Array.from(message.trim()).length;
 }
 
+/** The share of new gifts held to the note's rules, from the build's setting (0 to 1): 0 when unset or unreadable. */
+export function noteShare(raw: string | undefined = process.env.NEXT_PUBLIC_FREE_NOTE_SHARE): number {
+  const n = Number(raw);
+  return raw !== undefined && raw !== "" && Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0;
+}
+
+/** True once every new gift is held to the note's rules: the test is over and the note is the only version. */
+export function noteForEveryone(share: number = noteShare()): boolean {
+  return share >= 1;
+}
+
+/**
+ * The version a gift is published under, decided by the server. One that is already out keeps its
+ * row's, whatever an edit claims. A first publish takes the draft's word only while the test splits
+ * visitors, when either answer is what half of them get anyway; once the note is for everyone it
+ * is the note, and what the draft says no longer matters.
+ */
+export function freeTierAtPublish(claimed: unknown, row: { live: boolean; stored: unknown }, share: number = noteShare()): FreeTier | undefined {
+  if (row.live) return row.stored === "note" ? "note" : undefined;
+  return noteForEveryone(share) || claimed === "note" ? "note" : undefined;
+}
+
+/** Whether an edit brings a photo the gift didn't already hold, by its stored path. */
+export function addsPhotos(stored: unknown, next: readonly { url: string }[]): boolean {
+  const had = new Set(
+    Array.isArray(stored) ? stored.map((p) => (p && typeof p === "object" && typeof (p as { url?: unknown }).url === "string" ? (p as { url: string }).url : "")) : [],
+  );
+  return next.some((p) => !had.has(p.url));
+}
+
+/**
+ * Once the note is for everyone, a free gift sent under the earlier rules keeps the photos it has
+ * and takes no new ones without the unlock: otherwise anyone with an old free Letter could edit it
+ * into the next free gift with photos, for good.
+ */
+export function oldFreeGiftAddsPhotos(
+  manifest: Pick<TemplateManifest, "slug" | "tier">,
+  row: { stored: unknown; photos: unknown },
+  next: readonly { url: string }[],
+  share: number = noteShare(),
+): boolean {
+  return noteForEveryone(share) && manifest.tier === "free" && NOTE_TEMPLATES.includes(manifest.slug) && row.stored !== "note" && addsPhotos(row.photos, next);
+}
+
 /**
  * Whether a template held to the note's rules can still go out free: only one that works without
  * photos (The Letter asks for one at most, and a note drops even that). One built from photos
