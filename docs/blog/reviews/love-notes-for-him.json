@@ -1,0 +1,139 @@
+{
+  "slug": "love-notes-for-him",
+  "keyword": "love notes for him",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the top results because it sorts notes by where he'll find them, with a practical trick for each spot (dry-erase or steam on the mirror, behind the bank card, the sun visor), which none of the 200-line lists do. Polish only: 'under twenty-five words' wording, steering wheel vs seat, 'Below are'."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Asked to stop pointing to /occasions/just-because as where Jar of Reasons sits (its manifest omits just-because; /gifts/for-boyfriend features it), to give the Spanish jar note a subject ('Él agita'), and to fix five Spanish calques ('Que me quieras tú', 'lo primero a quien', 'la mitad de por qué funciona', 'le encuentra a mitad del día', 'le para en mitad de la calle')."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for one more FAQ answering the 'love notes for boyfriend' People-also-ask question 'How can I make him smile over text?', in both languages; every other PAA was covered."
+        }
+      ],
+      "applied": [
+        "Jar paragraph (en/es): Jar of Reasons now presented as one of the digital gifts for your boyfriend; just because gifts kept as a 'more ideas' link",
+        "Spanish jar note: 'Él agita el móvil'",
+        "Five Spanish calques rewritten as the editor gave them",
+        "New FAQ 'How can I make him smile over text?' / '¿Cómo puedo sacarle una sonrisa por mensaje?'",
+        "Polish taken to head off fixes: 'dry-erase (whiteboard) marker', 'wrapped around', 'big and general' (en/es), Spanish heading 'que quiera guardar', Spanish open-when link text 'cartas para abrir cuando', 'en cómo hiciste que fuera', 'debajo del limpiaparabrisas'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Better than the top results because every note comes with the place to leave it and a practical trick for that spot, plus a frequency table and the don'ts no list page has. Polish only."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All seven round-one fixes confirmed. Asked for five Spanish fixes: 'Un gracias sencillo y un orgullo sencillo', 'el gemelo de la nota', 'coge la idea y muévela', 'entonces también te querían' (wrong subject) and 'doblada' (agreement with 'notas')."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page in the results that pairs sample lines with where to leave each one, and it now answers every People-also-ask question across the three variants, including 'How can I make him smile over text?'."
+        }
+      ],
+      "applied": [
+        "Five Spanish fixes exactly as the editor gave them",
+        "Polish taken to head off fixes: 'Send one to his work' (US/UK neutral), EN 'so adapt the idea' to match the Spanish, ES 'Lo que te hace sentir', 'Te he encontrado', 'por encima del hombro', 'no te cabe en un pósit', ES description 'Y graciosas'"
+      ],
+      "rejected": [
+        "Search polish (shorter description, 'Cute, sweet and romantic' heading): the description is 155 characters, within the test's 160 and the reviewer's length estimate was off; the heading change is optional and new text the next panel would have to clear"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The notes sorted by hiding place, with tips like no sticky note in a steamy bathroom and nothing under the wiper, are the part a reader would screenshot; no top result gives placement plus lines."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It's the only page that tells her where to put each note and how it will hold up there, and how often to leave them, with lines that sound like a person, and every product claim checks out against the code."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "No top-10 result sorts notes by where he'll find them with real placement advice, and the FAQ now covers every People-also-ask question across the three variants."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Reader: 'about twenty-five words or fewer'; 'Here are'; steering wheel or passenger seat",
+        "Editor: 'one line on each' / 'una frase en cada una'; ES heading 'que él quiera guardar'; EN FAQ 'Send what you'd put on a note'; 'la mitad es por ti'",
+        "Search: laptop-screen spot; shorter description; 'Cute, sweet and romantic' heading; 'in a note or a letter' in the last FAQ"
+      ]
+    }
+  ]
+}

@@ -4,6 +4,36 @@ Weekly, from DataForSEO (`ranked_keywords`, US), written by the daily SEO routin
 (`docs/blog/SEO-AGENT.md`): the keywords with the most searches that the site ranks for, newest
 section first.
 
+## 2026-11-19
+
+The Thursday check: Google's mobile top 30 for 276 phrases (152 US, 32 UK for the product phrases,
+92 Spain), $1.67, built the same way as on 16 Nov (the list grew with the blog: every post's keyword
+in both languages). Six phrases answered "Internal SE Server Error" the first time and came back on a
+retry. Mobile pages hold 19 to 21 organic results, so "top 30" is in practice the top 20 or so.
+
+**Top 10: 1 of 276. Top 30: 3 of 276.**
+
+| Phrase | Market | Position | Page | Monthly searches |
+|---|---|---|---|---|
+| scratch card ideas | US | 6 | /blog/scratch-card-ideas | 90 |
+| ideas de cartas para abrir cuando | Spain | 13 | /es/blog/open-when-letter-ideas | – |
+| frases para galletas de la fortuna | Spain | 14 | /es/blog/fortune-cookie-messages | 20 |
+
+**What moved since 16 Nov:** "scratch card ideas" up 3 (9 to 6; Google still shows the old title,
+the 18 Nov refresh isn't indexed yet). "frases para galletas de la fortuna" up 4 (18 to 14). New:
+"ideas de cartas para abrir cuando" at 13. Out: "carta de navidad para mi novio" (Spain) was 10, now
+not in the 21 results (Pinterest leads); Search Console still has it at 8.5.
+
+`ranked_keywords` sees nothing new: the same 4 US keywords (snow globe 79, Melbourne date 29,
+Auckland date 69, keepsake 104) and, in Spain, "regalos virtuales" (590 a month) at 37 for
+/es/templates.
+
+**Search Console (28 days to 17 Nov, brand left out)** has these in striking distance:
+"monthiversary" 85 impressions at 6.5 and "monthiversary meaning" 24 at 7.5 (/blog/monthiversary-ideas,
+0 clicks), "digital fortune cookie" 49 at 6.3, "digital bouquet" 51 at 11.0, "scratch cards builder"
+52 at 14.8, "digital scratch card maker" 57 at 18.7, "digital anniversary gift(s)" 42 at 8.6–9.3,
+"planes para halloween en pareja" 25 at 7.8.
+
 ## 2026-11-16
 
 The first live check (SEO-AGENT.md step 1): Google's mobile top 30 for 249 phrases (150 US, 22 UK for the

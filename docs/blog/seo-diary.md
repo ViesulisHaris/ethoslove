@@ -3,6 +3,44 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-19: what-to-write-in-boyfriends-birthday-card gets lines to make him cry, long-distance lines and "31 lines" in the title; Spanish aims at "frases de cumpleaños para mi novio"
+- **Page:** /blog/what-to-write-in-boyfriends-birthday-card (and /es to match)
+- **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov).
+  Search Console (28 days, brand left out): monthiversary-ideas is still the best seen-but-not-clicked
+  page (158 impressions, 0 clicks, "monthiversary" at 6.5) but waits for 27 Nov; the other blog posts
+  in reach were touched in the last 14 days or out of season (Halloween). This post, never refreshed,
+  had "how to write a birthday card for boyfriend" at 8, and today's rank check didn't find it in the
+  US top 20 for its keyword. DataForSEO (US): "what to write in a birthday card for boyfriend" 880
+  (KD 1), "what to write in boyfriends birthday card" 880 (KD 3), "birthday card message for
+  boyfriend" 320, UK 590 and 260; Spain "frases de cumpleaños para mi novio" 90 (KD 0) against about 10
+  for the old Spanish keyword. The top results are lists of 45 to 100 wishes (The Knot, Good
+  Housekeeping, Cosmopolitan, American Greetings, Adobe) and a Reddit thread; the AI overview sorts
+  lines into romantic, short, funny and long-distance. People also ask: how to make him cry, a
+  romantic card, a cute message to send on the day, how to make him feel special with words or over
+  text. The post had no long-distance lines and answered none of those questions.
+- **What changed:** Title "What to write in your boyfriend's birthday card: 31 lines" (Spanish "Frases
+  de cumpleaños para tu novio y su tarjeta", keyword "frases de cumpleaños para mi novio"), new
+  descriptions naming the kinds of lines; new sections "Birthday card messages that might make him
+  cry" and "Long-distance birthday card messages" (send early, "Open on your birthday" on the
+  envelope); FAQs on making him cry and making him feel special with a message (links to
+  cute-things-to-say-to-your-boyfriend and midnight-birthday-surprise-ideas). Spanish to match.
+  `updated` 2026-11-19.
+- **Panel:** 10/10/10 after 2 rounds (`docs/blog/reviews/refresh/what-to-write-in-boyfriends-birthday-card-2026-11-19.json`)
+- **Cost:** $0.05 for the change (keyword overviews US, UK and Spain, four SERPs with AI overview and
+  PAA); the Thursday jobs $1.71 (rank check of 276 phrases plus ranked_keywords US and Spain $1.67,
+  AI answers $0.04); balance $47.42
+- **Weekly jobs:** first run of a Thursday. Rank check (`seo-ranks.md`): top 10 for 1 of 276, top 30
+  for 3; "scratch card ideas" up to 6, "frases para galletas de la fortuna" up to 14, "ideas de
+  cartas para abrir cuando" new at 13, "carta de navidad para mi novio" out (was 10). AI answers
+  (`ai-answers.md`): Ethos named in 2 of 10 (1 on 13 Nov): 2nd of 5 for "best alternatives to
+  gifft.me", citing /blog/gifft-me-alternatives, and /gifts/for-girlfriend cited for "personalized
+  digital gift for my girlfriend"; dropped from the love-letter-website answer. Seven new link
+  prospects from the pages those answers cite (ouvella.com twice, senddigitalgift.com twice,
+  longdistance.net, my-sweet-ldr.com, RAYXIS). Search Console and the sales endpoint both answered.
+- **Check on:** 2026-12-06 whether "what to write in a birthday card for boyfriend", "birthday card
+  message for boyfriend" and "frases de cumpleaños para mi novio" (Spain) show for the post in Search
+  Console and the rank check
+
 ## 2026-11-18: how-to-make-a-digital-scrapbook gets tool steps, page ideas and print sizes; Spanish says "scrapbook digital"
 - **Page:** /blog/how-to-make-a-digital-scrapbook (and /es to match)
 - **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov;
