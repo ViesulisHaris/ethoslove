@@ -863,3 +863,12 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-19T04:50Z | serp/google/organic/live/advanced | 0.002 | seo: what-to-write-in-boyfriends-birthday-card |
 | 2026-11-19T04:50Z | serp/google/organic/live/advanced | 0.002 | seo: what-to-write-in-boyfriends-birthday-card |
 | 2026-11-19T04:51Z | serp/google/organic/live/advanced | 0.002 | seo: what-to-write-in-boyfriends-birthday-card |
+| 2026-11-19T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.0126 | blog: love-notes-for-him |
+| 2026-11-19T06:19Z | dataforseo_labs/google/keyword_overview/live | 0.01236 | blog: love-notes-for-him |
+| 2026-11-19T06:19Z | serp/google/organic/live/advanced | 0.002 | blog: love-notes-for-him |
+| 2026-11-19T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-notes-for-him |
+| 2026-11-19T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-notes-for-him |
+| 2026-11-19T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: love-notes-for-him |
+| 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
+| 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
+| 2026-11-19T06:21Z | on_page/content_parsing/live | 0.00015 | blog: love-notes-for-him |
