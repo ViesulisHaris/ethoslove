@@ -1,0 +1,98 @@
+{
+  "slug": "what-to-write-in-boyfriends-birthday-card",
+  "keyword": "what to write in your boyfriend's birthday card",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The top results (The Knot, Good Housekeeping, Cosmopolitan) are 45 to 100 undifferentiated wishes; this gives a method that produces a specific card, a worked example, fit-to-card sizing and 31 lines sorted by situation. Polish: 'post it' reads British, 'cupboard' UK-leaning."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template, scheduling and link claim checked. Fixes: the envelope should say 'Open on your birthday' (he reads it) and 'Send', not the British 'Post'; Spanish «solo dabas por hecho» means 'took for granted', not 'implied'. Polish: «para… para» in the Spanish title, two lines opening 'I used to', «Ya tengo el billete», «te has fijado»."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The People-also-ask 'how can I make my bf feel special with words / over text' isn't answered: add a FAQ in both languages, linking cute-things-to-say-to-your-boyfriend. Polish: say every short line works as a text."
+        }
+      ],
+      "applied": [
+        "EN envelope line: 'Send it early … write \"Open on your birthday\"'",
+        "ES: «lo que hasta ahora solo habías dado a entender»",
+        "The 'cute message' FAQ became 'How do I make my boyfriend feel special with a birthday message?' (both languages), with a sendable example and links to cute-things-to-say-to-your-boyfriend and midnight-birthday-surprise-ideas",
+        "Polish taken: short-lines intro says every line also works as a birthday text; one 'I used to' / «Antes» line reworded; «Ya tengo el billete»; ES title 'Frases de cumpleaños para tu novio y su tarjeta'; ES FAQ «en lo que no sabe que te has fijado», «gracias» in quotes"
+      ],
+      "rejected": [
+        "Search: a seventh FAQ. tests/unit/blog-posts.test.ts allows at most six and the post had six, so the question replaced the overlapping 'cute message' FAQ instead"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers the search in the lead with the formula and a worked card, then 31 lines in the AI overview's categories plus card sizes, signing and what to leave out; the round-1 changes read well and nothing was lost."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-1 fixes made correctly; the only page for this search with a formula to write your own card, a table for how much fits and 31 sorted lines, accurate about Ethos and in natural Spain Spanish. Polish (not applied): clearer time-zone note, one more «Antes» line in Spanish, a softer Spanish title."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All eight People-also-ask questions are now answered; beats the ranking pages, which are bare lists of wishes, with a build-it-yourself formula, card-size guidance and 31 sorted lines."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Time-zone note: '(If it's already the next day where you are.)' / «(Si donde estás tú ya es el día siguiente.)»",
+        "ES cry list: «No sabía que sentirse querida podía ser algo tan tranquilo hasta que llegaste tú»",
+        "ES title: «Frases de cumpleaños para tu novio (y qué poner en su tarjeta)»",
+        "FAQ question could add 'or text'",
+        "Optional link to cute-things from the romantic section; optional free-demo mention"
+      ]
+    }
+  ]
+}

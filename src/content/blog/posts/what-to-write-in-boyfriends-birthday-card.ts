@@ -3,14 +3,15 @@ import type { BlogPost } from "../types";
 export const post: BlogPost = {
   slug: "what-to-write-in-boyfriends-birthday-card",
   published: "2026-10-29",
+  updated: "2026-11-19",
   occasion: "birthday",
   templates: ["the-letter", "birthday-cinema"],
   content: {
     en: {
-      title: "What to write in your boyfriend's birthday card",
-      description: "What to write in your boyfriend's birthday card: a four-line formula for when you're bad at words, plus short, funny and sweet lines to borrow.",
+      title: "What to write in your boyfriend's birthday card: 31 lines",
+      description: "What to write in a birthday card for your boyfriend: a four-line formula, then short, funny, romantic and long-distance lines, and ones to make him cry.",
       keyword: "what to write in your boyfriend's birthday card",
-      lead: "If you're stuck on what to write in your boyfriend's birthday card, write four lines: the first thing you noticed about him, something he does that only you get to see, one moment from this year, and one thing you want to do with him next. That's a whole card, even if you're bad at words. Below is the formula with examples, then lines to borrow, sorted into short, funny and sweet.",
+      lead: "If you're stuck on what to write in your boyfriend's birthday card, write four lines: the first thing you noticed about him, something he does that only you get to see, one moment from this year, and one thing you want to do with him next. That's a whole card, even if you're bad at words. Below is the formula with examples, then lines to borrow: short, funny, romantic, a few that might make him cry, and some for when you're apart on the day.",
       takeaways: [
         "Four specific lines beat a page of general ones: what you noticed first, a habit only you see, a moment from this year, what's next.",
         "Draft it in your notes app first. Cards don't have a backspace.",
@@ -68,7 +69,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Short things to write in your boyfriend's birthday card" },
         {
           type: "p",
-          text: "For a small card, for a card that comes with a bigger present, or when the present is doing most of the talking:",
+          text: "For a small card, for a card that comes with a bigger present, or when the present is doing most of the talking. Every line here also works as a birthday text:",
         },
         {
           type: "list",
@@ -113,6 +114,41 @@ export const post: BlogPost = {
             "\"I hope this year is as kind to you as you are to everyone else.\"",
             "\"Half the things I notice in a day, I notice so I can tell you later. Happy birthday.\"",
             "\"Being with you feels like getting home after a long day. I love you.\"",
+          ],
+        },
+        { type: "h2", text: "Birthday card messages that might make him cry" },
+        {
+          type: "p",
+          text: "The lines that make someone cry in a card are rarely the grand ones. They show you noticed something he thought nobody saw, or say out loud a thing you've only ever implied. Take the shape of one of these and fill it with your own detail:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"You never made a big deal of driving me to the hospital that night. I've never forgotten it.\"",
+            "\"I know this year asked a lot of you. I saw all of it, and I'm so proud of you.\"",
+            "\"Before you, I didn't know being loved could feel this calm.\"",
+            "\"Thank you for the small things: the coffee on my side of the bed, the text when I land, the way you ask how it went. I notice every one.\"",
+            "\"I used to be scared of a lot of things. Fewer now. Happy birthday to the reason.\"",
+            "\"Most of my birthday wishes are about you now.\"",
+          ],
+        },
+        {
+          type: "p",
+          text: "Put it last, after anything funny, and don't explain it. One of these is enough: two in a row starts to read like a speech.",
+        },
+        { type: "h2", text: "Long-distance birthday card messages for your boyfriend" },
+        {
+          type: "p",
+          text: "Send it early, earlier still if it crosses a border, and write \"Open on your birthday\" on the envelope in case it lands days before. If it might arrive late, send the same lines as a message at midnight his time and give him the card when you next see him. Lines for a birthday you're not there for:",
+        },
+        {
+          type: "list",
+          items: [
+            "\"Hold this card for a minute. I held it too, so that's the closest we get to holding hands today.\"",
+            "\"I've counted: 23 days until I see you. Today is the best of them, because it's yours.\" (Change the number.)",
+            "\"Happy birthday from a city where it's already tomorrow. I miss you anyway.\" (If you're ahead of him in time.)",
+            "\"Eat the cake for both of us. I want a full report, crumbs included.\"",
+            "\"This is the last birthday of yours I miss. I've already booked the next one.\" (Only if you have.)",
           ],
         },
         { type: "h2", text: "What to write depending on how long you've been together" },
@@ -184,13 +220,21 @@ export const post: BlogPost = {
           q: "Should a birthday card for my boyfriend be funny or romantic?",
           a: "Both, in that order. One joke about something real, then one sincere line to finish, because the last line in a card is the one he remembers.",
         },
+        {
+          q: "What can I write in my boyfriend's birthday card to make him cry?",
+          a: "Something specific he doesn't know you noticed, or a thank-you for something he never made a fuss about. Keep it to one or two sentences and put it last, after any jokes.",
+        },
+        {
+          q: "How do I make my boyfriend feel special with a birthday message?",
+          a: "Name one thing only you have noticed about him and say what it means to you, in two sentences, sent at midnight or first thing: \"I love that you read the last page of a book first and think nobody knows. Happy birthday.\" Save the longer words for the card. Our [cute things to say to your boyfriend](/blog/cute-things-to-say-to-your-boyfriend) has more lines like it, and our [midnight birthday surprise ideas](/blog/midnight-birthday-surprise-ideas) cover what to say when the clock turns.",
+        },
       ],
     },
     es: {
-      title: "Qué escribir en la tarjeta de cumpleaños de tu novio",
-      description: "Qué escribir en la tarjeta de cumpleaños de tu novio: una fórmula de cuatro frases para cuando no te salen las palabras, y frases cortas, graciosas y tiernas.",
-      keyword: "qué escribir en la tarjeta de cumpleaños de mi novio",
-      lead: "Si no sabes qué escribir en la tarjeta de cumpleaños de tu novio, escribe cuatro frases: lo primero que te llamó la atención de él, algo que hace y que solo ves tú, un momento de este año y lo próximo que quieres hacer con él. Eso ya es una tarjeta entera, aunque no se te den bien las palabras. Abajo tienes la fórmula con ejemplos y después frases para tomar prestadas: cortas, graciosas y tiernas.",
+      title: "Frases de cumpleaños para tu novio y su tarjeta",
+      description: "Frases de cumpleaños para tu novio y qué poner en su tarjeta: una fórmula de cuatro frases, y frases graciosas, románticas, a distancia y para emocionarlo.",
+      keyword: "frases de cumpleaños para mi novio",
+      lead: "Si no sabes qué escribir en la tarjeta de cumpleaños de tu novio, escribe cuatro frases: lo primero que te llamó la atención de él, algo que hace y que solo ves tú, un momento de este año y lo próximo que quieres hacer con él. Eso ya es una tarjeta entera, aunque no se te den bien las palabras. Abajo tienes la fórmula con ejemplos y después frases de cumpleaños para tu novio: cortas, graciosas, románticas, para emocionarlo y para cuando no estáis juntos ese día.",
       takeaways: [
         "Cuatro frases concretas valen más que una página de frases vagas: lo que te llamó la atención, una costumbre que solo ves tú, un momento del año y un plan.",
         "Escríbela antes en las notas del móvil. Las tarjetas no tienen tecla de borrar.",
@@ -248,7 +292,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Frases cortas para la tarjeta de cumpleaños de tu novio" },
         {
           type: "p",
-          text: "Para una tarjeta pequeña, para una que acompaña a un regalo más grande o cuando el regalo ya lo dice casi todo:",
+          text: "Para una tarjeta pequeña, para una que acompaña a un regalo más grande o cuando el regalo ya lo dice casi todo. Todas sirven también como mensaje de cumpleaños:",
         },
         {
           type: "list",
@@ -293,6 +337,41 @@ export const post: BlogPost = {
             "«Ojalá este año te trate tan bien como tratas tú a todo el mundo».",
             "«La mitad de las cosas en las que me fijo al día son para contártelas después. Feliz cumpleaños».",
             "«Estar contigo es como llegar a casa después de un día largo. Te quiero».",
+          ],
+        },
+        { type: "h2", text: "Frases de cumpleaños para emocionar a tu novio" },
+        {
+          type: "p",
+          text: "Las frases que hacen llorar en una tarjeta casi nunca son las grandilocuentes. Son las que demuestran que te fijaste en algo que él creía que nadie veía, o que dicen en voz alta lo que hasta ahora solo habías dado a entender. Toma la forma de una de estas y llénala con tu propio detalle:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Nunca le diste importancia a llevarme al hospital aquella noche. Yo no lo he olvidado».",
+            "«Sé que este año te ha pedido mucho. Lo he visto todo, y estoy muy orgullosa de ti».",
+            "«Antes de ti no sabía que sentirse querida podía ser algo tan tranquilo».",
+            "«Gracias por las cosas pequeñas: el café en mi lado de la cama, el mensaje cuando aterrizo, cómo me preguntas qué tal ha ido. Me fijo en todas».",
+            "«Antes me daban miedo muchas cosas. Ahora menos. Feliz cumpleaños a quien tiene la culpa».",
+            "«Ahora casi todos mis deseos de cumpleaños tienen que ver contigo».",
+          ],
+        },
+        {
+          type: "p",
+          text: "Ponla al final, después de lo gracioso, y no la expliques. Con una basta: dos seguidas empiezan a sonar a discurso.",
+        },
+        { type: "h2", text: "Frases de cumpleaños para tu novio a distancia" },
+        {
+          type: "p",
+          text: "Échala al correo con tiempo, y con más si cruza una frontera, y escribe «Ábrela el día de tu cumpleaños» en el sobre por si llega días antes. Si puede llegar tarde, mándale las mismas frases en un mensaje a medianoche, a su hora, y dale la tarjeta cuando os veáis. Frases para un cumpleaños en el que no vas a estar:",
+        },
+        {
+          type: "list",
+          items: [
+            "«Sujeta esta tarjeta un momento. Yo también la he sujetado, así que es lo más parecido a darnos la mano que tenemos hoy».",
+            "«Lo he contado: faltan 23 días para verte. Hoy es el mejor de todos, porque es el tuyo». (Cambia el número.)",
+            "«Feliz cumpleaños desde una ciudad donde ya es mañana. Te echo de menos igual». (Si vas por delante de él en la hora.)",
+            "«Cómete la tarta por los dos. Quiero un informe completo, migas incluidas».",
+            "«Este es el último cumpleaños tuyo que me pierdo. Ya tengo el billete para el siguiente». (Solo si es verdad.)",
           ],
         },
         { type: "h2", text: "Qué escribir según el tiempo que llevéis juntos" },
@@ -363,6 +442,14 @@ export const post: BlogPost = {
         {
           q: "¿La tarjeta de cumpleaños de mi novio tiene que ser graciosa o romántica?",
           a: "Las dos cosas, en ese orden. Una broma sobre algo real y una frase sincera para terminar, porque la última frase de una tarjeta es la que recuerda.",
+        },
+        {
+          q: "¿Qué le escribo a mi novio en su cumpleaños para que llore?",
+          a: "Algo concreto en lo que no sabe que te has fijado, o un «gracias» por algo a lo que él nunca le dio importancia. Que sean una o dos frases, y ponlas al final, después de las bromas.",
+        },
+        {
+          q: "¿Cómo hago que mi novio se sienta especial con un mensaje de cumpleaños?",
+          a: "Dile una cosa en la que solo te has fijado tú y lo que significa para ti, en dos frases, a medianoche o a primera hora: «Me encanta que leas primero la última página de los libros y creas que nadie lo sabe. Feliz cumpleaños». Guarda lo largo para la tarjeta. Nuestras [cosas bonitas para decirle a tu novio](/blog/cute-things-to-say-to-your-boyfriend) tienen más frases así, y nuestras ideas de [sorpresa de cumpleaños a medianoche](/blog/midnight-birthday-surprise-ideas) cuentan qué decirle cuando dan las doce.",
         },
       ],
     },
