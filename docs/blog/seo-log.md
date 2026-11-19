@@ -889,3 +889,15 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-19T14:19Z | on_page/content_parsing/live | 0.00015 | blog: quality-time-love-language |
 | 2026-11-19T14:19Z | on_page/content_parsing/live | 0.00015 | blog: quality-time-love-language |
 | 2026-11-19T14:19Z | on_page/content_parsing/live | 0.00015 | blog: quality-time-love-language |
+| 2026-11-19T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01416 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:42Z | dataforseo_labs/google/keyword_overview/live | 0.01416 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | dataforseo_labs/google/keyword_ideas/live | 0.0192 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:43Z | dataforseo_labs/google/keyword_overview/live | 0.01332 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:44Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:44Z | serp/google/organic/live/advanced | 0.004 | seo: surprise-trip-reveal-ideas |
+| 2026-11-19T16:44Z | on_page/content_parsing/live | 0.00015 | seo: surprise-trip-reveal-ideas |
