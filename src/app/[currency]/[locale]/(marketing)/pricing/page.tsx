@@ -11,6 +11,7 @@ import { MembershipHero } from "@/components/pricing/membership-hero";
 import { PricingFaq } from "@/components/pricing/pricing-faq";
 import { SingleGifts } from "@/components/pricing/single-gifts";
 import { initialPlan, pricingFaq, safeReturnPath, type FaqItem } from "@/components/pricing/offers";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/pricing">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -82,7 +83,7 @@ export default async function PricingPage({ params, searchParams }: PageProps<"/
       <MembershipCompare
         currency={currency}
         subscriptions={subscriptions}
-        freeTemplates={manifests.filter((m) => m.tier === "free").map((m) => m.name[lang])}
+        freeTemplates={manifests.filter((m) => sendsFree(m)).map((m) => m.name[lang])}
         templateCount={manifests.length}
       />
       <SingleGifts

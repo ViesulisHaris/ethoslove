@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 
 /*
  * Where a paid ad lands: the gift the ad showed, playing, on the first screen, and one button.
@@ -54,9 +55,10 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
   const tr = await getTranslations("home.reactions");
   const tm = await getTranslations("money.paywall");
   const currency = chargedCurrency(shown);
-  const free = manifest.tier === "free";
+  // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
+  const free = sendsFree(manifest);
   // A premium template is bought as one; a free one only ever costs its "make it special" extras.
-  const price = formatAmount(PRODUCTS[free ? "extras" : "single"].amounts[currency], currency, l);
+  const price = formatAmount(PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency], currency, l);
   const hook = `hooks.${slug}` as const;
   // Real reactions only, and only with three of them: no samples on a page that asks for money.
   const [numbers, reactions] = await Promise.all([proofNumbers(), shownReactions(3, l === "es" ? "es" : "en")]);
@@ -171,7 +173,7 @@ export default async function TryTemplatePage({ params }: PageProps<"/[currency]
         <div className="mx-auto flex max-w-md flex-col gap-2">
           {/* One line, which the cookie strip's offset (globals.css) counts on: smaller under 360px. */}
           <p className="text-center text-sm text-ink-soft max-[359px]:text-xs">
-            {free ? t("priceFree", { price }) : t("pricePaid", { price })}
+            {free ? t(noteForEveryone() ? "priceFreeShort" : "priceFree", { price }) : t("pricePaid", { price })}
           </p>
           <Button asChild size="lg" className="h-12 w-full rounded-full text-base shadow-lift">
             <Link href={`/create/${manifest.slug}`}>

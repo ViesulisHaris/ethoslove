@@ -197,7 +197,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "He taps to break a wax seal pressed with your initial. The paper unfolds by candlelight, your words write themselves onto it in handwriting, and your photos land on the desk as polaroids. It's one of the two free templates, so you can send a full letter tonight without paying.",
+          note: "He taps to break a wax seal pressed with your initial. The paper unfolds by candlelight, your words write themselves onto it in handwriting, and your photos land on the desk as polaroids. A short version, up to 500 characters and without the photos, goes out free tonight; the full letter with photos is paid once.",
         },
         {
           type: "template",
@@ -423,7 +423,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Él rompe con un toque un sello de lacre con tu inicial. El papel se despliega a la luz de una vela, tus palabras se van escribiendo a mano sobre él y tus fotos caen en el escritorio como polaroids. Es una de las dos plantillas gratis, así que puedes mandarle una carta entera esta noche sin pagar.",
+          note: "Él rompe con un toque un sello de lacre con tu inicial. El papel se despliega a la luz de una vela, tus palabras se van escribiendo a mano sobre él y tus fotos caen en el escritorio como polaroids. Una versión corta, de hasta 500 caracteres y sin las fotos, se envía gratis esta misma noche; la carta entera con fotos se paga una sola vez.",
         },
         {
           type: "template",

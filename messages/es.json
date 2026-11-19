@@ -43,7 +43,8 @@
     "titleTemplate": "%s · Ethos",
     "description": "Crea un regalo digital en diez minutos: una carta de amor, un ramo o un álbum con vuestras fotos y su canción, en un enlace. Gratis, con citas y juegos.",
     "giftsTitle": "Regalos digitales y virtuales: crea uno gratis online · Ethos",
-    "giftsDescription": "Crea un regalo digital o virtual en diez minutos: una carta, un ramo o un pequeño juego con tus fotos y tu canción, en un enlace. 30 ideas, dos gratis."
+    "giftsDescription": "Crea un regalo digital o virtual en diez minutos: una carta, un ramo o un pequeño juego con tus fotos y tu canción, en un enlace. 30 ideas, dos gratis.",
+    "giftsDescriptionShort": "Crea un regalo digital o virtual en diez minutos: una carta, un ramo o un pequeño juego con tus fotos y tu canción, en un enlace. 30 ideas, una gratis."
   },
   "nav": {
     "templates": "Plantillas",
@@ -766,6 +767,7 @@
     "make": "Crea el tuyo",
     "pricePaid": "Gratis crearlo · {price} una vez, al enviarlo",
     "priceFree": "Gratis crearlo y enviarlo · extras por {price}, una vez",
+    "priceFreeShort": "Gratis como nota corta · con fotos {price}, una vez",
     "stepsTitle": "Cómo funciona",
     "whatTheySee": "Lo que verá",
     "reactionsTitle": "Lo que respondieron",
@@ -850,6 +852,7 @@
     "priceOnce": "{price} una vez",
     "priceFree": "Gratis",
     "detailPriceFree": "Gratis, para siempre. Añade un vídeo, un mensaje de voz, 20 fotos o una sorpresa dentro por {price}, pagado una vez.",
+    "detailPriceFreeShort": "Gratis como nota corta: hasta 500 caracteres y su canción. Las fotos, la carta entera, un vídeo, un mensaje de voz o una sorpresa dentro vienen con “Hazlo especial” por {price}, pagado una vez.",
     "detailPricePaid": "Pruébalo primero, sin cuenta. {price} una sola vez al enviarlo, y es tuyo para siempre.",
     "sections": {
       "popular": {
@@ -886,8 +889,9 @@
       "faqTitle": "Preguntas frecuentes",
       "faqFreeQ": "¿Es gratis?",
       "faqFreeA": "Sí. {name} es una de las dos plantillas gratis: hasta 10 fotos, música, una cuenta atrás y una sorpresa final, con un pequeño pie que dice “Hecho con Ethos”. Vídeo, un mensaje de voz, 20 fotos, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
+      "faqFreeAShort": "Sí, como nota corta. {name} se envía gratis con hasta 500 caracteres, música y un pequeño pie que dice “Hecho con Ethos”. Las fotos, una carta más larga, vídeo, un mensaje de voz, sin pie y la programación vienen con “Hazlo especial” por {price}, en un solo pago.",
       "faqPaidQ": "¿Cuánto cuesta?",
-      "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta y Constelaciones son gratis.",
+      "faqPaidA": "Hazlo y pruébalo entero antes, sin cuenta. Enviarlo cuesta {price} una sola vez, y después esa plantilla es tuya para usarla siempre, sin suscripción. La carta es gratis como nota corta.",
       "faqOpenQ": "¿Cómo lo abren?",
       "faqOpenA": "Con el enlace que les envías, por WhatsApp, iMessage, Instagram o email, o escaneando su código QR con la cámara del móvil. Se abre en el navegador de cualquier móvil u ordenador: sin app que instalar ni cuenta que crear.",
       "faqEditQ": "¿Puedo cambiarlo después de enviarlo?",
@@ -938,6 +942,7 @@
     "bestValue": "Mejor valor",
     "priority": "Incluye soporte prioritario",
     "freeNote": "Los regalos gratis incluyen 10 fotos, nuestra biblioteca musical, un fragmento de 30 segundos de una canción de verdad que se escucha con un toque y el pie «Hecho con Ethos». Vídeos, mensajes de voz, hasta 20 fotos, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en una plantilla gratis.",
+    "freeNoteShort": "Una Carta gratis es una nota corta: hasta 500 caracteres, nuestra biblioteca musical o un fragmento de 30 segundos de una canción de verdad que se escucha con un toque, y el pie «Hecho con Ethos». Las fotos, la carta entera, vídeos, mensajes de voz, una sorpresa dentro (una cita o un viaje, envueltos al final), quitar el pie, programación y contraseña vienen con cualquier desbloqueo, con Ethos for Two o con «Hazlo especial» en La carta o Constelaciones.",
     "comingSoon": "Los pagos se abren pronto. Las plantillas gratis ya se pueden publicar.",
     "plans": {
       "single": {
@@ -2786,6 +2791,7 @@
         "eyebrow": "Para una plantilla gratis",
         "name": "Hazlo especial",
         "blurb": "Para {names}: vídeo, mensajes de voz, 20 fotos, programación, contraseña y sin pie, en esa plantilla para siempre.",
+        "blurbShort": "Para {names}: tus fotos, la carta entera, vídeo, mensajes de voz, programación, contraseña y sin pie, en esa plantilla para siempre.",
         "note": "Se compra en el editor, al publicar.",
         "cta": "Abrir {name}"
       }

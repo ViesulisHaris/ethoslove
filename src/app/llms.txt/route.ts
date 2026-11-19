@@ -24,6 +24,7 @@ import { TRIPS } from "@/lib/trips/presets";
 import { listManifests } from "@/templates/manifests";
 import { pricingFaq } from "@/components/pricing/offers";
 import en from "../../../messages/en.json";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 
 export const dynamic = "force-static";
 
@@ -33,7 +34,7 @@ export const dynamic = "force-static";
  */
 export function GET() {
   const manifests = listManifests();
-  const free = manifests.filter((m) => m.tier === "free").map((m) => m.name.en);
+  const free = manifests.filter((m) => sendsFree(m)).map((m) => m.name.en);
   // Only currencies checkout really charges in: a price nobody can pay is not a price.
   const prices = (id: ProductId) => CHARGED_CURRENCIES.map((c) => formatAmount(PRODUCTS[id].amounts[c], c)).join(" / ");
   const plan = (p: MembershipPlan) => CHARGED_CURRENCIES.map((c) => formatAmount(membershipAmount(p, c), c)).join(" / ");
@@ -90,7 +91,7 @@ export function GET() {
     "",
     "## Pricing",
     "",
-    `- Free: ${free.join(" and ")}. ${en.pricing.freeNote}`,
+    `- Free: ${free.join(" and ")}. ${noteForEveryone() ? en.pricing.freeNoteShort : en.pricing.freeNote}`,
     ...PRODUCT_ORDER.map((id) => `- ${en.pricing.plans[id].name}: ${prices(id)}, paid once. ${en.pricing.plans[id].features.join("; ")}.`),
     `- Make it special: ${prices("extras")}, paid once, for a free template (${free.join(" or ")}): that template's paid extras (a video, a voice message, up to 20 photos, no footer, scheduling and a password), forever.`,
     `- Sending one back: someone who receives a paid gift made with a premium template can send one back in the same template for free, once, with the "Made with Ethos" footer. Extras or no footer on the reply cost the template's normal price.`,

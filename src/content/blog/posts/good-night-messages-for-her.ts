@@ -180,7 +180,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Free. Her sky is made of your photos, each star with a few words underneath. Once she's opened them all, lines join them into a heart or another shape you set, and then your message comes up. Up to ten photos on the free version.",
+          note: "Her sky is made of your photos, each star with a few words underneath. Once she's opened them all, lines join them into a heart or another shape you set, and then your message comes up. It takes three to twelve photos and is paid once.",
         },
         {
           type: "template",
@@ -381,7 +381,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Gratis. Las estrellas de su cielo son vuestras fotos, cada una con dos o tres palabras debajo. Cuando las ha abierto todas, unas líneas las unen en un corazón u otra figura que hayas elegido, y luego sale tu mensaje. Hasta diez fotos en la versión gratis.",
+          note: "Las estrellas de su cielo son vuestras fotos, cada una con dos o tres palabras debajo. Cuando las ha abierto todas, unas líneas las unen en un corazón u otra figura que hayas elegido, y luego sale tu mensaje. Lleva entre tres y doce fotos y se paga una sola vez.",
         },
         {
           type: "template",

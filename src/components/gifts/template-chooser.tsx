@@ -15,6 +15,7 @@ import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 type Filter = "all" | "loved" | "free";
 const FILTERS: Filter[] = ["all", "loved", "free"];
@@ -56,7 +57,7 @@ export function TemplateChooser({
   const drag = useRef<{ y: number; at: number; dy: number } | null>(null);
 
   const templates = useMemo(() => sectionTemplates(listManifests()).flatMap((s) => s.items), []);
-  const shown = useMemo(() => templates.filter((m) => filter === "all" || (filter === "free" ? m.tier === "free" : LOVED.includes(m.slug))), [templates, filter]);
+  const shown = useMemo(() => templates.filter((m) => filter === "all" || (filter === "free" ? sendsFree(m) : LOVED.includes(m.slug))), [templates, filter]);
   const currency = useCurrency();
   const single = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
   const extras = formatAmount(PRODUCTS.extras.amounts[currency], currency, locale);
@@ -167,7 +168,7 @@ export function TemplateChooser({
             <ul className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4 xl:grid-cols-5">
               {shown.map((m, i) => (
                 <li key={m.slug}>
-                  <ChooserCard manifest={m} locale={locale} eager={i < 4} busy={picking === m.slug} disabled={picking !== null && picking !== m.slug} onPick={() => void pick(m.slug)} price={m.tier === "free" ? t("free") : t("price", { price: single })} note={m.tier === "free" ? t("extra", { price: extras }) : t("included")} pickLabel={t("pick", { name: m.name[locale] })} wrapping={t("wrapping")} badge={featuredFor(m.slug) === "popular" ? t("filter.loved") : null} />
+                  <ChooserCard manifest={m} locale={locale} eager={i < 4} busy={picking === m.slug} disabled={picking !== null && picking !== m.slug} onPick={() => void pick(m.slug)} price={sendsFree(m) ? t("free") : t("price", { price: m.tier === "free" ? extras : single })} note={sendsFree(m) ? t("extra", { price: extras }) : t("included")} pickLabel={t("pick", { name: m.name[locale] })} wrapping={t("wrapping")} badge={featuredFor(m.slug) === "popular" ? t("filter.loved") : null} />
                 </li>
               ))}
             </ul>
@@ -208,7 +209,7 @@ function ChooserCard({
       <span className="relative block aspect-[390/600] overflow-hidden rounded-[22px] bg-ink/10 shadow-[0_18px_40px_-26px_rgba(23,19,15,0.7)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-1 group-hover:shadow-[0_28px_56px_-28px_rgba(23,19,15,0.75)] group-focus-visible:ring-4 group-focus-visible:ring-rose/50">
         {/* The button's label is what a screen reader says; the alt text is what image search reads. */}
         <Image src={manifest.thumbnail.poster} alt={`${manifest.name[locale]}: ${manifest.tagline[locale]}`} fill sizes="(min-width: 1280px) 200px, (min-width: 1024px) 240px, (min-width: 640px) 30vw, 46vw" quality={70} priority={eager} className="object-cover" />
-        <span className={cn("absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur", manifest.tier === "free" ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream")}>{price}</span>
+        <span className={cn("absolute top-2.5 left-2.5 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur", sendsFree(manifest) ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream")}>{price}</span>
         {/* A heart, not a word: two labels side by side ran into each other on a phone's narrow card. */}
         {badge ? (
           <span title={badge} className="absolute top-2.5 right-2.5 grid size-7 place-items-center rounded-full bg-blush text-rose-deep shadow-sm">

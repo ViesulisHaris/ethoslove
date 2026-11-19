@@ -195,7 +195,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "She breaks a wax seal stamped with your initial and the paper opens out beside a lit candle. Your words appear in handwriting as she watches, and your photos scatter as polaroids. It's one of the two free templates.",
+          note: "She breaks a wax seal stamped with your initial and the paper opens out beside a lit candle. Your words appear in handwriting as she watches, and your photos scatter as polaroids. A short note without photos is free; the full letter with photos is paid once.",
         },
         {
           type: "template",
@@ -424,7 +424,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "the-letter",
-          note: "Rompe un sello de lacre con tu inicial y el papel se abre junto a una vela encendida. Tus palabras aparecen escritas a mano mientras mira, y tus fotos se reparten como polaroids. Es una de las dos plantillas gratis.",
+          note: "Rompe un sello de lacre con tu inicial y el papel se abre junto a una vela encendida. Tus palabras aparecen escritas a mano mientras mira, y tus fotos se reparten como polaroids. Una nota corta sin fotos es gratis; la carta entera con fotos se paga una sola vez.",
         },
         {
           type: "template",

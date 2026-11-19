@@ -172,7 +172,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "A dark sky where every star is one of your photos, with a caption under each. He taps his way from star to star, and when the last one is found they join into the shape you picked, with your good night message beneath. Free with three to ten photos.",
+          note: "A dark sky where every star is one of your photos, with a caption under each. He taps his way from star to star, and when the last one is found they join into the shape you picked, with your good night message beneath. It takes three to twelve photos and is paid once.",
         },
         {
           type: "template",
@@ -370,7 +370,7 @@ export const post: BlogPost = {
         {
           type: "template",
           slug: "constellations",
-          note: "Un cielo oscuro en el que cada estrella es una de vuestras fotos, con un pie de foto debajo de cada una. Él va tocando de estrella en estrella y, cuando encuentra la última, se unen en la forma que elegiste, con tu mensaje de buenas noches debajo. Gratis con entre tres y diez fotos.",
+          note: "Un cielo oscuro en el que cada estrella es una de vuestras fotos, con un pie de foto debajo de cada una. Él va tocando de estrella en estrella y, cuando encuentra la última, se unen en la forma que elegiste, con tu mensaje de buenas noches debajo. Lleva entre tres y doce fotos y se paga una sola vez.",
         },
         {
           type: "template",

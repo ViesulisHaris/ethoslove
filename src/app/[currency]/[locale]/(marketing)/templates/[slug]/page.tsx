@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
 import { TemplateGuide, templateFaq } from "@/components/templates/template-guide";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
 export function generateStaticParams() {
@@ -55,6 +56,8 @@ export default async function TemplateDetailPage({
   const t = await getTranslations();
   const currency = chargedCurrency(shown);
   // A premium template is bought as one; a free one only ever costs its "make it special" extras.
+  // Shown as free only while it can be sent free (lib/gift/free-tier.ts).
+  const free = sendsFree(manifest);
   const price = formatAmount(
     PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency],
     currency,
@@ -100,12 +103,12 @@ export default async function TemplateDetailPage({
             <div className="flex items-center gap-2">
               <span
                 className={
-                  manifest.tier === "free"
+                  free
                     ? "rounded-sm border border-ink px-2 py-1 text-eyebrow text-ink"
                     : "rounded-sm bg-ink px-2 py-1 text-eyebrow text-paper"
                 }
               >
-                {manifest.tier === "free" ? t("common.free") : t("common.premium")}
+                {free ? t("common.free") : t("common.premium")}
               </span>
               {manifest.styles.map((s) => (
                 <span
@@ -146,8 +149,8 @@ export default async function TemplateDetailPage({
               </Button>
             </div>
             <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              {manifest.tier === "free"
-                ? t("templates.detailPriceFree", { price })
+              {free
+                ? t(noteForEveryone() ? "templates.detailPriceFreeShort" : "templates.detailPriceFree", { price })
                 : t("templates.detailPricePaid", { price })}
             </p>
           </div>

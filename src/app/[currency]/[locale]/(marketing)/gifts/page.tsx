@@ -21,6 +21,7 @@ import { Faq } from "@/components/marketing/home/faq";
 import { FinalCta } from "@/components/marketing/home/final-cta";
 import { TornEdge } from "@/components/marketing/home/cutouts";
 import { proofNumbers, shownReactions } from "@/lib/proof/proof";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 
 /** The proof in the reactions section is read from the database: the page is drawn again hourly to keep it current. */
 export const revalidate = 3600;
@@ -28,7 +29,7 @@ export const revalidate = 3600;
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/gifts">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
-  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t("giftsDescription"), absoluteTitle: true });
+  return pageMetadata({ locale, path: "/gifts", title: t("giftsTitle"), description: t(noteForEveryone() ? "giftsDescriptionShort" : "giftsDescription"), absoluteTitle: true });
 }
 
 /**

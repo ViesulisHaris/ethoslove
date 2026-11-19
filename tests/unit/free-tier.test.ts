@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems, withOldGiftRule } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, addsPhotos, freeTierAtPublish, noteCanBeFree, noteForEveryone, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, addsPhotos, freeTierAtPublish, noteCanBeFree, noteForEveryone, noteLength, noteRules, oldFreeGiftAddsPhotos, sendsFree } from "@/lib/gift/free-tier";
 import { freeTestEvent } from "@/lib/analytics/track";
 import { completeGiftData } from "@/lib/editor/complete-data";
 import { createGiftSchema } from "@/lib/gift/schema";
@@ -108,6 +108,19 @@ describe("the free Letter as a short note", () => {
     expect(readinessProblems(constellations, sky(0))).toContain("photosMin");
     expect(readinessProblems(constellations, sky(2))).toContain("photosMin");
     expect(decidePublish(constellations, sky(0), { unlocked: true }, none)).toMatchObject({ ok: false, reason: "not_ready" });
+  });
+
+  it("is shown with its price, not as free, once the note is for everyone; the Letter stays free", () => {
+    // While the test splits visitors, and before it: both free templates are shown as free.
+    expect(sendsFree(letter, 0)).toBe(true);
+    expect(sendsFree(constellations, 0)).toBe(true);
+    expect(sendsFree(constellations, 0.5)).toBe(true);
+    // For everyone: the Letter still goes out free as a short note, Constellations has a price.
+    expect(sendsFree(letter, 1)).toBe(true);
+    expect(sendsFree(constellations, 1)).toBe(false);
+    // A premium template was never free.
+    expect(sendsFree(premium, 0)).toBe(false);
+    expect(sendsFree(premium, 1)).toBe(false);
   });
 
   it("names the test's events per template, step and version", () => {

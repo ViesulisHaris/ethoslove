@@ -7,6 +7,7 @@ import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateCard } from "@/components/templates/template-card";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/made-with-ethos">, "searchParams">): Promise<Metadata> {
   const { locale } = await params;
@@ -33,8 +34,8 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
   const firstTheirs = (list: TemplateManifest[]) => [...list.filter((m) => m.slug === theirs), ...list.filter((m) => m.slug !== theirs)];
   const all = listManifests();
   const shelves = [
-    { id: "free", items: firstTheirs(all.filter((m) => m.tier === "free")) },
-    { id: "premium", items: firstTheirs(all.filter((m) => m.tier !== "free")) },
+    { id: "free", items: firstTheirs(all.filter((m) => sendsFree(m))) },
+    { id: "premium", items: firstTheirs(all.filter((m) => !sendsFree(m))) },
   ] as const;
 
   return (

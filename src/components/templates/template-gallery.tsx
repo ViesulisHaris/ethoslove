@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Cutout } from "@/components/marketing/home/cutouts";
 import { TemplateCard } from "./template-card";
 import { GALLERY_ID } from "./gallery-id";
+import { sendsFree } from "@/lib/gift/free-tier";
 import { TIER_FILTERS, TIER_PARAM, parseTier, searchWithTier, type TierFilter } from "./gallery-tier";
 
 /** Fired after the filter rewrites the address, which `popstate` does not report. */
@@ -62,7 +63,8 @@ export function TemplateGallery({
   const t = useTranslations();
   const tier = useSyncExternalStore(subscribeTier, readTier, () => initialTier);
 
-  const filtered = useMemo(() => manifests.filter((m) => tier === "all" || m.tier === tier), [manifests, tier]);
+  // "Free" is what can be sent free as the site stands (sendsFree), not the template's price class.
+  const filtered = useMemo(() => manifests.filter((m) => tier === "all" || sendsFree(m) === (tier === "free")), [manifests, tier]);
   const shelves = useMemo(() => (occasion ? [{ id: "all" as const, items: filtered }] : sectionTemplates(filtered)), [filtered, occasion]);
   // Cards count on from one shelf to the next, so only the very first row is loaded eagerly.
   const offsets = shelves.map((_, i) => shelves.slice(0, i).reduce((n, shelf) => n + shelf.items.length, 0));

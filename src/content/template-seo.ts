@@ -21,28 +21,28 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
   "the-letter": {
     en: {
       keyword: "Digital love letter",
-      title: "Digital Love Letter Template, Free with Photos and Music",
-      description: "An online love letter they open like a real one: a wax seal, your words, your photos and your song, sent as a link. A free template with nothing to install.",
+      title: "Digital Love Letter Template, Free to Send, with Music",
+      description: "An online love letter they open like a real one: a wax seal, your words and your song, sent as a link. Free as a short note; photos are a one-time extra.",
       howTo: "How to send a digital love letter",
     },
     es: {
       keyword: "Carta de amor digital",
-      title: "Carta de amor digital gratis, con fotos y música",
-      description: "Escribe una carta de amor digital que se abre como una de verdad: sello de lacre, tus palabras, vuestras fotos y vuestra canción, en un enlace. Gratis.",
+      title: "Carta de amor digital gratis, con música",
+      description: "Una carta de amor digital que se abre como una de verdad: sello de lacre, tus palabras y vuestra canción, en un enlace. Gratis como nota corta; las fotos, un pago único.",
       howTo: "Cómo enviar una carta de amor digital",
     },
   },
   constellations: {
     en: {
       keyword: "Night sky gift",
-      title: "Night Sky Gift: Your Photos as Stars, Free",
-      description: "A star map of the two of you: every photo is a star they find by moving the phone, then your song and a message. Free, for anniversaries and long distance.",
+      title: "Night Sky Gift: Your Photos as Stars",
+      description: "A star map of the two of you: every photo is a star they find by moving the phone, then your song and a message. For anniversaries and long distance.",
       howTo: "How to make a night sky gift",
     },
     es: {
       keyword: "Regalo de cielo estrellado",
-      title: "Cielo estrellado de regalo con vuestras fotos, gratis",
-      description: "Un mapa de estrellas de los dos: cada foto es una estrella que encuentran moviendo el móvil, y al final vuestra canción y un mensaje. Gratis.",
+      title: "Cielo estrellado de regalo con vuestras fotos",
+      description: "Un mapa de estrellas de los dos: cada foto es una estrella que encuentran moviendo el móvil, y al final vuestra canción y un mensaje.",
       howTo: "Cómo hacer un cielo estrellado de regalo",
     },
   },

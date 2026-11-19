@@ -5,10 +5,11 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { TemplateManifest } from "@/templates/types";
 import { TemplateCard } from "@/components/templates/template-card";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 export function TemplateStrip({ manifests }: { manifests: TemplateManifest[] }) {
   const t = useTranslations("home.templates");
-  const free = manifests.filter((m) => m.tier === "free").length;
+  const free = manifests.filter((m) => sendsFree(m)).length;
   return (
     <section className="border-b border-line py-20 lg:py-28">
       <div className="container-x mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">

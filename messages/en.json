@@ -43,7 +43,8 @@
     "titleTemplate": "%s · Ethos",
     "description": "Make a digital gift in ten minutes: a love letter, bouquet or scrapbook with your photos and song, sent as a link. Free to start, with date ideas and games.",
     "giftsTitle": "Digital Gifts and Virtual Gifts: Make a Free, Personal One · Ethos",
-    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free."
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free.",
+    "giftsDescriptionShort": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, one free."
   },
   "nav": {
     "templates": "Templates",
@@ -766,6 +767,7 @@
     "make": "Make yours",
     "pricePaid": "Free to make · {price} once, when you send it",
     "priceFree": "Free to make and send · extras {price}, paid once",
+    "priceFreeShort": "Free as a short note · with photos {price}, paid once",
     "stepsTitle": "How it works",
     "whatTheySee": "What they'll see",
     "reactionsTitle": "What came back",
@@ -850,6 +852,7 @@
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
+    "detailPriceFreeShort": "Free as a short note: up to 500 characters and their song. Photos, the full letter, a video, a voice message or a surprise inside come with “Make it special” for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
     "sections": {
       "popular": {
@@ -886,8 +889,9 @@
       "faqTitle": "Questions people ask",
       "faqFreeQ": "Is it free?",
       "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
+      "faqFreeAShort": "Yes, as a short note. {name} goes out free with up to 500 characters, music and a small “Made with Ethos” footer. Photos, a longer letter, a video, a voice message, no footer and scheduling come with “Make it special” for {price}, paid once.",
       "faqPaidQ": "How much does it cost?",
-      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter and Constellations are free.",
+      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter is free as a short note.",
       "faqOpenQ": "How do they open it?",
       "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
       "faqEditQ": "Can I change it after I send it?",
@@ -938,6 +942,7 @@
     "bestValue": "Best value",
     "priority": "Includes priority support",
     "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
+    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter or Constellations.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -2786,6 +2791,7 @@
         "eyebrow": "For a free template",
         "name": "Make it special",
         "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
+        "blurbShort": "For {names}: your photos, the full letter, video, voice messages, scheduling, a password and no footer, on that template for good.",
         "note": "Sold in the editor, when you publish.",
         "cta": "Open {name}"
       }
