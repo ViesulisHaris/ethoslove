@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decidePublish, liveEditNeedsUnlock, premiumExtras, readinessProblems } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, noteLength, noteRules } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, noteCanBeFree, noteLength, noteRules } from "@/lib/gift/free-tier";
+import { freeTestEvent } from "@/lib/analytics/track";
 import { completeGiftData } from "@/lib/editor/complete-data";
 import { createGiftSchema } from "@/lib/gift/schema";
 import { manifest as letter } from "@/templates/the-letter/manifest";
@@ -36,8 +37,9 @@ describe("the free Letter as a short note", () => {
   it("only a Letter that says so is held to it", () => {
     expect(noteRules(letter, note)).toBe(true);
     expect(noteRules(letter, classic)).toBe(false);
-    // Constellations needs three photos to be a sky: it keeps the roomier rules whatever its data says.
-    expect(noteRules(constellations, { freeTier: "note" })).toBe(false);
+    // Constellations is in the test too; it differs in having no free version (below).
+    expect(noteRules(constellations, { freeTier: "note" })).toBe(true);
+    expect(noteRules(constellations, {})).toBe(false);
     expect(noteRules(premium, { freeTier: "note" })).toBe(false);
     expect(noteRules(letter, { freeTier: "something else" })).toBe(false);
     // The editor asks before its gift has loaded: that must be a plain no, never a crash.
@@ -90,7 +92,29 @@ describe("the free Letter as a short note", () => {
     const ten = Array.from({ length: 10 }, (_, i) => photo(`gifts/g1/${i}.webp`));
     expect(premiumExtras({ ...classic, photos: ten, message: long })).toEqual([]);
     expect(decidePublish(premium, { ...classic, photos: ten, message: long, freeTier: "note" }, { unlocked: false }, { ...none, freeReply: true }).ok).toBe(true);
-    expect(decidePublish(constellations, { ...classic, templateSlug: "constellations", photos: ten.slice(0, 3), freeTier: "note" }, { unlocked: false }, none).ok).toBe(true);
+    // A Constellations under the earlier rules: three to ten photos, free, as before.
+    expect(decidePublish(constellations, { ...classic, templateSlug: "constellations", photos: ten.slice(0, 3) }, { unlocked: false }, none)).toEqual({ ok: true, watermark: true, isPremium: false });
+    expect(decidePublish(constellations, { ...classic, templateSlug: "constellations", photos: ten }, { unlocked: false }, none).ok).toBe(true);
+  });
+
+  it("Constellations, held to the note's rules, has no free version: it is made of photos", () => {
+    const sky = (photos: number): GiftData => ({ ...classic, templateSlug: "constellations", freeTier: "note", photos: Array.from({ length: photos }, (_, i) => photo(`gifts/g1/${i}.webp`)) });
+    expect(noteCanBeFree(letter)).toBe(true);
+    expect(noteCanBeFree(constellations)).toBe(false);
+    // Three photos make it a sky, and photos are paid.
+    expect(decidePublish(constellations, sky(3), { unlocked: false }, none)).toEqual({ ok: false, reason: "payment_required" });
+    expect(decidePublish(constellations, sky(3), { unlocked: true }, none)).toEqual({ ok: true, watermark: false, isPremium: false });
+    // Without its photos it is not a gift yet: there is no photo-less sky to send free.
+    expect(readinessProblems(constellations, sky(0))).toContain("photosMin");
+    expect(readinessProblems(constellations, sky(2))).toContain("photosMin");
+    expect(decidePublish(constellations, sky(0), { unlocked: true }, none)).toMatchObject({ ok: false, reason: "not_ready" });
+  });
+
+  it("names the test's events per template, step and version", () => {
+    expect(freeTestEvent("the-letter", "started", "note")).toBe("letter_started_note");
+    expect(freeTestEvent("the-letter", "pay", "classic")).toBe("letter_pay_classic");
+    expect(freeTestEvent("constellations", "sheet", "note")).toBe("sky_sheet_note");
+    expect(freeTestEvent("constellations", "started", "classic")).toBe("sky_started_classic");
   });
 
   it("an edit to a note that is already out is held to the note's rules", () => {

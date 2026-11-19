@@ -7,9 +7,9 @@ import { useSearchParams } from "next/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
-import { track } from "@/lib/analytics/track";
+import { freeTestEvent, track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, type FieldProblem } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteLength, noteRules } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules } from "@/lib/gift/free-tier";
 import { FreeNoteOption } from "./free-note-option";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
@@ -107,14 +107,16 @@ export function PublishSheet({
     void fetchUpgradeQuote(currency).then(setUpgrade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, state.authed, slug]);
-  // A Letter held to the short note (lib/gift/free-tier.ts): its photos and a long letter are paid.
+  // A gift held to the note's rules (lib/gift/free-tier.ts): its photos and a long letter are paid.
+  // The Letter can still go out free as a short note; Constellations, made of photos, cannot.
   const note = noteRules(manifest, state.data);
+  const noteFree = noteCanBeFree(manifest);
   // Which version of the free Letter test this gift is in, for the test's own events; null elsewhere.
   const letterArm = manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) ? (note ? "note" : "classic") : null;
   useEffect(() => {
     if (!open) return;
     track("publish_sheet_shown", { template: slug, tier: manifest.tier, guest: !state.authed });
-    if (letterArm) track(letterArm === "note" ? "letter_sheet_note" : "letter_sheet_classic", { guest: !state.authed });
+    if (letterArm) track(freeTestEvent(slug, "sheet", letterArm), { guest: !state.authed });
   }, [open, slug, manifest.tier, state.authed, letterArm]);
   // The app says what this account owns changed (a purchase, a restore, a pass joined): check again.
   useNativeEvents((event) => {
@@ -419,7 +421,7 @@ export function PublishSheet({
                 {(["photosMin", "uploadsPending"] as const)
                   // A template that needs no photos has nothing to tick off for them.
                   // A note goes out without photos (lib/gift/free-tier.ts): it has no photo row to tick.
-                  .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || (manifest.features.photos.min > 0 && !note)))
+                  .filter((key) => (state.authed || key !== "uploadsPending") && (key !== "photosMin" || (manifest.features.photos.min > 0 && !(note && noteFree))))
                   .map((key) => {
                     const bad = problems.includes(key);
                     const stuck = key === "uploadsPending" && bad && lastingProblem;
@@ -492,7 +494,7 @@ export function PublishSheet({
                 letterArm={letterArm}
               />
             ) : null}
-            {noteOffer && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
+            {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
             ) : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
@@ -533,7 +535,7 @@ export function PublishSheet({
                 </Notice>
               )
             ) : null}
-            {noteOffer && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {noteOffer && noteFree && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
             ) : null}
 

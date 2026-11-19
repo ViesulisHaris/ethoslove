@@ -27,7 +27,7 @@ import { clearLocalDraft, localAssetIds, localRefs, readLocalDraft, serializeFor
 import { completeGiftData } from "./complete-data";
 import { armFromSearch, pickFreeTier } from "./free-tier-split";
 import { NOTE_TEMPLATES } from "@/lib/gift/free-tier";
-import { track } from "@/lib/analytics/track";
+import { freeTestEvent, track } from "@/lib/analytics/track";
 
 const LOCAL_DEBOUNCE = 350;
 const REMOTE_DEBOUNCE = 1800;
@@ -509,8 +509,8 @@ export const useEditor = create<EditorState>((set, get) => {
         removeWatermark = local.removeWatermark;
       }
 
-      // A Letter started now is given the free version it is held to (lib/gift/free-tier.ts): the
-      // short note, or the rules before it. One that exists already keeps its own, except that a
+      // A Letter or a Constellations started now is given the free version it is held to
+      // (lib/gift/free-tier.ts): the note's rules, or the ones before them. One that exists already keeps its own, except that a
       // draft still on this device follows `?free=` on the address, for trying a version out.
       if (manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) && !remote) {
         const search = typeof window === "undefined" ? "" : window.location.search;
@@ -519,7 +519,7 @@ export const useEditor = create<EditorState>((set, get) => {
           const rest: GiftData = { ...data };
           delete rest.freeTier;
           data = arm === "note" ? { ...rest, freeTier: "note" } : rest;
-          if (!local) track(arm === "note" ? "letter_started_note" : "letter_started_classic", { template: slug });
+          if (!local) track(freeTestEvent(slug, "started", arm), { template: slug });
         }
       }
 

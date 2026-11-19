@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js/pure";
 import { CheckoutElementsProvider, ExpressCheckoutElement, useCheckoutElements } from "@stripe/react-stripe-js/checkout";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { env } from "@/lib/env";
-import { track } from "@/lib/analytics/track";
+import { freeTestEvent, track } from "@/lib/analytics/track";
 import { adTrack } from "@/lib/analytics/ads";
 import { consentSentence } from "@/lib/stripe/line-items";
 import { startOneTapCheckout, useCheckoutError } from "@/components/pricing/checkout";
@@ -151,7 +151,7 @@ function Buttons({ sale, onError }: { sale: Sale; onError: () => void }) {
         onConfirm={async (event) => {
           if (checkout.type !== "success") return;
           track("pay_clicked", { template: sale.template, product: sale.product, bump: sale.bump, second: sale.second, reply: sale.reply, guest: sale.guest, oneTap: true });
-          if (sale.letterArm) track(sale.letterArm === "note" ? "letter_pay_note" : "letter_pay_classic", { guest: sale.guest, oneTap: true });
+          if (sale.letterArm) track(freeTestEvent(sale.template, "pay", sale.letterArm), { guest: sale.guest, oneTap: true });
           adTrack({ name: "InitiateCheckout", contents: [{ id: sale.template, category: sale.category }], value: sale.total / 100, currency: sale.currency.toUpperCase() });
           const result = await checkout.checkout.confirm({ expressCheckoutConfirmEvent: event });
           if (result.type === "error") onError();

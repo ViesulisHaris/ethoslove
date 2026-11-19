@@ -2,7 +2,7 @@ import type { z } from "zod";
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { isStoragePath } from "./assets";
-import { FREE_NOTE_MAX_CHARS, noteLength, noteRules } from "./free-tier";
+import { FREE_NOTE_MAX_CHARS, noteCanBeFree, noteLength, noteRules } from "./free-tier";
 import { isKnownMusic } from "./music";
 
 export type Entitlement = {
@@ -98,8 +98,9 @@ export function readinessProblems(manifest: TemplateManifest, data: GiftData, fi
   if (!data.senderName.trim()) problems.push("senderName");
   if (!data.message.trim()) problems.push("message");
   if (fieldsSchema) problems.push(...fieldProblems(fieldsSchema, data.fields).map((problem) => `fields.${problem.key}`));
-  // A note goes out with no photos at all (./free-tier), whatever the template asks of the full version.
-  if (data.photos.length < (noteRules(manifest, data) ? 0 : manifest.features.photos.min)) problems.push("photosMin");
+  // A note goes out with no photos at all (./free-tier), where the template can stand without them;
+  // one built from photos keeps its minimum, and so has no free version.
+  if (data.photos.length < (noteRules(manifest, data) && noteCanBeFree(manifest) ? 0 : manifest.features.photos.min)) problems.push("photosMin");
   if (data.photos.length > manifest.features.photos.max) problems.push("photosMax");
   if (data.photos.some((p) => !isStoragePath(p.url) && !p.url.startsWith("http"))) problems.push("uploadsPending");
   if (data.music?.source === "upload" && !isStoragePath(data.music.url) && !data.music.url.startsWith("http")) problems.push("uploadsPending");

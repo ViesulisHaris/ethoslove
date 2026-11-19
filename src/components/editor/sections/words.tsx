@@ -46,7 +46,9 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
 
   const left = LIMITS.messageMaxChars - data.message.length;
   // A Letter whose free version is the short note says where free ends while they write, not at the end.
-  const { note, max: noteMax, price: notePrice } = useNoteRules();
+  // Only where a free note exists: a gift made of photos has no free length to count towards.
+  const { note: held, free: noteFree, max: noteMax, price: notePrice } = useNoteRules();
+  const note = held && noteFree;
   const length = noteLength(data.message);
 
   return (

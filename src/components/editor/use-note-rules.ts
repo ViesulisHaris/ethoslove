@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 import { getEntitlement } from "@/app/actions/gift";
 import { useEditor } from "@/lib/editor/store";
-import { FREE_NOTE_MAX_CHARS, noteRules } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, noteCanBeFree, noteRules } from "@/lib/gift/free-tier";
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
 import { useCurrency } from "@/lib/pricing/use-currency";
 
@@ -17,7 +17,7 @@ const owned = new Map<string, Promise<boolean>>();
  * letter's counter and the line under the photos. A sender who already owns the template's extras
  * is told nothing: for them it is all included.
  */
-export function useNoteRules(): { note: boolean; max: number; price: string } {
+export function useNoteRules(): { note: boolean; /** False for a gift made of photos: held to the rules, it has no free version. */ free: boolean; max: number; price: string } {
   const manifest = useEditor((s) => s.manifest);
   // The store holds no gift until it has loaded.
   const freeTier = useEditor((s) => s.data?.freeTier);
@@ -48,5 +48,10 @@ export function useNoteRules(): { note: boolean; max: number; price: string } {
     };
   }, [held, authed, userId, slug]);
 
-  return { note: held && !(authed && unlocked), max: FREE_NOTE_MAX_CHARS, price: formatAmount(PRODUCTS.extras.amounts[currency], currency, locale) };
+  return {
+    note: held && !(authed && unlocked),
+    free: manifest !== null && noteCanBeFree(manifest),
+    max: FREE_NOTE_MAX_CHARS,
+    price: formatAmount(PRODUCTS.extras.amounts[currency], currency, locale),
+  };
 }

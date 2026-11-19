@@ -417,6 +417,7 @@
       "tooMany": "Esta plantilla admite hasta {max} fotos.",
       "free10": "Los regalos gratis admiten 10 fotos. Desbloquea la plantilla para 20.",
       "noteHint": "Las fotos vienen con la versión completa: {price}, una sola vez. Una Carta gratis se envía como una nota corta, sin fotos.",
+      "noteHintPaidOnly": "Este regalo se hace con tus fotos, así que no tiene versión gratis: {price}, una sola vez.",
       "failedBanner": "{n, plural, one {Una foto no se subió.} other {# fotos no se subieron.}}",
       "failedUnreadable": "{n, plural, one {No se pudo abrir una foto. Prueba con una copia en JPEG o PNG.} other {No se pudieron abrir # fotos. Prueba con copias en JPEG o PNG.}}",
       "failedMissing": "{n, plural, one {Una foto ya no está en este dispositivo. Añádela de nuevo.} other {# fotos ya no están en este dispositivo. Añádelas de nuevo.}}",

@@ -35,7 +35,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
   const [dragOver, setDragOver] = useState(false);
   const [cropping, setCropping] = useState<GiftPhoto | null>(null);
   const tSections = useTranslations("editor.sections.photos");
-  const { note, price: notePrice } = useNoteRules();
+  const { note, free: noteFree, price: notePrice } = useNoteRules();
 
   const max = manifest.features.photos.max;
   const processing = Object.values(assets).filter((a) => a.kind === "photo" && a.status === "processing");
@@ -99,7 +99,7 @@ export function PhotosSection({ manifest }: { manifest: TemplateManifest }) {
         <p className="mt-2 text-xs text-muted-foreground">{t("tooMany", { max })}</p>
       ) : note ? (
         <p className="mt-2 text-xs text-muted-foreground" data-testid="photos-note-hint">
-          {t("noteHint", { price: notePrice })}
+          {t(noteFree ? "noteHint" : "noteHintPaidOnly", { price: notePrice })}
         </p>
       ) : photos.length >= LIMITS.free.maxPhotos ? (
         <p className="mt-2 text-xs text-muted-foreground">{t("free10")}</p>

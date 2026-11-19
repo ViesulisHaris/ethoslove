@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
-import { track } from "@/lib/analytics/track";
+import { freeTestEvent, track } from "@/lib/analytics/track";
 import { adTrack } from "@/lib/analytics/ads";
 import { PRODUCTS, SECOND_GIFT, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
@@ -160,7 +160,7 @@ export function Paywall({
     going.current = true;
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
-    if (letterArm) track(letterArm === "note" ? "letter_pay_note" : "letter_pay_classic", { guest });
+    if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
     const result = await startCheckout({ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale }, { total, category: manifest.tier });
     if ("url" in result) {
       window.location.assign(result.url);
