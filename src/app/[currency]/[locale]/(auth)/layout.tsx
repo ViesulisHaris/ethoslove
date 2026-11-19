@@ -3,6 +3,8 @@ import { ClientMessages } from "@/i18n/client-messages";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/shared/logo";
 import { SiteMotion } from "@/components/motion/site-motion";
+import { SupportLauncher } from "@/components/support/support-launcher";
+import { isConfigured } from "@/lib/env";
 
 export default async function AuthLayout({ children, params }: LayoutProps<"/[currency]/[locale]">) {
   const { locale } = await params;
@@ -21,6 +23,7 @@ export default async function AuthLayout({ children, params }: LayoutProps<"/[cu
           {children}
         </main>
         <SiteMotion />
+        {isConfigured.supportChat ? <SupportLauncher /> : null}
       </div>
     </ClientMessages>
   );

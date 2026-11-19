@@ -5,6 +5,7 @@ import { isConfigured } from "@/lib/env";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { AppShell } from "@/components/app/app-shell";
 import { SiteMotion } from "@/components/motion/site-motion";
+import { SupportLauncher } from "@/components/support/support-launcher";
 
 /** Authenticated app shell. Without Supabase configured it renders a "not connected" state. */
 export default async function AppLayout({ children, params }: LayoutProps<"/[currency]/[locale]">) {
@@ -31,6 +32,7 @@ export default async function AppLayout({ children, params }: LayoutProps<"/[cur
         {children}
       </AppShell>
       <SiteMotion />
+      {isConfigured.supportChat ? <SupportLauncher /> : null}
     </ClientMessages>
   );
 }

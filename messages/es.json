@@ -3337,5 +3337,74 @@
     "copied": "Enlace copiado",
     "gift": "Haz un regalo que se abra el {date}",
     "privacy": "Vuestra fecha se queda en este dispositivo. El enlace solo lleva la fecha."
+  },
+  "support": {
+    "open": "Ayuda",
+    "openLabel": "Abrir el chat de ayuda",
+    "title": "Ayuda de Ethos",
+    "subtitle": "Respuestas al momento",
+    "close": "Cerrar el chat de ayuda",
+    "restart": "Nuevo chat",
+    "greeting": "¡Hola! Estoy aquí para ayudarte con Ethos. ¿Con qué necesitas ayuda?",
+    "placeholder": "Escribe tu pregunta",
+    "send": "Enviar",
+    "writing": "Escribiendo…",
+    "disclaimer": "Las respuestas las da una IA y pueden equivocarse. Cuando no puede ayudarte, se encarga nuestro equipo.",
+    "handoffTitle": "Pasárselo a nuestro equipo",
+    "handoffBody": "Responden por email y este chat va con el mensaje, así no tendrás que explicarlo otra vez.",
+    "emailLabel": "Tu email",
+    "handoffSend": "Enviar al equipo",
+    "handoffSending": "Enviando…",
+    "handoffDone": "Enviado. Te responderemos a {email}.",
+    "errorRate": "Son muchos mensajes seguidos. Inténtalo de nuevo en unos minutos o escríbenos a {email}.",
+    "errorDown": "El chat de ayuda no está disponible ahora. Escríbenos a {email} y te ayudamos.",
+    "errorHandoff": "No se ha podido enviar. Escríbenos a {email}, por favor.",
+    "errorEmailInvalid": "Ese email no parece correcto.",
+    "followDone": "Me ha servido, gracias",
+    "followAsk": "Preguntar otra cosa",
+    "doneReply": "¡Me alegro! ¿Algo más?",
+    "askReply": "Claro, escribe tu pregunta abajo.",
+    "handoffReply": "Se lo paso a nuestro equipo, que responde por email. Deja tu dirección aquí abajo.",
+    "backToTopics": "Volver a los temas",
+    "topics": {
+      "paidMissing": {
+        "label": "He pagado y no encuentro mi regalo",
+        "answer": "Un regalo se guarda en el móvil u ordenador donde se hizo hasta que se publica. Entra con el email con el que pagaste, en ese mismo móvil u ordenador, y abre Mis regalos: arriba verás que tu regalo está pagado. Pulsa «Terminar y enviarlo». En otro móvil el borrador no está, así que haz el regalo de nuevo con la misma plantilla: ya está desbloqueada, así que no hay nada más que pagar.",
+        "stuck": "Sigo sin encontrarlo"
+      },
+      "signIn": {
+        "label": "No puedo entrar",
+        "answer": "No hay contraseñas: escribe tu email en la página de entrada y te enviamos un enlace y un código de 6 dígitos. Cada enlace sirve una vez, durante una hora, y un email nuevo sustituye al anterior, así que usa el último o escribe su código de 6 dígitos. ¿No llega en unos minutos? Mira en spam y promociones. Entra con el email con el que pagaste, o tus compras no estarán ahí.",
+        "stuck": "Sigo sin poder entrar"
+      },
+      "prices": {
+        "label": "Precios y pagos",
+        "answer": "Las plantillas se pagan una sola vez y nada se renueva: una plantilla {single}, tres a elegir {pick3}, todas las plantillas {everything} y «Hazlo especial» en una plantilla gratis {extras}. {forTwo} The Letter y Constellations son gratis. Pagas en la página de Stripe con tarjeta, Apple Pay o Google Pay, y no hay códigos de descuento.",
+        "forTwoPass": "Ethos for Two cuesta {pass} por un año para los dos, en un solo pago, y no se renueva solo.",
+        "forTwoSubscription": "Ethos for Two cuesta {monthly} al mes o {yearly} al año para los dos, y se renueva hasta que lo canceles en tu página de Cuenta."
+      },
+      "edit": {
+        "label": "Cambiar o reenviar un regalo",
+        "answer": "Abre Mis regalos y pulsa «Editar» en el regalo: los cambios salen en el mismo enlace en cuanto los publicas, así que no hay que reenviar nada. «Copiar enlace» te da el enlace otra vez y «Tarjeta QR», una tarjeta para imprimir."
+      },
+      "wontOpen": {
+        "label": "El regalo no se abre",
+        "answer": "Los enlaces de regalo se abren en el navegador de cualquier móvil u ordenador, sin app ni cuenta. Si dice que aún no se abre, está programado para una hora concreta; si pide una contraseña, es la que eligió quien lo envió. Si las palabras salen en otro idioma, el navegador está traduciendo la página: desactiva la traducción para esa página.",
+        "stuck": "Sigue sin abrirse"
+      },
+      "refunds": {
+        "label": "Reembolsos",
+        "answer": "Las plantillas, «Hazlo especial» y los packs de juegos se desbloquean al momento al pagar, y con eso termina el derecho a cancelar de 14 días. Si un regalo no se abre o no se reproduce bien y no podemos arreglarlo, avísanos en los 30 días siguientes a la compra y te devolvemos el dinero. Ethos for Two se puede cancelar en 14 días, con reembolso menos los días usados. Nuestro equipo decide cada reembolso.",
+        "stuck": "Quiero un reembolso"
+      },
+      "etsy": {
+        "label": "Compré en Etsy",
+        "answer": "Ve a tryethos.io/etsy y escribe tu número de pedido de Etsy: el número largo después de «Order #» en el email de Etsy, o en Tú → Compras en Etsy. Abre el regalo que compraste, listo para hacerlo.",
+        "stuck": "No ha funcionado"
+      },
+      "other": {
+        "label": "Otra cosa"
+      }
+    }
   }
 }
