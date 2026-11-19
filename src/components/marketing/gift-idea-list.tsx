@@ -6,6 +6,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { cn } from "@/lib/utils";
 import { getManifest } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 /** One gift idea: a template, and what it is for this person or this day. */
 export type GiftIdea = { template: string; heading: string; body: string };
@@ -46,7 +47,7 @@ export async function GiftIdeaList({
           <div className="min-w-0">
             <p className="text-mono-meta text-muted-foreground">
               {String(i + 1).padStart(2, "0")} · {idea.manifest.name[locale]}
-              {idea.manifest.tier === "free" ? ` · ${t("free")}` : null}
+              {sendsFree(idea.manifest) ? ` · ${t("free")}` : null}
             </p>
             <Heading className="mt-2 font-display text-2xl leading-tight">
               <Link href={`/templates/${idea.template}`} className="transition-colors hover:text-coral">

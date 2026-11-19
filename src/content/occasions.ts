@@ -30,11 +30,11 @@ const phoneEs = {
 };
 const costEn = {
   q: "Does it cost anything?",
-  a: "Two templates are free, with up to ten photos, our music library and a real song they tap to hear, and they publish with a small “Made with Ethos” footer. Premium templates are a one-time payment for that template, forever — no subscription — and add video, voice messages, twenty photos, scheduling and a password.",
+  a: "The Letter is free as a short note: up to 500 characters, our music library and a real song they tap to hear, with a small “Made with Ethos” footer. Photos, a longer letter and every other template are a one-time payment for that template, forever — no subscription — and add video, voice messages, up to twenty photos, scheduling and a password.",
 };
 const costEs = {
   q: "¿Cuesta algo?",
-  a: "Dos plantillas son gratis, con hasta diez fotos, nuestra biblioteca de música y una canción de verdad que se escucha con un toque, y se publican con un pequeño pie que dice “Hecho con Ethos”. Las premium son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, veinte fotos, programación y contraseña.",
+  a: "La carta es gratis como nota corta: hasta 500 caracteres, nuestra biblioteca de música y una canción de verdad que se escucha con un toque, con un pequeño pie que dice “Hecho con Ethos”. Las fotos, una carta más larga y las demás plantillas son un solo pago por esa plantilla, para siempre, sin suscripción, y añaden vídeo, mensajes de voz, hasta veinte fotos, programación y contraseña.",
 };
 const keepEn = {
   q: "Will it still be there next year?",

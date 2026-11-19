@@ -695,7 +695,68 @@ export interface Database {
         Update: never;
         Relationships: [];
       };
-      /** Who asked for our offer emails, with the sentence they ticked (0020, api/offer/emails). Service role only. */
+      /** The help chat's conversations, kept 30 days (0020). Service role only. */
+      support_chats: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          locale: string;
+          currency: string;
+          page: string | null;
+          model: string;
+          api_messages: Json;
+          transcript: Json;
+          visitor_turns: number;
+          input_tokens: number;
+          output_tokens: number;
+          cache_read_tokens: number;
+          cache_write_tokens: number;
+          cost_micros: number;
+          handoff_at: string | null;
+          handoff_email: string | null;
+        };
+        Insert: {
+          id: string;
+          created_at?: string;
+          updated_at?: string;
+          locale: string;
+          currency: string;
+          page?: string | null;
+          model: string;
+          api_messages?: Json;
+          transcript?: Json;
+          visitor_turns?: number;
+          input_tokens?: number;
+          output_tokens?: number;
+          cache_read_tokens?: number;
+          cache_write_tokens?: number;
+          cost_micros?: number;
+          handoff_at?: string | null;
+          handoff_email?: string | null;
+        };
+        Update: {
+          updated_at?: string;
+          model?: string;
+          api_messages?: Json;
+          transcript?: Json;
+          visitor_turns?: number;
+          input_tokens?: number;
+          output_tokens?: number;
+          cache_read_tokens?: number;
+          cache_write_tokens?: number;
+          cost_micros?: number;
+          handoff_at?: string | null;
+          handoff_email?: string | null;
+        };
+        Relationships: [];
+      };
+      /** The help chat's windowed counters: per-visitor limits and the day's spend (0020). Service role only. */
+      support_counters: {
+        Row: { key: string; window_start: string; window_secs: number; total: number };
+        Insert: { key: string; window_start?: string; window_secs: number; total?: number };
+        Update: never;
+      /** Who asked for our offer emails, with the sentence they ticked (0021, api/offer/emails). Service role only. */
       offer_emails: {
         Row: { user_id: string; created_at: string; wording: string; source: string; locale: string };
         Insert: { user_id: string; created_at?: string; wording: string; source: string; locale?: string };
@@ -749,6 +810,10 @@ export interface Database {
       purge_stale_drafts: { Args: { p_days?: number }; Returns: number };
       /** Deletes checkout_sources rows of checkouts never paid once older than p_days (0019). Service role only. */
       forget_unpaid_checkout_sources: { Args: { p_days?: number }; Returns: number };
+      /** Adds to a help-chat counter in its current window and returns the total (0020). Service role only. */
+      support_count: { Args: { p_key: string; p_add: number; p_window_seconds: number }; Returns: number };
+      /** Deletes help chats untouched for p_days and expired counters (0020). Service role only. */
+      forget_support_chats: { Args: { p_days?: number }; Returns: number };
       /** Gifts opened and opens counted, for the numbers on the site (0017). Service role only. */
       proof_numbers: { Args: Record<string, never>; Returns: Json };
       get_public_gift: { Args: { p_short_id: string; p_password?: string | null }; Returns: Json };

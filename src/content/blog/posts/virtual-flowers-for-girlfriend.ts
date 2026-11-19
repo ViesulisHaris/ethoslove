@@ -166,7 +166,7 @@ export const post: BlogPost = {
         },
         {
           q: "Can I send virtual flowers for free?",
-          a: "A photo of flowers you saw that made you think of her, with one line, costs nothing and still works. Bouquet and Bloom are premium, paid once, and each has a free live demo you can try first. [The Letter](/templates/the-letter) is free: no bouquet, but a wax-sealed envelope she opens by hand, with room for those lines and up to ten photos.",
+          a: "A photo of flowers you saw that made you think of her, with one line, costs nothing and still works. Bouquet and Bloom are premium, paid once, and each has a free live demo you can try first. [The Letter](/templates/the-letter) is free as a short note: no bouquet, but a wax-sealed envelope she opens by hand, with room for those lines. Photos in it are paid once.",
         },
       ],
     },
@@ -330,7 +330,7 @@ export const post: BlogPost = {
         },
         {
           q: "¿Puedo mandar flores virtuales gratis?",
-          a: "Una foto de unas flores que viste y te hicieron pensar en ella, con una frase, no cuesta nada y funciona. Las plantillas Ramo y Flor son premium, de pago único, y cada una tiene una demo gratis para probarla antes. [La carta](/templates/the-letter) es gratis: no lleva ramo, pero es un sobre lacrado que ella abre a mano, con sitio para esas frases y hasta diez fotos.",
+          a: "Una foto de unas flores que viste y te hicieron pensar en ella, con una frase, no cuesta nada y funciona. Las plantillas Ramo y Flor son premium, de pago único, y cada una tiene una demo gratis para probarla antes. [La carta](/templates/the-letter) es gratis como nota corta: no lleva ramo, pero es un sobre lacrado que ella abre a mano, con sitio para esas frases. Las fotos dentro se pagan una sola vez.",
         },
       ],
     },

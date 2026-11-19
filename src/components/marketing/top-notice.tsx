@@ -10,9 +10,9 @@ import { useCurrency } from "@/lib/pricing/use-currency";
 
 /**
  * The window in which every page says the Privacy Policy and Terms have changed: two hours from the
- * release that changed them (the owner's choice, 20 Nov 2026). Times in UTC.
+ * release that changed them (the owner's choice, 19 Nov 2026). Times in UTC.
  */
-export const POLICY_NOTICE = { from: Date.parse("2026-11-20T10:00:00Z"), until: Date.parse("2026-11-20T12:00:00Z") };
+export const POLICY_NOTICE = { from: Date.parse("2026-11-19T20:30:00Z"), until: Date.parse("2026-11-19T23:30:00Z") };
 
 // The time the page was opened, in the browser only: the built page carries neither notice.
 let openedAt: number | null = null;

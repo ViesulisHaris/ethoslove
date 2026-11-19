@@ -151,7 +151,7 @@ export const post: BlogPost = {
           type: "list",
           ordered: true,
           items: [
-            "**Make one gift per letter.** [The Letter](/templates/the-letter) is free and you can make as many as you like, each with its own message, up to ten photos and a song from the music library. The photo for the \"open when you miss me\" letter does the job the photo in the envelope would.",
+            "**Make one gift per letter.** [The Letter](/templates/the-letter) is free as a short note, up to 500 characters with a song from the music library, and you can make as many as you like, each with its own message. Photos come with one payment that covers every Letter you make after it; the photo for the \"open when you miss me\" letter does the job the photo in the envelope would.",
             "**Send them in one message**, each link under its moment: \"Open when you can't sleep\", then the link. Ask them to pin it or save it in a note, so the set stays in one place like the box would.",
             "**Lock the dated ones.** A letter for their birthday or your anniversary can be scheduled to open at a set time in their time zone, midnight if you like. Open it early and they see a countdown instead of the letter, so nobody can peek. Scheduling, a voice message and a video come with “Make it special”, a one-time [paid extra](/pricing) for The Letter.",
           ],
@@ -343,7 +343,7 @@ export const post: BlogPost = {
           type: "list",
           ordered: true,
           items: [
-            "**Haz un regalo por carta.** [La carta](/templates/the-letter) es gratis y puedes hacer tantas como quieras, cada una con su mensaje, hasta diez fotos y una canción de la biblioteca de música. La foto de la carta de «ábrela cuando me eches de menos» hace lo mismo que la del sobre.",
+            "**Haz un regalo por carta.** [La carta](/templates/the-letter) es gratis como nota corta, de hasta 500 caracteres con una canción de la biblioteca de música, y puedes hacer tantas como quieras, cada una con su mensaje. Las fotos vienen con un solo pago que vale para todas las Cartas que hagas después; la foto de la carta de «ábrela cuando me eches de menos» hace lo mismo que la del sobre.",
             "**Mándalas en un solo mensaje**, cada enlace debajo de su momento: «Ábrela cuando no puedas dormir» y el enlace. Pídele que lo fije o lo guarde en una nota, para que el conjunto esté en un sitio, como la caja.",
             "**Bloquea las que tienen fecha.** La carta de su cumpleaños o de vuestro aniversario se puede programar para que se abra a una hora concreta en su zona horaria, a medianoche si quieres. Si la abre antes, ve una cuenta atrás en vez de la carta, así que no hay forma de hacer trampa. La programación, un mensaje de voz y un vídeo vienen con «Hazlo especial», un [pago único](/pricing) para La carta.",
           ],

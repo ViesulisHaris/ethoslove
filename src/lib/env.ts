@@ -81,6 +81,12 @@ export const env = {
   sentryDsn: read("NEXT_PUBLIC_SENTRY_DSN"),
 
   anthropicApiKey: read("ANTHROPIC_API_KEY"),
+  /**
+   * The help chat's own key (SIA Miglia's API organization, where the plan's monthly API credit
+   * lands). Its own name, so turning the chat on doesn't also turn on the editor's writing helper,
+   * which shows wherever ANTHROPIC_API_KEY is set. Falls back to that key when only it is set.
+   */
+  supportAnthropicApiKey: read("SUPPORT_ANTHROPIC_API_KEY") ?? read("ANTHROPIC_API_KEY"),
 
   cronSecret: read("CRON_SECRET"),
   upstashRedisUrl: read("UPSTASH_REDIS_REST_URL"),
@@ -124,5 +130,7 @@ export const isConfigured = {
   cookieConsent: Boolean(env.clarityId || env.metaPixelId || env.tiktokPixelId),
   sentry: Boolean(env.sentryDsn),
   ai: Boolean(env.anthropicApiKey),
+  /** The help chat answers (SUPPORT_CHAT_ENABLED=false switches it off; =true shows it without a key, for the UI). */
+  supportChat: read("SUPPORT_CHAT_ENABLED") !== "false" && (read("SUPPORT_CHAT_ENABLED") === "true" || Boolean(env.supportAnthropicApiKey)),
   upstash: Boolean(env.upstashRedisUrl && env.upstashRedisToken),
 } as const;

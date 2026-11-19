@@ -12,6 +12,7 @@ import { JsonLd } from "@/components/shared/json-ld";
 import { OccasionGuide } from "@/components/marketing/occasion-guide";
 import { PageHeader } from "@/components/shared/page-header";
 import { TemplateGallery } from "@/components/templates/template-gallery";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 export function generateStaticParams() {
   return OCCASIONS.map((occasion) => ({ occasion }));
@@ -38,7 +39,7 @@ export default async function OccasionPage({ params }: PageProps<"/[currency]/[l
   const title = t(`seo.occasion.${occasion}.title`);
   const templates = listManifests({ occasion });
   // What "Free" shows when this occasion has no free template of its own.
-  const alsoFree = listManifests({ tier: "free" }).filter((m) => !m.occasions.includes(occasion));
+  const alsoFree = listManifests({ tier: "free" }).filter((m) => sendsFree(m) && !m.occasions.includes(occasion));
   const guide = OCCASION_GUIDES[occasion][locale as Locale];
   return (
     <>

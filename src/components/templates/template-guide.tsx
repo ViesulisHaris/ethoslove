@@ -6,6 +6,7 @@ import { templateGuide } from "@/content/template-guides";
 import { templateSeo } from "@/content/template-seo";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
+import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { FaqList } from "@/components/shared/faq-list";
 
 /**
@@ -17,8 +18,8 @@ export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const name = manifest.name[locale];
   return [
-    manifest.tier === "free"
-      ? { q: t("faqFreeQ"), a: t("faqFreeA", { name, price }) }
+    sendsFree(manifest)
+      ? { q: t("faqFreeQ"), a: t(noteForEveryone() ? "faqFreeAShort" : "faqFreeA", { name, price }) }
       : { q: t("faqPaidQ"), a: t("faqPaidA", { name, price }) },
     { q: t("faqOpenQ"), a: t("faqOpenA") },
     { q: t("faqEditQ"), a: t("faqEditA") },

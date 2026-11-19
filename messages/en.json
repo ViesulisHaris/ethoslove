@@ -43,7 +43,8 @@
     "titleTemplate": "%s · Ethos",
     "description": "Make a digital gift in ten minutes: a love letter, bouquet or scrapbook with your photos and song, sent as a link. Free to start, with date ideas and games.",
     "giftsTitle": "Digital Gifts and Virtual Gifts: Make a Free, Personal One · Ethos",
-    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free."
+    "giftsDescription": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, two free.",
+    "giftsDescriptionShort": "Make a digital gift in ten minutes: a love letter, bouquet, scrapbook or small game from your photos, words and their song, sent as a link. 30 ideas, one free."
   },
   "nav": {
     "templates": "Templates",
@@ -766,6 +767,7 @@
     "make": "Make yours",
     "pricePaid": "Free to make · {price} once, when you send it",
     "priceFree": "Free to make and send · extras {price}, paid once",
+    "priceFreeShort": "Free as a short note · with photos {price}, paid once",
     "stepsTitle": "How it works",
     "whatTheySee": "What they'll see",
     "reactionsTitle": "What came back",
@@ -850,6 +852,7 @@
     "priceOnce": "{price} once",
     "priceFree": "Free",
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
+    "detailPriceFreeShort": "Free as a short note: up to 500 characters and their song. Photos, the full letter, a video, a voice message or a surprise inside come with “Make it special” for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
     "sections": {
       "popular": {
@@ -886,8 +889,9 @@
       "faqTitle": "Questions people ask",
       "faqFreeQ": "Is it free?",
       "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
+      "faqFreeAShort": "Yes, as a short note. {name} goes out free with up to 500 characters, music and a small “Made with Ethos” footer. Photos, a longer letter, a video, a voice message, no footer and scheduling come with “Make it special” for {price}, paid once.",
       "faqPaidQ": "How much does it cost?",
-      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter and Constellations are free.",
+      "faqPaidA": "Make it and try every part of it first, with no account. Sending it costs {price} once, and then the template is yours to use again, forever, with no subscription. The Letter is free as a short note.",
       "faqOpenQ": "How do they open it?",
       "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
       "faqEditQ": "Can I change it after I send it?",
@@ -938,6 +942,7 @@
     "bestValue": "Best value",
     "priority": "Includes priority support",
     "freeNote": "Free gifts include 10 photos, our music library, a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Video clips, voice messages, up to 20 photos, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on a free template.",
+    "freeNoteShort": "A free Letter is a short note: up to 500 characters, our music library or a 30-second preview of a real song they can tap to hear, and the “Made with Ethos” footer. Photos, the full letter, video clips, voice messages, a surprise inside (a date or a trip, wrapped at the end), no footer, scheduling and a password come with any unlock, with Ethos for Two, or with “Make it special” on The Letter or Constellations.",
     "comingSoon": "Payments open soon. Free templates publish today.",
     "plans": {
       "single": {
@@ -2788,6 +2793,7 @@
         "eyebrow": "For a free template",
         "name": "Make it special",
         "blurb": "For {names}: video, voice messages, 20 photos, scheduling, a password and no footer, on that template for good.",
+        "blurbShort": "For {names}: your photos, the full letter, video, voice messages, scheduling, a password and no footer, on that template for good.",
         "note": "Sold in the editor, when you publish.",
         "cta": "Open {name}"
       }
@@ -3369,6 +3375,75 @@
     "copied": "Link copied",
     "gift": "Make a gift that opens on {date}",
     "privacy": "Your date stays on this device. The link carries only the date."
+  },
+  "support": {
+    "open": "Help",
+    "openLabel": "Open the help chat",
+    "title": "Ethos help",
+    "subtitle": "Answers straight away",
+    "close": "Close the help chat",
+    "restart": "New chat",
+    "greeting": "Hi! I'm here to help with Ethos. What do you need help with?",
+    "placeholder": "Type your question",
+    "send": "Send",
+    "writing": "Writing…",
+    "disclaimer": "Answers come from an AI and can be wrong. When it can't help, our team takes over.",
+    "handoffTitle": "Pass this to our team",
+    "handoffBody": "They answer by email, and this chat goes with it, so you won't have to explain again.",
+    "emailLabel": "Your email",
+    "handoffSend": "Send to the team",
+    "handoffSending": "Sending…",
+    "handoffDone": "Sent. We'll reply to {email}.",
+    "errorRate": "That's a lot of messages at once. Try again in a few minutes, or email us at {email}.",
+    "errorDown": "The help chat isn't available right now. Email us at {email} and we'll help.",
+    "errorHandoff": "That didn't send. Please email us at {email} instead.",
+    "errorEmailInvalid": "That email address doesn't look right.",
+    "followDone": "That helped, thanks",
+    "followAsk": "Ask something else",
+    "doneReply": "Glad that helped! Anything else?",
+    "askReply": "Sure, type your question below.",
+    "handoffReply": "I'll pass this to our team, who answer by email. Leave your address just below.",
+    "backToTopics": "Back to the topics",
+    "topics": {
+      "paidMissing": {
+        "label": "I paid but can't find my gift",
+        "answer": "A gift is saved on the phone or computer it was made on until it's published. Sign in with the email you paid with, on that same phone or computer, and open My gifts: at the top it says your gift is paid for. Tap “Finish and send it”. On a different phone the draft isn't there, so make the gift again in the same template: it's already unlocked, so there's nothing more to pay.",
+        "stuck": "I still can't find it"
+      },
+      "signIn": {
+        "label": "I can't sign in",
+        "answer": "There are no passwords: type your email on the sign-in page and we send you a link and a 6-digit code. Each link works once, for an hour, and a newer email replaces an older one, so use the newest, or type its 6-digit code. Nothing after a few minutes? Check spam and promotions. Sign in with the email you paid with, or your purchases won't be there.",
+        "stuck": "I still can't sign in"
+      },
+      "prices": {
+        "label": "Prices and paying",
+        "answer": "Templates are paid once and nothing renews: one template {single}, any three {pick3}, every template {everything}, and “Make it special” on a free template {extras}. {forTwo} The Letter is free as a short note; its photos and full letter come with “Make it special”. You pay on Stripe's page with a card, Apple Pay or Google Pay, and there are no discount codes.",
+        "forTwoPass": "Ethos for Two is {pass} for a year for both of you, paid once, and it doesn't renew by itself.",
+        "forTwoSubscription": "Ethos for Two is {monthly} a month or {yearly} a year for both of you, renewing until you cancel it on your Account page."
+      },
+      "edit": {
+        "label": "Changing or resending a gift",
+        "answer": "Open My gifts and tap “Edit” on the gift: your changes go live at the same link as soon as you publish them, so there's nothing to resend. “Copy link” gives you the link again, and “QR card” a card to print."
+      },
+      "wontOpen": {
+        "label": "The gift won't open",
+        "answer": "Gift links open in any phone or computer browser, with no app and no account. If it says it isn't open yet, it's scheduled for a set time; if it asks for a password, it's the one the sender chose. If the words show in another language, the browser is translating the page: turn translation off for that page.",
+        "stuck": "It still won't open"
+      },
+      "refunds": {
+        "label": "Refunds",
+        "answer": "Templates, “Make it special” and game packs are unlocked straight away at checkout, which ends the 14-day right to cancel. If a gift won't open or play properly and we can't fix it, tell us within 30 days of buying and you get your money back. Ethos for Two can be withdrawn within 14 days, refunded minus the days used. Our team decides every refund.",
+        "stuck": "I'd like a refund"
+      },
+      "etsy": {
+        "label": "I bought on Etsy",
+        "answer": "Go to tryethos.io/etsy and type your Etsy order number: the long number after “Order #” in Etsy's email, or under You → Purchases on Etsy. It opens the gift you bought, ready to make.",
+        "stuck": "It didn't work"
+      },
+      "other": {
+        "label": "Something else"
+      }
+    }
   },
   "offerEmails": {
     "box": "Email me Ethos offers, like early Black Friday prices. I can unsubscribe any time.",

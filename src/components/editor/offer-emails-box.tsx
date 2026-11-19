@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 
 /**
  * "Email me Ethos offers": one unticked box on the screen a gift is sent from, for the account that
- * sent it (api/offer/emails, migration 0020). Never ticked for them; ticking it is the yes the offer
+ * sent it (api/offer/emails, migration 0021). Never ticked for them; ticking it is the yes the offer
  * emails need, and unticking it takes the yes back at once. It shows what is already saved.
  */
 export function OfferEmailsBox() {

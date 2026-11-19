@@ -7,6 +7,8 @@ import { RevealRoot } from "@/components/motion/reveal-root";
 import { SiteMotion } from "@/components/motion/site-motion";
 import { TourMount } from "@/components/tour/tour-mount";
 import { TopNotice } from "@/components/marketing/top-notice";
+import { SupportLauncher } from "@/components/support/support-launcher";
+import { isConfigured } from "@/lib/env";
 
 export default async function MarketingLayout({ children, params }: LayoutProps<"/[currency]/[locale]">) {
   const { locale } = await params;
@@ -27,6 +29,7 @@ export default async function MarketingLayout({ children, params }: LayoutProps<
         <RevealRoot />
         <SiteMotion />
         <TourMount />
+        {isConfigured.supportChat ? <SupportLauncher /> : null}
       </div>
     </ClientMessages>
   );

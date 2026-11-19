@@ -43,7 +43,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
     definition:
       "A digital gift is a present you send as a link instead of in a box: a love letter, a bouquet, a scrapbook or a small game, made from your photos, your words and a song, and opened on their phone. It arrives the second you send it, nothing ships, and it's still there next year.",
     notACard:
-      "It isn't a gift card. A gift card is money with a design on it; a digital gift is the thing itself, made by you for one person. Ethos has 54 of them to start from, every one with a live demo, and two are free.",
+      "It isn't a gift card. A gift card is money with a design on it; a digital gift is the thing itself, made by you for one person. Ethos has 54 of them to start from, every one with a live demo, and one is free.",
     ideasTitle: `${DIGITAL_GIFT_IDEAS.length} digital gift ideas`,
     ideasLead: "Each one is a template you can open, try and make in about ten minutes.",
     groups: GROUPS.map((g) => ({ title: GROUP_TITLES.en[g.key], templates: g.templates })),
@@ -55,7 +55,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       },
       {
         q: "Can you send a digital gift for free?",
-        a: "Yes. The Letter and Constellations are free, with up to ten photos, music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there's nothing to install.",
+        a: "Yes. The Letter is free as a short note: up to 500 characters, with music, a countdown and a hidden surprise. You make it, publish it and send the link: nobody pays and there's nothing to install. Photos, a longer letter and the other templates are a one-time payment.",
       },
       {
         q: "How do you send a digital gift?",
@@ -85,7 +85,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
     definition:
       "Un regalo digital, o regalo virtual, es lo que mandas en un enlace en vez de en una caja: una carta de amor, un ramo, un álbum o un pequeño juego, hecho con tus fotos, tus palabras y una canción, que se abre en su móvil. Llega en el segundo en que lo mandas, no hay paquete que esperar y sigue ahí el año que viene.",
     notACard:
-      "No es una tarjeta regalo. Una tarjeta regalo es dinero con un diseño; un regalo digital es el regalo en sí, hecho por ti para una persona. Ethos tiene 54 para empezar, todos con demo en vivo, y dos son gratis.",
+      "No es una tarjeta regalo. Una tarjeta regalo es dinero con un diseño; un regalo digital es el regalo en sí, hecho por ti para una persona. Ethos tiene 54 para empezar, todos con demo en vivo, y uno es gratis.",
     ideasTitle: `${DIGITAL_GIFT_IDEAS.length} ideas de regalos digitales`,
     ideasLead: "Cada una es una plantilla que puedes abrir, probar y hacer en unos diez minutos.",
     groups: GROUPS.map((g) => ({ title: GROUP_TITLES.es[g.key], templates: g.templates })),
@@ -97,7 +97,7 @@ export const DIGITAL_GIFT_GUIDE: Record<GiftLocale, DigitalGiftGuide> = {
       },
       {
         q: "¿Hay regalos virtuales gratis?",
-        a: "Sí. La carta (una carta digital con sello de lacre) y Constelaciones (un cielo en el que cada foto es una estrella) son gratis, con hasta diez fotos, música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y mandas el enlace: no se paga y no hay nada que instalar.",
+        a: "Sí. La carta (una carta digital con sello de lacre) es gratis como nota corta: hasta 500 caracteres, con música, una cuenta atrás y una sorpresa final. Lo haces, lo publicas y mandas el enlace: no se paga y no hay nada que instalar. Las fotos, una carta más larga y las demás plantillas son un pago único.",
       },
       {
         q: "¿Cómo se envía un regalo digital?",

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { TornEdge } from "@/components/marketing/home/cutouts";
 import { GiftCardOffer } from "./gift-card-offer";
 import { PricingCards } from "./pricing-cards";
+import { noteForEveryone } from "@/lib/gift/free-tier";
 
 /**
  * The one-time gifts, under Ethos for Two and quieter than it: the three template plans (the same
@@ -67,7 +68,7 @@ export function SingleGifts({
                   {t("special.eyebrow")}
                 </p>
                 <h3 className="mt-3 font-display text-[1.75rem] leading-tight text-forest">{t("special.name")}</h3>
-                <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-soft">{t("special.blurb", { names })}</p>
+                <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-soft">{t(noteForEveryone() ? "special.blurbShort" : "special.blurb", { names })}</p>
                 <p className="mt-2 text-[13px] text-muted-foreground">{t("special.note")}</p>
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:items-end">
@@ -84,7 +85,7 @@ export function SingleGifts({
           {giftCards ? <GiftCardOffer currency={currency} paymentsEnabled={paymentsEnabled} /> : null}
         </div>
 
-        <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-muted-foreground">{tPricing("freeNote")}</p>
+        <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-muted-foreground">{tPricing(noteForEveryone() ? "freeNoteShort" : "freeNote")}</p>
       </div>
     </section>
   );

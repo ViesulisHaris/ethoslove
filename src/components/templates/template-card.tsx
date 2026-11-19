@@ -21,6 +21,7 @@ const GiftRenderer = dynamic(
   { ssr: false },
 );
 import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { sendsFree } from "@/lib/gift/free-tier";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +39,10 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
   const [live, setLive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const currency = useCurrency();
-  const price = formatAmount(PRODUCTS.single.amounts[currency], currency, locale);
+  // A premium template is bought as one; a free template that has no free version any more
+  // (lib/gift/free-tier.ts) costs its "make it special".
+  const free = sendsFree(manifest);
+  const price = formatAmount(PRODUCTS[manifest.tier === "free" ? "extras" : "single"].amounts[currency], currency, locale);
   /** The first row on a phone and on a laptop: painted immediately, never faded in, never lazy. */
   const above = index < 4;
 
@@ -131,10 +135,10 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
         <span
           className={cn(
             "pointer-events-none absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide backdrop-blur",
-            manifest.tier === "free" ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream",
+            free ? "bg-cream/90 text-forest" : "bg-forest/80 text-cream",
           )}
         >
-          {manifest.tier === "free" ? t("common.free") : t("common.premium")}
+          {free ? t("common.free") : t("common.premium")}
         </span>
         {/* A word in the badge's place (the footer page's "The one you got"); off once the demo runs, like the badge. */}
         {marker && !live ? (
@@ -158,7 +162,7 @@ export function TemplateCard({ manifest, index = 0, badge, linkQuery = "", marke
             <span className="text-mono-meta shrink-0 text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
             <h3 className="font-display text-[1.35rem] leading-tight text-balance">{manifest.name[locale]}</h3>
           </div>
-          <span className="text-mono-meta shrink-0 text-ink-soft">{manifest.tier === "free" ? t("templates.priceFree") : t("templates.priceOnce", { price })}</span>
+          <span className="text-mono-meta shrink-0 text-ink-soft">{free ? t("templates.priceFree") : t("templates.priceOnce", { price })}</span>
         </div>
         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{manifest.tagline[locale]}</p>
         <div className="mt-3 flex items-center gap-4">

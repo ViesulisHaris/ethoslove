@@ -79,6 +79,16 @@ export function noteCanBeFree(manifest: Pick<TemplateManifest, "features">): boo
   return manifest.features.photos.min <= 1;
 }
 
+/**
+ * Whether a template is shown as free: a free template, unless the note is for everyone and the
+ * template has no free version under it (Constellations then sells at the "Make it special" price).
+ * It is what the gallery, the template pages and the price lists say. The commerce code keeps
+ * reading `tier`, which never changes: "Make it special" is still what both free templates sell.
+ */
+export function sendsFree(manifest: Pick<TemplateManifest, "slug" | "tier" | "features">, share: number = noteShare()): boolean {
+  return manifest.tier === "free" && !(noteForEveryone(share) && NOTE_TEMPLATES.includes(manifest.slug) && !noteCanBeFree(manifest));
+}
+
 /** Whether this gift's free version is the short note. A gift that hasn't loaded yet is not one. */
 export function noteRules(manifest: Pick<TemplateManifest, "slug" | "tier">, data: { freeTier?: unknown } | null | undefined): boolean {
   return manifest.tier === "free" && NOTE_TEMPLATES.includes(manifest.slug) && data?.freeTier === "note";

@@ -13,7 +13,7 @@ export const maxDuration = 10;
  * The box "Email me Ethos offers" on the screen a gift is sent from (components/editor/offer-emails-box.tsx).
  * GET says whether the signed-in account said yes; POST { on, locale } records the yes, with the
  * sentence they ticked as the server words it (never the page's copy of it), or takes it back.
- * Signed in only: the address the offers go to is the account's (migration 0020).
+ * Signed in only: the address the offers go to is the account's (migration 0021).
  */
 const input = z.object({ on: z.boolean(), locale: z.enum(["en", "es"]).default("en") });
 
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     .from("offer_emails")
     .upsert({ user_id: user.id, wording: t("box"), source: "send", locale, created_at: new Date().toISOString() }, { onConflict: "user_id" });
   if (error) {
-    // Before migration 0020 is applied the table isn't there: the box says it couldn't save.
+    // Before migration 0021 is applied the table isn't there: the box says it couldn't save.
     console.error("[offer-emails] couldn't save a yes", error.message);
     return NextResponse.json({ error: "save_failed" }, { status: 500 });
   }

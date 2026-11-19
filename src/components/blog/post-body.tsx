@@ -7,6 +7,7 @@ import type { BlogBlock } from "@/content/blog/types";
 import { postSections } from "@/content/blog/text";
 import { getManifest } from "@/templates/manifests";
 import { RichText } from "./rich-text";
+import { sendsFree } from "@/lib/gift/free-tier";
 
 /** The body of a post, block by block, in the site's editorial type. */
 export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[]; locale: GiftLocale }) {
@@ -76,7 +77,7 @@ export async function PostBody({ blocks, locale }: { blocks: readonly BlogBlock[
                   <Image src={manifest.thumbnail.poster} alt={manifest.tagline[locale]} fill sizes="128px" quality={75} className="object-cover" />
                 </Link>
                 <div className="flex min-w-0 flex-col justify-center">
-                  <p className="text-eyebrow text-ink-soft">{manifest.tier === "free" ? t("templateFree") : t("templatePremium")}</p>
+                  <p className="text-eyebrow text-ink-soft">{sendsFree(manifest) ? t("templateFree") : t("templatePremium")}</p>
                   <p className="font-display mt-1.5 text-2xl leading-tight">{manifest.name[locale]}</p>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
                     <RichText text={block.note} />

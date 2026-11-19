@@ -35,11 +35,11 @@ export type RecipientGuide = {
 
 const freeEn = {
   q: "Is it free?",
-  a: "The Letter and Constellations are free, with up to ten photos, music, a countdown and a hidden surprise. Every other template is a one-time payment for that template, with no subscription, and you can try each one in full before you pay.",
+  a: "The Letter is free as a short note: up to 500 characters, with music, a countdown and a hidden surprise. Photos, a longer letter and every other template are a one-time payment for that template, with no subscription, and you can try each one in full before you pay.",
 };
 const freeEs = {
   q: "¿Es gratis?",
-  a: "La carta y Constelaciones son gratis, con hasta diez fotos, música, una cuenta atrás y una sorpresa final. Las demás plantillas son un solo pago por esa plantilla, sin suscripción, y puedes probar cada una entera antes de pagar.",
+  a: "La carta es gratis como nota corta: hasta 500 caracteres, con música, una cuenta atrás y una sorpresa final. Las fotos, una carta más larga y las demás plantillas son un solo pago por esa plantilla, sin suscripción, y puedes probar cada una entera antes de pagar.",
 };
 
 export const RECIPIENT_GUIDES: Record<Recipient, Record<GiftLocale, RecipientGuide>> = {
