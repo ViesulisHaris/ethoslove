@@ -57,3 +57,6 @@ next-env.d.ts
 
 # Git worktrees that Claude Code workflows check out inside the repo
 /.claude/worktrees/
+
+# Raw results of the help chat test sets (tests/eval/support); the .md reports are kept.
+docs/support/eval/*.json
