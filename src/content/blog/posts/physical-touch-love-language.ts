@@ -22,7 +22,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What is the physical touch love language?" },
         {
           type: "p",
-          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, quality time, receiving gifts and acts of service. For someone who speaks it, being touched with affection is the clearest proof that they matter to you. A compliment is nice. Your arm around them while everyone else talks is the thing they'll remember.",
+          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, [quality time](/blog/quality-time-love-language), receiving gifts and acts of service. For someone who speaks it, being touched with affection is the clearest proof that they matter to you. A compliment is nice. Your arm around them while everyone else talks is the thing they'll remember.",
         },
         {
           type: "p",
@@ -232,7 +232,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿Qué es el contacto físico como lenguaje del amor?" },
         {
           type: "p",
-          text: "Es uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el tiempo de calidad, recibir regalos y los actos de servicio. Para quien lo habla, que le toquen con cariño es la prueba más clara de que le importa a alguien. Un cumplido está bien. Tu brazo rodeándole mientras todos hablan es lo que va a recordar.",
+          text: "Es uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el [tiempo de calidad](/blog/quality-time-love-language), recibir regalos y los actos de servicio. Para quien lo habla, que le toquen con cariño es la prueba más clara de que le importa a alguien. Un cumplido está bien. Tu brazo rodeándole mientras todos hablan es lo que va a recordar.",
         },
         {
           type: "p",
