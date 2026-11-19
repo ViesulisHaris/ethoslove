@@ -34,6 +34,10 @@ export const post: BlogPost = {
             ["After a hard week", "Ones that let her talk without fixing anything", "\"What would make this weekend feel like a rest?\""],
           ],
         },
+        {
+          type: "p",
+          text: "Not together yet? Our [questions to ask your crush](/blog/questions-to-ask-your-crush) start a step earlier, from the first hello to asking her out.",
+        },
         { type: "h2", text: "How to make it a conversation" },
         {
           type: "list",
@@ -373,6 +377,10 @@ export const post: BlogPost = {
             ["Por mensaje", "Cortas, que pueda contestar con una foto o una frase", "«¿Qué tienes ahora mismo en la mesa?»"],
             ["Después de una semana dura", "Las que le dejan hablar sin que nadie arregle nada", "«¿Qué haría que este fin de semana fuera un descanso de verdad?»"],
           ],
+        },
+        {
+          type: "p",
+          text: "¿Todavía no estáis juntos? Nuestras [preguntas para hacerle a tu crush](/blog/questions-to-ask-your-crush) empiezan un paso antes, desde el primer hola hasta proponerle quedar.",
         },
         { type: "h2", text: "Cómo convertirlo en una conversación" },
         {
