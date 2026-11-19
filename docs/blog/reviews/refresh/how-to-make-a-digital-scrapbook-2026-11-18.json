@@ -1,0 +1,142 @@
+{
+  "slug": "how-to-make-a-digital-scrapbook",
+  "keyword": "how to make a digital scrapbook",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The phone FAQ says 'an app' without naming one though the post names three; the cheapest-way line in the best-way FAQ reads as a muddled fragment. Fix both in both languages."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template, pricing and link claim checked against manifests, schemas, Template.tsx and products.ts; Canva templates and video export, 12x12 sizes and 3,600 px confirmed online (Shutterfly 12x12). Fix the best-way FAQ's reasoning (the apps are free, not the sending) in both languages, and the Spanish takeaway 'convierte en álbum' to 'en un scrapbook'. Polish: smoother table cell, 'se solapen', 'pies de foto', verb order in Paso 5."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 8
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "Six of seven top results are Canva tutorials and the post never shows the tool steps: add a short four-move tip. The 'who prints 12x12' answer is vaguer than the top results: make it actionable, with a home-print size. Answer paper against digital (PAA on paper and cheapest). Name a phone route in the best-way answer."
+        }
+      ],
+      "applied": [
+        "Best-way FAQ reworded (Canva or Slides, both free, so the cheapest way), both languages",
+        "Phone FAQ names Canva, Google Slides and PowerPoint as having phone versions, both languages",
+        "Spanish takeaway: 'lo convierte en un scrapbook'",
+        "Print FAQ: online photo book services print 12x12 books (Shutterfly in the US, as the editor verified), labs print single pages, 3,600 px at 300 ppi, and 8x8 in / 20x20 cm pages for a home printer on Letter or A4",
+        "New tip 'In Canva or Google Slides, in four moves' (custom size incl. 1080x1920, background, photos with shadow, captions and download) after Step 4's rules, both languages",
+        "New 'Digital or paper?' paragraph after the three-ways table, both languages",
+        "Polish taken: table cell 'Canva, Google Slides or PowerPoint, page by page'; Spanish 'se solapen', 'pies de foto', 'Bastan tres o cuatro líneas…'"
+      ],
+      "rejected": [
+        "Search: a paper-vs-digital FAQ entry. The FAQ is at its limit of six, so the answer went into the body after the three-ways table instead",
+        "Search: naming PicCollage. The phone route is answered with the three tools already named, which the editor could verify, rather than a new name",
+        "Polish not taken: 'digital scrapbooking' worked into the lead, description rewrite, extra onward links, layout-shape line, Spanish lead wording, Our Timeline note change (it matches the manifest)"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both fixes made. The only page that gives the story, scraps and chapters method that works in any tool, then layout rules, page ideas, a schedule, print sizes and the cheapest-way answer, where the top results are Canva tutorials."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-1 fixes and polish all made; the four-moves tip, phone FAQ, Shutterfly example and sizes check out. 'A home printer can't take 12 by 12' is too absolute (wide-format printers can): make it 'most', in both languages. Polish: 'que la foto no enseña' in the Spanish journal page."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "All four fixes made well, rejections sound. The only page that turns the Canva-tutorial steps into a gift: story-first structure, chapter table, page ideas, a paper-vs-digital verdict and print sizes, where the ranking pages are tool tutorials or kit shops."
+        }
+      ],
+      "applied": [
+        "Print FAQ: 'Most home printers can't take 12 by 12, so to print at home, design 8 by 8 inch pages…' and the Spanish 'La mayoría de las impresoras de casa no admiten…'",
+        "Spanish polish: 'lo que pasó ese día que la foto no enseña'"
+      ],
+      "rejected": [
+        "Polish not taken: a kit-shop clause on digital paper, 'digital scrapbooking' in the lead, a UK or Spain printer name (not verified)"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that starts from the story, the scraps and the chapters before any tool, then gives page layouts, a print-size answer and a plan for a deadline, where the others only show how to drag assets around a canvas."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Both round-2 fixes and the polish made correctly; every claim checked holds, and the Spanish is natural Spain Spanish with nothing lost or added."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that turns the Canva-tutorial steps into a gift, story first with a chapter table, page ideas, a schedule, print sizes and a paper-vs-digital answer, where the ranking pages are single-tool tutorials, Pinterest boards or kit shops."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Final-round polish goes in the record only: 'with a small margin' after A4; naming Adobe Express and PicCollage; a kit-shop clause on digital paper; 'digital scrapbooking' in the lead"
+      ]
+    }
+  ]
+}

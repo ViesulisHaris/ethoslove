@@ -1,35 +1,5 @@
 [
   {
-    "slug": "long-distance-relationship-quotes",
-    "keyword": "long distance relationship quotes",
-    "keyword_es": "frases para relaciones a distancia",
-    "occasion": "long-distance",
-    "templates": [
-      "halfway",
-      "text-thread"
-    ],
-    "angle": "Lines to send someone far away, sorted by moment (goodnight across time zones, the day before a visit, the airport, a bad week), mostly original; a quote from a real person only with their name and checked. Then what to send with the words: Halfway and Text Thread. Link up to /long-distance and the date-ideas post.",
-    "volume": 2900,
-    "difficulty": 9,
-    "group": "long-distance"
-  },
-  {
-    "slug": "long-distance-relationship-tips",
-    "keyword": "long distance relationship tips",
-    "keyword_es": "consejos para una relación a distancia",
-    "occasion": "long-distance",
-    "templates": [
-      "halfway",
-      "passport",
-      "midnight-countdown"
-    ],
-    "angle": "Specific tips instead of 'communicate more': a call rhythm that survives time zones, what to do in the first hour of a visit, how to argue well by text, money and the plan to close the distance, and the free tools on /long-distance (the city halfway between you, the hours you're both awake).",
-    "volume": 1900,
-    "difficulty": 24,
-    "volume_es": 10,
-    "group": "long-distance"
-  },
-  {
     "slug": "love-notes-for-him",
     "keyword": "love notes for him",
     "keyword_es": "notas de amor para él",

@@ -3,6 +3,39 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-18: how-to-make-a-digital-scrapbook gets tool steps, page ideas and print sizes; Spanish says "scrapbook digital"
+- **Page:** /blog/how-to-make-a-digital-scrapbook (and /es to match)
+- **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov;
+  monthiversary-ideas, the best striking-distance page, waits for 27 Nov). Search Console (28 days,
+  brand left out): this post at 18.0 for "how to make a digital scrapbook" and 9.0 for "how to do
+  digital scrapbooking", never refreshed, and it leads to the Scrapbook template. DataForSEO (US):
+  "how to make a digital scrapbook" 170 (KD 8), "how to create a digital scrapbook" 170, "digital
+  scrapbook ideas" 140 (KD 4), "what is a digital scrapbook" 110, "digital scrapbooking" 4,400 (KD 15);
+  Spain "como hacer un scrapbook" 260 and "scrapbook digital" 140 (KD 0), while "álbum de recortes
+  digital", the Spanish keyword, has no measurable searches. The top results are Canva tutorials
+  (YouTube, Pinterest), CottageArts and kit shops; the AI overview steps through platform, canvas
+  size (12x12 for print), layering with shadows, journaling and export (PDF, PNG, video, print).
+  People also ask: best scrapbooking site, who prints 12x12 pages, paper scrapbooks, the cheapest
+  way. The post named no tool, no page size, no export and none of those questions.
+- **What changed:** Title "How to make a digital scrapbook: 5 steps and page ideas" (Spanish "Cómo
+  hacer un scrapbook digital: 5 pasos e ideas", keyword "cómo hacer un scrapbook digital"), new
+  descriptions; page size first (12x12 for print, a tall page for a phone), shadows and washi tape, a
+  "Canva or Google Slides in four moves" tip, a "Digital scrapbook page ideas" section, video export,
+  named tools in the three-ways table, a digital-or-paper paragraph, the templates' one-time
+  payment; FAQs on what it is, the best and cheapest way, and printing 12x12 (3,600 px, 8x8 at
+  home). Spanish to match. `updated` 2026-11-18.
+- **Panel:** 10/10/10 after 3 rounds (`docs/blog/reviews/refresh/how-to-make-a-digital-scrapbook-2026-11-18.json`)
+- **Cost:** $0.05 (keyword overviews US and Spain, keyword suggestions, three SERPs with AI overview
+  and PAA, one page read that returned nothing); balance $49.21
+- **Note:** Second run today (Wednesday; ranks from 16 Nov, so no weekly job). Search Console and the
+  sales endpoint both answered. Built pages now sit under `.next/server/app/<currency>/<locale>/blog/`
+  (e.g. `eur/en`), not `en/blog/` as PLAYBOOK step 5 says. Also near page one in Search Console:
+  "how to write a birthday card for boyfriend" at 8 for what-to-write-in-boyfriends-birthday-card
+  ("what to write in boyfriends birthday card" 880, KD 3) and "cute things to tell your girlfriend"
+  at 17 (the head phrase 1,900, KD 4): candidates for the next runs.
+- **Check on:** 2026-12-05 whether "how to make a digital scrapbook", "digital scrapbook ideas" and
+  "scrapbook digital" (Spain) show for the post in Search Console and the rank check
+
 ## 2026-11-18: scratch-card-ideas answers "diy scratch card", with the steps, small everyday ideas and two new FAQs
 - **Page:** /blog/scratch-card-ideas (and /es to match)
 - **Why:** No backlog item open today (the Spanish-side and virtual-date items wait for 27 and 28 Nov).
