@@ -1,0 +1,145 @@
+{
+  "slug": "questions-to-ask-your-crush",
+  "keyword": "questions to ask your crush",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "The headline 60 didn't survive a count (54 in the lists, and two table rows repeated list questions); make the table rows distinct so the number is true."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "Factual error about the post itself: the title, description and lead in both languages promise 60 questions, but the numbered lists hold 54 (12 + 12 + 10 + 10 + 10 in EN and ES). Even counting the four new questions in the 'likes you back' table you only reach 58, and those aren't sorted by stage as the lead says."
+          ],
+          "summary": "Fix the 60 count (or add six real questions); the Text Thread note implied a two-sided chat, but every bubble comes from the sender; 'raramente bueno' is a mistranslation. Polish on Spanish verbs (reírse, aparecerse, cumplido) and the Saturday takeaway wording."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Answer the remaining People-also-ask questions: how to rizz up your crush, 20 juicy questions (only 5 given), and 20 questions to ask your crush."
+        }
+      ],
+      "applied": [
+        "Added six questions (two each to funny, deep and flirty) so the five lists hold 60, matching title, description and lead in both languages",
+        "Replaced the two repeated rows in the 'likes you' table with new questions (EN and ES)",
+        "Text Thread note rewritten: write it the way you already text them, not a two-sided back-and-forth (EN and ES)",
+        "'¿En qué eres raramente bueno?' -> '¿Qué se te da extrañamente bien?'",
+        "Editor polish taken: Saturday takeaway wording, reírse, te aparecerías, cumplido, the FAQ 'largo' line",
+        "Juicy FAQ now asks and answers 20 (ten new plus the flirty list)",
+        "Rizz folded into the flirt-over-text FAQ (specific compliments, attention not lines)",
+        "Added a short 'Playing 20 questions over text' tip in the text section to answer 'What are 20 questions to ask your crush?'"
+      ],
+      "rejected": [
+        "Search's two extra FAQ items (rizz, 20 good questions) as separate questions: the playbook caps the FAQ at five, so rizz went into the flirting FAQ and the 20 questions went into a tip in the text section instead"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It beats the top results because the questions are sorted by stage, with a table of warm versus lukewarm answers and ready-to-send lines for asking them out, where the typical result is an unsorted list with nothing about what to do next."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes verified (60 questions, Text Thread note, Spanish). Two Spanish fixes: the 36-questions tip should be plural (llevan, guárdalas), and a tense clash in the WhatsApp FAQ (cuéntale qué te pareció cuando lo pruebes). Polish: 'ten more' from a flirty list of twelve should say the first ten."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Against the 222+ and 110+ question dumps from paired, marriage.com and eharmony, it gives 60 questions sorted by how well you know them, a warm-versus-lukewarm answer table, a what-not-to-ask list and borrowable asking-out lines, and every People-also-ask question is answered."
+        }
+      ],
+      "applied": [
+        "ES 36-questions tip made plural: 'Llevan hasta 45 minutos y preguntan… guárdalas'",
+        "ES WhatsApp FAQ: 'y, cuando lo pruebes, cuéntale qué te ha parecido'",
+        "Editor polish taken to head off a fix: 'take the first ten from the flirty list' (EN and ES)"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It beats the top results, which are mostly bare numbered lists, because it sorts the questions by stage and by channel, tells you how to read their answers and gives you lines to send tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the code or the cited source, last round's edits are correct in both languages, and it beats generic crush-question lists by ordering questions by stage, decoding answers and ending with a plan and lines to borrow."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Smaller than the 110 to 230-question lists that rank now, but every set is sorted by stage, with follow-up rules, a decoder for their replies and a way to turn it into a date, and every People-also-ask question is answered."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: ES 'construida alrededor de un boli prestado' -> 'que gira en torno a un boli prestado'",
+        "Reader and search: US-neutral spellings for favourite, flat white, rumour",
+        "Search: work 'flirty' and 'over text' into the lead"
+      ]
+    }
+  ]
+}

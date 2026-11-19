@@ -26,6 +26,9 @@ export const isUndeliverable = (to: string): boolean => UNDELIVERABLE.test(to.tr
  *
  * `idempotencyKey` makes an email once-only on Resend's side for 24 hours: a second send with the
  * same key gets the first one's answer and sends nothing.
+ *
+ * `replyTo` defaults to the support address; the help chat's hand-off sets the visitor's, so the
+ * team's Reply goes straight to them.
  */
 export async function sendEmail({
   to,
@@ -33,12 +36,14 @@ export async function sendEmail({
   react,
   headers,
   idempotencyKey,
+  replyTo = BRAND.supportEmail,
 }: {
   to: string;
   subject: string;
   react: ReactElement;
   headers?: Record<string, string>;
   idempotencyKey?: string;
+  replyTo?: string;
 }): Promise<{ ok: boolean; skipped?: boolean; id?: string; error?: string }> {
   if (!to) return { ok: false, error: "no_recipient" };
   if (isUndeliverable(to)) {
@@ -53,7 +58,7 @@ export async function sendEmail({
     client ??= new Resend(env.resendApiKey);
     const html = await render(react);
     const { data, error } = await client.emails.send(
-      { from: env.emailFrom, to, subject, html, replyTo: BRAND.supportEmail, ...(headers ? { headers } : {}) },
+      { from: env.emailFrom, to, subject, html, replyTo, ...(headers ? { headers } : {}) },
       idempotencyKey ? { idempotencyKey } : undefined,
     );
     if (error) return { ok: false, error: error.message };

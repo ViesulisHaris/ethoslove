@@ -35,6 +35,10 @@ export const post: BlogPost = {
             ["Any time at all", "The fun ones: they work on a first date and a tenth anniversary", "\"What's your most controversial food opinion?\""],
           ],
         },
+        {
+          type: "p",
+          text: "Not together yet? Our [questions to ask your crush](/blog/questions-to-ask-your-crush) start a step earlier, from the first hello to asking him out.",
+        },
         { type: "h2", text: "How to ask without it feeling like an interview" },
         {
           type: "list",
@@ -359,6 +363,10 @@ export const post: BlogPost = {
             ["A distancia", "Vuestros días, y la próxima vez que estéis juntos", "«¿A qué olía hoy donde estás?»"],
             ["En cualquier momento", "Las divertidas: valen en una primera cita y en un décimo aniversario", "«¿Cuál es tu opinión más polémica sobre comida?»"],
           ],
+        },
+        {
+          type: "p",
+          text: "¿Todavía no estáis juntos? Nuestras [preguntas para hacerle a tu crush](/blog/questions-to-ask-your-crush) empiezan un paso antes, desde el primer hola hasta proponerle quedar.",
         },
         { type: "h2", text: "Cómo preguntar sin que parezca una entrevista" },
         {

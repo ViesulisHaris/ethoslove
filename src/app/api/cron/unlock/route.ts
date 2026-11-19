@@ -4,6 +4,7 @@ import { notifyUnlocked } from "@/lib/email/notify";
 import { pruneOpenedGiftStorage } from "@/lib/gift/storage-cleanup";
 import { runStorageRetention } from "@/lib/gift/retention";
 import { forgetUnpaidCheckoutSources } from "@/lib/attribution/checkout-source";
+import { forgetOldSupportChats } from "@/lib/support/retention";
 
 export const runtime = "nodejs";
 // The storage sweep takes most of this; Hobby allows up to 60 s.
@@ -16,8 +17,8 @@ export const maxDuration = 60;
  * once a day; on Pro you can switch the schedule back to every few minutes.
  *
  * The same run prunes leftovers of opened gifts and sweeps orphaned uploads and stale drafts
- * (lib/gift/retention.ts), and forgets where buyers came from for checkouts never paid
- * (lib/attribution/checkout-source.ts).
+ * (lib/gift/retention.ts), forgets where buyers came from for checkouts never paid
+ * (lib/attribution/checkout-source.ts), and deletes help chats after 30 days (lib/support/retention.ts).
  */
 export async function GET(request: NextRequest) {
   // Fail closed: without a configured secret nobody can trigger the cron.
@@ -50,7 +51,8 @@ export async function GET(request: NextRequest) {
   }
 
   const unpaidSourcesForgotten = await forgetUnpaidCheckoutSources(admin);
+  const supportChatsForgotten = await forgetOldSupportChats(admin);
   const retention = await runStorageRetention(admin, { budgetMs: 40_000 });
 
-  return NextResponse.json({ ok: true, flipped, pruned, unpaidSourcesForgotten, retention });
+  return NextResponse.json({ ok: true, flipped, pruned, unpaidSourcesForgotten, supportChatsForgotten, retention });
 }
