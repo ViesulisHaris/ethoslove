@@ -1,0 +1,227 @@
+{
+  "slug": "digital-love-letter-websites-compared",
+  "keyword": "best digital love letter websites",
+  "sources": [
+    {
+      "maker": "Just Meant For You",
+      "url": "https://justmeantforyou.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Just Meant For You",
+      "url": "https://justmeantforyou.com/es",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Just Meant For You",
+      "url": "https://justmeantforyou.com/es/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "ShareLove Letters",
+      "url": "https://www.shareloveletters.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "ShareLove Letters",
+      "url": "https://shareloveletters.com/es",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "ShareLove Letters",
+      "url": "https://www.shareloveletters.com/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "LovePaper",
+      "url": "https://lovepaper.app/es",
+      "checked": "2026-11-20"
+    }
+  ],
+  "sources_note": "Read on 20 Nov 2026 through DataForSEO's page reader (on_page/content_parsing), since the cloud can't fetch these hosts directly. The other makers' facts are unchanged from the 16 Nov check (docs/blog/reviews/digital-love-letter-websites-compared.json). Tu Carta Eterna and Dedikame, named by ChatGPT in Spanish, had no own site we could find (tucartaeterna.com and dedikame.com returned empty pages), so they are named as unchecked and kept out of the tables. On 20 Nov the round-2 editor also re-read the 16 Nov makers' home pages (2luv, LetterHugs, Letters by Heart, LoveLetter.digital, LovePaper, OpenWhen, OpenYourLetter, gifft.me) and found every row still true; LoveLetter.digital now also sells a personalised song (a free 45-second preview, then $6.99), worth a look at the next 60-day check.",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that says, from each maker's own site and with dates, which letter sites are free, which open at a set time, how long the link lasts and what the free version leaves on the page, honest about Ethos's weak points. Polish: phone-width tables."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 6,
+            "voice": 9,
+            "spanish": 9
+          },
+          "overall": 6,
+          "dealbreakers": [
+            "Claims about ShareLove Letters that its own pricing page contradicts. https://www.shareloveletters.com/pricing, read today on 20 Nov 2026 with the DataForSEO page reader, lists a Free plan (ad-supported, 1 photo, no voice), a Single Letter Keepsake at $3.99 once (up to 3 photos, a voice memo, no ads, the link never expires) and ShareLove VIP at $4.99 a month or $29.99 a year (5 photos, voice notes, every link kept for life). The post says its price is just \"Free.\", says the number of photos and voice are \"not stated\", and says only three of the eleven sites offer voice. In Spanish the free account \"te avisa\" (notifies you), but its email alerts are VIP only.",
+            "A false internal-link claim: the post says /blog/digital-gift-websites-compared covers \"eight sites\" (Spanish: \"ocho\"), but that post compares nine (\"We make Ethos, one of the nine sites below\")."
+          ],
+          "summary": "Ethos's free-note correction and every Just Meant For You fact checked out. ShareLove Letters' /pricing (not read by the writer) shows ads on the free plan, one free photo, a $3.99 Keepsake and a $4.99/$29.99 VIP with voice notes and permanent links; the gift comparison compares nine, not eight. Polish: optional password, Premium-only questions, the Spanish date, \"relación a distancia\", euros for Mexico."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fixes: a Spanish heading that says \"carta digital gratis\" (260 a month in Mexico), and one line saying what a digital love letter is and how you make one (\"como hacer una carta digital\" 170). Polish: Canva and Genially, which the AI overview cites; euros for Mexican readers."
+        }
+      ],
+      "applied": [
+        "ShareLove Letters corrected from its /pricing page in both languages: free with ads, one free photo, $3.99 Keepsake and VIP $4.99 a month or $29.99 a year, voice note with either, link kept for good with either; the voice FAQ now four of eleven; its ads in \"what the free version leaves\"; Spanish \"te muestra\" for \"te avisa\"",
+        "\"eight\"/\"ocho\" corrected to nine for the gift-site comparison",
+        "Spanish h2 \"Carta digital gratis: precio y qué incluye cada página\"",
+        "A two-sentence what-it-is and how-to paragraph in both languages",
+        "Polish taken: Just Meant For You's optional password and Premium-only questions, the voice pick, the Spanish takeaway's date, \"relación a distancia\", euros from Mexico and every country but the US and UK (products.ts)",
+        "Sources added for the seven pages read on 20 Nov"
+      ],
+      "rejected": [
+        "Canva and Genially line: not checked on their own pages, and they design rather than send a letter; left out under the comparison rules"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the maker pages and listicles that rank, it puts eleven sites in the same three tables with \"not stated\" where a site was silent, answers free, midnight, expiry and voice, and says plainly where a rival is the better pick."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every round-1 fix in and correct in both languages; all makers re-read today and still true. Fixes: three posts that link here still said \"nine\" sites (gifft-me-alternatives, digital-gift-websites-compared, how-to-write-a-love-letter, both languages); Spanish \"sin cuenta. Sin cuenta\" back to back. Polish: JMFY's optional password in the section, VIP's five photos, a ShareLove Letters link-life line in the checklist, LovePaper's Spanish page dated 20 Nov."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Today's first page is template galleries, Etsy, content-farm roundups and makers' own guides; none compares real sites on price, free tier, voice, opening time and link expiry, and this does for eleven, dated, with \"not stated\" where a site was silent. Both round-1 fixes made correctly."
+        }
+      ],
+      "applied": [
+        "\"nine\" -> \"eleven\"/\"once\" in the three posts that link here, both languages (link text only)",
+        "Spanish \"sin registrarte\"",
+        "Polish that heads off a fix: JMFY \"optional password\"/\"si quieres, una contraseña\" in its section; VIP \"with up to five photos\"; ShareLove Letters link life in \"What happens to the link later\"; LovePaper's Spanish page in the 20 Nov sentence"
+      ],
+      "rejected": [
+        "Search polish (a \"Cómo hacer una carta digital\" heading; LoveYouMake and LovePanda as unchecked names): left for round 2's 10 to stand; not needed"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The one page that puts eleven makers side by side, each read on its own site and dated, with a pick-by-situation list that includes the midnight and link-expiry traps; the top results are single-maker pages and image galleries."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 9,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every round-2 fix in and correct. Fixes: the new unchecked-names line said we haven't checked Qlovy on its own site, but gifft-me-alternatives did on 16 Nov (spelled QLovy); say \"for this comparison\". Spanish LovePaper designs should use its own Spanish names, Minimal, Romántica y Lujosa. Polish: a comma in the Spanish FAQ, \"tu padre\" for \"a parent\", \"seven days\" spelled out."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "For both keywords the first page is template listings, thin roundups and single-brand blogs; this is the only page that compares eleven makers on dated facts from their own sites, with its own maker's weak points and a pick per need."
+        }
+      ],
+      "applied": [
+        "\"QLovy\" and \"for this comparison\"/\"para esta comparativa\" in the unchecked-names line, both languages",
+        "ES LovePaper \"Tres plantillas (Minimal, Romántica y Lujosa), todas gratis\"",
+        "Polish: the Spanish FAQ comma; \"tu madre, tu padre o un amigo\""
+      ],
+      "rejected": [
+        "\"7 days\" -> \"seven days\" for ShareLove Letters: consistency only, left to keep the round's edits small",
+        "Search polish (a how-to heading; trimming the description, which is under the tested 160 characters)"
+      ]
+    },
+    {
+      "round": 4,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The one page where a stranger can compare eleven real letter sites in the same columns, each fact dated and \"not stated\" where a site was silent, then pick tonight's site from a one-line list, with a clear note that we make one of them and where it loses."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every round-3 fix in and correct; every claim checked against the code and the makers' pages today holds. No other page puts eleven letter sites side by side with every cell dated, \"not stated\" where a site doesn't say, and its own product's gaps spelled out. Polish (record only): \"seven days\" for ShareLove Letters' guest link."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that puts eleven letter makers in the same columns, facts read on each maker's own site and dated, Ethos's gaps included, with a pick-by-need list in both languages; the ranking pages are single-vendor posts, template lists and SEO-farm roundups."
+        }
+      ],
+      "applied": [],
+      "rejected": [
+        "Polish from the final round (\"seven days\" for ShareLove Letters) kept in the record, not the post, as the rubric says"
+      ]
+    }
+  ]
+}

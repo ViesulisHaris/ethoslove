@@ -7,7 +7,7 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 
 ## For the routine (blog files only)
 
-- [ ] **digital-love-letter-websites-compared, the Spanish side.** Asked in Spanish on 20 Nov 2026
+- [x] (2026-11-20) **digital-love-letter-websites-compared, the Spanish side.** Asked in Spanish on 20 Nov 2026
   ("página para hacer una carta digital para mi novio", Mexico), ChatGPT named LovePaper, Just Meant
   For You, Tu Carta Eterna, Share Love Letters and Dedikame, each by its own Spanish page, and not
   Ethos (`docs/blog/ai-answers.md`). Check which of them the post's Spanish version covers and add
@@ -90,6 +90,12 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   /occasions/anniversary ("Anniversary Gift Ideas", 9,900), /occasions/birthday ("Digital and
   Virtual Birthday Gifts"), /es/games/deck ("Preguntas para parejas", 1,600 in Spain), /es/games.
   Check on 4 Dec whether each moved (the weekly rank check covers them).
+- [ ] **/pricing's FAQ still describes the old free tier** (found 20 Nov 2026 while refreshing
+  digital-love-letter-websites-compared): "What does the free tier actually include?" says "two full
+  templates (The Letter and Constellations) ... up to 10 photos per gift", in both languages, while the
+  card above it says a free Letter is a short note of up to 500 characters and Constellations has no
+  free version (`src/lib/gift/free-tier.ts`, 19 Nov). ChatGPT and Google read the FAQ's JSON-LD, so the
+  old answer is the one they quote. Rewrite that answer (`messages/en.json`, `messages/es.json`).
 - [ ] **Refreshed posts and IndexNow**: the Publish blog workflow tells IndexNow (Bing, which feeds
   ChatGPT search) only about new posts. Changed posts reach Google through the sitemap's lastmod,
   but Bing waits. Ping changed posts too, once the deploy shows their new `dateModified`.

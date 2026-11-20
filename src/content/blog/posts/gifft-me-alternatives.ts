@@ -131,7 +131,7 @@ export const post: BlogPost = {
             "**It has to open on the day:** GiftsQR's time capsule opens on the date you choose, and GiftFeels shows gifts locked until a date, one of them opening at midnight his time, but doesn't say how you set it. On any paid Ethos gift you pick the date, the time and their time zone.",
             "**You want your voice in it:** GiftFeels's paid plans, Surprises.Gift's stuffed animal, or a paid Ethos gift.",
             "**It's your whole story with photos and places:** 2luv, or QLovy if you want to see when they open it.",
-            "**It's a letter more than a gift:** our [digital love letter websites compared](/blog/digital-love-letter-websites-compared) puts nine letter sites side by side.",
+            "**It's a letter more than a gift:** our [digital love letter websites compared](/blog/digital-love-letter-websites-compared) puts eleven letter sites side by side.",
           ],
         },
         {
@@ -320,7 +320,7 @@ export const post: BlogPost = {
             "**Tiene que abrirse ese día:** la cápsula del tiempo de GiftsQR se abre en la fecha que elijas, y GiftFeels muestra regalos cerrados hasta una fecha (uno de ellos se abre a medianoche, hora de él), pero no explica cómo se fija. En cualquier regalo de pago de Ethos eliges la fecha, la hora y su zona horaria.",
             "**Quieres que se oiga tu voz:** los planes de pago de GiftFeels, el peluche de Surprises.Gift o un regalo de pago de Ethos.",
             "**Es vuestra historia entera, con fotos y lugares:** 2luv, o QLovy si quieres ver cuándo lo abre.",
-            "**Es más una carta que un regalo:** nuestra [comparativa de páginas para hacer una carta de amor digital](/blog/digital-love-letter-websites-compared) compara nueve webs de cartas.",
+            "**Es más una carta que un regalo:** nuestra [comparativa de páginas para hacer una carta de amor digital](/blog/digital-love-letter-websites-compared) compara once webs de cartas.",
           ],
         },
         {
