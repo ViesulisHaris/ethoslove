@@ -13,9 +13,10 @@ test.describe("the template gallery", () => {
 
     // NEW_SLUGS in src/config/featured.ts, in its order: change both when the next batch ships.
     const fresh = page.locator("[data-shelf=new]");
-    await expect(fresh.getByRole("heading", { level: 3 })).toHaveText(["The Séance", "Bat Swarm", "Witch's Brew", "Jack-o'-Lantern", "Haunted House", "Be My Boo", "Fall for You", "Autumn Reel"]);
-    // An older arrival is back in the catalogue below.
+    await expect(fresh.getByRole("heading", { level: 3 })).toHaveText(["The Nice List", "Unwrapped", "Snow Globe", "Frosted Window", "String the Lights", "Gingerbread House", "Light the Candles", "Wishbone"]);
+    // An older arrival is back in the catalogue below, and so is last season's batch.
     await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Party Animals" })).toBeVisible();
+    await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Bat Swarm" })).toBeVisible();
     await expect(page.locator("[data-shelf=all]").getByRole("heading", { level: 3, name: "Coquette" })).toBeVisible();
 
     // Nothing is listed twice.
