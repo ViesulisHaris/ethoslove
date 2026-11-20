@@ -13,6 +13,7 @@ import {
   pageMetadata,
   templateProductNode,
 } from "@/lib/seo";
+import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
@@ -193,6 +194,14 @@ export default async function TemplateDetailPage({
           <p className="mt-4 text-center text-xs text-muted-foreground">
             {t("templates.previewHint")}
           </p>
+          {manifest.slug === "the-letter" ? (
+            // The Letter has a page in Portuguese (content/pt-letter.ts): a link here is how a crawler finds it.
+            <p className="mt-1 text-center text-xs">
+              <a href={PT_LETTER_PATH} hrefLang={PT_LETTER_LANG} lang={PT_LETTER_LANG} className="inline-flex min-h-11 items-center text-muted-foreground underline underline-offset-4 hover:text-ink">
+                Também em português: carta digital
+              </a>
+            </p>
+          ) : null}
         </div>
       </div>
       <TemplateGuide manifest={manifest} locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} faq={faq} />

@@ -1,7 +1,10 @@
 import { BRAND } from "@/config/brand";
 import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
+import { ABOUT_PATH, aboutCopy } from "@/content/about";
 import { BLOG_POSTS } from "@/content/blog";
+import { LEGAL_ENTITY } from "@/content/legal";
+import { PT_LETTER_PATH } from "@/content/pt-letter";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { templateSeo } from "@/content/template-seo";
@@ -22,6 +25,9 @@ export const dynamic = "force-static";
  */
 export function GET() {
   const manifests = listManifests();
+  // Who runs the site, in the About page's own words: what an assistant is asked right before someone pays.
+  const about = aboutCopy("en", { templates: manifests.length, single: "" });
+  const aboutSaid = (id: string, from = 0) => (about.sections.find((section) => section.id === id)?.paragraphs ?? []).slice(from).map((p) => `- ${p}`);
 
   const lines = [
     ...briefIntro(),
@@ -62,6 +68,17 @@ export function GET() {
     "",
     ...briefPricing(),
     "",
+    "## Who makes Ethos",
+    "",
+    ...aboutSaid("company"),
+    `- Registered address: ${LEGAL_ENTITY.address}.`,
+    // The first paragraph of "paying" quotes a price in the visitor's currency; prices are in the section above.
+    ...aboutSaid("paying", 1),
+    ...aboutSaid("guarantee"),
+    ...aboutSaid("privacy"),
+    ...aboutSaid("contact"),
+    `- [About Ethos](${localizedUrl("en", ABOUT_PATH)})`,
+    "",
     ...briefFaq(),
     "## Links",
     "",
@@ -74,7 +91,9 @@ export function GET() {
     `- Blog: ${localizedUrl("en", "/blog")}`,
     `- Pricing: ${localizedUrl("en", "/pricing")}`,
     `- Creators: ${localizedUrl("en", "/creators")}`,
+    `- About: ${localizedUrl("en", ABOUT_PATH)}`,
     `- En español: ${localizedUrl("es")}`,
+    `- Em português (carta digital): ${SITE.url}${PT_LETTER_PATH}`,
     `- Terms: ${localizedUrl("en", "/legal/terms")}`,
     `- Privacy: ${localizedUrl("en", "/legal/privacy")}`,
     `- Contact: ${BRAND.supportEmail}`,

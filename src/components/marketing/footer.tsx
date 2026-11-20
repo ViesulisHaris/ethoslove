@@ -46,6 +46,7 @@ export async function MarketingFooter() {
           ))}
         </FooterColumn>
         <FooterColumn title={t("footer.company")} className="col-span-2 md:col-span-1">
+          <FooterLink href="/about">{t("footer.about")}</FooterLink>
           <FooterLink href="/legal/terms">{t("footer.terms")}</FooterLink>
           <FooterLink href="/legal/privacy">{t("footer.privacy")}</FooterLink>
           {/* EU consumer law wants the way to withdraw easy to find, on every page (CRD art. 11a). */}

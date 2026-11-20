@@ -1,4 +1,6 @@
+import { ABOUT_PATH, ABOUT_UPDATED } from "@/content/about";
 import { LEGAL_UPDATED } from "@/content/legal";
+import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 
 /**
  * When each page's own words last changed, for the sitemap's <lastmod>. Search engines believe
@@ -55,6 +57,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/pricing": "2026-10-25",
   // The date the legal pages print at the top.
   "/legal/*": LEGAL_UPDATED,
+  [ABOUT_PATH]: ABOUT_UPDATED,
+  [PT_LETTER_PATH]: PT_LETTER_UPDATED,
 };
 
 /** The day a page last changed (its own date, else its section's), or undefined when it isn't known. */

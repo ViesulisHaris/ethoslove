@@ -44,6 +44,9 @@ const nextConfig: NextConfig = {
   redirects: async () => [
     { source: "/&", destination: "/", permanent: true },
     { source: "/es/&", destination: "/es", permanent: true },
+    // People, and the assistants they ask, try /contact (404 until 20 Nov 2026): the About page says how to reach us.
+    { source: "/contact", destination: "/about#contact", permanent: false },
+    { source: "/es/contact", destination: "/es/about#contact", permanent: false },
   ],
   headers: async () => [
     // Universal links for the iPhone app (public/.well-known/apple-app-site-association): a shared plan,
