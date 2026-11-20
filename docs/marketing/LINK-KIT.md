@@ -23,7 +23,7 @@ are launch directories that give a followed link.
 
 | Site | Why | Account |
 |---|---|---|
-| alternativeto.net | Lists "alternatives to" a product. DigiFlower (digital bouquets) is listed there now; Ethos belongs next to it and next to Smilebox, Jacquie Lawson, Paperless Post and Canva's cards | AlternativeTo account |
+| alternativeto.net | Lists "alternatives to" a product. Smilebox, Paperless Post, Greetings Island and Canva are listed there (searched 20 Nov 2026; DigiFlower and Jacquie Lawson are not), and Ethos belongs next to them | AlternativeTo account |
 | producthunt.com | A launch day brings visitors, reviews and copies on dozens of sites that mirror launches | maker account; launch Tuesday to Thursday, 00:01 Pacific |
 | peerpush.com | Already lists Letters by Heart, a direct competitor | PeerPush account |
 | saashub.com | Alternatives pages that rank in Google | SaaSHub account |
@@ -38,16 +38,26 @@ an account on all four the same day and Claude filled in what could be filled in
 
 | Site | A free listing | Stands at (20 Nov 2026) |
 |---|---|---|
-| alternativeto.net | Free, no badge, one followed link | Waits for the owner to open the confirmation link AlternativeTo emailed (it works for 24 hours; "Resend e-mail" sends a new one). Then: add Ethos as an app, and as an alternative to the ones the table above names |
+| alternativeto.net | Free, no badge, one followed link. But the free queue "holds several thousand apps" and most "will not be looked at for a very long time"; a review within 1 to 2 working days costs $25 once (or $35 with their editing) | Submitted as **TryEthos** (an "Ethos" exists there), with Smilebox, Paperless Post, Greetings Island and Canva as alternatives. Waiting in the normal queue: "My submissions" in the account. The paid review was declined; it is the owner's to choose |
+| saastool.site | Free: their badge or a link to them has to stay on our home page for good; a person reviews within 90 days | **Under review**, free plan. The link is on the home page (`src/config/directories.ts`). Their automatic check answered with a server error, so the listing went in on their manual confirmation, which their reviewer checks. Basic $9.90 and Pro $19.90 are paid links: skip |
+| fazier.com | Free launch: three comments on other products from the account, then their badge image on our site, then "Verify Badge"; reviewed and listed within 30 days | Not started: both the comments and a badge image are the owner's to decide. Lite $29 and up are paid: skip |
 | openlaunch.ai | Free launch: $0, five slots a day, the link followed only for a day's top three | Not submitted: every one of the 180 days on offer showed "0 free slot(s)". Only the $9 launch could be booked, and that is a paid link. The form keeps no draft; its answers are below |
-| saastool.site | Free: their badge or a link to them has to stay on our site for good; reviewed within 90 days | Details saved, not published (dashboard: "Badge Verification Required", no plan selected). Basic $9.90 and Pro $19.90 are paid links: skip |
-| fazier.com | Free: a link to them on our homepage or footer; reviewed and listed within 30 days | Nothing entered: the form comes after the plan. Lite $29 and up are paid: skip |
 
-So two of the four ask for a link back from tryethos.io. That is the owner's decision; if it is a
-yes, two small text links in the homepage footer are enough for both.
+**The link on the home page.** One line of the footer's smallest print, on the home page only
+("Elsewhere: SaaSTool"), with the address SaaSTool's badge code gives. It has to stay: SaaSTool
+checks from time to time and takes the listing down without it. Small is fine, hidden is not: a link
+people cannot see is one the directory refuses and search engines count against the site.
+`tests/e2e/directory-links.spec.ts` holds it to that.
 
 What went into the forms, for the next one:
 
+- **AlternativeTo:** name TryEthos; the one-sentence description "Make a digital gift that opens
+  like a story on their phone: a love letter, a bouquet or a scrapbook made of your photos, your
+  words and a song."; a three-paragraph description with no links in it (their rule); languages
+  English and Spanish; Freemium, a purchase of $9 to $30; proprietary; tags gifts,
+  personalized-gifts, greeting-cards, ecards; platform Online; company SIA MIGLAI, Latvia; release
+  23 April 2026; TikTok and YouTube; the icon and four real screenshots (they turn down listings
+  without screenshots).
 - **Open Launch:** tagline (160 characters at most) "Digital gifts that open like a story: a love
   letter, a bouquet or a scrapbook made of your photos, your words and their song."; categories
   Design Tools and SaaS (three at most, and none is about gifts); tech stack Next.js, React,
@@ -163,7 +173,8 @@ in the owner's name; Claude can draft the answers.
 | 13 Nov 2026 | stampgoose.com, "The best ways to send a digital letter in 2026" (Jake Powney, who makes Stampgoose; followed links; ChatGPT reads it) | Pitch from support@secuora.xyz to hello@stampgoose.com: add The Letter (free, 10 photos and a song; $8.99 extras), with their table's three lines and the demo. A code for the extras offered, not made. | https://stampgoose.com/articles/comparisons/best-ways-to-send-a-digital-letter |
 | 13 Nov 2026 | birthdaywebsite.app, "Best Birthday Website Makers in 2026: An Honest Comparison" (by the maker of Birthday Website Maker; followed links) | Pitch from support@secuora.xyz to support@birthdaywebsite.app, answering their criteria: Birthday Cinema, Midnight Countdown, scheduled unlock in their time zone, password with paid templates, permanent links, link or QR. A code offered, not made. | https://birthdaywebsite.app/blog/best-birthday-website-makers-2026 |
 | 13 Nov 2026 | peekwire.com, "5 Digital Open-When Letter Services Worth Knowing in the US" (no author; followed links) | Pitch from support@secuora.xyz to editorial@peekwire.com, answering their four factors: scheduled unlock in their time zone and a password, Midnight Countdown, the 100-note jar, prices, link or QR with no app. A code offered, not made. | https://peekwire.com/article/5-digital-open-when-letter-services-worth-knowing-in-the-us |
-| 20 Nov 2026 | saastool.site | Listing details saved from the owner's account, not published: the free plan needs their badge or link on our site | https://saastool.site/dashboard |
+| 20 Nov 2026 | saastool.site | Listing submitted on the free plan from the owner's account: under review (up to 90 days). The link they ask for is on the home page | https://saastool.site/dashboard |
+| 20 Nov 2026 | alternativeto.net | Submitted as TryEthos from the owner's account, with four alternatives; normal queue, paid review declined | https://alternativeto.net/my-submissions/ |
 | 20 Nov 2026 | openlaunch.ai | Form filled from the owner's account, not submitted: no free slot on any of the 180 days | https://openlaunch.ai/projects/submit |
 
 The Stampgoose pitch of 13 Nov described The Letter as it was then: free with 10 photos and a

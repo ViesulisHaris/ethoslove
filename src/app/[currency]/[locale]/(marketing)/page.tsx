@@ -5,6 +5,7 @@ import { homeHeroFor } from "@/lib/attribution/landing";
 import { ogImageUrl, organizationNode, pageMetadata, websiteNode } from "@/lib/seo";
 import { listManifests } from "@/templates/manifests";
 import { JsonLd } from "@/components/shared/json-ld";
+import { DirectoryLine } from "@/components/marketing/home/directory-line";
 import { TemplateStrip } from "@/components/marketing/home/template-strip";
 import { TornEdge } from "@/components/marketing/home/cutouts";
 import { GamesBand, LongDistanceBand, PlatformClosing } from "@/components/marketing/platform/bands";
@@ -48,6 +49,7 @@ export default async function HomePage({ params, searchParams }: PageProps<"/[cu
       <GamesBand />
       <TornEdge from="var(--brand-paper)" to="var(--brand-forest)" fibre="#4d2139" />
       <PlatformClosing />
+      <DirectoryLine />
     </ClientMessages>
   );
 }
