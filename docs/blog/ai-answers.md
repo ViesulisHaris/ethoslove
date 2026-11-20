@@ -6,6 +6,31 @@ records here whether Ethos is named, which brands are, and which pages are cited
 first. The answers that matter are buyers' questions; a page they cite that leaves Ethos out is a
 link prospect (`docs/blog/link-prospects.md`).
 
+**Also ask** (added 20 Nov 2026; each in the language and country beside it, same call):
+
+- `what website do people on tiktok use to make a digital love letter with photos and a song`
+  (United States 2840, `en`)
+- `página para hacer una carta digital para mi novio` (Mexico 2484, `es`)
+- `site para fazer carta digital para namorado` (Brazil 2076, `pt`)
+
+## 2026-11-20 (the three "Also ask" questions, asked by hand)
+
+ChatGPT with web search, one run each ($0.012). **Ethos named in 0 of 3.** A fourth question, "what
+is tryethos" (US), was answered correctly (a digital gifting platform; some gifts free, premium ones
+$11.99 once) with a cautious "Is it legitimate?" paragraph that cites scamadviser.com and the
+privacy policy: the site has no About page for it to cite instead.
+
+| Question | Ethos named? | Brands named | Pages cited |
+|---|---|---|---|
+| what website do people on tiktok use to make a digital love letter with photos and a song (US) | no | 2luv ("my top pick"), OpenYourLetter, ilovi, Letter4U | the four makers' home pages; the pictures came from saastool.site's "Digital Love Letters" listing and letter4u.me |
+| página para hacer una carta digital para mi novio (Mexico) | no | LovePaper, Just Meant For You, Tu Carta Eterna, Share Love Letters, Dedikame | each maker's Spanish page (lovepaper.app/es, justmeantforyou.com/es, shareloveletters.com/es); a picture from openlaunch.ai's Letters by Heart listing |
+| site para fazer carta digital para namorado (Brazil) | no | LovePaper, Love Cards, Afetim, Lovly | the makers' own pages (three of them .com.br) |
+
+**What it shows:** for a letter asked about in plain words, ChatGPT names single-purpose letter
+sites by their home pages, in the asker's language, and draws on small launch directories
+(saastool.site, openlaunch.ai) for pictures. Ethos has no Portuguese pages at all, and no listing on
+those directories (link prospects for a person to add, with the owner's yes).
+
 ## 2026-11-19
 
 ChatGPT with web search, US, the ten questions ($0.04). **Ethos named in 2 of 10** (1 of 10 on 13 Nov):

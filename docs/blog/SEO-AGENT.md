@@ -63,7 +63,9 @@ routine never contacts anyone: a person drafts each pitch, and it goes out only 
 
 **AI answers (Thursdays).** For the ten buyer questions in KEYWORDS.md's "AI answers" table, ask
 ChatGPT with web search, as a US user would (`ai_optimization/chat_gpt/llm_scraper/live/advanced`,
-about $0.004 a question). Add a dated section to `docs/blog/ai-answers.md`: per question, whether
+about $0.004 a question). Then ask the "Also ask" questions at the top of `docs/blog/ai-answers.md`,
+each with the country and language written beside it (`location_code`, `language_code`): people ask
+in their own language, and the makers named differ by language. Add a dated section to `docs/blog/ai-answers.md`: per question, whether
 Ethos is named (and where in the list), the brands named, and the pages cited. A cited page that
 compares makers and leaves Ethos out goes to `link-prospects.md` too. When an answer cites a page of
 ours, note which: those pages are worth keeping sharp.

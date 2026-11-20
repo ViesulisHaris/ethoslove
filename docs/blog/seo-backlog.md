@@ -7,6 +7,13 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 
 ## For the routine (blog files only)
 
+- [ ] **digital-love-letter-websites-compared, the Spanish side.** Asked in Spanish on 20 Nov 2026
+  ("página para hacer una carta digital para mi novio", Mexico), ChatGPT named LovePaper, Just Meant
+  For You, Tu Carta Eterna, Share Love Letters and Dedikame, each by its own Spanish page, and not
+  Ethos (`docs/blog/ai-answers.md`). Check which of them the post's Spanish version covers and add
+  the missing Spanish-market makers under the comparison rules (VOICE.md: each on its own site that
+  day, `sources` in the refresh record). Make sure the Spanish title and lead say "carta digital",
+  the words people use. The English table changes only if a maker belongs there too.
 - [ ] **The free Letter is a short note now (19 Nov 2026), and many posts still say otherwise.** Since
   the owner's change (`src/lib/gift/free-tier.ts`), a free Letter is up to 500 characters with music
   and the footer; photos and the full letter come with "Make it special". Template notes such as
