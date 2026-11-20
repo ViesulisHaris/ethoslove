@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { templateGuide } from "@/content/template-guides";
+import { templateGuide, templateGuideFaq } from "@/content/template-guides";
 import { templateSeo } from "@/content/template-seo";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
@@ -23,7 +23,7 @@ export async function templateFaq(manifest: TemplateManifest, locale: GiftLocale
       : { q: t("faqPaidQ"), a: t("faqPaidA", { name, price }) },
     { q: t("faqOpenQ"), a: t("faqOpenA") },
     { q: t("faqEditQ"), a: t("faqEditA") },
-    ...(templateGuide(manifest.slug, locale)?.faq ?? []),
+    ...templateGuideFaq(manifest.slug, locale),
   ];
 }
 
