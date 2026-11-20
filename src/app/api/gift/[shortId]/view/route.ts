@@ -6,6 +6,8 @@ import { isShortId } from "@/lib/gift/short-id";
 import { rateLimit } from "@/lib/rate-limit";
 import { clientIp } from "@/lib/request-ip";
 import { notifyFirstOpen } from "@/lib/email/notify";
+import { getCurrentUser } from "@/lib/auth/get-user";
+import { carriesSignIn, isOwnView } from "@/lib/gift/own-view";
 import { pruneOpenedGiftStorage } from "@/lib/gift/storage-cleanup";
 
 export const runtime = "nodejs";
@@ -49,6 +51,16 @@ export async function POST(request: NextRequest, ctx: RouteContext<"/api/gift/[s
   const ip = clientIp(request.headers);
   const ua = request.headers.get("user-agent") ?? "";
   if (!(await rateLimit(`view:${ip}`, { limit: 60, windowSeconds: 600 }))) return NextResponse.json({ ok: false }, { status: 429 });
+
+  // The sender's own look is not an open (lib/gift/own-view.ts): nothing is recorded and no
+  // "opened your gift" email goes. Asked only of a request that carries a sign-in at all.
+  if (carriesSignIn(request.cookies.getAll().map((c) => c.name), request.headers.has("authorization"))) {
+    const user = await getCurrentUser().catch(() => null);
+    if (user) {
+      const { data: gift } = await admin.from("gifts").select("user_id").eq("short_id", shortId).maybeSingle();
+      if (isOwnView(user.id, gift?.user_id)) return NextResponse.json({ ok: true, own: true });
+    }
+  }
 
   const { data, error } = await admin.rpc("record_gift_view", { p_short_id: shortId, p_viewer_hash: await viewerHash(ip, ua, shortId), p_device: device(ua) });
   const recorded = parseRecordGiftViewResult(data);
