@@ -90,7 +90,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "Late becomes early: set it for midnight",
-          body: "If the day is tomorrow, you are ahead of schedule. Send the link tonight: it shows a clock running down under a darkening sky and opens by itself at the moment you set, in their time zone, with fireworks. It asks for one photo and two short lines, so it is quick. Nobody who gets a gift at 00:00 thinks it was made at 21:40.",
+          body: "If the day is tomorrow, you are ahead of schedule. Send the link tonight: it shows a clock running down under a darkening sky and opens by itself at the moment you set, in their time zone, with fireworks. Beyond the names and your message it needs one photo and the moment to open, so it is quick. Nobody who gets a gift at 00:00 thinks it was made at 21:40.",
           line: { field: "zeroLine", where: "The line that appears with the fireworks", text: "It's officially your day. I got here first." },
         },
         {
@@ -126,7 +126,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "birthday-cinema",
           heading: "If it's a birthday: a cake they can blow out",
-          body: "For the birthday you remembered at lunch. Their name goes up in lights, a cake waits with one candle per year up to twelve, and they put them out by blowing into the phone or swiping. It needs their name, their age, one photo and your message, which is four fields. Add a second photo if you have ten more seconds.",
+          body: "For the birthday you remembered at lunch. Their name goes up in lights, a cake waits with one candle per year up to twelve, and they put them out by blowing into the phone or swiping. It needs the two names, one photo and your message, and their age if you want the candles to match. Add a second photo if you have ten more seconds.",
           line: { field: "marquee", where: "On the marquee", text: "SAM AT 30: THE DIRECTOR'S CUT" },
         },
       ],
@@ -185,7 +185,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "midnight-countdown",
           heading: "De llegar tarde a llegar antes: prográmalo a medianoche",
-          body: "Si el día es mañana, vas con tiempo de sobra. Manda el enlace esta noche: muestra un reloj que baja bajo un cielo que oscurece y se abre solo en el momento que elijas, en su zona horaria, con fuegos artificiales. Pide una foto y dos frases cortas, así que se hace rápido. Nadie que recibe un regalo a las 00:00 piensa que se hizo a las 21:40.",
+          body: "Si el día es mañana, vas con tiempo de sobra. Manda el enlace esta noche: muestra un reloj que baja bajo un cielo que oscurece y se abre solo en el momento que elijas, en su zona horaria, con fuegos artificiales. Aparte de los nombres y tu mensaje, pide una foto y el momento de abrirse, así que se hace rápido. Nadie que recibe un regalo a las 00:00 piensa que se hizo a las 21:40.",
           line: { field: "zeroLine", where: "La frase que sale con los fuegos", text: "Ya es tu día, oficialmente. He llegado antes que nadie." },
         },
         {
@@ -221,7 +221,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "birthday-cinema",
           heading: "Si es un cumpleaños: una tarta que se sopla",
-          body: "Para el cumpleaños del que te has acordado a la hora de comer. Su nombre sale en luces, espera una tarta con una vela por año hasta doce, y las apaga soplando al móvil o deslizando el dedo. Pide su nombre, su edad, una foto y tu mensaje: cuatro campos. Añade una segunda foto si te sobran diez segundos.",
+          body: "Para el cumpleaños del que te has acordado a la hora de comer. Su nombre sale en luces, espera una tarta con una vela por año hasta doce, y las apaga soplando al móvil o deslizando el dedo. Pide los dos nombres, una foto y tu mensaje, y su edad si quieres que las velas coincidan. Añade una segunda foto si te sobran diez segundos.",
           line: { field: "marquee", where: "En la marquesina", text: "ÁLEX A LOS 30: VERSIÓN DEL DIRECTOR" },
         },
       ],
@@ -401,7 +401,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
           template: "vinyl",
           heading: "Sin cámara: tu voz después de la última canción",
           body: "Ponen la aguja, el disco gira con la música y tus fotos pasan como portadas de discos. Cuando termina, tu mensaje de voz espera en la última pantalla: hasta un minuto, grabado en el editor con tu propio móvil. Cuenta de qué va la canción y por qué es suya. Hace lo que un pie de foto no puede.",
-          line: { field: "album", where: "El título del disco, en la galleta", text: "Canciones que no puedo oír sin ti" },
+          line: { field: "album", where: "El título del disco, en su etiqueta", text: "Canciones que no puedo oír sin ti" },
         },
         {
           template: "halfway",

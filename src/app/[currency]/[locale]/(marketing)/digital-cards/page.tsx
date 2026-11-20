@@ -102,12 +102,12 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
         </dl>
       </section>
 
-      <section className="container-x border-t border-line pt-14 pb-16 lg:pt-16" aria-labelledby="kinds">
+      <section className="container-x border-t border-line pt-14 lg:pt-16" aria-labelledby="kinds">
         <h2 id="kinds" className="display-lg">
           {copy.kinds.heading}
         </h2>
         <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">{copy.kinds.lead}</p>
-        <ul className="mt-10">
+        <ul className="mt-10 border-b border-line">
           {kinds.map((kind) => {
             const name = kind.manifest.name[l];
             return (
@@ -118,7 +118,8 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
                 </Link>
                 <div className="self-center sm:self-start">
                   <p className="text-mono-meta text-muted-foreground">
-                    <Link href={`/templates/${kind.template}`} className="rounded-sm underline-offset-4 outline-none hover:text-ink hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">
+                    {/* 44px to a thumb, pulled back into the line by its negative margin, so nothing moves. */}
+                    <Link href={`/templates/${kind.template}`} className="-my-3.5 inline-flex min-h-11 items-center rounded-sm underline-offset-4 outline-none hover:text-ink hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">
                       {name}
                     </Link>
                     {sendsFree(kind.manifest) ? ` · ${t("free")}` : null}
@@ -158,7 +159,7 @@ export default async function DigitalCardsPage({ params }: PageProps<"/[currency
         </ul>
       </section>
 
-      <div className="container-narrow border-t border-line pt-14 pb-16 lg:pt-16">
+      <div className="container-narrow pt-14 pb-16 lg:pt-16">
         <section aria-labelledby="how">
           <h2 id="how" className="display-md">
             {copy.steps.heading}
