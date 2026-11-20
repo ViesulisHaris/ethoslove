@@ -113,7 +113,7 @@ describe("sitemap dates", () => {
 
   it("are a page's own, else its section's, else none", () => {
     expect(pageUpdated("/templates/scratch-card")).toBe(PAGE_UPDATED["/templates/scratch-card"]);
-    expect(pageUpdated("/templates/xoxo")).toBe(PAGE_UPDATED["/templates/*"]);
+    expect(pageUpdated("/templates/vinyl")).toBe(PAGE_UPDATED["/templates/*"]);
     expect(pageUpdated("/")).toBe(PAGE_UPDATED["/"]);
     expect(pageUpdated("/dates/riga")).toBeUndefined();
     expect(pageUpdated("/creators")).toBeUndefined();
