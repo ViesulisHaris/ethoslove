@@ -7,6 +7,7 @@ import type { GiftData, GiftLocale } from "@/lib/gift/schema";
 import { isCatalogPreview } from "@/lib/gift/music";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics/track";
+import { MAKE_OWN_REF, madeWithEthosHref } from "@/lib/attribution/recipient";
 import { getManifest } from "../manifests";
 import { useGiftChrome } from "./gift-chrome";
 import { giftString } from "./i18n";
@@ -18,15 +19,16 @@ import { UnwrapGift } from "./UnwrapGift";
 import { Watermark } from "./Watermark";
 
 /**
- * The reply offer and "Keep this gift", in the gift's own language like every other line here. Only
- * this screen says these, so they live with it rather than in ./i18n. "The first": a gift has one
- * free reply, and a page can't know it's been sent without asking, so the line stays true after it
- * has (a "free" that turns out not to be is a banned claim; once it's used the editor opens at the
- * normal price).
+ * The reply offer, "or make one for someone else" and "Keep this gift", in the gift's own language
+ * like every other line here. Only this screen says these, so they live with it rather than in
+ * ./i18n. "The first": a gift has one free reply, and a page can't know it's been sent without
+ * asking, so the line stays true after it has (a "free" that turns out not to be is a banned claim;
+ * once it's used the editor opens at the normal price). "or …" reads on from "Send one back to
+ * {sender}" just above it, which is why it starts small.
  */
 const REPLY_OFFER = {
-  en: { free: "The first reply is free", keep: "Keep this gift" },
-  es: { free: "La primera respuesta es gratis", keep: "Guardar este regalo" },
+  en: { free: "The first reply is free", someoneElse: "or make one for someone else", keep: "Keep this gift" },
+  es: { free: "La primera respuesta es gratis", someoneElse: "o hazle uno a otra persona", keep: "Guardar este regalo" },
 } as const satisfies Record<GiftLocale, Record<string, string>>;
 
 /**
@@ -161,6 +163,29 @@ export function EndScreen({
             {replyFree ? (
               <p className={cn("text-xs font-medium", dark ? "text-white/70" : "text-black/60")}>{replyFree}</p>
             ) : null}
+            {/* Not everyone who loved the gift wants to answer its sender. For anyone else in their
+                life: the page made for a recipient (/made-with-ethos), the template they just watched
+                first, in a new tab so the gift stays open. A text link, the weight of "Keep this
+                gift"; its address carries the template and never the gift. On a real gift only (free
+                or paid), and not inside the iPhone app, where the gifts are a tab of their own. */}
+            {reply ? (
+              <a
+                data-app-hide
+                href={madeWithEthosHref(locale, MAKE_OWN_REF, data.templateSlug)}
+                target="_blank"
+                rel="noopener"
+                onClick={() => track("make_own_clicked", { template: data.templateSlug, from: "end" })}
+                // Underlined, lightly: with no icon beside it, that is what says it can be tapped. On a
+                // narrow card it breaks in two even lines rather than leaving "else" on its own.
+                className={cn(
+                  "flex min-h-11 items-center justify-center px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current active:opacity-70",
+                  dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
+                )}
+                data-testid="make-for-someone-else"
+              >
+                {(REPLY_OFFER[locale] ?? REPLY_OFFER.en).someoneElse}
+              </a>
+            ) : null}
           </div>
         ) : null}
         {/* Their reason to make one comes later (the sender's birthday, the anniversary): the gift's own
@@ -196,7 +221,7 @@ export function EndScreen({
         ) : null}
       </div>
 
-      {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline className="mt-8" /> : null}
+      {chrome.watermarked ? <Watermark locale={locale} slug={data.templateSlug} inline tone={tone} counted={reply} className="mt-8" /> : null}
     </div>
   );
 }

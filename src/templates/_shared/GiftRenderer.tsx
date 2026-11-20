@@ -194,7 +194,7 @@ export function GiftRenderer({
         {/* The still frame rarely shows the end screen, where a surprise inside waits: it peeks in instead, until the real one is in view. */}
         {mode === "preview" && ready && resolved?.unwrap && !endScreen ? <UnwrapPeek data={resolved} /> : null}
         {/* The end screen carries the badge itself, so the floating one stands down while it shows. */}
-        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} /> : null}
+        {watermarked && !endScreen && resolved ? <Watermark locale={resolved.locale} slug={slug} counted={replyMode} /> : null}
       </div>
     </MotionConfig>
   );

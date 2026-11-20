@@ -25,6 +25,15 @@ export const BRAND = {
     etsy: "https://www.etsy.com/shop/TryEthos",
     pinterest: "https://www.pinterest.com/tryethosgifts/",
   },
+  /**
+   * What Ethos makes, in the owner's words (20 Nov 2026). A maker's mark, not a slogan: it is set
+   * small, in a few chosen places (the foot of a free gift, the page its badge opens), never on
+   * every page. English never says "digital gift card", which means a voucher.
+   */
+  categoryLine: {
+    en: "Digital cards by Tryethos",
+    es: "Tarjetas digitales de Tryethos",
+  },
   /** Shown on free-tier gifts. Keep it short; it is the viral hook. */
   watermark: {
     en: "Made with Ethos",

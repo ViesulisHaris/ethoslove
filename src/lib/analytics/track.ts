@@ -74,7 +74,17 @@ export type FunnelEvent =
   | "etsy_review_click"
   | "affiliate_click"
   | "reminder_saved"
+  // "Send one back to {sender}": the template, and where it was tapped ("end": the end screen,
+  // "reaction": under "Sent to {sender}." after a reaction).
   | "reply_started"
+  // The recipient loop (lib/attribution/recipient.ts): taps on a real gift page (the "Made with
+  // Ethos" badge; "or make one for someone else" on the end screen), the editor opened by someone
+  // who came from a gift (which door: reply, g, watermark, gift-keep), and that gift sent for the
+  // first time (and whether it holds anything paid). Counts only: no ids, no names.
+  | "watermark_clicked"
+  | "make_own_clicked"
+  | "recipient_editor_opened"
+  | "recipient_gift_sent"
   | "pack_offer_shown"
   | "tour_step"
   | "tour_skipped"
