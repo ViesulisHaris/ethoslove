@@ -1,5 +1,6 @@
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { OCCASION_IDEAS } from "./occasion-ideas";
 
 /**
  * What each occasion page says below its templates: how to make the gift for that day, and the
@@ -619,6 +620,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A wedding gift with the words in it",
       lead: "For the couple, or for the person you're marrying. A wedding day goes past in a blur; the morning after is when they read things. Gather the photos, the wishes and a song into something they can open then — and every year that follows.",
+      ideas: OCCASION_IDEAS["wedding"].en,
       sections: [
         {
           heading: "What to write",
@@ -648,6 +650,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de boda con las palabras dentro",
       lead: "Para la pareja, o para la persona con la que te casas. El día pasa volando; la mañana siguiente es cuando se leen las cosas. Junta las fotos, los deseos y una canción en algo que puedan abrir entonces, y cada año que venga después.",
+      ideas: OCCASION_IDEAS["wedding"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -680,6 +683,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A graduation gift from the first day to the last",
       lead: "Money is what everyone gives, and it's spent by August. This is the other thing: the photos from year one to the cap and gown, what you were proud of when nobody was looking, and a song for the day — timed to open the moment they finish.",
+      ideas: OCCASION_IDEAS["graduation"].en,
       sections: [
         {
           heading: "What to write",
@@ -706,6 +710,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de graduación del primer día al último",
       lead: "Dinero le da todo el mundo, y en agosto ya no queda. Esto es lo otro: las fotos desde el primer curso hasta el birrete, de qué estabas orgulloso cuando nadie miraba y una canción para el día, programado para abrirse en el momento en que termina.",
+      ideas: OCCASION_IDEAS["graduation"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1015,6 +1020,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A Thanksgiving gift for the one across the table",
       lead: "Thanksgiving is the one day of the year built around saying what you are grateful for, and most of us still mumble it over the turkey. Say it properly instead: a gift they open on their phone, with your photos, your song and a wishbone only one of you can win.",
+      ideas: OCCASION_IDEAS["thanksgiving"].en,
       sections: [
         {
           heading: "What to write",
@@ -1041,6 +1047,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo de Acción de Gracias para quien se sienta a tu lado",
       lead: "Acción de Gracias es el único día del año pensado para decir qué agradeces, y casi siempre acaba en un murmullo antes del pavo. Si lo celebráis, porque vivís fuera o porque lo habéis adoptado, dilo bien: un regalo que se abre en el móvil, con tus fotos, vuestra canción y una espoleta que solo uno de los dos puede ganar.",
+      ideas: OCCASION_IDEAS["thanksgiving"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1070,6 +1077,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A Mother's Day gift in your own words",
       lead: "She has a drawer of cards. What she doesn't have is the thing you'd say if you weren't embarrassed: the old photos, the song she always sings along to, and a letter that names what she did for you. Sent as a link she can open on the bus, at work, and again that night.",
+      ideas: OCCASION_IDEAS["mothers-day"].en,
       sections: [
         {
           heading: "What to write",
@@ -1096,6 +1104,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo del Día de la Madre con tus palabras",
       lead: "Tiene un cajón de tarjetas. Lo que no tiene es lo que le dirías si no te diera vergüenza: las fotos antiguas, la canción que siempre canta y una carta que nombre lo que hizo por ti. Enviado como un enlace que abre en el autobús, en el trabajo y otra vez esa noche.",
+      ideas: OCCASION_IDEAS["mothers-day"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1125,6 +1134,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A Father's Day gift he'll actually keep",
       lead: "Not another tie, not a mug. The road trips, the lessons, the terrible jokes, in a gift that opens on his phone — with a note that says the thing sons and daughters mostly don't say to their dads, and the song from the car.",
+      ideas: OCCASION_IDEAS["fathers-day"].en,
       sections: [
         {
           heading: "What to write",
@@ -1151,6 +1161,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo del Día del Padre que guardará de verdad",
       lead: "Ni otra corbata ni otra taza. Los viajes en coche, las lecciones y los chistes malos, en un regalo que se abre en su móvil, con una nota que dice lo que hijos e hijas casi nunca dicen a sus padres, y la canción del coche.",
+      ideas: OCCASION_IDEAS["fathers-day"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1180,6 +1191,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "How to say sorry when a text isn't enough",
       lead: "A text apology is read in four seconds and answered in ten. This takes longer to make, and that is the point: they can see you sat down, chose the words, found the photo, and sent something they can open when they're ready — not something they have to answer now.",
+      ideas: OCCASION_IDEAS["apology"].en,
       sections: [
         {
           heading: "What to write",
@@ -1209,6 +1221,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Cómo pedir perdón cuando un mensaje no basta",
       lead: "Una disculpa por WhatsApp se lee en cuatro segundos y se contesta en diez. Esto tarda más en hacerse, y esa es la gracia: se nota que te sentaste, elegiste las palabras, buscaste la foto y mandaste algo que puede abrir cuando esté preparado, no algo que tenga que contestar ahora.",
+      ideas: OCCASION_IDEAS["apology"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1241,6 +1254,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A gift that arrives the moment you send it",
       lead: "Miles apart, the post takes a week and the parcel goes to the wrong office. This arrives the second it's ready, in their time zone, on their phone: a passport that flies from your city to theirs, the places that belong to you both, a countdown to the next visit, and your voice.",
+      ideas: OCCASION_IDEAS["long-distance"].en,
       sections: [
         {
           heading: "What to write",
@@ -1270,6 +1284,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo que llega en el momento en que lo envías",
       lead: "A kilómetros, el correo tarda una semana y el paquete acaba en la oficina equivocada. Esto llega en el segundo en que está listo, en su zona horaria, en su móvil: un pasaporte que vuela de tu ciudad a la suya, los sitios que son de los dos, una cuenta atrás hasta la próxima visita y tu voz.",
+      ideas: OCCASION_IDEAS["long-distance"].es,
       sections: [
         {
           heading: "Qué escribir",
@@ -1302,6 +1317,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     en: {
       title: "A gift for no reason, which is the best reason",
       lead: "Birthdays are expected. A Tuesday isn't. A small gift on an ordinary day — three photos, a song, a few honest lines — says you were thinking of them when nothing required it, which is the thing people actually want to hear.",
+      ideas: OCCASION_IDEAS["just-because"].en,
       sections: [
         {
           heading: "What to write",
@@ -1328,6 +1344,7 @@ export const OCCASION_GUIDES: Record<Occasion, Record<GiftLocale, OccasionGuide>
     es: {
       title: "Un regalo sin motivo, que es el mejor motivo",
       lead: "Los cumpleaños se esperan. Un martes no. Un regalo pequeño en un día cualquiera, tres fotos, una canción, unas líneas sinceras, dice que pensabas en esa persona cuando nada lo exigía, que es justo lo que la gente quiere oír.",
+      ideas: OCCASION_IDEAS["just-because"].es,
       sections: [
         {
           heading: "Qué escribir",
