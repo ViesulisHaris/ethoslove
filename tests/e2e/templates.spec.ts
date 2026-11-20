@@ -41,6 +41,33 @@ test.describe("template engine", () => {
   });
 });
 
+test.describe("who a template suits", () => {
+  const suits = (page: import("@playwright/test").Page) => page.locator('ul[aria-labelledby="who-it-suits"]').getByRole("link");
+
+  test("a couples' template names partners only, each linking to that person's gift ideas", async ({ page }) => {
+    await page.goto("/templates/xoxo");
+    await expect(page.getByRole("heading", { level: 2, name: "Who it suits" })).toBeVisible();
+    await expect(suits(page)).toHaveText(["For your boyfriend", "For your girlfriend", "For your husband", "For your wife"]);
+    expect(await suits(page).evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts/for-boyfriend", "/gifts/for-girlfriend", "/gifts/for-husband", "/gifts/for-wife"]);
+    // It sits with the occasions, after them.
+    const perfect = await page.getByRole("heading", { level: 2, name: "Perfect for" }).boundingBox();
+    const who = await page.getByRole("heading", { level: 2, name: "Who it suits" }).boundingBox();
+    expect(who!.y).toBeGreaterThan(perfect!.y);
+  });
+
+  test("one made for a mother says so, and one for anyone lists everyone, in the server's HTML", async ({ page }) => {
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto("/templates/recipe-box");
+    await expect(suits(page)).toHaveText(["For your girlfriend", "For your wife", "For your mom"]);
+    await page.goto("/templates/the-letter");
+    await expect(suits(page)).toHaveCount(7);
+    await page.goto("/es/templates/front-page");
+    await expect(page.getByRole("heading", { level: 2, name: "A quién le va" })).toBeAttached();
+    await expect(suits(page).last()).toHaveText("Para tu padre");
+    await expect(suits(page).last()).toHaveAttribute("href", "/es/gifts/for-dad");
+  });
+});
+
 test.describe("later batch demos", () => {
   for (const slug of ["birthday-cinema", "jar-of-reasons", "scratch-card", "midnight-countdown", "our-timeline", "vinyl", "museum", "front-page", "fortune-cookie", "text-thread", "arcade", "passport", "bloom", "bouquet", "kawaii", "fireside", "trick-or-treat", "scrapbook", "halfway", "garden", "snow-globe", "recipe-box", "cap-toss", "paper-crane", "the-toast", "balloons", "popup-card", "sketchbook", "party-animals", "the-council", "sticker-bomb", "coquette", "xoxo", "keepsake", "pack-your-bags", "digicam", "photo-booth", "picnic", "music-box", "spooky-season", "dark-romance", "favorite-person", "on-repeat", "evergreen", "seance", "bat-swarm", "cauldron", "jack-o-lantern", "haunted-house", "nice-list", "unwrapped", "wishbone", "frosted-window", "light-the-candles", "string-the-lights", "gingerbread-house"]) {
     test(`${slug} demo loads past the loading screen`, async ({ page }) => {

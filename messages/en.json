@@ -833,6 +833,11 @@
     "tryNote": "The editor is free to use with a live preview. You only pay to publish a premium template.",
     "includes": "Includes",
     "perfectFor": "Perfect for",
+    "suits": "Who it suits",
+    "finder": {
+      "ask": "Not sure which?",
+      "link": "Answer three questions"
+    },
     "featureMusic": "Background music",
     "featureCaptions": "Photo captions",
     "featureCountdown": "Countdown",

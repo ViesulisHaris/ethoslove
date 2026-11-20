@@ -17,29 +17,32 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
-  "/": "2026-11-15",
-  "/gifts": "2026-11-13",
+  // 20 Nov: Gifts lead the rooms, the category line heads the front page, and the gift finder is linked
+  // from the front page, /gifts and the gallery.
+  "/": "2026-11-20",
+  "/gifts": "2026-11-20",
   "/gifts/*": "2026-10-24",
   // The gift finder: new on 20 Nov 2026.
   "/gifts/finder": "2026-11-20",
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
-  "/templates": "2026-11-11",
-  "/templates/*": "2026-10-25",
-  // Free templates show no price, so their last change was the search phrases of 24 Oct.
-  "/templates/the-letter": "2026-11-13",
-  "/templates/constellations": "2026-10-24",
-  "/templates/scratch-card": "2026-11-13",
-  "/templates/bouquet": "2026-11-09",
-  "/templates/fortune-cookie": "2026-11-13",
+  // 20 Nov: every template page gained "Who it suits", with links to the gift-idea pages.
+  "/templates": "2026-11-20",
+  "/templates/*": "2026-11-20",
+  // Templates that had a date of their own before then (their search phrases, their launch) carry the new one too.
+  "/templates/the-letter": "2026-11-20",
+  "/templates/constellations": "2026-11-20",
+  "/templates/scratch-card": "2026-11-20",
+  "/templates/bouquet": "2026-11-20",
+  "/templates/fortune-cookie": "2026-11-20",
   // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
-  "/templates/nice-list": "2026-11-11",
-  "/templates/unwrapped": "2026-11-11",
-  "/templates/wishbone": "2026-11-11",
+  "/templates/nice-list": "2026-11-20",
+  "/templates/unwrapped": "2026-11-20",
+  "/templates/wishbone": "2026-11-20",
   // The second holiday batch, live on the night of 15 Nov (UTC).
-  "/templates/frosted-window": "2026-11-15",
-  "/templates/gingerbread-house": "2026-11-15",
-  "/templates/light-the-candles": "2026-11-15",
-  "/templates/string-the-lights": "2026-11-15",
+  "/templates/frosted-window": "2026-11-20",
+  "/templates/gingerbread-house": "2026-11-20",
+  "/templates/light-the-candles": "2026-11-20",
+  "/templates/string-the-lights": "2026-11-20",
   "/occasions/*": "2026-10-25",
   "/occasions/birthday": "2026-11-13",
   "/occasions/anniversary": "2026-11-13",

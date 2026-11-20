@@ -9,6 +9,7 @@ import { sendsFree } from "@/lib/gift/free-tier";
 
 export function TemplateStrip({ manifests }: { manifests: TemplateManifest[] }) {
   const t = useTranslations("home.templates");
+  const finder = useTranslations("templates.finder");
   const free = manifests.filter((m) => sendsFree(m)).length;
   return (
     <section className="border-b border-line py-20 lg:py-28">
@@ -36,6 +37,14 @@ export function TemplateStrip({ manifests }: { manifests: TemplateManifest[] }) 
           </div>
         ))}
       </div>
+      {/* One quiet way out of sixty-one choices: the finder (/gifts/finder). */}
+      <p className="container-x mt-3 text-[15px] text-ink-soft">
+        {finder("ask")}{" "}
+        <Link href="/gifts/finder" className="group inline-flex min-h-11 items-center gap-1.5 font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-ink">
+          {finder("link")}
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </p>
     </section>
   );
 }

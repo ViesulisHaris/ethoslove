@@ -24,6 +24,18 @@ test.describe("the template gallery", () => {
     expect(new Set(names).size).toBe(names.length);
   });
 
+  test("offers the gift finder above the filters, for someone who can't choose", async ({ page }) => {
+    await page.goto("/templates");
+    const finder = page.locator("main").getByRole("link", { name: "Answer three questions" });
+    await expect(finder).toBeVisible();
+    await expect(finder).toHaveAttribute("href", "/gifts/finder");
+    const link = await finder.boundingBox();
+    const filters = await page.getByRole("link", { name: "All occasions" }).boundingBox();
+    expect(link!.y + link!.height).toBeLessThanOrEqual(filters!.y);
+    // The gallery under it is as it was: three shelves, the best sellers first.
+    await expect(page.locator("[data-shelf]")).toHaveCount(3);
+  });
+
   test("the free filter leaves only the shelf that still has something on it", async ({ page }) => {
     await page.goto("/templates");
     await page.getByRole("button", { name: "Free", exact: true }).click();

@@ -129,9 +129,10 @@ describe("sitemap dates", () => {
   });
 
   it("give a template launched after the templates' shared date one of its own", () => {
-    // Every template already live on 25 Oct, the day "/templates/*" stands for. The holiday three
-    // launched on 11 Nov inherited it and told Google they were older than they were; a template
-    // added since has to carry its own date (or, if its words haven't changed, join this list).
+    // Every template without a date of its own takes "/templates/*": 20 Nov, when each template page
+    // gained "Who it suits". The holiday three launched on 11 Nov once inherited an older shared date
+    // and told Google they were older than they were; a template added since has to carry its own
+    // date (or, if its words haven't changed, join this list).
     const LIVE_ON_SECTION_DATE = [
       "arcade", "autumn-reel", "balloons", "bat-swarm", "be-my-boo", "birthday-cinema", "bloom", "cap-toss", "cauldron",
       "coquette", "dark-romance", "digicam", "evergreen", "fall-for-you", "favorite-person", "fireside", "front-page",
@@ -141,7 +142,7 @@ describe("sitemap dates", () => {
       "sketchbook", "snow-globe", "spooky-season", "sticker-bomb", "text-thread", "the-council", "the-toast",
       "trick-or-treat", "vinyl", "xoxo",
     ];
-    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-10-25");
+    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-11-20");
     for (const m of TEMPLATE_MANIFESTS)
       if (!LIVE_ON_SECTION_DATE.includes(m.slug)) expect(PAGE_UPDATED[`/templates/${m.slug}`], m.slug).toBeDefined();
   });

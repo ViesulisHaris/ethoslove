@@ -13,7 +13,9 @@ import {
   pageMetadata,
   templateProductNode,
 } from "@/lib/seo";
+import { suitedRecipients } from "@/content/finder";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
+import { RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
@@ -66,6 +68,8 @@ export default async function TemplateDetailPage({
   );
   const seo = templateSeo(manifest.slug, l);
   const faq = await templateFaq(manifest, l, price);
+  // The people it suits, from the gift finder's hand-written table: each has a page of gift ideas.
+  const suited = suitedRecipients(manifest.slug);
 
   const featureList: [boolean, string][] = [
     [true, t("templates.featurePhotos", { max: manifest.features.photos.max })],
@@ -187,6 +191,26 @@ export default async function TemplateDetailPage({
                 </li>
               ))}
             </ul>
+
+            {suited.length > 0 ? (
+              <>
+                <h2 id="who-it-suits" className="mt-8 mb-4 text-eyebrow text-ink-soft">
+                  {t("templates.suits")}
+                </h2>
+                <ul className="flex flex-wrap gap-2" aria-labelledby="who-it-suits">
+                  {suited.map((r) => (
+                    <li key={r}>
+                      <Link
+                        href={`/gifts/${recipientSlug(r)}`}
+                        className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                      >
+                        {RECIPIENT_GUIDES[r][l].label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
           </div>
         </div>
         <div className="min-w-0 lg:sticky lg:top-24 lg:order-first">

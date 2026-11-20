@@ -833,6 +833,11 @@
     "tryNote": "El editor es gratis y tiene vista previa en vivo. Solo pagas para publicar una plantilla premium.",
     "includes": "Incluye",
     "perfectFor": "Perfecta para",
+    "suits": "A quién le va",
+    "finder": {
+      "ask": "¿No sabes cuál?",
+      "link": "Responde tres preguntas"
+    },
     "featureMusic": "Música de fondo",
     "featureCaptions": "Pies de foto",
     "featureCountdown": "Cuenta atrás",
