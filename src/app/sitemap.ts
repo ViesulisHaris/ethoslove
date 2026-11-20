@@ -5,6 +5,7 @@ import { OCCASIONS } from "@/config/occasions";
 import { BLOG_POSTS, postLocales, postModified } from "@/content/blog";
 import { pageUpdated } from "@/content/page-dates";
 import { ABOUT_PATH } from "@/content/about";
+import { FINDER_PATH } from "@/content/finder";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { TOGETHER_PATH } from "@/content/together-guide";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
@@ -44,6 +45,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/dates", priority: 0.9, changeFrequency: "weekly" },
     ...CITY_SLUGS.map((slug): Page => ({ path: `/dates/${slug}`, priority: 0.7, changeFrequency: "weekly" })),
     { path: "/gifts", priority: 0.9, changeFrequency: "weekly" },
+    { path: FINDER_PATH, priority: 0.8, changeFrequency: "monthly" },
     ...RECIPIENTS.map((r): Page => ({ path: `/gifts/${recipientSlug(r)}`, priority: 0.8, changeFrequency: "monthly" })),
     { path: "/trips", priority: 0.8, changeFrequency: "monthly" },
     ...TRIPS.map((trip): Page => ({ path: `/trips/${trip.id}`, priority: 0.7, changeFrequency: "monthly", ...(trip.image ? { images: [`${SITE.url}${trip.image}`] } : {}) })),

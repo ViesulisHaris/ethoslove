@@ -20,6 +20,8 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/": "2026-11-15",
   "/gifts": "2026-11-13",
   "/gifts/*": "2026-10-24",
+  // The gift finder: new on 20 Nov 2026.
+  "/gifts/finder": "2026-11-20",
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
   "/templates": "2026-11-11",
   "/templates/*": "2026-10-25",

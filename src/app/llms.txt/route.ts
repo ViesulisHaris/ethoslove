@@ -3,6 +3,7 @@ import { SITE } from "@/config/site";
 import { OCCASIONS } from "@/config/occasions";
 import { ABOUT_PATH, aboutCopy } from "@/content/about";
 import { BLOG_POSTS } from "@/content/blog";
+import { FINDER_PATH } from "@/content/finder";
 import { LEGAL_ENTITY } from "@/content/legal";
 import { PT_LETTER_PATH } from "@/content/pt-letter";
 import { LOVE_QUIZ_PATH } from "@/content/love-language-quiz";
@@ -60,6 +61,7 @@ export function GET() {
     "",
     "## Gift ideas by who it's for",
     "",
+    `- [Gift finder](${localizedUrl("en", FINDER_PATH)}): three questions (who it is for, the occasion, the feeling) that end on three templates to watch and make. The answers are in the page's address, so a result can be shared.`,
     ...RECIPIENTS.map((r) => `- [${RECIPIENT_GUIDES[r].en.h1}](${localizedUrl("en", `/gifts/${recipientSlug(r)}`)}): ${RECIPIENT_GUIDES[r].en.description}`),
     "",
     "## Blog",
@@ -87,6 +89,7 @@ export function GET() {
     `- Trips: ${localizedUrl("en", "/trips")}`,
     `- Gifts: ${localizedUrl("en", "/gifts")}`,
     `- Templates: ${localizedUrl("en", "/templates")}`,
+    `- Gift finder: ${localizedUrl("en", FINDER_PATH)}`,
     `- Occasions: ${localizedUrl("en", "/occasions")}`,
     `- Blog: ${localizedUrl("en", "/blog")}`,
     `- Pricing: ${localizedUrl("en", "/pricing")}`,

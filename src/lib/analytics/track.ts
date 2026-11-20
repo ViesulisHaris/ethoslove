@@ -94,6 +94,12 @@ export type FunnelEvent =
   | "quiz_finished"
   | "quiz_shared"
   | "quiz_gift_click"
+  // The gift finder (/gifts/finder): the first answer, each question answered (which one, never what was
+  // said), a result shown (the three answers, each one of a fixed list), and a pick watched or made (the template).
+  | "finder_started"
+  | "finder_step"
+  | "finder_result"
+  | "finder_pick"
   // A visit that arrived with no referrer, only a tag in its address (lib/attribution/arrival.ts): from
   // ChatGPT, another assistant, a pin or an Instagram link. Named per source because Vercel's reports
   // count by event name; nothing else is sent.
