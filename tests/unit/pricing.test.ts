@@ -32,6 +32,7 @@ describe("pricing catalogue", () => {
       pick3: [1499, 1799, 1299],
       everything: [2499, 2999, 2199],
       extras: [749, 899, 649],
+      photos: [399, 499, 349],
       // Ethos for Two: the one-time year is the yearly membership's price (membership's figure is its yearly one).
       pass: [2999, 3499, 2599],
       membership: [2999, 3499, 2599],

@@ -19,6 +19,12 @@ export const NOTE_TEMPLATES: readonly string[] = ["the-letter", "constellations"
 /** How long a free note may be, in characters as the sender counts them. */
 export const FREE_NOTE_MAX_CHARS = 500;
 
+/**
+ * A note with photos (the "photos" product, lib/pricing/products.ts): the short note keeps up to
+ * this many of the sender's photos. It is still a note: the free length and the footer stay.
+ */
+export const NOTE_PHOTOS_MAX = 5;
+
 export type FreeTier = "note";
 
 /** The letter's length the way the counter shows it: an emoji is one, the edges' blank space none. */
@@ -77,6 +83,14 @@ export function oldFreeGiftAddsPhotos(
  */
 export function noteCanBeFree(manifest: Pick<TemplateManifest, "features">): boolean {
   return manifest.features.photos.min <= 1;
+}
+
+/**
+ * Whether "a note with photos" is sold on a template: one whose free version is the short note
+ * and can go out free at all (The Letter). Constellations has no free note for photos to join.
+ */
+export function sellsNotePhotos(manifest: Pick<TemplateManifest, "slug" | "tier" | "features"> | null | undefined): boolean {
+  return Boolean(manifest) && manifest!.tier === "free" && NOTE_TEMPLATES.includes(manifest!.slug) && noteCanBeFree(manifest!);
 }
 
 /**

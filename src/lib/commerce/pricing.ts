@@ -13,7 +13,7 @@ export function creditIn(amount: number, from: string, to: Currency): number {
 }
 
 /** What counts towards "upgrade to Everything for the difference". */
-export const UPGRADE_CREDITED = ["single", "pick3", "extras"] as const;
+export const UPGRADE_CREDITED = ["single", "pick3", "extras", "photos"] as const;
 
 /**
  * How many days a purchase counts towards the upgrade, from the day it was made; null: for as long

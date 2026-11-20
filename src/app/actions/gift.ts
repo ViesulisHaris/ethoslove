@@ -5,7 +5,8 @@ import { revalidatePath } from "next/cache";
 import { createGiftSchema, giftDataBaseSchema, type GiftData, type GiftLocale } from "@/lib/gift/schema";
 import { generateShortId } from "@/lib/gift/short-id";
 import { decidePublish, liveEditNeedsUnlock } from "@/lib/gift/publish";
-import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
+import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
+import { photosUnlock } from "@/lib/pricing/products";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
@@ -49,6 +50,15 @@ function recipientFacingWriter(): SignedIn["supabase"] | null {
 }
 
 /** Every stored file a gift points at, in any field, must sit in the folder of a gift this user owns. */
+/**
+ * Whether the account holds "a note with photos" for a template: its own unlock row ("photos:<slug>",
+ * lib/pricing/products.ts). Row-level security shows a user their own rows only.
+ */
+async function holdsNotePhotos(ctx: SignedIn, templateSlug: string): Promise<boolean> {
+  const { data } = await ctx.supabase.from("template_unlocks").select("template_slug").eq("user_id", ctx.user.id).eq("template_slug", photosUnlock(templateSlug)).maybeSingle();
+  return Boolean(data);
+}
+
 async function ownsAssets(ctx: SignedIn, data: unknown): Promise<boolean> {
   const giftIds = new Set<string>();
   for (const path of giftStoragePaths(data)) {
@@ -125,7 +135,10 @@ export async function saveDraft(raw: unknown): Promise<ActionResult<{ savedAt: s
   const needs = liveEditNeedsUnlock(manifest, content, flags) || oldFreeGiftAddsPhotos(manifest, { stored: row.free_tier, photos: row.held_photos }, data.photos ?? []);
   if (needs) {
     const { data: unlocked } = await ctx.supabase.rpc("has_template_unlock", { p_user: ctx.user.id, p_slug: row.template_slug });
-    if (!unlocked) {
+    // A note with photos (the "photos" row) covers a note's photos, up to its limit, and nothing else.
+    const photosOwned = !unlocked && sellsNotePhotos(manifest) && content.freeTier === "note" && content.photos.length > 0 ? await holdsNotePhotos(ctx, row.template_slug) : false;
+    const stillNeeds = !photosOwned || liveEditNeedsUnlock(manifest, content, { ...flags, photosOwned }) || oldFreeGiftAddsPhotos(manifest, { stored: row.free_tier, photos: row.held_photos }, data.photos ?? []);
+    if (!unlocked && stillNeeds) {
       // A free reply (lib/commerce/free-reply.ts) may be edited in its own template, footer on, and so
       // may a creator-campaign gift while its grant runs (lib/commerce/campaign-rules.ts).
       const campaign = campaignCoversEdit(parseCampaignGrant(ctx.user.app_metadata), row.template_slug, Date.now());
@@ -213,7 +226,9 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
   const firstPublish = gift.status === "draft";
   const campaign = firstPublish ? campaignCoversNewGift(grant, gift.template_slug, Date.now()) : campaignCoversEdit(grant, gift.template_slug, Date.now());
 
-  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked) }, {
+  // A note with photos: only looked up for a note that carries photos and has no unlock behind it.
+  const photos = !unlocked && sellsNotePhotos(manifest) && data.freeTier === "note" && data.photos.length > 0 ? await holdsNotePhotos(ctx, gift.template_slug) : false;
+  const decision = decidePublish(manifest, data, { unlocked: Boolean(unlocked), photos }, {
     removeWatermark: input.data.removeWatermark,
     schedule: Boolean(input.data.schedule),
     password: Boolean(input.data.password),

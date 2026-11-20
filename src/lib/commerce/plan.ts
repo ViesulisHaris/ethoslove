@@ -6,6 +6,8 @@ import {
   PRODUCTS,
   SECOND_GIFT,
   bumpAmount,
+  extrasAmount,
+  hasPhotosUnlock,
   hasUnlock,
   membershipAmount,
   rowsCoverPack,
@@ -15,6 +17,7 @@ import {
   type ProductId,
 } from "@/lib/pricing/products";
 import type { MembershipProvider, MembershipStatus } from "@/lib/membership/types";
+import { sellsNotePhotos } from "@/lib/gift/free-tier";
 import { getManifest, isTemplateSlug } from "@/templates/manifests";
 import { upgradeAmount, type PaidPurchase } from "./pricing";
 
@@ -100,6 +103,8 @@ const fail = (error: string, status: number, extra: Partial<PlanError> = {}): { 
 function alreadyCovered(owned: string[], unlock: string): boolean {
   if (unlock === EVERY_TEMPLATE) return owned.includes(EVERY_TEMPLATE);
   if (unlock.startsWith("pack:")) return rowsCoverPack(owned, unlock.slice("pack:".length));
+  // A note with photos is covered by its own row or by the template's unlock, which holds everything.
+  if (unlock.startsWith("photos:")) return hasPhotosUnlock(owned, unlock.slice("photos:".length));
   return hasUnlock(owned, unlock);
 }
 
@@ -148,9 +153,11 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
 
   if (product === "giftcard" && !ctx.giftCardsOnSale) return fail("not_on_sale", 400);
   let slugs: string[] = [];
-  if (product === "single" || product === "pick3" || product === "extras") {
+  if (product === "single" || product === "pick3" || product === "extras" || product === "photos") {
     slugs = Array.from(new Set(req.templateSlugs.filter(isTemplateSlug)));
     if (slugs.length !== catalogue.picks) return fail("wrong_template_count", 400, { needed: catalogue.picks });
+    // A note with photos is sold only where the free version is the short note (The Letter).
+    if (product === "photos" && !sellsNotePhotos(getManifest(slugs[0]))) return fail("photos_note_only", 400);
     // "Make it special" is the free templates' upgrade; a premium template is bought as a single.
     if (product === "extras" && getManifest(slugs[0])?.tier !== "free") return fail("extras_free_only", 400);
     // And the other way round: a free template's unlock is "Make it special" at its own price, never
@@ -188,7 +195,9 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   // Never with the bump or a second gift: the price is for one gift.
   const personal = req.personalPrice && ctx.personalPrice ? ctx.personalPrice : null;
   if (personal && (bump || second !== null)) return fail("personal_price_unavailable", 400);
-  const listed = product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : catalogue.amounts[currency];
+  // "Make it special" for someone who already paid for a note with photos is the difference.
+  const listed =
+    product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : product === "extras" ? extrasAmount(currency, ctx.ownedForever, slugs[0]) : catalogue.amounts[currency];
   const charged = personal ? Math.min(listed, PERSONAL_PRICE.amounts[currency]) : listed;
   const lines: PlanLine[] = [{ key: product, amount: charged }];
   // The bump takes the order to exactly Everything's price.

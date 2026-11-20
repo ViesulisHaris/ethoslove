@@ -37,7 +37,7 @@ export function recoveryTarget(session: Stripe.Checkout.Session): RecoveryTarget
   const url = session.after_expiration?.recovery?.url;
   const to = (session.customer_details?.email ?? session.customer_email ?? "").trim().toLowerCase();
   if (!url || !to) return null;
-  const templateSlug = m.product === "single" || m.product === "extras" ? (m.template_slugs ?? "").split(",").find(Boolean) : undefined;
+  const templateSlug = m.product === "single" || m.product === "extras" || m.product === "photos" ? (m.template_slugs ?? "").split(",").find(Boolean) : undefined;
   return { to, locale: m.locale === "es" ? "es" : "en", url, ...(templateSlug ? { templateSlug } : {}) };
 }
 

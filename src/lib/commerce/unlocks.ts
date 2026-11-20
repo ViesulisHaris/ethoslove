@@ -1,7 +1,7 @@
 import { premiumExtras } from "@/lib/gift/publish";
 import { noteRules } from "@/lib/gift/free-tier";
 import type { GiftData } from "@/lib/gift/schema";
-import { EVERY_TEMPLATE, hasUnlock } from "@/lib/pricing/products";
+import { EVERY_TEMPLATE, hasPhotosUnlock, hasUnlock, photosUnlock } from "@/lib/pricing/products";
 import type { Json } from "@/lib/supabase/types";
 import { getManifest } from "@/templates/manifests";
 import { unique, type Db } from "./db";
@@ -64,6 +64,8 @@ export function foreverRowsOfPurchase(purchase: { product: string; template_slug
     case "extras":
     case "pick3":
       return [...(purchase.template_slugs ?? []), ...(purchase.kind === "bump" ? [EVERY_TEMPLATE] : [])];
+    case "photos":
+      return (purchase.template_slugs ?? []).map(photosUnlock);
     case "everything":
     case "upgrade":
       return [EVERY_TEMPLATE];
@@ -120,7 +122,11 @@ export async function relockGifts(db: Db, userId: string): Promise<void> {
     const manifest = getManifest(gift.template_slug);
     const paidFeature =
       manifest?.tier !== "free" ||
-      premiumExtras({ ...data, photos: Array.isArray(data.photos) ? data.photos : [] }, { note: manifest ? noteRules(manifest, data) : false }).length > 0 ||
+      // A note with photos that is still paid for keeps its photos; one whose payment went back doesn't.
+      premiumExtras(
+        { ...data, photos: Array.isArray(data.photos) ? data.photos : [] },
+        { note: manifest ? noteRules(manifest, data) : false, photosOwned: hasPhotosUnlock(owned, gift.template_slug) },
+      ).length > 0 ||
       gift.password_hash !== null ||
       gift.unlock_at !== null;
     if (paidFeature) await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);

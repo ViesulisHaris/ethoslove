@@ -9,11 +9,13 @@ import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { freeTestEvent, track } from "@/lib/analytics/track";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, withOldGiftRule, type FieldProblem } from "@/lib/gift/publish";
-import { FREE_NOTE_MAX_CHARS, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos } from "@/lib/gift/free-tier";
+import { FREE_NOTE_MAX_CHARS, NOTE_PHOTOS_MAX, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
 import { FreeNoteOption } from "./free-note-option";
 import { pickPaySheet, type PayArm } from "@/lib/editor/pay-sheet-split";
+import { canKeepPhotos, pickKeep, rememberLetterClick, type KeepArm } from "@/lib/editor/keep-split";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
-import { PRODUCTS, formatAmount } from "@/lib/pricing/products";
+import { PRODUCTS, extrasAmount, formatAmount, photosUnlock } from "@/lib/pricing/products";
+import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { getManifest } from "@/templates/manifests";
 import { useEditor } from "@/lib/editor/store";
@@ -116,6 +118,15 @@ export function PublishSheet({
   // when the editor's send screen first exists, and null where there is no premium price to show.
   const [payPanel] = useState<PayArm>(() => pickPaySheet({ userId: state.userId, search: typeof window === "undefined" ? "" : window.location.search }));
   const payArm: PayArm | null = manifest.tier === "premium" && !freeReply && !campaign && !inApp ? payPanel : null;
+  // Which version of the Letter's send screen this visitor is shown (lib/editor/keep-split.ts):
+  // only for a note that can also go out free, and never inside the iPhone app.
+  const [keepPick] = useState<KeepArm>(() => pickKeep({ userId: state.userId, search: typeof window === "undefined" ? "" : window.location.search }));
+  const keepArm: KeepArm | null = note && noteFree && !inApp ? keepPick : null;
+  // The account's unlock rows; "a note with photos" is one of them (photos:<slug>).
+  const ownedRows = useMemo(() => (state.authed ? (fetchedEntitlement?.owned ?? []) : []), [state.authed, fetchedEntitlement]);
+  const photosOwned = ownedRows.includes(photosUnlock(slug));
+  const showCheckoutError = useCheckoutError();
+  const [keepPaying, setKeepPaying] = useState(false);
   // Which version of the free Letter test this gift is in, for the test's own events; null elsewhere.
   const letterArm = manifest.tier === "free" && NOTE_TEMPLATES.includes(slug) ? (note ? "note" : "classic") : null;
   useEffect(() => {
@@ -209,7 +220,11 @@ export function PublishSheet({
   );
   const decision =
     entitlement && serialized
-      ? withOldGiftRule(decidePublish(manifest, serialized, entitlement, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }), addsToOldGift, entitlement.unlocked)
+      ? withOldGiftRule(
+          decidePublish(manifest, serialized, { unlocked: entitlement.unlocked, photos: photosOwned }, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }),
+          addsToOldGift,
+          entitlement.unlocked,
+        )
       : null;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
@@ -230,7 +245,7 @@ export function PublishSheet({
     options.password && "Password",
     // New photos on a free gift from before the note: what the pay panel names for it.
     addsToOldGift && "Photos",
-    ...(serialized ? premiumExtras(serialized, { note }) : [])
+    ...(serialized ? premiumExtras(serialized, { note, photosOwned }) : [])
       // The editor calls the surprise "Included" on a premium template: the template is what is paid for there.
       .filter((extra) => extra !== "unwrap" || manifest.tier === "free" || freeReply || Boolean(campaign))
       // Music from outside Ethos; the catalogue song is free (lib/gift/publish.ts).
@@ -242,13 +257,43 @@ export function PublishSheet({
   const premiumBenefits = [...new Set(premiumKeys.filter((key) => !note || (key !== "AllPhotos" && key !== "FullLetter")).map((key) => t(`benefit${key}`)))];
   // What the pay panel of a note opens with, and what the free way out has to take away.
   const noteLetter = noteLength(serialized?.message ?? "");
-  const notePaid = note && serialized ? premiumExtras(serialized, { note }) : [];
+  const notePaid = note && serialized ? premiumExtras(serialized, { note, photosOwned }) : [];
   const noteOffer =
     note && serialized && notePaid.length > 0
       ? { photos: serialized.photos.length, longLetter: notePaid.includes("longLetter"), thumbs: (state.data?.photos ?? []).slice(0, 4).map((photo) => photo.url) }
       : null;
   const noteOthers = options.removeWatermark || options.schedule || options.password || notePaid.some((extra) => extra !== "photos" && extra !== "longLetter");
   const [strippingNote, setStrippingNote] = useState(false);
+  const money = (minor: number) => formatAmount(minor, currency, locale);
+  const noteThumbs = (state.data?.photos ?? []).slice(0, 5).map((photo) => photo.url);
+  // "A note with photos" can be bought for this gift: the "keep" version, a note of one to five
+  // photos with nothing else paid in it, payments on, and not already held.
+  const keepPrice =
+    keepArm === "keep" && noteOffer && paymentsEnabled && sellsNotePhotos(manifest) && !photosOwned && canKeepPhotos({ photos: noteOffer.photos, longLetter: noteOffer.longLetter, others: noteOthers }, NOTE_PHOTOS_MAX)
+      ? money(PRODUCTS.photos.amounts[currency])
+      : null;
+  // Counted once per opening, per version: a Letter's send screen that holds something paid.
+  const pricedNote = Boolean(noteOffer);
+  useEffect(() => {
+    if (open && keepArm && pricedNote) track(keepArm === "keep" ? "letter_sheet_keep" : "letter_sheet_plain", { guest: !state.authed });
+  }, [open, keepArm, pricedNote, state.authed]);
+  /** Straight to checkout for one product on this template, from the step that takes the photos out. */
+  const payFromKeepStep = async (product: "photos" | "extras") => {
+    if (keepPaying) return;
+    setKeepPaying(true);
+    track(product === "photos" ? "letter_keep_tap" : "letter_keepfull_tap", { guest: !state.authed });
+    track("pay_clicked", { template: slug, product, bump: false, second: false, reply: false, guest: !state.authed });
+    track("letter_pay_keep", { guest: !state.authed });
+    rememberLetterClick("keep");
+    const total = product === "photos" ? PRODUCTS.photos.amounts[currency] : extrasAmount(currency, ownedRows, slug);
+    const result = await startCheckout({ product, templateSlugs: [slug], currency, returnTo: next, locale }, { total, category: manifest.tier });
+    if ("url" in result) {
+      window.location.assign(result.url);
+      return;
+    }
+    setKeepPaying(false);
+    showCheckoutError(result.error);
+  };
   // The simpler panel for a premium gift: named for who it is for, with their first photos.
   const oneOffer =
     payArm === "one" && serialized
@@ -258,6 +303,7 @@ export function PublishSheet({
   const sendAsNote = async () => {
     setStrippingNote(true);
     track("free_note_chosen", { template: slug, photos: serialized?.photos.length ?? 0, guest: !state.authed });
+    if (keepArm) track(keepArm === "keep" ? "letter_free_keep" : "letter_free_plain", { guest: !state.authed });
     try {
       for (const photo of [...useEditor.getState().data.photos]) await state.removePhoto(photo.id);
       if (useEditor.getState().data.video) state.clearVideo();
@@ -372,9 +418,30 @@ export function PublishSheet({
     options.schedule ||
     options.password ||
     addsToOldGift ||
-    (serialized ? premiumExtras(serialized, { note }).length > 0 : false);
+    (serialized ? premiumExtras(serialized, { note, photosOwned }).length > 0 : false);
 
   const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // The "keep" version: the note with and without their photos, the extra row among the options,
+  // and what the step that takes the photos out offers.
+  const compareOffer =
+    keepArm === "keep" && noteOffer && noteOffer.photos > 0 && noteThumbs.length > 0 && serialized
+      ? { photo: noteThumbs[0], line: letterOpening(serialized.message), name: serialized.recipientName.trim(), photos: noteOffer.photos }
+      : null;
+  const keepRow = keepPrice ? { price: keepPrice, max: NOTE_PHOTOS_MAX, busy: keepPaying, onPay: () => void payFromKeepStep("photos") } : null;
+  const keepStep =
+    keepArm === "keep" && paymentsEnabled
+      ? {
+          thumbs: noteThumbs,
+          price: keepPrice,
+          fullPrice: money(extrasAmount(currency, ownedRows, slug)),
+          paying: keepPaying,
+          onKeep: () => void payFromKeepStep("photos"),
+          onKeepFull: () => void payFromKeepStep("extras"),
+        }
+      : null;
+  const askedToSendFree = () => {
+    if (keepArm) track(keepArm === "keep" ? "letter_confirm_keep" : "letter_confirm_plain", { guest: !state.authed });
+  };
   // "One payment, no subscription" under a free publish read as if sending it cost something.
   const asksForMoney = publishAsksForMoney({ authed: state.authed, supabaseConfigured, inApp, paymentsEnabled, wouldNeedPayment, decision });
   // Guests can't upload before they have an account; those uploads run right after payment.
@@ -527,10 +594,14 @@ export function PublishSheet({
                 letterArm={letterArm}
                 one={oneOffer}
                 payArm={payArm}
+                compare={compareOffer}
+                keepArm={keepArm}
+                keepRow={keepRow}
+                ownedRows={ownedRows}
               />
             ) : null}
             {noteOffer && noteFree && !state.authed && supabaseConfigured && !inApp && guestCanPay && !showSignIn ? (
-              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
+              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
               <section className="mt-7 rounded-xl border border-line bg-card p-5">
@@ -565,6 +636,10 @@ export function PublishSheet({
                   letterArm={letterArm}
                   one={oneOffer}
                   payArm={payArm}
+                  compare={compareOffer}
+                  keepArm={keepArm}
+                  keepRow={keepRow}
+                  ownedRows={ownedRows}
                 />
               ) : (
                 <Notice tone="info" className="mt-7">
@@ -573,7 +648,7 @@ export function PublishSheet({
               )
             ) : null}
             {noteOffer && noteFree && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
-              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} />
+              <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
 
             {/* Only when the reply is what makes it free: someone who owns the template sends it without the footer. */}
@@ -630,6 +705,15 @@ export function PublishSheet({
       </SheetContent>
     </Sheet>
   );
+}
+
+/** The letter's opening as plain words (its bold and italic marks taken off), for the pay panel's two small pictures. */
+function letterOpening(message: string): string {
+  return message
+    .replace(/[*_~`]+/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 260);
 }
 
 function ChecklistItem({ bad, spinning = false, label }: { bad: boolean; spinning?: boolean; label: string }) {

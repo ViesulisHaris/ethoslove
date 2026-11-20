@@ -16,6 +16,7 @@ import { listManifests } from "@/templates/manifests";
 import { pricingFaq } from "@/components/pricing/offers";
 import en from "../../../messages/en.json";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { keepShare } from "@/lib/editor/keep-split";
 
 /**
  * The parts of the plain-language brief of Ethos that /llms.txt and the help chat's guide
@@ -65,6 +66,10 @@ export function briefPricing(): string[] {
     noteForEveryone()
       ? `- Make it special: ${prices("extras")}, paid once, for ${specialTemplates().join(" or ")}: that template's paid parts (photos, a letter over 500 characters, a video, a voice message, no footer, scheduling and a password), forever. Constellations is made of photos, so it has no free version.`
       : `- Make it special: ${prices("extras")}, paid once, for a free template (${free.join(" or ")}): that template's paid extras (a video, a voice message, up to 20 photos, no footer, scheduling and a password), forever.`,
+    // Only while some visitors are offered it (lib/editor/keep-split.ts): with the share at 0 nobody can buy it.
+    ...(keepShare() > 0
+      ? [`- A note with photos: ${prices("photos")}, paid once, for The Letter: the short free note keeps up to five of the sender's photos. Its 500 characters and the "Made with Ethos" footer stay. Offered to some visitors while it is being tried out. What it cost comes off "Make it special" for the same template later.`]
+      : []),
     `- Sending one back: someone who receives a paid gift made with a premium template can send one back in the same template for free, once, with the "Made with Ethos" footer. Extras or no footer on the reply cost the template's normal price.`,
     `- Upgrade to Everything: anyone who already bought single templates, three templates or "Make it special" pays Everything's price minus what they paid for those, never less than ${prices("upgrade")}.`,
     subscriptions

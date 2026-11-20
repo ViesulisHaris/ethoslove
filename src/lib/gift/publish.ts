@@ -2,12 +2,18 @@ import type { z } from "zod";
 import type { GiftData } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { isStoragePath } from "./assets";
-import { FREE_NOTE_MAX_CHARS, noteCanBeFree, noteLength, noteRules } from "./free-tier";
+import { FREE_NOTE_MAX_CHARS, NOTE_PHOTOS_MAX, noteCanBeFree, noteLength, noteRules } from "./free-tier";
 import { isKnownMusic } from "./music";
 
 export type Entitlement = {
   /** User owns this template (or Everything). */
   unlocked: boolean;
+  /**
+   * User holds "a note with photos" for this template (hasPhotosUnlock, lib/pricing/products.ts): a
+   * note may carry up to NOTE_PHOTOS_MAX photos. Nothing else changes: the footer and the free
+   * length stay, and every other extra still needs the template's unlock.
+   */
+  photos?: boolean;
 };
 
 export type PublishDecision =
@@ -35,7 +41,8 @@ export function decidePublish(
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
 
   const premiumTemplate = manifest.tier === "premium" && !options.freeReply && !options.campaign;
-  const needsUnlock = premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data, { note: noteRules(manifest, data) }).length > 0;
+  const needsUnlock =
+    premiumTemplate || options.removeWatermark || options.schedule || options.password || premiumExtras(data, { note: noteRules(manifest, data), photosOwned: entitlement.photos }).length > 0;
 
   if (needsUnlock && !entitlement.unlocked) return { ok: false, reason: "payment_required" };
 
@@ -69,14 +76,16 @@ export type ExtrasContent = Pick<GiftData, "music" | "video" | "voiceNote" | "ph
  *
  * `note` is for a gift whose free version is the short note (noteRules, ./free-tier): there every
  * photo is "photos" and a letter past the free length is "longLetter", in place of "morePhotos".
+ * `photosOwned` is for an account that holds "a note with photos": up to NOTE_PHOTOS_MAX photos
+ * are then part of the note, and only more than that is "photos".
  */
-export function premiumExtras(data: ExtrasContent, rules: { note?: boolean } = {}): PremiumExtra[] {
+export function premiumExtras(data: ExtrasContent, rules: { note?: boolean; photosOwned?: boolean } = {}): PremiumExtra[] {
   const extras: PremiumExtra[] = [];
   if (data.music && !isKnownMusic(data.music)) extras.push("song");
   if (data.video) extras.push("video");
   if (data.voiceNote) extras.push("voiceNote");
   if (rules.note) {
-    if (data.photos.length > 0) extras.push("photos");
+    if (data.photos.length > (rules.photosOwned ? NOTE_PHOTOS_MAX : 0)) extras.push("photos");
     if (noteLength(data.message ?? "") > FREE_NOTE_MAX_CHARS) extras.push("longLetter");
   } else if (data.photos.length > 10) extras.push("morePhotos");
   if (data.unwrap) extras.push("unwrap");
@@ -91,9 +100,15 @@ export function premiumExtras(data: ExtrasContent, rules: { note?: boolean } = {
 export function liveEditNeedsUnlock(
   manifest: TemplateManifest,
   data: ExtrasContent & { freeTier?: unknown },
-  row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean; freeReply?: boolean },
+  row: { hasSchedule: boolean; hasPassword: boolean; watermark: boolean; freeReply?: boolean; photosOwned?: boolean },
 ): boolean {
-  return (manifest.tier === "premium" && !row.freeReply) || premiumExtras(data, { note: noteRules(manifest, data) }).length > 0 || row.hasSchedule || row.hasPassword || !row.watermark;
+  return (
+    (manifest.tier === "premium" && !row.freeReply) ||
+    premiumExtras(data, { note: noteRules(manifest, data), photosOwned: row.photosOwned }).length > 0 ||
+    row.hasSchedule ||
+    row.hasPassword ||
+    !row.watermark
+  );
 }
 
 /**

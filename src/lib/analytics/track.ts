@@ -47,6 +47,24 @@ export type FunnelEvent =
   | "sky_pay_classic"
   | "free_note_chosen"
   | "free_note_too_long"
+  // The Letter's send screen in two versions (lib/editor/keep-split.ts), named per version because
+  // Vercel's reports count by event name: the send screen opened on a note that holds something
+  // paid, the step that takes the photos out shown, the note sent free from there, a pay button
+  // tapped, and a sale that followed a tap. Then the "keep" version's own buttons: keep the photos
+  // for less, keep them at the full price, keep every word of a long letter.
+  | "letter_sheet_keep"
+  | "letter_sheet_plain"
+  | "letter_confirm_keep"
+  | "letter_confirm_plain"
+  | "letter_free_keep"
+  | "letter_free_plain"
+  | "letter_pay_keep"
+  | "letter_pay_plain"
+  | "letter_paid_keep"
+  | "letter_paid_plain"
+  | "letter_keep_tap"
+  | "letter_keepfull_tap"
+  | "letter_keepwords_tap"
   | "bump_toggled"
   | "second_toggled"
   | "etsy_claim_sent"

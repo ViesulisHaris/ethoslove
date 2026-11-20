@@ -6,6 +6,10 @@ import { useTranslations } from "next-intl";
 import { useEditor } from "@/lib/editor/store";
 import { LIMITS } from "@/config/site";
 import { noteLength } from "@/lib/gift/free-tier";
+import { pickKeep, type KeepArm } from "@/lib/editor/keep-split";
+import { askForSendScreen } from "@/lib/editor/open-publish";
+import { track } from "@/lib/analytics/track";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, SectionHeader, Segmented } from "../field";
 import { EmojiPicker } from "../emoji-picker";
@@ -50,6 +54,13 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
   const { note: held, free: noteFree, max: noteMax, price: notePrice } = useNoteRules();
   const note = held && noteFree;
   const length = noteLength(data.message);
+  // The send screen's version for this visitor (lib/editor/keep-split.ts), decided once per tab like
+  // the send screen's own: in "keep", a letter past the free length gets a button that keeps every
+  // word. Nothing of it is drawn until the gift has loaded, which only ever happens in the browser.
+  const [keepArm] = useState<KeepArm>(() => pickKeep({ userId: useEditor.getState().userId, search: typeof window === "undefined" ? "" : window.location.search }));
+  const keepWords = note && keepArm === "keep" && length > noteMax;
+  // Where a free note would end: the last few words before the free length runs out.
+  const noteEnd = keepWords ? Array.from(data.message.trim()).slice(0, noteMax).join("").replace(/\s+/g, " ").trim().split(" ").slice(-6).join(" ") : "";
 
   return (
     <section>
@@ -95,6 +106,25 @@ export function WordsSection({ aiEnabled }: { aiEnabled: boolean }) {
           />
         </div>
       </Field>
+      {keepWords ? (
+        <div className="mt-3 rounded-xl border border-line bg-card p-3.5" data-testid="keep-words">
+          <p className="text-sm text-ink-soft [overflow-wrap:anywhere]">{t("fields.keepWordsLine", { tail: noteEnd })}</p>
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-2">
+            <Button
+              type="button"
+              className="h-10 rounded-full px-4"
+              onClick={() => {
+                track("letter_keepwords_tap");
+                askForSendScreen();
+              }}
+              data-testid="keep-words-pay"
+            >
+              {t("fields.keepWordsPay", { price: notePrice })}
+            </Button>
+            <span className="text-sm text-ink-soft">{t("fields.keepWordsOr", { max: noteMax })}</span>
+          </div>
+        </div>
+      ) : null}
       <Field label={t("fields.messageStyle")} className="mt-5">
         <Segmented
           ariaLabel={t("fields.messageStyle")}

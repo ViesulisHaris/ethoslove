@@ -9,8 +9,9 @@ import type { TemplateManifest } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { freeTestEvent, track } from "@/lib/analytics/track";
 import { rememberPayClick, type PayArm } from "@/lib/editor/pay-sheet-split";
+import { rememberLetterClick, type KeepArm } from "@/lib/editor/keep-split";
 import { adTrack } from "@/lib/analytics/ads";
-import { PRODUCTS, SECOND_GIFT, bumpAmount, formatAmount, type Currency } from "@/lib/pricing/products";
+import { PRODUCTS, SECOND_GIFT, bumpAmount, extrasAmount, formatAmount, type Currency } from "@/lib/pricing/products";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,10 @@ export function Paywall({
   letterArm = null,
   one = null,
   payArm = null,
+  compare = null,
+  keepArm = null,
+  keepRow = null,
+  ownedRows = [],
 }: {
   manifest: TemplateManifest;
   currency: Currency;
@@ -99,6 +104,17 @@ export function Paywall({
   one?: { name: string; photos: number; thumbs?: string[] } | null;
   /** Which panel this visitor is shown, so a pay tap is counted to it; null where there is no choice of panel. */
   payArm?: PayArm | null;
+  /**
+   * The Letter's "keep" version (lib/editor/keep-split.ts): the note as it will open with their
+   * photos and without, side by side, in place of the row of small photos.
+   */
+  compare?: { photo: string; line: string; name: string; photos: number } | null;
+  /** Which version of the Letter's send screen this visitor is shown, so a pay tap is counted to it; null elsewhere. */
+  keepArm?: KeepArm | null;
+  /** "A note with photos", listed with the other options where it can be bought for this gift. */
+  keepRow?: { price: string; max: number; busy: boolean; onPay: () => void } | null;
+  /** The account's unlock rows, for a price that depends on them (extrasAmount). */
+  ownedRows?: string[];
 }) {
   const t = useTranslations("editor.publishSheet");
   const tm = useTranslations("money.paywall");
@@ -108,7 +124,8 @@ export function Paywall({
   // A personal price from an offer email (lib/commerce/personal-price.ts) goes on this gift's own row:
   // the price shown is the price checkout charges, and checkout refuses rather than charge another.
   const { price: personal, forget: forgetPersonal } = usePersonalPrice();
-  const listedForTemplate = PRODUCTS[forTemplate].amounts[currency];
+  // "Make it special" is the difference for an account that already paid for a note with photos.
+  const listedForTemplate = forTemplate === "extras" ? extrasAmount(currency, ownedRows, slug) : PRODUCTS[forTemplate].amounts[currency];
   const personalFor = personal !== null && personal.onto.includes(forTemplate) ? Math.min(listedForTemplate, personal.amounts[currency]) : null;
   const forTemplateAmount = personalFor ?? listedForTemplate;
   // Null until the sender picks a row: the default can change when the upgrade quote arrives.
@@ -196,6 +213,10 @@ export function Paywall({
     setPaying(true);
     track("pay_clicked", { template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest });
     if (letterArm) track(freeTestEvent(slug, "pay", letterArm), { guest });
+    if (keepArm) {
+      track(keepArm === "keep" ? "letter_pay_keep" : "letter_pay_plain", { guest });
+      rememberLetterClick(keepArm);
+    }
     if (payArm) {
       track(payArm === "one" ? "pay_one_clicked" : "pay_classic_clicked", { template: slug, guest });
       rememberPayClick(payArm);
@@ -364,7 +385,33 @@ export function Paywall({
     <section className="mt-7 rounded-xl border border-ink bg-card p-4 sm:p-5" data-testid="pay-panel">
       {panel ? (
         <div data-testid={panel.kind === "note" ? "pay-note" : "pay-one"}>
-          {panel.thumbs?.length ? (
+          {compare ? (
+            // What they are choosing between, as two small pictures made of what is already here:
+            // their first photo over the letter's first lines, and the lines alone.
+            <div className="mb-4" data-testid="pay-compare">
+              <p className="font-display text-lg leading-snug text-balance">{tm("seeTitle", { name: compare.name || "…" })}</p>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <figure className="m-0">
+                  <div className="flex aspect-[3/4] flex-col overflow-hidden rounded-xl border-2 border-coral bg-paper p-2 shadow-sm">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- the sender's own photo, as the editor already shows it */}
+                    <img src={compare.photo} alt="" draggable={false} className="h-[58%] w-full rounded-md object-cover" />
+                    <p className="mt-2 line-clamp-3 font-display text-[11px] leading-snug text-ink [overflow-wrap:anywhere]" aria-hidden="true">
+                      {compare.line}
+                    </p>
+                  </div>
+                  <figcaption className="mt-1.5 text-center text-xs font-medium text-ink">{tm("seeWith", { count: compare.photos })}</figcaption>
+                </figure>
+                <figure className="m-0">
+                  <div className="flex aspect-[3/4] flex-col overflow-hidden rounded-xl border border-line bg-paper p-2">
+                    <p className="line-clamp-[9] font-display text-[11px] leading-snug text-ink-soft [overflow-wrap:anywhere]" aria-hidden="true">
+                      {compare.line}
+                    </p>
+                  </div>
+                  <figcaption className="mt-1.5 text-center text-xs text-ink-soft">{tm("seeFree")}</figcaption>
+                </figure>
+              </div>
+            </div>
+          ) : panel.thumbs?.length ? (
             <div className="mb-3 flex items-center" aria-hidden="true" data-testid="pay-note-photos">
               {panel.thumbs.slice(0, 4).map((src, i) => (
                 // eslint-disable-next-line @next/next/no-img-element -- the sender's own photo, as the editor already shows it
@@ -448,7 +495,7 @@ export function Paywall({
         request={{ ...paywallRequest({ plan: chosen, slug, bump: bumpOn, second }), currency, returnTo, locale, ...(personalOn ? { personalPrice: true } : {}) }}
         locale={locale}
         disabled={paying || blocked}
-        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm, payArm }}
+        sale={{ template: slug, product: chosen, bump: bumpOn, second: second !== null, reply: freeReply, guest, total, category: manifest.tier, currency, letterArm, payArm, keepArm }}
       />
       {panel ? (
         <>
@@ -462,7 +509,27 @@ export function Paywall({
               <span>{panel.more}</span>
               <ArrowRight aria-hidden="true" className="size-4 shrink-0 transition-transform group-open:rotate-90" />
             </summary>
-            <div className="pb-3">{chooser}</div>
+            <div className="pb-3">
+              {chooser}
+              {keepRow ? (
+                // The smaller thing, said beside the bigger ones: nobody pays the full price without having been shown it.
+                <button
+                  type="button"
+                  onClick={keepRow.onPay}
+                  disabled={keepRow.busy || paying || blocked}
+                  className="mt-2 flex w-full items-start gap-3 rounded-xl border border-line p-3 text-left hover:border-ink/40 disabled:opacity-60"
+                  data-testid="more-note-photos"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-baseline justify-between gap-3 leading-6">
+                      <span className="min-w-0 font-medium">{tm("moreNotePhotos")}</span>
+                      <span className="shrink-0 font-semibold">{keepRow.price}</span>
+                    </span>
+                    <span className="block text-xs text-muted-foreground">{tm("moreNotePhotosBlurb", { n: keepRow.max })}</span>
+                  </span>
+                </button>
+              ) : null}
+            </div>
           </details>
         </>
       ) : null}

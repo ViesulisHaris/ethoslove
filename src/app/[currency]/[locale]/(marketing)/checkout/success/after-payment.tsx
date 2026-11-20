@@ -6,6 +6,7 @@ import { Check, Copy, Loader2, Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { track } from "@/lib/analytics/track";
 import { takePayClick } from "@/lib/editor/pay-sheet-split";
+import { takeLetterClick } from "@/lib/editor/keep-split";
 import { upgradeStarting } from "@/components/pricing/upgrade-after-purchase";
 // Long enough for "Unlocked." to be read, and for the analytics script to send the purchase before
 // the page goes; short enough that the gift is still the next thing they see.
@@ -36,6 +37,9 @@ export function TrackPurchase({ sessionId, product, bump }: { sessionId: string;
     // And to the pay panel the tap came from, when this tab remembers one (lib/editor/pay-sheet-split.ts).
     const arm = takePayClick();
     if (arm) track(arm === "one" ? "pay_one_paid" : "pay_classic_paid", { product });
+    // And to the version of the Letter's send screen it came from (lib/editor/keep-split.ts).
+    const letter = takeLetterClick();
+    if (letter) track(letter === "keep" ? "letter_paid_keep" : "letter_paid_plain", { product });
   }, [sessionId, product, bump]);
   return null;
 }

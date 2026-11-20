@@ -16,6 +16,7 @@ import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
+import { OPEN_PUBLISH_EVENT } from "@/lib/editor/open-publish";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
 import { WhoSection } from "./sections/who";
@@ -98,6 +99,12 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
   const [publishOpen, setPublishOpen] = useState(false);
   const [resumeDismissed, setResumeDismissed] = useState(false);
   const resumePublish = search.get("resume") === "publish";
+  // A part of the form can ask for the send screen (the letter's "Keep every word" button).
+  useEffect(() => {
+    const openIt = () => setPublishOpen(true);
+    window.addEventListener(OPEN_PUBLISH_EVENT, openIt);
+    return () => window.removeEventListener(OPEN_PUBLISH_EVENT, openIt);
+  }, []);
   const hydrated = useEditor((s) => s.hydrated);
   const storeSlug = useEditor((s) => s.slug);
   const storeGiftId = useEditor((s) => s.giftId);

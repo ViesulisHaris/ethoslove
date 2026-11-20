@@ -9,7 +9,7 @@
  * Prices, no trials), and while STRIPE_SUBSCRIPTIONS_ENABLED is off it is sold as the one-time
  * yearly pass instead.
  */
-export type ProductId = "single" | "pick3" | "everything" | "extras" | "pass" | "membership" | "pack" | "giftcard" | "upgrade";
+export type ProductId = "single" | "pick3" | "everything" | "extras" | "photos" | "pass" | "membership" | "pack" | "giftcard" | "upgrade";
 export type MembershipPlan = "monthly" | "yearly";
 /** The three template plans the pricing page shows as cards. */
 export type PlanId = "single" | "pick3" | "everything";
@@ -59,6 +59,10 @@ export const PRODUCTS: Record<ProductId, Product> = {
   // The Letter's and Constellations' paid extras (video, voice, 20 photos, scheduling, a password, no
   // footer), for that free template, forever. The song is free on every gift and not among them.
   extras: { id: "extras", picks: 1, amounts: { usd: 899, eur: 749, gbp: 649 }, highlight: false, envProductKey: "STRIPE_PRODUCT_EXTRAS", name: { en: "Ethos: make it special", es: "Ethos: hazlo especial" } },
+  // A note with photos: The Letter's short note keeps up to NOTE_PHOTOS_MAX of the sender's photos
+  // (lib/gift/free-tier.ts). It stays a note: the free length, the footer, none of the other extras.
+  // A smaller thing than "Make it special" at its own standing price, never shown as a price cut.
+  photos: { id: "photos", picks: 1, amounts: { usd: 499, eur: 399, gbp: 349 }, highlight: false, envProductKey: "STRIPE_PRODUCT_PHOTOS", name: { en: "Ethos: a note with your photos", es: "Ethos: una nota con tus fotos" } },
   // The membership's one-time fallback (a year, paid once), at the yearly subscription's price.
   pass: { id: "pass", picks: 0, amounts: MEMBERSHIP_PLANS.yearly.amounts, highlight: false, envProductKey: "STRIPE_PRODUCT_PASS", name: { en: "Ethos for Two: one year, for both of you", es: "Ethos for Two: un año, para los dos" } },
   // `amounts` is the yearly figure for code that reads any product generically; a plan's own amount
@@ -186,10 +190,14 @@ export function chargedCurrency(value: string | null | undefined): Currency {
   return CHARGED_CURRENCIES.find((c) => c === value) ?? CHARGED_CURRENCIES[0];
 }
 
-/** Unlock rows are template slugs, "*" for every template, and "pack:<id>" / "pack:*" for game packs. */
+/**
+ * Unlock rows are template slugs, "*" for every template, "pack:<id>" / "pack:*" for game packs, and
+ * "photos:<slug>" for a note with photos on that template (the "photos" product).
+ */
 export const EVERY_TEMPLATE = "*";
 export const EVERY_PACK = "pack:*";
 export const packUnlock = (packId: string) => `pack:${packId}`;
+export const photosUnlock = (templateSlug: string) => `photos:${templateSlug}`;
 
 /**
  * Which template_unlocks rows a paid product grants its buyer. "everything" (and an upgrade) is the
@@ -207,12 +215,31 @@ export function unlocksFor(product: ProductId, chosenSlugs: string[], options: {
   }
   const unique = Array.from(new Set(chosenSlugs.filter(Boolean)));
   if (unique.length !== PRODUCTS[product].picks) throw new Error(`product ${product} needs exactly ${PRODUCTS[product].picks} template(s)`);
-  return unique;
+  // A note with photos is its own row: it never stands in for the template's unlock.
+  return product === "photos" ? unique.map(photosUnlock) : unique;
 }
 
 /** True when the user's unlock rows cover a template. */
 export function hasUnlock(unlockSlugs: string[], templateSlug: string): boolean {
   return unlockSlugs.includes(EVERY_TEMPLATE) || unlockSlugs.includes(templateSlug);
+}
+
+/**
+ * True when the user's unlock rows let a note on this template carry photos: the "photos" row, or
+ * the template's own unlock, which covers everything on it.
+ */
+export function hasPhotosUnlock(unlockSlugs: string[], templateSlug: string): boolean {
+  return unlockSlugs.includes(photosUnlock(templateSlug)) || hasUnlock(unlockSlugs, templateSlug);
+}
+
+/**
+ * What "Make it special" costs this buyer on a template: its price, less what a note with photos
+ * cost them if they hold that row. They paid for the photos once; the step up is the difference.
+ * Checkout charges this and the pay panel shows it, both from here.
+ */
+export function extrasAmount(currency: Currency, unlockSlugs: string[], templateSlug: string): number {
+  const paidForPhotos = unlockSlugs.includes(photosUnlock(templateSlug)) && !hasUnlock(unlockSlugs, templateSlug);
+  return PRODUCTS.extras.amounts[currency] - (paidForPhotos ? PRODUCTS.photos.amounts[currency] : 0);
 }
 
 /** True when unlock rows ("pack:<id>" / "pack:*") cover a game pack. */
