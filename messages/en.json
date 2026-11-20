@@ -1264,7 +1264,8 @@
       "secondPick": "Which one?",
       "bumpPrice": "+{price}",
       "freeReplyExtras": "Sending it back is free as it is, with the footer on. With these extras, it's this template's normal price.",
-      "guarantee": "If it doesn't open on their phone, you get your money back."
+      "guarantee": "If it doesn't open on their phone, you get your money back.",
+      "personalPrice": "Your personal price from our email, until {ends}."
     },
     "etsy": {
       "title": "Bought on Etsy",
@@ -1307,7 +1308,8 @@
       "alreadyMember": "You already have Ethos for Two: it's on your account page.",
       "paymentIssue": "Your last payment didn't go through: update your card on your account page first.",
       "notOnSale": "That isn't on sale right now. Reload the page.",
-      "toAccount": "Your account"
+      "toAccount": "Your account",
+      "personalPriceEnded": "Your personal price has ended or has already been used, so the usual price shows again."
     },
     "recovery": {
       "optIn": "If I don't finish paying, email me one link to come back to it."
@@ -3445,5 +3447,19 @@
         "label": "Something else"
       }
     }
+  },
+  "offerEmails": {
+    "box": "Email me Ethos offers, like early Black Friday prices. I can unsubscribe any time.",
+    "saved": "Done. We'll email you our offers.",
+    "removed": "Done. No offer emails.",
+    "failed": "Couldn't save that. Try again in a moment.",
+    "how": "How we use your email"
+  },
+  "notice": {
+    "policy": "We've updated our Privacy Policy and Terms.",
+    "policyLink": "What changed",
+    "offer": "Your personal price: any gift for {price}, until {ends}.",
+    "offerLink": "Choose a gift",
+    "close": "Close"
   }
 }

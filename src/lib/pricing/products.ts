@@ -94,6 +94,16 @@ export const SECOND_GIFT = {
   onto: ["single"] as readonly ProductId[],
 } as const;
 
+/**
+ * A personal price, opened from the link in an offer email (lib/commerce/personal-price.ts): one gift,
+ * a premium template or "Make it special", for the second gift's price, once, until the link ends.
+ * Never with the bump or a second gift, and never on anything else.
+ */
+export const PERSONAL_PRICE = {
+  amounts: SECOND_GIFT.amounts,
+  onto: ["single", "extras"] as readonly ProductId[],
+} as const;
+
 /** What the bump costs on top of `base`: Everything's price minus the base line's (€24.99 − €9.99 = €15.00). */
 export function bumpAmount(base: ProductId, currency: Currency): number {
   return PRODUCTS.everything.amounts[currency] - PRODUCTS[base].amounts[currency];

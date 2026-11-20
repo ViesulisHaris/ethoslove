@@ -91,7 +91,16 @@ describe("reading a session back", () => {
       ref: "c-maria",
       locale: "en",
       plan: null,
+      personalPrice: null,
+      personalPriceOff: null,
     });
+    // A personal price comes back with what it took off (lib/commerce/personal-price.ts).
+    const personal = metadata(
+      { product: "single", templateSlugs: ["vinyl"], currency: "usd", personalPrice: true },
+      {},
+      { ...guest, personalPrice: { id: "5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d" } },
+    );
+    expect(readSession(session(personal.meta))).toMatchObject({ personalPrice: "5f0c6f7e-3a55-4d2b-9a57-0e8a3f1b2c4d", personalPriceOff: 700 });
     // Another business on the shared Stripe account, or a pack with no pack.
     expect(readSession(session({ order: "42" }))).toBeNull();
     expect(readSession(session({ purchase_id: PURCHASE, product: "pack" }))).toBeNull();

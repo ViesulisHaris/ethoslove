@@ -7,6 +7,14 @@ DataForSEO, US unless marked, collected in `docs/marketing/KEYWORDS.md` (13 Nov 
 
 ## For the routine (blog files only)
 
+- [ ] **The free Letter is a short note now (19 Nov 2026), and many posts still say otherwise.** Since
+  the owner's change (`src/lib/gift/free-tier.ts`), a free Letter is up to 500 characters with music
+  and the footer; photos and the full letter come with "Make it special". Template notes such as
+  "your photos drop in as polaroids. Free" are still in open-when-letter-ideas, paragraphs-for-him,
+  reasons-why-i-love-you, love-letter-to-husband and others (found 20 Nov while refreshing
+  christmas-letter-to-mom, which now says "Free as a short note"). Check every post's `the-letter`
+  note in both languages and say what is free, the way gifft-me-alternatives does. Words change, so
+  `updated` and the panel apply; a few posts a run.
 - [x] (2026-11-13) **monthiversary-ideas** is close to page one: "monthiversary" at 8.2 with 33 impressions a
   week and no clicks. Get its top 10 and questions, give the post what the top three have, and
   answer every "People also ask" question.

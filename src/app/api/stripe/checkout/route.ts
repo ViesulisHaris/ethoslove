@@ -19,6 +19,7 @@ import { readBuyer } from "@/lib/commerce/buyer";
 import { creditedCreator } from "@/lib/commerce/creators";
 import { saveGiftCardDetails } from "@/lib/commerce/gift-cards";
 import { planCheckout } from "@/lib/commerce/plan";
+import { PERSONAL_PRICE_COOKIE, activePersonalPrice } from "@/lib/commerce/personal-price";
 
 export const runtime = "nodejs";
 export const maxDuration = 10;
@@ -65,6 +66,9 @@ const input = z.object({
   // with `waiver`, which the pay sheet sends once the buyer has ticked the withdrawal box there.
   oneTap: z.literal(true).optional(),
   waiver: z.literal(true).optional(),
+  // The pay sheet showed a personal price (lib/commerce/personal-price.ts) and asks for it. The price
+  // itself comes from the cookie the offer email's link set, checked here, never from the page.
+  personalPrice: z.literal(true).optional(),
 });
 
 /**
@@ -99,14 +103,15 @@ export async function POST(request: NextRequest) {
   const currency: Currency = body.currency && CHARGED_CURRENCIES.includes(body.currency) ? body.currency : visitorCurrency(request.headers);
 
   const now = Date.now();
-  const [creatorCode, owned, membership] = await Promise.all([
+  const [creatorCode, owned, membership, personalPrice] = await Promise.all([
     creditedCreator(admin, body.ref, user?.email),
     readBuyer(admin, userId),
     userId && (product === "membership" || product === "pass") ? membershipContextOf(admin, userId, now) : null,
+    body.personalPrice ? activePersonalPrice(request.cookies.get(PERSONAL_PRICE_COOKIE)?.value, now) : null,
   ]);
   const plan = planCheckout(
-    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan },
-    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, ...owned },
+    { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice },
+    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, ...owned },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
   // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.
@@ -128,7 +133,7 @@ export async function POST(request: NextRequest) {
         kind: plan.kind,
         creator_code: plan.creatorCode,
         ref: body.ref ?? null,
-        discount_amount: null,
+        discount_amount: plan.personalPrice?.discount ?? null,
       })
       .select("id")
       .single();

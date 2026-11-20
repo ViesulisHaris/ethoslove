@@ -2,6 +2,7 @@ import { isPackId, type PackId } from "@/lib/games/packs";
 import {
   BUMP,
   EVERY_TEMPLATE,
+  PERSONAL_PRICE,
   PRODUCTS,
   SECOND_GIFT,
   bumpAmount,
@@ -33,6 +34,12 @@ export type CheckoutRequest = {
   currency: Currency;
   /** Ethos for Two: which plan. The server decides whether that is a subscription or the pass. */
   plan?: MembershipPlan;
+  /**
+   * The pay sheet showed the buyer their personal price (PERSONAL_PRICE) and asks for it. Charged only
+   * while the server still finds it (CheckoutContext.personalPrice); otherwise refused, never quietly
+   * charged at the full price the buyer didn't see.
+   */
+  personalPrice?: boolean;
 };
 
 /** The buyer's own membership, as checkout needs to know it (lib/commerce/memberships.ts membershipContextOf). */
@@ -56,6 +63,8 @@ export type CheckoutContext = {
   subscriptions?: boolean;
   /** The buyer's running membership, else a subscription Stripe is still collecting; null for a guest. */
   membership?: MembershipContext | null;
+  /** The personal price the request's cookie holds, checked and not spent (lib/commerce/personal-price.ts); null without one. */
+  personalPrice?: { id: string } | null;
 };
 
 export type PlanLine = { key: ProductId | "bump" | "second"; amount: number };
@@ -80,6 +89,8 @@ export type CheckoutPlan = {
   plan: MembershipPlan | null;
   /** A subscription is only ever Ethos for Two; everything else, the pass included, is paid once. */
   billing: "one_time" | "subscription";
+  /** The personal price charged (its link's account id) and how much it took off the catalogue price; null at full price. */
+  personalPrice: { id: string; discount: number } | null;
 };
 
 export type PlanError = { error: string; status: number; needed?: number };
@@ -97,9 +108,16 @@ function alreadyCovered(owned: string[], unlock: string): boolean {
  * looks things up, this decides. Amounts only ever come from the catalogue (or, for an upgrade, from
  * what the buyer really paid), never from the request. There are no discounts: a creator is paid a
  * commission by us, and a reply to a paid gift is free without checkout (lib/commerce/free-reply.ts).
+ * The one exception is a personal price from an offer email (PERSONAL_PRICE), which the route has
+ * checked before it gets here.
  */
 export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok: true } & CheckoutPlan) | ({ ok: false } & PlanError) {
   const { currency } = req;
+  // A personal price is for one gift (PERSONAL_PRICE.onto), and only while it still holds.
+  if (req.personalPrice) {
+    if (!PERSONAL_PRICE.onto.includes(req.product)) return fail("personal_price_unavailable", 400);
+    if (!ctx.personalPrice) return fail("personal_price_ended", 409);
+  }
   if (req.product === "membership" || req.product === "pass") {
     const membership = planMembership(req, ctx);
     if (!membership.ok) return membership;
@@ -121,6 +139,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
         unlocks: [],
         plan: membership.plan,
         billing: "subscription",
+        personalPrice: null,
       };
     }
   }
@@ -166,7 +185,12 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   if (second) unlocks.push(second);
   if (unlocks.length > 0 && unlocks.every((u) => alreadyCovered(ctx.ownedForever, u))) return fail("already_owned", 409);
 
-  const lines: PlanLine[] = [{ key: product, amount: product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : catalogue.amounts[currency] }];
+  // Never with the bump or a second gift: the price is for one gift.
+  const personal = req.personalPrice && ctx.personalPrice ? ctx.personalPrice : null;
+  if (personal && (bump || second !== null)) return fail("personal_price_unavailable", 400);
+  const listed = product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : catalogue.amounts[currency];
+  const charged = personal ? Math.min(listed, PERSONAL_PRICE.amounts[currency]) : listed;
+  const lines: PlanLine[] = [{ key: product, amount: charged }];
   // The bump takes the order to exactly Everything's price.
   if (bump) lines.push({ key: "bump", amount: bumpAmount(product, currency) });
   if (second) lines.push({ key: "second", amount: SECOND_GIFT.amounts[currency] });
@@ -186,6 +210,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     unlocks,
     plan: product === "pass" ? "yearly" : null,
     billing: "one_time",
+    personalPrice: personal ? { id: personal.id, discount: listed - charged } : null,
   };
 }
 

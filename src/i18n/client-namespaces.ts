@@ -20,7 +20,7 @@ export const CLIENT_NAMESPACES = {
   layout: ["common", "cookies", "error"],
   // The header, menu and tour. The commerce pages send their own below: here, they were ~14 KB in
   // every other marketing page's HTML.
-  "(marketing)/layout": ["nav", "tour", "support"],
+  "(marketing)/layout": ["nav", "tour", "support", "notice"],
   "(marketing)/page": ["dates.where", "home.templates", "templates"],
   "(marketing)/gifts/page": ["home", "occasions", "templates", "pricing", "money.plans", "money.account", "money.checkoutErrors", "money.recovery"],
   "(marketing)/pricing/layout": ["pricing", "membership", "money.plans", "money.account", "money.checkoutErrors", "money.recovery", "money.giftcard"],
@@ -53,7 +53,7 @@ export const CLIENT_NAMESPACES = {
   "(marketing)/tools/how-long-have-we-been-together/page": ["together", "templates"],
   // The love language quiz: its own words come as props; the gift cards under it read these.
   "(marketing)/tools/love-language-quiz/page": ["templates"],
-  "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers"],
+  "(editor)/layout": ["tour", "editor", "auth", "lifecycle", "money", "occasions", "pickers", "offerEmails"],
   "(app)/layout": ["account", "dashboard", "lifecycle", "money", "membership", "savedDates", "support"],
   "(auth)/layout": ["auth", "support"],
   "(gift)/demo/[slug]/page": ["templates"],

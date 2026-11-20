@@ -54,7 +54,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Fun questions to ask your boyfriend" },
         {
           type: "p",
-          text: "Light, quick, good for a long drive or a slow evening. Many of these turn into a debate, which is the point:",
+          text: "Light, quick, good for a long drive or a slow evening. Many of these turn into a debate, which is the point. For sixty more, from unhinged ones to quick texts, see our [funny questions to ask your boyfriend](/blog/funny-questions-to-ask-your-boyfriend):",
         },
         {
           type: "list",
@@ -383,7 +383,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Preguntas divertidas para tu novio" },
         {
           type: "p",
-          text: "Ligeras, rápidas, buenas para un viaje en coche o una noche tranquila. Muchas acaban en debate, y esa es la gracia:",
+          text: "Ligeras, rápidas, buenas para un viaje en coche o una noche tranquila. Muchas acaban en debate, y esa es la gracia. Para sesenta más, de las absurdas a las de mandar por mensaje, mira nuestras [preguntas graciosas para tu novio](/blog/funny-questions-to-ask-your-boyfriend):",
         },
         {
           type: "list",

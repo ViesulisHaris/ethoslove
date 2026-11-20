@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
 import { RemindNextYear } from "@/components/reminders/remind-next-year";
 import { QrDesigner } from "./qr-designer";
+import { OfferEmailsBox } from "./offer-emails-box";
 import { useEtsyMode } from "./etsy-claim";
 
 export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { shortId: string; status: "live" | "scheduled"; unlockAt?: string; data: GiftData; giftId: string | null }) {
@@ -86,6 +87,13 @@ export function ShareScreen({ shortId, status, unlockAt, data, giftId }: { short
       <BookTheTrip data={data} />
 
       {authed ? <RemindNextYear data={data} /> : null}
+
+      {/* The yes our offer emails need, asked of the account that just sent a gift; not inside the iPhone app. */}
+      {authed ? (
+        <div data-app-hide>
+          <OfferEmailsBox />
+        </div>
+      ) : null}
 
       <section className="mt-8">
         <p className="font-display text-xl">{t("qrTitle")}</p>
