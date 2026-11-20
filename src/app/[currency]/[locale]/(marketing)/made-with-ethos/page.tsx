@@ -3,6 +3,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ClientMessages } from "@/i18n/client-messages";
 import { featuredFor } from "@/config/featured";
 import { REF_PATTERN } from "@/lib/attribution/ref";
+import { MAKE_OWN_REF } from "@/lib/attribution/recipient";
+import { BRAND } from "@/config/brand";
 import { listManifests } from "@/templates/manifests";
 import type { TemplateManifest } from "@/templates/types";
 import { PageHeader } from "@/components/shared/page-header";
@@ -22,6 +24,11 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
  * that making one back starts free, then shows the free templates first and the premium ones after,
  * the gift's own template first among its kind. Every card opens a demo or the editor, never a
  * checkout, and carries the ref on to the editor, where it rides with any purchase.
+ *
+ * A gift's end screen sends people here too ("or make one for someone else", ?ref=g): they are not
+ * answering the sender, and their gift may have been a paid one with no footer, so two lines change
+ * for them. The eyebrow is what Ethos makes (BRAND.categoryLine): this is the first page of the
+ * site most recipients ever see.
  */
 export default async function MadeWithEthosPage({ params, searchParams }: PageProps<"/[currency]/[locale]/made-with-ethos">) {
   const { locale } = await params;
@@ -31,6 +38,7 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
   const ref = typeof query.ref === "string" ? query.ref.trim().toLowerCase() : "";
   const linkQuery = REF_PATTERN.test(ref) ? `?ref=${ref}` : "";
   const theirs = typeof query.template === "string" ? query.template : null;
+  const forSomeoneElse = ref === MAKE_OWN_REF;
   const firstTheirs = (list: TemplateManifest[]) => [...list.filter((m) => m.slug === theirs), ...list.filter((m) => m.slug !== theirs)];
   const all = listManifests();
   const shelves = [
@@ -40,7 +48,7 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
 
   return (
     <ClientMessages scope="(marketing)/made-with-ethos/page" locale={locale}>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} subtitle={t("subtitle")} />
+      <PageHeader eyebrow={BRAND.categoryLine[locale === "es" ? "es" : "en"]} title={t("title")} subtitle={t(forSomeoneElse ? "subtitleElse" : "subtitle")} />
       <div className="container-x flex flex-col gap-20 pb-24" data-testid="made-with-ethos">
         {shelves.map((shelf, s) => (
           <section key={shelf.id} aria-labelledby={`shelf-${shelf.id}`} data-shelf={shelf.id}>
@@ -51,7 +59,7 @@ export default async function MadeWithEthosPage({ params, searchParams }: PagePr
                   {t(`${shelf.id}.title`)}
                 </h2>
               </div>
-              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground md:mt-0 md:pb-1">{t(`${shelf.id}.blurb`)}</p>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground md:mt-0 md:pb-1">{t(shelf.id === "free" && forSomeoneElse ? "free.blurbElse" : `${shelf.id}.blurb`)}</p>
             </header>
             <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {shelf.items.map((m, i) => (

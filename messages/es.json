@@ -3344,14 +3344,15 @@
   "madeWith": {
     "metaTitle": "Hazle uno tú también",
     "metaDescription": "Alguien te ha hecho un regalo de Ethos. Hazle uno de vuelta: dos plantillas son gratis, y todas las demás se prueban gratis.",
-    "eyebrow": "Hecho con Ethos",
     "title": "Alguien te ha hecho uno de estos.",
     "subtitle": "Hazle uno tú también: empezar es gratis.",
+    "subtitleElse": "Hazle uno a otra persona: empezar es gratis.",
     "yours": "El que te llegó",
     "free": {
       "eyebrow": "Gratis",
       "title": "Gratis para hacer y enviar",
-      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan la pequeña marca «Hecho con Ethos», como el que te llegó."
+      "blurb": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan la pequeña marca «Hecho con Ethos», como el que te llegó.",
+      "blurbElse": "Sin pagar, y sin cuenta hasta que lo envíes. Llevan una pequeña marca «Hecho con Ethos»."
     },
     "premium": {
       "eyebrow": "Premium",
