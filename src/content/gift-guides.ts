@@ -543,7 +543,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
     },
     es: {
       title: "Tarjetas de cumpleaños interactivas: tocar, explotar, soplar",
-      description: "Ocho tarjetas de cumpleaños interactivas que responden: velas que se apagan al soplar, globos que sueltan fotos, una tarjeta que se despliega. Con una frase para cada una.",
+      description: "Ocho tarjetas de cumpleaños interactivas: velas que se apagan al soplar, globos que sueltan fotos, una tarjeta que se despliega. Con una frase para cada una.",
       h1: "Tarjetas de cumpleaños interactivas",
       label: "Tarjetas de cumpleaños interactivas",
       lead: [
@@ -645,7 +645,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
   "virtual-birthday-cake": {
     en: {
       title: "Virtual Birthday Cake: Blow Out the Candles Online",
-      description: "Three virtual birthday cakes with candles that go out when they blow into the phone, and two that work another way. How the blowing works, and what if it doesn't.",
+      description: "Three virtual birthday cakes whose candles go out when they blow into the phone, and two that work another way. How the blowing works, and the fallback.",
       h1: "A virtual birthday cake they can blow out",
       label: "Virtual birthday cakes",
       lead: [
@@ -915,7 +915,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
     },
     es: {
       title: "Álbumes de fotos interactivos: un libro de recuerdos digital",
-      description: "Ocho álbumes de fotos interactivos que se envían en un enlace: una galería, un camino con fechas, un carrete, un cielo de estrellas. Cuántas fotos caben en cada uno.",
+      description: "Ocho álbumes de fotos interactivos que se envían en un enlace: una galería, un camino con fechas, un carrete, un cielo. Cuántas fotos caben en cada uno.",
       h1: "Álbumes de fotos interactivos",
       label: "Álbumes de fotos interactivos",
       lead: [
