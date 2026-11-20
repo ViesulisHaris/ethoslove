@@ -3,6 +3,37 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-20: digital-love-letter-websites-compared adds Just Meant For You and ShareLove Letters, corrects Ethos's free note; Spanish aims at "carta de amor digital"
+- **Page:** /blog/digital-love-letter-websites-compared (and /es to match)
+- **Why:** Second run of the day; the first open backlog item. Asked in Spanish on 20 Nov ("página para
+  hacer una carta digital para mi novio", Mexico), ChatGPT named LovePaper, Just Meant For You, Tu Carta
+  Eterna, ShareLove Letters and Dedikame, each by its own Spanish page, and not Ethos; the post had only
+  LovePaper of those. DataForSEO (Mexico, all KD 0): "carta digital" 2,900 a month, "carta digital de
+  amor" 720, "carta de amor digital" 590, "carta digital gratis" 260, "como hacer una carta digital"
+  170; Spain "carta de amor digital" 70; the old Spanish keyword ("páginas para hacer una carta de amor
+  digital") has no measurable searches. The Mexican top 10 is makers' pages (QR letters, interactive
+  confessions), with an AI overview citing Canva, TikTok and Genially; no comparison ranks. Search
+  Console: 1 impression in 28 days. The post also still called the free Letter free with photos and
+  Constellations free, both untrue since 19 Nov.
+- **What changed:** Just Meant For You and ShareLove Letters added to every table, with a section each
+  and in the picks and FAQs (eleven sites now), every fact from their own pages on 20 Nov (read through
+  DataForSEO's page reader; sources in the record); LovePaper's Spanish pages noted. Ethos's row, section
+  and note now say what is free: The Letter as a short note of up to 500 characters with a song, photos
+  and the full letter with "Make it special". Spanish title "Carta de amor digital: 11 páginas para
+  hacerla, comparadas", keyword "carta de amor digital", a "Carta digital gratis" heading, and a
+  two-line what-it-is and how-to paragraph in both languages. Tu Carta Eterna and Dedikame have no own
+  site we could find, so they are named as unchecked. `updated` 2026-11-20.
+- **Panel:** 10/10/10 after 4 rounds (`docs/blog/reviews/refresh/digital-love-letter-websites-compared-2026-11-20.json`);
+  round 1's editor caught ShareLove Letters' paid plans on its /pricing page, now in the tables;
+  round 2's, that three posts linking here still said "nine" sites (now "eleven", link text only).
+- **Cost:** $0.10 (Spanish keyword ideas and suggestions for Mexico and Spain, four SERPs, ten page
+  reads); balance $46.38
+- **Also found:** /pricing's own FAQ still describes the old free tier (two full templates, ten
+  photos): added to the backlog's "For a person".
+- **Check on:** 2026-12-08 whether /es/blog/digital-love-letter-websites-compared shows for "carta de
+  amor digital" or "carta digital de amor" (Mexico and Spain), and whether ChatGPT names Ethos for the
+  Spanish "Also ask" question on the next Thursday run
+
 ## 2026-11-20: christmas-letter-to-mom answers "christmas message for mom" with 17 short card messages; Spanish says "feliz Navidad"
 - **Page:** /blog/christmas-letter-to-mom (and /es to match)
 - **Why:** First run of the day, a Friday (no weekly job; the ranks are a day old). No backlog item

@@ -190,7 +190,7 @@ export const post: BlogPost = {
         { type: "h2", text: "Handwritten or digital?" },
         {
           type: "p",
-          text: "Handwritten, if you'll see them: your handwriting is part of the letter, crossings-out included. Write a draft first, copy it out once, and date it, so years from now they know when you wrote it. If you want to decorate it, add one thing from the memory, such as a ticket stub or a photo, rather than stickers. If they're far away, send it as a [digital gift](/gifts) instead, and add the photo from the memory you wrote about. Having it open at a set moment, such as midnight where they are, is a paid extra on any template. To choose where to send it, [our comparison of digital love letter websites](/blog/digital-love-letter-websites-compared) puts nine of them side by side: price, what's free and what you can add.",
+          text: "Handwritten, if you'll see them: your handwriting is part of the letter, crossings-out included. Write a draft first, copy it out once, and date it, so years from now they know when you wrote it. If you want to decorate it, add one thing from the memory, such as a ticket stub or a photo, rather than stickers. If they're far away, send it as a [digital gift](/gifts) instead, and add the photo from the memory you wrote about. Having it open at a set moment, such as midnight where they are, is a paid extra on any template. To choose where to send it, [our comparison of digital love letter websites](/blog/digital-love-letter-websites-compared) puts eleven of them side by side: price, what's free and what you can add.",
         },
         {
           type: "template",
@@ -422,7 +422,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿A mano o digital?" },
         {
           type: "p",
-          text: "A mano, si vas a verle: tu letra es parte de la carta, tachones incluidos. Haz primero un borrador, pásalo a limpio una vez y ponle la fecha, para que dentro de unos años sepa cuándo la escribiste. Si quieres decorarla, añade una sola cosa del recuerdo, como una entrada o una foto, en vez de pegatinas. Si está lejos, mándala como [regalo digital](/gifts) y añade la foto del recuerdo del que hablas. Que se abra en un momento concreto, como la medianoche donde esté, es un extra de pago en cualquier plantilla. Para elegir desde dónde mandarla, [nuestra comparativa de páginas para hacer una carta de amor digital](/blog/digital-love-letter-websites-compared) pone nueve una al lado de otra: precio, qué es gratis y qué puedes añadir.",
+          text: "A mano, si vas a verle: tu letra es parte de la carta, tachones incluidos. Haz primero un borrador, pásalo a limpio una vez y ponle la fecha, para que dentro de unos años sepa cuándo la escribiste. Si quieres decorarla, añade una sola cosa del recuerdo, como una entrada o una foto, en vez de pegatinas. Si está lejos, mándala como [regalo digital](/gifts) y añade la foto del recuerdo del que hablas. Que se abra en un momento concreto, como la medianoche donde esté, es un extra de pago en cualquier plantilla. Para elegir desde dónde mandarla, [nuestra comparativa de páginas para hacer una carta de amor digital](/blog/digital-love-letter-websites-compared) pone once una al lado de otra: precio, qué es gratis y qué puedes añadir.",
         },
         {
           type: "template",

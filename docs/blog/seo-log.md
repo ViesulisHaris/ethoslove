@@ -977,3 +977,32 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-20T14:27Z | on_page/content_parsing/live | 0.00015 | blog: digital-gift-websites-compared |
 | 2026-11-20T14:27Z | on_page/content_parsing/live | 0.00015 | blog: digital-gift-websites-compared |
 | 2026-11-20T14:27Z | on_page/content_parsing/live | 0.00015 | blog: digital-gift-websites-compared |
+| 2026-11-20T16:43Z | dataforseo_labs/google/keyword_ideas/live | 0.0216 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.0192 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.01296 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.0192 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:43Z | dataforseo_labs/google/keyword_suggestions/live | 0.01284 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:44Z | serp/google/organic/live/advanced | 0.002 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:44Z | serp/google/organic/live/advanced | 0.002 | seo: digital-love-letter-websites-compared (es) |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:44Z | serp/google/organic/live/regular | 0.002 | seo: digital-love-letter-websites-compared (es) find makers |
+| 2026-11-20T16:44Z | serp/google/organic/live/regular | 0.002 | seo: digital-love-letter-websites-compared (es) find makers |
+| 2026-11-20T16:44Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) find makers |
+| 2026-11-20T16:47Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:47Z | on_page/content_parsing/live | 0.00015 | seo: digital-love-letter-websites-compared (es) maker pages |
+| 2026-11-20T16:52Z | on_page/content_parsing/live | 0.00015 | panel check (editor): SLL scheduling free? |
+| 2026-11-20T16:52Z | on_page/content_parsing/live | 0.00015 | panel check (editor): SLL pricing page |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T16:58Z | on_page/content_parsing/live | 0.00015 | panel check r2 editor |
+| 2026-11-20T17:08Z | on_page/content_parsing/live | 0.00015 | panel check |
+| 2026-11-20T17:08Z | on_page/content_parsing/live | 0.00015 | panel check |
