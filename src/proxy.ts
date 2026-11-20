@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "@/i18n/routing";
 import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 import { visitorCurrency, type Currency } from "@/lib/pricing/products";
+import { forwardedActionPath, isServerActionPost } from "@/lib/server-action-forwarding";
 
 const handleI18n = createIntlMiddleware(routing);
 
@@ -49,6 +50,16 @@ function needsServerSession(pathname: string): boolean {
 
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+  const currency = visitorCurrency(request.headers);
+
+  // A Server Action Next passes on from a page that doesn't have it to the page that does: served
+  // from that page's code, not the not-found catch-all (src/lib/server-action-forwarding.ts).
+  const forwarded = forwardedActionPath(request, currency, routing.defaultLocale);
+  if (forwarded) {
+    const url = request.nextUrl.clone();
+    url.pathname = forwarded;
+    return NextResponse.rewrite(url);
+  }
 
   // Supabase sends OAuth / magic-link codes to the Site URL when the callback path is not
   // on its allow list. Catch a stray auth code anywhere and finish the exchange properly.
@@ -61,7 +72,6 @@ export async function proxy(request: NextRequest) {
   // Gift links (/g/abc123) are shared across languages and printed on QR codes.
   // They must never redirect based on the viewer's browser language: rewrite them
   // to the default locale segment and let the page render in the sender's locale.
-  const currency = visitorCurrency(request.headers);
   if (pathname === "/g" || pathname.startsWith("/g/")) {
     const url = request.nextUrl.clone();
     url.pathname = `/${currency}/${routing.defaultLocale}${pathname}`;
@@ -69,7 +79,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const response = inCurrency(request, handleI18n(request), currency);
-  return needsServerSession(pathname) ? refreshSupabaseSession(request, response) : response;
+  return needsServerSession(pathname) || isServerActionPost(request) ? refreshSupabaseSession(request, response) : response;
 }
 
 export const config = {
