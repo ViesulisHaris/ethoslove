@@ -191,7 +191,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para tu madre, en sus colores",
-            body: "Peonías o lirios del color que siempre lleva, el fondo de noche si le gusta un poco de drama y una tarjeta con tus palabras: «Siempre te llamo primero». En España el Día de la Madre es el primer domingo de mayo; puedes programarlo para que se abra esa mañana.",
+            body: "Peonías o lirios del color que siempre lleva, el fondo de noche si le gusta un poco de drama y una tarjeta con tus palabras: «Siempre te llamo primero». En la mayoría de los países de habla hispana el Día de la Madre cae en mayo, cada uno en su fecha; puedes programarlo para que se abra esa mañana.",
           },
         ],
       },

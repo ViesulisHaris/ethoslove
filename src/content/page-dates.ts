@@ -27,7 +27,7 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   "/templates/the-letter": "2026-11-13",
   "/templates/constellations": "2026-10-24",
   "/templates/scratch-card": "2026-11-13",
-  "/templates/bouquet": "2026-11-09",
+  "/templates/bouquet": "2026-11-20",
   "/templates/fortune-cookie": "2026-11-13",
   // A template launched after "/templates/*" was set needs its own date (crawl.test.ts checks).
   "/templates/nice-list": "2026-11-11",
