@@ -21,7 +21,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What is words of affirmation?" },
         {
           type: "p",
-          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to quality time, gifts, acts of service and physical touch. Someone who speaks it feels loved through what you say and write: a thank-you that names the actual thing, a “proud of you” they didn't have to fish for, a message that could only be about them.",
+          text: "It's one of the [five love languages](/blog/the-5-love-languages) in Gary Chapman's 1992 book *The 5 Love Languages*, next to quality time, gifts, acts of service and physical touch. Someone who speaks it feels loved through what you say and write: a thank-you that names the actual thing, a “proud of you” they didn't have to fish for, a message that could only be about them.",
         },
         {
           type: "p",
@@ -255,7 +255,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿Qué son las palabras de afirmación?" },
         {
           type: "p",
-          text: "Son uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto al tiempo de calidad, los regalos, los actos de servicio y el contacto físico. Quien lo habla se siente querido por lo que le dices y le escribes: un gracias que nombra lo que hizo, un «qué orgullo» que no tuvo que pedir, un mensaje que solo podía ser para esa persona.",
+          text: "Son uno de los [cinco lenguajes del amor](/blog/the-5-love-languages) del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto al tiempo de calidad, los regalos, los actos de servicio y el contacto físico. Quien lo habla se siente querido por lo que le dices y le escribes: un gracias que nombra lo que hizo, un «qué orgullo» que no tuvo que pedir, un mensaje que solo podía ser para esa persona.",
         },
         {
           type: "p",

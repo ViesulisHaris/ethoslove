@@ -1,0 +1,142 @@
+{
+  "slug": "the-5-love-languages",
+  "keyword": "5 love languages",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the lead names all five and defines 'your love language' before the first scroll, and the table with 'Try tonight' and 'What hurts most' columns is the line you'd screenshot. Polish only: a plainer first sample line, a 'quickest route tonight' line."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 7,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 7,
+          "dealbreakers": [
+            "A claim about Ethos the code no longer supports: The Letter presented as free with photos ('For words of affirmation, and free ... your photos drop in as polaroids', 'The Letter is free'). Since 19 Nov 2026 the free Letter is a short note of up to 500 characters with no photos (src/lib/gift/free-tier.ts, messages/en.json pricing.freeNoteShort, commit 862df53). Same in the Spanish."
+          ],
+          "summary": "Asked to correct the free-Letter claim in the template note and the gift paragraph (EN and ES), with the wording commit 862df53 used. Spanish fixes: 'lleva días temiendo' to 'posponiendo', a translated-sounding tip line, 'como una pareja ... a tu pareja', and a description that dropped 'what to do when they differ'. All other product, template, quiz, link and external claims verified (Chapman 1992, 20 million copies, Impett/Park/Muise 2024, YouGov 38%, Truity 2022)."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked to word the People-also-ask question 'How many love languages are there?' in the 5-or-7 heading and FAQ (EN and ES). Polish: the phrase 'five love language types' once, a second quiz link with 'love language test'."
+        }
+      ],
+      "applied": [
+        "Template note and gift paragraph: the free Letter is a short note of up to 500 characters without photos; the full letter with photos is paid once (EN and ES, wording from commit 862df53)",
+        "Spanish: 'posponiendo', the tip's last line, 'tómalos como un par y cuéntale los dos a tu pareja', new description with 'qué hacer si no coinciden'",
+        "Heading 'How many love languages are there: 5 or 7?' and FAQ 'How many love languages are there? Is it 5 or 7?' (ES: '¿Cuántos lenguajes del amor hay...')",
+        "Polish taken: 'five love language types' in the table intro (EN and ES), 'Buscas su contacto' in the Spanish table, 'cosas que para ti son amor'"
+      ],
+      "rejected": [
+        "Polish not taken: a rewritten first sample line, a 'quickest route' line with a time estimate, 'estoy orgullosa de ti' (genders the speaker in a line about anyone), the % spacing, a second quiz link, a 'people who took its test' clause"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the five languages with a thing to do tonight for each in one table, then the 5-or-7 answer and the research verdict in plain words; round 1's free-Letter fix is present and correct. Polish only: a sample line for a partner who isn't a words person."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All six round-1 fixes made correctly; every claim verified again. Two Spanish fixes: 'YouGov preguntó ... que ordenaran' to 'pidió', and the research sentence, which read as if the reviewed studies were published in that journal. Polish: the same ambiguity in the English, 'un par' in the tip, 'puts up the shelf', 'Con un toque rompe' in the Letter note, a plainer first Spanish sample line."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: every on-topic People-also-ask question is answered under a heading or FAQ in the searcher's words, and no top result has the try-tonight and what-hurts table; last round's 'How many love languages' fix made correctly. Polish only: a shorter description, 'love language test' once."
+        }
+      ],
+      "applied": [
+        "ES: 'YouGov pidió a adultos estadounidenses'",
+        "ES: research sentence now 'publicaron en la revista ... una revisión de los estudios que había'",
+        "Polish taken to head off fixes: the English research sentence 'In a 2024 review in Current Directions in Psychological Science, ... went through the published studies', 'tómalos como un par' in the tip, 'puts up the shelf', 'Con un toque rompe el sello' in the Spanish Letter note"
+      ],
+      "rejected": [
+        "Polish not taken: a third sample line, a shorter description (it is 157 characters, inside the 160 limit), a 'love language test' anchor, the reworded first Spanish sample line (colloquial but natural)"
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: the lead answers the search before any scrolling, and the try-tonight table, the plain examples and the honest 5-or-7 and research sections make it the page to send a friend; round 2's edits broke nothing. Polish only: a third sample line, a 'quickest route' line."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: both round-2 Spanish fixes and all the polish made correctly; every claim checks against the code and sources, and the Spanish reads as written in Spain. Each language comes with something to do tonight, and the post says plainly what the evidence does and doesn't support. Polish only: an optional rewording of the second Spanish sample line."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "10: no ranking page has the try-tonight and what-hurts table, the headings answer every on-topic People-also-ask question in the searcher's words, and the research section goes further than the top results. Polish only: a tighter description, 'love language test' once."
+        }
+      ],
+      "applied": [
+        "Nothing: the version this round reviewed is the one published"
+      ],
+      "rejected": [
+        "Final-round polish goes in the record, not the post (RUBRIC.md step 4): a third sample line, a quickest-route line, a tighter description, a 'love language test' anchor, the reworded Spanish sample line"
+      ]
+    }
+  ]
+}

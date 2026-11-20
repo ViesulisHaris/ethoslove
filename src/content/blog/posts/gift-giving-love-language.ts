@@ -21,7 +21,7 @@ export const post: BlogPost = {
         { type: "h2", text: "What is the gift giving love language?" },
         {
           type: "p",
-          text: "It's one of the five love languages in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, quality time, acts of service and [physical touch](/blog/physical-touch-love-language). Chapman's name for it is “receiving gifts”. Someone who speaks it feels loved through things they can hold or keep: a present, a souvenir, a flower picked on the walk home.",
+          text: "It's one of the [five love languages](/blog/the-5-love-languages) in Gary Chapman's 1992 book *The 5 Love Languages*, next to words of affirmation, quality time, acts of service and [physical touch](/blog/physical-touch-love-language). Chapman's name for it is “receiving gifts”. Someone who speaks it feels loved through things they can hold or keep: a present, a souvenir, a flower picked on the walk home.",
         },
         {
           type: "p",
@@ -222,7 +222,7 @@ export const post: BlogPost = {
         { type: "h2", text: "¿Qué es el lenguaje del amor de los regalos?" },
         {
           type: "p",
-          text: "Es uno de los cinco lenguajes del amor del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el tiempo de calidad, los actos de servicio y el [contacto físico](/blog/physical-touch-love-language). Chapman lo llama «recibir regalos». Quien lo habla se siente querido a través de cosas que puede tocar o guardar: un regalo, un recuerdo de un viaje, una flor cogida de camino a casa.",
+          text: "Es uno de los [cinco lenguajes del amor](/blog/the-5-love-languages) del libro de Gary Chapman de 1992, *Los 5 lenguajes del amor*, junto a las palabras de afirmación, el tiempo de calidad, los actos de servicio y el [contacto físico](/blog/physical-touch-love-language). Chapman lo llama «recibir regalos». Quien lo habla se siente querido a través de cosas que puede tocar o guardar: un regalo, un recuerdo de un viaje, una flor cogida de camino a casa.",
         },
         {
           type: "p",

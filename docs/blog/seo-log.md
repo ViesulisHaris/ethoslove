@@ -929,3 +929,17 @@ Written by `scripts/seo/dfs.sh`: one row per call, cost in USD.
 | 2026-11-20T06:20Z | on_page/content_parsing/live | 0.00015 | blog: funny-questions-to-ask-your-boyfriend |
 | 2026-11-20T06:20Z | on_page/content_parsing/live | 0.00015 | blog: funny-questions-to-ask-your-boyfriend |
 | 2026-11-20T06:20Z | serp/google/organic/live/advanced | 0.002 | blog: funny-questions-to-ask-your-boyfriend |
+| 2026-11-20T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: the-5-love-languages |
+| 2026-11-20T10:18Z | dataforseo_labs/google/keyword_overview/live | 0.01248 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | serp/google/organic/live/advanced | 0.002 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:19Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:21Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:21Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |
+| 2026-11-20T10:21Z | on_page/content_parsing/live | 0.00015 | blog: the-5-love-languages |

@@ -98,6 +98,10 @@ Proposals from KEYWORDS.md, most urgent first; the season sets each deadline.
   card in "The five love languages, in plain words" (in the page's HTML, where Google sees it) and
   from the words result, not the reading list, so the page links it once. The other four language
   posts link themselves the day they go live (`LANGUAGE_POSTS`, TOPIC-GROUPS.md group 2).
+- [ ] **Love languages group: link /blog/the-5-love-languages from /tools/love-language-quiz**
+  (the blog hub, TOPIC-GROUPS.md group 2 and rule 3; "5 love languages" 90,500, KD 26, published
+  20 Nov): a line under "The five love languages, in plain words" ("all five side by side, and what
+  the research says"), in both languages ("Los 5 lenguajes del amor").
 - [ ] **Long distance group: link /blog/long-distance-relationship-gifts from /long-distance**
   (the hub, TOPIC-GROUPS.md rule 3; "long distance relationship gifts" 2,400, KD 0, published
   16 Nov): a line under "Gifts for the distance" on the page, next to "All long-distance gifts", in
