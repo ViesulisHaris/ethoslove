@@ -365,7 +365,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary letter that starts where you started",
-            body: "Skip “Dear Ana,”. The greeting takes 60 characters, so start where the two of you started: “To the stranger who took my umbrella,”. Let the letter tell what happened next, a year to a paragraph, and close the loop in the sign-off, which sits right above your name: “Still sharing it,”. On the cover, make the title the date you met.",
+            body: "Drop the “Dear Ana,” it would start with. The greeting takes 60 characters, so begin where the two of you began, with “To the stranger who took my umbrella,” and let the letter tell what happened next, a year to a paragraph. Close the loop with “Still sharing it,” in the sign-off, which sits right above your name. On the cover, make the title the date you met.",
             borrow: [{ field: "fields.greeting", line: "To the stranger who took my umbrella," }, { field: "fields.signOff", line: "Still sharing it," }],
           },
           {
@@ -380,17 +380,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Ten years, with the number in the wax",
-            body: "The seal takes two characters. It carries your initial unless you say otherwise; for a round anniversary, press the number into it: “10”. Title the envelope “Ten years, and I’d still write to you”, choose kraft paper, and give each year one sentence, in order. Sign off above your name with “Same again, please,”.",
+            body: "The seal takes two characters. It carries your initial unless you say otherwise; for a round anniversary, press the number into it: “10”. Title the envelope “Ten years, and I’d still write to you”, choose kraft paper, and give each year one sentence, in order. Then put “Same again, please,” in the sign-off, above your name.",
             borrow: [{ field: "fields.sealInitial", line: "10" }, { field: "title", line: "Ten years, and I’d still write to you" }, { field: "fields.signOff", line: "Same again, please," }],
           },
           {
             heading: "A letter to open in the car park",
-            body: "For the morning of an interview, an exam or a first day. The title is the line on the cover, so make it an instruction: “Open before you walk in”. Write only what they already know and forget when nervous, in short sentences, because the words write themselves out as they read. Sign off with where you’ll be: “Outside at five, with chips,”.",
+            body: "For the morning of an interview, an exam or a first day. The title is the line on the cover, so make it an instruction: “Open before you walk in”. Write only what they already know and forget when nervous, in short sentences, because the words write themselves out as they read. Let the sign-off say where you’ll be: “Outside at five, with chips,” and then your name.",
             borrow: [{ field: "title", line: "Open before you walk in" }, { field: "fields.signOff", line: "Outside at five, with chips," }],
           },
           {
             heading: "A letter from the dog",
-            body: "The name under the letter doesn’t have to be yours. For Mother’s Day, Father’s Day or the first week someone is away, sign it as the one who misses them loudest. Greeting: “To the one with the treats,”. Sign-off: “Yours, mostly at dinner time,”. Press a B for Biscuit into the wax and write it the way the dog would: no paragraphs, a lot about the postman.",
+            body: "The name under the letter doesn’t have to be yours. For Mother’s Day, Father’s Day or the first week someone is away, sign it as the one who misses them loudest. Open with “To the one with the treats,” and sign off “Yours, mostly at dinner time,” over a B for Biscuit pressed into the wax. Write it the way the dog would: no paragraphs, a lot about the postman.",
             borrow: [{ field: "fields.greeting", line: "To the one with the treats," }, { field: "fields.signOff", line: "Yours, mostly at dinner time," }],
           },
         ],
@@ -422,7 +422,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Una carta de aniversario que empieza donde empezasteis",
-            body: "Olvídate de «Hola, Ana:». El saludo admite 60 caracteres, así que empieza por donde empezó lo vuestro: «A quien se llevó mi paraguas sin pedirlo:». Deja que la carta cuente lo que vino después, un párrafo por año, y cierra el círculo en la despedida, que va justo encima de tu firma: «Seguimos compartiéndolo,». En la portada, que el título sea la fecha en que os conocisteis.",
+            body: "Olvídate del «Hola, Ana:» de siempre. El saludo admite 60 caracteres, así que empieza por donde empezó lo vuestro, con «A quien se llevó mi paraguas sin pedirlo:» y deja que la carta cuente lo que vino después, un párrafo por año. Cierra el círculo con «Seguimos compartiéndolo,» en la despedida, que va justo encima de tu firma. En la portada, que el título sea la fecha en que os conocisteis.",
             borrow: [{ field: "fields.greeting", line: "A quien se llevó mi paraguas sin pedirlo:" }, { field: "fields.signOff", line: "Seguimos compartiéndolo," }],
           },
           {
@@ -437,17 +437,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Diez años, con el número en el lacre",
-            body: "El sello admite dos caracteres. Lleva tu inicial si no dices otra cosa; para un aniversario redondo, estampa el número: «10». Titula el sobre «Diez años y te seguiría escribiendo», elige el papel kraft y dale a cada año una frase, en orden. Despídete, justo encima de tu nombre, con «Otros diez, por favor,».",
+            body: "El sello admite dos caracteres. Lleva tu inicial si no dices otra cosa; para un aniversario redondo, estampa el número: «10». Titula el sobre «Diez años y te seguiría escribiendo», elige el papel kraft y dale a cada año una frase, en orden. Y pon «Otros diez, por favor,» en la despedida, justo encima de tu nombre.",
             borrow: [{ field: "fields.sealInitial", line: "10" }, { field: "title", line: "Diez años y te seguiría escribiendo" }, { field: "fields.signOff", line: "Otros diez, por favor," }],
           },
           {
             heading: "Una carta para abrir en el aparcamiento",
-            body: "Para la mañana de una entrevista, un examen o un primer día. El título es la frase de la portada, así que conviértelo en una instrucción: «Ábrela antes de entrar». Escribe solo lo que esa persona ya sabe y con los nervios se le olvida, en frases cortas, porque las palabras se van escribiendo solas mientras lee. Y despídete diciendo dónde vas a estar: «Fuera a las cinco, con patatas,».",
+            body: "Para la mañana de una entrevista, un examen o un primer día. El título es la frase de la portada, así que conviértelo en una instrucción: «Ábrela antes de entrar». Escribe solo lo que esa persona ya sabe y con los nervios se le olvida, en frases cortas, porque las palabras se van escribiendo solas mientras lee. Y que la despedida diga dónde vas a estar: «Fuera a las cinco, con patatas,» y, debajo, tu nombre.",
             borrow: [{ field: "title", line: "Ábrela antes de entrar" }, { field: "fields.signOff", line: "Fuera a las cinco, con patatas," }],
           },
           {
             heading: "Una carta de parte del perro",
-            body: "La firma no tiene por qué ser la tuya. Para el Día de la Madre, el Día del Padre o la primera semana que alguien pasa fuera, firma como quien más ruido hace echándole de menos. Saludo: «A quien guarda las chuches:». Despedida: «Tuyo, sobre todo a la hora de cenar,». Estampa una B de Bizcocho en el lacre y escribe como escribiría el perro: sin párrafos y con mucho cartero.",
+            body: "La firma no tiene por qué ser la tuya. Para el Día de la Madre, el Día del Padre o la primera semana que alguien pasa fuera, firma como quien más ruido hace echándole de menos. Empieza con «A quien guarda las chuches:» y despídete con «Tuyo, sobre todo a la hora de cenar,» sobre una B de Bizcocho estampada en el lacre. Escribe como escribiría el perro: sin párrafos y con mucho cartero.",
             borrow: [{ field: "fields.greeting", line: "A quien guarda las chuches:" }, { field: "fields.signOff", line: "Tuyo, sobre todo a la hora de cenar," }],
           },
         ],
@@ -600,7 +600,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A question in the last line",
-            body: "Nothing on the cover gives the ending away: it shows a star chart with their name and nothing else. The final line appears once every star has been found and the shape has drawn itself, with a Continue button under it. Put the question there, and be in the room: “Will you marry me? Look up from the phone.”",
+            body: "Nothing on the cover gives the ending away: it is a star chart with their name on it and a count of the stars. The final line appears once every star has been found and the shape has drawn itself, with a Continue button under it. Put the question there, and be in the room: “Will you marry me? Look up from the phone.”",
             borrow: [{ field: "fields.finalLine", line: "Will you marry me? Look up from the phone." }],
           },
           {
@@ -656,7 +656,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una pregunta en la última frase",
-            body: "Nada en la portada adelanta el final: enseña una carta celeste con su nombre y nada más. La frase final aparece cuando se han encontrado todas las estrellas y la figura se ha dibujado sola, con un botón de «Continuar» debajo. Pon ahí la pregunta y procura estar delante: «¿Te casas conmigo? Levanta la vista del móvil.»",
+            body: "Nada en la portada adelanta el final: es una carta celeste con su nombre y el número de estrellas. La frase final aparece cuando se han encontrado todas las estrellas y la figura se ha dibujado sola, con un botón de «Continuar» debajo. Pon ahí la pregunta y procura estar delante: «¿Te casas conmigo? Levanta la vista del móvil.»",
             borrow: [{ field: "fields.finalLine", line: "¿Te casas conmigo? Levanta la vista del móvil." }],
           },
           {
@@ -1043,7 +1043,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The last postcard",
-            body: "For the week the distance ends. The title is how the back of the postcard opens, in place of “Dear Clara,”, so make it say which postcard this is: “Last postcard from this address,”. Under the letter, hide the proof in the P.S.: “The lease is signed. Keys on the 1st. Start packing.”",
+            body: "For the week the distance ends. The title is how the back of the postcard opens, in place of the usual “Dear Clara,” so make it say which postcard this is, “Last postcard from this address,” and hide the proof in the P.S. under the letter: “The lease is signed. Keys on the 1st. Start packing.”",
             borrow: [{ field: "title", line: "Last postcard from this address," }, { field: "surprise.text", line: "The lease is signed. Keys on the 1st. Start packing." }],
           },
           {
@@ -1098,7 +1098,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La última postal",
-            body: "Para la semana en que se acaba la distancia. El título es como empieza el reverso de la postal, en lugar de «Hola, Clara:», así que haz que diga qué postal es: «Última postal desde esta dirección:». Debajo de la carta, esconde la prueba en la posdata: «Contrato firmado. Las llaves, el día 1. Ve haciendo cajas.»",
+            body: "Para la semana en que se acaba la distancia. El título es como empieza el reverso de la postal, en lugar del «Hola, Clara:» de siempre, así que haz que empiece por «Última postal desde esta dirección:» y esconde la prueba en la posdata, debajo de la carta: «Contrato firmado. Las llaves, el día 1. Ve haciendo cajas.»",
             borrow: [{ field: "title", line: "Última postal desde esta dirección:" }, { field: "surprise.text", line: "Contrato firmado. Las llaves, el día 1. Ve haciendo cajas." }],
           },
           {
@@ -1320,7 +1320,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: [{ field: "fields.thanks", line: "Dani: por el sofá, todo marzo" }],
           },
           {
-            heading: "El primer Acción de Gracias lejos de casa",
+            heading: "El primer Día de Acción de Gracias lejos de casa",
             body: "Si no puedes volver, haz la lista de lo que vas a echar de menos de esa mesa, lo malo incluido: «la discusión por el relleno». Añade las fotos del año pasado; después de la carta, cada una aparece sola sobre las velas encendidas, con su pie. Y pon al final una cuenta atrás rotulada «Hasta que vuelva a esa mesa».",
             borrow: [{ field: "fields.thanks", line: "la discusión por el relleno" }, { field: "countdown.label", line: "Hasta que vuelva a esa mesa" }],
           },
@@ -1883,7 +1883,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una nota de cada persona",
-            body: "Para los ochenta de una abuela, el último día de una profesora o la despedida de una novia, pide una razón a cada persona y pon su nombre dentro de la nota: «Porque me enseñaste a barajar. (Leo)». Y rotula el frasco con el recuento: «23 razones, una de cada uno».",
+            body: "Para los ochenta de una abuela, el último día de una profesora o una despedida de soltera, pide una razón a cada persona y pon su nombre dentro de la nota: «Porque me enseñaste a barajar. (Leo)». Y rotula el frasco con el recuento: «23 razones, una de cada uno».",
             borrow: [{ field: "fields.reasons", line: "Porque me enseñaste a barajar. (Leo)" }, { field: "fields.label", line: "23 razones, una de cada uno" }],
           },
           {

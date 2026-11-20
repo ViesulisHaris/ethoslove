@@ -13,13 +13,15 @@ const FIRST_THREE = ["scratch-card", "bouquet", "fortune-cookie"];
 
 /**
  * Limits no schema knows: a place that shows less than its field holds, and never shows the rest.
- * Each was measured in the template itself at 320 px wide, the narrowest phone still in use, with
- * the longest line a guide lends for it.
+ * Each was measured in the template's own demo at 320 px wide, the narrowest phone still in use
+ * (20 Nov 2026), by putting a caption of capitals and spaces in the place and adding a character
+ * until it was cut. The numbers here are a few characters under what fitted.
  *
  * - Birthday Cinema prints a caption under its film frame on one line of capitals and cuts what
  *   doesn't fit; a tap enlarges the photo without its caption (birthday-cinema/Template.tsx,
- *   the `truncate` figcaption in FilmPanel).
+ *   the `truncate` figcaption in FilmPanel). 29 characters fitted.
  * - Scrapbook's roll of film does the same under each frame (scrapbook/Template.tsx, FilmStrip).
+ *   22 characters fitted.
  */
 const SHOWN: Record<string, number> = {
   "birthday-cinema caption": 24,
