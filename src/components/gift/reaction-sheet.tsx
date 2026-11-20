@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Sparkles, X } from "lucide-react";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { giftString } from "@/templates/_shared/i18n";
 import { cn } from "@/lib/utils";
 import { VoiceRecorder } from "./voice-recorder";
 
@@ -38,7 +39,26 @@ const S = {
   },
 };
 
-export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { open: boolean; onClose: () => void; shortId: string; senderName: string; locale: GiftLocale }) {
+/**
+ * `onSendOneBack`: once the reaction has gone, the confirmation offers the one next step there is,
+ * the end screen's own "Send one back to {sender}" (the same words, the same handler, handed down
+ * by the gift page). Nothing else is added there: no price, no second link.
+ */
+export function ReactionSheet({
+  open,
+  onClose,
+  shortId,
+  senderName,
+  locale,
+  onSendOneBack,
+}: {
+  open: boolean;
+  onClose: () => void;
+  shortId: string;
+  senderName: string;
+  locale: GiftLocale;
+  onSendOneBack?: () => void;
+}) {
   const t = S[locale] ?? S.en;
   const [emoji, setEmoji] = useState<(typeof EMOJI)[number]>("❤️");
   const [text, setText] = useState("");
@@ -80,12 +100,7 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
               <X className="size-4" />
             </button>
             {state === "sent" ? (
-              <div className="flex flex-col items-center py-6 text-center">
-                <Burst key={burst} emoji={emoji} />
-                <span className="text-6xl">{emoji}</span>
-                <p className="mt-5 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.sent.replace("{sender}", senderName)}</p>
-                <p className="mt-2 text-sm text-white/60">{t.sentBlurb}</p>
-              </div>
+              <ReactionSent key={burst} emoji={emoji} senderName={senderName} locale={locale} onSendOneBack={onSendOneBack} />
             ) : (
               <>
                 <p className="pr-10 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.title.replace("{sender}", senderName)}</p>
@@ -119,6 +134,34 @@ export function ReactionSheet({ open, onClose, shortId, senderName, locale }: { 
         </motion.div>
       ) : null}
     </AnimatePresence>
+  );
+}
+
+/**
+ * What the sheet says once the reaction has gone: that it went, and to whom. Under it, the one
+ * next step: the end screen's outline button, on the sheet's dark, so the same action looks the
+ * same in both places.
+ */
+export function ReactionSent({ emoji, senderName, locale, onSendOneBack }: { emoji: string; senderName: string; locale: GiftLocale; onSendOneBack?: () => void }) {
+  const t = S[locale] ?? S.en;
+  return (
+    <div className="flex flex-col items-center py-6 text-center">
+      <Burst emoji={emoji} />
+      <span className="text-6xl">{emoji}</span>
+      <p className="mt-5 text-2xl italic" style={{ fontFamily: "var(--font-display)" }}>{t.sent.replace("{sender}", senderName)}</p>
+      <p className="mt-2 text-sm text-white/60">{t.sentBlurb}</p>
+      {onSendOneBack ? (
+        <button
+          type="button"
+          onClick={onSendOneBack}
+          className="relative mt-7 flex min-h-12 w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-center text-[15px] leading-snug font-medium text-white hover:bg-white/10 active:bg-white/15"
+          data-testid="reaction-reply"
+        >
+          <Sparkles aria-hidden="true" className="size-4 shrink-0" />
+          <span className="min-w-0 [overflow-wrap:anywhere]">{giftString(locale, "sendOneBack", { sender: senderName })}</span>
+        </button>
+      ) : null}
+    </div>
   );
 }
 

@@ -106,6 +106,21 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
     [shortId],
   );
 
+  // "Send one back to {sender}": one door, two places to find it (the end screen, and under "Sent to
+  // {sender}." once a reaction has gone). The count says which, so the two can be told apart.
+  const sendOneBack = useCallback(
+    (from: "end" | "reaction") => {
+      // The easiest gift to make is a reply: the same template, the names already swapped, and
+      // whatever else the template carries across (Halfway flips the two places).
+      saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
+      track("reply_started", { template: data.templateSlug, from });
+      // A paid premium gift's reply is free: the link carries the sealed token that proves it,
+      // never this gift's id.
+      router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
+    },
+    [data, replyToken, router],
+  );
+
   return (
     // The whole gift page is the sender's, names and all: the browser's translator doesn't get to
     // reword it (see GiftRenderer).
@@ -119,22 +134,14 @@ export function GiftExperience({ shortId, data, locale, replyToken = null }: { s
           replayKey={replayKey}
           onEvent={onEvent}
           onReact={data.showReactionCta ? () => setReactOpen(true) : undefined}
-          onMakeOne={() => {
-            // The easiest gift to make is a reply: the same template, the names already swapped, and
-            // whatever else the template carries across (Halfway flips the two places).
-            saveReplySeed({ slug: data.templateSlug, recipientName: data.senderName, senderName: data.recipientName, fields: data.fields });
-            track("reply_started", { template: data.templateSlug });
-            // A paid premium gift's reply is free: the link carries the sealed token that proves it,
-            // never this gift's id.
-            router.push(replyEditorHref(data.templateSlug, data.locale === "es" ? "es" : "en", replyToken));
-          }}
+          onMakeOne={() => sendOneBack("end")}
           replyMode
           keepHref={`/g/${shortId}/keep`}
           onCoverOpened={hasCover ? recordView : undefined}
         />
       ) : null}
       {!opened ? <SoundGate recipientName={data.recipientName} senderName={data.senderName} locale={locale} onOpen={open} /> : null}
-      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} />
+      <ReactionSheet open={reactOpen} onClose={() => setReactOpen(false)} shortId={shortId} senderName={data.senderName} locale={locale} onSendOneBack={() => sendOneBack("reaction")} />
       {ended ? <HomeScreenTip locale={locale} onReplay={() => setReplayKey((k) => k + 1)} /> : null}
     </div>
     </div>
