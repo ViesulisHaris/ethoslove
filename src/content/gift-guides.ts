@@ -1,3 +1,4 @@
+import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import type { BorrowedLine } from "@/components/marketing/gift-idea-list";
 
@@ -21,6 +22,16 @@ export type GiftGuideSlug = (typeof GIFT_GUIDE_SLUGS)[number];
 export function isGiftGuide(slug: string): slug is GiftGuideSlug {
   return (GIFT_GUIDE_SLUGS as readonly string[]).includes(slug);
 }
+
+/**
+ * The pages by kind an occasion page points to: the format pages that sit next to that day's ideas
+ * (a birthday's cards and cakes, an anniversary's page and album). Each of those pages links back.
+ */
+export const GUIDES_FOR_OCCASION: Partial<Record<Occasion, GiftGuideSlug[]>> = {
+  birthday: ["interactive-birthday-card", "virtual-birthday-cake", "last-minute"],
+  anniversary: ["anniversary-website", "photo-album"],
+  "long-distance": ["video-message"],
+};
 
 export type GiftGuideIdea = { template: string; heading: string; body: string; line: BorrowedLine };
 

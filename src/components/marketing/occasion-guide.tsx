@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import type { Occasion } from "@/config/occasions";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { OCCASION_GUIDES } from "@/content/occasions";
+import { GIFT_GUIDES, GUIDES_FOR_OCCASION } from "@/content/gift-guides";
+import { Link } from "@/i18n/navigation";
 import { FaqList } from "@/components/shared/faq-list";
 
 /**
@@ -12,6 +14,8 @@ import { FaqList } from "@/components/shared/faq-list";
 export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; locale: GiftLocale }) {
   const t = await getTranslations("occasions");
   const guide = OCCASION_GUIDES[occasion][locale];
+  const kinds = GUIDES_FOR_OCCASION[occasion] ?? [];
+  const tKinds = await getTranslations("recipients");
   return (
     <section className="container-narrow border-t border-line pt-14 pb-24 sm:pt-16" aria-labelledby={`guide-${occasion}`}>
       <p className="text-eyebrow text-ink-soft">{t("guideEyebrow")}</p>
@@ -29,6 +33,25 @@ export async function OccasionGuide({ occasion, locale }: { occasion: Occasion; 
       </div>
       <h2 className="display-md mt-16 mb-6">{t("faqTitle")}</h2>
       <FaqList items={guide.faq} name={`faq-${occasion}`} />
+      {kinds.length > 0 ? (
+        <nav className="mt-14" aria-labelledby={`kinds-${occasion}`}>
+          <h2 id={`kinds-${occasion}`} className="text-eyebrow text-ink-soft">
+            {tKinds("byKind")}
+          </h2>
+          <ul className="mt-5 flex flex-wrap gap-2">
+            {kinds.map((slug) => (
+              <li key={slug}>
+                <Link
+                  href={`/gifts/${slug}`}
+                  className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors outline-none hover:border-ink/40 focus-visible:ring-3 focus-visible:ring-ring/50 active:bg-paper-deep"
+                >
+                  {GIFT_GUIDES[slug][locale].label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
     </section>
   );
 }

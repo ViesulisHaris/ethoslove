@@ -5,7 +5,7 @@ import { LIMITS } from "@/config/site";
 import { getPost, postLocales } from "@/content/blog";
 import { DIGITAL_CARDS_PATH, DIGITAL_CARDS_REF, DIGITAL_CARD_TEMPLATES, digitalCardsCopy, type DigitalCardsFacts } from "@/content/digital-cards";
 import { DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
-import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS, GUIDES_FOR_OCCASION, isGiftGuide, type GiftGuideSlug } from "@/content/gift-guides";
 import { pageUpdated } from "@/content/page-dates";
 import { recipientFromSlug } from "@/content/recipients";
 import { REF_PATTERN } from "@/lib/attribution/ref";
@@ -147,6 +147,16 @@ describe("gift pages by kind", () => {
       const guides = GIFT_GUIDE_SLUGS.map((s) => GIFT_GUIDES[s][locale]);
       expect(new Set(guides.map((g) => g.title.toLowerCase())).size).toBe(guides.length);
       expect(new Set(guides.map((g) => g.h1.toLowerCase())).size).toBe(guides.length);
+    }
+  });
+
+  it("are linked from the occasion pages they sit beside, and link back", () => {
+    for (const [occasion, kinds] of Object.entries(GUIDES_FOR_OCCASION)) {
+      expect(isOccasion(occasion), occasion).toBe(true);
+      for (const kind of kinds) {
+        expect(isGiftGuide(kind), kind).toBe(true);
+        expect(GIFT_GUIDES[kind].en.related.map((r) => r.href), `${kind} → ${occasion}`).toContain(`/occasions/${occasion}`);
+      }
     }
   });
 
