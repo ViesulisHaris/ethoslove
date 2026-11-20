@@ -33,15 +33,27 @@ are launch directories that give a followed link.
 **The four to do first (20 Nov 2026).** When ChatGPT is asked for a site to make a digital love
 letter, its answers draw on small launch directories as well as the makers' own pages: the pictures
 in two of three answers that day came from saastool.site's "Digital Love Letters" listing and from
-openlaunch.ai's "Letters by Heart" (`docs/blog/ai-answers.md`). Ethos is on neither. None of the
-four is signed in in Chrome, and each needs an account, which is the owner's to make:
+openlaunch.ai's "Letters by Heart" (`docs/blog/ai-answers.md`). Ethos is on neither. The owner made
+an account on all four the same day and Claude filled in what could be filled in. Where each stands:
 
-| Site | What a listing costs | What it needs |
+| Site | A free listing | Stands at (20 Nov 2026) |
 |---|---|---|
-| openlaunch.ai | Free launch: $0, five slots a day, a queue of up to 180 days; the link is followed only for a day's top three. The $9 launch is a paid link: skip it | an account (Sign up), then "Submit Project" |
-| saastool.site | "Submit" in the menu; its pricing page shows only a $19.90 a month sponsor slot, so see after signing in whether a plain listing is free. If it is not, skip it | an account (Sign In) |
-| alternativeto.net | Free: add Ethos as an app, then as an alternative to the ones the table above names (DigiFlower, Smilebox, Jacquie Lawson, Paperless Post, Canva) | an account |
-| fazier.com | Free launch | an account (Join) |
+| alternativeto.net | Free, no badge, one followed link | Waits for the owner to open the confirmation link AlternativeTo emailed (it works for 24 hours; "Resend e-mail" sends a new one). Then: add Ethos as an app, and as an alternative to the ones the table above names |
+| openlaunch.ai | Free launch: $0, five slots a day, the link followed only for a day's top three | Not submitted: every one of the 180 days on offer showed "0 free slot(s)". Only the $9 launch could be booked, and that is a paid link. The form keeps no draft; its answers are below |
+| saastool.site | Free: their badge or a link to them has to stay on our site for good; reviewed within 90 days | Details saved, not published (dashboard: "Badge Verification Required", no plan selected). Basic $9.90 and Pro $19.90 are paid links: skip |
+| fazier.com | Free: a link to them on our homepage or footer; reviewed and listed within 30 days | Nothing entered: the form comes after the plan. Lite $29 and up are paid: skip |
+
+So two of the four ask for a link back from tryethos.io. That is the owner's decision; if it is a
+yes, two small text links in the homepage footer are enough for both.
+
+What went into the forms, for the next one:
+
+- **Open Launch:** tagline (160 characters at most) "Digital gifts that open like a story: a love
+  letter, a bouquet or a scrapbook made of your photos, your words and their song."; categories
+  Design Tools and SaaS (three at most, and none is about gifts); tech stack Next.js, React,
+  TypeScript; platform Web; pricing Freemium.
+- **SaaSTool:** categories Design and Daily Life; tags Web, English Supported, Free, Paid; the short
+  description below (256 characters at most); an introduction in Markdown made from the long one.
 
 ### The copy
 
@@ -83,7 +95,9 @@ photos and a long letter on The Letter €7.49 / $8.99 / £6.49.
 **Images:** the template posters in `public/templates/<slug>/poster.jpg` (1170 × 1800, the 2:3
 shape Pinterest and most galleries want): bouquet, the-letter, jar-of-reasons, constellations,
 scratch-card, museum. The short videos in `public/templates/<slug>/preview.webm` work as a
-Product Hunt gallery video.
+Product Hunt gallery video. For a listing form: the logo is `public/icons/icon-512.png` (square), and
+the 16:9 product image is `docs/marketing/listing/ethos-product-16x9.jpg` (1600 × 900: the tagline
+and three covers in phones).
 
 **The maker's first comment** (Product Hunt, Open Launch and Fazier ask for one). A draft with
 today's facts; it lands best in the owner's own words, so change anything in it but the numbers:
@@ -149,6 +163,8 @@ in the owner's name; Claude can draft the answers.
 | 13 Nov 2026 | stampgoose.com, "The best ways to send a digital letter in 2026" (Jake Powney, who makes Stampgoose; followed links; ChatGPT reads it) | Pitch from support@secuora.xyz to hello@stampgoose.com: add The Letter (free, 10 photos and a song; $8.99 extras), with their table's three lines and the demo. A code for the extras offered, not made. | https://stampgoose.com/articles/comparisons/best-ways-to-send-a-digital-letter |
 | 13 Nov 2026 | birthdaywebsite.app, "Best Birthday Website Makers in 2026: An Honest Comparison" (by the maker of Birthday Website Maker; followed links) | Pitch from support@secuora.xyz to support@birthdaywebsite.app, answering their criteria: Birthday Cinema, Midnight Countdown, scheduled unlock in their time zone, password with paid templates, permanent links, link or QR. A code offered, not made. | https://birthdaywebsite.app/blog/best-birthday-website-makers-2026 |
 | 13 Nov 2026 | peekwire.com, "5 Digital Open-When Letter Services Worth Knowing in the US" (no author; followed links) | Pitch from support@secuora.xyz to editorial@peekwire.com, answering their four factors: scheduled unlock in their time zone and a password, Midnight Countdown, the 100-note jar, prices, link or QR with no app. A code offered, not made. | https://peekwire.com/article/5-digital-open-when-letter-services-worth-knowing-in-the-us |
+| 20 Nov 2026 | saastool.site | Listing details saved from the owner's account, not published: the free plan needs their badge or link on our site | https://saastool.site/dashboard |
+| 20 Nov 2026 | openlaunch.ai | Form filled from the owner's account, not submitted: no free slot on any of the 180 days | https://openlaunch.ai/projects/submit |
 
 The Stampgoose pitch of 13 Nov described The Letter as it was then: free with 10 photos and a
 song. Since 19 Nov the free Letter is a short note (up to 500 characters, with music, no photos),
