@@ -61,6 +61,39 @@ test.describe("gifts come first in the rooms", () => {
   });
 });
 
+test.describe("the category line, set like a maker's mark", () => {
+  test("heads the front page's headline, in both languages", async ({ page }) => {
+    await page.goto("/");
+    const h1 = page.getByRole("heading", { level: 1 });
+    await expect(h1).toContainText("Digital cards by Tryethos");
+    await expect(h1).toContainText("Make them a gift");
+    await page.goto("/es");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Tarjetas digitales de Tryethos");
+  });
+
+  test("is one small line under the footer's wordmark on an ordinary page, and nowhere else on it", async ({ page }) => {
+    for (const [path, line] of [["/pricing", "Digital cards by Tryethos"], ["/es/templates/bouquet", "Tarjetas digitales de Tryethos"]] as const) {
+      await page.goto(path);
+      await expect(page.getByText(line), path).toHaveCount(1);
+      await expect(page.locator("footer").getByText(line), path).toBeVisible();
+      // Not in the header, and not in the page's title.
+      await expect(page.locator("header").getByText(line), path).toHaveCount(0);
+      expect(await page.title(), path).not.toMatch(/Tryethos|Digital cards|Tarjetas digitales/);
+    }
+  });
+
+  test("is in what machines read: the Organization's slogan and the first words of /llms.txt", async ({ page, request }) => {
+    await page.goto("/");
+    const data = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("");
+    expect(data).toContain('"slogan":"Digital cards by Tryethos"');
+    expect(data).toMatch(/"alternateName":\["[^"]+","Tryethos"\]/);
+    const llms = await (await request.get("/llms.txt")).text();
+    expect(llms.split("\n").slice(0, 3)).toEqual(["# Ethos", "", expect.stringMatching(/^> Digital cards by Tryethos\. /)]);
+    // The share card's site name is still the brand alone.
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "Ethos");
+  });
+});
+
 test.describe("the creator programme", () => {
   test("says the deal and applies by email with the subject filled in", async ({ page }) => {
     await page.goto("/creators");

@@ -1,5 +1,6 @@
 import { ArrowRight, Play } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { BRAND } from "@/config/brand";
 import { Link } from "@/i18n/navigation";
 import type { HomeHero } from "@/lib/attribution/landing";
 import { HERO_ART, heroSizes, heroSrcSet } from "@/lib/dates/art";
@@ -105,12 +106,13 @@ async function DatesFirst() {
  */
 async function GiftFirst() {
   const t = await getTranslations("growth.hero");
+  const locale = (await getLocale()) === "es" ? "es" : "en";
   return (
     <>
       <div className="lg:col-span-6">
-        {/* The eyebrow is the first line of the h1: "Digital gifts" is what this page is found by. */}
+        {/* The eyebrow is the first line of the h1, and it is the category line (config/brand.ts): what Ethos makes, and whose it is. */}
         <h1 className="text-forest">
-          <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{t("eyebrow")}</span>
+          <span className="block text-[12px] font-medium tracking-[0.22em] text-forest/70 uppercase">{BRAND.categoryLine[locale]}</span>
           <span className="mt-6 block max-w-[7.8em] display-hero text-balance">
             {t("h1a")} <em className="text-rose-deep">{t("h1b")}</em>
           </span>

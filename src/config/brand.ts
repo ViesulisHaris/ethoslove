@@ -9,6 +9,16 @@ export const BRAND = {
     en: "Gifts that open like a story.",
     es: "Regalos que se abren como una historia.",
   },
+  /**
+   * What Ethos makes, set like a maker's mark: under the footer's wordmark, over the front page's
+   * headline, and for machines (the Organization's slogan, the first words of /llms.txt). A quiet
+   * signature in a few chosen places, never a banner and never in a page title (the owner, 20 Nov
+   * 2026: "sleek, so it doesn't ruin it"). Read it from here and nowhere else.
+   */
+  categoryLine: {
+    en: "Digital cards by Tryethos",
+    es: "Tarjetas digitales de Tryethos",
+  },
   domain: "tryethos.io",
   supportEmail: "support@secuora.xyz",
   /**

@@ -96,6 +96,8 @@ export function jsonLd(nodes: Node[]): string {
 }
 
 const ORGANIZATION_ID = `${SITE.url}/#organization`;
+/** The site's address as a name: how people who have seen tryethos.io ask for it. */
+const TRYETHOS = "Tryethos";
 const price = (minor: number) => (minor / 100).toFixed(2);
 
 /**
@@ -132,7 +134,9 @@ export function organizationNode(): Node {
     "@type": "Organization",
     "@id": ORGANIZATION_ID,
     name: BRAND.name,
-    alternateName: BRAND.legalName,
+    // "Tryethos" is the name people type and the one the category line signs with (config/brand.ts).
+    alternateName: [BRAND.legalName, TRYETHOS],
+    slogan: BRAND.categoryLine.en,
     url: SITE.url,
     logo: `${SITE.url}/icons/icon-512.png`,
     email: BRAND.supportEmail,

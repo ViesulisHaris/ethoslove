@@ -24,6 +24,8 @@ export async function MarketingFooter() {
       <div className="container-x relative grid grid-cols-2 gap-x-6 gap-y-10 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="col-span-2 max-w-xs md:col-span-1">
           <Logo />
+          {/* The maker's mark: the one place the category line shows on an ordinary page, in the footer's own small type. */}
+          <p className="mt-3 text-[11px] font-medium tracking-[0.2em] text-cream/45 uppercase">{BRAND.categoryLine[locale]}</p>
           <p className="font-display mt-4 text-xl leading-snug text-cream/70 italic">{t("footer.blurb")}</p>
         </div>
         <FooterColumn title={t("footer.explore")}>
