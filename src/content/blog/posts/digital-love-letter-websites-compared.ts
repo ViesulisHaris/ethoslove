@@ -137,6 +137,7 @@ export const post: BlogPost = {
             "**It's two lines, not two pages:** Letters by Heart's free tier, or gifft.me.",
             "**You'll write in Spanish, German or Portuguese:** LoveLetter.digital, which lists all three among its six languages. 2luv says it works in 12, from English to Japanese, but doesn't list them.",
             "**You want more than a letter, or one look you'll reuse for many gifts:** Ethos. One template is paid once and you can make it as often as you like.",
+            "**It's a gift more than a letter:** our [best digital gift websites](/blog/digital-gift-websites-compared) compares eight sites that make cards, love pages and animated worlds.",
           ],
         },
         {
@@ -327,6 +328,7 @@ export const post: BlogPost = {
             "**Son dos líneas, no dos páginas:** el plan gratis de Letters by Heart, o gifft.me.",
             "**Vas a escribir en español, alemán o portugués:** LoveLetter.digital, que tiene los tres entre sus seis idiomas. 2luv dice que funciona en 12, del inglés al japonés, pero no dice cuáles.",
             "**Quieres algo más que una carta, o un diseño que reutilizar para muchos regalos:** Ethos. Cada plantilla se paga una vez y puedes usarla tantas veces como quieras.",
+            "**Es más un regalo que una carta:** nuestra comparativa de las [mejores páginas para hacer regalos digitales](/blog/digital-gift-websites-compared) revisa ocho que hacen tarjetas, páginas de amor y mundos animados.",
           ],
         },
         {

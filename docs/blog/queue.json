@@ -1,21 +1,5 @@
 [
   {
-    "slug": "digital-gift-websites-compared",
-    "keyword": "best digital gift websites",
-    "keyword_es": "mejores páginas para hacer regalos digitales",
-    "occasion": "just-because",
-    "templates": [
-      "the-letter",
-      "bouquet",
-      "scrapbook"
-    ],
-    "angle": "When someone asks ChatGPT for the best sites to make a digital gift, or what to send a boyfriend online, it answers from ouvella.com's \"Best Personalized Digital Gift Websites: 10 Compared\" and senddigitalgift.com's \"Best Digital Gift Websites\" (the 13 and 19 Nov checks in docs/blog/ai-answers.md); both leave Ethos out. Write the honest one: the makers those answers name (Canva, GiftFeels, LovePage, Forevermore, SendVirtualGift, Gifts QR, gifft.me, Ethos and whoever ranks for the phrase), each checked on its own site the day you write: price and what's free, what you can put in it, how it opens, languages, who it suits, in one dated table, Ethos's weak points included. Don't repeat gifft-me-alternatives or digital-love-letter-websites-compared: link to them for those two questions. Never a claim about a maker you didn't see on its site that day.",
-    "for": "ai-answers",
-    "volume": 0,
-    "volume_es": 0,
-    "difficulty": null
-  },
-  {
     "slug": "digital-bouquet-makers-compared",
     "keyword": "digital bouquet maker",
     "keyword_es": "crear ramo de flores online",
