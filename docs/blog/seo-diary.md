@@ -3,6 +3,37 @@
 One entry a day from the daily SEO routine (`docs/blog/SEO-AGENT.md`), newest first: what changed,
 the data behind it, what it cost, and when to check whether it worked.
 
+## 2026-11-20: christmas-letter-to-mom answers "christmas message for mom" with 17 short card messages; Spanish says "feliz Navidad"
+- **Page:** /blog/christmas-letter-to-mom (and /es to match)
+- **Why:** First run of the day, a Friday (no weekly job; the ranks are a day old). No backlog item
+  open (the two left wait for 27 and 28 Nov), and the Search Console candidates (monthiversary-ideas
+  186 impressions at 10.7, the Spanish Halloween, fortune-cookie and virtual-date posts) were touched
+  in the last 14 days or out of season. This post, never refreshed and five weeks from Christmas,
+  sits at 32 for "christmas letter for mom" (Search Console, 28 days, brand left out). DataForSEO
+  (US, all KD 0-1): "christmas message for mom" 320 a month, 3,600 in December; "christmas wishes for
+  mom" 2,400 in December; "christmas card message for mom" and "christmas letter to mom" 1,600 each
+  in December; UK "christmas message for mum" and "christmas card message for mum" 1,000 each in
+  December; Spain "feliz navidad mamá" 1,300 in December against 90 for the post's keyword. The top
+  results are lists of 33 to 180 wishes and single sample letters; the AI overview groups lines as
+  heartfelt, short and lighthearted. People also ask: what to write in a Christmas card to your mom,
+  a sweet emotional message from a daughter, short and sweet messages, what a mom wants for
+  Christmas. The post had one card line and answered none of them.
+- **What changed:** Title "Christmas letter and messages for your mother, with examples" (Spanish
+  "Carta de Navidad para tu madre y frases de feliz Navidad"), new descriptions; the card heading now
+  "What to write in a Christmas card to your mother"; a new section of 17 short messages in seven
+  groups (emotional, gift tag, funny, apart, after a hard year, daughter or son, if she is no longer
+  here); FAQs on a short message and on what to give a mother who wants nothing; the FAQ's letter
+  length matched to the examples; the Letter's note corrected to the free short-note rules of
+  19 Nov. Spanish to match. `updated` 2026-11-20.
+- **Panel:** 10/10/10 after 3 rounds (`docs/blog/reviews/refresh/christmas-letter-to-mom-2026-11-20.json`)
+- **Cost:** $0.07 (keyword overviews US, UK and Spain, Spanish keyword ideas, four SERPs with AI
+  overview and PAA); balance $46.81
+- **Also found:** many older posts still call the free Letter free with photos; added to the
+  backlog's routine list.
+- **Check on:** 2026-12-08 whether "christmas message for mom", "christmas card message for mom" and
+  "christmas letter to mom" show for the post (December is their month), and whether
+  /es/blog/christmas-letter-to-mom shows for "feliz navidad mamá"
+
 ## 2026-11-19: surprise-trip-reveal-ideas speaks the UK's "surprise holiday reveal", answers "clever ways to give a trip as a gift"; Spanish aims at "cómo regalar un viaje sorpresa"
 - **Page:** /blog/surprise-trip-reveal-ideas (and /es to match)
 - **Why:** Second run of the day; no backlog item open (the two left wait for 27 and 28 Nov), and

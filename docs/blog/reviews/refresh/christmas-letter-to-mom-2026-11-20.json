@@ -1,0 +1,100 @@
+{
+  "slug": "christmas-letter-to-mom",
+  "keyword": "christmas letter to mom",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Beats the card-message lists: three full letters, the four specifics, a what-to-thank-her-for table and 15 short lines in six groups, with honest product notes. Polish: the FAQ's 150-250 words didn't match the example letters; a line for a first Christmas after a loss."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 9, "voice": 9, "spanish": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Every template, free-note, scheduling and link claim checked against the code. Fixes: the FAQ's 150-250 words contradicted letters of 92-125 words (both languages); too many short messages ended on \"Merry Christmas\"; Spanish «cada vez este año» was word for word. Polish: tápers, «hazle caso», «tirar la toalla», the FAQ's \"set it to open\" implied scheduling."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 9, "search": 9 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Fixes: the Spanish title and headings never said \"feliz Navidad\" (1,300 in December in Spain); the English title should put \"messages\" next to Christmas, as every top result does. Polish: a mom-and-dad line, a first Christmas without her, a traditional group."
+        }
+      ],
+      "applied": [
+        "EN title \"Christmas letter and messages for your mother, with examples\"; ES title \"Carta de Navidad para tu madre y frases de feliz Navidad\", h2 \"Frases de feliz Navidad para tu madre\"",
+        "FAQ word count now 100-250 words, with the letters' length (both languages)",
+        "\"Merry Christmas\" / «Feliz Navidad» dropped from the last-slice and daughter lines",
+        "«todas las veces que te he llamado este año»",
+        "Polish: «Sobre todo de tus tápers», «Si dice que no quiere cosas, hazle caso y regálale tiempo», «tirar la toalla», \"or send it to her phone to open on the day\""
+      ],
+      "rejected": []
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The page to send a friend over the card-message lists: full letters to adapt tonight, the short lines, and when and how to hand it over. Polish: give the letters' length as a range."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 9, "voice": 10, "spanish": 10 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes all in. Fix: \"each about 100\" undercounts the 120-word daughter letter; say 90 to 125 (ES «entre unas 90 y 125»). Polish: «todavía no le has dicho que has visto»."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 9, "search": 10 },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round-one fixes in. Fix: a top-10 result is a letter to a mother for her first Christmas in heaven and the post had nothing for that reader; add two lines and update the count. Polish: a traditional group, \"wishes\" in the h2."
+        }
+      ],
+      "applied": [
+        "FAQ: \"The three letters above run from about 90 to 125.\" / «Las tres cartas de arriba tienen entre unas 90 y 125.»",
+        "New h3 \"If she is no longer here\" / «Si ya no está» with two lines each; descriptions now say 17 short messages",
+        "Polish: «y que todavía no le has dicho que has visto»"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": { "answers": 10, "usable": 10, "trust": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The lead answers at once, and the post gives three real letters, a card line and 17 short messages grouped by need, including a careful pair for a mother who has died, with the product only after the answer."
+        },
+        {
+          "reviewer": "editor",
+          "scores": { "accuracy": 10, "voice": 10, "spanish": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checked against the code (free short note, Make it special, Fireside, Recipe Box, scheduling, links), and the Spanish reads like Spain. Polish, left for later: English upper bound 120, «y los difíciles, casi siempre por mi culpa»."
+        },
+        {
+          "reviewer": "search",
+          "scores": { "better": 10, "search": 10 },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "It gives a way to write her letter and the lines to borrow for a card in one place, answers every People also ask question and covers the first-Christmas-without-her reader, which no single top result does. Polish: a traditional group, a mom-and-dad line."
+        }
+      ],
+      "applied": [],
+      "rejected": []
+    }
+  ]
+}
