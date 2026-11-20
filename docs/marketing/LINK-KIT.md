@@ -39,15 +39,17 @@ an account on all four the same day and Claude filled in what could be filled in
 | Site | A free listing | Stands at (20 Nov 2026) |
 |---|---|---|
 | alternativeto.net | Free, no badge, one followed link. But the free queue "holds several thousand apps" and most "will not be looked at for a very long time"; a review within 1 to 2 working days costs $25 once (or $35 with their editing) | Submitted as **TryEthos** (an "Ethos" exists there), with Smilebox, Paperless Post, Greetings Island and Canva as alternatives. Waiting in the normal queue: "My submissions" in the account. The paid review was declined; it is the owner's to choose |
-| saastool.site | Free: their badge or a link to them has to stay on our home page for good; a person reviews within 90 days | **Under review**, free plan. The link is on the home page (`src/config/directories.ts`). Their automatic check answered with a server error, so the listing went in on their manual confirmation, which their reviewer checks. Basic $9.90 and Pro $19.90 are paid links: skip |
+| saastool.site | Free: their badge or a link to them has to stay on our home page for good; a person reviews within 90 days | **Under review**, free plan. Its badge is on the home page (`src/config/directories.ts`). Their automatic check answered with a server error, so the listing went in on their manual confirmation, which their reviewer checks. Basic $9.90 and Pro $19.90 are paid links: skip |
 | fazier.com | Free launch: three comments on other products from the account, then their badge image on our site, then "Verify Badge"; reviewed and listed within 30 days | Not started: both the comments and a badge image are the owner's to decide. Lite $29 and up are paid: skip |
 | openlaunch.ai | Free launch: $0, five slots a day, the link followed only for a day's top three | Not submitted: every one of the 180 days on offer showed "0 free slot(s)". Only the $9 launch could be booked, and that is a paid link. The form keeps no draft; its answers are below |
 
-**The link on the home page.** One line of the footer's smallest print, on the home page only
-("Elsewhere: SaaSTool"), with the address SaaSTool's badge code gives. It has to stay: SaaSTool
-checks from time to time and takes the listing down without it. Small is fine, hidden is not: a link
-people cannot see is one the directory refuses and search engines count against the site.
-`tests/e2e/directory-links.spec.ts` holds it to that.
+**The badge on the home page.** SaaSTool's own dark badge, 22px tall and dimmed, under the home
+page's last section and on no other page. The owner picked that size from a side-by-side of four
+(text, 22px, 30px, the directory's own 54px); it was a text link for a few hours before. The picture
+is served from `public/badges`, not from their server, and links to the address their badge code
+gives. It has to stay: SaaSTool checks from time to time and takes the listing down without it.
+Small is fine, hidden is not: a badge people cannot see is one the directory refuses and search
+engines count against the site. `tests/e2e/directory-links.spec.ts` holds it to that.
 
 What went into the forms, for the next one:
 
@@ -173,7 +175,7 @@ in the owner's name; Claude can draft the answers.
 | 13 Nov 2026 | stampgoose.com, "The best ways to send a digital letter in 2026" (Jake Powney, who makes Stampgoose; followed links; ChatGPT reads it) | Pitch from support@secuora.xyz to hello@stampgoose.com: add The Letter (free, 10 photos and a song; $8.99 extras), with their table's three lines and the demo. A code for the extras offered, not made. | https://stampgoose.com/articles/comparisons/best-ways-to-send-a-digital-letter |
 | 13 Nov 2026 | birthdaywebsite.app, "Best Birthday Website Makers in 2026: An Honest Comparison" (by the maker of Birthday Website Maker; followed links) | Pitch from support@secuora.xyz to support@birthdaywebsite.app, answering their criteria: Birthday Cinema, Midnight Countdown, scheduled unlock in their time zone, password with paid templates, permanent links, link or QR. A code offered, not made. | https://birthdaywebsite.app/blog/best-birthday-website-makers-2026 |
 | 13 Nov 2026 | peekwire.com, "5 Digital Open-When Letter Services Worth Knowing in the US" (no author; followed links) | Pitch from support@secuora.xyz to editorial@peekwire.com, answering their four factors: scheduled unlock in their time zone and a password, Midnight Countdown, the 100-note jar, prices, link or QR with no app. A code offered, not made. | https://peekwire.com/article/5-digital-open-when-letter-services-worth-knowing-in-the-us |
-| 20 Nov 2026 | saastool.site | Listing submitted on the free plan from the owner's account: under review (up to 90 days). The link they ask for is on the home page | https://saastool.site/dashboard |
+| 20 Nov 2026 | saastool.site | Listing submitted on the free plan from the owner's account: under review (up to 90 days). The badge they ask for is on the home page | https://saastool.site/dashboard |
 | 20 Nov 2026 | alternativeto.net | Submitted as TryEthos from the owner's account, with four alternatives; normal queue, paid review declined | https://alternativeto.net/my-submissions/ |
 | 20 Nov 2026 | openlaunch.ai | Form filled from the owner's account, not submitted: no free slot on any of the 180 days | https://openlaunch.ai/projects/submit |
 
