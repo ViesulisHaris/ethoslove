@@ -8,6 +8,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import type { TemplateManifest, TemplateModule } from "@/templates/types";
 import type { ShownReaction } from "@/lib/proof/numbers";
 import { freeTestEvent, track } from "@/lib/analytics/track";
+import { countRecipientGiftSent } from "@/lib/attribution/recipient-loop";
 import { decidePublish, fieldMustHaves, fieldProblems, readinessProblems, premiumExtras, withOldGiftRule, type FieldProblem } from "@/lib/gift/publish";
 import { FREE_NOTE_MAX_CHARS, NOTE_PHOTOS_MAX, NOTE_TEMPLATES, noteCanBeFree, noteLength, noteRules, oldFreeGiftAddsPhotos, sellsNotePhotos } from "@/lib/gift/free-tier";
 import { FreeNoteOption } from "./free-note-option";
@@ -357,6 +358,9 @@ export function PublishSheet({
       setRefusedFields([...new Set(refused.map((path) => path.split(".")[1]).filter(Boolean))]);
       return;
     }
+    // A recipient's own gift going out, the first time it does: the end of the loop a gift starts
+    // (lib/attribution/recipient.ts). "Paid": it holds something that costs money.
+    if (state.status === "draft") countRecipientGiftSent(new URLSearchParams(window.location.search), slug, premiumKeys.length > 0);
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
     // The app closes the editor and shows its own "It's ready" sheet; the share screen below stays

@@ -16,6 +16,7 @@ import { withoutUrlSeed } from "@/lib/editor/url-seed";
 import { useNativeEvents, useNativeReady } from "@/lib/app/use-bridge";
 import { hasSessionCookie } from "@/lib/supabase/session-cookie";
 import { track } from "@/lib/analytics/track";
+import { countRecipientEditorOpened } from "@/lib/attribution/recipient-loop";
 import { OPEN_PUBLISH_EVENT } from "@/lib/editor/open-publish";
 import { TopBar } from "./top-bar";
 import { PreviewPane } from "./preview-pane";
@@ -117,6 +118,9 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
 
   useEffect(() => {
     track("editor_opened", { template: slug });
+    // And, when whoever opened it came from a gift (its "send one back", its "someone else" link, its
+    // badge, a kept gift's reminder), that the loop turned: which door, which template, nothing else.
+    countRecipientEditorOpened(new URLSearchParams(window.location.search), slug);
   }, [slug]);
 
   // Load the template module (schema + field meta), then hydrate the store. A seed in the address
