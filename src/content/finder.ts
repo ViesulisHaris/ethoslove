@@ -643,8 +643,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Rompe el sello de lacre de un paquete de cosas guardadas: tu primera foto bajo flores secas y un relicario dorado que se abre con un toque a la segunda.",
       },
       romantic: {
-        en: "Engrave the inside of the locket in 18 characters, a date, a place or \"always\", and put a number only the two of you would recognise on the ticket.",
-        es: "Graba el interior del relicario en 18 caracteres, una fecha, un lugar o «siempre», y pon en el billete un número que solo reconozcáis vosotros.",
+        en: "Engrave the inside of the locket in 18 characters, a date, a place or \"always\", and rewrite the ticket, 26 characters, for somewhere only the two of you have been.",
+        es: "Graba el interior del relicario en 18 caracteres, una fecha, un lugar o «siempre», y reescribe el billete, de 26 caracteres, con un sitio donde solo habéis estado vosotros.",
       },
       mom: {
         en: "A box of kept things for the person who keeps everything: pressed flowers, a typed letter, and a locket that opens to the photo you put second.",
@@ -738,8 +738,8 @@ export const FINDER_FITS: Record<string, FinderFit> = {
         es: "Suena nota a nota y se va frenando al acabarse la cuerda, como una de verdad. Cada vuelta trae otra de tus fotos al espejo, hasta ocho.",
       },
       mom: {
-        en: "She winds the key and a ballerina turns to Brahms' Lullaby while your photos appear in the mirror. Then your letter lifts out of the velvet.",
-        es: "Ella da cuerda y una bailarina gira con la Canción de cuna de Brahms mientras tus fotos aparecen en el espejo. Después tu carta sale del terciopelo.",
+        en: "Choose Brahms' Lullaby from the three tunes. She winds the key, a ballerina turns, and your photos appear in the mirror before your letter lifts out of the velvet.",
+        es: "Elige la Canción de cuna de Brahms entre las tres melodías. Ella da cuerda, una bailarina gira y tus fotos aparecen en el espejo antes de que tu carta salga del terciopelo.",
       },
     },
   },
@@ -871,7 +871,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     why: {
       base: {
         en: "They touch the planchette and it moves by itself, spelling your words one glowing letter at a time. You get 22 letters, enough for a nickname or \"I love you\".",
-        es: "Toca el puntero y se mueve solo, deletreando tus palabras letra a letra, cada una encendida. Tienes 22 letras: caben un apodo o «te quiero».",
+        es: "Toca la plancheta y se mueve sola, deletreando tus palabras letra a letra, cada una encendida. Tienes 22 letras: caben un apodo o «te quiero».",
       },
       romantic: {
         en: "The board spells what you chose, says goodbye, and the candles go out. In the dark your letter appears on old paper, and your photos develop out of the mist.",
@@ -946,7 +946,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     why: {
       base: {
         en: "A scroll from the North Pole with up to four good deeds and four crimes, all written by you. Each gets ticked in pen before the verdict is stamped.",
-        es: "Un pergamino del Polo Norte con hasta cuatro buenas acciones y cuatro delitos, todos escritos por ti. Cada uno recibe su marca a boli antes de que se selle el veredicto.",
+        es: "Un pergamino del Polo Norte con hasta cuatro buenas obras y cuatro fechorías, todas escritas por ti. Cada una recibe su marca a boli antes de que caiga el sello con el veredicto.",
       },
     },
   },
@@ -972,7 +972,7 @@ export const FINDER_FITS: Record<string, FinderFit> = {
     why: {
       base: {
         en: "They pull their side of the wishbone with a finger until it snaps. You decide beforehand who gets the big half, and your wish comes out with it.",
-        es: "Tira de su lado del hueso de los deseos con el dedo hasta que se parte. Tú decides antes quién se queda la mitad grande, y con ella sale tu deseo.",
+        es: "Tira de su lado de la espoleta con el dedo hasta que se parte. Tú decides antes quién se queda la mitad grande, y con ella sale tu deseo.",
       },
       funny: {
         en: "Rig it. Give yourself the big half and write a wish at their expense in 120 characters, or let them win one that is good news for you both.",
