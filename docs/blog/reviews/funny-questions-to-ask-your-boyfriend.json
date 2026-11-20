@@ -1,0 +1,138 @@
+{
+  "slug": "funny-questions-to-ask-your-boyfriend",
+  "keyword": "funny questions to ask your boyfriend",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Asked for one grammar fix in a line the reader says out loud: \"What's the shop's opening hours?\" to \"What are the shop's opening hours?\". Polish: US spellings, mood labels on the opener quotes."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All product, template, game and link claims verified against the code (60 questions, no repeats of the hub's thirty, Fortune Cookie up to 20 slips, Scratch Card up to 12 captioned photos, both games on one phone or two). Spanish fixes: 'si' + conditional, '¿qué mío?', a broken relative clause (twice), 'mezquindad', 'para picar' clashing with the snack sense, the title's 'dan para historia', and 'tiene gracia una frase'."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 9,
+            "search": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Covers all four People also ask questions; the one intent in the top 10 it misses is funny trick questions (organic 6). Asked for an FAQ on trick questions in both languages."
+        }
+      ],
+      "applied": [
+        "EN: 'What are the shop's opening hours?'",
+        "ES: seven Spanish fixes from the editor (si + presente, 'qué prenda mía', '¿A qué cosa que hago le has puesto nombre en secreto?' twice, 'hasta dónde llegarías para fastidiarle', 'que se hacen virales para provocar', 'hace gracia una vez'); ES title changed to 'Preguntas graciosas para tu novio: 60 que dan juego' because the editor's suggested title ran past 60 characters",
+        "Added a trick-questions FAQ in both languages",
+        "Polish taken: 'two tweets in 2019' (ES 'dos tuits'), 'know me' for 'recognise me', 'canción de cabecera', 'lo mucho que', 'a quién de los dos', 'para cuando os pongáis serios', 'juego gratis [¿Qué prefieres?]'"
+      ],
+      "rejected": [
+        "ES title '60 preguntas graciosas para tu novio que dan para una buena historia': 68 characters, over the 60 limit; replaced with an equivalent natural title instead"
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Unlike the top lists that dump 100+ random questions, it tells you which kind to ask when (text, sofa, car), how to get him playing along and which trap questions to skip, so you can use it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "All round-1 fixes made correctly; every claim re-verified. One fix: the Spanish tip title 'Sáltate las preguntas trampa' contradicts the new FAQ that recommends 'preguntas trampa graciosas'; retitle it 'Sáltate las que son un examen'. Polish: EN tip 'Skip the loyalty tests' to keep trap and trick apart."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers every People also ask question, including the trick-question intent from result 6, and beats the 150-350 question dumps with a how-to-ask section, opener lines, the trap-question warning and the worm-meme origin."
+        }
+      ],
+      "applied": [
+        "ES tip title 'Sáltate las que son un examen'",
+        "Polish taken to head off the same confusion in English: tip title 'Skip the loyalty tests'"
+      ],
+      "rejected": []
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Instead of a bare list it sorts the questions by moment and mood, gives lines to open with and shows how to ask so he plays along, so you could use it tonight."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Every claim checks out against the code; 60 questions sorted by when to ask them, a sourced worm-meme answer and honest loyalty-test advice, with Spain Spanish that reads as written, not translated."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Answers all four People also ask questions plus texting and trick questions, and offers the how-to-ask section, opener lines and loyalty-test warning that the page-one listicles don't."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish": [
+        "Editor: ES tip title 'Sáltate las pruebas de lealtad'; 'se puede volver a ver' for rewatch; 'preguntas para tu novio' as the hub anchor",
+        "Reader: give a concrete time for the text questions",
+        "Search: a by-vibe row in the table"
+      ]
+    }
+  ]
+}
