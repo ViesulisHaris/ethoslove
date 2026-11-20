@@ -37,6 +37,28 @@ test.describe("the front page by arrival link", () => {
   });
 });
 
+test.describe("gifts come first in the rooms", () => {
+  test("the header, the menu and the doors all start with Gifts", async ({ page, isMobile }) => {
+    await page.goto("/");
+    if (isMobile) {
+      await page.getByRole("button", { name: "Open menu" }).click();
+      const rooms = page.getByRole("navigation", { name: "Menu" }).getByRole("link");
+      await expect(rooms.first()).toHaveAttribute("href", "/gifts");
+      expect(await rooms.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts", "/dates", "/trips", "/long-distance", "/games", "/pricing"]);
+      await page.keyboard.press("Escape");
+    } else {
+      const rooms = page.getByRole("navigation", { name: "Main" }).getByRole("link");
+      expect(await rooms.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts", "/dates", "/trips", "/long-distance", "/games", "/pricing"]);
+    }
+    // The four doors on the page: Gifts is the first of them.
+    const doors = page.locator("section", { has: page.getByRole("heading", { level: 2, name: "Whatever kind of couple you are this week." }) }).locator("ul > li > a");
+    expect(await doors.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).toEqual(["/gifts", "/dates", "/long-distance", "/games"]);
+    // And the footer's list of what there is to explore.
+    const explore = page.locator("footer ul").first().getByRole("link");
+    expect((await explore.evaluateAll((links) => links.map((a) => a.getAttribute("href")))).slice(0, 4)).toEqual(["/gifts", "/templates", "/dates", "/trips"]);
+  });
+});
+
 test.describe("the creator programme", () => {
   test("says the deal and applies by email with the subject filled in", async ({ page }) => {
     await page.goto("/creators");

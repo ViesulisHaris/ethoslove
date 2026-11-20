@@ -27,10 +27,10 @@ export async function MarketingFooter() {
           <p className="font-display mt-4 text-xl leading-snug text-cream/70 italic">{t("footer.blurb")}</p>
         </div>
         <FooterColumn title={t("footer.explore")}>
-          <FooterLink href="/dates">{t("nav.dates")}</FooterLink>
-          <FooterLink href="/trips">{t("nav.trips")}</FooterLink>
           <FooterLink href="/gifts">{t("footer.digitalGifts")}</FooterLink>
           <FooterLink href="/templates">{t("nav.templates")}</FooterLink>
+          <FooterLink href="/dates">{t("nav.dates")}</FooterLink>
+          <FooterLink href="/trips">{t("nav.trips")}</FooterLink>
           <FooterLink href="/long-distance">{t("nav.longDistance")}</FooterLink>
           <FooterLink href="/games">{t("nav.games")}</FooterLink>
           <FooterLink href="/tools/how-long-have-we-been-together">{t("footer.togetherCounter")}</FooterLink>
