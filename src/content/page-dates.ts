@@ -18,8 +18,11 @@ export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.
   // 13 Nov: titles, descriptions and copy aimed at what people search (docs/marketing/KEYWORDS.md).
   "/": "2026-11-15",
-  "/gifts": "2026-11-13",
-  "/gifts/*": "2026-10-24",
+  // 20 Nov: the gift pages by kind (content/gift-guides.ts) and /digital-cards arrived, and /gifts and
+  // every /gifts/for-* page gained their links.
+  "/gifts": "2026-11-20",
+  "/gifts/*": "2026-11-20",
+  "/digital-cards": "2026-11-20",
   // The holiday three went live on 11 Nov, and every page that lists them gained them that day.
   "/templates": "2026-11-11",
   "/templates/*": "2026-10-25",

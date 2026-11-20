@@ -2,7 +2,9 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { GiftLocale } from "@/lib/gift/schema";
+import { DIGITAL_CARDS_PATH } from "@/content/digital-cards";
 import { DIGITAL_GIFT_GUIDE } from "@/content/digital-gifts";
+import { GIFT_GUIDES, GIFT_GUIDE_SLUGS } from "@/content/gift-guides";
 import { RECIPIENTS, RECIPIENT_GUIDES, recipientSlug } from "@/content/recipients";
 import { templateSeo } from "@/content/template-seo";
 import { getManifest } from "@/templates/manifests";
@@ -10,7 +12,8 @@ import { getManifest } from "@/templates/manifests";
 /**
  * On /gifts, after the occasions: what a digital gift is, thirty ideas grouped the way people shop
  * for them (every one a template, linked by the words people search it by), and the gift-idea
- * pages by person. The answer to "digital gift" and to "digital gift ideas" in one place.
+ * pages by person and by kind. The answer to "digital gift" and to "digital gift ideas" in one
+ * place; "digital card" has a page of its own (/digital-cards), linked from the last row.
  */
 export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }) {
   const t = await getTranslations("recipients");
@@ -85,6 +88,28 @@ export async function DigitalGiftGuideSection({ locale }: { locale: GiftLocale }
               className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
             >
               {t("occasions")}
+            </Link>
+          </li>
+        </ul>
+
+        <h2 className="display-md mt-14">{guide.byKind}</h2>
+        <ul className="mt-5 flex flex-wrap gap-2">
+          {GIFT_GUIDE_SLUGS.map((slug) => (
+            <li key={slug}>
+              <Link
+                href={`/gifts/${slug}`}
+                className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+              >
+                {GIFT_GUIDES[slug][locale].label}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <Link
+              href={DIGITAL_CARDS_PATH}
+              className="inline-flex min-h-10 items-center rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+            >
+              {guide.cards}
             </Link>
           </li>
         </ul>
