@@ -75,7 +75,14 @@ export type FunnelEvent =
   | "quiz_started"
   | "quiz_finished"
   | "quiz_shared"
-  | "quiz_gift_click";
+  | "quiz_gift_click"
+  // A visit that arrived with no referrer, only a tag in its address (lib/attribution/arrival.ts): from
+  // ChatGPT, another assistant, a pin or an Instagram link. Named per source because Vercel's reports
+  // count by event name; nothing else is sent.
+  | "arrived_chatgpt"
+  | "arrived_ai"
+  | "arrived_pinterest"
+  | "arrived_instagram";
 
 type Props = Record<string, string | number | boolean | null>;
 
