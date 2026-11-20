@@ -1,0 +1,382 @@
+import type { BlogPost } from "../types";
+
+export const post: BlogPost = {
+  slug: "digital-gift-websites-compared",
+  published: "2026-11-20",
+  occasion: "just-because",
+  templates: ["the-letter", "bouquet", "scrapbook"],
+  content: {
+    en: {
+      title: "Best digital gift websites, compared (2026)",
+      description: "Nine digital gift websites checked on 20 Nov 2026: what each one makes, price, what's free, how long the link lasts, set opening times and who it suits.",
+      keyword: "best digital gift websites",
+      lead: "The best digital gift websites depend on the gift: Sendly for an interactive card at $3.99, LovePage.io for a love page you can try free, Forevermore for an animated world that never expires, GiftsQR for a QR code in a card, Canva to design it yourself, and SendVirtualGift for free. Below are nine sites side by side, checked on each maker's own pages on 20 Nov 2026. We make Ethos, one of the nine, and its weak points are in the tables too.",
+      takeaways: [
+        "Free: gifft.me, Canva, Ethos's short note, and SendVirtualGift, which needs no sign-up. LovePage.io is free too, but a free page lasts 48 hours.",
+        "Lowest US price we could see for a paid gift: Sendly, $3.99 once per card.",
+        "Check how long the link lasts before you pay: from 48 hours to forever, depending on the site and the plan.",
+        "Only three of the nine say on their pages that a gift can stay locked until a date you choose.",
+      ],
+      body: [
+        { type: "h2", text: "How we compared them" },
+        {
+          type: "p",
+          text: "We make Ethos, one of the nine sites below. Everything about the other eight comes from their own home and pricing pages, FAQ sections included, as we read them on 20 Nov 2026. Nothing comes from reviews, other comparisons or AI answers. Where a site's pages didn't say something, or a price didn't load for us, the table says so rather than guessing. Ethos's row comes from our own pricing and template files, weak points included.",
+        },
+        {
+          type: "p",
+          text: "A digital gift here means something you make for one person and send as a link: an animated card, a letter, a love page, a small world to explore. Not a gift card, and not a parcel. The sites are in alphabetical order, prices in US dollars as they showed them to us; several change the price by country. JibJab also comes up when people ask for digital gift sites, but its pages didn't load for our check, so it isn't in the tables.",
+        },
+        { type: "h2", text: "Price, what's free and how long the link lasts" },
+        {
+          type: "table",
+          head: ["Site", "Price", "Free", "How long the link lasts"],
+          rows: [
+            ["Canva (canva.com)", "Free for individuals. Canva Pro is paid; the amount isn't on the pages we read.", "Designing an eCard from its templates with your own photos", "Not stated"],
+            ["Ethos (tryethos.io)", "$11.99 for one template, $17.99 for three, $29.99 for all, paid once. Photos and the full letter on The Letter: $8.99. [Pricing](/pricing)", "The Letter, as a short note of up to 500 characters with music and a small \"Made with Ethos\" footer", "Meant to be permanent"],
+            ["Forevermore (getforevermore.co)", "$10 Standard, $20 Premium, $30 Deluxe, per gift, paid once, plus tax where it applies", "Building the gift and watching it through before you pay", "Never expires"],
+            ["gifft.me", "Free, no subscription", "Its gift boxes and e-cards", "Not stated"],
+            ["GiftFeels (giftfeels.com)", "A one-time unlock for one gift, or Monthly for every gift. The amounts didn't load for us.", "Making and previewing a gift", "A one-time unlock adds \"90 more days on the link\""],
+            ["GiftsQR (giftsqr.com)", "Essential or Premium, paid once, priced by country. Amounts not shown.", "Building the page; it says there is no free preview link", "Essential: 30 days. Premium: lifetime."],
+            ["LovePage.io", "Free, or US$8.99 once per page for Lifetime Premium in the US, UK and EU", "Building, publishing and sharing a page", "Free: 48 hours. Premium: forever."],
+            ["Sendly (sendlycard.com)", "$3.99 once per card", "Building and previewing the whole card", "Not stated"],
+            ["SendVirtualGift (sendvirtualgift.com)", "Free. Its paid plans say \"coming soon\".", "Its instant gifts, with no sign-up", "Not stated; signing in saves cards \"forever\""],
+          ],
+        },
+        { type: "h2", text: "What you can put inside, and what it looks like" },
+        {
+          type: "table",
+          head: ["Site", "What it makes", "Photos", "Music", "Video or voice"],
+          rows: [
+            ["Canva", "eCards and video cards you design yourself, dragging and dropping onto its templates", "Your own, plus its stock images, some free and some paid", "A music library in Pro, for videos", "Video templates, such as Christmas videos"],
+            ["Ethos", "61 animated templates: letters, a bouquet built stem by stem, a scrapbook, scratch cards, fortune cookies and more", "None on the free short note; up to 20 with a paid option, depending on the template", "A music library, or a 30-second preview of a real song", "With any paid option: a voice message up to 60 seconds, and video clips on some templates"],
+            ["Forevermore", "31 animated worlds they move through, from a fair to a rooftop dinner", "Standard up to 12; Premium and Deluxe up to 30", "A song from YouTube; your own recording in Premium and Deluxe", "Premium and Deluxe: a voice note and up to 3 videos"],
+            ["gifft.me", "A surprise gift box around a photo, and e-cards", "One, yours or from its collection", "Not stated", "Not stated"],
+            ["GiftFeels", "40+ templates: a cake they blow out, a love letter, a jar of reasons, a time capsule, a scrapbook", "Several, on some templates", "Not stated for gifts; AI songs are sold separately", "Voice messages, listed among its paid features"],
+            ["GiftsQR", "32+ surprises: a scratch card, a star sky, a slot machine, a newspaper about you, a time capsule", "Essential up to 5; Premium unlimited", "Yes, on several surprises", "Video in its time capsule; a wall of voice messages from friends"],
+            ["LovePage.io", "A love page its AI lays out from your story in two designs to pick from: a newspaper, a streaming series, a photo album, a photo puzzle", "Yes; the number isn't stated", "Your song", "They can send video replies"],
+            ["Sendly", "Interactive cards for an occasion, with surprises they tap and unwrap", "Yes", "Not stated", "Video clips"],
+            ["SendVirtualGift", "A 3D gift box, a wax-sealed letter, a cake, a scratch card, a 3D rose and more", "Up to 3 per free gift", "Built-in music on its free 3D rose; your own MP3 is on a paid plan that isn't out yet", "Voice notes listed for a paid plan that isn't out yet"],
+          ],
+        },
+        { type: "h2", text: "Opening at a set time, privacy and languages" },
+        {
+          type: "table",
+          head: ["Site", "Opens at a set time", "Lock", "Languages"],
+          rows: [
+            ["Canva", "Not stated", "Not stated", "Not stated"],
+            ["Ethos", "Yes, with any paid option. You choose the time zone.", "Password, with any paid option", "English and Spanish"],
+            ["Forevermore", "Not stated; you send it when you like", "Says \"only they can open it\"; no password mentioned", "Not stated"],
+            ["gifft.me", "Not stated", "Not stated", "Not stated"],
+            ["GiftFeels", "Its time capsule stays \"locked until a future date\"; how you set the time isn't stated", "Private link, never indexed", "Not stated"],
+            ["GiftsQR", "Its time capsule opens on the date you choose; the time isn't stated", "A password-protected secret message", "Not stated"],
+            ["LovePage.io", "Not stated", "Password, with Premium", "English, Turkish and German"],
+            ["Sendly", "Not stated", "Optional passcode", "Not stated"],
+            ["SendVirtualGift", "Not stated", "A 4-digit PIN on its Lock Lovebox gift", "Several; its menu includes Indonesian, Vietnamese and Malay"],
+          ],
+        },
+        { type: "h2", text: "Each digital gift website in a few lines" },
+        { type: "h3", text: "Canva" },
+        {
+          type: "p",
+          text: "Not a gift maker but a design tool: you pick an eCard or video template, drag in your own photos and text, and send it by email or social media, or download it as an image or a PDF to print. It's free for individuals, with paid stock images and a Pro plan for the music library and premium templates. What it doesn't do is the opening: its pages mention no envelope to tap, no set time and no lock. Pick it if you want every detail your way and the card itself is the gift.",
+        },
+        { type: "h3", text: "Ethos" },
+        {
+          type: "p",
+          text: "Our site. It makes animated [digital gifts](/gifts) from 61 templates, and one is free: [The Letter](/templates/the-letter), as a short note of up to 500 characters with music. Its weak points: one paid template costs more than a Sendly card or a LovePage.io page, photos are paid even on The Letter, the free note carries a footer and can't be scheduled or locked, and it speaks only English and Spanish. Where it's strongest: a gift can open at midnight in their time zone, a paid template can be used again for every gift you make, and they can send a reaction or a gift back.",
+        },
+        {
+          type: "template",
+          slug: "bouquet",
+          note: "You build it stem by stem: roses, peonies, tulips, sunflowers, in the colours you pick. They watch it come together one flower at a time, then open the card tucked inside.",
+        },
+        { type: "h3", text: "Forevermore" },
+        {
+          type: "p",
+          text: "A small animated world they walk through, finding your photos one by one, with your letter addressed to them by name and a song playing the whole time. There are 31 worlds. Standard ($10) holds up to 12 photos; Premium ($20) adds a voice note, up to 30 photos and three videos; Deluxe ($30) is the same in its six biggest worlds. It never expires, comes with a printable keepsake, and a made-from-scratch world starts at $250 and takes about three weeks. Pick it for a big anniversary, if you can give it an evening.",
+        },
+        { type: "h3", text: "gifft.me" },
+        {
+          type: "p",
+          text: "Free virtual gifts: a surprise box wrapped around a photo, yours or one from its collection, with a personal message, plus e-cards for birthdays and Valentine's Day. Its pages don't mention music, scheduling or a lock. Good for a quick, light surprise. If you've used it and want more, our [gifft.me alternatives](/blog/gifft-me-alternatives) compare seven sites that make the same kind of gift.",
+        },
+        { type: "h3", text: "GiftFeels" },
+        {
+          type: "p",
+          text: "More than 40 templates, from a birthday cake they blow out to \"open when\" letters and a Valentine's question with a runaway \"no\" button. Making and previewing a gift is free. You pay once to send one gift or monthly to send them all; the one-time unlock gives a custom link, an alert when they open it and 90 more days on the link. It also sells AI portraits and songs, and has a couples app, Little Us. It suits someone who sends gifts often enough for a subscription to make sense.",
+        },
+        { type: "h3", text: "GiftsQR" },
+        {
+          type: "p",
+          text: "More than 32 surprises, many of them games: a scratch card with confetti, a slot machine of hearts, a star sky where each star holds a memory, a mixtape, a newspaper front page about you two, and a time capsule with a letter, photos and video that opens on a date you choose. Essential keeps the link up for 30 days with up to 5 photos; Premium never expires. If you're printing a QR code to slip into a card or a box, start here.",
+        },
+        { type: "h3", text: "LovePage.io" },
+        {
+          type: "p",
+          text: "You tell it the occasion, how long you've been together, a few photos and what you want them to read, and its AI builds two finished designs to choose from, such as a newspaper front page or a streaming-series page. It's free to publish, but a free page lasts 48 hours; Lifetime Premium (US$8.99 in the US, UK and EU, less in most other countries) keeps it for good and adds a password and a printable poster. Good for a love page tonight, and the free trial tells you whether it's worth paying for.",
+        },
+        { type: "h3", text: "Sendly" },
+        {
+          type: "p",
+          text: "Ready-made cards for an occasion that you fill with photos, video clips, messages and surprises they tap to open, with an optional passcode. Building and previewing are free; publishing the link is $3.99 once. It suits a birthday or thank-you card with more in it than a picture, at the lowest US price we could see among the paid sites here.",
+        },
+        { type: "h3", text: "SendVirtualGift" },
+        {
+          type: "p",
+          text: "Free animated gifts with no account: a 3D box with a ribbon to untie, a wax-sealed letter that cracks open, a cake with candles to blow out, a foil scratch card and a 3D rose in a glass dome, each with your message and up to three photos, sent as a link or QR code. Its fuller story pages with music and more photos are listed as \"coming soon\". Go here when it has to be free and it has to be now.",
+        },
+        { type: "h2", text: "Which digital gift website should you pick?" },
+        {
+          type: "list",
+          items: [
+            "**It has to be free:** SendVirtualGift or gifft.me for a quick surprise, Canva if you'd rather design it. Ethos's The Letter if a short note with music is enough: up to 500 characters, no photos, a small footer.",
+            "**You'll pay a little for more:** Sendly at $3.99 for a card with video, or LovePage.io at US$8.99 for a love page that stays up for good.",
+            "**It's a big anniversary:** Forevermore's Premium world with your voice and videos, or an Ethos [scrapbook](/templates/scrapbook) with polaroids, a letter and their song.",
+            "**It has to open at midnight on their birthday:** Ethos lets you pick the time and their time zone. GiftsQR and GiftFeels have time capsules that open on a date, but don't say how you set the hour.",
+            "**You're putting it in a card or under the tree:** GiftsQR is built around the QR code. Ethos and SendVirtualGift also give you one.",
+            "**It's a letter more than a gift:** read our [digital love letter websites compared](/blog/digital-love-letter-websites-compared), which checks nine letter sites.",
+          ],
+        },
+        { type: "h2", text: "Five things to check before you pay" },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**How long the link lasts.** Open the FAQ, not the home page. On these nine sites it runs from 48 hours to forever, and it's often the paid plan that buys the time.",
+            "**Whose midnight.** If they live in another time zone, a gift set for \"midnight\" can open at lunch. Look for a time zone setting, not just a date.",
+            "**What they see before it opens.** Open your own link on your phone in a private tab before you send it. That's what they'll see, including any footer or badge.",
+            "**Whether you can fix a typo.** Ethos, Forevermore and LovePage.io say you can edit after sending at the same link. If a site doesn't say, assume you can't.",
+            "**What it costs for the next gift.** A one-off price is cheaper for one gift; a reusable template or a bundle wins if there's a birthday and an anniversary coming.",
+          ],
+        },
+        {
+          type: "template",
+          slug: "scrapbook",
+          note: "Opens like a real scrapbook: your photos land as polaroids that develop, between washi tape and flowers, with a torn handwritten note, a typed letter from you and their song playing.",
+        },
+        { type: "h2", text: "What to put inside, whichever site you use" },
+        {
+          type: "p",
+          text: "The site matters less than the three things you put in. One photo they haven't seen in a while, not the one on your lock screen. One line about something only the two of you know. And a song that means something to both of you, even if it's a slightly embarrassing one. A gift with those in it works on any of the nine sites; one without them looks like a template whatever you pay.",
+        },
+        {
+          type: "quote",
+          text: "I found this photo from our first trip and I still remember you trying to read the map upside down. Happy birthday. I'd get lost with you again.",
+        },
+        {
+          type: "p",
+          text: "If you want to try it free first, [The Letter](/templates/the-letter) goes out free as a short note with a song, and the [digital gifts](/gifts) page shows what each kind of gift looks like when it opens.",
+        },
+      ],
+      faq: [
+        {
+          q: "Are there free digital gift websites?",
+          a: "Yes. SendVirtualGift makes free animated gifts with no account, gifft.me makes free gift boxes and e-cards, and Canva is free for designing your own eCard. LovePage.io lets you publish a free love page, but it stays live for 48 hours. Ethos has one free template, The Letter, as a short note of up to 500 characters with music and a small footer.",
+        },
+        {
+          q: "How long does a digital gift link last?",
+          a: "It depends on the site and the plan. On the pages we read, a free LovePage.io page lasts 48 hours, GiftsQR's Essential 30 days, and GiftFeels' one-time unlock adds 90 days. Forevermore, LovePage.io Premium and GiftsQR Premium say they never expire, and Ethos links are meant to be permanent.",
+        },
+        {
+          q: "Can I schedule a digital gift to open at midnight?",
+          a: "On some sites. Ethos lets a paid gift unlock at a time you set, in the time zone you choose, so it can open at midnight where they are. GiftFeels and GiftsQR have time capsules that open on a set date but don't say how the time is set. The other six sites' pages don't mention it.",
+        },
+        {
+          q: "Which digital gift websites let me add my voice?",
+          a: "Three of the nine, each on a paid option: Ethos adds a voice message of up to 60 seconds with any unlock, Forevermore a voice note in its Premium and Deluxe worlds, and GiftFeels lists voice messages among its paid features. GiftsQR's wall of voices collects voice messages from friends and family instead, and SendVirtualGift lists voice notes for a paid plan that isn't out yet.",
+        },
+        {
+          q: "Does the person need an app to open a digital gift?",
+          a: "None of the nine sites asks for one on the pages we read. Ethos, Forevermore, GiftFeels, Sendly and SendVirtualGift say plainly that the gift opens from a link with nothing to install. GiftFeels has a couples app, Little Us, but you don't need it to send or open a gift.",
+        },
+      ],
+    },
+    es: {
+      title: "Mejores páginas para hacer regalos digitales (2026)",
+      description: "Nueve páginas para hacer regalos digitales revisadas el 20 nov 2026: qué hace cada una, precio, qué es gratis, cuánto dura el enlace y si se puede programar.",
+      keyword: "mejores páginas para hacer regalos digitales",
+      lead: "Las mejores páginas para hacer regalos digitales dependen del regalo: Sendly para una tarjeta interactiva por 3,99 $, LovePage.io para una página de amor que puedes probar gratis, Forevermore para un mundo animado que no caduca, GiftsQR para un código QR dentro de una tarjeta, Canva para diseñarlo tú y SendVirtualGift si tiene que ser gratis. Aquí tienes nueve, revisadas en sus propias páginas el 20 de noviembre de 2026. Nosotros hacemos Ethos, una de las nueve, y sus puntos débiles también están en las tablas.",
+      takeaways: [
+        "Gratis: gifft.me, Canva, la nota corta de Ethos y SendVirtualGift, que no pide registro. LovePage.io también es gratis, pero la página gratis dura 48 horas.",
+        "El precio más bajo que vimos en EE. UU. para un regalo de pago: Sendly, 3,99 $ una vez por tarjeta.",
+        "Mira cuánto dura el enlace antes de pagar: de 48 horas a para siempre, según la página y el plan.",
+        "Solo tres de las nueve dicen que un regalo puede quedar cerrado hasta la fecha que elijas.",
+      ],
+      body: [
+        { type: "h2", text: "Cómo las hemos comparado" },
+        {
+          type: "p",
+          text: "Nosotros hacemos Ethos, una de las nueve páginas. Todo lo que contamos de las otras ocho sale de sus propias páginas de inicio y de precios, con sus preguntas frecuentes, tal como las leímos el 20 de noviembre de 2026. Nada sale de reseñas, de otras comparativas ni de respuestas de IA. Cuando una página no decía algo, o un precio no nos cargó, la tabla lo dice en vez de adivinarlo. La fila de Ethos sale de nuestros propios archivos de precios y plantillas, con sus puntos débiles.",
+        },
+        {
+          type: "p",
+          text: "Aquí un regalo digital es algo que haces para una persona y le mandas como enlace: una tarjeta animada, una carta, una página de amor, un pequeño mundo que recorrer. No una tarjeta regalo ni un paquete. Van por orden alfabético. Los precios de las demás están en dólares, tal como nos los enseñaron, y varias los cambian según el país; los de Ethos, en euros. JibJab también sale cuando se buscan páginas de regalos digitales, pero sus páginas no nos cargaron, así que no está en las tablas.",
+        },
+        { type: "h2", text: "Precio, qué es gratis y cuánto dura el enlace" },
+        {
+          type: "table",
+          head: ["Página", "Precio", "Gratis", "Cuánto dura el enlace"],
+          rows: [
+            ["Canva (canva.com)", "Gratis para particulares. Canva Pro es de pago; el importe no aparece en las páginas que leímos.", "Diseñar una tarjeta con sus plantillas y tus propias fotos", "No lo dice"],
+            ["Ethos (tryethos.io)", "9,99 € una plantilla, 14,99 € tres, 24,99 € todas, en un solo pago. Fotos y la carta completa en La carta: 7,49 €. [Precios](/pricing)", "La carta, como nota corta de hasta 500 caracteres, con música y un pequeño pie «Hecho con Ethos»", "Pensado para ser permanente"],
+            ["Forevermore (getforevermore.co)", "10 $ Standard, 20 $ Premium, 30 $ Deluxe, por regalo, en un solo pago, más impuestos donde se apliquen", "Crear el regalo y verlo entero antes de pagar", "No caduca"],
+            ["gifft.me", "Gratis, sin suscripción", "Sus cajas sorpresa y sus tarjetas", "No lo dice"],
+            ["GiftFeels (giftfeels.com)", "Un pago único por un regalo, o Monthly para todos. Los importes no nos cargaron.", "Hacer el regalo y verlo antes", "El pago único añade «90 días más al enlace»"],
+            ["GiftsQR (giftsqr.com)", "Essential o Premium, en un solo pago, con precio según el país. No muestra los importes.", "Crear la página; dice que no hay enlace de prueba gratis", "Essential: 30 días. Premium: para siempre."],
+            ["LovePage.io", "Gratis, o 8,99 US$ una vez por página por Lifetime Premium en EE. UU., Reino Unido y la UE", "Crear, publicar y compartir una página", "Gratis: 48 horas. Premium: para siempre."],
+            ["Sendly (sendlycard.com)", "3,99 $ una vez por tarjeta", "Crear y ver la tarjeta entera", "No lo dice"],
+            ["SendVirtualGift (sendvirtualgift.com)", "Gratis. Sus planes de pago dicen «próximamente».", "Sus regalos instantáneos, sin registro", "No lo dice; si inicias sesión, guarda las tarjetas «para siempre»"],
+          ],
+        },
+        { type: "h2", text: "Qué puedes meter dentro y cómo es" },
+        {
+          type: "table",
+          head: ["Página", "Qué hace", "Fotos", "Música", "Vídeo o voz"],
+          rows: [
+            ["Canva", "Tarjetas y vídeos que diseñas tú, arrastrando y soltando sobre sus plantillas", "Las tuyas, más sus imágenes de archivo, unas gratis y otras de pago", "Una biblioteca de música en Pro, para vídeos", "Plantillas de vídeo, como las de Navidad"],
+            ["Ethos", "61 plantillas animadas: cartas, un ramo que se monta flor a flor, un álbum de recortes, rasca y gana, galletas de la fortuna y más", "Ninguna en la nota corta gratis; hasta 20 con una opción de pago, según la plantilla", "Una biblioteca de música, o 30 segundos de una canción real", "Con cualquier opción de pago: un mensaje de voz de hasta 60 segundos, y vídeos en algunas plantillas"],
+            ["Forevermore", "31 mundos animados que se recorren, de una feria a una cena en una azotea", "Standard hasta 12; Premium y Deluxe hasta 30", "Una canción de YouTube; tu propia grabación en Premium y Deluxe", "Premium y Deluxe: una nota de voz y hasta 3 vídeos"],
+            ["gifft.me", "Una caja sorpresa con una foto dentro, y tarjetas", "Una, tuya o de su colección", "No lo dice", "No lo dice"],
+            ["GiftFeels", "Más de 40 plantillas: una tarta para soplar las velas, una carta, un bote de razones, una cápsula del tiempo, un álbum", "Varias, en algunas plantillas", "No lo dice para los regalos; vende aparte canciones con IA", "Mensajes de voz, entre sus funciones de pago"],
+            ["GiftsQR", "Más de 32 sorpresas: rasca y gana, un cielo de estrellas, una tragaperras, un periódico sobre vosotros, una cápsula del tiempo", "Essential hasta 5; Premium sin límite", "Sí, en varias sorpresas", "Vídeo en su cápsula del tiempo; un muro de mensajes de voz de amigos"],
+            ["LovePage.io", "Una página de amor que su IA monta con tu historia en dos diseños a elegir: un periódico, una serie, un álbum, un puzle de fotos", "Sí; no dice cuántas", "Tu canción", "Quien la recibe puede responder con vídeos"],
+            ["Sendly", "Tarjetas interactivas para cada ocasión, con sorpresas que se tocan y se desenvuelven", "Sí", "No lo dice", "Vídeos cortos"],
+            ["SendVirtualGift", "Una caja 3D, una carta lacrada, una tarta, un rasca y gana, una rosa 3D y más", "Hasta 3 por regalo gratis", "Música incluida en su rosa 3D gratis; tu propio MP3, en un plan de pago que aún no ha salido", "Notas de voz en un plan de pago que aún no ha salido"],
+          ],
+        },
+        { type: "h2", text: "Apertura a una hora, privacidad e idiomas" },
+        {
+          type: "table",
+          head: ["Página", "Se abre a una hora fijada", "Bloqueo", "Idiomas"],
+          rows: [
+            ["Canva", "No lo dice", "No lo dice", "No lo dice"],
+            ["Ethos", "Sí, con cualquier opción de pago. Eliges la zona horaria.", "Contraseña, con cualquier opción de pago", "Inglés y español"],
+            ["Forevermore", "No lo dice; lo mandas cuando quieras", "Dice que «solo esa persona puede abrirlo»; no habla de contraseña", "No lo dice"],
+            ["gifft.me", "No lo dice", "No lo dice", "No lo dice"],
+            ["GiftFeels", "Su cápsula del tiempo queda «cerrada hasta una fecha futura»; no dice cómo se fija la hora", "Enlace privado, nunca indexado", "No lo dice"],
+            ["GiftsQR", "Su cápsula del tiempo se abre en la fecha que elijas; no dice la hora", "Un mensaje secreto con contraseña", "No lo dice"],
+            ["LovePage.io", "No lo dice", "Contraseña, con Premium", "Inglés, turco y alemán"],
+            ["Sendly", "No lo dice", "Código de acceso opcional", "No lo dice"],
+            ["SendVirtualGift", "No lo dice", "Un PIN de 4 cifras en su regalo Lock Lovebox", "Varios; su menú incluye indonesio, vietnamita y malayo"],
+          ],
+        },
+        { type: "h2", text: "Cada página de regalos digitales en pocas líneas" },
+        { type: "h3", text: "Canva" },
+        {
+          type: "p",
+          text: "No es una página de regalos, sino una herramienta de diseño: eliges una plantilla de tarjeta o de vídeo, arrastras tus fotos y tu texto, y la mandas por correo o redes sociales, o la descargas como imagen o PDF para imprimirla. Es gratis para particulares, con imágenes de archivo de pago y un plan Pro para la biblioteca de música y las plantillas premium. Lo que no hace es la apertura: sus páginas no hablan de un sobre que tocar, de una hora fijada ni de un bloqueo. Elígela si quieres cada detalle a tu manera y la tarjeta en sí es el regalo.",
+        },
+        { type: "h3", text: "Ethos" },
+        {
+          type: "p",
+          text: "La nuestra. Hace [regalos digitales](/gifts) animados con 61 plantillas, y una es gratis: [La carta](/templates/the-letter), como nota corta de hasta 500 caracteres con música. Sus puntos débiles: una plantilla de pago cuesta más que una tarjeta de Sendly o una página de LovePage.io, las fotos son de pago incluso en La carta, la nota gratis lleva un pie y no se puede programar ni cerrar con contraseña, y solo está en inglés y español. Donde más destaca: un regalo puede abrirse a medianoche en su zona horaria, una plantilla de pago se puede usar en todos los regalos que hagas, y quien lo recibe puede mandarte una reacción o un regalo de vuelta.",
+        },
+        {
+          type: "template",
+          slug: "bouquet",
+          note: "Lo montas tallo a tallo: rosas, peonías, tulipanes, girasoles, en los colores que elijas. Lo verá formarse flor a flor y después abrirá la tarjeta escondida dentro.",
+        },
+        { type: "h3", text: "Forevermore" },
+        {
+          type: "p",
+          text: "Un pequeño mundo animado que esa persona recorre mientras encuentra tus fotos una a una, con tu carta dirigida a esa persona por su nombre y una canción sonando todo el rato. Hay 31 mundos. Standard (10 $) admite hasta 12 fotos; Premium (20 $) añade una nota de voz, hasta 30 fotos y tres vídeos; Deluxe (30 $) es lo mismo en sus seis mundos más grandes. No caduca, incluye un recuerdo para imprimir, y un mundo hecho desde cero empieza en 250 $ y tarda unas tres semanas. Elígelo para un aniversario grande, si puedes dedicarle una tarde.",
+        },
+        { type: "h3", text: "gifft.me" },
+        {
+          type: "p",
+          text: "Regalos virtuales gratis: una caja sorpresa con una foto dentro, tuya o de su colección, y un mensaje, además de tarjetas para cumpleaños y San Valentín. Sus páginas no hablan de música, de programarlo ni de contraseña. Va bien para una sorpresa rápida y ligera. Si ya la has usado y quieres algo más, nuestras [alternativas a gifft.me](/blog/gifft-me-alternatives) comparan siete páginas que hacen el mismo tipo de regalo.",
+        },
+        { type: "h3", text: "GiftFeels" },
+        {
+          type: "p",
+          text: "Más de 40 plantillas, de una tarta de cumpleaños para soplar las velas a cartas «ábrela cuando» y una pregunta de San Valentín con un botón de «no» que se escapa. Hacer el regalo y verlo antes es gratis. Pagas una vez para mandar un regalo o cada mes para mandarlos todos; el pago único da un enlace personalizado, un aviso cuando lo abre y 90 días más de enlace. También vende retratos y canciones con IA, y tiene una app para parejas, Little Us. Le va bien a quien regala tan a menudo que una suscripción le sale a cuenta.",
+        },
+        { type: "h3", text: "GiftsQR" },
+        {
+          type: "p",
+          text: "Más de 32 sorpresas, muchas de ellas juegos: un rasca y gana con confeti, una tragaperras de corazones, un cielo en el que cada estrella guarda un recuerdo, una cinta de casete, una portada de periódico sobre vosotros y una cápsula del tiempo con carta, fotos y vídeo que se abre en la fecha que elijas. Essential mantiene el enlace 30 días con hasta 5 fotos; Premium no caduca. Si vas a imprimir un código QR para meterlo en una tarjeta o una caja, empieza por aquí.",
+        },
+        { type: "h3", text: "LovePage.io" },
+        {
+          type: "p",
+          text: "Le cuentas la ocasión, cuánto tiempo lleváis juntos, unas fotos y lo que quieres que lea, y su IA monta dos diseños terminados para que elijas, como una portada de periódico o la página de una serie. Publicarla es gratis, pero la página gratis dura 48 horas; Lifetime Premium (8,99 US$ en EE. UU., Reino Unido y la UE, menos en la mayoría de los demás países) la mantiene para siempre y añade contraseña y un póster para imprimir. Va bien para una página de amor esta misma noche, y la prueba gratis te dice si merece la pena pagar.",
+        },
+        { type: "h3", text: "Sendly" },
+        {
+          type: "p",
+          text: "Tarjetas ya hechas para cada ocasión que llenas de fotos, vídeos, mensajes y sorpresas que se abren con un toque, con un código opcional. Crearla y verla es gratis; publicar el enlace cuesta 3,99 $ una vez. Va bien para una tarjeta de cumpleaños o de agradecimiento con algo más que una foto, y es el precio más bajo que vimos en EE. UU. entre las de pago de esta lista.",
+        },
+        { type: "h3", text: "SendVirtualGift" },
+        {
+          type: "p",
+          text: "Regalos animados gratis y sin cuenta: una caja 3D con un lazo que desatar, una carta lacrada que se rompe al abrirla, una tarta con velas que soplar, un rasca y gana dorado y una rosa 3D en una cúpula de cristal, cada uno con tu mensaje y hasta tres fotos, enviado como enlace o código QR. Sus páginas más completas, con música y más fotos, aparecen como «próximamente». Es la tuya cuando tiene que ser gratis y tiene que ser ya.",
+        },
+        { type: "h2", text: "¿Qué página de regalos digitales elegir?" },
+        {
+          type: "list",
+          items: [
+            "**Tiene que ser gratis:** SendVirtualGift o gifft.me para una sorpresa rápida, Canva si prefieres diseñarlo tú. La carta de Ethos si te basta una nota corta con música: hasta 500 caracteres, sin fotos y con un pie pequeño.",
+            "**No te importa pagar un poco:** Sendly por 3,99 $ para una tarjeta con vídeo, o LovePage.io por 8,99 US$ para una página de amor que se quede para siempre.",
+            "**Es un aniversario grande:** el mundo Premium de Forevermore con tu voz y vídeos, o un [álbum de recortes](/templates/scrapbook) de Ethos con polaroids, una carta y su canción.",
+            "**Tiene que abrirse a medianoche en su cumpleaños:** Ethos te deja elegir la hora y su zona horaria. GiftsQR y GiftFeels tienen cápsulas del tiempo que se abren en una fecha, pero no dicen cómo se fija la hora.",
+            "**Lo vas a meter en una tarjeta o bajo el árbol:** GiftsQR está pensada para el código QR. Ethos y SendVirtualGift también te dan uno.",
+            "**Es más una carta que un regalo:** lee nuestra [comparativa de páginas de cartas de amor digitales](/blog/digital-love-letter-websites-compared), que revisa nueve.",
+          ],
+        },
+        { type: "h2", text: "Cinco cosas que mirar antes de pagar" },
+        {
+          type: "list",
+          ordered: true,
+          items: [
+            "**Cuánto dura el enlace.** Abre las preguntas frecuentes, no la portada. En estas nueve va de 48 horas a para siempre, y muchas veces es el plan de pago el que compra el tiempo.",
+            "**La medianoche de quién.** Si vive en otra zona horaria, un regalo puesto para «medianoche» puede abrirse a la hora de comer. Busca un ajuste de zona horaria, no solo una fecha.",
+            "**Qué ve antes de abrirlo.** Abre tu propio enlace en el móvil en una pestaña privada antes de mandarlo. Eso es lo que verá, pie o sello incluidos.",
+            "**Si puedes corregir una errata.** Ethos, Forevermore y LovePage.io dicen que puedes editarlo después de enviarlo en el mismo enlace. Si una página no lo dice, cuenta con que no.",
+            "**Cuánto cuesta el siguiente regalo.** Un precio suelto sale más barato para un regalo; una plantilla que puedes reutilizar o un paquete ganan si se acercan un cumpleaños y un aniversario.",
+          ],
+        },
+        {
+          type: "template",
+          slug: "scrapbook",
+          note: "Se abre como un álbum de verdad: tus fotos caen como polaroids que se revelan, entre cinta washi y flores, con una nota rasgada escrita a mano, una carta tuya a máquina y su canción sonando.",
+        },
+        { type: "h2", text: "Qué meter dentro, uses la página que uses" },
+        {
+          type: "p",
+          text: "La página importa menos que las tres cosas que pongas. Una foto que hace tiempo que no ve, no la de tu pantalla de bloqueo. Una frase sobre algo que solo sabéis vosotros dos. Y una canción que signifique algo para los dos, aunque dé un poco de vergüenza. Un regalo con eso dentro funciona en cualquiera de las nueve; uno sin eso parece una plantilla pagues lo que pagues.",
+        },
+        {
+          type: "quote",
+          text: "He encontrado esta foto de nuestro primer viaje y todavía me acuerdo de ti leyendo el mapa al revés. Feliz cumpleaños. Me volvería a perder contigo.",
+        },
+        {
+          type: "p",
+          text: "Si quieres probar gratis primero, [La carta](/templates/the-letter) se manda gratis como nota corta con una canción, y la página de [regalos digitales](/gifts) enseña cómo se abre cada tipo de regalo.",
+        },
+      ],
+      faq: [
+        {
+          q: "¿Hay páginas para hacer regalos digitales gratis?",
+          a: "Sí. SendVirtualGift hace regalos animados gratis y sin cuenta, gifft.me hace cajas sorpresa y tarjetas gratis, y Canva es gratis para diseñar tu propia tarjeta. LovePage.io te deja publicar gratis una página de amor, pero dura 48 horas. Ethos tiene una plantilla gratis, La carta, como nota corta de hasta 500 caracteres, con música y un pie pequeño.",
+        },
+        {
+          q: "¿Cuánto dura el enlace de un regalo digital?",
+          a: "Depende de la página y del plan. En las páginas que leímos, una página gratis de LovePage.io dura 48 horas, Essential de GiftsQR 30 días y el pago único de GiftFeels añade 90 días. Forevermore, LovePage.io Premium y GiftsQR Premium dicen que no caducan, y los enlaces de Ethos están pensados para ser permanentes.",
+        },
+        {
+          q: "¿Puedo programar un regalo digital para que se abra a medianoche?",
+          a: "En algunas. Ethos deja que un regalo de pago se abra a la hora que elijas, en la zona horaria que elijas, así que puede abrirse a medianoche donde esté esa persona. GiftFeels y GiftsQR tienen cápsulas del tiempo que se abren en una fecha, pero no dicen cómo se fija la hora. Las otras seis no lo mencionan.",
+        },
+        {
+          q: "¿Qué páginas de regalos digitales dejan añadir tu voz?",
+          a: "Tres de las nueve, siempre de pago: Ethos añade un mensaje de voz de hasta 60 segundos con cualquier desbloqueo, Forevermore una nota de voz en sus mundos Premium y Deluxe, y GiftFeels incluye mensajes de voz entre sus funciones de pago. El muro de voces de GiftsQR reúne en su lugar mensajes de voz de amigos y familia, y SendVirtualGift anuncia notas de voz en un plan de pago que aún no ha salido.",
+        },
+        {
+          q: "¿Hace falta una app para abrir un regalo digital?",
+          a: "Ninguna de las nueve lo pide en las páginas que leímos. Ethos, Forevermore, GiftFeels, Sendly y SendVirtualGift dicen claramente que el regalo se abre desde un enlace sin instalar nada. GiftFeels tiene una app para parejas, Little Us, pero no hace falta para mandar ni para abrir un regalo.",
+        },
+      ],
+    },
+  },
+};

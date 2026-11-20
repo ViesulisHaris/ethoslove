@@ -1,0 +1,227 @@
+{
+  "slug": "digital-gift-websites-compared",
+  "keyword": "best digital gift websites",
+  "sources": [
+    {
+      "maker": "Canva",
+      "url": "https://www.canva.com/create/ecards/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Canva",
+      "url": "https://www.canva.com/pro/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Forevermore",
+      "url": "https://getforevermore.co/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Forevermore",
+      "url": "https://getforevermore.co/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "gifft.me",
+      "url": "https://gifft.me/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "GiftFeels",
+      "url": "https://giftfeels.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "GiftFeels",
+      "url": "https://giftfeels.com/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "GiftsQR",
+      "url": "https://giftsqr.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "GiftsQR",
+      "url": "https://giftsqr.com/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "LovePage.io",
+      "url": "https://lovepage.io/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "LovePage.io",
+      "url": "https://lovepage.io/pricing",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "Sendly",
+      "url": "https://www.sendlycard.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "SendVirtualGift",
+      "url": "https://sendvirtualgift.com/",
+      "checked": "2026-11-20"
+    },
+    {
+      "maker": "SendVirtualGift",
+      "url": "https://sendvirtualgift.com/pricing",
+      "checked": "2026-11-20"
+    }
+  ],
+  "sources_note": "WebFetch can't reach outside hosts from the routine's box, so each page was read with DataForSEO's on_page/content_parsing/live on 20 Nov 2026 (VOICE.md, Comparison posts). Canva's home, pricing and /cards pages returned only an unsupported-browser page, but /create/ecards/ and /pro/ loaded. JibJab (jibjab.com, /ecards, /faq, /plans) returned nothing, so it isn't in the tables. GiftFeels' pricing page loaded without its amounts, and GiftsQR's pricing page shows none.",
+  "rounds": [
+    {
+      "round": 1,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 9,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "One fix: the GiftFeels sentence ('to open when letters ... free to make and preview') read like a typo; quote \"open when\" and split the sentence. Polish: don't claim gifft.me needs no sign-up unless its pages say so; a line on the quickest sites; a shorter lead."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 4,
+            "voice": 10,
+            "spanish": 9
+          },
+          "overall": 5,
+          "dealbreakers": [
+            "A claim about Ethos that the code no longer supports, in both languages: since 19 Nov 2026 the free Letter is a short note of up to 500 characters with music and no photos, and Constellations has no free version (src/lib/gift/free-tier.ts; messages/en.json pricing.freeNoteShort). VOICE.md's 'Free' list is out of date.",
+            "Claims about other makers that the sources don't show: gifft.me 'no sign-up'/'animated'; SendVirtualGift lock and free-gift music marked 'Not stated' though its page shows a PIN-locked Lock Lovebox and music on the Eternal Rose; Forevermore lock 'Not stated' though it says 'Only they can open it'; GiftsQR 'the longest menu of games'; Sendly 'the least money among the paid sites'."
+          ],
+          "summary": "Rewrite every Ethos free-tier line (price table, photos cell, Ethos paragraph, 'free' pick, closing line, FAQ) to the short free Letter; fix the five maker claims; say the sources are home and pricing pages with their FAQ sections; Spanish: 'Le va bien a quien', and give the Spanish description the 'set opening times' the English has."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 8,
+            "search": 9
+          },
+          "overall": 8,
+          "dealbreakers": [],
+          "summary": "One fix: ChatGPT's live answer names Canva as the best free option and the top comparison includes it; re-open Canva's own pages and add it to every table, the sections and the picks, and make the counts nine. Polish: an at-a-glance block, a shorter lead, a voice FAQ, links to each maker."
+        }
+      ],
+      "applied": [
+        "Ethos's free tier corrected everywhere, both languages, to The Letter as a free short note of up to 500 characters with music and a footer; photos are paid and listed as a weak point; 'Make it special' named as photos and the full letter on The Letter ($8.99 / 7,49 €).",
+        "gifft.me no longer called no-sign-up or animated; SendVirtualGift lock (4-digit PIN on Lock Lovebox) and music (built-in on its free 3D rose) filled in; Forevermore lock says 'only they can open it', no password mentioned; GiftsQR now 'more than 32 surprises, many of them games'; Sendly 'the lowest price we could see'.",
+        "Canva added from canva.com/create/ecards/ and canva.com/pro/ (both loaded today): a row in each table, a section, a 'free' pick, the lead, takeaway and FAQ; counts now nine; JibJab still couldn't be read.",
+        "Method line: home and pricing pages, FAQ sections included.",
+        "GiftFeels sentence: \"open when\" in quotes and split in two.",
+        "Spanish: 'Le va bien a quien', description says 'si se puede programar', 'código de acceso', clearer Forevermore subject, cartas «ábrela cuando».",
+        "Added a FAQ: which sites let you add your voice (from the voice column).",
+        "Takeaway on the cheapest: 'Lowest US price we could see'.",
+        "One 'It suits' closer varied (gifft.me)."
+      ],
+      "rejected": [
+        "Search polish to link each maker's site: the post keeps its external links for sources a reader needs; maker names stay plain text, as in the two earlier comparisons.",
+        "Search polish for an at-a-glance block: the lead already gives the pick per need, and the 'Which ... should you pick?' list covers the rest."
+      ]
+    },
+    {
+      "round": 2,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 9,
+            "trust": 10
+          },
+          "overall": 9,
+          "dealbreakers": [],
+          "summary": "Round 1's GiftFeels fix confirmed. One fix: the free takeaway's commas made 'with no sign-up' read as covering gifft.me, and it left out Ethos's free short note. Polish: one dollar format, a 'quickest tonight' pick if sources show it, split the lead."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 8,
+            "voice": 10,
+            "spanish": 8
+          },
+          "overall": 8,
+          "dealbreakers": [
+            "The Sendly paragraph still said 'the lowest price we could see among the paid sites here' (both languages), though LovePage.io's pricing page shows US$4.99 and US$2.99 tiers; only the US price makes Sendly lowest."
+          ],
+          "summary": "Round 1's Ethos free-tier and maker fixes confirmed. Fixes: qualify the Sendly paragraph as the lowest US price; LovePage 'less in most other countries'; Spanish: the bouquet note's subject ('Lo verá formarse'), 'No te importa pagar un poco', 'Es la tuya cuando', and «» quotes throughout the Spanish."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only post that compares nine digital gift sites on link life, set opening time, voice, languages and apps, each from its own pages with a date, and says plainly when another site is the better pick; the page-one results are gift-card roundups and a maker ranking itself first."
+        }
+      ],
+      "applied": [
+        "Free takeaway (both languages): gifft.me, Canva, Ethos's short note, and SendVirtualGift, which needs no sign-up.",
+        "Sendly paragraph: 'the lowest US price we could see' (Spanish: 'el precio más bajo que vimos en EE. UU.').",
+        "LovePage.io: 'less in most other countries' / 'menos en la mayoría de los demás países'.",
+        "Spanish: bouquet note 'Lo verá formarse flor a flor y después abrirá la tarjeta'; '**No te importa pagar un poco:**'; 'Es la tuya cuando tiene que ser gratis y tiene que ser ya'; straight quotes changed to «» throughout the Spanish."
+      ],
+      "rejected": [
+        "Reader polish on one dollar format: '$' is the makers' own US price and 'US$' is how LovePage.io writes a price it sets in dollars for several countries; kept as each site shows it.",
+        "Search polish (at-a-glance block, shorter lead, SendWishOnline clause, maker links): polish only, and round two changes only what was asked."
+      ]
+    },
+    {
+      "round": 3,
+      "reviews": [
+        {
+          "reviewer": "reader",
+          "scores": {
+            "answers": 10,
+            "usable": 10,
+            "trust": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "For a phone reader choosing tonight, the same-column tables, the plain Ethos weak points, the picks by need and 'Five things to check before you pay' make it the page to send a friend over anything on page one."
+        },
+        {
+          "reviewer": "editor",
+          "scores": {
+            "accuracy": 10,
+            "voice": 10,
+            "spanish": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "The only page that checks nine digital gift sites on price, free tier, link lifespan, timed opening, voice, lock and languages from each maker's own pages on a stated date, every cell traceable to those pages, saying plainly where another site is the better pick."
+        },
+        {
+          "reviewer": "search",
+          "scores": {
+            "better": 10,
+            "search": 10
+          },
+          "overall": 10,
+          "dealbreakers": [],
+          "summary": "Page one is gift-card roundups, e-card listicles and vendor pages; this is a dated, sourced nine-site comparison on link life, set opening time, voice, languages and app needs that says when another site is the better pick."
+        }
+      ],
+      "applied": [],
+      "rejected": [],
+      "polish_not_applied": [
+        "Editor: 'esa persona' twice in the Spanish Forevermore sentence; 'tiene el precio más bajo' for Sendly in Spanish; 'dicen en sus páginas' in the Spanish takeaway; 'no set opening time' in the Canva paragraph.",
+        "Search: trim the English description to about 155 characters; an at-a-glance block; maker links.",
+        "Reader: a 'fastest tonight' pick; split the lead; a note on US$."
+      ]
+    }
+  ]
+}
