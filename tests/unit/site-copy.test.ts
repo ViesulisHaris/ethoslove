@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS } from "@/content/digital-gifts";
+import { FINDER_COPY, FINDER_FITS } from "@/content/finder";
 import { OCCASION_GUIDES } from "@/content/occasions";
 import { RECIPIENT_GUIDES } from "@/content/recipients";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
@@ -34,6 +35,7 @@ const SOURCES: Record<string, unknown> = {
   occasions: OCCASION_GUIDES,
   recipients: RECIPIENT_GUIDES,
   "digital gifts": { DIGITAL_GIFT_GUIDE, DIGITAL_GIFT_IDEAS },
+  "gift finder": { FINDER_COPY, FINDER_FITS },
   "template search entries": TEMPLATE_SEO,
   "template guides": TEMPLATE_GUIDES,
   "days-together counter": TOGETHER_GUIDE,
