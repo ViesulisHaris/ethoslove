@@ -30,7 +30,23 @@ are launch directories that give a followed link.
 | uneed.best, fazier.com, tinylaunch.com, microlaunch.net, betalist.com | Launch directories; check each one's link is followed before spending time | one each |
 | Where To Submit (peerpush.com/p/where-to-submit), Nick Launches Directory Finder (peerpush.com/p/nick-launches-directory-finder) | Lists of 150 to 260 more, with which ones give followed links | none |
 
+**The four to do first (20 Nov 2026).** When ChatGPT is asked for a site to make a digital love
+letter, its answers draw on small launch directories as well as the makers' own pages: the pictures
+in two of three answers that day came from saastool.site's "Digital Love Letters" listing and from
+openlaunch.ai's "Letters by Heart" (`docs/blog/ai-answers.md`). Ethos is on neither. None of the
+four is signed in in Chrome, and each needs an account, which is the owner's to make:
+
+| Site | What a listing costs | What it needs |
+|---|---|---|
+| openlaunch.ai | Free launch: $0, five slots a day, a queue of up to 180 days; the link is followed only for a day's top three. The $9 launch is a paid link: skip it | an account (Sign up), then "Submit Project" |
+| saastool.site | "Submit" in the menu; its pricing page shows only a $19.90 a month sponsor slot, so see after signing in whether a plain listing is free. If it is not, skip it | an account (Sign In) |
+| alternativeto.net | Free: add Ethos as an app, then as an alternative to the ones the table above names (DigiFlower, Smilebox, Jacquie Lawson, Paperless Post, Canva) | an account |
+| fazier.com | Free launch | an account (Join) |
+
 ### The copy
+
+Checked against the site on 20 Nov 2026. Two things changed since October and are easy to get wrong:
+the free Letter is a short note now, and Constellations is no longer free.
 
 **Name:** Ethos
 
@@ -39,35 +55,42 @@ are launch directories that give a followed link.
 **Short description (about 260 characters):**
 Make a digital gift in ten minutes: a love letter with a wax seal, a bouquet picked stem by stem, a
 scrapbook, a little game. Your photos, your words and their song, sent as a link or a QR code and
-opened on their phone. Two templates are free.
+opened on their phone. A short letter is free to send.
 
 **Long description:**
 Ethos turns your photos, your words and a song into a gift that opens like a story on their phone.
-There are 54 animated templates, from a wax-sealed love letter and a digital bouquet to a
+There are 61 animated templates, from a wax-sealed love letter and a digital bouquet to a
 newspaper front page about them, a night sky made of your photos and a jar of 100 reasons you love
 them. Every one has a live demo. You make it in the browser in about ten minutes and send a link
-or print a QR code; they need no app and no account. The Letter and Constellations are free; each
-other template is a one-time payment, with no subscription. In English and Spanish. Made in Riga.
+or print a QR code; they need no app and no account. The Letter is free to send as a short note
+with music; every other template, and a letter with photos, is a one-time payment, with no
+subscription. In English and Spanish. Made in Riga by SIA "MIGLAI" (https://tryethos.io/about).
+
+**One line for a "digital love letter" listing:** A love letter they open like a real one: a wax
+seal, your words in handwriting and your song, sent as a link. Free as a short note.
 
 **Categories / tags:** digital gifts, virtual gifts, e-cards, love letters, greeting cards,
 relationships, long distance, gift ideas
 
-**Links:** https://tryethos.io · gallery https://tryethos.io/templates · free one
-https://tryethos.io/templates/the-letter
+**Links:** https://tryethos.io · gallery https://tryethos.io/templates · the letter
+https://tryethos.io/templates/the-letter · who makes it https://tryethos.io/about · in Spanish
+https://tryethos.io/es · the letter in Portuguese https://tryethos.io/pt/carta-digital
 
-**Pricing:** freemium. Free: The Letter and Constellations. Paid: one template forever from €9.99 /
-$11.99, every template €24.99 / $29.99.
+**Pricing:** freemium. Free: The Letter as a short note (up to 500 characters, with music). Paid
+once, no subscription: one template €9.99 / $11.99 / £8.99; every template €24.99 / $29.99 / £21.99;
+photos and a long letter on The Letter €7.49 / $8.99 / £6.49.
 
 **Images:** the template posters in `public/templates/<slug>/poster.jpg` (1170 × 1800, the 2:3
 shape Pinterest and most galleries want): bouquet, the-letter, jar-of-reasons, constellations,
 scratch-card, museum. The short videos in `public/templates/<slug>/preview.webm` work as a
 Product Hunt gallery video.
 
-**Product Hunt first comment (from the maker):**
-Hi Product Hunt! A text feels too small and a parcel takes a week, so we made the thing in between:
-a gift made of your own photos, words and song that opens like a little story on their phone.
-Fifty-four templates, two free, no app for them to install. I'd love to hear which one you'd send
-first, and what's missing.
+**The maker's first comment** (Product Hunt, Open Launch and Fazier ask for one). A draft with
+today's facts; it lands best in the owner's own words, so change anything in it but the numbers:
+Hi! A text feels too small and a parcel takes a week, so we made the thing in between: a gift made
+of your own photos, words and song that opens like a little story on their phone. Sixty-one
+templates, a short letter free to send, no app for them to install. I'd love to hear which one
+you'd send first, and what's missing.
 
 ## 2. Pitches (Claude drafts; sent from the owner's email only with a yes for each)
 
@@ -95,7 +118,7 @@ One short email each, with a free code if they want to try a paid template.
 > Ethos (tryethos.io) turns someone's photos, words and a song into a little animated gift that
 > opens on the recipient's phone: a wax-sealed love letter, a bouquet you build stem by stem, a jar
 > of 100 reasons, a newspaper front page about them. It takes about ten minutes, arrives
-> instantly, and two of the 54 templates are free. Here's one to open:
+> instantly, and a short letter is free to send. Here's one to open:
 > https://tryethos.io/demo/bouquet
 >
 > Happy to send a code so you can try any paid template, or answer anything.
@@ -105,10 +128,13 @@ One short email each, with a free code if they want to try a paid template.
 ## 3. Pinterest
 
 Pinterest ranks in Google for "digital gift ideas" and "virtual gift ideas for boyfriend". Its pin
-links don't pass ranking credit, but they bring people who are choosing a gift right now. The
-template posters are the right shape already. Best from a separate **Ethos business account**
-(the owner creates it); then Claude can make a board per occasion and a pin per template, each
-linking to its template page.
+links don't pass ranking credit, but they bring people who are choosing a gift right now.
+
+Done. The Ethos business account (@tryethosgifts) has existed since 28 Oct 2026 and pins by itself
+every day since 9 Nov (the assets repo's `pins/README.md`). In its first 30 days its 153 pins were
+shown 1,270 times and saved once: every pin was a headline over a gift's cover. Since 20 Nov a
+blog post's pin is a list of the post's own lines, a template's is its poster in a phone, and there
+are 26 boards, nine of them for what the posts are about. Read the numbers again around 20 Dec.
 
 ## 4. Questions from journalists
 
@@ -123,3 +149,8 @@ in the owner's name; Claude can draft the answers.
 | 13 Nov 2026 | stampgoose.com, "The best ways to send a digital letter in 2026" (Jake Powney, who makes Stampgoose; followed links; ChatGPT reads it) | Pitch from support@secuora.xyz to hello@stampgoose.com: add The Letter (free, 10 photos and a song; $8.99 extras), with their table's three lines and the demo. A code for the extras offered, not made. | https://stampgoose.com/articles/comparisons/best-ways-to-send-a-digital-letter |
 | 13 Nov 2026 | birthdaywebsite.app, "Best Birthday Website Makers in 2026: An Honest Comparison" (by the maker of Birthday Website Maker; followed links) | Pitch from support@secuora.xyz to support@birthdaywebsite.app, answering their criteria: Birthday Cinema, Midnight Countdown, scheduled unlock in their time zone, password with paid templates, permanent links, link or QR. A code offered, not made. | https://birthdaywebsite.app/blog/best-birthday-website-makers-2026 |
 | 13 Nov 2026 | peekwire.com, "5 Digital Open-When Letter Services Worth Knowing in the US" (no author; followed links) | Pitch from support@secuora.xyz to editorial@peekwire.com, answering their four factors: scheduled unlock in their time zone and a password, Midnight Countdown, the 100-note jar, prices, link or QR with no app. A code offered, not made. | https://peekwire.com/article/5-digital-open-when-letter-services-worth-knowing-in-the-us |
+
+The Stampgoose pitch of 13 Nov described The Letter as it was then: free with 10 photos and a
+song. Since 19 Nov the free Letter is a short note (up to 500 characters, with music, no photos),
+and photos and a long letter come with the one-time "Make it special". If Stampgoose answers, the
+reply has to say so before they print it.
