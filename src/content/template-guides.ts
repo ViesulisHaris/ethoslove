@@ -365,7 +365,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "An anniversary letter that starts where you started",
-            body: "Drop the “Dear Ana,” it would start with. The greeting takes 60 characters, so begin where the two of you began, with “To the stranger who took my umbrella,” and let the letter tell what happened next, a year to a paragraph. Close the loop with “Still sharing it,” in the sign-off, which sits right above your name. On the cover, make the title the date you met.",
+            body: "Leave “Dear Ana,” for another letter. The greeting has room for 60 characters, so begin where the two of you began, with “To the stranger who took my umbrella,” and tell what happened next, a year to a paragraph. Close the loop with “Still sharing it,” in the sign-off, which sits right above your name. On the cover, make the title the date you met.",
             borrow: [{ field: "fields.greeting", line: "To the stranger who took my umbrella," }, { field: "fields.signOff", line: "Still sharing it," }],
           },
           {
@@ -375,7 +375,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A long-distance letter that says when",
-            body: "Set the countdown to the minute you land and write its label yourself; it takes 80 characters: “Until I’m the one ringing your doorbell”. The date at the top of the page is the day they open it, so write “by the time you read this”, never “today”. Hide the real news in the P.S., which can be set to open under a held finger: “I moved the flight. I land Thursday, not Saturday.”",
+            body: "Set the countdown to the minute you land and write its label yourself, in up to 80 characters: “Until I’m the one ringing your doorbell”. The date at the top of the page is the day they open it, so write “by the time you read this”, never “today”. Hide the real news in the P.S., which can be set to open under a held finger: “I moved the flight. I land Thursday, not Saturday.”",
             borrow: [{ field: "countdown.label", line: "Until I’m the one ringing your doorbell" }, { field: "surprise.text", line: "I moved the flight. I land Thursday, not Saturday." }],
           },
           {
@@ -384,13 +384,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: [{ field: "fields.sealInitial", line: "10" }, { field: "title", line: "Ten years, and I’d still write to you" }, { field: "fields.signOff", line: "Same again, please," }],
           },
           {
-            heading: "A letter to open in the car park",
-            body: "For the morning of an interview, an exam or a first day. The title is the line on the cover, so make it an instruction: “Open before you walk in”. Write only what they already know and forget when nervous, in short sentences, because the words write themselves out as they read. Let the sign-off say where you’ll be: “Outside at five, with chips,” and then your name.",
-            borrow: [{ field: "title", line: "Open before you walk in" }, { field: "fields.signOff", line: "Outside at five, with chips," }],
+            heading: "A letter to open outside the building",
+            body: "For the morning of an interview, an exam or a first day. The title is the line on the cover, so make it an instruction: “Open before you walk in”. Write only what they already know and forget when nervous, in short sentences, because the words write themselves out as they read. Use the sign-off to say where you’ll be: “Outside at five, with ice cream,” and then your name.",
+            borrow: [{ field: "title", line: "Open before you walk in" }, { field: "fields.signOff", line: "Outside at five, with ice cream," }],
           },
           {
             heading: "A letter from the dog",
-            body: "The name under the letter doesn’t have to be yours. For Mother’s Day, Father’s Day or the first week someone is away, sign it as the one who misses them loudest. Open with “To the one with the treats,” and sign off “Yours, mostly at dinner time,” over a B for Biscuit pressed into the wax. Write it the way the dog would: no paragraphs, a lot about the postman.",
+            body: "For Mother’s Day, Father’s Day or the first week someone is away, put another name under the letter: the one who misses them loudest. Open with “To the one with the treats,” and sign off “Yours, mostly at dinner time,” over a B for Biscuit pressed into the wax. Write it the way the dog would: no paragraphs, a lot about the postman.",
             borrow: [{ field: "fields.greeting", line: "To the one with the treats," }, { field: "fields.signOff", line: "Yours, mostly at dinner time," }],
           },
         ],
@@ -441,9 +441,9 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: [{ field: "fields.sealInitial", line: "10" }, { field: "title", line: "Diez años y te seguiría escribiendo" }, { field: "fields.signOff", line: "Otros diez, por favor," }],
           },
           {
-            heading: "Una carta para abrir en el aparcamiento",
-            body: "Para la mañana de una entrevista, un examen o un primer día. El título es la frase de la portada, así que conviértelo en una instrucción: «Ábrela antes de entrar». Escribe solo lo que esa persona ya sabe y con los nervios se le olvida, en frases cortas, porque las palabras se van escribiendo solas mientras lee. Y que la despedida diga dónde vas a estar: «Fuera a las cinco, con patatas,» y, debajo, tu nombre.",
-            borrow: [{ field: "title", line: "Ábrela antes de entrar" }, { field: "fields.signOff", line: "Fuera a las cinco, con patatas," }],
+            heading: "Una carta para abrir en la puerta",
+            body: "Para la mañana de una entrevista, un examen o un primer día. El título es la frase de la portada, así que conviértelo en una instrucción: «Ábrela antes de entrar». Escribe solo lo que esa persona ya sabe y con los nervios se le olvida, en frases cortas, porque las palabras se van escribiendo solas mientras lee. Y que la despedida diga dónde vas a estar: «Fuera a las cinco, con churros,» y, debajo, tu nombre.",
+            borrow: [{ field: "title", line: "Ábrela antes de entrar" }, { field: "fields.signOff", line: "Fuera a las cinco, con churros," }],
           },
           {
             heading: "Una carta de parte del perro",
@@ -482,7 +482,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A big birthday, billed like a premiere",
-            body: "The sign over the curtain takes 40 characters of your own. Leave it and it reads “Now showing: Ana turns 30”; write it and it can read “30 years in the making: Ana”. Enter the age too: past twelve, the number stands on the cake as candles of its own, and it is printed on the stub of their ticket.",
+            body: "The marquee line, the sign over the curtain, holds 40 characters of your own. Leave it and it reads “Now showing: Ana turns 30”; write it and it can read “30 years in the making: Ana”. Enter the age too: past twelve, the number stands on the cake as a topper, over six candles, and it is printed on the stub of their ticket.",
             borrow: [{ field: "fields.marquee", line: "30 years in the making: Ana" }],
           },
           {
@@ -492,7 +492,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A seventh birthday, with seven candles",
-            body: "Up to twelve, the cake carries one candle for every year, so a seven-year-old counts seven and blows out seven. Set the candles to swipe only and nobody has to explain a microphone permission to a child; a swipe up is the blow. For grandparents sending from far away, let the sign do the shouting: “Now showing: Leo is SEVEN”.",
+            body: "Up to twelve, the cake carries one candle for every year, so a seven-year-old counts seven and blows out seven. Set the candles to swipe only and nobody has to explain a microphone permission to a child; a swipe up is the blow. For grandparents sending from far away, the sign can do the shouting: “Now showing: Leo is SEVEN”.",
             borrow: [{ field: "fields.marquee", line: "Now showing: Leo is SEVEN" }],
           },
           {
@@ -519,7 +519,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "How many candles are on the cake?",
-          a: "One for each year up to twelve. From thirteen on, the age stands on top as number candles, with six small ones on the tier below. Leave the age empty and the cake gets five.",
+          a: "One for each year up to twelve. From thirteen on, the age stands on top as a cake topper, with six candles on the tier below. Leave the age empty and the cake gets five.",
         },
         {
           q: "What happens if they open it before their birthday?",
@@ -537,7 +537,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un cumpleaños redondo, anunciado como un estreno",
-            body: "El cartel luminoso sobre el telón admite 40 caracteres tuyos. Si lo dejas vacío pone «Hoy: Ana cumple 30»; si lo escribes puede poner «30 años de rodaje: Ana». Indica también la edad: a partir de trece, el número se planta sobre la tarta con velas propias y sale impreso en el resguardo de su entrada.",
+            body: "La marquesina, el cartel luminoso sobre el telón, admite 40 caracteres tuyos. Si la dejas vacía pone «Hoy: Ana cumple 30»; si la escribes puede poner «30 años de rodaje: Ana». Indica también la edad: a partir de trece, el número va en un adorno sobre la tarta, con seis velas debajo, y sale impreso en el resguardo de su entrada.",
             borrow: [{ field: "fields.marquee", line: "30 años de rodaje: Ana" }],
           },
           {
@@ -557,7 +557,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un cumpleaños al que no llegas",
-            body: "Si estás en otra ciudad, que apague las velas de verdad: toca «Usar el micrófono», sopla al móvil y las llamas se van apagando de pocas en pocas, como en una tarta. Debajo de tu carta, pon la cuenta atrás hasta tu próxima visita y rotúlala «Hasta que lleve la tarta de verdad».",
+            body: "Si estás en otra ciudad, que apague las velas de verdad: toca «Usar el micrófono», sopla al móvil y las llamas se van apagando unas pocas cada vez, como en una tarta. Debajo de tu carta, pon la cuenta atrás hasta tu próxima visita y rotúlala «Hasta que lleve la tarta de verdad».",
             borrow: [{ field: "countdown.label", line: "Hasta que lleve la tarta de verdad" }],
           },
           {
@@ -574,7 +574,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Cuántas velas lleva la tarta?",
-          a: "Una por año hasta los doce. A partir de trece, la edad va arriba en velas con forma de número y en el piso de abajo quedan seis pequeñas. Si no indicas la edad, la tarta lleva cinco.",
+          a: "Una por año hasta los doce. A partir de trece, la edad va arriba en un adorno y en el piso de abajo quedan seis velas. Si no indicas la edad, la tarta lleva cinco.",
         },
         {
           q: "¿Qué pasa si abren la tarjeta antes del cumpleaños?",
@@ -595,7 +595,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "One star for every city",
-            body: "Give each place you’ve been together a star, in the order you went, and caption the photo with the place and the hour: “Porto, the bridge at 2 a.m.” The line that appears when the last star is found takes 120 characters, so let it count them: “Six cities so far. You pick the seventh.”",
+            body: "Give each place you’ve been together a star, in the order you went, and caption the photo with the place and the hour: “Porto, the bridge at 2 a.m.” The line that appears when the last star is found has 120 characters to add them up in: “Six cities so far. You pick the seventh.”",
             borrow: [{ field: "caption", line: "Porto, the bridge at 2 a.m." }, { field: "fields.finalLine", line: "Six cities so far. You pick the seventh." }],
           },
           {
@@ -609,9 +609,9 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: [{ field: "caption", line: "You let go of the saddle and didn’t tell me." }],
           },
           {
-            heading: "The story told backwards",
-            body: "The constellation is drawn through the stars in the order of your photos, each one joined to the next as it is found. So put last week first and the day you met last, and let the captions count down. The final star is the oldest photo you have of the two of you: “And this is where it started.”",
-            borrow: [{ field: "caption", line: "And this is where it started." }],
+            heading: "An anniversary sky that reads in any order",
+            body: "Any star can be opened first, so a story told in stars has to make sense from wherever they start. Give every caption its own time, the way you’d write on the back of a print: “Last week. You, asleep on the train.” on the newest photo and “Day one. This is where it started.” on the oldest. The order of your photos decides which stars the lines join, each to the one before it and the one after.",
+            borrow: [{ field: "caption", line: "Last week. You, asleep on the train." }, { field: "caption", line: "Day one. This is where it started." }],
           },
           {
             heading: "The same sky, two time zones",
@@ -633,7 +633,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "How many photos does a night sky gift need?",
-          a: "Between 3 and 12. Each photo becomes one star, and the constellation is drawn through them in the order you put them, so arrange them like a story.",
+          a: "Between 3 and 12. Each photo becomes one star. The order you put them in decides which stars the lines join, each to the one before it and the one after. It is not the order they are read in: any star can be opened first.",
         },
         {
           q: "Do they have to find the stars in order?",
@@ -651,7 +651,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Una estrella por cada ciudad",
-            body: "Dale una estrella a cada sitio en el que habéis estado, en el orden en que fuisteis, y pon en el pie el lugar y la hora: «Oporto, el puente a las 2 de la mañana». La frase que aparece cuando se encuentra la última estrella admite 120 caracteres, así que deja que las cuente: «Seis ciudades por ahora. La séptima la eliges tú.»",
+            body: "Dale una estrella a cada sitio en el que habéis estado, en el orden en que fuisteis, y pon en el pie el lugar y la hora: «Oporto, el puente a las 2 de la mañana». La frase que aparece cuando se encuentra la última estrella admite 120 caracteres, de sobra para hacer la cuenta: «Seis ciudades por ahora. La séptima la eliges tú.»",
             borrow: [{ field: "caption", line: "Oporto, el puente a las 2 de la mañana" }, { field: "fields.finalLine", line: "Seis ciudades por ahora. La séptima la eliges tú." }],
           },
           {
@@ -665,9 +665,9 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: [{ field: "caption", line: "Soltaste el sillín y no me avisaste." }],
           },
           {
-            heading: "La historia contada al revés",
-            body: "La constelación se traza de estrella en estrella en el orden de tus fotos, y cada una se une a la siguiente según las van encontrando. Así que pon primero la semana pasada y al final el día en que os conocisteis, y que los pies vayan hacia atrás. La última estrella es la foto más antigua que tengáis de los dos: «Y aquí empezó todo.»",
-            borrow: [{ field: "caption", line: "Y aquí empezó todo." }],
+            heading: "Un cielo de aniversario que se lee en cualquier orden",
+            body: "Se puede abrir primero cualquier estrella, así que una historia contada con estrellas tiene que entenderse empiece por donde empiece. Pon en cada pie su momento, como se escribe detrás de una foto en papel: «La semana pasada. Tú, durmiendo en el tren.» en la más reciente y «El primer día. Aquí empezó todo.» en la más antigua. El orden de tus fotos decide qué estrellas unen las líneas: cada una, con la anterior y con la siguiente.",
+            borrow: [{ field: "caption", line: "La semana pasada. Tú, durmiendo en el tren." }, { field: "caption", line: "El primer día. Aquí empezó todo." }],
           },
           {
             heading: "El mismo cielo, dos husos horarios",
@@ -689,7 +689,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Cuántas fotos necesita un cielo estrellado de regalo?",
-          a: "Entre 3 y 12. Cada foto se convierte en una estrella y la constelación se traza por ellas en el orden en que las pones, así que ordénalas como una historia.",
+          a: "Entre 3 y 12. Cada foto se convierte en una estrella. El orden en que las pones decide qué estrellas unen las líneas, cada una con la anterior y con la siguiente. No es el orden en que se leen: se puede abrir primero cualquiera.",
         },
         {
           q: "¿Hay que encontrar las estrellas en orden?",
@@ -710,17 +710,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "The name only you call them",
-            body: "The headline is cut out of newspaper letters, one word to a row, and takes 16 characters. It says “my person” if you leave it; “my plus one” is better, and the nickname nobody else is allowed to use is better still. Three words at most, because each gets a row of its own.",
+            body: "On a first Valentine’s together, “my love” can still feel like too much. The headline is cut out of newspaper letters, one word to a row, with room for 16 characters. It says “my person” if you leave it; “my plus one” is better, and the nickname nobody else is allowed to use is better still. Three words at most, because each gets a row of its own.",
             borrow: [{ field: "fields.headline", line: "my plus one" }],
           },
           {
             heading: "Lines written like your song",
-            body: "The card under the first photo is laid out like a lyric card: your song’s title on top, your first photo as its cover, then up to 220 characters of your own. Write the verse that song is missing: “you put your cold feet on me in January and I have never once moved away.” Pen marks land on parts of it by themselves, so short clauses work best.",
+            body: "Send it on the anniversary of the night that song was playing. The card under the first photo is laid out like a lyric card: your song’s title on top, your first photo as its cover, then up to 220 characters of your own. Write the verse the song is missing: “you put your cold feet on me in January and I have never once moved away.” Pen marks land on parts of it by themselves, so short clauses work best.",
             borrow: [{ field: "fields.lines", line: "you put your cold feet on me in January and I have never once moved away." }],
           },
           {
             heading: "One word for a first anniversary",
-            body: "The second polaroid carries a single word in script where its caption would be, up to 10 characters, “Love” unless you change it. For a first anniversary, try “Year one”; for moving in together, “Home”. That photo’s own caption won’t show, so put the photos whose captions matter first and third.",
+            body: "The second polaroid carries a single word in script where its caption would be, up to 10 characters, “Love” unless you change it. For a first anniversary, try “Year one”; for moving in together, “Home”. That photo’s caption shows only when the photo is tapped open, so put the photos whose captions matter first and third.",
             borrow: [{ field: "fields.word", line: "Year one" }, { field: "fields.word", line: "Home" }],
           },
           {
@@ -730,7 +730,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A card for the group chat, not a partner",
-            body: "It doesn’t have to be red, or romantic. There are ten pages to choose from, lilac, sage, baby blue and noir among them. Send one to your friends on 13 February with “my girls” in the cut-out letters, “Always” on the second photo, and nine photos, the most the page takes.",
+            body: "There are ten pages to choose from, lilac, sage, baby blue and noir among them, for a card that isn’t a valentine. Send one to your friends on Galentine’s, 13 February, with “my girls” in the cut-out letters, “Always” on the second photo, and nine photos, the most the page takes.",
             borrow: [{ field: "fields.headline", line: "my girls" }, { field: "fields.word", line: "Always" }],
           },
           {
@@ -761,17 +761,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "El nombre que solo usas tú",
-            body: "El titular va en letras recortadas de periódico, una palabra por fila, y admite 16 caracteres. Si lo dejas vacío pone «mi persona»; «mi peor idea» es mejor, y el mote que nadie más puede usar, mejor todavía. Tres palabras como mucho, porque cada una ocupa su fila.",
+            body: "En un primer San Valentín, «mi amor» todavía puede sonar a demasiado. El titular va en letras recortadas de periódico, una palabra por fila, y admite 16 caracteres. Si lo dejas vacío pone «mi persona»; «mi peor idea» es mejor, y el mote que nadie más puede usar, mejor todavía. Tres palabras como mucho, porque cada una ocupa su fila.",
             borrow: [{ field: "fields.headline", line: "mi peor idea" }],
           },
           {
             heading: "Unas frases escritas como vuestra canción",
-            body: "La tarjeta de debajo de la primera foto está montada como una tarjeta de letra de canción: arriba el título de la vuestra, tu primera foto como portada y después hasta 220 caracteres tuyos. Escribe la estrofa que le falta: «me pones los pies helados encima en enero y no me he apartado ni una sola vez.» Los trazos de boli caen solos sobre algunas partes, así que funcionan mejor las frases cortas.",
+            body: "Mándala en el aniversario de la noche en que sonaba esa canción. La tarjeta de debajo de la primera foto está montada como la letra de una canción impresa: arriba el título de la vuestra, tu primera foto como portada y después hasta 220 caracteres tuyos. Escribe la estrofa que le falta: «me pones los pies helados encima en enero y no me he apartado ni una sola vez.» Los trazos de boli caen solos sobre algunas partes, así que funcionan mejor las frases cortas.",
             borrow: [{ field: "fields.lines", line: "me pones los pies helados encima en enero y no me he apartado ni una sola vez." }],
           },
           {
             heading: "Una palabra para el primer aniversario",
-            body: "La segunda polaroid lleva una sola palabra en cursiva donde iría su pie, de hasta 10 caracteres: «Amor», si no la cambias. Para un primer aniversario, prueba «Año uno»; para estrenar casa juntos, «Hogar». El pie de esa foto no se ve, así que pon en primer y tercer lugar las fotos cuyos pies importan.",
+            body: "La segunda polaroid lleva una sola palabra en cursiva donde iría su pie, de hasta 10 caracteres: «Amor», si no la cambias. Para un primer aniversario, prueba «Año uno»; para estrenar casa juntos, «Hogar». El pie de esa foto solo se ve al tocarla para abrirla, así que pon en primer y tercer lugar las fotos cuyos pies importan.",
             borrow: [{ field: "fields.word", line: "Año uno" }, { field: "fields.word", line: "Hogar" }],
           },
           {
@@ -781,7 +781,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una tarjeta para tu grupo, no para tu pareja",
-            body: "No tiene por qué ser roja ni romántica. Hay diez páginas para elegir, entre ellas lila, salvia, azul bebé y noir. Mándasela a tu gente el 14 de febrero con «mi gente» en las letras recortadas, «Siempre» en la segunda foto y nueve fotos, el máximo que admite la página.",
+            body: "No tiene por qué ser roja ni romántica. Hay diez páginas para elegir, entre ellas lila, salvia, azul bebé y noir. Mándasela a tu gente el 14 de febrero, que en muchos países es también el día de la amistad, con «mi gente» en las letras recortadas, «Siempre» en la segunda foto y nueve fotos, el máximo que admite la página.",
             borrow: [{ field: "fields.headline", line: "mi gente" }, { field: "fields.word", line: "Siempre" }],
           },
           {
@@ -830,17 +830,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Photos, entered as evidence",
-            body: "Up to six photos go in above your letter, tagged Exhibit A to F. Each shows one line of its caption on the card and the whole of it when tapped, so write them like labels on an evidence bag: “the hoodie in question, on the accused”. The worse the photo, the stronger the case.",
+            body: "Somebody keeps taking your hoodies, and their birthday is coming. Up to six photos go in above your letter, tagged Exhibit A to F. Each shows one line of its caption on the card and the whole of it when tapped, so write them like labels on an evidence bag: “the hoodie in question, on the accused”. The worse the photo, the stronger the case.",
             borrow: [{ field: "caption", line: "the hoodie in question, on the accused" }],
           },
           {
             heading: "Five jokes, then the true one",
-            body: "The cats read your findings one tap at a time, in the order you wrote them, and there is room for six. Make the first five petty. Make the sixth the thing you never thanked them for: “drove four hours when I called and never brought it up again”. Then the gavel comes down three times.",
+            body: "A thank-you to the friend who turned up, sent a year to the day afterwards. The cats read your findings one tap at a time, in the order you wrote them, and there is room for six. Make the first five petty. Make the sixth the thing you never thanked them for: “drove four hours when I called and never brought it up again”. Then the gavel comes down three times.",
             borrow: [{ field: "fields.findings", line: "drove four hours when I called and never brought it up again" }],
           },
           {
             heading: "A ruling that drops the act",
-            body: "“Read the full ruling” opens your letter, typed like a court document. Keep the voice for two paragraphs (the council sat, the evidence was heard), then leave it in the last line: “Off the record: this household has never liked anyone more.” Add a P.S. and it waits under the ruling for a tap.",
+            body: "A housemate is moving out at the end of the month. “Read the full ruling” opens your letter, typed like a court document. Keep the voice for two paragraphs (the council sat, the evidence was heard), then leave it in the last line: “Off the record: this household has never liked anyone more.” Add a P.S. and it waits under the ruling for a tap.",
             borrow: [{ field: "message", line: "Off the record: this household has never liked anyone more." }],
           },
         ],
@@ -881,17 +881,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Fotos presentadas como pruebas",
-            body: "Hasta seis fotos van encima de tu carta, etiquetadas de Prueba A a Prueba F. Cada una enseña una línea de su pie en la tarjeta y el pie entero al tocarla, así que escríbelos como la etiqueta de una bolsa de pruebas: «la sudadera en cuestión, puesta en quien la robó». Cuanto peor la foto, más sólido el caso.",
+            body: "Alguien te quita las sudaderas y se acerca su cumpleaños. Hasta seis fotos van encima de tu carta, etiquetadas de Prueba A a Prueba F. Cada una enseña una línea de su pie en la tarjeta y el pie entero al tocarla, así que escríbelos como la etiqueta de una bolsa de pruebas: «la sudadera en cuestión, puesta en quien la robó». Cuanto peor la foto, más sólido el caso.",
             borrow: [{ field: "caption", line: "la sudadera en cuestión, puesta en quien la robó" }],
           },
           {
             heading: "Cinco bromas y, después, la de verdad",
-            body: "Los gatos leen tus conclusiones de toque en toque, en el orden en que las escribiste, y caben seis. Que las cinco primeras sean mezquinas. Que la sexta sea eso por lo que nunca diste las gracias: «condujo cuatro horas cuando llamé y nunca lo ha vuelto a mencionar». Después, el mazo cae tres veces.",
+            body: "Un gracias para quien apareció cuando hacía falta, enviado justo un año después. Los gatos leen tus conclusiones, una por toque, en el orden en que las escribiste, y caben seis. Que las cinco primeras sean de poca monta. Que la sexta sea eso por lo que nunca diste las gracias: «condujo cuatro horas cuando llamé y nunca lo ha vuelto a mencionar». Después, el mazo cae tres veces.",
             borrow: [{ field: "fields.findings", line: "condujo cuatro horas cuando llamé y nunca lo ha vuelto a mencionar" }],
           },
           {
             heading: "Una sentencia que al final se quita la toga",
-            body: "«Leer la sentencia completa» abre tu carta, escrita a máquina como un documento judicial. Mantén el tono dos párrafos (el consejo deliberó, se oyeron las pruebas) y suéltalo en la última línea: «Fuera de acta: en esta casa nunca hemos querido tanto a nadie.» Si añades una posdata, espera debajo de la sentencia a que la toquen.",
+            body: "Alguien se va del piso a final de mes. «Leer la sentencia completa» abre tu carta, escrita a máquina como un documento judicial. Mantén el tono dos párrafos (el consejo deliberó, se oyeron las pruebas) y suéltalo en la última línea: «Fuera de acta: en esta casa nunca hemos querido tanto a nadie.» Si añades una posdata, espera debajo de la sentencia a que la toquen.",
             borrow: [{ field: "message", line: "Fuera de acta: en esta casa nunca hemos querido tanto a nadie." }],
           },
         ],
@@ -925,7 +925,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "An apology with nothing around it",
-            body: "Switch off the stickers and the pot, choose the daisy in white on paper white, and the flower stands alone in the light. It opens only while they hold the screen, about three seconds in all, which is as long as a real apology takes to say. Keep the note as plain: “I’m sorry. I was wrong about Saturday, and unkind about it.”",
+            body: "Switch off the stickers and the pot, choose the daisy in white on paper white, and only the flower and its name tag are left in the light. It opens only while they hold the screen, about three seconds in all, which is as long as a real apology takes to say. Keep the note as plain: “I’m sorry. I was wrong about Saturday, and unkind about it.”",
             borrow: [{ field: "message", line: "I’m sorry. I was wrong about Saturday, and unkind about it." }],
           },
           {
@@ -980,7 +980,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una disculpa sin nada alrededor",
-            body: "Quita las pegatinas y la maceta, elige la margarita en blanco sobre blanco papel, y la flor se queda sola en la luz. Solo se abre mientras mantienen pulsada la pantalla, unos tres segundos en total, que es lo que se tarda en decir una disculpa de verdad. Que la nota sea igual de sencilla: «Perdóname. Me equivoqué con lo del sábado y encima lo dije de malas maneras.»",
+            body: "Quita las pegatinas y la maceta, elige la margarita en blanco sobre blanco papel, y en la luz solo quedan la flor y la etiqueta con su nombre. Solo se abre mientras mantienen pulsada la pantalla, unos tres segundos en total, que es lo que se tarda en decir una disculpa de verdad. Que la nota sea igual de sencilla: «Perdóname. Me equivoqué con lo del sábado y encima lo dije de malas maneras.»",
             borrow: [{ field: "message", line: "Perdóname. Me equivoqué con lo del sábado y encima lo dije de malas maneras." }],
           },
           {
@@ -1038,8 +1038,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Your own number",
-            body: "The distance is worked out from the two towns, as the crow flies. If you count it another way, type it in: the 412 km of motorway you drive every other Friday, door to door. Swap the plane for the little bird, and use the halfway line for the place you always stop: “This is the services where I buy the bad coffee.”",
-            borrow: [{ field: "fields.halfwayNote", line: "This is the services where I buy the bad coffee." }],
+            body: "The distance is worked out from the two towns, as the crow flies. If you count it another way, type it in: the 412 km of motorway you drive every other Friday, door to door. Swap the plane for the little bird, and use the halfway line for your usual stop: “This is where I pull over for the bad coffee.”",
+            borrow: [{ field: "fields.halfwayNote", line: "This is where I pull over for the bad coffee." }],
           },
           {
             heading: "The last postcard",
@@ -1048,7 +1048,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A parent to a student",
-            body: "It isn’t only for couples. Home on one island, the university town on the other, a balloon in place of the plane, and the halfway bubble doing what parents do: “Halfway. Dad says check your tyre pressure.” Tape eight photos beside the letter, the dog first.",
+            body: "It isn’t only for couples. Home on one island, the university town on the other, a balloon in place of the plane, and the halfway bubble doing what parents do: “Halfway. Dad says check your tyre pressure.” Tape eight photos under the letter, the dog first.",
             borrow: [{ field: "fields.halfwayNote", line: "Halfway. Dad says check your tyre pressure." }],
           },
           {
@@ -1069,7 +1069,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "A tap on the plane flies it the rest of the way by itself. Blowing needs the microphone, which the phone asks for first; in a quiet office, or with that permission refused, the tap does everything.",
         },
         {
-          q: "Is the distance on the map real?",
+          q: "Does this long-distance relationship gift show the real distance?",
           a: "Yes. Pick both towns from the list and the kilometres are measured between them as the crow flies, through any stops you add. You can type your own number over it, such as the length of the drive.",
         },
         {
@@ -1103,7 +1103,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "De una madre o un padre a quien estudia fuera",
-            body: "No es solo para parejas. La casa en una isla, la ciudad de la universidad en la otra, un globo en lugar del avión y el bocadillo de la mitad haciendo lo que hacen los padres: «Mitad de camino. Dice tu padre que mires las ruedas.» Pega ocho fotos junto a la carta, la del perro la primera.",
+            body: "No es solo para parejas. La casa en una isla, la ciudad de la universidad en la otra, un globo en lugar del avión y el bocadillo de la mitad haciendo lo que hacen los padres: «Mitad de camino. Dice tu padre que mires las ruedas.» Pega ocho fotos debajo de la carta, la del perro la primera.",
             borrow: [{ field: "fields.halfwayNote", line: "Mitad de camino. Dice tu padre que mires las ruedas." }],
           },
           {
@@ -1124,7 +1124,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "Un toque en el avión lo lleva solo el resto del camino. Soplar necesita el micrófono, y el móvil pide permiso antes; en una oficina en silencio, o si no dan ese permiso, el toque lo hace todo.",
         },
         {
-          q: "¿La distancia del mapa es real?",
+          q: "¿Los kilómetros de este regalo a distancia son reales?",
           a: "Sí. Elige las dos ciudades de la lista y los kilómetros se miden entre ellas en línea recta, pasando por las paradas que añadas. Puedes escribir tu propio número encima, como los kilómetros en coche.",
         },
         {
@@ -1161,7 +1161,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A private joke in the frost",
-            body: "The title is the first thing they see, drawn in the frost as if by a fingertip. “look outside” is what it says unless you change it; for a brother, a sister or a flatmate, make it “made you look” and let the snowman finish the insult: “merry christmas, you nosy thing”. Choose the log cabin.",
+            body: "The title is the first thing they see, drawn in the frost as if by a fingertip. “look outside” is what it says unless you change it; for a brother, a sister or a flatmate, make it “made you look” and give the snowman the rest of the insult: “merry christmas, you nosy thing”. Choose the log cabin.",
             borrow: [{ field: "title", line: "made you look" }, { field: "fields.sign", line: "merry christmas, you nosy thing" }],
           },
           {
@@ -1171,7 +1171,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The year in eight prints",
-            body: "Photos arrive as a small stack, like prints out of an envelope: they tap the top one and it goes to the back. Eight fit. Put them in the order the year happened and give each a caption of two short lines at most: “March. The flat with the mustard carpet.” The last print is the one from this week.",
+            body: "On Christmas morning, for grandparents who saw none of it in person. Photos arrive as a small stack, like prints out of an envelope: they tap the top one and it goes to the back. Eight fit. Put them in the order the year happened and give each a caption of two short lines at most: “March. The flat with the mustard carpet.” The last print is the one from this week.",
             borrow: [{ field: "caption", line: "March. The flat with the mustard carpet." }],
           },
         ],
@@ -1182,8 +1182,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "36 characters, chalked on his blackboard. Left empty it reads “merry christmas” and their name. Whatever it says also heads your letter.",
         },
         {
-          q: "Does the frost clear by itself?",
-          a: "No. Only what their finger wipes goes clear, and “read the letter” appears once most of the blackboard is showing. On a laptop they drag with the mouse, and from a keyboard Enter clears the pane.",
+          q: "How does this interactive Christmas card open?",
+          a: "With a finger on the frost. Nothing clears by itself: only what they wipe goes clear, and “read the letter” appears once most of the blackboard is showing. On a laptop they drag with the mouse, and from a keyboard Enter clears the pane.",
         },
         {
           q: "Whose names are on the stockings?",
@@ -1222,8 +1222,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "El año en ocho copias",
-            body: "Las fotos llegan en un montoncito, como copias recién sacadas de un sobre: se toca la de arriba y pasa al fondo. Caben ocho. Ponlas en el orden en que pasó el año y dale a cada una un pie de dos líneas cortas como mucho: «Marzo. El piso de la moqueta mostaza.» La última copia, la de esta semana.",
-            borrow: [{ field: "caption", line: "Marzo. El piso de la moqueta mostaza." }],
+            body: "La mañana de Navidad, para los abuelos que no vieron nada de eso en persona. Las fotos llegan en un montoncito, como copias recién sacadas de un sobre: se toca la de arriba y pasa al fondo. Caben ocho. Ponlas en el orden en que pasó el año y dale a cada una un pie de dos líneas cortas como mucho: «Marzo. El piso de las cortinas mostaza.» La última copia, la de esta semana.",
+            borrow: [{ field: "caption", line: "Marzo. El piso de las cortinas mostaza." }],
           },
         ],
       },
@@ -1233,8 +1233,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "36 caracteres, escritos con tiza en su pizarra. Si lo dejas vacío pone «feliz navidad» y su nombre. Lo que diga encabeza también tu carta.",
         },
         {
-          q: "¿La escarcha se quita sola?",
-          a: "No. Solo se limpia lo que frota el dedo, y «lee la carta» aparece cuando ya se ve casi toda la pizarra. En un ordenador se arrastra con el ratón y, desde el teclado, Intro limpia el cristal entero.",
+          q: "¿Cómo se abre esta tarjeta de Navidad interactiva?",
+          a: "Con el dedo sobre la escarcha. Nada se quita solo: se limpia lo que frota el dedo, y «lee la carta» aparece cuando ya se ve casi toda la pizarra. En un ordenador se arrastra con el ratón y, desde el teclado, Intro limpia el cristal entero.",
         },
         {
           q: "¿De quién son los nombres de los calcetines?",
@@ -1251,12 +1251,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Five lines that grow",
-            body: "Each candle writes one line in light above the table, 60 characters at most, in the order you wrote them, whichever wick they reach first. So build it: start with the smallest daily thing, “the heating you turn on before I’m up”, and let the fifth be the whole of it: “the life you made room in for me”.",
+            body: "Each candle writes one line in light above the table, 60 characters at most, in the order you wrote them, whichever wick they reach first. So build it: start with the smallest daily thing, “the heating you turn on before I’m up”, and make the fifth the whole of it: “the life you made room in for me”.",
             borrow: [{ field: "fields.thanks", line: "the heating you turn on before I’m up" }, { field: "fields.thanks", line: "the life you made room in for me" }],
           },
           {
             heading: "For whoever is cooking",
-            body: "Send it to your mother at seven in the morning, while the turkey is still a problem. Five lines about her table and nobody else’s: “the gravy only you get right”. The title appears in light when the fifth candle catches, and takes 80 characters: “Before the house fills up, thank you”.",
+            body: "Send it to your mother at seven in the morning, while the turkey is still a problem. Five lines about her table and nobody else’s: “the gravy only you get right”. The title appears in light when the fifth candle catches, on three lines at most; keep it under about 55 characters and all of it shows: “Before the house fills up, thank you”.",
             borrow: [{ field: "fields.thanks", line: "the gravy only you get right" }, { field: "title", line: "Before the house fills up, thank you" }],
           },
           {
@@ -1283,7 +1283,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "Do I have to write all five lines?",
+          q: "Does a Thanksgiving message here need all five lines?",
           a: "No, but each of the five candles shows the next line as it lights, so with fewer than five the last candles catch without words. Every line takes up to 60 characters.",
         },
         {
@@ -1311,7 +1311,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para quien cocina",
-            body: "Mándaselo a tu madre a las siete de la mañana, cuando el pavo todavía es un problema. Cinco frases sobre su mesa y la de nadie más: «la salsa que solo te sale a ti». El título aparece hecho de luz cuando prende la quinta vela y admite 80 caracteres: «Antes de que se llene la casa, gracias».",
+            body: "Mándaselo a tu madre a las siete de la mañana, cuando el pavo todavía es un problema. Cinco frases sobre su mesa y la de nadie más: «la salsa que solo te sale a ti». El título aparece hecho de luz cuando prende la quinta vela, en tres líneas como mucho; con menos de unos 55 caracteres sale entero: «Antes de que se llene la casa, gracias».",
             borrow: [{ field: "fields.thanks", line: "la salsa que solo te sale a ti" }, { field: "title", line: "Antes de que se llene la casa, gracias" }],
           },
           {
@@ -1331,14 +1331,14 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "El brindis que nunca te levantarías a dar",
-            body: "Tu carta se lee de pocas frases en pocas frases sobre las velas encendidas, con una flecha para seguir, así que escríbela a golpes, como se dice un brindis. Un recuerdo por párrafo. Y termina con la frase por la que levantarías la copa: «Por mamá. Y ahora sentaos todos, que se enfría.»",
+            body: "Tu carta se lee unas pocas frases cada vez sobre las velas encendidas, con una flecha para seguir, así que escríbela con pausas, como se dice un brindis. Un recuerdo por párrafo. Y termina con la frase por la que levantarías la copa: «Por mamá. Y ahora sentaos todos, que se enfría.»",
             borrow: [{ field: "message", line: "Por mamá. Y ahora sentaos todos, que se enfría." }],
           },
         ],
       },
       faq: [
         {
-          q: "¿Hay que escribir las cinco frases?",
+          q: "¿Un mensaje de Acción de Gracias necesita las cinco frases?",
           a: "No, pero cada una de las cinco velas enseña la siguiente frase al encenderse, así que con menos de cinco las últimas prenden sin palabras. Cada frase admite hasta 60 caracteres.",
         },
         {
@@ -1351,7 +1351,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Cómo se lee la carta?",
-          a: "De pocas frases en pocas frases sobre las velas encendidas, con una flecha para seguir. Después de las palabras, cada foto aparece sola con su pie y, al final, la cuenta atrás y la sorpresa escondida.",
+          a: "Unas pocas frases cada vez, sobre las velas encendidas, con una flecha para seguir. Después de las palabras, cada foto aparece sola con su pie y, al final, la cuenta atrás y la sorpresa escondida.",
         },
       ],
     },
@@ -1364,7 +1364,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Twelve letters or fewer",
-            body: "The board in the garden takes 28 characters and shows them in capitals, made of bulbs. Twelve or fewer are drawn at the largest size, so the best signs are short: “HOME, MIA” beats a sentence. Left empty, it reads MERRY CHRISTMAS and their name.",
+            body: "Someone is driving home on the 23rd. The board in the garden takes 28 characters and shows them in capitals, made of bulbs. Twelve or fewer are drawn at the largest size, so the best signs are short: “HOME, MIA” beats a sentence. Left empty, it reads MERRY CHRISTMAS and their name.",
             borrow: [{ field: "fields.sign", line: "HOME, MIA" }],
           },
           {
@@ -1374,7 +1374,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For the one who always does the lights",
-            body: "Some people are on the ladder every December while the rest of the family points. Give them a roof they can string with one finger, and a title over the house, up to 80 characters: “Your turn to stand in the garden and point”. In the letter, admit they were right about the crooked ones.",
+            body: "Some people are on the ladder every December while the rest of the family points. Give them a roof they can string with one finger, and a title over the house. It is set on two lines at most, so keep it under about 45 characters: “Your turn to stand in the garden and point”. In the letter, admit they were right about the crooked ones.",
             borrow: [{ field: "title", line: "Your turn to stand in the garden and point" }],
           },
           {
@@ -1404,7 +1404,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "Yes. The switch appears only when the last bulb is up, and a counter shows how many are left. A finger run along the roof and the porch hangs them quickly; from a keyboard, Enter hangs eight at a time.",
         },
         {
-          q: "How do they read the letter?",
+          q: "How do they read the letter in this digital Christmas card?",
           a: "As a stack of cards they turn by tapping: your words over a few cards, then one card for each photo with its caption, then the countdown and the hidden surprise. A bulb lights on the string for every card.",
         },
       ],
@@ -1415,17 +1415,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Doce letras o menos",
-            body: "El cartel del jardín admite 28 caracteres y los enseña en mayúsculas, hechos de bombillas. Con doce o menos salen en el tamaño más grande, así que los mejores carteles son cortos: «EN CASA, MIA» gana a cualquier frase. Si lo dejas vacío pone FELIZ NAVIDAD y su nombre.",
+            body: "Alguien vuelve a casa en coche el día 23. El cartel del jardín admite 28 caracteres y los enseña en mayúsculas, hechos de bombillas. Con doce o menos salen en el tamaño más grande, así que los mejores carteles son cortos: «EN CASA, MIA» gana a cualquier frase. Si lo dejas vacío pone FELIZ NAVIDAD y su nombre.",
             borrow: [{ field: "fields.sign", line: "EN CASA, MIA" }],
           },
           {
             heading: "Una pregunta que espera al interruptor",
-            body: "Las palabras siguen apagadas hasta que está colgada la última bombilla y se da al interruptor, y un contador va diciendo cuántas faltan. Eso convierte el cartel en un buen sitio para una pregunta: «¿NOS VAMOS A VIVIR JUNTOS?» Habrá puesto luces en todo el tejado antes de saber para qué era la casa.",
-            borrow: [{ field: "fields.sign", line: "¿NOS VAMOS A VIVIR JUNTOS?" }],
+            body: "Las palabras siguen apagadas hasta que está colgada la última bombilla y se da al interruptor, y un contador va diciendo cuántas faltan. Eso convierte el cartel en un buen sitio para una pregunta: «¿TE VIENES A VIVIR CONMIGO?» Habrá puesto luces en todo el tejado antes de saber para qué era la casa.",
+            borrow: [{ field: "fields.sign", line: "¿TE VIENES A VIVIR CONMIGO?" }],
           },
           {
             heading: "Para quien siempre pone las luces",
-            body: "Hay quien pasa cada diciembre subido a la escalera mientras el resto de la familia opina desde abajo. Regálale un tejado que se decora con un dedo y un título sobre la casa, de hasta 80 caracteres: «Este año opinas tú desde el jardín». En la carta, reconoce que tenía razón con las que estaban torcidas.",
+            body: "Hay quien pasa cada diciembre subido a la escalera mientras el resto de la familia opina desde abajo. Regálale un tejado que se decora con un dedo y un título sobre la casa. Va en dos líneas como mucho, así que no pases de unos 45 caracteres: «Este año opinas tú desde el jardín». En la carta, reconoce que tenía razón con las que estaban torcidas.",
             borrow: [{ field: "title", line: "Este año opinas tú desde el jardín" }],
           },
           {
@@ -1455,7 +1455,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "Sí. El interruptor solo aparece cuando está puesta la última bombilla, y un contador indica cuántas faltan. Pasando el dedo por el tejado y el porche se cuelgan rápido; desde el teclado, Intro cuelga ocho de golpe.",
         },
         {
-          q: "¿Cómo se lee la carta?",
+          q: "¿Cómo se lee la carta de esta tarjeta de Navidad digital?",
           a: "En un montón de tarjetas que se pasan con un toque: tus palabras en unas cuantas, luego una tarjeta por foto con su pie y, al final, la cuenta atrás y la sorpresa escondida. Por cada tarjeta se enciende una bombilla en la tira.",
         },
       ],
@@ -1501,7 +1501,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "What can they decorate the house with?",
+          q: "What can they decorate a virtual gingerbread house with?",
           a: "Seven sweets (red and green gumdrops, peppermints, chocolate buttons, sugar stars, sugar hearts and candy canes) and white icing, piped by dragging a finger. There is an undo button, and they can add as much or as little as they like.",
         },
         {
@@ -1556,7 +1556,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "¿Con qué se puede decorar la casita?",
+          q: "¿Con qué se decora una casita de jengibre virtual?",
           a: "Con siete dulces (gominolas rojas y verdes, caramelos de menta, botones de chocolate, estrellas y corazones de azúcar y bastones de caramelo) y con glaseado blanco, que se traza arrastrando el dedo. Hay un botón de deshacer y se puede poner tanto o tan poco como apetezca.",
         },
         {
@@ -1587,7 +1587,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "One memory in every flurry",
-            body: "Each time the snow settles, one thing has appeared in it: a line of yours, then a photo hanging like an ornament, then a line. Lines take 90 characters, enough for a whole memory: “The year the tree fell on the cat, and the cat won.” Pick three shakes and that is two lines with a photo between them.",
+            body: "Send this one to the family group on Christmas Eve. Each time the snow settles, one thing has appeared in it: a line of yours, then a photo hanging like an ornament, then a line. Lines take 90 characters, enough for a whole memory: “The year the tree fell on the cat, and the cat won.” Pick three shakes and that is two lines with a photo between them.",
             borrow: [{ field: "fields.lines", line: "The year the tree fell on the cat, and the cat won." }],
           },
           {
@@ -1597,12 +1597,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "The cabin, not Christmas",
-            body: "A snow globe needn’t be about the 25th. Take the cabin in the woods on a frosted morning for the anniversary of the trip, and set the P.S. to open with a shake, since their hand is already moving: “I booked it again. Same cabin, the 14th of February.”",
+            body: "Take the cabin in the woods on a frosted morning for the anniversary of the trip, in whatever month that falls, and set the P.S. to open with a shake, since their hand is already moving: “I booked it again. Same cabin, the 14th of February.”",
             borrow: [{ field: "surprise.text", line: "I booked it again. Same cabin, the 14th of February." }],
           },
           {
             heading: "For a friend who moved away",
-            body: "The little village, lamplit, and two lines about home that only work in order: “You’d hate how early it gets dark here now.” and then “Your chair at the pub is still yours.” Lines and photos take turns starting with a line, and with two photos or more only your first two lines get a turn. Put those two first.",
+            body: "The little village, lamplit, and two lines about home that only work in order: “You’d hate how early it gets dark here now.” and then “Your chair at the pub is still yours.” Lines and photos take turns, a line first, and once there are two photos or more the globe shows only your first two lines, so put this pair at the top of the list.",
             borrow: [{ field: "fields.lines", line: "You’d hate how early it gets dark here now." }, { field: "fields.lines", line: "Your chair at the pub is still yours." }],
           },
           {
@@ -1642,7 +1642,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Un recuerdo en cada nevada",
-            body: "Cada vez que la nieve se posa ha aparecido algo dentro: una frase tuya, luego una foto colgada como un adorno, luego otra frase. Las frases admiten 90 caracteres, lo que ocupa un recuerdo entero: «El año que el árbol se le cayó encima al gato, y ganó el gato.» Con tres sacudidas son dos frases con una foto en medio.",
+            body: "Esta, para el grupo de la familia en Nochebuena. Cada vez que la nieve se posa ha aparecido algo dentro: una frase tuya, luego una foto colgada como un adorno, luego otra frase. Las frases admiten 90 caracteres, lo que ocupa un recuerdo entero: «El año que el árbol se le cayó encima al gato, y ganó el gato.» Con tres sacudidas son dos frases con una foto en medio.",
             borrow: [{ field: "fields.lines", line: "El año que el árbol se le cayó encima al gato, y ganó el gato." }],
           },
           {
@@ -1695,7 +1695,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Crimes with numbers in them",
-            body: "A crime reads better counted. Each line takes 50 characters: “left one sip of milk in the carton. nine times.” The list reads a good deed, then a crime, in turn, so write them as pairs and let each good deed nearly cancel the crime after it: “defrosts my windscreen before work, unasked”. Stamp it naughty and nice.",
+            body: "For the person you share a fridge with, any night in December. A crime reads better counted. Each line takes 50 characters: “left one sip of milk in the carton. nine times.” The list reads a good deed, then a crime, in turn, so write them as pairs and let each good deed nearly cancel the crime after it: “defrosts my windscreen before work, unasked”. Stamp it naughty and nice.",
             borrow: [{ field: "fields.naughty", line: "left one sip of milk in the carton. nine times." }, { field: "fields.nice", line: "defrosts my windscreen before work, unasked" }],
           },
           {
@@ -1715,7 +1715,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Photographic evidence",
-            body: "After the list comes your letter, and under it up to eight photos, filed as “the evidence” and held with paper clips. Each has two lines of handwriting for a caption, so write them like notes in a case file: “seen here: the last roast potato, leaving”.",
+            body: "The cousin who denies everything gets this one at lunch on the 25th. After the list comes your letter, and under it up to eight photos, filed as “the evidence” and held with paper clips. Each has two lines of handwriting for a caption, so write them like notes in a case file: “seen here: the last roast potato, leaving”.",
             borrow: [{ field: "caption", line: "seen here: the last roast potato, leaving" }],
           },
           {
@@ -1727,7 +1727,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "How many lines fit on the list?",
+          q: "How long can a naughty or nice list be?",
           a: "Up to four good deeds and four crimes, 50 characters each. They are read in turn, a good deed and then a crime, and each is ticked in pen in its own column.",
         },
         {
@@ -1750,7 +1750,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Fechorías con cifras",
-            body: "Una fechoría se lee mejor contada. Cada línea admite 50 caracteres: «deja un sorbo de leche en el brik. nueve veces.» La lista lee una buena obra y después una fechoría, por turnos, así que escríbelas por parejas y que cada buena obra casi compense la fechoría que viene detrás: «me quita el hielo del parabrisas sin pedírselo». Séllala con «Carbón dulce».",
+            body: "Para quien comparte nevera contigo, cualquier noche de diciembre. Una fechoría gana con un número. Cada línea admite 50 caracteres: «deja un sorbo de leche en el brik. nueve veces.» La lista lee una buena obra y después una fechoría, por turnos, así que escríbelas por parejas y que cada buena obra casi compense la fechoría que viene detrás: «me quita el hielo del parabrisas sin pedírselo». Séllala con «Carbón dulce».",
             borrow: [{ field: "fields.naughty", line: "deja un sorbo de leche en el brik. nueve veces." }, { field: "fields.nice", line: "me quita el hielo del parabrisas sin pedírselo" }],
           },
           {
@@ -1770,7 +1770,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Pruebas fotográficas",
-            body: "Después de la lista va tu carta y, debajo, hasta ocho fotos archivadas como «las pruebas» y sujetas con clips. Cada una lleva dos líneas escritas a mano como pie, así que escríbelos como notas de un expediente: «aquí, la última patata asada, dándose a la fuga».",
+            body: "Quien lo niega todo en la familia recibe esta en la comida del 25. Después de la lista va tu carta y, debajo, hasta ocho fotos archivadas como «las pruebas» y sujetas con clips. Cada una lleva dos líneas escritas a mano como pie, así que escríbelos como notas de un expediente: «aquí, la última patata asada, dándose a la fuga».",
             borrow: [{ field: "caption", line: "aquí, la última patata asada, dándose a la fuga" }],
           },
           {
@@ -1782,7 +1782,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
       },
       faq: [
         {
-          q: "¿Cuántas líneas caben en la lista?",
+          q: "¿Cuántas líneas caben en una lista de Papá Noel?",
           a: "Hasta cuatro buenas obras y cuatro fechorías, de 50 caracteres cada una. Se leen por turnos, una buena obra y luego una fechoría, y cada una lleva su marca a boli en su columna.",
         },
         {
@@ -1808,39 +1808,39 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A number that means something",
-            body: "The label on the jar counts the notes for you, so pick the count on purpose: 30 for a thirtieth birthday, 52 for a year of weeks, 100 for the classic. A hundred takes a while to empty, since every note is a shake or a tap; thirty reads in one sitting. Or write the label yourself, in 40 characters: “52 reasons, one for every week of us”.",
+            body: "The label on the jar counts the notes for you, so pick the count for the day: 30 for a best friend’s thirtieth birthday, 52 for a first anniversary, a year of weeks, and 100 for the classic. A hundred takes a while to empty, since every note is a shake or a tap; thirty reads in one sitting. Or write the label yourself, in 40 characters: “52 reasons, one for every week of us”.",
             borrow: [{ field: "fields.label", line: "52 reasons, one for every week of us" }],
           },
           {
             heading: "Evidence, not adjectives",
-            body: "“You’re kind” slides past. A note lands when it catches them doing something, so begin each one with a verb: “You warm the car up before I’ve found my shoes.” Notes take 160 characters and are written out by hand on the screen, one to a slip. Short ones look best.",
+            body: "After ten years together, “You’re kind” slides past. A note lands when it catches them doing something, so for an anniversary begin each one with a verb: “You warm the car up before I’ve found my shoes.” Notes take 160 characters and are written out by hand on the screen, one to a slip. Short ones look best.",
             borrow: [{ field: "fields.reasons", line: "You warm the car up before I’ve found my shoes." }],
           },
           {
             heading: "A jar for your dad",
-            body: "The label is yours to change, so it needn’t be about romance. For Father’s Day: “40 reasons you’re a good dad”. For a daughter leaving for university: “18 reasons you’ll be fine”. Write what he did and thought nobody saw: “You pretended the stabilisers were still on.”",
-            borrow: [{ field: "fields.label", line: "40 reasons you’re a good dad" }, { field: "fields.label", line: "18 reasons you’ll be fine" }, { field: "fields.reasons", line: "You pretended the stabilisers were still on." }],
+            body: "The label is yours to change, so it needn’t be about romance. For Father’s Day: “40 reasons you’re a good dad”. For a daughter leaving for university: “18 reasons you’ll be fine”. Write what he did and thought nobody saw: “You waited up, then pretended you’d fallen asleep.”",
+            borrow: [{ field: "fields.label", line: "40 reasons you’re a good dad" }, { field: "fields.label", line: "18 reasons you’ll be fine" }, { field: "fields.reasons", line: "You waited up, then pretended you’d fallen asleep." }],
           },
           {
             heading: "Photos on the first notes",
-            body: "Your first photo rides on your first reason, your second on the second, and so on, so write the reasons that have a photo first. The jar shuffles everything before it is opened, which scatters those photos through it. Captions don’t show on a note, so say it in the reason: “This face. This exact face. Lisbon, 2023.”",
+            body: "A long-distance birthday, when photos are most of what you have. Your first photo rides on your first reason, your second on the second, and so on, so write the reasons that have a photo first. The jar shuffles everything before it is opened, which scatters those photos through it. Captions don’t show on a note, so say it in the reason: “This face. This exact face. Lisbon, 2023.”",
             borrow: [{ field: "fields.reasons", line: "This face. This exact face. Lisbon, 2023." }],
           },
           {
             heading: "One note from everyone",
-            body: "For a grandmother’s eightieth, a teacher’s last day or a bride’s hen weekend, collect one reason from each person and put their name inside the note: “Because you taught me to shuffle cards. (Leo)”. Label the jar with the head count: “23 reasons, one from each of us”.",
+            body: "For a grandmother’s eightieth, a teacher’s last day or the weekend before a friend’s wedding, collect one reason from each person and put their name inside the note: “Because you taught me to shuffle cards. (Leo)”. Label the jar with the head count: “23 reasons, one from each of us”.",
             borrow: [{ field: "fields.reasons", line: "Because you taught me to shuffle cards. (Leo)" }, { field: "fields.label", line: "23 reasons, one from each of us" }],
           },
           {
             heading: "The note that isn’t a reason",
-            body: "Because the order is shuffled, they never know what the next pull will be. Hide one piece of news among the reasons and let them find it somewhere in the middle: “Not a reason. I bought the tickets. We leave on the 9th.” When the jar is empty, your letter is waiting under it.",
+            body: "An anniversary with a trip hidden in it. Because the order is shuffled, they never know what the next pull will be. Write one piece of news among the reasons and it comes out wherever the jar puts it, which may be first: “Not a reason. I bought the tickets. We leave on the 9th.” When the jar is empty, your letter is waiting under it.",
             borrow: [{ field: "fields.reasons", line: "Not a reason. I bought the tickets. We leave on the 9th." }],
           },
         ],
       },
       faq: [
         {
-          q: "How many reasons fit in the jar?",
+          q: "How many reasons fit in a reasons why I love you jar?",
           a: "From 3 to 100, up to 160 characters each. The label counts them for you (“100 reasons I love you”) unless you write your own.",
         },
         {
@@ -1863,12 +1863,12 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "Un número que signifique algo",
-            body: "La etiqueta del frasco cuenta las notas por ti, así que elige el número a propósito: 30 para unos treinta años, 52 para un año de semanas, 100 para el clásico. Cien tardan en vaciarse, porque cada nota es una sacudida o un toque; treinta se leen de una sentada. O escribe tú la etiqueta, en 40 caracteres: «52 razones, una por cada semana juntos».",
-            borrow: [{ field: "fields.label", line: "52 razones, una por cada semana juntos" }],
+            body: "La etiqueta del frasco cuenta las notas por ti, así que elige el número según el día: 30 para quien cumple treinta, 52 para un primer aniversario, que es un año de semanas, y 100 para el clásico. Cien tardan en vaciarse, porque cada nota es una sacudida o un toque; treinta se leen de una sentada. O escribe tú la etiqueta, en 40 caracteres: «52 razones, una por cada semana contigo».",
+            borrow: [{ field: "fields.label", line: "52 razones, una por cada semana contigo" }],
           },
           {
             heading: "Pruebas, no adjetivos",
-            body: "«Eres muy buena persona» resbala. Una nota llega cuando pilla a alguien haciendo algo, así que empieza cada una por un verbo: «Calientas el coche antes de que yo haya encontrado los zapatos.» Las notas admiten 160 caracteres y salen escritas a mano en la pantalla, una por papelito. Las cortas son las que mejor quedan.",
+            body: "Después de diez años, «Eres muy buena persona» resbala. Una nota llega cuando pilla a alguien haciendo algo, así que para un aniversario empieza cada una por un verbo: «Calientas el coche antes de que yo haya encontrado los zapatos.» Las notas admiten 160 caracteres y salen escritas a mano en la pantalla, una por papelito. Las cortas son las que mejor quedan.",
             borrow: [{ field: "fields.reasons", line: "Calientas el coche antes de que yo haya encontrado los zapatos." }],
           },
           {
@@ -1878,7 +1878,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Fotos en las primeras notas",
-            body: "Tu primera foto va con tu primera razón, la segunda con la segunda, y así, de modo que escribe primero las razones que tienen foto. El frasco lo baraja todo antes de abrirse, y eso reparte las fotos por el frasco. Los pies no salen en las notas, así que dilo en la propia razón: «Esta cara. Esta cara exacta. Lisboa, 2023.»",
+            body: "Un cumpleaños a distancia, cuando las fotos son casi todo lo que tenéis. Tu primera foto va con tu primera razón, la segunda con la segunda, y así, de modo que escribe primero las razones que tienen foto. El frasco lo baraja todo antes de abrirse, y eso reparte las fotos por el frasco. Los pies no salen en las notas, así que dilo en la propia razón: «Esta cara. Esta cara exacta. Lisboa, 2023.»",
             borrow: [{ field: "fields.reasons", line: "Esta cara. Esta cara exacta. Lisboa, 2023." }],
           },
           {
@@ -1888,15 +1888,15 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "La nota que no es una razón",
-            body: "Como el orden va barajado, nunca se sabe qué saldrá en la siguiente. Esconde una noticia entre las razones y deja que aparezca por la mitad: «Esto no es una razón. He comprado los billetes. Salimos el día 9.» Cuando el frasco se vacía, tu carta espera debajo.",
+            body: "Un aniversario con un viaje escondido. Como el orden va barajado, nunca se sabe qué saldrá en la siguiente. Escribe una noticia entre las razones y saldrá donde el frasco la ponga, puede que la primera: «Esto no es una razón. He comprado los billetes. Salimos el día 9.» Cuando el frasco se vacía, tu carta espera debajo.",
             borrow: [{ field: "fields.reasons", line: "Esto no es una razón. He comprado los billetes. Salimos el día 9." }],
           },
         ],
       },
       faq: [
         {
-          q: "¿Cuántas razones caben en el frasco?",
-          a: "De 3 a 100, de hasta 160 caracteres cada una. La etiqueta las cuenta por ti («100 razones por las que te quiero»), salvo que escribas la tuya.",
+          q: "¿Caben 100 razones por las que te amo en el frasco?",
+          a: "Sí: caben de 3 a 100, de hasta 160 caracteres cada una. La etiqueta las cuenta por ti («100 razones por las que te quiero»), salvo que escribas la tuya.",
         },
         {
           q: "¿Las notas salen en el orden en que las escribí?",
@@ -1921,23 +1921,23 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "A first year, one photo a month",
-            body: "Twelve photos, twelve labels, a screen each. The label above every caption takes 40 characters and can simply be the month: “March 2026”. Put a year in at least the first and the last of them and the cover works out the span by itself, printing 2025 → 2026 under your title. Captions are for what the month was like: “Month three: you met my mother and survived.”",
+            body: "Twelve photos, twelve labels, a screen each. The label above every caption (“Milestone dates” in the editor) takes 40 characters and can simply be the month: “March 2026”. Put a year in at least the first and the last of them and the cover works out the span by itself, printing 2025 → 2026 under your title. Captions are for what the month was like: “Month three: you met my mother and survived.”",
             borrow: [{ field: "fields.dates", line: "March 2026" }, { field: "caption", line: "Month three: you met my mother and survived." }],
           },
           {
             heading: "The morning of the wedding",
-            body: "From the first photo of the two of you to the one from the rehearsal last night. Change the closing line, which takes 80 characters, to “…and at four o’clock, the next part.” and set the countdown under it to the ceremony, labelled “Until I see you at the end of the aisle”. Send it when you wake up.",
+            body: "From the first photo of the two of you to the one from the rehearsal last night. Change the closing line (80 characters at most) to “…and at four o’clock, the next part.” and set the countdown under it to the ceremony, labelled “Until I see you at the end of the aisle”. Send it when you wake up.",
             borrow: [{ field: "fields.ending", line: "…and at four o’clock, the next part." }, { field: "countdown.label", line: "Until I see you at the end of the aisle" }],
           },
           {
             heading: "Labels that aren’t dates",
-            body: "After twenty years nobody remembers the months. The label is free text, so name the eras the way the two of you do: “The flat with no oven”, “Before the dog”, “The winter the boiler died”. A label left empty reads “Chapter 4”, which is honest too.",
+            body: "After twenty years nobody remembers the months. The label is free text, so for a twentieth anniversary name the eras the way the two of you do: “The flat with no oven”, “Before the dog”, “The winter the boiler died”. A label left empty reads “Chapter 4”, which is honest too.",
             borrow: [{ field: "fields.dates", line: "The flat with no oven" }, { field: "fields.dates", line: "Before the dog" }, { field: "fields.dates", line: "The winter the boiler died" }],
           },
           {
             heading: "From the first day of school to the gown",
-            body: "A graduation timeline from a parent: the uniform that was too big, the science fair, the driving test, today. Sign it from both of you and rewrite the ending for someone leaving: “…and now the part we don’t get to plan.” The letter comes after it, and that is where the advice goes.",
-            borrow: [{ field: "fields.ending", line: "…and now the part we don’t get to plan." }],
+            body: "A graduation timeline from a parent: the uniform that was too big, the science fair, the driving test, today. Sign it from both of you, and give the captions to what you never said at the time: “You were terrified. You went in anyway.” The letter comes after the road, and that is where the advice goes.",
+            borrow: [{ field: "caption", line: "You were terrified. You went in anyway." }],
           },
           {
             heading: "Every visit, with the airports on it",
@@ -1972,7 +1972,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         items: [
           {
             heading: "El primer año, una foto por mes",
-            body: "Doce fotos, doce rótulos, una pantalla para cada una. El rótulo que va encima de cada pie admite 40 caracteres y puede ser solo el mes: «Marzo de 2026». Pon el año al menos en el primero y en el último y la portada calcula sola el tramo y escribe 2025 → 2026 bajo tu título. Los pies son para contar cómo fue el mes: «Mes tres: conociste a mi madre y sobreviviste.»",
+            body: "Doce fotos, doce rótulos, una pantalla para cada una. El rótulo que va encima de cada pie («Fechas de los hitos» en el editor) admite 40 caracteres y puede ser solo el mes: «Marzo de 2026». Pon el año al menos en el primero y en el último y la portada calcula sola los años que abarca y escribe 2025 → 2026 bajo tu título. Los pies son para contar cómo fue el mes: «Mes tres: conociste a mi madre y sobreviviste.»",
             borrow: [{ field: "fields.dates", line: "Marzo de 2026" }, { field: "caption", line: "Mes tres: conociste a mi madre y sobreviviste." }],
           },
           {
@@ -1982,13 +1982,13 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Rótulos que no son fechas",
-            body: "A los veinte años ya nadie se acuerda de los meses. El rótulo es texto libre, así que nombra las épocas como las nombráis vosotros: «El piso sin horno», «Antes del perro», «El invierno sin caldera». Un rótulo vacío pone «Capítulo 4», que también es verdad.",
+            body: "Después de veinte años ya nadie se acuerda de los meses. El rótulo es texto libre, así que para un vigésimo aniversario nombra las épocas como las nombráis vosotros: «El piso sin horno», «Antes del perro», «El invierno sin caldera». Un rótulo vacío pone «Capítulo 4», que también es verdad.",
             borrow: [{ field: "fields.dates", line: "El piso sin horno" }, { field: "fields.dates", line: "Antes del perro" }, { field: "fields.dates", line: "El invierno sin caldera" }],
           },
           {
             heading: "Del primer día de colegio a la toga",
-            body: "Una línea del tiempo de graduación hecha por una madre o un padre: el uniforme que le quedaba grande, la feria de ciencias, el carné de conducir, hoy. Firmadla los dos y reescribid el final para alguien que se va: «…y ahora viene la parte que no nos toca planear.» La carta va después, y ahí es donde caben los consejos.",
-            borrow: [{ field: "fields.ending", line: "…y ahora viene la parte que no nos toca planear." }],
+            body: "Una línea del tiempo de graduación hecha por una madre o un padre: el uniforme que le quedaba grande, la feria de ciencias, el carné de conducir, hoy. Firmadla los dos y dejad en los pies lo que no dijisteis entonces: «Te morías de miedo. Entraste igual.» La carta va después del camino, y ahí es donde caben los consejos.",
+            borrow: [{ field: "caption", line: "Te morías de miedo. Entraste igual." }],
           },
           {
             heading: "Cada visita, con sus aeropuertos",
@@ -2009,7 +2009,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
         },
         {
           q: "¿Hace falta recordar las fechas exactas?",
-          a: "No. Cada rótulo es texto libre de hasta 40 caracteres, así que valen «Verano de 2022» o «El primer piso», y uno vacío pone «Capítulo 3». Si tus rótulos llevan años, la portada enseña el tramo, por ejemplo 2022 → 2026.",
+          a: "No. Cada rótulo es texto libre de hasta 40 caracteres, así que valen «Verano de 2022» o «El primer piso», y uno vacío pone «Capítulo 3». Si tus rótulos llevan años, la portada enseña los años que abarca, por ejemplo 2022 → 2026.",
         },
         {
           q: "¿Se puede cambiar la última frase?",
@@ -2031,8 +2031,8 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A real photo-booth strip",
-            body: "Photos two, three and four are printed as one strip, top to bottom, labelled “photo booth”. Use three frames from the same minute: an actual booth strip cut apart, or three selfies in a row where somebody blinks. The strip shows no captions, so let the pinned note say where it was: “the booth at the fair · £4 · worth it”. Each dot starts a new line.",
-            borrow: [{ field: "fields.tag", line: "the booth at the fair · £4 · worth it" }],
+            body: "Make this one for whoever went to the fair with you, a year on from that night. Photos two, three and four are printed as one strip, top to bottom, labelled “photo booth”. Use three frames from the same minute: an actual booth strip cut apart, or three selfies in a row where somebody blinks. The strip shows no captions, so let the pinned note say where it was: “the fair · four tries · worth it”. Each dot starts a new line.",
+            borrow: [{ field: "fields.tag", line: "the fair · four tries · worth it" }],
           },
           {
             heading: "A holiday with a friend, on the Seaside pages",
@@ -2041,7 +2041,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Long distance: the things you kept",
-            body: "The torn note holds one line in handwriting, up to 90 characters. Don’t spend it on a quotation from somebody else. Use it for the object you kept and they don’t know about: “I still have the boarding pass from the first time. It’s my bookmark.”",
+            body: "Send it on the last night of a visit. The torn note holds one line in handwriting, up to 90 characters. Don’t spend it on a quotation from somebody else. Use it for the object you kept and they don’t know about: “I still have the boarding pass from the first time. It’s my bookmark.”",
             borrow: [{ field: "fields.quote", line: "I still have the boarding pass from the first time. It’s my bookmark." }],
           },
           {
@@ -2086,7 +2086,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Una tira de fotomatón de verdad",
-            body: "Las fotos dos, tres y cuatro salen como una sola tira, de arriba abajo, con el rótulo «fotomatón». Usa tres tomas del mismo minuto: una tira de cabina de verdad recortada, o tres selfis seguidos en los que alguien parpadea. La tira no lleva pies, así que deja que la nota de la chincheta diga dónde fue: «la cabina de la feria · 4 € · lo valió». Cada punto abre una línea nueva.",
+            body: "Hazlo para quien fue contigo a la feria, un año después de aquella noche. Las fotos dos, tres y cuatro salen como una sola tira, de arriba abajo, con el rótulo «fotomatón». Usa tres tomas del mismo minuto: una tira de cabina de verdad recortada, o tres selfis seguidos en los que alguien parpadea. La tira no lleva pies, así que deja que la nota con chincheta diga dónde fue: «la cabina de la feria · 4 € · lo valió». Cada punto abre una línea nueva.",
             borrow: [{ field: "fields.tag", line: "la cabina de la feria · 4 € · lo valió" }],
           },
           {
@@ -2096,17 +2096,17 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A distancia: las cosas que guardaste",
-            body: "La nota rasgada lleva una sola frase escrita a mano, de hasta 90 caracteres. No la gastes en una cita de otra persona. Úsala para ese objeto que guardaste sin que lo sepa: «Aún tengo la tarjeta de embarque de la primera vez. La uso de marcapáginas.»",
+            body: "Mándalo la última noche de una visita. La nota rasgada lleva una sola frase escrita a mano, de hasta 90 caracteres. No la gastes en una cita de otra persona. Úsala para ese objeto que guardaste sin que lo sepa: «Aún tengo la tarjeta de embarque de la primera vez. La uso de marcapáginas.»",
             borrow: [{ field: "fields.quote", line: "Aún tengo la tarjeta de embarque de la primera vez. La uso de marcapáginas." }],
           },
           {
             heading: "Una página de cumpleaños con las frases de tu madre",
-            body: "En las páginas de Sol, pon de título «dice mamá» y dale la nota de la chincheta a sus tres frases más repetidas. Admite 40 caracteres a máquina y un punto medio abre línea nueva: «llévate chaqueta · come algo · llámame». La va a leer con su propia voz.",
+            body: "En las páginas de Sol, pon de título «dice mamá» y dale la nota con chincheta a sus tres frases más repetidas. Admite 40 caracteres a máquina y un punto medio abre línea nueva: «llévate chaqueta · come algo · llámame». La va a leer con su propia voz.",
             borrow: [{ field: "fields.headline", line: "dice mamá" }, { field: "fields.tag", line: "llévate chaqueta · come algo · llámame" }],
           },
           {
             heading: "El año, de enero a diciembre",
-            body: "Las páginas de Recuerdos son de película en negro, y su nota de la chincheta, si no la tocas, pone el año en curso encima de «resumen» y «nosotros». Mándalo en Nochevieja con doce fotos, una de cada mes, en orden. La carta va a máquina, encabezada con «De» y «Para» y sellada con tu inicial en lacre; termínala mirando hacia delante: «El año que viene, lo mismo, pero sin la intoxicación.»",
+            body: "Las páginas de Recuerdos son de película en negro, y su nota con chincheta, si no la tocas, pone el año en curso encima de «resumen» y «nosotros». Mándalo en Nochevieja con doce fotos, una de cada mes, en orden. La carta va a máquina, encabezada con «De» y «Para» y sellada con tu inicial en lacre; termínala mirando hacia delante: «El año que viene, lo mismo, pero sin la intoxicación.»",
             borrow: [{ field: "message", line: "El año que viene, lo mismo, pero sin la intoxicación." }],
           },
         ],
@@ -2125,7 +2125,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           a: "Flores, Persona favorita (con estampado de leopardo), Playa, Sol y Recuerdos (de película en negro). Cada uno pone el papel, las letras recortadas y las flores, y trae un título y una nota rasgada que puedes cambiar por los tuyos.",
         },
         {
-          q: "¿Cómo se cambia de línea en la nota de la chincheta?",
+          q: "¿Cómo se cambia de línea en la nota con chincheta?",
           a: "Escribe un punto medio (·) donde quieras el salto: «sal · sol · nosotros» sale en tres líneas cortas. La nota admite 40 caracteres en total.",
         },
       ],
