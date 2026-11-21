@@ -65,10 +65,15 @@ function StepPicture({ kind, flowers, line, photo, poster }: { kind: "photo" | "
     );
   if (kind === "note")
     return (
-      <span data-flatlay="step" className="block w-[6.75rem] sm:w-[11.5rem]">
-        {/* The card is a container, so the handwriting is sized by the card and keeps its place at any width. */}
+      <span data-flatlay="step" className="block w-[8.25rem] sm:w-[11.5rem]">
+        {/*
+         * The card is a container, so the handwriting is sized by the card and keeps its place at any
+         * width. Never under 12px: on a phone the card is small, and an eighth of its width was 8px
+         * of handwriting, a scribble where the step shows a real value of the gift ("Berlin → Riga").
+         * There the line takes a second or third row of the card.
+         */}
         <ArtWithSlot id="step-note" flowers={flowers} slot="card" shown="190px" slotClassName="[container-type:inline-size]">
-          <span className="flex h-full items-center px-[9cqw] font-hand text-[12.5cqw] leading-[1.08] text-page-ink">{line}</span>
+          <span data-note-line className="flex h-full items-center px-[9cqw] font-hand text-[max(12.5cqw,12px)] leading-[1.08] text-page-ink">{line}</span>
         </ArtWithSlot>
       </span>
     );
@@ -127,7 +132,7 @@ export async function HowToSend({
           {pictured.map((step, i) => (
             <li
               key={step.title}
-              className="relative grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-x-5 rounded-[1.4rem] border border-page-line bg-page-raised/70 py-4 pr-4 pl-5 shadow-page-card sm:block sm:px-4 sm:pt-10 sm:pb-7 sm:text-center"
+              className="relative grid grid-cols-[7.5rem_minmax(0,1fr)] items-center gap-x-3.5 rounded-[1.4rem] border border-page-line bg-page-raised/70 py-4 pr-4 pl-5 shadow-page-card sm:block sm:px-4 sm:pt-10 sm:pb-7 sm:text-center"
             >
               <span className="absolute top-1/2 -left-3 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-page-badge font-display text-base text-page-ink ring-4 ring-page-ground sm:-top-5 sm:left-1/2 sm:size-10 sm:-translate-x-1/2 sm:translate-y-0 sm:text-lg">
                 {i + 1}
@@ -212,8 +217,8 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
         <ul id={gridId} className="grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {guide.ideas.items.map((idea) => (
             <li key={idea.heading}>
-              <details className="group relative h-full rounded-[1.25rem] border border-page-line bg-page-raised/55 transition-colors duration-200 open:bg-page-raised hover:bg-page-raised sm:min-h-[10.25rem]">
-                {/* The whole card is the button: the summary's ::after covers it. The heart fills when its line is showing. */}
+              <details data-card className="group relative h-full rounded-[1.25rem] border border-page-line bg-page-raised/55 transition-colors duration-200 open:bg-page-raised hover:bg-page-raised sm:min-h-[10.25rem]">
+                {/* The whole card is the button: the summary's ::after covers it, and the keyboard's ring is drawn round the card (globals.css). The heart fills when its line is showing. */}
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-[1.25rem] px-5 py-4 after:absolute after:inset-0 after:rounded-[1.25rem] sm:block sm:px-6 sm:pt-6 sm:pb-0 [&::-webkit-details-marker]:hidden">
                   <h3 className="font-display text-[1.0625rem] leading-snug text-page-ink">{idea.heading}</h3>
                   <Heart aria-hidden="true" className="size-4 shrink-0 text-page-accent transition-[fill] duration-200 group-open:fill-current sm:absolute sm:bottom-5 sm:left-1/2 sm:-translate-x-1/2" strokeWidth={1.6} />

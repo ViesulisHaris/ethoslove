@@ -45,13 +45,19 @@ export type HeroFlatlayArt = {
  * and anything that moves for more than five seconds has to be stoppable (WCAG 2.2.2).
  * Most of the recordings open on the demo page's own bar for a second or so; the film starts past
  * it (`frame.from`) and comes back to the same point, so the bar is never in the phone.
- * The covers and films are 13:20 and a phone's screen is taller, so they fill it and lose a little
- * off each side; `frame` moves or shrinks a gift's picture where that would cut something off.
+ * The covers and films are 13:20 and a phone's screen is far taller (about 6:13). They used to fill
+ * it, which cut a seventh off each side: "No signal. No plans. Just stars." read "lo signal. No
+ * plans. Just star" on Constellations, and a dozen gifts had words cut in half in the first and
+ * largest picture of their page (the test of 21 Nov 2026). So the picture is drawn whole, at the
+ * screen's width, and what is left of the screen above and below it is a soft copy of the same
+ * picture: of the cover while it is still, and of the film's own frame while it plays, so the
+ * wash keeps the film's colours when the scene changes. Nothing of a gift is ever cut.
  *
  * A tap plays the gift, and to play it the phone is picked up: the live gift comes up over the
  * lying phone, upright, and the table goes soft behind it. The keyboard's focus goes up with it,
- * and a close button or Escape puts the phone down again and hands the focus back to the button
- * that lifted it. Upright because a rendered phone can't
+ * and a close button, Escape or a tap on the page beside it puts the phone down again and hands
+ * the focus back to the button that lifted it. It is never taller than the screen has room for,
+ * and the page moves to show all of it. Upright because a rendered phone can't
  * be stood up, and a gift is played with a finger: 24 of the 61 templates read where the finger
  * is (a scratch card, a frosted window, a cork to pull), and a template works that out from an
  * upright box, so on a screen turned 14 degrees the scratch would land beside the finger. One
@@ -65,13 +71,16 @@ export type HeroFlatlayArt = {
  * file: a CSS variable can't say it.
  */
 export type HeroFrame = {
-  /** Where the cover is held when it is wider than the screen: CSS object-position. The middle unless said. */
-  position?: string;
-  /** Under 1, the cover is drawn smaller than the screen's height and a soft copy of itself fills what is left above and below. */
-  zoom?: number;
   /** The second the film starts from, and loops back to: past the demo page's own bar, which most recordings open on (content/template-film-starts.ts). */
   from?: number;
 };
+
+/** The shape every cover and film is recorded in: 13 across, 20 down (public/templates/<slug>/poster.jpg and preview.webm; tests/unit/template-film-starts.test.ts measures them). */
+export const COVER_SHAPE = [13, 20] as const;
+const COVER_RATIO = `${COVER_SHAPE[0]} / ${COVER_SHAPE[1]}`;
+
+/** How often the wash behind the film is redrawn from it, in milliseconds: a soft blur needs no more. */
+const WASH_EVERY = 200;
 
 export function HeroFlatlay({
   slug,
@@ -105,6 +114,7 @@ export function HeroFlatlay({
   /** The film as its pause button needs to know it: not showing, running, or stopped by the visitor. */
   const [filmState, setFilmState] = useState<"off" | "playing" | "paused">("off");
   const film = useRef<HTMLVideoElement>(null);
+  const wash = useRef<HTMLCanvasElement>(null);
   const play = useRef<HTMLButtonElement>(null);
   const upright = useRef<HTMLDivElement>(null);
   /** The visitor stopped the film: scrolling it back on screen must not start it again. */
@@ -121,6 +131,42 @@ export function HeroFlatlay({
     wasLive.current = live;
   }, [live]);
 
+  // The picked-up phone comes up round the lying one's middle, which on a short screen or a phone
+  // is partly off it: the foot of a gift, where most keep their first button, was under the fold,
+  // and scrolled down, the close button sat level with the header (the test of 21 Nov 2026). So
+  // the page moves just far enough to show the whole phone under the header, and not at all when
+  // it is already in view. Worked out from where it ends up, not from its box while it turns.
+  useEffect(() => {
+    const phone = upright.current;
+    const ground = phone?.offsetParent;
+    if (!live || !phone || !ground) return;
+    const header = parseFloat(getComputedStyle(phone).getPropertyValue("--header-h")) || 0;
+    // Under the header, with the close button that sits half above the phone's corner; a finger's width at the foot.
+    const head = header + 28;
+    const foot = 16;
+    const middle = ground.getBoundingClientRect().top + phone.offsetTop;
+    const top = middle - phone.offsetHeight / 2;
+    const bottom = middle + phone.offsetHeight / 2;
+    const fits = phone.offsetHeight + head + foot <= window.innerHeight;
+    const by = top < head || !fits ? top - head : bottom > window.innerHeight - foot ? bottom - (window.innerHeight - foot) : 0;
+    if (Math.abs(by) > 1) window.scrollBy({ top: by, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }, [live]);
+
+  // A tap on the page beside the picked-up phone puts it down, as a tap beside anything that has
+  // come up over a page does. A click, not a press: a finger that drags the page to see the
+  // gift's foot must not close it. Not the header's, and not one inside the gift whose target the
+  // gift took away as it handled it.
+  useEffect(() => {
+    if (!live) return;
+    const away = (event: MouseEvent) => {
+      const at = event.target;
+      if (!(at instanceof Element) || !at.isConnected || upright.current?.contains(at) || play.current?.contains(at)) return;
+      if (at.closest("[data-page-theme]")) setLive(false);
+    };
+    document.addEventListener("click", away);
+    return () => document.removeEventListener("click", away);
+  }, [live]);
+
   // The film plays while the lying phone is on screen, and only for someone it suits. All of it is
   // done to the element itself: no state, so the first paint is the still cover on the server and here.
   useEffect(() => {
@@ -133,13 +179,40 @@ export function HeroFlatlay({
       return connection?.saveData === true || (typeof connection?.effectiveType === "string" && connection.effectiveType !== "4g");
     };
     const suits = () => !calm.matches && !sparing() && video.canPlayType("video/webm") !== "";
+    // The soft copy behind the film: its own frame, drawn small a few times a second, with the
+    // frame turned over above it and below it as the cover's copies are. Only ever drawn, never
+    // read back, and left as it is when the film is stopped, so it matches the frame.
+    const canvas = wash.current;
+    const paint = () => {
+      if (!canvas || !canvas.clientHeight || video.paused || video.readyState < 2 || video.currentTime < from) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const [across, down] = COVER_SHAPE;
+      // The frame's height as a share of the screen's, in the canvas's own rows.
+      const tall = (canvas.height * canvas.clientWidth * down) / across / canvas.clientHeight;
+      const top = (canvas.height - tall) / 2;
+      try {
+        for (const edge of [top, top + tall]) {
+          ctx.setTransform(1, 0, 0, -1, 0, 2 * edge);
+          ctx.drawImage(video, 0, top, canvas.width, tall);
+        }
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.drawImage(video, 0, top, canvas.width, tall);
+        canvas.setAttribute("data-on", "");
+      } catch {
+        // A browser that will not draw a film to a canvas keeps the cover's soft copy.
+      }
+    };
+    const painting = window.setInterval(paint, WASH_EVERY);
     const hide = () => {
       video.removeAttribute("data-on");
+      canvas?.removeAttribute("data-on");
       setFilmState("off");
     };
     // Seen only once it is really playing, and past the recording's opening.
     const show = () => {
       if (video.paused || video.seeking || video.currentTime < from || video.hasAttribute("data-on")) return;
+      paint();
       video.setAttribute("data-on", "");
       setFilmState("playing");
     };
@@ -174,6 +247,7 @@ export function HeroFlatlay({
     };
     calm.addEventListener("change", settle);
     return () => {
+      window.clearInterval(painting);
       watcher.disconnect();
       calm.removeEventListener("change", settle);
       video.removeEventListener("loadedmetadata", skip);
@@ -204,10 +278,14 @@ export function HeroFlatlay({
     }
   };
 
-  // How the 13:20 cover sits in the taller screen: filling it, held where `frame` says, or drawn a little smaller.
-  const zoom = frame?.zoom ?? 1;
-  const held: CSSProperties = zoom < 1 ? { objectFit: "cover", objectPosition: frame?.position ?? "50% 50%", inset: `${((1 - zoom) / 2) * 100}% 0`, height: `${zoom * 100}%` } : { objectFit: "cover", objectPosition: frame?.position ?? "50% 50%", inset: 0, height: "100%" };
+  // The picture in the screen's middle, and the same picture turned over above it and below it: a
+  // reflection carries on from the picture's own edge, so the soft copy never changes colour there.
+  const copy = "absolute top-1/2 left-0 block w-full";
   const picture = `calc(${width} * ${art.perWidth})`;
+  // The picked-up phone: a little larger than the lying one, but never taller than the screen has
+  // room for under the header (a frame is 390:844, so its width is 0.462 of its height), and never
+  // so small that a gift can't be played in it: a phone on its side scrolls instead.
+  const lifted = `max(12.5rem, min(calc(${width} * 1.14), calc((var(--lift-vh, 100vh) - var(--header-h, 4.25rem) - 2.75rem) * 0.462)))`;
   const settle = cn("transition-[opacity,filter] duration-500 ease-(--ease-out-quint)", live && "opacity-55 blur-[2px]");
   return (
     <div data-flatlay="hero" data-live={live ? "" : undefined} className={cn("relative mx-auto", className)} style={{ width: `calc(${width} * ${art.spanX})`, height: `calc(${width} * (${up} + ${down}))` }}>
@@ -231,12 +309,25 @@ export function HeroFlatlay({
            * drawn round the play disc instead, dark then light, so it shows on any cover.
            */}
           <button ref={play} type="button" data-play onClick={() => setLive(true)} aria-label={t("tryDemo")} className="group relative block h-full w-full text-paper focus-visible:outline-none">
-            {zoom < 1 ? <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-xl" /> : null}
-            <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute w-full" style={held} />
-            {preview ? (
-              // Over the still cover, unseen until it is really playing: no black frame, no flicker, and the cover where it can't play.
-              <video ref={film} muted loop={from === 0} playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" style={held} />
-            ) : null}
+            {/* The soft copy that fills the taller screen: blurred as one piece, and larger than the screen, so its faded rim is never seen. */}
+            <span data-soft aria-hidden="true" className="pointer-events-none absolute inset-0 block scale-125 blur-lg">
+              {["-150%", "50%", "-50%"].map((shift) => (
+                <img key={shift} src={`/templates/${slug}/poster.jpg`} alt="" className={copy} style={{ aspectRatio: COVER_RATIO, transform: `translateY(${shift})${shift === "-50%" ? "" : " scaleY(-1)"}` }} />
+              ))}
+              {preview ? <canvas ref={wash} width={26} height={56} className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" /> : null}
+            </span>
+            {/*
+             * The picture itself, whole: as wide as the screen, in the shape it was recorded in, in the
+             * screen's middle. Its top and bottom edges fade into the soft copy, so no line is drawn
+             * across the phone where one ends and the other begins.
+             */}
+            <span data-cover className={cn("hero-cover", copy, "-translate-y-1/2")} style={{ aspectRatio: COVER_RATIO }}>
+              <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full object-contain" />
+              {preview ? (
+                // Over the still cover, unseen until it is really playing: no black frame, no flicker, and the cover where it can't play.
+                <video ref={film} muted loop={from === 0} playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-300 data-on:opacity-100" />
+              ) : null}
+            </span>
             {live ? null : (
               <>
                 <span className="absolute inset-0 bg-black/20 transition-colors group-hover:bg-black/10" />
@@ -287,7 +378,7 @@ export function HeroFlatlay({
           className="hero-lift absolute left-1/2 z-10 outline-none"
           style={{ top: `calc(${width} * ${up})`, "--lift-turn": `${art.turn}deg` } as CSSProperties}
         >
-          <TemplatePhonePreview slug={slug} locale={locale} autoStart width={`calc(${width} * 1.14)`} />
+          <TemplatePhonePreview slug={slug} locale={locale} autoStart width={lifted} />
           {/* On the phone's top corner, half off it: clear of the gift's own controls, which keep inside the screen. */}
           <button type="button" data-close-demo onClick={() => setLive(false)} aria-label={t("closeDemo")} className="group/close absolute -top-4 -right-4 z-10 grid size-11 place-items-center rounded-full">
             <span className="grid size-9 place-items-center rounded-full border border-page-line bg-page-raised text-page-ink shadow-page-lift transition-[background-color,scale] duration-200 group-hover/close:bg-page-ground group-active/close:scale-95">

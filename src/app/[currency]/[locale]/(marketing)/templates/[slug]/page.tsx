@@ -149,8 +149,8 @@ export default async function TemplateDetailPage({
            * phone takes the left column. The text column is `contents` below `lg`, which makes its
            * two halves grid items that `order` can put either side of the phone.
            */}
-          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] xl:items-center xl:gap-x-14 xl:pt-10 xl:pb-28">
-            <div className="contents xl:block xl:max-w-[33rem]">
+          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-center lg:gap-x-10 lg:pt-10 lg:pb-24 xl:gap-x-14 xl:pb-28">
+            <div className="contents lg:block lg:max-w-[33rem]">
               <div className="order-first">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={free ? "rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink" : "rounded-[5px] bg-page-ink px-2 py-1 text-page-label text-page-ground"}>
@@ -162,7 +162,7 @@ export default async function TemplateDetailPage({
                     </span>
                   ))}
                 </div>
-                {/* The phrase people search for, then the name we gave it: one heading, both read. */}
+                {/* The phrase people search for, then the name we gave it: one heading, both read (and the name alone where they are the same words). */}
                 <h1 className="mt-7">
                   {keyword ? <span className="mb-3 block text-page-label text-page-body">{keyword}</span> : null}
                   <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
@@ -170,7 +170,7 @@ export default async function TemplateDetailPage({
                 <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{manifest.tagline[l]}</p>
                 {lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{lead}</p> : null}
 
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href={`/create/${manifest.slug}`}
                     className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px"
@@ -191,7 +191,7 @@ export default async function TemplateDetailPage({
                 </p>
               </div>
 
-              <div className="order-last xl:mt-10">
+              <div className="order-last lg:mt-10">
                 <h2 className="text-page-label text-page-body">{t(note ? "templates.includedSpecial" : "templates.included")}</h2>
                 <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
                   {included.map((label) => (
@@ -206,13 +206,16 @@ export default async function TemplateDetailPage({
             {/*
              * The phone lying on its flowers. --hero-phone is how wide its screen is drawn; --fl-up
              * and --fl-down the room kept above and below the screen's middle, in screen widths.
-             * Below `xl` the words are above and below it, so nearly the whole picture is kept clear
-             * of them. From `xl` it has the left column: its leaves run into the section's own
+             * Below `lg` the words are above and below it, so nearly the whole picture is kept clear
+             * of them. From `lg` it has the left column: its leaves run into the section's own
              * padding, and it sits left of centre, by less on a wider screen, so its right-hand
-             * lilies stop short of the words and its left-hand one is not lost off the page.
+             * lilies stop short of the words and its left-hand one is not lost off the page. Between
+             * 1024 and 1280 the two columns used to wait for `xl`: the words filled the left half of an
+             * iPad on its side, the right half was empty and the phone began under the fold (the test
+             * of 21 Nov 2026). The phone is drawn smaller there, by the same share of the screen.
              */}
-            <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] xl:order-first xl:[--fl-down:1.2] xl:[--fl-up:1.2] xl:[--hero-phone:clamp(14rem,17.8vw,16rem)]">
-              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ ...theme.cover, from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
+            <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] lg:order-first lg:[--fl-down:1.2] lg:[--fl-up:1.2] lg:[--hero-phone:clamp(11.25rem,17.8vw,16rem)]">
+              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 1024px) 700px, (min-width: 420px) 800px, 190vw" className="lg:mx-0 lg:ml-[calc(6.8rem-(80rem-100vw)*0.09)] xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
             </div>
           </div>
         </section>

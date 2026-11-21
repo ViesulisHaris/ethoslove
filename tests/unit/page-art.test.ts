@@ -130,8 +130,8 @@ describe("page art", () => {
       // The two flat-lays and the step pictures are pictures of their own, never strewn about.
       expect(["hero-flatlay", "experience-flatlay", "step-photo", "step-note", "step-send", "step-phone"]).not.toContain(piece.art);
     }
-    // A placement has no way to flip a piece: where it lies, how wide, how far turned, and no more.
-    for (const piece of ALL_PLACEMENTS) expect(Object.keys(piece).filter((k) => !["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until"].includes(k))).toEqual([]);
+    // A placement has no way to flip a piece: where it lies (`top`: at a fixed height, where a share of a growing section would not do), how wide, how far turned, and no more.
+    for (const piece of ALL_PLACEMENTS) expect(Object.keys(piece).filter((k) => !["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until", "top"].includes(k))).toEqual([]);
     // One tall stem at the right edge, one lily by the questions, a few petals and a leaf: composed, not scattered.
     const desk = ALL_PLACEMENTS.filter((p) => p.phone !== "only" && p.until === undefined);
     expect(desk.filter((p) => p.art.startsWith("lily-")).length).toBeLessThanOrEqual(2);

@@ -503,8 +503,39 @@ body:has([data-page-theme]) .site-header .btn-rose {
   }
 }
 
+/* The gift's cover and film in the lying phone's screen (hero-flatlay.tsx): drawn whole, at the
+   screen's width, over a soft copy of themselves that fills the taller screen. The picture's top
+   and bottom edges fade into that copy, so no line crosses the phone where one meets the other. */
+[data-page-theme] .hero-cover {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 3.5%, #000 96.5%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 3.5%, #000 96.5%, transparent);
+}
+
+/* A card of "What to write" is one button, and from 640px its title is only the card's top strip:
+   the keyboard's ring goes round the whole card. Only where :has() is known, so no browser is
+   left with no ring at all. */
+@supports selector(:has(a)) {
+  [data-page-theme] details[data-card] > summary:focus-visible {
+    outline: none;
+  }
+  [data-page-theme] details[data-card]:has(> summary:focus-visible) {
+    outline: 2px solid var(--page-ink);
+    outline-offset: 3px;
+  }
+}
+
 /* The hero's phone, picked up to be played (components/templates/page/hero-flatlay.tsx): the live
-   gift comes up over the lying phone from that phone's own turn, and ends upright and still. */
+   gift comes up over the lying phone from that phone's own turn, and ends upright and still. Its
+   height is held to the screen's (--lift-vh: the part of it a phone's address bar leaves free,
+   where the browser can say). */
+[data-page-theme] {
+  --lift-vh: 100vh;
+}
+@supports (height: 100dvh) {
+  [data-page-theme] {
+    --lift-vh: 100dvh;
+  }
+}
 [data-page-theme] .hero-lift {
   translate: -50% -50%;
 }

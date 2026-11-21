@@ -1,6 +1,8 @@
-import { existsSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import sharp from "sharp";
+import { COVER_SHAPE } from "@/components/templates/page/hero-flatlay";
 import { TEMPLATE_FILM_STARTS, templateFilmStart } from "@/content/template-film-starts";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
 
@@ -44,6 +46,24 @@ describe("where a gift's preview film starts", () => {
   it("is 0 for a template nobody measured", () => {
     expect(templateFilmStart("the-letter")).toBeGreaterThan(1);
     expect(templateFilmStart("not-a-template")).toBe(0);
+  });
+
+  it("is recorded, with its cover, in the one shape the lying phone lays it into: 13 across, 20 down", async () => {
+    // The hero draws each cover and film whole, at the phone screen's width, in a box of this shape
+    // (hero-flatlay.tsx, COVER_SHAPE). A recording of another shape would still be whole, but it
+    // would sit in that box with a gap beside it; this fails before anyone sees that.
+    const [across, down] = COVER_SHAPE;
+    for (const m of TEMPLATE_MANIFESTS) {
+      const cover = await sharp(join(process.cwd(), "public", m.thumbnail.poster)).metadata();
+      expect(cover.width! * down, `${m.slug}: its cover is ${cover.width}×${cover.height}`).toBe(cover.height! * across);
+      if (!m.thumbnail.webm) continue;
+      // A WebM says its size once, near its start: PixelWidth (0xB0) and PixelHeight (0xBA), two bytes each.
+      const head = readFileSync(join(process.cwd(), "public", m.thumbnail.webm)).subarray(0, 8192);
+      let size: [number, number] | null = null;
+      for (let i = 0; i < head.length - 8 && !size; i++) if (head[i] === 0xb0 && head[i + 1] === 0x82 && head[i + 4] === 0xba && head[i + 5] === 0x82) size = [head.readUInt16BE(i + 2), head.readUInt16BE(i + 6)];
+      expect(size, `${m.slug}: its film does not say its size`).not.toBeNull();
+      expect(size![0] * down, `${m.slug}: its film is ${size![0]}×${size![1]}`).toBe(size![1] * across);
+    }
   });
 
   it("leaves every film small enough to send to a phone: none over 2 MB", () => {

@@ -1,5 +1,6 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
 import { templateFilmStart } from "../../src/content/template-film-starts";
+import { TEMPLATE_SLUGS } from "../../src/templates/manifests";
 
 /**
  * A gift's page as the owner's mock-up lays it out (docs/marketing/growth-build/
@@ -187,7 +188,15 @@ for (const [width, height] of SIZES) {
  * The layout is every template's. A long name, a long description, a page without a guide, a
  * premium one, each colourway of the art, and both languages: each on a desk, a laptop and a phone.
  */
-const OTHERS = ["/templates/birthday-cinema", "/templates/scratch-card", "/templates/snow-globe", "/templates/vinyl", "/templates/coquette", "/templates/constellations", "/templates/gingerbread-house", "/es/templates/the-letter", "/es/templates/string-the-lights"];
+const SOME = ["/templates/birthday-cinema", "/templates/scratch-card", "/templates/snow-globe", "/templates/vinyl", "/templates/coquette", "/templates/constellations", "/templates/gingerbread-house", "/templates/xoxo", "/es/templates/the-letter", "/es/templates/string-the-lights", "/es/templates/midnight-countdown"];
+/**
+ * Every gift's page in both languages, for a change to the shared layout or to the words in it:
+ *
+ *   ALL_GIFT_PAGES=1 PORT=3413 npx playwright test tests/e2e/template-page-design.spec.ts -g "holds the same layout" --project=desktop-chrome --workers=1
+ *
+ * (122 pages at four sizes, about a quarter of an hour.)
+ */
+const OTHERS = process.env.ALL_GIFT_PAGES === "1" ? [...TEMPLATE_SLUGS.map((slug) => `/templates/${slug}`), ...TEMPLATE_SLUGS.map((slug) => `/es/templates/${slug}`)] : SOME;
 
 for (const path of OTHERS) {
   test(`${path} holds the same layout, on a desk and on a phone`, async ({ page }) => {
@@ -557,10 +566,19 @@ test("The Letter's page never lists under “Free” what the free note does not
     await expect(list).toContainText(/20/);
     const heading = hero.getByRole("heading", { level: 2 });
     const experience = page.locator("section[aria-labelledby=template-experience]");
+    const rows = (await list.locator("li").allTextContents()).join(" | ");
     if (NOTE_FOR_EVERYONE) {
       // The list of photos, captions and a video is what “Make it special” adds, and says so.
       await expect(heading).toHaveText(special);
       await expect(hero).not.toContainText(included);
+      // And only what it adds: the free note has its song, its countdown and its hidden P.S., and all
+      // three stood under this heading as if they cost the unlock's price (the test of 21 Nov 2026).
+      expect(rows, path).not.toMatch(/music|countdown|surprise|música|cuenta atrás|sorpresa/i);
+      expect(rows, path).toMatch(/4[.,]000/);
+      expect(rows, path).toMatch(/voice message|mensaje de voz/i);
+      await expect(list.locator("li")).toHaveCount(5);
+      // The page's own fourth question says the same of the free note.
+      await expect(page.locator("section[aria-labelledby=template-questions]")).toContainText(/a song, a countdown and a hidden P\.S\.|una canción, una cuenta atrás y una posdata escondida/);
       // Nor does the sentence beside the phone promise photos dropping in.
       await expect(hero).not.toContainText(/photos drop in|fotos caen/i);
       await expect(hero).toContainText(/handwriting|escritas a mano/i);
@@ -572,6 +590,9 @@ test("The Letter's page never lists under “Free” what the free note does not
     } else {
       await expect(heading).toHaveText(included);
       await expect(experience).toContainText(/20/);
+      // Under “What's included” the song, the countdown and the surprise belong: they come with it.
+      expect(rows, path).toMatch(/music|música/i);
+      await expect(list.locator("li")).toHaveCount(6);
     }
   }
   if (NOTE_FOR_EVERYONE) {
@@ -581,20 +602,198 @@ test("The Letter's page never lists under “Free” what the free note does not
   }
 });
 
-test("a gift whose title sat at the cover's edge keeps it in the lying phone", async ({ page }) => {
-  // content/template-page-themes.ts, `cover`: held to one side, or drawn smaller over a soft copy of itself.
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/templates/coquette");
-  const held = page.locator("[data-flatlay=hero] video");
-  expect(await held.evaluate((v) => getComputedStyle(v).objectPosition)).toBe("22% 50%");
-  await page.goto("/templates/evergreen");
-  const small = await page.locator("[data-flatlay=hero] video").evaluate((v: HTMLVideoElement) => {
-    const screen = v.parentElement!;
-    return { share: v.offsetHeight / screen.offsetHeight, stills: screen.querySelectorAll("img").length, position: getComputedStyle(v).objectPosition };
+/**
+ * How the cover and the film sit in the lying phone's screen: the box they are drawn in against the
+ * screen's, in the screen's own unturned pixels, and how much of the recording that box shows.
+ */
+async function coverFit(page: Page) {
+  return page.locator("[data-flatlay=hero] [data-cover]").evaluate((cover: HTMLElement) => {
+    const screen = cover.closest("[data-play]") as HTMLElement;
+    const video = cover.querySelector("video");
+    const still = cover.querySelector("img")!;
+    // The share of a 13:20 recording's width that a box shows when the picture is fitted into it by `fit`.
+    const shown = (el: HTMLElement) => {
+      const fit = getComputedStyle(el).objectFit;
+      const box = el.offsetWidth / el.offsetHeight;
+      return fit === "cover" ? Math.min(1, box / (13 / 20)) : 1;
+    };
+    return {
+      screen: [screen.offsetWidth, screen.offsetHeight],
+      cover: [cover.offsetWidth, cover.offsetHeight, cover.offsetLeft],
+      stillShown: shown(still),
+      filmShown: video ? shown(video) : 1,
+      filmBox: video ? [video.offsetWidth, video.offsetHeight] : null,
+      playing: video?.hasAttribute("data-on") ?? false,
+      soft: screen.querySelectorAll("[data-soft] img").length,
+      wash: screen.querySelector("[data-soft] canvas")?.hasAttribute("data-on") ?? false,
+    };
   });
-  expect(small.share).toBeCloseTo(0.8, 2);
-  expect(small.stills).toBe(2);
-  expect(small.position).toBe("0% 50%");
+}
+
+test("the lying phone shows the whole of a gift's cover and film: nothing is cut off its sides", async ({ page }) => {
+  // The test of 21 Nov 2026: the screen is 6:13 and the recordings 13:20, and filling the screen cut
+  // a seventh off each side. Constellations' caption read "lo signal. No plans. Just star", Fireside
+  // lost the first word of its title in the film and in the still, and a dozen gifts had words cut
+  // mid-word in the first and largest picture of their page. These are the gifts it named, at a
+  // desk's size and a phone's; the unit test holds every recording to the shape this relies on.
+  for (const [width, height] of [[1440, 900], [375, 812]] as const) {
+    await page.setViewportSize({ width, height });
+    for (const slug of ["constellations", "fireside", "digicam", "front-page", "coquette", "evergreen"]) {
+      await page.goto(`/templates/${slug}`);
+      await page.locator("[data-flatlay=hero]").scrollIntoViewIfNeeded();
+      const still = await coverFit(page);
+      // The picture is as wide as the screen and no wider, in the recordings' own shape, in the screen's middle.
+      expect(still.cover[0], `${slug} ${width}`).toBe(still.screen[0]);
+      expect(still.cover[2], `${slug} ${width}`).toBe(0);
+      expect(still.cover[0] / still.cover[1], `${slug} ${width}`).toBeCloseTo(13 / 20, 2);
+      expect(still.cover[1], `${slug} ${width}`).toBeLessThan(still.screen[1]);
+      expect(still.stillShown, `${slug} ${width}: the still cover is cut`).toBe(1);
+      // What is left of the taller screen is a soft copy of the same cover: itself, and turned over above and below.
+      expect(still.soft, `${slug} ${width}`).toBe(3);
+      // And the film, once it plays, is laid in the same box and is whole too, over a wash of its own frame.
+      await expect(page.locator("[data-flatlay=hero] video[data-on]"), `${slug} ${width}`).toHaveCount(1, { timeout: 25000 });
+      const film = await coverFit(page);
+      expect(film.filmBox, `${slug} ${width}`).toEqual([film.cover[0], film.cover[1]]);
+      expect(film.filmShown, `${slug} ${width}: the film is cut`).toBe(1);
+      await expect.poll(async () => (await coverFit(page)).wash, { message: `${slug} ${width}: the wash follows the film` }).toBe(true);
+    }
+  }
+});
+
+test("a step's note card can be read on a phone: its handwriting is never under 12 px", async ({ page }) => {
+  // It was an eighth of the card's width, which on a phone is 8 px: "Berlin → Riga" was a scribble (the test of 21 Nov 2026).
+  for (const [width, path] of [[375, "/templates/passport"], [320, "/templates/passport"], [320, "/templates/birthday-cinema"], [375, "/es/templates/the-council"]] as const) {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto(path);
+    const notes = await page.locator("[data-note-line]").evaluateAll((lines) =>
+      lines.map((line) => {
+        const card = line.parentElement!;
+        const range = document.createRange();
+        range.selectNodeContents(line);
+        const rects = [...range.getClientRects()];
+        const picture = line.closest("[data-flatlay=step]")!.getBoundingClientRect();
+        const title = line.closest("li")!.querySelector("h3")!.getBoundingClientRect();
+        return { size: parseFloat(getComputedStyle(line).fontSize), fits: Math.max(...rects.map((r) => r.bottom)) - Math.min(...rects.map((r) => r.top)) <= card.offsetHeight + 1 && line.scrollWidth <= card.offsetWidth + 1, clear: picture.right <= title.left };
+      }),
+    );
+    expect(notes.length, path).toBeGreaterThan(0);
+    for (const note of notes) {
+      expect(note.size, `${path} ${width}`).toBeGreaterThanOrEqual(12);
+      // The whole line is on the card, and the wider picture stops short of the step's title.
+      expect(note.fits, `${path} ${width}: the line runs off its card`).toBe(true);
+      expect(note.clear, `${path} ${width}: the picture meets the title`).toBe(true);
+    }
+  }
+  // On a desk the card is larger and the line is the eighth of its width it always was.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/templates/passport");
+  expect(await page.locator("[data-note-line]").first().evaluate((el) => parseFloat(getComputedStyle(el).fontSize))).toBeGreaterThan(13.5);
+});
+
+test("the picked-up phone fits a short screen under the header, and a tap beside it puts it down", async ({ page }) => {
+  // A 1366×768 laptop with its browser bars, and a short one: the gift's foot, where most keep their
+  // first button, was under the fold, and scrolled down the close button sat level with the header.
+  for (const [width, height] of [[1366, 650], [1280, 620], [375, 812]] as const) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/templates/snow-globe");
+    const hero = page.locator("[data-flatlay=hero]");
+    await hero.locator("[data-play]").click();
+    const up = hero.locator("[data-upright]");
+    await expect(up).toBeVisible();
+    // Once it has come up and the page has moved to show it: all of it between the header and the screen's foot.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(() => {
+            const phone = document.querySelector("[data-upright]")!.getBoundingClientRect();
+            const close = document.querySelector("[data-close-demo]")!.getBoundingClientRect();
+            const header = parseFloat(getComputedStyle(document.querySelector("[data-upright]")!).getPropertyValue("--header-h"));
+            return close.top >= header && phone.top >= header && phone.bottom <= innerHeight;
+          }),
+        { message: `${width}×${height}: the phone is not whole on the screen`, timeout: 8000 },
+      )
+      .toBe(true);
+    // Never so small that the gift can't be played.
+    expect((await up.boundingBox())!.width, `${width}×${height}`).toBeGreaterThanOrEqual(200);
+  }
+  // A tap inside the gift plays it; a tap on the page beside it puts the phone down and hands the focus back.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/templates/snow-globe");
+  const hero = page.locator("[data-flatlay=hero]");
+  await hero.locator("[data-play]").click();
+  const up = hero.locator("[data-upright]");
+  await expect(up.locator("[data-template=snow-globe]")).toBeVisible({ timeout: 25000 });
+  await up.click({ position: { x: 100, y: 300 }, force: true });
+  await expect(up).toHaveCount(1);
+  // Not the header's: the language switch and the links are not "beside the phone".
+  await page.locator(".site-header").click({ position: { x: 560, y: 20 }, force: true });
+  await expect(up).toHaveCount(1);
+  await page.locator("h1").click();
+  await expect(up).toHaveCount(0);
+  await expect(hero.locator("[data-play]")).toBeFocused();
+  // And it comes up again.
+  await hero.locator("[data-play]").click();
+  await expect(up).toBeVisible();
+});
+
+test("the keyboard's ring goes round the whole card of “What to write”, not its title", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/templates/snow-globe");
+  const section = page.locator("section[aria-labelledby=template-guide]");
+  await section.getByRole("button", { name: /see more examples/i }).focus();
+  await page.keyboard.press("Tab");
+  const ring = await page.evaluate(() => {
+    const summary = document.activeElement as HTMLElement;
+    const card = summary.parentElement!;
+    return { summary: summary.tagName, focused: summary.matches(":focus-visible"), own: getComputedStyle(summary).outlineStyle, card: getComputedStyle(card).outlineStyle, width: getComputedStyle(card).outlineWidth, taller: card.offsetHeight > summary.offsetHeight * 2 };
+  });
+  expect(ring).toEqual({ summary: "SUMMARY", focused: true, own: "none", card: "solid", width: "2px", taller: true });
+  // And it leaves with the focus.
+  await page.keyboard.press("Tab");
+  expect(await section.locator("details").first().evaluate((card) => getComputedStyle(card).outlineStyle)).toBe("none");
+});
+
+test("an iPad on its side has the phone beside the words, not an empty half", async ({ page }) => {
+  // Between 1024 and 1280 the words filled the left half, the right half was empty and the phone began under the fold.
+  for (const [width, height, path] of [[1024, 768, "/es/templates/midnight-countdown"], [1100, 800, "/templates/the-letter"], [1024, 768, "/templates/xoxo"]] as const) {
+    await page.setViewportSize({ width, height });
+    await page.goto(path);
+    const at = await page.evaluate(() => {
+      const screen = document.querySelector("[data-flatlay=hero] [data-play]")!.getBoundingClientRect();
+      const name = document.querySelector("h1")!.getBoundingClientRect();
+      const make = document.querySelector("[data-page-theme] a[href*='/create/']")!.getBoundingClientRect();
+      return { screenRight: screen.right, screenTop: screen.top, screenBottom: screen.bottom, nameLeft: name.left, makeBottom: make.bottom, view: innerHeight };
+    });
+    // Side by side: the phone's screen ends before the words begin, and both are on the first screen.
+    expect(at.screenRight, path).toBeLessThan(at.nameLeft);
+    expect(at.screenTop, path).toBeGreaterThan(0);
+    expect(at.screenBottom, path).toBeLessThanOrEqual(at.view);
+    expect(at.makeBottom, path).toBeLessThan(at.view);
+  }
+});
+
+test("every hero says what the gift is, its h1 says its name once, and “Made for” reads as a sentence", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // XOXO's description opens on a sentence of fifty words, so its hero had a name, an italic line and two buttons.
+  await page.goto("/templates/xoxo");
+  const hero = page.locator("[data-page-theme] > section").first();
+  await expect(hero.getByText(/An envelope sealed with a lipstick kiss\./)).toBeVisible();
+  // The whole description is still on the page, in its closed block.
+  await expect(page.locator("[data-more-about]")).toContainText(/fingerprint hearts/);
+  await expect(page.locator("[data-more-about]")).toContainText(/Made for Valentine’s Day, an anniversary, no reason at all\./);
+  await expect(page.locator("[data-more-about] a[href$='/occasions/valentines']")).toHaveText("Valentine’s Day");
+  // Two Thanksgiving gifts exist: the row is still four cards, and is not headed "for Thanksgiving" when half of it is not.
+  await page.goto("/templates/light-the-candles");
+  const more = page.locator("section[aria-labelledby=template-more]");
+  await expect(more.locator("li a")).toHaveCount(4);
+  await expect(more.locator("li a").first()).toHaveAttribute("href", /\/templates\/wishbone$/);
+  await expect(page.locator("#template-more")).toHaveText(/more gifts to send/i);
+  // The Spanish pages last: a visit to one is remembered, and the next page would come in Spanish.
+  await page.goto("/es/templates/midnight-countdown");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cuenta atrás de medianoche");
+  await page.goto("/es/templates/xoxo");
+  await expect(page.locator("[data-page-theme] > section").first().getByText(/Un sobre sellado con un beso de pintalabios\./)).toBeVisible();
+  await expect(page.locator("[data-more-about]")).toContainText(/Pensado para San Valentín, un aniversario, un día cualquiera\./);
 });
 
 test("a gift played by dragging works from the hero: a scratch card scratches where the pointer is", async ({ page }) => {
