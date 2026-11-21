@@ -630,7 +630,7 @@
       "fromName": "Tu nombre, como te conocen",
       "forName": "Para quién es",
       "prompt": "¿Qué quieres que escriban?",
-      "promptPlaceholder": "Por ejemplo: un recuerdo que solo tenéis vosotros dos",
+      "promptPlaceholder": "P. ej.: un recuerdo solo vuestro",
       "optional": "Opcional",
       "create": "Crear el enlace",
       "creating": "Creando…",

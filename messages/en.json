@@ -630,7 +630,7 @@
       "fromName": "Your name, as they know you",
       "forName": "Who it's for",
       "prompt": "What should they write?",
-      "promptPlaceholder": "e.g. A memory only the two of you share",
+      "promptPlaceholder": "e.g. A memory only you two share",
       "optional": "Optional",
       "create": "Create the link",
       "creating": "Creating…",
