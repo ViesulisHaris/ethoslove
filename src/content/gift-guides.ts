@@ -943,7 +943,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "our-timeline",
           heading: "Un camino con una fecha en cada foto",
-          body: "Para fotos que tienen un orden. Un camino se dibuja página abajo y clava cada foto en un hito con su propia etiqueta, veinte paradas como máximo. Cuenta qué pasó, no solo cuándo. Bajo la última foto quedan tu frase final, luego una cuenta atrás si la añades, y al final la carta. Apúntala a lo siguiente: el viaje, la mudanza, la boda.",
+          body: "Para fotos que tienen un orden. Un camino se dibuja página abajo y clava cada foto en un hito con su propia etiqueta, veinte paradas como máximo. Cuenta qué pasó, no solo cuándo. Bajo la última foto quedan tu frase final, luego una cuenta atrás si la añades, y al final la carta. Apunta la cuenta atrás a lo siguiente: el viaje, la mudanza, la boda.",
           line: { field: "dates", where: "La etiqueta de un hito", text: "Marzo de 2021: el piso de las tuberías" },
         },
         {
@@ -1150,7 +1150,7 @@ export const GIFT_GUIDES: Record<GiftGuideSlug, Record<GiftLocale, GiftGuide>> =
         {
           template: "scratch-card",
           heading: "Una noticia bajo el metalizado, para un aniversario con secreto",
-          body: "Rascan con el dedo una baraja de tarjetas; cada una esconde una foto y su pie, y la última lleva el anuncio en letras grandes: el viaje, el anillo, la reserva. Las palabras impresas sobre la capa metalizada las eliges tú, para que la portada no cuente nada.",
+          body: "Rascan con el dedo un montón de tarjetas; cada una esconde una foto y su pie, y la última lleva el anuncio en letras grandes: el viaje, el anillo, la reserva. Las palabras impresas sobre la capa metalizada las eliges tú, para que la portada no cuente nada.",
           line: { field: "finalTitle", where: "El titular de la última tarjeta", text: "Volvemos a donde nos conocimos. El viernes." },
         },
         {

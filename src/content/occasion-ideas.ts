@@ -678,7 +678,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "pack-your-bags",
           heading: "La próxima visita, anunciada por sorpresa",
-          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en “Destino” y la tuya en “Salida”. Mete tus pistas en la maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, sin saber adónde va, hasta que el panel de salidas deletrea su propia ciudad. Pon en el billete la llegada de verdad: “vie. 12 dic., 19:40”.",
+          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en “Destino” y la tuya en “Salida”. Irá metiendo tus pistas en la maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, sin saber adónde va, hasta que el panel de salidas deletrea su propia ciudad. Pon en el billete la llegada de verdad: “vie. 12 dic., 19:40”.",
         },
         {
           template: "paper-crane",
