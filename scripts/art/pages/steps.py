@@ -1,11 +1,13 @@
 """
 The three small pictures of "how to send a gift": bold, simple shapes that still read at 140 px.
 
-    blender --background --factory-startup --python steps.py -- --out <dir> [--preview] [--only photo,note,send]
+    blender --background --factory-startup --python steps.py -- --out <dir> [--preview] [--only photo,note,send,phone]
 
 step-photo   a polaroid lying slightly turned on another, its photo's place empty (a page lays a photo into it)
 step-note    a sheet of cream letter paper with a fold line and a lifted corner, blank (a page writes on it), a fountain pen beside it
 step-send    a small phone, a sealed cream envelope with a wine wax seal on its screen
+step-phone   the same phone from the same camera with nothing on its screen (a flat dark fill), for a page to lay
+             any gift's cover into; with it step-phone-bezel, the phone alone with its screen cut out, to go back on top
 """
 
 import os
@@ -65,9 +67,30 @@ def send():
     pkit.shoot("step-send", OPT["out"], objs, floor, shot, meta={"piece": "step-send", "long": 480})
 
 
+def phone():
+    """step-send's phone, just as it lies there, with an empty screen. It is held (frames.json) to step-send's frame and rectangle."""
+    pkit.begin()
+    floor = pkit.ground()
+    parts, info = things.phone("phone", 2.7)
+    root = things.place("phone_root", parts, (0.0, 0.0, 0.0), yaw=-5.0)
+    pkit.rig(OPT)
+    shot = pkit.frame(parts, 540, pad=PAD, opt=OPT, piece="step-phone")
+    meta = {"piece": "step-phone", "long": 480,
+            "screen": dict(pkit.area(shot, things.world_corners(root, info), things.SCREEN_BOX, info["radius"], info["width"]), fill="#0b0908")}
+    scr = info["screen"]
+    black, hole = scr.data.materials[0], things.holdout()
+
+    def cut():
+        scr.data.materials[0] = hole
+
+    def uncut():
+        scr.data.materials[0] = black
+    pkit.shoot("step-phone", OPT["out"], parts, floor, shot, meta=meta, extra=[("bezel", parts, cut, uncut)])
+
+
 def main():
-    for which in (OPT["only"] or ["photo", "note", "send"]):
-        {"photo": photo, "note": note, "send": send}[which]()
+    for which in (OPT["only"] or ["photo", "note", "send", "phone"]):
+        {"photo": photo, "note": note, "send": send, "phone": phone}[which]()
 
 
 main()
