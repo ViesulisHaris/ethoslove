@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
+import { loadTemplate } from "@/templates/registry";
 
 /**
  * What the page hands over about the render (content/page-art.ts reads it from the art's manifest
@@ -55,10 +56,14 @@ export type HeroFlatlayArt = {
  *
  * A tap plays the gift, and to play it the phone is picked up: the live gift comes up over the
  * lying phone, upright, and the table goes soft behind it. The keyboard's focus goes up with it,
- * and a close button, Escape or a tap on the page beside it puts the phone down again and hands
- * the focus back to the button that lifted it. It is never taller than the screen has room for,
- * and the page moves to show all of it. Upright because a rendered phone can't
- * be stood up, and a gift is played with a finger: 24 of the 61 templates read where the finger
+ * and a close button, Escape (wherever the focus is by then) or a tap on the page beside it puts
+ * the phone down again and hands the focus back to the button that lifted it. While it is up the
+ * page says a gift is running, as the editor's preview does, so the consent strip and the help
+ * button leave the foot of the screen to the gift. A gift whose code can't be fetched (no
+ * connection, or a page older than the last deploy) puts the phone back down by itself. It is
+ * never taller than the screen has room for, and the page moves to show all of it. Upright
+ * because a rendered phone can't be stood up, and a gift is played with a finger: 24 of the 61
+ * templates read where the finger
  * is (a scratch card, a frosted window, a cork to pull), and a template works that out from an
  * upright box, so on a screen turned 14 degrees the scratch would land beside the finger. One
  * way for every gift, so nobody learns two.
@@ -78,6 +83,10 @@ export type HeroFrame = {
 /** The shape every cover and film is recorded in: 13 across, 20 down (public/templates/<slug>/poster.jpg and preview.webm; tests/unit/template-film-starts.test.ts measures them). */
 export const COVER_SHAPE = [13, 20] as const;
 const COVER_RATIO = `${COVER_SHAPE[0]} / ${COVER_SHAPE[1]}`;
+
+/** A finger's tap beside the picked-up phone: it lifts where it came down, give or take this many pixels, within this many milliseconds. */
+const TAP_SLOP = 10;
+const TAP_MS = 600;
 
 /** How often the wash behind the film is redrawn from it, in milliseconds: a soft blur needs no more. */
 const WASH_EVERY = 200;
@@ -152,19 +161,80 @@ export function HeroFlatlay({
     if (Math.abs(by) > 1) window.scrollBy({ top: by, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }, [live]);
 
+  // A gift running: the consent strip and the help button are fixed to the foot of the screen,
+  // which is where gifts keep their first controls, and stand down for `data-gift-running` on
+  // <html> (components/shared/cookie-consent.tsx), as they do for the editor's preview. Without
+  // it every new visitor, who has not answered the strip yet, had it lying over the lower quarter
+  // of the picked-up phone (the deep test of 21 Nov 2026).
+  useEffect(() => {
+    if (!live) return;
+    document.documentElement.dataset.giftRunning = "true";
+    return () => {
+      delete document.documentElement.dataset.giftRunning;
+    };
+  }, [live]);
+
+  // The gift's code is fetched when the phone is picked up. Where it can't be (no connection, or a
+  // page older than the last deploy, whose files have new names) the renderer has only a black
+  // screen with a developer's line to show, so the phone goes back down: the cover and "Try the
+  // live demo" are the right thing to see, and the next tap tries again.
+  useEffect(() => {
+    if (!live) return;
+    let on = true;
+    loadTemplate(slug).then(
+      (found) => on && !found && setLive(false),
+      () => on && setLive(false),
+    );
+    return () => {
+      on = false;
+    };
+  }, [live, slug]);
+
   // A tap on the page beside the picked-up phone puts it down, as a tap beside anything that has
   // come up over a page does. A click, not a press: a finger that drags the page to see the
   // gift's foot must not close it. Not the header's, and not one inside the gift whose target the
   // gift took away as it handled it.
+  // An iPhone makes a click out of a tap only on something it takes for clickable; a tap on the
+  // page's ground gives pointer events and no click (the deep test of 21 Nov 2026: the phone
+  // stayed up on every WebKit run). So a finger is followed by its own events: down and up beside
+  // the phone, in the same place and without a pause, is a tap. A drag scrolls and a long press
+  // selects, and neither closes.
+  // Escape closes from anywhere: a gift that takes away the button just pressed leaves the
+  // keyboard's focus on the page's body, outside the phone, where a handler on the phone never heard it.
   useEffect(() => {
     if (!live) return;
+    const beside = (at: EventTarget | null) => at instanceof Element && at.isConnected && !upright.current?.contains(at) && !play.current?.contains(at) && at.closest("[data-page-theme]") !== null;
     const away = (event: MouseEvent) => {
-      const at = event.target;
-      if (!(at instanceof Element) || !at.isConnected || upright.current?.contains(at) || play.current?.contains(at)) return;
-      if (at.closest("[data-page-theme]")) setLive(false);
+      if (beside(event.target)) setLive(false);
+    };
+    let pressed: { x: number; y: number; at: number } | null = null;
+    const press = (event: PointerEvent) => {
+      pressed = event.pointerType === "touch" && event.isPrimary && beside(event.target) ? { x: event.clientX, y: event.clientY, at: event.timeStamp } : null;
+    };
+    const release = (event: PointerEvent) => {
+      const from = pressed;
+      pressed = null;
+      if (!from || event.pointerType !== "touch" || !beside(event.target)) return;
+      if (Math.hypot(event.clientX - from.x, event.clientY - from.y) <= TAP_SLOP && event.timeStamp - from.at <= TAP_MS) setLive(false);
+    };
+    const cancel = () => {
+      pressed = null;
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setLive(false);
     };
     document.addEventListener("click", away);
-    return () => document.removeEventListener("click", away);
+    document.addEventListener("pointerdown", press);
+    document.addEventListener("pointerup", release);
+    document.addEventListener("pointercancel", cancel);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("click", away);
+      document.removeEventListener("pointerdown", press);
+      document.removeEventListener("pointerup", release);
+      document.removeEventListener("pointercancel", cancel);
+      document.removeEventListener("keydown", escape);
+    };
   }, [live]);
 
   // The film plays while the lying phone is on screen, and only for someone it suits. All of it is
@@ -372,9 +442,6 @@ export function HeroFlatlay({
           role="group"
           aria-label={t("liveDemo", { name })}
           tabIndex={-1}
-          onKeyDown={(e) => {
-            if (e.key === "Escape") setLive(false);
-          }}
           className="hero-lift absolute left-1/2 z-10 outline-none"
           style={{ top: `calc(${width} * ${up})`, "--lift-turn": `${art.turn}deg` } as CSSProperties}
         >

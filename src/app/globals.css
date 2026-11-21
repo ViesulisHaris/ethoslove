@@ -539,9 +539,39 @@ body:has([data-page-theme]) .site-header .btn-rose {
 [data-page-theme] .hero-lift {
   translate: -50% -50%;
 }
+/* Only a start is drawn (`from`), so nothing has to be held once it is over: `both` kept the
+   phone on a layer of its own for as long as it was up. */
 @media (prefers-reduced-motion: no-preference) {
   [data-page-theme] .hero-lift {
-    animation: hero-lift 0.7s var(--ease-out-quint) both;
+    animation: hero-lift 0.7s var(--ease-out-quint) backwards;
+  }
+}
+/* The picked-up phone's soft shadow. The frame's own is a box-shadow blurred by 80px
+   (components/shared/phone-frame.tsx), which Android Chrome paints in squares: at 2.625 device
+   pixels to a pixel the squares showed, and the shadow stopped on a straight line under the phone
+   (the deep test of 21 Nov 2026; "shadows never cut off" is the owner's rule for the art). So here
+   the same shadow is drawn with gradients, which have no squares: the frame's shadow box (24px in
+   from each side, 30px down), each of its four edges a ramp along the blur's own curve (a
+   Gaussian of 40px, laid out to two and a half of them, where it is nothing), multiplied together
+   by the mask. It ends on nothing at every side, inside this layer's own box. Where a browser
+   cannot multiply masks the frame keeps its box-shadow. */
+@supports (mask-composite: intersect) or (-webkit-mask-composite: source-in) {
+  [data-page-theme] .hero-lift [data-phone-body] {
+    box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.06);
+  }
+  [data-page-theme] .hero-lift::before {
+    --ramp: transparent 0, rgb(0 0 0 / 0.023) 20px, rgb(0 0 0 / 0.067) 40px, rgb(0 0 0 / 0.159) 60px, rgb(0 0 0 / 0.309) 80px, rgb(0 0 0 / 0.5) 100px, rgb(0 0 0 / 0.691) 120px, rgb(0 0 0 / 0.841) 140px, rgb(0 0 0 / 0.933) 160px,
+      rgb(0 0 0 / 0.977) 180px, #000 200px;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -46px -76px -106px;
+    background: rgb(26 22 20 / 0.55);
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to right, var(--ramp)), linear-gradient(to left, var(--ramp)), linear-gradient(to bottom, var(--ramp)), linear-gradient(to top, var(--ramp));
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, var(--ramp)), linear-gradient(to left, var(--ramp)), linear-gradient(to bottom, var(--ramp)), linear-gradient(to top, var(--ramp));
+    mask-composite: intersect;
   }
 }
 @keyframes hero-lift {
