@@ -37,7 +37,7 @@ const WRITE_ART: PlacedArt[] = [
 ];
 const MORE_ART: PlacedArt[] = [
   // Lying across the edge between the questions and "More like this".
-  { art: "lily-open", x: 8, y: -9, size: 21, rot: -14, phone: false },
+  { art: "lily-open", x: 5, y: -17, size: 21, rot: -14, phone: false },
   { art: "petal-2", x: 97, y: 88, size: 4.5, rot: 40, blur: 1, phone: false },
   { art: "lily-open", x: 90, y: 0, size: 20, rot: 18, phone: "only" },
 ];
@@ -215,13 +215,13 @@ export async function Experience({ manifest, locale, flowers }: { manifest: Temp
   return (
     <section className="relative" aria-labelledby="template-experience">
       <BandEdge side="top" className="text-page-band" />
-      <div className="relative -mt-px bg-page-band">
-        <div className="container-x grid items-center gap-y-12 pt-10 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-6 lg:pb-12">
-          {/* On a desk the phone's foot runs under the band's lower edge, as a thing lying half off a page. */}
-          <div className="lg:-mb-24">
+      {/* Clipped: on a desk the phone's foot runs off the band, under its curved lower edge, as the mock-up has it. */}
+      <div className="relative isolate -mt-px overflow-hidden bg-page-band">
+        <div className="container-x grid items-center gap-y-12 pt-10 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-6 lg:pb-0">
+          <div className="lg:translate-y-10">
             <ExperienceFlatlay manifest={manifest} flowers={flowers} />
           </div>
-          <div className="lg:pb-16">
+          <div className="lg:pb-20">
             <p className="text-page-label text-page-body">{t("experienceLabel")}</p>
             <h2 id="template-experience" className="mt-4 display-xl text-balance text-page-ink">
               {t("experienceHeading")}
@@ -283,7 +283,7 @@ export async function Questions({
   const plus = "size-4 shrink-0 text-page-body transition-transform duration-200 group-open:rotate-45";
   return (
     <section className="relative" aria-labelledby="template-questions">
-      <div className={cn(SPREAD, "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-48")}>
+      <div className={cn(SPREAD, "pt-16 pb-20 sm:pt-20 lg:pt-28 lg:pb-44")}>
         <Intro id="template-questions" label={g("faqLabel")} heading={g("faqTitle")} line={g("faqLine")} />
         <div className="border-t border-page-line">
           {faq.map((item) => (

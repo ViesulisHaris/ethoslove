@@ -128,6 +128,32 @@ for (const [width, height] of SIZES) {
   });
 }
 
+/**
+ * The layout is every template's. A long name, a long description, a page without a guide, a
+ * premium one, and both languages: each on a desk and on a phone.
+ */
+const OTHERS = ["/templates/birthday-cinema", "/templates/scratch-card", "/templates/snow-globe", "/templates/vinyl", "/templates/coquette", "/templates/gingerbread-house", "/es/templates/the-letter", "/es/templates/string-the-lights"];
+
+for (const path of OTHERS) {
+  test(`${path} holds the same layout, on a desk and on a phone`, async ({ page }) => {
+    for (const [width, height] of [[1440, 900], [1024, 768], [375, 812]] as const) {
+      await page.setViewportSize({ width, height });
+      await page.goto(path);
+      await settle(page);
+      const m = await measure(page);
+      expect(m.overflow, `${width}: the page scrolls sideways`).toBeLessThanOrEqual(0);
+      expect(m.overlaps, `${width}: a flower lies over words`).toEqual([]);
+      expect(m.count, `${width}: words on the page`).toBeLessThanOrEqual(300);
+      expect(m.smallest, `${width}`).toBeGreaterThanOrEqual(14);
+      expect(m.small, `${width}: too small for a thumb`).toEqual([]);
+    }
+    // One h1, and the page says what it is to a search engine.
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    await expect(page.locator('script[type="application/ld+json"]')).not.toHaveCount(0);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
+  });
+}
+
 test("the page is whole, and the same height, when no picture arrives", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(PAGE);
