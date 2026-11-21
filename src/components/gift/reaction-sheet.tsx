@@ -154,7 +154,8 @@ export function ReactionSent({ emoji, senderName, locale, onSendOneBack }: { emo
         <button
           type="button"
           onClick={onSendOneBack}
-          className="relative mt-7 flex min-h-12 w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-center text-[15px] leading-snug font-medium text-white hover:bg-white/10 active:bg-white/15"
+          // The sheet is dark, so its keyboard ring is a light one (the site's own would not show).
+          className="relative mt-7 flex min-h-12 w-full max-w-xs items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-center text-[15px] leading-snug font-medium text-white hover:bg-white/10 focus-visible:outline-white/60 active:bg-white/15"
           data-testid="reaction-reply"
         >
           <Sparkles aria-hidden="true" className="size-4 shrink-0" />

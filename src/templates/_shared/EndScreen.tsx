@@ -177,9 +177,11 @@ export function EndScreen({
                 onClick={() => track("make_own_clicked", { template: data.templateSlug, from: "end" })}
                 // Underlined, lightly: with no icon beside it, that is what says it can be tapped. On a
                 // narrow card it breaks in two even lines rather than leaving "else" on its own.
+                // Its keyboard ring sits on its own box, clear of the button above, and on a dark end
+                // screen it is a light one (the site's ring is a dark plum, which a dark gift swallows).
                 className={cn(
-                  "flex min-h-11 items-center justify-center px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current active:opacity-70",
-                  dark ? "text-white/70 hover:text-white" : "text-black/60 hover:text-black",
+                  "flex min-h-11 items-center justify-center rounded-full px-2 py-2 text-center text-sm leading-snug text-balance underline decoration-current/30 underline-offset-4 hover:decoration-current focus-visible:outline-offset-0 active:opacity-70",
+                  dark ? "text-white/70 hover:text-white focus-visible:outline-white/60" : "text-black/60 hover:text-black",
                 )}
                 data-testid="make-for-someone-else"
               >

@@ -55,7 +55,13 @@ export function Watermark({
         target="_blank"
         rel="noopener"
         onClick={onClick}
-        className={cn("group/mark relative z-40 flex min-h-11 flex-col items-center justify-center gap-1.5 active:opacity-70", className)}
+        // Its keyboard ring stands off both lines, and on a dark end screen it is a light one (the
+        // site's own is a dark plum, lost on a dark gift).
+        className={cn(
+          "group/mark relative z-40 flex min-h-11 flex-col items-center justify-center gap-1.5 rounded-2xl px-3 focus-visible:outline-offset-4 active:opacity-70",
+          tone === "dark" && "focus-visible:outline-white/60",
+          className,
+        )}
       >
         <span className="flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1.5 text-[11px] font-medium whitespace-nowrap text-white/85 shadow-sm backdrop-blur-md transition-colors group-hover/mark:bg-black/55">
           <LogoMark className="size-3.5" />
