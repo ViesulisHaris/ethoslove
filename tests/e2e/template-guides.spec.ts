@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { TEMPLATE_GUIDES } from "../../src/content/template-guides";
+import { TEMPLATE_STEPS } from "../../src/content/template-steps";
 
 /**
  * A template page with a guide of its own (content/template-guides.ts): what people make with it,
@@ -17,7 +18,8 @@ function fromGuide(slug: string, locale: "en" | "es") {
   // A question that is on the page whatever the build's switches say.
   const { q, a } = guide.faq.findLast((f) => !f.whileFreeNote && f.notePhotos === undefined)!;
   const first = guide.ideas.items[0];
-  return { slug, title: guide.ideas.title, ideas: guide.ideas.items.length, heading: first.heading, how: first.how, line: first.borrow.line, question: q, answer: a };
+  const steps = TEMPLATE_STEPS[slug].steps.map((step) => step[locale]);
+  return { slug, steps, title: guide.ideas.title, ideas: guide.ideas.items.length, heading: first.heading, how: first.how, line: first.borrow.line, question: q, answer: a };
 }
 
 const PAGES = [
@@ -28,8 +30,9 @@ const PAGES = [
 for (const p of PAGES) {
   test(`${p.path} shows what people make with it, a line to borrow and its own questions`, async ({ page }) => {
     await page.goto(p.path);
-    // How to send: three steps, numbered because they are an order.
+    // How to send: three steps, numbered because they are an order, and this gift's own (content/template-steps.ts).
     await expect(page.locator("section[aria-labelledby=template-how] ol > li")).toHaveCount(3);
+    await expect(page.locator("section[aria-labelledby=template-how] ol > li h3")).toHaveText(p.steps);
 
     const guide = page.locator("section[aria-labelledby=template-guide]");
     await expect(guide.getByRole("heading", { level: 2, name: p.title })).toBeVisible();
@@ -91,13 +94,39 @@ test("The Letter answers about the free note only while the page says the free v
   await expect(questions.locator("details").filter({ hasText: "What date does the letter show?" })).toHaveCount(1);
 });
 
-test("a template with no guide of its own keeps the three steps and the shared questions", async ({ page }) => {
+test("The Letter's steps are a letter's: nothing about photos, and its own cover in the phone that sends it", async ({ page }) => {
+  // The owner, 21 Nov 2026: "change the ways when to send the gifts, as its kinda weird for letter".
+  await page.goto("/templates/the-letter");
+  const steps = page.locator("section[aria-labelledby=template-how] ol > li");
+  await expect(steps.locator("h3")).toHaveText(["Write the letter", "Seal and sign it", "Send the link"]);
+  await expect(page.locator("section[aria-labelledby=template-how]")).not.toContainText(/photo/i);
+  // Two note cards with a line each in handwriting, and no polaroid.
+  await expect(steps.locator("[data-decor=step-note]")).toHaveCount(2);
+  await expect(steps.locator("[data-decor=step-photo]")).toHaveCount(0);
+  const notes = await steps.locator("[data-decor=step-note]").allInnerTexts();
+  expect(notes.every((line) => line.trim().length >= 8)).toBe(true);
+  expect(new Set(notes).size).toBe(2);
+  // The last picture is the small phone with The Letter's own cover under its rim.
+  const phone = steps.nth(2).locator("[data-decor=step-phone]");
+  await phone.scrollIntoViewIfNeeded();
+  await expect(phone.locator("img")).toHaveCount(3);
+  expect(await phone.locator("img").nth(1).getAttribute("src")).toContain(encodeURIComponent("/templates/the-letter/poster.jpg"));
+  expect(await phone.locator("img").nth(2).getAttribute("src")).toContain("step-phone-bezel");
+});
+
+test("a gift with no questions of its own still has its six cards, its own steps and the shared questions", async ({ page }) => {
   await page.goto("/templates/vinyl");
-  await expect(page.locator("section[aria-labelledby=template-guide]")).toHaveCount(0);
-  await expect(page.locator("section[aria-labelledby=template-how] ol > li")).toHaveCount(3);
+  const vinyl = TEMPLATE_GUIDES.vinyl.en;
+  expect(vinyl.faq).toHaveLength(0);
+  const guide = page.locator("section[aria-labelledby=template-guide]");
+  await expect(guide.locator("#ideas-vinyl > li")).toHaveCount(6);
+  await expect(guide.locator("#ideas-vinyl > li").first()).toContainText(vinyl.ideas.items[0].heading);
+  const steps = page.locator("section[aria-labelledby=template-how] ol > li");
+  await expect(steps.locator("h3")).toHaveText(TEMPLATE_STEPS.vinyl.steps.map((step) => step.en));
+  // A step about photos shows the gift's own sample photo in the polaroid.
+  await expect(steps.locator("[data-decor=step-photo] img")).toHaveCount(2);
   const questions = page.locator("section[aria-labelledby=template-questions]");
-  // The three shared questions, one open at a time, and the closed block with the steps written out.
+  // The three shared questions, one open at a time, and the closed block with what to do for each card.
   await expect(questions.locator("details[name]")).toHaveCount(3);
-  expect(await questions.locator("details[data-more-about] ol > li").count()).toBeGreaterThanOrEqual(3);
-  await expect(questions.locator("details[data-more-about]")).toContainText("QR");
+  await expect(questions.locator("details[data-more-about]")).toContainText(vinyl.ideas.items[0].how);
 });

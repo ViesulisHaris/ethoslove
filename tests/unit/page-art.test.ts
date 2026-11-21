@@ -71,6 +71,10 @@ describe("page art", () => {
       expect(pageArt("experience-flatlay", flowers).slots.photo, flowers).toBeDefined();
       expect(pageArt("step-photo", flowers).slots.photo, flowers).toBeDefined();
       expect(pageArt("step-note", flowers).slots.card, flowers).toBeDefined();
+      // The third step's small phone takes any gift's cover in its screen, under a rim of its own.
+      const send = pageArt("step-phone", flowers);
+      expect(send.slots.screen?.box, flowers).toEqual([390, 844]);
+      expect(send.bezel, `${flowers}: the step's phone has no bezel layer`).toBeDefined();
     }
     // Every place lies inside its picture, corner for corner.
     for (const id of ART_IDS) {
@@ -124,7 +128,7 @@ describe("page art", () => {
       // The footer's lily is the footer's own (components/marketing/footer.tsx) and no placement may use it on a pale ground.
       expect(piece.art).not.toBe("lily-footer");
       // The two flat-lays and the step pictures are pictures of their own, never strewn about.
-      expect(["hero-flatlay", "experience-flatlay", "step-photo", "step-note", "step-send"]).not.toContain(piece.art);
+      expect(["hero-flatlay", "experience-flatlay", "step-photo", "step-note", "step-send", "step-phone"]).not.toContain(piece.art);
     }
     // A placement has no way to flip a piece: where it lies, how wide, how far turned, and no more.
     for (const piece of ALL_PLACEMENTS) expect(Object.keys(piece).filter((k) => !["art", "x", "y", "size", "rot", "blur", "opacity", "phone", "eager", "from", "until"].includes(k))).toEqual([]);

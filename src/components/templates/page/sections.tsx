@@ -8,11 +8,12 @@ import type { GiftLocale } from "@/lib/gift/schema";
 import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art";
 import type { BorrowField, TemplateGuideContent } from "@/content/template-guides";
+import type { TemplateSteps } from "@/content/template-steps";
 import type { Flowers } from "@/content/template-page-themes";
 import { listManifests } from "@/templates/manifests";
 import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
-import { Art, ArtLayer, ArtWithSlot, BandEdge } from "./art";
+import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasToggle } from "./ideas-toggle";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
 import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
@@ -41,53 +42,91 @@ function Intro({ id, label, heading, line, children }: { id?: string; label: str
 /** The two-column spread every section below the hero shares. */
 const SPREAD = "container-x relative grid gap-y-9 lg:grid-cols-[17.5rem_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[22.5rem_minmax(0,1fr)] xl:gap-x-20";
 
+/** A photo a picture on the page shows: the gift's own first sample photo, where its demo has one. */
+export type SamplePhoto = { src: string; width: number; height: number };
+
 /**
- * One of the three pictures of "How to send", from the page art: a polaroid with the sample photo
- * laid into it, a note card with a line of handwriting written on it, a small phone showing a
- * sealed envelope. `data-flatlay` marks what is laid in as part of a picture, as a phone's screen is.
+ * One of the three pictures of "How to send", from the page art, chosen by what the step is: a
+ * polaroid with the gift's sample photo laid into it for a step about photos, a note card with a
+ * line of that gift in handwriting for a step about words or choices, and for sending it a small
+ * phone with the gift's own cover in its screen, under the render's rim. `data-flatlay` marks
+ * what is laid in as part of a picture, as a phone's screen is.
  */
-function StepPicture({ step, flowers, noteLine }: { step: 0 | 1 | 2; flowers: Flowers; noteLine: string }) {
-  if (step === 0)
+function StepPicture({ kind, flowers, line, photo, poster }: { kind: "photo" | "note" | "phone"; flowers: Flowers; line: string; photo: SamplePhoto; poster: string }) {
+  if (kind === "photo")
     return (
       <span data-flatlay="step" className="block w-[5.5rem] sm:w-[9.25rem]">
         <ArtWithSlot id="step-photo" flowers={flowers} slot="photo" shown="150px">
-          <Image src={SAMPLE_PHOTO.src} alt="" fill sizes="130px" className="object-cover" />
+          <Image src={photo.src} alt="" fill sizes="130px" className="object-cover" />
         </ArtWithSlot>
       </span>
     );
-  if (step === 1)
+  if (kind === "note")
     return (
       <span data-flatlay="step" className="block w-[6.75rem] sm:w-[11.5rem]">
         {/* The card is a container, so the handwriting is sized by the card and keeps its place at any width. */}
         <ArtWithSlot id="step-note" flowers={flowers} slot="card" shown="190px" slotClassName="[container-type:inline-size]">
-          <span className="flex h-full items-center px-[9cqw] font-hand text-[12.5cqw] leading-[1.08] text-page-ink">{noteLine}</span>
+          <span className="flex h-full items-center px-[9cqw] font-hand text-[12.5cqw] leading-[1.08] text-page-ink">{line}</span>
         </ArtWithSlot>
       </span>
     );
-  return <Art id="step-send" flowers={flowers} shown="100px" className="w-[3.4rem] sm:w-[5.6rem]" />;
+  return (
+    <span data-flatlay="step" className="block w-[3.4rem] sm:w-[5.6rem]">
+      <ArtWithSlot id="step-phone" flowers={flowers} slot="screen" shown="100px" slotClassName="bg-night">
+        <Image src={poster} alt="" fill sizes="110px" className="object-cover" />
+      </ArtWithSlot>
+    </span>
+  );
 }
 
-/** (2) How to send: three small picture cards, numbered because they are an order. */
-export async function HowToSend({ locale, heading, flowers, noteLine }: { locale: GiftLocale; heading: string; flowers: Flowers; noteLine: string }) {
+/** (2) How to send: three small picture cards, numbered because they are an order, each this gift's own step. */
+export async function HowToSend({
+  locale,
+  heading,
+  flowers,
+  steps,
+  lines,
+  photo,
+  poster,
+}: {
+  locale: GiftLocale;
+  heading: string;
+  flowers: Flowers;
+  /** The gift's own three steps (content/template-steps.ts); without them, the three every gift shares. */
+  steps: TemplateSteps | null;
+  /** Lines of this gift to write on a note card, the first for the first note. */
+  lines: string[];
+  photo: SamplePhoto;
+  poster: string;
+}) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const steps = [t("step1Title"), t("step2Title"), t("step3Title")];
+  const shown = steps
+    ? steps.steps.map((step) => ({ title: step[locale], kind: step.picture }))
+    : ([
+        { title: t("step1Title"), kind: "photo" },
+        { title: t("step2Title"), kind: "note" },
+        { title: t("step3Title"), kind: "phone" },
+      ] as const);
+  // A second note card shows a second line, where the gift has one.
+  let notes = 0;
+  const pictured = shown.map((step) => ({ ...step, line: step.kind === "note" ? (lines[notes++] ?? lines[0] ?? "") : "" }));
   return (
     <section className="relative" aria-labelledby="template-how">
       <ArtLayer items={HOW_ART} flowers={flowers} />
       <div className={cn(SPREAD, "py-14 sm:py-20 lg:py-28")}>
-        <Intro id="template-how" label={t("eyebrow")} heading={heading} line={t("howLine")} />
+        <Intro id="template-how" label={t("eyebrow")} heading={heading} line={steps ? steps.line[locale] : t("howLine")} />
         <ol className="grid gap-3 sm:grid-cols-3 sm:gap-x-9 lg:gap-x-10">
-          {steps.map((title, i) => (
+          {pictured.map((step, i) => (
             <li
-              key={title}
+              key={step.title}
               className="relative grid grid-cols-[6rem_minmax(0,1fr)] items-center gap-x-5 rounded-[1.4rem] border border-page-line bg-page-raised/70 py-4 pr-4 pl-5 shadow-page-card sm:block sm:px-4 sm:pt-10 sm:pb-7 sm:text-center"
             >
               <span className="absolute top-1/2 -left-3 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-page-badge font-display text-base text-page-ink ring-4 ring-page-ground sm:-top-5 sm:left-1/2 sm:size-10 sm:-translate-x-1/2 sm:translate-y-0 sm:text-lg">
                 {i + 1}
               </span>
-              <h3 className="order-last font-display text-[1.25rem] leading-tight text-page-ink sm:text-[1.3rem]">{title}</h3>
+              <h3 className="order-last font-display text-[1.25rem] leading-tight text-page-ink sm:text-[1.3rem]">{step.title}</h3>
               <span className="grid h-28 place-items-center sm:mt-5 sm:h-40">
-                <StepPicture step={i as 0 | 1 | 2} flowers={flowers} noteLine={noteLine} />
+                <StepPicture kind={step.kind} flowers={flowers} line={step.line} photo={photo} poster={poster} />
               </span>
               {i < 2 ? <ArrowRight aria-hidden="true" className="absolute top-1/2 -right-[1.6rem] hidden size-4 -translate-y-1/2 text-page-body sm:block lg:-right-[1.75rem]" /> : null}
             </li>
@@ -99,21 +138,25 @@ export async function HowToSend({ locale, heading, flowers, noteLine }: { locale
 }
 
 /**
- * The line written on the note card of step two. From the template's own guide where it has one:
- * the first line to borrow that is short enough to be read on a card that small. Otherwise the
- * title of the template's own demo. Either way a line the product already shows, never one made up
- * for the picture.
+ * What the pictures on a gift's page show of that gift: lines to write on a note card, and its
+ * first sample photo. The lines are ones the product already has, never made up for the picture:
+ * the gift's own lines to borrow that are short enough to read on a card that small, then the
+ * title of its demo. The photo is the first of its demo's, or the sample every demo shares.
  */
-export async function stepNoteLine(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<string> {
+export async function templateSamples(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<{ lines: string[]; photo: SamplePhoto }> {
   const fits = (line: string) => line.length >= 8 && line.length <= 30;
-  const borrowed = guide?.ideas.items.map((idea) => idea.borrow.line).find(fits);
-  if (borrowed) return borrowed;
+  const lines = (guide?.ideas.items.map((idea) => idea.borrow.line) ?? []).filter(fits);
+  let photo: SamplePhoto = SAMPLE_PHOTO;
   try {
-    const mod = (await import(`@/templates/${slug}/demo-data`)) as { demoData?: Record<GiftLocale, { title?: string }> };
-    return mod.demoData?.[locale]?.title ?? "";
+    const mod = (await import(`@/templates/${slug}/demo-data`)) as { demoData?: Record<GiftLocale, { title?: string; photos?: { url: string; width?: number; height?: number }[] }> };
+    const demo = mod.demoData?.[locale];
+    if (demo?.title && !lines.includes(demo.title)) lines.push(demo.title);
+    const first = demo?.photos?.[0];
+    if (first?.url && first.width && first.height) photo = { src: first.url, width: first.width, height: first.height };
   } catch {
-    return "";
+    // A template without a demo file shows the shared sample.
   }
+  return { lines: [...new Set(lines)], photo };
 }
 
 /** A template's own fields, by the names its editor gives them. */
@@ -173,11 +216,11 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
 
 /**
  * The picture of "The experience": the page art's `experience-flatlay`, a larger phone lying on
- * lilies with a polaroid resting on it, and the sample photo laid into the polaroid by the
+ * lilies with a polaroid resting on it, and the gift's sample photo laid into the polaroid by the
  * render's own matrix. On a phone it is drawn wider than the screen and most of it is off the
  * sides, so `sizes` asks for less than it is drawn at: the half-size file is sharp enough there.
  */
-function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
+function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo: SamplePhoto }) {
   const art = pageArt("experience-flatlay", flowers);
   const photo = art.slots.photo;
   return (
@@ -187,7 +230,7 @@ function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
       </span>
       {photo ? (
         <div className="absolute overflow-hidden" style={slotStyle(art, photo)}>
-          <Image src={SAMPLE_PHOTO.src} alt="" fill sizes="(min-width: 1024px) 220px, 45vw" className="object-cover" />
+          <Image src={sample.src} alt="" fill sizes="(min-width: 1024px) 220px, 45vw" className="object-cover" />
         </div>
       ) : null}
     </div>
@@ -195,7 +238,7 @@ function ExperienceFlatlay({ flowers }: { flowers: Flowers }) {
 }
 
 /** (4) The experience: the deeper band with soft curved edges, a large picture and three checks. */
-export async function Experience({ manifest, locale, flowers }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers }) {
+export async function Experience({ manifest, locale, flowers, photo }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers; photo: SamplePhoto }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const checks = [t("experienceCheck1"), t("experienceCheck2"), t("experienceCheck3")];
   return (
@@ -210,7 +253,7 @@ export async function Experience({ manifest, locale, flowers }: { manifest: Temp
         <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
           {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
           <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
-            <ExperienceFlatlay flowers={flowers} />
+            <ExperienceFlatlay flowers={flowers} photo={photo} />
           </div>
           <div className="lg:py-24">
             <p className="text-page-label text-page-body">{t("experienceLabel")}</p>

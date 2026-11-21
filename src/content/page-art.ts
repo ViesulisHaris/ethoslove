@@ -35,6 +35,7 @@ export const ART_IDS = [
   "step-photo",
   "step-note",
   "step-send",
+  "step-phone",
   "lily-footer",
 ] as const;
 

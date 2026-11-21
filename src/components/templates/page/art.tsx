@@ -37,6 +37,8 @@ export function ArtWithSlot({ id, flowers, slot, shown, className, slotClassName
           {children}
         </span>
       ) : null}
+      {/* A phone's rim, over what was laid into its screen. */}
+      {art.bezel ? <CutoutImg src={art.bezel.src1x} srcSet={`${art.bezel.src1x} ${art.width1x}w, ${art.bezel.src} ${art.width}w`} sizes={shown} width={art.width} height={art.height} className="absolute inset-0 block w-full" /> : null}
     </span>
   );
 }

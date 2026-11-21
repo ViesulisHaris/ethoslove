@@ -16,6 +16,7 @@ import {
 import { templateGuide } from "@/content/template-guides";
 import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateSeo } from "@/content/template-seo";
+import { templateSteps } from "@/content/template-steps";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
 import { JsonLd } from "@/components/shared/json-ld";
@@ -25,7 +26,7 @@ import { ArtLayer } from "@/components/templates/page/art";
 import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/hero-flatlay";
 import { heroLead } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
-import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, stepNoteLine } from "@/components/templates/page/sections";
+import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
@@ -100,7 +101,7 @@ export default async function TemplateDetailPage({
     turn,
     spanX,
   };
-  const noteLine = await stepNoteLine(manifest.slug, l, guide);
+  const samples = await templateSamples(manifest.slug, l, guide);
 
   // What's included: only what this template has. What it lacks is not a list to read.
   const included = [
@@ -209,9 +210,17 @@ export default async function TemplateDetailPage({
           </div>
         </section>
 
-        <HowToSend locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} flowers={flowers} noteLine={noteLine} />
+        <HowToSend
+          locale={l}
+          heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })}
+          flowers={flowers}
+          steps={templateSteps(manifest.slug)}
+          lines={samples.lines}
+          photo={samples.photo}
+          poster={manifest.thumbnail.poster}
+        />
         {guide ? <WhatToWrite manifest={manifest} locale={l} guide={guide} flowers={flowers} /> : null}
-        <Experience manifest={manifest} locale={l} flowers={flowers} />
+        <Experience manifest={manifest} locale={l} flowers={flowers} photo={samples.photo} />
         <Questions manifest={manifest} locale={l} faq={faq} guide={guide} about={about.rest} />
         <MoreLikeThis manifest={manifest} locale={l} flowers={flowers} />
       </div>
