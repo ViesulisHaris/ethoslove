@@ -383,6 +383,129 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* A gift's page in the gift's own colours. The palette is a row of     */
+/* content/template-page-themes.ts; the page writes it as these          */
+/* variables on its wrapper ([data-page-theme]) and, through a rule of   */
+/* its own, on <body> while it is open, so the footer, the header's      */
+/* button and the ground behind them follow. The names are the page's    */
+/* own on purpose: a gift playing inside the page reads --brand-* and    */
+/* --foreground, and must not change colour with the page around it.     */
+/* Here are the defaults (the site's paper, ink and rose), the utilities */
+/* (bg-page-ground, text-page-ink …) and what is worked out from a       */
+/* palette. To put the whole site in one palette, set these on :root.    */
+/* ------------------------------------------------------------------ */
+:root {
+  --page-ground: var(--brand-paper);
+  --page-raised: #fffbf9;
+  --page-band: var(--brand-paper-deep);
+  --page-ink: var(--brand-ink);
+  --page-body: var(--brand-ink-soft);
+  --page-accent: var(--brand-coral-deep);
+  --page-on-accent: #fffaf5;
+  --page-badge: #e3bfc9;
+  --page-footer: #2a0f1f;
+  --page-footer-text: #d9c6cd;
+}
+:root,
+[data-page-theme] {
+  /* A hairline, a pressed accent and a shadow, each made from the palette it sits in. The shadow is
+     tinted with the footer's colour, the deepest of every palette, so it darkens a night ground too. */
+  --page-line: color-mix(in oklab, var(--page-ink) 14%, var(--page-ground));
+  --page-accent-hover: color-mix(in oklab, var(--page-accent) 84%, var(--page-ink));
+  --page-shade: color-mix(in oklab, var(--page-footer) 42%, transparent);
+  --page-shade-soft: color-mix(in oklab, var(--page-footer) 20%, transparent);
+}
+
+@theme inline {
+  --color-page-ground: var(--page-ground);
+  --color-page-raised: var(--page-raised);
+  --color-page-band: var(--page-band);
+  --color-page-ink: var(--page-ink);
+  --color-page-body: var(--page-body);
+  --color-page-accent: var(--page-accent);
+  --color-page-accent-hover: var(--page-accent-hover);
+  --color-page-on-accent: var(--page-on-accent);
+  --color-page-badge: var(--page-badge);
+  --color-page-line: var(--page-line);
+  --shadow-page-card: 0 1px 0 color-mix(in oklab, var(--page-raised) 70%, transparent) inset, 0 18px 40px -26px var(--page-shade);
+  --shadow-page-lift: 0 2px 4px var(--page-shade-soft), 0 34px 60px -28px var(--page-shade);
+}
+
+/* The small label over a heading: the mono, spaced out like a printed index. */
+@utility text-page-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+[data-page-theme] {
+  background-color: var(--page-ground);
+  color: var(--page-ink);
+  /* Flowers spill off the page's sides; they must never make it scroll sideways. `clip`, not
+     `hidden`: it leaves the page's own vertical overflow alone, so a bloom can still lie across the
+     edge between two sections. */
+  overflow-x: clip;
+}
+[data-page-theme] ::selection {
+  background: color-mix(in oklab, var(--page-accent) 26%, transparent);
+}
+[data-page-theme] :focus-visible {
+  outline-color: var(--page-ink);
+}
+
+/* Outside the wrapper, while a themed page is open. */
+body:has([data-page-theme]) {
+  background-color: var(--page-ground);
+}
+body:has([data-page-theme]) [data-site-footer] {
+  background-color: var(--page-footer);
+  color: color-mix(in oklab, var(--page-footer-text) 30%, #fff);
+}
+body:has([data-page-theme]) [data-site-footer] :is(a, p, button):not(:hover) {
+  color: var(--page-footer-text);
+}
+body:has([data-page-theme]) .site-header .btn-rose {
+  background-image: none;
+  background-color: var(--page-accent);
+  color: var(--page-on-accent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 14px 30px -16px var(--page-accent);
+}
+/* The footer's one flower is the page art's (content/page-art.ts): faint, in the corner, there only
+   on a themed page and only where the corner is not the links' (a phone's is). Lazy and not
+   displayed anywhere else, so no other page fetches it. */
+[data-footer-flower] {
+  display: none;
+  position: absolute;
+  right: -4.5rem;
+  bottom: -6rem;
+  width: clamp(16rem, 24vw, 23rem);
+  rotate: -20deg;
+  opacity: 0.2;
+  pointer-events: none;
+}
+@media (min-width: 64rem) {
+  body:has([data-page-theme]) [data-footer-flower] {
+    display: block;
+  }
+}
+
+/* An idea's line to borrow, and a question's answer, open softly (the page's <details>). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-page-theme] details[open] > [data-reveal] {
+    animation: page-reveal 0.32s var(--ease-out-quint) both;
+  }
+}
+@keyframes page-reveal {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Dusk: Ethos for Two's own colours (docs/MEMBERSHIP.md 4.1). The rest */
 /* of the site is paper, rose and wine; the membership is the sky after */
 /* the date: deep indigo, a peach horizon, gold starlight. It matches   */
