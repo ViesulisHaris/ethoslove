@@ -31,7 +31,8 @@ const emailAddress = z.email().max(254);
  * Forty an hour from one connection (a family at one table shares one) and thirty an hour to one
  * link from it; the database holds each group to its own number waiting and sixty in all. No IP
  * address is stored anywhere. 404 while the switch is off or for a link that finds nothing; 410
- * once the link is closed or the gift sent; 409 when it has all the notes it can hold.
+ * once the link is closed, past its last day ("expired") or the gift sent; 409 when it has all the
+ * notes it can hold.
  */
 export async function POST(request: NextRequest) {
   if (switchedOff()) return notThere();
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
     if (!(await rateLimit(`group-add:${ip}:${group.token_sha256.slice(0, 16)}`, { limit: 30, windowSeconds: 3600 }))) return answer({ error: "rate_limited" }, 429);
     const now = Date.now();
     const state = await linkState(admin, group, now);
-    if (state === "sent" || state === "closed") return answer({ error: state }, 410);
+    if (state === "sent" || state === "closed" || state === "expired") return answer({ error: state }, 410);
     if (state === "full") return answer({ error: "full" }, 409);
 
     if (form.get("agree") !== "1") return answer({ error: "invalid" }, 400);

@@ -13,6 +13,7 @@ import es from "../../messages/es.json";
 import type { Db } from "@/lib/commerce/db";
 import { GroupConfirmEmail, GroupNudgeEmail, GroupSignedEmail, groupConfirmSubject, groupNudgeSubject, groupSignedSubject } from "@/emails/group";
 import { emailKey, signToken, verifyToken } from "@/lib/lifecycle/links";
+import { groupEmailConsent } from "@/lib/group/notice";
 import { groupToken, sha256Hex } from "@/lib/group/token";
 import { FakeDb } from "./helpers/fake-db";
 
@@ -370,8 +371,32 @@ describe("telling the sender notes are waiting", () => {
     await add();
     const [mail] = sent("nudge");
     expect(sent("nudge")).toHaveLength(1);
-    expect(mail).toEqual({ to: "tom@example.test", locale: "es", count: 1, forName: "Nora", onceKey: `group-nudge:${GROUP}:2026-12-01` });
+    expect(mail).toEqual({ to: "tom@example.test", locale: "es", count: 1, forName: "Nora", unsubscribeUrl: expect.stringMatching(/\/api\/email\/unsubscribe\?t=[0-9a-f]{64}\.[A-Za-z0-9_-]+&l=es$/), onceKey: `group-nudge:${GROUP}:2026-12-01` });
     expect(fake.rows("gift_groups")[0].nudged_at).toBe(at(NOW));
+    // The way out is the site's own unsubscribe link, for this address and no other.
+    const token = new URL(mail.unsubscribeUrl as string).searchParams.get("t");
+    expect(await verifyToken("email-optout", token, SECRET)).toBe(await emailKey("tom@example.test"));
+  });
+
+  it("never to an address on the unsubscribe list, and the list is asked once a day, not once a note", async () => {
+    seed({ gifts: [gift({ status: "draft" })], email_optouts: [{ email_sha256: await emailKey("tom@example.test") }] });
+    expect((await add()).status).toBe(200);
+    expect((await add({ name: "Dad" })).status).toBe(200);
+    expect(sent("nudge")).toEqual([]);
+    expect(fake.calls.filter((call) => call.table === "email_optouts")).toHaveLength(1);
+    expect(rows()).toHaveLength(2);
+  });
+
+  it("the day is counted as a moment, however the database writes the time it last sent one", async () => {
+    // Postgres hands a timestamp back as "+00:00", toISOString writes ".000Z": as text the two don't compare.
+    const stamp = (ms: number) => at(ms).replace(".000Z", "+00:00");
+    seed({ gifts: [gift({ status: "draft" })], gift_groups: [group({ nudged_at: stamp(NOW - DAY + 60_000) })] });
+    expect(await nudgeSender(db(), fake.rows("gift_groups")[0] as never, NOW)).toBe(false);
+    // Not a day yet: nothing is sent, and nothing is even asked of the database.
+    expect(fake.calls).toEqual([]);
+    seed({ gifts: [gift({ status: "draft" })], gift_groups: [group({ nudged_at: stamp(NOW - DAY - 60_000) })] });
+    expect(await nudgeSender(db(), fake.rows("gift_groups")[0] as never, NOW)).toBe(true);
+    expect(sent("nudge")).toHaveLength(1);
   });
 
   it("at most once a day for a card, however many notes land", async () => {
@@ -419,6 +444,15 @@ describe("the emails themselves", () => {
     const spanish = text(await render(GroupConfirmEmail({ locale: "es", confirmUrl: "https://ethos.test/c", neverUrl: "https://ethos.test/n" })));
     expect(spanish).toContain("Sí, envíamela");
     expect(spanish).toContain("tarjeta en grupo");
+    // It promises the card only to someone whose note is in it: nobody is left waiting for an email that won't come.
+    expect(english).toContain("It comes only if that note is in the card.");
+    expect(spanish).toContain("Llega solo si esa nota va en la tarjeta.");
+    for (const locale of ["en", "es"] as const) expect(groupEmailConsent(locale)).toMatch(locale === "es" ? /si tu nota entra en la tarjeta/ : /if your note goes into the card/);
+    // So do the two pages the confirming link opens.
+    expect(en.lifecycle.group.confirmBody).toContain("If your note is in the card when it goes out");
+    expect(en.lifecycle.group.doneBody).toContain("if your note is in it");
+    expect(es.lifecycle.group.confirmBody).toContain("Si tu nota va en la tarjeta cuando salga");
+    expect(es.lifecycle.group.doneBody).toContain("si tu nota va en ella");
     expect(groupConfirmSubject("en")).toBe("Confirm to be sent the card");
     expect(groupConfirmSubject("es")).toBe("Confirma para recibir la tarjeta");
   });
@@ -444,12 +478,17 @@ describe("the emails themselves", () => {
     expect(html).toContain("&lt;img src=x");
   });
 
-  it("the sender's nudge counts the notes, in both languages", async () => {
-    expect(text(await render(GroupNudgeEmail({ locale: "en", count: 1, forName: "Nora", editorUrl: "https://tryethos.io/dashboard" })))).toContain("A note is waiting for your card for Nora.");
-    const spanish = text(await render(GroupNudgeEmail({ locale: "es", count: 3, forName: "Nora", editorUrl: "https://tryethos.io/es/dashboard" })));
+  it("the sender's nudge counts the notes, in both languages, and carries the way to stop them", async () => {
+    const english = text(await render(GroupNudgeEmail({ locale: "en", count: 1, forName: "Nora", editorUrl: "https://tryethos.io/dashboard", unsubscribeUrl: "https://tryethos.io/api/email/unsubscribe?t=abc&l=en" })));
+    expect(english).toContain("A note is waiting to go into the card for Nora.");
+    expect(english).toContain("https://tryethos.io/api/email/unsubscribe?t=abc&l=en");
+    expect(english).toContain("Unsubscribe");
+    const spanish = text(await render(GroupNudgeEmail({ locale: "es", count: 3, forName: "Nora", editorUrl: "https://tryethos.io/es/dashboard", unsubscribeUrl: "https://tryethos.io/api/email/unsubscribe?t=abc&l=es" })));
     expect(spanish).toContain("3 notas esperan en tu tarjeta para Nora.");
     expect(spanish).toContain("https://tryethos.io/es/dashboard");
-    expect(groupNudgeSubject("en", 2, "Nora")).toBe("2 notes are waiting for your card for Nora");
+    expect(spanish).toContain("Darme de baja");
+    expect(groupNudgeSubject("en", 1, "Nora")).toBe("A note is waiting to go into the card for Nora");
+    expect(groupNudgeSubject("en", 2, "Nora")).toBe("2 notes are waiting to go into the card for Nora");
     expect(groupNudgeSubject("es", 1, "Nora")).toBe("Una nota espera en tu tarjeta para Nora");
   });
 });

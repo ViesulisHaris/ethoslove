@@ -5,8 +5,9 @@ const bare = (url: string) => url.replace(/^https?:\/\//, "");
 
 export const groupConfirmSubject = (locale: L) => (locale === "es" ? "Confirma para recibir la tarjeta" : "Confirm to be sent the card");
 export const groupSignedSubject = (locale: L, fromName: string) => (locale === "es" ? `${fromName} ha enviado la tarjeta que firmaste` : `${fromName} sent the card you signed`);
+/** English says "the card for Nora", never "Nora's card": a name ending in s, or two names, would trip on the possessive. */
 export const groupNudgeSubject = (locale: L, n: number, forName: string) =>
-  locale === "es" ? (n === 1 ? `Una nota espera en tu tarjeta para ${forName}` : `${n} notas esperan en tu tarjeta para ${forName}`) : n === 1 ? `A note is waiting for your card for ${forName}` : `${n} notes are waiting for your card for ${forName}`;
+  locale === "es" ? (n === 1 ? `Una nota espera en tu tarjeta para ${forName}` : `${n} notas esperan en tu tarjeta para ${forName}`) : n === 1 ? `A note is waiting to go into the card for ${forName}` : `${n} notes are waiting to go into the card for ${forName}`;
 
 /**
  * The one email someone who added a note to a group card gets before anything else: their address
@@ -18,15 +19,15 @@ export function GroupConfirmEmail({ locale, confirmUrl, neverUrl }: { locale: L;
   return (
     <EmailLayout
       lang={locale}
-      preview={es ? "Confirma y te enviamos la tarjeta cuando esté lista. Si no fuiste tú, no hagas nada." : "Confirm and we'll send the card when it's ready. If it wasn't you, do nothing."}
+      preview={es ? "Confirma y te la enviamos cuando salga, si tu nota va en ella. Si no fuiste tú, no hagas nada." : "Confirm and we'll send it once it's out, if your note is in it. If it wasn't you, do nothing."}
       heading={es ? "¿Te enviamos la tarjeta?" : "Send you the card?"}
       footer={es ? "Recibes esto porque alguien escribió esta dirección al añadir una nota a una tarjeta en grupo de Ethos." : "You're getting this because this address was entered when a note was added to a group card on Ethos."}
       footerLink={{ label: es ? "No escribirme nunca más" : "Never email me", href: neverUrl }}
     >
       <P>
         {es
-          ? "Esta dirección se acaba de escribir para recibir una tarjeta en grupo de Ethos cuando se envíe. Si fuiste tú, confírmalo."
-          : "This address was just entered to be sent a group card on Ethos once it goes out. If that was you, confirm."}
+          ? "Esta dirección se acaba de escribir, junto a una nota, para recibir una tarjeta en grupo de Ethos cuando se envíe. Llega solo si esa nota va en la tarjeta. Si fuiste tú, confírmalo."
+          : "This address was just entered, with a note, to be sent a group card on Ethos once it goes out. It comes only if that note is in the card. If that was you, confirm."}
       </P>
       <CtaButton href={confirmUrl} label={es ? "Sí, envíamela" : "Yes, send it to me"} />
       <Quiet>
@@ -67,15 +68,15 @@ export function GroupSignedEmail({ locale, fromName, giftUrl, hasPassword, makeU
 }
 
 /** To the sender: notes are waiting for their yes. At most one a day, and it names only who the card is for. */
-export function GroupNudgeEmail({ locale, count, forName, editorUrl }: { locale: L; count: number; forName: string; editorUrl: string }) {
+export function GroupNudgeEmail({ locale, count, forName, editorUrl, unsubscribeUrl }: { locale: L; count: number; forName: string; editorUrl: string; unsubscribeUrl?: string | null }) {
   const es = locale === "es";
-  const one = count === 1;
   return (
     <EmailLayout
       lang={locale}
       preview={es ? "Nada entra en la tarjeta hasta que tú lo decidas." : "Nothing goes into the card until you say so."}
-      heading={es ? (one ? `Una nota espera en tu tarjeta para ${forName}.` : `${count} notas esperan en tu tarjeta para ${forName}.`) : one ? `A note is waiting for your card for ${forName}.` : `${count} notes are waiting for your card for ${forName}.`}
+      heading={`${groupNudgeSubject(locale, count, forName)}.`}
       footer={es ? "Recibes esto porque compartiste el enlace de una tarjeta en grupo. Como mucho, un aviso al día." : "You're getting this because you shared a group card's link. One of these a day at most."}
+      {...(unsubscribeUrl ? { footerLink: { label: es ? "Darme de baja" : "Unsubscribe", href: unsubscribeUrl } } : {})}
     >
       <P>{es ? "Ábrela para leerlas y elegir cuáles entran." : "Open it to read them and choose which go in."}</P>
       <CtaButton href={editorUrl} label={es ? "Ver las notas" : "See the notes"} />

@@ -362,6 +362,8 @@ export function PublishSheet({
       setRefusedFields([...new Set(refused.map((path) => path.split(".")[1]).filter(Boolean))]);
       return;
     }
+    // Notes left out of a group card because they were taken back since this editor last looked: out of its copy too.
+    for (const key of result.data.takenBack ?? []) useEditor.getState().removeContribution(key);
     state.markPublished(result.data.shortId, result.data.status);
     setPublished(result.data);
     // The app closes the editor and shows its own "It's ready" sheet; the share screen below stays

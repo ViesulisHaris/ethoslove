@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
 import { CircleCheck, ImagePlus, Loader2, Lock, PenLine, Undo2, X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { BRAND } from "@/config/brand";
@@ -9,6 +9,7 @@ import { LogoMark } from "@/components/shared/logo";
 import { track } from "@/lib/analytics/track";
 import { GROUP_LIMITS } from "@/lib/group/limits";
 import { groupAgeLine, groupEmailConsent, groupNotice, groupPhotoRule } from "@/lib/group/notice";
+import { groupReportLink } from "@/lib/group/report";
 import { cn } from "@/lib/utils";
 
 /** In the card's own language, like the keep page: this page sits off a gift, not on the site. */
@@ -33,13 +34,17 @@ const S = {
     sentTitle: "Your note is with {from}.",
     sentInbox: "Check your inbox to confirm your address.",
     takeBack: "Take my note back",
+    takeBackOf: "Take back the note from {name}",
     takingBack: "Taking it back…",
     another: "Add another note",
     takenTitle: "Your note has been taken back.",
+    takenOne: "The note from {name} has been taken back.",
     tooLate: "The card has already been sent. Write to {support} and we'll take your note out.",
+    notHere: "That note can't be taken back from here any more. Write to {support} and we'll take it out.",
     own: "Make a gift of your own",
     fullTitle: "This card has all the notes it can hold.",
     closedTitle: "{from} has closed this link.",
+    expiredTitle: "This link has stopped taking notes.",
     sentAwayTitle: "This card has been sent.",
     invalid: "Add your name and a note, and tick the box.",
     no_links: "A note can't carry a web address. Take it out and try again.",
@@ -69,13 +74,17 @@ const S = {
     sentTitle: "Tu nota ya la tiene {from}.",
     sentInbox: "Mira tu correo para confirmar tu dirección.",
     takeBack: "Retirar mi nota",
+    takeBackOf: "Retirar la nota de {name}",
     takingBack: "Retirándola…",
     another: "Añadir otra nota",
     takenTitle: "Tu nota se ha retirado.",
+    takenOne: "La nota de {name} se ha retirado.",
     tooLate: "La tarjeta ya se ha enviado. Escribe a {support} y quitamos tu nota.",
+    notHere: "Esa nota ya no se puede retirar desde aquí. Escribe a {support} y la quitamos.",
     own: "Haz tu propio regalo",
     fullTitle: "En esta tarjeta ya no caben más notas.",
     closedTitle: "{from} ha cerrado este enlace.",
+    expiredTitle: "Este enlace ya no admite notas.",
     sentAwayTitle: "Esta tarjeta ya se ha enviado.",
     invalid: "Pon tu nombre y una nota, y marca la casilla.",
     no_links: "Una nota no puede llevar una dirección web. Quítala y vuelve a intentarlo.",
@@ -89,30 +98,50 @@ const S = {
 
 type Problem = "invalid" | "no_links" | "bad_photo" | "too_large" | "invalid_email" | "limited" | "error";
 /** What the page is: taking a note, or one of the ends a link comes to. */
-export type ContributeState = "open" | "full" | "closed" | "sent";
+export type ContributeState = "open" | "full" | "closed" | "expired" | "sent";
 type Stage = ContributeState | "done" | "taken";
 
 const fill = (text: string, values: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ""));
-const withdrawKey = (token: string) => `ethos:group-note:${token}`;
-/** The secret this tab kept for a note it added here, or null (and null where storage is off). */
-function keptSecret(token: string): string | null {
+
+/**
+ * A note added from this browser, as the browser keeps it to be able to take it back: the secret the
+ * server handed over (`s`), the name it was signed with (`n`, to tell two notes apart when one phone
+ * went round a table) and when (`t`). Kept in this browser's own storage under the link, so closing
+ * the tab, or adding a second note, takes away nobody's way to withdraw the first; it never leaves
+ * the browser except as the secret, when "Take my note back" is tapped.
+ */
+type Kept = { s: string; n: string; t: number };
+const notesKey = (token: string) => `ethos:group-notes:${token}`;
+/** Longer than any link can stay open, after which the server has nothing left for a secret to find. */
+const KEEP_MS = 120 * 86_400_000;
+
+/** What this browser has stored for the link, as written (null where there is nothing, or storage is off). */
+function storedNotes(token: string): string | null {
   try {
-    return window.sessionStorage.getItem(withdrawKey(token));
+    return window.localStorage.getItem(notesKey(token));
   } catch {
     return null;
   }
 }
-function forget(token: string) {
+function parseNotes(raw: string | null): Kept[] {
+  if (!raw) return [];
   try {
-    window.sessionStorage.removeItem(withdrawKey(token));
+    const list: unknown = JSON.parse(raw);
+    if (!Array.isArray(list)) return [];
+    return list.filter((item): item is Kept => Boolean(item) && typeof item.s === "string" && /^[A-Za-z0-9_-]{16,64}$/.test(item.s) && typeof item.n === "string" && typeof item.t === "number").slice(-GROUP_LIMITS.total);
   } catch {
-    // Nothing was kept.
+    return [];
+  }
+}
+function storeNotes(token: string, list: Kept[]) {
+  try {
+    if (list.length) window.localStorage.setItem(notesKey(token), JSON.stringify(list));
+    else window.localStorage.removeItem(notesKey(token));
+  } catch {
+    // Kept for this visit only, then.
   }
 }
 const never = () => () => {};
-
-const reportLink = (ref: string) =>
-  `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(`Report group card ${ref}`)}&body=${encodeURIComponent(`Group card: ${ref}\n\nWhat is wrong with it, and why (for example: offensive, someone's personal details, illegal):\n\n\nYour name:\n\nI believe the information in this report is accurate and complete.`)}`;
 
 /**
  * The page at a group card's link: a name, a note and, if they like, one photo and an address to be
@@ -146,12 +175,13 @@ export function ContributeForm({
   const prefix = locale === "es" ? "/es" : "";
   const reduce = useReducedMotion();
   const [picked, setStage] = useState<Stage>(initial);
-  // A note already added from this tab: after a reload the page comes back to "Take my note back".
-  // Read after hydration (the server knows nothing of it); `own` is what this visit has done since.
-  const kept = useSyncExternalStore(never, () => keptSecret(token), () => null);
-  const [own, setOwn] = useState<string | null | undefined>(undefined);
-  const withdraw = own === undefined ? kept : own;
-  const stage: Stage = picked === "open" && own === undefined && kept ? "done" : picked;
+  // Notes already added from this browser: coming back to the page shows "Take my note back".
+  // Read after hydration (the server knows nothing of it); `own` is the list once this visit has changed it.
+  const stored = useSyncExternalStore(never, () => storedNotes(token), () => null);
+  const kept = useMemo(() => parseNotes(stored), [stored]);
+  const [own, setOwn] = useState<Kept[] | undefined>(undefined);
+  const notes = own ?? kept;
+  const stage: Stage = picked === "open" && own === undefined && kept.length > 0 ? "done" : picked;
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
   const [count, setCount] = useState(0);
@@ -159,8 +189,10 @@ export function ContributeForm({
   const [leftEmail, setLeftEmail] = useState(false);
   const [photo, setPhoto] = useState<{ blob: Blob; url: string } | null>(null);
   const [reading, setReading] = useState(false);
-  const [takingBack, setTakingBack] = useState(false);
+  const [takingBack, setTakingBack] = useState<string | null>(null);
   const [tooLate, setTooLate] = useState(false);
+  const [notHere, setNotHere] = useState(false);
+  const [tookBack, setTookBack] = useState<string | null>(null);
   const alert = useRef<HTMLParagraphElement>(null);
   const picker = useRef<HTMLInputElement>(null);
 
@@ -208,12 +240,12 @@ export function ContributeForm({
     if (res?.ok) {
       const data = (await res.json().catch(() => null)) as { withdraw?: string } | null;
       const secret = typeof data?.withdraw === "string" ? data.withdraw : null;
-      try {
-        if (secret) window.sessionStorage.setItem(withdrawKey(token), secret);
-      } catch {
-        // Kept for this visit only, then.
-      }
-      setOwn(secret);
+      const now = Date.now();
+      const list = [...notes.filter((note) => now - note.t < KEEP_MS), ...(secret ? [{ s: secret, n: String(fields.get("name") ?? "").trim().slice(0, GROUP_LIMITS.entryName), t: now }] : [])];
+      storeNotes(token, list);
+      setOwn(list);
+      setTookBack(null);
+      setNotHere(false);
       setLeftEmail(Boolean(address));
       track("group_note_added", { photo: Boolean(photo), email: Boolean(address) });
       setStage("done");
@@ -221,30 +253,43 @@ export function ContributeForm({
     }
     const error = res ? (((await res.json().catch(() => null)) as { error?: string } | null)?.error ?? "") : "";
     if (res?.status === 409 && error === "full") setStage("full");
-    else if (res?.status === 410) setStage(error === "sent" ? "sent" : "closed");
+    else if (res?.status === 410) setStage(error === "sent" ? "sent" : error === "expired" ? "expired" : "closed");
     else if (res?.status === 429) setProblem("limited");
     else if (res?.status === 413) setProblem("too_large");
     else if (error === "no_links" || error === "bad_photo" || error === "invalid_email" || error === "invalid" || error === "too_large") setProblem(error);
     else setProblem("error");
   };
 
-  const takeBack = async () => {
-    if (!withdraw || takingBack) return;
-    setTakingBack(true);
-    const res = await fetch("/api/group/withdraw", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ token, withdraw }) }).catch(() => null);
-    setTakingBack(false);
+  const takeBack = async (note: Kept) => {
+    if (takingBack) return;
+    setTakingBack(note.s);
+    setProblem(null);
+    const res = await fetch("/api/group/withdraw", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ token, withdraw: note.s }) }).catch(() => null);
+    setTakingBack(null);
+    // Only the server's yes means the note is out. A note it can no longer find (404) may be in a
+    // card already: the page says to write in, and never that the note was taken back.
     if (res?.ok || res?.status === 404) {
-      forget(token);
-      setOwn(null);
+      const left = notes.filter((other) => other.s !== note.s);
+      storeNotes(token, left);
+      setOwn(left);
+      // Where the link still takes notes, the answer is said on the "your note is with…" screen
+      // (reached by adding a note just now, or by coming back to the page), or on its own once no
+      // note is left. A link that is full, closed or past its last day keeps its own line and says
+      // it under that.
+      const taking = stage === "open" || stage === "done";
+      if (taking) setStage(res.ok && left.length === 0 ? "taken" : "done");
+      if (!res.ok) return setNotHere(true);
       track("group_note_withdrawn");
-      setStage("taken");
+      if (!taking || left.length > 0) setTookBack(note.n);
     } else if (res?.status === 410) setTooLate(true);
     else setProblem("error");
   };
 
   const again = () => {
-    forget(token);
-    setOwn(null);
+    // The notes already added stay kept: each can still be taken back after another is written.
+    setOwn(notes);
+    setTookBack(null);
+    setNotHere(false);
     setPhoto(null);
     setCount(0);
     setWantsEmail(false);
@@ -256,7 +301,39 @@ export function ContributeForm({
   const field = "w-full border border-white/15 bg-white/8 px-5 text-base text-paper placeholder:text-paper/40 focus:border-coral focus:outline-none";
   const quiet = "inline-flex min-h-11 items-center gap-1.5 text-sm text-paper/70 underline-offset-4 hover:text-paper hover:underline focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral";
   const Icon = stage === "open" ? PenLine : stage === "done" ? CircleCheck : stage === "taken" ? Undo2 : Lock;
-  const ended = stage === "full" ? t.fullTitle : stage === "closed" ? fill(t.closedTitle, { from: fromName }) : stage === "sent" ? t.sentAwayTitle : stage === "taken" ? t.takenTitle : null;
+  const ended = stage === "full" ? t.fullTitle : stage === "closed" ? fill(t.closedTitle, { from: fromName }) : stage === "expired" ? t.expiredTitle : stage === "sent" ? t.sentAwayTitle : stage === "taken" ? t.takenTitle : null;
+
+  // The notes this browser can still take back, each with its own button (named once there is more
+  // than one to tell apart), and what the last tap came to.
+  const takeBackPart = (
+    <>
+      {tookBack !== null ? (
+        <p role="status" className="mt-3 text-sm [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-took-back">
+          {fill(t.takenOne, { name: tookBack })}
+        </p>
+      ) : null}
+      {tooLate || notHere ? (
+        <p role="alert" className="mt-4 text-sm [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-write-in">
+          {fill(tooLate ? t.tooLate : t.notHere, { support: BRAND.supportEmail })}
+        </p>
+      ) : null}
+      {tooLate ? null : (
+        <div className={cn("flex flex-col items-center", notes.length > 0 && "mt-4")}>
+          {notes.map((note) => (
+            <button key={note.s} type="button" onClick={() => void takeBack(note)} disabled={takingBack !== null} className={cn(quiet, "underline [overflow-wrap:anywhere] disabled:opacity-60")} data-testid="contribute-take-back">
+              {takingBack === note.s ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
+              {takingBack === note.s ? t.takingBack : notes.length > 1 || tookBack !== null ? fill(t.takeBackOf, { name: note.n }) : t.takeBack}
+            </button>
+          ))}
+        </div>
+      )}
+      {problem && stage !== "open" ? (
+        <p role="alert" className="mt-2 text-sm text-coral">
+          {t[problem]}
+        </p>
+      ) : null}
+    </>
+  );
 
   return (
     <div lang={locale} translate="no" className="flex min-h-dvh flex-col items-center justify-center bg-night px-6 py-12 text-center text-paper" data-testid="contribute" data-stage={stage}>
@@ -413,29 +490,19 @@ export function ContributeForm({
             {fill(t.sentTitle, { from: fromName })}
           </h1>
           {leftEmail ? <p className="mt-3 text-sm text-paper/70">{t.sentInbox}</p> : null}
-          {tooLate ? (
-            <p role="alert" className="mt-4 text-sm [overflow-wrap:anywhere] text-paper/80">
-              {fill(t.tooLate, { support: BRAND.supportEmail })}
-            </p>
-          ) : withdraw ? (
-            <button type="button" onClick={takeBack} disabled={takingBack} className={cn(quiet, "mt-4 underline disabled:opacity-60")} data-testid="contribute-take-back">
-              {takingBack ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
-              {takingBack ? t.takingBack : t.takeBack}
-            </button>
-          ) : null}
-          {problem ? (
-            <p role="alert" className="mt-2 text-sm text-coral">
-              {t[problem]}
-            </p>
-          ) : null}
+          {takeBackPart}
           <button type="button" onClick={again} className={cn(quiet, "mt-1")} data-testid="contribute-another">
             {t.another}
           </button>
         </div>
       ) : (
-        <h1 className="mt-6 max-w-sm text-[1.8rem] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--font-display)" }} data-testid="contribute-ended">
-          {ended}
-        </h1>
+        <div className="mt-6 flex max-w-sm flex-col items-center">
+          <h1 className="text-[1.8rem] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--font-display)" }} data-testid="contribute-ended">
+            {ended}
+          </h1>
+          {/* A link that takes no more notes still lets a note be taken back, until the card is sent. */}
+          {stage === "full" || stage === "closed" || stage === "expired" ? takeBackPart : null}
+        </div>
       )}
 
       {stage !== "open" ? (
@@ -443,7 +510,7 @@ export function ContributeForm({
           {t.own}
         </a>
       ) : null}
-      <a href={reportLink(reportRef)} className="mt-6 inline-flex min-h-11 items-center text-xs text-paper/40 underline-offset-4 hover:text-paper/70 hover:underline" data-testid="contribute-report">
+      <a href={groupReportLink("page", reportRef, locale)} className="mt-6 inline-flex min-h-11 items-center text-xs text-paper/60 underline-offset-4 hover:text-paper/80 hover:underline focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral" data-testid="contribute-report">
         {t.report}
       </a>
     </div>

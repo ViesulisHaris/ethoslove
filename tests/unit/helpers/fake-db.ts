@@ -63,6 +63,7 @@ const DEFAULTS: Record<string, Row> = {
     photo_width: null,
     photo_height: null,
     item_key: null,
+    with_photo: null,
     email: null,
     email_sha256: null,
     email_consent: null,

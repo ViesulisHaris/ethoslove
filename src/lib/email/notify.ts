@@ -429,9 +429,15 @@ export async function sendGroupSigned({ to, locale, fromName, giftUrl, hasPasswo
 }
 
 /** To the sender: notes are waiting. The caller holds it to one a day per group. */
-export async function sendGroupNudge({ to, locale, count, forName, onceKey }: { to: string; locale: L; count: number; forName: string; onceKey: string }): Promise<boolean> {
+export async function sendGroupNudge({ to, locale, count, forName, unsubscribeUrl, onceKey }: { to: string; locale: L; count: number; forName: string; unsubscribeUrl: string | null; onceKey: string }): Promise<boolean> {
   return safely("group nudge", async () =>
-    deliver("group nudge", { to, subject: groupNudgeSubject(locale, count, forName), react: GroupNudgeEmail({ locale, count, forName, editorUrl: pageUrl(locale, "/dashboard") }), idempotencyKey: onceKey }),
+    deliver("group nudge", {
+      to,
+      subject: groupNudgeSubject(locale, count, forName),
+      react: GroupNudgeEmail({ locale, count, forName, editorUrl: pageUrl(locale, "/dashboard"), unsubscribeUrl }),
+      ...(unsubscribeUrl ? { headers: unsubscribeHeaders(unsubscribeUrl) } : {}),
+      idempotencyKey: onceKey,
+    }),
   );
 }
 

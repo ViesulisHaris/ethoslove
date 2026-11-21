@@ -286,12 +286,15 @@ describe("what a link comes to", () => {
     expect(rows()).toEqual([]);
   });
 
-  it("closed by the sender, or by time: 410", async () => {
+  it("closed by the sender, or past its last day: 410, and the page is told which, so it never says the sender closed a link that only ran out", async () => {
     reset({ closed_at: new Date(NOW).toISOString() });
     expect(await (await send()).json()).toEqual({ error: "closed" });
     reset({ closes_at: new Date(NOW).toISOString() });
     const res = await send();
-    expect([res.status, await res.json()]).toEqual([410, { error: "closed" }]);
+    expect([res.status, await res.json()]).toEqual([410, { error: "expired" }]);
+    // Both at once: the sender did close it.
+    reset({ closed_at: new Date(NOW - DAY).toISOString(), closes_at: new Date(NOW).toISOString() });
+    expect(await (await send()).json()).toEqual({ error: "closed" });
     reset({ closes_at: new Date(NOW + 1000).toISOString() });
     expect((await send()).status).toBe(200);
   });
@@ -367,12 +370,32 @@ describe("taking a note back", () => {
     expect(rows()[0].status).toBe("pending");
   });
 
-  it("names nobody else's note: a wrong secret, or the right one at another link, finds nothing", async () => {
+  it("names nobody else's note: a wrong secret finds nothing, and a request without one is refused", async () => {
     const secret = await added();
     expect((await takeBack({ token: TOKEN, withdraw: "x".repeat(32) })).status).toBe(404);
-    expect((await takeBack({ token: groupToken(GROUP, 2, SECRET), withdraw: secret })).status).toBe(404);
     expect((await takeBack({ token: TOKEN })).status).toBe(400);
     expect((await takeBack({ token: "nope", withdraw: secret })).status).toBe(400);
     expect(rows()[0].status).toBe("pending");
+  });
+
+  it("still works after the sender has reset the link: the old page's secret is what names the note", async () => {
+    const secret = await added();
+    // "Reset the link": the group now answers to another token, and the one this page holds finds no group.
+    Object.assign(fake.rows("gift_groups")[0], { token_version: 2, token_sha256: sha256Hex(groupToken(GROUP, 2, SECRET)) });
+    const res = await takeBack({ token: TOKEN, withdraw: secret });
+    expect([res.status, await res.json()]).toEqual([200, { ok: true }]);
+    expect(rows()[0]).toMatchObject({ status: "withdrawn", decided_at: new Date(NOW).toISOString() });
+  });
+
+  it("a note that is no longer there (scrubbed, or deleted with its card) answers 404, never 'taken back'", async () => {
+    const secret = await added();
+    // The daily job's scrub forgets the secret with the words.
+    Object.assign(rows()[0], { status: "rejected", name: null, note: null, withdraw_sha256: null, scrubbed_at: new Date(NOW).toISOString() });
+    expect((await takeBack({ token: TOKEN, withdraw: secret })).status).toBe(404);
+    expect(rows()[0].status).toBe("rejected");
+    // And a note whose group has gone (the row would have gone with it).
+    const again = await added();
+    fake.tables.gift_groups = [];
+    expect((await takeBack({ token: TOKEN, withdraw: again })).status).toBe(404);
   });
 });

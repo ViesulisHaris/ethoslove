@@ -60,9 +60,10 @@ in none of the lists the gallery, sitemap, app catalogue, llms brief or checkout
   the card is for, one optional line on what to write), the template's limits copied in, when the
   link closes, and the SHA-256 of the link's token.
 - `gift_contributions`: what one person added. Status `pending`, `approved`, `rejected`, `removed`
-  or `withdrawn`; name, note, the photo's path; optionally an email address with the sentence they
-  agreed to; the notice they accepted, word for word; the SHA-256 of the secret their browser keeps
-  to take the note back.
+  or `withdrawn`; name, note, the photo's path; whether the sender added it with its photo
+  (`with_photo`); optionally an email address with the sentence they agreed to; the notice they
+  accepted, word for word; the SHA-256 of the secret their browser keeps to take the note back
+  (indexed: the secret alone finds the note).
 - A private `contributions` storage bucket for photos waiting for the sender's yes, a trigger that
   holds each group to its limits when two notes land together, and `group_photo_orphans()`.
 
@@ -78,7 +79,19 @@ gift, and the page sends no referrer.
 **The editor is the only writer of a gift's content.** Saying yes to a note marks it approved,
 gives it a key, copies its photo into the gift's own folder (`gifts/<giftId>/c<key>.webp`) and
 returns the item; the editor puts it into `data.contributions` and saves. Whenever the panel loads,
-an approved note missing from the gift is added again, and one its writer took back is taken out.
+an approved note missing from the gift is added again (with its photo only if it was added with it
+the first time), and one its writer took back is taken out.
+
+**The server decides what goes out.** The editor's copy can be behind (another phone, a tab left
+open, the panel off screen), so `publishGift`, and `saveDraft` for a card that is already out, drop
+every note whose key belongs to a contribution that was withdrawn, removed or turned down
+(`keysOutOfCard` in `src/lib/group/store.ts`) before anything is stored, and publishing tells the
+editor which (`takenBack`). A key stays on its row after the words are scrubbed, so the note stays
+out. If the group's rows can't be read, the card is not sent (`group_unavailable`); a database
+without the tables has nothing to have been taken back, and the card goes as it is.
+
+A duplicated card carries its notes and no group: the editor's panel lists them all the same (move,
+fix, remove), under "Invite people".
 
 ## What is kept and for how long
 
@@ -91,14 +104,21 @@ The daily job is `runGroupRetention` (`src/lib/group/retention.ts`), called from
 | A note turned down, removed or taken back: its words, photo and address | 24 hours after the decision (the sender's Undo) | The columns are emptied and the file deleted; the row stays so the group's limits still count it |
 | A contributor's email address | The moment its one email has been sent, or refused because the address is on the unsubscribe list | `email`, its hash and the consent are set to null |
 | An address that never confirmed | 7 days after the note was added | Same |
-| Every note of a card that was sent, waiting ones included, and their waiting photos | 7 days after sending | Rows and files deleted. What was added lives on in the gift itself |
+| Every note of a card that was sent, waiting ones included, and their waiting photos | Within 7 days of sending, which is what every contributor is told (`sentPromiseDays`). The job runs once a day, so it deletes at 6 days (`afterSentDays`): a note is gone between 6 and 7 days after sending | Rows and files deleted. What was added lives on in the gift itself |
 | The exception: a card sent with a date on it that has not opened yet | The notes that are in it and whose writers confirmed an address wait until the card opens and their email has gone | Then the next run deletes them |
-| Every note of a card never sent | 14 days after the link ran out (`closes_at`) | Rows and files deleted; the draft is then no longer kept from the 7-day draft sweep |
+| Every note of a card never sent | 14 days after the date its link was due to close (`closes_at`), even if the sender closed it by hand sooner | Rows and files deleted; the draft is then no longer kept from the 7-day draft sweep |
 | A group deleted with its gift or its account | Rows at once (cascade); files at once as well as can be, and within a day for certain | `forgetGroupPhotos`, then `group_photo_orphans()` |
 
 A draft with an open group would otherwise be deleted by the existing 7-day draft sweep. The job
-touches such a draft's `updated_at` every day until 14 days after its link ran out. That is the one
-write this feature makes to a table that existed before, and it is only ever made to a draft.
+touches such a draft's `updated_at` once it has gone 4 days untouched (`draftTouchDays`: early enough
+that two missed runs cost nothing, and seldom enough that the draft is not sent to the top of "My
+gifts" every morning), until 14 days after its link was due to close. That is the one write this
+feature makes to a table that existed before, and it is only ever made to a draft. This step runs
+first and on its own, so nothing that fails further down the job costs anyone a draft.
+
+The purge reads the notes that still exist (a thousand at a time, by id), not the groups: a sent
+group's row lives as long as its gift, so a list of "groups sent a week ago" only ever grows. No
+filter carries more than a hundred ids.
 
 ## Routes
 
@@ -110,7 +130,7 @@ The sender's (signed in, 120 requests in ten minutes per account, each checks th
 | --- | --- |
 | `POST /api/group` | Makes the group for a draft gift on a group template, or returns the one it has |
 | `POST /api/group/find` | The panel asking how its group stands. A POST, because a gift's id is never put in a URL |
-| `PATCH /api/group/[id]` | The page's words, close or reopen, reset the link, keep it open 30 more days (never past 90 from the start) |
+| `PATCH /api/group/[id]` | The page's words, close or reopen, reset the link, keep it open 30 more days: 30 on from the day it closes, or from today once that has passed, never past 90 from the start. The group's `extendsTo` is where that would move it (null at the last day), and `ranOut` says its last day has passed |
 | `POST /api/group/[id]/entries/[entryId]` | `approve` (with or without the photo), `reject`, `remove`, `restore` |
 | `DELETE /api/group/[id]` | The group and everything sent to it; the gift's own notes stay |
 
@@ -121,13 +141,19 @@ Anyone holding the link (no account):
 | Route | Does |
 | --- | --- |
 | `POST /api/group/contribute` | Multipart: name, note, the box, an optional photo and an optional address. 40 an hour per connection, 30 an hour per link from it |
-| `POST /api/group/withdraw` | "Take my note back", with the secret the page kept, until the card is sent |
+| `POST /api/group/withdraw` | "Take my note back", with the secret the page kept (in the browser's own storage, one per note), until the card is sent. The secret alone finds the note, so it works after the sender has reset the link. 410 once sent, 404 for a note no longer there: the page gives the support address for both, and never says "taken back" without the server's yes |
 | `GET`/`POST /api/group/confirm` | "Yes, send it to me": GET only asks, so a mail scanner confirms nothing |
 
 What a contributor types is made one line of plain text (`src/lib/group/clean.ts`): control,
 zero-width and bidi characters stripped, whitespace collapsed, anything that looks like a link
-refused. A photo is refused over 2 MB or outside JPEG, PNG and WebP, and always decoded and written
+refused. A full stop with no space after it is not a link ("Gracias por todo.Es un placer"): a
+word, a dot and a word counts only with a path after it, with an ending that is no word
+("evil.pt"), or with a word-like ending where the note stops ("tienda.es"). The sender's own form
+in the panel runs the same check. A photo is refused over 2 MB or outside JPEG, PNG and WebP, and always decoded and written
 out again as WebP of at most 1600 px (`src/lib/group/photo.ts`), which removes its EXIF.
+
+A link is one of: open, full, closed (by its sender), expired (past its last day, which the page
+says without blaming the sender) or sent.
 
 The page is `src/app/[currency]/[locale]/(gift)/c/[token]/page.tsx`: no site chrome, noindex, no
 price or payment field, no Clarity, no pixels, no cookie banner (`OFF_LIMITS` in
@@ -138,8 +164,8 @@ price or payment field, no Clarity, no pixels, no cookie banner (`OFF_LIMITS` in
 | Email | To | When |
 | --- | --- | --- |
 | Confirmation | The address a contributor left | On adding the note. It names nobody. At most three a day per address; never to an address on the unsubscribe list (which is then not kept) |
-| "Here's the card you signed" | A confirmed address whose note is in a card that is out | When the card is published live, when a scheduled card opens (the recipient's first open, or the cron), when someone confirms after the card went out, and from the daily job as the backstop. Once per note; the address is deleted as it goes |
-| "Notes are waiting" | The sender's account address | On a new note, at most once a day per group. It links to the dashboard, not to the gift |
+| "Here's the card you signed" | A confirmed address whose note is in a card that is out. Someone whose note was left out gets nothing, and the sentence they agreed to, the confirming email and its pages all say "if your note is in it" | When the card is published live (after the sender has their answer, not before), when a scheduled card opens (the recipient's first open, or the cron), when someone confirms after the card went out, and from the daily job as the backstop. Once per note; the address is deleted as it goes |
+| "Notes are waiting" | The sender's account address, unless it is on the unsubscribe list | On a new note, at most once a day per group. It links to the dashboard, not to the gift, and carries the site's own unsubscribe link |
 
 ## Money
 

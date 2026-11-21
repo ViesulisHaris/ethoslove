@@ -648,6 +648,8 @@ export interface Database {
           photo_height: number | null;
           /** What the gift's own data calls it, once approved. */
           item_key: string | null;
+          /** Whether it was approved with its photo; null until approved. */
+          with_photo: boolean | null;
           email: string | null;
           email_sha256: string | null;
           email_consent: string | null;
@@ -673,6 +675,7 @@ export interface Database {
           photo_width?: number | null;
           photo_height?: number | null;
           item_key?: string | null;
+          with_photo?: boolean | null;
           email?: string | null;
           email_sha256?: string | null;
           email_consent?: string | null;
@@ -695,6 +698,7 @@ export interface Database {
           photo_width?: number | null;
           photo_height?: number | null;
           item_key?: string | null;
+          with_photo?: boolean | null;
           email?: string | null;
           email_sha256?: string | null;
           email_consent?: string | null;

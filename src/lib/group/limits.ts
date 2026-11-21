@@ -19,7 +19,7 @@ export const GROUP_LIMITS = {
   open: CONTRIBUTION_LIMITS.max,
   /** Every note a group has ever been sent, turned down and taken back ones included. */
   total: 60,
-  /** A link takes notes for this many days; "Keep it open" adds as many again, never past `maxDays` from the start. */
+  /** A link takes notes for this many days; "Keep it open" adds as many again to the day it closes (or to today, once that has passed), never past `maxDays` from the start. */
   days: 30,
   maxDays: 90,
   /** A photo as it arrives, and its longest edge once the server has re-encoded it. */
@@ -35,8 +35,23 @@ export const GROUP_RETENTION = {
   undoHours: 24,
   /** An address that never confirmed. */
   unconfirmedDays: 7,
-  /** Every note of a card that was sent. */
-  afterSentDays: 7,
-  /** Every note of a card never sent, counted from when its link closed. */
+  /**
+   * What everyone who adds a note is told (lib/group/notice.ts, and the privacy policy): what isn't
+   * used is deleted within this many days of the card being sent.
+   */
+  sentPromiseDays: 7,
+  /**
+   * When the daily job deletes every note of a card that was sent. A day less than the promise: the
+   * job runs once a day, so a note is gone between six and seven days after sending, never later.
+   * The sender's panel counts with this one too ("notes still waiting can be added until…").
+   */
+  afterSentDays: 6,
+  /** Every note of a card never sent, counted from the date its link was due to close (`closes_at`), even if the sender closed it by hand sooner. */
   afterClosedDays: 14,
+  /**
+   * A draft with a group is kept from the seven-day draft sweep by touching it, and only once it has
+   * gone this long untouched: early enough that two missed runs cost nothing, and seldom enough that
+   * the draft isn't sent to the top of "My gifts" every morning.
+   */
+  draftTouchDays: 4,
 } as const;

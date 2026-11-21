@@ -14,7 +14,7 @@ import { manifest } from "@/templates/_group-reference/manifest";
  * panel and its pay panel with made-up notes, for screenshots and the browser tests, which have no
  * account and no database. `live` leaves the panel talking to the real routes, which a test answers.
  */
-export type PanelPreviewState = "intro" | "guest" | "setup" | "active" | "full" | "sent";
+export type PanelPreviewState = "intro" | "guest" | "setup" | "active" | "full" | "sent" | "ranout" | "capped" | "copy";
 
 const GIFT = "6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b";
 const NOW = "2026-12-01T10:00:00.000Z";
@@ -73,6 +73,8 @@ function fixture(state: PanelPreviewState, locale: GiftLocale): { group: GroupVi
   const copy = COPY[locale];
   if (state === "intro" || state === "guest" || state === "setup") return { group: null, items: [] };
   const base: GiftContribution[] = copy.inCard.map((item, i) => ({ key: `preview00${i}`, ...item, ...(i === 0 ? { photo: PHOTO } : {}) }));
+  // A duplicated card: it carries the notes and has no group behind it.
+  if (state === "copy") return { group: null, items: base };
   const items = state === "full" ? [...base, ...Array.from({ length: 22 }, (_, i) => ({ key: `filler${String(i).padStart(4, "0")}`, ...copy.filler(i + 4) }))] : base;
   const entries: GroupEntryView[] = [
     entry(1, { ...copy.waiting[0], wantsEmail: true }),
@@ -90,8 +92,12 @@ function fixture(state: PanelPreviewState, locale: GiftLocale): { group: GroupVi
       max: 25,
       noteMax: 140,
       takesPhotos: true,
-      closesAt: "2026-12-31T10:00:00.000Z",
+      // "ranout": the link's last day passed three days before NOW and nobody closed it. "capped":
+      // open, and already at the last day a link can have, so there is nothing to keep it open to.
+      closesAt: state === "ranout" ? "2026-11-28T10:00:00.000Z" : state === "capped" ? "2027-01-15T10:00:00.000Z" : "2026-12-31T10:00:00.000Z",
       closedAt: null,
+      ranOut: state === "ranout",
+      extendsTo: state === "sent" || state === "capped" ? null : state === "ranout" ? "2026-12-31T10:00:00.000Z" : "2027-01-30T10:00:00.000Z",
       sentAt: state === "sent" ? NOW : null,
       reportRef: "prev1ew0",
       entries,

@@ -85,7 +85,8 @@ test.describe("the page at a group card's link", () => {
     await page.goto(PREVIEW);
     await write(page);
     await page.getByTestId("contribute-wants-email").check();
-    await expect(page.getByText("We'll email you once to confirm it's you, and once with the link when the card is sent. Then we delete your address.")).toBeVisible();
+    // The card comes only to someone whose note is in it, and the sentence they agree to says so.
+    await expect(page.getByText("We'll email you once to confirm it's you and, if your note goes into the card, once with the link when it's sent. Then we delete your address.")).toBeVisible();
     await page.getByTestId("contribute-email").fill("gran@example.com");
     await page.getByTestId("contribute-submit").click();
 
@@ -147,6 +148,7 @@ test.describe("the page at a group card's link", () => {
   for (const [status, error, words] of [
     [409, "full", "This card has all the notes it can hold."],
     [410, "closed", "Tom has closed this link."],
+    [410, "expired", "This link has stopped taking notes."],
     [410, "sent", "This card has been sent."],
   ] as const) {
     test(`a link that ended while they were writing says so: ${error}`, async ({ page }) => {
@@ -163,6 +165,8 @@ test.describe("the page at a group card's link", () => {
     for (const [state, words] of [
       ["full", "This card has all the notes it can hold."],
       ["closed", "Tom has closed this link."],
+      // Past its last day, with nobody having closed it: it does not say Tom did.
+      ["expired", "This link has stopped taking notes."],
       ["sent", "This card has been sent."],
     ] as const) {
       await page.goto(`${PREVIEW}?state=${state}`);
@@ -181,6 +185,77 @@ test.describe("the page at a group card's link", () => {
     await page.getByTestId("contribute-submit").click();
     await page.getByTestId("contribute-take-back").click();
     await expect(page.getByTestId("contribute-done").getByRole("alert")).toContainText("The card has already been sent. Write to");
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+  });
+
+  test("a note the server can no longer find is never said to be taken back: the page gives the support address", async ({ page }) => {
+    await answer(page, "**/api/group/contribute", { status: 200, body: { ok: true, withdraw: "w".repeat(32) } });
+    await answer(page, "**/api/group/withdraw", { status: 404, body: { error: "not_found" } });
+    await page.goto(PREVIEW);
+    await write(page);
+    await page.getByTestId("contribute-submit").click();
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("contribute-write-in")).toContainText("That note can't be taken back from here any more. Write to");
+    await expect(page.getByTestId("contribute")).toHaveAttribute("data-stage", "done");
+    await expect(page.getByTestId("contribute-ended")).toHaveCount(0);
+    await expect(page.locator("body")).not.toContainText("has been taken back");
+    // The key that found nothing is not offered again.
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+  });
+
+  test("the way to take a note back outlives the tab, and a second note does not cost the first its own", async ({ page, context }) => {
+    let n = 0;
+    const secrets = ["a".repeat(32), "b".repeat(32)];
+    await answer(page, "**/api/group/contribute", () => ({ status: 200, body: { ok: true, withdraw: secrets[n++] } }));
+    await page.goto(PREVIEW);
+    await write(page);
+    await page.getByTestId("contribute-submit").click();
+    await expect(page.getByTestId("contribute-take-back")).toHaveText("Take my note back");
+    await page.getByTestId("contribute-another").click();
+    await write(page, "Sam", "You taught me to drive.");
+    await page.getByTestId("contribute-submit").click();
+    // Two notes from this phone: each has its own way back, by the name it was signed with.
+    await expect(page.getByTestId("contribute-take-back")).toHaveText(["Take back the note from Gran", "Take back the note from Sam"]);
+    await page.close();
+
+    // Another tab, later (a chat app's browser closes the first one): both are still there.
+    const later = await context.newPage();
+    const taken = await answer(later, "**/api/group/withdraw", { status: 200, body: { ok: true } });
+    await later.goto(PREVIEW);
+    await expect(later.getByTestId("contribute-take-back")).toHaveCount(2);
+    await later.getByTestId("contribute-take-back").first().click();
+    await expect(later.getByTestId("contribute-took-back")).toHaveText("The note from Gran has been taken back.");
+    // The one that is left is still named, so nobody wonders which note the button means.
+    await expect(later.getByTestId("contribute-take-back")).toHaveText(["Take back the note from Sam"]);
+    expect(taken.map((request) => request.postDataJSON())).toEqual([{ token: TOKEN, withdraw: "a".repeat(32) }]);
+    await later.getByTestId("contribute-take-back").click();
+    await expect(later.getByTestId("contribute-ended")).toHaveText("Your note has been taken back.");
+    expect(taken.map((request) => (request.postDataJSON() as { withdraw: string }).withdraw)).toEqual(["a".repeat(32), "b".repeat(32)]);
+    // Nothing is left behind in the browser once both are out.
+    expect(await later.evaluate(() => Object.keys(window.localStorage).filter((key) => key.startsWith("ethos:group-notes:")))).toEqual([]);
+  });
+
+  test("a note can still be taken back at a link that has closed, until the card is sent", async ({ page }) => {
+    await answer(page, "**/api/group/contribute", { status: 200, body: { ok: true, withdraw: "w".repeat(32) } });
+    const taken = await answer(page, "**/api/group/withdraw", { status: 200, body: { ok: true } });
+    await page.goto(PREVIEW);
+    await write(page);
+    await page.getByTestId("contribute-submit").click();
+    await expect(page.getByTestId("contribute-done")).toBeVisible();
+    // Tom closes the link (everyone has signed); Gran comes back to change her mind.
+    await page.goto(`${PREVIEW}?state=closed`);
+    await expect(page.getByTestId("contribute-ended")).toHaveText("Tom has closed this link.");
+    await page.getByTestId("contribute-take-back").click();
+    await expect(page.getByTestId("contribute-took-back")).toHaveText("The note from Gran has been taken back.");
+    await expect(page.getByTestId("contribute-ended")).toHaveText("Tom has closed this link.");
+    await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
+    expect(taken).toHaveLength(1);
+    // Once the card is sent there is no button: that is the support address's job.
+    await page.goto(PREVIEW);
+    await write(page);
+    await page.getByTestId("contribute-submit").click();
+    await page.goto(`${PREVIEW}?state=sent`);
+    await expect(page.getByTestId("contribute-ended")).toHaveText("This card has been sent.");
     await expect(page.getByTestId("contribute-take-back")).toHaveCount(0);
   });
 
@@ -308,6 +383,37 @@ test.describe("the page at a group card's link", () => {
     expect(href.startsWith("mailto:")).toBe(true);
     expect(decodeURIComponent(href)).toContain("Group card: prev1ew0");
     expect(href).not.toContain(TOKEN);
+    // Small text on the night ground still has to be read: 4.5 to 1 or better against what is behind it.
+    const ratio = await page.getByTestId("contribute-report").evaluate((link) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 1;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+      const ground = getComputedStyle(document.querySelector('[data-testid="contribute"]')!).backgroundColor;
+      const paint = (...colors: string[]) => {
+        ctx.clearRect(0, 0, 1, 1);
+        for (const color of colors) {
+          ctx.fillStyle = color;
+          ctx.fillRect(0, 0, 1, 1);
+        }
+        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+        const linear = (v: number) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
+        return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+      };
+      const back = paint(ground);
+      const text = paint(ground, getComputedStyle(link).color);
+      return (Math.max(back, text) + 0.05) / (Math.min(back, text) + 0.05);
+    });
+    expect(ratio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test("on a Spanish card the report is written in Spanish, subject and body", async ({ page }) => {
+    await page.goto(`${PREVIEW}?lang=es`);
+    await expect(page.getByTestId("contribute-report")).toHaveText("Denunciar esta página");
+    const href = decodeURIComponent((await page.getByTestId("contribute-report").getAttribute("href")) ?? "");
+    expect(href).toContain("subject=Denunciar la tarjeta en grupo prev1ew0");
+    expect(href).toContain("Tarjeta en grupo: prev1ew0");
+    expect(href).toContain("Qué tiene de malo y por qué");
+    expect(href).not.toMatch(/Report|What is wrong|Your name/);
   });
 
   test("works in Safari on an iPhone: write, send, come back, take it back", async ({ baseURL }, testInfo) => {
@@ -352,6 +458,9 @@ function serverGroup(over: Record<string, unknown> = {}, entries: Record<string,
     takesPhotos: true,
     closesAt: "2026-12-31T10:00:00.000Z",
     closedAt: null,
+    ranOut: false,
+    // Made on 1 December: 30 more days from the day it closes, as the real route counts it.
+    extendsTo: "2027-01-30T10:00:00.000Z",
     sentAt: null,
     reportRef: "live0000",
     entries,
@@ -463,7 +572,8 @@ test.describe("the sender's group card panel", () => {
 
   test("once the card is sent the link is gone, and notes still waiting can be added for a week", async ({ page }) => {
     await page.goto(`${PANEL}?state=sent`);
-    await expect(page.getByTestId("group-sent")).toHaveText("The card has been sent, so the link is closed. Notes still waiting can be added until December 8.");
+    // Six days from sending (1 December): the daily job deletes what is still waiting within the seven everyone was told.
+    await expect(page.getByTestId("group-sent")).toHaveText("The card has been sent, so the link is closed. Notes still waiting can be added until December 7.");
     await expect(page.getByTestId("group-link")).toHaveCount(0);
     await expect(page.getByTestId("group-link-controls")).toHaveCount(0);
     await expect(page.getByTestId("group-add")).toBeEnabled();
@@ -475,10 +585,66 @@ test.describe("the sender's group card panel", () => {
     for (const id of ["group-copy", "group-share", "group-whatsapp", "group-add", "group-reject", "group-undo", "group-move-down", "group-edit", "group-remove-item", "group-add-own", "group-extend", "group-close", "group-reset", "group-report"]) {
       const box = await page.getByTestId(id).first().boundingBox();
       expect(box, id).not.toBeNull();
-      expect(box!.height, id).toBeGreaterThanOrEqual(40);
-      if (!["group-copy", "group-add", "group-reject"].includes(id)) expect(box!.height, id).toBeGreaterThanOrEqual(44);
+      expect(box!.height, id).toBeGreaterThanOrEqual(44);
     }
+    // The form a note is fixed in, and the one behind "Add one yourself": its buttons too.
+    await page.getByTestId("group-edit").first().click();
+    for (const button of await page.getByTestId("group-note-form").getByRole("button").all()) expect((await button.boundingBox())!.height, await button.innerText()).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+
+  test("a note the sender types or fixes can't carry a web address either, and the form says why", async ({ page }) => {
+    await page.goto(`${PANEL}?state=active`);
+    await page.getByTestId("group-edit").first().click();
+    const form = page.getByTestId("group-note-form");
+    await form.getByLabel("Note").fill("Photos from the day are on evil.com");
+    await expect(form.getByTestId("group-note-links")).toHaveText("A note can't carry a web address. Take it out to save it.");
+    await expect(form.getByRole("button", { name: "Save" })).toBeDisabled();
+    // A full stop with no space after it is not an address.
+    await form.getByLabel("Note").fill("See you on the 12th.Me and Sam will bring the cake");
+    await expect(form.getByTestId("group-note-links")).toHaveCount(0);
+    await expect(form.getByRole("button", { name: "Save" })).toBeEnabled();
+  });
+
+  test("a link past its last day says the day it ran out, not that it is open, and offers the way back", async ({ page }) => {
+    await page.goto(`${PANEL}?state=ranout`);
+    await expect(page.getByTestId("group-link-controls")).toHaveAttribute("data-link", "ran-out");
+    await expect(page.getByTestId("group-open-until")).toHaveText("The link ran out on November 28. Nobody new can add a note.");
+    await expect(page.getByTestId("group-extend")).toHaveText("Open it again until December 31");
+    // There is nothing to close, so no "Close the link"; a new link can still be made.
+    await expect(page.getByTestId("group-close")).toHaveCount(0);
+    await expect(page.getByTestId("group-reset")).toBeVisible();
+    await page.goto(`/es${PANEL}?state=ranout`);
+    await expect(page.getByTestId("group-open-until")).toHaveText("El enlace caducó el 28 de noviembre. Nadie más puede dejar una nota.");
+    await expect(page.getByTestId("group-extend")).toHaveText("Volver a abrirlo hasta el 31 de diciembre");
+  });
+
+  test("at the last day a link can have, there is no button that would do nothing", async ({ page }) => {
+    await page.goto(`${PANEL}?state=capped`);
+    await expect(page.getByTestId("group-open-until")).toHaveText("Open until January 15");
+    await expect(page.getByTestId("group-extend")).toHaveCount(0);
+    await expect(page.getByTestId("group-close")).toHaveText("Close the link");
+  });
+
+  test("a duplicated card: its notes can be seen, fixed and taken out though no group is behind them", async ({ page }) => {
+    await page.goto(`${PANEL}?state=copy`);
+    // Inviting people is still on offer, and the card's own notes are listed under it.
+    await expect(page.getByTestId("group-invite")).toBeVisible();
+    await expect(page.getByTestId("group-link")).toHaveCount(0);
+    await expect(page.getByTestId("group-waiting-title")).toHaveCount(0);
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (3 of 25)");
+    await expect(page.getByTestId("group-item")).toHaveCount(3);
+    await page.getByTestId("group-remove-item").first().click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (2 of 25)");
+    await expect(page.getByTestId("group-item").first()).toContainText("Iris");
+  });
+
+  test("the sender's report on a note is written in their language", async ({ page }) => {
+    await page.goto(`/es${PANEL}?state=active`);
+    const report = decodeURIComponent((await page.getByTestId("group-report").first().getAttribute("href")) ?? "");
+    expect(report).toContain("subject=Denunciar una nota de una tarjeta en grupo (prev0001)");
+    expect(report).toContain("Nota: prev0001");
+    expect(report).not.toMatch(/Report|What is wrong|Your name/);
   });
 
   test("in Spanish, written for it", async ({ page }) => {
@@ -591,13 +757,17 @@ test.describe("the panel talking to the routes", () => {
       const body = request.postDataJSON() as Record<string, unknown>;
       if (body.closed === true) return { status: 200, body: { group: serverGroup({ closedAt: "2026-12-01T10:00:00.000Z" }) } };
       if (body.resetLink) return { status: 200, body: { group: serverGroup({ url: "https://tryethos.io/c/newNewNewNewNewNewNew0" }) } };
-      if (body.extend) return { status: 200, body: { group: serverGroup({ closesAt: "2027-01-30T10:00:00.000Z" }) } };
+      // What the real route answers for a link made on 1 December: 30 days on from the day it closes,
+      // and the next tap would reach the last day it can have (90 days from the start, 1 March).
+      if (body.extend) return { status: 200, body: { group: serverGroup({ closesAt: "2027-01-30T10:00:00.000Z", extendsTo: "2027-03-01T10:00:00.000Z" }) } };
       return { status: 200, body: { group: serverGroup() } };
     });
     await page.goto(`${PANEL}?state=active&live=1`);
     await expect(page.getByTestId("group-open-until")).toHaveText("Open until December 31");
+    await expect(page.getByTestId("group-extend")).toHaveText("Keep it open 30 more days");
     await page.getByTestId("group-extend").click();
     await expect(page.getByTestId("group-open-until")).toHaveText("Open until January 30");
+    await expect(page.getByTestId("group-extend")).toHaveText("Keep it open 30 more days");
     await page.getByTestId("group-close").click();
     await expect(page.getByTestId("group-open-until")).toHaveText("The link is closed. Nobody new can add a note.");
     await expect(page.getByTestId("group-close")).toHaveText("Reopen the link");
@@ -610,6 +780,19 @@ test.describe("the panel talking to the routes", () => {
     await expect(page.getByTestId("group-url")).toHaveText("tryethos.io/c/newNewNewNewNewNewNew0");
     expect(patches.at(-1)?.method()).toBe("PATCH");
     expect(patches.at(-1)?.postDataJSON()).toEqual({ resetLink: true });
+  });
+
+  test("'30 more days' is only promised when it is 30: near the last day the button names the day instead", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup({ closesAt: "2027-02-14T10:00:00.000Z", extendsTo: "2027-03-01T10:00:00.000Z" }) } });
+    const patches = await answer(page, `**/api/group/${GROUP_ID}`, { status: 200, body: { group: serverGroup({ closesAt: "2027-03-01T10:00:00.000Z", extendsTo: null }) } });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await expect(page.getByTestId("group-open-until")).toHaveText("Open until February 14");
+    await expect(page.getByTestId("group-extend")).toHaveText("Keep it open until March 1");
+    await page.getByTestId("group-extend").click();
+    await expect(page.getByTestId("group-open-until")).toHaveText("Open until March 1");
+    // The last day it can have: the button is gone, not left to do nothing.
+    await expect(page.getByTestId("group-extend")).toHaveCount(0);
+    expect(patches.map((request) => request.postDataJSON())).toEqual([{ extend: true }]);
   });
 
   test("a failure says so and leaves the note where it was", async ({ page }) => {
@@ -777,5 +960,13 @@ test.describe("the reference template and the editor", () => {
     await expect(page.getByTestId("contribution")).toHaveCount(2);
     await expect(page.getByTestId("contribution").first()).toContainText("Forty is nothing. Ring me.");
     await expect(page.getByTestId("contribution").last()).toContainText("Sam");
+    // And the editor lists them, with no group behind them (a duplicated card, a draft from before): they can be taken out.
+    if (isMobile) await page.getByRole("tab", { name: "Edit" }).click();
+    await expect(page.getByTestId("group-section").getByTestId("group-item")).toHaveCount(2);
+    await page.getByTestId("group-remove-item").first().click();
+    await expect(page.getByTestId("group-section").getByTestId("group-item")).toHaveCount(1);
+    if (isMobile) await page.getByRole("tab", { name: "Preview" }).click();
+    await expect(page.getByTestId("contribution")).toHaveCount(1);
+    await expect(page.getByTestId("contribution")).toContainText("Sam");
   });
 });

@@ -11,7 +11,8 @@ import { linkSecret } from "@/lib/lifecycle/links";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 
 /**
- * The group behind a link, and what the link is right now; null for anything that isn't one. Off
+ * The group behind a link, and what the link is right now (taking notes, full, closed by its
+ * sender, past its last day, or sent); null for anything that isn't one. Off
  * (the switch), a token of the wrong shape, a link that was reset, and a database without migration
  * 0023 all read the same from outside: there is no such page.
  */

@@ -3,12 +3,12 @@
 
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Check, Copy, Loader2, MessageCircle, Pencil, Plus, Share2, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { BRAND } from "@/config/brand";
+import { useLocale, useTranslations } from "next-intl";
 import type { GiftContribution } from "@/lib/gift/schema";
-import { cleanText, lengthOf } from "@/lib/group/clean";
+import { cleanText, hasLink, lengthOf } from "@/lib/group/clean";
 import type { GroupEntryView, GroupView } from "@/lib/group/client";
 import { GROUP_LIMITS } from "@/lib/group/limits";
+import { groupReportLink } from "@/lib/group/report";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,10 +20,6 @@ import { Field } from "@/components/editor/field";
  * together and talks to the server). Each is plain: it draws what it is given and says what was
  * tapped. Everything a contributor wrote is drawn as text, never as markup.
  */
-
-/** A report is an email to a person, quoting the note's reference and nothing that opens anything (as on the dates' reviews). */
-const reportLink = (ref: string) =>
-  `mailto:${BRAND.supportEmail}?subject=${encodeURIComponent(`Report a note on a group card (${ref})`)}&body=${encodeURIComponent(`Note: ${ref}\n\nWhat is wrong with it, and why (for example: offensive, someone's personal details, illegal):\n\n\nYour name:\n\nI believe the information in this report is accurate and complete.`)}`;
 
 const quiet = "inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline disabled:opacity-50";
 const iconButton = "grid size-11 shrink-0 place-items-center rounded-full text-ink-soft hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-30";
@@ -126,7 +122,7 @@ export function GroupLink({ url, shareText, onShared }: { url: string; shareText
         <span className="min-w-0 flex-1 truncate font-mono text-sm" data-testid="group-url">
           {url.replace(/^https?:\/\//, "")}
         </span>
-        <Button type="button" onClick={copy} className="h-10 shrink-0 rounded-full px-4" data-testid="group-copy">
+        <Button type="button" onClick={copy} className="h-11 shrink-0 rounded-full px-4" data-testid="group-copy">
           {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
           <span>{copied ? t("copied") : t("copy")}</span>
         </Button>
@@ -148,6 +144,7 @@ export function GroupLink({ url, shareText, onShared }: { url: string; shareText
 /** One note waiting for the sender's yes: who, what, the photo if any, and the two answers. */
 export function WaitingEntry({ entry, busy, full, onAdd, onRemove }: { entry: GroupEntryView; busy: boolean; full: boolean; onAdd: (withPhoto: boolean) => void; onRemove: () => void }) {
   const t = useTranslations("editor.group");
+  const locale = useLocale();
   const [withPhoto, setWithPhoto] = useState(true);
   const name = entry.name ?? "";
   return (
@@ -167,14 +164,15 @@ export function WaitingEntry({ entry, busy, full, onAdd, onRemove }: { entry: Gr
         </label>
       ) : null}
       <div className={cn("flex flex-wrap items-center gap-x-2 gap-y-1", entry.photo ? "mt-1" : "mt-3")}>
-        <Button type="button" className="h-10 rounded-full px-4" disabled={busy || full} onClick={() => onAdd(Boolean(entry.photo) && withPhoto)} data-testid="group-add">
+        <Button type="button" className="h-11 rounded-full px-4" disabled={busy || full} onClick={() => onAdd(Boolean(entry.photo) && withPhoto)} data-testid="group-add">
           {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
           <span>{busy ? t("adding") : t("add")}</span>
         </Button>
-        <Button type="button" variant="ghost" className="h-10 rounded-full px-4" disabled={busy} onClick={onRemove} data-testid="group-reject">
+        <Button type="button" variant="ghost" className="h-11 rounded-full px-4" disabled={busy} onClick={onRemove} data-testid="group-reject">
           {t("remove")}
         </Button>
-        <a href={reportLink(entry.reportRef)} className={cn(quiet, "ml-auto text-xs")} data-testid="group-report">
+        {/* A report is an email to a person, in the sender's language, quoting the note's reference and nothing that opens anything. */}
+        <a href={groupReportLink("note", entry.reportRef, locale)} className={cn(quiet, "ml-auto text-xs")} data-testid="group-report">
           {t("report")}
         </a>
       </div>
@@ -195,13 +193,18 @@ export function DecidedEntry({ entry, busy, onUndo }: { entry: GroupEntryView; b
   );
 }
 
-/** Edits a note's name and words in place (a typo), and can take its photo off. Also the form behind "Add one yourself". */
+/**
+ * Edits a note's name and words in place (a typo), and can take its photo off. Also the form behind
+ * "Add one yourself". What the sender types is held to what a contributor's note is held to: one
+ * line of plain text, inside the card's lengths, with no web address in it.
+ */
 export function NoteForm({ initial, noteMax, hasPhoto = false, submitLabel, onSubmit, onCancel, onDropPhoto }: { initial?: { name: string; note: string }; noteMax: number; hasPhoto?: boolean; submitLabel: string; onSubmit: (value: { name: string; note: string }) => void; onCancel: () => void; onDropPhoto?: () => void }) {
   const t = useTranslations("editor.group");
   const [name, setName] = useState(initial?.name ?? "");
   const [note, setNote] = useState(initial?.note ?? "");
   const clean = { name: cleanText(name), note: cleanText(note) };
-  const ok = Boolean(clean.name && clean.note) && lengthOf(clean.name) <= GROUP_LIMITS.entryName && lengthOf(clean.note) <= noteMax;
+  const linked = hasLink(clean.name) || hasLink(clean.note);
+  const ok = Boolean(clean.name && clean.note) && lengthOf(clean.name) <= GROUP_LIMITS.entryName && lengthOf(clean.note) <= noteMax && !linked;
   return (
     <form
       className="flex flex-col gap-3"
@@ -216,11 +219,16 @@ export function NoteForm({ initial, noteMax, hasPhoto = false, submitLabel, onSu
         <Textarea value={note} maxLength={noteMax} rows={3} onChange={(e) => setNote(e.target.value)} placeholder={t("note")} aria-label={t("note")} className="min-h-24 resize-none text-base leading-relaxed md:text-[15px]" />
         <p className="mt-1 text-right text-[11px] text-muted-foreground tabular-nums">{t("count", { n: note.length, max: noteMax })}</p>
       </div>
+      {linked ? (
+        <p role="alert" className="text-sm text-coral-deep" data-testid="group-note-links">
+          {t("noLinks")}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-2">
-        <Button type="submit" className="h-10 rounded-full px-4" disabled={!ok}>
+        <Button type="submit" className="h-11 rounded-full px-4" disabled={!ok}>
           {submitLabel}
         </Button>
-        <Button type="button" variant="ghost" className="h-10 rounded-full px-4" onClick={onCancel}>
+        <Button type="button" variant="ghost" className="h-11 rounded-full px-4" onClick={onCancel}>
           {t("cancel")}
         </Button>
         {hasPhoto && onDropPhoto ? (
@@ -317,15 +325,22 @@ export function AddOwn({ noteMax, disabled, onAdd }: { noteMax: number; disabled
   );
 }
 
-/** How long the link stays open, and the three things the sender can do to it. */
-export function LinkControls({ group, date, busy, onExtend, onToggle, onReset }: { group: Pick<GroupView, "closedAt" | "closesAt">; date: string; busy: boolean; onExtend: () => void; onToggle: () => void; onReset: () => void }) {
+/**
+ * How long the link stays open, and what the sender can do to it. Three states: open (keep it open
+ * longer, close it), closed by the sender (reopen it), and past its last day, which nobody closed:
+ * that one says the day it ran out and offers the way back. `extend` is where "Keep it open" would
+ * move the last day, or null when it can't move (90 days from the start): the button is then not
+ * shown, and it promises "30 more days" only when it adds all thirty.
+ */
+export function LinkControls({ group, date, extend, busy, onExtend, onToggle, onReset }: { group: Pick<GroupView, "closedAt" | "ranOut">; date: string; extend: { date: string; full: boolean } | null; busy: boolean; onExtend: () => void; onToggle: () => void; onReset: () => void }) {
   const t = useTranslations("editor.group");
   const [confirming, setConfirming] = useState(false);
   const closed = Boolean(group.closedAt);
+  const ranOut = !closed && group.ranOut;
   return (
-    <div className="border-t border-dashed border-border pt-4" data-testid="group-link-controls">
+    <div className="border-t border-dashed border-border pt-4" data-testid="group-link-controls" data-link={closed ? "closed" : ranOut ? "ran-out" : "open"}>
       <p className="text-sm text-ink-soft" data-testid="group-open-until">
-        {closed ? t("closedNow") : t("openUntil", { date })}
+        {closed ? t("closedNow") : ranOut ? t("ranOut", { date }) : t("openUntil", { date })}
       </p>
       {confirming ? (
         <div className="mt-1" role="group" aria-label={t("reset")}>
@@ -350,14 +365,16 @@ export function LinkControls({ group, date, busy, onExtend, onToggle, onReset }:
         </div>
       ) : (
         <div className="flex flex-wrap gap-x-5">
-          {closed ? null : (
+          {closed || !extend ? null : (
             <button type="button" disabled={busy} className={quiet} onClick={onExtend} data-testid="group-extend">
-              {t("extend")}
+              {ranOut ? t("reopenUntil", { date: extend.date }) : extend.full ? t("extend") : t("extendUntil", { date: extend.date })}
             </button>
           )}
-          <button type="button" disabled={busy} className={quiet} onClick={onToggle} data-testid="group-close">
-            {closed ? t("reopen") : t("close")}
-          </button>
+          {ranOut ? null : (
+            <button type="button" disabled={busy} className={quiet} onClick={onToggle} data-testid="group-close">
+              {closed ? t("reopen") : t("close")}
+            </button>
+          )}
           <button type="button" disabled={busy} className={quiet} onClick={() => setConfirming(true)} data-testid="group-reset">
             {t("reset")}
           </button>

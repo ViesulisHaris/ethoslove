@@ -74,6 +74,10 @@ export type GroupView = {
   takesPhotos: boolean;
   closesAt: string;
   closedAt: string | null;
+  /** The link's last day has passed: it takes no notes until the sender keeps it open. */
+  ranOut: boolean;
+  /** The day "Keep it open" would move the closing day to, or null when it can't be moved (sent, or already at its last possible day). */
+  extendsTo: string | null;
   sentAt: string | null;
   reportRef: string;
   entries: GroupEntryView[];
@@ -142,7 +146,7 @@ export async function createGroup(admin: Db, input: { userId: string; giftId: st
  * gift may still be carrying it. If the secret changed since the link was made, the stored hash is
  * brought up to date here, so the link in the panel is always the one that works.
  */
-export async function viewGroup(admin: Db, group: GroupRow, secret: string): Promise<GroupView> {
+export async function viewGroup(admin: Db, group: GroupRow, secret: string, now = Date.now()): Promise<GroupView> {
   const token = groupToken(group.id, group.token_version, secret);
   const hash = sha256Hex(token);
   if (hash !== group.token_sha256) need(await admin.from("gift_groups").update({ token_sha256: hash }).eq("id", group.id), "relink");
@@ -165,6 +169,8 @@ export async function viewGroup(admin: Db, group: GroupRow, secret: string): Pro
     takesPhotos: group.takes_photos,
     closesAt: group.closes_at,
     closedAt: group.closed_at,
+    ranOut: !group.sent_at && Date.parse(group.closes_at) <= now,
+    extendsTo: group.sent_at ? null : extendedClose(group, now),
     sentAt: group.sent_at,
     reportRef: group.report_ref,
     entries: shown.map((row) => ({
@@ -185,9 +191,23 @@ export async function viewGroup(admin: Db, group: GroupRow, secret: string): Pro
 export type GroupPatch = { fromName?: string; forName?: string; prompt?: string | null; closed?: boolean; resetLink?: boolean; extend?: boolean };
 
 /**
+ * Where "Keep it open" moves a link's last day: 30 days on from the day it closes, or from today
+ * once that day has passed (which is also how a link that ran out is opened again), and never past
+ * 90 days from the day the link was made. Null when that moves nothing: the link is already at its
+ * last possible day. The panel shows the button only while this is a date, and names the date
+ * whenever it is fewer than 30 days on.
+ */
+export function extendedClose(group: Pick<GroupRow, "created_at" | "closes_at">, now: number): string | null {
+  const closes = Date.parse(group.closes_at);
+  const latest = Date.parse(group.created_at) + GROUP_LIMITS.maxDays * DAY;
+  const next = Math.min(Math.max(closes, now) + GROUP_LIMITS.days * DAY, latest);
+  return next > closes && next > now ? iso(next) : null;
+}
+
+/**
  * The sender changes what the page says, closes or reopens the link, makes a new one (the old one
- * then finds nothing), or keeps it open 30 more days, never past 90 from the day it was made. Once
- * the gift has been sent the link stays closed: only the words can still change.
+ * then finds nothing), or keeps it open 30 more days (`extendedClose`). Once the gift has been sent
+ * the link stays closed: only the words can still change.
  */
 export async function patchGroup(admin: Db, group: GroupRow, patch: GroupPatch, secret: string, now: number): Promise<{ ok: true; group: GroupRow } | { ok: false; error: "sent" }> {
   if (group.sent_at && (patch.closed === false || patch.resetLink || patch.extend)) return { ok: false, error: "sent" };
@@ -202,8 +222,8 @@ export async function patchGroup(admin: Db, group: GroupRow, patch: GroupPatch, 
     update.token_sha256 = sha256Hex(groupToken(group.id, version, secret));
   }
   if (patch.extend) {
-    const latest = Date.parse(group.created_at) + GROUP_LIMITS.maxDays * DAY;
-    update.closes_at = iso(Math.max(Date.parse(group.closes_at), Math.min(now + GROUP_LIMITS.days * DAY, latest)));
+    const next = extendedClose(group, now);
+    if (next) update.closes_at = next;
   }
   if (Object.keys(update).length === 0) return { ok: true, group };
   const row = need(await admin.from("gift_groups").update(update).eq("id", group.id).select("*").single(), "update") as GroupRow;
@@ -247,14 +267,17 @@ export async function approveEntry(admin: Db, group: GroupRow, entryId: string, 
   if (!already && (await counts(admin, group.id)).approved >= group.max_entries) return { ok: false, error: "full" };
 
   const key = already ?? randomRef(10);
+  // Asked again for a note already added (the editor putting back one the gift lost): its photo comes
+  // with it only if the sender added it with the photo the first time, whatever this request says.
+  const wanted = already && entry.with_photo !== null && entry.with_photo !== undefined ? entry.with_photo : withPhoto;
   let copy: { path: string; previewUrl: string | null } | null = null;
-  if (withPhoto && entry.photo_path && group.takes_photos) {
+  if (wanted && entry.photo_path && group.takes_photos) {
     copy = await copyPhotoToGift(admin, entry.photo_path, group.gift_id, key);
     if (!copy) return { ok: false, error: "photo_failed" };
   }
   if (already) return { ok: true, entry, item: itemOf(entry, key, copy?.path ?? null), previewUrl: copy?.previewUrl ?? null };
 
-  const claimed = need(await admin.from("gift_contributions").update({ status: "approved", item_key: key, decided_at: iso(now) }).eq("id", entry.id).eq("status", "pending").select("*"), "approve") as EntryRow[] | null;
+  const claimed = need(await admin.from("gift_contributions").update({ status: "approved", item_key: key, with_photo: Boolean(copy), decided_at: iso(now) }).eq("id", entry.id).eq("status", "pending").select("*"), "approve") as EntryRow[] | null;
   if (!claimed?.length) {
     // Decided from another tab in the same moment: whatever it is now is the answer.
     const again = await entryOf(admin, group.id, entryId);
@@ -285,7 +308,7 @@ export async function restoreEntry(admin: Db, group: GroupRow, entryId: string, 
   const decided = entry.decided_at ? Date.parse(entry.decided_at) : 0;
   if (entry.scrubbed_at || !entry.name || !entry.note || now - decided > GROUP_RETENTION.undoHours * HOUR) return { ok: false, error: "gone" };
   if ((await counts(admin, group.id)).open >= group.max_entries) return { ok: false, error: "full" };
-  const restored = need(await admin.from("gift_contributions").update({ status: "pending", decided_at: null, item_key: null }).eq("id", entry.id).eq("status", entry.status).select("*"), "restore") as EntryRow[] | null;
+  const restored = need(await admin.from("gift_contributions").update({ status: "pending", decided_at: null, item_key: null, with_photo: null }).eq("id", entry.id).eq("status", entry.status).select("*"), "restore") as EntryRow[] | null;
   return restored?.length ? { ok: true, entry: restored[0] } : { ok: false, error: "not_allowed" };
 }
 
@@ -319,12 +342,13 @@ export async function groupByToken(admin: Db, token: string): Promise<GroupRow |
   return need(await admin.from("gift_groups").select("*").eq("token_sha256", sha256Hex(token)).maybeSingle(), "find") as GroupRow | null;
 }
 
-export type LinkState = "open" | "full" | "closed" | "sent";
+export type LinkState = "open" | "full" | "closed" | "expired" | "sent";
 
-/** What the page at the link is: taking notes, out of room, closed by the sender (or by time), or sent. */
+/** What the page at the link is: taking notes, out of room, closed by the sender, past its last day, or sent. */
 export async function linkState(admin: Db, group: GroupRow, now: number): Promise<LinkState> {
   if (group.sent_at) return "sent";
-  if (group.closed_at || Date.parse(group.closes_at) <= now) return "closed";
+  if (group.closed_at) return "closed";
+  if (Date.parse(group.closes_at) <= now) return "expired";
   const { open, total } = await counts(admin, group.id);
   return open >= group.max_entries || total >= GROUP_LIMITS.total ? "full" : "open";
 }
@@ -365,17 +389,38 @@ export async function addEntry(admin: Db, group: GroupRow, entry: NewEntry, now:
 }
 
 /**
- * "Take my note back", from the browser that wrote it (it kept the secret). Before the gift is sent
- * the note is withdrawn wherever it stood; if it was already in the draft, its key stays on the row
- * so the sender's editor takes it out the next time the panel loads. After sending it is too late
- * for a button: the page gives the support address instead.
+ * "Take my note back", from the browser that wrote it (it kept the secret). The secret alone names
+ * the note: it is 24 random bytes that only that browser was ever given, so the link the note was
+ * written at need not still work (a sender who resets the link takes away nobody's way to take
+ * their note back). Before the gift is sent the note is withdrawn wherever it stood; if it was
+ * already in the draft, its key stays on the row, which keeps it out of the card from then on (the
+ * sender's editor takes it out, and publishing refuses it: `keysOutOfCard`). After sending it is too
+ * late for a button: the page gives the support address instead.
  */
-export async function withdrawEntry(admin: Db, group: GroupRow, secret: string, now: number): Promise<"ok" | "sent" | "not_found"> {
-  if (group.sent_at) return "sent";
-  const entry = need(await admin.from("gift_contributions").select("id, status").eq("group_id", group.id).eq("withdraw_sha256", sha256Hex(secret)).maybeSingle(), "withdraw") as Pick<EntryRow, "id" | "status"> | null;
+export async function withdrawEntry(admin: Db, secret: string, now: number): Promise<"ok" | "sent" | "not_found"> {
+  const found = need(await admin.from("gift_contributions").select("id, status, group_id").eq("withdraw_sha256", sha256Hex(secret)).limit(1), "withdraw") as Pick<EntryRow, "id" | "status" | "group_id">[] | null;
+  const entry = found?.[0];
   if (!entry) return "not_found";
+  const group = need(await admin.from("gift_groups").select("sent_at").eq("id", entry.group_id).maybeSingle(), "withdraw") as Pick<GroupRow, "sent_at"> | null;
+  if (!group) return "not_found";
+  if (group.sent_at) return "sent";
   if (entry.status !== "withdrawn") need(await admin.from("gift_contributions").update({ status: "withdrawn", decided_at: iso(now) }).eq("id", entry.id), "withdraw");
   return "ok";
+}
+
+/**
+ * The keys of notes that must not be in a gift's card any more: ones their writer took back, and
+ * ones the sender removed or turned down (on any device). The editor takes these out of its own
+ * copy when its panel next reads the group, but that copy can be behind (another phone, a tab left
+ * open, the panel off screen), and what recipients see is decided on the server: publishing a card,
+ * and saving one that is already out, drop every note whose key is here before anything is stored.
+ * A gift with no group behind it (a duplicate, a card whose group was deleted) has none.
+ */
+export async function keysOutOfCard(admin: Db, giftId: string): Promise<Set<string>> {
+  const group = need(await admin.from("gift_groups").select("id").eq("gift_id", giftId).maybeSingle(), "read") as Pick<GroupRow, "id"> | null;
+  if (!group) return new Set();
+  const rows = (need(await admin.from("gift_contributions").select("item_key").eq("group_id", group.id).in("status", ["withdrawn", "removed", "rejected"]).not("item_key", "is", null), "read") ?? []) as Pick<EntryRow, "item_key">[];
+  return new Set(rows.flatMap((row) => (row.item_key ? [row.item_key] : [])));
 }
 
 /** The gift was published: its link takes no more notes. Safe to call for a gift with no group. */

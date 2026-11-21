@@ -18,16 +18,20 @@
 -- gift_contributions: what one person added at the link, for the organiser to approve or remove.
 --   status         pending, approved (item_key is then what the gift's own data calls it), rejected
 --                  or removed (by the organiser), withdrawn (by whoever wrote it).
+--   with_photo     whether the organiser added it with its photo, so a note put back into a gift
+--                  that lost it comes back the way they chose.
 --   photo_path     the file in the contributions bucket, "<group id>/<contribution id>.webp".
 --   email          only if they asked to be sent the finished gift, with the sentence they agreed
 --                  to (email_consent) and when; nothing is sent until the address has said yes
 --                  (email_confirmed_at). It is deleted the moment that one email has gone.
 --   agreed         the notice they accepted, word for word: 16 or over, and what happens to it.
---   withdraw_sha256  SHA-256 of the secret their browser keeps to take the note back.
+--   withdraw_sha256  SHA-256 of the secret their browser keeps to take the note back. The secret
+--                  alone finds the note, so it can be taken back after the link has been reset.
 --   scrubbed_at    a note the organiser turned down, or its writer took back, loses its words,
 --                  photo and address after a day; the row stays so the group's limits still count it.
--- The daily job deletes every contribution of a gift 7 days after it is sent, and of a gift never
--- sent 14 days after its link closed. What was approved lives on in the gift itself.
+-- The daily job deletes every contribution of a gift within 7 days of it being sent, and of a gift
+-- never sent 14 days after the date its link was due to close (closes_at). What was approved lives
+-- on in the gift itself.
 --
 -- gift_contributions_cap: at most max_entries waiting or approved, and 60 in all, per group. It
 -- locks the group's row first, so two notes arriving together can't both take the last place.
@@ -83,6 +87,7 @@ create table if not exists public.gift_contributions (
   photo_width smallint check (photo_width between 1 and 1600),
   photo_height smallint check (photo_height between 1 and 1600),
   item_key text check (item_key ~ '^[a-z0-9]{10}$'),
+  with_photo boolean,
   email text check (char_length(email) between 3 and 254),
   email_sha256 text check (email_sha256 ~ '^[0-9a-f]{64}$'),
   email_consent text check (char_length(email_consent) between 1 and 600),
@@ -102,6 +107,8 @@ create table if not exists public.gift_contributions (
 create index if not exists gift_contributions_group_idx on public.gift_contributions (group_id, created_at);
 -- One key per gift.
 create unique index if not exists gift_contributions_key_idx on public.gift_contributions (group_id, item_key) where item_key is not null;
+-- "Take my note back": the note is found by its secret's hash alone.
+create index if not exists gift_contributions_withdraw_idx on public.gift_contributions (withdraw_sha256) where withdraw_sha256 is not null;
 -- What the daily job scrubs.
 create index if not exists gift_contributions_decided_idx on public.gift_contributions (decided_at) where scrubbed_at is null and status in ('rejected', 'removed', 'withdrawn');
 

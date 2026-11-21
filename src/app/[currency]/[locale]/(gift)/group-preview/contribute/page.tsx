@@ -6,12 +6,12 @@ import { ContributeForm, type ContributeState } from "@/components/group/contrib
 export const metadata: Metadata = { robots: { index: false } };
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-const STATES: readonly ContributeState[] = ["open", "full", "closed", "sent"];
+const STATES: readonly ContributeState[] = ["open", "full", "closed", "expired", "sent"];
 
 /**
  * Development only: the page a group card's link opens (/c/<token>), for a made-up group, for
  * screenshots and the browser tests, which have no group to open (a worktree has no database).
- *   ?state=open|full|closed|sent   what the link is
+ *   ?state=open|full|closed|expired|sent   what the link is
  *   ?lang=es                       a Spanish card
  *   ?from= ?for= ?prompt=          what the page says (prompt empty for none)
  *   ?photos=0                      a template that takes no photos

@@ -11,8 +11,10 @@ import { manifest as reference } from "@/templates/_group-reference/manifest";
 import { fieldsSchema as referenceFields } from "@/templates/_group-reference/schema";
 import { FakeDb } from "./helpers/fake-db";
 
-const state = vi.hoisted(() => ({ client: null as unknown, user: null as unknown, on: true, signed: [] as Record<string, unknown>[] }));
+const state = vi.hoisted(() => ({ client: null as unknown, user: null as unknown, on: true, signed: [] as Record<string, unknown>[], tasks: [] as (() => unknown)[], signedAtAnswer: 0 }));
 vi.mock("server-only", () => ({}));
+// Work handed to after() waits here until the action has answered, as it does on the server.
+vi.mock("next/server", async (original) => ({ ...(await original<typeof import("next/server")>()), after: (task: () => unknown) => void state.tasks.push(task) }));
 vi.mock("next/cache", () => ({ revalidatePath: () => {}, unstable_cache: (fn: unknown) => fn }));
 vi.mock("@/lib/supabase/server", () => ({ getSupabaseServerClient: async () => state.client, bearerToken: async () => null }));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdminClient: () => state.client }));
@@ -28,7 +30,7 @@ vi.mock("@/templates/schemas", async (original) => {
   return { ...real, loadFieldsSchema: async (slug: string) => (slug === "group-reference" ? referenceFields : real.loadFieldsSchema(slug)) };
 });
 
-const { publishGift } = await import("@/app/actions/gift");
+const { publishGift, saveDraft } = await import("@/app/actions/gift");
 
 const NOW = Date.parse("2026-12-01T10:00:00Z");
 const DAY = 86_400_000;
@@ -97,13 +99,22 @@ function seed({ unlocks = [SLUG, `group:${SLUG}`], withGroup = true, missingTabl
 }
 const stored = () => fake.rows("gifts")[0];
 const groupRow = () => fake.rows("gift_groups")[0];
-const send = (over: Record<string, unknown> = {}) => publishGift({ giftId: GIFT, data: card, removeWatermark: true, ...over });
+/** Publishes, notes how many emails had gone by the time the sender had their answer, then lets the work left for afterwards run. */
+const send = async (over: Record<string, unknown> = {}) => {
+  const result = await publishGift({ giftId: GIFT, data: card, removeWatermark: true, ...over });
+  state.signedAtAnswer = state.signed.length;
+  for (const task of state.tasks.splice(0)) await task();
+  return result;
+};
+const notes = () => (stored().data as { contributions?: { key: string }[] }).contributions?.map((item) => item.key);
 
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(NOW);
   state.on = true;
   state.signed = [];
+  state.tasks = [];
+  state.signedAtAnswer = 0;
   vi.spyOn(console, "error").mockImplementation(() => {});
   return () => {
     vi.useRealTimers();
@@ -127,6 +138,8 @@ describe("sending a group card", () => {
     expect((stored().data as typeof card).contributions).toEqual(card.contributions);
     expect(groupRow().sent_at).toBe(at(NOW));
     expect(state.signed).toHaveLength(1);
+    // The Send tap is not kept waiting for the emails: they go once it has its answer.
+    expect(state.signedAtAnswer).toBe(0);
     expect(state.signed[0]).toMatchObject({ to: "mum@example.test", fromName: "Tom", giftUrl: expect.stringMatching(/\/g\/card234ab$/) });
     const [mum, dad] = fake.rows("gift_contributions");
     expect(mum).toMatchObject({ email: null, emailed_at: at(NOW) });
@@ -155,6 +168,73 @@ describe("sending a group card", () => {
     seed({ withGroup: false });
     expect((await send()).ok).toBe(true);
     expect(state.signed).toEqual([]);
+  });
+});
+
+describe("a note that is no longer the card's to carry", () => {
+  const takeOut = (n: number, status: string) => Object.assign(fake.rows("gift_contributions")[n], { status, decided_at: at(NOW - 60_000) });
+
+  it("taken back by its writer: it never goes out, whatever the editor still held, and the editor is told which", async () => {
+    seed();
+    takeOut(0, "withdrawn");
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live", takenBack: ["abcdefghij"] } });
+    expect(stored().status).toBe("live");
+    expect(notes()).toEqual(["bcdefghijk"]);
+    // Nothing of the note is in what recipients are sent, and nobody is told they signed it.
+    expect(JSON.stringify(stored().data)).not.toContain("Forty is nothing");
+    expect(state.signed).toEqual([]);
+  });
+
+  it("removed or turned down on another device: the same", async () => {
+    for (const status of ["removed", "rejected"]) {
+      seed();
+      takeOut(1, status);
+      expect((await send()).ok).toBe(true);
+      expect(notes(), status).toEqual(["abcdefghij"]);
+    }
+  });
+
+  it("stays out after its words have been scrubbed: the key is what is remembered", async () => {
+    seed();
+    Object.assign(fake.rows("gift_contributions")[0], { status: "withdrawn", name: null, note: null, withdraw_sha256: null, decided_at: at(NOW - 2 * DAY), scrubbed_at: at(NOW - DAY) });
+    await send();
+    expect(notes()).toEqual(["bcdefghijk"]);
+  });
+
+  it("a card left with no notes is an ordinary gift: it needs no group unlock", async () => {
+    seed({ unlocks: [SLUG] });
+    takeOut(0, "withdrawn");
+    takeOut(1, "withdrawn");
+    expect(await send()).toMatchObject({ ok: true, data: { takenBack: ["abcdefghij", "bcdefghijk"] } });
+    expect(notes()).toEqual([]);
+  });
+
+  it("a note added back after Undo has a new key, so the old one being out does not touch it", async () => {
+    seed();
+    // Removed, then restored and added again: the row holds the new key; the old one is on no row.
+    Object.assign(fake.rows("gift_contributions")[0], { status: "approved", item_key: "zzzzzzzzzz" });
+    expect(await send()).toEqual({ ok: true, data: { shortId: "card234ab", status: "live" } });
+    expect(notes()).toEqual(["abcdefghij", "bcdefghijk"]);
+  });
+
+  it("if the notes can't be read, the card is not sent: better late than with a note someone took back", async () => {
+    seed();
+    takeOut(0, "withdrawn");
+    fake.failNext("gift_contributions", "select", "connection lost");
+    expect(await send()).toEqual({ ok: false, error: "group_unavailable" });
+    expect(stored().status).toBe("draft");
+    expect(groupRow().sent_at).toBeNull();
+  });
+
+  it("an edit to a card that is already out drops it too", async () => {
+    seed();
+    await send();
+    expect(notes()).toEqual(["abcdefghij", "bcdefghijk"]);
+    // The sender takes Dad's note out on their phone; a laptop left open still holds it and saves.
+    takeOut(1, "removed");
+    expect((await saveDraft({ giftId: GIFT, data: card })).ok).toBe(true);
+    expect(notes()).toEqual(["abcdefghij"]);
+    expect(stored().status).toBe("live");
   });
 });
 

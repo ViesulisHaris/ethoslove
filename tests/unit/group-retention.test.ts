@@ -7,6 +7,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Db } from "@/lib/commerce/db";
 import { GROUP_RETENTION } from "@/lib/group/limits";
+import { groupNotice } from "@/lib/group/notice";
 import { FakeDb } from "./helpers/fake-db";
 
 const state = vi.hoisted(() => ({ sent: [] as Record<string, unknown>[], sendOk: true }));
@@ -156,7 +157,24 @@ describe("an address that never said yes", () => {
 });
 
 describe("a card that was sent", () => {
-  it("loses every note seven days after sending, waiting ones included, and their files", async () => {
+  it("is cleared a day inside what every contributor was told: the job runs once a day, and 'within 7 days' has to be true at any hour", async () => {
+    expect(groupNotice("en", "Tom")).toContain(`deleted within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent`);
+    expect(groupNotice("es", "Tomás")).toContain(`se borra en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío`);
+    expect(GROUP_RETENTION.sentPromiseDays).toBe(7);
+    expect(GROUP_RETENTION.afterSentDays + 1).toBeLessThanOrEqual(GROUP_RETENTION.sentPromiseDays);
+
+    // The worst case: sent a moment after one run, so that the run six days on just misses it. The
+    // next run, a day later, takes it: still inside seven days of sending.
+    const sentAt = NOW - GROUP_RETENTION.afterSentDays * DAY + 1000;
+    seed({ gifts: [gift(1, { status: "live" })], gift_groups: [group(1, { sent_at: at(sentAt) })], gift_contributions: [entry(1, 1), entry(2, 1, { status: "approved", item_key: "abcdefghij" })] });
+    expect((await runGroupRetention(admin(), NOW)).purged).toBe(0);
+    const next = NOW + DAY;
+    expect((await runGroupRetention(admin(), next)).purged).toBe(2);
+    expect(next - sentAt).toBeLessThan(GROUP_RETENTION.sentPromiseDays * DAY);
+    expect(rows()).toEqual([]);
+  });
+
+  it("loses every note six days after sending, waiting ones included, and their files", async () => {
     const live = (n: number) => gift(n, { status: "live", data: { contributions: [{ key: "abcdefghij", name: "Mum", note: "x" }] } });
     seed({
       gifts: [live(1), live(2)],
@@ -220,7 +238,78 @@ describe("a card never sent", () => {
   });
 });
 
+describe("however many cards have been sent", () => {
+  it("every note that is due goes, even when hundreds of older cards were sent before it", async () => {
+    // 620 cards sent long ago, their notes long deleted (a sent group's row lives as long as its gift),
+    // and then twenty sent a week ago that still have theirs.
+    const old = Array.from({ length: 620 }, (_, i) => group(i + 1, { sent_at: at(NOW - 40 * DAY) }));
+    const due = Array.from({ length: 20 }, (_, i) => group(700 + i, { sent_at: at(NOW - 7 * DAY) }));
+    seed({ gift_groups: [...old, ...due], gift_contributions: due.map((_, i) => entry(i + 1, 700 + i, { photo_path: `${groupId(700 + i)}/${entryId(i + 1)}.webp` })) });
+    const result = await runGroupRetention(admin(), NOW);
+    expect(result.error).toBeUndefined();
+    expect(result.purged).toBe(20);
+    expect(rows()).toEqual([]);
+    expect(removedFiles()).toHaveLength(20);
+  });
+
+  it("goes through more notes than one read holds, takes the ones that are due and leaves the rest", async () => {
+    // Twenty cards sent a week ago and twenty still open, sixty notes each: 2,400 notes, read a thousand at a time.
+    const sent = Array.from({ length: 20 }, (_, i) => group(i + 1, { sent_at: at(NOW - 7 * DAY) }));
+    const open = Array.from({ length: 20 }, (_, i) => group(100 + i));
+    let n = 0;
+    const notes = [...sent, ...open].flatMap((_, g) => Array.from({ length: 60 }, () => entry(++n, g < 20 ? g + 1 : 100 + g - 20)));
+    seed({ gift_groups: [...sent, ...open], gift_contributions: notes });
+    const result = await runGroupRetention(admin(), NOW);
+    expect(result.error).toBeUndefined();
+    expect(result.purged).toBe(1200);
+    expect(rows()).toHaveLength(1200);
+    expect(rows().every((row) => (row.group_id as string) >= groupId(100))).toBe(true);
+  });
+
+  it("no filter ever carries more than a hundred ids (each is 36 characters of an address)", async () => {
+    const sent = Array.from({ length: 150 }, (_, i) => group(i + 1, { sent_at: at(NOW - 7 * DAY) }));
+    seed({ gifts: sent.map((_, i) => gift(i + 1, { status: "live" })), gift_groups: sent, gift_contributions: sent.map((_, i) => entry(i + 1, i + 1)) });
+    const db = admin();
+    const sizes: number[] = [];
+    const from = db.from.bind(db);
+    (db as unknown as { from: (table: string) => unknown }).from = (table: string) => {
+      const query = from(table as never) as unknown as { in: (column: string, values: unknown[]) => unknown };
+      const inList = query.in.bind(query);
+      query.in = (column: string, values: unknown[]) => (sizes.push(values.length), inList(column, values));
+      return query;
+    };
+    expect((await runGroupRetention(db, NOW)).purged).toBe(150);
+    expect(sizes.length).toBeGreaterThan(0);
+    expect(Math.max(...sizes)).toBeLessThanOrEqual(100);
+  });
+});
+
 describe("the draft behind a group", () => {
+  it("is kept even on a run where the rest of the job fails", async () => {
+    seed({ gifts: [gift(1)], gift_groups: [group(1)], gift_contributions: [entry(1, 1)] });
+    fake.failNext("gift_contributions", "select", "connection lost");
+    const result = await runGroupRetention(admin(), NOW);
+    expect(result).toMatchObject({ draftsKept: 1, error: "connection lost" });
+    expect(fake.rows("gifts")[0].updated_at).toBe(at(NOW));
+  });
+
+  it("is touched only once it has gone four days untouched, so it is not sent to the top of My gifts every morning", async () => {
+    seed({
+      gifts: [gift(1, { updated_at: at(NOW - 2 * DAY) }), gift(2, { updated_at: at(NOW - GROUP_RETENTION.draftTouchDays * DAY - 1000) }), gift(3, { updated_at: at(NOW - GROUP_RETENTION.draftTouchDays * DAY + 1000) })],
+      gift_groups: [group(1), group(2), group(3)],
+    });
+    expect((await runGroupRetention(admin(), NOW)).draftsKept).toBe(1);
+    expect(fake.rows("gifts").map((row) => row.updated_at)).toEqual([at(NOW - 2 * DAY), at(NOW), at(NOW - GROUP_RETENTION.draftTouchDays * DAY + 1000)]);
+    // Early enough that two missed runs still leave it short of the sweep's seven days.
+    expect(GROUP_RETENTION.draftTouchDays + 2).toBeLessThan(7);
+  });
+
+  it("reaches every open group, however many there are", async () => {
+    const many = Array.from({ length: 1100 }, (_, i) => i + 1);
+    seed({ gifts: many.map((n) => gift(n)), gift_groups: many.map((n) => group(n, { closes_at: at(NOW + (n % 25) * DAY + n) })) });
+    expect((await runGroupRetention(admin(), NOW)).draftsKept).toBe(1100);
+  });
+
   it("is touched while its link is open, and for fourteen days after it ran out, so the draft sweep leaves it", async () => {
     seed({
       gifts: [gift(1), gift(2), gift(3), gift(4, { status: "live" }), gift(5), gift(6)],

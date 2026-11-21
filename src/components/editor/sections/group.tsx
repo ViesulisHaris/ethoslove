@@ -9,7 +9,7 @@ import { AddOwn, DecidedEntry, GroupIntro, GroupLink, GroupSetup, InCardList, Li
 import { track } from "@/lib/analytics/track";
 import { useEditor } from "@/lib/editor/store";
 import { approveEntry, createGroup, decideEntry, findGroup, patchGroup, type GroupEntryView, type GroupError, type GroupView } from "@/lib/group/client";
-import { GROUP_RETENTION } from "@/lib/group/limits";
+import { GROUP_LIMITS, GROUP_RETENTION } from "@/lib/group/limits";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { formatAmount, groupAmount, hasGroupUnlock, hasUnlock } from "@/lib/pricing/products";
 import type { TemplateManifest } from "@/templates/types";
@@ -98,6 +98,8 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   }, [live, authed, giftId]);
 
   // Keep the gift in step with the group: put back what was added and lost, take out what is gone.
+  // (The server is the one that keeps a note taken back out of what is sent: publishing, and saving
+  // a card that is out, drop it whatever this copy holds. This only keeps the editor honest.)
   const healing = useRef(new Set<string>());
   useEffect(() => {
     if (!live || !group) return;
@@ -107,6 +109,7 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
       if (!entry.key) continue;
       if (entry.status === "approved" && !held.has(entry.key) && !healing.current.has(entry.id)) {
         healing.current.add(entry.id);
+        // Asked for with the photo; the server gives it back only if it was added with it the first time.
         void approveEntry(group.id, entry.id, Boolean(entry.photo)).then((again) => {
           healing.current.delete(entry.id);
           if (!again.ok || !again.item) return;
@@ -215,6 +218,36 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   const full = inCard.length >= max;
   const sent = Boolean(group?.sentAt);
   const sharing = group ? t("shareText", { from: group.fromName, for: group.forName, url: group.url }) : "";
+  // Where "Keep it open" would move the link's last day, and whether that is a whole 30 days on.
+  const extend = group?.extendsTo ? { date: dateOf(group.extendsTo), full: !group.ranOut && Date.parse(group.extendsTo) - Date.parse(group.closesAt) >= GROUP_LIMITS.days * DAY } : null;
+
+  // The card's own notes: drawn whenever the card holds any, with a group behind them or not (a
+  // duplicated card carries its notes and no group, and they must still be seen, fixed and removed).
+  const cardNotes = (
+    <div>
+      <h3 className="font-display text-xl" data-testid="group-in-card-title">
+        {t("inCard", { n: inCard.length, max })}
+      </h3>
+      {tookBack.map((name) => (
+        <p key={name} className="mt-1.5 text-sm text-ink-soft" data-testid="group-took-back">
+          {t("tookBack", { name })}
+        </p>
+      ))}
+      {inCard.length === 0 ? <p className="mt-1.5 text-sm text-muted-foreground">{t("inCardEmpty")}</p> : null}
+      <div className="mt-3 flex flex-col gap-3">
+        <InCardList
+          items={inCard}
+          noteMax={noteMax}
+          busyKey={busy}
+          onMove={(from, to) => useEditor.getState().moveContribution(from, to)}
+          onEdit={(key, value) => useEditor.getState().updateContribution(key, value)}
+          onDropPhoto={(key) => useEditor.getState().updateContribution(key, { photo: null })}
+          onRemove={(key) => void removeItem(key)}
+        />
+        <AddOwn noteMax={noteMax} disabled={full} onAdd={(value) => useEditor.getState().addContribution({ key: ownKey(), ...value })} />
+      </div>
+    </div>
+  );
 
   return (
     // Not inside the iPhone app: a group card is bought on the site, and the app sells nothing outside the App Store.
@@ -249,32 +282,10 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
             {full && waiting.length > 0 ? <p className="mt-2 text-sm text-ink-soft">{t("full")}</p> : null}
           </div>
 
-          <div>
-            <h3 className="font-display text-xl" data-testid="group-in-card-title">
-              {t("inCard", { n: inCard.length, max })}
-            </h3>
-            {tookBack.map((name) => (
-              <p key={name} className="mt-1.5 text-sm text-ink-soft" data-testid="group-took-back">
-                {t("tookBack", { name })}
-              </p>
-            ))}
-            {inCard.length === 0 ? <p className="mt-1.5 text-sm text-muted-foreground">{t("inCardEmpty")}</p> : null}
-            <div className="mt-3 flex flex-col gap-3">
-              <InCardList
-                items={inCard}
-                noteMax={noteMax}
-                busyKey={busy}
-                onMove={(from, to) => useEditor.getState().moveContribution(from, to)}
-                onEdit={(key, value) => useEditor.getState().updateContribution(key, value)}
-                onDropPhoto={(key) => useEditor.getState().updateContribution(key, { photo: null })}
-                onRemove={(key) => void removeItem(key)}
-              />
-              <AddOwn noteMax={noteMax} disabled={full} onAdd={(value) => useEditor.getState().addContribution({ key: ownKey(), ...value })} />
-            </div>
-          </div>
+          {cardNotes}
 
           {sent ? null : (
-            <LinkControls group={group} date={dateOf(group.closesAt)} busy={busy === "link"} onExtend={() => void change({ extend: true })} onToggle={() => void change({ closed: !group.closedAt })} onReset={() => void change({ resetLink: true })} />
+            <LinkControls group={group} date={dateOf(group.closesAt)} extend={extend} busy={busy === "link"} onExtend={() => void change({ extend: true })} onToggle={() => void change({ closed: !group.closedAt })} onReset={() => void change({ resetLink: true })} />
           )}
           {error ? (
             <p role="alert" className="text-sm text-coral-deep" data-testid="group-error">
@@ -282,15 +293,21 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
             </p>
           ) : null}
         </div>
-      ) : step === "guest" ? (
-        <div className="rounded-xl border border-line bg-card p-5" data-testid="group-guest">
-          <p className="mb-4 text-sm text-ink-soft">{t("guestLine")}</p>
-          <AuthForm mode="login" next={`/create/${slug}`} compact />
-        </div>
-      ) : step === "setup" ? (
-        <GroupSetup fromName={senderName} forName={recipientName} busy={busy === "create"} error={error} onCreate={(input) => void create(input)} />
       ) : (
-        <GroupIntro priceLine={priceLine} onInvite={invite} />
+        <div className="flex flex-col gap-7">
+          {/* Inviting people starts from a draft; a card that is already out has only its notes to show. */}
+          {status !== "draft" ? null : step === "guest" ? (
+            <div className="rounded-xl border border-line bg-card p-5" data-testid="group-guest">
+              <p className="mb-4 text-sm text-ink-soft">{t("guestLine")}</p>
+              <AuthForm mode="login" next={`/create/${slug}`} compact />
+            </div>
+          ) : step === "setup" ? (
+            <GroupSetup fromName={senderName} forName={recipientName} busy={busy === "create"} error={error} onCreate={(input) => void create(input)} />
+          ) : (
+            <GroupIntro priceLine={priceLine} onInvite={invite} />
+          )}
+          {inCard.length > 0 ? cardNotes : null}
+        </div>
       )}
     </section>
   );

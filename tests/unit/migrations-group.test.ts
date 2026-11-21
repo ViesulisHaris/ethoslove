@@ -74,6 +74,8 @@ describe("0023: group cards", () => {
     expect(sql).toContain(`closes_at timestamptz not null default (now() + interval '${GROUP_LIMITS.days} days')`);
     expect(sql).toContain("status text not null default 'pending' check (status in ('pending', 'approved', 'rejected', 'removed', 'withdrawn'))");
     expect(sql).toContain("item_key text check (item_key ~ '^[a-z0-9]{10}$')");
+    // Whether a note was added with its photo: no default, so it is null until the sender says yes.
+    expect(sql).toContain("with_photo boolean,");
     expect(sql).toMatch(/photo_path text check \(photo_path ~ '\^\[0-9a-f-\]\{36\}\/\[0-9a-f-\]\{36\}\\\.webp\$'\)/);
   });
 
@@ -86,6 +88,10 @@ describe("0023: group cards", () => {
     expect(body).toContain(`where group_id = new.group_id) >= ${GROUP_LIMITS.total}`);
     expect(body).toContain("raise exception 'group is full' using errcode = '23514'");
     expect(body).toContain("security definer set search_path = public");
+  });
+
+  it("finds a note by the hash of its writer's secret alone, so it can be taken back after the link is reset", () => {
+    expect(sql).toContain("create index if not exists gift_contributions_withdraw_idx on public.gift_contributions (withdraw_sha256) where withdraw_sha256 is not null;");
   });
 
   it("a scrubbed note may lose its words, and only a scrubbed one", () => {

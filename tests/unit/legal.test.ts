@@ -178,10 +178,29 @@ describe("legal documents and group cards", () => {
     expect(GROUP_RETENTION.unconfirmedDays).toBe(7);
     expect(en).toContain("never confirmed: seven days");
     expect(es).toContain("sin confirmar: siete días");
-    expect(en).toContain(`${GROUP_RETENTION.afterSentDays} days after the card is sent`);
-    expect(es).toContain(`${GROUP_RETENTION.afterSentDays} días después de que la tarjeta se envíe`);
-    expect(en).toContain(`${GROUP_RETENTION.afterClosedDays} days after its link stops taking notes`);
-    expect(es).toContain(`${GROUP_RETENTION.afterClosedDays} días después de que su enlace deje de admitir notas`);
+    // "Within 7 days" is what everyone who adds a note agreed to; the job, which runs once a day,
+    // deletes a day inside it so that the sentence holds at any hour.
+    expect(en).toContain(`within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent`);
+    expect(es).toContain(`en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío de la tarjeta`);
+    expect(GROUP_RETENTION.afterSentDays).toBeLessThan(GROUP_RETENTION.sentPromiseDays);
+    // Counted from the day the link was due to close, which is what the job counts from, not from the day the sender closed it by hand.
+    expect(en).toContain(`${GROUP_RETENTION.afterClosedDays} days after the date its link was due to close, even if the person putting the card together closed it sooner`);
+    expect(es).toContain(`${GROUP_RETENTION.afterClosedDays} días después de la fecha en que su enlace debía cerrarse, aunque quien prepara la tarjeta lo cerrase antes`);
+    for (const text of [en, es]) expect(text).not.toMatch(/stops taking notes|deje de admitir notas/);
+  });
+
+  it("promises the finished card only to someone whose note is in it, and says how a note is taken back and when it can't be", () => {
+    const en = section(on.privacy.en, 1);
+    const es = section(on.privacy.es, 1);
+    expect(en).toContain("then, if your note is in the card, one email with the card's link once it is sent");
+    expect(en).toContain("If your note isn't in the card, no second email comes, and the address is deleted with the note.");
+    expect(es).toContain("después, si tu nota va en la tarjeta, un correo con su enlace cuando se envíe");
+    expect(es).toContain("Si tu nota no va en la tarjeta, no llega un segundo correo y la dirección se borra con la nota.");
+    // The key the page keeps is in the browser's storage (it outlives the tab), and the policy says so.
+    expect(en).toContain("that browser keeps a random key for each note you added, in its own storage for that page");
+    expect(en).toContain("If you have cleared the browser's storage, or once the card is sent, write to us with the card's link.");
+    expect(es).toContain("ese navegador guarda una clave aleatoria por cada nota que añadiste, en su propio almacenamiento para esa página");
+    expect(es).toContain("Si has borrado el almacenamiento del navegador, o una vez enviada la tarjeta, escríbenos con el enlace de la tarjeta.");
   });
 
   it("says what a contributor is asked for, that no IP address is kept, and that the address goes with its one email", () => {

@@ -270,6 +270,26 @@ describe("the moderation step", () => {
     expect(state.copies).toEqual([]);
   });
 
+  it("put back into a gift that lost it, a note comes back the way the sender added it: without its photo, or with it", async () => {
+    const group = await made();
+    for (const n of [1, 2]) seed(group.id, n, { photo_path: `${group.id}/${entryId(n)}.webp`, photo_width: 1200, photo_height: 900 });
+    await decide(group.id, entryId(1), { action: "approve", withPhoto: false });
+    await decide(group.id, entryId(2), { action: "approve", withPhoto: true });
+    expect([row(1).with_photo, row(2).with_photo]).toEqual([false, true]);
+    state.copies = [];
+    // The editor's panel asks again for both, and (as it does) asks for the photo whenever there is one.
+    const without = (await (await decide(group.id, entryId(1), { action: "approve", withPhoto: true })).json()) as { item: Record<string, unknown>; previewUrl?: string };
+    expect(without.item.photo).toBeUndefined();
+    expect(without.previewUrl).toBeUndefined();
+    const withIt = (await (await decide(group.id, entryId(2), { action: "approve", withPhoto: false })).json()) as { item: { key: string; photo?: { url: string } } };
+    expect(withIt.item.photo?.url).toBe(`gifts/${GIFT}/c${withIt.item.key}.webp`);
+    expect(state.copies).toEqual([{ from: `${group.id}/${entryId(2)}.webp`, giftId: GIFT, key: withIt.item.key }]);
+    // Undo forgets the choice: the next yes is a new one.
+    await decide(group.id, entryId(1), { action: "remove" });
+    await decide(group.id, entryId(1), { action: "restore" });
+    expect(row(1).with_photo).toBeNull();
+  });
+
   it("a photo that can't be copied leaves the note waiting, not half added", async () => {
     const group = await made();
     seed(group.id, 1, { photo_path: `${group.id}/${entryId(1)}.webp`, photo_width: 1200, photo_height: 900 });
@@ -376,15 +396,42 @@ describe("the link's controls", () => {
     expect(((await (await patch(group.id, { closed: false })).json()) as { group: Group }).group.closedAt).toBeNull();
   });
 
-  it("30 more days, never past 90 from the day it was made, and never shorter than it was", async () => {
+  const day = (n: number) => new Date(NOW + n * DAY).toISOString();
+  const extended = async (id: string) => ((await (await patch(id, { extend: true })).json()) as { group: Group }).group;
+
+  it("'Keep it open 30 more days' adds 30 days to the day it closes, on whatever day it is tapped", async () => {
     const group = await made();
-    fake.rows("gift_groups")[0].closes_at = new Date(NOW + 30 * DAY).toISOString();
+    expect(group).toMatchObject({ closesAt: day(30), ranOut: false, extendsTo: day(60) });
+    // Tapped the moment the link is made: 30 more, not none.
+    expect(await extended(group.id)).toMatchObject({ closesAt: day(60), extendsTo: day(90) });
+    // Tapped again twenty days in: 30 more again, which is the last day a link can have.
     vi.setSystemTime(NOW + 20 * DAY);
-    expect(((await (await patch(group.id, { extend: true })).json()) as { group: Group }).group.closesAt).toBe(new Date(NOW + 50 * DAY).toISOString());
-    vi.setSystemTime(NOW + 80 * DAY);
-    expect(((await (await patch(group.id, { extend: true })).json()) as { group: Group }).group.closesAt).toBe(new Date(NOW + 90 * DAY).toISOString());
+    expect(await extended(group.id)).toMatchObject({ closesAt: day(90), extendsTo: null });
+  });
+
+  it("never past 90 days from the day it was made: there the button has nothing to offer, and a request moves nothing", async () => {
+    const group = await made();
+    fake.rows("gift_groups")[0].closes_at = day(90);
     vi.setSystemTime(NOW + 85 * DAY);
-    expect(((await (await patch(group.id, { extend: true })).json()) as { group: Group }).group.closesAt).toBe(new Date(NOW + 90 * DAY).toISOString());
+    expect(((await (await read()).json()) as { group: Group }).group.extendsTo).toBeNull();
+    expect((await extended(group.id)).closesAt).toBe(day(90));
+    // Close to the end it says the day it would move to, which the panel shows instead of "30 more days".
+    fake.rows("gift_groups")[0].closes_at = day(75);
+    expect(((await (await read()).json()) as { group: Group }).group.extendsTo).toBe(day(90));
+    expect((await extended(group.id)).closesAt).toBe(day(90));
+  });
+
+  it("a link past its last day says so, and keeping it open counts from today", async () => {
+    const group = await made();
+    vi.setSystemTime(NOW + 45 * DAY);
+    const late = ((await (await read()).json()) as { group: Group }).group;
+    expect(late).toMatchObject({ closesAt: day(30), closedAt: null, ranOut: true, extendsTo: day(75) });
+    expect(await extended(group.id)).toMatchObject({ closesAt: day(75), ranOut: false });
+    // Past the ninetieth day there is no way back.
+    fake.rows("gift_groups")[0].closes_at = day(75);
+    vi.setSystemTime(NOW + 95 * DAY);
+    expect(((await (await read()).json()) as { group: Group }).group).toMatchObject({ ranOut: true, extendsTo: null });
+    expect((await extended(group.id)).closesAt).toBe(day(75));
   });
 
   it("changes what the page says, cleaned like everything else", async () => {

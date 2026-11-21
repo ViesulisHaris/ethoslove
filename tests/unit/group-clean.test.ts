@@ -40,8 +40,42 @@ describe("addresses", () => {
     for (const text of ["see https://evil.example/x", "HTTP://EVIL.EXAMPLE", "www.evil.example", "go to evil.com now", "bit.ly/3xYz", "free at prizes.shop!", "mi web: tienda.es"]) expect(hasLink(text), text).toBe(true);
   });
 
+  it("finds the endings a short list would miss, and anything with a path after it", () => {
+    for (const text of ["evil.pt", "mira evil.mx hoy", "ask evil.ai for it", "t.me/abc", "write to me on t.me/abc please", "youtu.be/abc", "see evil.co.uk", "EVIL.COM", "Evil.com", "x.com", "(prizes.shop)", "todo en tienda.es.", "my page is about.me"]) expect(hasLink(text), text).toBe(true);
+  });
+
   it("leaves a sentence alone, even one that forgot its space", () => {
     for (const text of ["Love you.Mum", "See you at 7.30", "Te quiero.Papá", "e.g. the one in March", "No. 1 dad", "Happy birthday... finally", "vs. the world", "It cost 3.50 and was worth it"]) expect(hasLink(text), text).toBe(false);
+  });
+
+  it("a full stop with no space after it, before a short word, is still a sentence: English and Spanish, with a capital or without", () => {
+    for (const text of [
+      "Happy birthday.Me and the kids miss you",
+      "Gracias por todo.Es un placer",
+      "Feliz cumple.De parte de todos",
+      "Miss you.It was great",
+      "ok.Live well",
+      // Typed without the capital too: the word after the dot carries on into a sentence, as no address does.
+      "happy birthday.me and the kids miss you",
+      "gracias por todo.es un placer",
+      "feliz cumple.de parte de todos",
+      "miss you.it was great",
+      "ok.live well",
+      "Te quiero.La abuela",
+      "Call me.Shop's shut on Sunday",
+      "HAPPY BIRTHDAY.ME AND THE KIDS MISS YOU",
+      // Not addresses either: an exclamation, a time, an abbreviation, a word that only holds "www".
+      "Awww.That is lovely",
+      "See you at 4 p.m. sharp",
+      "Love you.Mum/Dad",
+    ])
+      expect(hasLink(text), text).toBe(false);
+  });
+
+  it("is written without a lookbehind, which Safari before 16.4 refuses to load (the editor's bundle holds this file)", async () => {
+    const { readFileSync } = await import("node:fs");
+    const source = readFileSync("src/lib/group/clean.ts", "utf8").replace(/\/\/.*$/gm, "").replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(source).not.toMatch(/\(\?<[=!]/);
   });
 });
 
