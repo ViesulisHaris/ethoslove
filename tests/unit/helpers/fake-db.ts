@@ -287,7 +287,7 @@ class Query implements PromiseLike<Result> {
     const failure = this.store.failures.find((f) => f.table === this.table && f.op === this.op);
     if (failure) {
       this.store.failures.splice(this.store.failures.indexOf(failure), 1);
-      return { data: null, error: { message: failure.message } };
+      return { data: null, error: { message: failure.message, ...(failure.code ? { code: failure.code } : {}) } };
     }
     if (this.store.missingTables.includes(this.table)) return { data: null, error: { code: "PGRST205", message: `Could not find the table 'public.${this.table}' in the schema cache` } };
     const schema = this.schemaError();
@@ -369,7 +369,7 @@ export const COLUMNS_0014: Record<string, string[]> = {
 export class FakeDb {
   tables: Record<string, Row[]>;
   calls: { table: string; op: string }[] = [];
-  failures: { table: string; op: string; message: string }[] = [];
+  failures: { table: string; op: string; message: string; code?: string }[] = [];
   clock: number;
   /** Columns the database doesn't have yet, per table: a statement naming one fails as PostgREST's would. */
   missingColumns: Record<string, string[]>;
@@ -390,9 +390,9 @@ export class FakeDb {
 
   now = () => this.clock;
 
-  /** The next statement of this kind on this table fails, as a database error would. */
-  failNext(table: string, op: string, message = "boom") {
-    this.failures.push({ table, op, message });
+  /** The next statement of this kind on this table fails, as a database error would (with Postgres's `code`, if given). */
+  failNext(table: string, op: string, message = "boom", code?: string) {
+    this.failures.push({ table, op, message, code });
   }
 
   rows(table: string): Row[] {

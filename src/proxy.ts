@@ -72,7 +72,9 @@ export async function proxy(request: NextRequest) {
   // Gift links (/g/abc123) are shared across languages and printed on QR codes.
   // They must never redirect based on the viewer's browser language: rewrite them
   // to the default locale segment and let the page render in the sender's locale.
-  if (pathname === "/g" || pathname.startsWith("/g/")) {
+  // A group card's link (/c/<token>) is the same: one address for everyone invited, whatever their
+  // phone's language, shown in the card's own language and never redirected.
+  if (pathname === "/g" || pathname.startsWith("/g/") || pathname === "/c" || pathname.startsWith("/c/")) {
     const url = request.nextUrl.clone();
     url.pathname = `/${currency}/${routing.defaultLocale}${pathname}`;
     return NextResponse.rewrite(url);

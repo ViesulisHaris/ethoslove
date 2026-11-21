@@ -79,7 +79,7 @@ export function Template({ data, mode, onEvent, onReact, onMakeOne }: TemplatePr
 
         {notes.length > 0 ? (
           <section className="mt-14" data-testid="contributions">
-            <h2 className="flex items-center gap-3 text-[0.8rem]" style={{ color: SOFT }}>
+            <h2 className="flex items-center gap-3 text-[0.8rem] font-normal tracking-normal" style={{ color: SOFT, fontFamily: "var(--gift-font-body)" }}>
               <span>{s.signed}</span>
               <span aria-hidden="true" className="h-px flex-1" style={{ background: LINE }} />
             </h2>
