@@ -10,7 +10,7 @@ import { loadFieldsSchema } from "@/templates/schemas";
 
 const LOCALES = ["en", "es"] as const;
 
-/** The guides written before a line had to say which field it goes in: some of their ideas carry no line at all. */
+/** The first three guides, from before the growth build; since 21 Nov 2026 every idea of every guide lends one line. */
 const FIRST_THREE = ["scratch-card", "bouquet", "fortune-cookie"];
 
 /**
@@ -88,12 +88,11 @@ describe("template guides: the lines to borrow", () => {
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES)) {
       for (const l of LOCALES) {
         for (const idea of guide[l].ideas.items) {
-          for (const { field, line } of idea.borrow ?? []) {
-            const limit = await limitFor(slug, field);
-            expect(limit, `${slug}: ${field} is not a text field with a limit`).not.toBeNull();
-            checked += 1;
-            if (lengthIn(field, line) > limit!) tooLong.push(`${slug} ${l} ${field}: ${lengthIn(field, line)} > ${limit} “${line}”`);
-          }
+          const { field, line } = idea.borrow;
+          const limit = await limitFor(slug, field);
+          expect(limit, `${slug}: ${field} is not a text field with a limit`).not.toBeNull();
+          checked += 1;
+          if (lengthIn(field, line) > limit!) tooLong.push(`${slug} ${l} ${field}: ${lengthIn(field, line)} > ${limit} “${line}”`);
         }
       }
     }
@@ -101,22 +100,21 @@ describe("template guides: the lines to borrow", () => {
     expect(checked).toBeGreaterThan(200);
   });
 
-  it("are quoted on the page word for word", () => {
+  it("are a line someone could type as it stands", () => {
+    // The page prints the line by itself, in handwriting, under the name of its field: it has to be whole.
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
       for (const l of LOCALES)
-        for (const idea of guide[l].ideas.items)
-          for (const { line } of idea.borrow ?? []) {
-            expect(line.trim(), `${slug} ${l}: ${idea.heading}`).toBe(line);
-            expect(line.length, `${slug} ${l}: ${idea.heading}`).toBeGreaterThan(0);
-            expect(idea.body.includes(line), `${slug} ${l}: “${line}” is not in “${idea.heading}”`).toBe(true);
-          }
+        for (const idea of guide[l].ideas.items) {
+          const { line } = idea.borrow;
+          expect(line.trim(), `${slug} ${l}: ${idea.heading}`).toBe(line);
+          expect(line.length, `${slug} ${l}: ${idea.heading}`).toBeGreaterThan(0);
+        }
   });
 
   it("go in the same fields in Spanish as in English", () => {
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
       guide.en.ideas.items.forEach((idea, i) => {
-        const fields = (items: typeof idea) => (items.borrow ?? []).map((b) => b.field);
-        expect(fields(guide.es.ideas.items[i]), `${slug} idea ${i + 1}`).toEqual(fields(idea));
+        expect(guide.es.ideas.items[i].borrow.field, `${slug} idea ${i + 1}`).toBe(idea.borrow.field);
       });
   });
 
@@ -127,7 +125,7 @@ describe("template guides: the lines to borrow", () => {
         const items = guide[l].ideas.items;
         expect(items.length, `${slug} ${l}`).toBeGreaterThanOrEqual(5);
         expect(items.length, `${slug} ${l}`).toBeLessThanOrEqual(6);
-        for (const idea of items) expect(idea.borrow?.length ?? 0, `${slug} ${l}: ${idea.heading}`).toBeGreaterThanOrEqual(1);
+        for (const idea of items) expect(idea.borrow.line.length, `${slug} ${l}: ${idea.heading}`).toBeGreaterThan(0);
         // Two to four questions on the page, whichever way the switches stand.
         for (const [freeNote, notePhotos] of STATES) {
           const shown = templateGuideFaq(slug, l, freeNote, notePhotos);
@@ -141,7 +139,7 @@ describe("template guides: the lines to borrow", () => {
   it("never put “juntos” or “juntas” in a Spanish reader’s mouth", () => {
     // RULES: Spanish never genders the recipient. A line that is copied word for word has to work for any two people.
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
-      for (const idea of guide.es.ideas.items) for (const { line } of idea.borrow ?? []) expect(line, `${slug}: ${idea.heading}`).not.toMatch(/\bjunt[oa]s\b/i);
+      for (const idea of guide.es.ideas.items) expect(idea.borrow.line, `${slug}: ${idea.heading}`).not.toMatch(/\bjunt[oa]s\b/i);
   });
 });
 
@@ -206,14 +204,15 @@ describe("template guides", () => {
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES)) {
       const max = getManifest(slug)!.features.photos.max;
       for (const l of LOCALES)
-        for (const text of [...guide[l].ideas.items.map((i) => i.body), ...guide[l].faq.map((f) => f.a)])
+        for (const text of [...guide[l].ideas.items.map((i) => i.how), ...guide[l].faq.map((f) => f.a)])
           for (const n of photoCounts(text, l)) {
             checked += 1;
             expect(n, `${slug} ${l}: ${n} photos in “${text.slice(0, 60)}…”`).toBeLessThanOrEqual(max);
           }
     }
-    // The first version of this test read digits only and so checked three sentences.
-    expect(checked).toBeGreaterThan(40);
+    // The first version of this test read digits only and so checked three sentences. With the
+    // ideas cut to one line each (21 Nov 2026) the guides give 36 counts, where their paragraphs gave over 40.
+    expect(checked).toBeGreaterThan(30);
   });
 
   it("answer “how many photos” with the template’s own smallest and largest number", () => {

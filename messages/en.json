@@ -865,6 +865,9 @@
     "detailPriceFree": "Free, forever. Add a video, a voice message, 20 photos or a surprise inside for {price}, paid once.",
     "detailPriceFreeShort": "Free as a short note: up to 500 characters and their song. Photos, the full letter, a video, a voice message or a surprise inside come with “Make it special” for {price}, paid once.",
     "detailPricePaid": "Try it first, no account needed. {price} once when you send it, then it's yours forever.",
+    "pagePriceNote": "Free as a short note. “Make it special” adds photos and more for {price}, paid once.",
+    "pagePriceFree": "Free to send. The extras cost {price}, paid once.",
+    "pagePricePaid": "Try it first, no account needed. {price} once when you send it.",
     "sections": {
       "popular": {
         "eyebrow": "Most popular",
@@ -889,6 +892,7 @@
     "guide": {
       "eyebrow": "How to make one",
       "heading": "How to make {name}",
+      "howLine": "Three steps. The preview shows what they will see as you go.",
       "step1Title": "Add your photos",
       "step1Body": "{min, plural, =0 {Add up to {max} photos, or none at all.} other {Choose up to {max} photos.}} The preview shows exactly what they'll see while you go.",
       "step1Music": "Add a song from the library, or the real one that's yours: thirty seconds of it wait at the end, a tap away.",
@@ -897,7 +901,19 @@
       "step2Extras": "Add a countdown to the day and a surprise hidden at the very end.",
       "step3Title": "Send the link",
       "step3Body": "Publish it and send the link anywhere a link goes, or print its QR code and tuck it in a real card. It opens on any phone or laptop, with nothing to install.",
+      "ideasLabel": "What to write",
+      "ideasLine": "{count} ideas, each with a line you can borrow word for word.",
+      "ideasShow": "See more examples",
+      "ideasHide": "Hide the examples",
+      "experienceLabel": "The experience",
+      "experienceHeading": "More than a message",
+      "experienceBody": "No app and no account. They tap the link you send and {name} opens in their browser.",
+      "experienceCheck1": "Works on any phone or laptop",
+      "experienceCheck2": "Change it after you send it; the link stays the same",
+      "experienceCheck3": "Print its QR code and tuck it into a real card",
+      "faqLabel": "Questions",
       "faqTitle": "Questions people ask",
+      "faqLine": "What it costs, how it opens and what you can change later.",
       "faqFreeQ": "Is it free?",
       "faqFreeA": "Yes. {name} is one of the two free templates: up to 10 photos, music, a countdown and a hidden surprise, with a small “Made with Ethos” footer. A video, a voice message, 20 photos, no footer and scheduling come with “Make it special” for {price}, paid once.",
       "faqFreeAShort": "Yes, as a short note. {name} goes out free with up to 500 characters, music and a small “Made with Ethos” footer. Photos, a longer letter, a video, a voice message, no footer and scheduling come with “Make it special” for {price}, paid once.",
@@ -907,7 +923,10 @@
       "faqOpenA": "With the link you send, in WhatsApp, iMessage, Instagram or an email, or by scanning its QR code with a phone camera. It opens in the browser on any phone or laptop: no app to install, no account to make.",
       "faqEditQ": "Can I change it after I send it?",
       "faqEditA": "Yes. Edit it whenever you like and the change goes live at the same link. Links don't expire, so it opens again next year.",
-      "moreTitle": "More like this"
+      "moreTitle": "More like this",
+      "moreHeading": "Explore more digital gifts",
+      "moreAbout": "More about {name}",
+      "madeFor": "Made for"
     }
   },
   "occasions": {

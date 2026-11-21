@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check, Maximize2 } from "lucide-react";
+import { ArrowRight, Check, Play } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SITE } from "@/config/site";
@@ -13,14 +13,17 @@ import {
   pageMetadata,
   templateProductNode,
 } from "@/lib/seo";
-import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
+import { templateGuide } from "@/content/template-guides";
+import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateSeo } from "@/content/template-seo";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
-import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/shared/json-ld";
-import { TemplateGuide, templateFaq } from "@/components/templates/template-guide";
-import { TemplatePhonePreview } from "@/components/templates/template-phone-preview";
+import { templateFaq } from "@/components/templates/template-guide";
+import { ArtLayer, type PlacedArt } from "@/components/templates/page/art";
+import { HeroFlatlay } from "@/components/templates/page/hero-flatlay";
+import { heroLead } from "@/components/templates/page/lead";
+import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite } from "@/components/templates/page/sections";
 import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
@@ -46,6 +49,20 @@ export async function generateMetadata({
   });
 }
 
+/** The hero's loose pieces: a petal by the phone's foot, one in the top corner, a bloom out of focus. */
+const HERO_ART: PlacedArt[] = [
+  { art: "lily-three-quarter", x: -1, y: 2, size: 12, rot: 42, blur: 5, opacity: 0.75, phone: false, eager: true },
+  { art: "petal-1", x: 5.5, y: 83, size: 4.4, rot: -32, phone: false },
+  { art: "petal-2", x: 95, y: 9, size: 4.2, rot: 28, blur: 1, phone: false, eager: true },
+];
+
+/**
+ * A gift's page, laid out as the owner's mock-up (docs/marketing/growth-build/DESIGN-LESS-TEXT.md):
+ * the hero with the live demo in a phone lying among flowers, how to send it in three pictures,
+ * what to write (where the template has a guide), the experience band, the questions and four more
+ * gifts. The same layout for every template, each in its own colours
+ * (content/template-page-themes.ts) and its colourway of the page art (content/page-art.ts).
+ */
 export default async function TemplateDetailPage({
   params,
 }: PageProps<"/[currency]/[locale]/templates/[slug]">) {
@@ -66,15 +83,21 @@ export default async function TemplateDetailPage({
   );
   const seo = templateSeo(manifest.slug, l);
   const faq = await templateFaq(manifest, l, price);
+  const guide = templateGuide(manifest.slug, l);
+  // The hero says the opening of the description; the closed block under the questions keeps the rest.
+  const about = heroLead(manifest.description[l]);
+  const theme = templatePageTheme(manifest.slug);
+  const flowers = theme.flowers;
 
-  const featureList: [boolean, string][] = [
-    [true, t("templates.featurePhotos", { max: manifest.features.photos.max })],
-    [manifest.features.music, t("templates.featureMusic")],
-    [manifest.features.captions, t("templates.featureCaptions")],
-    [manifest.features.countdown, t("templates.featureCountdown")],
-    [manifest.features.surprise, t("templates.featureSurprise")],
-    [manifest.features.video, t("templates.featureVideo")],
-  ];
+  // What's included: only what this template has. What it lacks is not a list to read.
+  const included = [
+    t("templates.featurePhotos", { max: manifest.features.photos.max }),
+    manifest.features.music ? t("templates.featureMusic") : null,
+    manifest.features.captions ? t("templates.featureCaptions") : null,
+    manifest.features.countdown ? t("templates.featureCountdown") : null,
+    manifest.features.surprise ? t("templates.featureSurprise") : null,
+    manifest.features.video ? t("templates.featureVideo") : null,
+  ].filter((label): label is string => label !== null);
 
   return (
     <>
@@ -91,120 +114,87 @@ export default async function TemplateDetailPage({
           faqNode(faq),
         ]}
       />
-      {/*
-       * Below `lg` it is one column, and the phone preview alone is taller than a phone's screen:
-       * the name and "Make this gift" sat one to two screens down. So the words come first there —
-       * name, price and the buttons, then the preview, then what's included — and from `lg` the
-       * preview takes the left column again. The text column is `contents` below `lg`, which makes
-       * its two halves grid items that `order` can put either side of the preview.
-       */}
-      <div className="container-x grid gap-12 pt-10 pb-24 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16 lg:pt-16">
-        <div className="contents lg:block">
-          <div className="order-first">
-            <div className="flex items-center gap-2">
-              <span
-                className={
-                  free
-                    ? "rounded-sm border border-ink px-2 py-1 text-eyebrow text-ink"
-                    : "rounded-sm bg-ink px-2 py-1 text-eyebrow text-paper"
-                }
-              >
-                {free ? t("common.free") : t("common.premium")}
-              </span>
-              {manifest.styles.map((s) => (
-                <span
-                  key={s}
-                  className="rounded-sm border border-line px-2 py-1 text-eyebrow text-muted-foreground"
-                >
-                  {t(`templates.style.${s}`)}
-                </span>
-              ))}
-            </div>
-            {/* The phrase people search for, then the name we gave it: one heading, both read. */}
-            <h1 className="mt-6">
-              {seo ? <span className="mb-3 block text-eyebrow text-ink-soft">{seo.keyword}</span> : null}
-              <span className="block display-xl">{manifest.name[l]}</span>
-            </h1>
-            <p className="mt-3 font-display text-2xl text-ink-soft italic">{manifest.tagline[l]}</p>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-              {manifest.description[l]}
-            </p>
+      {/* The footer, the header's button and the ground behind them take the page's colours while it is open. */}
+      <style>{pageThemeChromeCss(manifest.slug, theme)}</style>
+      {/* -mt/pt: the page's ground runs up under the floating header, as the homepage's hero does. */}
+      <div data-page-theme={manifest.slug} style={pageThemeStyle(theme)} className="relative isolate -mt-[var(--header-h)] pt-[var(--header-h)]">
+        {/* (1) The hero. */}
+        <section className="relative">
+          <ArtLayer items={HERO_ART} flowers={flowers} />
+          {/*
+           * Below `lg` it is one column, and the phone alone is taller than a phone's screen: the
+           * name and "Make this gift" sat one to two screens down. So the words come first there:
+           * name, the buttons and the price, then the phone, then what's included. From `lg` the
+           * phone takes the left column. The text column is `contents` below `lg`, which makes its
+           * two halves grid items that `order` can put either side of the phone.
+           */}
+          <div className="container-x relative grid gap-y-10 pt-8 pb-14 sm:pb-20 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:gap-x-10 lg:pt-10 lg:pb-24 xl:gap-x-14">
+            <div className="contents lg:block lg:max-w-[35rem]">
+              <div className="order-first">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={free ? "rounded-[5px] border border-page-ink/70 px-2 py-1 text-page-label text-page-ink" : "rounded-[5px] bg-page-ink px-2 py-1 text-page-label text-page-ground"}>
+                    {free ? t("common.free") : t("common.premium")}
+                  </span>
+                  {manifest.styles.map((s) => (
+                    <span key={s} className="rounded-[5px] border border-page-line px-2 py-1 text-page-label text-page-body">
+                      {t(`templates.style.${s}`)}
+                    </span>
+                  ))}
+                </div>
+                {/* The phrase people search for, then the name we gave it: one heading, both read. */}
+                <h1 className="mt-7">
+                  {seo ? <span className="mb-3 block text-page-label text-page-body">{seo.keyword}</span> : null}
+                  <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
+                </h1>
+                <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{manifest.tagline[l]}</p>
+                {about.lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{about.lead}</p> : null}
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="h-12 rounded-full px-6 text-base">
-                <Link href={`/create/${manifest.slug}`}>
-                  {t("templates.makeThis")}
-                  <ArrowRight className="size-4" data-icon="inline-end" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-12 rounded-full px-6 text-base"
-              >
-                <Link href={`/demo/${manifest.slug}`}>
-                  <Maximize2 className="size-4" data-icon="inline-start" />
-                  {t("templates.fullscreenDemo")}
-                </Link>
-              </Button>
-            </div>
-            <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              {free
-                ? t(noteForEveryone() ? "templates.detailPriceFreeShort" : "templates.detailPriceFree", { price })
-                : t("templates.detailPricePaid", { price })}
-            </p>
-          </div>
-
-          <div className="order-last lg:mt-12">
-            <h2 className="mb-4 text-eyebrow text-muted-foreground">{t("templates.included")}</h2>
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {featureList.map(([on, label]) => (
-                <li
-                  key={label}
-                  className={
-                    on
-                      ? "flex items-center gap-2 text-sm"
-                      : "flex items-center gap-2 text-sm text-muted-foreground line-through"
-                  }
-                >
-                  <Check className={on ? "size-4 text-coral" : "size-4 opacity-30"} />
-                  {label}
-                </li>
-              ))}
-            </ul>
-
-            <h2 className="mt-10 mb-4 text-eyebrow text-ink-soft">{t("templates.perfectFor")}</h2>
-            <ul className="flex flex-wrap gap-2">
-              {manifest.occasions.map((o) => (
-                <li key={o}>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href={`/occasions/${o}`}
-                    className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm transition-colors hover:border-ink/40"
+                    href={`/create/${manifest.slug}`}
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-page-accent px-6 text-base font-medium text-page-on-accent shadow-[0_14px_28px_-16px_var(--page-accent)] transition-[background-color,translate,scale] duration-200 ease-(--ease-out-quint) hover:bg-page-accent-hover active:scale-[0.98] pointer-fine:hover:-translate-y-px"
                   >
-                    {t(`occasions.${o}`)}
+                    {t("templates.makeThis")}
+                    <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
-                </li>
-              ))}
-            </ul>
+                  <Link
+                    href={`/demo/${manifest.slug}`}
+                    className="inline-flex h-12 items-center justify-center gap-2.5 rounded-full border border-page-ink/30 px-6 text-base font-medium text-page-ink transition-[background-color,border-color,scale] duration-200 ease-(--ease-out-quint) hover:border-page-ink/50 hover:bg-page-raised active:scale-[0.98]"
+                  >
+                    <Play aria-hidden="true" className="size-3.5 fill-current" />
+                    {t("templates.fullscreenDemo")}
+                  </Link>
+                </div>
+                <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body">
+                  {free ? t(noteForEveryone() ? "templates.pagePriceNote" : "templates.pagePriceFree", { price }) : t("templates.pagePricePaid", { price })}
+                </p>
+              </div>
+
+              <div className="order-last lg:mt-10">
+                <h2 className="text-page-label text-page-body">{t("templates.included")}</h2>
+                <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+                  {included.map((label) => (
+                    <li key={label} className="flex items-center gap-2.5 text-[0.9375rem] text-page-ink">
+                      <Check aria-hidden="true" className="size-4 shrink-0 text-page-accent" />
+                      {label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {/* The phone's width: most of a phone's screen, a fifth of a desk's. */}
+            <div className="min-w-0 py-2 [--hero-phone:min(17rem,100vw-6.5rem)] lg:order-first lg:py-4 lg:[--hero-phone:clamp(15rem,21.5vw,19.5rem)]">
+              <HeroFlatlay slug={manifest.slug} locale={l} flowers={flowers} width="var(--hero-phone)" />
+            </div>
           </div>
-        </div>
-        <div className="min-w-0 lg:sticky lg:top-24 lg:order-first">
-          <TemplatePhonePreview slug={manifest.slug} locale={l} />
-          <p className="mt-4 text-center text-xs text-muted-foreground">
-            {t("templates.previewHint")}
-          </p>
-          {manifest.slug === "the-letter" ? (
-            // The Letter has a page in Portuguese (content/pt-letter.ts): a link here is how a crawler finds it.
-            <p className="mt-1 text-center text-xs">
-              <a href={PT_LETTER_PATH} hrefLang={PT_LETTER_LANG} lang={PT_LETTER_LANG} className="inline-flex min-h-11 items-center text-muted-foreground underline underline-offset-4 hover:text-ink">
-                Também em português: carta digital
-              </a>
-            </p>
-          ) : null}
-        </div>
+        </section>
+
+        <HowToSend manifest={manifest} locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} flowers={flowers} />
+        {guide ? <WhatToWrite manifest={manifest} locale={l} guide={guide} flowers={flowers} /> : null}
+        <Experience manifest={manifest} locale={l} flowers={flowers} />
+        <Questions manifest={manifest} locale={l} faq={faq} guide={guide} about={about.rest} />
+        <MoreLikeThis manifest={manifest} locale={l} flowers={flowers} />
       </div>
-      <TemplateGuide manifest={manifest} locale={l} heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })} faq={faq} />
     </>
   );
 }
