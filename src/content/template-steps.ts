@@ -347,7 +347,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "photo-booth": {
     line: { en: "Three steps. Four flashes, and a strip of your photos prints.", es: "Tres pasos. Cuatro flashes y sale una tira con tus fotos." },
     steps: [
-      { picture: "photo", en: "Pick four photos", es: "Elige cuatro fotos" },
+      { picture: "photo", en: "Pick your photos", es: "Elige tus fotos" },
       { picture: "note", en: "Write on the wall", es: "Escribe en el muro" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
