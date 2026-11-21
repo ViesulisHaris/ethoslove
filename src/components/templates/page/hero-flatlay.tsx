@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Play } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,14 @@ export type HeroFlatlayArt = {
  * with the gift's cover laid into its screen by the render's own matrix and the render's bezel
  * layer over it. Nothing else overlaps the phone.
  *
+ * In that screen the gift's own preview loops, silent (public/templates/<slug>/preview.webm, the
+ * film the gallery's cards play on hover): it starts when the phone is on screen and stops when it
+ * leaves, over the still cover, which stays underneath so nothing flickers when the film arrives
+ * and nothing is missing where it can't play. No film at all for someone who asked for less
+ * motion or less data, or on a browser that can't play it: the still cover is the whole of it.
+ * The covers and films are 13:20 and a phone's screen is taller, so they fill it and lose a little
+ * off each side; `frame` moves or shrinks a gift's picture where that would cut something off.
+ *
  * A tap plays the gift, and to play it the phone is picked up: the live gift comes up over the
  * lying phone, upright, and the table goes soft behind it. Upright because a rendered phone can't
  * be stood up, and a gift is played with a finger: 24 of the 61 templates read where the finger
@@ -49,9 +57,82 @@ export type HeroFlatlayArt = {
  * section's own padding). `sizes` is how wide the picture is drawn, for the browser's choice of
  * file: a CSS variable can't say it.
  */
-export function HeroFlatlay({ slug, locale, art, width, up, down, sizes, className }: { slug: string; locale: GiftLocale; art: HeroFlatlayArt; width: string; up: string; down: string; sizes: string; className?: string }) {
+export type HeroFrame = {
+  /** Where the cover is held when it is wider than the screen: CSS object-position. The middle unless said. */
+  position?: string;
+  /** Under 1, the cover is drawn smaller than the screen's height and a soft copy of itself fills what is left above and below. */
+  zoom?: number;
+};
+
+export function HeroFlatlay({
+  slug,
+  locale,
+  art,
+  preview,
+  frame,
+  width,
+  up,
+  down,
+  sizes,
+  className,
+}: {
+  slug: string;
+  locale: GiftLocale;
+  art: HeroFlatlayArt;
+  /** The gift's looping preview film, if it has one. */
+  preview?: string;
+  frame?: HeroFrame;
+  width: string;
+  up: string;
+  down: string;
+  sizes: string;
+  className?: string;
+}) {
   const t = useTranslations("templates");
   const [live, setLive] = useState(false);
+  const film = useRef<HTMLVideoElement>(null);
+
+  // The film plays while the lying phone is on screen, and only for someone it suits. All of it is
+  // done to the element itself: no state, so the first paint is the still cover on the server and here.
+  useEffect(() => {
+    const video = film.current;
+    if (!video || !preview || live) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sparing = () => (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    const suits = () => !calm.matches && !sparing() && video.canPlayType("video/webm") !== "";
+    const show = () => video.setAttribute("data-on", "");
+    const hide = () => video.removeAttribute("data-on");
+    video.addEventListener("playing", show);
+    video.addEventListener("error", hide);
+    const watcher = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && suits()) {
+          if (!video.getAttribute("src")) video.src = preview;
+          video.play().catch(hide);
+        } else video.pause();
+      },
+      { threshold: 0.4 },
+    );
+    watcher.observe(video);
+    const settle = () => {
+      if (calm.matches) {
+        video.pause();
+        hide();
+      }
+    };
+    calm.addEventListener("change", settle);
+    return () => {
+      watcher.disconnect();
+      calm.removeEventListener("change", settle);
+      video.removeEventListener("playing", show);
+      video.removeEventListener("error", hide);
+      video.pause();
+    };
+  }, [preview, live]);
+
+  // How the 13:20 cover sits in the taller screen: filling it, held where `frame` says, or drawn a little smaller.
+  const zoom = frame?.zoom ?? 1;
+  const held: CSSProperties = zoom < 1 ? { objectFit: "cover", objectPosition: frame?.position ?? "50% 50%", inset: `${((1 - zoom) / 2) * 100}% 0`, height: `${zoom * 100}%` } : { objectFit: "cover", objectPosition: frame?.position ?? "50% 50%", inset: 0, height: "100%" };
   const picture = `calc(${width} * ${art.perWidth})`;
   const settle = cn("transition-[opacity,filter] duration-500 ease-(--ease-out-quint)", live && "opacity-55 blur-[2px]");
   return (
@@ -71,7 +152,12 @@ export function HeroFlatlay({ slug, locale, art, width, up, down, sizes, classNa
         <div className={cn("absolute overflow-hidden bg-night", settle)} style={art.screen}>
           {/* The cover until they tap, so the phone never lies there black. */}
           <button type="button" onClick={() => setLive(true)} disabled={live} aria-label={t("tryDemo")} className="group relative block h-full w-full text-paper">
-            <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            {zoom < 1 ? <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute inset-0 h-full w-full scale-125 object-cover blur-xl" /> : null}
+            <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute w-full" style={held} />
+            {preview ? (
+              // Over the still cover, unseen until it is really playing: no black frame, no flicker, and the cover where it can't play.
+              <video ref={film} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" style={held} />
+            ) : null}
             {live ? null : (
               <>
                 <span className="absolute inset-0 bg-black/20 transition-colors group-hover:bg-black/10" />
