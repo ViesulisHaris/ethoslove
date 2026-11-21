@@ -98,6 +98,7 @@ export type FunnelEvent =
   | "group_invite_tap"
   | "group_link_created"
   | "group_link_shared"
+  | "group_page_edited"
   | "group_note_approved"
   | "group_note_removed"
   | "group_pay_shown"

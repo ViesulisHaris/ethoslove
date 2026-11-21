@@ -15,19 +15,24 @@ export function groupAgeLine(locale: L): string {
 
 /**
  * Who sees the note and what happens to it: shown above the button, with a link to the privacy page.
- * The number of days is the promise (GROUP_RETENTION.sentPromiseDays); the daily job deletes a day
- * sooner than that, so that "within" is true whatever hour the card went out.
+ * It names the photo only on a card that takes one (`takesPhotos`, the group's own setting): nobody
+ * agrees to something the page never asked them for. The number of days is the promise
+ * (GROUP_RETENTION.sentPromiseDays); the daily job deletes a day sooner than that, so that "within"
+ * is true whatever hour the card went out.
  */
-export function groupNotice(locale: L, fromName: string): string {
+export function groupNotice(locale: L, fromName: string, takesPhotos: boolean): string {
   const days = GROUP_RETENTION.sentPromiseDays;
-  return locale === "es"
-    ? `${fromName} verá tu nombre, tu nota y tu foto, y decide si entran en la tarjeta. Si entran, las verá quien la abra. Lo que no se use se borra en los ${days} días siguientes al envío.`
-    : `${fromName} will see your name, note and photo and chooses whether they go in. If they do, whoever opens the card sees them. What isn't used is deleted within ${days} days of the card being sent.`;
+  if (locale === "es") {
+    const what = takesPhotos ? "tu nombre, tu nota y tu foto" : "tu nombre y tu nota";
+    return `${fromName} verá ${what}, y decide si entran en la tarjeta. Si entran, los verá quien la abra. Lo que no se use se borra en los ${days} días siguientes al envío.`;
+  }
+  const what = takesPhotos ? "your name, note and photo" : "your name and note";
+  return `${fromName} will see ${what} and choose whether they go in. If they do, whoever opens the card sees them. What isn't used is deleted within ${days} days of the card being sent.`;
 }
 
 /** What a contribution's `agreed` column holds: the box they ticked and the notice under it. */
-export function groupAgreed(locale: L, fromName: string): string {
-  return `${groupAgeLine(locale)} ${groupNotice(locale, fromName)}`;
+export function groupAgreed(locale: L, fromName: string, takesPhotos: boolean): string {
+  return `${groupAgeLine(locale)} ${groupNotice(locale, fromName, takesPhotos)}`;
 }
 
 /**

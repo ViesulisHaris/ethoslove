@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       {
         name: words.name,
         note: words.note,
-        agreed: groupAgreed(group.locale, group.from_name),
+        agreed: groupAgreed(group.locale, group.from_name, group.takes_photos),
         photo,
         email: address,
         withdrawSha256: sha256Hex(withdraw),

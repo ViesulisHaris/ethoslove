@@ -7,13 +7,13 @@ import { GroupPanelPreview, type PanelPreviewState } from "@/components/group/pa
 export const metadata: Metadata = { robots: { index: false } };
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-const STATES: readonly PanelPreviewState[] = ["intro", "guest", "setup", "active", "full", "sent", "ranout", "capped", "copy"];
+const STATES: readonly PanelPreviewState[] = ["intro", "guest", "setup", "active", "full", "sent", "ranout", "capped", "closed", "copy"];
 
 /**
  * Development only: the sender's group card panel as the editor draws it, with made-up notes, for
  * screenshots and the browser tests (nobody is signed in there, and there is no database).
  *   ?state=intro|guest|setup|active|full|sent   where the sender is
- *   ?state=ranout|capped                         the link past its last day, and at the last day it can have
+ *   ?state=ranout|capped|closed                  the link past its last day, at the last day it can have, and closed by its sender
  *   ?state=copy                                  a duplicated card: its notes, and no group behind them
  *   ?owned=1                                     they already hold the template (the step-up price)
  *   ?live=1                                      the panel talks to the real routes, which a test answers

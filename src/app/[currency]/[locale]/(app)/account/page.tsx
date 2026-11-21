@@ -73,10 +73,12 @@ export default async function AccountPage({ params }: PageProps<"/[currency]/[lo
   const billed = membership?.isOwner && membership.provider === "stripe_subscription" ? "stripe" : membership?.isOwner && membership.provider === "app_store" ? "app_store" : null;
 
   // Templates, then the ones group cards were bought on (a "group:<slug>" row is not a template by that name).
+  // Their two names live in this page's own namespace, which only a signed-in account's pages are
+  // sent: in "money.account" they went out in the source of /pricing and /gifts while switched off.
   const held = accountUnlocks(forever, lent);
   const templateChips = [
     ...held.templates.map(({ slug, lent: viaPass }) => (slug === EVERY_TEMPLATE ? (viaPass ? tm("account.everythingWithPass") : t("everything")) : (getManifest(slug)?.name[l] ?? slug))),
-    ...held.groups.map((slug) => (slug === "*" ? tm("account.groupEvery") : tm("account.groupOn", { template: getManifest(slug)?.name[l] ?? slug }))),
+    ...held.groups.map((slug) => (slug === "*" ? t("groupEvery") : t("groupOn", { template: getManifest(slug)?.name[l] ?? slug }))),
   ];
   const packName = (row: string) => {
     const id = row.slice("pack:".length);

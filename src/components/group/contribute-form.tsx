@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { CircleCheck, ImagePlus, Loader2, Lock, PenLine, Undo2, X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { BRAND } from "@/config/brand";
 import type { GiftLocale } from "@/lib/gift/schema";
 import { LogoMark } from "@/components/shared/logo";
 import { track } from "@/lib/analytics/track";
+import { KEPT_ATTRIBUTE, notesKey } from "@/lib/group/kept";
 import { GROUP_LIMITS } from "@/lib/group/limits";
 import { groupAgeLine, groupEmailConsent, groupNotice, groupPhotoRule } from "@/lib/group/notice";
-import { groupReportLink } from "@/lib/group/report";
+import { groupReportLink, groupWriteInLink } from "@/lib/group/report";
 import { cn } from "@/lib/utils";
 
 /** In the card's own language, like the keep page: this page sits off a gift, not on the site. */
@@ -30,6 +31,7 @@ const S = {
     send: "Add my note",
     sending: "Adding…",
     privacy: "Privacy",
+    newTab: "opens in a new tab",
     report: "Report this page",
     sentTitle: "Your note is with {from}.",
     sentInbox: "Check your inbox to confirm your address.",
@@ -39,7 +41,8 @@ const S = {
     another: "Add another note",
     takenTitle: "Your note has been taken back.",
     takenOne: "The note from {name} has been taken back.",
-    tooLate: "The card has already been sent. Write to {support} and we'll take your note out.",
+    // Under "This card has been sent.", which the page becomes when a note can no longer be taken back.
+    tooLate: "Write to {support} and we'll take your note out.",
     notHere: "That note can't be taken back from here any more. Write to {support} and we'll take it out.",
     own: "Make a gift of your own",
     fullTitle: "This card has all the notes it can hold.",
@@ -70,6 +73,7 @@ const S = {
     send: "Añadir mi nota",
     sending: "Añadiendo…",
     privacy: "Privacidad",
+    newTab: "se abre en otra pestaña",
     report: "Denunciar esta página",
     sentTitle: "Tu nota ya la tiene {from}.",
     sentInbox: "Mira tu correo para confirmar tu dirección.",
@@ -79,7 +83,7 @@ const S = {
     another: "Añadir otra nota",
     takenTitle: "Tu nota se ha retirado.",
     takenOne: "La nota de {name} se ha retirado.",
-    tooLate: "La tarjeta ya se ha enviado. Escribe a {support} y quitamos tu nota.",
+    tooLate: "Escribe a {support} y quitamos tu nota.",
     notHere: "Esa nota ya no se puede retirar desde aquí. Escribe a {support} y la quitamos.",
     own: "Haz tu propio regalo",
     fullTitle: "En esta tarjeta ya no caben más notas.",
@@ -111,7 +115,6 @@ const fill = (text: string, values: Record<string, string | number>) => text.rep
  * the browser except as the secret, when "Take my note back" is tapped.
  */
 type Kept = { s: string; n: string; t: number };
-const notesKey = (token: string) => `ethos:group-notes:${token}`;
 /** Longer than any link can stay open, after which the server has nothing left for a secret to find. */
 const KEEP_MS = 120 * 86_400_000;
 
@@ -142,6 +145,18 @@ function storeNotes(token: string, list: Kept[]) {
   }
 }
 const never = () => () => {};
+
+/** A sentence with one "{support}" in it, drawn with whatever stands there (the address, as a link). */
+function around(text: string, support: ReactNode): ReactNode {
+  const [before, after = ""] = text.split("{support}");
+  return (
+    <>
+      {before}
+      {support}
+      {after}
+    </>
+  );
+}
 
 /**
  * The page at a group card's link: a name, a note and, if they like, one photo and an address to be
@@ -177,7 +192,13 @@ export function ContributeForm({
   const [picked, setStage] = useState<Stage>(initial);
   // Notes already added from this browser: coming back to the page shows "Take my note back".
   // Read after hydration (the server knows nothing of it); `own` is the list once this visit has changed it.
+  // Until then the form is held back for a browser that holds something for this link (lib/group/kept.ts
+  // marks the document before the first paint), so nobody watches an empty form where their note was.
   const stored = useSyncExternalStore(never, () => storedNotes(token), () => null);
+  const hydrated = useSyncExternalStore(never, () => true, () => false);
+  useEffect(() => {
+    if (hydrated) document.documentElement.removeAttribute(KEPT_ATTRIBUTE);
+  }, [hydrated]);
   const kept = useMemo(() => parseNotes(stored), [stored]);
   const [own, setOwn] = useState<Kept[] | undefined>(undefined);
   const notes = own ?? kept;
@@ -195,11 +216,31 @@ export function ContributeForm({
   const [tookBack, setTookBack] = useState<string | null>(null);
   const alert = useRef<HTMLParagraphElement>(null);
   const picker = useRef<HTMLInputElement>(null);
+  const form = useRef<HTMLFormElement>(null);
 
-  // The words sit under the button, which can be at the foot of a phone's screen.
+  // The words sit by what they are about (the photo button, or the send button at the foot of a
+  // phone's screen), which may be off screen when they appear.
   useEffect(() => {
     if (problem) alert.current?.scrollIntoView({ block: "nearest" });
   }, [problem]);
+
+  // The fields keep their own values, and a browser puts those back when someone leaves the page and
+  // returns (Back, a reload, a tab the phone threw away). What this component remembers beside them
+  // (the count under the note, whether the address field is open) starts again from nothing, so it
+  // is read back off the fields: once the page is live, and again when the browser says it is shown,
+  // which is when some browsers restore. Sending reads the box itself, never this copy of it.
+  const readFields = useCallback(() => {
+    const fields = form.current?.elements;
+    const note = fields?.namedItem("note");
+    const wants = fields?.namedItem("wantsEmail");
+    if (note instanceof HTMLTextAreaElement) setCount(note.value.length);
+    if (wants instanceof HTMLInputElement) setWantsEmail(wants.checked);
+  }, []);
+  useEffect(() => {
+    readFields();
+    window.addEventListener("pageshow", readFields);
+    return () => window.removeEventListener("pageshow", readFields);
+  }, [readFields]);
 
   useEffect(() => () => void (photo && URL.revokeObjectURL(photo.url)), [photo]);
 
@@ -230,7 +271,17 @@ export function ContributeForm({
     body.set("name", String(fields.get("name") ?? ""));
     body.set("note", String(fields.get("note") ?? ""));
     if (fields.get("agree")) body.set("agree", "1");
-    const address = wantsEmail ? String(fields.get("email") ?? "").trim() : "";
+    // The box as it stands on the page decides, not what this component last heard of it.
+    const wants = fields.get("wantsEmail") !== null;
+    const address = wants ? String(fields.get("email") ?? "").trim() : "";
+    // Ticked with no address would be sent as "no email, thanks" while the page shows a tick.
+    if (wants && !address) {
+      setWantsEmail(true);
+      setProblem("invalid_email");
+      const empty = event.currentTarget.elements.namedItem("email");
+      if (empty instanceof HTMLInputElement) requestAnimationFrame(() => empty.focus());
+      return;
+    }
     if (address) body.set("email", address);
     if (photo && takesPhotos) body.set("photo", new File([photo.blob], "photo", { type: photo.blob.type || "image/jpeg" }));
     setBusy(true);
@@ -281,8 +332,12 @@ export function ContributeForm({
       if (!res.ok) return setNotHere(true);
       track("group_note_withdrawn");
       if (!taking || left.length > 0) setTookBack(note.n);
-    } else if (res?.status === 410) setTooLate(true);
-    else setProblem("error");
+    } else if (res?.status === 410) {
+      // The card went out while this page was open: it says so, like the link itself now does, with
+      // the address to write to. Nothing here offers another note, which could only be refused.
+      setTooLate(true);
+      setStage("sent");
+    } else setProblem("error");
   };
 
   const again = () => {
@@ -300,8 +355,29 @@ export function ContributeForm({
 
   const field = "w-full border border-white/15 bg-white/8 px-5 text-base text-paper placeholder:text-paper/40 focus:border-coral focus:outline-none";
   const quiet = "inline-flex min-h-11 items-center gap-1.5 text-sm text-paper/70 underline-offset-4 hover:text-paper hover:underline focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coral";
+  // A tick box on the night ground: the browser's own focus ring is near black there, so it gets the page's.
+  const box = "size-5 shrink-0 accent-coral focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper";
+  // A link inside a sentence: a thumb's worth of room round it that moves no line, and a focus ring drawn round the word itself.
+  const inline = "group -mx-1.5 -my-3.5 inline-block px-1.5 py-3.5 hover:text-paper focus-visible:outline-none";
+  const inlineWord = "rounded-sm underline underline-offset-2 group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-coral";
   const Icon = stage === "open" ? PenLine : stage === "done" ? CircleCheck : stage === "taken" ? Undo2 : Lock;
   const ended = stage === "full" ? t.fullTitle : stage === "closed" ? fill(t.closedTitle, { from: fromName }) : stage === "expired" ? t.expiredTitle : stage === "sent" ? t.sentAwayTitle : stage === "taken" ? t.takenTitle : null;
+  // A photo that could not be used is said at the photo button, where the person just was.
+  const photoProblem = takesPhotos && (problem === "bad_photo" || problem === "too_large");
+
+  // What to do once the page can no longer take a note back: the address is a link that opens an
+  // email with this page's reference in its subject, not a string to select by hand on a phone.
+  const writeIn =
+    tooLate || notHere ? (
+      <p role="alert" className="mt-4 text-sm leading-relaxed [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-write-in">
+        {around(
+          tooLate ? t.tooLate : t.notHere,
+          <a href={groupWriteInLink(reportRef, locale)} className={cn(inline, "text-paper")} data-testid="contribute-write-in-link">
+            <span className={inlineWord}>{BRAND.supportEmail}</span>
+          </a>,
+        )}
+      </p>
+    ) : null;
 
   // The notes this browser can still take back, each with its own button (named once there is more
   // than one to tell apart), and what the last tap came to.
@@ -312,11 +388,7 @@ export function ContributeForm({
           {fill(t.takenOne, { name: tookBack })}
         </p>
       ) : null}
-      {tooLate || notHere ? (
-        <p role="alert" className="mt-4 text-sm [overflow-wrap:anywhere] text-paper/80" data-testid="contribute-write-in">
-          {fill(tooLate ? t.tooLate : t.notHere, { support: BRAND.supportEmail })}
-        </p>
-      ) : null}
+      {writeIn}
       {tooLate ? null : (
         <div className={cn("flex flex-col items-center", notes.length > 0 && "mt-4")}>
           {notes.map((note) => (
@@ -351,7 +423,8 @@ export function ContributeForm({
       </motion.div>
 
       {stage === "open" ? (
-        <>
+        // Not drawn, for a browser that already left a note here, until the page knows to show that instead (lib/group/kept.ts).
+        <div className="flex w-full flex-col items-center [[data-group-kept]_&]:hidden" data-testid="contribute-open">
           <h1 className="mt-6 max-w-sm text-[1.8rem] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--font-display)" }}>
             {fill(t.title, { for: forName })}
           </h1>
@@ -362,7 +435,7 @@ export function ContributeForm({
             </p>
           ) : null}
 
-          <form onSubmit={submit} className="mt-8 flex w-full max-w-sm flex-col gap-3 text-left" data-testid="contribute-form" noValidate>
+          <form ref={form} onSubmit={submit} className="mt-8 flex w-full max-w-sm flex-col gap-3 text-left" data-testid="contribute-form" noValidate>
             <input
               type="text"
               name="name"
@@ -376,7 +449,7 @@ export function ContributeForm({
               className={cn(field, "h-12 rounded-full")}
               data-testid="contribute-name"
             />
-            <div className="relative">
+            <div>
               <textarea
                 name="note"
                 required
@@ -389,16 +462,17 @@ export function ContributeForm({
                   setCount(event.target.value.length);
                   if (problem === "invalid" || problem === "no_links") setProblem(null);
                 }}
-                className={cn(field, "block min-h-32 resize-none rounded-3xl pt-3.5 pb-8 leading-relaxed")}
+                className={cn(field, "block min-h-32 resize-none rounded-3xl py-3.5 leading-relaxed")}
                 data-testid="contribute-note"
               />
-              <span id="note-count" className={cn("pointer-events-none absolute right-5 bottom-2.5 text-xs tabular-nums", count >= noteMax ? "text-coral" : "text-paper/50")} data-testid="contribute-count">
+              {/* Under the box, never inside it: a note of five lines on a phone scrolled its words through a count laid over them. */}
+              <p id="note-count" className={cn("mt-1.5 px-5 text-right text-xs tabular-nums", count >= noteMax ? "text-coral" : "text-paper/50")} data-testid="contribute-count">
                 {fill(t.count, { n: count, max: noteMax })}
-              </span>
+              </p>
             </div>
 
             {takesPhotos ? (
-              <div className="mt-1">
+              <div>
                 <input ref={picker} type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={pick} className="sr-only" tabIndex={-1} aria-hidden="true" data-testid="contribute-photo-input" />
                 {photo ? (
                   <div className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/[0.04] p-2.5" data-testid="contribute-photo">
@@ -423,40 +497,45 @@ export function ContributeForm({
                     <span>{reading ? t.photoReading : t.photo}</span>
                   </button>
                 )}
+                {photoProblem && problem ? (
+                  <p ref={alert} role="alert" className="mt-2 px-1 text-sm text-coral" data-testid="contribute-photo-problem">
+                    {t[problem]}
+                  </p>
+                ) : null}
                 <p className="mt-2 px-1 text-xs text-paper/50">{groupPhotoRule(locale)}</p>
               </div>
             ) : null}
 
             <div className="mt-1 rounded-3xl border border-white/10 bg-white/[0.04] px-4 py-1">
               <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
-                <input type="checkbox" checked={wantsEmail} onChange={(event) => setWantsEmail(event.target.checked)} className="size-5 shrink-0 accent-coral" data-testid="contribute-wants-email" />
+                {/* Its own value, like the fields: a browser that restores the page restores the tick, and the page reads it back. */}
+                <input type="checkbox" name="wantsEmail" value="1" onChange={(event) => setWantsEmail(event.target.checked)} className={box} data-testid="contribute-wants-email" />
                 <span className="min-w-0">{t.email}</span>
               </label>
-              {wantsEmail ? (
-                <div className="pt-1 pb-3">
-                  <input
-                    type="email"
-                    name="email"
-                    maxLength={254}
-                    autoComplete="email"
-                    inputMode="email"
-                    autoCapitalize="none"
-                    spellCheck={false}
-                    placeholder={t.emailField}
-                    aria-label={t.emailField}
-                    aria-describedby="email-consent"
-                    onChange={() => problem === "invalid_email" && setProblem(null)}
-                    className={cn(field, "h-11 rounded-full text-[15px]")}
-                    data-testid="contribute-email"
-                  />
-                  {/* Word for word what is stored with the address (lib/group/notice.ts). */}
-                  <p id="email-consent" className="mt-2 px-1 text-xs leading-relaxed text-paper/50">
-                    {groupEmailConsent(locale)}
-                  </p>
-                </div>
-              ) : null}
+              {/* Always in the page, shown with the tick: an address typed here comes back with the rest of the form. */}
+              <div hidden={!wantsEmail} className="pt-1 pb-3">
+                <input
+                  type="email"
+                  name="email"
+                  maxLength={254}
+                  autoComplete="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  placeholder={t.emailField}
+                  aria-label={t.emailField}
+                  aria-describedby="email-consent"
+                  onChange={() => problem === "invalid_email" && setProblem(null)}
+                  className={cn(field, "h-11 rounded-full text-[15px]")}
+                  data-testid="contribute-email"
+                />
+                {/* Word for word what is stored with the address (lib/group/notice.ts). */}
+                <p id="email-consent" className="mt-2 px-1 text-xs leading-relaxed text-paper/50">
+                  {groupEmailConsent(locale)}
+                </p>
+              </div>
               <label className="flex min-h-11 cursor-pointer items-center gap-3 border-t border-white/10 text-sm">
-                <input type="checkbox" name="agree" value="1" required onChange={() => problem === "invalid" && setProblem(null)} className="size-5 shrink-0 accent-coral" data-testid="contribute-agree" />
+                <input type="checkbox" name="agree" value="1" required onChange={() => problem === "invalid" && setProblem(null)} className={box} data-testid="contribute-agree" />
                 <span className="min-w-0">{groupAgeLine(locale)}</span>
               </label>
             </div>
@@ -470,20 +549,22 @@ export function ContributeForm({
               {busy ? <Loader2 aria-hidden="true" className="size-4 animate-spin" /> : null}
               <span>{busy ? t.sending : t.send}</span>
             </button>
-            {problem ? (
+            {problem && !photoProblem ? (
               <p ref={alert} role="alert" className="text-center text-sm text-coral">
                 {t[problem]}
               </p>
             ) : null}
             {/* Word for word what the note stores as agreed to (lib/group/notice.ts). */}
             <p className="mt-1 text-center text-xs leading-relaxed [overflow-wrap:anywhere] text-paper/50">
-              {groupNotice(locale, fromName)}{" "}
-              <a href={`${prefix}/legal/privacy`} className="underline underline-offset-2 hover:text-paper/80">
-                {t.privacy}
+              {groupNotice(locale, fromName, takesPhotos)}{" "}
+              {/* In its own tab: reading it never costs anyone the note they were writing. */}
+              <a href={`${prefix}/legal/privacy`} target="_blank" rel="noopener" className={inline} data-testid="contribute-privacy">
+                <span className={inlineWord}>{t.privacy}</span>
+                <span className="sr-only"> ({t.newTab})</span>
               </a>
             </p>
           </form>
-        </>
+        </div>
       ) : stage === "done" ? (
         <div className="mt-6 flex max-w-sm flex-col items-center" data-testid="contribute-done">
           <h1 className="text-[1.8rem] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--font-display)" }}>
@@ -500,8 +581,8 @@ export function ContributeForm({
           <h1 className="text-[1.8rem] leading-tight italic [overflow-wrap:anywhere]" style={{ fontFamily: "var(--font-display)" }} data-testid="contribute-ended">
             {ended}
           </h1>
-          {/* A link that takes no more notes still lets a note be taken back, until the card is sent. */}
-          {stage === "full" || stage === "closed" || stage === "expired" ? takeBackPart : null}
+          {/* A link that takes no more notes still lets a note be taken back, until the card is sent; after that, the address to write to. */}
+          {stage === "full" || stage === "closed" || stage === "expired" ? takeBackPart : stage === "sent" ? writeIn : null}
         </div>
       )}
 

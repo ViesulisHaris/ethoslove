@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/sheet";
 import { AuthForm } from "@/components/auth/auth-form";
 import { keepAsWritten } from "@/components/shared/keep-as-written";
-import { publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
+import { guestPaysOnSheet, publishAsksForMoney, replyTokenFrom, resumePath, templatePlan, type UpgradeQuote } from "@/components/pricing/offers";
 import { fetchUpgradeQuote } from "@/components/pricing/upgrade-quote";
 import { cn } from "@/lib/utils";
 import { SITE } from "@/config/site";
@@ -427,7 +427,10 @@ export function PublishSheet({
     addsToOldGift ||
     (serialized ? premiumExtras(serialized, { note, photosOwned }).length > 0 : false);
 
-  const guestCanPay = wouldNeedPayment && paymentsEnabled;
+  // A draft that holds a group's notes, on a template made for them: signed out, it gets the sign-in
+  // step and never the guest pay panel, whose prices don't send it (components/pricing/offers.ts).
+  const groupDraft = Boolean(groupRules && (serialized?.contributions?.length ?? 0) > 0);
+  const guestCanPay = guestPaysOnSheet({ wouldNeedPayment, paymentsEnabled, groupDraft });
   // The "keep" version: the note with and without their photos, the extra row among the options,
   // and what the step that takes the photos out offers.
   const compareOffer =
@@ -617,14 +620,16 @@ export function PublishSheet({
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
             {!state.authed && supabaseConfigured && !inApp && (!guestCanPay || showSignIn) ? (
-              <section className="mt-7 rounded-xl border border-line bg-card p-5">
+              <section className="mt-7 rounded-xl border border-line bg-card p-5" data-testid="publish-sign-in">
                 <p className="font-display text-xl">{t("signInTitle")}</p>
                 <p className="mt-1 mb-4 text-sm text-muted-foreground">
-                  {wouldNeedPayment && paymentsEnabled
-                    ? t("signInBlurbPaid", { price: priceHint })
-                    : freeReply
-                      ? t("signInBlurbFreeReply")
-                      : t("signInBlurb")}
+                  {groupDraft
+                    ? t("signInBlurbGroup")
+                    : wouldNeedPayment && paymentsEnabled
+                      ? t("signInBlurbPaid", { price: priceHint })
+                      : freeReply
+                        ? t("signInBlurbFreeReply")
+                        : t("signInBlurb")}
                 </p>
                 <AuthForm mode="login" next={next} compact />
               </section>

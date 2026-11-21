@@ -22,7 +22,7 @@ function safeNext(value: string | null): string {
   return value;
 }
 
-export function AuthForm({ mode, next: nextOverride, compact = false, email: knownEmail = "" }: { mode: "login" | "signup"; next?: string; compact?: boolean; email?: string }) {
+export function AuthForm({ mode, next: nextOverride, compact = false, email: knownEmail = "", title, subtitle }: { mode: "login" | "signup"; next?: string; compact?: boolean; email?: string; /** Said instead of "Welcome back" where the form is a step in something else (the editor's group card panel), with the line under it. */ title?: string; subtitle?: string }) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const search = useSearchParams();
@@ -85,12 +85,12 @@ export function AuthForm({ mode, next: nextOverride, compact = false, email: kno
       {/* Compact, the form sits inside another page (the publish sheet, /redeem, /for-two/join) under
           that page's own h1 and a "Sign in to…" h2, so its title is a step below rather than a second h1. */}
       {compact ? (
-        <h3 className="font-display text-xl">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h3>
+        <h3 className="font-display text-xl">{title ?? (mode === "login" ? t("loginTitle") : t("signupTitle"))}</h3>
       ) : (
         <h1 className="display-md">{mode === "login" ? t("loginTitle") : t("signupTitle")}</h1>
       )}
       <p className="mt-2 text-sm text-muted-foreground">
-        {mode === "login" ? t("loginSubtitle") : t("signupSubtitle")}
+        {subtitle ?? (mode === "login" ? t("loginSubtitle") : t("signupSubtitle"))}
       </p>
 
       {!SUPABASE_CONFIGURED ? (

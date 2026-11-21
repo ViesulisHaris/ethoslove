@@ -159,6 +159,40 @@ The page is `src/app/[currency]/[locale]/(gift)/c/[token]/page.tsx`: no site chr
 price or payment field, no Clarity, no pixels, no cookie banner (`OFF_LIMITS` in
 `src/lib/analytics/consent.ts`), and the cookieless page count sees it as `/c/[token]`.
 
+How the page behaves when it is used by hand (each of these was found broken once, and is tested):
+
+- **The fields keep their own values** (name, note, both tick boxes, the address). A browser puts
+  them back after Back or a reload, and the page reads the count and the address field's tick back
+  off them, so what is drawn and what is sent agree. Sending reads the tick box itself. A tick with
+  no address asks for the address; it is never sent as "no email". Privacy opens in its own tab.
+- **The count is under the note's box**, never inside it.
+- **A photo that can't be used is said at the photo button.** Everything else is said under the
+  send button.
+- **The notice names the photo only on a card that takes one** (`groupNotice(locale, from,
+  takesPhotos)`), on the page and in what is stored as agreed to.
+- **Someone whose note is already in never sees the empty form first.** `KeptNoteGate`
+  (`src/components/group/kept-gate.tsx`, `src/lib/group/kept.ts`) is a few bytes of inline script
+  that looks in the browser's storage before the first paint and holds the form back when it finds
+  a note kept for this link. It reads one key, sets one attribute and sends nothing. A first-time
+  visitor has the form, and can type in it, from the first frame.
+- **Too late to take a note back** (the card went out while the page was open): the page becomes
+  "This card has been sent." and the support address is a link that opens an email with the page's
+  reference in its subject (`groupWriteInLink`).
+- **An address that opens no card** (reset, mistyped, made up) is a 404 drawn by `not-found.tsx`
+  beside the page: the site's own "not found" while the switch is off, and once it is on one line,
+  "This link no longer works. Ask whoever sent it for a new one." (`GroupLinkGone`), the same for
+  every address.
+
+In the sender's panel: a failed tap is answered inside the thing that was tapped (the note's own
+card, the link's controls, the form), never in one line at the foot; under the link, one sentence
+says what the page says with **Edit**, which changes the names and the line on what to write
+without changing the link; a link that is closed or past its last day says so on its own block and
+offers nothing to share it with; "Share…" is drawn only where the browser has a share sheet.
+
+A draft that holds a group's notes, opened signed out, gets the sign-in step on the send screen and
+never the guest pay panel (`guestPaysOnSheet` in `src/components/pricing/offers.ts`): that panel
+sells the template or Everything, and neither sends a card with notes in it.
+
 ## Emails (`src/emails/group.tsx`)
 
 | Email | To | When |
@@ -212,3 +246,33 @@ Browser (`tests/e2e/group.spec.ts`): the contribute page and the sender's panel 
 the development-only preview pages (`/group-preview/contribute`, `/group-preview/panel`,
 `/group-preview/pay`), the reference template at `/demo/group-reference`, and the editor with the
 panel on and off.
+
+### Running the browser specs
+
+A worktree has no `.env.local`, so nothing live can be reached. Playwright starts its own dev
+server on the port given; never `CI=true`, never port 3000 or 3100, always `--workers=1`.
+
+```
+PORT=3431 npx playwright test tests/e2e/group.spec.ts --workers=1
+```
+
+The same bare command runs `commerce-api`, `keep-and-footer`, `templates`, `unsent-gift` and
+`lifecycle`.
+
+**`money.spec.ts` needs four placeholder settings**, because the pay panel and the pricing page's
+buy buttons are only drawn on a server that has accounts and payments: the send screen needs
+Supabase's public URL and key and a Stripe key, and `/pricing` reads `stripeReady()`
+(`src/lib/stripe/server.ts`), which also wants the service-role key. All four point at nothing:
+
+```
+PORT=3431 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:9 NEXT_PUBLIC_SUPABASE_ANON_KEY=x \
+SUPABASE_SERVICE_ROLE_KEY=x STRIPE_SECRET_KEY=sk_test_placeholder_reaches_nothing \
+npx playwright test tests/e2e/money.spec.ts --workers=1
+```
+
+Run bare, 30 of its 52 tests fail (no pay panel to find); with the first three only, 6 fail (the
+pricing page's buttons). BASELINE_LINE
+
+One test in `group.spec.ts` also wants those settings: the send screen of a signed-out draft that
+holds notes. On a bare server it skips and says so; run `group.spec.ts` once with the four
+placeholders to see it.

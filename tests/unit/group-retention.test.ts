@@ -158,8 +158,8 @@ describe("an address that never said yes", () => {
 
 describe("a card that was sent", () => {
   it("is cleared a day inside what every contributor was told: the job runs once a day, and 'within 7 days' has to be true at any hour", async () => {
-    expect(groupNotice("en", "Tom")).toContain(`deleted within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent`);
-    expect(groupNotice("es", "Tomás")).toContain(`se borra en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío`);
+    expect(groupNotice("en", "Tom", true)).toContain(`deleted within ${GROUP_RETENTION.sentPromiseDays} days of the card being sent`);
+    expect(groupNotice("es", "Tomás", true)).toContain(`se borra en los ${GROUP_RETENTION.sentPromiseDays} días siguientes al envío`);
     expect(GROUP_RETENTION.sentPromiseDays).toBe(7);
     expect(GROUP_RETENTION.afterSentDays + 1).toBeLessThanOrEqual(GROUP_RETENTION.sentPromiseDays);
 

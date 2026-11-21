@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- signed Storage URLs, shown at thumbnail size */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowDown, ArrowUp, Check, Copy, Loader2, MessageCircle, Pencil, Plus, Share2, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { GiftContribution } from "@/lib/gift/schema";
@@ -24,6 +24,25 @@ import { Field } from "@/components/editor/field";
 const quiet = "inline-flex min-h-11 items-center gap-1.5 rounded-md text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline disabled:opacity-50";
 const iconButton = "grid size-11 shrink-0 place-items-center rounded-full text-ink-soft hover:bg-ink/5 hover:text-ink disabled:pointer-events-none disabled:opacity-30";
 
+const never = () => () => {};
+
+/**
+ * What went wrong, said where the sender is looking: inside the note they tapped, beside the link's
+ * own controls, under the form they sent. It brings itself into view, because the thing tapped can
+ * sit at the edge of a phone's screen (one line at the foot of the whole panel was two screens away).
+ */
+export function PanelError({ text, className }: { text: string | null | undefined; className?: string }) {
+  const line = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (text) line.current?.scrollIntoView({ block: "nearest" });
+  }, [text]);
+  return text ? (
+    <p ref={line} role="alert" className={cn("text-sm text-coral-deep", className)} data-testid="group-error">
+      {text}
+    </p>
+  ) : null;
+}
+
 /** Before a link exists: what it costs (the price is shown here first) and the one button. */
 export function GroupIntro({ priceLine, onInvite }: { priceLine: string; onInvite: () => void }) {
   const t = useTranslations("editor.group");
@@ -40,12 +59,17 @@ export function GroupIntro({ priceLine, onInvite }: { priceLine: string; onInvit
   );
 }
 
-/** What the page at the link will say: who is asking, who it is for, and one line on what to write. */
-export function GroupSetup({ fromName, forName, busy, error, onCreate }: { fromName: string; forName: string; busy: boolean; error: string | null; onCreate: (input: { fromName: string; forName: string; prompt: string }) => void }) {
+/**
+ * What the page at the link will say: who is asking, who it is for, and one line on what to write.
+ * The same form makes the link (`onCancel` absent) and, once it exists, changes what its page says
+ * (`onCancel` given: "Save" and a way out), so a name typed wrong can be put right after it was shared.
+ */
+export function GroupSetup({ fromName, forName, prompt: promptNow = "", busy, error, onCreate, onCancel }: { fromName: string; forName: string; prompt?: string; busy: boolean; error: string | null; onCreate: (input: { fromName: string; forName: string; prompt: string }) => void; onCancel?: () => void }) {
   const t = useTranslations("editor.group");
+  const editing = Boolean(onCancel);
   const [from, setFrom] = useState(fromName);
   const [to, setTo] = useState(forName);
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(promptNow);
   const [missing, setMissing] = useState(false);
   const submit = () => {
     const names = { fromName: cleanText(from), forName: cleanText(to), prompt: cleanText(prompt) };
@@ -60,7 +84,7 @@ export function GroupSetup({ fromName, forName, busy, error, onCreate }: { fromN
         event.preventDefault();
         submit();
       }}
-      data-testid="group-setup"
+      data-testid={editing ? "group-page-form" : "group-setup"}
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field id="group-from" label={t("fromName")}>
@@ -70,14 +94,21 @@ export function GroupSetup({ fromName, forName, busy, error, onCreate }: { fromN
           <Input id="group-for" value={to} maxLength={GROUP_LIMITS.name} onChange={(e) => setTo(e.target.value)} className="h-11" autoComplete="off" />
         </Field>
       </div>
-      <Field id="group-prompt" label={t("prompt")} counter={t("optional")}>
+      <Field id="group-prompt" label={t("prompt")} badge={<span className="text-xs font-normal text-muted-foreground">{t("optional")}</span>}>
         <Input id="group-prompt" value={prompt} maxLength={GROUP_LIMITS.prompt} onChange={(e) => setPrompt(e.target.value)} placeholder={t("promptPlaceholder")} className="h-11" autoComplete="off" />
       </Field>
       <div>
-        <Button type="submit" className="h-11 rounded-full px-5" disabled={busy} data-testid="group-create">
-          {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
-          <span>{busy ? t("creating") : t("create")}</span>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button type="submit" className="h-11 rounded-full px-5" disabled={busy} data-testid={editing ? "group-page-save" : "group-create"}>
+            {busy ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
+            <span>{editing ? (busy ? t("saving") : t("save")) : busy ? t("creating") : t("create")}</span>
+          </Button>
+          {onCancel ? (
+            <Button type="button" variant="ghost" className="h-11 rounded-full px-4" disabled={busy} onClick={onCancel}>
+              {t("cancel")}
+            </Button>
+          ) : null}
+        </div>
         {missing || error ? (
           <p role="alert" className="mt-3 text-sm text-coral-deep">
             {missing ? t("needNames") : error}
@@ -88,10 +119,17 @@ export function GroupSetup({ fromName, forName, busy, error, onCreate }: { fromN
   );
 }
 
-/** The link, with the three ways to pass it on. */
-export function GroupLink({ url, shareText, onShared }: { url: string; shareText: string; onShared: (via: "copy" | "share" | "whatsapp") => void }) {
+/**
+ * The link, with the ways to pass it on. A link that takes no notes (closed by the sender, or past
+ * its last day) says so on itself and offers nothing to share it with: it used to stand at the top
+ * looking live, with the only word about it under every note in the card. "Share…" is the phone's
+ * own sheet, so it is offered only where there is one.
+ */
+export function GroupLink({ url, shareText, state = "open", onShared }: { url: string; shareText: string; state?: "open" | "closed" | "ranOut"; onShared: (via: "copy" | "share" | "whatsapp") => void }) {
   const t = useTranslations("editor.group");
   const [copied, setCopied] = useState(false);
+  const canShare = useSyncExternalStore(never, () => typeof navigator.share === "function", () => false);
+  const open = state === "open";
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url);
@@ -103,46 +141,77 @@ export function GroupLink({ url, shareText, onShared }: { url: string; shareText
     }
   };
   const share = async () => {
-    if (typeof navigator.share === "function") {
-      try {
-        await navigator.share({ text: shareText, url });
-        onShared("share");
-        return;
-      } catch {
-        return; // They closed the sheet.
-      }
+    try {
+      await navigator.share({ text: shareText, url });
+      onShared("share");
+    } catch {
+      // They closed the sheet.
     }
-    void copy();
   };
   const pill = "flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-card text-sm font-medium hover:border-ink/40";
   return (
-    <div data-testid="group-link">
-      <p className="mb-2 text-[13px] font-medium text-ink">{t("link")}</p>
-      <div className="flex items-center gap-2 rounded-2xl border border-border bg-card p-2 pl-4">
-        <span className="min-w-0 flex-1 truncate font-mono text-sm" data-testid="group-url">
+    <div data-testid="group-link" data-link={open ? "open" : state === "closed" ? "closed" : "ran-out"}>
+      <div className="mb-2 flex items-center gap-2">
+        <p className="text-[13px] font-medium text-ink">{t("link")}</p>
+        {open ? null : (
+          <span className="rounded-full bg-ink px-2.5 py-0.5 text-xs font-medium text-paper" data-testid="group-link-state">
+            {t(state === "closed" ? "linkClosed" : "linkRanOut")}
+          </span>
+        )}
+      </div>
+      <div className={cn("flex items-center gap-2 rounded-2xl border border-border p-2 pl-4", open ? "bg-card" : "border-dashed")}>
+        <span className={cn("min-w-0 flex-1 truncate font-mono text-sm", !open && "text-muted-foreground line-through decoration-ink/30")} data-testid="group-url">
           {url.replace(/^https?:\/\//, "")}
         </span>
-        <Button type="button" onClick={copy} className="h-11 shrink-0 rounded-full px-4" data-testid="group-copy">
-          {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
-          <span>{copied ? t("copied") : t("copy")}</span>
-        </Button>
+        {open ? (
+          <Button type="button" onClick={copy} className="h-11 shrink-0 rounded-full px-4" data-testid="group-copy">
+            {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
+            <span>{copied ? t("copied") : t("copy")}</span>
+          </Button>
+        ) : (
+          // The row keeps its height, so nothing under it jumps when the link is closed and reopened.
+          <span className="h-11" aria-hidden="true" />
+        )}
       </div>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <button type="button" onClick={share} className={pill} data-testid="group-share">
-          <Share2 className="size-4" aria-hidden="true" />
-          {t("share")}
-        </button>
-        <a href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener" onClick={() => onShared("whatsapp")} className={pill} data-testid="group-whatsapp">
-          <MessageCircle className="size-4" aria-hidden="true" />
-          {t("whatsapp")}
-        </a>
-      </div>
+      {open ? (
+        <div className={cn("mt-2 grid gap-2", canShare ? "grid-cols-2" : "grid-cols-1")}>
+          {canShare ? (
+            <button type="button" onClick={share} className={pill} data-testid="group-share">
+              <Share2 className="size-4" aria-hidden="true" />
+              {t("share")}
+            </button>
+          ) : null}
+          <a href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noopener" onClick={() => onShared("whatsapp")} className={pill} data-testid="group-whatsapp">
+            <MessageCircle className="size-4" aria-hidden="true" />
+            {t("whatsapp")}
+          </a>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * What the page at the link says, in one sentence, with the way to change it: up to 25 people read
+ * these names, so a slip in one has to be fixable after the link went out.
+ */
+export function PageWords({ group, onEdit }: { group: Pick<GroupView, "fromName" | "forName" | "prompt">; onEdit: () => void }) {
+  const t = useTranslations("editor.group");
+  return (
+    <div className="flex items-start justify-between gap-3" data-testid="group-page-words">
+      <p className="min-w-0 py-3 text-sm leading-relaxed [overflow-wrap:anywhere] text-ink-soft">
+        {t("pageSays", { from: group.fromName, for: group.forName })}
+        {group.prompt ? <> {t("pageAsks", { prompt: group.prompt })}</> : null}
+      </p>
+      <button type="button" onClick={onEdit} aria-label={t("editPage")} className={cn(quiet, "min-w-11 shrink-0 justify-end font-medium text-ink underline")} data-testid="group-edit-page">
+        {t("edit")}
+      </button>
     </div>
   );
 }
 
 /** One note waiting for the sender's yes: who, what, the photo if any, and the two answers. */
-export function WaitingEntry({ entry, busy, full, onAdd, onRemove }: { entry: GroupEntryView; busy: boolean; full: boolean; onAdd: (withPhoto: boolean) => void; onRemove: () => void }) {
+export function WaitingEntry({ entry, busy, full, error, onAdd, onRemove }: { entry: GroupEntryView; busy: boolean; full: boolean; error?: string | null; onAdd: (withPhoto: boolean) => void; onRemove: () => void }) {
   const t = useTranslations("editor.group");
   const locale = useLocale();
   const [withPhoto, setWithPhoto] = useState(true);
@@ -172,23 +241,27 @@ export function WaitingEntry({ entry, busy, full, onAdd, onRemove }: { entry: Gr
           {t("remove")}
         </Button>
         {/* A report is an email to a person, in the sender's language, quoting the note's reference and nothing that opens anything. */}
-        <a href={groupReportLink("note", entry.reportRef, locale)} className={cn(quiet, "ml-auto text-xs")} data-testid="group-report">
+        <a href={groupReportLink("note", entry.reportRef, locale)} className={cn(quiet, "ml-auto min-w-11 justify-end text-xs")} data-testid="group-report">
           {t("report")}
         </a>
       </div>
+      <PanelError text={error} className="mt-2" />
     </li>
   );
 }
 
 /** A note just turned down or removed: one line, and a day to change your mind. */
-export function DecidedEntry({ entry, busy, onUndo }: { entry: GroupEntryView; busy: boolean; onUndo: () => void }) {
+export function DecidedEntry({ entry, busy, error, onUndo }: { entry: GroupEntryView; busy: boolean; error?: string | null; onUndo: () => void }) {
   const t = useTranslations("editor.group");
   return (
-    <li className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-border px-4 py-1 text-sm text-ink-soft" data-testid="group-decided-entry">
-      <span className="min-w-0 [overflow-wrap:anywhere]">{t("removed", { name: entry.name ?? "" })}</span>
-      <button type="button" onClick={onUndo} disabled={busy} className={cn(quiet, "shrink-0 font-medium text-ink underline")} data-testid="group-undo">
-        {t("undo")}
-      </button>
+    <li className="rounded-2xl border border-dashed border-border px-4 py-1 text-sm text-ink-soft" data-testid="group-decided-entry">
+      <div className="flex items-center justify-between gap-3">
+        <span className="min-w-0 [overflow-wrap:anywhere]">{t("removed", { name: entry.name ?? "" })}</span>
+        <button type="button" onClick={onUndo} disabled={busy} className={cn(quiet, "min-w-11 shrink-0 justify-end font-medium text-ink underline")} data-testid="group-undo">
+          {t("undo")}
+        </button>
+      </div>
+      <PanelError text={error} className="pb-2" />
     </li>
   );
 }
@@ -242,7 +315,7 @@ export function NoteForm({ initial, noteMax, hasPhoto = false, submitLabel, onSu
 }
 
 /** The notes already in the card, in the order the card shows them: move, fix, or take one out. */
-export function InCardList({ items, noteMax, busyKey, onMove, onEdit, onDropPhoto, onRemove }: { items: GiftContribution[]; noteMax: number; busyKey: string | null; onMove: (from: number, to: number) => void; onEdit: (key: string, value: { name: string; note: string }) => void; onDropPhoto: (key: string) => void; onRemove: (key: string) => void }) {
+export function InCardList({ items, noteMax, busyKey, error, onMove, onEdit, onDropPhoto, onRemove }: { items: GiftContribution[]; noteMax: number; busyKey: string | null; error?: { at: string; text: string } | null; onMove: (from: number, to: number) => void; onEdit: (key: string, value: { name: string; note: string }) => void; onDropPhoto: (key: string) => void; onRemove: (key: string) => void }) {
   const t = useTranslations("editor.group");
   const [editing, setEditing] = useState<string | null>(null);
   return (
@@ -288,6 +361,7 @@ export function InCardList({ items, noteMax, busyKey, onMove, onEdit, onDropPhot
                   {busyKey === item.key ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : <Trash2 className="size-4" aria-hidden="true" />}
                 </button>
               </div>
+              <PanelError text={error?.at === item.key ? error.text : null} className="pt-1 pb-2" />
             </div>
           )}
         </li>
@@ -332,7 +406,7 @@ export function AddOwn({ noteMax, disabled, onAdd }: { noteMax: number; disabled
  * move the last day, or null when it can't move (90 days from the start): the button is then not
  * shown, and it promises "30 more days" only when it adds all thirty.
  */
-export function LinkControls({ group, date, extend, busy, onExtend, onToggle, onReset }: { group: Pick<GroupView, "closedAt" | "ranOut">; date: string; extend: { date: string; full: boolean } | null; busy: boolean; onExtend: () => void; onToggle: () => void; onReset: () => void }) {
+export function LinkControls({ group, date, extend, busy, error, onExtend, onToggle, onReset }: { group: Pick<GroupView, "closedAt" | "ranOut">; date: string; extend: { date: string; full: boolean } | null; busy: boolean; error?: string | null; onExtend: () => void; onToggle: () => void; onReset: () => void }) {
   const t = useTranslations("editor.group");
   const [confirming, setConfirming] = useState(false);
   const closed = Boolean(group.closedAt);
@@ -380,6 +454,7 @@ export function LinkControls({ group, date, extend, busy, onExtend, onToggle, on
           </button>
         </div>
       )}
+      <PanelError text={error} className="mt-1" />
     </div>
   );
 }

@@ -157,7 +157,7 @@ describe("adding a note", () => {
       email: null,
       email_sha256: null,
       item_key: null,
-      agreed: groupAgreed("en", "Tom"),
+      agreed: groupAgreed("en", "Tom", true),
       withdraw_sha256: sha256Hex(body.withdraw),
     });
     expect(rows()[0].report_ref).toMatch(/^[a-z0-9]{8}$/);
@@ -169,7 +169,17 @@ describe("adding a note", () => {
   it("agrees in the card's own language", async () => {
     reset({ locale: "es", from_name: "Tomás" });
     await send({ email: "abuela@example.test" });
-    expect(rows()[0]).toMatchObject({ agreed: groupAgreed("es", "Tomás"), email_consent: groupEmailConsent("es") });
+    expect(rows()[0]).toMatchObject({ agreed: groupAgreed("es", "Tomás", true), email_consent: groupEmailConsent("es") });
+  });
+
+  it("on a card that takes no photos, nobody is recorded as agreeing to one being seen", async () => {
+    reset({ takes_photos: false });
+    await send();
+    expect(rows()[0].agreed).toBe(groupAgreed("en", "Tom", false));
+    expect(rows()[0].agreed).not.toMatch(/photo/i);
+    reset();
+    await send();
+    expect(rows()[0].agreed).toContain("your name, note and photo");
   });
 
   it("stores no IP address, anywhere", async () => {

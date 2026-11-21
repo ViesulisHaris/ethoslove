@@ -78,7 +78,11 @@ describe("what the account page lists as held", () => {
     expect(page).not.toMatch(/filter\(\(\{ slug \}\) => !slug\.startsWith\("pack:"\)\)/);
     const en = JSON.parse(readFileSync("messages/en.json", "utf8"));
     const es = JSON.parse(readFileSync("messages/es.json", "utf8"));
-    expect(en.money.account).toMatchObject({ groupOn: "Group cards on {template}", groupEvery: "Group cards on every template" });
-    expect(es.money.account).toMatchObject({ groupOn: "Tarjetas en grupo con {template}", groupEvery: "Tarjetas en grupo con todas las plantillas" });
+    // In the account page's own namespace, which only a signed-in account's pages are sent: under
+    // "money.account" they went out in the source of /pricing while group cards were off.
+    expect(en.account).toMatchObject({ groupOn: "Group cards on {template}", groupEvery: "Group cards on every template" });
+    expect(es.account).toMatchObject({ groupOn: "Tarjetas en grupo con {template}", groupEvery: "Tarjetas en grupo con todas las plantillas" });
+    expect(en.money.account.groupOn ?? en.money.account.groupEvery ?? es.money.account.groupOn ?? es.money.account.groupEvery).toBeUndefined();
+    expect(page).toContain('t("groupOn"');
   });
 });

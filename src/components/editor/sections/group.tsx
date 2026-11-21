@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { useLocale, useTranslations } from "next-intl";
 import { getEntitlement } from "@/app/actions/gift";
 import { AuthForm } from "@/components/auth/auth-form";
-import { AddOwn, DecidedEntry, GroupIntro, GroupLink, GroupSetup, InCardList, LinkControls, WaitingEntry } from "@/components/group/panel";
+import { AddOwn, DecidedEntry, GroupIntro, GroupLink, GroupSetup, InCardList, LinkControls, PageWords, WaitingEntry } from "@/components/group/panel";
 import { track } from "@/lib/analytics/track";
 import { useEditor } from "@/lib/editor/store";
 import { approveEntry, createGroup, decideEntry, findGroup, patchGroup, type GroupEntryView, type GroupError, type GroupView } from "@/lib/group/client";
@@ -54,7 +54,12 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   const [loaded, setLoaded] = useState(Boolean(preview));
   const [owned, setOwned] = useState<string[]>(preview?.owned ?? []);
   const [busy, setBusy] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // What went wrong and what it was about (a note's id or key, "link", "words", "create"): each is
+  // said beside the thing that was tapped, never in one line at the foot of the panel.
+  const [failure, setFailure] = useState<{ at: string; text: string } | null>(null);
+  const failed = (at: string) => (failure?.at === at ? failure.text : null);
+  // The form that changes what the page at the link says, open or not.
+  const [editingWords, setEditingWords] = useState(false);
   const section = useRef<HTMLElement>(null);
   const live = !preview;
 
@@ -131,21 +136,21 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
 
   const invite = () => {
     track("group_invite_tap", { template: slug, guest: !authed });
-    setError(null);
+    setFailure(null);
     setAsked(authed ? "setup" : "guest");
   };
 
   const create = async (input: { fromName: string; forName: string; prompt: string }) => {
     if (!live) return;
     setBusy("create");
-    setError(null);
+    setFailure(null);
     // The group hangs off the draft's row: make sure there is one, and that it holds what is on screen.
     const editor = useEditor.getState();
     const id = await editor.ensureRemote();
     if (id) await editor.syncNow();
     const made = id ? await createGroup({ giftId: id, ...input, ...(input.prompt ? {} : { prompt: undefined }) }) : null;
     setBusy(null);
-    if (!made?.ok) return setError(made?.error === "unavailable" ? t("unavailable") : t("createError"));
+    if (!made?.ok) return setFailure({ at: "create", text: made?.error === "unavailable" ? t("unavailable") : t("createError") });
     track("group_link_created", { template: slug });
     setGroup(made.group);
     setLoaded(true);
@@ -156,10 +161,10 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   const add = async (entry: GroupEntryView, withPhoto: boolean) => {
     if (!group || !live) return;
     setBusy(entry.id);
-    setError(null);
+    setFailure(null);
     const done = await approveEntry(group.id, entry.id, withPhoto);
     setBusy(null);
-    if (!done.ok || !done.item) return setError(words(done.ok ? "failed" : done.error));
+    if (!done.ok || !done.item) return setFailure({ at: entry.id, text: words(done.ok ? "failed" : done.error) });
     const editor = useEditor.getState();
     editor.addContribution(done.item, done.previewUrl);
     void editor.syncNow();
@@ -170,10 +175,10 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   const decide = async (entry: GroupEntryView, action: "reject" | "restore") => {
     if (!group || !live) return;
     setBusy(entry.id);
-    setError(null);
+    setFailure(null);
     const done = await decideEntry(group.id, entry.id, action);
     setBusy(null);
-    if (!done.ok) return setError(words(done.error));
+    if (!done.ok) return setFailure({ at: entry.id, text: words(done.error) });
     patchEntry(entry.id, { status: done.status, key: action === "restore" ? null : entry.key, decidedAt: action === "restore" ? null : new Date().toISOString() });
     if (action === "reject") track("group_note_removed", { template: slug, added: false });
   };
@@ -183,11 +188,11 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
     const entry = group?.entries.find((candidate) => candidate.key === key && candidate.status === "approved");
     if (entry && group && live) {
       setBusy(key);
-      setError(null);
+      setFailure(null);
       // The server first, so a note taken out here is never put back by the next read.
       const done = await decideEntry(group.id, entry.id, "remove");
       setBusy(null);
-      if (!done.ok) return setError(words(done.error));
+      if (!done.ok) return setFailure({ at: key, text: words(done.error) });
       patchEntry(entry.id, { status: "removed", decidedAt: new Date().toISOString() });
     }
     editor.removeContribution(key);
@@ -198,11 +203,25 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
   const change = async (patch: Parameters<typeof patchGroup>[1]) => {
     if (!group || !live) return;
     setBusy("link");
-    setError(null);
+    setFailure(null);
     const done = await patchGroup(group.id, patch);
     setBusy(null);
-    if (!done.ok) return setError(words(done.error));
+    if (!done.ok) return setFailure({ at: "link", text: words(done.error) });
     setGroup(done.group);
+  };
+
+  // What the page at the link says, changed after the link exists (a name typed wrong, a better
+  // line on what to write). The link itself stays the same, so nobody has to be sent a new one.
+  const saveWords = async (input: { fromName: string; forName: string; prompt: string }) => {
+    if (!group || !live) return;
+    setBusy("words");
+    setFailure(null);
+    const done = await patchGroup(group.id, { fromName: input.fromName, forName: input.forName, prompt: input.prompt || null });
+    setBusy(null);
+    if (!done.ok) return setFailure({ at: "words", text: done.error === "unavailable" ? t("unavailable") : t("pageError") });
+    track("group_page_edited", { template: slug });
+    setGroup(done.group);
+    setEditingWords(false);
   };
 
   const dateOf = (iso: string | number) => new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" }).format(new Date(iso));
@@ -243,6 +262,7 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
           onEdit={(key, value) => useEditor.getState().updateContribution(key, value)}
           onDropPhoto={(key) => useEditor.getState().updateContribution(key, { photo: null })}
           onRemove={(key) => void removeItem(key)}
+          error={failure}
         />
         <AddOwn noteMax={noteMax} disabled={full} onAdd={(value) => useEditor.getState().addContribution({ key: ownKey(), ...value })} />
       </div>
@@ -263,7 +283,27 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
               {t("sentLine")} {waiting.length > 0 && group.sentAt ? t("sentWaiting", { date: dateOf(Date.parse(group.sentAt) + GROUP_RETENTION.afterSentDays * DAY) }) : ""}
             </p>
           ) : (
-            <GroupLink url={group.url} shareText={sharing} onShared={(via) => track("group_link_shared", { template: slug, via })} />
+            <div>
+              <GroupLink url={group.url} shareText={sharing} state={group.closedAt ? "closed" : group.ranOut ? "ranOut" : "open"} onShared={(via) => track("group_link_shared", { template: slug, via })} />
+              {editingWords ? (
+                <div className="mt-3 rounded-2xl border border-border bg-card p-4">
+                  <GroupSetup
+                    fromName={group.fromName}
+                    forName={group.forName}
+                    prompt={group.prompt ?? ""}
+                    busy={busy === "words"}
+                    error={failed("words")}
+                    onCreate={(input) => void saveWords(input)}
+                    onCancel={() => {
+                      setFailure(null);
+                      setEditingWords(false);
+                    }}
+                  />
+                </div>
+              ) : (
+                <PageWords group={group} onEdit={() => setEditingWords(true)} />
+              )}
+            </div>
           )}
 
           <div>
@@ -273,10 +313,10 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
             {waiting.length === 0 && decided.length === 0 ? <p className="mt-1.5 text-sm text-muted-foreground">{t("waitingEmpty")}</p> : null}
             <ul className="mt-3 flex flex-col gap-2">
               {waiting.map((entry) => (
-                <WaitingEntry key={entry.id} entry={entry} busy={busy === entry.id} full={full} onAdd={(withPhoto) => void add(entry, withPhoto)} onRemove={() => void decide(entry, "reject")} />
+                <WaitingEntry key={entry.id} entry={entry} busy={busy === entry.id} full={full} error={failed(entry.id)} onAdd={(withPhoto) => void add(entry, withPhoto)} onRemove={() => void decide(entry, "reject")} />
               ))}
               {decided.map((entry) => (
-                <DecidedEntry key={entry.id} entry={entry} busy={busy === entry.id} onUndo={() => void decide(entry, "restore")} />
+                <DecidedEntry key={entry.id} entry={entry} busy={busy === entry.id} error={failed(entry.id)} onUndo={() => void decide(entry, "restore")} />
               ))}
             </ul>
             {full && waiting.length > 0 ? <p className="mt-2 text-sm text-ink-soft">{t("full")}</p> : null}
@@ -285,24 +325,23 @@ export function GroupSection({ manifest, preview }: { manifest: TemplateManifest
           {cardNotes}
 
           {sent ? null : (
-            <LinkControls group={group} date={dateOf(group.closesAt)} extend={extend} busy={busy === "link"} onExtend={() => void change({ extend: true })} onToggle={() => void change({ closed: !group.closedAt })} onReset={() => void change({ resetLink: true })} />
+            <LinkControls group={group} date={dateOf(group.closesAt)} extend={extend} busy={busy === "link"} error={failed("link")} onExtend={() => void change({ extend: true })} onToggle={() => void change({ closed: !group.closedAt })} onReset={() => void change({ resetLink: true })} />
           )}
-          {error ? (
-            <p role="alert" className="text-sm text-coral-deep" data-testid="group-error">
-              {error}
-            </p>
-          ) : null}
         </div>
       ) : (
         <div className="flex flex-col gap-7">
           {/* Inviting people starts from a draft; a card that is already out has only its notes to show. */}
           {status !== "draft" ? null : step === "guest" ? (
             <div className="rounded-xl border border-line bg-card p-5" data-testid="group-guest">
-              <p className="mb-4 text-sm text-ink-soft">{t("guestLine")}</p>
-              <AuthForm mode="login" next={`/create/${slug}`} compact />
+              {/* Its own heading: the site's "Welcome back" greeted people making their first card. */}
+              <AuthForm mode="login" next={`/create/${slug}`} compact title={t("guestTitle")} subtitle={t("guestLine")} />
+              {/* The way back to the price, which this box replaced. */}
+              <button type="button" onClick={() => setAsked("intro")} className="mt-3 inline-flex min-h-11 items-center rounded-md text-sm text-ink-soft underline-offset-4 hover:text-ink hover:underline" data-testid="group-guest-cancel">
+                {t("guestCancel")}
+              </button>
             </div>
           ) : step === "setup" ? (
-            <GroupSetup fromName={senderName} forName={recipientName} busy={busy === "create"} error={error} onCreate={(input) => void create(input)} />
+            <GroupSetup fromName={senderName} forName={recipientName} busy={busy === "create"} error={failed("create")} onCreate={(input) => void create(input)} />
           ) : (
             <GroupIntro priceLine={priceLine} onInvite={invite} />
           )}

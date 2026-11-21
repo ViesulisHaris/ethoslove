@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { Db } from "@/lib/commerce/db";
 import { ContributeForm } from "@/components/group/contribute-form";
+import { KeptNoteGate } from "@/components/group/kept-gate";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { GroupUnavailableError, groupByToken, linkState, type GroupRow, type LinkState } from "@/lib/group/store";
 import { isGroupToken } from "@/lib/group/token";
@@ -14,7 +15,8 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
  * The group behind a link, and what the link is right now (taking notes, full, closed by its
  * sender, past its last day, or sent); null for anything that isn't one. Off
  * (the switch), a token of the wrong shape, a link that was reset, and a database without migration
- * 0023 all read the same from outside: there is no such page.
+ * 0023 all read the same from outside: there is no such page (a 404, drawn by not-found.tsx beside
+ * this file: the site's own while group cards are off, one line on what to do once they are on).
  */
 const groupAt = cache(async (token: string): Promise<{ group: GroupRow; state: LinkState } | null> => {
   if (!groupGiftsEnabled() || !isGroupToken(token)) return null;
@@ -55,16 +57,19 @@ export default async function ContributePage({ params }: PageProps<"/[currency]/
   if (!found) notFound();
   const { group, state } = found;
   return (
-    <ContributeForm
-      token={token}
-      state={state}
-      locale={group.locale === "es" ? "es" : "en"}
-      fromName={group.from_name}
-      forName={group.for_name}
-      prompt={group.prompt}
-      noteMax={group.note_max}
-      takesPhotos={group.takes_photos}
-      reportRef={group.report_ref}
-    />
+    <>
+      <KeptNoteGate token={token} />
+      <ContributeForm
+        token={token}
+        state={state}
+        locale={group.locale === "es" ? "es" : "en"}
+        fromName={group.from_name}
+        forName={group.for_name}
+        prompt={group.prompt}
+        noteMax={group.note_max}
+        takesPhotos={group.takes_photos}
+        reportRef={group.report_ref}
+      />
+    </>
   );
 }

@@ -14,7 +14,7 @@ import { manifest } from "@/templates/_group-reference/manifest";
  * panel and its pay panel with made-up notes, for screenshots and the browser tests, which have no
  * account and no database. `live` leaves the panel talking to the real routes, which a test answers.
  */
-export type PanelPreviewState = "intro" | "guest" | "setup" | "active" | "full" | "sent" | "ranout" | "capped" | "copy";
+export type PanelPreviewState = "intro" | "guest" | "setup" | "active" | "full" | "sent" | "ranout" | "capped" | "closed" | "copy";
 
 const GIFT = "6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b";
 const NOW = "2026-12-01T10:00:00.000Z";
@@ -95,7 +95,7 @@ function fixture(state: PanelPreviewState, locale: GiftLocale): { group: GroupVi
       // "ranout": the link's last day passed three days before NOW and nobody closed it. "capped":
       // open, and already at the last day a link can have, so there is nothing to keep it open to.
       closesAt: state === "ranout" ? "2026-11-28T10:00:00.000Z" : state === "capped" ? "2027-01-15T10:00:00.000Z" : "2026-12-31T10:00:00.000Z",
-      closedAt: null,
+      closedAt: state === "closed" ? NOW : null,
       ranOut: state === "ranout",
       extendsTo: state === "sent" || state === "capped" ? null : state === "ranout" ? "2026-12-31T10:00:00.000Z" : "2027-01-30T10:00:00.000Z",
       sentAt: state === "sent" ? NOW : null,
