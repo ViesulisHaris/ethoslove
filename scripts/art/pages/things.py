@@ -161,13 +161,74 @@ def polaroid(name, w=3.0, photo=None):
     return [card, pic], dict(photo=pic, corners=corners, width=pw, radius=w * 0.006, size=(w, h, 0.022))
 
 
-def note_card(name, w=3.7, h=2.55, color="#dcbb8c", warm="#c9a271"):
-    """A kraft note card, blank. Returns (parts, info): the place for words is its face inside a margin."""
-    card = sheet(name, w, h, 0.07, 0.03, paper_stock(name + "_kraft", color, warm, 0.8, 0.5), bend=0.035)
+def letter_sheet(name, w=3.7, h=2.55, color="#fff3d6", warm="#f6e0b8"):
+    """
+    A sheet of cream letter paper that has been folded once and opened out again: a soft fold line
+    across its middle, the two halves not quite flat, one corner (the top right) lifting off the page.
+    Blank. Returns (parts, info): the place for words is its face inside a margin, as flat as paper is.
+    """
+    m = Mat(name + "_paper")
+    obj = m.coords("Object")
+    _, y, _ = m.sep(obj)
+    cloud, _ = m.noise(obj, 1.2, 3.0, 0.55)
+    fine, _ = m.noise(obj, 130.0, 2.0, 0.6)
+    fib, _ = m.noise(m.mapping(obj, (50.0, 5.0, 5.0)), 3.0, 2.0, 0.5)
+    crease = m.math("SUBTRACT", 1.0, m.math("SMOOTHSTEP", m.math("ABSOLUTE", y), 0.0, 0.03))
+    col = m.mix(m.math("MULTIPLY", cloud, 0.4), color, kit.lin(warm))
+    col = m.mix(m.math("MULTIPLY", fib, 0.05), col, kit.lin(warm))
+    col = m.mix(m.math("MULTIPLY", crease, 0.4), col, kit.lin("#cdb48a"))
+    height = m.math("SUBTRACT", m.math("ADD", m.math("MULTIPLY", fine, 0.4), m.math("MULTIPLY", fib, 0.12)), m.math("MULTIPLY", crease, 1.6))
+    # its own light is warmer than its colour: lit like the petals it would come out a grey white on a cream page
+    m.set(base=col, rough=0.7, spec=0.22, sheen=0.15, emit=m.mix(0.6, col, kit.lin("#ffdfae")), emit_strength=0.5, normal=m.bump(height, 0.16, 0.006),
+          sss=0.15, sss_radius=(1.0, 0.8, 0.5), sss_scale=0.05)
+    nx, ny = 44, 30
+    verts, faces = [], []
+    for j in range(ny + 1):
+        for i in range(nx + 1):
+            x, yy = -w / 2 + w * i / nx, -h / 2 + h * j / ny
+            # the fold: a low ridge along the middle, its two sides falling away a degree or two
+            z = 0.11 * (1.0 - math.sqrt(yy * yy + 0.03 ** 2) / (h / 2))
+            # a sheet never lies quite flat
+            z += 0.012 * math.sin(x * 1.7 + 0.6) * math.sin(yy * 2.1 + 1.0)
+            # the top right corner, lifting and curling back a little
+            d = max(0.0, x / (w / 2) + yy / (h / 2) - 1.1)
+            z += 0.85 * d * d
+            pull = 0.2 * d * d
+            verts.append((x - pull, yy - pull, max(z, 0.0)))
+    for j in range(ny):
+        for i in range(nx):
+            a = j * (nx + 1) + i
+            faces.append((a, a + 1, a + nx + 2, a + nx + 1))
+    paper = mesh_obj(name, verts, faces, m.mat, True)
+    kit.solidify(paper, 0.006, 1.0)
+    kit.subsurf(paper, 1)
     mx, my = w * 0.1, h * 0.14
     z = 0.031
     corners = [Vector((-w / 2 + mx, h / 2 - my, z)), Vector((w / 2 - mx, h / 2 - my, z)), Vector((w / 2 - mx, -h / 2 + my, z)), Vector((-w / 2 + mx, -h / 2 + my, z))]
-    return [card], dict(corners=corners, width=w - 2 * mx, radius=0.0, size=(w, h, 0.03), aspect=(w - 2 * mx) / (h - 2 * my))
+    return [paper], dict(corners=corners, width=w - 2 * mx, radius=0.0, size=(w, h, 0.03), aspect=(w - 2 * mx) / (h - 2 * my))
+
+
+def glow_screen(name, top="#5a3524", bottom="#1d0f0b", sheen=0.05, strength=0.5):
+    """
+    A screen that is on but showing nothing: a soft warm gradient, lighter towards its top left as if
+    lit from within, and the faintest band of a reflection across it. The same whatever the light.
+    """
+    m = Mat(name)
+    u, v, _ = m.sep(m.coords("UV"))
+    # how near the top left: 1 there, 0 at the bottom right
+    lit = m.math("ADD", m.math("MULTIPLY", v, 0.72), m.math("MULTIPLY", m.math("SUBTRACT", 1.0, u), 0.28))
+    col = m.mix(m.math("SMOOTHSTEP", lit, 0.05, 1.0), bottom, kit.lin(top))
+    # a pool of warmth a third of the way down, as a lit page has
+    du = m.math("SUBTRACT", u, 0.42)
+    dv = m.math("MULTIPLY", m.math("SUBTRACT", v, 0.7), 1.6)
+    pool = m.math("SUBTRACT", 1.0, m.math("SMOOTHSTEP", m.math("SQRT", m.math("ADD", m.math("MULTIPLY", du, du), m.math("MULTIPLY", dv, dv))), 0.0, 0.75))
+    col = m.mix(m.math("MULTIPLY", pool, 0.28), col, kit.lin("#77482c"))
+    # the reflection: a broad soft band running down from the top right
+    band = m.math("ABSOLUTE", m.math("SUBTRACT", m.math("ADD", u, m.math("MULTIPLY", v, 0.55)), 1.12))
+    shine = m.math("MULTIPLY", m.math("SUBTRACT", 1.0, m.math("SMOOTHSTEP", band, 0.0, 0.2)), sheen)
+    col = m.mix(shine, col, (1.0, 0.93, 0.84, 1.0))
+    m.set(base=(0.0, 0.0, 0.0, 1.0), spec=0.0, rough=1.0, emit=col, emit_strength=strength)
+    return m.mat
 
 
 def fountain_pen(name, length=3.5, color="#3d0f1c"):

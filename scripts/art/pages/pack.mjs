@@ -10,11 +10,19 @@
 // one cut short by its frame still ends softly; being apart from the thing, the shadow can be
 // treated so without touching the thing's own soft edges.
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-const [raw, only] = process.argv.slice(2);
-if (!raw) throw new Error("usage: pack.mjs <folder of renders> [id,id,...]");
+const argv = process.argv.slice(2);
+// --pin: besides packing, write the rectangle each piece is cut by into frames.json, to be held to from then on
+const PIN = argv.includes("--pin");
+const [raw, only] = argv.filter((a) => a !== "--pin");
+if (!raw) throw new Error("usage: pack.mjs <folder of renders> [id,id,...] [--pin]");
+// A page is built against each picture's size and the manifest's numbers. frames.json (see pkit.py)
+// holds, per piece, the rectangle it was first cut by; a piece that is in there is always cut by it.
+const FRAMES = join(dirname(fileURLToPath(import.meta.url)), "frames.json");
+const frames = existsSync(FRAMES) ? JSON.parse(readFileSync(FRAMES, "utf8")) : {};
 // PAGES_OUT sends a trial pack somewhere else, to be looked at before anything in the site is replaced.
 const OUT = process.env.PAGES_OUT ?? join("public", "art", "pages");
 mkdirSync(OUT, { recursive: true });
@@ -145,8 +153,14 @@ async function whole(id) {
 // all are cut by the one rectangle that holds every one of them, so they are the same size to the
 // pixel and what is in them is in the same place.
 const boxes = {};
-async function sharedBox(piece, have) {
+async function sharedBox(piece, have, w) {
   if (boxes[piece]) return boxes[piece];
+  if (frames[piece]?.box && !PIN) {
+    // a --preview render is half the size the rectangle was held at: it is cut by half the rectangle
+    const k = frames[piece].frame ? w / frames[piece].frame[4] : 1;
+    const b = frames[piece].box;
+    return (boxes[piece] = k === 1 ? b : { left: Math.round(b.left * k), top: Math.round(b.top * k), width: Math.round(b.width * k), height: Math.round(b.height * k) });
+  }
   let x0 = Infinity, y0 = Infinity, x1 = -1, y1 = -1;
   for (const id of every) {
     if (infoOf(id).piece !== piece || !existsSync(join(raw, `${id}.png`))) continue;
@@ -156,7 +170,18 @@ async function sharedBox(piece, have) {
     x1 = Math.max(x1, box.left + box.width);
     y1 = Math.max(y1, box.top + box.height);
   }
-  return (boxes[piece] = { left: x0, top: y0, width: x1 - x0, height: y1 - y0 });
+  boxes[piece] = { left: x0, top: y0, width: x1 - x0, height: y1 - y0 };
+  if (PIN) (frames[piece] ??= {}).box = boxes[piece];
+  return boxes[piece];
+}
+
+/** Says so if the thing itself (not its shadow) runs into the edge of a held rectangle: it has outgrown it. */
+function warnIfCut(id, data, w, box) {
+  let n = 0;
+  const solid = (x, y) => data[(y * w + x) * 4 + 3] > 200;
+  for (let x = box.left; x < box.left + box.width; x++) n += solid(x, box.top) + solid(x, box.top + box.height - 1);
+  for (let y = box.top; y < box.top + box.height; y++) n += solid(box.left, y) + solid(box.left + box.width - 1, y);
+  if (n > 6) console.log(`  !! ${id}: ${n} solid pixels on the edge of its held rectangle: the thing is CUT`);
 }
 
 for (const id of ids) {
@@ -165,7 +190,8 @@ for (const id of ids) {
   const way = info.colourway ?? "plain";
   const made = await whole(id);
   const { data: wholeData, w, h } = made;
-  const box = await sharedBox(info.piece, { [id]: made });
+  const box = await sharedBox(info.piece, { [id]: made }, w);
+  warnIfCut(id, wholeData, w, box);
   const k = Math.min(1, info.long / Math.max(box.width, box.height));
   const W = Math.round(box.width * k), H = Math.round(box.height * k);
   const cut = (buf, scale) => () => sharp(buf, { raw: { width: w, height: h, channels: 4 } }).extract(box).resize({ width: Math.round(W * scale), height: Math.round(H * scale), fit: "fill", kernel: "lanczos3" });
@@ -200,12 +226,15 @@ if (existsSync(footerOf) && (!only || only.split(",").some((o) => "lily-footer".
     for (let c = 0; c < 3; c++) data[i + c] = Math.round(lo[c] + (hi[c] - lo[c]) * f);
     data[i + 3] = Math.round(data[i + 3] * 0.92);
   }
-  const box = bbox(data, info.width, info.height);
+  let box = bbox(data, info.width, info.height);
+  if (PIN) (frames["lily-footer"] ??= {}).box = box;
+  else if (frames["lily-footer"]?.box) box = frames["lily-footer"].box;
   const k = Math.min(1, 900 / Math.max(box.width, box.height));
   const W = Math.round(box.width * k), H = Math.round(box.height * k);
   const cut = (scale) => () => sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).extract(box).resize({ width: Math.round(W * scale), height: Math.round(H * scale), fit: "fill" });
   manifest.pieces["lily-footer"] = { plain: { ...(await save(cut(1), "lily-footer.webp")), x1: await save(cut(0.5), "lily-footer-1x.webp"), ground: "#2d0e18" } };
 }
 
+if (PIN) writeFileSync(FRAMES, JSON.stringify(frames, Object.keys(frames).sort().concat(["box", "frame", "obj", "left", "top", "width", "height"]), 1) + "\n");
 writeFileSync(MANIFEST, JSON.stringify(manifest, null, 1) + "\n");
 console.log(`manifest: ${Object.keys(manifest.pieces).length} pieces`);

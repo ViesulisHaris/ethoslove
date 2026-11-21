@@ -35,10 +35,34 @@ GROUND = "#f1e3d3"
 # The pale ground each colourway of flowers is made for; what lies on it is lit from below by it.
 GROUNDS = {"ivory": "#f1e3d3", "blush": "#f6e3e0", "wine": "#f3e2dc", "moonlight": "#e6e6ef"}
 _ground = GROUND
+_opt = {}
+
+# A page is built against each picture's size and the numbers in the manifest, so once a piece has
+# shipped its framing is held: frames.json keeps, per piece, the camera's frame ("frame": centre x and
+# y, width and height in units, width and height in pixels), the thing's own bounds in it ("obj") and
+# the rectangle pack.mjs cuts ("box"). A piece that is in there is always shot and cut exactly so,
+# whatever is changed in it afterwards; one that is not is framed round whatever it turns out to be.
+FRAMES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frames.json")
+
+
+def frames():
+    if os.path.exists(FRAMES_FILE):
+        with open(FRAMES_FILE) as f:
+            return json.load(f)
+    return {}
+
+
+def held(piece):
+    if _opt.get("record"):
+        return None
+    pin = frames().get(piece)
+    return pin if pin and pin.get("frame") else None
 UP = Vector((0.0, COS_T, SIN_T))
 
 # One light for every piece, so two of them side by side on a page were lit by the same window.
 LIGHT = dict(key=3500.0, world=0.28, fill=320.0, exposure=0.9, contrast="Medium High Contrast", at=(-10.5, 9.0, 21.0), shadow_at=(-6.2, 5.3, 23.5))
+# For a single flower or petal the shadow is thrown from higher still: it should sit the thing on the page, not pool under it.
+SHORT_SHADOW = (-4.2, 3.6, 24.2)
 
 
 def cli():
@@ -46,6 +70,10 @@ def cli():
     opt = kit.cli()
     a = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     opt["colour"] = a[a.index("--colour") + 1].split(",") if "--colour" in a else ["ivory"]
+    # --record: render nothing; write each piece's framing into frames.json, to be held to from then on
+    opt["record"] = "--record" in a
+    global _opt
+    _opt = opt
     return opt
 
 
@@ -157,18 +185,34 @@ class Shot:
         return [round((sx - self.cx + self.vw / 2.0) * self.ppu, 3), round((self.vh / 2.0 - (sy - self.cy)) * self.ppu, 3)]
 
 
-def frame(objs, px_long, pad=(0.5, 0.5, 1.4, 1.4), opt=None, samples=220):
-    """Points the camera at these things with room round them (left, top, right, bottom) for their shadow."""
+def frame(objs, px_long, pad=(0.5, 0.5, 1.4, 1.4), opt=None, samples=220, piece=None):
+    """
+    Points the camera at these things with room round them (left, top, right, bottom) for their shadow.
+    A `piece` whose framing is held in frames.json is framed as it was, not round what it now is.
+    """
     opt = opt or {}
     bpy.context.view_layer.update()
-    x0, y0, x1, y1 = screen_bounds(objs)
     scale = 0.5 if opt.get("preview") else 1.0
-    # `px_long` is the thing's own longer side; pack.mjs brings thing and shadow together down to it
-    ppu = px_long * scale / max(x1 - x0, y1 - y0)
-    x0, y1, x1, y0 = x0 - pad[0], y1 + pad[1], x1 + pad[2], y0 - pad[3]
-    vw, vh = x1 - x0, y1 - y0
-    pw, ph = int(math.ceil(vw * ppu)), int(math.ceil(vh * ppu))
-    vw, vh = pw / ppu, ph / ppu
+    pin = held(piece) if piece else None
+    if pin:
+        cx, cy, vw, vh, pw, ph = pin["frame"]
+        pw, ph = int(round(pw * scale)), int(round(ph * scale))
+        ppu = pw / vw
+    else:
+        x0, y0, x1, y1 = bounds = screen_bounds(objs)
+        # `px_long` is the thing's own longer side; pack.mjs brings thing and shadow together down to it
+        ppu = px_long * scale / max(x1 - x0, y1 - y0)
+        x0, y1, x1, y0 = x0 - pad[0], y1 + pad[1], x1 + pad[2], y0 - pad[3]
+        vw, vh = x1 - x0, y1 - y0
+        pw, ph = int(math.ceil(vw * ppu)), int(math.ceil(vh * ppu))
+        vw, vh = pw / ppu, ph / ppu
+        cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+        if opt.get("record") and piece and not opt.get("preview"):
+            all_ = frames()
+            all_.setdefault(piece, {}).update(frame=[round(v, 6) for v in (cx, cy, vw, vh)] + [pw, ph], obj=[round(v, 5) for v in bounds])
+            with open(FRAMES_FILE, "w") as f:
+                json.dump(all_, f, indent=1, sort_keys=True)
+            print("FRAME", piece, all_[piece]["frame"])
     for ob in [o for o in bpy.data.objects if o.type == "CAMERA"]:
         bpy.data.objects.remove(ob, do_unlink=True)
     look = LIGHT
@@ -180,9 +224,33 @@ def frame(objs, px_long, pad=(0.5, 0.5, 1.4, 1.4), opt=None, samples=220):
         sc.cycles.samples = 64
         sc.cycles.adaptive_threshold = 0.03
     cam.data.ortho_scale = max(vw, vh)
-    cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
     cam.location = cam.location + Vector((cx, 0.0, 0.0)) + UP * cy
     return Shot(cx, cy, vw, vh, pw, ph)
+
+
+def fit(piece, root, objs, rest=None, grow=True):
+    """
+    Brings a thing that has been reshaped back inside the bounds the piece was first framed round (sized
+    about its root, then moved), so the held frame still holds all of it. `rest(root)` puts it back on
+    the page after it is resized (the default: lowered till its lowest point touches).
+    """
+    pin = held(piece)
+    if not pin:
+        return 1.0
+    bpy.context.view_layer.update()
+    x0, y0, x1, y1 = screen_bounds(objs)
+    ox0, oy0, ox1, oy1 = pin["obj"]
+    s = min((ox1 - ox0) / (x1 - x0), (oy1 - oy0) / (y1 - y0))
+    if not grow:
+        s = min(1.0, s)
+    root.scale = root.scale * s
+    bpy.context.view_layer.update()
+    (rest or (lambda r: settle(r, objs, 0.004)))(root)
+    x0, y0, x1, y1 = screen_bounds(objs)
+    root.location.x += (ox0 + ox1) / 2.0 - (x0 + x1) / 2.0
+    root.location.y += ((oy0 + oy1) / 2.0 - (y0 + y1) / 2.0) / COS_T
+    bpy.context.view_layer.update()
+    return s
 
 
 def _render(path, transparent=True):
@@ -195,12 +263,14 @@ def _render(path, transparent=True):
     print("SAVED", path)
 
 
-def shoot(pid, out, objs, ground_ob, shot, meta=None, extra=None, shadow_samples=160):
+def shoot(pid, out, objs, ground_ob, shot, meta=None, extra=None, shadow_samples=160, shadow_at=None):
     """
     The piece and then its shadow. `extra` is a list of (suffix, visible objects, before, after): further
     pictures from the same camera with only those objects seen (a phone's bezel, say); `before` and
     `after` are called round the render, to swap a material in and back.
     """
+    if _opt.get("record"):
+        return
     sc = bpy.context.scene
     # a thing marked "unseen" is only ever there for the light (a shadow's caster): no pass shows it
     every = [o for o in bpy.data.objects if o.type == "MESH" and o is not ground_ob and not o.get("unseen")]
@@ -229,7 +299,7 @@ def shoot(pid, out, objs, ground_ob, shot, meta=None, extra=None, shadow_samples
     # decoration's shadow wants to stay short and under it, however tall the thing is.
     key = bpy.data.objects["key"]
     was = (key.location.copy(), key.rotation_euler.copy())
-    key.location = Vector(LIGHT["shadow_at"])
+    key.location = Vector(shadow_at or LIGHT["shadow_at"])
     key.rotation_euler = (Vector((0, 0, 0)) - key.location).to_track_quat("-Z", "Y").to_euler()
     _render(os.path.join(out, pid + "-shadow.png"))
     key.location, key.rotation_euler = was

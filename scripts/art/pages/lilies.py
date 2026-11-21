@@ -2,7 +2,7 @@
 A lily, built the way the flower is: six tepals in two whorls of three (three narrower sepals
 outside, three broader petals inside and between them), each a long blade that leaves the throat
 as a channel, opens flat and rolls back at its tip, with a midrib furrow, a ruffled edge and real
-thickness; six stamens with rust anthers hung crosswise on their filaments; a pistil; a green
+thickness; six stamens, each a bowed, furrowed anther dusted with pollen and balanced on a thin filament; a pistil; a green
 receptacle and a stalk. No two tepals are alike: each gets its own length, curl, twist and ruffle.
 
 The colour is a palette, not part of the model (PALETTES: ivory, blush, wine, moonlight), so a
@@ -25,19 +25,19 @@ PALETTES = {
     # streak: the line along the midrib. vein: the fine parallel veins. glow: light coming through a petal.
     "ivory": dict(base="#f8efdd", tip="#fcf6ea", throat="#e2c47e", deep="#bfa257", streak="#cbc07a", vein="#c9b384", vein_mix=0.16, glow="#f6cf98",
                   sss=0.6, sss_radius=(1.0, 0.55, 0.28), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.25,
-                  back="#ece3c9", anther="#4f260c", pollen="#8a4c1a", filament="#e3e2b8", stigma="#c4bd7c"),
+                  back="#ece3c9", anther="#5e2a0e", pollen="#b4611f", filament="#ecefd6", stigma="#c9c487"),
     # Every colourway stays as soft as the ivory one: muted, low in saturation, made for a pale ground.
     "blush": dict(base="#f3d6d2", tip="#f9e8e4", throat="#e4a5a5", deep="#cf898b", streak="#dc9d9d", vein="#e0b0ac", vein_mix=0.2, glow="#f6c2ba",
                   sss=0.6, sss_radius=(1.0, 0.5, 0.4), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.28,
-                  back="#efcdc8", anther="#4f260c", pollen="#8a4c1a", filament="#efe3ca", stigma="#d6b48f"),
+                  back="#efcdc8", anther="#5e2a0e", pollen="#b4611f", filament="#f1ead8", stigma="#d9b996"),
     # wine is a dusty rose-burgundy, not a dark red: less light is let through it, or it glows pink
     "wine": dict(base="#9d5068", tip="#b97a8a", throat="#702b44", deep="#551c31", streak="#7b344c", vein="#803a52", vein_mix=0.32, glow="#c67a8b",
                  sss=0.42, sss_radius=(1.0, 0.34, 0.32), sss_scale=0.22, trans=0.2, rough=0.5, sheen=0.4,
-                 back="#96506a", anther="#46220e", pollen="#b58040", filament="#e8d2c2", stigma="#bd908a"),
+                 back="#96506a", anther="#5a2c10", pollen="#bd8440", filament="#ecdccf", stigma="#c29a92"),
     # moonlight is lit by the same warm lamp as the rest, which greys a cool white: it is given a paler base and more light within
     "moonlight": dict(base="#f3f5fb", tip="#fcfdff", throat="#dde8d2", deep="#bccfa6", streak="#cfdcbc", vein="#c7cbe3", vein_mix=0.2, glow="#e6e9fb",
                       sss=0.7, sss_radius=(0.8, 0.84, 1.0), sss_scale=0.36, trans=0.32, rough=0.52, sheen=0.25,
-                      back="#e6e9f3", anther="#5a3418", pollen="#b08a4a", filament="#e4edd6", stigma="#bccf9f"),
+                      back="#e6e9f3", anther="#5c3416", pollen="#b88a44", filament="#e9f0dd", stigma="#c2d2a6"),
 }
 GREENS = dict(stem="#75744a", stem_dark="#555632", leaf="#7b7a45", leaf_dark="#5a5c31", leaf_light="#a19d61", rib="#b9b47c")
 
@@ -88,12 +88,12 @@ def petal_material(name, pal):
     ridge = m.math("SMOOTHSTEP", lines, 0.35, 1.0)
     fade = m.math("MULTIPLY", m.math("SUBTRACT", 1.0, m.math("SMOOTHSTEP", t, 0.55, 1.0)), m.math("SUBTRACT", 1.0, m.math("MULTIPLY", c, 0.5)))
     vein = m.math("MULTIPLY", ridge, fade)
-    col = m.mix(m.math("MULTIPLY", vein, pal["vein_mix"]), col, kit.lin(pal["vein"]))
+    col = m.mix(m.math("MULTIPLY", vein, pal["vein_mix"] * pal.get("vein_gain", 1.0)), col, kit.lin(pal["vein"]))
     cells, _ = m.noise(m.coords("Object"), 38.0, 2.0, 0.5)
     soft, _ = m.noise(m.coords("Object"), 1.6, 2.0, 0.5)
     col = m.mix(m.math("MULTIPLY", soft, 0.07), col, kit.lin(pal["throat"]))
     height = m.math("ADD", m.math("MULTIPLY", vein, 0.6), m.math("MULTIPLY", cells, 0.12))
-    normal = m.bump(height, 0.4, 0.02)
+    normal = m.bump(height, pal.get("relief", 0.4), 0.02)
     m.set(base=col, rough=pal["rough"], sheen=pal["sheen"], sheen_rough=0.5, spec=0.3, normal=normal,
           sss=pal["sss"], sss_radius=pal["sss_radius"], sss_scale=pal["sss_scale"])
     _translucent(m, m.mix(0.5, col, kit.lin(pal["glow"])), pal["trans"], normal)
@@ -136,16 +136,23 @@ def stem_material(name, color=None, dark=None):
     return m.mat
 
 
-def kit_of_materials(colour="ivory", tag=""):
-    """Everything a lily in this colourway is made of."""
-    pal = PALETTES[colour]
+def kit_of_materials(colour="ivory", tag="", **tweak):
+    """Everything a lily in this colourway is made of. `tweak` overrides entries of its palette for this one flower."""
+    pal = dict(PALETTES[colour], **tweak)
     n = colour + tag
+    # Pollen: matt (no sheen: seen end-on it went silver), powdery, rust-orange where it lies thick and deep
+    # cinnamon where it is thin, speckled with paler grains.
     anther = Mat("anther_" + n)
-    grain, _ = anther.noise(anther.coords("Object"), 90.0, 2.0, 0.6)
-    blot, _ = anther.noise(anther.coords("Object"), 9.0, 2.0, 0.5)
-    anther.set(base=anther.mix(blot, pal["anther"], kit.lin(pal["pollen"])), rough=0.95, sheen=0.0, spec=0.05, normal=anther.bump(grain, 0.7, 0.01))
+    obj = anther.coords("Object")
+    blot, _ = anther.noise(obj, 22.0, 3.0, 0.6)
+    grain, _ = anther.noise(obj, 260.0, 2.0, 0.7)
+    lump, _ = anther.noise(obj, 70.0, 2.0, 0.5)
+    col = anther.ramp(blot, [(0.36, pal["anther"]), (0.8, pal["pollen"])])
+    col = anther.mix(anther.math("MULTIPLY", anther.math("SMOOTHSTEP", grain, 0.6, 0.84), 0.3), col, kit.lin(pal.get("grain", "#d9963f")))
+    height = anther.math("ADD", anther.math("MULTIPLY", grain, 0.6), anther.math("MULTIPLY", lump, 0.5))
+    anther.set(base=col, rough=1.0, sheen=0.0, spec=0.03, normal=anther.bump(height, 0.9, 0.012))
     fil = Mat("filament_" + n)
-    fil.set(base=pal["filament"], rough=0.45, sss=0.4, sss_radius=(0.8, 1.0, 0.4), sss_scale=0.08, spec=0.35)
+    fil.set(base=pal["filament"], rough=0.45, sss=0.5, sss_radius=(0.8, 1.0, 0.5), sss_scale=0.1, spec=0.35)
     stig = Mat("stigma_" + n)
     stig.set(base=pal["stigma"], rough=0.3, coat=0.3, coat_rough=0.2, sss=0.3, sss_scale=0.05)
     return dict(pal=pal, petal=petal_material("petal_" + n, pal), anther=anther.mat, filament=fil.mat, stigma=stig.mat,
@@ -256,23 +263,45 @@ def tepal(name, mat, length=3.0, width=0.5, az=0.0, a0=6.0, a1=58.0, a2=125.0, o
 
 # ------------------------------------------------------------------------------------- the flower
 
-def _capsule(name, r, half, mat, seg=14, rings=10):
-    """A rounded rod along Z, for an anther's lobe."""
-    prof = [(0.0, -half - r)]
-    for i in range(1, rings):
-        a = math.pi * i / rings
-        z = -r * math.cos(a)
-        prof.append((r * math.sin(a), z + (half if z > 0 else -half)))
-        if i == rings // 2:
-            prof.insert(-1, (r, -half))
-    prof.append((0.0, half + r))
-    return kit.lathe(name, prof, seg, mat)
+def anther(name, mat, length, width, bend=0.6, rings=15, seg=16):
+    """
+    A lily's anther: a long bean, bowed (its ends drooping back by `bend` radians between them), a
+    furrow down its face between its two halves and a fainter one down its back. It is built along Z
+    with its middle at the origin; its face looks along +X, and its back, where the filament holds
+    it, is at -X.
+    """
+    verts, faces = [], []
+    radius = length / max(bend, 1e-3)
+    for i in range(rings):
+        s = (i / (rings - 1)) * 2.0 - 1.0
+        phi = bend * 0.5 * s * 0.985
+        c = Vector((radius * (math.cos(phi) - 1.0), 0.0, radius * math.sin(phi)))
+        nrm = Vector((math.cos(phi), 0.0, math.sin(phi)))
+        # blunt, rounded ends; a touch fuller towards one end, as they are
+        fat = (1.0 - abs(s) ** 2.4) ** 0.55 * (1.0 + 0.1 * s)
+        for j in range(seg):
+            th = TAU * j / seg
+            d = math.atan2(math.sin(th), math.cos(th))
+            back = math.atan2(math.sin(th - math.pi), math.cos(th - math.pi))
+            rho = 0.5 * width * fat * (1.0 - 0.42 * math.exp(-(d / 0.42) ** 2) - 0.16 * math.exp(-(back / 0.5) ** 2))
+            verts.append(c + nrm * (math.cos(th) * rho * 0.8) + Vector((0.0, 1.0, 0.0)) * (math.sin(th) * rho))
+    for i in range(rings - 1):
+        for j in range(seg):
+            k = (j + 1) % seg
+            faces.append((i * seg + j, i * seg + k, (i + 1) * seg + k, (i + 1) * seg + j))
+    faces.append(tuple(range(seg - 1, -1, -1)))
+    faces.append(tuple(range((rings - 1) * seg, rings * seg)))
+    ob = mesh_obj(name, verts, faces, mat, True)
+    subsurf(ob, 1)
+    return ob
 
 
-def bloom(name, mats, length=3.0, seed=1, opened=1.0, curl=1.0, stamens=True):
+def bloom(name, mats, length=3.0, seed=1, opened=1.0, curl=1.0, stamens=True, broad=1.0, edge=1.0, relief=1.0):
     """
     The flower, its axis +Z and its base at the origin. `opened` 1 is a flower fully out (0.7 one
-    still a trumpet); `curl` scales how far the tips roll back. Returns its parts.
+    still a trumpet); `curl` scales how far the tips roll back. `broad` widens its tepals, `edge` scales
+    their thickness (under 1: a finer edge) and `relief` the depth of their furrows and folds; all three
+    leave every other number of the flower as it was. Returns its parts.
     """
     rnd = random.Random(seed)
     L = length
@@ -281,7 +310,7 @@ def bloom(name, mats, length=3.0, seed=1, opened=1.0, curl=1.0, stamens=True):
         inner = i % 2 == 1
         ln = L * (1.0 if inner else 0.96) * rnd.uniform(0.95, 1.05)
         parts.append(tepal(
-            "%s_tepal%d" % (name, i), mats["petal"], ln, (0.2 if inner else 0.16) * L * rnd.uniform(0.95, 1.05),
+            "%s_tepal%d" % (name, i), mats["petal"], ln, (0.2 if inner else 0.16) * L * rnd.uniform(0.95, 1.05) * broad,
             az=TAU * i / 6.0 + rnd.uniform(-0.06, 0.06),
             a0=rnd.uniform(8.0, 10.5), a1=(56.0 if inner else 62.0) * opened + rnd.uniform(-6.0, 6.0),
             a2=(62.0 * opened) + (rnd.uniform(50.0, 95.0) if inner else rnd.uniform(62.0, 110.0)) * curl,
@@ -290,42 +319,46 @@ def bloom(name, mats, length=3.0, seed=1, opened=1.0, curl=1.0, stamens=True):
             cup0=1.45 if inner else 1.4, cup1=rnd.uniform(0.5, 0.7), cup2=rnd.uniform(-0.6, -0.2),
             twist=rnd.uniform(-0.4, 0.4), side=rnd.uniform(-0.05, 0.05),
             ruffle=rnd.uniform(0.016, 0.027) * (1.15 if inner else 0.85), ruffle_f=rnd.uniform(2.2, 3.2), phase=rnd.uniform(0.0, TAU),
-            groove=rnd.uniform(0.15, 0.22), r0=(0.027 if inner else 0.037) * L, z0=(-0.04 if inner else -0.05) * L,
-            thick=0.0065 * L, claw=0.26 if inner else 0.36))
+            groove=rnd.uniform(0.15, 0.22) * relief, r0=(0.027 if inner else 0.037) * L, z0=(-0.04 if inner else -0.05) * L,
+            thick=0.0065 * L * edge, claw=0.26 if inner else 0.36, pleat=0.07 * relief))
     if stamens:
+        own = random.Random(seed * 31 + 7)
         for i in range(6):
             az = TAU * (i + 0.5) / 6.0 + rnd.uniform(-0.2, 0.2)
             ln = L * rnd.uniform(0.6, 0.7)
             b1 = rnd.uniform(16.0, 30.0) * opened
             p = Vector((0.012 * L * math.cos(az), 0.012 * L * math.sin(az), 0.03 * L))
             path = [p.copy()]
-            n = 16
+            n = 20
             drift = rnd.uniform(-0.25, 0.25)
             for s in range(1, n + 1):
                 f = s / n
-                b = math.radians(2.0 + (b1 - 2.0) * f ** 1.4)
+                # a thin thread arcing gently out of the throat, a little more at its end under the anther's weight
+                b = math.radians(2.0 + (b1 - 2.0) * f ** 1.4 + 9.0 * opened * f ** 4)
                 a = az + drift * f
                 p = p + Vector((math.sin(b) * math.cos(a), math.sin(b) * math.sin(a), math.cos(b))) * (ln / n)
                 path.append(p.copy())
-            parts.append(tube("%s_filament%d" % (name, i), path, [0.0095 * L * (1.0 - 0.45 * s / n) for s in range(n + 1)], 8, mats["filament"]))
-            # the anther: two long lobes side by side, hung by its middle across the filament's tip
+            parts.append(tube("%s_filament%d" % (name, i), path, [0.0078 * L * (1.0 - 0.55 * s / n) for s in range(n + 1)], 8, mats["filament"]))
+            # the anther: balanced by the middle of its back on the filament's tip, lying across it at
+            # whatever angle it swung to, tipped and rolled a little, no two alike
             tip, heading = path[-1], (path[-1] - path[-2]).normalized()
-            r, half = 0.009 * L, rnd.uniform(0.034, 0.044) * L
-            # it lies crosswise, at whatever angle it happened to swing to, and tipped a little
+            size = rnd.uniform(0.034, 0.044) / 0.039
             turn = rnd.uniform(0.0, math.pi)
             ref = Vector((math.cos(az + math.pi / 2), math.sin(az + math.pi / 2), 0.0))
             ref = (ref - heading * ref.dot(heading)).normalized()
             other = heading.cross(ref).normalized()
-            long_axis = (ref * math.cos(turn) + other * math.sin(turn) + heading * rnd.uniform(-0.35, 0.35)).normalized()
-            x_axis = long_axis.cross(heading).normalized()
+            long_axis = (ref * math.cos(turn) + other * math.sin(turn) + heading * rnd.uniform(-0.35, 0.35) * 1.5).normalized()
+            x_axis = (heading - long_axis * heading.dot(long_axis)).normalized()
+            roll = Matrix.Rotation(own.uniform(-0.5, 0.5), 4, long_axis)
+            x_axis = (roll @ x_axis.to_4d()).to_3d().normalized()
             y_axis = long_axis.cross(x_axis).normalized()
             m = Matrix((x_axis, y_axis, long_axis)).transposed().to_4x4()
-            m.translation = tip + heading * r * 0.5
-            for side_ in (-1.0, 1.0):
-                lobe = _capsule("%s_anther%d_%d" % (name, i, int(side_ + 1)), r, half, mats["anther"])
-                lobe.matrix_world = m @ Matrix.Translation(Vector((side_ * r * 0.72, 0.0, 0.0)))
-                parts.append(lobe)
-        # the pistil: a longer style leaning out of the stamens, a three-lobed stigma on it
+            width = 0.036 * L * own.uniform(0.9, 1.1)
+            m.translation = tip + x_axis * width * 0.3
+            ob = anther("%s_anther%d" % (name, i), mats["anther"], 0.122 * L * size, width, own.uniform(0.35, 0.8))
+            ob.matrix_world = m
+            parts.append(ob)
+        # the pistil: a longer style leaning out of the stamens, a small three-lobed knob of a stigma on it
         az = rnd.uniform(0.0, TAU)
         ln = L * rnd.uniform(0.72, 0.8)
         p = Vector((0.0, 0.0, 0.03 * L))
@@ -336,14 +369,15 @@ def bloom(name, mats, length=3.0, seed=1, opened=1.0, curl=1.0, stamens=True):
             b = math.radians(1.0 + 10.0 * opened * f ** 1.6)
             p = p + Vector((math.sin(b) * math.cos(az), math.sin(b) * math.sin(az), math.cos(b))) * (ln / n)
             path.append(p.copy())
-        parts.append(tube(name + "_style", path, [0.019 * L * (1.0 - 0.3 * s / n) for s in range(n + 1)], 10, mats["filament"]))
+        # the style thickens a little into the stigma
+        parts.append(tube(name + "_style", path, [0.016 * L * (1.0 - 0.38 * s / n + 0.32 * max(0.0, s / n - 0.86) / 0.14) for s in range(n + 1)], 10, mats["filament"]))
         heading = (path[-1] - path[-2]).normalized()
         for k in range(3):
-            a = TAU * k / 3.0
+            a = TAU * k / 3.0 + 0.4
             side_dir = Vector((math.cos(a), math.sin(a), 0.0))
             side_dir = (side_dir - heading * side_dir.dot(heading)).normalized()
-            lobe = kit.sphere("%s_stigma%d" % (name, k), 0.026 * L, mats["stigma"], 14, 8, 0.8)
-            lobe.location = path[-1] + heading * 0.012 * L + side_dir * 0.017 * L
+            lobe = kit.sphere("%s_stigma%d" % (name, k), 0.0185 * L, mats["stigma"], 14, 8, 0.85)
+            lobe.location = path[-1] + heading * 0.006 * L + side_dir * 0.0125 * L
             parts.append(lobe)
     # the receptacle: where six tepals narrow into one green stalk
     prof = [(0.0, -0.24 * L), (0.026 * L, -0.23 * L), (0.03 * L, -0.16 * L), (0.04 * L, -0.09 * L), (0.05 * L, -0.03 * L), (0.05 * L, 0.0), (0.042 * L, 0.03 * L), (0.0, 0.045 * L)]
@@ -444,9 +478,9 @@ def stalk(name, root, mat, heading, length, length_scale=3.0, r=None, end_r=None
     return tube(name, path, radii, 14, mat)
 
 
-def lying_lily(name, mats, loc=(0.0, 0.0), tilt=55.0, heading=0.0, spin=0.0, stalk_to=None, stalk_len=3.0, seed=1, length=3.2, opened=1.0, curl=1.0, face_up=False):
+def lying_lily(name, mats, loc=(0.0, 0.0), tilt=55.0, heading=0.0, spin=0.0, stalk_to=None, stalk_len=3.0, seed=1, length=3.2, opened=1.0, curl=1.0, face_up=False, **shape):
     """A whole flower laid on the page with its stalk. Returns (root, everything it is made of)."""
-    parts = bloom(name, mats, length, seed, opened, curl)
+    parts = bloom(name, mats, length, seed, opened, curl, **shape)
     root = pose(name + "_root", parts, tilt, heading, spin, loc, rest=parts[:6])
     if face_up:
         # seen from above, a flower that faces up rests on its open tepals and its throat dips below the page
