@@ -227,7 +227,7 @@ export function EndScreen({
       {data.contributions?.length ? (
         <a
           href={reportHref(locale)}
-          className={cn("mt-6 inline-flex min-h-11 items-center px-3 text-xs underline-offset-4 hover:underline", dark ? "text-white/45 hover:text-white/80" : "text-black/45 hover:text-black/75")}
+          className={cn("mt-6 inline-flex min-h-11 items-center px-3 text-xs underline-offset-4 hover:underline", dark ? "text-white/60 hover:text-white/85" : "text-black/55 hover:text-black/80")}
           data-testid="report-note"
         >
           {(REPORT[locale] ?? REPORT.en).label}

@@ -42,6 +42,9 @@ test.describe("with the switch off, as it is live", () => {
     expect((await request.patch("/api/group/6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b", { data: { closed: true } })).status()).toBe(404);
     expect((await request.delete("/api/group/6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b")).status()).toBe(404);
     expect((await request.post("/api/group/6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b/entries/7f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b", { data: { action: "approve" } })).status()).toBe(404);
+    // The link in a contributor's confirming email: asking and pressing are both not there.
+    expect((await request.get("/api/group/confirm?t=anything&l=en")).status()).toBe(404);
+    expect((await request.post("/api/group/confirm?t=anything&l=en")).status()).toBe(404);
   });
 
   test("the /c/ address is never redirected to a language: it answers where it was asked", async ({ request }) => {
@@ -696,6 +699,36 @@ test.describe("the reference template and the editor", () => {
     await expect(page.getByTestId("contribution")).toHaveCount(6);
     await expect(page.getByTestId("contribution").first()).toContainText("Naciste a las cuatro de la mañana");
     await expect(page.getByText("Firman")).toBeVisible();
+  });
+
+  test("a card with notes ends with one small Report link: an email to a person that names nothing of the card", async ({ page }) => {
+    await page.goto("/demo/group-reference?cover=classic");
+    const report = page.getByTestId("report-note");
+    await expect(report).toHaveCount(1);
+    await report.scrollIntoViewIfNeeded();
+    await expect(report).toHaveText("Report a note");
+    const href = decodeURIComponent((await report.getAttribute("href")) ?? "");
+    expect(href.startsWith("mailto:")).toBe(true);
+    expect(href).toContain("The card's link:");
+    for (const secret of ["Tom", "Nora", "Mum", "Okonkwo", "group-reference", "demo0000", "/g/", "/demo/"]) expect(href).not.toContain(secret);
+    // Big enough to tap, quiet enough not to be the screen's point, and it comes after the buttons.
+    const box = (await report.boundingBox())!;
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    const lastButton = (await page.getByRole("button", { name: /Make one for someone/ }).boundingBox())!;
+    expect(box.y).toBeGreaterThan(lastButton.y + lastButton.height - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+
+    await page.goto("/es/demo/group-reference?cover=classic");
+    await expect(page.getByTestId("report-note")).toHaveText("Denunciar una nota");
+  });
+
+  test("the same template with no notes from a group has no Report link, like every gift before it", async ({ page, isMobile }) => {
+    // A new draft holds no notes: the editor's preview is the gift as it would be sent today.
+    await page.goto("/create/group-reference");
+    if (isMobile) await page.getByRole("tab", { name: "Preview" }).click();
+    await expect(page.getByText("The end. For now.")).toBeAttached();
+    await expect(page.getByTestId("report-note")).toHaveCount(0);
+    await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
   });
 
   test("the editor shows the group card section only with the switch on, and only on a template made for it", async ({ page }) => {
