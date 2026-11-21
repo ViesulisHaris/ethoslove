@@ -40,6 +40,8 @@ export type HeroFlatlayArt = {
  * leaves, over the still cover, which stays underneath so nothing flickers when the film arrives
  * and nothing is missing where it can't play. No film at all for someone who asked for less
  * motion or less data, or on a browser that can't play it: the still cover is the whole of it.
+ * Most of the recordings open on the demo page's own bar for a second or so; the film starts past
+ * it (`frame.from`) and comes back to the same point, so the bar is never in the phone.
  * The covers and films are 13:20 and a phone's screen is taller, so they fill it and lose a little
  * off each side; `frame` moves or shrinks a gift's picture where that would cut something off.
  *
@@ -62,6 +64,8 @@ export type HeroFrame = {
   position?: string;
   /** Under 1, the cover is drawn smaller than the screen's height and a soft copy of itself fills what is left above and below. */
   zoom?: number;
+  /** The second the film starts from, and loops back to: past the demo page's own bar, which most recordings open on (content/template-film-starts.ts). */
+  from?: number;
 };
 
 export function HeroFlatlay({
@@ -91,6 +95,7 @@ export function HeroFlatlay({
   const t = useTranslations("templates");
   const [live, setLive] = useState(false);
   const film = useRef<HTMLVideoElement>(null);
+  const from = frame?.from ?? 0;
 
   // The film plays while the lying phone is on screen, and only for someone it suits. All of it is
   // done to the element itself: no state, so the first paint is the still cover on the server and here.
@@ -100,9 +105,23 @@ export function HeroFlatlay({
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sparing = () => (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
     const suits = () => !calm.matches && !sparing() && video.canPlayType("video/webm") !== "";
-    const show = () => video.setAttribute("data-on", "");
     const hide = () => video.removeAttribute("data-on");
+    // Seen only once it is really playing, and past the recording's opening bar.
+    const show = () => {
+      if (!video.paused && !video.seeking && video.currentTime >= from) video.setAttribute("data-on", "");
+    };
+    const skip = () => {
+      if (from > 0 && video.currentTime < from) video.currentTime = from;
+    };
+    // A film that starts late can't use the browser's own loop, which would go back to the bar.
+    const again = () => {
+      video.currentTime = from;
+      video.play().catch(hide);
+    };
+    video.addEventListener("loadedmetadata", skip);
     video.addEventListener("playing", show);
+    video.addEventListener("timeupdate", show);
+    video.addEventListener("ended", again);
     video.addEventListener("error", hide);
     const watcher = new IntersectionObserver(
       ([entry]) => {
@@ -124,11 +143,14 @@ export function HeroFlatlay({
     return () => {
       watcher.disconnect();
       calm.removeEventListener("change", settle);
+      video.removeEventListener("loadedmetadata", skip);
       video.removeEventListener("playing", show);
+      video.removeEventListener("timeupdate", show);
+      video.removeEventListener("ended", again);
       video.removeEventListener("error", hide);
       video.pause();
     };
-  }, [preview, live]);
+  }, [preview, live, from]);
 
   // How the 13:20 cover sits in the taller screen: filling it, held where `frame` says, or drawn a little smaller.
   const zoom = frame?.zoom ?? 1;
@@ -156,7 +178,7 @@ export function HeroFlatlay({
             <img src={`/templates/${slug}/poster.jpg`} alt="" className="absolute w-full" style={held} />
             {preview ? (
               // Over the still cover, unseen until it is really playing: no black frame, no flicker, and the cover where it can't play.
-              <video ref={film} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" style={held} />
+              <video ref={film} muted loop={from === 0} playsInline preload="none" aria-hidden="true" tabIndex={-1} className="pointer-events-none absolute w-full opacity-0 transition-opacity duration-300 data-on:opacity-100" style={held} />
             ) : null}
             {live ? null : (
               <>

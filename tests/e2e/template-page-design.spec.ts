@@ -1,4 +1,5 @@
 import { devices, expect, test, webkit, type Page } from "@playwright/test";
+import { templateFilmStart } from "../../src/content/template-film-starts";
 
 /**
  * A gift's page as the owner's mock-up lays it out (docs/marketing/growth-build/
@@ -305,7 +306,18 @@ test("the gift's film plays in the lying phone while it is on screen, and moves 
   await expect.poll(async () => (await film(page)).opacity).toBe(1);
   const t0 = f.at;
   await expect.poll(async () => (await film(page)).at).toBeGreaterThan(t0);
-  expect(await hero.locator("video").evaluate((v: HTMLVideoElement) => [v.muted, v.loop, v.playsInline, v.controls])).toEqual([true, true, true, false]);
+  expect(await hero.locator("video").evaluate((v: HTMLVideoElement) => [v.muted, v.playsInline, v.controls])).toEqual([true, true, false]);
+  // The recording opens on the demo page's own bar ("All templates … Use this template"). The film
+  // is first seen past it, and comes back to the same point when it has gone round, never to the bar.
+  const from = templateFilmStart("the-letter");
+  expect(from).toBeGreaterThan(1);
+  expect(t0).toBeGreaterThanOrEqual(from);
+  await hero.locator("video").evaluate((v: HTMLVideoElement) => void (v.currentTime = v.duration - 0.4));
+  await expect.poll(async () => (await film(page)).at, { timeout: 10000 }).toBeLessThan(from + 2);
+  const round = await film(page);
+  expect(round.at).toBeGreaterThanOrEqual(from);
+  expect(round.paused).toBe(false);
+  expect(round.on).toBe(true);
   // Nothing on the page moved when it arrived.
   expect(await box()).toBe(before);
   // It stops when the phone has scrolled away, and picks up again when it is back.

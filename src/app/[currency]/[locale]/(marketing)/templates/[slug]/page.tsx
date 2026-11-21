@@ -15,6 +15,7 @@ import {
 } from "@/lib/seo";
 import { templateGuide } from "@/content/template-guides";
 import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
+import { templateFilmStart } from "@/content/template-film-starts";
 import { templateSeo } from "@/content/template-seo";
 import { templateSteps } from "@/content/template-steps";
 import { TEMPLATE_SLUGS, getManifest } from "@/templates/manifests";
@@ -205,7 +206,7 @@ export default async function TemplateDetailPage({
              * lilies stop short of the words and its left-hand one is not lost off the page.
              */}
             <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] xl:order-first xl:[--fl-down:1.2] xl:[--fl-up:1.2] xl:[--hero-phone:clamp(14rem,17.8vw,16rem)]">
-              <HeroFlatlay slug={manifest.slug} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={theme.cover} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
+              <HeroFlatlay slug={manifest.slug} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ ...theme.cover, from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
             </div>
           </div>
         </section>
