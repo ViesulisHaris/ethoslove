@@ -83,7 +83,11 @@ describe("the three checks of “The experience”", () => {
 
   it("are the gift's own: what they do, how many photos it is made of, what it asks of their phone", () => {
     const of = (slug: string, note = false) => experienceChecks(getManifest(slug)!, TEMPLATE_STEPS[slug].line.en, note, t("en"));
-    expect(of("arcade")[0]).toBe(TEMPLATE_STEPS.arcade.line.en);
+    // The gift's own line, without the full stop it has where it is written: a check has none.
+    expect(TEMPLATE_STEPS.arcade.line.en).toMatch(/\.$/);
+    expect(`${of("arcade")[0]}.`).toBe(TEMPLATE_STEPS.arcade.line.en);
+    // Only a full stop is taken off: a line that ends on a word keeps its last letter.
+    expect(experienceChecks(getManifest("arcade")!, "They play", false, t("en"))[0]).toBe("They play");
     // Photos: none needed, one is enough, or a number to start from.
     expect(of("bloom")[1]).toBe("Works without photos, or with up to 8");
     expect(of("passport")[1]).toBe("One photo is enough; it holds 10");

@@ -855,6 +855,9 @@
     "fullscreenDemo": "Open full-screen demo",
     "included": "What's included",
     "includedSpecial": "With “Make it special”",
+    "noteLead": {
+      "the-letter": "Tap to break the seal. The letter slides out and unfolds on a candle-lit desk, and your words appear in handwriting."
+    },
     "featurePhotos": "Up to {max} photos",
     "style": {
       "cinematic": "Cinematic",

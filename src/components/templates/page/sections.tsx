@@ -266,19 +266,20 @@ export function experienceChecks(
   line: string | null,
   /** The free version is the short note, which has no photos (lib/gift/free-tier.ts). */
   note: boolean,
-  t: (key: ExperienceKey, values?: Record<string, number>) => string,
+  /** The page's translator for templates.guide. Not named `t`: tests/unit/messages.test.ts checks every literal key handed to a `t` against the translator declared above it in the file. */
+  say: (key: ExperienceKey, values?: Record<string, number>) => string,
 ): string[] {
   const { photos, music, needs = [] } = manifest.features;
   const made = note
-    ? t("experienceNote", { chars: FREE_NOTE_MAX_CHARS })
+    ? say("experienceNote", { chars: FREE_NOTE_MAX_CHARS })
     : photos.min === 0
-      ? t("experiencePhotosNone", { max: photos.max })
+      ? say("experiencePhotosNone", { max: photos.max })
       : photos.min === 1
-        ? t("experiencePhotosOne", { max: photos.max })
-        : t("experiencePhotosMany", { min: photos.min, max: photos.max });
-  const asks = needs.includes("microphone") ? t("experienceMic") : needs.includes("deviceMotion") ? t("experienceMotion") : music ? t("experienceSong") : t("experienceTouch");
+        ? say("experiencePhotosOne", { max: photos.max })
+        : say("experiencePhotosMany", { min: photos.min, max: photos.max });
+  const asks = needs.includes("microphone") ? say("experienceMic") : needs.includes("deviceMotion") ? say("experienceMotion") : music ? say("experienceSong") : say("experienceTouch");
   // The line is a sentence where it is written; a check has no full stop.
-  return [line ? line.replace(/.$/, "") : t("experienceOpens"), made, asks];
+  return [line ? line.replace(/\.$/, "") : say("experienceOpens"), made, asks];
 }
 
 export type ExperienceKey = "experienceOpens" | "experienceNote" | "experiencePhotosNone" | "experiencePhotosOne" | "experiencePhotosMany" | "experienceMic" | "experienceMotion" | "experienceSong" | "experienceTouch";

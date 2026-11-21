@@ -561,6 +561,9 @@ test("The Letter's page never lists under “Free” what the free note does not
       // The list of photos, captions and a video is what “Make it special” adds, and says so.
       await expect(heading).toHaveText(special);
       await expect(hero).not.toContainText(included);
+      // Nor does the sentence beside the phone promise photos dropping in.
+      await expect(hero).not.toContainText(/photos drop in|fotos caen/i);
+      await expect(hero).toContainText(/handwriting|escritas a mano/i);
       // The band beside the picture promises no photos either, and gives the note's own length.
       await expect(experience).toContainText(chars);
       await expect(experience).not.toContainText(/photo|foto/i);
@@ -572,9 +575,9 @@ test("The Letter's page never lists under “Free” what the free note does not
     }
   }
   if (NOTE_FOR_EVERYONE) {
-    // Constellations has no free version then: it is sold, its photos come with it, and its list is plain.
+    // Constellations has no free version then: it is sold, its photos come with it, and its list is plain (in the language the last page left).
     await page.goto("/templates/constellations");
-    await expect(page.locator("[data-page-theme] > section").first().getByRole("heading", { level: 2 })).toHaveText(/what.s included/i);
+    await expect(page.locator("[data-page-theme] > section").first().getByRole("heading", { level: 2 })).toHaveText(/what.s included|qué incluye/i);
   }
 });
 

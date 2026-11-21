@@ -108,6 +108,9 @@ export default async function TemplateDetailPage({
   // captions (lib/gift/free-tier.ts): the list under the hero is then what "Make it special" adds,
   // and says so, where it used to stand under "Free" as if it came with the free note.
   const note = free && noteForEveryone() && NOTE_TEMPLATES.includes(manifest.slug);
+  // And the hero says what the note does: a description that ends on "your photos drop in as polaroids"
+  // gives way to the same sentences without the photos (messages: templates.noteLead).
+  const lead = note && t.has(`templates.noteLead.${manifest.slug}`) ? t(`templates.noteLead.${manifest.slug}`) : about.lead;
 
   // What's included: only what this template has. What it lacks is not a list to read.
   const included = [
@@ -167,7 +170,7 @@ export default async function TemplateDetailPage({
                   <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
                 </h1>
                 <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{manifest.tagline[l]}</p>
-                {about.lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{about.lead}</p> : null}
+                {lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{lead}</p> : null}
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link

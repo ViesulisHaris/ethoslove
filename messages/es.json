@@ -855,6 +855,9 @@
     "fullscreenDemo": "Abrir demo a pantalla completa",
     "included": "Qué incluye",
     "includedSpecial": "Con «Hazlo especial»",
+    "noteLead": {
+      "the-letter": "Toca para romper el sello. La carta sale del sobre y se despliega sobre un escritorio a la luz de una vela, y tus palabras aparecen escritas a mano."
+    },
     "featurePhotos": "Hasta {max} fotos",
     "style": {
       "cinematic": "Cinemática",
