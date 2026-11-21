@@ -9,6 +9,7 @@ import { NOTE_TEMPLATES, freeTierAtPublish, oldFreeGiftAddsPhotos, sellsNotePhot
 import { EVERY_GROUP, groupUnlock, photosUnlock } from "@/lib/pricing/products";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { markGroupSent } from "@/lib/group/store";
+import { sendSignedGiftEmails } from "@/lib/group/signed-email";
 import { GIFTS_BUCKET, giftIdOfStoragePath, storageObjectKey } from "@/lib/gift/assets";
 import { deleteGiftStorage } from "@/lib/gift/storage-cleanup";
 import { giftStoragePaths } from "@/lib/gift/storage-paths";
@@ -314,7 +315,12 @@ export async function publishGift(raw: unknown): Promise<ActionResult<{ shortId:
 
   // A group card that has gone out takes no more notes: its link closes. Only where group cards are
   // on and the template is one; a failure here never undoes a publish that has happened.
-  if (manifest.features.group && groupGiftsEnabled()) await markGroupSent(writer, gift.id, Date.now()).catch((e) => console.error(`[group] sent not recorded: ${(e as Error).message}`));
+  if (manifest.features.group && groupGiftsEnabled()) {
+    await markGroupSent(writer, gift.id, Date.now()).catch((e) => console.error(`[group] sent not recorded: ${(e as Error).message}`));
+    // "Here's the card you signed", to whoever asked for it and confirmed: now if it is live; a
+    // scheduled card sends it when it unlocks (lib/gift/promote.ts and the daily job).
+    if (status === "live") await sendSignedGiftEmails(writer, gift.id, Date.now()).catch((e) => console.error(`[group] signed emails not sent: ${(e as Error).message}`));
+  }
 
   const { data: row } = await ctx.supabase.from("gifts").select("short_id").eq("id", gift.id).single();
   revalidatePath("/dashboard");

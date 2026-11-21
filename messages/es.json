@@ -3125,6 +3125,15 @@
       "reminderOffDoneBody": "No más correos antes de {day}.",
       "reminderOffGoneBody": "Ese recordatorio ya estaba quitado."
     },
+    "group": {
+      "confirmTitle": "¿Te enviamos la tarjeta terminada?",
+      "confirmBody": "Te la enviaremos a esta dirección una sola vez, cuando la tarjeta salga, y después borraremos la dirección.",
+      "confirmButton": "Sí, envíamela",
+      "doneTitle": "Apuntado.",
+      "doneBody": "La tarjeta llegará a esta dirección cuando se envíe. Si ya ha salido, va de camino.",
+      "goneTitle": "Este enlace ha caducado.",
+      "goneBody": "La nota a la que pertenecía ya no está, así que no hemos guardado nada y no llegará nada más."
+    },
     "reactionPrivate": {
       "title": "¿Mantener esta reacción en privado?",
       "body": "No se mostrará en la web de Ethos, ni siquiera sin nombres. Sigue siendo tuya, en tu panel.",

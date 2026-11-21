@@ -3125,6 +3125,15 @@
       "reminderOffDoneBody": "No more emails before {day}.",
       "reminderOffGoneBody": "That reminder was already removed."
     },
+    "group": {
+      "confirmTitle": "Send you the finished card?",
+      "confirmBody": "We'll send it to this address once, when the card goes out, and then delete the address.",
+      "confirmButton": "Yes, send it to me",
+      "doneTitle": "You're on the list.",
+      "doneBody": "The card will come to this address when it's sent. If it has gone already, it's on its way now.",
+      "goneTitle": "This link has expired.",
+      "goneBody": "The note it belonged to is no longer there, so nothing was kept and nothing more will come."
+    },
     "reactionPrivate": {
       "title": "Keep this reaction private?",
       "body": "It won't be shown on Ethos's site, even without names. It stays yours, on your dashboard.",

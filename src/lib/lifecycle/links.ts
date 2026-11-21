@@ -20,7 +20,8 @@ export type TokenPurpose =
   | "keep-reminder-off"
   | "reaction-private"
   | "publish-finish"
-  | "personal-price";
+  | "personal-price"
+  | "group-confirm";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
@@ -51,6 +52,9 @@ const VALUE: Record<TokenPurpose, RegExp> = {
   // A personal price, in an offer email (lib/commerce/personal-price.ts): the account it was sent to
   // and when it ends (Unix seconds). The account id is what makes it once-only, not who uses it.
   "personal-price": /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:\d{10}$/,
+  // "Yes, send it to me", in the confirmation someone who added a note to a group card is sent: the
+  // note's id (a random one that opens nothing; never the gift's).
+  "group-confirm": UUID,
 };
 
 const encoder = new TextEncoder();

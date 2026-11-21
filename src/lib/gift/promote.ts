@@ -2,6 +2,8 @@ import "server-only";
 
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { notifyUnlocked } from "@/lib/email/notify";
+import { groupGiftsEnabled } from "@/lib/group/flag";
+import { sendSignedGiftEmails } from "@/lib/group/signed-email";
 
 /**
  * Flips a scheduled gift to live once its unlock time has passed. Called from the recipient
@@ -20,5 +22,7 @@ export async function promoteScheduledGift(giftId: string): Promise<boolean> {
     .select("id");
   const flipped = (data?.length ?? 0) > 0;
   if (flipped) void notifyUnlocked(giftId).catch(() => {});
+  // A scheduled group card has just gone live: whoever signed it and asked gets its link (lib/group).
+  if (flipped && groupGiftsEnabled()) void sendSignedGiftEmails(admin, giftId, Date.now()).catch(() => {});
   return flipped;
 }

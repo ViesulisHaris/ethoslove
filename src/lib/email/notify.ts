@@ -30,6 +30,7 @@ import {
 } from "@/emails/lifecycle";
 import { MembershipEndedEmail, MembershipPaymentEmail, MembershipRenewalEmail, MembershipWelcomeEmail, membershipSubject } from "@/emails/membership";
 import { KeepConfirmEmail, KeepLinkEmail, keepConfirmSubject, keepLinkSubject, type KeptDay } from "@/emails/keep";
+import { GroupConfirmEmail, GroupNudgeEmail, GroupSignedEmail, groupConfirmSubject, groupNudgeSubject, groupSignedSubject } from "@/emails/group";
 import { accountUrl, pricingUrl } from "@/lib/commerce/db";
 import type { Pass } from "@/lib/commerce/passes";
 import { formatAmount, membershipAmount, type Currency, type MembershipPlan } from "@/lib/pricing/products";
@@ -407,6 +408,30 @@ export async function sendKeepConfirm({ to, locale, confirmUrl, neverUrl }: { to
 export async function sendKeepLink({ to, locale, giftUrl, days, sender = "", stopUrl }: { to: string; locale: L; giftUrl: string; days: KeptDay[]; sender?: string; stopUrl: string }): Promise<boolean> {
   return safely("keep link", async () =>
     deliver("keep link", { to, subject: keepLinkSubject(locale, sender), react: KeepLinkEmail({ locale, giftUrl, days, sender, stopUrl }), headers: unsubscribeHeaders(stopUrl) }),
+  );
+}
+
+/**
+ * A group card (src/lib/group). The confirmation an address gets when it was left with a note: it
+ * names nobody, and `neverUrl` puts the address on the list nothing is ever sent to.
+ */
+export async function sendGroupConfirm({ to, locale, confirmUrl, neverUrl }: { to: string; locale: L; confirmUrl: string; neverUrl: string }): Promise<boolean> {
+  return safely("group confirm", async () =>
+    deliver("group confirm", { to, subject: groupConfirmSubject(locale), react: GroupConfirmEmail({ locale, confirmUrl, neverUrl }), headers: unsubscribeHeaders(neverUrl) }),
+  );
+}
+
+/** "Here's the card you signed": once per note (`onceKey` holds that on Resend's side too), to an address that said yes. */
+export async function sendGroupSigned({ to, locale, fromName, giftUrl, hasPassword, makeUrl, onceKey }: { to: string; locale: L; fromName: string; giftUrl: string; hasPassword: boolean; makeUrl: string; onceKey: string }): Promise<boolean> {
+  return safely("group signed", async () =>
+    deliver("group signed", { to, subject: groupSignedSubject(locale, fromName), react: GroupSignedEmail({ locale, fromName, giftUrl, hasPassword, makeUrl }), idempotencyKey: onceKey }),
+  );
+}
+
+/** To the sender: notes are waiting. The caller holds it to one a day per group. */
+export async function sendGroupNudge({ to, locale, count, forName, onceKey }: { to: string; locale: L; count: number; forName: string; onceKey: string }): Promise<boolean> {
+  return safely("group nudge", async () =>
+    deliver("group nudge", { to, subject: groupNudgeSubject(locale, count, forName), react: GroupNudgeEmail({ locale, count, forName, editorUrl: pageUrl(locale, "/dashboard") }), idempotencyKey: onceKey }),
   );
 }
 

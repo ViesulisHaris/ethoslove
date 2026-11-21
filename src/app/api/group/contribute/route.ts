@@ -4,6 +4,7 @@ import type { Db } from "@/lib/commerce/db";
 import { cleanEntry, cleanText } from "@/lib/group/clean";
 import { answer, failed, notThere, switchedOff, unavailable } from "@/lib/group/http";
 import { GROUP_LIMITS } from "@/lib/group/limits";
+import { askToConfirm, nudgeSender } from "@/lib/group/mail";
 import { groupAgreed, groupEmailConsent } from "@/lib/group/notice";
 import { encodePhoto } from "@/lib/group/photo";
 import { addEntry, groupByToken, linkState } from "@/lib/group/store";
@@ -16,14 +17,16 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 export const runtime = "nodejs";
 export const maxDuration = 20;
 
-const address = z.email().max(254);
+const emailAddress = z.email().max(254);
 
 /**
  * Someone with a group card's link adds their note: multipart { token, name, note, agree=1, photo?,
  * email? } → { ok, withdraw }. No account, and nothing here shows or takes money. What they wrote is
  * made one line of plain text with no addresses in it; a photo is decoded and written out again as
  * WebP, so nothing of the file that arrived is kept; and none of it reaches the gift until its
- * sender says yes. `withdraw` is the secret the page keeps to take the note back.
+ * sender says yes. `withdraw` is the secret the page keeps to take the note back. An address left
+ * with the note is sent one confirmation that names nobody; the answer here is the same whether
+ * or not that email went.
  *
  * Forty an hour from one connection (a family at one table shares one) and thirty an hour to one
  * link from it; the database holds each group to its own number waiting and sixty in all. No IP
@@ -33,7 +36,8 @@ const address = z.email().max(254);
 export async function POST(request: NextRequest) {
   if (switchedOff()) return notThere();
   const admin = getSupabaseAdminClient() as Db | null;
-  if (!admin || !linkSecret()) return unavailable();
+  const secret = linkSecret();
+  if (!admin || !secret) return unavailable();
   // A body over the limit is refused before any of it is read.
   if (Number(request.headers.get("content-length") ?? 0) > GROUP_LIMITS.bodyBytes) return answer({ error: "too_large" }, 413);
   const ip = clientIp(request.headers);
@@ -65,7 +69,7 @@ export async function POST(request: NextRequest) {
     if (!words.ok) return answer({ error: words.error }, 400);
 
     const typed = cleanText(form.get("email")).toLowerCase();
-    const parsed = typed ? address.safeParse(typed) : null;
+    const parsed = typed ? emailAddress.safeParse(typed) : null;
     if (parsed && !parsed.success) return answer({ error: "invalid_email" }, 400);
 
     let photo: { webp: Buffer; width: number; height: number } | null = null;
@@ -78,6 +82,7 @@ export async function POST(request: NextRequest) {
     }
 
     const withdraw = withdrawSecret();
+    const address = parsed?.success ? { address: parsed.data, sha256: await emailKey(parsed.data), consent: groupEmailConsent(group.locale) } : null;
     const added = await addEntry(
       admin,
       group,
@@ -86,12 +91,16 @@ export async function POST(request: NextRequest) {
         note: words.note,
         agreed: groupAgreed(group.locale, group.from_name),
         photo,
-        email: parsed?.success ? { address: parsed.data, sha256: await emailKey(parsed.data), consent: groupEmailConsent(group.locale) } : null,
+        email: address,
         withdrawSha256: sha256Hex(withdraw),
       },
       now,
     );
     if (!added.ok) return added.error === "full" ? answer({ error: "full" }, 409) : unavailable();
+    // The note is in. Neither email is allowed to undo that: one confirmation to the address left
+    // with it (nothing else goes there until it says yes), and a word to the sender, once a day.
+    if (address) await askToConfirm(admin, { entryId: added.id, email: address.address, emailSha256: address.sha256, locale: group.locale, secret, now }).catch((e) => console.error(`[group] confirmation not sent: ${(e as Error).message}`));
+    await nudgeSender(admin, group, now).catch((e) => console.error(`[group] sender not told: ${(e as Error).message}`));
     return answer({ ok: true, withdraw });
   } catch (error) {
     return failed(error);
