@@ -4,7 +4,7 @@ import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
-import { CLOSED_BLOCK_WORDS, fitSentences, heroKeyword, heroLead } from "@/components/templates/page/lead";
+import { CLOSED_BLOCK_WORDS, TAGLINE_WORDS, fitSentences, heroKeyword, heroLead, heroWords } from "@/components/templates/page/lead";
 import { TEMPLATE_LEADS, templateLead } from "@/content/template-leads";
 import { templateSeo } from "@/content/template-seo";
 
@@ -88,12 +88,44 @@ describe("the text budget of a gift's page", () => {
     expect(none.length, none.join(", ")).toBeLessThanOrEqual(TEMPLATE_MANIFESTS.length / 2);
   });
 
+  it("the italic line is a line: a tagline that is a paragraph gives its first sentence, and the rest stands under it", () => {
+    // The deep test of 21 Nov 2026: seven gifts had 21 to 31 words of italic display type under the
+    // name, four or five rows on a phone, and Light the Candles' pushed "Make this gift" off a small phone's first screen.
+    const split: string[] = [];
+    for (const m of TEMPLATE_MANIFESTS) {
+      const long = LOCALES.some((l) => words(m.tagline[l]) > TAGLINE_WORDS);
+      for (const l of LOCALES) {
+        const hero = heroWords(m.tagline, m.description[l], l);
+        if (!long) {
+          // Every other gift's hero is as it was: its tagline, then the description's opening.
+          expect(hero, `${m.slug} ${l}`).toEqual({ line: m.tagline[l], ...heroLead(m.description[l]) });
+          continue;
+        }
+        if (l === "en") split.push(m.slug);
+        // One sentence in italics and the rest of the tagline under it, where the description's opening stood; the closed block keeps what it kept.
+        expect(hero.line, `${m.slug} ${l}`).toMatch(/^[^.!?]+[.!?]$/);
+        expect(words(hero.line), `${m.slug} ${l}: “${hero.line}”`).toBeLessThanOrEqual(14);
+        expect(`${hero.line} ${hero.lead}`, `${m.slug} ${l}`).toBe(m.tagline[l]);
+        expect(words(hero.lead), `${m.slug} ${l}: “${hero.lead}” is a stub`).toBeGreaterThanOrEqual(12);
+        expect(words(hero.lead), `${m.slug} ${l}`).toBeLessThanOrEqual(30);
+        expect(hero.rest, `${m.slug} ${l}`).toBe(heroLead(m.description[l]).rest);
+      }
+    }
+    // The seven the test named, and no other: a new gift with a long tagline shows up here to be read.
+    expect(split.sort()).toEqual(["autumn-reel", "fall-for-you", "frosted-window", "gingerbread-house", "light-the-candles", "music-box", "string-the-lights"]);
+    expect(heroWords(TEMPLATE_MANIFESTS.find((m) => m.slug === "light-the-candles")!.tagline, "x", "en").line).toBe("A Thanksgiving table at dusk, five candles unlit.");
+    // No italic line on any page is a paragraph now.
+    for (const m of TEMPLATE_MANIFESTS) for (const l of LOCALES) expect(words(heroWords(m.tagline, m.description[l], l).line), `${m.slug} ${l}`).toBeLessThanOrEqual(TAGLINE_WORDS);
+    // A long tagline of one sentence can't be split, and is left whole.
+    expect(heroWords({ en: `${"word ".repeat(25).trim()}.`, es: "Una frase." }, "The description.", "en").line.split(" ")).toHaveLength(25);
+  });
+
   it("no hero is left with only a name and an italic line: a gift whose description gives no lead has one written", () => {
     // The test of 21 Nov 2026: eleven heroes in each language said nothing about what the gift is, XOXO's among them.
     const off: string[] = [];
     for (const m of TEMPLATE_MANIFESTS)
       for (const l of LOCALES) {
-        const own = heroLead(m.description[l]).lead;
+        const own = heroWords(m.tagline, m.description[l], l).lead;
         const written = templateLead(m.slug, l);
         if (!own && !written) off.push(`${m.slug} ${l}: no sentence under the name`);
         if (own && written) off.push(`${m.slug} ${l}: a lead is written, and the description already gives one`);
@@ -143,7 +175,7 @@ describe("the text budget of a gift's page", () => {
       const step1 = g.step1Body.replace(/\{min, plural, =0 \{[^}]*\{max\}[^}]*\} other \{([^}]*\{max\}[^}]*)\}\}/, "$1");
       for (const m of TEMPLATE_MANIFESTS) {
         const guide = Object.hasOwn(TEMPLATE_GUIDES, m.slug) ? TEMPLATE_GUIDES[m.slug][l] : null;
-        const rest = heroLead(m.description[l]).rest;
+        const rest = heroWords(m.tagline, m.description[l], l).rest;
         expect(words(rest), `${m.slug} ${l}: the description alone overruns the block`).toBeLessThanOrEqual(CLOSED_BLOCK_WORDS);
         const steps = fitSentences([step1, g.step1Music, g.step2Body, g.step2Extras, g.step3Body], [4, 0, 3, 1, 2], CLOSED_BLOCK_WORDS - (rest ? words(rest) : 0));
         // How it is sent, and how many photos it takes, are on every page whatever else is cut.

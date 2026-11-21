@@ -5,7 +5,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { GiftLocale } from "@/lib/gift/schema";
-import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art";
 import type { BorrowField, TemplateGuideContent } from "@/content/template-guides";
 import type { TemplateSteps } from "@/content/template-steps";
@@ -102,7 +101,7 @@ export async function HowToSend({
   flowers: Flowers;
   /** The gift's own three steps (content/template-steps.ts); without them, the three every gift shares. */
   steps: TemplateSteps | null;
-  /** Lines of this gift for a note card whose step names no field, or one with nothing short enough in it. */
+  /** Lines of this gift for a note card whose step names no field. */
   lines: string[];
   /** Where a note card finds a value of the field its step is about (./quote). */
   source: QuoteSource;
@@ -110,19 +109,14 @@ export async function HowToSend({
   poster: string;
 }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const shown: { title: string; kind: "photo" | "note" | "phone"; quote?: string | readonly string[] }[] = steps
-    ? steps.steps.map((step) => ({ title: step[locale], kind: step.picture, quote: step.quote }))
+  const shown: { title: string; kind: "photo" | "note" | "phone"; quote?: string | readonly string[]; sample?: string }[] = steps
+    ? steps.steps.map((step) => ({ title: step[locale], kind: step.picture, quote: step.quote, sample: step.sample?.[locale] }))
     : [
         { title: t("step1Title"), kind: "photo" },
         { title: t("step2Title"), kind: "note" },
         { title: t("step3Title"), kind: "phone" },
       ];
-  // A note card shows a value of the field its step is about. Where that gives nothing short
-  // enough, it shows a line of the gift that no other card is showing.
-  const quoted = shown.map((step) => (step.kind === "note" && step.quote ? stepQuote(step.quote, source) : null));
-  const spare = lines.filter((line) => !quoted.includes(line));
-  let next = 0;
-  const pictured = shown.map((step, i) => ({ ...step, line: step.kind === "note" ? (quoted[i] ?? spare[next++] ?? lines[0] ?? "") : "" }));
+  const pictured = shown.map((step) => ({ ...step, line: step.kind === "note" ? noteLine(step, lines, source) : "" }));
   return (
     <section className="relative" aria-labelledby="template-how">
       <ArtLayer items={HOW_ART} flowers={flowers} />
@@ -151,10 +145,24 @@ export async function HowToSend({
 }
 
 /**
+ * The line a note card shows. A step that names its field shows a value of that field (./quote),
+ * or, where the field has nothing short enough, the short line written for that step
+ * (content/template-steps.ts, `sample`). It never borrows from another field: the card under
+ * "Write the fortunes" showed the lucky numbers, and "List the good deeds" a caption about a crime
+ * (the deep test of 21 Nov 2026). Only a step that names no field (the three every gift shared
+ * before each had its own) shows the gift's first short line.
+ */
+export function noteLine(step: { quote?: string | readonly string[]; sample?: string }, lines: readonly string[], source: QuoteSource): string {
+  if (!step.quote) return lines[0] ?? "";
+  return stepQuote(step.quote, source) ?? step.sample ?? "";
+}
+
+/**
  * What the pictures on a gift's page show of that gift: lines to write on a note card, and its
  * first sample photo. The lines are ones the product already has, never made up for the picture:
  * the gift's own lines to borrow that are short enough to read on a card that small, then the
- * title of its demo. The photo is the first of its demo's, or the sample every demo shares.
+ * title of its demo, held to the same thirty characters (Front Page's, at 35 and 40, was not).
+ * The photo is the first of its demo's, or the sample every demo shares.
  */
 export async function templateSamples(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<{ lines: string[]; photo: SamplePhoto; source: QuoteSource }> {
   const fits = (line: string) => line.length >= 8 && line.length <= 30;
@@ -166,7 +174,7 @@ export async function templateSamples(slug: string, locale: GiftLocale, guide: T
     const mod = (await import(`@/templates/${slug}/demo-data`)) as { demoData?: Record<GiftLocale, { title?: string; photos?: { url: string; width?: number; height?: number }[] }> };
     const found = mod.demoData?.[locale];
     demo = (found as Record<string, unknown> | undefined) ?? null;
-    if (found?.title && !lines.includes(found.title)) lines.push(found.title);
+    if (found?.title && fits(found.title) && !lines.includes(found.title)) lines.push(found.title);
     const first = found?.photos?.[0];
     if (first?.url && first.width && first.height) photo = { src: first.url, width: first.width, height: first.height };
   } catch {
@@ -240,7 +248,10 @@ export async function WhatToWrite({ manifest, locale, guide, flowers }: { manife
  * The picture of "The experience": the page art's `experience-flatlay`, a larger phone lying on
  * lilies with a polaroid resting on it, and the gift's sample photo laid into the polaroid by the
  * render's own matrix. On a phone it is drawn wider than the screen and most of it is off the
- * sides, so `sizes` asks for less than it is drawn at: the half-size file is sharp enough there.
+ * sides, so `sizes` asks for less than it is drawn at: the half-size file (900 wide) is sharp
+ * enough there. Two thirds of the screen's width, so a phone with three device pixels to a pixel
+ * still picks it up to 454px wide: at "80vw" an iPhone asked for 936 and was sent the full file,
+ * twice the bytes (the deep test of 21 Nov 2026).
  */
 function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo: SamplePhoto }) {
   const art = pageArt("experience-flatlay", flowers);
@@ -248,7 +259,7 @@ function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo
   return (
     <div data-flatlay="experience" className="relative" style={{ aspectRatio: `${art.width} / ${art.height}` }}>
       <span data-decor="experience-flatlay" className="absolute inset-0 block">
-        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, 80vw" width={art.width} height={art.height} className="block w-full" />
+        <CutoutImg src={art.src1x} srcSet={artSrcSet(art)} sizes="(min-width: 1024px) 50vw, (min-width: 640px) 80vw, 66vw" width={art.width} height={art.height} className="block w-full" />
       </span>
       {photo ? (
         <div className="absolute overflow-hidden" style={slotStyle(art, photo)}>
@@ -259,11 +270,58 @@ function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo
   );
 }
 
+/** Something about a gift its sender picks from a list, by the names the editor shows: what it is called, the choices a check lists, and how many more there are. */
+export type GiftChoice = { label: string; options: readonly string[]; more: number };
+
+/** The most words a check may take to list a gift's choices, and the most choices it lists in full. */
+const CHOICE_WORDS = 12;
+const CHOICE_LISTED = 5;
+
+/**
+ * The choice a gift's page names in "The experience": the first of the template's own settings
+ * that is picked from a list of three or more (The Letter's paper, the Music Box's tune, the room
+ * behind the Frosted Window), with its choices by the editor's own names. A setting whose choices
+ * make too long a line, or have a comma of their own, is passed over for the next; one with more
+ * than five choices gives its first three and how many more there are. Chosen from the English
+ * names (`meta`) and said in the page's (`shown`), so a gift's page names the same setting in
+ * both languages.
+ */
+export function giftChoice(meta: Record<string, FieldMeta>, shown: Record<string, FieldMeta> = meta): GiftChoice | null {
+  const picked = (key: string, take?: number): GiftChoice => {
+    const all = Object.keys(meta[key].options ?? {});
+    // "Cream and red, Blush and 8 more" would read as three things; a choice with an "and" of its own is not one of the three named.
+    const kept = take === undefined ? all : all.filter((id) => !/ and /.test(meta[key].options![id])).slice(0, take);
+    return { label: shown[key]?.label ?? meta[key].label, options: kept.map((id) => shown[key]?.options?.[id] ?? meta[key].options![id]), more: all.length - kept.length };
+  };
+  const lists = Object.entries(meta).filter(([, field]) => {
+    const options = Object.values(field.options ?? {});
+    return options.length >= 3 && options.every((option) => !option.includes(","));
+  });
+  for (const [key, field] of lists) {
+    const options = Object.values(field.options!);
+    if (options.length <= CHOICE_LISTED && countWords(`${field.label} ${options.join(" ")}`) + 1 <= CHOICE_WORDS) return picked(key);
+  }
+  for (const [key, field] of lists) if (Object.keys(field.options!).length > CHOICE_LISTED) return picked(key, 3);
+  return null;
+}
+
+/** A gift's choice as one check: "Paper: Cream, White or Kraft", or "The page: Blush, Lilac, Baby blue and 7 more". */
+export function choiceCheck(choice: GiftChoice, locale: GiftLocale, say: (key: ExperienceKey, values?: Record<string, string | number>) => string): string {
+  if (choice.more > 0) return say("experienceChoiceMore", { label: choice.label, choices: choice.options.join(", "), count: choice.more });
+  // "u" before "Oliva", as Spanish has it; "A, B or C" without the American comma.
+  return say("experienceChoice", { label: choice.label, choices: new Intl.ListFormat(locale === "es" ? "es" : "en-GB", { style: "long", type: "disjunction" }).format(choice.options) });
+}
+
 /**
  * The three checks of "The experience", each read off the gift: what the person who gets it does
- * (its row of content/template-steps.ts), how many photos it is made of (its manifest), and what it
- * asks of their phone (its manifest's `needs`: every gift that listens or feels a shake also takes
- * a tap). They were "Works on any phone or laptop", "Edit it after sending" and "Print its QR code"
+ * (its row of content/template-steps.ts), how many photos it is made of (its manifest), and a
+ * third that the first has not said. For a gift that listens or feels a shake, that a finger does
+ * it too (its manifest's `needs`: every such gift also takes a tap or a swipe); it used to name
+ * the action again, "blow" on the page of a gift they cheer into (Cap Toss), and "shake" under a
+ * first check that had just said it. For every other gift, something of its own to choose
+ * (`choice`): it was "Carries the song you choose" on 50 of the 61 pages (the deep test of
+ * 21 Nov 2026), which the list under the hero says anyway.
+ * They were "Works on any phone or laptop", "Edit it after sending" and "Print its QR code"
  * on all 61 pages, which the three questions under the band answer anyway.
  */
 export function experienceChecks(
@@ -272,7 +330,9 @@ export function experienceChecks(
   /** The free version is the short note, which has no photos (lib/gift/free-tier.ts). */
   note: boolean,
   /** The page's translator for templates.guide. Not named `t`: tests/unit/messages.test.ts checks every literal key handed to a `t` against the translator declared above it in the file. */
-  say: (key: ExperienceKey, values?: Record<string, number>) => string,
+  say: (key: ExperienceKey, values?: Record<string, string | number>) => string,
+  /** The gift's own choice, already as a line (choiceCheck). */
+  choice: string | null = null,
 ): string[] {
   const { photos, music, needs = [] } = manifest.features;
   const made = note
@@ -282,17 +342,19 @@ export function experienceChecks(
       : photos.min === 1
         ? say("experiencePhotosOne", { max: photos.max })
         : say("experiencePhotosMany", { min: photos.min, max: photos.max });
-  const asks = needs.includes("microphone") ? say("experienceMic") : needs.includes("deviceMotion") ? say("experienceMotion") : music ? say("experienceSong") : say("experienceTouch");
+  const asks = needs.includes("microphone") ? say("experienceMic") : needs.includes("deviceMotion") ? say("experienceMotion") : (choice ?? (music ? say("experienceSong") : say("experienceTouch")));
   // The line is a sentence where it is written; a check has no full stop.
   return [line ? line.replace(/\.$/, "") : say("experienceOpens"), made, asks];
 }
 
-export type ExperienceKey = "experienceOpens" | "experienceNote" | "experiencePhotosNone" | "experiencePhotosOne" | "experiencePhotosMany" | "experienceMic" | "experienceMotion" | "experienceSong" | "experienceTouch";
+export type ExperienceKey = "experienceOpens" | "experienceNote" | "experiencePhotosNone" | "experiencePhotosOne" | "experiencePhotosMany" | "experienceMic" | "experienceMotion" | "experienceSong" | "experienceTouch" | "experienceChoice" | "experienceChoiceMore";
 
 /** (4) The experience: the deeper band with soft curved edges, a large picture and three checks. */
 export async function Experience({ manifest, locale, flowers, photo, line, note }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers; photo: SamplePhoto; line: string | null; note: boolean }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const checks = experienceChecks(manifest, line, note, (key, values) => t(key, values));
+  const say = (key: ExperienceKey, values?: Record<string, string | number>) => t(key, values);
+  const choice = giftChoice(await fieldMetaOf(manifest.slug, "en"), await fieldMetaOf(manifest.slug, locale));
+  const checks = experienceChecks(manifest, line, note, say, choice ? choiceCheck(choice, locale, say) : null);
   return (
     <section className="relative" aria-labelledby="template-experience">
       <BandEdge side="top" className="text-page-band" />
@@ -406,27 +468,25 @@ export async function Questions({
                   ))}
                 </ol>
               )}
-              {/* A sentence, so each day is said as it is in one ("an anniversary", "saying sorry"): the menu's labels read "Made for Anniversary, Apology". */}
-              <p className="mt-3">
+              {/*
+               * A sentence, so each day is said as it is in one ("an anniversary", "saying sorry"): the menu's labels read "Made for Anniversary, Apology".
+               * Each day is a link a thumb can hit, 44px tall, and that height is padding, not the
+               * line's: as `inline-flex min-h-11` every row of the sentence stood 44px from the next,
+               * double-spaced under a list set at 24 (the deep test of 21 Nov 2026). The rows are
+               * 32px apart, so one link's padding stops short of the words on the row above it.
+               */}
+              <p className="mt-3 leading-8">
                 {g("madeFor")}{" "}
                 {manifest.occasions.map((o, i) => (
                   <span key={o}>
                     {i > 0 ? ", " : null}
-                    <Link href={`/occasions/${o}`} className="inline-flex min-h-11 items-center text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink">
+                    <Link href={`/occasions/${o}`} className="py-[0.8125rem] text-page-ink underline decoration-page-line underline-offset-4 hover:decoration-page-ink">
                       {g(`madeForDay.${o}`)}
                     </Link>
                   </span>
                 ))}
                 .
               </p>
-              {manifest.slug === "the-letter" ? (
-                // The Letter has a page in Portuguese (content/pt-letter.ts): a link here is how a crawler finds it.
-                <p>
-                  <a href={PT_LETTER_PATH} hrefLang={PT_LETTER_LANG} lang={PT_LETTER_LANG} className="inline-flex min-h-11 items-center underline decoration-page-line underline-offset-4 hover:text-page-ink">
-                    Também em português: carta digital
-                  </a>
-                </p>
-              ) : null}
             </div>
           </details>
         </div>

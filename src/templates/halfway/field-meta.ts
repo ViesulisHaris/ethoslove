@@ -5,7 +5,7 @@ export const fieldMeta: Record<"en" | "es", Record<string, FieldMeta>> = {
     from: { label: "Your town or city", help: "Start typing and pick it from the list: anywhere in the world." },
     to: { label: "Their town or city" },
     stops: {
-      label: "Where you've met in the middle",
+      label: "Where you’ve met in the middle",
       help: "Optional, in order. They add to the distance and go on the postcard.",
       addLabel: "Add a place",
     },

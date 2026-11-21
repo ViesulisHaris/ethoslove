@@ -853,7 +853,7 @@
     "showAll": "Show all {count}",
     "previewHint": "This is the real template with sample data. Tap, scroll and explore.",
     "fullscreenDemo": "Open full-screen demo",
-    "included": "What's included",
+    "included": "What’s included",
     "includedSpecial": "With “Make it special”",
     "noteLead": {
       "the-letter": "Tap to break the seal. The letter slides out and unfolds on a candle-lit desk, and your words appear in handwriting."
@@ -923,8 +923,10 @@
       "experiencePhotosOne": "One photo is enough; it holds {max}",
       "experiencePhotosMany": "Made from {min} to {max} of your photos",
       "experienceNote": "The free note holds {chars} characters",
-      "experienceMic": "They can blow into the phone, or tap instead",
-      "experienceMotion": "They can shake or tilt the phone, or tap instead",
+      "experienceMic": "A finger does it too, where the microphone is off",
+      "experienceMotion": "A tap does it too, where the phone can’t feel a shake",
+      "experienceChoice": "{label}: {choices}",
+      "experienceChoiceMore": "{label}: {choices} and {count} more",
       "experienceSong": "Carries the song you choose",
       "experienceTouch": "Plays with a finger or a mouse",
       "faqLabel": "Questions",

@@ -13,6 +13,7 @@ import {
   pageMetadata,
   templateProductNode,
 } from "@/lib/seo";
+import { PT_LETTER_LANG, PT_LETTER_PATH } from "@/content/pt-letter";
 import { templateGuide } from "@/content/template-guides";
 import { pageThemeChromeCss, pageThemeStyle, templatePageTheme } from "@/content/template-page-themes";
 import { templateFilmStart } from "@/content/template-film-starts";
@@ -27,7 +28,7 @@ import { artSrcSet, pageArt, slotGeometry, slotStyle } from "@/content/page-art"
 import { ArtLayer } from "@/components/templates/page/art";
 import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/hero-flatlay";
 import { includedRows } from "@/components/templates/page/included";
-import { heroKeyword, heroLead } from "@/components/templates/page/lead";
+import { heroKeyword, heroWords } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
 import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
@@ -83,8 +84,8 @@ export default async function TemplateDetailPage({
   const seo = templateSeo(manifest.slug, l);
   const faq = await templateFaq(manifest, l, price);
   const guide = templateGuide(manifest.slug, l);
-  // The hero says the opening of the description; the closed block under the questions keeps the rest.
-  const about = heroLead(manifest.description[l]);
+  // The hero says the gift's italic line and the opening of the description; the closed block under the questions keeps the rest.
+  const about = heroWords(manifest.tagline, manifest.description[l], l);
   const theme = templatePageTheme(manifest.slug);
   const flowers = theme.flowers;
   // The hero's picture, as the browser needs it: the render, its bezel, and where its screen is.
@@ -167,7 +168,7 @@ export default async function TemplateDetailPage({
                   {keyword ? <span className="mb-3 block text-page-label text-page-body">{keyword}</span> : null}
                   <span className="block font-display text-[clamp(2.6rem,5.7vw,4.75rem)] leading-[0.98] tracking-[-0.03em] text-page-ink">{manifest.name[l]}</span>
                 </h1>
-                <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{manifest.tagline[l]}</p>
+                <p className="mt-4 font-display text-[clamp(1.3rem,2vw,1.6rem)] leading-snug text-page-body italic">{about.line}</p>
                 {lead ? <p className="mt-6 max-w-[31rem] text-base leading-relaxed text-page-body">{lead}</p> : null}
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -189,6 +190,16 @@ export default async function TemplateDetailPage({
                 <p className="mt-4 max-w-[31rem] text-sm leading-relaxed text-page-body">
                   {free ? t(noteForEveryone() ? "templates.pagePriceNote" : "templates.pagePriceFree", { price }) : t("templates.pagePricePaid", { price })}
                 </p>
+                {manifest.slug === "the-letter" ? (
+                  // The Letter has a page in Portuguese (content/pt-letter.ts). One quiet line under the price, in
+                  // sight as it was before the redesign: it is how a Portuguese visitor finds that page, and
+                  // inside the closed block under the questions it was on nobody's screen (tests/e2e/about-and-pt.spec.ts).
+                  <p className="text-sm text-page-body">
+                    <a href={PT_LETTER_PATH} hrefLang={PT_LETTER_LANG} lang={PT_LETTER_LANG} className="inline-flex min-h-11 items-center underline decoration-page-line underline-offset-4 hover:text-page-ink">
+                      Também em português: carta digital
+                    </a>
+                  </p>
+                ) : null}
               </div>
 
               <div className="order-last lg:mt-10">

@@ -3,7 +3,7 @@ import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { stepQuote, type QuoteSource } from "@/components/templates/page/quote";
 import { includedRows } from "@/components/templates/page/included";
-import { experienceChecks, moreGifts, moreLikeThis, type ExperienceKey } from "@/components/templates/page/sections";
+import { choiceCheck, experienceChecks, giftChoice, moreGifts, moreLikeThis, noteLine, type ExperienceKey } from "@/components/templates/page/sections";
 import { giftDataBaseSchema } from "@/lib/gift/schema";
 import { premiumExtras } from "@/lib/gift/publish";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
@@ -18,6 +18,11 @@ import { TEMPLATE_MANIFESTS, getManifest, listManifests } from "@/templates/mani
  * second review of 21 Nov 2026.
  */
 const LOCALES = ["en", "es"] as const;
+
+/** What the editor calls a gift's settings and their choices, in one language. */
+async function metaOf(slug: string, l: (typeof LOCALES)[number]): Promise<Record<string, { label: string; options?: Record<string, string> }>> {
+  return ((await import(`../../src/templates/${slug}/field-meta.ts`).catch(() => ({ fieldMeta: { en: {}, es: {} } }))) as { fieldMeta: Record<string, Record<string, { label: string; options?: Record<string, string> }>> }).fieldMeta[l];
+}
 
 /** A gift's demo, lines and choices, as the page gathers them (templateSamples). */
 async function sourceOf(slug: string, l: (typeof LOCALES)[number]): Promise<QuoteSource> {
@@ -56,35 +61,72 @@ describe("the line on a note card of “How to send”", () => {
     expect(stepQuote("fields.note+fields.label", source)).toBeNull();
   });
 
-  it("is found for nearly every note step of every gift, in both languages, and never names Spain", async () => {
-    const spain = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma)\b/i;
-    const none: string[] = [];
+  it("is the step's own on every note card of every gift, in both languages: its field's value or a line written for it, never another field's", async () => {
+    // The deep test of 21 Nov 2026: where a step's field had nothing of thirty characters or fewer, its
+    // card took a spare line of the gift. "Write the fortunes" showed the lucky numbers "14 · 06 · 21",
+    // the Spanish "List the good deeds" a caption about a crime, "Escribe la carta" the pennants.
+    const spain = /\b(spain|españa|espana|spanish|madrid|barcelona|sevilla|seville|valencia|málaga|malaga|bilbao|mallorca|ibiza|canarias|canary|palma|vigo)\b/i;
+    const off: string[] = [];
     let steps = 0;
     for (const [slug, row] of Object.entries(TEMPLATE_STEPS))
       for (const l of LOCALES) {
         const source = await sourceOf(slug, l);
+        // Every line of the gift that belongs to some other card: none may stand in for this step's.
         for (const step of row.steps) {
-          if (step.picture !== "note" || !step.quote) continue;
+          if (step.picture !== "note") continue;
+          // Every note step names its field (tests/unit/template-steps.test.ts), so none falls back to "any line of the gift".
+          expect(step.quote, `${slug}: ${step.en}`).toBeDefined();
           steps += 1;
-          const quote = stepQuote(step.quote, source);
-          if (quote === null) none.push(`${slug} ${l}: ${step.en}`);
-          else expect(quote, `${slug} ${l}`).not.toMatch(spain);
+          const quote = stepQuote(step.quote!, source);
+          const sample = step.sample?.[l];
+          const line = noteLine({ quote: step.quote, sample }, ["a spare line of the gift"], source);
+          if (quote === null && !sample) off.push(`${slug} ${l}: “${step[l]}” has nothing short in its field and no sample`);
+          if (quote !== null && sample) off.push(`${slug} ${l}: “${step[l]}” has a sample its field no longer needs`);
+          if (line !== (quote ?? sample)) off.push(`${slug} ${l}: “${step[l]}” shows “${line}”`);
+          if (line.length < 2 || line.length > 30) off.push(`${slug} ${l}: “${line}” is ${line.length} characters`);
+          if (/[!¡]|—| – /.test(line)) off.push(`${slug} ${l}: “${line}” shouts or has a dash aside`);
+          expect(line, `${slug} ${l}`).not.toMatch(spain);
         }
       }
     expect(steps).toBeGreaterThan(130);
-    // The few with nothing short enough in the field show a spare line of the gift, as every card did before.
-    expect(none.length, none.join("; ")).toBeLessThanOrEqual(14);
+    expect(off).toEqual([]);
+    // The cards the test named, by what they show now.
+    const shown = async (slug: string, l: (typeof LOCALES)[number], en: string) => {
+      const step = TEMPLATE_STEPS[slug].steps.find((s) => s.en === en)!;
+      return noteLine({ quote: step.quote, sample: step.sample?.[l] }, [], await sourceOf(slug, l));
+    };
+    expect(await shown("fortune-cookie", "en", "Write the fortunes")).toBe("You know more than you think.");
+    expect(await shown("nice-list", "es", "List the good deeds")).toBe("compartió la última galleta");
+    expect(await shown("the-council", "en", "List the findings")).toBe("a hall sock, since March");
+    // Cap Toss in Spanish said only "2027": the year is not what a diploma is written with.
+    expect(await shown("cap-toss", "es", "Write the diploma")).toBe("Biología Marina · 2027");
+    // Front Page's card carried its demo's title, 35 and 40 characters in three rows of small handwriting.
+    expect((await shown("front-page", "en", "Write the headline")).length).toBeLessThanOrEqual(30);
+    expect((await shown("front-page", "es", "Write the headline")).length).toBeLessThanOrEqual(30);
+  });
+
+  it("a step that names no field shows the gift's first short line, and one that names a field never does", () => {
+    const source: QuoteSource = { lent: [], demo: { fields: {} }, options: {} };
+    expect(noteLine({}, ["first", "second"], source)).toBe("first");
+    expect(noteLine({ quote: "fields.missing" }, ["first"], source)).toBe("");
+    expect(noteLine({ quote: "fields.missing", sample: "its own" }, ["first"], source)).toBe("its own");
   });
 });
 
 describe("the three checks of “The experience”", () => {
-  const t = (l: (typeof LOCALES)[number]) => (key: ExperienceKey, values?: Record<string, number>) => {
+  const t = (l: (typeof LOCALES)[number]) => (key: ExperienceKey, values?: Record<string, string | number>) => {
     let text: string = (l === "en" ? en : es).templates.guide[key];
     for (const [name, value] of Object.entries(values ?? {})) text = text.replace(`{${name}}`, String(value));
     return text;
   };
 
-  it("are the gift's own: what they do, how many photos it is made of, what it asks of their phone", () => {
+  /** The three checks as the page builds them: the gift's own choice read from its editor's names. */
+  const checksOf = async (slug: string, l: (typeof LOCALES)[number], note = false) => {
+    const choice = giftChoice(await metaOf(slug, "en"), await metaOf(slug, l));
+    return experienceChecks(getManifest(slug)!, TEMPLATE_STEPS[slug].line[l], note, t(l), choice ? choiceCheck(choice, l, t(l)) : null);
+  };
+
+  it("are the gift's own: what they do, how many photos it is made of, and something the first has not said", async () => {
     const of = (slug: string, note = false) => experienceChecks(getManifest(slug)!, TEMPLATE_STEPS[slug].line.en, note, t("en"));
     // The gift's own line, without the full stop it has where it is written: a check has none.
     expect(TEMPLATE_STEPS.arcade.line.en).toMatch(/\.$/);
@@ -95,27 +137,55 @@ describe("the three checks of “The experience”", () => {
     expect(of("bloom")[1]).toBe("Works without photos, or with up to 8");
     expect(of("passport")[1]).toBe("One photo is enough; it holds 10");
     expect(of("constellations")[1]).toBe("Made from 3 to 12 of your photos");
-    // A gift that listens or feels a shake says so, and that a tap does it too.
-    expect(of("halfway")[2]).toMatch(/blow/);
-    expect(of("snow-globe")[2]).toMatch(/shake/);
+    // A gift that listens or feels a shake says that a finger does it too, and does not name the action
+    // again: Cap Toss said "cheer" in its first check and "blow" in its third, and the Jar of Reasons "shake" twice.
+    expect(of("halfway")[2]).toBe("A finger does it too, where the microphone is off");
+    expect(of("cap-toss")[2]).not.toMatch(/blow/);
+    expect(of("jar-of-reasons")[2]).toBe("A tap does it too, where the phone can’t feel a shake");
+    for (const slug of ["cap-toss", "halfway", "jar-of-reasons", "snow-globe", "birthday-cinema"]) {
+      const [first, , third] = await checksOf(slug, "en");
+      for (const verb of ["blow", "cheer", "tilt"]) expect(first.includes(verb) && third.includes(verb), `${slug} says “${verb}” twice`).toBe(false);
+    }
+    // Every other gift names something of its own to choose, by the editor's names. It was the song on 50 of 61 pages.
+    expect((await checksOf("the-letter", "en"))[2]).toBe("Paper: Cream, White or Kraft");
+    expect((await checksOf("the-letter", "es"))[2]).toBe("Papel: Crema, Blanco o Kraft");
+    expect((await checksOf("frosted-window", "en"))[2]).toBe("The room: Cream cottage, Log cabin or Midnight blue");
+    // The first setting with three or more choices: the Music Box's two figurines are passed over for its tune.
+    expect((await checksOf("music-box", "en"))[2]).toBe("The tune: Swan Lake, Brahms’ Lullaby or Für Elise");
+    // Spanish says "u" before "Oliva".
+    expect((await checksOf("autumn-reel", "es"))[2]).toBe("El estilo: Óxido, Espresso u Oliva");
+    // Ten looks are not listed: three and how many more, none of the three with an "and" of its own.
+    expect((await checksOf("xoxo", "en"))[2]).toBe("The page: Blush, Lilac, Baby blue and 7 more");
+    expect((await checksOf("xoxo", "es"))[2]).toBe("La página: Rosa, Lila, Azul bebé y 7 más");
+    // A choice with a comma of its own is passed over for the next setting (The Garden's "Blush, at midday").
+    expect((await checksOf("garden", "en"))[2]).toBe("What’s growing: Wildflowers, Roses, Peonies or Sunflowers");
+    // Arcade has no music, and still has something to choose.
+    expect((await checksOf("arcade", "en"))[2]).toBe("What falls: Hearts, Stars or Cake slices");
+    // Without a choice a gift falls back on its song, or on a finger where it has none.
     expect(of("the-letter")[2]).toMatch(/song/);
-    // Arcade has no music.
     expect(of("arcade")[2]).toMatch(/finger/);
+    expect(giftChoice({ a: { label: "Two", options: { x: "One", y: "Other" } }, b: { label: "No list" } })).toBeNull();
     // The free note has no photos: its page gives the note's length and promises none.
     expect(of("the-letter", true)[1]).toBe(`The free note holds ${FREE_NOTE_MAX_CHARS} characters`);
     expect(of("the-letter", true).join(" ")).not.toMatch(/photo/);
   });
 
-  it("differ from gift to gift, and leave no placeholder unfilled in either language", () => {
+  it("differ from gift to gift, and leave no placeholder unfilled in either language", async () => {
     for (const l of LOCALES) {
       const seen = new Set<string>();
+      const thirds = new Map<string, number>();
       for (const m of TEMPLATE_MANIFESTS) {
-        const checks = experienceChecks(m, TEMPLATE_STEPS[m.slug].line[l], false, t(l));
+        const checks = await checksOf(m.slug, l);
         expect(checks).toHaveLength(3);
         for (const check of checks) expect(check, `${m.slug} ${l}`).not.toMatch(/[{}]|undefined/);
+        // A check is a line: a dozen words, fifteen where Spanish needs its articles (the Music Box and its three tunes).
+        expect(checks[2].trim().split(/\s+/).length, `${m.slug} ${l}: ${checks[2]}`).toBeLessThanOrEqual(l === "en" ? 12 : 15);
         seen.add(checks.join(" | "));
+        thirds.set(checks[2], (thirds.get(checks[2]) ?? 0) + 1);
       }
       expect(seen.size).toBe(TEMPLATE_MANIFESTS.length);
+      // No third check is on more pages than the gifts that listen (six) or feel a shake: "Carries the song you choose" was on 50.
+      expect(Math.max(...thirds.values()), [...thirds].filter(([, n]) => n > 6).map(([line, n]) => `${n}× ${line}`).join("; ")).toBeLessThanOrEqual(6);
     }
   });
 

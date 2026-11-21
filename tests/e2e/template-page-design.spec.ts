@@ -527,6 +527,9 @@ test("“The experience” is about the gift beside it, and “More like this”
   expect(globe.checks.join(" ")).toMatch(/shake/i);
   expect(halfway.checks[0]).not.toBe(globe.checks[0]);
   expect(halfway.checks[2]).not.toBe(globe.checks[2]);
+  // The third does not say the first over again: "blow" once, "shake" in one check's own words only.
+  expect(halfway.checks[2]).not.toMatch(/blow/i);
+  expect(globe.checks[2]).toMatch(/a tap does it too/i);
   expect([...halfway.checks, ...globe.checks].join(" ")).not.toMatch(/any phone or laptop|QR code|after sending/i);
   // Nothing opens "Three steps." any more.
   expect(`${halfway.how} ${globe.how} ${halfway.checks.join(" ")}`).not.toMatch(/three steps/i);
@@ -536,6 +539,10 @@ test("“The experience” is about the gift beside it, and “More like this”
   expect(globe.heading).toMatch(/christmas/i);
   const letter = await read("/templates/the-letter");
   const sky = await read("/templates/constellations");
+  // A gift that asks nothing of their phone names something of its own to choose, by the editor's names:
+  // "Carries the song you choose" was the third check on 50 of the 61 pages.
+  expect(letter.checks[2]).toBe("Paper: Cream, White or Kraft");
+  expect(sky.checks[2]).toBe("Sky: Midnight, Aurora or Dawn");
   expect(letter.more).toHaveLength(4);
   expect(letter.more).not.toEqual(sky.more);
   expect(letter.more).not.toContain("/templates/the-letter");
@@ -913,6 +920,218 @@ test("a phone's first screen is light: the lying phone, its rim and the gift's c
   await context.close();
 });
 
+/**
+ * What the deep test of 21 Nov 2026 found on the picked-up phone and round it (reports/guides-deep.md,
+ * D1 to D12). Each of these fails on the page as it was.
+ */
+test("while the phone is up the page says a gift is running, so the consent strip leaves the gift's foot alone", async ({ browser, baseURL }) => {
+  // Every other test starts with the consent answer stored (playwright.config.ts), and a worktree
+  // shows no strip at all without a pixel id, so nobody had seen it lying over the lower quarter of
+  // the picked-up phone: the banner stands down only for `data-gift-running` on <html>. This one
+  // starts as a new visitor does. The strip itself is checked where the server shows one (a server
+  // started with any NEXT_PUBLIC_CLARITY_ID); what hides it is checked everywhere.
+  const context = await browser.newContext({ viewport: { width: 390, height: 664 }, baseURL, storageState: { cookies: [], origins: [] } });
+  const page = await context.newPage();
+  await page.goto("/templates/scratch-card");
+  expect(await page.evaluate(() => localStorage.getItem("ethos-consent"))).toBeNull();
+  const running = () => page.evaluate(() => document.documentElement.dataset.giftRunning ?? null);
+  const strip = page.getByRole("region", { name: "Cookies" });
+  await page.waitForTimeout(1500);
+  const shown = await strip.isVisible();
+  console.log(`the consent strip ${shown ? "is shown by this server: checked against the picked-up phone" : "is not shown by this server (no pixel id): only its stand-down hook is checked"}`);
+  expect(await running()).toBeNull();
+  const hero = page.locator("[data-flatlay=hero]");
+  const play = hero.locator("[data-play]");
+  await play.scrollIntoViewIfNeeded();
+  await play.click();
+  const up = hero.locator("[data-upright]");
+  await expect(up).toBeVisible();
+  await expect.poll(running).toBe("true");
+  if (shown) {
+    await expect(strip).toBeHidden();
+    // Nothing fixed to the screen lies over the phone: under its foot's middle is the phone itself.
+    await expect.poll(() => page.evaluate(() => { const r = document.querySelector("[data-upright]")!.getBoundingClientRect(); return document.elementFromPoint(r.left + r.width / 2, Math.min(r.bottom, innerHeight) - 30)?.closest("[data-upright]") !== null; })).toBe(true);
+  }
+  // Put down, the page is a page again and the strip comes back for an answer.
+  await up.getByRole("button", { name: /close the demo/i }).click();
+  await expect(up).toHaveCount(0);
+  await expect.poll(running).toBeNull();
+  if (shown) await expect(strip).toBeVisible();
+  // Leaving the page with the phone up does not leave the mark behind for the next page.
+  await play.click();
+  await expect.poll(running).toBe("true");
+  await page.locator('section[aria-labelledby="template-more"] a').first().evaluate((a: HTMLAnchorElement) => a.click());
+  await page.waitForURL((url) => !url.pathname.endsWith("/scratch-card"));
+  await expect.poll(running).toBeNull();
+  await context.close();
+});
+
+test("Escape puts the phone down wherever the keyboard's focus has got to", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // Past the close button, on the page behind: the handler used to be on the phone and never heard it.
+  await page.goto("/templates/the-letter");
+  const hero = page.locator("[data-flatlay=hero]");
+  const play = hero.locator("[data-play]");
+  const up = hero.locator("[data-upright]");
+  await play.focus();
+  await page.keyboard.press("Enter");
+  await expect(up).toBeFocused();
+  for (let i = 0; i < 12; i++) {
+    await page.keyboard.press("Tab");
+    if (await page.evaluate(() => document.activeElement !== null && document.activeElement.closest("[data-upright]") === null && document.activeElement !== document.body)) break;
+  }
+  expect(await page.evaluate(() => document.activeElement?.closest("[data-upright]") === null)).toBe(true);
+  await page.keyboard.press("Escape");
+  await expect(up).toHaveCount(0);
+  await expect(play).toBeFocused();
+
+  // A gift that takes away the button just pressed leaves the focus on <body>: Scratch Card's "scratch here".
+  await page.goto("/templates/scratch-card");
+  await play.focus();
+  await page.keyboard.press("Enter");
+  await expect(up.locator("[data-template=scratch-card]")).toBeVisible({ timeout: 25000 });
+  const scratch = up.getByRole("button", { name: /scratch here/i });
+  await expect(scratch).toBeVisible({ timeout: 15000 });
+  await scratch.focus();
+  await page.keyboard.press("Enter");
+  await expect(scratch).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await expect(up).toHaveCount(0);
+  await expect(play).toBeFocused();
+});
+
+test("a gift whose code can't be fetched puts the phone back down, and the next tap tries again", async ({ browser, baseURL }) => {
+  // No connection, or a page older than the last deploy: the picked-up phone was a black screen that
+  // said `Unknown template “xoxo”.` in English on any page, and stayed that way once back online.
+  const origin = new URL(baseURL!).origin;
+  const context = await browser.newContext({ ...devices["Pixel 7"], baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
+  const page = await context.newPage();
+  // A gift no other test of this file has opened, so its code is not in this page yet.
+  await page.goto("/templates/wishbone", { waitUntil: "networkidle" });
+  const hero = page.locator("[data-flatlay=hero]");
+  const play = hero.locator("[data-play]");
+  const up = hero.locator("[data-upright]");
+  await context.setOffline(true);
+  await play.scrollIntoViewIfNeeded();
+  const said: string[] = [];
+  const watch = setInterval(() => void page.evaluate(() => document.querySelector("[data-upright]")?.textContent ?? "").then((text) => said.push(text), () => {}), 150);
+  await play.tap();
+  // Down again by itself, the cover and its button back, the page no longer "a gift running".
+  await expect(up).toHaveCount(0, { timeout: 20000 });
+  clearInterval(watch);
+  expect(said.join(" ")).not.toMatch(/unknown template/i);
+  await expect(play).toBeVisible();
+  await expect(play).toHaveAccessibleName(/try the live demo/i);
+  expect(await page.evaluate(() => document.documentElement.dataset.giftRunning ?? null)).toBeNull();
+  // Back online, the same button plays the gift.
+  await context.setOffline(false);
+  await play.tap();
+  await expect(up.locator("[data-template=wishbone]")).toBeVisible({ timeout: 30000 });
+  await context.close();
+});
+
+test("The Letter's page in Portuguese is linked where a visitor sees it, and only from The Letter", async ({ page }) => {
+  // It stood under the preview before the redesign, then became the last line of a closed block: in
+  // the HTML and on nobody's screen (tests/e2e/about-and-pt.spec.ts failed on it in both projects).
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/templates/the-letter");
+  const link = page.getByRole("link", { name: "Também em português: carta digital" });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute("href", "/pt/carta-digital");
+  await expect(link).toHaveAttribute("hreflang", "pt-BR");
+  // One link, in the hero, under the price: not also inside the closed block.
+  expect(await page.locator('[data-page-theme] a[href="/pt/carta-digital"]').count()).toBe(1);
+  expect(await link.evaluate((a) => a.closest("details") === null && a.closest("section")?.querySelector("h1") !== null)).toBe(true);
+  const box = (await link.boundingBox())!;
+  expect(box.height).toBeGreaterThanOrEqual(44);
+  expect(await link.evaluate((a) => parseFloat(getComputedStyle(a).fontSize))).toBeGreaterThanOrEqual(14);
+  await page.goto("/templates/xoxo");
+  await expect(page.locator('[data-page-theme] a[href="/pt/carta-digital"]')).toHaveCount(0);
+});
+
+test("the days a gift is made for read as a sentence, not a double-spaced list, and each is still a thumb's target", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  // Scrapbook is made for four days: the sentence runs to two or three rows on a phone.
+  await page.goto("/templates/scrapbook");
+  const block = page.locator("details[data-more-about]");
+  await block.locator("summary").click();
+  const links = block.locator('a[href*="/occasions/"]');
+  await expect(links.first()).toBeVisible();
+  const m = await block.evaluate((el) => {
+    el.querySelector('a[href*="/occasions/"]')!.scrollIntoView({ block: "center" });
+    const all = [...el.querySelectorAll<HTMLAnchorElement>('a[href*="/occasions/"]')];
+    const boxes = all.map((a) => a.getBoundingClientRect());
+    const rows = [...new Set(boxes.map((b) => Math.round(b.top)))].sort((a, b) => a - b);
+    // Where each word's own row is: the middle of its box, since the padding is the same above and below.
+    const taken = all.map((a) => { const first = a.getClientRects()[0]; return document.elementFromPoint(first.left + 4, first.top + first.height / 2) === a; });
+    return { count: all.length, rows, heights: boxes.map((b) => Math.round(b.height)), taken, listRow: parseFloat(getComputedStyle(el.querySelector("li")!).lineHeight) };
+  });
+  expect(m.count).toBeGreaterThanOrEqual(4);
+  expect(m.rows.length).toBeGreaterThanOrEqual(2);
+  // 44px apart was a sentence set double-spaced under a list set at 24.
+  for (let i = 1; i < m.rows.length; i++) expect(m.rows[i] - m.rows[i - 1]).toBeLessThanOrEqual(34);
+  for (const h of m.heights) expect(h).toBeGreaterThanOrEqual(44);
+  // A tap on a day's own words opens that day, not the one on the row under it.
+  expect(m.taken).toEqual(m.taken.map(() => true));
+});
+
+test("an iPhone-sharp phone still gets the half-size picture of “The experience”", async ({ browser, baseURL }) => {
+  // Three device pixels to a pixel: "80vw" asked for 936 and was sent the 1800px file, twice the bytes.
+  const origin = new URL(baseURL!).origin;
+  for (const width of [390, 430]) {
+    const context = await browser.newContext({ viewport: { width, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, baseURL, storageState: { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] } });
+    const page = await context.newPage();
+    await page.goto(PAGE);
+    const picture = page.locator("[data-decor=experience-flatlay] img");
+    await picture.scrollIntoViewIfNeeded();
+    await expect.poll(() => picture.evaluate((img: HTMLImageElement) => (img.complete && img.naturalWidth > 0 ? new URL(img.currentSrc).pathname.split("/").pop() : "")), { timeout: 15000 }).toBe("experience-flatlay-ivory-1x.webp");
+    // And it is not drawn soft: the file itself (its own pixels, not what `sizes` makes of them) has
+    // more than one and a half pixels for each CSS pixel the picture is drawn across.
+    expect(await picture.evaluate(async (img: HTMLImageElement) => (await createImageBitmap(await (await fetch(img.currentSrc)).blob())).width / img.getBoundingClientRect().width)).toBeGreaterThan(1.5);
+    await context.close();
+  }
+});
+
+test("the picked-up phone's shadow is drawn inside its own layer, with nothing to cut it", async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 839 });
+  await page.goto("/templates/xoxo");
+  const hero = page.locator("[data-flatlay=hero]");
+  await hero.locator("[data-play]").click();
+  await expect(hero.locator("[data-upright]")).toBeVisible();
+  const shadow = await page.evaluate(() => {
+    const up = document.querySelector("[data-upright]")!;
+    const drawn = getComputedStyle(up, "::before");
+    return { frame: getComputedStyle(up.querySelector("[data-phone-body]")!).boxShadow, content: drawn.content, bottom: parseFloat(drawn.bottom), left: parseFloat(drawn.left), mask: drawn.maskImage || drawn.webkitMaskImage, events: drawn.pointerEvents };
+  });
+  // The frame keeps only its inner rim; its 80px blur, which Android Chrome paints in squares, is gone.
+  expect(shadow.frame).toMatch(/inset/);
+  expect(shadow.frame).not.toMatch(/80px/);
+  // The gradient shadow reaches well past the phone on every side it shows, and ends on nothing there.
+  expect(shadow.content).not.toBe("none");
+  expect(shadow.bottom).toBeLessThanOrEqual(-100);
+  expect(shadow.left).toBeLessThanOrEqual(-70);
+  expect(shadow.mask).toMatch(/linear-gradient/);
+  expect(shadow.events).toBe("none");
+});
+
+test("no hero's italic line is a paragraph: Light the Candles keeps “Make this gift” on a small phone's first screen", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  for (const path of ["/templates/light-the-candles", "/es/templates/light-the-candles"]) {
+    await page.goto(path);
+    const hero = page.locator("[data-page-theme] section").first();
+    const italic = hero.locator("h1 + p");
+    const m = await italic.evaluate((p) => ({ rows: Math.round(p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight)), words: p.textContent!.trim().split(/\s+/).length, style: getComputedStyle(p).fontStyle }));
+    expect(m.style).toBe("italic");
+    // 24 and 31 words in five and seven rows, before.
+    expect(m.words, path).toBeLessThanOrEqual(14);
+    expect(m.rows, path).toBeLessThanOrEqual(3);
+    // The rest of the tagline is the sentence under it.
+    await expect(hero.locator("h1 + p + p")).toContainText(path.startsWith("/es") ? "con una cerilla" : "with a match");
+    const button = (await hero.locator('a[href$="/create/light-the-candles"]').boundingBox())!;
+    expect(button.y, `${path}: the button's top`).toBeLessThan(568);
+  }
+});
+
 test("WebKit as an iPhone 13: no sideways scroll, no flower under words, the gift plays", async ({ baseURL }) => {
   const browser = await webkit.launch();
   try {
@@ -939,7 +1158,27 @@ test("WebKit as an iPhone 13: no sideways scroll, no flower under words, the gif
     if (can === "") expect(f.src).toBe("");
     expect(thrown).toEqual([]);
     await page.locator("[data-flatlay=hero]").getByRole("button", { name: /try the live demo/i }).tap();
-    await expect(page.locator("[data-flatlay=hero] [data-upright] [data-template=the-letter]")).toBeVisible({ timeout: 30000 });
+    const up = page.locator("[data-flatlay=hero] [data-upright]");
+    await expect(up.locator("[data-template=the-letter]")).toBeVisible({ timeout: 30000 });
+    // A finger beside the phone puts it down. WebKit makes a click of a tap only on something it takes for
+    // clickable, and the page's ground is not: the click the page listened for never came (the deep test of
+    // 21 Nov 2026, all 23 WebKit runs). A real touch, on plain ground left of the phone.
+    const beside = await page.evaluate(() => {
+      const phone = document.querySelector("[data-upright]")!.getBoundingClientRect();
+      const y = Math.round(phone.top + phone.height / 2);
+      const at = document.elementFromPoint(8, y)!;
+      return { x: 8, y, plain: at.closest("a, button, summary, [data-upright]") === null && at.closest("[data-page-theme]") !== null, cursor: getComputedStyle(at).cursor };
+    });
+    expect(beside.plain).toBe(true);
+    expect(beside.cursor).not.toBe("pointer");
+    // A finger on the gift itself is the gift's: the phone stays up.
+    await page.touchscreen.tap(Math.round((await up.boundingBox())!.x + 60), beside.y);
+    await expect(up).toHaveCount(1);
+    await page.touchscreen.tap(beside.x, beside.y);
+    await expect(up).toHaveCount(0);
+    // And it comes up again.
+    await page.locator("[data-flatlay=hero]").getByRole("button", { name: /try the live demo/i }).tap();
+    await expect(up).toBeVisible();
   } finally {
     await browser.close();
   }

@@ -21,6 +21,31 @@ export function heroLead(description: string, max = 30, least = 12, most = 40): 
   return { lead: sentences.slice(0, taken).join(" "), rest: sentences.slice(taken).join(" ") };
 }
 
+/** A tagline of more words than this, in either language, is a paragraph and not a line. */
+export const TAGLINE_WORDS = 20;
+
+/**
+ * What a gift's hero says under its name: the italic line, the sentences under it, and what is
+ * left for the closed block. The italic line is the gift's tagline, and for nearly every gift
+ * that is a line. Seven have a tagline of two sentences and 21 to 31 words (Light the Candles,
+ * Gingerbread House, String the Lights, Autumn Reel, Frosted Window, Music Box, Fall for You):
+ * set in italic display type it was four or five rows on a phone, with the description still to
+ * come, and on a small phone it pushed "Make this gift" off the first screen (the deep test of
+ * 21 Nov 2026). For those the first sentence is the italic line ("A Thanksgiving table at dusk,
+ * five candles unlit.") and the rest of the tagline is the sentence under it, in the place of the
+ * description's opening, which says the same scene at more length and stays the page's meta
+ * description. The closed block keeps what it kept before, the description after that opening:
+ * given the whole description it had room for only three or four of a gift's six ideas (Music
+ * Box, Autumn Reel). Decided by the gift, not the language: a tagline long in one is split in
+ * both, so the two pages are laid out alike.
+ */
+export function heroWords(tagline: Readonly<Record<string, string>>, description: string, locale: string): { line: string; lead: string; rest: string } {
+  const own = (tagline[locale] ?? "").trim();
+  const sentences = own.split(/(?<=[.!?])\s+/);
+  if (sentences.length < 2 || !Object.values(tagline).some((t) => words(t) > TAGLINE_WORDS)) return { line: own, ...heroLead(description) };
+  return { line: sentences[0], lead: sentences.slice(1).join(" "), rest: heroLead(description).rest };
+}
+
 /**
  * The phrase people search for, which stands in small capitals over a gift's name in its h1. Where
  * the two are the same words the name alone says it: the Spanish Midnight Countdown read "CUENTA

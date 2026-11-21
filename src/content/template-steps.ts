@@ -15,6 +15,13 @@ import type { GiftLocale } from "@/lib/gift/schema";
  *   phone with the gift's own cover in its screen.
  * - `quote`, on a note step: the field the step is about, so its card shows a real value of that
  *   field and not just any line of the gift (components/templates/page/quote.ts).
+ * - `sample`, on a note step, in the language that needs it: a short line for that field, written
+ *   for the card, where neither the gift's lines to borrow nor its demo have one of thirty
+ *   characters or fewer there. Without it the card borrowed a line from another field: "Write the
+ *   fortunes" showed the lucky numbers, and the Spanish "List the good deeds" a photo's caption
+ *   about a crime (the deep test of 21 Nov 2026). Each is cut from that gift's own longer line for
+ *   the field, and only where one is needed: tests/unit/template-page-sections.test.ts fails a
+ *   sample the field no longer needs.
  *
  * A row's `line` says what the person who gets the gift does. It was the line under "How to send"
  * and opened "Three steps." on all 61 pages (the review of 21 Nov 2026); the numbered cards say
@@ -25,7 +32,7 @@ import type { GiftLocale } from "@/lib/gift/schema";
  */
 export type StepPictureKind = "photo" | "note" | "phone";
 
-export type TemplateStep = { picture: StepPictureKind; quote?: string | readonly string[] } & Record<GiftLocale, string>;
+export type TemplateStep = { picture: StepPictureKind; quote?: string | readonly string[]; sample?: Partial<Record<GiftLocale, string>> } & Record<GiftLocale, string>;
 
 export type TemplateSteps = { line: Record<GiftLocale, string>; steps: readonly [TemplateStep, TemplateStep, TemplateStep] };
 
@@ -89,7 +96,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   bouquet: {
     line: { en: "They watch it come together, one flower at a time.", es: "Lo ven formarse, flor a flor." },
     steps: [
-      { picture: "note", quote: "fields.stems", en: "Pick the flowers", es: "Elige las flores" },
+      { picture: "note", quote: "fields.stems", sample: { en: "Peonies, roses, eucalyptus", es: "Peonías, rosas, eucalipto" }, en: "Pick the flowers", es: "Elige las flores" },
       { picture: "note", quote: "fields.cardNote", en: "Write the card", es: "Escribe la tarjeta" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -97,7 +104,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "cap-toss": {
     line: { en: "They cheer into the phone and the cap goes up.", es: "Gritan al móvil y el birrete sale volando." },
     steps: [
-      { picture: "note", quote: ["fields.awardedFor","fields.school","fields.year"], en: "Write the diploma", es: "Escribe el diploma" },
+      { picture: "note", quote: ["fields.awardedFor","fields.school"], sample: { es: "Biología Marina · 2027" }, en: "Write the diploma", es: "Escribe el diploma" },
       { picture: "photo", en: "Add their photos", es: "Añade sus fotos" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -177,7 +184,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "fortune-cookie": {
     line: { en: "They crack a cookie and read what you wrote.", es: "Abren una galleta y leen lo que escribiste." },
     steps: [
-      { picture: "note", quote: "fields.fortunes", en: "Write the fortunes", es: "Escribe las fortunas" },
+      { picture: "note", quote: "fields.fortunes", sample: { en: "You know more than you think." }, en: "Write the fortunes", es: "Escribe las fortunas" },
       { picture: "photo", en: "Slip in photos", es: "Mete alguna foto" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -185,7 +192,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "front-page": {
     line: { en: "A newspaper about them lands on the doormat.", es: "Un periódico sobre esa persona cae en el felpudo." },
     steps: [
-      { picture: "note", quote: "fields.headline", en: "Write the headline", es: "Escribe el titular" },
+      { picture: "note", quote: "fields.headline", sample: { en: "LOCAL WOMAN TURNS 30", es: "CUMPLE 30: EL BARRIO REACCIONA" }, en: "Write the headline", es: "Escribe el titular" },
       { picture: "photo", en: "Add the lead photo", es: "Añade la foto principal" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -209,7 +216,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "gingerbread-house": {
     line: { en: "They decorate the house and the little door opens.", es: "Decoran la casita y se abre la puertecita." },
     steps: [
-      { picture: "note", quote: "message", en: "Write the letter", es: "Escribe la carta" },
+      { picture: "note", quote: "message", sample: { es: "Tú decoras. Yo llevo glaseado." }, en: "Write the letter", es: "Escribe la carta" },
       { picture: "photo", en: "Add your photos", es: "Añade tus fotos" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -297,7 +304,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "nice-list": {
     line: { en: "They unroll the scroll and the verdict is stamped.", es: "Desenrollan el pergamino y cae el veredicto." },
     steps: [
-      { picture: "note", quote: "fields.nice", en: "List the good deeds", es: "Apunta las buenas obras" },
+      { picture: "note", quote: "fields.nice", sample: { es: "compartió la última galleta" }, en: "List the good deeds", es: "Apunta las buenas obras" },
       { picture: "note", quote: "fields.naughty", en: "List the crimes", es: "Apunta las fechorías" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -369,7 +376,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
   "popup-card": {
     line: { en: "The card opens and a paper cake stands up.", es: "La tarjeta se abre y se levanta una tarta de papel." },
     steps: [
-      { picture: "note", quote: "message", en: "Write the letter", es: "Escribe la carta" },
+      { picture: "note", quote: "message", sample: { es: "Tarde, pero con velas." }, en: "Write the letter", es: "Escribe la carta" },
       { picture: "photo", en: "Add your photos", es: "Añade tus fotos" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
@@ -410,7 +417,7 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
     line: { en: "Every page draws itself in ink as they turn it.", es: "Cada página se dibuja sola al pasarla." },
     steps: [
       { picture: "photo", en: "Tape in photos", es: "Pega las fotos" },
-      { picture: "note", quote: "message", en: "Write the letter", es: "Escribe la carta" },
+      { picture: "note", quote: "message", sample: { es: "No sé dibujar. Pedí ayuda." }, en: "Write the letter", es: "Escribe la carta" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
   },
@@ -458,14 +465,14 @@ export const TEMPLATE_STEPS: Record<string, TemplateSteps> = {
     line: { en: "Five cats read your findings and stamp a verdict.", es: "Cinco gatos leen tus conclusiones y sellan un veredicto." },
     steps: [
       { picture: "note", quote: "fields.charge", en: "Write the charge", es: "Escribe el cargo" },
-      { picture: "note", quote: "fields.findings", en: "List the findings", es: "Apunta las conclusiones" },
+      { picture: "note", quote: "fields.findings", sample: { en: "a hall sock, since March" }, en: "List the findings", es: "Apunta las conclusiones" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],
   },
   "the-letter": {
     line: { en: "They break the seal and your words write themselves by hand.", es: "Rompen el sello y tus palabras se escriben a mano." },
     steps: [
-      { picture: "note", quote: "fields.greeting", en: "Write the letter", es: "Escribe la carta" },
+      { picture: "note", quote: "fields.greeting", sample: { en: "To my umbrella thief,", es: "A quien se llevó mi paraguas:" }, en: "Write the letter", es: "Escribe la carta" },
       { picture: "note", quote: "fields.signOff", en: "Seal and sign it", es: "Séllala y fírmala" },
       { picture: "phone", en: "Send the link", es: "Envía el enlace" },
     ],

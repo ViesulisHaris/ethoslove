@@ -597,13 +597,13 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       keyword: "Spooky season gift",
       title: "Spooky Season Gift: A Cosy Halloween Collage",
       description: "Blow the leaves away: a cosy Halloween collage of black cats, pumpkins, film and your photos, with your song. A spooky season gift for your person.",
-      howTo: "How to make a spooky season collage",
+      howTo: "How to make a Spooky Season collage",
     },
     es: {
       keyword: "Regalo spooky season",
       title: "Regalo spooky season: collage de Halloween",
       description: "Sopla las hojas: un collage de Halloween con gatos negros, calabazas, carrete y vuestras fotos, con vuestra canción. Un regalo spooky season.",
-      howTo: "Cómo hacer un collage spooky season",
+      howTo: "Cómo hacer un collage Spooky Season",
     },
   },
   "dark-romance": {
@@ -667,13 +667,13 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       keyword: "Be my boo card",
       title: "Be My Boo: A Cute Halloween Card with Photos",
       description: "Tap the ghost: a cute Halloween collage of your photos, pumpkins, bats and a black cat, with your message. Ask them to be your boo.",
-      howTo: "How to make a be my boo card",
+      howTo: "How to make a Be My Boo card",
     },
     es: {
       keyword: "Tarjeta be my boo",
       title: "Be My Boo: tarjeta de Halloween con tus fotos",
       description: "Toca el fantasma: un collage de Halloween con vuestras fotos, calabazas, murciélagos y un gato negro, con tu mensaje. Pídele que sea tu boo.",
-      howTo: "Cómo hacer una tarjeta be my boo",
+      howTo: "Cómo hacer una tarjeta Be My Boo",
     },
   },
   "fall-for-you": {
@@ -681,7 +681,7 @@ export const TEMPLATE_SEO: Record<string, Record<GiftLocale, TemplateSeo>> = {
       keyword: "Autumn love gift",
       title: "Fall for You: A Cosy Autumn Love Collage",
       description: "Light the candle: a gingham collage of your photos, real leaves and their name in letter blocks, with your song. An autumn gift for the one you fell for.",
-      howTo: "How to make a fall for you collage",
+      howTo: "How to make a Fall for You collage",
     },
     es: {
       keyword: "Regalo de amor de otoño",

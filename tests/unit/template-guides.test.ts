@@ -151,7 +151,11 @@ describe("template guides: the lines to borrow", () => {
     // endings that were found and their near kin, and when it fires the line is read by a person,
     // then reworded or, if it speaks of the sender, of a thing, or of someone the card itself names
     // (a mother, a daughter), added to READ with why.
-    const bent = /(?<![\p{L}])(bienvenid[oa]s?|despiert[oa]s?|dormid[oa]s?|vestid[oa]s|vecin[oa]|jugador(?:a|es)?|la que|el que|querid[oa]s?|guap[oa]s?|cansad[oa]s?|enamorad[oa]s?|invitad[oa]s?|content[oa]s?|orgullos[oa]s?|amig[oa]|novi[oa]|niñ[oa]|chic[oa]|reina|rey|princesa)(?![\p{L}])/iu;
+    // The deep test of the same day added the words that take two men, or a man and a woman, for
+    // granted: «llorando los dos», «Por vosotros dos», «un año de vosotros», and a card titled "Un
+    // año de vosotros". A title is read by everyone who opens the page, so titles are held too.
+    const bent = /(?<![\p{L}])(bienvenid[oa]s?|despiert[oa]s?|dormid[oa]s?|vestid[oa]s|vecin[oa]|jugador(?:a|es)?|la que|el que|querid[oa]s?|guap[oa]s?|cansad[oa]s?|enamorad[oa]s?|invitad[oa]s?|content[oa]s?|orgullos[oa]s?|amig[oa]|novi[oa]|niñ[oa]|chic[oa]|reina|rey|princesa|los dos|las dos|vosotr[oa]s)(?![\p{L}])/iu;
+    const pair = /(?<![\p{L}])(los dos|las dos|vosotr[oa]s)(?![\p{L}])/iu;
     const found: string[] = [];
     const lines = new Set<string>();
     for (const [slug, guide] of Object.entries(TEMPLATE_GUIDES))
@@ -159,6 +163,7 @@ describe("template guides: the lines to borrow", () => {
         const key = `${slug}: ${idea.borrow.line}`;
         lines.add(key);
         if (bent.test(idea.borrow.line) && !Object.hasOwn(READ_AND_LET_STAND, key)) found.push(key);
+        if (pair.test(idea.heading)) found.push(`${slug}, a card's title: ${idea.heading}`);
       }
     expect(found).toEqual([]);
     // Every line let stand is still a line of the guides, so the list never outlives what it excuses.

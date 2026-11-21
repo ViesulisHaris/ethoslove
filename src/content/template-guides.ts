@@ -489,7 +489,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Una carta de agradecimiento",
             how: "Di eso concreto que hizo. La despedida va sobre tu nombre.",
-            borrow: { field: "fields.signOff", line: "Con las gracias de cada día," },
+            borrow: { field: "fields.signOff", line: "Con todo mi agradecimiento," },
           },
           {
             heading: "Una carta porque sí",
@@ -835,7 +835,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "A distancia",
             how: "Hasta nueve fotos en polaroids sobre una blonda.",
-            borrow: { field: "caption", line: "El aeropuerto, llorando los dos" },
+            borrow: { field: "caption", line: "El aeropuerto, llorando a dúo" },
           },
           {
             heading: "Para el grupo",
@@ -1474,7 +1474,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Una pregunta importante",
             how: "Pon la pregunta en el cartel del jardín.",
-            borrow: { field: "fields.sign", line: "¿VIVIMOS EN LA MISMA?" },
+            borrow: { field: "fields.sign", line: "¿VIVIMOS EN LA MISMA CASA?" },
           },
           {
             heading: "Navidad a distancia",
@@ -2135,7 +2135,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un aniversario",
             how: "Di cuánto lleváis en el título recortado, en 28 caracteres.",
-            borrow: { field: "fields.headline", line: "un año de vosotros" },
+            borrow: { field: "fields.headline", line: "un año de lo vuestro" },
           },
           {
             heading: "Su cumpleaños",
@@ -2236,7 +2236,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "San Valentín",
             how: "Que caigan corazones y guarda tu mensaje para el último nivel.",
-            borrow: { field: "fields.title", line: "MODO DOS, PARA SIEMPRE" },
+            borrow: { field: "fields.title", line: "COOPERATIVO PARA SIEMPRE" },
           },
           {
             heading: "Un aniversario",
@@ -2389,7 +2389,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un cumpleaños redondo",
             how: "Pon su edad y aparece en números dorados.",
-            borrow: { field: "fields.banner", line: "LOS TREINTA TE SIENTAN" },
+            borrow: { field: "fields.banner", line: "LOS 30 TE SIENTAN BIEN" },
           },
           {
             heading: "El cumple de un peque",
@@ -2504,7 +2504,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "be-my-boo": {
     en: {
       ideas: {
-        title: "What to put in a be my boo card",
+        title: "What to put in a Be My Boo card",
         items: [
           {
             heading: "Asking them to be yours",
@@ -2542,7 +2542,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué poner en una tarjeta be my boo",
+        title: "Qué poner en una tarjeta Be My Boo",
         items: [
           {
             heading: "Para pedirle salir",
@@ -2945,7 +2945,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.headline", line: "hoy se permite todo" },
           },
           {
-            heading: "Un año de vosotros",
+            heading: "Vuestro primer año",
             how: "Hasta doce fotos, cada una con la fecha naranja en la esquina.",
             borrow: { field: "caption", line: "dijimos una caña" },
           },
@@ -3057,7 +3057,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "fall-for-you": {
     en: {
       ideas: {
-        title: "What to put in a fall for you collage",
+        title: "What to put in a Fall for You collage",
         items: [
           {
             heading: "An autumn anniversary",
@@ -4468,7 +4468,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "A distancia",
             how: "Tu carta va en papel rayado, escrita a mano.",
-            borrow: { field: "message", line: "En la próxima tira salimos los dos." },
+            borrow: { field: "message", line: "En la próxima tira salimos tú y yo." },
           },
         ],
       },
@@ -4841,7 +4841,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
             borrow: { field: "fields.title", line: "feliz cumple, Ana" },
           },
           {
-            heading: "Un año de vosotros",
+            heading: "Vuestro primer año",
             how: "Hasta doce fotos, pegadas entre los garabatos.",
             borrow: { field: "caption", line: "El día que compramos la planta" },
           },
@@ -4874,7 +4874,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
   "spooky-season": {
     en: {
       ideas: {
-        title: "What to put in a spooky season collage",
+        title: "What to put in a Spooky Season collage",
         items: [
           {
             heading: "A Halloween date",
@@ -4912,7 +4912,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
     },
     es: {
       ideas: {
-        title: "Qué poner en un collage spooky season",
+        title: "Qué poner en un collage Spooky Season",
         items: [
           {
             heading: "Una cita de Halloween",
@@ -5169,7 +5169,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           {
             heading: "Un compromiso",
             how: "Champán, tinto, blanco o sin alcohol en las copas.",
-            borrow: { field: "fields.opening", line: "Por vosotros dos, por fin" },
+            borrow: { field: "fields.opening", line: "Por vuestro sí, por fin" },
           },
           {
             heading: "San Valentín",
