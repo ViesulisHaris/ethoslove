@@ -31,14 +31,21 @@ const CUTOUTS = {
 export type CutoutId = keyof typeof CUTOUTS;
 
 /**
- * One cut-out. Decorative: never announced, never clickable, never the thing the page waits for.
+ * The picture itself, for a cut-out from anywhere: public/scraps here, the rendered page art on a
+ * gift's page (content/page-art.ts). Decorative: never announced, never clickable, never the thing
+ * the page waits for, and its box is reserved by its width and height.
  * An eager one is drawn through EagerImg, so the homepage's hero lilies stop being preloaded by
  * every page that merely links to the homepage (see eager-img.tsx); a lazy one needs no such care.
  */
+export function CutoutImg({ src, width, height, srcSet, eager = false, className, style }: { src: string; width: number; height: number; srcSet?: string; eager?: boolean; className?: string; style?: CSSProperties }) {
+  const Img = eager ? EagerImg : "img";
+  return <Img src={src} srcSet={srcSet} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
+}
+
+/** One cut-out from public/scraps, by name. */
 export function Cutout({ id, eager = false, className, style }: { id: CutoutId; eager?: boolean; className?: string; style?: CSSProperties }) {
   const [width, height] = CUTOUTS[id];
-  const Img = eager ? EagerImg : "img";
-  return <Img src={`/scraps/${id}.webp`} alt="" aria-hidden="true" width={width} height={height} draggable={false} loading={eager ? "eager" : "lazy"} decoding="async" className={cn("pointer-events-none h-auto select-none", className)} style={style} />;
+  return <CutoutImg src={`/scraps/${id}.webp`} width={width} height={height} eager={eager} className={className} style={style} />;
 }
 
 /**
@@ -46,7 +53,29 @@ export function Cutout({ id, eager = false, className, style }: { id: CutoutId; 
  * is one placed for a phone's taller, narrower page and hidden everywhere else. "Phone" means
  * anything under `lg`: a tablet gets the same single column, with the type starting at the left edge.
  */
-type Bloom = { id: CutoutId; x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean };
+export type Placement = { x: number; y: number; size: number; rot: number; blur?: number; opacity?: number; phone?: boolean | "only"; eager?: boolean };
+type Bloom = Placement & { id: CutoutId };
+
+/** Which screens a placed bloom is drawn on. */
+export function placementClass(b: Pick<Placement, "phone">): string {
+  return cn("absolute max-w-none", b.phone === false && "hidden lg:block", b.phone === "only" && "lg:hidden");
+}
+
+/**
+ * Where a placed bloom lies in its frame: its middle at x and y per cent, as wide as `size` per
+ * cent of the screen (never under 4.4 times that in pixels, never over 15 times), turned, and
+ * given the shadow of the ground it lies on.
+ */
+export function placementStyle(b: Placement, shadow: string): CSSProperties {
+  return {
+    left: `${b.x}%`,
+    top: `${b.y}%`,
+    width: `clamp(${Math.round(b.size * 4.4)}px, ${b.size}vw, ${b.size * 15}px)`,
+    transform: `translate(-50%, -50%) rotate(${b.rot}deg)`,
+    filter: `${b.blur ? `blur(${b.blur}px) ` : ""}drop-shadow(0 10px 18px ${shadow})`,
+    opacity: b.opacity ?? 1,
+  };
+}
 
 /** Round the hero: lilies spilling off the corners, a few soft with depth, the words left clear. */
 const HERO: Bloom[] = [
@@ -92,20 +121,7 @@ export function FloralFrame({ frame, ground, className }: { frame: keyof typeof 
       {ground === "light" ? <div className="absolute inset-0" style={{ background: "radial-gradient(58% 60% at 82% 44%, rgba(255,176,200,.5) 0%, rgba(255,176,200,0) 70%), radial-gradient(46% 42% at 0% 0%, rgba(255,214,196,.85) 0%, rgba(255,214,196,0) 72%), radial-gradient(44% 46% at 40% 104%, rgba(228,214,255,.75) 0%, rgba(228,214,255,0) 70%), linear-gradient(180deg, #FFF7F3 0%, #FFE9EC 100%)" }} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(85% 70% at 50% 30%, #55203f 0%, #2a0f1f 55%, #170810 100%)" }} /> : null}
       {FRAMES[frame].map((b, i) => (
-        <Cutout
-          key={i}
-          id={b.id}
-          eager={b.eager}
-          className={cn("absolute max-w-none", b.phone === false && "hidden lg:block", b.phone === "only" && "lg:hidden")}
-          style={{
-            left: `${b.x}%`,
-            top: `${b.y}%`,
-            width: `clamp(${Math.round(b.size * 4.4)}px, ${b.size}vw, ${b.size * 15}px)`,
-            transform: `translate(-50%, -50%) rotate(${b.rot}deg)`,
-            filter: `${b.blur ? `blur(${b.blur}px) ` : ""}drop-shadow(0 10px 18px rgba(${ground === "light" ? "120,50,70,.22" : "0,0,0,.5"}))`,
-            opacity: b.opacity ?? 1,
-          }}
-        />
+        <Cutout key={i} id={b.id} eager={b.eager} className={placementClass(b)} style={placementStyle(b, `rgba(${ground === "light" ? "120,50,70,.22" : "0,0,0,.5"})`)} />
       ))}
       {ground !== "bare" ? <div className={cn("grain-overlay mix-blend-overlay", ground === "light" ? "opacity-[0.16]" : "opacity-[0.1]")} /> : null}
       {ground === "dark" ? <div className="absolute inset-0" style={{ background: "radial-gradient(120% 90% at 50% 45%, transparent 45%, rgba(16,4,11,0.55) 100%)" }} /> : null}
