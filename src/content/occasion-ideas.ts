@@ -618,7 +618,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "pack-your-bags",
           heading: "The next visit, sprung as a surprise",
-          body: "Book the trip to them, then tell them like this. Set “Going to” as their own city and “Leaving from” as yours. They pack your clues, “my worst jumper, by request”, “an appetite”, “the key you gave me”, with no idea where the case is headed, until the departures board spells out the town they are standing in. Put the real arrival on the ticket: “Fri 12 Dec, 19:40”.",
+          body: "Book the trip to them, then tell them like this. Set “Going to” as their own city and “Leaving from” as yours. They pack your clues, “my worst jumper, by request”, “an appetite”, “the key you gave me”, with no idea where the case is headed, until the departures board spells out their own town. Put the real arrival on the ticket: “Fri 12 Dec, 19:40”.",
         },
         {
           template: "paper-crane",
@@ -678,7 +678,7 @@ export const OCCASION_IDEAS: Record<ListedOccasion, Record<GiftLocale, OccasionI
         {
           template: "pack-your-bags",
           heading: "La próxima visita, anunciada por sorpresa",
-          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en “Destino” y la tuya en “Salida”. Mete tus pistas en la maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, sin saber adónde va, hasta que el panel de salidas deletrea la ciudad en la que está. Pon en el billete la llegada de verdad: “vie. 12 dic., 19:40”.",
+          body: "Compra el billete para ir a su ciudad y cuéntaselo así. Pon su ciudad en “Destino” y la tuya en “Salida”. Mete tus pistas en la maleta, “mi peor jersey, a petición tuya”, “hambre”, “la llave que me diste”, sin saber adónde va, hasta que el panel de salidas deletrea su propia ciudad. Pon en el billete la llegada de verdad: “vie. 12 dic., 19:40”.",
         },
         {
           template: "paper-crane",
