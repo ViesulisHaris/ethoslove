@@ -164,7 +164,8 @@ How the page behaves when it is used by hand (each of these was found broken onc
 - **The fields keep their own values** (name, note, both tick boxes, the address). A browser puts
   them back after Back or a reload, and the page reads the count and the address field's tick back
   off them, so what is drawn and what is sent agree. Sending reads the tick box itself. A tick with
-  no address asks for the address; it is never sent as "no email". Privacy opens in its own tab.
+  no address asks for the address ("Add your email, or untick the box."); it is never sent as "no
+  email". Privacy opens in its own tab.
 - **The count is under the note's box**, never inside it.
 - **A photo that can't be used is said at the photo button.** Everything else is said under the
   send button.
@@ -271,7 +272,14 @@ npx playwright test tests/e2e/money.spec.ts --workers=1
 ```
 
 Run bare, 30 of its 52 tests fail (no pay panel to find); with the first three only, 6 fail (the
-pricing page's buttons). That is the live code's own behaviour, not this branch's: run bare on `origin/main` (4ad3c39d, 22 Nov 2026) the same 30 tests fail, name for name, and the branch changes neither the spec, the pay panel nor the pricing page.
+pricing page's buttons). That is the live code's own behaviour, not this branch's: run bare on `origin/main`
+(4ad3c39d, 22 Nov 2026) the same 30 tests fail, name for name, and the branch changes neither the
+spec, the pay panel nor the pricing page.
+
+Starting `next dev` by hand within a few seconds of another one on the same folder being stopped
+(Playwright stops its own at the end of a run) has twice come up answering 404 for every editor and
+preview page while `/pricing` answered 200. Stopping it and starting it again cleared it both
+times; check `/create/the-letter` answers 200 before trusting a run.
 
 One test in `group.spec.ts` also wants those settings: the send screen of a signed-out draft that
 holds notes. On a bare server it skips and says so; run `group.spec.ts` once with the four

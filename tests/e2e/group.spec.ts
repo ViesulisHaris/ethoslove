@@ -1139,7 +1139,7 @@ test.describe("the page at a link, used the way people use it", () => {
     await page.getByTestId("contribute-submit").click();
     if (now.ticked && !now.email) {
       // A tick with no address is never sent as "no email": the page asks for the address.
-      await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveText("Check the email address.");
+      await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveText("Add your email, or untick the box.");
       expect(asked).toHaveLength(0);
     } else {
       await expect(page.getByTestId("contribute-done")).toBeVisible();
@@ -1174,8 +1174,16 @@ test.describe("the page at a link, used the way people use it", () => {
     await write(page);
     await page.getByTestId("contribute-wants-email").check();
     await page.getByTestId("contribute-submit").click();
-    await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveText("Check the email address.");
+    await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveText("Add your email, or untick the box.");
+    // The field it is about has the cursor.
+    await expect(page.getByTestId("contribute-email")).toBeFocused();
     expect(asked).toHaveLength(0);
+    // Unticking is the other way out, and clears the words.
+    await page.getByTestId("contribute-wants-email").uncheck();
+    await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveCount(0);
+    await page.getByTestId("contribute-wants-email").check();
+    await page.getByTestId("contribute-submit").click();
+    await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveText("Add your email, or untick the box.");
     await page.getByTestId("contribute-email").fill("gran@example.com");
     await expect(page.getByTestId("contribute-form").getByRole("alert")).toHaveCount(0);
     await page.getByTestId("contribute-submit").click();

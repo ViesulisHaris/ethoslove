@@ -54,6 +54,7 @@ const S = {
     bad_photo: "That photo couldn't be used. Try a JPEG or a PNG.",
     too_large: "That photo is too big. Try a smaller one.",
     invalid_email: "Check the email address.",
+    no_email: "Add your email, or untick the box.",
     limited: "Too many notes from this connection. Try again in an hour.",
     error: "That didn't go through. Try again in a moment.",
   },
@@ -95,12 +96,13 @@ const S = {
     bad_photo: "Esa foto no se ha podido usar. Prueba con un JPEG o un PNG.",
     too_large: "Esa foto pesa demasiado. Prueba con una más pequeña.",
     invalid_email: "Revisa la dirección de correo.",
+    no_email: "Pon tu correo o desmarca la casilla.",
     limited: "Demasiadas notas desde esta conexión. Vuelve a probar en una hora.",
     error: "No se ha podido enviar. Inténtalo en un momento.",
   },
 } as const satisfies Record<GiftLocale, Record<string, string>>;
 
-type Problem = "invalid" | "no_links" | "bad_photo" | "too_large" | "invalid_email" | "limited" | "error";
+type Problem = "invalid" | "no_links" | "bad_photo" | "too_large" | "invalid_email" | "no_email" | "limited" | "error";
 /** What the page is: taking a note, or one of the ends a link comes to. */
 export type ContributeState = "open" | "full" | "closed" | "expired" | "sent";
 type Stage = ContributeState | "done" | "taken";
@@ -277,7 +279,7 @@ export function ContributeForm({
     // Ticked with no address would be sent as "no email, thanks" while the page shows a tick.
     if (wants && !address) {
       setWantsEmail(true);
-      setProblem("invalid_email");
+      setProblem("no_email");
       const empty = event.currentTarget.elements.namedItem("email");
       if (empty instanceof HTMLInputElement) requestAnimationFrame(() => empty.focus());
       return;
@@ -509,7 +511,10 @@ export function ContributeForm({
             <div className="mt-1 rounded-3xl border border-white/10 bg-white/[0.04] px-4 py-1">
               <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
                 {/* Its own value, like the fields: a browser that restores the page restores the tick, and the page reads it back. */}
-                <input type="checkbox" name="wantsEmail" value="1" onChange={(event) => setWantsEmail(event.target.checked)} className={box} data-testid="contribute-wants-email" />
+                <input type="checkbox" name="wantsEmail" value="1" onChange={(event) => {
+                    setWantsEmail(event.target.checked);
+                    if (problem === "no_email") setProblem(null);
+                  }} className={box} data-testid="contribute-wants-email" />
                 <span className="min-w-0">{t.email}</span>
               </label>
               {/* Always in the page, shown with the tick: an address typed here comes back with the rest of the form. */}
@@ -525,7 +530,7 @@ export function ContributeForm({
                   placeholder={t.emailField}
                   aria-label={t.emailField}
                   aria-describedby="email-consent"
-                  onChange={() => problem === "invalid_email" && setProblem(null)}
+                  onChange={() => (problem === "invalid_email" || problem === "no_email") && setProblem(null)}
                   className={cn(field, "h-11 rounded-full text-[15px]")}
                   data-testid="contribute-email"
                 />
