@@ -61,9 +61,34 @@ async function sprites() {
     }
     y += heights[ri];
   }
+  // step-phone: the piece; the piece with a gift's poster laid into its screen by the manifest's matrix and the bezel
+  // put back on top (a wrong number would show as a crooked or overflowing screen); the bezel layer alone; and
+  // step-send beside them, which it has to match to the pixel
+  const sp = manifest.pieces["step-phone"]?.plain;
+  if (sp) {
+    const rowH = 600, cw = 330;
+    const at0 = { left: 0, top: 0 };
+    const proof = await canvas(sp.w, sp.h, "#00000000").composite([{ input: join(DIR, sp.file), ...at0 }, await laidIn(poster, sp.screen, sp.screen.radius), { input: join(DIR, sp.bezel.file), ...at0 }]).png().toBuffer();
+    const send = entry("step-send", "plain");
+    const cells = [
+      [join(DIR, sp.file), "step-phone", `${sp.w}×${sp.h}  ${Math.round(sp.bytes / 1000)} kB  screen: flat ${sp.screen.fill}`],
+      [proof, "step-phone + poster by matrix + bezel", sp.screen.matrix],
+      [join(DIR, sp.bezel.file), "step-phone-bezel", `${sp.bezel.w}×${sp.bezel.h}  ${Math.round(sp.bezel.bytes / 1000)} kB`],
+      [join(DIR, send.file), "step-send (unchanged)", `${send.w}×${send.h}`],
+      [join(DIR, sp.x1.file), "step-phone-1x", `${sp.x1.w}×${sp.x1.h}  ${Math.round(sp.x1.bytes / 1000)} kB`],
+    ];
+    for (const [i, [src, name, sub]] of cells.entries()) {
+      const img = await sharp(src).resize({ height: rowH - 90, width: cw - 30, fit: "inside", withoutEnlargement: true }).png().toBuffer({ resolveWithObject: true });
+      const cx = 20 + i * (cw + 20);
+      layers.push({ input: img.data, left: cx + Math.round((cw - img.info.width) / 2), top: y + Math.round((rowH - 70 - img.info.height) / 2) });
+      layers.push({ input: label(name, cw, INK, 14), left: cx, top: y + rowH - 56 });
+      layers.push({ input: label(sub, cw, BODY, 10), left: cx, top: y + rowH - 32 });
+    }
+    y += rowH;
+  }
   const creamH = y + 10;
   // the same things small on the footer's ground: a box round a sprite, a shadow gone pale, would show here
-  const strip = ["lily-open", "lily-three-quarter", "lily-side", "petal-1", "petal-3", "leaf-1", "step-photo", "step-note", "step-send", "lily-stem-tall", "lily-footer"];
+  const strip = ["lily-open", "lily-three-quarter", "lily-side", "petal-1", "petal-3", "leaf-1", "step-photo", "step-note", "step-send", "step-phone", "lily-stem-tall", "lily-footer"];
   const sh = 300, sw = Math.floor((W - 40) / strip.length);
   for (const [i, piece] of strip.entries()) {
     const e = entry(piece, "ivory");
