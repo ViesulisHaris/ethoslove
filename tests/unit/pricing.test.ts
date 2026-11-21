@@ -39,6 +39,8 @@ describe("pricing catalogue", () => {
       pack: [299, 299, 249],
       giftcard: [2499, 2999, 2199],
       upgrade: [499, 499, 499],
+      // A group card, its template included (the owner's price, 21 Nov 2026); switched off until it has a template.
+      group: [1999, 2399, 1799],
     });
     // The bump takes a single or "make it special" to exactly Everything's price.
     expect([bumpAmount("single", "eur"), bumpAmount("single", "usd"), bumpAmount("single", "gbp")]).toEqual([1500, 1800, 1300]);

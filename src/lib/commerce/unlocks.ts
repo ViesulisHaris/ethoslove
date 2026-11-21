@@ -1,7 +1,7 @@
 import { premiumExtras } from "@/lib/gift/publish";
 import { noteRules } from "@/lib/gift/free-tier";
 import type { GiftData } from "@/lib/gift/schema";
-import { EVERY_TEMPLATE, hasPhotosUnlock, hasUnlock, photosUnlock } from "@/lib/pricing/products";
+import { EVERY_TEMPLATE, groupRows, hasGroupUnlock, hasPhotosUnlock, hasUnlock, photosUnlock } from "@/lib/pricing/products";
 import type { Json } from "@/lib/supabase/types";
 import { getManifest } from "@/templates/manifests";
 import { unique, type Db } from "./db";
@@ -66,6 +66,10 @@ export function foreverRowsOfPurchase(purchase: { product: string; template_slug
       return [...(purchase.template_slugs ?? []), ...(purchase.kind === "bump" ? [EVERY_TEMPLATE] : [])];
     case "photos":
       return (purchase.template_slugs ?? []).map(photosUnlock);
+    // A group card: its group row, and the template only when this purchase paid for it (`kind` is
+    // "group"; the step up is "group_addon"). So a refunded single is never handed back by a step up.
+    case "group":
+      return (purchase.template_slugs ?? []).flatMap((slug) => groupRows(slug, purchase.kind));
     case "everything":
     case "upgrade":
       return [EVERY_TEMPLATE];
@@ -117,8 +121,14 @@ export async function relockGifts(db: Db, userId: string): Promise<void> {
   ]);
   const owned = (unlocks ?? []).map((u) => u.template_slug);
   for (const gift of gifts ?? []) {
-    if (hasUnlock(owned, gift.template_slug)) continue;
     const data = gift.data as unknown as GiftData;
+    // A group card with nothing paid for its group behind it goes back to draft, whatever else the
+    // account holds: its link stops opening until it is paid for again, or sent without its notes.
+    if (Array.isArray(data?.contributions) && data.contributions.length > 0 && !hasGroupUnlock(owned, gift.template_slug)) {
+      await db.from("gifts").update({ status: "draft" }).eq("id", gift.id);
+      continue;
+    }
+    if (hasUnlock(owned, gift.template_slug)) continue;
     const manifest = getManifest(gift.template_slug);
     const paidFeature =
       manifest?.tier !== "free" ||

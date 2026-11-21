@@ -8,6 +8,8 @@ export type BuyerContext = {
   ownedForever: string[];
   /** Their paid purchases, for the upgrade price. */
   purchases: PaidPurchase[];
+  /** Every unlock row they can use today, a running membership's included: a group card's price goes by it. */
+  heldNow: string[];
 };
 
 /**
@@ -16,11 +18,12 @@ export type BuyerContext = {
  * A guest has nothing yet.
  */
 export async function readBuyer(admin: Db, userId: string | null): Promise<BuyerContext> {
-  if (!userId) return { ownedForever: [], purchases: [] };
+  if (!userId) return { ownedForever: [], purchases: [], heldNow: [] };
   const [{ data: rows }, passIds, { data: purchases }] = await Promise.all([
     admin.from("template_unlocks").select("template_slug, purchase_id").eq("user_id", userId),
     passPurchaseIds(admin, userId),
     admin.from("purchases").select(PURCHASE_CREDIT_COLUMNS).eq("user_id", userId).eq("status", "paid"),
   ]);
-  return { ownedForever: splitUnlocks(rows ?? [], passIds).forever, purchases: purchases ?? [] };
+  const split = splitUnlocks(rows ?? [], passIds);
+  return { ownedForever: split.forever, purchases: purchases ?? [], heldNow: [...split.forever, ...split.lent] };
 }

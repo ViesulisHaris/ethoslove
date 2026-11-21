@@ -14,11 +14,16 @@ export type Entitlement = {
    * length stay, and every other extra still needs the template's unlock.
    */
   photos?: boolean;
+  /**
+   * User holds group cards for this template (hasGroupUnlock, lib/pricing/products.ts): their own
+   * "group:" row. Everything's "*" does not count. Needed to send a gift that carries contributions.
+   */
+  group?: boolean;
 };
 
 export type PublishDecision =
   | { ok: true; watermark: boolean; isPremium: boolean }
-  | { ok: false; reason: "payment_required" | "not_ready"; problems?: string[] };
+  | { ok: false; reason: "payment_required" | "not_ready"; problems?: string[]; needs?: "group" };
 
 /**
  * Pure publish rules — unit tested, shared by the server action and the publish sheet.
@@ -29,7 +34,8 @@ export type PublishDecision =
  * goes out like a free template, footer on, extras still paid (`freeReply` is only ever set once the
  * server has checked the reply's token, lib/commerce/free-reply.ts). A creator-campaign gift goes out
  * the same way (`campaign`, set by the server only for a running grant that covers the template,
- * lib/commerce/campaign-rules.ts).
+ * lib/commerce/campaign-rules.ts). A gift that carries contributions is a group card, and needs the
+ * group unlock on top of whatever else it needs (src/lib/group).
  */
 export function decidePublish(
   manifest: TemplateManifest,
@@ -39,6 +45,11 @@ export function decidePublish(
 ): PublishDecision {
   const problems = readinessProblems(manifest, data, options.fieldsSchema);
   if (problems.length > 0) return { ok: false, reason: "not_ready", problems };
+
+  // A group card (a gift carrying what other people added, on a template made for it) needs the
+  // group unlock, which nothing else stands in for: not the template's own unlock, not Everything, not
+  // a free reply or a campaign. `needs` tells the publish sheet to show the group card's own price.
+  if (manifest.features.group && (data.contributions?.length ?? 0) > 0 && !entitlement.group) return { ok: false, reason: "payment_required", needs: "group" };
 
   const premiumTemplate = manifest.tier === "premium" && !options.freeReply && !options.campaign;
   const needsUnlock =

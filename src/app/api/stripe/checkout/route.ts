@@ -1,3 +1,4 @@
+import { groupGiftsEnabled } from "@/lib/group/flag";
 import { NextResponse, after, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
   ]);
   const plan = planCheckout(
     { product, templateSlugs: body.templateSlugs, packId: body.packId, addEverything: body.addEverything, secondSlug: body.secondSlug, currency, plan: body.plan, personalPrice: body.personalPrice },
-    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, ...owned },
+    { signedIn: Boolean(user), creatorCode, giftCardsOnSale: giftCardsOnSale(), subscriptions: subscriptionsEnabled(), membership, personalPrice, groupOnSale: groupGiftsEnabled(), ...owned },
   );
   if (!plan.ok) return NextResponse.json({ error: plan.error, ...(plan.needed ? { needed: plan.needed } : {}) }, { status: plan.status });
   // Before any purchase row: a one-tap session only for what the buttons sell, and only ticked.

@@ -113,7 +113,7 @@ export function supabasePublishReminderStore(admin: Db, stripe: Stripe | null): 
         .from("purchases")
         .select("id, user_id, template_slugs, created_at, stripe_payment_intent_id, store")
         .eq("status", "paid")
-        .in("product", ["single", "extras", "photos"])
+        .in("product", ["single", "extras", "photos", "group"])
         // Bought in the iOS app: the app publishes it, and has no web editor to send them to.
         .or("store.is.null,store.neq.app_store")
         .not("user_id", "is", null)

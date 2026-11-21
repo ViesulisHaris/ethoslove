@@ -49,7 +49,12 @@ export function passFromMembership(membership: MembershipSummary | null): PassSu
 }
 
 export function templatesFromRows(rows: string[]): string[] {
-  return rows.filter((row) => !row.startsWith("pack:"));
+  return rows.filter((row) => !row.startsWith("pack:") && !row.startsWith("group:"));
+}
+
+/** Templates the account may send group cards on ("*" for every one), from its "group:" rows. */
+export function groupsFromRows(rows: string[]): string[] {
+  return rows.filter((row) => row.startsWith("group:")).map((row) => row.slice("group:".length));
 }
 
 export function packsFromRows(rows: string[]): string[] {

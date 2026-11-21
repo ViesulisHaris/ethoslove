@@ -7,6 +7,9 @@ import {
   SECOND_GIFT,
   bumpAmount,
   extrasAmount,
+  groupAmount,
+  groupRows,
+  hasGroupUnlock,
   hasPhotosUnlock,
   hasUnlock,
   membershipAmount,
@@ -22,10 +25,11 @@ import { getManifest, isTemplateSlug } from "@/templates/manifests";
 import { upgradeAmount, type PaidPurchase } from "./pricing";
 
 /**
- * purchases.kind: the product, "bump" for a single or extras with every other template added, or
- * "second" for a single with a second gift.
+ * purchases.kind: the product, "bump" for a single or extras with every other template added,
+ * "second" for a single with a second gift, or "group_addon" for a group card bought by someone who
+ * already held its template (the step up: it grants the group row only, never the template again).
  */
-export type PurchaseKind = ProductId | "bump" | "second";
+export type PurchaseKind = ProductId | "bump" | "second" | "group_addon";
 
 export type CheckoutRequest = {
   product: ProductId;
@@ -68,6 +72,14 @@ export type CheckoutContext = {
   membership?: MembershipContext | null;
   /** The personal price the request's cookie holds, checked and not spent (lib/commerce/personal-price.ts); null without one. */
   personalPrice?: { id: string } | null;
+  /** Group cards are sold only while groupGiftsEnabled() (lib/group/flag.ts); absent or false, product "group" is refused. */
+  groupOnSale?: boolean;
+  /**
+   * Every unlock row the buyer can use today: what they keep for good and what a running membership
+   * lends them. Decides a group card's price (whoever holds the template pays the step up). Absent,
+   * only `ownedForever` counts.
+   */
+  heldNow?: string[];
 };
 
 export type PlanLine = { key: ProductId | "bump" | "second"; amount: number };
@@ -105,6 +117,8 @@ function alreadyCovered(owned: string[], unlock: string): boolean {
   if (unlock.startsWith("pack:")) return rowsCoverPack(owned, unlock.slice("pack:".length));
   // A note with photos is covered by its own row or by the template's unlock, which holds everything.
   if (unlock.startsWith("photos:")) return hasPhotosUnlock(owned, unlock.slice("photos:".length));
+  // A group card only by its own row ("group:<slug>" or "group:*"): Everything's "*" is templates.
+  if (unlock.startsWith("group:")) return hasGroupUnlock(owned, unlock.slice("group:".length));
   return hasUnlock(owned, unlock);
 }
 
@@ -152,8 +166,10 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   const catalogue = PRODUCTS[product];
 
   if (product === "giftcard" && !ctx.giftCardsOnSale) return fail("not_on_sale", 400);
+  // Built, and switched off until GROUP_GIFTS_ENABLED and a template made for it (lib/group/flag.ts).
+  if (product === "group" && !ctx.groupOnSale) return fail("not_on_sale", 400);
   let slugs: string[] = [];
-  if (product === "single" || product === "pick3" || product === "extras" || product === "photos") {
+  if (product === "single" || product === "pick3" || product === "extras" || product === "photos" || product === "group") {
     slugs = Array.from(new Set(req.templateSlugs.filter(isTemplateSlug)));
     if (slugs.length !== catalogue.picks) return fail("wrong_template_count", 400, { needed: catalogue.picks });
     // A note with photos is sold only where the free version is the short note (The Letter).
@@ -163,6 +179,8 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     // And the other way round: a free template's unlock is "Make it special" at its own price, never
     // the same unlock sold as a single for more.
     if (product === "single" && getManifest(slugs[0])?.tier !== "premium") return fail("single_premium_only", 400);
+    // A group card is sold only on a template made for one.
+    if (product === "group" && !getManifest(slugs[0])?.features.group) return fail("not_group_template", 400);
   }
   let packId: PackId | null = null;
   if (product === "pack") {
@@ -183,10 +201,16 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
     if (!isTemplateSlug(second) || getManifest(second)?.tier !== "premium" || slugs.includes(second)) return fail("second_not_available", 400);
     if (alreadyCovered(ctx.ownedForever, second)) return fail("second_owned", 409);
   }
-  // The price depends on what the buyer already paid, so it needs to know who they are.
-  if (product === "upgrade" && !ctx.signedIn) return fail("sign_in_required", 401);
+  // The price depends on what the buyer already paid, so it needs to know who they are. So does a
+  // group card's: it is the step up for whoever holds the template, and it is bought from a draft
+  // that already belongs to an account.
+  if ((product === "upgrade" || product === "group") && !ctx.signedIn) return fail("sign_in_required", 401);
 
-  const unlocks = product === "pass" || product === "giftcard" ? [] : unlocksFor(product, slugs, { packId: packId ?? undefined });
+  // A group card includes its template; whoever holds the template today (for good, or through a
+  // running membership) pays the difference and is granted group cards only.
+  const heldNow = ctx.heldNow ?? ctx.ownedForever;
+  const groupKind: PurchaseKind | null = product === "group" ? (hasUnlock(heldNow, slugs[0]) ? "group_addon" : "group") : null;
+  const unlocks = product === "pass" || product === "giftcard" ? [] : groupKind ? groupRows(slugs[0], groupKind) : unlocksFor(product, slugs, { packId: packId ?? undefined });
   // addEverything on a pass is refused above (the bump only rides on a single or extras).
   if (bump) unlocks.push(EVERY_TEMPLATE);
   if (second) unlocks.push(second);
@@ -197,7 +221,13 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   if (personal && (bump || second !== null)) return fail("personal_price_unavailable", 400);
   // "Make it special" for someone who already paid for a note with photos is the difference.
   const listed =
-    product === "upgrade" ? upgradeAmount(currency, ctx.purchases) : product === "extras" ? extrasAmount(currency, ctx.ownedForever, slugs[0]) : catalogue.amounts[currency];
+    product === "upgrade"
+      ? upgradeAmount(currency, ctx.purchases)
+      : product === "extras"
+        ? extrasAmount(currency, ctx.ownedForever, slugs[0])
+        : product === "group"
+          ? groupAmount(currency, heldNow, slugs[0])
+          : catalogue.amounts[currency];
   const charged = personal ? Math.min(listed, PERSONAL_PRICE.amounts[currency]) : listed;
   const lines: PlanLine[] = [{ key: product, amount: charged }];
   // The bump takes the order to exactly Everything's price.
@@ -207,7 +237,7 @@ export function planCheckout(req: CheckoutRequest, ctx: CheckoutContext): ({ ok:
   return {
     ok: true,
     product,
-    kind: bump ? "bump" : second ? "second" : product,
+    kind: bump ? "bump" : second ? "second" : (groupKind ?? product),
     currency,
     templateSlugs: packId ? [`pack:${packId}`] : slugs,
     packId,

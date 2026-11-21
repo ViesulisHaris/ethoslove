@@ -15,6 +15,7 @@ import {
   isProductId,
   membershipAmount,
   unlocksFor,
+  groupRows,
   type Currency,
   type MembershipPlan,
   type ProductId,
@@ -61,6 +62,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     pack: "Game pack",
     giftcard: "Gift card: Give Everything",
     upgrade: "Upgrade to Everything",
+    group: "A group card",
   },
   es: {
     single: "Una plantilla",
@@ -73,6 +75,7 @@ const LABELS: Record<Locale, Record<ProductId, string>> = {
     pack: "Pack de juegos",
     giftcard: "Tarjeta regalo: Regálalo todo",
     upgrade: "Pasar a Todo",
+    group: "Una tarjeta en grupo",
   },
 };
 
@@ -81,6 +84,7 @@ const RECEIPT_LINES = {
     withBump: (label: string) => `${label} + every other template`,
     withSecond: (label: string) => `${label} + a second gift`,
     everyTemplate: "All templates, current and future",
+    group: (template: string) => `Group cards on ${template}`,
     pass: "Every gift template and every game pack, for both of you",
     giftcard: "A gift card code for Everything, forever (sent in its own email)",
   },
@@ -88,6 +92,7 @@ const RECEIPT_LINES = {
     withBump: (label: string) => `${label} + todas las demás plantillas`,
     withSecond: (label: string) => `${label} + un segundo regalo`,
     everyTemplate: "Todas las plantillas, las de ahora y las que vengan",
+    group: (template: string) => `Tarjetas en grupo con ${template}`,
     pass: "Todas las plantillas de regalo y todos los packs de juegos, para los dos",
     giftcard: "Un código de tarjeta regalo para «Todo», para siempre (te llega en otro correo)",
   },
@@ -188,6 +193,9 @@ export function agreedConsent(
 /** The unlock rows a template or pack purchase grants its buyer for good. Null when the metadata doesn't add up. */
 export function foreverRowsFor(sold: Sold): string[] | null {
   if (sold.product === "pass" || sold.product === "membership" || sold.product === "giftcard") return [];
+  // A group card: group cards on its template, and the template itself unless the buyer already held
+  // it when they paid (kind "group_addon", written by checkout into the session's metadata).
+  if (sold.product === "group") return sold.slugs.length === 1 ? groupRows(sold.slugs[0], sold.kind) : null;
   try {
     const rows = unlocksFor(sold.product, sold.slugs, { packId: sold.packId ?? undefined });
     return [...rows, ...(sold.bump ? [EVERY_TEMPLATE] : []), ...(sold.second ? [sold.second] : [])];
@@ -265,7 +273,9 @@ export async function fulfilCheckoutSession(session: Stripe.Checkout.Session): P
         ? lines.everyTemplate
         : sold.packId && row === `pack:${sold.packId}`
           ? PACK_NAMES[sold.packId][buyer.locale]
-          : (getManifest(row)?.name[buyer.locale] ?? row),
+          : row.startsWith("group:")
+            ? lines.group(getManifest(row.slice("group:".length))?.name[buyer.locale] ?? row.slice("group:".length))
+            : (getManifest(row)?.name[buyer.locale] ?? row),
     );
   }
 
