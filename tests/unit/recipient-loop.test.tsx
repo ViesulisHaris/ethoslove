@@ -171,6 +171,9 @@ describe("after a reaction is sent", () => {
     // Nothing else: one button, no link, no price, no form.
     expect(html.match(/<button/g)).toHaveLength(1);
     expect(html).not.toMatch(/<a |<form|<input|€|\$\d|free/);
+    // A thumb tall, and its keyboard ring is a light one: the sheet is dark.
+    expect(html).toContain("min-h-12");
+    expect(html).toContain("focus-visible:outline-white/60");
   });
 
   it("in Spanish for a Spanish gift", () => {

@@ -170,6 +170,24 @@ describe("the maker's mark at the foot of a free gift", () => {
     expect(mark(endOf("en", "dark"))).toContain("text-white/55");
   });
 
+  it("shows its keyboard ring on a dark end screen, where the site's dark ring is lost, as the link above it does", () => {
+    const light = /focus-visible:outline-white\/60/;
+    expect(mark(endOf("en", "dark"))).toMatch(light);
+    expect(mark(endOf("en", "light"))).not.toMatch(light);
+    const link = (tone: "light" | "dark") =>
+      someoneElse(
+        renderToStaticMarkup(
+          <ReplyModeContext.Provider value>
+            <EndScreen data={gift("bouquet")} tone={tone} onMakeOne={() => {}} />
+          </ReplyModeContext.Provider>,
+        ),
+      );
+    expect(link("dark")).toMatch(light);
+    expect(link("light")).not.toMatch(light);
+    // On its own box: the default ring stands 3px off, into the button above.
+    expect(link("light")).toContain("focus-visible:outline-offset-0");
+  });
+
   it("leaves the floating badge the one line it was", () => {
     const floating = renderToStaticMarkup(<Watermark locale="en" slug="the-letter" />);
     expect(floating).toContain("Made with Ethos");
