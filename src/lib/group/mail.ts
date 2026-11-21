@@ -45,7 +45,9 @@ export async function askToConfirm(admin: Db, input: { entryId: string; email: s
 export async function nudgeSender(admin: Db, group: GroupRow, now: number): Promise<boolean> {
   const dayAgo = iso(now - DAY);
   if (group.nudged_at && group.nudged_at > dayAgo) return false;
-  const claimed = await admin.from("gift_groups").update({ nudged_at: iso(now) }).eq("id", group.id).or(`nudged_at.is.null,nudged_at.lt.${dayAgo}`).select("id");
+  // Claimed against what the row held when it was read: never nudged, or last nudged over a day ago.
+  const claim = admin.from("gift_groups").update({ nudged_at: iso(now) }).eq("id", group.id);
+  const claimed = await (group.nudged_at ? claim.lt("nudged_at", dayAgo) : claim.is("nudged_at", null)).select("id");
   if (!claimed.data?.length) return false;
   const [{ data: profile }, { count }] = await Promise.all([
     admin.from("profiles").select("email, locale").eq("id", group.user_id).maybeSingle(),
