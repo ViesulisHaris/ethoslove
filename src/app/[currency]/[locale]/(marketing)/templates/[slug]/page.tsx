@@ -28,7 +28,7 @@ import { HeroFlatlay, type HeroFlatlayArt } from "@/components/templates/page/he
 import { heroLead } from "@/components/templates/page/lead";
 import { HERO_ART } from "@/components/templates/page/placements";
 import { Experience, HowToSend, MoreLikeThis, Questions, WhatToWrite, templateSamples } from "@/components/templates/page/sections";
-import { noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
+import { NOTE_TEMPLATES, noteForEveryone, sendsFree } from "@/lib/gift/free-tier";
 import { PRODUCTS, chargedCurrency, formatAmount } from "@/lib/pricing/products";
 
 export function generateStaticParams() {
@@ -103,6 +103,11 @@ export default async function TemplateDetailPage({
     spanX,
   };
   const samples = await templateSamples(manifest.slug, l, guide);
+  const steps = templateSteps(manifest.slug);
+  // While the free version is the short note, a note template's free gift has no photos, video or
+  // captions (lib/gift/free-tier.ts): the list under the hero is then what "Make it special" adds,
+  // and says so, where it used to stand under "Free" as if it came with the free note.
+  const note = free && noteForEveryone() && NOTE_TEMPLATES.includes(manifest.slug);
 
   // What's included: only what this template has. What it lacks is not a list to read.
   const included = [
@@ -186,7 +191,7 @@ export default async function TemplateDetailPage({
               </div>
 
               <div className="order-last xl:mt-10">
-                <h2 className="text-page-label text-page-body">{t("templates.included")}</h2>
+                <h2 className="text-page-label text-page-body">{t(note ? "templates.includedSpecial" : "templates.included")}</h2>
                 <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
                   {included.map((label) => (
                     <li key={label} className="flex items-center gap-2.5 text-[0.9375rem] text-page-ink">
@@ -206,7 +211,7 @@ export default async function TemplateDetailPage({
              * lilies stop short of the words and its left-hand one is not lost off the page.
              */}
             <div className="min-w-0 [--fl-down:1.76] [--fl-up:1.74] [--hero-phone:min(13.75rem,57vw)] xl:order-first xl:[--fl-down:1.2] xl:[--fl-up:1.2] xl:[--hero-phone:clamp(14rem,17.8vw,16rem)]">
-              <HeroFlatlay slug={manifest.slug} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ ...theme.cover, from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
+              <HeroFlatlay slug={manifest.slug} name={manifest.name[l]} locale={l} art={heroArt} preview={manifest.thumbnail.webm} frame={{ ...theme.cover, from: templateFilmStart(manifest.slug) }} width="var(--hero-phone)" up="var(--fl-up)" down="var(--fl-down)" sizes="(min-width: 1280px) 860px, (min-width: 420px) 800px, 190vw" className="xl:mx-0 xl:ml-[clamp(3.25rem,calc(6.8rem-(100vw-80rem)*0.36),6.8rem)]" />
             </div>
           </div>
         </section>
@@ -215,13 +220,14 @@ export default async function TemplateDetailPage({
           locale={l}
           heading={seo?.howTo ?? t("templates.guide.heading", { name: manifest.name[l] })}
           flowers={flowers}
-          steps={templateSteps(manifest.slug)}
+          steps={steps}
           lines={samples.lines}
+          source={samples.source}
           photo={samples.photo}
           poster={manifest.thumbnail.poster}
         />
         {guide ? <WhatToWrite manifest={manifest} locale={l} guide={guide} flowers={flowers} /> : null}
-        <Experience manifest={manifest} locale={l} flowers={flowers} photo={samples.photo} />
+        <Experience manifest={manifest} locale={l} flowers={flowers} photo={samples.photo} line={steps?.line[l] ?? null} note={note} />
         <Questions manifest={manifest} locale={l} faq={faq} guide={guide} about={about.rest} />
         <MoreLikeThis manifest={manifest} locale={l} flowers={flowers} />
       </div>

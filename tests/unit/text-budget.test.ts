@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
+import { TEMPLATE_STEPS } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 import { CLOSED_BLOCK_WORDS, fitSentences, heroLead } from "@/components/templates/page/lead";
 
@@ -13,6 +14,8 @@ import { CLOSED_BLOCK_WORDS, fitSentences, heroLead } from "@/components/templat
  */
 const LOCALES = ["en", "es"] as const;
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
+
+const EXPERIENCE_KEYS = ["experienceOpens", "experienceNote", "experiencePhotosNone", "experiencePhotosOne", "experiencePhotosMany", "experienceMic", "experienceMotion", "experienceSong", "experienceTouch"] as const;
 
 describe("the text budget of a gift's page", () => {
   it("an idea is a card: a title of at most six words, one line of at most sixteen on what to do", () => {
@@ -33,7 +36,11 @@ describe("the text budget of a gift's page", () => {
       for (const key of ["howLine", "ideasLine", "faqLine"] as const) if (words(guide[key]) > 14) over.push(`${l} templates.guide.${key} (${words(guide[key])})`);
       // "The experience" has the mock-up's two lines beside its picture, and three short checks.
       if (words(guide.experienceBody) > 24) over.push(`${l} templates.guide.experienceBody (${words(guide.experienceBody)})`);
-      for (const key of ["experienceCheck1", "experienceCheck2", "experienceCheck3"] as const) if (words(guide[key]) > 12) over.push(`${l} templates.guide.${key} (${words(guide[key])})`);
+      // The checks are read off the gift (sections.tsx, experienceChecks): each wording, with the longest numbers a gift has.
+      const filled = (key: (typeof EXPERIENCE_KEYS)[number]) => guide[key].replace("{min}", "3").replace("{max}", "20").replace("{chars}", "500");
+      for (const key of EXPERIENCE_KEYS) if (words(filled(key)) > 12) over.push(`${l} templates.guide.${key} (${words(filled(key))})`);
+      // The first check is the gift's own line on what the person who gets it does.
+      for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) if (words(row.line[l]) > 12) over.push(`${slug} ${l} line (${words(row.line[l])}): ${row.line[l]}`);
       // The line under the buttons says what it costs and no more.
       for (const key of ["pagePriceNote", "pagePriceFree", "pagePricePaid"] as const) if (words(messages.templates[key]) > 16) over.push(`${l} templates.${key} (${words(messages.templates[key])})`);
     }
@@ -45,6 +52,13 @@ describe("the text budget of a gift's page", () => {
     for (const [l, messages] of [["en", en], ["es", es]] as const) {
       for (const key of ["step1Title", "step2Title", "step3Title", "experienceHeading", "moreHeading"] as const)
         if (words(messages.templates.guide[key]) > 9) over.push(`${l} templates.guide.${key}`);
+      // "More like this" is headed by the day the four gifts are for: one heading for each day a gift can be made for.
+      for (const m of TEMPLATE_MANIFESTS)
+        for (const o of m.occasions) {
+          const heading = (messages.templates.guide.moreFor as Record<string, string>)[o];
+          if (!heading) over.push(`${l} templates.guide.moreFor.${o} is missing`);
+          else if (words(heading) > 9) over.push(`${l} templates.guide.moreFor.${o}`);
+        }
       for (const m of TEMPLATE_MANIFESTS) if (words(m.name[l]) > 9) over.push(`${m.slug} ${l} name`);
     }
     expect(over).toEqual([]);

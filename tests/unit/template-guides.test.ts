@@ -186,7 +186,7 @@ const plain = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/[.
 
 /** What the editor calls a template's fields and their choices, in one language. */
 async function editorNames(slug: string, l: (typeof LOCALES)[number]): Promise<Set<string>> {
-  const mod = (await import(`@/templates/${slug}/field-meta.ts`).catch(() => null)) as { fieldMeta?: Record<string, Record<string, { label: string; options?: Record<string, string> }>> } | null;
+  const mod = (await import(`../../src/templates/${slug}/field-meta.ts`).catch(() => null)) as { fieldMeta?: Record<string, Record<string, { label: string; options?: Record<string, string> }>> } | null;
   const names = new Set<string>();
   for (const meta of Object.values(mod?.fieldMeta?.[l] ?? {})) for (const name of [meta.label, ...Object.values(meta.options ?? {})]) names.add(plain(name));
   return names;

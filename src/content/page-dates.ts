@@ -22,9 +22,9 @@ import { PT_LETTER_PATH, PT_LETTER_UPDATED } from "@/content/pt-letter";
  * 21 Nov 2026 (far fewer words on show, new lines beside each section, the steps written out only
  * in a closed block), so every template page takes this date. They are not live yet, and a date
  * that runs ahead of the page is the kind search engines stop believing: whoever ships them sets
- * this to that day.
+ * this to that day. It is the one line to set: tests/unit/crawl.test.ts reads it from here.
  */
-const GUIDES_LIVE = "2026-11-21";
+export const GUIDES_LIVE = "2026-11-21";
 
 export const PAGE_UPDATED: Readonly<Record<string, string>> = {
   // Prices went local on 25 Oct: every page showing one changed that day for US visitors and Googlebot.

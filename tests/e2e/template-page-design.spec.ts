@@ -332,12 +332,14 @@ test("the gift's film plays in the lying phone while it is on screen, and moves 
   await expect.poll(async () => (await film(page)).paused).toBe(true);
 });
 
-test("no film for someone who asked for less motion or less data: the still cover is the whole of it", async ({ browser, baseURL }) => {
+test("no film for someone who asked for less motion or less data, or on a slow connection: the still cover is the whole of it", async ({ browser, baseURL }) => {
   const origin = new URL(baseURL!).origin;
   const storageState = { cookies: [], origins: [{ origin, localStorage: [{ name: "ethos-consent", value: "denied" }] }] };
-  for (const kind of ["motion", "data"] as const) {
+  // "slow": a film is 0.4 to 2 MB, and the browser itself says the connection is under 4g (the review of 21 Nov 2026).
+  for (const kind of ["motion", "data", "slow"] as const) {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, baseURL, storageState, reducedMotion: kind === "motion" ? "reduce" : "no-preference" });
     if (kind === "data") await context.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true } }));
+    if (kind === "slow") await context.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: false, effectiveType: "3g" } }));
     const page = await context.newPage();
     const films: string[] = [];
     page.on("request", (request) => void (/\.(webm|mp4)$/.test(new URL(request.url()).pathname) && films.push(request.url())));
@@ -350,7 +352,229 @@ test("no film for someone who asked for less motion or less data: the still cove
     expect(f.opacity, kind).toBe(0);
     expect(f.stillShown, kind).toBe(true);
     expect(films, kind).toEqual([]);
+    // And no pause button for a film that is not there.
+    await expect(page.locator("[data-film-toggle]"), kind).toHaveCount(0);
     await context.close();
+  }
+});
+
+test("the film starts on the gift's own screen, never on the cover that says “turn your sound on”", async ({ page }) => {
+  // Every recording opens on the demo page's bar and then the cover every gift opens on, for two
+  // dark seconds. In the hero the film is silent, so that was a play button over "turn your sound on".
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const slug of ["passport", "coquette"]) {
+    await page.goto(`/templates/${slug}`);
+    const video = page.locator("[data-flatlay=hero] video");
+    await expect(page.locator("[data-flatlay=hero] video[data-on]")).toHaveCount(1, { timeout: 20000 });
+    const from = templateFilmStart(slug);
+    expect(from, slug).toBeGreaterThanOrEqual(2);
+    expect(await video.evaluate((v: HTMLVideoElement) => v.currentTime), slug).toBeGreaterThanOrEqual(from);
+  }
+});
+
+test("the film can be stopped and started again, and stays stopped when the phone scrolls back", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(PAGE);
+  const hero = page.locator("[data-flatlay=hero]");
+  // No button until there is a film to stop.
+  await expect(hero.locator("video[data-on]")).toHaveCount(1, { timeout: 20000 });
+  const toggle = hero.locator("[data-film-toggle]");
+  await expect(toggle).toHaveAccessibleName(/pause the preview/i);
+  const box = (await toggle.boundingBox())!;
+  expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+  // It is beside the phone, not on its screen: what is under its middle is the button itself, and a tap on it must not start the demo.
+  expect(await toggle.evaluate((el) => { const r = el.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return el.contains(top) && !top!.closest("[data-play]"); })).toBe(true);
+  await toggle.click();
+  await expect(hero.locator("[data-upright]")).toHaveCount(0);
+  await expect.poll(async () => (await film(page)).paused).toBe(true);
+  await expect(toggle).toHaveAccessibleName(/play the preview/i);
+  // Stopped by the visitor, it stays stopped: off the screen and back does not start it.
+  await page.locator("section[aria-labelledby=template-questions]").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(800);
+  expect((await film(page)).paused).toBe(true);
+  // By keyboard too.
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect.poll(async () => (await film(page)).paused).toBe(false);
+  await expect(toggle).toHaveAccessibleName(/pause the preview/i);
+});
+
+test("by keyboard: the play button shows its focus, the picked-up phone takes it, and it can be put down again", async ({ page }) => {
+  // The review of 21 Nov 2026: the button's ring was cut off by the phone's screen, pressing it
+  // disabled it and dropped the focus on the page's body, and nothing could put the phone down.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(PAGE);
+  const hero = page.locator("[data-flatlay=hero]");
+  const play = hero.locator("[data-play]");
+  await expect(play).toBeVisible();
+  for (let i = 0; i < 60; i++) {
+    await page.keyboard.press("Tab");
+    if (await play.evaluate((el) => el === document.activeElement)) break;
+  }
+  await expect(play).toBeFocused();
+  // The ring is drawn inside the screen, round the play disc, where nothing cuts it off.
+  expect(await play.evaluate((el) => el.matches(":focus-visible"))).toBe(true);
+  const ring = await hero.locator("[data-play-disc]").evaluate((el) => {
+    const disc = el.getBoundingClientRect();
+    const screen = el.closest("[data-play]")!.parentElement!.getBoundingClientRect();
+    return { shadow: getComputedStyle(el).boxShadow, inside: disc.left - 8 > screen.left && disc.right + 8 < screen.right && disc.top - 8 > screen.top && disc.bottom + 8 < screen.bottom };
+  });
+  expect(ring.shadow).toMatch(/0px 0px 0px 6px/);
+  expect(ring.inside).toBe(true);
+
+  await page.keyboard.press("Enter");
+  const up = hero.locator("[data-upright]");
+  await expect(up).toBeVisible();
+  // The focus went up with the phone, to something with a name.
+  await expect(up).toBeFocused();
+  await expect(up).toHaveAccessibleName(/the letter, the live demo/i);
+  // The lying phone is only a picture now: not disabled, and out of the tab order.
+  expect(await play.evaluate((el) => [(el as HTMLButtonElement).disabled, el.closest("[inert]") !== null])).toEqual([false, true]);
+  // The next tab stop is inside the gift or its close button, never the button underneath.
+  await page.keyboard.press("Tab");
+  expect(await page.evaluate(() => document.activeElement?.closest("[data-upright]") !== null)).toBe(true);
+
+  // The close button puts the phone down and hands the focus back.
+  const close = up.getByRole("button", { name: /close the demo/i });
+  const box = (await close.boundingBox())!;
+  expect(Math.min(box.width, box.height)).toBeGreaterThanOrEqual(44);
+  await close.focus();
+  await page.keyboard.press("Enter");
+  await expect(up).toHaveCount(0);
+  await expect(play).toBeFocused();
+  expect(await play.evaluate((el) => el.closest("[inert]") === null)).toBe(true);
+
+  // And Escape does the same.
+  await page.keyboard.press("Enter");
+  await expect(up).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(up).toHaveCount(0);
+  await expect(play).toBeFocused();
+});
+
+test("“See more examples” follows the cards, however they were opened", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(PAGE);
+  const section = page.locator("section[aria-labelledby=template-guide]");
+  const button = section.getByRole("button", { name: /see more examples|hide the examples/i });
+  const cards = section.locator("details");
+  await expect(cards).toHaveCount(6);
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+  // Opened one by one, by hand: the button knows only when all six are open.
+  for (let i = 0; i < 6; i++) {
+    await cards.nth(i).locator("summary").click();
+    await expect(button).toHaveAttribute("aria-expanded", i === 5 ? "true" : "false");
+  }
+  await expect(button).toHaveText(/hide the examples/i);
+  // One closed by hand: it offers to show them again.
+  await cards.nth(2).locator("summary").click();
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+  await expect(button).toHaveText(/see more examples/i);
+  // And the button itself still opens and closes all of them.
+  await button.click();
+  await expect(section.locator("details[open]")).toHaveCount(6);
+  await expect(button).toHaveText(/hide the examples/i);
+  await button.click();
+  await expect(section.locator("details[open]")).toHaveCount(0);
+  await expect(button).toHaveAttribute("aria-expanded", "false");
+});
+
+test("Passport's page shows the route its demo flies, on its step card and nowhere a place in Spain", async ({ page }) => {
+  // Its cover and film said Berlin to Madrid, and its first step card quoted a nationality line.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/templates/passport");
+  const first = page.locator("section[aria-labelledby=template-how] li").first();
+  await expect(first).toContainText(/set both cities/i);
+  await expect(first.locator("[data-flatlay=step]")).toHaveText("Berlin → Riga");
+  // A step about a choice shows the choice as the editor names it.
+  await page.goto("/templates/bloom");
+  await expect(page.locator("section[aria-labelledby=template-how] li").first().locator("[data-flatlay=step]")).toHaveText(/^(Peony|Tulip|Daisy)$/);
+  // The Spanish pages last: a visit to one is remembered, and the next page would come in Spanish.
+  for (const path of ["/templates/passport", "/templates/picnic", "/templates/halfway", "/es/templates/passport", "/es/templates/halfway"]) {
+    await page.goto(path);
+    const text = await page.locator("[data-page-theme]").evaluate((el) => el.textContent ?? "");
+    expect(text, path).not.toMatch(/\b(spain|españa|madrid|barcelona|sevilla|seville|valencia|málaga|bilbao|mallorca|ibiza|retiro|las palmas)\b/i);
+  }
+});
+
+test("“The experience” is about the gift beside it, and “More like this” differs from gift to gift", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const read = async (path: string) => {
+    await page.goto(path);
+    const checks = await page.locator("section[aria-labelledby=template-experience] li").allTextContents();
+    const more = await page.locator("section[aria-labelledby=template-more] li a").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
+    const heading = await page.locator("#template-more").textContent();
+    const how = await page.locator("section[aria-labelledby=template-how] p").nth(1).textContent();
+    return { checks, more, heading, how };
+  };
+  const halfway = await read("/templates/halfway");
+  const globe = await read("/templates/snow-globe");
+  // Three checks each: what they do and what it asks of their phone differ between two gifts
+  // (both hold one to eight photos), and none is one of the three every page used to have.
+  expect(halfway.checks).toHaveLength(3);
+  expect(globe.checks).toHaveLength(3);
+  expect(halfway.checks.join(" ")).toMatch(/blow/i);
+  expect(globe.checks.join(" ")).toMatch(/shake/i);
+  expect(halfway.checks[0]).not.toBe(globe.checks[0]);
+  expect(halfway.checks[2]).not.toBe(globe.checks[2]);
+  expect([...halfway.checks, ...globe.checks].join(" ")).not.toMatch(/any phone or laptop|QR code|after sending/i);
+  // Nothing opens "Three steps." any more.
+  expect(`${halfway.how} ${globe.how} ${halfway.checks.join(" ")}`).not.toMatch(/three steps/i);
+  // Four gifts each, for the day the page's gift is first made for, named in the heading.
+  expect(halfway.more).toHaveLength(4);
+  expect(halfway.heading).toMatch(/long distance/i);
+  expect(globe.heading).toMatch(/christmas/i);
+  const letter = await read("/templates/the-letter");
+  const sky = await read("/templates/constellations");
+  expect(letter.more).toHaveLength(4);
+  expect(letter.more).not.toEqual(sky.more);
+  expect(letter.more).not.toContain("/templates/the-letter");
+});
+
+/**
+ * The live site runs with the free Letter as a short note (NEXT_PUBLIC_FREE_NOTE_SHARE=1) and “a note
+ * with photos” offered to everyone (NEXT_PUBLIC_LETTER_KEEP_SHARE=1). A worktree has no env file, so
+ * every run here used to see the page as it is with both off, and the page live visitors get was
+ * never opened by a test: under “Free” it listed 20 photos, captions and a video clip, which the
+ * free note does not have (the review of 21 Nov 2026). Run the suite with both set to see this:
+ *
+ *   NEXT_PUBLIC_FREE_NOTE_SHARE=1 NEXT_PUBLIC_LETTER_KEEP_SHARE=1 PORT=3413 npx playwright test tests/e2e/template-page-design.spec.ts --workers=1
+ *
+ * (stop any dev server on the port first: the switches are read when the server builds a page).
+ */
+const NOTE_FOR_EVERYONE = process.env.NEXT_PUBLIC_FREE_NOTE_SHARE === "1";
+
+test("The Letter's page never lists under “Free” what the free note does not have", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [path, special, included, chars] of [
+    ["/templates/the-letter", /with “make it special”/i, /what.s included/i, /the free note holds 500 characters/i],
+    ["/es/templates/the-letter", /con «hazlo especial»/i, /qué incluye/i, /la nota gratis admite 500 caracteres/i],
+  ] as const) {
+    await page.goto(path);
+    const hero = page.locator("[data-page-theme] > section").first();
+    const list = hero.locator("ul").last();
+    await expect(list).toContainText(/20/);
+    const heading = hero.getByRole("heading", { level: 2 });
+    const experience = page.locator("section[aria-labelledby=template-experience]");
+    if (NOTE_FOR_EVERYONE) {
+      // The list of photos, captions and a video is what “Make it special” adds, and says so.
+      await expect(heading).toHaveText(special);
+      await expect(hero).not.toContainText(included);
+      // The band beside the picture promises no photos either, and gives the note's own length.
+      await expect(experience).toContainText(chars);
+      await expect(experience).not.toContainText(/photo|foto/i);
+      // The first card is something 500 characters can do.
+      await expect(page.locator("[data-more-about]")).not.toContainText(/a year to a paragraph|un párrafo por año/i);
+    } else {
+      await expect(heading).toHaveText(included);
+      await expect(experience).toContainText(/20/);
+    }
+  }
+  if (NOTE_FOR_EVERYONE) {
+    // Constellations has no free version then: it is sold, its photos come with it, and its list is plain.
+    await page.goto("/templates/constellations");
+    await expect(page.locator("[data-page-theme] > section").first().getByRole("heading", { level: 2 })).toHaveText(/what.s included/i);
   }
 });
 

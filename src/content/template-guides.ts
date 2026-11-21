@@ -1660,7 +1660,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "For a grandparent",
-            how: "Up to eight photos hang inside like ornaments.",
+            how: "A photo hangs in the snow between your lines; the rest wait by the letter.",
             borrow: { field: "caption", line: "The sledge, last January" },
           },
         ],
@@ -1715,7 +1715,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Para tu abuela o tu abuelo",
-            how: "Hasta ocho fotos cuelgan dentro como adornos.",
+            how: "Una foto cuelga en la nieve entre tus frases; las demás esperan junto a la carta.",
             borrow: { field: "caption", line: "El trineo, el enero pasado" },
           },
         ],
@@ -2770,7 +2770,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Just because",
-            how: "Your letter waits at the bottom, and its words cover the paper behind.",
+            how: "Your letter waits at the bottom, on a sheet of torn paper.",
             borrow: { field: "message", line: "No reason. I just like you a lot." },
           },
         ],
@@ -2808,7 +2808,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Porque sí",
-            how: "Tu carta espera al final, y sus palabras cubren el papel de fondo.",
+            how: "Tu carta espera al final, en una hoja de papel rasgado.",
             borrow: { field: "message", line: "Sin motivo. Me gustas mucho y ya." },
           },
         ],
@@ -3560,7 +3560,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Long distance",
-            how: "Your letter is underneath, on old paper.",
+            how: "Your letter opens once the candle is lit, on cream paper.",
             borrow: { field: "message", line: "I lit one for you here too." },
           },
         ],
@@ -3598,7 +3598,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "A distancia",
-            how: "Tu carta está debajo, en papel antiguo.",
+            how: "Tu carta se abre al encenderse la vela, en papel crema.",
             borrow: { field: "message", line: "Aquí también he encendido una por ti." },
           },
         ],
@@ -3624,7 +3624,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Just because",
-            how: "Your message arrives in a speech bubble.",
+            how: "Your message is a handwritten note, taped at one corner.",
             borrow: { field: "message", line: "You looked sad, so here is a bunny." },
           },
           {
@@ -3662,7 +3662,7 @@ export const TEMPLATE_GUIDES: Record<string, Record<GiftLocale, TemplateGuideCon
           },
           {
             heading: "Porque sí",
-            how: "Tu mensaje llega en un bocadillo.",
+            how: "Tu mensaje es una nota a mano, sujeta con cinta.",
             borrow: { field: "message", line: "Te vi triste, así que toma un conejito." },
           },
           {

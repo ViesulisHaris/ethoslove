@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
  * "See more examples": opens every idea card in the grid it points at, so each shows its line to
  * borrow, and closes them again. The cards are native <details> and open one by one without this;
- * the button is only the quick way to read all six.
+ * the button is only the quick way to read all six. What it says follows the cards themselves: it
+ * reads "Hide the examples" once all of them are open, whether it opened them or a visitor did one
+ * by one, and "See more examples" again as soon as one is closed.
  */
 export function IdeasToggle({ target, show, hide, className }: { target: string; show: string; hide: string; className?: string }) {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const grid = document.getElementById(target);
+    if (!grid) return;
+    const cards = () => [...grid.querySelectorAll("details")];
+    const follow = () => setOpen(cards().length > 0 && cards().every((card) => card.open));
+    // `toggle` does not bubble: caught on its way down.
+    grid.addEventListener("toggle", follow, true);
+    follow();
+    return () => grid.removeEventListener("toggle", follow, true);
+  }, [target]);
   return (
     <button
       type="button"
@@ -21,6 +33,7 @@ export function IdeasToggle({ target, show, hide, className }: { target: string;
         document.getElementById(target)?.querySelectorAll("details").forEach((card) => {
           card.open = next;
         });
+        // The cards' own `toggle` events arrive a task later and say the same.
         setOpen(next);
       }}
       className={cn(

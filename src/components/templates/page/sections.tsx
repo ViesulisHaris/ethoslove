@@ -10,12 +10,14 @@ import { SAMPLE_PHOTO, artSrcSet, pageArt, slotStyle } from "@/content/page-art"
 import type { BorrowField, TemplateGuideContent } from "@/content/template-guides";
 import type { TemplateSteps } from "@/content/template-steps";
 import type { Flowers } from "@/content/template-page-themes";
+import { FREE_NOTE_MAX_CHARS } from "@/lib/gift/free-tier";
 import { listManifests } from "@/templates/manifests";
 import type { FieldMeta, TemplateManifest } from "@/templates/types";
 import { CutoutImg } from "@/components/marketing/home/cutouts";
 import { ArtLayer, ArtWithSlot, BandEdge } from "./art";
 import { IdeasToggle } from "./ideas-toggle";
 import { CLOSED_BLOCK_WORDS, countWords, fitSentences } from "./lead";
+import { stepQuote, type QuoteSource } from "./quote";
 import { HOW_ART, MORE_ART, WRITE_ART } from "./placements";
 
 /**
@@ -86,6 +88,7 @@ export async function HowToSend({
   flowers,
   steps,
   lines,
+  source,
   photo,
   poster,
 }: {
@@ -94,27 +97,32 @@ export async function HowToSend({
   flowers: Flowers;
   /** The gift's own three steps (content/template-steps.ts); without them, the three every gift shares. */
   steps: TemplateSteps | null;
-  /** Lines of this gift to write on a note card, the first for the first note. */
+  /** Lines of this gift for a note card whose step names no field, or one with nothing short enough in it. */
   lines: string[];
+  /** Where a note card finds a value of the field its step is about (./quote). */
+  source: QuoteSource;
   photo: SamplePhoto;
   poster: string;
 }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const shown = steps
-    ? steps.steps.map((step) => ({ title: step[locale], kind: step.picture }))
-    : ([
+  const shown: { title: string; kind: "photo" | "note" | "phone"; quote?: string | readonly string[] }[] = steps
+    ? steps.steps.map((step) => ({ title: step[locale], kind: step.picture, quote: step.quote }))
+    : [
         { title: t("step1Title"), kind: "photo" },
         { title: t("step2Title"), kind: "note" },
         { title: t("step3Title"), kind: "phone" },
-      ] as const);
-  // A second note card shows a second line, where the gift has one.
-  let notes = 0;
-  const pictured = shown.map((step) => ({ ...step, line: step.kind === "note" ? (lines[notes++] ?? lines[0] ?? "") : "" }));
+      ];
+  // A note card shows a value of the field its step is about. Where that gives nothing short
+  // enough, it shows a line of the gift that no other card is showing.
+  const quoted = shown.map((step) => (step.kind === "note" && step.quote ? stepQuote(step.quote, source) : null));
+  const spare = lines.filter((line) => !quoted.includes(line));
+  let next = 0;
+  const pictured = shown.map((step, i) => ({ ...step, line: step.kind === "note" ? (quoted[i] ?? spare[next++] ?? lines[0] ?? "") : "" }));
   return (
     <section className="relative" aria-labelledby="template-how">
       <ArtLayer items={HOW_ART} flowers={flowers} />
       <div className={cn(SPREAD, "py-14 sm:py-20 lg:py-28")}>
-        <Intro id="template-how" label={t("eyebrow")} heading={heading} line={steps ? steps.line[locale] : t("howLine")} />
+        <Intro id="template-how" label={t("eyebrow")} heading={heading} line={t("howLine")} />
         <ol className="grid gap-3 sm:grid-cols-3 sm:gap-x-9 lg:gap-x-10">
           {pictured.map((step, i) => (
             <li
@@ -143,30 +151,39 @@ export async function HowToSend({
  * the gift's own lines to borrow that are short enough to read on a card that small, then the
  * title of its demo. The photo is the first of its demo's, or the sample every demo shares.
  */
-export async function templateSamples(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<{ lines: string[]; photo: SamplePhoto }> {
+export async function templateSamples(slug: string, locale: GiftLocale, guide: TemplateGuideContent | null): Promise<{ lines: string[]; photo: SamplePhoto; source: QuoteSource }> {
   const fits = (line: string) => line.length >= 8 && line.length <= 30;
-  const lines = (guide?.ideas.items.map((idea) => idea.borrow.line) ?? []).filter(fits);
+  const lent = guide?.ideas.items.map((idea) => ({ field: idea.borrow.field as string, line: idea.borrow.line })) ?? [];
+  const lines = lent.map((l) => l.line).filter(fits);
   let photo: SamplePhoto = SAMPLE_PHOTO;
+  let demo: Record<string, unknown> | null = null;
   try {
     const mod = (await import(`@/templates/${slug}/demo-data`)) as { demoData?: Record<GiftLocale, { title?: string; photos?: { url: string; width?: number; height?: number }[] }> };
-    const demo = mod.demoData?.[locale];
-    if (demo?.title && !lines.includes(demo.title)) lines.push(demo.title);
-    const first = demo?.photos?.[0];
+    const found = mod.demoData?.[locale];
+    demo = (found as Record<string, unknown> | undefined) ?? null;
+    if (found?.title && !lines.includes(found.title)) lines.push(found.title);
+    const first = found?.photos?.[0];
     if (first?.url && first.width && first.height) photo = { src: first.url, width: first.width, height: first.height };
   } catch {
     // A template without a demo file shows the shared sample.
   }
-  return { lines: [...new Set(lines)], photo };
+  const options = Object.fromEntries(Object.entries(await fieldMetaOf(slug, locale)).flatMap(([key, meta]) => (meta.options ? [[key, meta.options]] : [])));
+  return { lines: [...new Set(lines)], photo, source: { lent, demo, options } };
+}
+
+/** A template's own fields as its editor shows them: their names and the names of their choices. */
+async function fieldMetaOf(slug: string, locale: GiftLocale): Promise<Record<string, FieldMeta>> {
+  try {
+    const mod = (await import(`@/templates/${slug}/field-meta`)) as { fieldMeta?: Record<GiftLocale, Record<string, FieldMeta>> };
+    return mod.fieldMeta?.[locale] ?? {};
+  } catch {
+    return {};
+  }
 }
 
 /** A template's own fields, by the names its editor gives them. */
 async function fieldLabels(slug: string, locale: GiftLocale): Promise<Record<string, string>> {
-  try {
-    const mod = (await import(`@/templates/${slug}/field-meta`)) as { fieldMeta?: Record<GiftLocale, Record<string, FieldMeta>> };
-    return Object.fromEntries(Object.entries(mod.fieldMeta?.[locale] ?? {}).map(([key, meta]) => [key, meta.label]));
-  } catch {
-    return {};
-  }
+  return Object.fromEntries(Object.entries(await fieldMetaOf(slug, locale)).map(([key, meta]) => [key, meta.label]));
 }
 
 /** (3) What to write: six quiet title cards; a card opens to its line to borrow, in handwriting. */
@@ -237,10 +254,39 @@ function ExperienceFlatlay({ flowers, photo: sample }: { flowers: Flowers; photo
   );
 }
 
+/**
+ * The three checks of "The experience", each read off the gift: what the person who gets it does
+ * (its row of content/template-steps.ts), how many photos it is made of (its manifest), and what it
+ * asks of their phone (its manifest's `needs`: every gift that listens or feels a shake also takes
+ * a tap). They were "Works on any phone or laptop", "Edit it after sending" and "Print its QR code"
+ * on all 61 pages, which the three questions under the band answer anyway.
+ */
+export function experienceChecks(
+  manifest: TemplateManifest,
+  line: string | null,
+  /** The free version is the short note, which has no photos (lib/gift/free-tier.ts). */
+  note: boolean,
+  t: (key: ExperienceKey, values?: Record<string, number>) => string,
+): string[] {
+  const { photos, music, needs = [] } = manifest.features;
+  const made = note
+    ? t("experienceNote", { chars: FREE_NOTE_MAX_CHARS })
+    : photos.min === 0
+      ? t("experiencePhotosNone", { max: photos.max })
+      : photos.min === 1
+        ? t("experiencePhotosOne", { max: photos.max })
+        : t("experiencePhotosMany", { min: photos.min, max: photos.max });
+  const asks = needs.includes("microphone") ? t("experienceMic") : needs.includes("deviceMotion") ? t("experienceMotion") : music ? t("experienceSong") : t("experienceTouch");
+  // The line is a sentence where it is written; a check has no full stop.
+  return [line ? line.replace(/.$/, "") : t("experienceOpens"), made, asks];
+}
+
+export type ExperienceKey = "experienceOpens" | "experienceNote" | "experiencePhotosNone" | "experiencePhotosOne" | "experiencePhotosMany" | "experienceMic" | "experienceMotion" | "experienceSong" | "experienceTouch";
+
 /** (4) The experience: the deeper band with soft curved edges, a large picture and three checks. */
-export async function Experience({ manifest, locale, flowers, photo }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers; photo: SamplePhoto }) {
+export async function Experience({ manifest, locale, flowers, photo, line, note }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers; photo: SamplePhoto; line: string | null; note: boolean }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
-  const checks = [t("experienceCheck1"), t("experienceCheck2"), t("experienceCheck3")];
+  const checks = experienceChecks(manifest, line, note, (key, values) => t(key, values));
   return (
     <section className="relative" aria-labelledby="template-experience">
       <BandEdge side="top" className="text-page-band" />
@@ -383,11 +429,25 @@ export async function Questions({
   );
 }
 
+/**
+ * The four gifts a page links to: the next four made for the same day, counted on from this gift's
+ * own place in that day's list and round to its start. Every page of an occasion used to show the
+ * list's first four, so The Letter and Constellations linked to the same gifts and most of the
+ * list was linked from nowhere.
+ */
+export function moreLikeThis(manifest: TemplateManifest, count = 4): TemplateManifest[] {
+  const occasion = manifest.occasions[0];
+  const list = occasion ? listManifests({ occasion }) : listManifests();
+  const at = list.findIndex((m) => m.slug === manifest.slug);
+  const round = at < 0 ? list : [...list.slice(at + 1), ...list.slice(0, at)];
+  return round.slice(0, count);
+}
+
 /** (6) More like this: four tall poster cards with the gifts' names, made for the same day. */
 export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: TemplateManifest; locale: GiftLocale; flowers: Flowers }) {
   const t = await getTranslations({ locale, namespace: "templates.guide" });
   const occasion = manifest.occasions[0];
-  const more = (occasion ? listManifests({ occasion }) : listManifests()).filter((m) => m.slug !== manifest.slug).slice(0, 4);
+  const more = moreLikeThis(manifest);
   if (more.length === 0) return null;
   return (
     <section className="relative" aria-labelledby="template-more">
@@ -395,7 +455,7 @@ export async function MoreLikeThis({ manifest, locale, flowers }: { manifest: Te
       <div className="relative -mt-px bg-page-raised">
         <ArtLayer items={MORE_ART} flowers={flowers} />
         <div className={cn(SPREAD, "pt-12 pb-20 sm:pb-24 lg:pt-16 lg:pb-28")}>
-          <Intro id="template-more" label={t("moreTitle")} heading={t("moreHeading")} />
+          <Intro id="template-more" label={t("moreTitle")} heading={occasion ? t(`moreFor.${occasion}`) : t("moreHeading")} />
           <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:gap-x-6">
             {more.map((m) => (
               <li key={m.slug}>

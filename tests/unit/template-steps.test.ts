@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { TEMPLATE_GUIDES } from "@/content/template-guides";
 import { TEMPLATE_STEPS, templateSteps } from "@/content/template-steps";
 import { TEMPLATE_MANIFESTS, getManifest } from "@/templates/manifests";
+import { loadFieldsSchema } from "@/templates/schemas";
+import { z } from "zod";
 
 /**
  * "Change the ways when to send the gifts, as its kinda weird for letter, they should be good for
@@ -48,10 +50,49 @@ describe("the three steps of a gift's page", () => {
     expect(TEMPLATE_STEPS["the-letter"].steps.map((s) => s.picture)).toEqual(["note", "note", "phone"]);
   });
 
-  it("have one line under the heading, of at most fourteen words", () => {
+  it("have one line on what the person who gets it does, of at most twelve words", () => {
+    // It is the first check of "The experience" (sections.tsx), where a check holds twelve words.
     const over: string[] = [];
-    for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) for (const l of LOCALES) if (words(row.line[l]) > 14 || words(row.line[l]) < 4) over.push(`${slug} ${l} (${words(row.line[l])}): ${row.line[l]}`);
+    for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) for (const l of LOCALES) if (words(row.line[l]) > 12 || words(row.line[l]) < 4) over.push(`${slug} ${l} (${words(row.line[l])}): ${row.line[l]}`);
     expect(over).toEqual([]);
+  });
+
+  it("never open that line on “Three steps.”, and say it once: no line is on two gifts", () => {
+    // The review of 21 Nov 2026: all 61 lines opened "Three steps." / "Tres pasos.", which the numbered cards already say.
+    for (const l of LOCALES) {
+      const seen = new Map<string, string>();
+      for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) {
+        expect(row.line[l], slug).not.toMatch(/^(three steps|tres pasos)/i);
+        expect(seen.get(row.line[l]), `${slug} ${l} shares its line with ${seen.get(row.line[l])}`).toBeUndefined();
+        seen.set(row.line[l], slug);
+      }
+    }
+  });
+
+  it("only promise a photo behind a window for a photo that is there (Haunted House)", () => {
+    // All six windows light; only the first of them hold a photo, and it opens with none (haunted-house/windows.ts).
+    for (const l of LOCALES) expect(TEMPLATE_STEPS["haunted-house"].line[l]).not.toMatch(/every lit window|cada ventana guarda/i);
+  });
+
+  it("name, on every note step, a field of that gift for its card to quote", async () => {
+    // A card showed the gift's first short line whatever its step was about: "Citizen of wherever
+    // you are" under "Set both cities" (the review of 21 Nov 2026). Now a step says which field.
+    const shared = ["title", "message", "recipientName", "senderName", "caption"];
+    const off: string[] = [];
+    for (const [slug, row] of Object.entries(TEMPLATE_STEPS)) {
+      const schema = await loadFieldsSchema(slug);
+      const own = schema instanceof z.ZodObject ? Object.keys(schema.shape) : [];
+      for (const step of row.steps) {
+        if (step.picture !== "note") {
+          if (step.quote) off.push(`${slug}: “${step.en}” is not a note and quotes a field`);
+          continue;
+        }
+        if (!step.quote) off.push(`${slug}: “${step.en}” names no field`);
+        for (const alt of typeof step.quote === "string" ? [step.quote] : (step.quote ?? []))
+          for (const field of alt.split("+")) if (!(field.startsWith("fields.") ? own.includes(field.slice("fields.".length)) : shared.includes(field))) off.push(`${slug}: “${step.en}” quotes ${field}, which this gift does not have`);
+      }
+    }
+    expect(off).toEqual([]);
   });
 
   it("say it plainly: no exclamation marks, no dash asides, nothing of Spain", () => {

@@ -18,6 +18,14 @@ import type { Flowers } from "@/content/template-page-themes";
  * either way; their shadows are made for pale grounds, so only `lily-footer` lies on the dark
  * footer; and nothing overlaps the hero's phone except its own bezel layer.
  * tests/unit/page-art.test.ts holds the table to its files.
+ *
+ * The set is one set for every redesigned page (the same document: "One set serves every template
+ * page and the other redesigned pages"), so it holds more than a gift's page places. On this
+ * branch `lily-open`, `lily-side`, `petal-4` and `leaf-1` are in no placement of
+ * components/templates/page/placements.ts, and `step-send` gave way to `step-phone`, which takes
+ * each gift's own cover: they are the corner and gap pieces for the finder, /digital-cards and the
+ * pages by kind, built on the other growth branches from this same table. Whoever merges the
+ * branches drops from public/art/pages any piece that no page ends up placing.
  */
 export const ART_IDS = [
   "lily-open",

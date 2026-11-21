@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import { LEGAL_UPDATED } from "@/content/legal";
-import { PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
+import { GUIDES_LIVE, PAGE_UPDATED, pageUpdated } from "@/content/page-dates";
 import { TEMPLATE_MANIFESTS } from "@/templates/manifests";
 
 type Rules = { allow: string[]; disallow: string[] };
@@ -143,7 +143,10 @@ describe("sitemap dates", () => {
       "sketchbook", "snow-globe", "spooky-season", "sticker-bomb", "text-thread", "the-council", "the-toast",
       "trick-or-treat", "vinyl", "xoxo",
     ];
-    expect(PAGE_UPDATED["/templates/*"]).toBe("2026-11-21");
+    // The day the redesigned pages go live, set in one place (content/page-dates.ts). It was pinned
+    // here as a second literal, so "one line to set" was two.
+    expect(GUIDES_LIVE).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(PAGE_UPDATED["/templates/*"]).toBe(GUIDES_LIVE);
     // And no template page says it is older than the redesign that changed its words.
     for (const m of TEMPLATE_MANIFESTS) expect(PAGE_UPDATED[`/templates/${m.slug}`] ?? PAGE_UPDATED["/templates/*"], m.slug).toBe(PAGE_UPDATED["/templates/*"]);
     for (const m of TEMPLATE_MANIFESTS)
