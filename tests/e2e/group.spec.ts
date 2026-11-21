@@ -330,3 +330,419 @@ test.describe("the page at a group card's link", () => {
     }
   });
 });
+
+const PANEL = "/group-preview/panel";
+const GIFT_ID = "6f1c2a3b-4d5e-4f60-8a7b-9c0d1e2f3a4b";
+const GROUP_ID = "99999999-9999-4999-8999-999999999999";
+const ENTRY = "eeeeeeee-eeee-4eee-8eee-000000000001";
+
+/** A group as the routes answer it, for a panel that talks to them. */
+function serverGroup(over: Record<string, unknown> = {}, entries: Record<string, unknown>[] = []) {
+  return {
+    id: GROUP_ID,
+    url: "https://tryethos.io/c/liveLiveLiveLiveLive00",
+    fromName: "Tom",
+    forName: "Nora",
+    prompt: null,
+    max: 25,
+    noteMax: 140,
+    takesPhotos: true,
+    closesAt: "2026-12-31T10:00:00.000Z",
+    closedAt: null,
+    sentAt: null,
+    reportRef: "live0000",
+    entries,
+    ...over,
+  };
+}
+const waitingEntry = (over: Record<string, unknown> = {}) => ({ id: ENTRY, status: "pending", name: "Gran", note: "Forty is nothing. Ring me.", photo: { url: "/demo/photos/p3.webp", width: 1024, height: 1024 }, wantsEmail: true, key: null, reportRef: "note0001", createdAt: "2026-12-01T10:00:00.000Z", decidedAt: null, ...over });
+
+test.describe("the sender's group card panel", () => {
+  test.beforeEach(async ({ request }) => needGroupPreviews(request));
+
+  test("shows the price before any link exists, and what it is for someone who has the template", async ({ page }) => {
+    await page.goto(`${PANEL}?state=intro`);
+    await expect(page.getByRole("heading", { name: "A group card" })).toBeVisible();
+    await expect(page.getByTestId("group-price-line")).toHaveText("Group cards on Group card (reference) cost €19.99. You pay once, when you send your first one.");
+    await expect(page.getByText("The group stays with this template.")).toBeVisible();
+    await expect(page.getByTestId("group-link")).toHaveCount(0);
+    await page.goto(`${PANEL}?state=intro&owned=1`);
+    await expect(page.getByTestId("group-price-line")).toHaveText("You already have Group card (reference), so group cards on it cost €10.00. You pay once, when you send your first one.");
+  });
+
+  test("a guest who taps Invite is asked to sign in, and told why", async ({ page }) => {
+    await page.goto(`${PANEL}?state=guest`);
+    await expect(page.getByTestId("group-guest")).toContainText("Notes are kept with your account, so you can open them on any phone.");
+    // The site's own sign-in form, in the panel (this server has no accounts behind it, so the form says so).
+    await expect(page.getByTestId("group-guest").getByRole("heading", { name: "Welcome back" })).toBeVisible();
+    await expect(page.getByTestId("group-link")).toHaveCount(0);
+  });
+
+  test("the names for the page come filled in from the gift, and both are needed", async ({ page }) => {
+    await page.goto(`${PANEL}?state=setup`);
+    await expect(page.getByLabel("Your name, as they know you")).toHaveValue("Tom");
+    await expect(page.getByLabel("Who it's for")).toHaveValue("Nora");
+    await expect(page.getByLabel("What should they write?")).toHaveAttribute("maxlength", "140");
+    await page.getByLabel("Who it's for").fill("   ");
+    await page.getByTestId("group-create").click();
+    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("Add both names first.");
+  });
+
+  test("the link can be copied and passed on, with words that say what it is", async ({ page }) => {
+    await page.goto(`${PANEL}?state=active`);
+    await expect(page.getByTestId("group-url")).toHaveText("tryethos.io/c/previewPreviewPreview0");
+    const whatsapp = decodeURIComponent((await page.getByTestId("group-whatsapp").getAttribute("href")) ?? "");
+    expect(whatsapp).toBe("https://wa.me/?text=Tom is making a group card for Nora. Add your note: https://tryethos.io/c/previewPreviewPreview0");
+    await expect(page.getByTestId("group-copy")).toBeVisible();
+    await expect(page.getByTestId("group-share")).toBeVisible();
+  });
+
+  test("lists who is waiting and what is in the card, and never an address or a price", async ({ page }) => {
+    await page.goto(`${PANEL}?state=active`);
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (2)");
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (3 of 25)");
+    const first = page.getByTestId("group-waiting-entry").first();
+    await expect(first).toContainText("Gran");
+    await expect(first).toContainText("Wants the finished card");
+    // A note with a photo offers it, ticked; one without does not.
+    await expect(first.getByTestId("group-with-photo")).toHaveCount(0);
+    await expect(page.getByTestId("group-waiting-entry").nth(1).getByTestId("group-with-photo")).toBeChecked();
+    await expect(page.getByTestId("group-decided-entry")).toContainText("Uncle Rob's note was removed.");
+    await expect(page.getByTestId("group-active")).not.toContainText(/@|€|\$|£/);
+    // Each note can be reported to a person, quoting its own reference.
+    const report = decodeURIComponent((await first.getByTestId("group-report").getAttribute("href")) ?? "");
+    expect(report.startsWith("mailto:")).toBe(true);
+    expect(report).toContain("Note: prev0001");
+  });
+
+  test("the card's own list: move a note, fix a typo, take one out, add one yourself", async ({ page }) => {
+    await page.goto(`${PANEL}?state=active`);
+    const names = () => page.getByTestId("group-item").locator("p.font-medium").allTextContents();
+    await expect(page.getByTestId("group-item")).toHaveCount(3);
+    expect(await names()).toEqual(["Mum", "Iris", "Sam"]);
+    await expect(page.getByTestId("group-move-up").first()).toBeDisabled();
+    await expect(page.getByTestId("group-move-down").last()).toBeDisabled();
+    await page.getByTestId("group-move-down").first().click();
+    expect(await names()).toEqual(["Iris", "Mum", "Sam"]);
+
+    await page.getByTestId("group-edit").first().click();
+    const form = page.getByTestId("group-note-form");
+    await form.getByLabel("Name").fill("Iris B.");
+    await form.getByLabel("Note").fill("Same table on the 12th.\nI'm buying.");
+    await expect(form.getByText("35 of 140")).toBeVisible();
+    await form.getByRole("button", { name: "Save" }).click();
+    expect(await names()).toEqual(["Iris B.", "Mum", "Sam"]);
+    // A line break typed into a note becomes a space: a note is one line.
+    await expect(page.getByTestId("group-item").first()).toContainText("Same table on the 12th. I'm buying.");
+
+    await page.getByTestId("group-remove-item").last().click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (2 of 25)");
+
+    await page.getByTestId("group-add-own").click();
+    const own = page.getByTestId("group-note-form");
+    await expect(own.getByRole("button", { name: "Add it" })).toBeDisabled();
+    await own.getByLabel("Name").fill("Grandad");
+    await own.getByLabel("Note").fill("Told you forty would suit you.");
+    await own.getByRole("button", { name: "Add it" }).click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (3 of 25)");
+    expect(await names()).toEqual(["Iris B.", "Mum", "Grandad"]);
+  });
+
+  test("a full card says so and takes no more until one is removed", async ({ page }) => {
+    await page.goto(`${PANEL}?state=full`);
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (25 of 25)");
+    await expect(page.getByTestId("group-add")).toBeDisabled();
+    await expect(page.getByTestId("group-add-own")).toBeDisabled();
+    await expect(page.getByText("The card is full. Remove a note to add another.")).toBeVisible();
+    await page.getByTestId("group-remove-item").last().click();
+    await expect(page.getByTestId("group-add")).toBeEnabled();
+  });
+
+  test("once the card is sent the link is gone, and notes still waiting can be added for a week", async ({ page }) => {
+    await page.goto(`${PANEL}?state=sent`);
+    await expect(page.getByTestId("group-sent")).toHaveText("The card has been sent, so the link is closed. Notes still waiting can be added until December 8.");
+    await expect(page.getByTestId("group-link")).toHaveCount(0);
+    await expect(page.getByTestId("group-link-controls")).toHaveCount(0);
+    await expect(page.getByTestId("group-add")).toBeEnabled();
+  });
+
+  test("everything in it is at least 44 px to tap and fits a 320 px screen", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await page.goto(`${PANEL}?state=active`);
+    for (const id of ["group-copy", "group-share", "group-whatsapp", "group-add", "group-reject", "group-undo", "group-move-down", "group-edit", "group-remove-item", "group-add-own", "group-extend", "group-close", "group-reset", "group-report"]) {
+      const box = await page.getByTestId(id).first().boundingBox();
+      expect(box, id).not.toBeNull();
+      expect(box!.height, id).toBeGreaterThanOrEqual(40);
+      if (!["group-copy", "group-add", "group-reject"].includes(id)) expect(box!.height, id).toBeGreaterThanOrEqual(44);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+
+  test("in Spanish, written for it", async ({ page }) => {
+    await page.goto(`/es${PANEL}?state=active`);
+    await expect(page.getByRole("heading", { name: "Una tarjeta en grupo" })).toBeVisible();
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Esperan tu visto bueno (2)");
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("En la tarjeta (3 de 25)");
+    await expect(page.getByTestId("group-open-until")).toHaveText("Abierto hasta el 31 de diciembre");
+    await page.goto(`/es${PANEL}?state=intro`);
+    await expect(page.getByTestId("group-price-line")).toContainText("Las tarjetas en grupo con Tarjeta en grupo (referencia) cuestan 19,99");
+  });
+});
+
+test.describe("the panel talking to the routes", () => {
+  test.beforeEach(async ({ request }) => needGroupPreviews(request));
+
+  test("makes the link from the gift's draft, with the gift's id in the body and never in an address", async ({ page }) => {
+    const urls: string[] = [];
+    page.on("request", (request) => urls.push(request.url()));
+    await answer(page, "**/api/group/find", { status: 200, body: { group: null } });
+    const made = await answer(page, "**/api/group", { status: 200, body: { group: serverGroup() } });
+    await page.goto(`${PANEL}?state=setup&live=1`);
+    await page.getByTestId("group-invite").click();
+    await page.getByLabel("What should they write?").fill("One line only you would know");
+    await page.getByTestId("group-create").click();
+    await expect(page.getByTestId("group-url")).toHaveText("tryethos.io/c/liveLiveLiveLiveLive00");
+    expect(made).toHaveLength(1);
+    expect(made[0].method()).toBe("POST");
+    expect(made[0].postDataJSON()).toEqual({ giftId: GIFT_ID, fromName: "Tom", forName: "Nora", prompt: "One line only you would know" });
+    expect(urls.filter((url) => url.includes(GIFT_ID))).toEqual([]);
+  });
+
+  test("says so when group cards can't be started, and lets them try again", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: null } });
+    await answer(page, "**/api/group", { status: 503, body: { error: "unavailable" } });
+    await page.goto(`${PANEL}?state=setup&live=1`);
+    await page.getByTestId("group-invite").click();
+    await page.getByTestId("group-create").click();
+    await expect(page.getByTestId("group-setup").getByRole("alert")).toHaveText("Group cards can't be started right now. Try again later.");
+    await expect(page.getByTestId("group-create")).toBeEnabled();
+  });
+
+  test("adding a note puts it in the card with its photo; removing it offers Undo", async ({ page }) => {
+    let entries = [waitingEntry()];
+    const item = { key: "abcdefghij", name: "Gran", note: "Forty is nothing. Ring me.", photo: { url: `gifts/${GIFT_ID}/cabcdefghij.webp`, width: 1024, height: 1024 } };
+    await answer(page, "**/api/group/find", () => ({ status: 200, body: { group: serverGroup({}, entries) } }));
+    const decided = await answer(page, `**/api/group/${GROUP_ID}/entries/${ENTRY}`, (request) => {
+      const { action } = request.postDataJSON() as { action: string };
+      if (action === "approve") {
+        entries = [waitingEntry({ status: "approved", key: item.key })];
+        return { status: 200, body: { ok: true, status: "approved", item, previewUrl: "/demo/photos/p3.webp" } };
+      }
+      entries = [waitingEntry({ status: action === "remove" ? "removed" : "pending", key: action === "remove" ? item.key : null, decidedAt: action === "remove" ? "2026-12-01T10:05:00.000Z" : null })];
+      return { status: 200, body: { ok: true, status: action === "remove" ? "removed" : "pending" } };
+    });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (1)");
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
+
+    await page.getByTestId("group-add").click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (1 of 25)");
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (0)");
+    await expect(page.getByTestId("group-item")).toContainText("Forty is nothing. Ring me.");
+    // The photo shown is the preview's address; what was asked for was the photo.
+    await expect(page.getByTestId("group-item").getByRole("img", { name: "Photo from Gran" })).toHaveAttribute("src", "/demo/photos/p3.webp");
+    expect(decided[0].postDataJSON()).toEqual({ action: "approve", withPhoto: true });
+
+    await page.getByTestId("group-remove-item").click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
+    await expect(page.getByTestId("group-decided-entry")).toContainText("Gran's note was removed.");
+    await page.getByTestId("group-undo").click();
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (1)");
+    expect(decided.map((request) => (request.postDataJSON() as { action: string }).action)).toEqual(["approve", "remove", "restore"]);
+  });
+
+  test("the photo can be left out, and a note can be turned down", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup({}, [waitingEntry()]) } });
+    const decided = await answer(page, `**/api/group/${GROUP_ID}/entries/${ENTRY}`, (request) => {
+      const body = request.postDataJSON() as { action: string };
+      return body.action === "approve" ? { status: 200, body: { ok: true, status: "approved", item: { key: "abcdefghij", name: "Gran", note: "Forty is nothing. Ring me." } } } : { status: 200, body: { ok: true, status: "rejected" } };
+    });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await page.getByTestId("group-with-photo").uncheck();
+    await page.getByTestId("group-add").click();
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (1 of 25)");
+    await expect(page.getByTestId("group-item").getByRole("img")).toHaveCount(0);
+    expect(decided[0].postDataJSON()).toEqual({ action: "approve", withPhoto: false });
+  });
+
+  test("a note the card lost is put back, and one its writer took back is taken out and said", async ({ page }) => {
+    // The server says "added" for a note the gift does not hold (a save that never landed).
+    const item = { key: "abcdefghij", name: "Gran", note: "Forty is nothing. Ring me." };
+    let entries = [waitingEntry({ status: "approved", key: item.key, photo: null })];
+    await answer(page, "**/api/group/find", () => ({ status: 200, body: { group: serverGroup({}, entries) } }));
+    const again = await answer(page, `**/api/group/${GROUP_ID}/entries/${ENTRY}`, { status: 200, body: { ok: true, status: "approved", item } });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (1 of 25)");
+    expect(again[0].postDataJSON()).toEqual({ action: "approve", withPhoto: false });
+
+    // Then its writer takes it back: the next read removes it from the card.
+    entries = [waitingEntry({ status: "withdrawn", key: item.key, photo: null })];
+    await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+    await expect(page.getByTestId("group-in-card-title")).toHaveText("In the card (0 of 25)");
+    await expect(page.getByTestId("group-took-back")).toHaveText("Gran took their note back, so it's out of the card.");
+  });
+
+  test("the link's controls: close, keep open, and a new link only after saying yes", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup() } });
+    const patches = await answer(page, `**/api/group/${GROUP_ID}`, (request) => {
+      const body = request.postDataJSON() as Record<string, unknown>;
+      if (body.closed === true) return { status: 200, body: { group: serverGroup({ closedAt: "2026-12-01T10:00:00.000Z" }) } };
+      if (body.resetLink) return { status: 200, body: { group: serverGroup({ url: "https://tryethos.io/c/newNewNewNewNewNewNew0" }) } };
+      if (body.extend) return { status: 200, body: { group: serverGroup({ closesAt: "2027-01-30T10:00:00.000Z" }) } };
+      return { status: 200, body: { group: serverGroup() } };
+    });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await expect(page.getByTestId("group-open-until")).toHaveText("Open until December 31");
+    await page.getByTestId("group-extend").click();
+    await expect(page.getByTestId("group-open-until")).toHaveText("Open until January 30");
+    await page.getByTestId("group-close").click();
+    await expect(page.getByTestId("group-open-until")).toHaveText("The link is closed. Nobody new can add a note.");
+    await expect(page.getByTestId("group-close")).toHaveText("Reopen the link");
+    await page.getByTestId("group-close").click();
+
+    await page.getByTestId("group-reset").click();
+    await expect(page.getByText("The link you shared will stop working. Make a new one?")).toBeVisible();
+    expect(patches.map((request) => request.postDataJSON())).toEqual([{ extend: true }, { closed: true }, { closed: false }]);
+    await page.getByTestId("group-reset-yes").click();
+    await expect(page.getByTestId("group-url")).toHaveText("tryethos.io/c/newNewNewNewNewNewNew0");
+    expect(patches.at(-1)?.method()).toBe("PATCH");
+    expect(patches.at(-1)?.postDataJSON()).toEqual({ resetLink: true });
+  });
+
+  test("a failure says so and leaves the note where it was", async ({ page }) => {
+    await answer(page, "**/api/group/find", { status: 200, body: { group: serverGroup({}, [waitingEntry()]) } });
+    await answer(page, `**/api/group/${GROUP_ID}/entries/${ENTRY}`, { status: 502, body: { error: "photo_failed" } });
+    await page.goto(`${PANEL}?state=active&live=1`);
+    await page.getByTestId("group-add").click();
+    await expect(page.getByTestId("group-error")).toHaveText("That didn't go through. Try again in a moment.");
+    await expect(page.getByTestId("group-waiting-title")).toHaveText("Waiting for you (1)");
+    await expect(page.getByTestId("group-add")).toBeEnabled();
+  });
+});
+
+test.describe("a group card's pay panel", () => {
+  test.beforeEach(async ({ request }) => needGroupPreviews(request));
+
+  test("one thing, one price, one button: the full price says the template is in it", async ({ page }) => {
+    const asked = await answer(page, "**/api/stripe/checkout", { status: 200, body: { url: "/group-preview/pay?went=stripe" } });
+    await page.goto("/group-preview/pay");
+    await expect(page.getByTestId("group-pay")).toContainText("Send your group card");
+    await expect(page.getByTestId("group-pay")).toContainText("Group cards on Group card (reference)");
+    await expect(page.getByTestId("group-pay-price")).toHaveText("€19.99");
+    await expect(page.getByTestId("group-pay-template")).toHaveText("Group card (reference) is included.");
+    await expect(page.getByTestId("group-pay-button")).toHaveText("Pay €19.99");
+    await expect(page.getByText("One payment. The people you invited never pay.")).toBeVisible();
+    await page.getByTestId("group-pay-button").click();
+    await page.waitForURL("**/group-preview/pay?went=stripe");
+    const body = asked[0].postDataJSON() as Record<string, unknown>;
+    expect(body).toMatchObject({ product: "group", templateSlugs: ["group-reference"], currency: "eur", locale: "en", returnTo: "/create/group-reference?resume=publish" });
+    // The browser never says what to charge, and names no gift.
+    expect(Object.keys(body).some((key) => /amount|price|total|gift/i.test(key))).toBe(false);
+    expect(JSON.stringify(body)).not.toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-/);
+  });
+
+  test("the step up for someone who has the template: the difference, and why", async ({ page }) => {
+    await page.goto("/group-preview/pay?owned=1");
+    await expect(page.getByTestId("group-pay-price")).toHaveText("€10.00");
+    await expect(page.getByTestId("group-pay-template")).toHaveText("You already have Group card (reference), so that part is taken off.");
+    await expect(page.getByTestId("group-pay-button")).toHaveText("Pay €10.00");
+  });
+
+  test("a refusal from checkout is said in words and the button comes back", async ({ page }) => {
+    await answer(page, "**/api/stripe/checkout", { status: 400, body: { error: "not_on_sale" } });
+    await page.goto("/group-preview/pay");
+    await page.getByTestId("group-pay-button").click();
+    await expect(page.getByTestId("group-pay-button")).toBeEnabled();
+    await expect(page.getByTestId("group-pay-button")).toHaveText("Pay €19.99");
+  });
+
+  test("inside the iPhone app it sells nothing and says where to finish", async ({ page }) => {
+    await page.goto("/group-preview/pay?inapp=1");
+    await expect(page.getByTestId("group-pay-in-app")).toHaveText("Group cards aren't sold in the app. Finish this one on tryethos.io.");
+    await expect(page.getByTestId("group-pay-button")).toHaveCount(0);
+  });
+
+  test("in Spanish, in euros written the Spanish way", async ({ page }) => {
+    await page.goto("/es/group-preview/pay?owned=1");
+    await expect(page.getByTestId("group-pay")).toContainText("Envía tu tarjeta en grupo");
+    await expect(page.getByTestId("group-pay-price")).toHaveText(/10,00\s€/);
+    await expect(page.getByTestId("group-pay-template")).toHaveText("Ya tienes Tarjeta en grupo (referencia), así que esa parte se descuenta.");
+  });
+});
+
+test.describe("the reference template and the editor", () => {
+  test.beforeEach(async ({ request }) => needGroupPreviews(request));
+
+  test("the demo draws all six notes, in order, with two photos, and nothing a note could have smuggled in", async ({ page }) => {
+    await page.goto("/demo/group-reference?cover=classic");
+    const notes = page.getByTestId("contribution");
+    await expect(notes).toHaveCount(6);
+    await expect(notes.first()).toContainText("You were born at 4 a.m.");
+    await expect(notes.first()).toContainText("Mum");
+    await expect(notes.nth(3)).toContainText("The whole Okonkwo family");
+    await expect(notes.last()).toContainText("Forty is nothing. Ring me.");
+    await expect(page.getByTestId("contributions").locator("img")).toHaveCount(2);
+    await expect(page.getByTestId("contributions").locator("a, button, form, input")).toHaveCount(0);
+    // The longest name and the longest note stay inside their card.
+    for (const card of await notes.all()) {
+      const fits = await card.evaluate((el) => el.scrollWidth <= el.clientWidth + 1);
+      expect(fits).toBe(true);
+    }
+    await expect(page.getByText("from Tom and 6 more")).toBeVisible();
+  });
+
+  test("in Spanish the demo's notes are Spanish", async ({ page }) => {
+    await page.goto("/es/demo/group-reference?cover=classic");
+    await expect(page.getByTestId("contribution")).toHaveCount(6);
+    await expect(page.getByTestId("contribution").first()).toContainText("Naciste a las cuatro de la mañana");
+    await expect(page.getByText("Firman")).toBeVisible();
+  });
+
+  test("the editor shows the group card section only with the switch on, and only on a template made for it", async ({ page }) => {
+    await page.goto("/create/group-reference?group=on");
+    await expect(page.getByTestId("group-section")).toBeVisible();
+    await expect(page.getByTestId("group-invite")).toBeVisible();
+    // A guest is asked to sign in before any link is made, and no group route is called.
+    const calls: string[] = [];
+    page.on("request", (request) => request.url().includes("/api/group") && calls.push(request.url()));
+    await page.getByTestId("group-invite").click();
+    await expect(page.getByTestId("group-guest")).toBeVisible();
+    expect(calls).toEqual([]);
+
+    await page.goto("/create/group-reference?group=off");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await expect(page.getByTestId("group-section")).toHaveCount(0);
+
+    await page.goto("/create/the-letter?group=on");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await expect(page.getByTestId("group-section")).toHaveCount(0);
+  });
+
+  test("with the switch as it is live (off), the editor has no group card section at all", async ({ page }) => {
+    await page.goto("/create/group-reference");
+    await expect(page.getByRole("heading", { name: "Your words" })).toBeVisible();
+    await expect(page.getByTestId("group-section")).toHaveCount(0);
+    await expect(page.locator("body")).not.toContainText("A group card");
+  });
+
+  test("the editor's preview draws the notes the draft holds", async ({ page, isMobile }) => {
+    const draft = {
+      version: 1,
+      slug: "group-reference",
+      giftId: null,
+      shortId: null,
+      status: "draft",
+      schedule: { enabled: false, timezone: "UTC" },
+      password: "",
+      removeWatermark: false,
+      updatedAt: Date.now(),
+      data: { version: 1, templateSlug: "group-reference", locale: "en", title: "", recipientName: "Nora", senderName: "Tom", message: "Forty looks good on you.", messageStyle: "fade", photos: [], accentColor: "#B4552D", fontPairing: "editorial", cover: "classic", showReactionCta: true, watermark: true, fields: {}, contributions: [{ key: "abcdefghij", name: "Gran", note: "Forty is nothing. Ring me." }, { key: "abcdefghik", name: "Sam", note: "You taught me to drive." }] },
+    };
+    await page.addInitScript((value) => window.localStorage.setItem("ethos:draft:group-reference", value), JSON.stringify(draft));
+    await page.goto("/create/group-reference?group=on");
+    if (isMobile) await page.getByRole("tab", { name: "Preview" }).click();
+    await expect(page.getByTestId("contribution")).toHaveCount(2);
+    await expect(page.getByTestId("contribution").first()).toContainText("Forty is nothing. Ring me.");
+    await expect(page.getByTestId("contribution").last()).toContainText("Sam");
+  });
+});

@@ -11,6 +11,7 @@ import { EditorShell } from "@/components/editor/editor-shell";
 import type { RemoteGift } from "@/lib/editor/store";
 import { shownReactions } from "@/lib/proof/proof";
 import { AdTemplateView } from "@/components/shared/ad-pixels";
+import { groupGiftsEnabled } from "@/lib/group/flag";
 
 export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[locale]/create/[templateSlug]">, "searchParams">): Promise<Metadata> {
   const { locale, templateSlug } = await params;
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: Omit<PageProps<"/[currency]/[
 
 export default async function CreatePage({ params, searchParams }: PageProps<"/[currency]/[locale]/create/[templateSlug]">) {
   const { locale, templateSlug } = await params;
-  const { gift } = await searchParams;
+  const { gift, group } = await searchParams;
   const manifest = getManifest(templateSlug);
   if (!manifest) notFound();
   setRequestLocale(locale);
@@ -45,6 +46,11 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
     }
   }
 
+  // Group cards are off until GROUP_GIFTS_ENABLED and a gallery template made for them. Under
+  // `next dev` only, ?group=on|off shows either state of the switch for the reference template
+  // (NODE_ENV is inlined at build: a production build never reads the query).
+  const groupEnabled = process.env.NODE_ENV === "development" && (group === "on" || group === "off") ? group === "on" : groupGiftsEnabled();
+
   return (
     <Suspense>
       {/* For the ad pixels' per-template audiences (lib/analytics/ads.ts); nothing without consent. */}
@@ -58,6 +64,7 @@ export default async function CreatePage({ params, searchParams }: PageProps<"/[
         aiEnabled={isConfigured.ai}
         paymentsEnabled={isConfigured.stripe}
         reaction={reaction ?? null}
+        groupEnabled={groupEnabled}
       />
     </Suspense>
   );

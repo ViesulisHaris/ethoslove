@@ -14,7 +14,7 @@ import { FreeNoteOption } from "./free-note-option";
 import { pickPaySheet, type PayArm } from "@/lib/editor/pay-sheet-split";
 import { canKeepPhotos, pickKeep, rememberLetterClick, type KeepArm } from "@/lib/editor/keep-split";
 import { CAMPAIGN_GIFT_LIMIT } from "@/lib/commerce/campaign-rules";
-import { PRODUCTS, extrasAmount, formatAmount, photosUnlock } from "@/lib/pricing/products";
+import { PRODUCTS, extrasAmount, formatAmount, hasGroupUnlock, photosUnlock } from "@/lib/pricing/products";
 import { startCheckout, useCheckoutError } from "@/components/pricing/checkout";
 import { useCurrency } from "@/lib/pricing/use-currency";
 import { getManifest } from "@/templates/manifests";
@@ -39,6 +39,7 @@ import { SITE } from "@/config/site";
 import { request, tell } from "@/lib/app/bridge";
 import { useInApp, useNativeEvents } from "@/lib/app/use-bridge";
 import { Paywall } from "./paywall";
+import { GroupPayPanel } from "./group-pay-panel";
 import { ShareScreen } from "./share-screen";
 import { humanize } from "./template-fields";
 
@@ -221,11 +222,15 @@ export function PublishSheet({
   const decision =
     entitlement && serialized
       ? withOldGiftRule(
-          decidePublish(manifest, serialized, { unlocked: entitlement.unlocked, photos: photosOwned }, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }),
+          decidePublish(manifest, serialized, { unlocked: entitlement.unlocked, photos: photosOwned, group: hasGroupUnlock(ownedRows, slug) }, { ...options, freeReply, campaign: Boolean(campaign), fieldsSchema }),
           addsToOldGift,
           entitlement.unlocked,
         )
       : null;
+  // A group card (a gift carrying notes on a template made for them) that the account hasn't paid
+  // for yet: the send screen shows the group card's own price instead of the usual panel.
+  const needsGroup = Boolean(decision && !decision.ok && decision.reason === "payment_required" && decision.needs === "group");
+  const groupRules = manifest.features.group;
   // What they have already paid for, so the paywall can name it instead of asking again blindly.
   const ownedElsewhere = useMemo(
     () =>
@@ -536,6 +541,12 @@ export function PublishSheet({
                         : t(`problems.${key}`, { min: manifest.features.photos.min });
                     return <ChecklistItem key={key} bad={bad} spinning={key === "uploadsPending" && !stuck} label={label} />;
                   })}
+                {/* A group card: the template's own number of notes, and anything about them that stops it going out. */}
+                {groupRules
+                  ? (["contributionsMin", "contributionsMax", "contributionNote"] as const)
+                      .filter((key) => problems.includes(key) || (key === "contributionsMin" && groupRules.min > 0))
+                      .map((key) => <ChecklistItem key={key} bad={problems.includes(key)} label={t(`problems.${key}`, { min: groupRules.min, max: key === "contributionNote" ? groupRules.noteMax : groupRules.max })} />)
+                  : null}
               </ul>
               {state.authed && showStuck ? (
                 <div className="mt-3 rounded-2xl border border-coral/40 bg-coral/5 p-3" role="alert" data-testid="failed-uploads">
@@ -617,7 +628,9 @@ export function PublishSheet({
               </section>
             ) : null}
 
-            {state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {state.authed && needsGroup ? (
+              <GroupPayPanel manifest={manifest} currency={currency} locale={locale} ownedRows={ownedRows} returnTo={next} paymentsEnabled={paymentsEnabled} inApp={inApp} />
+            ) : state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
               paymentsEnabled || inApp ? (
                 <Paywall
                   manifest={manifest}
@@ -647,7 +660,7 @@ export function PublishSheet({
                 </Notice>
               )
             ) : null}
-            {noteOffer && noteFree && state.authed && decision && !decision.ok && decision.reason === "payment_required" ? (
+            {noteOffer && noteFree && state.authed && !needsGroup && decision && !decision.ok && decision.reason === "payment_required" ? (
               <FreeNoteOption photos={noteOffer.photos} chars={noteLetter} max={FREE_NOTE_MAX_CHARS} others={noteOthers} busy={strippingNote} onShorten={shortenNote} onSendFree={sendAsNote} onAsk={askedToSendFree} keep={keepStep} />
             ) : null}
 

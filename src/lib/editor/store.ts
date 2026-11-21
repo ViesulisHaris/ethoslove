@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { nanoid } from "nanoid";
-import type { GiftData, GiftLocale, GiftPhoto } from "@/lib/gift/schema";
+import type { GiftContribution, GiftData, GiftLocale, GiftPhoto } from "@/lib/gift/schema";
 import type { TemplateManifest } from "@/templates/types";
 import { LIMITS } from "@/config/site";
 import { SUPABASE_CONFIGURED } from "@/lib/supabase/configured";
@@ -94,6 +94,18 @@ export type EditorState = {
   setUploadedVideo: (file: File) => Promise<void>;
   clearVideo: () => void;
 
+  /**
+   * A group card's notes (data.contributions, src/lib/group). `addContribution` puts in a note the
+   * sender said yes to: `item.photo.url` is the file's path in this gift's own folder, and
+   * `previewUrl` a signed address to show it by until the editor is opened again. Adding a key that
+   * is already there changes nothing, so the panel can ask for the same note twice.
+   */
+  addContribution: (item: GiftContribution, previewUrl?: string | null) => void;
+  /** Fix a typo in a note's name or words, or take its photo off (`photo: null`). */
+  updateContribution: (key: string, patch: { name?: string; note?: string; photo?: null }) => void;
+  removeContribution: (key: string) => void;
+  moveContribution: (from: number, to: number) => void;
+
   ensureRemote: () => Promise<string | null>;
   uploadPending: () => Promise<void>;
   /** Give failed uploads another go (a photo the browser has lost cannot be retried). */
@@ -165,6 +177,29 @@ function placeInBatch(photos: GiftPhoto[], photo: GiftPhoto, batch: string[], in
   const next = [...photos];
   next.splice(after >= 0 ? after + 1 : before >= 0 ? before : photos.length, 0, photo);
   return next;
+}
+
+/** A contribution's photo is one of the gift's stored files; its record in `assets` is named for the note's key. */
+const noteAssetId = (key: string) => `c${key}`;
+
+/**
+ * A stored gift's contribution photos, made showable: each one that is still a Storage path gets a
+ * record in `assets` (so saving writes the path back, never the signed address) and a signed address
+ * to preview it by. One that can't be signed keeps its path: it still saves and publishes correctly.
+ */
+async function withSignedNotes(data: GiftData, assets: Record<string, AssetRecord>): Promise<{ data: GiftData; assets: Record<string, AssetRecord> }> {
+  const stored = (data.contributions ?? []).filter((item) => item.photo && isStoragePath(item.photo.url));
+  if (stored.length === 0) return { data, assets };
+  const signed = await signAssetUrls(stored.map((item) => item.photo!.url)).catch(() => null);
+  const map = signed?.ok ? signed.data : {};
+  const next = { ...assets };
+  const contributions = (data.contributions ?? []).map((item) => {
+    if (!item.photo || !isStoragePath(item.photo.url)) return item;
+    const objectUrl = map[item.photo.url];
+    next[noteAssetId(item.key)] = { id: noteAssetId(item.key), kind: "photo", local: false, storagePath: item.photo.url, status: "uploaded", progress: 1, objectUrl };
+    return objectUrl ? { ...item, photo: { ...item.photo, url: objectUrl } } : item;
+  });
+  return { data: { ...data, contributions }, assets: next };
 }
 
 /** How long the poster frame may take; past it the clip simply has no poster. */
@@ -534,6 +569,12 @@ export const useEditor = create<EditorState>((set, get) => {
           if (fresh) track(freeTestEvent(slug, "started", arm), { template: slug });
         }
       }
+
+      // A group card's notes come back with their photos as Storage paths, from the server or from
+      // this browser's own copy of the draft: both get signed addresses for the preview here.
+      const withNotes = await withSignedNotes(data, assets);
+      data = withNotes.data;
+      assets = withNotes.assets;
 
       set({
         slug,
@@ -912,6 +953,58 @@ export const useEditor = create<EditorState>((set, get) => {
       touch();
     },
 
+    addContribution(item, previewUrl) {
+      const s = get();
+      const list = s.data.contributions ?? [];
+      if (list.some((existing) => existing.key === item.key)) return;
+      const assets = { ...s.assets };
+      let stored = item;
+      if (item.photo && isStoragePath(item.photo.url)) {
+        const id = noteAssetId(item.key);
+        assets[id] = { id, kind: "photo", local: false, storagePath: item.photo.url, status: "uploaded", progress: 1, objectUrl: previewUrl ?? undefined };
+        if (previewUrl) stored = { ...item, photo: { ...item.photo, url: previewUrl } };
+      }
+      set({ assets, data: { ...s.data, contributions: [...list, stored] } });
+      touch();
+    },
+
+    updateContribution(key, patch) {
+      const s = get();
+      const list = s.data.contributions;
+      if (!list?.some((item) => item.key === key)) return;
+      const assets = { ...s.assets };
+      const contributions = list.map((item) => {
+        if (item.key !== key) return item;
+        const next: GiftContribution = { ...item, ...(patch.name !== undefined ? { name: patch.name } : {}), ...(patch.note !== undefined ? { note: patch.note } : {}) };
+        if (patch.photo === null) {
+          delete next.photo;
+          delete assets[noteAssetId(key)];
+        }
+        return next;
+      });
+      set({ assets, data: { ...s.data, contributions } });
+      touch();
+    },
+
+    removeContribution(key) {
+      const s = get();
+      const list = s.data.contributions;
+      if (!list?.some((item) => item.key === key)) return;
+      const assets = { ...s.assets };
+      delete assets[noteAssetId(key)];
+      set({ assets, data: { ...s.data, contributions: list.filter((item) => item.key !== key) } });
+      touch();
+    },
+
+    moveContribution(from, to) {
+      const list = [...(get().data.contributions ?? [])];
+      if (from === to || from < 0 || to < 0 || from >= list.length || to >= list.length) return;
+      const [item] = list.splice(from, 1);
+      list.splice(to, 0, item);
+      set((s) => ({ data: { ...s.data, contributions: list } }));
+      touch();
+    },
+
     clearMusic() {
       const s = get();
       const id = s.data.music?.source === "upload" ? s.data.music.trackId : undefined;
@@ -1062,6 +1155,10 @@ export const useEditor = create<EditorState>((set, get) => {
           s.data.music && s.data.music.source === "upload" && s.data.music.trackId
             ? { ...s.data.music, url: refs[s.data.music.trackId] ?? `idb:${s.data.music.trackId}` }
             : s.data.music,
+        // A note's photo goes back as its Storage path, never as the signed address it is shown by.
+        ...(s.data.contributions
+          ? { contributions: s.data.contributions.map((item) => (item.photo ? { ...item, photo: { ...item.photo, url: refs[noteAssetId(item.key)] ?? byUrl[item.photo.url] ?? item.photo.url } } : item)) }
+          : {}),
       };
     },
 

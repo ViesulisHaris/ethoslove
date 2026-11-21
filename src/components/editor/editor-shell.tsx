@@ -28,6 +28,7 @@ import { VoiceSection } from "./sections/voice";
 import { LookSection } from "./sections/look";
 import { ExtrasSection } from "./sections/extras";
 import { UnwrapSection } from "./sections/unwrap";
+import { GroupSection } from "./sections/group";
 import { PublishSheet } from "./publish-sheet";
 import { TemplateFields } from "./template-fields";
 import { FormSkeleton } from "./form-skeleton";
@@ -44,6 +45,11 @@ export type EditorShellProps = {
   paymentsEnabled: boolean;
   /** A real reaction the pay panel may open with (lib/proof), or null. */
   reaction?: ShownReaction | null;
+  /**
+   * Group cards are switched on (groupGiftsEnabled, lib/group/flag.ts: server-side only, so it comes
+   * down as a prop). The panel is drawn only with this and on a template that declares `features.group`.
+   */
+  groupEnabled?: boolean;
 };
 
 /**
@@ -85,7 +91,7 @@ function blankGift(manifest: TemplateManifest, locale: GiftLocale, mod: Template
   };
 }
 
-export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null }: EditorShellProps) {
+export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, aiEnabled, paymentsEnabled, reaction = null, groupEnabled = false }: EditorShellProps) {
   const locale = useLocale() as GiftLocale;
   const search = useSearchParams();
   const [mod, setMod] = useState<TemplateModule | null>(null);
@@ -333,6 +339,7 @@ export function EditorShell({ slug, manifest, user, remote, supabaseConfigured, 
                   ) : null}
                 </WhoSection>
                 <WordsSection aiEnabled={aiEnabled} />
+                {groupEnabled && manifest.features.group ? <GroupSection manifest={manifest} /> : null}
                 {manifest.tier === "free" ? <MoveOffer manifest={manifest} /> : null}
                 <UnwrapSection manifest={manifest} />
                 <PhotosSection manifest={manifest} />
