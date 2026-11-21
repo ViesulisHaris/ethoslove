@@ -201,8 +201,12 @@ export async function Experience({ manifest, locale, flowers }: { manifest: Temp
   return (
     <section className="relative" aria-labelledby="template-experience">
       <BandEdge side="top" className="text-page-band" />
-      {/* Clipped: on a desk the phone's foot runs off the band, under its curved lower edge, as the mock-up has it. */}
-      <div className="relative isolate -mt-px overflow-hidden bg-page-band">
+      {/*
+       * Cut along its foot and its sides only: the picture runs off the page's left side and under the
+       * band's curved lower edge, as the mock-up has it, while its top leaves lie over the upper edge
+       * whole. `overflow: hidden` would cut those along a straight line.
+       */}
+      <div className="relative isolate -mt-px bg-page-band [clip-path:inset(-24rem_0_0_0)]">
         <div className="container-x grid items-center gap-y-6 pt-4 pb-20 sm:pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)] lg:gap-x-12 lg:pt-0 lg:pb-0">
           {/* The picture is wider than its column and runs off the page's left side and under the band's lower edge. */}
           <div className="-mx-[14%] sm:mx-auto sm:w-[34rem] lg:-mt-6 lg:-mb-[9%] lg:-ml-[24%] lg:mr-[-4%] lg:w-auto">
