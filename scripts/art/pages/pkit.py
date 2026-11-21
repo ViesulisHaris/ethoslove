@@ -29,9 +29,12 @@ from mathutils import Vector
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "holiday"))
 
 import kit  # noqa: E402
-from kit import COS_T, SIN_T, K  # noqa: E402
+from kit import COS_T, SIN_T, K  # noqa: E402,F401
 
 GROUND = "#f1e3d3"
+# The pale ground each colourway of flowers is made for; what lies on it is lit from below by it.
+GROUNDS = {"ivory": "#f1e3d3", "blush": "#f6e3e0", "wine": "#f3e2dc", "moonlight": "#e6e6ef"}
+_ground = GROUND
 UP = Vector((0.0, COS_T, SIN_T))
 
 # One light for every piece, so two of them side by side on a page were lit by the same window.
@@ -46,9 +49,11 @@ def cli():
     return opt
 
 
-def begin():
+def begin(colour=None):
+    global _ground
     kit.reset()
     kit.layer("things")
+    _ground = GROUNDS.get(colour, GROUND)
 
 
 def ground(hole=None):
@@ -67,7 +72,7 @@ def ground(hole=None):
         faces = [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)]
     else:
         faces = [tuple(range(n))]
-    ob = kit.mesh_obj("ground", verts, faces, kit.plain("ground_mat", GROUND, 0.9), smooth=False)
+    ob = kit.mesh_obj("ground", verts, faces, kit.plain("ground_mat", _ground, 0.9), smooth=False)
     ob.visible_camera = False
     kit.layer("things")
     return ob
@@ -197,21 +202,22 @@ def shoot(pid, out, objs, ground_ob, shot, meta=None, extra=None, shadow_samples
     `after` are called round the render, to swap a material in and back.
     """
     sc = bpy.context.scene
-    every = [o for o in bpy.data.objects if o.type == "MESH" and o is not ground_ob]
+    # a thing marked "unseen" is only ever there for the light (a shadow's caster): no pass shows it
+    every = [o for o in bpy.data.objects if o.type == "MESH" and o is not ground_ob and not o.get("unseen")]
     ground_ob.visible_camera = False
     ground_ob.is_shadow_catcher = False
     _render(os.path.join(out, pid + ".png"))
     for (suffix, seen, before, after) in (extra or []):
-        keep = {o.name: o.visible_camera for o in every}
+        # everything else is still there, as a hole: what lies over the seen things cuts them, as it does in the piece
         for o in every:
-            o.visible_camera = o in seen
+            o.is_holdout = o not in seen
         if before:
             before()
         _render(os.path.join(out, "%s-%s.png" % (pid, suffix)))
         if after:
             after()
         for o in every:
-            o.visible_camera = keep[o.name]
+            o.is_holdout = False
     keep = {o.name: o.visible_camera for o in every}
     for o in every:
         o.visible_camera = False

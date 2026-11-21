@@ -26,15 +26,17 @@ PALETTES = {
     "ivory": dict(base="#f8efdd", tip="#fcf6ea", throat="#e2c47e", deep="#bfa257", streak="#cbc07a", vein="#c9b384", vein_mix=0.16, glow="#f6cf98",
                   sss=0.6, sss_radius=(1.0, 0.55, 0.28), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.25,
                   back="#ece3c9", anther="#4f260c", pollen="#8a4c1a", filament="#e3e2b8", stigma="#c4bd7c"),
-    "blush": dict(base="#f7d9dc", tip="#fbe9ea", throat="#de8fa2", deep="#b9566f", streak="#d77b93", vein="#e3a3b1", vein_mix=0.22, glow="#f9b9c2",
-                  sss=0.5, sss_radius=(1.0, 0.45, 0.42), sss_scale=0.22, trans=0.28, rough=0.5, sheen=0.3,
-                  back="#f1c9cf", anther="#7b3a12", pollen="#b96a22", filament="#f0dcc6", stigma="#d9a3a0"),
-    "wine": dict(base="#7c1429", tip="#8e1c33", throat="#4a0817", deep="#2c040d", streak="#3c0612", vein="#4d0a19", vein_mix=0.5, glow="#c22a42",
-                 sss=0.3, sss_radius=(1.0, 0.16, 0.14), sss_scale=0.16, trans=0.2, rough=0.42, sheen=0.55,
-                 back="#671024", anther="#3a1a0c", pollen="#c88a3a", filament="#c9a08c", stigma="#8a4a4a"),
-    "moonlight": dict(base="#eef0f6", tip="#f8f9fc", throat="#d7e4c4", deep="#a9c08c", streak="#c3d6ac", vein="#c2c6de", vein_mix=0.22, glow="#dfe4fb",
-                      sss=0.45, sss_radius=(0.7, 0.75, 1.0), sss_scale=0.22, trans=0.26, rough=0.5, sheen=0.25,
-                      back="#e2e4f1", anther="#6d4a2a", pollen="#c79a4a", filament="#e1ecd2", stigma="#b9cf9c"),
+    # Every colourway stays as soft as the ivory one: muted, low in saturation, made for a pale ground.
+    "blush": dict(base="#f3d6d2", tip="#f9e8e4", throat="#e4a5a5", deep="#cf898b", streak="#dc9d9d", vein="#e0b0ac", vein_mix=0.2, glow="#f6c2ba",
+                  sss=0.6, sss_radius=(1.0, 0.5, 0.4), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.28,
+                  back="#efcdc8", anther="#4f260c", pollen="#8a4c1a", filament="#efe3ca", stigma="#d6b48f"),
+    # wine is a dusty rose-burgundy, not a dark red: less light is let through it, or it glows pink
+    "wine": dict(base="#9d5068", tip="#b97a8a", throat="#702b44", deep="#551c31", streak="#7b344c", vein="#803a52", vein_mix=0.32, glow="#c67a8b",
+                 sss=0.42, sss_radius=(1.0, 0.34, 0.32), sss_scale=0.22, trans=0.2, rough=0.5, sheen=0.4,
+                 back="#96506a", anther="#46220e", pollen="#b58040", filament="#e8d2c2", stigma="#bd908a"),
+    "moonlight": dict(base="#eef0f5", tip="#f9fafc", throat="#dae5ce", deep="#b8cba1", streak="#ccdab8", vein="#c9cde2", vein_mix=0.22, glow="#e2e5f7",
+                      sss=0.6, sss_radius=(0.78, 0.82, 1.0), sss_scale=0.3, trans=0.3, rough=0.52, sheen=0.25,
+                      back="#e3e6f0", anther="#5a3418", pollen="#b08a4a", filament="#e4edd6", stigma="#bccf9f"),
 }
 GREENS = dict(stem="#75744a", stem_dark="#555632", leaf="#7b7a45", leaf_dark="#5a5c31", leaf_light="#a19d61", rib="#b9b47c")
 
@@ -140,7 +142,7 @@ def kit_of_materials(colour="ivory", tag=""):
     anther = Mat("anther_" + n)
     grain, _ = anther.noise(anther.coords("Object"), 90.0, 2.0, 0.6)
     blot, _ = anther.noise(anther.coords("Object"), 9.0, 2.0, 0.5)
-    anther.set(base=anther.mix(blot, pal["anther"], kit.lin(pal["pollen"])), rough=0.92, sheen=0.6, spec=0.1, normal=anther.bump(grain, 0.7, 0.01))
+    anther.set(base=anther.mix(blot, pal["anther"], kit.lin(pal["pollen"])), rough=0.95, sheen=0.0, spec=0.05, normal=anther.bump(grain, 0.7, 0.01))
     fil = Mat("filament_" + n)
     fil.set(base=pal["filament"], rough=0.45, sss=0.4, sss_radius=(0.8, 1.0, 0.4), sss_scale=0.08, spec=0.35)
     stig = Mat("stigma_" + n)
@@ -411,15 +413,19 @@ def bezier(p0, p1, p2, p3, n=28):
     return out
 
 
-def stalk(name, root, mat, heading, length, length_scale=3.0, r=None, end_r=None, sag=0.0):
+def stalk(name, root, mat, heading, length, length_scale=3.0, r=None, end_r=None, sag=0.0, start=-0.12, to=None):
     """The stalk behind a posed flower: out of the back of the receptacle, down to the ground and along it towards `heading`."""
     L = length_scale
     r = r or 0.025 * L
     end_r = end_r or r * 1.25
     ax, base = axis_of(root)
-    p0 = base - ax * 0.12 * L
-    d = Vector((math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0.0))
+    p0 = base + ax * start * L
     flat = Vector((p0.x, p0.y, 0.0))
+    if to is not None:
+        # to a given point on the page (where it joins a stem), not off in a direction
+        gap = Vector((to[0], to[1], 0.0)) - flat
+        heading, length = math.degrees(math.atan2(gap.y, gap.x)), gap.length
+    d = Vector((math.cos(math.radians(heading)), math.sin(math.radians(heading)), 0.0))
     p3 = flat + d * length
     p3.z = end_r
     reach = max(0.5, length * 0.45)
@@ -435,6 +441,29 @@ def stalk(name, root, mat, heading, length, length_scale=3.0, r=None, end_r=None
         p.z = max(p.z, end_r)
     radii = [r + (end_r - r) * i / n for i in range(n + 1)]
     return tube(name, path, radii, 14, mat)
+
+
+def lying_lily(name, mats, loc=(0.0, 0.0), tilt=55.0, heading=0.0, spin=0.0, stalk_to=None, stalk_len=3.0, seed=1, length=3.2, opened=1.0, curl=1.0, face_up=False):
+    """A whole flower laid on the page with its stalk. Returns (root, everything it is made of)."""
+    parts = bloom(name, mats, length, seed, opened, curl)
+    root = pose(name + "_root", parts, tilt, heading, spin, loc, rest=parts[:6])
+    if face_up:
+        # seen from above, a flower that faces up rests on its open tepals and its throat dips below the page
+        rest_on_blades(root, parts[:6])
+    objs = list(parts)
+    if stalk_len:
+        objs.append(stalk(name + "_stalk", root, mats["stem"], heading + 180.0 if stalk_to is None else stalk_to, stalk_len, length))
+    return root, objs
+
+
+def laid(name, ob, loc=(0.0, 0.0), yaw=0.0, roll=0.0, lift=0.004):
+    """Lays one blade (a leaf, a loose petal) built along +X on the page: pointing `yaw`, turned `roll` about its length."""
+    root = bpy.data.objects.new(name, None)
+    kit.link(root)
+    ob.parent = root
+    root.matrix_world = Matrix.Translation(Vector((loc[0], loc[1], 0.0))) @ Matrix.Rotation(math.radians(yaw), 4, "Z") @ Matrix.Rotation(math.radians(roll), 4, "X")
+    pkit.settle(root, [ob], lift)
+    return root
 
 
 def leaf(name, mat, length=3.4, width=0.3, arch=18.0, lift=6.0, twist=0.0, side=0.0, fold=0.55, thick=0.022, curl=0.0):

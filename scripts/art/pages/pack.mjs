@@ -19,14 +19,14 @@ if (!raw) throw new Error("usage: pack.mjs <folder of renders> [id,id,...]");
 const OUT = process.env.PAGES_OUT ?? join("public", "art", "pages");
 mkdirSync(OUT, { recursive: true });
 const MANIFEST = join(OUT, "manifest.json");
-const LIMIT = 250 * 1024;
+const LIMIT = 250_000;
 
 // What each colourway's flowers are meant to lie on, and the colour their shadow is there.
 export const COLOURWAYS = {
   ivory: { ground: "#f1e3d3", shadow: "#3a2200", strength: 0.58 },
-  blush: { ground: "#f6dde3", shadow: "#7a4450", strength: 1.0 },
-  wine: { ground: "#2a1016", shadow: "#0a0204", strength: 0.9 },
-  moonlight: { ground: "#141a33", shadow: "#04060f", strength: 0.9 },
+  blush: { ground: "#f6e3e0", shadow: "#3c1a10", strength: 0.56 },
+  wine: { ground: "#f3e2dc", shadow: "#3a1612", strength: 0.56 },
+  moonlight: { ground: "#e6e6ef", shadow: "#2a2233", strength: 0.5 },
   plain: { ground: "#f1e3d3", shadow: "#3a2200", strength: 0.58 },
 };
 
@@ -138,7 +138,7 @@ for (const id of ids) {
   const W = Math.round(box.width * k), H = Math.round(box.height * k);
   const cut = (buf, scale) => () => sharp(buf, { raw: { width: w, height: h, channels: 4 } }).extract(box).resize({ width: Math.round(W * scale), height: Math.round(H * scale), fit: "fill", kernel: "lanczos3" });
   const entry = { ...(await save(cut(whole, 1), `${id}.webp`)), x1: await save(cut(whole, 0.5), `${id}-1x.webp`) };
-  for (const key of ["screen", "photo"]) {
+  for (const key of ["screen", "photo", "card"]) {
     if (!info[key]) continue;
     const big = place(info[key], box, k), small = place(info[key], box, k * 0.5);
     entry[key] = { box: info[key].box, radius: info[key].radius, fill: info[key].fill, corners: big.corners, matrix: big.matrix, x1: { corners: small.corners, matrix: small.matrix } };
@@ -161,7 +161,7 @@ for (const id of ids) {
 const footerOf = join(raw, "lily-open-ivory.png");
 if (existsSync(footerOf) && (!only || only.split(",").some((o) => "lily-footer".startsWith(o) || o === "lily-open-ivory"))) {
   const { data, info } = await sharp(footerOf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const lo = hex("#3a1622"), hi = hex("#6a3445");
+  const lo = hex("#35121d"), hi = hex("#59293b");
   for (let i = 0; i < data.length; i += 4) {
     const l = Math.min(1, Math.max(0, ((0.3 * data[i] + 0.59 * data[i + 1] + 0.11 * data[i + 2]) / 255 - 0.25) / 0.7));
     const f = l * l * (3 - 2 * l);

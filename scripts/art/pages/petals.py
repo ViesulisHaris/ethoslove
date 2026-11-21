@@ -7,17 +7,12 @@ Makes petal-1..4-<colour> and leaf-1, leaf-2 (leaves are the same green whatever
 so they are made once, with the first colourway asked for).
 """
 
-import math
 import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-import bpy  # noqa: E402
-from mathutils import Matrix  # noqa: E402
-
-import pkit  # noqa: E402  (first: it puts the holiday kit on the path)
-import kit  # noqa: E402
+import pkit  # noqa: E402
 import lilies  # noqa: E402
 
 OPT = pkit.cli()
@@ -36,18 +31,9 @@ LEAVES = {
 }
 
 
-def lay(name, ob, roll, yaw):
-    root = bpy.data.objects.new(name, None)
-    kit.link(root)
-    ob.parent = root
-    root.matrix_world = Matrix.Rotation(math.radians(yaw), 4, "Z") @ Matrix.Rotation(math.radians(roll), 4, "X")
-    pkit.settle(root, [ob], 0.004)
-    return root
-
-
 def petal(pid, colour):
     p = PETALS[pid]
-    pkit.begin()
+    pkit.begin(colour)
     floor = pkit.ground()
     # a fallen petal shows less of the throat's colour than one in the flower: only its narrow foot
     mat = lilies.petal_material("loose_" + colour, dict(lilies.PALETTES[colour], throat_mix=0.5, deep_mix=0.35, streak_mix=0.4))
@@ -61,7 +47,7 @@ def petal(pid, colour):
     ob = lilies.ribbon(pid, mat, p["length"], lilies.tepal_shape(p["width"], claw=0.1), alpha, cup,
                        twist=lambda t: p["twist"] * (t - 0.35), side=lambda t: 0.05 * p["length"] * t * t,
                        groove=0.17, ruffle=0.022, ruffle_f=2.4, phase=p["seed"] * 1.3, thick=0.021, nt=44, nu=21, pleat=0.07)
-    lay(pid + "_root", ob, p["roll"], p["yaw"])
+    lilies.laid(pid + "_root", ob, (0.0, 0.0), p["yaw"], p["roll"])
     pkit.rig(OPT)
     return floor, [ob]
 
@@ -72,7 +58,7 @@ def leaf(pid):
     floor = pkit.ground()
     mat = lilies.leaf_material("leaf")
     ob = lilies.leaf(pid, mat, p["length"], p["width"], p["arch"], p["lift"], p["twist"], p["side"], p["fold"], curl=p["curl"])
-    lay(pid + "_root", ob, p["roll"], p["yaw"])
+    lilies.laid(pid + "_root", ob, (0.0, 0.0), p["yaw"], p["roll"])
     pkit.rig(OPT)
     return floor, [ob]
 
