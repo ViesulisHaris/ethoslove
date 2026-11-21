@@ -35,13 +35,15 @@ export type GroupRetentionResult = {
  *      limits still count it.
  *   2. An address that never confirmed: forgotten after 7 days.
  *   3. Every note of a card that was sent: deleted 7 days after sending. What was added lives on in
- *      the gift itself. Every note of a card never sent: deleted 14 days after its link ran out
- *      (`closes_at`: 30 days from the start unless the sender kept it open longer).
+ *      the gift itself. One exception: a card sent with a date on it that has not arrived yet keeps
+ *      the notes that are in it and whose writers confirmed an address, until their email has gone.
+ *      Every note of a card never sent: deleted 14 days after its link ran out (`closes_at`: 30 days
+ *      from the start unless the sender kept it open longer).
  *   4. A draft with a group is touched, so the 7-day draft sweep leaves it alone, until 14 days
  *      after its link ran out; then it is no longer touched, and the sweep applies.
  *   5. Files no note points at (a group deleted with its gift or account) are removed after a day.
  *   6. The backstop for "here's the card you signed": cards that are live, with a confirmed address
- *      still waiting (a scheduled card that went live, a note added after sending).
+ *      still waiting (a scheduled card that went live, a note added after sending, a send that failed).
  *
  * A database without migration 0023 reports `{ error }` and changes nothing: this never throws.
  */
@@ -79,23 +81,44 @@ export async function runGroupRetention(admin: Db, now: number): Promise<GroupRe
     if (unconfirmed.error) throw new Error(unconfirmed.error.message);
     result.addressesForgotten = unconfirmed.data?.length ?? 0;
 
-    // 6 (before 3, so nobody's email is lost to the purge): cards that are out and still owe an email.
-    const owing = await admin.from("gift_groups").select("gift_id").not("sent_at", "is", null).gte("sent_at", iso(now - GROUP_RETENTION.afterSentDays * DAY)).limit(PAGE);
-    if (owing.error) throw new Error(owing.error.message);
-    for (const group of owing.data ?? []) result.emailed += (await sendSignedGiftEmails(admin, group.gift_id, now).catch(() => ({ sent: 0 }))).sent;
+    // 6 (before 3, so nobody's email is lost to the purge): confirmed addresses still owed the card.
+    // sendSignedGiftEmails itself sends only for a card that is live, with the note still in it.
+    const owed = await admin.from("gift_contributions").select("group_id").eq("status", "approved").not("email", "is", null).not("email_confirmed_at", "is", null).is("emailed_at", null).limit(PAGE);
+    if (owed.error) throw new Error(owed.error.message);
+    const owedGroups = [...new Set((owed.data ?? []).map((row) => row.group_id))];
+    if (owedGroups.length) {
+      const owing = await admin.from("gift_groups").select("gift_id").in("id", owedGroups).not("sent_at", "is", null);
+      if (owing.error) throw new Error(owing.error.message);
+      for (const group of owing.data ?? []) result.emailed += (await sendSignedGiftEmails(admin, group.gift_id, now).catch(() => ({ sent: 0 }))).sent;
+    }
 
     // 3. Every note of a card sent a week ago, or never sent two weeks after its link closed.
     const [sent, expired] = await Promise.all([
-      admin.from("gift_groups").select("id").not("sent_at", "is", null).lt("sent_at", iso(now - GROUP_RETENTION.afterSentDays * DAY)).limit(PAGE),
-      admin.from("gift_groups").select("id").is("sent_at", null).lt("closes_at", iso(now - GROUP_RETENTION.afterClosedDays * DAY)).limit(PAGE),
+      admin.from("gift_groups").select("id, gift_id").not("sent_at", "is", null).lt("sent_at", iso(now - GROUP_RETENTION.afterSentDays * DAY)).limit(PAGE),
+      admin.from("gift_groups").select("id, gift_id").is("sent_at", null).lt("closes_at", iso(now - GROUP_RETENTION.afterClosedDays * DAY)).limit(PAGE),
     ]);
     for (const read of [sent, expired]) if (read.error) throw new Error(read.error.message);
     const over = [...new Set([...(sent.data ?? []), ...(expired.data ?? [])].map((group) => group.id))];
     if (over.length) {
-      const gone = await admin.from("gift_contributions").delete().in("group_id", over).select("photo_path");
-      if (gone.error) throw new Error(gone.error.message);
-      await removePendingPhotos(admin, (gone.data ?? []).flatMap((row) => (row.photo_path ? [row.photo_path] : [])));
-      result.purged = gone.data?.length ?? 0;
+      // A card sent with a date on it is not out yet. Whoever signed it and confirmed an address is
+      // still owed its link, so that one note waits for the day (the send then deletes the address,
+      // and the next run takes the note). Everything else goes now.
+      const sentGifts = (sent.data ?? []).map((group) => group.gift_id);
+      const waiting = sentGifts.length ? await admin.from("gifts").select("id").in("id", sentGifts).eq("status", "scheduled") : { data: [], error: null };
+      if (waiting.error) throw new Error(waiting.error.message);
+      const notOutYet = new Set((waiting.data ?? []).map((gift) => gift.id));
+      const held = new Set((sent.data ?? []).filter((group) => notOutYet.has(group.gift_id)).map((group) => group.id));
+
+      const rows = await admin.from("gift_contributions").select("id, group_id, status, photo_path, email, email_confirmed_at, emailed_at").in("group_id", over).limit(PAGE * 4);
+      if (rows.error) throw new Error(rows.error.message);
+      const going = (rows.data ?? []).filter((row) => !(held.has(row.group_id) && row.status === "approved" && row.email && row.email_confirmed_at && !row.emailed_at));
+      for (let i = 0; i < going.length; i += 200) {
+        const batch = going.slice(i, i + 200);
+        const gone = await admin.from("gift_contributions").delete().in("id", batch.map((row) => row.id));
+        if (gone.error) throw new Error(gone.error.message);
+        await removePendingPhotos(admin, batch.flatMap((row) => (row.photo_path ? [row.photo_path] : [])));
+        result.purged += batch.length;
+      }
     }
 
     // 4. Drafts whose link is still open, or ran out less than two weeks ago, are kept from the draft

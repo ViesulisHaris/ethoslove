@@ -41,13 +41,22 @@ async function problem(state: "invalid" | "unavailable" | "gone", locale: L) {
   return linkPage({ locale, title: t(`link.${state}Title`), body: t(`link.${state}Body`), home: t("link.home"), status: state === "invalid" ? 404 : 503 });
 }
 
-/** The note, if it still holds an address to confirm, with its group's language. */
+/**
+ * The note, with its group's language, if it still holds an address to confirm or its card has
+ * already been sent to that address (`sent`: the address is deleted by then, so there is nothing
+ * left to do but say so). Null when there is neither; undefined when the database could not say.
+ */
 async function waiting(db: Db, id: string) {
-  const { data: entry, error } = await db.from("gift_contributions").select("id, group_id, email, email_confirmed_at").eq("id", id).maybeSingle();
+  const { data: entry, error } = await db.from("gift_contributions").select("id, group_id, email, email_confirmed_at, emailed_at").eq("id", id).maybeSingle();
   if (error) return undefined;
-  if (!entry?.email) return null;
+  if (!entry || (!entry.email && !entry.emailed_at)) return null;
   const { data: group } = await db.from("gift_groups").select("gift_id, locale").eq("id", entry.group_id).maybeSingle();
-  return group ? { entry, giftId: group.gift_id, locale: localeOf(group.locale) } : null;
+  return group ? { entry, sent: !entry.email, giftId: group.gift_id, locale: localeOf(group.locale) } : null;
+}
+
+async function done(locale: L) {
+  const t = await getTranslations({ locale, namespace: "lifecycle" });
+  return linkPage({ locale, title: t("group.doneTitle"), body: t("group.doneBody"), home: t("link.home") });
 }
 
 export async function GET(request: NextRequest) {
@@ -57,6 +66,7 @@ export async function GET(request: NextRequest) {
   const note = await waiting(found.db, found.id);
   if (note === undefined) return problem("unavailable", asked);
   if (note === null) return problem("gone", asked);
+  if (note.sent) return done(note.locale);
   const t = await getTranslations({ locale: note.locale, namespace: "lifecycle" });
   return linkPage({
     locale: note.locale,
@@ -74,6 +84,7 @@ export async function POST(request: NextRequest) {
   const note = await waiting(found.db, found.id);
   if (note === undefined) return problem("unavailable", asked);
   if (note === null) return problem("gone", asked);
+  if (note.sent) return done(note.locale);
   const now = Date.now();
   if (!note.entry.email_confirmed_at) {
     const { error } = await found.db.from("gift_contributions").update({ email_confirmed_at: new Date(now).toISOString() }).eq("id", note.entry.id).is("email_confirmed_at", null);
@@ -81,6 +92,5 @@ export async function POST(request: NextRequest) {
   }
   // A card that is already out sends it now; one still being made sends it when it goes.
   await sendSignedGiftEmails(found.db, note.giftId, now).catch(() => {});
-  const t = await getTranslations({ locale: note.locale, namespace: "lifecycle" });
-  return linkPage({ locale: note.locale, title: t("group.doneTitle"), body: t("group.doneBody"), home: t("link.home") });
+  return done(note.locale);
 }

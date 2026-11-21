@@ -7,6 +7,7 @@ import { forgetUnpaidCheckoutSources } from "@/lib/attribution/checkout-source";
 import { forgetOldSupportChats } from "@/lib/support/retention";
 import { groupGiftsEnabled } from "@/lib/group/flag";
 import { runGroupRetention } from "@/lib/group/retention";
+import { sendSignedGiftEmails } from "@/lib/group/signed-email";
 
 export const runtime = "nodejs";
 // The storage sweep takes most of this; Hobby allows up to 60 s.
@@ -39,6 +40,8 @@ export async function GET(request: NextRequest) {
     if (!error) {
       flipped += 1;
       await notifyUnlocked(g.id).catch(() => {});
+      // A group card that has just arrived: whoever signed it and asked gets its link (lib/group).
+      if (groupGiftsEnabled()) await sendSignedGiftEmails(admin, g.id, Date.now()).catch(() => {});
     }
   }
 
