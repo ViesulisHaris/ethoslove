@@ -24,12 +24,12 @@
     "file": "experience-flatlay-blush.webp",
     "w": 1800,
     "h": 1793,
-    "bytes": 244134,
+    "bytes": 246464,
     "x1": {
      "file": "experience-flatlay-blush-1x.webp",
      "w": 900,
      "h": 897,
-     "bytes": 122834
+     "bytes": 122204
     },
     "screen": {
      "box": [
@@ -37,7 +37,7 @@
       844
      ],
      "radius": 53.03,
-     "fill": "#2c1a14",
+     "fill": "#3e2318",
      "corners": [
       [
        529.886,
@@ -97,7 +97,7 @@
       ],
       [
        1182.13,
-       929.705
+       929.706
       ],
       [
        754.905,
@@ -117,7 +117,7 @@
        ],
        [
         591.065,
-        464.852
+        464.853
        ],
        [
         377.452,
@@ -132,12 +132,12 @@
     "file": "experience-flatlay-ivory.webp",
     "w": 1800,
     "h": 1793,
-    "bytes": 246264,
+    "bytes": 248090,
     "x1": {
      "file": "experience-flatlay-ivory-1x.webp",
      "w": 900,
      "h": 897,
-     "bytes": 122588
+     "bytes": 122934
     },
     "screen": {
      "box": [
@@ -145,7 +145,7 @@
       844
      ],
      "radius": 53.03,
-     "fill": "#2c1a14",
+     "fill": "#3e2318",
      "corners": [
       [
        529.886,
@@ -205,7 +205,7 @@
       ],
       [
        1182.13,
-       929.705
+       929.706
       ],
       [
        754.905,
@@ -225,7 +225,7 @@
        ],
        [
         591.065,
-        464.852
+        464.853
        ],
        [
         377.452,
@@ -240,12 +240,12 @@
     "file": "experience-flatlay-moonlight.webp",
     "w": 1800,
     "h": 1793,
-    "bytes": 249786,
+    "bytes": 235758,
     "x1": {
      "file": "experience-flatlay-moonlight-1x.webp",
      "w": 900,
      "h": 897,
-     "bytes": 116602
+     "bytes": 117432
     },
     "screen": {
      "box": [
@@ -253,7 +253,7 @@
       844
      ],
      "radius": 53.03,
-     "fill": "#2c1a14",
+     "fill": "#3e2318",
      "corners": [
       [
        529.886,
@@ -313,7 +313,7 @@
       ],
       [
        1182.13,
-       929.705
+       929.706
       ],
       [
        754.905,
@@ -333,7 +333,7 @@
        ],
        [
         591.065,
-        464.852
+        464.853
        ],
        [
         377.452,
@@ -348,12 +348,12 @@
     "file": "experience-flatlay-wine.webp",
     "w": 1800,
     "h": 1793,
-    "bytes": 240238,
+    "bytes": 241210,
     "x1": {
      "file": "experience-flatlay-wine-1x.webp",
      "w": 900,
      "h": 897,
-     "bytes": 126548
+     "bytes": 127598
     },
     "screen": {
      "box": [
@@ -361,7 +361,7 @@
       844
      ],
      "radius": 53.03,
-     "fill": "#2c1a14",
+     "fill": "#3e2318",
      "corners": [
       [
        529.886,
@@ -421,7 +421,7 @@
       ],
       [
        1182.13,
-       929.705
+       929.706
       ],
       [
        754.905,
@@ -441,7 +441,7 @@
        ],
        [
         591.065,
-        464.852
+        464.853
        ],
        [
         377.452,
@@ -458,12 +458,12 @@
     "file": "hero-flatlay-blush.webp",
     "w": 1229,
     "h": 1400,
-    "bytes": 208352,
+    "bytes": 210788,
     "x1": {
      "file": "hero-flatlay-blush-1x.webp",
      "w": 615,
      "h": 700,
-     "bytes": 84350
+     "bytes": 84170
     },
     "screen": {
      "box": [
@@ -517,12 +517,12 @@
      "file": "hero-flatlay-blush-bezel.webp",
      "w": 1229,
      "h": 1400,
-     "bytes": 46116,
+     "bytes": 46076,
      "x1": {
       "file": "hero-flatlay-blush-bezel-1x.webp",
       "w": 615,
       "h": 700,
-      "bytes": 17734
+      "bytes": 17742
      }
     }
    },
@@ -530,12 +530,12 @@
     "file": "hero-flatlay-ivory.webp",
     "w": 1229,
     "h": 1400,
-    "bytes": 210118,
+    "bytes": 210134,
     "x1": {
      "file": "hero-flatlay-ivory-1x.webp",
      "w": 615,
      "h": 700,
-     "bytes": 84632
+     "bytes": 84678
     },
     "screen": {
      "box": [
@@ -589,12 +589,12 @@
      "file": "hero-flatlay-ivory-bezel.webp",
      "w": 1229,
      "h": 1400,
-     "bytes": 46276,
+     "bytes": 46412,
      "x1": {
       "file": "hero-flatlay-ivory-bezel-1x.webp",
       "w": 615,
       "h": 700,
-      "bytes": 17908
+      "bytes": 17892
      }
     }
    },
@@ -602,12 +602,12 @@
     "file": "hero-flatlay-moonlight.webp",
     "w": 1229,
     "h": 1400,
-    "bytes": 200752,
+    "bytes": 200902,
     "x1": {
      "file": "hero-flatlay-moonlight-1x.webp",
      "w": 615,
      "h": 700,
-     "bytes": 80498
+     "bytes": 80778
     },
     "screen": {
      "box": [
@@ -661,12 +661,12 @@
      "file": "hero-flatlay-moonlight-bezel.webp",
      "w": 1229,
      "h": 1400,
-     "bytes": 44242,
+     "bytes": 44326,
      "x1": {
       "file": "hero-flatlay-moonlight-bezel-1x.webp",
       "w": 615,
       "h": 700,
-      "bytes": 16664
+      "bytes": 16618
      }
     }
    },
@@ -674,12 +674,12 @@
     "file": "hero-flatlay-wine.webp",
     "w": 1229,
     "h": 1400,
-    "bytes": 219692,
+    "bytes": 220460,
     "x1": {
      "file": "hero-flatlay-wine-1x.webp",
      "w": 615,
      "h": 700,
-     "bytes": 87116
+     "bytes": 87332
     },
     "screen": {
      "box": [
@@ -733,12 +733,12 @@
      "file": "hero-flatlay-wine-bezel.webp",
      "w": 1229,
      "h": 1400,
-     "bytes": 45740,
+     "bytes": 45720,
      "x1": {
       "file": "hero-flatlay-wine-bezel-1x.webp",
       "w": 615,
       "h": 700,
-      "bytes": 17610
+      "bytes": 17592
      }
     }
    }
@@ -748,12 +748,12 @@
     "file": "leaf-1.webp",
     "w": 700,
     "h": 398,
-    "bytes": 34664,
+    "bytes": 31482,
     "x1": {
      "file": "leaf-1-1x.webp",
      "w": 350,
      "h": 199,
-     "bytes": 13736
+     "bytes": 13068
     }
    }
   },
@@ -762,12 +762,12 @@
     "file": "leaf-2.webp",
     "w": 700,
     "h": 260,
-    "bytes": 31754,
+    "bytes": 29580,
     "x1": {
      "file": "leaf-2-1x.webp",
      "w": 350,
      "h": 130,
-     "bytes": 12936
+     "bytes": 11922
     }
    }
   },
@@ -776,48 +776,48 @@
     "file": "lily-open-blush.webp",
     "w": 900,
     "h": 604,
-    "bytes": 58840,
+    "bytes": 57762,
     "x1": {
      "file": "lily-open-blush-1x.webp",
      "w": 450,
      "h": 302,
-     "bytes": 24620
+     "bytes": 24518
     }
    },
    "ivory": {
     "file": "lily-open-ivory.webp",
     "w": 900,
     "h": 604,
-    "bytes": 59852,
+    "bytes": 57726,
     "x1": {
      "file": "lily-open-ivory-1x.webp",
      "w": 450,
      "h": 302,
-     "bytes": 24938
+     "bytes": 24532
     }
    },
    "moonlight": {
     "file": "lily-open-moonlight.webp",
     "w": 900,
     "h": 604,
-    "bytes": 54164,
+    "bytes": 53074,
     "x1": {
      "file": "lily-open-moonlight-1x.webp",
      "w": 450,
      "h": 302,
-     "bytes": 23046
+     "bytes": 22358
     }
    },
    "wine": {
     "file": "lily-open-wine.webp",
     "w": 900,
     "h": 604,
-    "bytes": 64254,
+    "bytes": 61990,
     "x1": {
      "file": "lily-open-wine-1x.webp",
      "w": 450,
      "h": 302,
-     "bytes": 26242
+     "bytes": 25320
     }
    }
   },
@@ -826,48 +826,48 @@
     "file": "lily-side-blush.webp",
     "w": 900,
     "h": 726,
-    "bytes": 66420,
+    "bytes": 58622,
     "x1": {
      "file": "lily-side-blush-1x.webp",
      "w": 450,
      "h": 363,
-     "bytes": 28204
+     "bytes": 26080
     }
    },
    "ivory": {
     "file": "lily-side-ivory.webp",
     "w": 900,
     "h": 726,
-    "bytes": 67402,
+    "bytes": 58754,
     "x1": {
      "file": "lily-side-ivory-1x.webp",
      "w": 450,
      "h": 363,
-     "bytes": 28242
+     "bytes": 26260
     }
    },
    "moonlight": {
     "file": "lily-side-moonlight.webp",
     "w": 900,
     "h": 726,
-    "bytes": 63548,
+    "bytes": 53264,
     "x1": {
      "file": "lily-side-moonlight-1x.webp",
      "w": 450,
      "h": 363,
-     "bytes": 26904
+     "bytes": 24854
     }
    },
    "wine": {
     "file": "lily-side-wine.webp",
     "w": 900,
     "h": 726,
-    "bytes": 70278,
+    "bytes": 61408,
     "x1": {
      "file": "lily-side-wine-1x.webp",
      "w": 450,
      "h": 363,
-     "bytes": 29000
+     "bytes": 26220
     }
    }
   },
@@ -876,48 +876,48 @@
     "file": "lily-stem-tall-blush.webp",
     "w": 1144,
     "h": 1600,
-    "bytes": 216504,
+    "bytes": 216184,
     "x1": {
      "file": "lily-stem-tall-blush-1x.webp",
      "w": 572,
      "h": 800,
-     "bytes": 87878
+     "bytes": 88130
     }
    },
    "ivory": {
     "file": "lily-stem-tall-ivory.webp",
     "w": 1144,
     "h": 1600,
-    "bytes": 217664,
+    "bytes": 217332,
     "x1": {
      "file": "lily-stem-tall-ivory-1x.webp",
      "w": 572,
      "h": 800,
-     "bytes": 87888
+     "bytes": 87902
     }
    },
    "moonlight": {
     "file": "lily-stem-tall-moonlight.webp",
     "w": 1144,
     "h": 1600,
-    "bytes": 209024,
+    "bytes": 208740,
     "x1": {
      "file": "lily-stem-tall-moonlight-1x.webp",
      "w": 572,
      "h": 800,
-     "bytes": 84992
+     "bytes": 85492
     }
    },
    "wine": {
     "file": "lily-stem-tall-wine.webp",
     "w": 1144,
     "h": 1600,
-    "bytes": 223570,
+    "bytes": 223254,
     "x1": {
      "file": "lily-stem-tall-wine-1x.webp",
      "w": 572,
      "h": 800,
-     "bytes": 90188
+     "bytes": 90264
     }
    }
   },
@@ -926,48 +926,48 @@
     "file": "lily-three-quarter-blush.webp",
     "w": 900,
     "h": 771,
-    "bytes": 69302,
+    "bytes": 64860,
     "x1": {
      "file": "lily-three-quarter-blush-1x.webp",
      "w": 450,
      "h": 386,
-     "bytes": 29086
+     "bytes": 27442
     }
    },
    "ivory": {
     "file": "lily-three-quarter-ivory.webp",
     "w": 900,
     "h": 771,
-    "bytes": 70692,
+    "bytes": 65328,
     "x1": {
      "file": "lily-three-quarter-ivory-1x.webp",
      "w": 450,
      "h": 386,
-     "bytes": 29046
+     "bytes": 27550
     }
    },
    "moonlight": {
     "file": "lily-three-quarter-moonlight.webp",
     "w": 900,
     "h": 771,
-    "bytes": 66074,
+    "bytes": 60728,
     "x1": {
      "file": "lily-three-quarter-moonlight-1x.webp",
      "w": 450,
      "h": 386,
-     "bytes": 27316
+     "bytes": 25900
     }
    },
    "wine": {
     "file": "lily-three-quarter-wine.webp",
     "w": 900,
     "h": 771,
-    "bytes": 74360,
+    "bytes": 69892,
     "x1": {
      "file": "lily-three-quarter-wine-1x.webp",
      "w": 450,
      "h": 386,
-     "bytes": 30168
+     "bytes": 28936
     }
    }
   },
@@ -976,48 +976,48 @@
     "file": "petal-1-blush.webp",
     "w": 360,
     "h": 256,
-    "bytes": 14652,
+    "bytes": 13658,
     "x1": {
      "file": "petal-1-blush-1x.webp",
      "w": 180,
      "h": 128,
-     "bytes": 6072
+     "bytes": 5840
     }
    },
    "ivory": {
     "file": "petal-1-ivory.webp",
     "w": 360,
     "h": 256,
-    "bytes": 14940,
+    "bytes": 14126,
     "x1": {
      "file": "petal-1-ivory-1x.webp",
      "w": 180,
      "h": 128,
-     "bytes": 6286
+     "bytes": 5970
     }
    },
    "moonlight": {
     "file": "petal-1-moonlight.webp",
     "w": 360,
     "h": 256,
-    "bytes": 13260,
+    "bytes": 12434,
     "x1": {
      "file": "petal-1-moonlight-1x.webp",
      "w": 180,
      "h": 128,
-     "bytes": 5586
+     "bytes": 5276
     }
    },
    "wine": {
     "file": "petal-1-wine.webp",
     "w": 360,
     "h": 256,
-    "bytes": 15824,
+    "bytes": 15288,
     "x1": {
      "file": "petal-1-wine-1x.webp",
      "w": 180,
      "h": 128,
-     "bytes": 6458
+     "bytes": 6176
     }
    }
   },
@@ -1026,48 +1026,48 @@
     "file": "petal-2-blush.webp",
     "w": 360,
     "h": 271,
-    "bytes": 12412,
+    "bytes": 12630,
     "x1": {
      "file": "petal-2-blush-1x.webp",
      "w": 180,
      "h": 136,
-     "bytes": 5602
+     "bytes": 5632
     }
    },
    "ivory": {
     "file": "petal-2-ivory.webp",
     "w": 360,
     "h": 271,
-    "bytes": 12868,
+    "bytes": 12808,
     "x1": {
      "file": "petal-2-ivory-1x.webp",
      "w": 180,
      "h": 136,
-     "bytes": 5756
+     "bytes": 5786
     }
    },
    "moonlight": {
     "file": "petal-2-moonlight.webp",
     "w": 360,
     "h": 271,
-    "bytes": 11504,
+    "bytes": 11470,
     "x1": {
      "file": "petal-2-moonlight-1x.webp",
      "w": 180,
      "h": 136,
-     "bytes": 4976
+     "bytes": 5292
     }
    },
    "wine": {
     "file": "petal-2-wine.webp",
     "w": 360,
     "h": 271,
-    "bytes": 14460,
+    "bytes": 14152,
     "x1": {
      "file": "petal-2-wine-1x.webp",
      "w": 180,
      "h": 136,
-     "bytes": 6034
+     "bytes": 6118
     }
    }
   },
@@ -1076,48 +1076,48 @@
     "file": "petal-3-blush.webp",
     "w": 360,
     "h": 264,
-    "bytes": 12956,
+    "bytes": 12280,
     "x1": {
      "file": "petal-3-blush-1x.webp",
      "w": 180,
      "h": 132,
-     "bytes": 5704
+     "bytes": 5412
     }
    },
    "ivory": {
     "file": "petal-3-ivory.webp",
     "w": 360,
     "h": 264,
-    "bytes": 13266,
+    "bytes": 12480,
     "x1": {
      "file": "petal-3-ivory-1x.webp",
      "w": 180,
      "h": 132,
-     "bytes": 5834
+     "bytes": 5548
     }
    },
    "moonlight": {
     "file": "petal-3-moonlight.webp",
     "w": 360,
     "h": 264,
-    "bytes": 11670,
+    "bytes": 11288,
     "x1": {
      "file": "petal-3-moonlight-1x.webp",
      "w": 180,
      "h": 132,
-     "bytes": 5248
+     "bytes": 4986
     }
    },
    "wine": {
     "file": "petal-3-wine.webp",
     "w": 360,
     "h": 264,
-    "bytes": 13974,
+    "bytes": 13218,
     "x1": {
      "file": "petal-3-wine-1x.webp",
      "w": 180,
      "h": 132,
-     "bytes": 5854
+     "bytes": 5684
     }
    }
   },
@@ -1126,48 +1126,48 @@
     "file": "petal-4-blush.webp",
     "w": 360,
     "h": 211,
-    "bytes": 13272,
+    "bytes": 12792,
     "x1": {
      "file": "petal-4-blush-1x.webp",
      "w": 180,
      "h": 106,
-     "bytes": 5718
+     "bytes": 5526
     }
    },
    "ivory": {
     "file": "petal-4-ivory.webp",
     "w": 360,
     "h": 211,
-    "bytes": 13600,
+    "bytes": 12950,
     "x1": {
      "file": "petal-4-ivory-1x.webp",
      "w": 180,
      "h": 106,
-     "bytes": 5840
+     "bytes": 5646
     }
    },
    "moonlight": {
     "file": "petal-4-moonlight.webp",
     "w": 360,
     "h": 211,
-    "bytes": 11860,
+    "bytes": 11320,
     "x1": {
      "file": "petal-4-moonlight-1x.webp",
      "w": 180,
      "h": 106,
-     "bytes": 5138
+     "bytes": 5052
     }
    },
    "wine": {
     "file": "petal-4-wine.webp",
     "w": 360,
     "h": 211,
-    "bytes": 14744,
+    "bytes": 14274,
     "x1": {
      "file": "petal-4-wine-1x.webp",
      "w": 180,
      "h": 106,
-     "bytes": 6020
+     "bytes": 5878
     }
    }
   },
@@ -1176,12 +1176,12 @@
     "file": "step-note.webp",
     "w": 480,
     "h": 350,
-    "bytes": 19982,
+    "bytes": 20470,
     "x1": {
      "file": "step-note-1x.webp",
      "w": 240,
      "h": 175,
-     "bytes": 8952
+     "bytes": 9098
     },
     "card": {
      "box": [
@@ -1189,7 +1189,7 @@
       186
      ],
      "radius": 0,
-     "fill": "#dcbb8c",
+     "fill": "#fce2c4",
      "corners": [
       [
        63.164,
@@ -1238,12 +1238,12 @@
     "file": "step-photo.webp",
     "w": 447,
     "h": 480,
-    "bytes": 17378,
+    "bytes": 17328,
     "x1": {
      "file": "step-photo-1x.webp",
      "w": 224,
      "h": 240,
-     "bytes": 8682
+     "bytes": 8676
     },
     "photo": {
      "box": [
@@ -1300,12 +1300,12 @@
     "file": "step-send.webp",
     "w": 281,
     "h": 480,
-    "bytes": 19616,
+    "bytes": 19536,
     "x1": {
      "file": "step-send-1x.webp",
      "w": 141,
      "h": 240,
-     "bytes": 8414
+     "bytes": 8514
     }
    }
   },
@@ -1314,12 +1314,12 @@
     "file": "lily-footer.webp",
     "w": 900,
     "h": 628,
-    "bytes": 29218,
+    "bytes": 28702,
     "x1": {
      "file": "lily-footer-1x.webp",
      "w": 450,
      "h": 314,
-     "bytes": 14004
+     "bytes": 13740
     },
     "ground": "#2d0e18"
    }

@@ -30,18 +30,17 @@ PHONE_Z = 0.22
 HIGH = 7.0
 
 
-def phone_over(w, yaw, screen="#0b0908", on_top=()):
+def phone_over(w, yaw, screen="#0b0908", screen_mat=None):
     """
     The phone as the camera sees it, and the phone as the light does. A phone pressed down on real
     flowers would have petals standing up through it; so the one that is seen is held well above
     everything (the camera has no perspective: moved back as it is moved up, it is the same picture)
     and throws no shadow, and an unseen copy lying where it seems to lie throws its shadow for it.
-    `on_top` is a list of (parts, info) laid on its glass, given where they sit as if it lay low.
     Returns (seen parts, info, root).
     """
     lift = HIGH - PHONE_Z
     back = -lift * pkit.SIN_T / pkit.COS_T
-    parts, info = things.phone("phone", w, screen=screen)
+    parts, info = things.phone("phone", w, screen=screen, screen_mat=screen_mat)
     root = things.place("phone_root", parts, (0.0, back, HIGH), yaw=yaw, pitch=0.6, roll=-1.2)
     for ob in parts:
         ob.visible_shadow = False
@@ -100,7 +99,7 @@ def hero(colour):
     parts, info, proot = phone_over(4.3, 14.0)
     objs += parts
     pkit.rig(OPT)
-    shot = pkit.frame(objs, 1560, pad=(0.5, 0.5, 1.3, 1.3), opt=OPT)
+    shot = pkit.frame(objs, 1560, pad=(0.5, 0.5, 1.3, 1.3), opt=OPT, piece="hero-flatlay")
     corners = things.world_corners(proot, info)
     meta = {"piece": "hero-flatlay", "colourway": colour, "long": 1400,
             "screen": dict(pkit.area(shot, corners, things.SCREEN_BOX, info["radius"], info["width"]), fill="#0b0908")}
@@ -135,7 +134,7 @@ def experience(colour):
         (-0.8, 4.2, 104.0, 3.8, 0.3, -0.5, 0.14, -6.0),
         (-2.0, 0.9, 172.0, 3.6, 0.3, 0.6, -0.16, 10.0)))
     objs += loose(mats, colour, ((5.3, 0.9, 32.0, 20.0, 1.9, 70.0, 1.2), (4.7, -3.2, 150.0, -30.0, 1.6, 50.0, 1.0), (-6.2, 1.5, 200.0, 60.0, 1.7, 95.0, 1.25)))
-    parts, info, proot = phone_over(4.9, 16.0, "#2c1a14")
+    parts, info, proot = phone_over(4.9, 16.0, screen_mat=things.glow_screen("screen_glow"))
     objs += parts
     # the polaroid lies on the phone's glass (and so is held up with it); its shadow falls on the glass
     lift = HIGH - PHONE_Z
@@ -150,10 +149,10 @@ def experience(colour):
         ob.visible_shadow = False
     objs += pparts + [shade]
     pkit.rig(OPT)
-    shot = pkit.frame(objs, 1980, pad=(0.5, 0.5, 1.3, 1.3), opt=OPT)
+    shot = pkit.frame(objs, 1980, pad=(0.5, 0.5, 1.3, 1.3), opt=OPT, piece="experience-flatlay")
     meta = {"piece": "experience-flatlay", "colourway": colour, "long": 1800,
             "photo": dict(pkit.area(shot, things.world_corners(pol, pinfo), (400, 400), pinfo["radius"], pinfo["width"]), fill="#3d2f29"),
-            "screen": dict(pkit.area(shot, things.world_corners(proot, info), things.SCREEN_BOX, info["radius"], info["width"]), fill="#2c1a14")}
+            "screen": dict(pkit.area(shot, things.world_corners(proot, info), things.SCREEN_BOX, info["radius"], info["width"]), fill="#3e2318")}
     pkit.shoot("experience-flatlay-" + colour, OPT["out"], objs, floor, shot, meta=meta)
 
 

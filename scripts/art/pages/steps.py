@@ -4,7 +4,7 @@ The three small pictures of "how to send a gift": bold, simple shapes that still
     blender --background --factory-startup --python steps.py -- --out <dir> [--preview] [--only photo,note,send]
 
 step-photo   a polaroid lying slightly turned on another, its photo's place empty (a page lays a photo into it)
-step-note    a kraft note card, blank (a page writes on it), a fountain pen beside it
+step-note    a sheet of cream letter paper with a fold line and a lifted corner, blank (a page writes on it), a fountain pen beside it
 step-send    a small phone, a sealed cream envelope with a wine wax seal on its screen
 """
 
@@ -30,7 +30,7 @@ def photo():
     root = things.place("polaroid_root", top, (0.0, 0.0, 0.03), yaw=-7.0, pitch=0.5)
     objs = under + top
     pkit.rig(OPT)
-    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT)
+    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT, piece="step-photo")
     meta = {"piece": "step-photo", "long": 480, "photo": dict(pkit.area(shot, things.world_corners(root, info), (400, 400), info["radius"], info["width"]), fill="#3d2f29")}
     pkit.shoot("step-photo", OPT["out"], objs, floor, shot, meta=meta)
 
@@ -38,15 +38,15 @@ def photo():
 def note():
     pkit.begin()
     floor = pkit.ground()
-    card, info = things.note_card("card", 3.7, 2.55)
+    card, info = things.letter_sheet("card", 3.7, 2.55)
     root = things.place("card_root", card, (0.0, 0.0, 0.0), yaw=-7.0)
     pen = things.fountain_pen("pen", 3.3)
     things.place("pen_root", pen, (1.5, -1.25, 0.0), yaw=38.0)
     objs = card + pen
     pkit.rig(OPT)
-    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT)
+    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT, piece="step-note")
     box = (300, round(300 / info["aspect"]))
-    meta = {"piece": "step-note", "long": 480, "card": dict(pkit.area(shot, things.world_corners(root, info), box, 0.0, info["width"]), fill="#dcbb8c")}
+    meta = {"piece": "step-note", "long": 480, "card": dict(pkit.area(shot, things.world_corners(root, info), box, 0.0, info["width"]), fill="#fce2c4"), "shadow": 1.35}
     pkit.shoot("step-note", OPT["out"], objs, floor, shot, meta=meta)
 
 
@@ -61,7 +61,7 @@ def send():
     things.place("envelope_root", env, (0.0, 0.25, info["size"][2] + 0.012), yaw=4.0)
     objs = phone + env
     pkit.rig(OPT)
-    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT)
+    shot = pkit.frame(objs, 540, pad=PAD, opt=OPT, piece="step-send")
     pkit.shoot("step-send", OPT["out"], objs, floor, shot, meta={"piece": "step-send", "long": 480})
 
 

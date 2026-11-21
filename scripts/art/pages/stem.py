@@ -64,7 +64,7 @@ def build(colour):
 def main():
     for colour in OPT["colour"]:
         floor, objs = build(colour)
-        shot = pkit.frame(objs, 1760, pad=(0.5, 0.5, 1.2, 1.0), opt=OPT)
+        shot = pkit.frame(objs, 1760, pad=(0.5, 0.5, 1.2, 1.0), opt=OPT, piece="lily-stem-tall")
         pkit.shoot("lily-stem-tall-" + colour, OPT["out"], objs, floor, shot, meta={"piece": "lily-stem-tall", "colourway": colour, "long": 1600})
 
 
